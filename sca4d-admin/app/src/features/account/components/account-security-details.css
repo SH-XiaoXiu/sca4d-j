@@ -1,0 +1,203 @@
+.account-detail {
+  padding: 0 24px;
+}
+
+.account-detail__header {
+  display: flex;
+  min-height: 76px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid var(--app-border);
+}
+
+.account-detail__header h2,
+.account-detail .section-heading h3 {
+  margin: 0;
+  color: var(--app-text);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.account-detail__header p {
+  margin: 5px 0 0;
+  overflow: hidden;
+  color: var(--app-text-secondary);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-detail .security-navigation {
+  margin-top: 16px;
+}
+
+.account-detail .security-section {
+  padding: 22px 0;
+}
+
+.account-detail .section-heading,
+.account-detail .section-heading > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.account-detail .section-heading {
+  margin-bottom: 14px;
+  color: var(--app-text-secondary);
+}
+
+.account-detail .section-heading--actions {
+  min-height: 40px;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.account-detail .second-factor-actions,
+.account-detail .credential-heading-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.account-detail .credential-notice {
+  margin-bottom: 12px;
+}
+
+.account-detail .passkey-list {
+  border-top: 1px solid var(--app-border);
+}
+
+.account-detail .passkey-name,
+.account-detail .session-row__body {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.account-detail .passkey-name small,
+.account-detail .session-row__body > span {
+  overflow: hidden;
+  color: var(--app-text-secondary);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-detail .fact-list,
+.account-detail .session-list {
+  display: grid;
+}
+
+.account-detail .fact-row {
+  display: grid;
+  min-height: 46px;
+  grid-template-columns: minmax(100px, 0.8fr) minmax(160px, 1.6fr) auto;
+  align-items: center;
+  gap: 12px;
+  border-top: 1px solid var(--app-border);
+}
+
+.account-detail .fact-row:first-child,
+.account-detail .session-row:first-child {
+  border-top: 0;
+}
+
+.account-detail .fact-row > span:first-child {
+  color: var(--app-text-secondary);
+}
+
+.account-detail .fact-row--single {
+  grid-template-columns: minmax(160px, 1fr) auto;
+}
+
+.account-detail .credential-actions {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.account-detail .session-row {
+  display: grid;
+  min-height: 78px;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  border-top: 1px solid var(--app-border);
+}
+
+.account-detail .session-row__icon {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  color: var(--app-primary);
+  background: var(--app-primary-soft);
+  border-radius: var(--app-radius);
+}
+
+.account-detail .session-row__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 560px) {
+  .account-detail {
+    padding: 0 16px;
+  }
+
+  .account-detail .fact-row {
+    min-height: 64px;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .account-detail .fact-row > strong {
+    grid-row: 2;
+    grid-column: 1 / -1;
+    overflow-wrap: anywhere;
+  }
+
+  .account-detail .fact-row--single {
+    min-height: 48px;
+  }
+
+  .account-detail .credential-actions {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-items: flex-end;
+    flex-direction: column;
+  }
+
+  .account-detail .section-heading--actions {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .account-detail .second-factor-actions,
+  .account-detail .credential-heading-actions {
+    display: grid;
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .account-detail .credential-heading-actions button,
+  .account-detail .second-factor-actions button {
+    min-height: 44px;
+  }
+
+  .account-detail .session-row {
+    min-height: 116px;
+    grid-template-columns: 36px minmax(0, 1fr);
+    padding: 12px 0;
+  }
+
+  .account-detail .session-row > button {
+    grid-column: 1 / -1;
+    min-height: 44px;
+  }
+}

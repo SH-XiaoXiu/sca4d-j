@@ -1,0 +1,6 @@
+packages:
+  - common
+  - app
+allowBuilds:
+  core-js: false
+  esbuild: false

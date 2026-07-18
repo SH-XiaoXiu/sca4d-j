@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.mapper.Oauth2ProviderMapper">
+    <insert id="insertConfiguration">
+        INSERT INTO iam_oauth2_provider (
+            provider_id, authorization_uri, token_uri, profile_uri, auxiliary_profile_uri,
+            client_id, client_secret_key_id, client_secret_nonce, client_secret_ciphertext,
+            scopes, subject_path, display_name_path, email_path, email_verified_path, avatar_path
+        ) VALUES (
+            #{configuration.providerId}, #{configuration.authorizationUri}, #{configuration.tokenUri},
+            #{configuration.profileUri}, #{configuration.auxiliaryProfileUri}, #{configuration.clientId},
+            #{configuration.clientSecretKeyId}, #{configuration.clientSecretNonce},
+            #{configuration.clientSecretCiphertext}, #{configuration.scopes},
+            #{configuration.subjectPath}, #{configuration.displayNamePath}, #{configuration.emailPath},
+            #{configuration.emailVerifiedPath}, #{configuration.avatarPath}
+        )
+    </insert>
+
+    <update id="updateConfiguration">
+        UPDATE iam_oauth2_provider
+        SET authorization_uri = #{configuration.authorizationUri},
+            token_uri = #{configuration.tokenUri},
+            profile_uri = #{configuration.profileUri},
+            auxiliary_profile_uri = #{configuration.auxiliaryProfileUri},
+            client_id = #{configuration.clientId},
+            <if test="secretChanged">
+                client_secret_key_id = #{configuration.clientSecretKeyId},
+                client_secret_nonce = #{configuration.clientSecretNonce},
+                client_secret_ciphertext = #{configuration.clientSecretCiphertext},
+            </if>
+            scopes = #{configuration.scopes},
+            subject_path = #{configuration.subjectPath},
+            display_name_path = #{configuration.displayNamePath},
+            email_path = #{configuration.emailPath},
+            email_verified_path = #{configuration.emailVerifiedPath},
+            avatar_path = #{configuration.avatarPath},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE provider_id = #{configuration.providerId}
+    </update>
+</mapper>

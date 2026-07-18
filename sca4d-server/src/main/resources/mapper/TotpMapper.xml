@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.mapper.TotpMapper">
+
+    <insert id="insertCredential">
+        INSERT INTO iam_credential (id, account_id, credential_type, status)
+        VALUES (#{credential.id}, #{credential.accountId}, #{credential.credentialType}, #{credential.status})
+    </insert>
+
+    <insert id="insertTotp">
+        INSERT INTO iam_totp (
+            credential_id, secret_key_id, secret_nonce, secret_ciphertext, last_accepted_step
+        ) VALUES (
+            #{totp.credentialId}, #{totp.secretKeyId}, #{totp.secretNonce},
+            #{totp.secretCiphertext}, #{totp.lastAcceptedStep}
+        )
+    </insert>
+
+    <select id="selectTotp" resultType="com.sca4d.iam.totp.repository.TotpRow">
+        SELECT credential.id AS credential_id,
+               credential.account_id,
+               account.subject_id,
+               account.scope_type,
+               account.scope_id,
+               subject.display_name,
+               totp.secret_key_id,
+               totp.secret_nonce,
+               totp.secret_ciphertext,
+               totp.last_accepted_step,
+               credential.status AS credential_status,
+               account.status AS account_status,
+               account.second_factor_required,
+               subject.status AS subject_status,
+               credential.version AS credential_version
+        FROM iam_credential credential
+        JOIN iam_totp totp ON totp.credential_id = credential.id
+        JOIN iam_account account ON account.id = credential.account_id AND account.deleted = 0
+        JOIN iam_subject subject ON subject.id = account.subject_id AND subject.deleted = 0
+        WHERE credential.account_id = #{accountId}
+          AND credential.credential_type = 'TOTP'
+          AND credential.deleted = 0
+    </select>
+
+    <select id="countActiveTotp" resultType="int">
+        SELECT COUNT(*)
+        FROM iam_credential credential
+        JOIN iam_totp totp ON totp.credential_id = credential.id
+        WHERE credential.account_id = #{accountId}
+          AND credential.credential_type = 'TOTP'
+          AND credential.status = 'ACTIVE'
+          AND credential.deleted = 0
+        <if test="excludedCredentialId != null">
+          AND credential.id != #{excludedCredentialId}
+        </if>
+    </select>
+
+    <update id="advanceAcceptedStep">
+        UPDATE iam_totp totp
+        SET last_accepted_step = #{acceptedStep}, updated_at = CURRENT_TIMESTAMP
+        FROM iam_credential credential
+        JOIN iam_account account
+          ON account.id = credential.account_id
+         AND account.status = 'ACTIVE'
+         AND account.deleted = 0
+        JOIN iam_subject subject
+          ON subject.id = account.subject_id
+         AND subject.status = 'ACTIVE'
+         AND subject.deleted = 0
+        WHERE totp.credential_id = #{credentialId}
+          AND credential.id = totp.credential_id
+          AND credential.account_id = #{accountId}
+          AND credential.credential_type = 'TOTP'
+          AND credential.status = 'ACTIVE'
+          AND credential.deleted = 0
+          AND totp.last_accepted_step &lt; #{acceptedStep}
+    </update>
+
+    <update id="replaceTotp">
+        WITH target AS MATERIALIZED (
+            SELECT credential.id
+            FROM iam_credential credential
+            JOIN iam_totp totp ON totp.credential_id = credential.id
+            WHERE credential.id = #{credentialId}
+              AND credential.account_id = #{accountId}
+              AND credential.credential_type = 'TOTP'
+              AND credential.version = #{version}
+              AND credential.deleted = 0
+            FOR UPDATE
+        ), updated_totp AS (
+            UPDATE iam_totp
+            SET secret_key_id = #{secretKeyId},
+                secret_nonce = #{secretNonce},
+                secret_ciphertext = #{secretCiphertext},
+                last_accepted_step = #{acceptedStep},
+                updated_at = CURRENT_TIMESTAMP
+            WHERE credential_id IN (SELECT id FROM target)
+            RETURNING credential_id
+        )
+        UPDATE iam_credential
+        SET status = 'ACTIVE', updated_at = CURRENT_TIMESTAMP, version = version + 1
+        WHERE id IN (SELECT credential_id FROM updated_totp)
+    </update>
+
+    <update id="deleteTotp">
+        UPDATE iam_credential credential
+        SET status = 'DISABLED',
+            deleted = 1,
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE credential.id = #{credentialId}
+          AND credential.account_id = #{accountId}
+          AND credential.credential_type = 'TOTP'
+          AND credential.version = #{version}
+          AND credential.deleted = 0
+          AND EXISTS (
+              SELECT 1
+              FROM iam_totp totp
+              WHERE totp.credential_id = credential.id
+          )
+    </update>
+</mapper>

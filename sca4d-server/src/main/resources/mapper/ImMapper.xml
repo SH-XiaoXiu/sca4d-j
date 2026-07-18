@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.mapper.ImMapper">
+    <delete id="deleteMembersByPrincipalIds">
+        DELETE FROM im_conversation_member
+        WHERE principal_id IN
+        <foreach collection="principalIds" item="principalId" open="(" separator="," close=")">
+            #{principalId}
+        </foreach>
+    </delete>
+
+    <insert id="insertConversation">
+        INSERT INTO im_conversation (
+            id,
+            conversation_type,
+            title,
+            created_at,
+            updated_at,
+            version,
+            deleted
+        ) VALUES (
+            #{entity.id},
+            #{entity.conversationType},
+            #{entity.title},
+            #{entity.createdAt},
+            #{entity.updatedAt},
+            0,
+            0
+        )
+    </insert>
+
+    <insert id="insertMembers">
+        INSERT INTO im_conversation_member (
+            id,
+            conversation_id,
+            principal_type,
+            principal_id,
+            subject_id,
+            display_name,
+            member_role,
+            joined_at,
+            created_at,
+            updated_at,
+            version,
+            deleted
+        ) VALUES
+        <foreach collection="entities" item="entity" separator=",">
+            (
+                #{entity.id},
+                #{entity.conversationId},
+                #{entity.principalType},
+                #{entity.principalId},
+                #{entity.subjectId},
+                #{entity.displayName},
+                #{entity.memberRole},
+                #{entity.joinedAt},
+                #{entity.createdAt},
+                #{entity.updatedAt},
+                0,
+                0
+            )
+        </foreach>
+        ON CONFLICT (conversation_id, principal_type, principal_id) WHERE deleted = 0 DO NOTHING
+    </insert>
+
+    <insert id="insertMessage">
+        INSERT INTO im_message (
+            id,
+            conversation_id,
+            sender_principal_type,
+            sender_principal_id,
+            sender_subject_id,
+            content_type,
+            content,
+            attachment_file_id,
+            payload_json,
+            status,
+            created_at,
+            version,
+            deleted
+        ) VALUES (
+            #{entity.id},
+            #{entity.conversationId},
+            #{entity.senderPrincipalType},
+            #{entity.senderPrincipalId},
+            #{entity.senderSubjectId},
+            #{entity.contentType},
+            #{entity.content},
+            #{entity.attachmentFileId},
+            CAST(#{payloadJson} AS jsonb),
+            #{entity.status},
+            #{entity.createdAt},
+            0,
+            0
+        )
+    </insert>
+
+    <select id="selectConversationPage" resultType="com.sca4d.im.ImConversation">
+        SELECT
+            c.id AS conversation_id,
+            c.conversation_type,
+            c.title,
+            (
+                SELECT COUNT(1)
+                FROM im_message msg
+                WHERE msg.conversation_id = c.id
+                AND msg.deleted = 0
+                AND msg.status = #{normalStatus}
+                AND msg.created_at >= m.joined_at
+                AND (m.last_read_message_id IS NULL OR msg.id > m.last_read_message_id)
+                AND NOT (msg.sender_principal_type = m.principal_type AND msg.sender_principal_id = m.principal_id)
+            ) AS unread_count,
+            c.last_message_id,
+            c.last_message_preview,
+            c.last_message_at,
+            c.updated_at
+        FROM im_conversation_member m
+        JOIN im_conversation c ON c.id = m.conversation_id
+        WHERE m.principal_type = #{principalType}
+        AND m.principal_id = #{principalId}
+        AND m.deleted = 0
+        AND c.deleted = 0
+        ORDER BY COALESCE(c.last_message_at, c.updated_at) DESC, c.id DESC
+    </select>
+
+    <select id="selectMessagePage" resultType="com.sca4d.im.ImMessage">
+        SELECT
+            id AS message_id,
+            conversation_id,
+            sender_principal_type,
+            sender_principal_id,
+            sender_subject_id,
+            content_type,
+            content,
+            attachment_file_id,
+            payload_json::text AS payload_json,
+            status,
+            created_at,
+            revoked_at
+        FROM im_message
+        WHERE conversation_id = #{conversationId}
+        AND deleted = 0
+        ORDER BY created_at DESC, id DESC
+    </select>
+
+    <select id="selectMessageById" resultType="com.sca4d.entity.ImMessageEntity">
+        SELECT
+            id,
+            conversation_id,
+            sender_principal_type,
+            sender_principal_id,
+            sender_subject_id,
+            content_type,
+            content,
+            attachment_file_id,
+            payload_json::text AS payload_json,
+            status,
+            created_at,
+            revoked_at,
+            version,
+            deleted
+        FROM im_message
+        WHERE id = #{messageId}
+        AND deleted = 0
+    </select>
+
+    <update id="updateConversationLastMessage">
+        UPDATE im_conversation
+        SET last_message_id = #{messageId},
+            last_message_preview = #{preview},
+            last_message_at = #{at},
+            updated_at = #{at},
+            version = version + 1
+        WHERE id = #{conversationId}
+        AND deleted = 0
+    </update>
+
+    <update id="updateMemberReadCursor">
+        UPDATE im_conversation_member
+        SET last_read_message_id = #{messageId},
+            last_read_at = #{at},
+            updated_at = #{at},
+            version = version + 1
+        WHERE conversation_id = #{conversationId}
+        AND principal_type = #{principalType}
+        AND principal_id = #{principalId}
+        AND deleted = 0
+        AND (last_read_message_id IS NULL OR last_read_message_id &lt; #{messageId})
+    </update>
+
+    <update id="updateMessageStatusBySenderAndStatus">
+        UPDATE im_message
+        SET status = #{nextStatus},
+            content = NULL,
+            revoked_at = #{revokedAt},
+            version = version + 1
+        WHERE id = #{messageId}
+        AND sender_principal_type = #{principalType}
+        AND sender_principal_id = #{principalId}
+        AND status = #{currentStatus}
+        AND deleted = 0
+    </update>
+</mapper>

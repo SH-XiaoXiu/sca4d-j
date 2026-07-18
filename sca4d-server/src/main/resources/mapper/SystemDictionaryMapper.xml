@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.mapper.SystemDictionaryMapper">
+    <select id="lockCodeDictionaryCatalog" resultType="int">
+        SELECT 1
+        FROM pg_advisory_xact_lock(hashtext('sca4d:system:code-dictionary-catalog'))
+    </select>
+
+    <select id="lockDictionaryTypeCode" resultType="int">
+        SELECT 1
+        FROM pg_advisory_xact_lock(hashtext('sca4d:system:dictionary-type:' || #{code}))
+    </select>
+
+    <select id="lockDictionaryItemValue" resultType="int">
+        SELECT 1
+        FROM pg_advisory_xact_lock(hashtext(
+            'sca4d:system:dictionary-item:' || #{dictionaryId}::text || ':' || UPPER(#{value})
+        ))
+    </select>
+
+    <select id="lockDictionaryOrder" resultType="int">
+        SELECT 1
+        FROM pg_advisory_xact_lock(hashtext('sca4d:dictionary-order:' || #{scope}))
+    </select>
+
+    <select id="selectMaxDictionaryTypeSortOrder" resultType="int">
+        SELECT MAX(sort_order)
+        FROM sys_dict_type
+        WHERE deleted = 0
+        <choose>
+            <when test="tenantId == null">
+                AND tenant_id IS NULL
+            </when>
+            <otherwise>
+                AND tenant_id = #{tenantId}
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectMaxDictionaryItemSortOrder" resultType="int">
+        SELECT MAX(sort_order)
+        FROM sys_dict_item
+        WHERE dict_type_id = #{dictionaryId}
+          AND deleted = 0
+    </select>
+
+    <select id="selectGlobalDictionaryTypes" resultType="com.sca4d.entity.SysDictionaryTypeEntity">
+        SELECT id, tenant_id, code, kind, source, name_key, name_labels, status, sort_order, source_ref,
+               created_at, updated_at, version, deleted
+        FROM sys_dict_type
+        WHERE tenant_id IS NULL
+        ORDER BY code, id
+    </select>
+
+    <select id="selectDictionaryItems" resultType="com.sca4d.entity.SysDictionaryItemEntity">
+        SELECT id, dict_type_id, item_value, source, source_ref, label_key, label_labels, tone, selectable, status, sort_order,
+               created_at, updated_at, version, deleted
+        FROM sys_dict_item
+        WHERE dict_type_id IN
+        <foreach collection="typeIds" item="typeId" open="(" separator="," close=")">
+            #{typeId}
+        </foreach>
+        ORDER BY dict_type_id, sort_order, id
+    </select>
+
+    <insert id="upsertCodeDictionaryTypes">
+        INSERT INTO sys_dict_type (
+            id, tenant_id, code, kind, source, name_key, name_labels, status, sort_order, source_ref, deleted
+        ) VALUES
+        <foreach collection="types" item="type" separator=",">
+            (
+                #{type.id}, NULL, #{type.code}, #{type.kind}, #{type.source}, #{type.nameKey},
+                CAST(#{type.nameLabels} AS JSONB), #{type.status}, #{type.sortOrder}, #{type.sourceRef}, #{type.deleted}
+            )
+        </foreach>
+        ON CONFLICT (id) DO UPDATE
+        SET kind = EXCLUDED.kind,
+            source = EXCLUDED.source,
+            name_key = EXCLUDED.name_key,
+            name_labels = EXCLUDED.name_labels,
+            status = EXCLUDED.status,
+            source_ref = EXCLUDED.source_ref,
+            updated_at = CURRENT_TIMESTAMP,
+            version = sys_dict_type.version + 1,
+            deleted = EXCLUDED.deleted
+        WHERE sys_dict_type.kind IS DISTINCT FROM EXCLUDED.kind
+           OR sys_dict_type.source IS DISTINCT FROM EXCLUDED.source
+           OR sys_dict_type.name_key IS DISTINCT FROM EXCLUDED.name_key
+           OR sys_dict_type.name_labels IS DISTINCT FROM EXCLUDED.name_labels
+           OR sys_dict_type.status IS DISTINCT FROM EXCLUDED.status
+           OR sys_dict_type.source_ref IS DISTINCT FROM EXCLUDED.source_ref
+           OR sys_dict_type.deleted IS DISTINCT FROM EXCLUDED.deleted
+    </insert>
+
+    <insert id="upsertCodeDictionaryItems">
+        INSERT INTO sys_dict_item (
+            id, dict_type_id, item_value, source, source_ref, label_key, label_labels, tone,
+            selectable, status, sort_order, deleted
+        ) VALUES
+        <foreach collection="items" item="item" separator=",">
+            (
+                #{item.id}, #{item.dictTypeId}, #{item.itemValue}, #{item.source}, #{item.sourceRef}, #{item.labelKey},
+                CAST(#{item.labelLabels} AS JSONB), #{item.tone}, #{item.selectable},
+                #{item.status}, #{item.sortOrder}, #{item.deleted}
+            )
+        </foreach>
+        ON CONFLICT (id) DO UPDATE
+        SET source = EXCLUDED.source,
+            source_ref = EXCLUDED.source_ref,
+            label_key = EXCLUDED.label_key,
+            label_labels = EXCLUDED.label_labels,
+            tone = EXCLUDED.tone,
+            selectable = EXCLUDED.selectable,
+            status = EXCLUDED.status,
+            updated_at = CURRENT_TIMESTAMP,
+            version = sys_dict_item.version + 1,
+            deleted = EXCLUDED.deleted
+        WHERE sys_dict_item.source IS DISTINCT FROM EXCLUDED.source
+           OR sys_dict_item.source_ref IS DISTINCT FROM EXCLUDED.source_ref
+           OR sys_dict_item.label_key IS DISTINCT FROM EXCLUDED.label_key
+           OR sys_dict_item.label_labels IS DISTINCT FROM EXCLUDED.label_labels
+           OR sys_dict_item.tone IS DISTINCT FROM EXCLUDED.tone
+           OR sys_dict_item.selectable IS DISTINCT FROM EXCLUDED.selectable
+           OR sys_dict_item.status IS DISTINCT FROM EXCLUDED.status
+           OR sys_dict_item.deleted IS DISTINCT FROM EXCLUDED.deleted
+    </insert>
+
+    <insert id="insertConfigurableDictionaryType">
+        INSERT INTO sys_dict_type (
+            id, tenant_id, code, kind, source, name_key, name_labels, status, sort_order, source_ref, deleted
+        ) VALUES (
+            #{type.id}, #{type.tenantId}, #{type.code}, #{type.kind}, 'CONFIGURATION', NULL,
+            CAST(#{type.nameLabels} AS JSONB), #{type.status}, #{type.sortOrder}, NULL, 0
+        )
+    </insert>
+
+    <insert id="insertConfigurableDictionaryItem">
+        INSERT INTO sys_dict_item (
+            id, dict_type_id, item_value, source, source_ref, label_key, label_labels, tone,
+            selectable, status, sort_order, deleted
+        ) VALUES (
+            #{item.id}, #{item.dictTypeId}, #{item.itemValue}, 'CONFIGURATION', NULL, NULL,
+            CAST(#{item.labelLabels} AS JSONB), #{item.tone}, #{item.selectable},
+            #{item.status}, #{item.sortOrder}, 0
+        )
+    </insert>
+
+    <select id="selectDictionaryTypeForUpdate" resultType="com.sca4d.entity.SysDictionaryTypeEntity">
+        SELECT id, tenant_id, code, kind, source, name_key, name_labels, status, sort_order, source_ref,
+               created_at, updated_at, version, deleted
+        FROM sys_dict_type
+        WHERE id = #{dictionaryId}
+          AND deleted = 0
+        <choose>
+            <when test="tenantId == null">
+                AND tenant_id IS NULL
+            </when>
+            <otherwise>
+                AND tenant_id = #{tenantId}
+            </otherwise>
+        </choose>
+        FOR UPDATE
+    </select>
+
+    <update id="updateConfigurableDictionaryType">
+        UPDATE sys_dict_type
+        SET name_labels = CAST(#{nameLabels} AS JSONB),
+            status = #{status},
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE id = #{dictionaryId}
+          AND kind IN ('BUSINESS_CODE', 'INPUT_SUGGESTION')
+          AND version = #{version}
+          AND deleted = 0
+        <choose>
+            <when test="tenantId == null">
+                AND tenant_id IS NULL
+            </when>
+            <otherwise>
+                AND tenant_id = #{tenantId}
+            </otherwise>
+        </choose>
+    </update>
+
+    <update id="updateConfigurableDictionaryItem">
+        UPDATE sys_dict_item item
+        SET item_value = #{value},
+            label_labels = CAST(#{labelLabels} AS JSONB),
+            tone = #{tone},
+            selectable = #{selectable},
+            status = #{status},
+            updated_at = CURRENT_TIMESTAMP,
+            version = item.version + 1
+        WHERE item.id = #{itemId}
+          AND item.dict_type_id = #{dictionaryId}
+          AND item.version = #{version}
+          AND item.deleted = 0
+          AND EXISTS (
+              SELECT 1
+              FROM sys_dict_type type
+              WHERE type.id = item.dict_type_id
+                AND type.kind = #{kind}
+                AND type.deleted = 0
+                <choose>
+                    <when test="tenantId == null">
+                        AND type.tenant_id IS NULL
+                    </when>
+                    <otherwise>
+                        AND type.tenant_id = #{tenantId}
+                    </otherwise>
+                </choose>
+          )
+    </update>
+
+    <update id="markDictionaryItemsDeleted">
+        UPDATE sys_dict_item
+        SET status = 'DISABLED',
+            selectable = FALSE,
+            deleted = 1,
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE dict_type_id = #{dictionaryId}
+          AND deleted = 0
+    </update>
+
+    <delete id="deleteDictionaryItems">
+        DELETE FROM sys_dict_item
+        WHERE dict_type_id = #{dictionaryId}
+    </delete>
+
+    <update id="markDictionaryTypeDeleted">
+        UPDATE sys_dict_type
+        SET status = 'DISABLED',
+            deleted = 1,
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE id = #{dictionaryId}
+          AND kind = #{kind}
+          AND kind IN ('BUSINESS_CODE', 'INPUT_SUGGESTION')
+          AND source = 'CONFIGURATION'
+          AND version = #{version}
+          AND deleted = 0
+        <choose>
+            <when test="tenantId == null">
+                AND tenant_id IS NULL
+            </when>
+            <otherwise>
+                AND tenant_id = #{tenantId}
+            </otherwise>
+        </choose>
+    </update>
+
+    <update id="markBusinessDictionaryItemDeleted">
+        UPDATE sys_dict_item item
+        SET status = 'DISABLED',
+            selectable = FALSE,
+            deleted = 1,
+            updated_at = CURRENT_TIMESTAMP,
+            version = item.version + 1
+        WHERE item.id = #{itemId}
+          AND item.dict_type_id = #{dictionaryId}
+          AND item.version = #{version}
+          AND item.source = 'CONFIGURATION'
+          AND item.deleted = 0
+          AND EXISTS (
+              SELECT 1
+              FROM sys_dict_type type
+              WHERE type.id = item.dict_type_id
+                AND type.kind = 'BUSINESS_CODE'
+                AND type.deleted = 0
+                <choose>
+                    <when test="tenantId == null">
+                        AND type.tenant_id IS NULL
+                    </when>
+                    <otherwise>
+                        AND type.tenant_id = #{tenantId}
+                    </otherwise>
+                </choose>
+          )
+    </update>
+
+    <delete id="deleteInputSuggestionItem">
+        DELETE FROM sys_dict_item item
+        WHERE item.id = #{itemId}
+          AND item.dict_type_id = #{dictionaryId}
+          AND item.version = #{version}
+          AND item.deleted = 0
+          AND EXISTS (
+              SELECT 1
+              FROM sys_dict_type type
+              WHERE type.id = item.dict_type_id
+                AND type.kind = 'INPUT_SUGGESTION'
+                AND type.deleted = 0
+                <choose>
+                    <when test="tenantId == null">
+                        AND type.tenant_id IS NULL
+                    </when>
+                    <otherwise>
+                        AND type.tenant_id = #{tenantId}
+                    </otherwise>
+                </choose>
+          )
+    </delete>
+
+    <update id="isolateTenantDictionaryItems">
+        UPDATE sys_dict_item item
+        SET status = 'DISABLED',
+            selectable = FALSE,
+            deleted = 1,
+            updated_at = CURRENT_TIMESTAMP,
+            version = item.version + 1
+        FROM sys_dict_type type
+        WHERE type.id = item.dict_type_id
+          AND type.tenant_id = #{tenantId}
+          AND item.deleted = 0
+    </update>
+
+    <update id="isolateTenantDictionaryTypes">
+        UPDATE sys_dict_type
+        SET status = 'DISABLED',
+            deleted = 1,
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE tenant_id = #{tenantId}
+          AND deleted = 0
+    </update>
+
+    <delete id="deleteIsolatedTenantDictionaries">
+        WITH type_ids AS MATERIALIZED (
+            SELECT id
+            FROM sys_dict_type
+            WHERE tenant_id = #{tenantId}
+              AND deleted = 1
+        ), deleted_items AS (
+            DELETE FROM sys_dict_item WHERE dict_type_id IN (SELECT id FROM type_ids)
+        )
+        DELETE FROM sys_dict_type WHERE id IN (SELECT id FROM type_ids)
+    </delete>
+
+    <update id="reorderDictionaryTypes">
+        UPDATE sys_dict_type AS type
+        SET sort_order = ordering.sort_order,
+            updated_at = CURRENT_TIMESTAMP,
+            version = type.version + 1
+        FROM (VALUES
+            <foreach collection="orders" item="order" separator=",">
+                (#{order.id}, #{order.sortOrder}, #{order.version})
+            </foreach>
+        ) AS ordering(type_id, sort_order, expected_version)
+        WHERE type.id = ordering.type_id
+          AND type.version = ordering.expected_version
+          AND type.deleted = 0
+        <choose>
+            <when test="tenantId == null">
+                AND type.tenant_id IS NULL
+            </when>
+            <otherwise>
+                AND type.tenant_id = #{tenantId}
+            </otherwise>
+        </choose>
+    </update>
+
+    <update id="reorderDictionaryItems">
+        UPDATE sys_dict_item item
+        SET sort_order = ordering.sort_order,
+            updated_at = CURRENT_TIMESTAMP,
+            version = item.version + 1
+        FROM (VALUES
+            <foreach collection="orders" item="order" separator=",">
+                (#{order.id}, #{order.sortOrder}, #{order.version})
+            </foreach>
+        ) AS ordering(item_id, sort_order, expected_version)
+        WHERE item.id = ordering.item_id
+          AND item.dict_type_id = #{dictionaryId}
+          AND item.version = ordering.expected_version
+          AND item.deleted = 0
+          AND EXISTS (
+              SELECT 1
+              FROM sys_dict_type type
+              WHERE type.id = item.dict_type_id
+                AND type.deleted = 0
+                <choose>
+                    <when test="tenantId == null">
+                        AND type.tenant_id IS NULL
+                    </when>
+                    <otherwise>
+                        AND type.tenant_id = #{tenantId}
+                    </otherwise>
+                </choose>
+          )
+    </update>
+</mapper>

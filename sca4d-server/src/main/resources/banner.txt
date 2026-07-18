@@ -1,0 +1,15 @@
+ _____             ___     _ _        ___
+/  ___|           /   |   | (_)      |_  |
+\ `--.  ___ __ _ / /| | __| |_ ______  | |
+ `--. \/ __/ _` / /_| |/ _` | |______| | |
+/\__/ / (_| (_| \___  | (_| | |    /\__/ /
+\____/ \___\__,_|   |_/\__,_| |    \____/
+                           _/ |
+                          |__/
+@application.title@
+Version : @build.version@
+Build   : @build.mode@ @build.time@
+Commit  : @build.commit@
+Branch  : @build.branch@
+Author  : @build.author@
+Powered by Spring Boot ${spring-boot.version}

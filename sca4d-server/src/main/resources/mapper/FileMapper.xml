@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.mapper.FileMapper">
+
+    <sql id="fileResourceColumns">
+        r.id AS file_id,
+        r.owner_principal_id,
+        r.original_filename,
+        r.content_type,
+        r.size_bytes,
+        r.status,
+        r.upload_expires_at,
+        r.ready_at,
+        r.consumed_at,
+        r.delete_requested_at,
+        r.deleted_at,
+        r.version,
+        o.provider,
+        o.bucket,
+        o.object_key,
+        o.temporary_object_key
+    </sql>
+
+    <insert id="insertResource">
+        INSERT INTO sys_file_resource (
+            id, owner_principal_id, original_filename, content_type, size_bytes, status,
+            upload_expires_at, created_at, updated_at, version, deleted
+        ) VALUES (
+            #{entity.id}, #{entity.ownerPrincipalId}, #{entity.originalFilename}, #{entity.contentType},
+            #{entity.sizeBytes}, #{entity.status}, #{entity.uploadExpiresAt}, #{entity.createdAt},
+            #{entity.updatedAt}, #{entity.version}, #{entity.deleted}
+        )
+    </insert>
+
+    <insert id="insertObject">
+        INSERT INTO sys_file_object (
+            id, file_id, provider, bucket, object_key, temporary_object_key, created_at, updated_at
+        ) VALUES (
+            #{entity.id}, #{entity.fileId}, #{entity.provider}, #{entity.bucket}, #{entity.objectKey},
+            #{entity.temporaryObjectKey}, #{entity.createdAt}, #{entity.updatedAt}
+        )
+    </insert>
+
+    <select id="selectById" resultType="com.sca4d.file.FileResource">
+        SELECT <include refid="fileResourceColumns" />
+        FROM sys_file_resource r
+        JOIN sys_file_object o ON o.file_id = r.id
+        WHERE r.id = #{fileId}
+        AND r.deleted = 0
+    </select>
+
+    <select id="selectByIds" resultType="com.sca4d.file.FileResource">
+        SELECT <include refid="fileResourceColumns" />
+        FROM sys_file_resource r
+        JOIN sys_file_object o ON o.file_id = r.id
+        WHERE r.id IN
+        <foreach collection="fileIds" item="fileId" open="(" separator="," close=")">
+            #{fileId}
+        </foreach>
+        AND r.deleted = 0
+    </select>
+
+    <update id="updateUploadCompleted">
+        UPDATE sys_file_resource
+        SET status = #{nextStatus},
+            content_type = #{contentType},
+            size_bytes = #{sizeBytes},
+            ready_at = #{at},
+            updated_at = #{at},
+            version = version + 1
+        WHERE id = #{fileId}
+        AND owner_principal_id = #{ownerPrincipalId}
+        AND status = #{currentStatus}
+        AND deleted = 0
+    </update>
+
+    <update id="updateStatus">
+        UPDATE sys_file_resource
+        SET status = #{nextStatus},
+            consumed_at = CASE WHEN #{nextStatus} = #{inUseStatus} THEN #{now} ELSE consumed_at END,
+            delete_requested_at = CASE
+                WHEN #{nextStatus} IN (#{deletePendingStatus}, #{expiredStatus}) THEN #{now}
+                ELSE delete_requested_at
+            END,
+            deleted_at = CASE WHEN #{nextStatus} = #{deletedStatus} THEN #{now} ELSE deleted_at END,
+            deleted = CASE WHEN #{nextStatus} = #{deletedStatus} THEN 1 ELSE deleted END,
+            updated_at = #{now},
+            version = version + 1
+        WHERE id = #{fileId}
+        AND status IN
+        <foreach collection="currentStatuses" item="status" open="(" separator="," close=")">
+            #{status}
+        </foreach>
+        AND deleted = 0
+    </update>
+
+    <update id="updateExpiredUploads">
+        UPDATE sys_file_resource
+        SET status = #{expiredStatus},
+            delete_requested_at = #{now},
+            updated_at = #{now},
+            version = version + 1
+        WHERE id IN (
+            SELECT id
+            FROM sys_file_resource
+            WHERE deleted = 0
+            AND (
+                (status = #{pendingStatus} AND upload_expires_at &lt;= #{now})
+                OR (status = #{readyStatus} AND ready_at &lt;= #{readyBefore})
+            )
+            ORDER BY updated_at, id
+            LIMIT #{limit}
+        )
+        AND status IN (#{pendingStatus}, #{readyStatus})
+        AND deleted = 0
+    </update>
+
+    <select id="claimDeletionBatch" resultType="com.sca4d.file.FileResource">
+        WITH candidates AS (
+            SELECT r.id
+            FROM sys_file_resource r
+            WHERE r.deleted = 0
+            AND (
+                r.status IN
+                <foreach collection="pendingStatuses" item="status" open="(" separator="," close=")">
+                    #{status}
+                </foreach>
+                OR (r.status = #{deletingStatus} AND r.updated_at &lt;= #{leaseExpiredBefore})
+            )
+            ORDER BY COALESCE(r.delete_requested_at, r.updated_at), r.id
+            FOR UPDATE SKIP LOCKED
+            LIMIT #{limit}
+        ), claimed AS (
+            UPDATE sys_file_resource r
+            SET status = #{deletingStatus},
+                updated_at = #{claimedAt},
+                version = r.version + 1
+            FROM candidates c
+            WHERE r.id = c.id
+            RETURNING r.*
+        )
+        SELECT <include refid="fileResourceColumns" />
+        FROM claimed r
+        JOIN sys_file_object o ON o.file_id = r.id
+        ORDER BY COALESCE(r.delete_requested_at, r.updated_at), r.id
+    </select>
+
+    <update id="updateDeletionFinished">
+        UPDATE sys_file_resource
+        SET status = #{nextStatus},
+            deleted_at = CASE WHEN #{nextStatus} = #{deletedStatus} THEN #{finishedAt} ELSE deleted_at END,
+            deleted = CASE WHEN #{nextStatus} = #{deletedStatus} THEN 1 ELSE deleted END,
+            updated_at = #{finishedAt},
+            version = version + 1
+        WHERE id = #{fileId}
+        AND status = #{deletingStatus}
+        AND updated_at = #{claimedAt}
+        AND deleted = 0
+    </update>
+</mapper>

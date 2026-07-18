@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.mapper.MailTemplateMapper">
+    <insert id="insertTemplate">
+        INSERT INTO sys_mail_template (
+            id, family, locale, subject_template, text_template, html_template, status, deleted
+        ) VALUES (
+            #{template.id}, #{template.family}, #{template.locale}, #{template.subjectTemplate},
+            #{template.textTemplate}, #{template.htmlTemplate}, #{template.status}, 0
+        )
+    </insert>
+
+    <update id="updateTemplate">
+        UPDATE sys_mail_template
+        SET family = #{family},
+            locale = #{locale},
+            subject_template = #{subjectTemplate},
+            text_template = #{textTemplate},
+            html_template = #{htmlTemplate},
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE id = #{templateId}
+          AND version = #{version}
+          AND deleted = 0
+    </update>
+
+    <update id="updateStatus">
+        UPDATE sys_mail_template
+        SET status = #{nextStatus},
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE id = #{templateId}
+          AND status = #{expectedStatus}
+          AND version = #{version}
+          AND deleted = 0
+    </update>
+
+    <update id="markDeleted">
+        UPDATE sys_mail_template
+        SET deleted = 1,
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE id = #{templateId}
+          AND version = #{version}
+          AND deleted = 0
+    </update>
+</mapper>

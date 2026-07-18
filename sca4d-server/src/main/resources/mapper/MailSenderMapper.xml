@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.mapper.MailSenderMapper">
+    <insert id="insertSender">
+        INSERT INTO sys_mail_sender (
+            id, name, host, port, security, username,
+            password_key_id, password_nonce, password_ciphertext,
+            from_address, from_name, reply_to, status, deleted
+        ) VALUES (
+            #{sender.id}, #{sender.name}, #{sender.host}, #{sender.port}, #{sender.security},
+            #{sender.username}, #{sender.passwordKeyId}, #{sender.passwordNonce},
+            #{sender.passwordCiphertext}, #{sender.fromAddress}, #{sender.fromName},
+            #{sender.replyTo}, #{sender.status}, 0
+        )
+    </insert>
+
+    <update id="updateSender">
+        UPDATE sys_mail_sender
+        SET name = #{name},
+            host = #{host},
+            port = #{port},
+            security = #{security},
+            username = #{username},
+            <if test="passwordChanged">
+                password_key_id = #{passwordKeyId},
+                password_nonce = #{passwordNonce},
+                password_ciphertext = #{passwordCiphertext},
+            </if>
+            from_address = #{fromAddress},
+            from_name = #{fromName},
+            reply_to = #{replyTo},
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE id = #{senderId}
+          AND version = #{version}
+          AND deleted = 0
+    </update>
+
+    <update id="updateStatus">
+        UPDATE sys_mail_sender
+        SET status = #{nextStatus},
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE id = #{senderId}
+          AND status = #{expectedStatus}
+          AND version = #{version}
+          AND deleted = 0
+    </update>
+
+    <update id="markDeleted">
+        UPDATE sys_mail_sender
+        SET deleted = 1,
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE id = #{senderId}
+          AND version = #{version}
+          AND deleted = 0
+    </update>
+</mapper>

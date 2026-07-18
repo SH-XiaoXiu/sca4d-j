@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.mapper.SysOperationLogMapper">
+    <insert id="insertOperationLog">
+        INSERT INTO sys_log (
+            id,
+            principal_id,
+            subject_id,
+            account_id,
+            subject_display_name,
+            principal_display_name,
+            module_code,
+            action_code,
+            result,
+            request_uri,
+            target_type,
+            target_id,
+            detail_json,
+            created_at
+        ) VALUES (
+            #{entity.id},
+            #{entity.principalId},
+            #{entity.subjectId},
+            #{entity.accountId},
+            #{entity.subjectDisplayName},
+            #{entity.principalDisplayName},
+            #{entity.moduleCode},
+            #{entity.actionCode},
+            #{entity.result},
+            #{entity.requestUri},
+            #{entity.targetType},
+            #{entity.targetId},
+            CAST(#{detailJson} AS jsonb),
+            #{entity.createdAt}
+        )
+    </insert>
+
+    <select id="findOperationLogById" resultType="com.sca4d.entity.SysOperationLogEntity">
+        SELECT
+            id,
+            principal_id,
+            subject_id,
+            account_id,
+            subject_display_name,
+            principal_display_name,
+            module_code,
+            action_code,
+            result,
+            request_uri,
+            target_type,
+            target_id,
+            detail_json::text AS detail_json,
+            created_at
+        FROM sys_log
+        WHERE id = #{id}
+    </select>
+
+    <select id="countOperationLogOperators" resultType="long">
+        SELECT COUNT(DISTINCT subject_id)
+        FROM sys_log
+        WHERE subject_id IS NOT NULL
+          AND subject_display_name IS NOT NULL
+        <if test="search != null">
+          AND subject_display_name ILIKE '%' || #{search} || '%'
+        </if>
+    </select>
+
+    <select id="selectOperationLogOperators" resultType="com.sca4d.system.audit.OperationLogOperatorOption">
+        SELECT subject_id, subject_display_name
+        FROM (
+            SELECT DISTINCT ON (subject_id)
+                subject_id,
+                subject_display_name,
+                created_at
+            FROM sys_log
+            WHERE subject_id IS NOT NULL
+              AND subject_display_name IS NOT NULL
+            <if test="search != null">
+              AND subject_display_name ILIKE '%' || #{search} || '%'
+            </if>
+            ORDER BY subject_id, created_at DESC
+        ) latest_actor
+        ORDER BY subject_display_name, subject_id
+        LIMIT #{limit}
+        OFFSET #{offset}
+    </select>
+</mapper>

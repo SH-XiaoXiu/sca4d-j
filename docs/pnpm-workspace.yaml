@@ -1,0 +1,5 @@
+allowBuilds:
+  esbuild: true
+  vue-demi: true
+patchedDependencies:
+  '@duxweb/vitepress-theme@1.1.9': patches/@duxweb__vitepress-theme@1.1.9.patch

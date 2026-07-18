@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.mapper.ExternalIdentityMapper">
+
+    <select id="selectLink" resultType="com.sca4d.identity.external.repository.ExternalIdentityRow">
+        SELECT external_identity.id AS identity_id,
+               external_identity.provider_id,
+               external_identity.account_id,
+               external_identity.external_subject,
+               external_identity.display_name AS external_display_name,
+               external_identity.email,
+               external_identity.email_verified,
+               external_identity.avatar_uri,
+               external_identity.last_authenticated_at,
+               external_identity.version AS identity_version,
+               provider.scope_type AS provider_scope_type,
+               provider.scope_id AS provider_scope_id,
+               provider.status AS provider_status,
+               subject.id AS subject_id,
+               subject.display_name AS subject_display_name,
+               subject.status AS subject_status,
+               subject.version AS subject_version,
+               account.scope_type AS account_scope_type,
+               account.scope_id AS account_scope_id,
+               account.status AS account_status,
+               account.second_factor_required,
+               account.version AS account_version
+        FROM iam_external_identity external_identity
+        JOIN iam_identity_provider provider
+          ON provider.id = external_identity.provider_id
+         AND provider.deleted = 0
+        JOIN iam_account account
+          ON account.id = external_identity.account_id
+         AND account.deleted = 0
+        JOIN iam_subject subject
+          ON subject.id = account.subject_id
+         AND subject.deleted = 0
+        WHERE external_identity.deleted = 0
+        <choose>
+            <when test="identityId != null">
+                AND external_identity.id = #{identityId}
+            </when>
+            <otherwise>
+                AND external_identity.provider_id = #{providerId}
+                AND external_identity.external_subject = #{externalSubject}
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insertLink">
+        WITH target AS MATERIALIZED (
+            SELECT provider.id AS provider_id, account.id AS account_id
+            FROM iam_identity_provider provider
+            JOIN iam_account account
+              ON account.id = #{identity.accountId}
+             AND account.scope_type = provider.scope_type
+             AND account.scope_id IS NOT DISTINCT FROM provider.scope_id
+             AND account.status = 'ACTIVE'
+             AND account.deleted = 0
+            JOIN iam_subject subject
+              ON subject.id = account.subject_id
+             AND subject.status = 'ACTIVE'
+             AND subject.deleted = 0
+            WHERE provider.id = #{identity.providerId}
+              AND provider.status = 'ACTIVE'
+              AND provider.deleted = 0
+            FOR SHARE OF provider, account, subject
+        )
+        INSERT INTO iam_external_identity (
+            id, provider_id, account_id, external_subject, display_name,
+            email, email_verified, avatar_uri, last_authenticated_at, version, deleted
+        )
+        SELECT #{identity.id}, target.provider_id, target.account_id,
+               #{identity.externalSubject}, #{identity.displayName}, #{identity.email},
+               #{identity.emailVerified}, #{identity.avatarUri}, CURRENT_TIMESTAMP, 0, 0
+        FROM target
+    </insert>
+
+    <update id="updateAuthentication">
+        WITH target AS MATERIALIZED (
+            SELECT external_identity.id
+            FROM iam_external_identity external_identity
+            JOIN iam_identity_provider provider
+              ON provider.id = external_identity.provider_id
+             AND provider.status = 'ACTIVE'
+             AND provider.deleted = 0
+            JOIN iam_account account
+              ON account.id = external_identity.account_id
+             AND account.scope_type = provider.scope_type
+             AND account.scope_id IS NOT DISTINCT FROM provider.scope_id
+             AND account.status = 'ACTIVE'
+             AND account.deleted = 0
+            JOIN iam_subject subject
+              ON subject.id = account.subject_id
+             AND subject.status = 'ACTIVE'
+             AND subject.deleted = 0
+            WHERE external_identity.id = #{identityId}
+              AND external_identity.provider_id = #{providerId}
+              AND external_identity.version = #{version}
+              AND external_identity.deleted = 0
+            FOR UPDATE OF external_identity
+            FOR SHARE OF provider, account, subject
+        )
+        UPDATE iam_external_identity
+        SET display_name = #{profile.displayName},
+            email = #{profile.email},
+            email_verified = #{profile.emailVerified},
+            avatar_uri = #{profile.avatarUri},
+            last_authenticated_at = CURRENT_TIMESTAMP,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id IN (SELECT id FROM target)
+    </update>
+
+    <select id="selectByAccount" resultType="com.sca4d.identity.external.repository.ExternalIdentityAccountRow">
+        SELECT external_identity.id AS identity_id,
+               external_identity.provider_id,
+               external_identity.account_id,
+               external_identity.external_subject,
+               external_identity.display_name AS external_display_name,
+               external_identity.email,
+               external_identity.email_verified,
+               external_identity.avatar_uri,
+               external_identity.last_authenticated_at,
+               external_identity.version AS identity_version,
+               provider.code AS provider_code,
+               provider.name AS provider_name,
+               provider.protocol AS provider_protocol,
+               provider.status AS provider_status
+        FROM iam_external_identity external_identity
+        JOIN iam_identity_provider provider
+          ON provider.id = external_identity.provider_id
+         AND provider.deleted = 0
+        WHERE external_identity.account_id = #{accountId}
+          AND external_identity.deleted = 0
+        ORDER BY provider.code, external_identity.id
+    </select>
+
+    <update id="deleteLink">
+        UPDATE iam_external_identity
+        SET deleted = 1,
+            version = version + 1,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{identityId}
+          AND account_id = #{accountId}
+          AND version = #{version}
+          AND deleted = 0
+    </update>
+
+    <select id="existsOtherActiveByAccount" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1
+            FROM iam_external_identity external_identity
+            JOIN iam_identity_provider provider
+              ON provider.id = external_identity.provider_id
+             AND provider.status = 'ACTIVE'
+             AND provider.deleted = 0
+            WHERE external_identity.account_id = #{accountId}
+              AND external_identity.id != #{excludedIdentityId}
+              AND external_identity.deleted = 0
+        )
+    </select>
+</mapper>

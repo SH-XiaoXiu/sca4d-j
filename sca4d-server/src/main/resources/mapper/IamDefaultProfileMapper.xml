@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.mapper.IamDefaultProfileMapper">
+    <select id="selectBySubjectId" resultType="com.sca4d.iam.profile.repository.DefaultProfileRow">
+        SELECT principal.subject_id,
+               profile.principal_id,
+               profile.avatar_file_id,
+               profile.version
+        FROM iam_principal principal
+        INNER JOIN iam_default_profile profile
+                ON profile.principal_id = principal.id
+               AND profile.deleted = 0
+        WHERE principal.subject_id = #{subjectId}
+          AND principal.principal_type = 'DEFAULT'
+          AND principal.deleted = 0
+    </select>
+
+    <select id="selectBySubjectIds" resultType="com.sca4d.iam.profile.repository.DefaultProfileRow">
+        SELECT principal.subject_id,
+               profile.principal_id,
+               profile.avatar_file_id,
+               profile.version
+        FROM iam_principal principal
+        INNER JOIN iam_default_profile profile
+                ON profile.principal_id = principal.id
+               AND profile.deleted = 0
+        WHERE principal.subject_id IN
+        <foreach collection="subjectIds" item="subjectId" open="(" separator="," close=")">
+            #{subjectId}
+        </foreach>
+          AND principal.principal_type = 'DEFAULT'
+          AND principal.deleted = 0
+    </select>
+
+    <update id="updateAvatar">
+        UPDATE iam_default_profile
+        SET avatar_file_id = #{avatarFileId},
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE principal_id = (
+            SELECT id
+            FROM iam_principal
+            WHERE subject_id = #{subjectId}
+              AND principal_type = 'DEFAULT'
+              AND deleted = 0
+        )
+          AND version = #{version}
+          AND deleted = 0
+    </update>
+
+    <update id="isolateBySubjectId">
+        UPDATE iam_default_profile
+        SET deleted = 1,
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE principal_id = (
+            SELECT id
+            FROM iam_principal
+            WHERE subject_id = #{subjectId}
+              AND principal_type = 'DEFAULT'
+              AND deleted = 0
+        )
+          AND version = #{version}
+          AND deleted = 0
+    </update>
+
+    <delete id="purgeBySubjectId">
+        DELETE FROM iam_default_profile
+        WHERE principal_id IN (
+            SELECT id
+            FROM iam_principal
+            WHERE subject_id = #{subjectId}
+              AND principal_type = 'DEFAULT'
+        )
+          AND deleted = 1
+    </delete>
+</mapper>

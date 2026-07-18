@@ -1,0 +1,771 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.mapper.IamMapper">
+    <insert id="insertSubject">
+        INSERT INTO iam_subject (id, display_name, status)
+        VALUES (#{subject.id}, #{subject.displayName}, #{subject.status})
+    </insert>
+
+    <update id="updateSubject">
+        UPDATE iam_subject
+        SET display_name = #{displayName},
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE id = #{subjectId}
+          AND version = #{version}
+          AND deleted = 0
+    </update>
+
+    <update id="updateSubjectStatus">
+        UPDATE iam_subject
+        SET status = #{status},
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE id = #{subjectId}
+          AND version = #{version}
+          AND deleted = 0
+    </update>
+
+    <update id="advanceSubjectVersion">
+        UPDATE iam_subject
+        SET updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE id = #{subjectId}
+          AND version = #{version}
+          AND deleted = 0
+    </update>
+
+    <update id="deleteSubject">
+        UPDATE iam_subject
+        SET status = 'DISABLED', deleted = 1, updated_at = CURRENT_TIMESTAMP, version = version + 1
+        WHERE id = #{subjectId} AND version = #{version} AND deleted = 0
+    </update>
+
+    <update id="isolateAccountsBySubject">
+        WITH account_ids AS MATERIALIZED (
+            SELECT id FROM iam_account WHERE subject_id = #{subjectId} AND deleted = 0
+        ), isolated_credentials AS (
+            UPDATE iam_credential
+            SET status = 'DISABLED', deleted = 1, updated_at = CURRENT_TIMESTAMP, version = version + 1
+            WHERE account_id IN (SELECT id FROM account_ids) AND deleted = 0
+        ), isolated_identifiers AS (
+            UPDATE iam_account_identifier
+            SET status = 'DISABLED', deleted = 1, updated_at = CURRENT_TIMESTAMP, version = version + 1
+            WHERE account_id IN (SELECT id FROM account_ids) AND deleted = 0
+        ), isolated_contacts AS (
+            UPDATE iam_contact
+            SET status = 'DISABLED', deleted = 1, updated_at = CURRENT_TIMESTAMP, version = version + 1
+            WHERE subject_id = #{subjectId} AND deleted = 0
+        )
+        UPDATE iam_account
+        SET status = 'DISABLED', deleted = 1, updated_at = CURRENT_TIMESTAMP, version = version + 1
+        WHERE id IN (SELECT id FROM account_ids)
+    </update>
+
+    <select id="hasUnreachableActivePrincipal" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1
+            FROM iam_principal principal
+            WHERE principal.subject_id = #{subjectId}
+              AND principal.principal_type IN ('PLATFORM', 'TENANT')
+              AND principal.status = 'ACTIVE'
+              AND principal.deleted = 0
+              AND NOT EXISTS (
+                  SELECT 1
+                  FROM iam_account account
+                  WHERE account.subject_id = principal.subject_id
+                    AND account.id &lt;&gt; #{excludedAccountId}
+                    AND account.status = 'ACTIVE'
+                    AND account.deleted = 0
+                    AND (
+                        (principal.principal_type = 'PLATFORM' AND account.scope_type = 'GLOBAL')
+                        OR (principal.principal_type = 'TENANT' AND (
+                            account.scope_type = 'GLOBAL'
+                            OR (account.scope_type = 'TENANT' AND account.scope_id = principal.tenant_id)
+                        ))
+                    )
+              )
+        )
+    </select>
+
+    <update id="isolateAccount">
+        WITH isolated_credentials AS (
+            UPDATE iam_credential
+            SET status = 'DISABLED', deleted = 1, updated_at = CURRENT_TIMESTAMP, version = version + 1
+            WHERE account_id = #{accountId} AND deleted = 0
+        ), isolated_identifiers AS (
+            UPDATE iam_account_identifier
+            SET status = 'DISABLED', deleted = 1, updated_at = CURRENT_TIMESTAMP, version = version + 1
+            WHERE account_id = #{accountId} AND deleted = 0
+        )
+        UPDATE iam_account
+        SET status = 'DISABLED', deleted = 1, updated_at = CURRENT_TIMESTAMP, version = version + 1
+        WHERE id = #{accountId} AND version = #{version} AND deleted = 0
+    </update>
+
+    <update id="deletePrincipalsBySubject">
+        UPDATE iam_principal
+        SET status = 'DISABLED', deleted = 1, updated_at = CURRENT_TIMESTAMP, version = version + 1
+        WHERE subject_id = #{subjectId} AND deleted = 0
+    </update>
+
+    <update id="deleteMembershipsBySubject">
+        UPDATE iam_tenant_membership
+        SET status = 'DISABLED', deleted = 1, updated_at = CURRENT_TIMESTAMP, version = version + 1
+        WHERE subject_id = #{subjectId} AND deleted = 0
+    </update>
+
+    <insert id="insertSubjectCleanupTask">
+        INSERT INTO iam_cleanup_task (id, task_type, resource_id)
+        VALUES (#{taskId}, 'SUBJECT', #{subjectId})
+        ON CONFLICT (task_type, resource_id) DO NOTHING
+    </insert>
+
+    <select id="claimPendingSubjectCleanupTasks" resultType="com.sca4d.iam.cleanup.SubjectCleanupTask">
+        WITH claimed AS (
+            SELECT id
+            FROM iam_cleanup_task
+            WHERE task_type = 'SUBJECT'
+              AND (status = 'PENDING'
+                   OR (status = 'PROCESSING' AND updated_at &lt; CURRENT_TIMESTAMP - INTERVAL '5 minutes'))
+            ORDER BY created_at, id
+            FOR UPDATE SKIP LOCKED
+            LIMIT #{limit}
+        )
+        UPDATE iam_cleanup_task task
+        SET status = 'PROCESSING', attempts = attempts + 1, last_error = NULL, updated_at = CURRENT_TIMESTAMP
+        WHERE task.id IN (SELECT id FROM claimed)
+        RETURNING task.id AS task_id, task.resource_id AS subject_id
+    </select>
+
+    <delete id="deleteIsolatedSubjectRelations">
+        WITH principal_ids AS MATERIALIZED (
+            SELECT id FROM iam_principal WHERE subject_id = #{subjectId}
+        ), deleted_roles AS (
+            DELETE FROM iam_principal_role WHERE principal_id IN (SELECT id FROM principal_ids)
+        ), account_ids AS MATERIALIZED (
+            SELECT id FROM iam_account WHERE subject_id = #{subjectId}
+        ), credential_ids AS MATERIALIZED (
+            SELECT id FROM iam_credential WHERE account_id IN (SELECT id FROM account_ids)
+        ), deleted_passwords AS (
+            DELETE FROM iam_password WHERE credential_id IN (SELECT id FROM credential_ids)
+        ), deleted_credentials AS (
+            DELETE FROM iam_credential WHERE account_id IN (SELECT id FROM account_ids)
+        ), deleted_identifiers AS (
+            DELETE FROM iam_account_identifier WHERE account_id IN (SELECT id FROM account_ids)
+        ), deleted_accounts AS (
+            DELETE FROM iam_account WHERE id IN (SELECT id FROM account_ids)
+        ), deleted_contacts AS (
+            DELETE FROM iam_contact WHERE subject_id = #{subjectId}
+        ), deleted_memberships AS (
+            DELETE FROM iam_tenant_membership WHERE subject_id = #{subjectId}
+        )
+        DELETE FROM iam_principal WHERE subject_id = #{subjectId};
+    </delete>
+
+    <select id="selectIsolatedSubjectPrincipalIds" resultType="java.lang.Long">
+        SELECT id
+        FROM iam_principal
+        WHERE subject_id = #{subjectId}
+          AND deleted = 1
+        ORDER BY id
+    </select>
+
+    <update id="completeCleanupTask">
+        UPDATE iam_cleanup_task SET status = 'COMPLETED', updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{taskId} AND status = 'PROCESSING'
+    </update>
+
+    <update id="releaseCleanupTask">
+        UPDATE iam_cleanup_task SET status = 'PENDING', last_error = #{error}, updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{taskId} AND status = 'PROCESSING'
+    </update>
+
+    <select id="claimPendingTenantCleanupTasks" resultType="com.sca4d.iam.cleanup.TenantCleanupTask">
+        WITH claimed AS (
+            SELECT id
+            FROM iam_cleanup_task
+            WHERE task_type = 'TENANT'
+              AND (status = 'PENDING'
+                   OR (status = 'PROCESSING' AND updated_at &lt; CURRENT_TIMESTAMP - INTERVAL '5 minutes'))
+            ORDER BY created_at, id
+            FOR UPDATE SKIP LOCKED
+            LIMIT #{limit}
+        )
+        UPDATE iam_cleanup_task task
+        SET status = 'PROCESSING', attempts = attempts + 1, last_error = NULL, updated_at = CURRENT_TIMESTAMP
+        WHERE task.id IN (SELECT id FROM claimed)
+        RETURNING task.id AS task_id, task.resource_id AS tenant_id
+    </select>
+
+    <update id="advancePlatformPrincipalVersion">
+        UPDATE iam_principal
+        SET updated_at = CURRENT_TIMESTAMP, version = version + 1
+        WHERE id = #{principalId}
+          AND principal_type = 'PLATFORM'
+          AND deleted = 0
+          AND version = #{version}
+    </update>
+
+    <update id="updateCredentialStatus">
+        UPDATE iam_credential
+        SET status = #{status},
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE id = #{credentialId}
+          AND account_id = #{accountId}
+          AND version = #{version}
+          AND deleted = 0
+    </update>
+
+    <update id="deleteCredential">
+        UPDATE iam_credential
+        SET status = 'DISABLED',
+            deleted = 1,
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE id = #{credentialId}
+          AND account_id = #{accountId}
+          AND version = #{version}
+          AND deleted = 0
+    </update>
+
+    <insert id="insertPrincipal">
+        INSERT INTO iam_principal (
+            id, subject_id, tenant_id, membership_id, principal_type, display_name, status
+        )
+        VALUES (
+            #{principal.id}, #{principal.subjectId}, #{principal.tenantId}, #{principal.membershipId},
+            #{principal.principalType}, #{principal.displayName}, #{principal.status}
+        )
+    </insert>
+
+    <insert id="insertTenantMembership">
+        INSERT INTO iam_tenant_membership (
+            id, subject_id, tenant_id, status, joined_at, created_at, updated_at, version, deleted
+        )
+        VALUES (
+            #{membership.id}, #{membership.subjectId}, #{membership.tenantId}, #{membership.status},
+            #{membership.joinedAt}, #{membership.createdAt}, #{membership.updatedAt},
+            #{membership.version}, #{membership.deleted}
+        )
+    </insert>
+
+    <update id="updateTenantMembershipStatus">
+        UPDATE iam_tenant_membership
+        SET status = #{status},
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE id = #{membershipId}
+          AND tenant_id = #{tenantId}
+          AND version = #{version}
+          AND deleted = 0
+    </update>
+
+    <select id="selectTenantSubjectIds" resultType="java.lang.Long">
+        SELECT DISTINCT subject_id
+        FROM iam_tenant_membership
+        WHERE tenant_id = #{tenantId}
+          AND deleted = 0
+        ORDER BY subject_id
+    </select>
+
+    <select id="selectSessionRows" resultType="com.sca4d.permission.repository.SessionRow">
+        SELECT account.id AS account_id,
+               account.scope_type AS account_scope_type,
+               account.scope_id AS account_scope_id,
+               account.second_factor_required,
+               subject.id AS subject_id,
+               subject.display_name AS subject_display_name,
+               p.id AS principal_id,
+               p.principal_type,
+               p.tenant_id,
+               p.display_name AS principal_display_name,
+               r.code AS role_code,
+               effective_permission.code AS permission_code
+        FROM iam_account account
+        INNER JOIN iam_subject subject
+                ON subject.id = account.subject_id
+               AND subject.status = 'ACTIVE'
+               AND subject.deleted = 0
+        INNER JOIN iam_principal p
+                ON p.subject_id = subject.id
+               AND p.status = 'ACTIVE'
+               AND p.deleted = 0
+               AND (account.scope_type = 'GLOBAL'
+                    OR p.principal_type = 'DEFAULT'
+                    OR (p.principal_type = 'TENANT' AND p.tenant_id = account.scope_id))
+        LEFT JOIN iam_tenant_membership membership
+               ON membership.id = p.membership_id
+              AND membership.subject_id = p.subject_id
+              AND membership.tenant_id = p.tenant_id
+              AND membership.deleted = 0
+        LEFT JOIN iam_tenant tenant
+               ON tenant.id = p.tenant_id
+        LEFT JOIN iam_principal_role pr
+               ON pr.principal_id = p.id
+        LEFT JOIN iam_role r
+               ON r.id = pr.role_id
+              AND r.status = 'ACTIVE'
+              AND r.deleted = 0
+              AND ((p.principal_type = 'TENANT' AND r.tenant_id = p.tenant_id)
+                   OR (p.principal_type &lt;&gt; 'TENANT' AND r.tenant_id IS NULL))
+        LEFT JOIN LATERAL (
+            SELECT permission.code
+            FROM iam_permission permission
+            WHERE permission.deleted = 0
+              AND (permission.granted_by_default = TRUE
+                   OR EXISTS (
+                       SELECT 1
+                       FROM iam_role_permission role_permission
+                       WHERE role_permission.role_id = r.id
+                         AND role_permission.permission_id = permission.id
+                   ))
+        ) effective_permission ON TRUE
+        WHERE account.id IN
+        <foreach collection="accountIds" item="accountId" open="(" separator="," close=")">
+            #{accountId}
+        </foreach>
+          AND account.status = 'ACTIVE'
+          AND account.deleted = 0
+          AND ((p.principal_type = 'TENANT'
+                AND membership.status = 'ACTIVE'
+                AND tenant.status = 'ACTIVE'
+                AND tenant.deleted = 0)
+               OR (p.principal_type &lt;&gt; 'TENANT' AND p.tenant_id IS NULL))
+        ORDER BY account.id, p.principal_type, p.tenant_id NULLS FIRST, p.id, r.code, effective_permission.code
+    </select>
+
+    <select id="selectCredentialRowsBySubjectIds" resultType="com.sca4d.iam.repository.CredentialRow">
+        SELECT credential.id AS credential_id,
+               credential.account_id,
+               account.subject_id,
+               credential.credential_type,
+               credential.status,
+               credential.created_at,
+               credential.updated_at,
+               credential.version,
+               credential.deleted
+        FROM iam_credential credential
+        INNER JOIN iam_account account
+                ON account.id = credential.account_id
+               AND account.deleted = 0
+        WHERE account.subject_id IN
+        <foreach collection="subjectIds" item="subjectId" open="(" separator="," close=")">
+            #{subjectId}
+        </foreach>
+          AND credential.credential_type IN
+        <foreach collection="credentialTypes" item="credentialType" open="(" separator="," close=")">
+            #{credentialType}
+        </foreach>
+          AND credential.deleted = 0
+        ORDER BY account.subject_id, credential.account_id, credential.credential_type, credential.id
+    </select>
+
+    <select id="selectCredentialReferenceRows" resultType="com.sca4d.iam.repository.CredentialRow">
+        SELECT credential.id AS credential_id,
+               credential.account_id,
+               account.subject_id,
+               credential.credential_type,
+               identifier.value AS identifier,
+               credential.deleted
+        FROM iam_credential credential
+        INNER JOIN iam_account account ON account.id = credential.account_id
+        LEFT JOIN LATERAL (
+            SELECT value
+            FROM iam_account_identifier
+            WHERE account_id = account.id
+              AND status = 'ACTIVE'
+              AND deleted = 0
+            ORDER BY CASE WHEN identifier_type = 'USERNAME' THEN 0 ELSE 1 END, id
+            LIMIT 1
+        ) identifier ON TRUE
+        WHERE credential.id IN
+        <foreach collection="credentialIds" item="credentialId" open="(" separator="," close=")">
+            #{credentialId}
+        </foreach>
+        ORDER BY credential.id
+    </select>
+
+    <update id="updatePrincipalStatus">
+        UPDATE iam_principal
+        SET status = #{status},
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE id = #{principalId}
+          AND version = #{version}
+          AND deleted = 0
+    </update>
+
+    <update id="updateTenantPrincipalStatus">
+        UPDATE iam_principal
+        SET status = #{status},
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE id = #{principalId}
+          AND tenant_id = #{tenantId}
+          AND principal_type = 'TENANT'
+          AND version = #{version}
+          AND deleted = 0
+    </update>
+
+    <update id="advanceTenantPrincipalVersion">
+        UPDATE iam_principal
+        SET updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE id = #{principalId}
+          AND tenant_id = #{tenantId}
+          AND principal_type = 'TENANT'
+          AND version = #{version}
+          AND deleted = 0
+    </update>
+
+    <insert id="insertTenant">
+        INSERT INTO iam_tenant (id, code, name, tenant_type, status)
+        VALUES (#{tenant.id}, #{tenant.code}, #{tenant.name}, #{tenant.tenantType}, #{tenant.status})
+    </insert>
+
+    <insert id="insertTenantCode">
+        INSERT INTO iam_tenant_code (code, tenant_id)
+        VALUES (#{code}, #{tenantId})
+    </insert>
+
+    <select id="updateTenant" resultType="java.lang.String">
+        WITH locked_tenant AS (
+            SELECT id, code
+            FROM iam_tenant
+            WHERE id = #{tenantId}
+              AND version = #{version}
+              AND deleted = 0
+            FOR UPDATE
+        ), updated_tenant AS (
+            UPDATE iam_tenant tenant
+            SET code = #{code},
+                name = #{name},
+                updated_at = CURRENT_TIMESTAMP,
+                version = tenant.version + 1
+            FROM locked_tenant
+            WHERE tenant.id = locked_tenant.id
+            RETURNING locked_tenant.code
+        )
+        SELECT code
+        FROM updated_tenant
+    </select>
+
+    <update id="updateTenantStatus">
+        UPDATE iam_tenant
+        SET status = #{status},
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE id = #{tenantId}
+          AND version = #{version}
+          AND deleted = 0
+    </update>
+
+    <select id="selectTenantStatusForShare" resultType="com.sca4d.iam.tenant.TenantStatus">
+        SELECT status
+        FROM iam_tenant
+        WHERE id = #{tenantId}
+          AND deleted = 0
+        FOR SHARE
+    </select>
+
+    <update id="isolateTenant">
+        UPDATE iam_tenant
+        SET status = 'DISABLED',
+            deleted = 1,
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE id = #{tenantId}
+          AND version = #{version}
+          AND deleted = 0
+    </update>
+
+    <update id="isolateTenantPrincipals">
+        UPDATE iam_principal
+        SET status = 'DISABLED',
+            deleted = 1,
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE tenant_id = #{tenantId}
+          AND principal_type = 'TENANT'
+          AND deleted = 0
+    </update>
+
+    <update id="isolateTenantMemberships">
+        UPDATE iam_tenant_membership
+        SET status = 'DISABLED',
+            deleted = 1,
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE tenant_id = #{tenantId}
+          AND deleted = 0
+    </update>
+
+    <update id="isolateTenantRoles">
+        UPDATE iam_role
+        SET status = 'DISABLED',
+            deleted = 1,
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE tenant_id = #{tenantId}
+          AND deleted = 0
+    </update>
+
+    <insert id="insertTenantCleanupTask">
+        INSERT INTO iam_cleanup_task (id, task_type, resource_id)
+        VALUES (#{taskId}, 'TENANT', #{tenantId})
+        ON CONFLICT (task_type, resource_id) DO NOTHING
+    </insert>
+
+    <select id="selectIsolatedTenantPrincipalIds" resultType="java.lang.Long">
+        SELECT id
+        FROM iam_principal
+        WHERE tenant_id = #{tenantId}
+          AND principal_type = 'TENANT'
+          AND deleted = 1
+        ORDER BY id
+    </select>
+
+    <delete id="deleteIsolatedTenantRelations">
+        WITH principal_ids AS MATERIALIZED (
+            SELECT id
+            FROM iam_principal
+            WHERE tenant_id = #{tenantId}
+              AND principal_type = 'TENANT'
+              AND deleted = 1
+        ), role_ids AS MATERIALIZED (
+            SELECT id
+            FROM iam_role
+            WHERE tenant_id = #{tenantId}
+              AND deleted = 1
+        ), deleted_principal_roles AS (
+            DELETE FROM iam_principal_role
+            WHERE principal_id IN (SELECT id FROM principal_ids)
+               OR role_id IN (SELECT id FROM role_ids)
+        ), deleted_role_permissions AS (
+            DELETE FROM iam_role_permission WHERE role_id IN (SELECT id FROM role_ids)
+        ), deleted_roles AS (
+            DELETE FROM iam_role WHERE id IN (SELECT id FROM role_ids)
+        ), deleted_memberships AS (
+            DELETE FROM iam_tenant_membership
+            WHERE tenant_id = #{tenantId}
+              AND deleted = 1
+        )
+        DELETE FROM iam_principal WHERE id IN (SELECT id FROM principal_ids)
+    </delete>
+
+    <select id="selectTenantMemberships" resultType="com.sca4d.tenant.TenantMembership">
+        SELECT membership.id AS membership_id,
+               p.id AS principal_id,
+               t.id AS tenant_id,
+               t.code AS tenant_code,
+               t.name AS tenant_name,
+               t.tenant_type,
+               t.status AS tenant_status,
+               membership.status AS membership_status,
+               membership.version
+        FROM iam_tenant_membership membership
+        INNER JOIN iam_principal p
+                ON p.membership_id = membership.id
+               AND p.principal_type = 'TENANT'
+               AND p.deleted = 0
+        INNER JOIN iam_tenant t ON t.id = membership.tenant_id AND t.deleted = 0
+        WHERE membership.subject_id = #{subjectId}
+          AND membership.deleted = 0
+          AND p.deleted = 0
+        ORDER BY t.name, t.id
+    </select>
+
+    <delete id="deletePrincipalRoles">
+        DELETE FROM iam_principal_role
+        WHERE principal_id = #{principalId}
+    </delete>
+
+    <insert id="insertPrincipalRoles">
+        INSERT INTO iam_principal_role (id, principal_id, role_id)
+        VALUES
+        <foreach collection="relations" item="relation" separator=",">
+            (#{relation.id}, #{relation.principalId}, #{relation.roleId})
+        </foreach>
+    </insert>
+
+    <select id="selectPrincipalsByRole" resultType="com.sca4d.entity.IamPrincipalEntity">
+        SELECT p.id, p.subject_id, p.tenant_id, p.principal_type, p.display_name,
+               p.status, p.created_at, p.updated_at, p.version, p.deleted
+        FROM iam_principal p
+        INNER JOIN iam_principal_role relation ON relation.principal_id = p.id
+        WHERE relation.role_id = #{roleId}
+          AND p.deleted = 0
+        ORDER BY p.id
+    </select>
+
+    <select id="selectPlatformPrincipalRoles" resultType="com.sca4d.iam.principal.PlatformRole">
+        SELECT relation.principal_id,
+               role.id AS role_id,
+               role.code AS role_code,
+               role.name AS role_name
+        FROM iam_principal_role relation
+        INNER JOIN iam_role role
+                ON role.id = relation.role_id
+               AND role.tenant_id IS NULL
+               AND role.status = 'ACTIVE'
+               AND role.deleted = 0
+        WHERE relation.principal_id IN
+        <foreach collection="principalIds" item="principalId" open="(" separator="," close=")">
+            #{principalId}
+        </foreach>
+        ORDER BY relation.principal_id, role.name, role.code, role.id
+    </select>
+
+    <select id="selectPermissionsIncludingDeleted" resultType="com.sca4d.entity.IamPermissionEntity">
+        SELECT DISTINCT ON (code)
+               id, parent_id, code, name_key, permission_type, sort_order, granted_by_default,
+               created_at, updated_at, version, deleted
+        FROM iam_permission
+        WHERE code IN
+        <foreach collection="codes" item="code" open="(" separator="," close=")">
+            #{code}
+        </foreach>
+        ORDER BY code, deleted, id DESC
+    </select>
+
+    <insert id="upsertPermissions">
+        INSERT INTO iam_permission (
+            id, parent_id, code, name_key, permission_type, sort_order
+        )
+        VALUES
+        <foreach collection="permissions" item="permission" separator=",">
+            (
+                #{permission.id}, #{permission.parentId}, #{permission.code},
+                #{permission.nameKey}, #{permission.permissionType}, #{permission.sortOrder}
+            )
+        </foreach>
+        ON CONFLICT (id) DO UPDATE
+        SET parent_id = EXCLUDED.parent_id,
+            code = EXCLUDED.code,
+            name_key = EXCLUDED.name_key,
+            permission_type = EXCLUDED.permission_type,
+            sort_order = EXCLUDED.sort_order,
+            updated_at = CURRENT_TIMESTAMP,
+            version = iam_permission.version + 1,
+            deleted = 0
+    </insert>
+
+    <update id="deletePermissionsExcept">
+        UPDATE iam_permission
+        SET deleted = 1,
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE deleted = 0
+        <choose>
+            <when test="codes != null and !codes.isEmpty()">
+                AND code NOT IN
+                <foreach collection="codes" item="code" open="(" separator="," close=")">
+                    #{code}
+                </foreach>
+            </when>
+        </choose>
+    </update>
+
+    <insert id="insertRole">
+        INSERT INTO iam_role (id, tenant_id, code, name, status, built_in)
+        VALUES (#{role.id}, #{role.tenantId}, #{role.code}, #{role.name}, #{role.status}, #{role.builtIn})
+    </insert>
+
+    <update id="updateRole">
+        UPDATE iam_role
+        SET name = #{name},
+            status = #{status},
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE id = #{roleId}
+          AND version = #{version}
+          AND deleted = 0
+        <choose>
+            <when test="tenantId == null">
+                AND tenant_id IS NULL
+            </when>
+            <otherwise>
+                AND tenant_id = #{tenantId}
+            </otherwise>
+        </choose>
+    </update>
+
+    <update id="deleteCustomRole">
+        UPDATE iam_role
+        SET deleted = 1,
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE id = #{roleId}
+          AND version = #{version}
+          AND built_in = FALSE
+          AND deleted = 0
+          AND NOT EXISTS (
+              SELECT 1
+              FROM iam_principal_role principal_role
+              INNER JOIN iam_principal principal
+                  ON principal.id = principal_role.principal_id
+                 AND principal.deleted = 0
+              WHERE principal_role.role_id = iam_role.id
+          )
+        <choose>
+            <when test="tenantId == null">
+                AND tenant_id IS NULL
+            </when>
+            <otherwise>
+                AND tenant_id = #{tenantId}
+            </otherwise>
+        </choose>
+    </update>
+
+    <select id="countPrincipalsByRole" resultType="long">
+        SELECT COUNT(DISTINCT principal_role.principal_id)
+        FROM iam_principal_role principal_role
+        INNER JOIN iam_principal principal
+            ON principal.id = principal_role.principal_id
+           AND principal.deleted = 0
+        WHERE principal_role.role_id = #{roleId}
+    </select>
+
+    <select id="selectRoleUsageCounts" resultType="com.sca4d.role.repository.RoleUsageCount">
+        SELECT role.id AS role_id,
+               (
+                   SELECT COUNT(DISTINCT principal_role.principal_id)
+                   FROM iam_principal_role principal_role
+                   INNER JOIN iam_principal principal
+                       ON principal.id = principal_role.principal_id
+                      AND principal.deleted = 0
+                   WHERE principal_role.role_id = role.id
+               ) AS principal_count,
+               (
+                   SELECT COUNT(*)
+                   FROM iam_role_permission role_permission
+                   INNER JOIN iam_permission permission
+                       ON permission.id = role_permission.permission_id
+                      AND permission.deleted = 0
+                   WHERE role_permission.role_id = role.id
+               ) AS permission_count
+        FROM iam_role role
+        WHERE role.id IN
+        <foreach collection="roleIds" item="roleId" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+        ORDER BY role.id
+    </select>
+
+    <delete id="deleteRolePermissions">
+        DELETE FROM iam_role_permission
+        WHERE role_id = #{roleId}
+    </delete>
+
+    <insert id="insertRolePermissions">
+        INSERT INTO iam_role_permission (id, role_id, permission_id)
+        VALUES
+        <foreach collection="relations" item="relation" separator=",">
+            (#{relation.id}, #{relation.roleId}, #{relation.permissionId})
+        </foreach>
+    </insert>
+</mapper>

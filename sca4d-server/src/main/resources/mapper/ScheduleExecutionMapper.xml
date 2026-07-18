@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.mapper.ScheduleExecutionMapper">
+    <insert id="insertIgnoreDuplicate">
+        INSERT INTO schedule_execution (
+            execution_id, schedule_id, fire_key, trigger_source, scheduled_fire_time, actual_fire_time,
+            completed_at, status, task_type, result_summary, safe_error_type, safe_error_message,
+            executed_instance_id, created_at, updated_at, version
+        ) VALUES (
+            #{execution.executionId}, #{execution.scheduleId}, #{execution.fireKey}, #{execution.triggerSource},
+            #{execution.scheduledFireTime}, #{execution.actualFireTime}, #{execution.completedAt},
+            #{execution.status}, #{execution.taskType}, #{execution.resultSummary}, #{execution.safeErrorType},
+            #{execution.safeErrorMessage}, #{execution.executedInstanceId}, #{execution.createdAt},
+            #{execution.updatedAt}, #{execution.version}
+        ) ON CONFLICT (schedule_id, fire_key) DO NOTHING
+    </insert>
+
+    <insert id="upsertUnsuccessful">
+        INSERT INTO schedule_execution (
+            execution_id, schedule_id, fire_key, trigger_source, scheduled_fire_time, actual_fire_time,
+            completed_at, status, task_type, result_summary, safe_error_type, safe_error_message,
+            executed_instance_id, created_at, updated_at, version
+        ) VALUES (
+            #{execution.executionId}, #{execution.scheduleId}, #{execution.fireKey}, #{execution.triggerSource},
+            #{execution.scheduledFireTime}, #{execution.actualFireTime}, #{execution.completedAt},
+            #{execution.status}, #{execution.taskType}, #{execution.resultSummary}, #{execution.safeErrorType},
+            #{execution.safeErrorMessage}, #{execution.executedInstanceId}, #{execution.createdAt},
+            #{execution.updatedAt}, #{execution.version}
+        ) ON CONFLICT (schedule_id, fire_key) DO UPDATE SET
+            trigger_source = EXCLUDED.trigger_source,
+            actual_fire_time = EXCLUDED.actual_fire_time,
+            completed_at = EXCLUDED.completed_at,
+            status = EXCLUDED.status,
+            safe_error_type = EXCLUDED.safe_error_type,
+            safe_error_message = EXCLUDED.safe_error_message,
+            executed_instance_id = EXCLUDED.executed_instance_id,
+            updated_at = EXCLUDED.updated_at,
+            version = schedule_execution.version + 1
+        WHERE schedule_execution.status IN ('PENDING', 'FAILED', 'SKIPPED')
+    </insert>
+
+    <select id="selectPendingManualExecutions" resultType="com.sca4d.entity.ScheduleExecutionEntity">
+        SELECT execution.*
+        FROM schedule_execution execution
+        INNER JOIN schedule_definition definition ON definition.id = execution.schedule_id
+        WHERE execution.trigger_source = 'MANUAL'
+          AND execution.status = 'PENDING'
+          AND definition.deleted = 0
+          AND definition.status IN ('ACTIVE', 'PAUSED')
+        ORDER BY execution.created_at, execution.execution_id
+    </select>
+</mapper>

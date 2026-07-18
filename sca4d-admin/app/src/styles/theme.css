@@ -1,0 +1,80 @@
+:root {
+  --app-bg: #f7f8fa;
+  --app-surface: #ffffff;
+  --app-surface-muted: #f2f3f5;
+  --app-text: #1d2129;
+  --app-text-secondary: #4e5969;
+  --app-text-tertiary: #86909c;
+  --app-border: #e5e6eb;
+  --app-border-strong: #c9cdd4;
+  --app-primary: #165dff;
+  --app-primary-soft: #e8f3ff;
+  --app-success: #00b42a;
+  --app-warning: #ff7d00;
+  --app-error: #f53f3f;
+  --app-overlay-shadow: 0 8px 24px rgb(29 33 41 / 12%);
+  --app-radius: 4px;
+  --app-radius-lg: 6px;
+  --app-header-height: 56px;
+  --app-sider-width: 224px;
+}
+
+:root[data-theme="dark"] {
+  --app-bg: #17171a;
+  --app-surface: #232324;
+  --app-surface-muted: #2a2a2b;
+  --app-text: rgb(255 255 255 / 90%);
+  --app-text-secondary: rgb(255 255 255 / 70%);
+  --app-text-tertiary: rgb(255 255 255 / 45%);
+  --app-border: #333335;
+  --app-border-strong: #4a4a4c;
+  --app-primary: #3c7eff;
+  --app-primary-soft: #172b4d;
+  --app-success: #23c343;
+  --app-warning: #ff9a2e;
+  --app-error: #f76965;
+  --app-overlay-shadow: 0 8px 24px rgb(0 0 0 / 42%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  min-width: 320px;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  color: var(--app-text);
+  background: var(--app-bg);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+    sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: 0;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  letter-spacing: 0;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--app-primary);
+  outline-offset: 2px;
+}
+
+::selection {
+  color: #ffffff;
+  background: var(--app-primary);
+}

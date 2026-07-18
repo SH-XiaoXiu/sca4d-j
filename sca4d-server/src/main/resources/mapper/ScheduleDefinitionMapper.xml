@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.mapper.ScheduleDefinitionMapper">
+    <insert id="insertDefinition">
+        INSERT INTO schedule_definition (
+            id, name, schedule_type, execute_at, cron_expression, time_zone, status,
+            task_type, task_payload, task_payload_version, definition_fingerprint,
+            synchronization_error, created_by_principal_id, version, created_at, updated_at, deleted
+        ) VALUES (
+            #{schedule.id}, #{schedule.name}, #{schedule.scheduleType}, #{schedule.executeAt},
+            #{schedule.cronExpression}, #{schedule.timeZone}, #{schedule.status}, #{schedule.taskType},
+            CAST(#{schedule.taskPayload} AS jsonb), #{schedule.taskPayloadVersion},
+            #{schedule.definitionFingerprint}, #{schedule.synchronizationError},
+            #{schedule.createdByPrincipalId}, #{schedule.version}, #{schedule.createdAt}, #{schedule.updatedAt},
+            #{schedule.deleted}
+        )
+    </insert>
+
+    <update id="updateDefinition">
+        UPDATE schedule_definition
+        SET name = #{schedule.name}, schedule_type = #{schedule.scheduleType}, execute_at = #{schedule.executeAt},
+            cron_expression = #{schedule.cronExpression}, time_zone = #{schedule.timeZone}, status = #{schedule.status},
+            task_payload = CAST(#{schedule.taskPayload} AS jsonb), task_payload_version = #{schedule.taskPayloadVersion},
+            definition_fingerprint = #{schedule.definitionFingerprint}, synchronization_error = NULL,
+            version = version + 1, updated_at = #{schedule.updatedAt}
+        WHERE id = #{schedule.id} AND version = #{expectedVersion} AND deleted = 0
+          AND status NOT IN ('COMPLETED', 'FAILED', 'CANCELLED')
+    </update>
+
+    <update id="updateSynchronizationError">
+        UPDATE schedule_definition
+        SET synchronization_error = #{synchronizationError}, updated_at = #{updatedAt}
+        WHERE id = #{scheduleId}
+    </update>
+</mapper>

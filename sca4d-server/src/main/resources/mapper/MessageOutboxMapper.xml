@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.mapper.MessageOutboxMapper">
+    <sql id="OutboxColumns">
+        id,
+        message_id,
+        business_key,
+        exchange_name,
+        routing_key,
+        event_name,
+        payload_json::text AS payload_json,
+        headers_json::text AS headers_json,
+        status,
+        attempts,
+        max_attempts,
+        next_attempt_at,
+        last_error,
+        created_at,
+        updated_at,
+        sent_at,
+        version
+    </sql>
+
+    <insert id="insert">
+        INSERT INTO sys_message_outbox (
+            id,
+            message_id,
+            business_key,
+            exchange_name,
+            routing_key,
+            event_name,
+            payload_json,
+            headers_json,
+            status,
+            attempts,
+            max_attempts,
+            next_attempt_at,
+            created_at,
+            updated_at,
+            version
+        ) VALUES (
+            #{entity.id},
+            #{entity.messageId},
+            #{entity.businessKey},
+            #{entity.exchangeName},
+            #{entity.routingKey},
+            #{entity.eventName},
+            CAST(#{entity.payloadJson} AS jsonb),
+            CAST(#{entity.headersJson} AS jsonb),
+            #{entity.status},
+            #{entity.attempts},
+            #{entity.maxAttempts},
+            #{entity.nextAttemptAt},
+            #{entity.createdAt},
+            #{entity.updatedAt},
+            #{entity.version}
+        )
+    </insert>
+
+    <select id="claim" resultType="com.sca4d.entity.MessageOutboxEntity">
+        WITH picked AS (
+            SELECT id
+            FROM sys_message_outbox
+            WHERE (
+                status IN ('PENDING', 'FAILED')
+                AND next_attempt_at &lt;= #{now}
+            )
+            OR (
+                status = 'SENDING'
+                AND updated_at &lt;= #{staleSendingBefore}
+            )
+            ORDER BY next_attempt_at ASC, id ASC
+            LIMIT #{batchSize}
+            FOR UPDATE SKIP LOCKED
+        ),
+        claimed AS (
+            UPDATE sys_message_outbox o
+            SET status = 'SENDING',
+                updated_at = #{now},
+                version = version + 1
+            FROM picked
+            WHERE o.id = picked.id
+            RETURNING o.*
+        )
+        SELECT
+            <include refid="OutboxColumns"/>
+        FROM claimed
+        ORDER BY next_attempt_at ASC, id ASC
+    </select>
+
+    <update id="updateStatus">
+        UPDATE sys_message_outbox
+        SET status = #{nextStatus},
+            attempts = attempts + #{attemptsIncrement},
+            last_error = #{lastError},
+            updated_at = #{updatedAt},
+            version = version + 1
+            <if test="nextAttemptAt != null">
+                , next_attempt_at = #{nextAttemptAt}
+            </if>
+            <if test="sentAt != null">
+                , sent_at = #{sentAt}
+            </if>
+        WHERE id = #{id}
+        AND status = #{currentStatus}
+        AND version = #{expectedVersion}
+    </update>
+</mapper>

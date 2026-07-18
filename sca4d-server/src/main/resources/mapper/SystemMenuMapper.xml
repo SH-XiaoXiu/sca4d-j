@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.mapper.SystemMenuMapper">
+    <select id="lockMenuCatalog" resultType="int">
+        SELECT 1
+        FROM pg_advisory_xact_lock(hashtext('sca4d:system:menu-catalog'))
+    </select>
+
+    <insert id="insertMenu">
+        INSERT INTO sys_menu (
+            id, parent_id, permission_code, route_code, title_labels,
+            icon_code, sort_order, visible, deleted
+        ) VALUES (
+            #{menu.id}, #{menu.parentId}, #{menu.permissionCode}, #{menu.routeCode},
+            CAST(#{menu.titleLabels} AS JSONB), #{menu.iconCode}, #{menu.sortOrder},
+            #{menu.visible}, 0
+        )
+    </insert>
+
+    <update id="updateMenu">
+        UPDATE sys_menu
+        SET parent_id = #{parentId},
+            permission_code = #{permissionCode},
+            route_code = #{routeCode},
+            title_labels = CAST(#{titleLabels} AS JSONB),
+            icon_code = #{iconCode},
+            sort_order = #{sortOrder},
+            visible = #{visible},
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE id = #{menuId}
+          AND version = #{version}
+          AND deleted = 0
+    </update>
+
+    <update id="markMenuTreeDeleted">
+        WITH RECURSIVE menu_tree AS (
+            SELECT id
+            FROM sys_menu
+            WHERE id = #{menuId}
+              AND version = #{version}
+              AND deleted = 0
+            UNION ALL
+            SELECT child.id
+            FROM sys_menu child
+            JOIN menu_tree parent ON parent.id = child.parent_id
+            WHERE child.deleted = 0
+        )
+        UPDATE sys_menu menu
+        SET deleted = 1,
+            updated_at = CURRENT_TIMESTAMP,
+            version = menu.version + 1
+        WHERE menu.id IN (SELECT id FROM menu_tree)
+    </update>
+
+    <update id="reorderMenus">
+        UPDATE sys_menu AS menu
+        SET sort_order = ordering.sort_order,
+            updated_at = CURRENT_TIMESTAMP,
+            version = menu.version + 1
+        FROM (VALUES
+            <foreach collection="items" item="item" separator=",">
+                (#{item.menuId}, #{item.sortOrder}, #{item.version})
+            </foreach>
+        ) AS ordering(menu_id, sort_order, expected_version)
+        WHERE menu.id = ordering.menu_id
+          AND menu.version = ordering.expected_version
+          AND menu.deleted = 0
+    </update>
+</mapper>

@@ -1,0 +1,14 @@
+sca4dj:
+  gateway:
+    upstreams:
+      sca4d-app:
+        health-path: /actuator/health/readiness
+        connect-timeout: 2s
+        response-timeout: 10s
+        healthy-threshold: 2
+        unhealthy-threshold: 3
+        instances:
+          - id: app-local
+            uri: http://127.0.0.1:8080
+            enabled: true
+            draining: false

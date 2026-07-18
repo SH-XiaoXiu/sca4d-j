@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.mapper.ScheduleJobRuntimeMapper">
+    <insert id="upsert">
+        INSERT INTO schedule_job_runtime (
+            job_group, job_name, last_actual_fire_time, last_result, last_duration_millis,
+            safe_error_summary, executed_instance_id, updated_at
+        ) VALUES (
+            #{runtime.jobGroup}, #{runtime.jobName}, #{runtime.lastActualFireTime}, #{runtime.lastResult},
+            #{runtime.lastDurationMillis}, #{runtime.safeErrorSummary}, #{runtime.executedInstanceId}, #{runtime.updatedAt}
+        ) ON CONFLICT (job_group, job_name) DO UPDATE SET
+            last_actual_fire_time = EXCLUDED.last_actual_fire_time,
+            last_result = EXCLUDED.last_result,
+            last_duration_millis = EXCLUDED.last_duration_millis,
+            safe_error_summary = EXCLUDED.safe_error_summary,
+            executed_instance_id = EXCLUDED.executed_instance_id,
+            updated_at = EXCLUDED.updated_at
+    </insert>
+</mapper>

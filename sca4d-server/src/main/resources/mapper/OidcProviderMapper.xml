@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.mapper.OidcProviderMapper">
+    <insert id="insertConfiguration">
+        INSERT INTO iam_oidc_provider (
+            provider_id, issuer, client_id, client_secret_key_id,
+            client_secret_nonce, client_secret_ciphertext, scopes
+        ) VALUES (
+            #{configuration.providerId}, #{configuration.issuer}, #{configuration.clientId},
+            #{configuration.clientSecretKeyId}, #{configuration.clientSecretNonce},
+            #{configuration.clientSecretCiphertext}, #{configuration.scopes}
+        )
+    </insert>
+
+    <update id="updateConfiguration">
+        UPDATE iam_oidc_provider
+        SET issuer = #{issuer},
+            client_id = #{clientId},
+            <if test="secretChanged">
+                client_secret_key_id = #{clientSecretKeyId},
+                client_secret_nonce = #{clientSecretNonce},
+                client_secret_ciphertext = #{clientSecretCiphertext},
+            </if>
+            scopes = #{scopes},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE provider_id = #{providerId}
+    </update>
+</mapper>

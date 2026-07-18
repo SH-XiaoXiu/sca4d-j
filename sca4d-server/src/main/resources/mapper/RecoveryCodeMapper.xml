@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.mapper.RecoveryCodeMapper">
+
+    <select id="selectCurrentSetForUpdate" resultType="com.sca4d.entity.IamRecoveryCodeSetEntity">
+        SELECT id, account_id, issued_at, replaced_at, version
+        FROM iam_recovery_code_set
+        WHERE account_id = #{accountId}
+          AND replaced_at IS NULL
+        FOR UPDATE
+    </select>
+
+    <update id="replaceSet">
+        UPDATE iam_recovery_code_set
+        SET replaced_at = #{replacedAt}, version = version + 1
+        WHERE id = #{setId}
+          AND version = #{version}
+          AND replaced_at IS NULL
+    </update>
+
+    <delete id="deleteCodes">
+        DELETE FROM iam_recovery_code
+        WHERE set_id = #{setId}
+    </delete>
+
+    <insert id="insertSet">
+        INSERT INTO iam_recovery_code_set (id, account_id, issued_at, version)
+        VALUES (#{set.id}, #{set.accountId}, #{set.issuedAt}, #{set.version})
+    </insert>
+
+    <insert id="insertCodes">
+        INSERT INTO iam_recovery_code (id, set_id, code_hash, created_at)
+        VALUES
+        <foreach collection="codes" item="code" separator=",">
+            (#{code.id}, #{code.setId}, #{code.codeHash}, #{code.createdAt})
+        </foreach>
+    </insert>
+
+    <select id="selectCurrentSummaries" resultType="com.sca4d.iam.recovery.repository.RecoveryCodeSummaryRow">
+        SELECT code_set.id AS set_id,
+               code_set.account_id,
+               code_set.issued_at,
+               code_set.version,
+               COUNT(code.id) FILTER (WHERE code.used_at IS NULL) AS remaining_count
+        FROM iam_recovery_code_set code_set
+        LEFT JOIN iam_recovery_code code ON code.set_id = code_set.id
+        WHERE code_set.account_id IN
+        <foreach collection="accountIds" item="accountId" open="(" separator="," close=")">
+            #{accountId}
+        </foreach>
+          AND code_set.replaced_at IS NULL
+        GROUP BY code_set.id, code_set.account_id, code_set.issued_at, code_set.version
+        ORDER BY code_set.account_id
+    </select>
+
+    <select id="selectUnusedCodes" resultType="com.sca4d.iam.recovery.repository.RecoveryCodeCandidateRow">
+        SELECT code.id AS code_id,
+               code.set_id,
+               code_set.account_id,
+               code.code_hash,
+               code_set.version AS set_version
+        FROM iam_recovery_code_set code_set
+        JOIN iam_recovery_code code ON code.set_id = code_set.id
+        WHERE code_set.account_id = #{accountId}
+          AND code_set.replaced_at IS NULL
+          AND code.used_at IS NULL
+        ORDER BY code.id
+    </select>
+
+    <update id="useCode">
+        UPDATE iam_recovery_code code
+        SET used_at = #{usedAt}
+        FROM iam_recovery_code_set code_set
+        WHERE code.id = #{codeId}
+          AND code.set_id = #{setId}
+          AND code.used_at IS NULL
+          AND code_set.id = code.set_id
+          AND code_set.account_id = #{accountId}
+          AND code_set.version = #{setVersion}
+          AND code_set.replaced_at IS NULL
+    </update>
+
+    <select id="countCurrentUsedCode" resultType="int">
+        SELECT COUNT(*)
+        FROM iam_recovery_code code
+        JOIN iam_recovery_code_set code_set ON code_set.id = code.set_id
+        WHERE code.id = #{codeId}
+          AND code.used_at IS NOT NULL
+          AND code_set.account_id = #{accountId}
+          AND code_set.version = #{setVersion}
+          AND code_set.replaced_at IS NULL
+    </select>
+</mapper>

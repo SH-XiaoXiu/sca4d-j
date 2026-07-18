@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.mapper.IdentityProviderMapper">
+    <insert id="insertProvider">
+        INSERT INTO iam_identity_provider (
+            id, scope_type, scope_id, code, name, protocol,
+            registration_policy, email_auto_link, status, deleted
+        ) VALUES (
+            #{provider.id}, #{provider.scopeType}, #{provider.scopeId}, #{provider.code},
+            #{provider.name}, #{provider.protocol}, #{provider.registrationPolicy},
+            #{provider.emailAutoLink}, #{provider.status}, 0
+        )
+    </insert>
+
+    <update id="updateProvider">
+        UPDATE iam_identity_provider
+        SET name = #{name},
+            registration_policy = #{registrationPolicy},
+            email_auto_link = #{emailAutoLink},
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE id = #{providerId}
+          AND scope_type = #{scopeType}
+          AND scope_id IS NOT DISTINCT FROM #{scopeId}
+          AND version = #{version}
+          AND deleted = 0
+    </update>
+
+    <update id="updateStatus">
+        UPDATE iam_identity_provider
+        SET status = #{nextStatus},
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE id = #{providerId}
+          AND scope_type = #{scopeType}
+          AND scope_id IS NOT DISTINCT FROM #{scopeId}
+          AND status = #{expectedStatus}
+          AND version = #{version}
+          AND deleted = 0
+    </update>
+
+    <update id="updateConfigurationVersion">
+        UPDATE iam_identity_provider
+        SET updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE id = #{providerId}
+          AND scope_type = #{scopeType}
+          AND scope_id IS NOT DISTINCT FROM #{scopeId}
+          AND protocol = #{protocol}
+          AND status = 'DISABLED'
+          AND version = #{version}
+          AND deleted = 0
+    </update>
+
+    <update id="markDeleted">
+        UPDATE iam_identity_provider provider
+        SET deleted = 1,
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE provider.id = #{providerId}
+          AND provider.scope_type = #{scopeType}
+          AND provider.scope_id IS NOT DISTINCT FROM #{scopeId}
+          AND provider.status = 'DISABLED'
+          AND provider.version = #{version}
+          AND provider.deleted = 0
+          AND NOT EXISTS (
+              SELECT 1
+              FROM iam_external_identity external_identity
+              WHERE external_identity.provider_id = provider.id
+                AND external_identity.deleted = 0
+          )
+    </update>
+
+    <select id="countExternalIdentities" resultType="int">
+        SELECT COUNT(*)
+        FROM iam_external_identity
+        WHERE provider_id = #{providerId}
+          AND deleted = 0
+    </select>
+</mapper>

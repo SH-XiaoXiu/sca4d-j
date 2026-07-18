@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.mapper.TenantMemberMapper">
+    <select id="selectPage" resultType="com.sca4d.tenant.TenantMember">
+        SELECT membership.id AS membership_id,
+               p.id AS principal_id,
+               p.subject_id,
+               p.tenant_id,
+               COALESCE(p.display_name, i.display_name) AS display_name,
+               membership.status AS membership_status,
+               membership.version AS membership_version,
+               p.status AS principal_status,
+               p.version AS principal_version
+        FROM iam_tenant_membership membership
+        INNER JOIN iam_principal p
+                ON p.membership_id = membership.id
+               AND p.tenant_id = membership.tenant_id
+               AND p.principal_type = 'TENANT'
+               AND p.deleted = 0
+        INNER JOIN iam_subject i ON i.id = p.subject_id AND i.deleted = 0
+        WHERE membership.tenant_id = #{tenantId}
+          AND membership.deleted = 0
+        <if test="status != null">
+          AND membership.status = #{status}
+        </if>
+        <if test="search != null and search != ''">
+          AND (
+              p.display_name ILIKE CONCAT('%', #{search}, '%')
+              OR i.display_name ILIKE CONCAT('%', #{search}, '%')
+              OR EXISTS (
+                  SELECT 1
+                  FROM iam_contact contact
+                  WHERE contact.subject_id = i.id
+                    AND contact.status = 'ACTIVE'
+                    AND contact.deleted = 0
+                    AND contact.value ILIKE CONCAT('%', #{search}, '%')
+              )
+          )
+        </if>
+        ORDER BY membership.created_at DESC, membership.id DESC
+    </select>
+
+    <select id="selectByTenantAndPrincipal" resultType="com.sca4d.tenant.TenantMember">
+        SELECT membership.id AS membership_id,
+               p.id AS principal_id,
+               p.subject_id,
+               p.tenant_id,
+               COALESCE(p.display_name, i.display_name) AS display_name,
+               membership.status AS membership_status,
+               membership.version AS membership_version,
+               p.status AS principal_status,
+               p.version AS principal_version
+        FROM iam_tenant_membership membership
+        INNER JOIN iam_principal p
+                ON p.membership_id = membership.id
+               AND p.tenant_id = membership.tenant_id
+               AND p.principal_type = 'TENANT'
+               AND p.deleted = 0
+        INNER JOIN iam_subject i ON i.id = p.subject_id AND i.deleted = 0
+        WHERE membership.tenant_id = #{tenantId}
+          AND membership.deleted = 0
+          AND p.id = #{principalId}
+    </select>
+
+    <select id="selectRoleAssignments" resultType="com.sca4d.tenant.RoleAssignment">
+        SELECT pr.principal_id,
+               r.id AS role_id,
+               r.code AS role_code,
+               r.name AS role_name
+        FROM iam_principal_role pr
+        INNER JOIN iam_role r ON r.id = pr.role_id AND r.deleted = 0 AND r.status = 'ACTIVE'
+        WHERE pr.principal_id IN
+        <foreach collection="principalIds" item="principalId" open="(" separator="," close=")">
+            #{principalId}
+        </foreach>
+        ORDER BY pr.principal_id, r.code, r.id
+    </select>
+
+</mapper>

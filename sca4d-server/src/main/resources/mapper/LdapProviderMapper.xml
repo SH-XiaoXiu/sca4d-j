@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.mapper.LdapProviderMapper">
+    <insert id="insertConfiguration">
+        INSERT INTO iam_ldap_provider (
+            provider_id, url, base_dn, service_account_dn,
+            service_account_password_key_id, service_account_password_nonce,
+            service_account_password_ciphertext, user_search_base, user_search_filter,
+            external_subject_attribute, display_name_attribute, email_attribute, transport_security
+        ) VALUES (
+            #{configuration.providerId}, #{configuration.url}, #{configuration.baseDn},
+            #{configuration.serviceAccountDn}, #{configuration.serviceAccountPasswordKeyId},
+            #{configuration.serviceAccountPasswordNonce}, #{configuration.serviceAccountPasswordCiphertext},
+            #{configuration.userSearchBase}, #{configuration.userSearchFilter},
+            #{configuration.externalSubjectAttribute}, #{configuration.displayNameAttribute},
+            #{configuration.emailAttribute}, #{configuration.transportSecurity}
+        )
+    </insert>
+
+    <update id="updateConfiguration">
+        UPDATE iam_ldap_provider
+        SET url = #{configuration.url},
+            base_dn = #{configuration.baseDn},
+            service_account_dn = #{configuration.serviceAccountDn},
+            <if test="passwordChanged">
+                service_account_password_key_id = #{configuration.serviceAccountPasswordKeyId},
+                service_account_password_nonce = #{configuration.serviceAccountPasswordNonce},
+                service_account_password_ciphertext = #{configuration.serviceAccountPasswordCiphertext},
+            </if>
+            user_search_base = #{configuration.userSearchBase},
+            user_search_filter = #{configuration.userSearchFilter},
+            external_subject_attribute = #{configuration.externalSubjectAttribute},
+            display_name_attribute = #{configuration.displayNameAttribute},
+            email_attribute = #{configuration.emailAttribute},
+            transport_security = #{configuration.transportSecurity},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE provider_id = #{configuration.providerId}
+    </update>
+</mapper>

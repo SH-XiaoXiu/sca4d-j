@@ -1,0 +1,28 @@
+{
+  "name": "sca4d-admin",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.1.2",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @sca4d/admin-app dev",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "e2e": "pnpm --filter @sca4d/admin-app e2e",
+    "api:generate": "pnpm --filter @sca4d/admin-common api:generate",
+    "api:check": "node scripts/check-openapi.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.30.1",
+    "@types/node": "^24.0.10",
+    "eslint": "^9.30.1",
+    "eslint-plugin-vue": "^10.2.0",
+    "prettier": "^3.6.2",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.35.1"
+  }
+}

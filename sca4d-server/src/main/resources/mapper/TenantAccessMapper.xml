@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.mapper.TenantAccessMapper">
+    <insert id="insertGrants">
+        INSERT INTO tenant_access_grant (id, principal_id, tenant_id, access_action)
+        VALUES
+        <foreach collection="grants" item="grant" separator=",">
+            (#{grant.id}, #{grant.principalId}, #{grant.tenantId}, #{grant.accessAction})
+        </foreach>
+    </insert>
+</mapper>

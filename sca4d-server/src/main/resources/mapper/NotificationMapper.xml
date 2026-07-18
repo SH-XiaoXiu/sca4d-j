@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.mapper.NotificationMapper">
+    <sql id="CurrentTargetWhere">
+        <choose>
+            <when test="subjectId != null and principalType != null and principalId != null">
+                AND (
+                    (
+                        d.subject_id = #{subjectId}
+                        AND d.principal_type IS NULL
+                        AND d.principal_id IS NULL
+                    )
+                    OR (
+                        d.principal_type = #{principalType}
+                        AND d.principal_id = #{principalId}
+                        AND (d.subject_id IS NULL OR d.subject_id = #{subjectId})
+                    )
+                )
+            </when>
+            <when test="subjectId != null">
+                AND d.subject_id = #{subjectId}
+                AND d.principal_type IS NULL
+                AND d.principal_id IS NULL
+            </when>
+            <when test="principalType != null and principalId != null">
+                AND d.subject_id IS NULL
+                AND d.principal_type = #{principalType}
+                AND d.principal_id = #{principalId}
+            </when>
+            <otherwise>
+                AND 1 = 0
+            </otherwise>
+        </choose>
+    </sql>
+
+    <sql id="CurrentNotificationWhere">
+        WHERE d.deleted = 0
+        AND m.deleted = 0
+        <include refid="CurrentTargetWhere"/>
+        <if test="unreadOnly">
+            AND d.status = #{unreadStatus}
+        </if>
+    </sql>
+
+    <insert id="insertMessage">
+        INSERT INTO notification_message (
+            id,
+            title,
+            content,
+            category,
+            sender_principal_type,
+            sender_principal_id,
+            payload_json,
+            created_at,
+            deleted
+        ) VALUES (
+            #{entity.id},
+            #{entity.title},
+            #{entity.content},
+            #{entity.category},
+            #{entity.senderPrincipalType},
+            #{entity.senderPrincipalId},
+            CAST(#{payloadJson} AS jsonb),
+            #{entity.createdAt},
+            0
+        )
+    </insert>
+
+    <insert id="insertDeliveries">
+        INSERT INTO notification_delivery (
+            id,
+            notification_id,
+            subject_id,
+            principal_type,
+            principal_id,
+            status,
+            delivered_at,
+            created_at,
+            updated_at,
+            version,
+            deleted
+        ) VALUES
+        <foreach collection="deliveries" item="delivery" separator=",">
+            (
+                #{delivery.id},
+                #{delivery.notificationId},
+                #{delivery.subjectId},
+                #{delivery.principalType},
+                #{delivery.principalId},
+                #{delivery.status},
+                #{delivery.deliveredAt},
+                #{delivery.createdAt},
+                #{delivery.updatedAt},
+                0,
+                0
+            )
+        </foreach>
+    </insert>
+
+    <select id="countUnreadByRecipients" resultType="com.sca4d.notification.repository.NotificationUnreadCountResult">
+        WITH targets (target_index, subject_id, principal_type, principal_id) AS (
+            VALUES
+            <foreach collection="recipients" item="recipient" index="index" separator=",">
+                (#{index}, #{recipient.subjectId}, #{recipient.principalType}, #{recipient.principalId})
+            </foreach>
+        )
+        SELECT t.target_index, COUNT(d.id) AS unread_count
+        FROM targets t
+        LEFT JOIN notification_delivery d
+          ON d.deleted = 0
+         AND d.status = #{status}
+         AND (
+              (t.subject_id IS NOT NULL AND t.principal_type IS NULL AND t.principal_id IS NULL
+               AND d.subject_id = t.subject_id AND d.principal_type IS NULL AND d.principal_id IS NULL)
+              OR
+              (t.principal_type IS NOT NULL AND t.principal_id IS NOT NULL
+               AND d.principal_type = t.principal_type AND d.principal_id = t.principal_id
+               AND (t.subject_id IS NULL AND d.subject_id IS NULL
+                    OR t.subject_id IS NOT NULL AND (d.subject_id IS NULL OR d.subject_id = t.subject_id)))
+         )
+        GROUP BY t.target_index
+        ORDER BY t.target_index
+    </select>
+
+    <select id="selectCurrentPage" resultType="com.sca4d.notification.NotificationMessage">
+        SELECT
+            m.id AS notification_id,
+            d.id AS delivery_id,
+            m.title,
+            m.content,
+            m.category,
+            d.status,
+            m.payload_json::text AS payload_json,
+            d.delivered_at,
+            d.read_at,
+            m.created_at
+        FROM notification_delivery d
+        JOIN notification_message m ON m.id = d.notification_id
+        <include refid="CurrentNotificationWhere"/>
+        ORDER BY d.created_at DESC, d.id DESC
+    </select>
+
+    <select id="countByStatus" resultType="long">
+        SELECT COUNT(1)
+        FROM notification_delivery d
+        WHERE d.deleted = 0
+        AND d.status = #{status}
+        <include refid="CurrentTargetWhere"/>
+    </select>
+
+    <select id="findCurrentDelivery" resultType="com.sca4d.entity.NotificationDeliveryEntity">
+        SELECT
+            d.id,
+            d.notification_id,
+            d.subject_id,
+            d.principal_type,
+            d.principal_id,
+            d.status,
+            d.delivered_at,
+            d.read_at,
+            d.created_at,
+            d.updated_at,
+            d.version,
+            d.deleted
+        FROM notification_delivery d
+        JOIN notification_message m ON m.id = d.notification_id
+        WHERE d.deleted = 0
+        AND m.deleted = 0
+        AND d.notification_id = #{notificationId}
+        <include refid="CurrentTargetWhere"/>
+        ORDER BY d.id DESC
+        LIMIT 1
+    </select>
+
+    <update id="updateDeliveryStatus">
+        UPDATE notification_delivery
+        SET status = #{nextStatus},
+            read_at = #{readAt},
+            updated_at = #{readAt},
+            version = version + 1
+        WHERE id = #{deliveryId}
+        AND deleted = 0
+        AND status = #{currentStatus}
+    </update>
+
+    <update id="updateAllStatus">
+        UPDATE notification_delivery d
+        SET status = #{nextStatus},
+            read_at = #{readAt},
+            updated_at = #{readAt},
+            version = version + 1
+        WHERE d.deleted = 0
+        AND d.status = #{currentStatus}
+        <include refid="CurrentTargetWhere"/>
+    </update>
+</mapper>

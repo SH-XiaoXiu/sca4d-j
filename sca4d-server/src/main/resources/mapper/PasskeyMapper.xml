@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.mapper.PasskeyMapper">
+
+    <insert id="insertUserHandle">
+        INSERT INTO iam_passkey_user_handle (account_id, user_handle)
+        VALUES (#{userHandle.accountId}, #{userHandle.userHandle})
+        ON CONFLICT (account_id) DO NOTHING
+    </insert>
+
+    <select id="selectUserHandle" resultType="com.sca4d.entity.IamPasskeyUserHandleEntity">
+        SELECT account_id, user_handle, created_at
+        FROM iam_passkey_user_handle
+        WHERE account_id = #{accountId}
+    </select>
+
+    <insert id="insertCredential">
+        INSERT INTO iam_credential (id, account_id, credential_type, status)
+        VALUES (#{credential.id}, #{credential.accountId}, #{credential.credentialType}, #{credential.status})
+    </insert>
+
+    <insert id="insertPasskey">
+        INSERT INTO iam_passkey (
+            credential_id, passkey_credential_id, public_key_cose, signature_count,
+            aaguid, backup_eligible, backup_state, display_name
+        ) VALUES (
+            #{passkey.credentialId}, #{passkey.passkeyCredentialId}, #{passkey.publicKeyCose},
+            #{passkey.signatureCount}, #{passkey.aaguid}, #{passkey.backupEligible},
+            #{passkey.backupState}, #{passkey.displayName}
+        )
+    </insert>
+
+    <sql id="passkeyColumns">
+        credential.id AS credential_id,
+        credential.account_id,
+        account.subject_id,
+        account.scope_type,
+        account.scope_id,
+        subject.display_name AS subject_display_name,
+        user_handle.user_handle,
+        passkey.passkey_credential_id,
+        passkey.public_key_cose,
+        passkey.signature_count,
+        passkey.aaguid,
+        passkey.backup_eligible,
+        passkey.backup_state,
+        passkey.display_name AS passkey_display_name,
+        passkey.last_used_at,
+        credential.status AS credential_status,
+        account.status AS account_status,
+        account.second_factor_required,
+        subject.status AS subject_status,
+        credential.version AS credential_version
+    </sql>
+
+    <sql id="passkeyJoins">
+        FROM iam_credential credential
+        JOIN iam_passkey passkey ON passkey.credential_id = credential.id
+        JOIN iam_passkey_user_handle user_handle ON user_handle.account_id = credential.account_id
+        JOIN iam_account account ON account.id = credential.account_id AND account.deleted = 0
+        JOIN iam_subject subject ON subject.id = account.subject_id AND subject.deleted = 0
+    </sql>
+
+    <select id="selectByAccount" resultType="com.sca4d.iam.passkey.repository.PasskeyRow">
+        SELECT <include refid="passkeyColumns" />
+        <include refid="passkeyJoins" />
+        WHERE credential.account_id = #{accountId}
+          AND credential.credential_type = 'PASSKEY'
+          AND credential.deleted = 0
+        ORDER BY credential.created_at, credential.id
+    </select>
+
+    <select id="selectSecurityByAccounts" resultType="com.sca4d.iam.passkey.repository.PasskeySecurityRow">
+        SELECT credential.id AS credential_id,
+               credential.account_id,
+               credential.status AS credential_status,
+               credential.created_at AS credential_created_at,
+               credential.updated_at AS credential_updated_at,
+               credential.version AS credential_version,
+               passkey.display_name AS passkey_display_name,
+               passkey.backup_eligible,
+               passkey.backup_state,
+               passkey.last_used_at
+        FROM iam_credential credential
+        JOIN iam_passkey passkey ON passkey.credential_id = credential.id
+        WHERE credential.account_id IN
+        <foreach collection="accountIds" item="accountId" open="(" separator="," close=")">
+            #{accountId}
+        </foreach>
+          AND credential.credential_type = 'PASSKEY'
+          AND credential.deleted = 0
+        ORDER BY credential.account_id, credential.created_at, credential.id
+    </select>
+
+    <select id="selectByUserHandle" resultType="com.sca4d.iam.passkey.repository.PasskeyRow">
+        SELECT <include refid="passkeyColumns" />
+        <include refid="passkeyJoins" />
+        WHERE user_handle.user_handle = #{userHandle}
+          AND credential.credential_type = 'PASSKEY'
+          AND credential.deleted = 0
+        ORDER BY credential.created_at, credential.id
+    </select>
+
+    <select id="selectByPasskeyCredentialId" resultType="com.sca4d.iam.passkey.repository.PasskeyRow">
+        SELECT <include refid="passkeyColumns" />
+        <include refid="passkeyJoins" />
+        WHERE passkey.passkey_credential_id = #{passkeyCredentialId}
+          AND credential.credential_type = 'PASSKEY'
+          AND credential.deleted = 0
+    </select>
+
+    <select id="selectByPasskeyCredentialIdAndUserHandle" resultType="com.sca4d.iam.passkey.repository.PasskeyRow">
+        SELECT <include refid="passkeyColumns" />
+        <include refid="passkeyJoins" />
+        WHERE passkey.passkey_credential_id = #{passkeyCredentialId}
+          AND user_handle.user_handle = #{userHandle}
+          AND credential.credential_type = 'PASSKEY'
+          AND credential.deleted = 0
+    </select>
+
+    <update id="advanceAssertion">
+        WITH target AS MATERIALIZED (
+            SELECT credential.id
+            FROM iam_credential credential
+            JOIN iam_passkey passkey ON passkey.credential_id = credential.id
+            JOIN iam_account account
+              ON account.id = credential.account_id
+             AND account.status = 'ACTIVE'
+             AND account.deleted = 0
+            JOIN iam_subject subject
+              ON subject.id = account.subject_id
+             AND subject.status = 'ACTIVE'
+             AND subject.deleted = 0
+            WHERE credential.id = #{credentialId}
+              AND credential.account_id = #{accountId}
+              AND credential.credential_type = 'PASSKEY'
+              AND credential.status = 'ACTIVE'
+              AND credential.version = #{version}
+              AND credential.deleted = 0
+              AND passkey.signature_count = #{expectedSignatureCount}
+              AND passkey.backup_eligible = #{backupEligible}
+            FOR UPDATE
+        ), updated_passkey AS (
+            UPDATE iam_passkey
+            SET signature_count = #{signatureCount},
+                backup_state = #{backupState},
+                last_used_at = CURRENT_TIMESTAMP,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE credential_id IN (SELECT id FROM target)
+            RETURNING credential_id
+        )
+        UPDATE iam_credential
+        SET updated_at = CURRENT_TIMESTAMP, version = version + 1
+        WHERE id IN (SELECT credential_id FROM updated_passkey)
+    </update>
+
+    <select id="countActivePasskeys" resultType="int">
+        SELECT COUNT(*)
+        FROM iam_credential credential
+        JOIN iam_passkey passkey ON passkey.credential_id = credential.id
+        WHERE credential.account_id = #{accountId}
+          AND credential.credential_type = 'PASSKEY'
+          AND credential.status = 'ACTIVE'
+          AND credential.deleted = 0
+        <if test="excludedCredentialId != null">
+          AND credential.id != #{excludedCredentialId}
+        </if>
+    </select>
+
+    <update id="deletePasskey">
+        UPDATE iam_credential credential
+        SET status = 'DISABLED',
+            deleted = 1,
+            updated_at = CURRENT_TIMESTAMP,
+            version = version + 1
+        WHERE credential.id = #{credentialId}
+          AND credential.account_id = #{accountId}
+          AND credential.credential_type = 'PASSKEY'
+          AND credential.version = #{version}
+          AND credential.deleted = 0
+          AND EXISTS (
+              SELECT 1
+              FROM iam_passkey passkey
+              WHERE passkey.credential_id = credential.id
+          )
+    </update>
+
+</mapper>
