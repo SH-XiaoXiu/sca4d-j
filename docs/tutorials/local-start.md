@@ -1,0 +1,128 @@
+# 第一次运行
+
+完成以下操作后，本机会运行 PostgreSQL、Redis、RabbitMQ、MinIO、Mailpit、Sca4d Gateway、Sca4d Server 和管理端。除特别说明外，命令都从仓库根目录执行。
+
+## 准备工具
+
+安装以下工具并确认版本：
+
+- JDK 21；
+- Node.js `^22.18.0` 或 `^24.0.0`；
+- pnpm 10 或更高版本；管理端工作区当前声明 `pnpm@11.1.2`；
+- Docker 与 Docker Compose。
+
+```bash
+java -version
+node --version
+pnpm --version
+docker compose version
+```
+
+## 创建本地配置
+
+`apps/sca4d-server/src/main/resources/application-local.yml` 会导入仓库根目录 `.env/` 下按用途拆分的 `.env` 文件。下面的循环只复制缺少的文件，不覆盖已经调整过的本地配置：
+
+```bash
+for example in .env/*.env.example; do
+  target=${example%.example}
+  if [ ! -e "$target" ]; then
+    cp "$example" "$target"
+    printf 'created %s\n' "$target"
+  fi
+done
+```
+
+本地初始管理员用户名来自 `.env/iam.env` 的 `SCA4DJ_IAM_BOOTSTRAP_USERNAME`，初始密码来自 `.env/auth.env` 的 `SCA4DJ_AUTH_PASSWORD_BOOTSTRAP_PASSWORD`。示例密码只用于本机开发；共享或生产环境必须使用外部秘密配置并替换示例值。
+
+`.env/application.env` 中的 `SCA4DJ_FRONTEND_ORIGIN` 和 `SCA4DJ_GATEWAY_ORIGIN` 分别表示浏览器访问管理端与 Gateway 的完整 Origin。Passkey、Web Realtime 和 MinIO CORS 引用前端地址，Storage 文件传输与联邦登录回调默认使用 Gateway 的 `/api` 入口。需要让某项功能使用不同地址时，再到对应环境文件覆盖它自己的变量。
+
+管理端开发服务器默认使用 `http://localhost:5666`，Gateway 默认使用 `http://localhost:8088`，Server 默认使用 `http://localhost:8080`。本地 `SCA4DJ_AUTH_PASSKEY_RELYING_PARTY_ID` 为 `localhost`；Passkey 必须从 `SCA4DJ_FRONTEND_ORIGIN` 对应的完整地址打开页面，不要混用 `127.0.0.1` 或其他端口。
+
+PostgreSQL 和 TimescaleDB 只在各自数据目录首次初始化时读取用户名与密码。要按新的 `.env/database.env` 或 `.env/iot-database.env` 重建本地数据库，先停止对应容器，再由操作者清理 `docker-data/postgresql` 与可选的 `docker-data/iot/timescaledb`；仅修改环境文件不会修改已经存在数据库角色的密码。
+
+## 启动全部本地依赖
+
+完整环境包含 PostgreSQL、Redis、RabbitMQ、MinIO、Mailpit、EMQX 和 TimescaleDB。`.env/iot.env.example` 与 `.env/iot-database.env.example` 默认启用后两项，因此体验全部示例功能时必须同时加载两个 Compose 文件。Docker Compose 不会自动读取 `.env/` 目录中的分片文件，必须显式传入参与 Compose 变量替换的文件：
+
+```bash
+docker compose \
+  --env-file .env/application.env \
+  --env-file .env/database.env \
+  --env-file .env/redis.env \
+  --env-file .env/rabbitmq.env \
+  --env-file .env/storage.env \
+  --env-file .env/notification.env \
+  --env-file .env/iot.env \
+  --env-file .env/iot-database.env \
+  -f docker-compose.yml \
+  -f docker-compose.iot.yml \
+  up -d
+
+docker compose \
+  --env-file .env/application.env \
+  --env-file .env/database.env \
+  --env-file .env/redis.env \
+  --env-file .env/rabbitmq.env \
+  --env-file .env/storage.env \
+  --env-file .env/notification.env \
+  --env-file .env/iot.env \
+  --env-file .env/iot-database.env \
+  -f docker-compose.yml \
+  -f docker-compose.iot.yml \
+  ps
+```
+
+这一步只确认容器状态，不代表 Sca4d Server 已经启动。`ps` 还必须显示 `iot-emqx` 与 `iot-timescaledb`；Mailpit 的 SMTP 地址为 `localhost:1025`，收件箱界面为 `http://localhost:8025`，它只用于本机查看测试邮件。
+
+## 启动 Gateway
+
+Gateway 的 `application-local.yml` 自动读取仓库根目录 `.env/application.env` 和 `.env/logging.env`。前者提供与 Server 相同的注册 Secret，后者在本机启用集中日志时提供日志写入路由配置：
+
+```bash
+./gradlew :gateway:sca4d-gateway:bootRun
+```
+
+Gateway 默认监听 `http://localhost:8088`。打开 `http://localhost:8088/actuator/health`，状态应为 `UP`。此时尚未启动 Server，访问 `/api/**` 返回 503 是预期结果。
+
+## 启动 Server
+
+另开一个终端：
+
+```bash
+./gradlew :apps:sca4d-server:bootRun
+```
+
+Server 默认监听 `http://localhost:8080`，readiness 后使用 `.env/application.env` 中相同的 Secret 向 Gateway 注册。`local` 配置在 `SCA4DJ_OPENAPI_ENABLED=true` 时启用 OpenAPI 和 Swagger UI，可从统一入口打开：
+
+- `http://localhost:8088/api/swagger-ui/index.html`；
+- `http://localhost:8088/api/v3/api-docs`。
+
+Server 启动日志出现“Server 实例已向 Gateway 注册”后，再使用 Swagger UI 和登录请求确认统一入口已经可用。`http://localhost:8080` 只用于检查单个 Server 实例，不作为浏览器和外部系统的正常入口。
+
+## 启动管理端
+
+另开一个终端。开发服务器自动读取仓库根目录 `.env/frontend.env` 中的 `SCA4D_API_TARGET`，修改目标地址后需要重启开发服务器：
+
+```bash
+cd frontends/sca4d-admin
+pnpm install
+pnpm dev
+```
+
+开发脚本默认监听 `http://localhost:5666`。浏览器请求使用 `/api`，Vite 保留路径并转发到 `SCA4D_API_TARGET`；环境示例默认指向 `http://localhost:8088`，端口被占用时应与 `.env/application.env` 中的 Gateway 地址保持一致。
+
+## 配置本地邮件
+
+清空数据库后没有 SMTP 发送方或统一通知模板。登录初始管理员后，通过 Swagger UI 或管理端调用 `/system/email/senders` 创建一个 `host=localhost`、`port=1025`、`security=NONE` 且不带用户名和密码的 Mailpit 发送方，测试连接并启用它。再为实际要发送的 NotificationCode 创建并启用统一通知模板；这两类资源保存在数据库，不应写入环境变量。认证邮件会出现在 `http://localhost:8025`。
+
+## 检查结果
+
+1. 完整环境的 Compose 服务已经运行，包含 `iot-emqx` 和 `iot-timescaledb`；
+2. Gateway health 为 `UP`，Server 日志显示应用监听 8080 并成功注册；
+3. Swagger UI 能通过 Gateway 的 `/api` 入口打开；
+4. 管理端能够在 `http://localhost:5666` 打开登录页，并通过 `/api` 请求后端；
+5. 上传头像或文件时，浏览器能够向 MinIO 的预签名地址传输文件；
+6. 注册 Passkey 后，浏览器能够完成 WebAuthn ceremony 并提交结果；
+7. 启用的 Mailpit SMTP 发送方和统一通知模板能够把认证邮件显示在 Mailpit 收件箱。
+
+接下来按 [HTTP API 基础](/tutorials/authentication-and-session) 完成登录。运行配置的准确入口见 [Sca4d Server 应用规格](/reference/)，前后端职责见 [Sca4d Server 应用设计](/tutorials/assemble-application) 与 [Sca4d 管理端设计](/tutorials/admin-feature)。

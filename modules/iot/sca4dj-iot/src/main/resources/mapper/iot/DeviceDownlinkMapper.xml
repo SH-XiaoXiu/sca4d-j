@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.iot.persistence.mapper.DeviceDownlinkMapper">
+    <sql id="messageColumns">
+        message_id, device_id, binding_generation, kind, target_code, desired_sequence,
+        schedule_id, scheduled_at,
+        data_json::text AS data_json, acknowledgement_policy,
+        acknowledgement_timeout_millis, retry_policy,
+        status, attempt_count, expires_at, created_at
+    </sql>
+
+    <select id="countDeviceDownlinks" resultType="long">
+        SELECT COUNT(*) FROM iot_downlink_message WHERE device_id = #{deviceId}
+    </select>
+    <select id="selectDeviceDownlinks" resultType="com.sca4d.iot.persistence.EncodedDownlinkMessage">
+        SELECT <include refid="messageColumns"/>
+        FROM iot_downlink_message
+        WHERE device_id = #{deviceId}
+        ORDER BY created_at DESC, message_id DESC
+        OFFSET #{offset} LIMIT #{limit}
+    </select>
+    <select id="countLatestAcknowledgements" resultType="long">
+        SELECT COUNT(*) FROM iot_downlink_message
+        WHERE device_id = #{deviceId} AND last_ack_code IS NOT NULL
+    </select>
+    <select id="selectLatestAcknowledgements" resultType="com.sca4d.iot.persistence.EncodedDeviceAcknowledgement">
+        SELECT message_id, last_ack_code AS ack_code, last_ack_data_json::text AS data_json,
+               last_ack_source AS source,
+               last_ack_source_acknowledgement_id AS source_acknowledgement_id,
+               last_acknowledged_at AS acknowledged_at, last_ack_received_at AS received_at
+        FROM iot_downlink_message
+        WHERE device_id = #{deviceId} AND last_ack_code IS NOT NULL
+        ORDER BY last_ack_received_at DESC, message_id DESC
+        OFFSET #{offset} LIMIT #{limit}
+    </select>
+
+    <select id="countActiveDownlinkMessages" resultType="long">
+        SELECT COUNT(*)
+        FROM iot_downlink_message
+        WHERE device_id = #{deviceId} AND binding_generation = #{bindingGeneration}
+          AND status IN ('PENDING', 'SENDING', 'WAITING_ACK')
+    </select>
+    <insert id="insertDownlinkMessage">
+        INSERT INTO iot_downlink_message (
+            message_id, device_id, binding_generation, kind, target_code, desired_sequence,
+            schedule_id, scheduled_at,
+            data_json, acknowledgement_policy, acknowledgement_timeout_millis,
+            retry_policy, status, attempt_count, expires_at)
+        VALUES (#{messageId}, #{deviceId}, #{bindingGeneration}, #{kind}, #{targetCode}, #{desiredSequence},
+                #{scheduleId}, #{scheduledAt},
+                CAST(#{dataJson} AS JSONB), #{acknowledgementPolicy}, #{acknowledgementTimeoutMillis},
+                #{retryPolicy}, 'PENDING', 0, #{expiresAt})
+    </insert>
+    <select id="selectDownlinkMessages" resultType="com.sca4d.iot.persistence.EncodedDownlinkMessage">
+        SELECT <include refid="messageColumns"/>
+        FROM iot_downlink_message
+        WHERE message_id IN
+        <foreach collection="messageIds" item="messageId" open="(" separator="," close=")">
+            #{messageId}
+        </foreach>
+        ORDER BY message_id
+    </select>
+    <update id="updateProgress">
+        UPDATE iot_downlink_message
+        <set>
+            <if test="status.set">status = #{status.value},</if>
+            <if test="attemptCount.set">attempt_count = #{attemptCount.value},</if>
+            <choose>
+                <when test="ackDeadline.set">ack_deadline = #{ackDeadline.value},</when>
+                <when test="ackDeadline.clear">ack_deadline = NULL,</when>
+            </choose>
+            <choose>
+                <when test="completedAt.set">completed_at = #{completedAt.value},</when>
+                <when test="completedAt.clear">completed_at = NULL,</when>
+            </choose>
+            <choose>
+                <when test="failureCode.set">last_failure_code = #{failureCode.value},</when>
+                <when test="failureCode.clear">last_failure_code = NULL,</when>
+            </choose>
+            version = version + 1
+        </set>
+        WHERE status IN
+        <foreach collection="expectedStatuses" item="expectedStatus" open="(" separator="," close=")">
+            #{expectedStatus}
+        </foreach>
+        <if test="messageId != null">AND message_id = #{messageId}</if>
+        <if test="deviceId != null">AND device_id = #{deviceId}</if>
+        <if test="bindingGeneration != null">AND binding_generation = #{bindingGeneration}</if>
+        <if test="kind != null">AND kind = #{kind}</if>
+        <if test="targetCode != null">AND target_code = #{targetCode}</if>
+        <if test="expectedAttempt != null">AND attempt_count = #{expectedAttempt}</if>
+    </update>
+    <update id="updateLatestAcknowledgement">
+        UPDATE iot_downlink_message
+        SET last_ack_identity_hash = #{identityHash}, last_ack_code = #{ackCode},
+            last_ack_data_json = CAST(#{dataJson} AS JSONB), last_ack_source = #{source},
+            last_ack_source_acknowledgement_id = #{sourceAcknowledgementId},
+            last_acknowledged_at = #{acknowledgedAt}, last_ack_received_at = #{receivedAt},
+            version = version + 1
+        WHERE message_id = #{messageId}
+          AND last_ack_identity_hash IS DISTINCT FROM #{identityHash}
+    </update>
+    <delete id="deleteCompletedBefore">
+        WITH expired AS (
+            SELECT message_id
+            FROM iot_downlink_message
+            WHERE completed_at &lt; #{completedBefore}
+              AND status IN ('SUCCEEDED', 'FAILED', 'SUPERSEDED', 'CANCELLED', 'EXPIRED')
+            ORDER BY completed_at, message_id
+            LIMIT #{batchSize}
+        )
+        DELETE FROM iot_downlink_message AS message
+        USING expired
+        WHERE message.message_id = expired.message_id
+    </delete>
+
+</mapper>

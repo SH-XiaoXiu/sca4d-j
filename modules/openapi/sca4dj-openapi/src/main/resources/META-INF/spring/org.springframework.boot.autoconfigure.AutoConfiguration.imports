@@ -1,0 +1,2 @@
+com.sca4d.openapi.web.OpenApiAutoConfiguration
+com.sca4d.openapi.web.OpenApiSpringdocAutoConfiguration

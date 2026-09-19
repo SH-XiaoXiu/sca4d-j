@@ -1,0 +1,7 @@
+spring:
+  config:
+    import:
+      - optional:file:.env/application.env[.properties]
+      - optional:file:.env/logging.env[.properties]
+      - optional:file:../../.env/application.env[.properties]
+      - optional:file:../../.env/logging.env[.properties]

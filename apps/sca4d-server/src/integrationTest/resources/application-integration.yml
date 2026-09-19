@@ -1,0 +1,22 @@
+sca4dj:
+  storage:
+    default-backend: local
+    local:
+      enabled: true
+      root: ${java.io.tmpdir}/sca4dj-integration-files
+    minio:
+      enabled: false
+  core:
+    open-api-enabled: true
+  auth:
+    excluded-paths:
+      - /v3/api-docs
+      - /v3/api-docs/**
+      - /swagger-ui.html
+      - /swagger-ui/**
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true

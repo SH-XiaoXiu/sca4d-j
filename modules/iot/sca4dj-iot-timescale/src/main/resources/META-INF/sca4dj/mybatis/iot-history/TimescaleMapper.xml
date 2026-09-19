@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.iot.timescale.persistence.TimescaleMapper">
+    <sql id="eventColumns">
+        message_id AS event_id, device_id, event_code, source_event_id,
+        data_json::text AS output_json, occurred_at, received_at
+    </sql>
+
+    <select id="selectTelemetry" resultType="com.sca4d.iot.timescale.persistence.EncodedTelemetrySample">
+        SELECT property_code, value_json::text AS value_json, observed_at, received_at
+        FROM iot_telemetry_sample
+        WHERE device_id = #{deviceId} AND property_code = #{propertyCode}
+          AND observed_at &gt;= #{from} AND observed_at &lt; #{to}
+        ORDER BY observed_at, message_id, sample_index
+        LIMIT #{limit}
+    </select>
+    <sql id="eventFilters">
+        <if test="deviceId != null">AND device_id = #{deviceId}</if>
+        <if test="eventCode != null">AND event_code = #{eventCode}</if>
+        <if test="scheduleId != null">
+            AND event_code = '$schedule.execution'
+            AND (data_json -&gt;&gt; 'scheduleId')::BIGINT = #{scheduleId}
+        </if>
+    </sql>
+    <select id="countEvents" resultType="long">
+        SELECT COUNT(*) FROM iot_event
+        <where><include refid="eventFilters"/></where>
+    </select>
+    <select id="selectEvents" resultType="com.sca4d.iot.timescale.persistence.TimescaleThingEvent">
+        SELECT <include refid="eventColumns"/>
+        FROM iot_event
+        <where><include refid="eventFilters"/></where>
+        ORDER BY occurred_at DESC, message_id DESC
+        OFFSET #{offset} LIMIT #{limit}
+    </select>
+
+    <insert id="insertTelemetrySamples">
+        INSERT INTO iot_telemetry_sample (
+            observed_at, message_id, sample_index, device_id, binding_generation,
+            property_code, value_json, received_at)
+        VALUES
+        <foreach collection="samples" item="sample" separator=",">
+            (#{sample.observedAt}, #{sample.messageId}, #{sample.sampleIndex},
+             #{sample.deviceId}, #{sample.bindingGeneration}, #{sample.propertyCode},
+             CAST(#{sample.valueJson} AS JSONB), #{sample.receivedAt})
+        </foreach>
+        ON CONFLICT DO NOTHING
+    </insert>
+    <insert id="insertEvent">
+        INSERT INTO iot_event (
+            occurred_at, message_id, device_id, binding_generation, event_code,
+            source_event_id, data_json, device_occurred_at, received_at)
+        VALUES (#{event.occurredAt}, #{messageId}, #{event.deviceId}, #{event.bindingGeneration},
+                #{event.eventCode}, #{event.sourceEventId}, CAST(#{dataJson} AS JSONB),
+                #{event.deviceOccurredAt}, #{event.receivedAt})
+        ON CONFLICT DO NOTHING
+    </insert>
+
+    <select id="dropTelemetryChunks" resultType="java.lang.String">
+        SELECT drop_chunks('iot_telemetry_sample', older_than =&gt; CAST(#{olderThan} AS TIMESTAMPTZ))
+    </select>
+    <select id="dropEventChunks" resultType="java.lang.String">
+        SELECT drop_chunks('iot_event', older_than =&gt; CAST(#{olderThan} AS TIMESTAMPTZ))
+    </select>
+</mapper>

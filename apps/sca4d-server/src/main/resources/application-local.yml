@@ -1,0 +1,45 @@
+spring:
+  config:
+    import:
+      - optional:file:.env/application.env[.properties]
+      - optional:file:.env/database.env[.properties]
+      - optional:file:.env/redis.env[.properties]
+      - optional:file:.env/rabbitmq.env[.properties]
+      - optional:file:.env/web-realtime.env[.properties]
+      - optional:file:.env/iam.env[.properties]
+      - optional:file:.env/auth.env[.properties]
+      - optional:file:.env/notification.env[.properties]
+      - optional:file:.env/storage.env[.properties]
+      - optional:file:.env/iot.env[.properties]
+      - optional:file:.env/iot-database.env[.properties]
+      - optional:file:../../.env/application.env[.properties]
+      - optional:file:../../.env/database.env[.properties]
+      - optional:file:../../.env/redis.env[.properties]
+      - optional:file:../../.env/rabbitmq.env[.properties]
+      - optional:file:../../.env/web-realtime.env[.properties]
+      - optional:file:../../.env/iam.env[.properties]
+      - optional:file:../../.env/auth.env[.properties]
+      - optional:file:../../.env/notification.env[.properties]
+      - optional:file:../../.env/storage.env[.properties]
+      - optional:file:../../.env/iot.env[.properties]
+      - optional:file:../../.env/iot-database.env[.properties]
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+springdoc:
+  api-docs:
+    enabled: ${SCA4DJ_OPENAPI_ENABLED:true}
+  swagger-ui:
+    enabled: ${SCA4DJ_OPENAPI_ENABLED:true}
+
+sca4dj:
+  core:
+    open-api-enabled: ${SCA4DJ_OPENAPI_ENABLED:true}
+  auth:
+    excluded-paths:
+      - /v3/api-docs
+      - /v3/api-docs/**
+      - /swagger-ui.html
+      - /swagger-ui/**

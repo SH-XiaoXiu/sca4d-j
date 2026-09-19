@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.sca4d.web.realtime.config"},{"l":"com.sca4d.web.realtime.connection"},{"l":"com.sca4d.web.realtime.rabbit"},{"l":"com.sca4d.web.realtime.sse"},{"l":"com.sca4d.web.realtime.stomp"},{"l":"com.sca4d.web.realtime.ticket"}];updateSearchResults();

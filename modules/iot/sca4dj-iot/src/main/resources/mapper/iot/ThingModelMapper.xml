@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.iot.persistence.mapper.ThingModelMapper">
+    <select id="selectThingModels" resultType="com.sca4d.iot.persistence.EncodedThingModel">
+        SELECT model.version, model.model_json::text AS model_json, model.content_hash, model.i18n
+        FROM iot_thing_model model
+        INNER JOIN iot_product product ON product.id = model.product_id
+        WHERE product.code = #{productCode}
+        <if test="version != null">AND model.version = #{version}</if>
+        ORDER BY model.version
+    </select>
+    <select id="selectProductIdByCode" resultType="java.lang.Long">
+        SELECT id FROM iot_product WHERE code = #{productCode}
+    </select>
+    <insert id="insertThingModel">
+        INSERT INTO iot_thing_model (product_id, version, model_json, content_hash, i18n, published_at)
+        VALUES (#{productId}, #{version}, CAST(#{modelJson} AS JSONB), #{contentHash}, #{i18n,jdbcType=OTHER}, #{now})
+    </insert>
+    <update id="updateThingModelI18n">
+        UPDATE iot_thing_model model
+        SET i18n = #{i18n,jdbcType=OTHER}
+        FROM iot_product product
+        WHERE product.id = model.product_id
+          AND product.code = #{productCode}
+          AND model.version = #{version}
+    </update>
+</mapper>

@@ -1,0 +1,66 @@
+package com.sca4d.openapi.client;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
+
+/** 保存第三方 Client 与 IAM APPLICATION Account 的稳定绑定。 */
+public final class OpenApiClient {
+
+    private final @NotNull String clientId;
+
+    private final long accountId;
+
+    private final @NotNull String displayName;
+
+    private final @NotNull OpenApiClientStatus status;
+
+    /** 创建 Client 事实。 */
+    public OpenApiClient(
+            @NotNull String clientId,
+            long accountId,
+            @NotNull String displayName,
+            @NotNull OpenApiClientStatus status) {
+        this.clientId = requireText(clientId, "Client ID");
+        if (accountId <= 0) {
+            throw new IllegalArgumentException("Client Account 标识必须为正数");
+        }
+        this.accountId = accountId;
+        this.displayName = requireText(displayName, "Client 名称");
+        this.status = Objects.requireNonNull(status, "Client 状态不能为空");
+    }
+
+    /** @return 第三方请求使用的 Client ID */
+    public @NotNull String clientId() {
+        return clientId;
+    }
+
+    /** @return 对应 IAM Account 标识 */
+    public long accountId() {
+        return accountId;
+    }
+
+    /** @return 管理端显示名称 */
+    public @NotNull String displayName() {
+        return displayName;
+    }
+
+    /** @return 当前生命周期状态 */
+    public @NotNull OpenApiClientStatus status() {
+        return status;
+    }
+
+    /** @return Client 允许继续认证和调用时为 {@code true} */
+    public boolean active() {
+        return status == OpenApiClientStatus.ACTIVE;
+    }
+
+    private static String requireText(String value, String name) {
+        Objects.requireNonNull(value, name + "不能为空");
+        String checked = value.trim();
+        if (checked.isEmpty()) {
+            throw new IllegalArgumentException(name + "不能为空");
+        }
+        return checked;
+    }
+}

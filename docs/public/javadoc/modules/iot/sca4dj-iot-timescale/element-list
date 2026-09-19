@@ -1,0 +1,3 @@
+com.sca4d.iot.config
+com.sca4d.iot.telemetry
+com.sca4d.iot.timescale.persistence

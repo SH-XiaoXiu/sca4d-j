@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.core.spring.dictionary.DictionaryMapper">
+
+    <select id="selectDictionaries" resultType="com.sca4d.core.spring.dictionary.DynamicDictionary">
+        SELECT dictionary_key AS key, label, enabled, sort_order, version
+        FROM sys_dictionary
+        <if test="key != null">WHERE dictionary_key = #{key}</if>
+        ORDER BY sort_order, dictionary_key
+    </select>
+
+    <select id="selectOptions" resultType="com.sca4d.core.spring.dictionary.DatabaseDictionaryOption">
+        SELECT option_value AS value, label, i18n, enabled, sort_order, version
+        FROM sys_dictionary_option
+        WHERE dictionary_key = #{key}
+        ORDER BY sort_order, option_value
+    </select>
+
+    <insert id="insertDictionary">
+        INSERT INTO sys_dictionary (dictionary_key, label, enabled, sort_order)
+        VALUES (#{key}, #{label}, #{enabled}, #{sortOrder})
+        ON CONFLICT DO NOTHING
+    </insert>
+
+    <update id="updateDictionary">
+        UPDATE sys_dictionary
+        <set>
+            <if test="label.set">label = #{label.value},</if>
+            <if test="enabled.set">enabled = #{enabled.value},</if>
+            <if test="sortOrder.set">sort_order = #{sortOrder.value},</if>
+            version = version + 1
+        </set>
+        WHERE dictionary_key = #{key} AND version = #{version}
+    </update>
+
+    <delete id="deleteDictionary">
+        DELETE FROM sys_dictionary
+        WHERE dictionary_key = #{key} AND version = #{version}
+    </delete>
+
+    <delete id="deleteOptions">
+        DELETE FROM sys_dictionary_option
+        WHERE dictionary_key = #{key}
+    </delete>
+
+    <insert id="insertOption">
+        INSERT INTO sys_dictionary_option (dictionary_key, option_value, label, i18n, enabled, sort_order)
+        VALUES (#{key}, #{value}, #{label}, #{i18n,jdbcType=OTHER}, #{enabled}, #{sortOrder})
+        ON CONFLICT DO NOTHING
+    </insert>
+
+    <update id="updateOption">
+        UPDATE sys_dictionary_option
+        <set>
+            <if test="label.set">label = #{label.value},</if>
+            <if test="i18n.set">i18n = #{i18n.value,jdbcType=OTHER},</if>
+            <if test="enabled.set">enabled = #{enabled.value},</if>
+            <if test="sortOrder.set">sort_order = #{sortOrder.value},</if>
+            version = version + 1
+        </set>
+        WHERE dictionary_key = #{key} AND option_value = #{value} AND version = #{version}
+    </update>
+
+    <delete id="deleteOption">
+        DELETE FROM sys_dictionary_option
+        WHERE dictionary_key = #{key} AND option_value = #{value} AND version = #{version}
+    </delete>
+</mapper>

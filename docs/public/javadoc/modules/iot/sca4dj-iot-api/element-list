@@ -1,0 +1,11 @@
+com.sca4d.iot.api
+com.sca4d.iot.api.change
+com.sca4d.iot.api.connection
+com.sca4d.iot.api.history
+com.sca4d.iot.api.message
+com.sca4d.iot.api.model
+com.sca4d.iot.api.protocol
+com.sca4d.iot.api.query
+com.sca4d.iot.api.schedule
+com.sca4d.iot.api.state
+com.sca4d.iot.api.telemetry

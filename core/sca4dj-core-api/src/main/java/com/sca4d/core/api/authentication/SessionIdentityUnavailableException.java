@@ -1,0 +1,19 @@
+package com.sca4d.core.api.authentication;
+
+import org.jetbrains.annotations.NotNull;
+
+/** 表示 Account 当前状态或身份关系已经不能恢复为有效 Session。 */
+public final class SessionIdentityUnavailableException extends RuntimeException {
+
+    @java.io.Serial
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 使用所属身份模块返回的失败创建异常。
+     *
+     * @param cause 身份状态或关系无效的原始失败
+     */
+    public SessionIdentityUnavailableException(@NotNull Throwable cause) {
+        super("Session 身份已经不可用", cause);
+    }
+}

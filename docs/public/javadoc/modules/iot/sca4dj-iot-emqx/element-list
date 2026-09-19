@@ -1,0 +1,6 @@
+com.sca4d.iot.emqx.authentication
+com.sca4d.iot.emqx.config
+com.sca4d.iot.emqx.connection
+com.sca4d.iot.emqx.management
+com.sca4d.iot.emqx.protocol
+com.sca4d.iot.emqx.transport

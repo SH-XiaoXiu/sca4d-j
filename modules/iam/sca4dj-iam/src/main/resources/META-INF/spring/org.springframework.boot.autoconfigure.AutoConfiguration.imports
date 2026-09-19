@@ -1,0 +1,3 @@
+com.sca4d.iam.config.IamRbacRedisAutoConfiguration
+com.sca4d.iam.config.IamAutoConfiguration
+com.sca4d.iam.base.user.UserAutoConfiguration

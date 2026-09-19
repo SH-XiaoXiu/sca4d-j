@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.sca4d.storage.minio","l":"MinioFileStorage"},{"p":"com.sca4d.storage.minio","l":"MinioStorageAutoConfiguration"},{"p":"com.sca4d.storage.minio","l":"MinioStorageProperties"}];updateSearchResults();

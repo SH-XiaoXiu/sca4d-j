@@ -1,0 +1,123 @@
+package com.sca4d.core.spring.call;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import com.sca4d.core.api.call.Call;
+import com.sca4d.core.api.call.CallExecution;
+import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.permission.Action;
+import com.sca4d.core.api.permission.Permission;
+import com.sca4d.core.api.permission.PermissionDecision;
+import com.sca4d.core.api.permission.ResourceScope;
+import com.sca4d.core.api.resource.Resource;
+import com.sca4d.core.spring.web.CurrentResourceScope;
+import com.sca4d.core.spring.web.RequestVersionConditions;
+import com.sca4d.core.spring.web.annotation.IfMatch;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.transaction.TransactionExecution;
+
+import java.lang.reflect.Method;
+import java.time.Instant;
+
+/** 验证 Spring 事务和嵌套方法执行会共同落实调用成功要求。 */
+class CallRequirementIntegrationTest {
+
+    private final RequestVersionConditions versionConditions = new RequestVersionConditions();
+
+    @AfterEach
+    void clearCall() {
+        CallHolder.clear();
+        versionConditions.clear();
+    }
+
+    @Test
+    @DisplayName("Rejects Transaction Commit Before If Match Is Consumed")
+    void rejectsTransactionCommitBeforeIfMatchIsConsumed() throws Exception {
+        Call call = Call.system("transaction-requirement", Instant.EPOCH);
+        CallHolder.set(call);
+        CallExecution execution = execution(call, Fixture.class.getDeclaredMethod("versioned"));
+        CallHolder.push(execution);
+        execution.beginInvocation();
+        versionConditions.bind(new Version(3));
+        versionConditions.attach(execution);
+        TransactionExecution transaction = mock(TransactionExecution.class);
+        when(transaction.isReadOnly()).thenReturn(false);
+        CallRequirementTransactionListener listener = new CallRequirementTransactionListener();
+
+        assertThatThrownBy(() -> listener.beforeCommit(transaction))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Repository 没有消费版本前置条件");
+
+        versionConditions.resolve(new Version(4));
+
+        assertThatCode(() -> listener.beforeCommit(transaction)).doesNotThrowAnyException();
+    }
+
+    @Test
+    @DisplayName("Consumes Matching Resource Scope For Every Active Execution")
+    void consumesMatchingResourceScopeForEveryActiveExecution() throws Exception {
+        Call call = Call.system("nested-scope", Instant.EPOCH);
+        Permission permission = new Permission(new DeviceCollection(), Action.READ);
+        DeviceScope scope = new DeviceScope();
+        call.recordPermissionDecision(permission, PermissionDecision.allow(scope));
+        CallExecution outer = execution(call, Fixture.class.getDeclaredMethod("plain"));
+        CallExecution inner = execution(call, Fixture.class.getDeclaredMethod("nested"));
+        outer.registerResourceScope(permission);
+        inner.registerResourceScope(permission);
+        CallHolder.set(call);
+        CallHolder.push(outer);
+        CallHolder.push(inner);
+
+        assertThat(new CurrentResourceScope().scope(permission, DeviceScope.class)).isSameAs(scope);
+        assertThatCode(outer::verifyRequirements).doesNotThrowAnyException();
+        assertThatCode(inner::verifyRequirements).doesNotThrowAnyException();
+    }
+
+    private static CallExecution execution(Call call, Method method) {
+        return new CallExecution(call, Fixture.class, method, new Object[0], method.getGenericReturnType());
+    }
+
+    /** 提供普通、嵌套和版本保护方法声明。 */
+    private static final class Fixture {
+
+        private void plain() {
+        }
+
+        private void nested() {
+        }
+
+        @IfMatch
+        private void versioned() {
+        }
+    }
+
+    /** 表示测试中的设备集合资源。 */
+    private static final class DeviceCollection implements Resource {
+
+        @Override
+        public @NotNull String type() {
+            return "device";
+        }
+
+        @Override
+        public @NotNull String id() {
+            return "collection";
+        }
+    }
+
+    /** 表示测试中的设备数据范围。 */
+    private static final class DeviceScope implements ResourceScope {
+
+        @Override
+        public String resourceType() {
+            return "device";
+        }
+    }
+}

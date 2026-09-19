@@ -1,0 +1,4 @@
+com.sca4d.auth.password
+com.sca4d.auth.password.config
+com.sca4d.auth.password.credential
+com.sca4d.auth.password.credential.mapper

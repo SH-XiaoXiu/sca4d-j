@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.job.persistence.JobMapper">
+    <resultMap id="scheduledRun" type="com.sca4d.job.persistence.ScheduledRunRecord">
+        <constructor>
+            <idArg column="run_id" javaType="_long"/>
+            <arg column="scheduled_at" javaType="java.time.Instant"/>
+            <arg column="status" javaType="com.sca4d.core.api.job.JobRunStatus"/>
+            <arg column="completed_at" javaType="java.time.Instant"/>
+            <arg column="output_json" javaType="java.lang.String"/>
+        </constructor>
+    </resultMap>
+    <select id="countScheduledRuns" resultType="long">
+        SELECT count(*)
+        FROM job.job_run
+        WHERE runtime_namespace = #{runtimeNamespace}
+          AND schedule_key = #{scheduleKey}
+          AND job_key = #{jobKey}
+          AND job_definition_version = #{definitionVersion}
+    </select>
+    <select id="selectScheduledRuns" resultMap="scheduledRun">
+        SELECT run.id AS run_id,
+               run.scheduled_fire_time AS scheduled_at,
+               run.status,
+               run.completed_at,
+               node.output_json::text AS output_json
+        FROM job.job_run run
+        LEFT JOIN job.job_run_node node
+          ON node.run_id = run.id
+         AND node.node_key = #{nodeKey}
+         AND node.status = 'SUCCEEDED'
+        WHERE run.runtime_namespace = #{runtimeNamespace}
+          AND run.schedule_key = #{scheduleKey}
+          AND run.job_key = #{jobKey}
+          AND run.job_definition_version = #{definitionVersion}
+        ORDER BY run.scheduled_fire_time DESC, run.id DESC
+        OFFSET #{page.offset} LIMIT #{page.size}
+    </select>
+    <select id="insertRun" resultType="long">
+        INSERT INTO job.job_run (
+            runtime_namespace, job_key, job_definition_version, job_kind, input_json, status,
+            schedule_key, scheduled_fire_time)
+        VALUES (#{runtimeNamespace}, #{jobKey}, #{definitionVersion}, #{kind},
+                CAST(#{inputJson} AS jsonb), 'QUEUED', #{scheduleKey}, #{scheduledAt})
+        RETURNING id
+    </select>
+    <select id="selectScheduledRun" resultType="long">
+        SELECT id FROM job.job_run
+        WHERE runtime_namespace = #{runtimeNamespace}
+          AND schedule_key = #{scheduleKey}
+        <if test="scheduledAt != null">AND scheduled_fire_time = #{scheduledAt}</if>
+        <if test="statuses != null">
+            AND status IN <foreach collection="statuses" item="status" open="(" separator="," close=")">#{status}</foreach>
+        </if>
+        ORDER BY id LIMIT 1
+    </select>
+    <select id="insertNode" resultType="long">
+        INSERT INTO job.job_run_node (
+            run_id, node_key, node_kind, input_json, status, parallel_merge,
+            max_attempts, retry_delay_millis, available_at)
+        VALUES (#{runId}, #{nodeKey}, #{kind}, CAST(#{inputJson} AS jsonb), #{status},
+                CASE WHEN #{parallelMerge} THEN 1 ELSE 0 END,
+                #{maxAttempts}, #{retryDelayMillis}, #{availableAt})
+        RETURNING id
+    </select>
+    <insert id="insertDependencies">
+        INSERT INTO job.job_run_dependency (run_id, node_id, depends_on_node_id, dependency_order)
+        VALUES
+        <foreach collection="dependencies" index="nodeId" item="edges" separator=",">
+            <foreach collection="edges" index="order" item="dependencyId" separator=",">
+                (#{runId}, #{nodeId}, #{dependencyId}, #{order})
+            </foreach>
+        </foreach>
+    </insert>
+    <select id="selectRun" resultType="com.sca4d.job.persistence.RunRecord">
+        SELECT id, job_key, job_definition_version, output_json::text AS output_json, status
+        FROM job.job_run
+        WHERE runtime_namespace = #{runtimeNamespace} AND id = #{runId}
+    </select>
+    <select id="updateClaimableNode" resultType="com.sca4d.job.persistence.NodeClaim">
+        WITH candidate AS MATERIALIZED (
+            SELECT n.id AS node_id, n.run_id, r.job_key, r.job_definition_version, r.job_kind,
+                   n.node_key, n.input_json::text AS input_json,
+                   n.attempt_count AS current_attempt, n.attempt_count + 1 AS next_attempt,
+                   n.max_attempts, n.retry_delay_millis
+            FROM job.job_run_node n
+            JOIN job.job_run r ON r.id = n.run_id
+            WHERE r.runtime_namespace = #{runtimeNamespace}
+              AND r.status IN ('QUEUED', 'RUNNING')
+              AND n.attempt_count &lt; n.max_attempts
+              AND ((n.status = 'READY' AND n.available_at &lt;= #{now})
+                   OR (n.status = 'RUNNING' AND n.lease_until &lt; #{now}))
+            ORDER BY n.available_at, n.id
+            LIMIT 1
+        ), node_started AS (
+            UPDATE job.job_run_node n
+            SET status = 'RUNNING', attempt_count = c.next_attempt,
+                lease_owner = #{workerId}, lease_until = #{leaseUntil},
+                started_at = COALESCE(n.started_at, #{now}), error_summary = NULL
+            FROM candidate c
+            WHERE n.id = c.node_id AND n.attempt_count = c.current_attempt
+              AND ((n.status = 'READY' AND n.available_at &lt;= #{now})
+                   OR (n.status = 'RUNNING' AND n.lease_until &lt; #{now}))
+            RETURNING n.id AS node_id, n.run_id
+        ), abandoned AS (
+            UPDATE job.job_run_attempt a
+            SET status = 'ABANDONED', completed_at = #{now}
+            FROM node_started started
+            WHERE a.node_id = started.node_id AND a.status = 'RUNNING'
+        ), attempt_started AS (
+            INSERT INTO job.job_run_attempt (node_id, attempt_number, worker_id, status, started_at)
+            SELECT started.node_id, candidate.next_attempt, #{workerId}, 'RUNNING', #{now}
+            FROM node_started started
+            JOIN candidate ON candidate.node_id = started.node_id
+        ), run_started AS (
+            UPDATE job.job_run r
+            SET status = 'RUNNING', started_at = COALESCE(r.started_at, #{now})
+            FROM node_started started WHERE r.id = started.run_id AND r.status = 'QUEUED'
+        )
+        SELECT candidate.node_id, candidate.run_id, candidate.job_key, candidate.job_definition_version,
+               candidate.job_kind, candidate.node_key, candidate.input_json,
+               candidate.next_attempt AS attempt, candidate.max_attempts, candidate.retry_delay_millis
+        FROM candidate
+        JOIN node_started ON node_started.node_id = candidate.node_id
+    </select>
+    <update id="updateNodeLease">
+        UPDATE job.job_run_node SET lease_until = #{leaseUntil}
+        WHERE id = #{nodeId} AND status = 'RUNNING' AND lease_owner = #{workerId}
+    </update>
+    <select id="selectDependencyOutputs" resultType="string">
+        SELECT source.output_json::text
+        FROM job.job_run_dependency dependency
+        JOIN job.job_run_node source ON source.id = dependency.depends_on_node_id
+        WHERE dependency.node_id = #{nodeId}
+        ORDER BY dependency.dependency_order
+    </select>
+    <select id="selectHasDependents" resultType="boolean">
+        SELECT EXISTS (SELECT 1 FROM job.job_run_dependency WHERE depends_on_node_id = #{nodeId})
+    </select>
+    <update id="updateNodeProgress">
+        WITH node_updated AS (
+            UPDATE job.job_run_node
+            <set>
+                <if test="nodeStatus.set">status = #{nodeStatus.value},</if>
+                <if test="outputJson.set">output_json = CAST(#{outputJson.value} AS jsonb),</if>
+                <if test="outputJson.clear">output_json = NULL,</if>
+                <if test="error.set">error_summary = #{error.value},</if>
+                <if test="error.clear">error_summary = NULL,</if>
+                <if test="availableAt.set">available_at = #{availableAt.value},</if>
+                <if test="nodeCompletedAt.set">completed_at = #{nodeCompletedAt.value},</if>
+                lease_owner = NULL, lease_until = NULL
+            </set>
+            WHERE id = #{nodeId} AND status = 'RUNNING' AND lease_owner = #{workerId}
+              AND attempt_count = #{attempt}
+            RETURNING id
+        )
+        UPDATE job.job_run_attempt
+        <set>
+            <if test="attemptStatus.set">status = #{attemptStatus.value},</if>
+            <if test="error.set">error_summary = #{error.value},</if>
+            <if test="error.clear">error_summary = NULL,</if>
+            <if test="completedAt.set">completed_at = #{completedAt.value},</if>
+        </set>
+        WHERE node_id IN (SELECT id FROM node_updated)
+          AND attempt_number = #{attempt} AND worker_id = #{workerId} AND status = 'RUNNING'
+    </update>
+    <update id="updateDependentNodes">
+        UPDATE job.job_run_node target
+        SET status = 'READY', available_at = #{availableAt},
+            input_json = CASE WHEN target.parallel_merge = 0 THEN (
+                SELECT source.output_json
+                FROM job.job_run_dependency only_dependency
+                JOIN job.job_run_node source ON source.id = only_dependency.depends_on_node_id
+                WHERE only_dependency.node_id = target.id
+                ORDER BY only_dependency.dependency_order LIMIT 1
+            ) END
+        WHERE target.status = 'WAITING'
+          AND EXISTS (SELECT 1 FROM job.job_run_dependency changed
+                      WHERE changed.node_id = target.id AND changed.depends_on_node_id = #{sourceNodeId})
+          AND NOT EXISTS (
+              SELECT 1 FROM job.job_run_dependency dependency
+              JOIN job.job_run_node source ON source.id = dependency.depends_on_node_id
+              WHERE dependency.node_id = target.id AND source.status &lt;&gt; 'SUCCEEDED')
+    </update>
+    <update id="updateRunResult">
+        UPDATE job.job_run
+        <set>
+            <if test="status.set">status = #{status.value},</if>
+            <if test="outputJson.set">output_json = CAST(#{outputJson.value} AS jsonb),</if>
+            <if test="outputJson.clear">output_json = NULL,</if>
+            <if test="completedAt.set">completed_at = #{completedAt.value},</if>
+        </set>
+        WHERE id = #{runId} AND status IN ('QUEUED', 'RUNNING')
+    </update>
+
+    <update id="updateNodeFailed">
+        WITH RECURSIVE failed AS (
+            UPDATE job.job_run_node
+            SET status = 'FAILED', error_summary = #{error}, completed_at = #{failedAt},
+                lease_owner = NULL, lease_until = NULL
+            WHERE id = #{nodeId} AND run_id = #{runId} AND status = 'RUNNING'
+              AND lease_owner = #{workerId} AND attempt_count = #{attempt}
+            RETURNING id, run_id
+        ), dependent AS (
+            SELECT node_id AS id FROM job.job_run_dependency WHERE depends_on_node_id IN (SELECT id FROM failed)
+            UNION
+            SELECT dependency.node_id FROM job.job_run_dependency dependency
+            JOIN dependent ON dependency.depends_on_node_id = dependent.id
+        ), cancelled AS (
+            UPDATE job.job_run_node SET status = 'CANCELLED', completed_at = #{failedAt}
+            WHERE id IN (SELECT id FROM dependent) AND status IN ('WAITING', 'READY')
+        ), run_updated AS (
+            UPDATE job.job_run SET status = 'FAILED', error_summary = #{error}, completed_at = #{failedAt}
+            WHERE id IN (SELECT run_id FROM failed) AND status IN ('QUEUED', 'RUNNING')
+        )
+        UPDATE job.job_run_attempt
+        SET status = 'FAILED', error_summary = #{error}, completed_at = #{failedAt}
+        WHERE node_id IN (SELECT id FROM failed) AND attempt_number = #{attempt}
+          AND worker_id = #{workerId} AND status = 'RUNNING'
+    </update>
+    <update id="updateExpiredNodes">
+        WITH RECURSIVE exhausted AS MATERIALIZED (
+            SELECT n.id, n.run_id FROM job.job_run_node n
+            JOIN job.job_run r ON r.id = n.run_id
+            WHERE r.runtime_namespace = #{runtimeNamespace} AND n.status = 'RUNNING'
+              AND n.lease_until &lt; #{now} AND n.attempt_count &gt;= n.max_attempts
+        ), failed AS (
+            UPDATE job.job_run_node n
+            SET status = 'FAILED', error_summary = 'Job worker 租约到期且重试次数耗尽', completed_at = #{now},
+                lease_owner = NULL, lease_until = NULL
+            FROM exhausted e
+            WHERE n.id = e.id AND n.status = 'RUNNING'
+              AND n.lease_until &lt; #{now} AND n.attempt_count &gt;= n.max_attempts
+            RETURNING n.id, n.run_id
+        ), abandoned AS (
+            UPDATE job.job_run_attempt a
+            SET status = 'ABANDONED', error_summary = 'Job worker 租约到期且重试次数耗尽', completed_at = #{now}
+            FROM failed WHERE a.node_id = failed.id AND a.status = 'RUNNING'
+        ), dependent AS (
+            SELECT node_id AS id FROM job.job_run_dependency WHERE depends_on_node_id IN (SELECT id FROM failed)
+            UNION
+            SELECT dependency.node_id FROM job.job_run_dependency dependency
+            JOIN dependent ON dependency.depends_on_node_id = dependent.id
+        ), cancelled AS (
+            UPDATE job.job_run_node SET status = 'CANCELLED', completed_at = #{now}
+            WHERE id IN (SELECT id FROM dependent) AND status IN ('WAITING', 'READY')
+        )
+        UPDATE job.job_run r SET status = 'FAILED', error_summary = 'Job worker 租约到期且重试次数耗尽', completed_at = #{now}
+        WHERE r.id IN (SELECT run_id FROM failed) AND r.status IN ('QUEUED', 'RUNNING')
+    </update>
+    <sql id="runIds"><foreach collection="runIds" item="runId" open="(" separator="," close=")">#{runId}</foreach></sql>
+    <select id="selectExpiredRunIdsForUpdate" resultType="long">
+        SELECT id FROM job.job_run
+        WHERE runtime_namespace = #{runtimeNamespace} AND status = 'SUCCEEDED' AND completed_at &lt; #{completedBefore}
+        ORDER BY completed_at, id LIMIT #{limit}
+        FOR UPDATE SKIP LOCKED
+    </select>
+    <delete id="deleteAttempts">
+        DELETE FROM job.job_run_attempt
+        WHERE node_id IN (SELECT id FROM job.job_run_node WHERE run_id IN <include refid="runIds"/>)
+    </delete>
+    <delete id="deleteDependencies">
+        DELETE FROM job.job_run_dependency WHERE run_id IN <include refid="runIds"/>
+    </delete>
+    <delete id="deleteNodes">
+        DELETE FROM job.job_run_node WHERE run_id IN <include refid="runIds"/>
+    </delete>
+    <delete id="deleteRuns">
+        DELETE FROM job.job_run
+        WHERE runtime_namespace = #{runtimeNamespace} AND status = 'SUCCEEDED' AND id IN <include refid="runIds"/>
+    </delete>
+</mapper>

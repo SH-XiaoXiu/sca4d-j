@@ -1,0 +1,6 @@
+com.sca4d.auth.passkey
+com.sca4d.auth.passkey.ceremony
+com.sca4d.auth.passkey.config
+com.sca4d.auth.passkey.credential
+com.sca4d.auth.passkey.credential.mapper
+com.sca4d.auth.passkey.registration

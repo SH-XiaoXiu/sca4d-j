@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.audit.recording.mapper.AuditMapper">
+    <sql id="columns">id, request_id, subject_id, account_id, principal_id, operation,
+        target_type, target_id, result, payload_type, payload_version,
+        payload_json::text AS payload_json, http_method, http_path, client_ip, user_agent, occurred_at
+    </sql>
+
+    <sql id="conditions">
+        <where>
+            <if test="query.requestId() != null">request_id = #{query.requestId}</if>
+            <if test="query.accountId() != null">AND account_id = #{query.accountId}</if>
+            <if test="query.principalId() != null">AND principal_id = #{query.principalId}</if>
+            <if test="query.operation() != null">AND operation = #{query.operation}</if>
+            <if test="query.result() != null">AND result = #{query.result}</if>
+            <if test="query.targetType() != null">
+                AND target_type = #{query.targetType} AND target_id = #{query.targetId}
+            </if>
+            <if test="query.occurredFrom() != null">AND occurred_at &gt;= #{query.occurredFrom}</if>
+            <if test="query.occurredTo() != null">AND occurred_at &lt; #{query.occurredTo}</if>
+        </where>
+    </sql>
+
+    <insert id="insert">
+        INSERT INTO audit_record
+        (id, request_id, subject_id, account_id, principal_id, operation,
+        target_type, target_id, result, payload_type, payload_version, payload_json,
+        http_method, http_path, client_ip, user_agent, occurred_at)
+        VALUES
+        (#{row.id}, #{row.requestId}, #{row.subjectId}, #{row.accountId}, #{row.principalId},
+        #{row.operation}, #{row.targetType}, #{row.targetId}, #{row.result},
+        #{row.payloadType}, #{row.payloadVersion}, CAST(#{row.payloadJson} AS JSONB),
+        #{row.httpMethod}, #{row.httpPath}, #{row.clientIp}, #{row.userAgent}, #{row.occurredAt})
+    </insert>
+
+    <select id="selectById" resultType="com.sca4d.audit.recording.mapper.EncodedAuditEntry">
+        SELECT <include refid="columns"/> FROM audit_record WHERE id = #{id}
+    </select>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM audit_record <include refid="conditions"/>
+    </select>
+
+    <select id="selectPage" resultType="com.sca4d.audit.recording.mapper.EncodedAuditEntry">
+        SELECT <include refid="columns"/>
+        FROM audit_record
+        <include refid="conditions"/>
+        ORDER BY occurred_at DESC, id DESC
+        LIMIT #{query.page.size} OFFSET #{query.page.offset}
+    </select>
+</mapper>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.notification.sms.mapper.SmsProviderMapper">
+    <select id="selectProviders" resultType="com.sca4d.notification.sms.mapper.SmsProviderState">
+        SELECT id AS provider_id, code, provider_type AS type, credential_ref,
+               priority, enabled, version
+        FROM notification_sms_provider
+        WHERE deleted = 0
+        <if test="providerId != null">AND id = #{providerId}</if>
+        <if test="enabled != null">AND enabled = #{enabled}</if>
+        <if test="route != null">AND EXISTS (
+              SELECT 1
+              FROM notification_sms_binding binding
+              WHERE binding.provider_id = notification_sms_provider.id
+                AND binding.route = #{route}
+                AND binding.enabled = TRUE
+                AND binding.deleted = 0
+          )</if>
+        ORDER BY priority, id
+    </select>
+    <select id="selectBindings" resultType="com.sca4d.notification.sms.mapper.SmsBindingState">
+        SELECT id AS binding_id, provider_id, notification_code AS code, route,
+               language_tag, sign_name, provider_template_code,
+               parameter_mapping::text AS parameter_mapping_json, enabled, version
+        FROM notification_sms_binding
+        WHERE deleted = 0
+        <if test="bindingId != null">AND id = #{bindingId}</if>
+        <if test="providerId != null">AND provider_id = #{providerId}</if>
+        <if test="notificationCode != null">AND notification_code = #{notificationCode}</if>
+        <if test="route != null">AND route = #{route}</if>
+        <if test="languageTag != null">AND language_tag = #{languageTag}</if>
+        <if test="enabled != null">AND enabled = #{enabled}</if>
+        ORDER BY id
+    </select>
+    <insert id="insertProvider">
+        INSERT INTO notification_sms_provider
+            (id, code, provider_type, credential_ref, priority, enabled)
+        VALUES
+            (#{providerId}, #{code}, #{providerType}, #{credentialRef}, #{priority}, FALSE)
+    </insert>
+    <update id="replaceProvider">
+        UPDATE notification_sms_provider
+        SET code = #{code}, provider_type = #{providerType}, credential_ref = #{credentialRef},
+            priority = #{priority}, version = version + 1
+        WHERE id = #{providerId} AND enabled = FALSE AND deleted = 0 AND version = #{expectedVersion}
+    </update>
+    <update id="setProviderEnabled">
+        UPDATE notification_sms_provider
+        SET enabled = #{enabled}, version = version + 1
+        WHERE id = #{providerId} AND deleted = 0 AND version = #{expectedVersion}
+    </update>
+    <update id="deleteProvider">
+        UPDATE notification_sms_provider provider
+        SET deleted = 1, version = version + 1
+        WHERE provider.id = #{providerId} AND provider.enabled = FALSE AND provider.deleted = 0
+          AND provider.version = #{expectedVersion}
+          AND NOT EXISTS (
+              SELECT 1 FROM notification_sms_binding binding
+              WHERE binding.provider_id = provider.id AND binding.deleted = 0
+          )
+    </update>
+    <insert id="insertBinding">
+        INSERT INTO notification_sms_binding
+            (id, provider_id, notification_code, route, language_tag, sign_name,
+             provider_template_code, parameter_mapping, enabled)
+        VALUES
+            (#{bindingId}, #{providerId}, #{notificationCode}, #{route}, #{languageTag}, #{signName},
+             #{providerTemplateCode}, CAST(#{parameterMappingJson} AS JSONB), FALSE)
+    </insert>
+    <update id="replaceBinding">
+        UPDATE notification_sms_binding
+        SET notification_code = #{notificationCode}, route = #{route}, language_tag = #{languageTag},
+            sign_name = #{signName}, provider_template_code = #{providerTemplateCode},
+            parameter_mapping = CAST(#{parameterMappingJson} AS JSONB), version = version + 1
+        WHERE id = #{bindingId} AND enabled = FALSE AND deleted = 0 AND version = #{expectedVersion}
+    </update>
+    <update id="setBindingEnabled">
+        UPDATE notification_sms_binding
+        SET enabled = #{enabled}, version = version + 1
+        WHERE id = #{bindingId} AND deleted = 0 AND version = #{expectedVersion}
+    </update>
+    <update id="deleteBinding">
+        UPDATE notification_sms_binding
+        SET deleted = 1, version = version + 1
+        WHERE id = #{bindingId} AND enabled = FALSE AND deleted = 0 AND version = #{expectedVersion}
+    </update>
+</mapper>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.iam.base.mapper.PlatformAccountMapper">
+
+    <sql id="platformAccountFrom">
+        FROM iam_account account
+        INNER JOIN iam_account_identifier identifier
+            ON identifier.account_id = account.id
+            AND identifier.identifier_type = 'USERNAME'
+            AND identifier.deleted = 0
+        INNER JOIN iam_account_principal account_principal
+            ON account_principal.account_id = account.id
+        INNER JOIN iam_principal principal
+            ON principal.id = account_principal.principal_id
+            AND principal.principal_type = #{principalType}
+            AND principal.deleted = 0
+        WHERE account.realm_key = 'platform'
+          AND account.deleted = 0
+    </sql>
+
+    <sql id="platformAccountFilters">
+        <if test="search != null">
+            AND LOWER(identifier.value) LIKE LOWER(CONCAT('%', #{search}, '%'))
+        </if>
+        <if test="status != null">
+            AND account.status = #{status}
+        </if>
+        <if test="roleId != null"><include refid="platformRoleAccountFilter"/></if>
+    </sql>
+
+    <sql id="platformRoleAccountFilter">
+        <choose>
+            <when test="assigned">
+                AND EXISTS (
+                    SELECT 1
+                    FROM platform_principal_role role_relation
+                    WHERE role_relation.principal_id = principal.id
+                      AND role_relation.role_id = #{roleId}
+                )
+            </when>
+            <otherwise>
+                AND NOT EXISTS (
+                    SELECT 1
+                    FROM platform_principal_role role_relation
+                    WHERE role_relation.principal_id = principal.id
+                      AND role_relation.role_id = #{roleId}
+                )
+            </otherwise>
+        </choose>
+    </sql>
+
+    <sql id="platformAccountColumns">
+        account.id AS account_id,
+        account.subject_id,
+        principal.id AS principal_id,
+        identifier.value AS username,
+        account.status,
+        account.created_at,
+        account.updated_at,
+        EXISTS (
+            SELECT 1
+            FROM platform_principal_role protected_relation
+            INNER JOIN platform_role protected_role ON protected_role.id = protected_relation.role_id
+            WHERE protected_relation.principal_id = principal.id
+              AND protected_relation.protected_relation = TRUE
+              AND protected_role.code = 'ROOT'
+        ) AS protected_root
+    </sql>
+
+    <select id="selectPlatformAccounts" resultType="com.sca4d.iam.base.PlatformAccountEntry">
+        SELECT <include refid="platformAccountColumns"/>
+        <include refid="platformAccountFrom"/>
+        <include refid="platformAccountFilters"/>
+        ORDER BY account.id DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <select id="countPlatformAccounts" resultType="long">
+        SELECT COUNT(*)
+        <include refid="platformAccountFrom"/>
+        <include refid="platformAccountFilters"/>
+    </select>
+
+    <select id="selectPlatformAccount" resultType="com.sca4d.iam.base.PlatformAccountEntry">
+        SELECT <include refid="platformAccountColumns"/>
+        <include refid="platformAccountFrom"/>
+        AND account.id = #{accountId}
+    </select>
+
+    <select id="selectPlatformAccountsByIds" resultType="com.sca4d.iam.base.PlatformAccountEntry">
+        SELECT <include refid="platformAccountColumns"/>
+        <include refid="platformAccountFrom"/>
+        AND account.id IN
+        <foreach collection="accountIds" item="accountId" open="(" separator="," close=")">
+            #{accountId}
+        </foreach>
+        ORDER BY account.id
+    </select>
+
+    <update id="updatePlatformAccountStatus">
+        UPDATE iam_account
+        SET status = #{status}
+        WHERE id = #{accountId} AND deleted = 0
+    </update>
+
+    <update id="markPlatformAccountDeleted">
+        UPDATE iam_account
+        SET status = 'DISABLED', deleted = 1
+        WHERE id = #{accountId} AND deleted = 0
+    </update>
+
+    <select id="existsOtherAccountForSubject" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1 FROM iam_account
+            WHERE subject_id = #{subjectId} AND id &lt;&gt; #{accountId} AND deleted = 0
+        )
+    </select>
+
+    <select id="existsOtherAccountForPrincipal" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1
+            FROM iam_account_principal relation
+            INNER JOIN iam_account account ON account.id = relation.account_id AND account.deleted = 0
+            WHERE relation.principal_id = #{principalId} AND relation.account_id &lt;&gt; #{accountId}
+        )
+    </select>
+
+    <update id="markAccountIdentifiersDeleted">
+        UPDATE iam_account_identifier
+        SET status = 'DISABLED', deleted = 1
+        WHERE account_id = #{accountId} AND deleted = 0
+    </update>
+
+    <delete id="deleteAccountPrincipalLinks">
+        DELETE FROM iam_account_principal WHERE account_id = #{accountId}
+    </delete>
+
+    <update id="markPrincipalDeleted">
+        UPDATE iam_principal
+        SET status = 'DISABLED', deleted = 1
+        WHERE id = #{principalId} AND deleted = 0
+    </update>
+
+    <update id="markSubjectDeleted">
+        UPDATE iam_subject
+        SET status = 'DISABLED', deleted = 1
+        WHERE id = #{subjectId} AND deleted = 0
+    </update>
+</mapper>

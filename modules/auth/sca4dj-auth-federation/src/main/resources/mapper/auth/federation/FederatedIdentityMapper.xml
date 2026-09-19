@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.auth.federation.identity.mapper.FederatedIdentityMapper">
+    <resultMap id="profile" type="com.sca4d.auth.federation.FederatedProfile">
+        <constructor>
+            <arg column="issuer" javaType="String"/>
+            <arg column="subject" javaType="String"/>
+            <arg column="display_name" javaType="String"/>
+            <arg column="email" javaType="String"/>
+            <arg column="email_verified" javaType="_boolean"/>
+            <arg column="avatar_url" javaType="String"/>
+        </constructor>
+    </resultMap>
+    <resultMap id="identity" type="com.sca4d.auth.federation.FederatedIdentity">
+        <constructor>
+            <idArg column="id" javaType="_long"/>
+            <arg column="provider_id" javaType="_long"/>
+            <arg column="account_id" javaType="_long"/>
+            <arg resultMap="profile" javaType="com.sca4d.auth.federation.FederatedProfile"/>
+            <arg column="version" javaType="_long"/>
+            <arg column="linked_at" javaType="java.time.Instant"/>
+        </constructor>
+    </resultMap>
+    <sql id="identityColumns">
+        id, provider_id, account_id, issuer, subject, display_name, email,
+        email_verified, avatar_url, version, linked_at
+    </sql>
+    <select id="select" resultMap="identity">
+        SELECT <include refid="identityColumns"/>
+        FROM auth_federated_identity
+        WHERE deleted = 0
+        <if test="providerId != null">
+            AND provider_id = #{providerId} AND issuer IS NOT DISTINCT FROM #{issuer} AND subject = #{subject}
+        </if>
+        <if test="accountId != null">AND account_id = #{accountId}</if>
+        <if test="providerId == null and accountId == null">AND FALSE</if>
+        ORDER BY linked_at, id
+    </select>
+    <insert id="insert">
+        INSERT INTO auth_federated_identity
+            (provider_id, account_id, issuer, subject, display_name, email, email_verified, avatar_url)
+        VALUES
+            (#{providerId}, #{accountId}, #{issuer}, #{subject}, #{displayName}, #{email}, #{emailVerified}, #{avatarUrl})
+    </insert>
+    <update id="updateProfile">
+        UPDATE auth_federated_identity
+        <set>
+            <if test="displayName.set">display_name = #{displayName.value},</if>
+            <if test="displayName.clear">display_name = NULL,</if>
+            <if test="email.set">email = #{email.value},</if>
+            <if test="email.clear">email = NULL,</if>
+            <if test="emailVerified.set">email_verified = #{emailVerified.value},</if>
+            <if test="avatarUrl.set">avatar_url = #{avatarUrl.value},</if>
+            <if test="avatarUrl.clear">avatar_url = NULL,</if>
+        </set>
+        WHERE id = #{id} AND account_id = #{accountId} AND version = #{version} AND deleted = 0
+    </update>
+    <delete id="delete">
+        UPDATE auth_federated_identity
+        SET deleted = 1, version = version + 1
+        WHERE id = #{id} AND account_id = #{accountId} AND version = #{version} AND deleted = 0
+    </delete>
+    <select id="exists" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1 FROM auth_federated_identity
+            WHERE id = #{id} AND account_id = #{accountId} AND version = #{version} AND deleted = 0
+        )
+    </select>
+    <delete id="deleteByAccountId">
+        DELETE FROM auth_federated_identity
+        WHERE account_id = #{accountId}
+    </delete>
+</mapper>

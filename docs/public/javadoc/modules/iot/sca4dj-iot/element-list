@@ -1,0 +1,15 @@
+com.sca4d.iot
+com.sca4d.iot.change
+com.sca4d.iot.config
+com.sca4d.iot.connection
+com.sca4d.iot.device
+com.sca4d.iot.message
+com.sca4d.iot.message.policy
+com.sca4d.iot.model
+com.sca4d.iot.persistence
+com.sca4d.iot.persistence.mapper
+com.sca4d.iot.product
+com.sca4d.iot.protocol
+com.sca4d.iot.query
+com.sca4d.iot.schedule
+com.sca4d.iot.state

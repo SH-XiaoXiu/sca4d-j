@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.iot.persistence.mapper.DesiredPropertyMapper">
+    <select id="select" resultType="com.sca4d.iot.persistence.EncodedDesiredProperty">
+        SELECT device_id, binding_generation, property_code, desired_sequence,
+               value_json::text AS value_json, converged_at
+        FROM iot_desired_property
+        WHERE device_id = #{deviceId} AND binding_generation = #{bindingGeneration}
+        <if test="propertyCodes != null">
+          AND property_code IN
+          <foreach collection="propertyCodes" item="propertyCode" open="(" separator="," close=")">
+              #{propertyCode}
+          </foreach>
+        </if>
+        ORDER BY property_code
+    </select>
+
+    <select id="selectDeviceDesiredSequence" resultType="java.lang.Long">
+        SELECT desired_sequence FROM iot_device WHERE id = #{deviceId}
+    </select>
+    <update id="updateDeviceDesiredSequence">
+        UPDATE iot_device
+        SET desired_sequence = #{desiredSequence}
+        WHERE id = #{deviceId} AND desired_sequence = #{expectedDesiredSequence}
+    </update>
+    <insert id="upsert">
+        INSERT INTO iot_desired_property (
+            device_id, binding_generation, property_code, desired_sequence, value_json)
+        VALUES (#{deviceId}, #{bindingGeneration}, #{propertyCode}, #{desiredSequence},
+                CAST(#{valueJson} AS JSONB))
+        ON CONFLICT (device_id, binding_generation, property_code) DO UPDATE SET
+            desired_sequence = EXCLUDED.desired_sequence,
+            value_json = EXCLUDED.value_json,
+            converged_at = NULL
+    </insert>
+    <delete id="delete">
+        DELETE FROM iot_desired_property
+        WHERE device_id = #{deviceId} AND binding_generation = #{bindingGeneration}
+          AND property_code = #{propertyCode}
+    </delete>
+    <delete id="deleteBinding">
+        DELETE FROM iot_desired_property
+        WHERE device_id = #{deviceId} AND binding_generation = #{bindingGeneration}
+    </delete>
+    <select id="updateConvergedAtIfValuesMatch"
+            resultType="com.sca4d.iot.persistence.ConvergedDesiredMessage"
+            affectData="true">
+        WITH reported(property_code, value_json) AS (
+            VALUES
+            <foreach collection="values" index="propertyCode" item="valueJson" separator=",">
+                (#{propertyCode}, CAST(#{valueJson} AS JSONB))
+            </foreach>
+        ), converged AS (
+            UPDATE iot_desired_property AS desired
+            SET converged_at = #{now}
+            FROM reported
+            WHERE desired.device_id = #{deviceId}
+              AND desired.binding_generation = #{bindingGeneration}
+              AND desired.property_code = reported.property_code
+              AND desired.value_json = reported.value_json
+              AND desired.converged_at IS NULL
+            RETURNING desired.property_code
+        )
+        SELECT converged.property_code, current_message.message_id
+        FROM converged
+        JOIN LATERAL (
+            SELECT message_id
+            FROM iot_downlink_message
+            WHERE device_id = #{deviceId}
+              AND binding_generation = #{bindingGeneration}
+              AND kind = 'DESIRED'
+              AND target_code = converged.property_code
+              AND status IN ('PENDING', 'SENDING', 'WAITING_ACK')
+            ORDER BY desired_sequence DESC, message_id DESC
+            LIMIT 1
+        ) AS current_message ON TRUE
+        ORDER BY converged.property_code
+    </select>
+</mapper>

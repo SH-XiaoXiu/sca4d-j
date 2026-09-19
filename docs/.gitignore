@@ -1,0 +1,6 @@
+node_modules/
+.vitepress/cache/
+.vitepress/dist/
+
+# Javadoc 随文档保存，包括 Java 包名中的 build 目录。
+!public/javadoc/**

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.storage.file.persistence.mapper.FileMapper">
+    <sql id="columns">id, uploader_principal_id, scene, target_resource_type, target_resource_id,
+        backend_id, container_name,
+        upload_object_key, object_key, filename, declared_content_type, declared_size_bytes,
+        content_type, size_bytes, status, upload_expires_at, ready_expires_at, upload_object_cleaned
+    </sql>
+
+    <insert id="insert">
+        INSERT INTO storage_file
+        (id, uploader_principal_id, scene, target_resource_type, target_resource_id,
+        backend_id, container_name, upload_object_key,
+        object_key, filename, declared_content_type, declared_size_bytes, content_type, size_bytes,
+        status, upload_expires_at, ready_expires_at, upload_object_cleaned)
+        VALUES (#{row.id}, #{row.uploaderPrincipalId}, #{row.scene},
+        #{row.targetResourceType}, #{row.targetResourceId}, #{row.backendId},
+        #{row.containerName}, #{row.uploadObjectKey}, #{row.objectKey}, #{row.filename},
+        #{row.declaredContentType}, #{row.declaredSizeBytes}, #{row.contentType}, #{row.sizeBytes},
+        #{row.status}, #{row.uploadExpiresAt}, #{row.readyExpiresAt},
+        CASE WHEN #{row.uploadObjectCleaned} THEN 1 ELSE 0 END)
+    </insert>
+
+    <select id="selectByIds" resultType="com.sca4d.storage.file.persistence.FileRecord">
+        SELECT
+        <include refid="columns"/>
+        FROM storage_file WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+        ORDER BY id
+    </select>
+
+    <update id="updateUploadedObject">
+        UPDATE storage_file
+        SET status = #{targetStatus}, content_type = #{contentType}, size_bytes = #{sizeBytes},
+        object_key = #{objectKey}, ready_expires_at = #{readyExpiresAt}
+        WHERE id = #{id} AND status = #{expectedStatus}
+    </update>
+    <update id="updateStatus">
+        UPDATE storage_file
+        <set>
+            <if test="targetStatus.set">status = #{targetStatus.value},</if>
+            <if test="readyExpiresAt.set">ready_expires_at = #{readyExpiresAt.value},</if>
+            <if test="readyExpiresAt.clear">ready_expires_at = NULL,</if>
+            <if test="nextDeleteAt.set">next_delete_at = #{nextDeleteAt.value},</if>
+            <if test="nextDeleteAt.clear">next_delete_at = NULL,</if>
+        </set>
+        WHERE id = #{id} AND status = #{expectedStatus}
+    </update>
+    <update id="updateStatusWhereExpired">
+        UPDATE storage_file
+        SET status = #{targetStatus}, next_delete_at = #{now}
+        WHERE (status = 'PENDING' AND upload_expires_at &lt;= #{now})
+           OR (status = 'READY' AND ready_expires_at &lt;= #{now})
+    </update>
+
+    <select id="selectUploadObjectsBefore" resultType="com.sca4d.storage.file.persistence.FileRecord">
+        SELECT
+        <include refid="columns"/>
+        FROM storage_file
+        WHERE upload_object_cleaned = 0 AND upload_expires_at &lt;= #{now}
+        ORDER BY upload_expires_at LIMIT #{limit}
+    </select>
+    <update id="updateUploadObjectCleaned">
+        UPDATE storage_file
+        SET upload_object_cleaned = 1
+        WHERE id = #{id} AND upload_object_cleaned = 0
+    </update>
+
+    <select id="updateDeletionLeases" resultType="com.sca4d.storage.file.persistence.FileRecord">
+        WITH candidate AS MATERIALIZED (
+            SELECT id FROM storage_file
+            WHERE status IN
+            <foreach collection="statuses" item="status" open="(" separator="," close=")">#{status}</foreach>
+            AND COALESCE(next_delete_at, #{now}) &lt;= #{now}
+            AND (delete_lease_until IS NULL OR delete_lease_until &lt;= #{now})
+            ORDER BY id LIMIT #{limit}
+        ), leased AS (
+            UPDATE storage_file AS file
+            SET status = #{targetStatus}, delete_lease_owner = #{leaseOwner}, delete_lease_until = #{leaseUntil}
+            FROM candidate
+            WHERE file.id = candidate.id
+              AND file.status IN
+              <foreach collection="statuses" item="status" open="(" separator="," close=")">#{status}</foreach>
+              AND COALESCE(file.next_delete_at, #{now}) &lt;= #{now}
+              AND (file.delete_lease_until IS NULL OR file.delete_lease_until &lt;= #{now})
+            RETURNING file.id, file.uploader_principal_id, file.scene,
+                      file.target_resource_type, file.target_resource_id,
+                      file.backend_id, file.container_name, file.upload_object_key,
+                      file.object_key, file.filename, file.declared_content_type,
+                      file.declared_size_bytes, file.content_type, file.size_bytes,
+                      file.status, file.upload_expires_at, file.ready_expires_at,
+                      file.upload_object_cleaned
+        )
+        SELECT <include refid="columns"/> FROM leased ORDER BY id
+    </select>
+    <update id="updateDeletionResult">
+        UPDATE storage_file
+        <set>
+        <if test="targetStatus.set">status = #{targetStatus.value},</if>
+        <if test="retryAt.set">next_delete_at = #{retryAt.value},</if>
+        <if test="retryAt.clear">next_delete_at = NULL,</if>
+        delete_lease_owner = NULL,
+        delete_lease_until = NULL,
+        delete_attempts = delete_attempts + CASE WHEN #{incrementAttempts} THEN 1 ELSE 0 END
+        </set>
+        WHERE id = #{id} AND status = #{expectedStatus} AND delete_lease_owner = #{leaseOwner}
+    </update>
+</mapper>

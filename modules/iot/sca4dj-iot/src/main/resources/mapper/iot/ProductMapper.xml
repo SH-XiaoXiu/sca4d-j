@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.iot.persistence.mapper.ProductMapper">
+    <insert id="insertProduct">
+        INSERT INTO iot_product (id, code, i18n)
+        VALUES (#{id}, #{code}, #{i18n,jdbcType=OTHER})
+    </insert>
+    <insert id="insertProductAccessMethods">
+        INSERT INTO iot_product_access_method (product_id, method_code)
+        VALUES
+        <foreach collection="methodCodes" item="methodCode" separator=",">
+            (#{productId}, #{methodCode})
+        </foreach>
+    </insert>
+    <insert id="insertProductProtocols">
+        INSERT INTO iot_product_protocol (product_id, protocol_code)
+        VALUES
+        <foreach collection="protocolCodes" item="protocolCode" separator=",">
+            (#{productId}, #{protocolCode})
+        </foreach>
+    </insert>
+    <select id="countProducts" resultType="long">
+        SELECT COUNT(*) FROM iot_product
+    </select>
+    <select id="selectProducts" resultType="com.sca4d.iot.persistence.ProductState">
+        SELECT id, code, i18n FROM iot_product
+        <where>
+            <if test="id != null">id = #{id}</if>
+            <if test="code != null">AND code = #{code}</if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderByCode">code</when>
+            <otherwise>created_at, id</otherwise>
+        </choose>
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+    <select id="selectProductAccessMethodsBatch" resultType="com.sca4d.iot.persistence.ProductAccessMethodState">
+        SELECT product_id, method_code
+        FROM iot_product_access_method
+        WHERE product_id IN
+        <foreach collection="productIds" item="productId" open="(" separator="," close=")">
+            #{productId}
+        </foreach>
+        ORDER BY product_id, method_code
+    </select>
+    <select id="selectProductProtocolsBatch" resultType="com.sca4d.iot.persistence.ProductProtocolState">
+        SELECT product_id, protocol_code
+        FROM iot_product_protocol
+        WHERE product_id IN
+        <foreach collection="productIds" item="productId" open="(" separator="," close=")">
+            #{productId}
+        </foreach>
+        ORDER BY product_id, protocol_code
+    </select>
+    <update id="updateProductI18n">
+        UPDATE iot_product SET i18n = #{i18n,jdbcType=OTHER} WHERE id = #{id}
+    </update>
+    <update id="touchProduct">
+        UPDATE iot_product SET updated_at = CURRENT_TIMESTAMP WHERE id = #{id}
+    </update>
+    <delete id="deleteProductAccessMethods">
+        DELETE FROM iot_product_access_method WHERE product_id = #{productId}
+    </delete>
+    <delete id="deleteProductProtocols">
+        DELETE FROM iot_product_protocol WHERE product_id = #{productId}
+    </delete>
+</mapper>

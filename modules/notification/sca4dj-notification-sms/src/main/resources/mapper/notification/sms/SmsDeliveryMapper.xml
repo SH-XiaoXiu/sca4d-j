@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.notification.sms.mapper.SmsDeliveryMapper">
+    <select id="selectStatus" resultType="com.sca4d.notification.sms.SmsDeliveryStatus">
+        SELECT status FROM notification_sms_delivery
+        WHERE message_id = #{messageId} AND provider_id = #{providerId}
+    </select>
+    <insert id="insertAttempt">
+        INSERT INTO notification_sms_delivery
+            (id, message_id, provider_id, route, recipient_hash, recipient_masked, status)
+        VALUES
+            (#{deliveryId}, #{messageId}, #{providerId}, #{route}, #{recipientHash}, #{recipientMasked}, 'PENDING')
+        ON CONFLICT (message_id, provider_id) DO NOTHING
+    </insert>
+    <update id="finish">
+        UPDATE notification_sms_delivery
+        SET status = #{status}, request_id = #{requestId}, biz_id = #{bizId},
+            failure_code = #{failureCode}, completed_at = CURRENT_TIMESTAMP
+        WHERE message_id = #{messageId} AND provider_id = #{providerId} AND status = 'PENDING'
+    </update>
+</mapper>

@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.sca4d.storage.local","l":"LocalFileStorage"},{"p":"com.sca4d.storage.local","l":"LocalStorageAutoConfiguration"},{"p":"com.sca4d.storage.local","l":"LocalStorageProperties"}];updateSearchResults();

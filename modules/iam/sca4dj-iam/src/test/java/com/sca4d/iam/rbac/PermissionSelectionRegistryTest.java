@@ -1,0 +1,115 @@
+package com.sca4d.iam.rbac;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import com.sca4d.core.api.permission.Action;
+import com.sca4d.core.api.permission.Operation;
+import com.sca4d.core.api.permission.OperationCatalog;
+import com.sca4d.core.api.permission.OperationModule;
+import com.sca4d.core.api.permission.OperationNode;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+import java.util.Set;
+
+class PermissionSelectionRegistryTest {
+
+    private static final RbacDomain PLATFORM = new RbacDomain("PLATFORM");
+
+    private static final RbacDomain PROJECT = new RbacDomain("PROJECT");
+
+    @Test
+    @DisplayName("Builds Domain Selections From Module Behavior")
+    void buildsDomainSelectionsFromModuleBehavior() {
+        RbacOperationModule module = projectModule();
+        PermissionSelectionRegistry registry = new PermissionSelectionRegistry(
+                new OperationCatalog(List.of(module)),
+                List.of(module));
+
+        assertThat(registry.selection(PLATFORM).operations())
+                .extracting(Operation::value)
+                .containsExactly("projects:items:read");
+        assertThat(registry.selection(PROJECT).operations())
+                .extracting(Operation::value)
+                .containsExactly("projects:items:manage", "projects:items:read");
+        assertThat(registry.domains()).containsExactlyInAnyOrder(PLATFORM, PROJECT);
+    }
+
+    @Test
+    @DisplayName("Rejects Catalog Module Without Rbac Domain Behavior")
+    void rejectsCatalogModuleWithoutRbacDomainBehavior() {
+        OperationModule module = PermissionSelectionRegistryTest::tree;
+
+        assertThatThrownBy(
+                () -> new PermissionSelectionRegistry(
+                        new OperationCatalog(List.of(module)),
+                        List.of()))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("missing=[projects]");
+    }
+
+    @Test
+    @DisplayName("Rejects Operation That Cannot Be Granted To Any Declared Domain")
+    void rejectsOperationThatCannotBeGrantedToAnyDeclaredDomain() {
+        RbacOperationModule module = new RbacOperationModule() {
+            @Override
+            public OperationNode.@NotNull Module operationTree() {
+                return tree();
+            }
+
+            @Override
+            public @NotNull Set<@NotNull RbacDomain> domains() {
+                return Set.of(PLATFORM);
+            }
+
+            @Override
+            public boolean canGrant(@NotNull RbacDomain domain, @NotNull Operation operation) {
+                return false;
+            }
+        };
+
+        assertThatThrownBy(
+                () -> new PermissionSelectionRegistry(
+                        new OperationCatalog(List.of(module)),
+                        List.of(module)))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("不能授予");
+    }
+
+    /** @return 同时向 Platform 和 Project 提供不同 Operation 的测试模块 */
+    private static RbacOperationModule projectModule() {
+        return new RbacOperationModule() {
+            @Override
+            public OperationNode.@NotNull Module operationTree() {
+                return tree();
+            }
+
+            @Override
+            public @NotNull Set<@NotNull RbacDomain> domains() {
+                return Set.of(PLATFORM, PROJECT);
+            }
+
+            @Override
+            public boolean canGrant(@NotNull RbacDomain domain, @NotNull Operation operation) {
+                return PROJECT.equals(domain) || operation.value().endsWith(":" + Action.READ_VALUE);
+            }
+        };
+    }
+
+    /** @return 包含 read 和 manage 的测试 Operation 树 */
+    private static OperationNode.Module tree() {
+        return OperationNode.module(
+                "projects",
+                "operation.projects",
+                100,
+                OperationNode.resource(
+                        "items",
+                        "operation.projects.items",
+                        100,
+                        OperationNode.action(Action.MANAGE_VALUE, "operation.projects.items.manage", 200),
+                        OperationNode.action(Action.READ_VALUE, "operation.projects.items.read", 100)));
+    }
+}

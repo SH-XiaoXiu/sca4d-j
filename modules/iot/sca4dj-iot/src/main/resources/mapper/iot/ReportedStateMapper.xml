@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.iot.persistence.mapper.ReportedStateMapper">
+    <select id="selectReportedGroups" resultType="com.sca4d.iot.persistence.EncodedReportedGroupSnapshot">
+        SELECT device_id, group_code, state_json::text AS state_json, version, observed_at, received_at
+        FROM iot_reported_group
+        WHERE (device_id, binding_generation) IN
+        <foreach collection="bindings" index="deviceId" item="generation" open="(" separator="," close=")">
+            (#{deviceId}, #{generation})
+        </foreach>
+        <if test="groupCode != null">AND group_code = #{groupCode}</if>
+        ORDER BY device_id, group_code
+    </select>
+    <select id="selectReportedGroup" resultType="com.sca4d.iot.persistence.EncodedReportedGroup">
+        SELECT order_scope, order_value, content_hash, state_json::text AS state_json,
+               version, observed_at, received_at
+        FROM iot_reported_group
+        WHERE device_id = #{deviceId} AND binding_generation = #{bindingGeneration}
+          AND group_code = #{groupCode}
+    </select>
+    <insert id="insertReportedGroupIfAbsent">
+        INSERT INTO iot_reported_group (
+            device_id, binding_generation, group_code, order_scope, order_value,
+            content_hash, state_json, observed_at, received_at, version)
+        VALUES (#{deviceId}, #{bindingGeneration}, #{groupCode}, #{orderScope}, #{orderValue},
+                #{contentHash}, CAST(#{stateJson} AS JSONB), #{observedAt}, #{receivedAt}, 1)
+        ON CONFLICT (device_id, binding_generation, group_code) DO NOTHING
+    </insert>
+    <update id="updateReportedGroup">
+        UPDATE iot_reported_group
+        SET order_scope = #{orderScope}, order_value = #{orderValue}, content_hash = #{contentHash},
+            state_json = CAST(#{stateJson} AS JSONB), observed_at = #{observedAt}, received_at = #{receivedAt},
+            version = version + 1
+        WHERE device_id = #{deviceId} AND binding_generation = #{bindingGeneration}
+          AND group_code = #{groupCode} AND version = #{expectedVersion}
+    </update>
+    <delete id="deleteReportedGroups">
+        DELETE FROM iot_reported_group
+        WHERE device_id = #{deviceId} AND binding_generation = #{bindingGeneration}
+    </delete>
+</mapper>

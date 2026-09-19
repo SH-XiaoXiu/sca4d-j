@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.iot.persistence.mapper.DeviceScheduleMapper">
+    <sql id="scheduleColumns">
+        schedule_id, device_id, command_code, command_inputs_json::text AS command_inputs_json,
+        trigger_type, execute_at, cron_expression, zone_id, valid_for_millis,
+        status, next_fire_at, version
+    </sql>
+
+    <insert id="insertSchedule">
+        INSERT INTO iot_device_schedule (
+            schedule_id, device_id, command_code, command_inputs_json, trigger_type,
+            execute_at, cron_expression, zone_id, valid_for_millis, status,
+            next_fire_at, version)
+        VALUES (#{scheduleId}, #{deviceId}, #{commandCode}, CAST(#{commandInputsJson} AS JSONB), #{triggerType},
+                #{executeAt}, #{cronExpression}, #{zoneId}, #{validForMillis}, 'ACTIVE',
+                #{nextFireAt}, 0)
+    </insert>
+    <select id="selectSchedules" resultType="com.sca4d.iot.persistence.EncodedDeviceSchedule">
+        SELECT <include refid="scheduleColumns"/>
+        FROM iot_device_schedule
+        <where>
+            <if test="scheduleId != null">schedule_id = #{scheduleId}</if>
+            <if test="deviceId != null">AND device_id = #{deviceId}</if>
+            <if test="dueAt != null">AND status = 'ACTIVE' AND next_fire_at &lt;= #{dueAt}</if>
+            <if test="scheduleId == null and deviceId == null and dueAt == null">AND FALSE</if>
+        </where>
+        <choose>
+            <when test="dueAt != null">ORDER BY next_fire_at, schedule_id</when>
+            <otherwise>ORDER BY schedule_id DESC</otherwise>
+        </choose>
+        OFFSET #{offset} LIMIT #{limit}
+    </select>
+    <update id="replaceSchedule">
+        UPDATE iot_device_schedule
+        SET command_code = #{commandCode}, command_inputs_json = CAST(#{commandInputsJson} AS JSONB),
+            trigger_type = #{triggerType},
+            <if test="executeAt.set">execute_at = #{executeAt.value},</if>
+            <if test="executeAt.clear">execute_at = NULL,</if>
+            <if test="cronExpression.set">cron_expression = #{cronExpression.value},</if>
+            <if test="cronExpression.clear">cron_expression = NULL,</if>
+            <if test="zoneId.set">zone_id = #{zoneId.value},</if>
+            <if test="zoneId.clear">zone_id = NULL,</if>
+            valid_for_millis = #{validForMillis}, status = #{status},
+            next_fire_at = #{nextFireAt}, version = version + 1
+        WHERE schedule_id = #{scheduleId} AND version = #{expectedVersion}
+          AND status &lt;&gt; 'CANCELLED'
+    </update>
+    <update id="updateProgress">
+        UPDATE iot_device_schedule
+        <set>
+            <if test="status.set">status = #{status.value},</if>
+            <if test="nextFireAt.set">next_fire_at = #{nextFireAt.value},</if>
+            <if test="nextFireAt.clear">next_fire_at = NULL,</if>
+            <if test="plannedAt.set">last_planned_at = #{plannedAt.value},</if>
+            <if test="triggeredAt.set">last_triggered_at = #{triggeredAt.value},</if>
+            <if test="executionStatus.set">last_execution_status = #{executionStatus.value},</if>
+            <if test="messageId.set">last_message_id = #{messageId.value},</if>
+            <if test="messageId.clear">last_message_id = NULL,</if>
+            <if test="failureCode.set">last_failure_code = #{failureCode.value},</if>
+            <if test="failureCode.clear">last_failure_code = NULL,</if>
+            version = version + 1
+        </set>
+        WHERE schedule_id = #{scheduleId} AND version = #{expectedVersion} AND status &lt;&gt; 'CANCELLED'
+        <if test="expectedStatus != null">AND status = #{expectedStatus}</if>
+    </update>
+    <select id="countDeviceSchedules" resultType="long">
+        SELECT COUNT(*) FROM iot_device_schedule WHERE device_id = #{deviceId}
+    </select>
+</mapper>

@@ -1,0 +1,54 @@
+spring:
+  application:
+    name: ${SCA4DJ_GATEWAY_APPLICATION_NAME:sca4d-gateway}
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
+  cloud:
+    discovery:
+      enabled: false
+    loadbalancer:
+      cache:
+        enabled: false
+    gateway:
+      server:
+        webflux:
+          httpclient:
+            connect-timeout: ${SCA4DJ_GATEWAY_CONNECT_TIMEOUT_MILLIS:3000}
+            response-timeout: ${SCA4DJ_GATEWAY_RESPONSE_TIMEOUT:PT30S}
+
+logging:
+  file:
+    path: ${SCA4DJ_LOG_PATH:${SCA4DJ_LOG_ROOT:logs}/${spring.application.name}/${SCA4DJ_INSTANCE_ID:${HOSTNAME:local}}}
+  structured:
+    json:
+      exclude: sessionId
+    ecs:
+      service:
+        environment: ${SCA4DJ_ENVIRONMENT:${SPRING_PROFILES_ACTIVE:default}}
+        node-name: ${SCA4DJ_INSTANCE_ID:${HOSTNAME:local}}
+
+server:
+  port: ${SCA4DJ_GATEWAY_PORT:8088}
+
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: never
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+sca4dj:
+  gateway:
+    secret: ${SCA4DJ_GATEWAY_SECRET:}
+    lease-ttl: ${SCA4DJ_GATEWAY_LEASE_TTL:PT30S}
+    health-interval: ${SCA4DJ_GATEWAY_HEALTH_INTERVAL:PT5S}
+    health-timeout: ${SCA4DJ_GATEWAY_HEALTH_TIMEOUT:PT3S}
+    logging:
+      enabled: ${SCA4DJ_GATEWAY_LOGGING_ENABLED:false}
+      loki-origin: ${SCA4DJ_GATEWAY_LOKI_ORIGIN:}
+      username: ${SCA4DJ_LOKI_PUSH_USERNAME:alloy}
+      password: ${SCA4DJ_LOKI_PUSH_PASSWORD:}

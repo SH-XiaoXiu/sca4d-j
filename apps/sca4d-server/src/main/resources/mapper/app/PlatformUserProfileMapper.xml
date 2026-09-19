@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.app.server.mapper.PlatformUserProfileMapper">
+
+    <sql id="columns">principal_id, display_name, email, phone_number, avatar_file_id, created_at, updated_at</sql>
+
+    <insert id="insert">
+        INSERT INTO platform_user_profile (principal_id, display_name, email, phone_number)
+        VALUES (#{principalId}, #{displayName}, #{email}, #{phoneNumber})
+    </insert>
+
+    <insert id="insertIfAbsent">
+        INSERT INTO platform_user_profile (principal_id, display_name)
+        VALUES (#{principalId}, #{displayName})
+        ON CONFLICT (principal_id) DO NOTHING
+    </insert>
+
+    <select id="select" resultType="com.sca4d.app.server.entity.PlatformUserProfile">
+        SELECT <include refid="columns"/>
+        FROM platform_user_profile
+        WHERE principal_id = #{principalId} AND deleted = 0
+    </select>
+
+    <select id="selectAll" resultType="com.sca4d.app.server.entity.PlatformUserProfile">
+        SELECT <include refid="columns"/>
+        FROM platform_user_profile
+        WHERE deleted = 0 AND principal_id IN
+        <foreach collection="principalIds" item="principalId" open="(" separator="," close=")">
+            #{principalId}
+        </foreach>
+        ORDER BY principal_id
+    </select>
+
+    <select id="selectAllWithEmail" resultType="com.sca4d.app.server.entity.PlatformUserProfile">
+        SELECT <include refid="columns"/>
+        FROM platform_user_profile
+        WHERE deleted = 0 AND email IS NOT NULL
+        ORDER BY principal_id
+    </select>
+
+    <update id="update">
+        UPDATE platform_user_profile
+        SET display_name = #{displayName}, email = #{email}, phone_number = #{phoneNumber}
+        WHERE principal_id = #{principalId} AND deleted = 0
+    </update>
+
+    <update id="updateAvatar">
+        UPDATE platform_user_profile
+        SET avatar_file_id = #{avatarFileId}
+        WHERE principal_id = #{principalId} AND deleted = 0
+    </update>
+
+    <update id="markDeleted">
+        UPDATE platform_user_profile
+        SET display_name = #{displayName}, email = NULL, phone_number = NULL, avatar_file_id = NULL,
+            deleted = 1
+        WHERE principal_id = #{principalId} AND deleted = 0
+    </update>
+</mapper>

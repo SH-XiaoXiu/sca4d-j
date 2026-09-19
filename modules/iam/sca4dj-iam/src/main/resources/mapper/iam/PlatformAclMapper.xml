@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.iam.base.mapper.PlatformAclMapper">
+    <insert id="insert">
+        INSERT INTO platform_acl_entry (principal_id, resource_type, resource_id, action)
+        VALUES (#{principalId}, #{resourceType}, #{resourceId}, #{action})
+        ON CONFLICT (principal_id, resource_type, resource_id, action) DO NOTHING
+    </insert>
+    <delete id="delete">
+        DELETE FROM platform_acl_entry
+        <where>
+            <if test="principalId != null">principal_id = #{principalId}</if>
+            <if test="resourceType != null">AND resource_type = #{resourceType}</if>
+            <if test="resourceId != null">AND resource_id = #{resourceId}</if>
+            <if test="action != null">AND action = #{action}</if>
+            <if test="principalId == null and (resourceType == null or resourceId == null)">AND FALSE</if>
+        </where>
+    </delete>
+    <select id="selectEntries" resultType="com.sca4d.iam.acl.AclEntry">
+        SELECT principal_id, resource_type, resource_id, action FROM platform_acl_entry
+        WHERE principal_id = #{principalId} AND resource_type = #{resourceType}
+        <if test="resourceId != null">AND resource_id = #{resourceId}</if>
+        <if test="action != null">AND action = #{action}</if>
+        ORDER BY resource_id, action
+        <if test="limit != null">LIMIT #{limit}</if>
+    </select>
+</mapper>

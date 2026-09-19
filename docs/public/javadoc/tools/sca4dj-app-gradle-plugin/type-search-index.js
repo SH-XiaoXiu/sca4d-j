@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.sca4dj.gradle.app","l":"InitFlywayTask"},{"p":"com.sca4dj.gradle.app","l":"Sca4djAppExtension"},{"p":"com.sca4dj.gradle.app","l":"Sca4djAppPlugin"}];updateSearchResults();

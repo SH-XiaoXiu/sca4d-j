@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.sca4d.storage.file.config"},{"l":"com.sca4d.storage.file.lifecycle"},{"l":"com.sca4d.storage.file.persistence"},{"l":"com.sca4d.storage.file.persistence.mapper"},{"l":"com.sca4d.storage.file.transfer"}];updateSearchResults();

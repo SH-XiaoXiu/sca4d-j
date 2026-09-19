@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.iot.persistence.mapper.DeviceMapper">
+    <insert id="insertDevice">
+        INSERT INTO iot_device (
+            id, product_source, product_code, product_id, code, serial_number, display_name, remark, thing_model_version,
+            binding_generation, protocol_code, connection_protocol, connection_identifier_type,
+            connection_identifier_value)
+        VALUES (
+            #{id}, #{productSource}, #{productCode}, #{productId}, #{code}, #{serialNumber}, #{displayName}, #{remark}, #{thingModelVersion},
+            1, #{protocolCode}, #{connectionProtocol}, #{connectionIdentifierType}, #{connectionIdentifierValue})
+    </insert>
+    <insert id="insertDeviceAccessMethods">
+        INSERT INTO iot_device_access_method (device_id, method_code)
+        VALUES
+        <foreach collection="methodCodes" item="methodCode" separator=",">
+            (#{deviceId}, #{methodCode})
+        </foreach>
+    </insert>
+    <select id="existsCurrentBinding" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1 FROM iot_device
+            WHERE id = #{deviceId} AND binding_generation = #{bindingGeneration}
+        )
+    </select>
+    <select id="selectDevicesByConnectionIdentifiers" resultType="com.sca4d.iot.persistence.DeviceState">
+        WITH requested(connection_protocol, identifier_type, identifier_value) AS (
+            VALUES
+            <foreach collection="connections" item="connection" separator=",">
+                (#{connection.definition.protocol.code},
+                 #{connection.definition.identifierType},
+                 #{connection.identifierValue})
+            </foreach>
+        )
+        SELECT d.id, d.product_source, d.product_code, d.product_id, d.code, d.serial_number, d.display_name, d.remark,
+               d.thing_model_version, d.binding_generation, d.protocol_code, d.connection_protocol,
+               d.connection_identifier_type, d.connection_identifier_value
+        FROM iot_device d
+        JOIN requested r
+          ON r.connection_protocol = d.connection_protocol
+         AND r.identifier_type = d.connection_identifier_type
+         AND r.identifier_value = d.connection_identifier_value
+        ORDER BY d.id
+    </select>
+    <select id="countDevices" resultType="long">
+        SELECT COUNT(*) FROM iot_device
+        <include refid="deviceQueryWhere"/>
+    </select>
+    <select id="selectDevices" resultType="com.sca4d.iot.persistence.DeviceState">
+        SELECT id, product_source, product_code, product_id, code, serial_number, display_name, remark, thing_model_version,
+               binding_generation, protocol_code, connection_protocol, connection_identifier_type,
+               connection_identifier_value
+        FROM iot_device
+        <include refid="deviceQueryWhere"/>
+        ORDER BY
+        <choose>
+            <when test="sort.isEmpty()">created_at ASC,</when>
+            <otherwise>
+                <foreach collection="sort" item="order" separator=",">
+                    <choose>
+                        <when test="order.field.name() == 'CREATED_AT'">created_at</when>
+                        <when test="order.field.name() == 'UPDATED_AT'">updated_at</when>
+                        <when test="order.field.name() == 'NAME'">code</when>
+                        <when test="order.field.name() == 'SERIAL'">id</when>
+                        <otherwise>id</otherwise>
+                    </choose>
+                    <choose>
+                        <when test="order.direction.name() == 'DESC'">DESC</when>
+                        <otherwise>ASC</otherwise>
+                    </choose>
+                </foreach>
+                ,
+            </otherwise>
+        </choose>
+        id ASC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+    <sql id="deviceQueryWhere">
+        <where>
+            <if test="deviceIds != null">
+                id IN <foreach collection="deviceIds" item="id" open="(" separator="," close=")">#{id}</foreach>
+            </if>
+            <if test="productSource != null">AND product_source = #{productSource}</if>
+            <if test="productCode != null">AND product_code = #{productCode}</if>
+            <if test="productId != null">AND product_id = #{productId}</if>
+            <if test="search != null">
+                AND (POSITION(LOWER(#{search}) IN LOWER(code)) > 0
+                     OR POSITION(LOWER(#{search}) IN LOWER(COALESCE(serial_number, ''))) > 0
+                     OR POSITION(LOWER(#{search}) IN LOWER(display_name)) > 0)
+            </if>
+            <if test="protocolCode != null">AND protocol_code = #{protocolCode}</if>
+            <if test="directConnection != null">
+                AND connection_protocol IS <choose><when test="directConnection">NOT NULL</when><otherwise>NULL</otherwise></choose>
+            </if>
+        </where>
+    </sql>
+    <select id="selectDeviceAccessMethodsBatch" resultType="com.sca4d.iot.persistence.DeviceAccessMethodState">
+        SELECT device_id, method_code
+        FROM iot_device_access_method
+        WHERE device_id IN
+        <foreach collection="deviceIds" item="deviceId" open="(" separator="," close=")">
+            #{deviceId}
+        </foreach>
+        ORDER BY device_id, method_code
+    </select>
+    <select id="existsDeviceIncompatibleWithProduct" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1
+            FROM iot_device d
+            WHERE d.product_id = #{productId}
+              AND (
+                  <choose>
+                      <when test="protocolCodes.isEmpty()">
+                          TRUE
+                      </when>
+                      <otherwise>
+                          d.protocol_code NOT IN
+                          <foreach collection="protocolCodes" item="protocolCode" open="(" separator="," close=")">
+                              #{protocolCode}
+                          </foreach>
+                      </otherwise>
+                  </choose>
+                  OR EXISTS (
+                      SELECT 1
+                      FROM iot_device_access_method dam
+                      WHERE dam.device_id = d.id
+                        AND
+                        <choose>
+                            <when test="accessMethodCodes.isEmpty()">
+                                TRUE
+                            </when>
+                            <otherwise>
+                                dam.method_code NOT IN
+                                <foreach collection="accessMethodCodes" item="methodCode" open="(" separator="," close=")">
+                                    #{methodCode}
+                                </foreach>
+                            </otherwise>
+                        </choose>
+                  )
+              )
+        )
+    </select>
+    <delete id="deleteDeviceAccessMethods">
+        DELETE FROM iot_device_access_method WHERE device_id = #{deviceId}
+    </delete>
+    <update id="updateDeviceDetails">
+        UPDATE iot_device
+        <set>
+            <choose>
+                <when test="update.displayName.set">
+                    display_name = #{update.displayName.value},
+                </when>
+                <when test="update.displayName.clear">
+                    display_name = NULL,
+                </when>
+            </choose>
+            <choose>
+                <when test="update.remark.set">
+                    remark = #{update.remark.value},
+                </when>
+                <when test="update.remark.clear">
+                    remark = NULL,
+                </when>
+            </choose>
+        </set>
+        WHERE id = #{deviceId}
+    </update>
+    <update id="updateDeviceBinding">
+        UPDATE iot_device
+        SET thing_model_version = #{thingModelVersion}, protocol_code = #{protocolCode},
+            binding_generation = #{bindingGeneration}, desired_sequence = 0
+        WHERE id = #{deviceId} AND binding_generation = #{expectedBindingGeneration}
+    </update>
+    <update id="updateDeviceConnection">
+        UPDATE iot_device
+        SET connection_protocol = #{connectionProtocol},
+            connection_identifier_type = #{connectionIdentifierType},
+            connection_identifier_value = #{connectionIdentifierValue}
+        WHERE id = #{deviceId}
+    </update>
+</mapper>

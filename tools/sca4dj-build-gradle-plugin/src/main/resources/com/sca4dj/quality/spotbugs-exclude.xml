@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+  <!-- Gradle 扩展必须向 KTS 暴露 Property 和 ConfigurableFileCollection，返回值就是 DSL 的修改入口。 -->
+  <Match class="com.sca4dj.build.Sca4djBuildMapping">
+    <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
+  </Match>
+  <!-- 构造器参数校验允许直接抛出异常，不检查基于终结器攻击模型的 CT_CONSTRUCTOR_THROW。 -->
+  <Match>
+    <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+  </Match>
+  <!-- 请求 Call ID 只有通过严格长度和字符白名单后才会写回响应头。 -->
+  <Match class="com.sca4d.core.spring.call.CallFilter">
+    <Bug pattern="HRS_REQUEST_PARAMETER_TO_HTTP_HEADER"/>
+  </Match>
+</FindBugsFilter>

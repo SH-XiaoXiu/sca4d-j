@@ -1,0 +1,104 @@
+package com.sca4d.auth.federation.identity;
+
+import com.sca4d.auth.federation.FederatedIdentity;
+import com.sca4d.auth.federation.FederatedProfile;
+import com.sca4d.auth.federation.FederatedProvider;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+
+import java.util.List;
+import java.util.Objects;
+
+/** 编排联邦身份绑定、资料快照刷新和解绑动作。 */
+public class FederatedIdentityService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(FederatedIdentityService.class);
+
+    private final @NotNull FederatedIdentityRepository repository;
+
+    /** 创建联邦身份服务。 */
+    public FederatedIdentityService(@NotNull FederatedIdentityRepository repository) {
+        this.repository = Objects.requireNonNull(repository, "联邦身份 Repository 不能为空");
+    }
+
+    /** @return 外部身份绑定；不存在时为空 */
+    @Transactional(readOnly = true)
+    public FederatedIdentity find(@NotNull FederatedProvider provider, @NotNull FederatedProfile profile) {
+        return repository.find(provider, profile);
+    }
+
+    /** @return 当前账号已经绑定的全部外部身份 */
+    @Transactional(readOnly = true)
+    public @NotNull List<FederatedIdentity> findByAccount(long accountId) {
+        List<FederatedIdentity> identities = repository.findByAccount(accountId);
+        LOG.debug("账号联邦身份读取完成 | accountId={} count={}", accountId, identities.size());
+        return identities;
+    }
+
+    /** 新增或明确更新当前账号的外部身份绑定。 */
+    @Transactional
+    public @NotNull FederatedIdentity link(
+            @NotNull FederatedProvider provider,
+            long accountId,
+            @NotNull FederatedProfile profile) {
+        FederatedIdentity existing = repository.find(provider, profile);
+        if (existing != null && existing.accountId() != accountId) {
+            throw new IllegalStateException("外部身份已经绑定其他账号");
+        }
+        FederatedIdentity linked = existing == null
+                ? repository.insert(provider, accountId, profile)
+                : repository.updateProfile(existing, profile);
+        if (existing == null) {
+            logAfterCommit("联邦身份已绑定", linked.id(), accountId);
+        } else {
+            LOG.debug(
+                    "联邦身份绑定资料已写入事务 | identityId={} accountId={}",
+                    linked.id(),
+                    accountId);
+        }
+        return linked;
+    }
+
+    /** 更新已经绑定的资料快照。 */
+    @Transactional
+    public @NotNull FederatedIdentity refresh(@NotNull FederatedIdentity identity, @NotNull FederatedProfile profile) {
+        FederatedIdentity refreshed = repository.updateProfile(identity, profile);
+        LOG.debug(
+                "联邦身份刷新资料已写入事务 | identityId={} accountId={}",
+                refreshed.id(),
+                refreshed.accountId());
+        return refreshed;
+    }
+
+    /** 按调用方读取的绑定版本删除外部身份绑定。 */
+    @Transactional
+    public void unlink(long identityId, long accountId, long version) {
+        repository.delete(identityId, accountId, version);
+        logAfterCommit("联邦身份已解绑", identityId, accountId);
+    }
+
+    /** 复核认证证据仍然对应当前账号的绑定。 */
+    @Transactional(readOnly = true)
+    public void verifyCurrentBinding(long identityId, long accountId, long version) {
+        repository.verifyCurrentBinding(identityId, accountId, version);
+    }
+
+    /** 在当前事务提交后记录身份绑定结果；没有事务同步时立即记录。 */
+    private static void logAfterCommit(@NotNull String event, long identityId, long accountId) {
+        Runnable log = () -> LOG.info("{} | identityId={} accountId={}", event, identityId, accountId);
+        if (!TransactionSynchronizationManager.isSynchronizationActive()) {
+            log.run();
+            return;
+        }
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                log.run();
+            }
+        });
+    }
+}

@@ -1,0 +1,11 @@
+com.sca4d.core.spring.config.RuntimeNamespaceAutoConfiguration
+com.sca4d.core.spring.config.CoreSpringAutoConfiguration
+com.sca4d.core.spring.gateway.GatewaySpringAutoConfiguration
+com.sca4d.core.spring.config.CoreJacksonAutoConfiguration
+com.sca4d.core.spring.config.CoreRedisAutoConfiguration
+com.sca4d.core.spring.persistence.mybatis.CoreMyBatisAutoConfiguration
+com.sca4d.core.spring.openapi.CoreOpenApiConfiguration
+com.sca4d.core.spring.security.SecretHasherAutoConfiguration
+com.sca4d.core.spring.security.SecretKeyringAutoConfiguration
+com.sca4d.core.spring.setting.SettingsAutoConfiguration
+com.sca4d.core.spring.dictionary.DictionaryAutoConfiguration

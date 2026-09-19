@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.sca4d.notification.inbox"},{"l":"com.sca4d.notification.inbox.config"},{"l":"com.sca4d.notification.inbox.mapper"}];updateSearchResults();

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProperty scope="context" name="LOG_PATH" source="logging.file.path" defaultValue="logs"/>
+
+    <conversionRule conversionWord="clr" class="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="source" class="com.sca4d.app.server.logging.LogSourceConverter"/>
+    <conversionRule conversionWord="context" class="com.sca4d.app.server.logging.LogContextConverter"/>
+
+    <property name="CONSOLE_PATTERN"
+              value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS,Asia/Shanghai}){blue} %clr([%thread]){magenta} %clr(%-5level) %clr(%source){cyan} %clr(%context){yellow} %clr(-){faint} %msg%n"/>
+    <!-- 后台任务只输出需要处理的失败，空轮询 SQL 不重复打印。 -->
+    <logger name="com.sca4d.job.runtime.JobWorker" level="WARN"/>
+    <logger name="com.sca4d.messaging.outbox.mapper.OutboxMapper.updateClaimable" level="INFO"/>
+    <logger name="com.sca4d.job.persistence.JobMapper.updateExpiredNodes" level="INFO"/>
+    <logger name="com.sca4d.job.persistence.JobMapper.updateClaimableNode" level="INFO"/>
+
+    <springProfile name="prod">
+        <appender name="CONSOLE_INFO" class="ch.qos.logback.core.ConsoleAppender">
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                <level>INFO</level>
+            </filter>
+            <encoder>
+                <pattern>${CONSOLE_PATTERN}</pattern>
+            </encoder>
+        </appender>
+
+        <appender name="ECS_JSON_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_PATH}/application.json</file>
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                <level>DEBUG</level>
+            </filter>
+            <encoder class="org.springframework.boot.logging.logback.StructuredLogEncoder">
+                <format>ecs</format>
+                <charset>UTF-8</charset>
+            </encoder>
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <fileNamePattern>${LOG_PATH}/application.%d{yyyy-MM-dd}.%i.json.gz</fileNamePattern>
+                <maxFileSize>100MB</maxFileSize>
+                <maxHistory>30</maxHistory>
+                <totalSizeCap>10GB</totalSizeCap>
+            </rollingPolicy>
+        </appender>
+
+        <logger name="com.sca4d" level="DEBUG"/>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE_INFO"/>
+            <appender-ref ref="ECS_JSON_FILE"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="dev | local">
+        <appender name="CONSOLE_DEBUG" class="ch.qos.logback.core.ConsoleAppender">
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                <level>DEBUG</level>
+            </filter>
+            <encoder>
+                <pattern>${CONSOLE_PATTERN}</pattern>
+            </encoder>
+        </appender>
+
+        <appender name="ECS_JSON_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_PATH}/application.json</file>
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                <level>TRACE</level>
+            </filter>
+            <encoder class="org.springframework.boot.logging.logback.StructuredLogEncoder">
+                <format>ecs</format>
+                <charset>UTF-8</charset>
+            </encoder>
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <fileNamePattern>${LOG_PATH}/application.%d{yyyy-MM-dd}.%i.json.gz</fileNamePattern>
+                <maxFileSize>100MB</maxFileSize>
+                <maxHistory>30</maxHistory>
+                <totalSizeCap>10GB</totalSizeCap>
+            </rollingPolicy>
+        </appender>
+
+        <logger name="com.sca4d" level="TRACE"/>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE_DEBUG"/>
+            <appender-ref ref="ECS_JSON_FILE"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="!prod &amp; !dev &amp; !local">
+        <appender name="CONSOLE_INFO" class="ch.qos.logback.core.ConsoleAppender">
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                <level>INFO</level>
+            </filter>
+            <encoder>
+                <pattern>${CONSOLE_PATTERN}</pattern>
+            </encoder>
+        </appender>
+
+        <root level="INFO">
+            <appender-ref ref="CONSOLE_INFO"/>
+        </root>
+    </springProfile>
+</configuration>

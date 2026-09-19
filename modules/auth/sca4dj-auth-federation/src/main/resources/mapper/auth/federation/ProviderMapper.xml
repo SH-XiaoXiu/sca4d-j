@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.auth.federation.provider.mapper.ProviderMapper">
+    <sql id="providerColumns">
+        id, code, protocol, status, login_page_visible, display_order,
+        unlinked_identity_action, auto_link_verified_email, i18n::text AS i18n,
+        icon_reference, version
+    </sql>
+    <select id="select" resultType="com.sca4d.auth.federation.provider.mapper.ProviderState">
+        SELECT <include refid="providerColumns"/>
+        FROM auth_federated_provider
+        WHERE deleted = 0
+        <if test="code != null">AND code = #{code}</if>
+        <if test="status != null">AND status = #{status}</if>
+        <if test="loginPageVisible != null">AND login_page_visible = #{loginPageVisible}</if>
+        ORDER BY display_order, id
+    </select>
+    <select id="selectSettings" resultType="com.sca4d.auth.federation.provider.mapper.ProviderSettingsState">
+        SELECT provider.protocol, issuer, client_id, client_secret_key_id AS secret_key_id,
+               client_secret_ciphertext AS secret_ciphertext, authorization_endpoint, token_endpoint,
+               userinfo_endpoint AS user_info_endpoint, jwks_endpoint, client_authentication,
+               scopes::text AS scopes, profile_mapping::text AS profile_mapping,
+               authorization_parameters::text AS authorization_parameters
+        FROM auth_federated_provider_configuration configuration
+        JOIN auth_federated_provider provider ON provider.id = configuration.provider_id
+        WHERE configuration.provider_id = #{providerId}
+          AND configuration.deleted = 0 AND provider.deleted = 0
+    </select>
+    <insert id="insert">
+        INSERT INTO auth_federated_provider
+            (code, protocol, status, login_page_visible, display_order,
+             unlinked_identity_action, auto_link_verified_email, i18n, icon_reference)
+        VALUES
+            (#{code}, #{protocol}, #{status}, #{loginPageVisible}, #{displayOrder},
+             #{unlinkedIdentityAction}, #{autoLinkVerifiedEmail}, #{i18n,jdbcType=OTHER}, #{iconReference})
+    </insert>
+    <update id="update">
+        UPDATE auth_federated_provider
+        <set>
+            <if test="loginPageVisible.set">login_page_visible = #{loginPageVisible.value},</if>
+            <if test="displayOrder.set">display_order = #{displayOrder.value},</if>
+            <if test="unlinkedIdentityAction.set">unlinked_identity_action = #{unlinkedIdentityAction.value},</if>
+            <if test="autoLinkVerifiedEmail.set">auto_link_verified_email = #{autoLinkVerifiedEmail.value},</if>
+            <if test="i18n.set">i18n = CAST(#{i18n.value} AS JSONB),</if>
+            <if test="iconReference.set">icon_reference = #{iconReference.value},</if>
+            <if test="iconReference.clear">icon_reference = NULL,</if>
+            <if test="status.set">status = #{status.value},</if>
+            version = version + 1
+        </set>
+        WHERE code = #{code} AND deleted = 0 AND version = #{expectedVersion}
+    </update>
+    <update id="delete">
+        UPDATE auth_federated_provider provider
+        SET deleted = 1, version = version + 1
+        WHERE provider.code = #{code} AND provider.status = 'DISABLED' AND provider.deleted = 0
+          AND NOT EXISTS (
+              SELECT 1 FROM auth_federated_identity identity
+              WHERE identity.provider_id = provider.id AND identity.deleted = 0
+          )
+          AND provider.version = #{expectedVersion}
+    </update>
+    <update id="deleteSettings">
+        UPDATE auth_federated_provider_configuration
+        SET deleted = 1
+        WHERE provider_id = #{providerId} AND deleted = 0
+    </update>
+    <insert id="insertSettings">
+        INSERT INTO auth_federated_provider_configuration
+            (provider_id, issuer, client_id, client_secret_key_id, client_secret_ciphertext,
+             authorization_endpoint, token_endpoint, userinfo_endpoint, jwks_endpoint,
+             client_authentication, scopes, profile_mapping, authorization_parameters)
+        VALUES
+            (#{providerId}, #{issuer}, #{clientId}, #{secretKeyId}, #{secretCiphertext},
+             #{authorizationEndpoint}, #{tokenEndpoint}, #{userInfoEndpoint}, #{jwksEndpoint},
+             #{clientAuthentication}, CAST(#{scopes} AS JSONB), CAST(#{profileMapping} AS JSONB),
+             CAST(#{authorizationParameters} AS JSONB))
+    </insert>
+    <update id="updateConfigurationVersion">
+        UPDATE auth_federated_provider
+        SET version = version + 1
+        WHERE id = #{providerId} AND deleted = 0 AND version = #{expectedVersion}
+    </update>
+</mapper>

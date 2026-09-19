@@ -1,0 +1,19 @@
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+springdoc:
+  api-docs:
+    enabled: ${SCA4DJ_OPENAPI_ENABLED:true}
+  swagger-ui:
+    enabled: ${SCA4DJ_OPENAPI_ENABLED:true}
+
+sca4dj:
+  core:
+    open-api-enabled: ${SCA4DJ_OPENAPI_ENABLED:true}
+  auth:
+    excluded-paths:
+      - /v3/api-docs
+      - /v3/api-docs/**
+      - /swagger-ui.html
+      - /swagger-ui/**

@@ -1,0 +1,120 @@
+:root {
+  --color-primary-50: #edf8f5;
+  --color-primary-100: #d4eee7;
+  --color-primary-200: #aadccf;
+  --color-primary-300: #76c4b0;
+  --color-primary-400: #45a58f;
+  --color-primary-500: #278875;
+  --color-primary-600: #15705f;
+  --color-primary-700: #125a4e;
+  --color-primary-800: #10483f;
+  --color-primary-900: #0e3b35;
+  --color-primary-950: #071f1c;
+  --vp-font-family-base: Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: var(--vp-font-family-base); }
+
+.prose,
+.prose-content,
+.prose-content > div {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.prose-content table {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.prose-content.prose-content a > code {
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+.prose-content .mermaid-container {
+  min-height: 20rem;
+  max-height: none;
+}
+
+.prose-content .mermaid-container .diagram-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 20rem;
+  height: auto;
+  padding: 1rem 1rem 4.5rem;
+}
+
+.prose-content .mermaid-container .mermaid {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  transform-origin: center;
+}
+
+.prose-content .mermaid-container .mermaid > svg {
+  display: block;
+  width: 100% !important;
+  max-width: 100%;
+  height: auto !important;
+  margin: 0 auto;
+}
+
+@media (max-width: 640px) {
+  .prose-content .mermaid-container,
+  .prose-content .mermaid-container .diagram-wrapper {
+    min-height: 18rem;
+  }
+
+  .prose-content .mermaid-container .diagram-wrapper {
+    padding: 0.75rem 0.5rem 4.5rem;
+  }
+}
+
+.skip-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 100;
+  padding: 10px 14px;
+  color: #ffffff;
+  background: var(--color-primary-700);
+  border-radius: 6px;
+  transform: translateY(-160%);
+  transition: transform 150ms ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+  outline: 3px solid #ffffff;
+  outline-offset: 2px;
+}
+
+header img[alt="Logo"] {
+  width: 32px !important;
+  height: 32px !important;
+  object-fit: contain;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

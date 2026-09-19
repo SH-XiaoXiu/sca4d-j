@@ -1,0 +1,5 @@
+com.sca4d.storage.file.config
+com.sca4d.storage.file.lifecycle
+com.sca4d.storage.file.persistence
+com.sca4d.storage.file.persistence.mapper
+com.sca4d.storage.file.transfer

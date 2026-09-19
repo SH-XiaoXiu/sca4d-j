@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.core.spring.setting.SettingMapper">
+
+    <sql id="settingColumns">
+        owner_type AS ownerType,
+        owner_id AS ownerId,
+        setting_key AS key,
+        schema_version AS schemaVersion,
+        has_value AS hasValue,
+        value_text AS valueText,
+        value_key_id AS valueKeyId,
+        value_ciphertext AS valueCiphertext,
+        encryption_context_version AS encryptionContextVersion,
+        synchronized_from_environment AS synchronizedFromEnvironment,
+        version
+    </sql>
+
+    <select id="select" resultType="com.sca4d.core.spring.setting.StoredSetting">
+        SELECT <include refid="settingColumns"/>
+        FROM sys_setting
+        WHERE owner_type = #{ownerType}
+          AND owner_id = #{ownerId}
+          AND setting_key IN
+        <foreach collection="keys" item="key" open="(" separator="," close=")">
+            #{key}
+        </foreach>
+    </select>
+
+    <insert id="synchronizeSystem">
+        INSERT INTO sys_setting (
+            owner_type, owner_id, setting_key, schema_version, has_value,
+            value_text, value_key_id, value_ciphertext, encryption_context_version,
+            synchronized_from_environment, version
+        )
+        VALUES (
+            'SYSTEM', '1', #{key}, #{schemaVersion}, TRUE,
+            <if test="valueText.set">#{valueText.value}</if><if test="valueText.clear">NULL</if>,
+            <if test="valueKeyId.set">#{valueKeyId.value}</if><if test="valueKeyId.clear">NULL</if>,
+            <if test="valueCiphertext.set">#{valueCiphertext.value,jdbcType=BINARY}</if><if test="valueCiphertext.clear">NULL</if>,
+            <if test="encryptionContextVersion.set">#{encryptionContextVersion.value}</if><if test="encryptionContextVersion.clear">NULL</if>,
+            TRUE, 1
+        )
+        ON CONFLICT (owner_type, owner_id, setting_key) DO UPDATE
+        SET schema_version = EXCLUDED.schema_version,
+            has_value = TRUE,
+            value_text = EXCLUDED.value_text,
+            value_key_id = EXCLUDED.value_key_id,
+            value_ciphertext = EXCLUDED.value_ciphertext,
+            encryption_context_version = EXCLUDED.encryption_context_version,
+            synchronized_from_environment = TRUE,
+            version = sys_setting.version + 1
+    </insert>
+
+    <update id="releaseSystemSynchronization">
+        UPDATE sys_setting
+        SET synchronized_from_environment = FALSE,
+            version = version + 1
+        WHERE owner_type = 'SYSTEM'
+          AND owner_id = '1'
+          AND setting_key = #{key}
+          AND synchronized_from_environment = TRUE
+    </update>
+
+    <insert id="insertManaged">
+        INSERT INTO sys_setting (
+            owner_type, owner_id, setting_key, schema_version, has_value,
+            value_text, value_key_id, value_ciphertext, encryption_context_version,
+            synchronized_from_environment, version
+        )
+        VALUES (
+            #{ownerType}, #{ownerId}, #{key}, #{schemaVersion}, TRUE,
+            #{valueText}, #{valueKeyId}, #{valueCiphertext}, #{encryptionContextVersion},
+            FALSE, 1
+        )
+        ON CONFLICT (owner_type, owner_id, setting_key) DO NOTHING
+    </insert>
+
+    <update id="updateManaged">
+        UPDATE sys_setting
+        <set>
+            <if test="schemaVersion.set">schema_version = #{schemaVersion.value},</if>
+            <if test="hasValue.set">has_value = #{hasValue.value},</if>
+            <if test="valueText.set">value_text = #{valueText.value},</if>
+            <if test="valueText.clear">value_text = NULL,</if>
+            <if test="valueKeyId.set">value_key_id = #{valueKeyId.value},</if>
+            <if test="valueKeyId.clear">value_key_id = NULL,</if>
+            <if test="valueCiphertext.set">value_ciphertext = #{valueCiphertext.value,jdbcType=BINARY},</if>
+            <if test="valueCiphertext.clear">value_ciphertext = NULL,</if>
+            <if test="encryptionContextVersion.set">encryption_context_version = #{encryptionContextVersion.value},</if>
+            <if test="encryptionContextVersion.clear">encryption_context_version = NULL,</if>
+            version = version + 1
+        </set>
+        WHERE owner_type = #{ownerType}
+          AND owner_id = #{ownerId}
+          AND setting_key = #{key}
+          AND version = #{expectedVersion}
+          AND synchronized_from_environment = FALSE
+    </update>
+
+    <delete id="erase">
+        DELETE FROM sys_setting
+        WHERE owner_type = #{ownerType}
+          AND owner_id = #{ownerId}
+          AND setting_key = #{key}
+    </delete>
+
+    <select id="tryLockBootstrap" resultType="boolean">
+        SELECT pg_try_advisory_xact_lock(hashtext('sca4dj.settings.bootstrap'))
+    </select>
+</mapper>

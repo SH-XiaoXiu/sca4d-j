@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.notification.email.sender.mapper.EmailSenderMapper">
+    <sql id="columns">id AS sender_id, name, host, port, security, username, password_key_id, password_ciphertext,
+        from_address, from_name, reply_to, enabled, version</sql>
+    <select id="select" resultType="com.sca4d.notification.email.sender.mapper.EmailSenderState">
+        SELECT <include refid="columns"/> FROM notification_email_sender WHERE deleted = 0
+        <if test="senderId != null">AND id = #{senderId}</if>
+        <if test="enabled != null">AND enabled = #{enabled}</if>
+        ORDER BY name, id
+    </select>
+    <insert id="insert">
+        INSERT INTO notification_email_sender
+            (id, name, host, port, security, username, password_key_id, password_ciphertext,
+             from_address, from_name, reply_to, enabled)
+        VALUES
+            (#{senderId}, #{name}, #{host}, #{port}, #{security}, #{username}, #{passwordKeyId},
+             #{passwordCiphertext}, #{fromAddress}, #{fromName}, #{replyTo}, FALSE)
+    </insert>
+    <update id="update">
+        UPDATE notification_email_sender
+        <set>
+            <if test="name.set">name = #{name.value},</if>
+            <if test="host.set">host = #{host.value},</if>
+            <if test="port.set">port = #{port.value},</if>
+            <if test="security.set">security = #{security.value},</if>
+            <if test="username.set">username = #{username.value},</if>
+            <if test="username.clear">username = NULL,</if>
+            <if test="passwordKeyId.set">password_key_id = #{passwordKeyId.value},</if>
+            <if test="passwordKeyId.clear">password_key_id = NULL,</if>
+            <if test="passwordCiphertext.set">password_ciphertext = #{passwordCiphertext.value,jdbcType=BINARY},</if>
+            <if test="passwordCiphertext.clear">password_ciphertext = NULL,</if>
+            <if test="fromAddress.set">from_address = #{fromAddress.value},</if>
+            <if test="fromName.set">from_name = #{fromName.value},</if>
+            <if test="fromName.clear">from_name = NULL,</if>
+            <if test="replyTo.set">reply_to = #{replyTo.value},</if>
+            <if test="replyTo.clear">reply_to = NULL,</if>
+            <if test="enabled.set">enabled = #{enabled.value},</if>
+            version = version + 1
+        </set>
+        WHERE id = #{senderId} AND deleted = 0 AND version = #{expectedVersion}
+    </update>
+    <update id="markDeleted">
+        UPDATE notification_email_sender
+        SET deleted = 1, version = version + 1
+        WHERE id = #{senderId} AND enabled = FALSE AND deleted = 0 AND version = #{expectedVersion}
+    </update>
+</mapper>

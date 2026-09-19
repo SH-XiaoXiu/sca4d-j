@@ -1,0 +1,2 @@
+com.sca4d.iot.config.IotAutoConfiguration
+com.sca4d.iot.config.IotWorkerAutoConfiguration

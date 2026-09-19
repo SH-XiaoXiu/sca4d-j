@@ -1,0 +1,6 @@
+com.sca4d.openapi.client
+com.sca4d.openapi.client.mapper
+com.sca4d.openapi.config
+com.sca4d.openapi.oauth
+com.sca4d.openapi.web
+com.sca4d.openapi.web.annotation
