@@ -99,7 +99,7 @@ CREATE UNIQUE INDEX uk_notification_sms_provider_code
 
 CREATE TABLE notification_sms_binding (
     id BIGINT PRIMARY KEY,
-    provider_id BIGINT NOT NULL REFERENCES notification_sms_provider (id),
+    provider_id BIGINT NOT NULL,
     notification_code VARCHAR(128) NOT NULL,
     route VARCHAR(64) NOT NULL,
     language_tag VARCHAR(64) NOT NULL,
@@ -121,7 +121,7 @@ CREATE UNIQUE INDEX uk_notification_sms_binding_route
 CREATE TABLE notification_sms_delivery (
     id BIGINT PRIMARY KEY,
     message_id BIGINT NOT NULL,
-    provider_id BIGINT NOT NULL REFERENCES notification_sms_provider (id),
+    provider_id BIGINT NOT NULL,
     route VARCHAR(64) NOT NULL,
     recipient_hash VARCHAR(64) NOT NULL,
     recipient_masked VARCHAR(32) NOT NULL,
