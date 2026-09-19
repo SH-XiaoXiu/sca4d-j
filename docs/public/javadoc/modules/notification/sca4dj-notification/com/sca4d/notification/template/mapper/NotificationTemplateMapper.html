@@ -102,19 +102,16 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insert(long,com.sca4d.core.api.notification.NotificationCode,java.lang.String)" class="member-name-link">insert</a><wbr>(long&nbsp;templateId,
- @NotNull com.sca4d.core.api.notification.NotificationCode&nbsp;notificationCode,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contentJson)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>long</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#count()" class="member-name-link">count</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#markDeleted(long,com.sca4d.core.api.concurrent.Version)" class="member-name-link">markDeleted</a><wbr>(long&nbsp;templateId,
- @NotNull com.sca4d.core.api.concurrent.Version&nbsp;expectedVersion)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insert(long,com.sca4d.core.api.notification.NotificationCode,java.lang.String)" class="member-name-link">insert</a><wbr>(long&nbsp;templateId,
+ @NotNull com.sca4d.core.api.notification.NotificationCode&nbsp;notificationCode,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contentJson)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#replace(long,com.sca4d.core.api.notification.NotificationCode,java.lang.String,com.sca4d.core.api.concurrent.Version)" class="member-name-link">replace</a><wbr>(long&nbsp;templateId,
- @NotNull com.sca4d.core.api.notification.NotificationCode&nbsp;notificationCode,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contentJson,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#markDeleted(long,com.sca4d.core.api.concurrent.Version)" class="member-name-link">markDeleted</a><wbr>(long&nbsp;templateId,
  @NotNull com.sca4d.core.api.concurrent.Version&nbsp;expectedVersion)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="NotificationTemplateState.html" title="class in com.sca4d.notification.template.mapper">NotificationTemplateState</a>&gt;</code></div>
@@ -124,11 +121,18 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">按可选标识、通知编码和启用状态读取未删除模板。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setEnabled(long,boolean,com.sca4d.core.api.concurrent.Version)" class="member-name-link">setEnabled</a><wbr>(long&nbsp;templateId,
- boolean&nbsp;enabled,
- @NotNull com.sca4d.core.api.concurrent.Version&nbsp;expectedVersion)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="NotificationTemplateState.html" title="class in com.sca4d.notification.template.mapper">NotificationTemplateState</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectPage(long,int,java.util.List)" class="member-name-link">selectPage</a><wbr>(long&nbsp;offset,
+ int&nbsp;size,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull com.sca4d.core.api.query.SortOrder&gt;&nbsp;sort)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#update(long,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.concurrent.Version)" class="member-name-link">update</a><wbr>(long&nbsp;templateId,
+ @NotNull com.sca4d.core.api.persistence.Patch&lt;com.sca4d.core.api.notification.NotificationCode&gt;&nbsp;notificationCode,
+ @NotNull com.sca4d.core.api.persistence.Patch&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;contentJson,
+ @NotNull com.sca4d.core.api.persistence.Patch&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&gt;&nbsp;enabled,
+ @NotNull com.sca4d.core.api.concurrent.Version&nbsp;expectedVersion)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -158,6 +162,32 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="count()">
+<h3>count</h3>
+<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name">count</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>未删除模板总数</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="selectPage(long,int,java.util.List)">
+<h3>selectPage</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="NotificationTemplateState.html" title="class in com.sca4d.notification.template.mapper">NotificationTemplateState</a>&gt;</span>&nbsp;<span class="element-name">selectPage</span><wbr><span class="parameters">(@Param("offset")
+ long&nbsp;offset,
+ @Param("size")
+ int&nbsp;size,
+ @Param("sort") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull com.sca4d.core.api.query.SortOrder&gt;&nbsp;sort)</span></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>按分页和安全排序要求读取的模板</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="insert(long,com.sca4d.core.api.notification.NotificationCode,java.lang.String)">
 <h3>insert</h3>
 <div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">insert</span><wbr><span class="parameters">(@Param("templateId")
@@ -173,34 +203,21 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="replace(long,com.sca4d.core.api.notification.NotificationCode,java.lang.String,com.sca4d.core.api.concurrent.Version)">
-<h3>replace</h3>
-<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">replace</span><wbr><span class="parameters">(@Param("templateId")
+<section class="detail" id="update(long,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.concurrent.Version)">
+<h3>update</h3>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">update</span><wbr><span class="parameters">(@Param("templateId")
  long&nbsp;templateId,
  @Param("notificationCode") @NotNull
- @NotNull com.sca4d.core.api.notification.NotificationCode&nbsp;notificationCode,
+ @NotNull com.sca4d.core.api.persistence.Patch&lt;com.sca4d.core.api.notification.NotificationCode&gt;&nbsp;notificationCode,
  @Param("contentJson") @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contentJson,
+ @NotNull com.sca4d.core.api.persistence.Patch&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;contentJson,
+ @Param("enabled") @NotNull
+ @NotNull com.sca4d.core.api.persistence.Patch&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&gt;&nbsp;enabled,
  @Param("expectedVersion") @NotNull
  @NotNull com.sca4d.core.api.concurrent.Version&nbsp;expectedVersion)</span></div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>按预期版本完整替换模板的行数</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setEnabled(long,boolean,com.sca4d.core.api.concurrent.Version)">
-<h3>setEnabled</h3>
-<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">setEnabled</span><wbr><span class="parameters">(@Param("templateId")
- long&nbsp;templateId,
- @Param("enabled")
- boolean&nbsp;enabled,
- @Param("expectedVersion") @NotNull
- @NotNull com.sca4d.core.api.concurrent.Version&nbsp;expectedVersion)</span></div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>按预期版本修改启用状态的行数</dd>
+<dd>按预期版本修改明确指定字段的行数</dd>
 </dl>
 </section>
 </li>

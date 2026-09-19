@@ -108,10 +108,10 @@ implements com.sca4d.core.api.notification.NotificationDelivery</span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.notification.email.EmailRecipientResolver,com.sca4d.notification.email.sender.EmailSenderRepository,com.sca4d.notification.template.NotificationTemplateRepository,com.sca4d.notification.template.NotificationRichTextRenderer,com.sca4d.notification.email.sender.EmailTransport)" class="member-name-link">EmailNotificationDelivery</a><wbr>(@NotNull <a href="EmailRecipientResolver.html" title="interface in com.sca4d.notification.email">EmailRecipientResolver</a>&nbsp;recipients,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.notification.email.EmailRecipientResolver,com.sca4d.notification.email.sender.EmailSenderRepository,com.sca4d.notification.template.NotificationTemplateRepository,com.sca4d.notification.template.NotificationTemplateRenderers,com.sca4d.notification.email.sender.EmailTransport)" class="member-name-link">EmailNotificationDelivery</a><wbr>(@NotNull <a href="EmailRecipientResolver.html" title="interface in com.sca4d.notification.email">EmailRecipientResolver</a>&nbsp;recipients,
  @NotNull <a href="sender/EmailSenderRepository.html" title="class in com.sca4d.notification.email.sender">EmailSenderRepository</a>&nbsp;senders,
  @NotNull com.sca4d.notification.template.NotificationTemplateRepository&nbsp;templates,
- @NotNull com.sca4d.notification.template.NotificationRichTextRenderer&nbsp;renderer,
+ @NotNull com.sca4d.notification.template.NotificationTemplateRenderers&nbsp;renderers,
  @NotNull <a href="sender/EmailTransport.html" title="interface in com.sca4d.notification.email.sender">EmailTransport</a>&nbsp;transport)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -156,7 +156,7 @@ implements com.sca4d.core.api.notification.NotificationDelivery</span></div>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.notification.email.EmailRecipientResolver,com.sca4d.notification.email.sender.EmailSenderRepository,com.sca4d.notification.template.NotificationTemplateRepository,com.sca4d.notification.template.NotificationRichTextRenderer,com.sca4d.notification.email.sender.EmailTransport)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.notification.email.EmailRecipientResolver,com.sca4d.notification.email.sender.EmailSenderRepository,com.sca4d.notification.template.NotificationTemplateRepository,com.sca4d.notification.template.NotificationTemplateRenderers,com.sca4d.notification.email.sender.EmailTransport)">
 <h3>EmailNotificationDelivery</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">EmailNotificationDelivery</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="EmailRecipientResolver.html" title="interface in com.sca4d.notification.email">EmailRecipientResolver</a>&nbsp;recipients,
@@ -165,7 +165,7 @@ implements com.sca4d.core.api.notification.NotificationDelivery</span></div>
  @NotNull
  @NotNull com.sca4d.notification.template.NotificationTemplateRepository&nbsp;templates,
  @NotNull
- @NotNull com.sca4d.notification.template.NotificationRichTextRenderer&nbsp;renderer,
+ @NotNull com.sca4d.notification.template.NotificationTemplateRenderers&nbsp;renderers,
  @NotNull
  @NotNull <a href="sender/EmailTransport.html" title="interface in com.sca4d.notification.email.sender">EmailTransport</a>&nbsp;transport)</span></div>
 <dl class="notes">
@@ -173,7 +173,7 @@ implements com.sca4d.core.api.notification.NotificationDelivery</span></div>
 <dd><code>recipients</code> - 内部接收人邮箱解析入口</dd>
 <dd><code>senders</code> - SMTP 配置持久化语义</dd>
 <dd><code>templates</code> - 平台无关通知模板持久化语义</dd>
-<dd><code>renderer</code> - 统一 Tiptap JSON 模板渲染入口</dd>
+<dd><code>renderers</code> - 统一 Tiptap JSON 模板渲染入口</dd>
 <dd><code>transport</code> - SMTP 操作</dd>
 </dl>
 </section>

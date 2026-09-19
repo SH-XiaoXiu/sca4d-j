@@ -18,11 +18,9 @@ dependencyManagement {
 dependencies {
     implementation(project(":core:sca4dj-core-api"))
     implementation(project(":core:sca4dj-core-spring"))
-    implementation(libs.caffeine)
     implementation(libs.jackson.annotations)
     implementation(libs.jackson.databind)
     implementation(libs.jsoup)
-    implementation(libs.mustache.compiler)
     implementation(libs.owasp.html.sanitizer)
     implementation(libs.slf4j.api)
     implementation(libs.spring.tx)
@@ -35,4 +33,9 @@ dependencies {
 
     testImplementation(libs.spring.boot.starter.test)
     testRuntimeOnly(libs.junit.platform.launcher)
+    add("integrationTestImplementation", libs.spring.jdbc)
+    add("integrationTestImplementation", libs.testcontainers.postgresql)
+    add("integrationTestImplementation", libs.testcontainers.junit.jupiter)
+    add("integrationTestRuntimeOnly", libs.postgresql)
+    add("integrationTestRuntimeOnly", libs.junit.platform.launcher)
 }

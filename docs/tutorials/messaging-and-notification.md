@@ -90,22 +90,7 @@ flowchart LR
     Router --> Inbox & Email & Sms
 ```
 
-领域代码使用 [NotificationType](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/notification/NotificationType.html) 声明必发渠道、可选渠道及 Java 默认值、模板变量回调和接收人回调。调用方只提交领域对象：
-
-```java
-public static final NotificationType<PasswordChanged> TYPE = NotificationType.define(
-        "security.password-changed",
-        PasswordChanged.class,
-        definition -> {
-            definition.required(NotificationChannel.SMS);
-            definition.optional(NotificationChannel.EMAIL, true);
-            definition.optional(NotificationChannel.INBOX, true);
-            definition.variable("changedAt", (notice, locale) -> notice.changedAt().toString());
-        },
-        (notice, execution) -> execution.sendToAccount(notice.accountId()));
-
-notifications.enqueue(TYPE, new PasswordChanged(accountId, changedAt));
-```
+领域代码使用 [NotificationType](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/notification/NotificationType.html) 声明必发渠道、可选渠道及 Java 默认值、模板变量回调和接收人回调。调用方只提交领域对象，完整代码见[接入一种领域通知](#接入一种领域通知)。
 
 [Notifications](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/notification/Notifications.html) 读取 `notification.channel-defaults` 和接收人的 `notification.channel-preferences`。必发渠道不能被设置关闭；可选渠道按接收人覆盖、系统默认和 Java 初值的顺序选择。框架再通过具体应用提供的 `NotificationLocaleResolver` 和 `NotificationRegionResolver` 解析语言与业务区域。业务调用方不会取得 `Settings`、`NotificationCode` 或变量 Map。
 
@@ -113,19 +98,232 @@ notifications.enqueue(TYPE, new PasswordChanged(accountId, changedAt));
 
 `sendNow` 同步执行已经选择的渠道。`enqueue` 把 `notification.requested@2` 写入 Messaging Outbox，返回 MessageId 只表示请求已经可靠登记。Inbox、Email 和 SMS 使用独立 Consumer 身份和 DLQ；一个渠道失败不会让已经成功的其他渠道重复执行。渠道使用原始 MessageId 实现自己的幂等或尝试记录。
 
+### 接入一种领域通知
+
+具体应用先定义普通领域对象，再用 `NotificationType` 声明稳定通知编码、渠道、模板变量和接收人。下面的 `PasswordChanged` 由具体应用定义；`NotificationType` 只读取它的公开业务字段：
+
+```java
+/** 保存一次密码修改安全通知需要的 Account 和发生时间。 */
+public final class PasswordChanged {
+
+    public static final NotificationType<PasswordChanged> TYPE = NotificationType.define(
+            "security.password-changed",
+            PasswordChanged.class,
+            definition -> {
+                definition.required(NotificationChannel.SMS);
+                definition.optional(NotificationChannel.EMAIL, true);
+                definition.optional(NotificationChannel.INBOX, true);
+                definition.variable(
+                        "changedAt",
+                        (notice, locale) -> notice.changedAt().toString());
+            },
+            (notice, execution) -> execution.sendToAccount(notice.accountId()));
+
+    private final long accountId;
+
+    private final Instant changedAt;
+
+    /** 创建一次密码修改安全通知。 */
+    public PasswordChanged(long accountId, @NotNull Instant changedAt) {
+        this.accountId = accountId;
+        this.changedAt = Objects.requireNonNull(changedAt, "改密时间不能为空");
+    }
+
+    public long accountId() {
+        return accountId;
+    }
+
+    public @NotNull Instant changedAt() {
+        return changedAt;
+    }
+}
+```
+
+每个 `NotificationType` 都必须作为 Spring Bean 注册。`NotificationTypeCatalog` 在应用启动时收集这些 Bean；重复通知编码会使启动失败：
+
+```java
+/** 注册具体应用的安全通知类型。 */
+@Configuration(proxyBeanMethods = false)
+public class SecurityNotificationConfiguration {
+
+    /** 注册改密安全通知。 */
+    @Bean
+    NotificationType<PasswordChanged> passwordChangedNotificationType() {
+        return PasswordChanged.TYPE;
+    }
+}
+```
+
+必发渠道不可由系统或接收人关闭。可选渠道的最终值依次读取接收人覆盖值、`notification.channel-defaults` 和 `NotificationType` 中的 Java 初值。必发渠道当前不可用时，通知发布失败；不可用的可选渠道不进入本次通知。
+
+### 创建并启用统一模板
+
+Sca4d Server 通过 `POST /api/system/email/templates` 管理统一通知模板。路径保留了 Email 管理入口名称，但保存的数据同时供 Email、Inbox 和其他模板渠道使用。下面的请求创建 `security.password-changed` 的 `zh-CN` 模板；实际模板必须包含 `LocaleCatalog` 声明的默认 Locale：
+
+```json
+{
+  "notificationCode": "security.password-changed",
+  "content": {
+    "zh-CN": {
+      "title": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              { "type": "text", "text": "密码已修改" }
+            ]
+          }
+        ]
+      },
+      "body": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              { "type": "text", "text": "你的密码修改时间是 " },
+              {
+                "type": "notificationVariable",
+                "attrs": { "name": "changedAt" }
+              },
+              { "type": "text", "text": "。如非本人操作，请立即联系管理员。" }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
+```
+
+模板创建后默认停用。读取 `GET /api/system/email/templates/{templateId}` 的 `ETag`，再发送以下请求启用模板：
+
+```http
+PATCH /api/system/email/templates/{templateId}/status
+If-Match: "<当前版本>"
+Content-Type: application/json
+
+{"enabled":true}
+```
+
+模板只能引用对应 `NotificationType` 已声明的变量。模板缺少默认 Locale、`title` 或 `body`，变量名未声明，或者 ProseMirror 结构、节点数量和嵌套深度不合法时，请求失败。
+
+### 选择同步或可靠发送
+
+业务动作已经处于数据库事务中时，使用 `enqueue` 把通知请求和业务写入一起提交。事务回滚时不留下通知 Outbox：
+
+```java
+/** 在账号安全动作完成后登记对应通知。 */
+@Service
+public class AccountSecurityService {
+
+    private final Notifications notifications;
+
+    public AccountSecurityService(@NotNull Notifications notifications) {
+        this.notifications = Objects.requireNonNull(notifications, "Notifications 不能为空");
+    }
+
+    /** 保存改密结果，并在同一事务中登记安全通知。 */
+    @Transactional
+    public void passwordChanged(long accountId, @NotNull Instant changedAt) {
+        // 此处先保存具体应用负责的密码修改结果。
+        notifications.enqueue(PasswordChanged.TYPE, new PasswordChanged(accountId, changedAt));
+    }
+}
+```
+
+`enqueue` 要求活跃事务，返回的 `MessageId` 只证明 Outbox 已登记。需要调用线程立即知道渠道成功或失败，且可以接受外部调用延长当前处理时间时，才使用 `sendNow`。`sendNow` 不经过 Outbox；调用失败直接返回给调用方。
+
+### 保存接收人的语言、区域和渠道偏好
+
+具体应用通过 `NotificationLocaleResolver` 和 `NotificationRegionResolver` 把自己的账号设置转换为 `Locale` 和 `Region`。业务 Service 不直接读取 `Settings`。Sca4d Server 提供领域化接口 `GET /api/me/notification-settings`，返回全局语言、业务区域、渠道覆盖值、通知类型定义和三个独立 Version。
+
+修改单项设置时，把对应 Version 放入 `If-Match`。例如关闭改密通知的可选 Email 渠道：
+
+```http
+PUT /api/me/notification-settings/channels
+If-Match: "<channelsVersion>"
+Content-Type: application/json
+
+{
+  "value": {
+    "security.password-changed": {
+      "email": false,
+      "inbox": true
+    }
+  }
+}
+```
+
+`PUT /api/me/notification-settings/language` 接受 `{"value":"en-US"}`，`PUT /api/me/notification-settings/region` 接受 `{"value":"US"}`。渠道请求是完整替换，只能包含已注册通知类型的可选渠道；把 `sms` 这类必发渠道写入偏好会被拒绝。
+
 ### 模板表达
 
-所有渠道读取同一张 `notification_template`。模板保存平台无关的 Tiptap/ProseMirror JSON；Email 读取 HTML 与纯文本，Inbox 保存渲染快照，SMS 使用纯文本。Provider 模板编码只属于 SMS 传输绑定，不是另一份通知模板。
+所有渠道读取同一张 `notification_template`。模板保存平台无关的 Tiptap/ProseMirror JSON；Email 读取 HTML 与纯文本，Inbox 保存渲染快照，自定义渠道可以选择具体应用安装的渲染器。Provider 模板编码只属于 SMS 传输绑定，不是另一份通知模板。
 
 ## 通知模板
 
 `notification_template` 为每个 `NotificationType` 保存一份平台无关的多语言模板。`content` 是 Locale 到 `title`、`body` 两个 ProseMirror `doc` 的 JSON object；默认 Locale 必须存在。
 
-常用节点包括段落、标题、引用、列表、代码块、分隔线、图片、表格、文本和换行。`notificationVariable` 是结构化变量节点，`attrs.name` 必须由对应 `NotificationType` 声明。链接与图片只允许 HTTPS、`mailto`、`tel` 或 Storage 文件路径；颜色使用六位十六进制值。渲染器限制节点数量和嵌套深度，并对 HTML 转义或清洗。
+常用节点包括段落、标题、引用、列表、代码块、分隔线、图片、表格、文本和换行。`notificationVariable` 是结构化变量节点，`attrs.name` 必须由对应 `NotificationType` 声明。模板公共校验只检查 ProseMirror 结构、变量名称、节点数量和嵌套深度，不限制具体应用增加节点或 Mark。
 
-新模板使用普通 Tiptap 节点和 `notificationVariable`。读取已有 `templateText` 或 `richHtml` 节点时，渲染器仍拒绝 section、partial、comment、未转义变量和对象属性访问。
+`NotificationTemplateRenderers` 内置 `text` 和 `html`。`html` 对文本与变量执行 HTML 转义，并在最终输出执行 allowlist 清洗。具体应用可以注册 `NotificationTemplateRenderer` Bean 增加新编码，或使用相同编码替换内置实现；多个自定义实现不能声明同一编码。
 
-Locale 选择顺序是精确标签、应用支持列表中的同语言项、应用默认 Locale。一次渲染同时得到无换行标题、纯文本正文和安全 HTML 正文。渠道可以使用其中适合自己的输出，但不能改写模板含义。
+Locale 选择顺序是精确标签、应用支持列表中的同语言项、应用默认 Locale。默认组合同时得到无换行标题、纯文本正文和清洗后的 HTML 正文。未知节点由默认渲染器继续处理其子节点，具体应用渲染器可以解释自己的扩展节点。
+
+### 扩展模板渲染器
+
+`NotificationTemplateRenderer` 接收已经完成公共结构校验、Locale 选择后的 `title`、`body` 和变量 Map。具体应用可以注册新的输出格式，也可以用相同编码替换内置 `text` 或 `html`。下面的最小 Markdown 渲染器处理文本、变量和普通容器节点：
+
+```java
+/** 把统一通知模板转换为具体应用需要的 Markdown 文本。 */
+@Component
+public final class MarkdownNotificationTemplateRenderer
+        implements NotificationTemplateRenderer {
+
+    /** @return 具体渠道选择此渲染器时使用的稳定编码 */
+    @Override
+    public @NotNull String code() {
+        return "markdown";
+    }
+
+    /** 把标题和正文转换成 Markdown 文本。 */
+    @Override
+    public @NotNull RenderedTemplate render(
+            @NotNull JsonNode title,
+            @NotNull JsonNode body,
+            @NotNull Map<@NotNull String, @NotNull String> variables) {
+        String renderedTitle = renderNode(title, variables)
+                .replace('\r', ' ')
+                .replace('\n', ' ')
+                .strip();
+        return new RenderedTemplate(renderedTitle, renderNode(body, variables).strip());
+    }
+
+    /** 解释当前应用需要支持的 ProseMirror 节点。 */
+    private @NotNull String renderNode(
+            @NotNull JsonNode node,
+            @NotNull Map<String, String> variables) {
+        String type = node.path("type").asText();
+        if ("text".equals(type)) {
+            return node.path("text").asText();
+        }
+        if ("notificationVariable".equals(type)) {
+            String name = node.path("attrs").path("name").asText();
+            return Objects.requireNonNull(variables.get(name), "缺少通知变量: " + name);
+        }
+        StringBuilder result = new StringBuilder();
+        node.path("content").forEach(child -> result.append(renderNode(child, variables)));
+        if (Set.of("paragraph", "heading", "blockquote", "listItem").contains(type)) {
+            result.append('\n');
+        }
+        return result.toString();
+    }
+}
+```
+
+渲染器编码必须使用小写字母、数字和连字符，并以小写字母开头。两个自定义 Bean 声明相同编码时，应用启动失败。覆盖 `html` 时，自定义实现负责自己的转义和清洗规则；公共模板校验不会为自定义输出增加节点、Mark 或 URL 白名单。
 
 ## Notification Email 模块
 
@@ -137,7 +335,7 @@ flowchart LR
     Resolver[EmailRecipientResolver]
     Template[(notification_template)]
     Sender[(notification_email_sender)]
-    Renderer[NotificationRichTextRenderer]
+    Renderer[NotificationTemplateRenderers]
     Transport[SmtpEmailTransport]
     Server[SMTP Server]
 
@@ -166,6 +364,17 @@ SMTP 支持 `NONE`、`STARTTLS` 和 `TLS`。密码由 [SecretKeyring](/javadoc/c
 
 Sca4d Server Admin 在顶部铃铛显示最近站内信和未读提示，收到 Realtime 事件后重新读取 HTTP。完整列表位于 `/notifications`，展开未读消息时按 Version 标记已读，也可以一次标记全部已读。客户端不提供删除操作，已渲染快照由服务端持久保存。
 
+HTTP 客户端使用 `GET /api/me/notifications?limit=20` 读取第一页；下一页把当前页最后一项的 `id` 作为 `beforeId`。响应中的 `messages` 按 `id` 倒序排列，`unreadCount` 是当前 Account 的完整未读数量。标记单条已读时提交该消息的 Version：
+
+```http
+POST /api/me/notifications/{messageId}/read
+Content-Type: application/json
+
+{"version":0}
+```
+
+Version 已变化或消息不属于当前 Account 时，请求失败。`POST /api/me/notifications/read-all` 只修改仍未读的记录，不需要客户端提交 Version。
+
 ## SMS 通知
 
 `modules/notification/sca4dj-notification-sms` 解析接收人的规范 E.164 手机号，选择 Provider 与传输绑定，并记录 Provider API 的提交结果。`sca4dj-notification-sms-aliyun` 提供阿里云 `SendSms` 适配器。
@@ -181,3 +390,51 @@ Sca4d Server 使用 `system:sms:read` 和 `system:sms:manage` 管理这些资源
 阿里云 AccessKey、Endpoint 和 Region ID 来自 `sca4dj.notification.sms.aliyun.credentials.<credentialRef>` 部署配置，不保存到 Settings 或数据库。
 
 管理端“短信通知”页面先维护 Provider，再为选中的 Provider 维护通知编码、应用路由、Locale、签名、供应商模板编码及“供应商参数名 → 统一通知变量名”映射。参数映射中的变量必须由对应 `NotificationType` 声明。
+
+### 配置一个阿里云 SMS Provider
+
+先在部署配置中声明凭据引用。凭据值来自环境变量，不写入 Git：
+
+```yaml
+sca4dj:
+  notification:
+    sms:
+      aliyun:
+        credentials:
+          primary:
+            access-key-id: ${ALIYUN_SMS_ACCESS_KEY_ID}
+            access-key-secret: ${ALIYUN_SMS_ACCESS_KEY_SECRET}
+            endpoint: dysmsapi.aliyuncs.com
+            region-id: cn-hangzhou
+```
+
+然后通过 `POST /api/system/sms/providers` 创建默认停用的 Provider：
+
+```json
+{
+  "code": "aliyun-primary",
+  "type": "ALIYUN",
+  "credentialRef": "primary",
+  "priority": 10
+}
+```
+
+为 Provider 创建与应用路由、Locale 和供应商审核模板匹配的绑定。Sca4d Server 的 `china-mainland` 和 `international` 是具体应用声明的 `SmsRoute`，不是 SMS 公共模块的固定分区：
+
+```json
+{
+  "notificationCode": "authentication.sms-code",
+  "route": "china-mainland",
+  "languageTag": "zh-CN",
+  "signName": "示例应用",
+  "providerTemplateCode": "SMS_123456789",
+  "parameterMapping": {
+    "code": "code",
+    "minutes": "expiresInMinutes"
+  }
+}
+```
+
+绑定创建后先读取详情取得 `ETag`，调用 `PATCH /api/system/sms/providers/{providerId}/bindings/{bindingId}/status` 启用绑定；再读取 Provider 详情并调用 `PATCH /api/system/sms/providers/{providerId}/status` 启用 Provider。启用 Provider 前必须至少有一个启用绑定。Provider 或绑定启用后不能直接替换或删除，需要先按当前 `ETag` 停用。
+
+同一通知编码、`SmsRoute` 和 Locale 可以配置多个 Provider。默认选择器按 `priority` 从小到大尝试候选项；明确拒绝可以尝试下一项，超时或未知结果不会切换。供应商模板中的参数名必须完整映射到 `NotificationType` 已声明变量，`credentialRef` 必须与部署配置中的引用一致。

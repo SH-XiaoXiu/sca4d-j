@@ -5,6 +5,7 @@ import type {
   EmailSender,
   EmailTemplate,
   EmailTemplateInput,
+  EmailTemplatePage,
   Int64String,
   LocaleCatalog,
   PreviewEmailTemplateInput,
@@ -31,9 +32,12 @@ export interface EmailTemplatesState {
   readonly detailEtag: null | string;
   readonly error: AdminError | null;
   readonly localeCatalog: LocaleCatalog | null;
+  readonly page: number;
   readonly phase: ResourcePhase;
   readonly preview: RenderedEmail | null;
+  readonly size: number;
   readonly templates: readonly EmailTemplate[];
+  readonly total: number;
 }
 
 /** 管理 SMTP 配置、密码修改语义、启用状态和连接测试。 */
@@ -210,9 +214,12 @@ export class EmailTemplatesController extends ObservableController<EmailTemplate
       detailEtag: null,
       error: null,
       localeCatalog: null,
+      page: 1,
       phase: 'idle',
       preview: null,
+      size: 20,
       templates: Object.freeze([]),
+      total: 0,
     });
   }
 
@@ -238,7 +245,7 @@ export class EmailTemplatesController extends ObservableController<EmailTemplate
         '/system/email/templates',
         input,
       );
-      await this.load();
+      await this.load(1, this.state.size);
       return freezeTemplate(result.data);
     } catch (error) {
       this.mutationFailed(error);
@@ -261,20 +268,34 @@ export class EmailTemplatesController extends ObservableController<EmailTemplate
     }
   }
 
-  /** 同时读取模板列表和应用 Locale；空列表仍允许创建模板。 */
-  async load(): Promise<void> {
+  /** 同时读取指定模板页和应用 Locale；空列表仍允许创建模板。 */
+  async load(page = this.state.page, size = this.state.size): Promise<void> {
     this.publish({ ...this.state, error: null, phase: 'loading' });
     try {
       const [templates, locales] = await Promise.all([
-        this.api.get<readonly EmailTemplate[]>('/system/email/templates'),
+        this.api.get<EmailTemplatePage>('/system/email/templates', {
+          page,
+          size,
+        }),
         this.api.get<LocaleCatalog>('/system/locales'),
       ]);
+      if (
+        templates.data.items.length === 0 &&
+        templates.data.total > 0 &&
+        page > 1
+      ) {
+        await this.load(page - 1, size);
+        return;
+      }
       this.publish({
         ...this.state,
         error: null,
         localeCatalog: freezeLocaleCatalog(locales.data),
+        page: templates.data.page,
         phase: 'ready',
-        templates: Object.freeze(templates.data.map(freezeTemplate)),
+        size: templates.data.size,
+        templates: Object.freeze(templates.data.items.map(freezeTemplate)),
+        total: templates.data.total,
       });
     } catch (error) {
       this.loadFailed(error);

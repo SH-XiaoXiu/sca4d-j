@@ -11,9 +11,13 @@ import com.sca4d.core.api.annotation.Audit;
 import com.sca4d.core.api.annotation.AuditTarget;
 import com.sca4d.core.api.annotation.RequirePermission;
 import com.sca4d.core.api.notification.NotificationCode;
+import com.sca4d.core.api.query.Page;
+import com.sca4d.core.api.query.Sort;
 import com.sca4d.core.spring.web.ApiResponse;
 import com.sca4d.core.spring.web.annotation.CurrentPrincipal;
 import com.sca4d.core.spring.web.annotation.IfMatch;
+import com.sca4d.core.spring.web.list.ListDefinition;
+import com.sca4d.core.spring.web.list.ListParameters;
 import com.sca4d.notification.template.NotificationTemplate;
 import com.sca4d.notification.template.NotificationTemplateService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,7 +35,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Objects;
 
 /** 管理多语言 Email 模板，并提供草稿预览和真实测试发送。 */
@@ -43,6 +46,14 @@ public class EmailTemplateController {
 
     private static final String RESOURCE_TYPE = "notification:email:template";
 
+    private static final Sort NOTIFICATION_CODE = Sort.of("NOTIFICATION_CODE");
+
+    private static final ListDefinition LIST = ListDefinition.builder()
+            .fields(NOTIFICATION_CODE, Sort.SERIAL)
+            .defaultSort(NOTIFICATION_CODE.asc(), Sort.SERIAL.asc())
+            .maxSize(100)
+            .build();
+
     private final @NotNull NotificationTemplateService templates;
 
     /** @param templates Email 模板管理、预览和测试发送服务 */
@@ -50,12 +61,12 @@ public class EmailTemplateController {
         this.templates = Objects.requireNonNull(templates, "Email Template 服务不能为空");
     }
 
-    /** @return 全部未删除模板及其变量集合 */
+    /** @return 按分页和安全排序要求读取的模板及其变量集合 */
     @GetMapping
     @Operation(summary = "查询 Email 模板")
     @RequirePermission(operation = SystemOperations.EMAIL_READ)
-    public @NotNull ApiResponse<List<EmailTemplateView>> findAll() {
-        return ApiResponse.ok(templates.findAll().stream().map(this::view).toList());
+    public @NotNull ApiResponse<Page<EmailTemplateView>> find(@NotNull ListParameters parameters) {
+        return ApiResponse.ok(templates.find(parameters.resolve(LIST)).map(this::view));
     }
 
     /** 创建默认停用的完整多语言 Email 模板。 */

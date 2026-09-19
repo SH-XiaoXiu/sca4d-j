@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">NotificationTemplateRepository</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">NotificationTemplateRepository</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">隐藏统一通知模板的 JSONB、Mapper 和影响行数语义。</div>
 </section>
@@ -138,11 +138,11 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="NotificationTemplate.html" title="class in com.sca4d.notification.template">NotificationTemplate</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#find(long)" class="member-name-link">find</a><wbr>(long&nbsp;templateId)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="NotificationTemplate.html" title="class in com.sca4d.notification.template">NotificationTemplate</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findAll()" class="member-name-link">findAll</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="NotificationTemplate.html" title="class in com.sca4d.notification.template">NotificationTemplate</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findEnabled(com.sca4d.core.api.notification.NotificationCode)" class="member-name-link">findEnabled</a><wbr>(@NotNull com.sca4d.core.api.notification.NotificationCode&nbsp;code)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="NotificationTemplate.html" title="class in com.sca4d.notification.template">NotificationTemplate</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findEnabled(com.sca4d.core.api.notification.NotificationCode)" class="member-name-link">findEnabled</a><wbr>(@NotNull com.sca4d.core.api.notification.NotificationCode&nbsp;code)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.query.Page<wbr>&lt;<a href="NotificationTemplate.html" title="class in com.sca4d.notification.template">NotificationTemplate</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#page(com.sca4d.core.api.query.ListRequest)" class="member-name-link">page</a><wbr>(@NotNull com.sca4d.core.api.query.ListRequest&nbsp;request)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#replace(long,com.sca4d.core.api.notification.NotificationCode,com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">replace</a><wbr>(long&nbsp;templateId,
@@ -195,14 +195,15 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="findAll()">
-<h3>findAll</h3>
+<section class="detail" id="page(com.sca4d.core.api.query.ListRequest)">
+<h3>page</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="NotificationTemplate.html" title="class in com.sca4d.notification.template">NotificationTemplate</a>&gt;</span>&nbsp;<span class="element-name">findAll</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.query.Page&lt;<a href="NotificationTemplate.html" title="class in com.sca4d.notification.template">NotificationTemplate</a>&gt;</span>&nbsp;<span class="element-name">page</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.query.ListRequest&nbsp;request)</span></div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>全部未删除统一通知模板</dd>
+<dd>按安全排序要求读取的一页统一通知模板和完整命中数量</dd>
 </dl>
 </section>
 </li>
@@ -234,7 +235,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="add(long,com.sca4d.core.api.notification.NotificationCode,com.fasterxml.jackson.databind.JsonNode)">
 <h3>add</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(long&nbsp;templateId,
+<div class="member-signature"><span class="annotations">@AffectedRows(target="\u65b0\u589e Notification Template")
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(long&nbsp;templateId,
  @NotNull
  @NotNull com.sca4d.core.api.notification.NotificationCode&nbsp;code,
  @NotNull

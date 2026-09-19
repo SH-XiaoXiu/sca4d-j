@@ -91,41 +91,49 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">为一个渠道消费 `notification.requested@2`，使各渠道分别确认或进入自己的 DLQ。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/template/NotificationRichTextRenderer.html" title="class in com.sca4d.notification.template">NotificationRichTextRenderer</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/config/NotificationSettings.html" title="class in com.sca4d.notification.config">NotificationSettings</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">校验受限 Tiptap JSON，并把同一模板渲染为纯文本与安全 HTML。</div>
-</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/config/NotificationSettings.html" title="class in com.sca4d.notification.config">NotificationSettings</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">声明 Notification 框架内部保存的系统渠道默认值和接收人覆盖值。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/template/NotificationTemplate.html" title="class in com.sca4d.notification.template">NotificationTemplate</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/template/NotificationTemplate.html" title="class in com.sca4d.notification.template">NotificationTemplate</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存一种通知的完整多语言 Tiptap JSON 模板、状态和版本。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/notification/template/mapper/NotificationTemplateMapper.html" title="interface in com.sca4d.notification.template.mapper">NotificationTemplateMapper</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/notification/template/mapper/NotificationTemplateMapper.html" title="interface in com.sca4d.notification.template.mapper">NotificationTemplateMapper</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">读写统一 Notification 模板的最小 SQL 形状。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/template/NotificationTemplateRepository.html" title="class in com.sca4d.notification.template">NotificationTemplateRepository</a></div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/notification/template/NotificationTemplateRenderer.html" title="interface in com.sca4d.notification.template">NotificationTemplateRenderer</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="block">把一个 Locale 的标题和正文文档转换成渠道可以使用的字符串。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/template/NotificationTemplateRenderers.html" title="class in com.sca4d.notification.template">NotificationTemplateRenderers</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">校验统一模板、选择 Locale，并调用具体应用安装的输出渲染器。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/template/NotificationTemplateRepository.html" title="class in com.sca4d.notification.template">NotificationTemplateRepository</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">隐藏统一通知模板的 JSONB、Mapper 和影响行数语义。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/template/NotificationTemplateService.html" title="class in com.sca4d.notification.template">NotificationTemplateService</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/template/NotificationTemplateService.html" title="class in com.sca4d.notification.template">NotificationTemplateService</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">管理平台无关 Tiptap JSON 通知模板，并提供统一预览结果。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/template/mapper/NotificationTemplateState.html" title="class in com.sca4d.notification.template.mapper">NotificationTemplateState</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/template/mapper/NotificationTemplateState.html" title="class in com.sca4d.notification.template.mapper">NotificationTemplateState</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存 Notification Template Mapper 从数据库读取的 JSON 文本状态。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/NotificationTypeCatalog.html" title="class in com.sca4d.notification">NotificationTypeCatalog</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/NotificationTypeCatalog.html" title="class in com.sca4d.notification">NotificationTypeCatalog</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">校验并保存当前应用安装的类型化通知定义。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/template/RenderedNotification.html" title="class in com.sca4d.notification.template">RenderedNotification</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/template/RenderedNotification.html" title="class in com.sca4d.notification.template">RenderedNotification</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存统一模板为渠道生成的纯文本标题、纯文本正文和安全 HTML 正文。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/template/RenderedTemplate.html" title="class in com.sca4d.notification.template">RenderedTemplate</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">保存一个通知模板渲染器生成的标题和正文。</div>
 </div>
 </div>
 </div>

@@ -103,8 +103,8 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.notification.template.NotificationTemplateRepository,com.sca4d.notification.template.NotificationRichTextRenderer,com.sca4d.notification.NotificationTypeCatalog,com.sca4d.core.api.id.IdGenerator)" class="member-name-link">NotificationTemplateService</a><wbr>(@NotNull <a href="NotificationTemplateRepository.html" title="class in com.sca4d.notification.template">NotificationTemplateRepository</a>&nbsp;templates,
- @NotNull <a href="NotificationRichTextRenderer.html" title="class in com.sca4d.notification.template">NotificationRichTextRenderer</a>&nbsp;renderer,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.notification.template.NotificationTemplateRepository,com.sca4d.notification.template.NotificationTemplateRenderers,com.sca4d.notification.NotificationTypeCatalog,com.sca4d.core.api.id.IdGenerator)" class="member-name-link">NotificationTemplateService</a><wbr>(@NotNull <a href="NotificationTemplateRepository.html" title="class in com.sca4d.notification.template">NotificationTemplateRepository</a>&nbsp;templates,
+ @NotNull <a href="NotificationTemplateRenderers.html" title="class in com.sca4d.notification.template">NotificationTemplateRenderers</a>&nbsp;renderers,
  @NotNull <a href="../NotificationTypeCatalog.html" title="class in com.sca4d.notification">NotificationTypeCatalog</a>&nbsp;types,
  @NotNull com.sca4d.core.api.id.IdGenerator&nbsp;ids)</code></div>
 <div class="col-last even-row-color">
@@ -131,8 +131,8 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#delete(long)" class="member-name-link">delete</a><wbr>(long&nbsp;templateId)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="NotificationTemplate.html" title="class in com.sca4d.notification.template">NotificationTemplate</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findAll()" class="member-name-link">findAll</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.query.Page<wbr>&lt;<a href="NotificationTemplate.html" title="class in com.sca4d.notification.template">NotificationTemplate</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#find(com.sca4d.core.api.query.ListRequest)" class="member-name-link">find</a><wbr>(@NotNull com.sca4d.core.api.query.ListRequest&nbsp;request)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="NotificationTemplate.html" title="class in com.sca4d.notification.template">NotificationTemplate</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#loadById(long)" class="member-name-link">loadById</a><wbr>(long&nbsp;templateId)</code></div>
@@ -172,12 +172,12 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.notification.template.NotificationTemplateRepository,com.sca4d.notification.template.NotificationRichTextRenderer,com.sca4d.notification.NotificationTypeCatalog,com.sca4d.core.api.id.IdGenerator)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.notification.template.NotificationTemplateRepository,com.sca4d.notification.template.NotificationTemplateRenderers,com.sca4d.notification.NotificationTypeCatalog,com.sca4d.core.api.id.IdGenerator)">
 <h3>NotificationTemplateService</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">NotificationTemplateService</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="NotificationTemplateRepository.html" title="class in com.sca4d.notification.template">NotificationTemplateRepository</a>&nbsp;templates,
  @NotNull
- @NotNull <a href="NotificationRichTextRenderer.html" title="class in com.sca4d.notification.template">NotificationRichTextRenderer</a>&nbsp;renderer,
+ @NotNull <a href="NotificationTemplateRenderers.html" title="class in com.sca4d.notification.template">NotificationTemplateRenderers</a>&nbsp;renderers,
  @NotNull
  @NotNull <a href="../NotificationTypeCatalog.html" title="class in com.sca4d.notification">NotificationTypeCatalog</a>&nbsp;types,
  @NotNull
@@ -194,16 +194,23 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="findAll()">
-<h3>findAll</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="NotificationTemplate.html" title="class in com.sca4d.notification.template">NotificationTemplate</a>&gt;</span>&nbsp;<span class="element-name">findAll</span>()</div>
+<section class="detail" id="find(com.sca4d.core.api.query.ListRequest)">
+<h3>find</h3>
+<div class="member-signature"><span class="annotations">@Transactional(readOnly=true)
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.query.Page&lt;<a href="NotificationTemplate.html" title="class in com.sca4d.notification.template">NotificationTemplate</a>&gt;</span>&nbsp;<span class="element-name">find</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.query.ListRequest&nbsp;request)</span></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>按分页和排序要求读取的统一通知模板</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="loadById(long)">
 <h3>loadById</h3>
-<div class="member-signature"><span class="annotations">@NotNull
+<div class="member-signature"><span class="annotations">@Transactional(readOnly=true)
+@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="NotificationTemplate.html" title="class in com.sca4d.notification.template">NotificationTemplate</a></span>&nbsp;<span class="element-name">loadById</span><wbr><span class="parameters">(long&nbsp;templateId)</span></div>
 </section>
 </li>

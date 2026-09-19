@@ -28,9 +28,9 @@ import {
 
 import { $t } from '#/locales';
 
-import ResourceState from '../components/ResourceState.vue';
-import ResourceReference from '../components/ResourceReference.vue';
 import NotificationDocumentEditor from '../components/NotificationDocumentEditor.vue';
+import ResourceReference from '../components/ResourceReference.vue';
+import ResourceState from '../components/ResourceState.vue';
 import { useI18n } from '../i18n';
 import {
   resourceQueryId,
@@ -197,6 +197,11 @@ async function reload(): Promise<void> {
   ]);
 }
 
+/** 读取指定页的通知模板。 */
+async function changeTemplatePage(page: number, size: number): Promise<void> {
+  await store.loadEmailTemplates(page, size);
+}
+
 /** 打开 SMTP 配置创建或详情抽屉。 */
 async function openSender(
   sender: EmailSender | Int64String | null = null,
@@ -356,8 +361,7 @@ async function openLinkedEmailResource(
   id: Int64String,
 ): Promise<void> {
   activeTab.value = tab;
-  if (tab === 'senders') await openSender(id);
-  else await openTemplate(id);
+  await (tab === 'senders' ? openSender(id) : openTemplate(id));
 }
 
 /** Email 详情抽屉关闭后清除已经消费的资源标识。 */
@@ -583,21 +587,13 @@ function cloneDocument(
   return value ? structuredClone(value) : emptyDocument();
 }
 
-/** 判断文档是否含有可渲染文本、变量、迁移节点、图片或分隔线。 */
+/** 判断文档是否含有可渲染文本、变量、图片或分隔线。 */
 function documentHasContent(node: NotificationRichTextNode): boolean {
   if (node.text?.trim()) return true;
-  if (
-    [
-      'horizontalRule',
-      'image',
-      'notificationVariable',
-      'richHtml',
-      'templateText',
-    ].includes(node.type)
-  ) {
+  if (['horizontalRule', 'image', 'notificationVariable'].includes(node.type)) {
     return true;
   }
-  return node.content?.some(documentHasContent) ?? false;
+  return node.content?.some((child) => documentHasContent(child)) ?? false;
 }
 
 /** 使用浏览器原生 Locale 实现校验并返回规范 BCP 47 标签。 */
@@ -696,9 +692,9 @@ function t(key: string, values?: Record<string, unknown>): string {
                 class="flex flex-col"
               >
                 <span>{{ record.host }}:{{ record.port }}</span>
-                <a-tag class="mt-1 w-fit" color="blue">{{
-                  record.security
-                }}</a-tag>
+                <a-tag class="mt-1 w-fit" color="blue">
+                  {{ record.security }}
+                </a-tag>
               </div>
               <div
                 v-else-if="column.key === 'from'"
@@ -780,6 +776,16 @@ function t(key: string, values?: Record<string, unknown>): string {
               </div>
             </template>
           </a-table>
+          <div class="mt-4 flex justify-end">
+            <a-pagination
+              :current="store.emailTemplates.page"
+              :page-size="store.emailTemplates.size"
+              :total="store.emailTemplates.total"
+              :show-size-changer="true"
+              :page-size-options="['10', '20', '50', '100']"
+              @change="changeTemplatePage"
+            />
+          </div>
         </ResourceState>
       </a-tab-pane>
 
@@ -1051,9 +1057,9 @@ function t(key: string, values?: Record<string, unknown>): string {
       </a-spin>
       <template #footer>
         <div class="flex justify-end gap-2">
-          <a-button @click="senderDrawerOpen = false">{{
-            t('cancel')
-          }}</a-button>
+          <a-button @click="senderDrawerOpen = false">
+            {{ t('cancel') }}
+          </a-button>
           <a-button
             v-if="canManage"
             type="primary"
@@ -1176,9 +1182,9 @@ function t(key: string, values?: Record<string, unknown>): string {
           >
             <FileText :size="17" aria-hidden="true" />{{ t('preview') }}
           </a-button>
-          <a-button @click="templateDrawerOpen = false">{{
-            t('cancel')
-          }}</a-button>
+          <a-button @click="templateDrawerOpen = false">
+            {{ t('cancel') }}
+          </a-button>
           <a-button
             v-if="canManage"
             type="primary"
@@ -1252,8 +1258,7 @@ function t(key: string, values?: Record<string, unknown>): string {
           <a-tab-pane key="text" :tab="t('textBody')">
             <pre
               class="max-h-80 overflow-auto whitespace-pre-wrap rounded border p-3 text-sm"
-              >{{ previewResult.text }}</pre
-            >
+              >{{ previewResult.text }}</pre>
           </a-tab-pane>
           <a-tab-pane v-if="previewResult.html" key="html" :tab="t('htmlBody')">
             <iframe

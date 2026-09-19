@@ -4,7 +4,7 @@ import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.notification.NotificationCode;
 import com.sca4d.notification.email.sender.EmailSenderRepository;
 import com.sca4d.notification.email.sender.EmailTransport;
-import com.sca4d.notification.template.NotificationRichTextRenderer;
+import com.sca4d.notification.template.NotificationTemplateRenderers;
 import com.sca4d.notification.template.NotificationTemplateRepository;
 import com.sca4d.notification.template.RenderedNotification;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +20,7 @@ public final class EmailMessageService {
 
     private final @NotNull NotificationTemplateRepository templates;
 
-    private final @NotNull NotificationRichTextRenderer renderer;
+    private final @NotNull NotificationTemplateRenderers renderers;
 
     private final @NotNull EmailTransport transport;
 
@@ -30,12 +30,12 @@ public final class EmailMessageService {
     public EmailMessageService(
             @NotNull EmailSenderRepository senders,
             @NotNull NotificationTemplateRepository templates,
-            @NotNull NotificationRichTextRenderer renderer,
+            @NotNull NotificationTemplateRenderers renderers,
             @NotNull EmailTransport transport,
             long maxAttachmentBytes) {
         this.senders = Objects.requireNonNull(senders, "Email Sender Repository 不能为空");
         this.templates = Objects.requireNonNull(templates, "Email Template Repository 不能为空");
-        this.renderer = Objects.requireNonNull(renderer, "Email 模板渲染器不能为空");
+        this.renderers = Objects.requireNonNull(renderers, "Email 模板渲染器不能为空");
         this.transport = Objects.requireNonNull(transport, "Email Transport 不能为空");
         if (maxAttachmentBytes < 1) {
             throw new IllegalArgumentException("Email 附件总大小上限必须为正数");
@@ -59,7 +59,7 @@ public final class EmailMessageService {
                 .orElseThrow(() -> new BusinessException(EmailNotificationErrorCode.DELIVERY_UNAVAILABLE));
         var template = templates.findEnabled(Objects.requireNonNull(code, "通知编码不能为空"))
                 .orElseThrow(() -> new BusinessException(EmailNotificationErrorCode.DELIVERY_UNAVAILABLE));
-        RenderedNotification rendered = renderer.render(template.content(), locale, variables);
+        RenderedNotification rendered = renderers.renderDefaults(template.content(), locale, variables);
         RenderedEmail email = new RenderedEmail(rendered.title(), rendered.text(), rendered.html());
         transport.send(sender, EmailAddresses.require(recipient), email, checkedAttachments);
     }

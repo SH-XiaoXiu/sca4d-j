@@ -10,7 +10,7 @@ import com.sca4d.notification.inbox.InboxNotificationDelivery;
 import com.sca4d.notification.inbox.InboxRepository;
 import com.sca4d.notification.inbox.InboxService;
 import com.sca4d.notification.inbox.mapper.InboxMessageMapper;
-import com.sca4d.notification.template.NotificationRichTextRenderer;
+import com.sca4d.notification.template.NotificationTemplateRenderers;
 import com.sca4d.notification.template.NotificationTemplateRepository;
 import org.jetbrains.annotations.NotNull;
 import org.mybatis.spring.annotation.MapperScan;
@@ -44,11 +44,11 @@ public class InboxNotificationAutoConfiguration {
     @Bean
     NotificationDelivery inboxNotificationDelivery(
             @NotNull NotificationTemplateRepository templates,
-            @NotNull NotificationRichTextRenderer renderer,
+            @NotNull NotificationTemplateRenderers renderers,
             @NotNull InboxRepository repository,
             @NotNull InboxService service,
             @NotNull IdGenerator ids) {
-        return new InboxNotificationDelivery(templates, renderer, repository, service, ids);
+        return new InboxNotificationDelivery(templates, renderers, repository, service, ids);
     }
 
     @Bean

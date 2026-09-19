@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.notification.NotificationCode;
+import com.sca4d.core.api.query.ListRequest;
+import com.sca4d.core.api.query.Page;
 import com.sca4d.notification.NotificationErrorCode;
 import com.sca4d.notification.NotificationTypeCatalog;
 import org.jetbrains.annotations.CheckReturnValue;
@@ -12,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -25,7 +26,7 @@ public class NotificationTemplateService {
 
     private final NotificationTemplateRepository templates;
 
-    private final NotificationRichTextRenderer renderer;
+    private final NotificationTemplateRenderers renderers;
 
     private final NotificationTypeCatalog types;
 
@@ -34,19 +35,22 @@ public class NotificationTemplateService {
     /** 创建统一通知模板 Service。 */
     public NotificationTemplateService(
             @NotNull NotificationTemplateRepository templates,
-            @NotNull NotificationRichTextRenderer renderer,
+            @NotNull NotificationTemplateRenderers renderers,
             @NotNull NotificationTypeCatalog types,
             @NotNull IdGenerator ids) {
         this.templates = Objects.requireNonNull(templates, "通知模板 Repository 不能为空");
-        this.renderer = Objects.requireNonNull(renderer, "通知富文本渲染器不能为空");
+        this.renderers = Objects.requireNonNull(renderers, "通知模板渲染器不能为空");
         this.types = Objects.requireNonNull(types, "通知类型目录不能为空");
         this.ids = Objects.requireNonNull(ids, "IdGenerator 不能为空");
     }
 
-    public @NotNull List<@NotNull NotificationTemplate> findAll() {
-        return templates.findAll();
+    /** @return 按分页和排序要求读取的统一通知模板 */
+    @Transactional(readOnly = true)
+    public @NotNull Page<NotificationTemplate> find(@NotNull ListRequest request) {
+        return templates.page(request);
     }
 
+    @Transactional(readOnly = true)
     public @NotNull NotificationTemplate loadById(long templateId) {
         return templates.find(templateId)
                 .orElseThrow(() -> new BusinessException(NotificationErrorCode.TEMPLATE_NOT_FOUND));
@@ -57,7 +61,7 @@ public class NotificationTemplateService {
     public @NotNull NotificationTemplate create(@NotNull NotificationCode code, @NotNull JsonNode content) {
         validate(code, content);
         long templateId = ids.nextId();
-        templates.add(templateId, code, renderer.validate(content));
+        templates.add(templateId, code, renderers.validate(content));
         LOG.info("统一通知模板已创建 | templateId={} notificationCode={} enabled=false", templateId, code);
         return loadById(templateId);
     }
@@ -69,7 +73,7 @@ public class NotificationTemplateService {
             @NotNull NotificationCode code,
             @NotNull JsonNode content) {
         validate(code, content);
-        templates.replace(templateId, code, renderer.validate(content));
+        templates.replace(templateId, code, renderers.validate(content));
         LOG.info("统一通知模板已修改 | templateId={} notificationCode={}", templateId, code);
         return loadById(templateId);
     }
@@ -97,13 +101,13 @@ public class NotificationTemplateService {
             @NotNull JsonNode content,
             @NotNull Locale locale,
             @NotNull Map<String, String> variables) {
-        return renderer.render(content, locale, variables);
+        return renderers.renderDefaults(content, locale, variables);
     }
 
     /** @return 模板全部 Locale 使用且必须由 NotificationType 声明的变量 */
     @CheckReturnValue
     public @NotNull Set<@NotNull String> variables(@NotNull JsonNode content) {
-        return renderer.variables(content);
+        return renderers.variables(content);
     }
 
     /** 要求模板只引用通知类型声明的变量。 */
@@ -113,7 +117,7 @@ public class NotificationTemplateService {
                 .filter(candidate -> candidate.code().equals(code))
                 .findFirst()
                 .orElseThrow(() -> new BusinessException(NotificationErrorCode.TEMPLATE_INVALID));
-        Set<String> used = renderer.variables(content);
+        Set<String> used = renderers.variables(content);
         if (!type.definition().variables().keySet().containsAll(used)) {
             throw new BusinessException(NotificationErrorCode.TEMPLATE_INVALID);
         }

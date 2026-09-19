@@ -17,20 +17,46 @@
         <if test="enabled != null">AND enabled = #{enabled}</if>
         ORDER BY notification_code, id
     </select>
+    <select id="count" resultType="long">
+        SELECT COUNT(*) FROM notification_template WHERE deleted = 0
+    </select>
+    <select id="selectPage" resultType="com.sca4d.notification.template.mapper.NotificationTemplateState">
+        SELECT <include refid="columns"/>
+        FROM notification_template
+        WHERE deleted = 0
+        ORDER BY
+        <choose>
+            <when test="sort.isEmpty()">notification_code ASC,</when>
+            <otherwise>
+                <foreach collection="sort" item="order" separator=",">
+                    <choose>
+                        <when test="order.field.name() == 'NOTIFICATION_CODE'">notification_code</when>
+                        <when test="order.field.name() == 'SERIAL'">id</when>
+                        <otherwise>id</otherwise>
+                    </choose>
+                    <choose>
+                        <when test="order.direction.name() == 'DESC'">DESC</when>
+                        <otherwise>ASC</otherwise>
+                    </choose>
+                </foreach>
+                ,
+            </otherwise>
+        </choose>
+        id ASC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
     <insert id="insert">
         INSERT INTO notification_template (id, notification_code, content, enabled)
         VALUES (#{templateId}, #{notificationCode}, CAST(#{contentJson} AS JSONB), FALSE)
     </insert>
-    <update id="replace">
+    <update id="update">
         UPDATE notification_template
-        SET notification_code = #{notificationCode},
-            content = CAST(#{contentJson} AS JSONB),
+        <set>
+            <if test="notificationCode.set">notification_code = #{notificationCode.value},</if>
+            <if test="contentJson.set">content = CAST(#{contentJson.value} AS JSONB),</if>
+            <if test="enabled.set">enabled = #{enabled.value},</if>
             version = version + 1
-        WHERE id = #{templateId} AND deleted = 0 AND version = #{expectedVersion}
-    </update>
-    <update id="setEnabled">
-        UPDATE notification_template
-        SET enabled = #{enabled}, version = version + 1
+        </set>
         WHERE id = #{templateId} AND deleted = 0 AND version = #{expectedVersion}
     </update>
     <update id="markDeleted">

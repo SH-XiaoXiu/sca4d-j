@@ -17,12 +17,14 @@ import com.sca4d.notification.NotificationDeliveryRouter;
 import com.sca4d.notification.NotificationLocaleResolver;
 import com.sca4d.notification.NotificationRegionResolver;
 import com.sca4d.notification.NotificationTypeCatalog;
-import com.sca4d.notification.template.NotificationRichTextRenderer;
+import com.sca4d.notification.template.NotificationTemplateRenderer;
+import com.sca4d.notification.template.NotificationTemplateRenderers;
 import com.sca4d.notification.template.NotificationTemplateRepository;
 import com.sca4d.notification.template.NotificationTemplateService;
 import com.sca4d.notification.template.mapper.NotificationTemplateMapper;
 import org.jetbrains.annotations.NotNull;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -39,10 +41,12 @@ public class NotificationAutoConfiguration {
     public NotificationAutoConfiguration() {
     }
 
-    /** @return 统一 Tiptap JSON 模板的校验和渠道渲染入口 */
+    /** @return 安装内置和具体应用自定义实现的通知模板渲染器目录 */
     @Bean
-    NotificationRichTextRenderer notificationRichTextRenderer(@NotNull LocaleCatalog locales) {
-        return new NotificationRichTextRenderer(locales);
+    NotificationTemplateRenderers notificationTemplateRenderers(
+            @NotNull LocaleCatalog locales,
+            @NotNull ObjectProvider<NotificationTemplateRenderer> renderers) {
+        return new NotificationTemplateRenderers(locales, renderers.orderedStream().toList());
     }
 
     /** @return 隐藏模板 JSONB 和 Mapper 的持久化入口 */
@@ -58,10 +62,10 @@ public class NotificationAutoConfiguration {
     @Bean
     NotificationTemplateService notificationTemplateService(
             @NotNull NotificationTemplateRepository templates,
-            @NotNull NotificationRichTextRenderer renderer,
+            @NotNull NotificationTemplateRenderers renderers,
             @NotNull NotificationTypeCatalog types,
             @NotNull IdGenerator ids) {
-        return new NotificationTemplateService(templates, renderer, types, ids);
+        return new NotificationTemplateService(templates, renderers, types, ids);
     }
 
     /** @return 管理员维护的通知渠道系统默认值定义 */

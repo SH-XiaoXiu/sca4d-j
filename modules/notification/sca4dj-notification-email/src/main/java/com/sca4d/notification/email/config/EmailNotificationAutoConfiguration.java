@@ -15,7 +15,7 @@ import com.sca4d.notification.email.sender.EmailSenderService;
 import com.sca4d.notification.email.sender.EmailTransport;
 import com.sca4d.notification.email.sender.SmtpEmailTransport;
 import com.sca4d.notification.email.sender.mapper.EmailSenderMapper;
-import com.sca4d.notification.template.NotificationRichTextRenderer;
+import com.sca4d.notification.template.NotificationTemplateRenderers;
 import com.sca4d.notification.template.NotificationTemplateRepository;
 import org.jetbrains.annotations.NotNull;
 import org.mybatis.spring.annotation.MapperScan;
@@ -66,13 +66,13 @@ public class EmailNotificationAutoConfiguration {
     EmailMessageService emailMessageService(
             @NotNull EmailSenderRepository senders,
             @NotNull NotificationTemplateRepository templates,
-            @NotNull NotificationRichTextRenderer renderer,
+            @NotNull NotificationTemplateRenderers renderers,
             @NotNull EmailTransport transport,
             @NotNull EmailNotificationProperties properties) {
         return new EmailMessageService(
                 senders,
                 templates,
-                renderer,
+                renderers,
                 transport,
                 properties.getMaxAttachmentBytes());
     }
@@ -83,9 +83,9 @@ public class EmailNotificationAutoConfiguration {
             @NotNull EmailRecipientResolver recipients,
             @NotNull EmailSenderRepository senders,
             @NotNull NotificationTemplateRepository templates,
-            @NotNull NotificationRichTextRenderer renderer,
+            @NotNull NotificationTemplateRenderers renderers,
             @NotNull EmailTransport transport) {
-        return new EmailNotificationDelivery(recipients, senders, templates, renderer, transport);
+        return new EmailNotificationDelivery(recipients, senders, templates, renderers, transport);
     }
 
     /** @return Email 渠道独立确认和进入独立 DLQ 的通知 Consumer */

@@ -8,7 +8,7 @@ import com.sca4d.core.api.notification.NotificationDelivery;
 import com.sca4d.notification.email.sender.EmailSenderConfiguration;
 import com.sca4d.notification.email.sender.EmailSenderRepository;
 import com.sca4d.notification.email.sender.EmailTransport;
-import com.sca4d.notification.template.NotificationRichTextRenderer;
+import com.sca4d.notification.template.NotificationTemplateRenderers;
 import com.sca4d.notification.template.NotificationTemplateRepository;
 import com.sca4d.notification.template.RenderedNotification;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +24,7 @@ public final class EmailNotificationDelivery implements NotificationDelivery {
 
     private final @NotNull NotificationTemplateRepository templates;
 
-    private final @NotNull NotificationRichTextRenderer renderer;
+    private final @NotNull NotificationTemplateRenderers renderers;
 
     private final @NotNull EmailTransport transport;
 
@@ -32,19 +32,19 @@ public final class EmailNotificationDelivery implements NotificationDelivery {
      * @param recipients 内部接收人邮箱解析入口
      * @param senders SMTP 配置持久化语义
      * @param templates 平台无关通知模板持久化语义
-     * @param renderer 统一 Tiptap JSON 模板渲染入口
+     * @param renderers 统一 Tiptap JSON 模板渲染入口
      * @param transport SMTP 操作
      */
     public EmailNotificationDelivery(
             @NotNull EmailRecipientResolver recipients,
             @NotNull EmailSenderRepository senders,
             @NotNull NotificationTemplateRepository templates,
-            @NotNull NotificationRichTextRenderer renderer,
+            @NotNull NotificationTemplateRenderers renderers,
             @NotNull EmailTransport transport) {
         this.recipients = Objects.requireNonNull(recipients, "EmailRecipientResolver 不能为空");
         this.senders = Objects.requireNonNull(senders, "EmailSenderRepository 不能为空");
         this.templates = Objects.requireNonNull(templates, "NotificationTemplateRepository 不能为空");
-        this.renderer = Objects.requireNonNull(renderer, "NotificationRichTextRenderer 不能为空");
+        this.renderers = Objects.requireNonNull(renderers, "NotificationTemplateRenderers 不能为空");
         this.transport = Objects.requireNonNull(transport, "EmailTransport 不能为空");
     }
 
@@ -74,7 +74,7 @@ public final class EmailNotificationDelivery implements NotificationDelivery {
                 .orElseThrow(() -> new BusinessException(EmailNotificationErrorCode.DELIVERY_UNAVAILABLE));
         RenderedNotification rendered;
         try {
-            rendered = renderer.render(template.content(), checked.locale(), checked.variables());
+            rendered = renderers.renderDefaults(template.content(), checked.locale(), checked.variables());
         } catch (IllegalArgumentException exception) {
             throw new BusinessException(EmailNotificationErrorCode.TEMPLATE_INVALID, exception);
         }

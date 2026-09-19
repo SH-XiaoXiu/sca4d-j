@@ -322,6 +322,14 @@ export interface EmailTemplate {
   readonly variables: readonly string[];
 }
 
+/** Controller 归一化后的统一通知模板分页。 */
+export interface EmailTemplatePage {
+  readonly items: readonly EmailTemplate[];
+  readonly page: number;
+  readonly size: number;
+  readonly total: number;
+}
+
 /** 创建或完整替换统一通知模板的输入。 */
 export interface EmailTemplateInput {
   readonly content: NotificationTemplateContent;

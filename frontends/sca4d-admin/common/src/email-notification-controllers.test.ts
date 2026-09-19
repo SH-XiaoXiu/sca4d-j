@@ -96,7 +96,7 @@ describe('Email notification controllers', () => {
       version: '2',
     });
     const responses: HttpResponse[] = [
-      ok([current]),
+      ok({ items: [current], page: 1, size: 20, total: 1 }),
       ok({
         defaultLocale: 'zh-CN',
         supportedLocales: ['zh-CN', 'en-US'],
@@ -118,6 +118,8 @@ describe('Email notification controllers', () => {
       variables: { code: '123456', expiresInMinutes: '5' },
     });
 
+    expect(requests[0]?.query).toEqual({ page: 1, size: 20 });
+    expect(controller.state.total).toBe(1);
     expect(controller.state.localeCatalog?.supportedLocales).toEqual([
       'zh-CN',
       'en-US',

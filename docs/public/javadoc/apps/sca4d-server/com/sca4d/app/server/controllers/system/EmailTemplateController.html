@@ -131,8 +131,8 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">按 `If-Match` 删除停用模板。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.spring.web.ApiResponse<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../system/view/EmailTemplateView.html" title="class in com.sca4d.app.server.system.view">EmailTemplateView</a>&gt;&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findAll()" class="member-name-link">findAll</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.spring.web.ApiResponse<wbr>&lt;com.sca4d.core.api.query.Page&lt;<a href="../../system/view/EmailTemplateView.html" title="class in com.sca4d.app.server.system.view">EmailTemplateView</a>&gt;&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#find(com.sca4d.core.spring.web.list.ListParameters)" class="member-name-link">find</a><wbr>(@NotNull com.sca4d.core.spring.web.list.ListParameters&nbsp;parameters)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.spring.web.ApiResponse<wbr>&lt;<a href="../../system/view/EmailTemplateView.html" title="class in com.sca4d.app.server.system.view">EmailTemplateView</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#get(long)" class="member-name-link">get</a><wbr>(long&nbsp;templateId)</code></div>
@@ -193,15 +193,16 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="findAll()">
-<h3>findAll</h3>
+<section class="detail" id="find(com.sca4d.core.spring.web.list.ListParameters)">
+<h3>find</h3>
 <div class="member-signature"><span class="annotations">@GetMapping
 @RequirePermission(operation="system:email:read")
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../system/view/EmailTemplateView.html" title="class in com.sca4d.app.server.system.view">EmailTemplateView</a>&gt;&gt;</span>&nbsp;<span class="element-name">findAll</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;com.sca4d.core.api.query.Page&lt;<a href="../../system/view/EmailTemplateView.html" title="class in com.sca4d.app.server.system.view">EmailTemplateView</a>&gt;&gt;</span>&nbsp;<span class="element-name">find</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.spring.web.list.ListParameters&nbsp;parameters)</span></div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>全部未删除模板及其变量集合</dd>
+<dd>按分页和安全排序要求读取的模板及其变量集合</dd>
 </dl>
 </section>
 </li>

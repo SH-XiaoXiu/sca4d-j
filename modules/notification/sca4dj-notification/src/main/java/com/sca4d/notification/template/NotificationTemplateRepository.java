@@ -8,6 +8,12 @@ import com.sca4d.core.api.concurrent.VersionConditions;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.notification.NotificationCode;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
+import com.sca4d.core.api.persistence.AffectedRows;
+import com.sca4d.core.api.persistence.Patch;
+import com.sca4d.core.api.query.ListRequest;
+import com.sca4d.core.api.query.Page;
+import com.sca4d.core.api.query.Sort;
+import com.sca4d.core.api.query.SortOrder;
 import com.sca4d.notification.NotificationErrorCode;
 import com.sca4d.notification.template.mapper.NotificationTemplateMapper;
 import com.sca4d.notification.template.mapper.NotificationTemplateState;
@@ -18,9 +24,14 @@ import org.springframework.dao.DataIntegrityViolationException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 /** 隐藏统一通知模板的 JSONB、Mapper 和影响行数语义。 */
-public final class NotificationTemplateRepository {
+public class NotificationTemplateRepository {
+
+    private static final Sort NOTIFICATION_CODE = Sort.of("NOTIFICATION_CODE");
+
+    private static final Set<Sort> SORT_FIELDS = Set.of(NOTIFICATION_CODE, Sort.SERIAL);
 
     private final @NotNull NotificationTemplateMapper mapper;
 
@@ -38,10 +49,27 @@ public final class NotificationTemplateRepository {
         this.objectMapper = Objects.requireNonNull(objectMapper, "ObjectMapper 不能为空");
     }
 
-    /** @return 全部未删除统一通知模板 */
+    /** @return 按安全排序要求读取的一页统一通知模板和完整命中数量 */
     @CheckReturnValue
-    public @NotNull List<@NotNull NotificationTemplate> findAll() {
-        return mapper.select(null, null, null).stream().map(this::template).toList();
+    public @NotNull Page<NotificationTemplate> page(@NotNull ListRequest request) {
+        ListRequest checked = Objects.requireNonNull(request, "通知模板列表要求不能为空");
+        var page = checked.getPage().requireMaxSize(100);
+        for (SortOrder order : checked.getSort()) {
+            if (!SORT_FIELDS.contains(order.getField())) {
+                throw new IllegalArgumentException("通知模板列表包含不支持的排序字段: " + order.getField());
+            }
+        }
+        long total = mapper.count();
+        List<NotificationTemplate> items = total == 0
+                ? List.of()
+                : mapper.selectPage(
+                        checked.getPage().offset(),
+                        page.size(),
+                        checked.getSort())
+                        .stream()
+                        .map(this::template)
+                        .toList();
+        return new Page<>(items, page, total);
     }
 
     /** @return 指定模板；不存在时为空 */
@@ -60,6 +88,7 @@ public final class NotificationTemplateRepository {
     }
 
     /** 新增默认停用模板。 */
+    @AffectedRows(target = "新增 Notification Template")
     public void add(long templateId, @NotNull NotificationCode code, @NotNull JsonNode content) {
         try {
             mapper.insert(templateId, Objects.requireNonNull(code, "通知编码不能为空"), write(content));
@@ -74,7 +103,12 @@ public final class NotificationTemplateRepository {
         VersionCondition condition = versionConditions.resolve(current.version());
         try {
             AffectedRowCounts.requireSingle(
-                    mapper.replace(templateId, code, write(content), condition.expected()),
+                    mapper.update(
+                            templateId,
+                            Patch.set(code),
+                            Patch.set(write(content)),
+                            Patch.ignore(),
+                            condition.expected()),
                     condition.whenZero(),
                     "Notification Template");
         } catch (DataIntegrityViolationException exception) {
@@ -87,7 +121,12 @@ public final class NotificationTemplateRepository {
         NotificationTemplate current = require(templateId);
         VersionCondition condition = versionConditions.resolve(current.version());
         AffectedRowCounts.requireSingle(
-                mapper.setEnabled(templateId, enabled, condition.expected()),
+                mapper.update(
+                        templateId,
+                        Patch.ignore(),
+                        Patch.ignore(),
+                        Patch.set(enabled),
+                        condition.expected()),
                 condition.whenZero(),
                 "Notification Template");
     }

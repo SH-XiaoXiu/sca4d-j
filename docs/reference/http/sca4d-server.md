@@ -153,7 +153,7 @@ HTTP 使用 account、role 和 permission 命名公开资源。其中 permission
 | `PATCH /system/email/senders/{senderId}/status` | Session、`system:email:manage`、If-Match | 200；启停 SMTP 配置、新 ETag |
 | `POST /system/email/senders/{senderId}/connection-tests` | Session、`system:email:manage` | 204；只测试连接 |
 | `DELETE /system/email/senders/{senderId}` | Session、`system:email:manage`、If-Match | 204；删除停用 SMTP 配置 |
-| `GET /system/email/templates` | Session、`system:email:read` | 200；统一通知模板列表与变量集合 |
+| `GET /system/email/templates` | Session、`system:email:read` | 200；按 `page`、`size`、`sort` 返回统一通知模板分页与变量集合 |
 | `POST /system/email/templates` | Session、`system:email:manage` | 201；默认停用模板、Location |
 | `GET /system/email/templates/{templateId}` | Session、`system:email:read` | 200；模板、变量集合、ETag |
 | `PUT /system/email/templates/{templateId}` | Session、`system:email:manage`、If-Match | 200；替换完整多语言 Tiptap JSON、新 ETag |
@@ -172,6 +172,64 @@ HTTP 使用 account、role 和 permission 命名公开资源。其中 permission
 | `PUT /system/sms/providers/{providerId}/bindings/{bindingId}` | Session、`system:sms:manage`、If-Match | 200；替换停用绑定、新 ETag |
 | `PATCH /system/sms/providers/{providerId}/bindings/{bindingId}/status` | Session、`system:sms:manage`、If-Match | 200；启停绑定、新 ETag |
 | `DELETE /system/sms/providers/{providerId}/bindings/{bindingId}` | Session、`system:sms:manage`、If-Match | 204；删除停用绑定 |
+
+### 通知模板、设置与站内信契约
+
+`GET /system/email/templates` 使用公共列表参数：
+
+| 参数 | 规则 |
+|---|---|
+| `page` | 从 1 开始，默认 1 |
+| `size` | 默认 20，范围 1..100 |
+| `sort` | 可以重复；格式为 `FIELD,DIRECTION` |
+
+模板列表只允许 `NOTIFICATION_CODE` 和 `SERIAL`，方向为 `ASC` 或 `DESC`。没有 `sort` 时按 `NOTIFICATION_CODE,ASC`、`SERIAL,ASC` 排列。响应 `items` 返回当前页模板，`page` 和 `size` 返回实际分页条件，`total` 返回完整模板数量。每项包含 `templateId`、`notificationCode`、完整 `content`、模板使用的 `variables`、`enabled` 和 `version`。
+
+`POST` 和 `PUT /system/email/templates` 接受以下字段：
+
+| 字段 | 规则 |
+|---|---|
+| `notificationCode` | 已注册 `NotificationType` 的稳定编码，最长 128 个字符 |
+| `content` | Locale 到 `title`、`body` 的完整 JSON object；两项都是 ProseMirror `doc` |
+
+`content` 必须包含应用默认 Locale。`notificationVariable.attrs.name` 只能引用该 `NotificationType` 声明的变量。`POST /system/email/templates/previews` 接受 `content`、BCP 47 `languageTag` 和字符串 `variables` object，返回 `subject`、`text` 和已经清洗的 `html`；预览不保存模板。完整 JSON 示例见[创建并启用统一模板](/tutorials/messaging-and-notification#创建并启用统一模板)。
+
+`GET /me/notification-settings` 返回以下字段：
+
+| 字段 | 含义 |
+|---|---|
+| `languageTag` | 当前 Account 的 BCP 47 通知语言 |
+| `regionCode` | 具体应用定义的业务 `Region` 编码 |
+| `channels` | 通知编码到可选渠道布尔覆盖值的 object |
+| `definitions` | 已注册通知类型的必发/可选渠道及 Java 初值 |
+| `languageVersion`、`regionVersion`、`channelsVersion` | 三项设置各自的乐观锁版本 |
+
+三个 `PUT` 接口都接受 `{"value":...}`，并要求 `If-Match` 使用对应 Version。语言值必须包含有效语言，区域值必须能构造具体应用的 `Region`，渠道值必须是完整 JSON object。渠道 object 只能引用已注册通知类型的可选渠道；未知通知编码、必发渠道和非布尔值返回输入错误。
+
+`GET /me/notifications` 的 `beforeId` 可选，`limit` 默认 20、范围 1..100。响应 `messages` 按 `id` 倒序排列，`unreadCount` 返回当前 Account 的完整未读数量。每条消息包含 `id`、`notificationType`、`languageTag`、`title`、`text`、`html`、`createdAt`、可空 `readAt` 和 `version`。`POST /me/notifications/{messageId}/read` 接受 `{"version":<当前版本>}`；`POST /me/notifications/read-all` 没有请求体。
+
+### SMS Code 契约
+
+`POST /login/sms-code/challenges` 接受 `{"phoneNumber":"<E.164>"}`。响应包含 `challengeId`、`maskedRecipient`、`expiresAt` 和 `resendAt`，不返回验证码或完整手机号。匿名签发对未知或不可投递手机号保持相同响应形状。
+
+`POST /login/sms-code/proofs`、`POST /login/attempts/{attemptId}/sms-code/proofs` 和 `POST /verifications/{verificationId}/sms-code/proofs` 接受相同请求：
+
+```json
+{
+  "challengeId": "<最多 64 个字符>",
+  "code": "123456"
+}
+```
+
+`code` 必须是六位数字。Challenge 只能成功消费一次；不存在、过期、已消费、验证码错误或超过最大错误次数时 proof 被拒绝。带 `attemptId` 或 `verificationId` 的 Challenge 接口不接收手机号，服务端从已经确定的 Account 解析接收人。verification 路由还要求当前 Session Account 与 verification Account 相同。
+
+### SMS Provider 与绑定契约
+
+Provider 请求包含 `code`、已安装 `SmsTransport` 的 `type`、部署配置引用 `credentialRef` 和整数 `priority`。阿里云 Transport 类型是 `ALIYUN`。HTTP 不接收或返回 AccessKey；运行配置见[阿里云 SMS](/reference/runtime/sca4d-server#阿里云-sms)。
+
+绑定请求包含 `notificationCode`、具体应用声明的 `route`、BCP 47 `languageTag`、`signName`、`providerTemplateCode` 和 `parameterMapping`。`parameterMapping` 的键是供应商模板参数名，值是 `NotificationType` 变量名。通知类型未注册、变量未声明或 Locale 不合法时，创建、替换和启用绑定都会失败。
+
+Provider 和绑定创建后默认停用。绑定可以在 Provider 停用时启用；Provider 启用前至少需要一个启用绑定。启用中的 Provider 或绑定不能替换或删除。Provider 删除还要求不存在未删除绑定。详情、替换、状态修改和删除均使用各自 `version` 对应的强 `ETag`/`If-Match`。
 
 ### IoT Product、Device 与 EMQX
 

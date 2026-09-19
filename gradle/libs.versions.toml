@@ -14,7 +14,6 @@ jsoup = "1.23.2"
 libphonenumber = "9.0.35"
 logback = "1.5.25"
 minio = "9.0.3"
-mustache = "0.9.14"
 mybatis = "3.5.19"
 mybatis-spring-boot = "3.0.5"
 owasp-html-sanitizer = "20240325.1"
@@ -40,7 +39,6 @@ bouncycastle-provider = { module = "org.bouncycastle:bcprov-jdk18on", version.re
 bucket4j-core = { module = "com.bucket4j:bucket4j_jdk17-core", version.ref = "bucket4j" }
 bucket4j-redis-common = { module = "com.bucket4j:bucket4j_jdk17-redis-common", version.ref = "bucket4j" }
 bucket4j-redisson = { module = "com.bucket4j:bucket4j_jdk17-redisson", version.ref = "bucket4j" }
-caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version = "3.2.2" }
 flyway-core = { module = "org.flywaydb:flyway-core" }
 flyway-postgresql = { module = "org.flywaydb:flyway-database-postgresql" }
 googleauth = { module = "com.warrenstrange:googleauth", version.ref = "googleauth" }
@@ -66,7 +64,6 @@ mybatis-spring = { module = "org.mybatis:mybatis-spring", version.ref = "mybatis
 mybatis-spring-boot-autoconfigure = { module = "org.mybatis.spring.boot:mybatis-spring-boot-autoconfigure", version.ref = "mybatis-spring-boot" }
 mybatis-spring-boot-starter = { module = "org.mybatis.spring.boot:mybatis-spring-boot-starter", version.ref = "mybatis-spring-boot" }
 minio = { module = "io.minio:minio", version.ref = "minio" }
-mustache-compiler = { module = "com.github.spullara.mustache.java:compiler", version.ref = "mustache" }
 owasp-html-sanitizer = { module = "com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer", version.ref = "owasp-html-sanitizer" }
 postgresql = { module = "org.postgresql:postgresql" }
 redisson = { module = "org.redisson:redisson", version.ref = "redisson" }

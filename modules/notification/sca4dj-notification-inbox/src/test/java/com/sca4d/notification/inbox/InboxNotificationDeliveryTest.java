@@ -15,8 +15,8 @@ import com.sca4d.core.api.notification.Notification;
 import com.sca4d.core.api.notification.NotificationChannel;
 import com.sca4d.core.api.notification.NotificationCode;
 import com.sca4d.core.api.notification.NotificationRecipient;
-import com.sca4d.notification.template.NotificationRichTextRenderer;
 import com.sca4d.notification.template.NotificationTemplate;
+import com.sca4d.notification.template.NotificationTemplateRenderers;
 import com.sca4d.notification.template.NotificationTemplateRepository;
 import com.sca4d.notification.template.RenderedNotification;
 import org.junit.jupiter.api.DisplayName;
@@ -34,7 +34,7 @@ class InboxNotificationDeliveryTest {
     @DisplayName("重复消息只发布一次 Inbox changed")
     void publishesChangeOnlyForFirstSnapshot() {
         NotificationTemplateRepository templates = mock(NotificationTemplateRepository.class);
-        NotificationRichTextRenderer renderer = mock(NotificationRichTextRenderer.class);
+        NotificationTemplateRenderers renderers = mock(NotificationTemplateRenderers.class);
         InboxRepository repository = mock(InboxRepository.class);
         InboxService service = mock(InboxService.class);
         IdGenerator ids = mock(IdGenerator.class);
@@ -53,13 +53,14 @@ class InboxNotificationDeliveryTest {
                 new Version(0));
         RenderedNotification rendered = new RenderedNotification("安全提醒", "正文", "<p>正文</p>");
         when(templates.findEnabled(notification.code())).thenReturn(Optional.of(template));
-        when(renderer.render(template.content(), notification.locale(), notification.variables())).thenReturn(rendered);
+        when(renderers.renderDefaults(template.content(), notification.locale(), notification.variables()))
+                .thenReturn(rendered);
         when(ids.nextId()).thenReturn(11L, 12L);
         when(repository.add(any(Long.class), eq(new MessageId(20)), eq(7L), eq(notification), eq(rendered)))
                 .thenReturn(true, false);
         InboxNotificationDelivery delivery = new InboxNotificationDelivery(
                 templates,
-                renderer,
+                renderers,
                 repository,
                 service,
                 ids);
