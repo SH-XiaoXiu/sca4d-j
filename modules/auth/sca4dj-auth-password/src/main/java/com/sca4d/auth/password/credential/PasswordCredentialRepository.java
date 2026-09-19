@@ -5,6 +5,7 @@ import com.sca4d.auth.password.credential.mapper.PasswordCredentialMapper;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
+import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.core.api.persistence.ZeroRowPolicy;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -73,31 +74,81 @@ public class PasswordCredentialRepository {
      * @return 密码凭据；账号尚未设置密码时为 {@code null}
      */
     public @Nullable PasswordCredential findByAccountId(@NotNull Long accountId) {
-        return mapper.selectByAccountId(Objects.requireNonNull(accountId, "密码凭据账号不能为空"));
+        PasswordCredential current = mapper.selectByAccountId(
+                Objects.requireNonNull(accountId, "密码凭据账号不能为空"));
+        return current == null || !current.active() ? null : current;
     }
 
-    /**
-     * 按乐观版本替换密码摘要。
-     *
-     * @param accountId 密码凭据所属账号
-     * @param passwordHash 新的 Argon2id 不可逆摘要
-     * @param expectedVersion Service 刚读取到的凭据版本
-     * @return 替换后的密码凭据
-     */
+    /** 按指定生命周期状态查询账号保存的密码凭据。 */
+    public @Nullable PasswordCredential findByAccountId(
+            @NotNull Long accountId,
+            @NotNull PasswordCredential.Status expectedStatus) {
+        PasswordCredential current = mapper.selectByAccountId(
+                Objects.requireNonNull(accountId, "密码凭据账号不能为空"));
+        return current != null && current.status() == Objects.requireNonNull(expectedStatus, "密码凭据状态不能为空")
+                ? current
+                : null;
+    }
+
+    /** 按当前凭据的版本和状态替换密码摘要及目标状态。 */
     @Transactional
     public @NotNull PasswordCredential replace(
-            @NotNull Long accountId,
+            @NotNull PasswordCredential current,
             @NotNull String passwordHash,
-            @NotNull Version expectedVersion) {
-        Long checkedId = Objects.requireNonNull(accountId, "密码凭据账号不能为空");
+            @NotNull PasswordCredential.Status status) {
+        PasswordCredential checked = Objects.requireNonNull(current, "当前密码凭据不能为空");
         AffectedRowCounts.requireSingle(
-                mapper.updateCredentialIfVersion(
-                        checkedId,
-                        Objects.requireNonNull(passwordHash, "密码摘要不能为空"),
-                        Objects.requireNonNull(expectedVersion, "密码凭据版本不能为空")),
+                mapper.update(
+                        checked.accountId(),
+                        checked.version(),
+                        checked.status(),
+                        Patch.set(Objects.requireNonNull(passwordHash, "密码摘要不能为空")),
+                        Patch.set(Objects.requireNonNull(status, "密码凭据状态不能为空"))),
                 ZeroRowPolicy.OPTIMISTIC_LOCK,
                 "Password 凭据");
-        return Objects.requireNonNull(findByAccountId(checkedId), "更新后的密码凭据不存在");
+        return Objects.requireNonNull(
+                mapper.selectByAccountId(checked.accountId()),
+                "更新后的密码凭据不存在");
+    }
+
+    /** 按账号、摘要和预期版本替换 ACTIVE 凭据。 */
+    @Transactional
+    public @NotNull PasswordCredential replace(
+            long accountId,
+            @NotNull String passwordHash,
+            @NotNull Version expectedVersion) {
+        AffectedRowCounts.requireSingle(
+                mapper.update(
+                        accountId,
+                        Objects.requireNonNull(expectedVersion, "密码凭据版本不能为空"),
+                        PasswordCredential.Status.ACTIVE,
+                        Patch.set(Objects.requireNonNull(passwordHash, "密码摘要不能为空")),
+                        Patch.set(PasswordCredential.Status.ACTIVE)),
+                ZeroRowPolicy.OPTIMISTIC_LOCK,
+                "Password 凭据");
+        return Objects.requireNonNull(
+                mapper.selectByAccountId(accountId),
+                "更新后的密码凭据不存在");
+    }
+
+    /** 按乐观版本和当前状态切换密码凭据状态。 */
+    @Transactional
+    public @NotNull PasswordCredential changeStatus(
+            @NotNull PasswordCredential current,
+            @NotNull PasswordCredential.Status status) {
+        PasswordCredential checked = Objects.requireNonNull(current, "当前密码凭据不能为空");
+        AffectedRowCounts.requireSingle(
+                mapper.update(
+                        checked.accountId(),
+                        checked.version(),
+                        checked.status(),
+                        Patch.ignore(),
+                        Patch.set(Objects.requireNonNull(status, "密码凭据状态不能为空"))),
+                ZeroRowPolicy.OPTIMISTIC_LOCK,
+                "Password 凭据");
+        return Objects.requireNonNull(
+                mapper.selectByAccountId(checked.accountId()),
+                "状态变更后的密码凭据不存在");
     }
 
     /**

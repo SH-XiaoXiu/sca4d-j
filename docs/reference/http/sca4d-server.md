@@ -504,12 +504,12 @@ MinIO backend 则返回 MinIO 预签名 URL。`PUT /files/transfers/uploads` 和
 
 ```json
 {
-  "status": "SET",
+  "status": "ACTIVE",
   "updatedAt": "2026-07-24T10:15:30Z"
 }
 ```
 
-它不返回摘要或内部凭据 Version。`PUT /me/password` 提交 `{ "password": "new-password" }`，要求满足 `authentication.password.replace` 的 `X-Verification`。成功返回 204，PasswordAuthenticationMethod 通过 `SessionControl.terminateAccount(...)` 注销该账号全部 Session。模块内部仍使用 Credential Version 拒绝已经过期的 VerifiedAuthentication，并通过 CAS 避免覆盖刚刚变化的 Credential。
+`status` 使用 Password Credential 的状态编码：`ACTIVE` 表示可以登录，`RESET_REQUIRED` 表示必须重新设置密码，`DISABLED` 不会出现在当前账号查询结果中。接口不返回摘要或内部凭据 Version。`PUT /me/password` 提交 `{ "password": "new-password" }`，要求满足 `authentication.password.replace` 的 `X-Verification`。成功返回 204，PasswordAuthenticationMethod 通过 `SessionControl.terminateAccount(...)` 注销该账号全部 Session。模块内部仍使用 Credential Version 拒绝已经过期的 VerifiedAuthentication，并通过 CAS 避免覆盖刚刚变化的 Credential。
 
 ## 认证设置与 Credential
 

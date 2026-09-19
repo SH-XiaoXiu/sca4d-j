@@ -29,7 +29,7 @@ public final class PasswordView {
     @CheckReturnValue
     public static @NotNull PasswordView from(@NotNull PasswordCredential credential) {
         PasswordCredential checked = Objects.requireNonNull(credential, "Password Credential 不能为空");
-        return new PasswordView("SET", checked.updatedAt());
+        return new PasswordView(checked.status().value(), checked.updatedAt());
     }
 
     /**

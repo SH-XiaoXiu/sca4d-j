@@ -12,4 +12,14 @@
   <Match class="com.sca4d.core.spring.call.CallFilter">
     <Bug pattern="HRS_REQUEST_PARAMETER_TO_HTTP_HEADER"/>
   </Match>
+  <!-- Spring Bean 构造器保存注入协作者是依赖装配，不是向调用方暴露内部表示。 -->
+  <Match>
+    <Bug pattern="EI_EXPOSE_REP2"/>
+    <Method name="&lt;init&gt;"/>
+    <Or>
+      <Annotation name="org.springframework.stereotype.Service"/>
+      <Annotation name="org.springframework.stereotype.Repository"/>
+      <Annotation name="org.springframework.web.bind.annotation.RestController"/>
+    </Or>
+  </Match>
 </FindBugsFilter>

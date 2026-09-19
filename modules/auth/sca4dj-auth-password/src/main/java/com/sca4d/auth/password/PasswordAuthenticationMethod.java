@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Clock;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 /** 创建、替换和验证 Account 的 Password Credential，并在 Account 终态删除时擦除密码摘要。 */
@@ -125,6 +126,7 @@ public class PasswordAuthenticationMethod implements AuthenticationMethod<Passwo
             PasswordCredential credential = credentials.findByAccountId(verifiedAccount.accountId());
             String password = Objects.requireNonNull(checkedProof.password(), "密码不能为空");
             if (credential == null
+                    || !credential.active()
                     || password.isBlank()
                     || !hasher.matches(password, credential.passwordHash())) {
                 throw new BusinessException(PasswordErrorCode.REJECTED);
@@ -149,6 +151,7 @@ public class PasswordAuthenticationMethod implements AuthenticationMethod<Passwo
     public void verifyCurrent(@NotNull Account account, @NotNull VerifiedAuthentication authentication) {
         PasswordCredential credential = credentials.findByAccountId(account.accountId());
         if (credential == null
+                || !credential.active()
                 || !Long.toString(account.accountId()).equals(authentication.reference())
                 || !credential.version().equals(authentication.version())) {
             throw new IllegalStateException("Password 凭据已变化");
@@ -204,7 +207,16 @@ public class PasswordAuthenticationMethod implements AuthenticationMethod<Passwo
      */
     @Transactional(readOnly = true)
     public @NotNull PasswordCredential loadByAccountId(long accountId) {
-        return java.util.Optional.ofNullable(credentials.findByAccountId(accountId))
+        return Optional.ofNullable(credentials.findByAccountId(accountId))
+                .orElseThrow(() -> new BusinessException(PasswordErrorCode.CREDENTIAL_NOT_FOUND));
+    }
+
+    /** 按指定生命周期状态读取 Account 当前保存的 Password Credential。 */
+    @Transactional(readOnly = true)
+    public @NotNull PasswordCredential loadByAccountId(
+            long accountId,
+            @NotNull PasswordCredential.Status status) {
+        return Optional.ofNullable(credentials.findByAccountId(accountId, status))
                 .orElseThrow(() -> new BusinessException(PasswordErrorCode.CREDENTIAL_NOT_FOUND));
     }
 
@@ -222,16 +234,78 @@ public class PasswordAuthenticationMethod implements AuthenticationMethod<Passwo
             throw new IllegalArgumentException("密码不能为空");
         }
         PasswordCredential current = loadByAccountId(accountId);
+        return replace(current, checkedPassword);
+    }
+
+    /** 按指定当前状态替换 Password Credential，并恢复为 ACTIVE。 */
+    @Transactional
+    public @NotNull PasswordCredential replace(
+            long accountId,
+            @NotNull String password,
+            @NotNull PasswordCredential.Status expectedStatus) {
+        validateReplaceSource(Objects.requireNonNull(expectedStatus, "预期密码凭据状态不能为空"));
+        String checkedPassword = Objects.requireNonNull(password, "密码不能为空");
+        if (checkedPassword.isBlank()) {
+            throw new IllegalArgumentException("密码不能为空");
+        }
+        PasswordCredential current = loadByAccountId(accountId, expectedStatus);
+        return replace(current, checkedPassword);
+    }
+
+    /** 使用当前凭据版本替换摘要并恢复为 ACTIVE。 */
+    private @NotNull PasswordCredential replace(
+            @NotNull PasswordCredential current,
+            @NotNull String password) {
+        PasswordCredential checked = Objects.requireNonNull(current, "当前密码凭据不能为空");
         PasswordCredential updated = credentials.replace(
-                accountId,
-                hasher.hash(checkedPassword),
-                current.version());
+                checked,
+                hasher.hash(Objects.requireNonNull(password, "密码不能为空")),
+                PasswordCredential.Status.ACTIVE);
         sessions.terminateAccount(updated.accountId(), SessionTerminationReason.AUTHENTICATION_CHANGED);
         LOG.debug(
                 "Password Credential 替换和旧 Session 终止已写入事务 | accountId={} version={}",
-                accountId,
+                checked.accountId(),
                 updated.version().value());
         return updated;
+    }
+
+    /** 按乐观版本变更 Password Credential 状态，并终止该 Account 的全部旧 Session。 */
+    @Transactional
+    public @NotNull PasswordCredential changeStatus(
+            long accountId,
+            @NotNull PasswordCredential.Status expectedStatus,
+            @NotNull PasswordCredential.Status status) {
+        PasswordCredential.Status checkedExpected = Objects.requireNonNull(
+                expectedStatus,
+                "预期密码凭据状态不能为空");
+        PasswordCredential.Status checkedStatus = Objects.requireNonNull(status, "目标密码凭据状态不能为空");
+        validateStatusChange(checkedExpected, checkedStatus);
+        PasswordCredential current = loadByAccountId(accountId, checkedExpected);
+        PasswordCredential changed = credentials.changeStatus(current, checkedStatus);
+        sessions.terminateAccount(accountId, SessionTerminationReason.AUTHENTICATION_CHANGED);
+        return changed;
+    }
+
+    /** 校验 Password 凭据允许的生命周期转换。 */
+    private static void validateStatusChange(
+            @NotNull PasswordCredential.Status expectedStatus,
+            @NotNull PasswordCredential.Status status) {
+        if ((expectedStatus == PasswordCredential.Status.ACTIVE
+                        && status == PasswordCredential.Status.RESET_REQUIRED)
+                || (expectedStatus == PasswordCredential.Status.RESET_REQUIRED
+                        && status == PasswordCredential.Status.ACTIVE)) {
+            return;
+        }
+        throw new IllegalArgumentException(
+                "Password 凭据不支持状态转换: " + expectedStatus + " -> " + status);
+    }
+
+    /** 替换密码只能从可认证或要求重置的状态开始，禁止恢复已停用凭据。 */
+    private static void validateReplaceSource(@NotNull PasswordCredential.Status status) {
+        if (status != PasswordCredential.Status.ACTIVE
+                && status != PasswordCredential.Status.RESET_REQUIRED) {
+            throw new IllegalArgumentException("Password 凭据不允许从该状态替换: " + status);
+        }
     }
 
     /** {@inheritDoc} */

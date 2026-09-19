@@ -122,23 +122,24 @@ public class JobRepository {
 
     /** 原子保存本次节点尝试结果，旧工作实例或旧尝试不能覆盖接管后的结果。 */
     public void saveNodeResult(@NotNull NodeClaim result, @NotNull String workerId) {
-        boolean succeeded = result.attemptStatus() == JobAttemptStatus.SUCCEEDED;
+        NodeClaim checked = Objects.requireNonNull(result, "Job 节点尝试结果不能为空");
+        boolean succeeded = checked.attemptStatus() == JobAttemptStatus.SUCCEEDED;
         AffectedRowCounts.requireSingle(
                 mapper.updateNodeProgress(
-                        result.nodeId(),
-                        result.attempt(),
-                        workerId,
-                        Patch.set(result.resultStatus()),
-                        Patch.set(result.attemptStatus()),
+                        checked.nodeId(),
+                        checked.attempt(),
+                        Objects.requireNonNull(workerId, "Job worker 标识不能为空"),
+                        Patch.set(checked.resultStatus()),
+                        Patch.set(checked.attemptStatus()),
                         succeeded
-                                ? result.outputJson() == null ? Patch.clear() : Patch.set(result.outputJson())
+                                ? checked.outputJson() == null ? Patch.clear() : Patch.set(checked.outputJson())
                                 : Patch.ignore(),
-                        result.error() == null ? Patch.ignore() : Patch.set(result.error()),
-                        result.availableAt() == null ? Patch.ignore() : Patch.set(result.availableAt()),
-                        result.resultStatus() == JobNodeStatus.SUCCEEDED
-                                ? Patch.set(result.completedAt())
+                        checked.error() == null ? Patch.ignore() : Patch.set(checked.error()),
+                        checked.availableAt() == null ? Patch.ignore() : Patch.set(checked.availableAt()),
+                        checked.resultStatus() == JobNodeStatus.SUCCEEDED
+                                ? Patch.set(checked.completedAt())
                                 : Patch.ignore(),
-                        Patch.set(result.completedAt())),
+                        Patch.set(checked.completedAt())),
                 ZeroRowPolicy.OPTIMISTIC_LOCK,
                 "Job 节点尝试结果");
     }

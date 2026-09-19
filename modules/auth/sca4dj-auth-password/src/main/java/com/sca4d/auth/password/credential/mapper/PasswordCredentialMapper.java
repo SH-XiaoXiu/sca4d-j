@@ -2,7 +2,9 @@ package com.sca4d.auth.password.credential.mapper;
 
 import com.sca4d.auth.password.credential.PasswordCredential;
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.persistence.Patch;
 import org.apache.ibatis.annotations.Param;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -31,18 +33,13 @@ public interface PasswordCredentialMapper {
     @Nullable
     PasswordCredential selectByAccountId(@Param("accountId") Long accountId);
 
-    /**
-     * 按乐观版本替换密码摘要。
-     *
-     * @param accountId 密码凭据所属账号
-     * @param passwordHash 新 Argon2id 摘要
-     * @param expectedVersion 预期版本
-     * @return 版本匹配并更新的行数
-     */
-    int updateCredentialIfVersion(
+    /** 按预期版本和状态执行密码摘要、状态的部分更新。 */
+    int update(
             @Param("accountId") Long accountId,
-            @Param("passwordHash") String passwordHash,
-            @Param("expectedVersion") Version expectedVersion);
+            @Param("expectedVersion") @NotNull Version expectedVersion,
+            @Param("expectedStatus") @NotNull PasswordCredential.Status expectedStatus,
+            @Param("passwordHash") @NotNull Patch<String> passwordHash,
+            @Param("status") @NotNull Patch<PasswordCredential.Status> status);
 
     /**
      * 删除账号保存的密码摘要。
