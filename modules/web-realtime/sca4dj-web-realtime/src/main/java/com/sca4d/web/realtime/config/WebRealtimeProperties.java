@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /** 配置 Web Realtime 节点传输、租约、SSE、WebSocket 票据、帧限制和 Origin。 */
 @ConfigurationProperties("sca4dj.web-realtime")
@@ -69,7 +70,7 @@ public final class WebRealtimeProperties {
 
     /** @param value `LOCAL` 或 `RABBIT` */
     public void setNodeTransport(NodeTransportMode value) {
-        nodeTransport = java.util.Objects.requireNonNull(value, "节点传输模式不能为空");
+        nodeTransport = Objects.requireNonNull(value, "节点传输模式不能为空");
     }
 
     /** @return 每条节点消息最多包含的 Connection 数 */
@@ -228,7 +229,7 @@ public final class WebRealtimeProperties {
 
         /** @param value `NODE_ROUTED` 或 `BROKER_RELAY` */
         public void setMode(StompBrokerMode value) {
-            mode = java.util.Objects.requireNonNull(value, "STOMP broker 模式不能为空");
+            mode = Objects.requireNonNull(value, "STOMP broker 模式不能为空");
         }
 
         /** @return 每条 WebSocket 连接允许缓冲的最大待发送字节数 */

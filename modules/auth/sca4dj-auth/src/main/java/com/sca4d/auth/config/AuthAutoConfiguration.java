@@ -25,8 +25,10 @@ import com.sca4d.core.api.authentication.AuthenticationMethod;
 import com.sca4d.core.api.authentication.AuthenticationPolicy;
 import com.sca4d.core.api.authentication.SessionIdentityLoader;
 import com.sca4d.core.api.authentication.SessionInvalidationListener;
+import com.sca4d.core.api.authentication.principalsession.PrincipalCodec;
 import com.sca4d.core.api.authentication.principalsession.PrincipalIdLoader;
 import com.sca4d.core.api.authentication.principalsession.PrincipalLoader;
+import com.sca4d.core.api.authentication.principalsession.ResourceCodec;
 import com.sca4d.core.api.authentication.principalsession.ResourceIdLoader;
 import com.sca4d.core.api.authentication.principalsession.ResourceLoader;
 import com.sca4d.core.api.concurrent.DistributedLock;
@@ -49,6 +51,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.time.Clock;
+import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -60,27 +63,27 @@ public class AuthAutoConfiguration {
 
     /** @return Session 有效期设置 */
     @Bean
-    SystemSetting<java.time.Duration> authSessionTtlSetting() {
+    SystemSetting<Duration> authSessionTtlSetting() {
         return AuthSettings.SESSION_TTL;
     }
 
     /** @return 认证尝试有效期设置 */
     @Bean
-    SystemSetting<java.time.Duration> authenticationAttemptTtlSetting() {
+    SystemSetting<Duration> authenticationAttemptTtlSetting() {
         return AuthSettings.ATTEMPT_TTL;
     }
 
     /** @return JWT access 有效期设置 */
     @Bean
-    SystemSetting<java.time.Duration> jwtAccessTtlSetting() {
+    SystemSetting<Duration> jwtAccessTtlSetting() {
         return AuthSettings.JWT_ACCESS_TTL;
     }
 
     @Bean
     SessionCodec sessionCodec(
             @Sca4djJson ObjectMapper objectMapper,
-            List<com.sca4d.core.api.authentication.principalsession.PrincipalCodec<?>> principalCodecs,
-            List<com.sca4d.core.api.authentication.principalsession.ResourceCodec<?>> resourceCodecs) {
+            List<PrincipalCodec<?>> principalCodecs,
+            List<ResourceCodec<?>> resourceCodecs) {
         return new SessionCodec(objectMapper, principalCodecs, resourceCodecs);
     }
 

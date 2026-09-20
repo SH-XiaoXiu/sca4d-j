@@ -12,6 +12,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 /** 验证 Passkey Credential 数量限制和签名计数器更新的持久化边界。 */
@@ -22,7 +24,7 @@ class PasskeyCredentialRepositoryTest {
     void returnsStoredUserHandleAfterInsertIfAbsent() {
         long accountId = 20;
         byte[] generated = new byte[32];
-        java.util.Arrays.fill(generated, (byte) 7);
+        Arrays.fill(generated, (byte) 7);
         PasskeyCredentialMapper mapper = mock(PasskeyCredentialMapper.class);
         when(mapper.selectAccount(accountId, null))
                 .thenReturn(new PasskeyAccountState(accountId, generated, new Version(0)));
@@ -72,7 +74,7 @@ class PasskeyCredentialRepositoryTest {
                 .thenReturn(1);
         when(mapper.selectCredentials(null, stored.credentialId(), null))
                 .thenReturn(
-                        java.util.List.of(
+                        List.of(
                                 new PasskeyCredential(
                                         1,
                                         20,

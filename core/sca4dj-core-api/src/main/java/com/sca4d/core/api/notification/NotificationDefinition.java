@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -18,7 +19,7 @@ public final class NotificationDefinition<T> {
 
     private final @NotNull Map<@NotNull NotificationChannel, @NotNull Boolean> optionalChannels = new LinkedHashMap<>();
 
-    private final @NotNull Map<@NotNull String, @NotNull BiFunction<T, java.util.Locale, String>> variables = new LinkedHashMap<>();
+    private final @NotNull Map<@NotNull String, @NotNull BiFunction<T, Locale, String>> variables = new LinkedHashMap<>();
 
     private boolean frozen;
 
@@ -50,7 +51,7 @@ public final class NotificationDefinition<T> {
      */
     public void variable(
             @NotNull String name,
-            @NotNull BiFunction<T, java.util.Locale, String> resolver) {
+            @NotNull BiFunction<T, Locale, String> resolver) {
         requireMutable();
         String checkedName = Notification.requireVariableName(name);
         if (variables.putIfAbsent(checkedName, Objects.requireNonNull(resolver, "通知变量回调不能为空")) != null) {
@@ -69,7 +70,7 @@ public final class NotificationDefinition<T> {
     }
 
     /** @return 模板变量及其领域值解析回调 */
-    public @NotNull @Unmodifiable Map<@NotNull String, @NotNull BiFunction<T, java.util.Locale, String>> variables() {
+    public @NotNull @Unmodifiable Map<@NotNull String, @NotNull BiFunction<T, Locale, String>> variables() {
         return Map.copyOf(variables);
     }
 

@@ -37,6 +37,7 @@ import org.springframework.web.method.HandlerMethod;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 class HttpInputOpenApiCustomizerTest {
 
@@ -250,7 +251,7 @@ class HttpInputOpenApiCustomizerTest {
         @NoDefaultValidation
         private String unrestricted;
 
-        private java.util.Map<String, String> labels;
+        private Map<String, String> labels;
 
         @NoDefaultValidation
         private RequestTypes disabledRequest;

@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
 /** 负责一个设置值与数据库文本之间的双向转换和校验。 */
@@ -123,7 +124,7 @@ public interface SettingCodec<T> {
                     Duration parsed = Duration.parse(Objects.requireNonNull(value, "设置时长文本不能为空"));
                     encode(parsed);
                     return parsed;
-                } catch (java.time.format.DateTimeParseException exception) {
+                } catch (DateTimeParseException exception) {
                     throw new IllegalArgumentException("设置时长必须使用 ISO-8601 格式", exception);
                 }
             }

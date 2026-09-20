@@ -29,7 +29,7 @@ class NotificationContractTest {
 
         assertEquals("42", notification.recipient().id());
         assertEquals("zh-CN", notification.locale().toLanguageTag());
-        assertEquals(java.util.Set.of("code"), notification.variables().keySet());
+        assertEquals(Set.of("code"), notification.variables().keySet());
     }
 
     @Test

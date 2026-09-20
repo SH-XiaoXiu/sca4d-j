@@ -6,6 +6,8 @@ import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.identity.SubjectType;
 import com.sca4d.core.spring.call.CallHandlerInterceptor;
 import com.sca4d.openapi.web.annotation.OpenApiRoute;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.web.method.HandlerMethod;
@@ -25,8 +27,8 @@ public final class OpenApiRequestInterceptor extends CallHandlerInterceptor {
     /** 检查路由是否由有效 Application Client 调用并开放了目标 Operation。 */
     @Override
     protected boolean preHandleWithCall(
-            @NotNull jakarta.servlet.http.HttpServletRequest request,
-            @NotNull jakarta.servlet.http.HttpServletResponse response,
+            @NotNull HttpServletRequest request,
+            @NotNull HttpServletResponse response,
             @NotNull Object handler,
             @NotNull Call call) {
         if (!(handler instanceof HandlerMethod handlerMethod)) {

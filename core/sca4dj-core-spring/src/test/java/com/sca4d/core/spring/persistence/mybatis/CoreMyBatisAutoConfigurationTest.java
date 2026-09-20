@@ -15,6 +15,7 @@ import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandlerRegistry;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
@@ -139,7 +140,7 @@ class CoreMyBatisAutoConfigurationTest {
         TypeHandlerRegistry handlers = new TypeHandlerRegistry();
         handlers.setDefaultEnumTypeHandler(CoreEnumTypeHandler.class);
 
-        org.assertj.core.api.Assertions.assertThatThrownBy(() -> handlers.getTypeHandler(OrdinaryState.class))
+        Assertions.assertThatThrownBy(() -> handlers.getTypeHandler(OrdinaryState.class))
                 .rootCause()
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("BaseEnum");

@@ -7,10 +7,12 @@ import com.sca4d.core.api.connection.Connection;
 import com.sca4d.core.api.connection.ConnectionId;
 import com.sca4d.core.api.connection.ConnectionProtocol;
 import com.sca4d.core.api.connection.ConnectionRegistry;
+import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.scheduling.ClusterTask;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.DeviceAccessMethod;
 import com.sca4d.iot.api.connection.DeviceConnection;
+import com.sca4d.iot.api.connection.DeviceConnectionBinding;
 import com.sca4d.iot.api.connection.DeviceConnectionId;
 import com.sca4d.iot.api.connection.DeviceConnectionProtocol;
 import com.sca4d.iot.api.connection.DeviceConnectionReceiver;
@@ -93,7 +95,7 @@ public final class EmqxConnectionReconciler implements ClusterTask {
                 reconcile();
                 return true;
             });
-        } catch (com.sca4d.core.api.error.BusinessException exception) {
+        } catch (BusinessException exception) {
             if (!started.get()) {
                 return false;
             }
@@ -106,11 +108,11 @@ public final class EmqxConnectionReconciler implements ClusterTask {
         // 读取同一时点的 Broker 快照，并把全部 Client ID 一次批量解析成当前 Device。
         Instant observedAt = clock.instant();
         List<EmqxClientConnection> brokerClients = management.findClients();
-        LinkedHashMap<String, com.sca4d.iot.api.connection.DeviceConnectionBinding> bindings = new LinkedHashMap<>();
+        LinkedHashMap<String, DeviceConnectionBinding> bindings = new LinkedHashMap<>();
         for (EmqxClientConnection managed : brokerClients) {
             bindings.put(managed.clientId(), MqttDeviceConnection.clientId(managed.clientId()));
         }
-        Map<com.sca4d.iot.api.connection.DeviceConnectionBinding, Device> resolvedDevices = devices
+        Map<DeviceConnectionBinding, Device> resolvedDevices = devices
                 .findDevices(bindings.values());
 
         // 校验连接属性和当前授权，只保留能够形成标准 DeviceConnection 的 Broker 连接。

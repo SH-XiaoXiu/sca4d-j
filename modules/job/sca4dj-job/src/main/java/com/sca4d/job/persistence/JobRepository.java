@@ -41,13 +41,13 @@ public class JobRepository {
             @NotNull JobMapper mapper,
             @NotNull RuntimeNamespace runtimeNamespace,
             @NotNull SqlBatches sqlBatches) {
-        this.mapper = java.util.Objects.requireNonNull(mapper, "JobMapper 不能为空");
-        RuntimeNamespace checked = java.util.Objects.requireNonNull(runtimeNamespace, "Job 运行时命名空间不能为空");
+        this.mapper = Objects.requireNonNull(mapper, "JobMapper 不能为空");
+        RuntimeNamespace checked = Objects.requireNonNull(runtimeNamespace, "Job 运行时命名空间不能为空");
         this.runtimeNamespace = checked.applicationId();
         if (this.runtimeNamespace.length() > 128) {
             throw new IllegalArgumentException("应用技术 ID 超过 Job runtime_namespace 的 128 字符限制");
         }
-        this.sqlBatches = java.util.Objects.requireNonNull(sqlBatches, "SQL 批处理器不能为空");
+        this.sqlBatches = Objects.requireNonNull(sqlBatches, "SQL 批处理器不能为空");
     }
 
     /** 查询同一计划和 fire 已存在的根运行。 */
@@ -62,11 +62,11 @@ public class JobRepository {
             int definitionVersion,
             @NotNull String nodeKey,
             @NotNull PageRequest page) {
-        PageRequest checkedPage = java.util.Objects.requireNonNull(page, "Job 历史分页要求不能为空");
+        PageRequest checkedPage = Objects.requireNonNull(page, "Job 历史分页要求不能为空");
         long total = mapper.countScheduledRuns(
                 runtimeNamespace,
-                java.util.Objects.requireNonNull(scheduleKey, "ScheduleKey 不能为空"),
-                java.util.Objects.requireNonNull(jobKey, "Job key 不能为空"),
+                Objects.requireNonNull(scheduleKey, "ScheduleKey 不能为空"),
+                Objects.requireNonNull(jobKey, "Job key 不能为空"),
                 definitionVersion);
         List<ScheduledRunRecord> items = total == 0
                 ? List.of()
@@ -75,7 +75,7 @@ public class JobRepository {
                         scheduleKey,
                         jobKey,
                         definitionVersion,
-                        java.util.Objects.requireNonNull(nodeKey, "Job 节点名称不能为空"),
+                        Objects.requireNonNull(nodeKey, "Job 节点名称不能为空"),
                         checkedPage);
         return new Page<>(items, checkedPage, total);
     }
@@ -91,7 +91,7 @@ public class JobRepository {
 
     /** 查询当前命名空间的根运行。 */
     public @Nullable RunRecord findRun(@NotNull JobRunId runId) {
-        JobRunId checked = java.util.Objects.requireNonNull(runId, "JobRunId 不能为空");
+        JobRunId checked = Objects.requireNonNull(runId, "JobRunId 不能为空");
         return mapper.selectRun(runtimeNamespace, checked.value());
     }
 
@@ -112,7 +112,7 @@ public class JobRepository {
 
     /** 读取节点依赖输出。 */
     public @NotNull List<@Nullable String> dependencyOutputs(long nodeId) {
-        return java.util.Objects.requireNonNull(mapper.selectDependencyOutputs(nodeId));
+        return Objects.requireNonNull(mapper.selectDependencyOutputs(nodeId));
     }
 
     /** 查询节点是否有后继。 */
@@ -192,7 +192,7 @@ public class JobRepository {
         }
         List<Long> selected = mapper.selectExpiredRunIdsForUpdate(
                 runtimeNamespace,
-                java.util.Objects.requireNonNull(completedBefore, "Job 成功历史截止时间不能为空"),
+                Objects.requireNonNull(completedBefore, "Job 成功历史截止时间不能为空"),
                 limit);
         int[] deleted = {0};
         sqlBatches.forEach(selected, 1, 1, batch -> {

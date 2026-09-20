@@ -3,6 +3,7 @@ package com.sca4d.iot.connection;
 import com.sca4d.core.api.connection.ConnectionId;
 import com.sca4d.core.api.connection.ConnectionRegistry;
 import com.sca4d.core.api.event.Event;
+import com.sca4d.core.api.event.EventType;
 import com.sca4d.core.api.messaging.MessageConsumer;
 import com.sca4d.core.api.messaging.MessageDelivery;
 import com.sca4d.core.api.messaging.MessageId;
@@ -68,7 +69,7 @@ public class DeviceDisconnectConsumer implements MessageConsumer<DeviceDisconnec
     }
 
     @Override
-    public @NotNull com.sca4d.core.api.event.EventType<DeviceDisconnectMessage> eventType() {
+    public @NotNull EventType<DeviceDisconnectMessage> eventType() {
         return IotMessageTypes.DEVICE_DISCONNECT;
     }
 

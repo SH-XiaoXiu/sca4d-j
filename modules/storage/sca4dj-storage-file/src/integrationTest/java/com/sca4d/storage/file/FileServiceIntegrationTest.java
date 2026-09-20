@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 import com.sca4d.core.api.concurrent.DistributedLock;
+import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.id.IdGenerator;
@@ -66,16 +67,20 @@ import java.io.InputStream;
 import java.net.URI;
 import java.sql.Timestamp;
 import java.time.Clock;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Supplier;
 
 /** 使用 PostgreSQL 17 验证文件状态、对象位置和多实例删除领取。 */
 @Testcontainers
@@ -134,12 +139,12 @@ class FileServiceIntegrationTest {
             ResourceDatabasePopulator coreSchema = new ResourceDatabasePopulator(
                     new ClassPathResource("META-INF/sca4dj/schema/dictionary-settings.sql"));
             coreSchema.setSeparator(ScriptUtils.EOF_STATEMENT_SEPARATOR);
-            coreSchema.execute(java.util.Objects.requireNonNull(jdbc.getDataSource()));
+            coreSchema.execute(Objects.requireNonNull(jdbc.getDataSource()));
         }
         jdbc.execute("DROP TABLE IF EXISTS storage_file");
         ResourceDatabasePopulator schema = new ResourceDatabasePopulator(
                 new ClassPathResource("META-INF/sca4dj/schema/storage-file.sql"));
-        schema.execute(java.util.Objects.requireNonNull(jdbc.getDataSource()));
+        schema.execute(Objects.requireNonNull(jdbc.getDataSource()));
         storage.reset();
     }
 
@@ -187,7 +192,7 @@ class FileServiceIntegrationTest {
         assertThat(storage.preparedUploadCount()).isZero();
         FileRecord record = repository.find(ready.fileId()).orElseThrow();
         assertThat(storage.contains(record.containerName(), record.uploadObjectKey())).isFalse();
-        assertThat(storage.contains(record.containerName(), java.util.Objects.requireNonNull(record.objectKey())))
+        assertThat(storage.contains(record.containerName(), Objects.requireNonNull(record.objectKey())))
                 .isTrue();
         assertThat(files.bind(ready.fileId(), use).status()).isEqualTo(FileStatus.IN_USE);
     }
@@ -281,7 +286,7 @@ class FileServiceIntegrationTest {
         FileRecord pending = repository.find(upload.fileId()).orElseThrow();
         StorageObject storedObject = new StorageObject(
                 pending.containerName(),
-                java.util.Objects.requireNonNull(pending.objectKey()));
+                Objects.requireNonNull(pending.objectKey()));
         storage.promote(storage.preparedObject(), storedObject);
 
         StoredFile completed = files.completeUpload(upload.fileId(), uploader);
@@ -361,7 +366,7 @@ class FileServiceIntegrationTest {
         storage.write(
                 new StorageObject(
                         recoverable.containerName(),
-                        java.util.Objects.requireNonNull(recoverable.objectKey())),
+                        Objects.requireNonNull(recoverable.objectKey())),
                 "application/octet-stream",
                 1L,
                 new ByteArrayInputStream(new byte[] {1}));
@@ -379,7 +384,7 @@ class FileServiceIntegrationTest {
         assertThat(
                 storage.contains(
                         recoverable.containerName(),
-                        java.util.Objects.requireNonNull(recoverable.objectKey())))
+                        Objects.requireNonNull(recoverable.objectKey())))
                 .isFalse();
         assertThat(repository.find(402L).orElseThrow().status()).isEqualTo(FileStatus.DELETE_FAILED);
         assertThat(
@@ -555,7 +560,7 @@ class FileServiceIntegrationTest {
         ConfiguredSecretKeyring secretKeyring() {
             SecretKeyringProperties properties = new SecretKeyringProperties();
             properties.setActiveKeyId("test");
-            properties.setKeys(Map.of("test", java.util.Base64.getEncoder().encodeToString(new byte[32])));
+            properties.setKeys(Map.of("test", Base64.getEncoder().encodeToString(new byte[32])));
             return new ConfiguredSecretKeyring(properties);
         }
 
@@ -569,9 +574,9 @@ class FileServiceIntegrationTest {
             return new DistributedLock() {
                 @Override
                 public <T> T execute(
-                        com.sca4d.core.api.concurrent.LockKey key,
-                        java.time.Duration waitTime,
-                        java.util.function.Supplier<T> task) {
+                        LockKey key,
+                        Duration waitTime,
+                        Supplier<T> task) {
                     return task.get();
                 }
             };
@@ -777,7 +782,7 @@ class FileServiceIntegrationTest {
         }
 
         StorageObject preparedObject() {
-            return java.util.Objects.requireNonNull(preparedObject);
+            return Objects.requireNonNull(preparedObject);
         }
 
         void reset() {

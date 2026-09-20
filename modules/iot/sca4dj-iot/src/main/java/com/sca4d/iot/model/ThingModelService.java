@@ -26,6 +26,7 @@ import java.time.Duration;
 import java.util.HexFormat;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 /** 在发布前校验 Product、策略和全部兼容协议，再调用 App 唯一选择的 Repository。 */
 public class ThingModelService {
@@ -150,7 +151,7 @@ public class ThingModelService {
     /** 取得 Product 聚合锁后，在事务内发布或修改物模型。 */
     private <T> @NotNull T write(
             @NotNull String productCode,
-            @NotNull java.util.function.Supplier<@NotNull T> operation) {
+            @NotNull Supplier<@NotNull T> operation) {
         return distributedLock.execute(
                 new LockKey("iot", "product", productCode),
                 LOCK_WAIT,

@@ -21,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.ZoneOffset;
+import java.util.Arrays;
 import java.util.Base64;
 
 class JwtSessionProjectionTest {
@@ -205,7 +206,7 @@ class JwtSessionProjectionTest {
 
     private static String key(String seed) {
         byte[] source = seed.getBytes(StandardCharsets.UTF_8);
-        byte[] key = java.util.Arrays.copyOf(source, 32);
+        byte[] key = Arrays.copyOf(source, 32);
         return Base64.getEncoder().encodeToString(key);
     }
 }

@@ -2,7 +2,9 @@ package com.sca4d.iot.schedule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.core.spring.persistence.mybatis.AffectedRowsAspect;
 import com.sca4d.core.spring.persistence.mybatis.AffectedRowsInterceptor;
 import com.sca4d.core.spring.persistence.mybatis.CoreEnumTypeHandler;
@@ -11,6 +13,7 @@ import com.sca4d.iot.api.schedule.DeviceScheduleExecutionStatus;
 import com.sca4d.iot.api.schedule.DeviceScheduleStatus;
 import com.sca4d.iot.api.schedule.DeviceScheduleTrigger;
 import com.sca4d.iot.api.schedule.DeviceScheduledCommand;
+import com.sca4d.iot.model.ThingDataJsonCodec;
 import com.sca4d.iot.persistence.mapper.DeviceScheduleMapper;
 import org.apache.ibatis.type.JdbcType;
 import org.junit.jupiter.api.AfterAll;
@@ -32,6 +35,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+
+import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.util.Map;
+import java.util.Objects;
 
 /** 用隔离 PostgreSQL 验证定时规则、执行进展和 Device 范围。 */
 @Testcontainers
@@ -75,7 +84,7 @@ class DeviceSchedulePersistenceIntegrationTest {
         factory.setConfiguration(configuration);
         factory.setPlugins(new AffectedRowsInterceptor());
         factory.setMapperLocations(new ClassPathResource("mapper/iot/DeviceScheduleMapper.xml"));
-        SqlSessionTemplate template = new SqlSessionTemplate(java.util.Objects.requireNonNull(factory.getObject()));
+        SqlSessionTemplate template = new SqlSessionTemplate(Objects.requireNonNull(factory.getObject()));
         context = new AnnotationConfigApplicationContext();
         context.register(Transactions.class);
         context.registerBean(DataSourceTransactionManager.class, () -> new DataSourceTransactionManager(source));
@@ -84,7 +93,7 @@ class DeviceSchedulePersistenceIntegrationTest {
                 DeviceScheduleRepository.class,
                 () -> new DeviceScheduleRepository(
                         template.getMapper(DeviceScheduleMapper.class),
-                        new com.sca4d.iot.model.ThingDataJsonCodec(new com.fasterxml.jackson.databind.ObjectMapper())));
+                        new ThingDataJsonCodec(new ObjectMapper())));
         context.refresh();
         schedules = context.getBean(DeviceScheduleRepository.class);
     }
@@ -100,10 +109,10 @@ class DeviceSchedulePersistenceIntegrationTest {
     @Test
     @DisplayName("定时规则切换保留独立执行结果，状态更新保持版本和取消保护")
     void preservesTriggerAndExecutionIntent() {
-        java.time.Instant now = java.time.Instant.parse("2026-09-15T00:00:00Z");
-        var command = new DeviceScheduledCommand("query", java.util.Map.of());
-        var cron = DeviceScheduleTrigger.cron("0 * * * * *", java.time.ZoneId.of("UTC"));
-        schedules.add(101, 201, command, cron, java.time.Duration.ofMinutes(1), now);
+        Instant now = Instant.parse("2026-09-15T00:00:00Z");
+        var command = new DeviceScheduledCommand("query", Map.of());
+        var cron = DeviceScheduleTrigger.cron("0 * * * * *", ZoneId.of("UTC"));
+        schedules.add(101, 201, command, cron, Duration.ofMinutes(1), now);
         assertThat(schedules.findNextDue(now).orElseThrow().scheduleId()).isEqualTo(101);
         assertThat(
                 schedules.recordExecutionAndAdvance(
@@ -130,7 +139,7 @@ class DeviceSchedulePersistenceIntegrationTest {
                         2,
                         command,
                         DeviceScheduleTrigger.once(now.plusSeconds(120)),
-                        java.time.Duration.ofMinutes(1),
+                        Duration.ofMinutes(1),
                         DeviceScheduleStatus.ACTIVE,
                         now.plusSeconds(120)))
                 .isTrue();
@@ -164,13 +173,13 @@ class DeviceSchedulePersistenceIntegrationTest {
                         5,
                         command,
                         cron,
-                        java.time.Duration.ofMinutes(1),
+                        Duration.ofMinutes(1),
                         DeviceScheduleStatus.ACTIVE,
                         now.plusSeconds(180)))
                 .isFalse();
-        assertThat(schedules.findDeviceSchedules(201, new com.sca4d.core.api.query.PageRequest(1, 10)).getTotal())
+        assertThat(schedules.findDeviceSchedules(201, new PageRequest(1, 10)).getTotal())
                 .isEqualTo(1);
-        assertThat(schedules.findDeviceSchedules(202, new com.sca4d.core.api.query.PageRequest(1, 10)).getItems())
+        assertThat(schedules.findDeviceSchedules(202, new PageRequest(1, 10)).getItems())
                 .isEmpty();
     }
 }

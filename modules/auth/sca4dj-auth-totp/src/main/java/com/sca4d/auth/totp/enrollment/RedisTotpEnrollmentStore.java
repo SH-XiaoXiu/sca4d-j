@@ -13,6 +13,7 @@ import java.time.Clock;
 import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /** 使用 Redis TTL 保存加密 enrollment，并以 value CAS 完成一次性消费。 */
 public final class RedisTotpEnrollmentStore {
@@ -113,7 +114,7 @@ public final class RedisTotpEnrollmentStore {
      */
     public void deleteByAccount(long accountId) {
         String accountKey = accountKey(accountId);
-        java.util.Set<String> enrollmentKeys = redis.opsForSet().members(accountKey);
+        Set<String> enrollmentKeys = redis.opsForSet().members(accountKey);
         if (enrollmentKeys != null && !enrollmentKeys.isEmpty()) {
             redis.delete(enrollmentKeys);
         }

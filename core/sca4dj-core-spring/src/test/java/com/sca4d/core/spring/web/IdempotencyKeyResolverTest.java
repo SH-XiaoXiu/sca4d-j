@@ -14,8 +14,10 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.lang.reflect.Method;
 import java.time.Instant;
 import java.util.Map;
+import java.util.Objects;
 
 class IdempotencyKeyResolverTest {
 
@@ -70,7 +72,7 @@ class IdempotencyKeyResolverTest {
 
     private CallExecution execution(Object[] arguments) {
         try {
-            java.lang.reflect.Method method = getClass().getDeclaredMethod("invoke", Object.class);
+            Method method = getClass().getDeclaredMethod("invoke", Object.class);
             return new CallExecution(call, getClass(), method, arguments, method.getGenericReturnType());
         } catch (NoSuchMethodException exception) {
             throw new AssertionError(exception);
@@ -78,6 +80,6 @@ class IdempotencyKeyResolverTest {
     }
 
     private void invoke(Object value) {
-        java.util.Objects.requireNonNull(value);
+        Objects.requireNonNull(value);
     }
 }

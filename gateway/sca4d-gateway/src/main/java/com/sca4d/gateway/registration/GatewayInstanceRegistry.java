@@ -19,10 +19,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /** 管理单个 Gateway 进程内的 Server 租约、readiness 状态和轮询选择。 */
 @Component
@@ -73,9 +75,9 @@ public final class GatewayInstanceRegistry {
                 .stream()
                 .map(GatewayCallbackCode::new)
                 .map(GatewayCallbackCode::value)
-                .collect(java.util.stream.Collectors.toUnmodifiableSet());
+                .collect(Collectors.toUnmodifiableSet());
         // 分配新租约并原子替换同名实例，旧租约 ID 不能再续租或删除新注册。
-        String leaseId = java.util.UUID.randomUUID().toString();
+        String leaseId = UUID.randomUUID().toString();
         GatewayInstance instance = new GatewayInstance(
                 instanceId,
                 leaseId,

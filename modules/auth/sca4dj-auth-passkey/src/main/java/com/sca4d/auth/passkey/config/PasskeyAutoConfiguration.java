@@ -26,6 +26,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.security.SecureRandom;
 import java.time.Clock;
+import java.time.Duration;
 
 /**
  * 自动装配 Passkey Credential、Redis ceremony 和 Yubico WebAuthn 校验。
@@ -43,7 +44,7 @@ public class PasskeyAutoConfiguration {
 
     /** @return Passkey ceremony 有效期设置 */
     @Bean
-    SystemSetting<java.time.Duration> passkeyCeremonyTtlSetting() {
+    SystemSetting<Duration> passkeyCeremonyTtlSetting() {
         return PasskeySettings.CEREMONY_TTL;
     }
 

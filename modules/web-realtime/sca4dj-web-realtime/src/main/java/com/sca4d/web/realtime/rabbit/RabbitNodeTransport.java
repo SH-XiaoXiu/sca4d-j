@@ -15,6 +15,7 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Declarables;
 import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.core.MessageDeliveryMode;
 import org.springframework.amqp.core.Queue;
@@ -112,7 +113,7 @@ public final class RabbitNodeTransport implements NodeTransport, SmartLifecycle 
             return;
         }
         byte[] body = codec.encode(connections, checkedDelivery);
-        org.springframework.amqp.core.Message rabbitMessage = MessageBuilder.withBody(body)
+        Message rabbitMessage = MessageBuilder.withBody(body)
                 .setContentType("application/json")
                 .setContentEncoding("UTF-8")
                 .setDeliveryMode(MessageDeliveryMode.NON_PERSISTENT)

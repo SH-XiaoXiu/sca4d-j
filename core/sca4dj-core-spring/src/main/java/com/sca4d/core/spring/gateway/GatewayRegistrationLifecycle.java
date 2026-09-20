@@ -28,6 +28,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 /** 在应用 readiness 后向 Gateway 注册实例，并在进程存活期间续租。 */
 public final class GatewayRegistrationLifecycle {
@@ -89,7 +90,7 @@ public final class GatewayRegistrationLifecycle {
         this.callbackCodes = callbacks.stream()
                 .map(callback -> Objects.requireNonNull(callback, "Gateway 回调不能为空"))
                 .map(callback -> callback.code().value())
-                .collect(java.util.stream.Collectors.toUnmodifiableSet());
+                .collect(Collectors.toUnmodifiableSet());
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout(requestTimeout);
         requestFactory.setReadTimeout(requestTimeout);

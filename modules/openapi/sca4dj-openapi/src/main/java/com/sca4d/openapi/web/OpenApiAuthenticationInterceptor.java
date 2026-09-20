@@ -8,6 +8,7 @@ import com.sca4d.core.api.authentication.EstablishedSession;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.spring.call.CallHandlerInterceptor;
 import com.sca4d.core.spring.web.BearerToken;
 import com.sca4d.openapi.client.OpenApiClient;
@@ -22,6 +23,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.method.HandlerMethod;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -130,7 +132,7 @@ public final class OpenApiAuthenticationInterceptor extends CallHandlerIntercept
         call.authenticate(established.session());
     }
 
-    private com.sca4d.core.api.identity.Account clientsAccount(OpenApiClient client) {
+    private Account clientsAccount(OpenApiClient client) {
         try {
             return clients.account(client.accountId());
         } catch (IllegalArgumentException exception) {
@@ -166,7 +168,7 @@ public final class OpenApiAuthenticationInterceptor extends CallHandlerIntercept
         if (query == null || query.isEmpty()) {
             return "";
         }
-        return java.util.Arrays.stream(query.split("&", -1))
+        return Arrays.stream(query.split("&", -1))
                 .sorted()
                 .reduce((left, right) -> left + "&" + right)
                 .orElse("");

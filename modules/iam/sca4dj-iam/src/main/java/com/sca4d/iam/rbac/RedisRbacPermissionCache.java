@@ -19,6 +19,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -257,7 +258,7 @@ public final class RedisRbacPermissionCache implements RbacPermissionCache {
         LinkedHashMap<RbacDomain, String> fingerprints = new LinkedHashMap<>();
         registry.domains()
                 .stream()
-                .sorted(java.util.Comparator.comparing(RbacDomain::value))
+                .sorted(Comparator.comparing(RbacDomain::value))
                 .forEach(
                         domain -> fingerprints.put(
                                 domain,

@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.OptimisticLockException;
+import com.sca4d.core.api.concurrent.VersionCondition;
+import com.sca4d.core.api.concurrent.VersionConditions;
 import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.event.EventType;
@@ -22,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.core.MessageDeliveryMode;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -29,6 +32,8 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -42,6 +47,7 @@ import org.testcontainers.containers.RabbitMQContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.sql.Timestamp;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
@@ -53,9 +59,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.sql.DataSource;
+
 /** 使用 PostgreSQL 和 RabbitMQ 验证业务消息发布、消费、DLQ 与 Outbox。 */
 @Testcontainers
-@org.springframework.boot.test.context.SpringBootTest(classes = MessagingInfrastructureIntegrationTest.TestApplication.class, properties = {
+@SpringBootTest(classes = MessagingInfrastructureIntegrationTest.TestApplication.class, properties = {
         "spring.autoconfigure.exclude="
                 + "com.sca4d.core.spring.config.CoreSpringAutoConfiguration,"
                 + "com.sca4d.core.spring.config.CoreJacksonAutoConfiguration,"
@@ -122,7 +130,7 @@ class MessagingInfrastructureIntegrationTest {
     private FailureConsumer failureConsumer;
 
     @Autowired
-    private org.springframework.context.ApplicationContext applicationContext;
+    private ApplicationContext applicationContext;
 
     @DynamicPropertySource
     static void infrastructureProperties(DynamicPropertyRegistry registry) {
@@ -142,7 +150,7 @@ class MessagingInfrastructureIntegrationTest {
                 "SELECT to_regclass('public.messaging_outbox') IS NOT NULL",
                 Boolean.class);
         if (!Boolean.TRUE.equals(schemaExists)) {
-            javax.sql.DataSource dataSource = Objects.requireNonNull(jdbc.getDataSource());
+            DataSource dataSource = Objects.requireNonNull(jdbc.getDataSource());
             ResourceDatabasePopulator coreSchema = new ResourceDatabasePopulator(
                     new ClassPathResource("META-INF/sca4dj/schema/dictionary-settings.sql"));
             coreSchema.setSeparator(ScriptUtils.EOF_STATEMENT_SEPARATOR);
@@ -182,7 +190,7 @@ class MessagingInfrastructureIntegrationTest {
         assertThat(copyConsumer.receivedMessage()).isEqualTo(messageId);
         assertThat(failureConsumer.receivedMessage()).isEqualTo(messageId);
 
-        org.springframework.amqp.core.Message deadLetter = rabbit.receive(FAILURE_DLQ, 5_000);
+        Message deadLetter = rabbit.receive(FAILURE_DLQ, 5_000);
         assertThat(deadLetter).isNotNull();
         assertThat(deadLetter.getMessageProperties().getReceivedDeliveryMode())
                 .isEqualTo(MessageDeliveryMode.PERSISTENT);
@@ -220,7 +228,7 @@ class MessagingInfrastructureIntegrationTest {
                         .setDeliveryMode(MessageDeliveryMode.PERSISTENT)
                         .build());
 
-        org.springframework.amqp.core.Message deadLetter = rabbit.receive(FAILURE_DLQ, 5_000);
+        Message deadLetter = rabbit.receive(FAILURE_DLQ, 5_000);
         assertThat(deadLetter).isNotNull();
         assertThat(deadLetter.getMessageProperties().getMessageId())
                 .isEqualTo(Long.toString(envelopeMessageId.value() + 1));
@@ -268,7 +276,7 @@ class MessagingInfrastructureIntegrationTest {
                         .containsExactly(takeover));
         jdbc.update(
                 "UPDATE messaging_outbox SET lease_until = ? WHERE message_id = ?",
-                java.sql.Timestamp.from(Instant.now().minusSeconds(1)),
+                Timestamp.from(Instant.now().minusSeconds(1)),
                 takeover.value());
         dispatcher.dispatch();
         assertThat(status(takeover)).isEqualTo(OutboxStatus.SENT);
@@ -281,7 +289,7 @@ class MessagingInfrastructureIntegrationTest {
 
         jdbc.update(
                 "UPDATE messaging_outbox SET sent_at = ? WHERE message_id IN (?, ?)",
-                java.sql.Timestamp.from(Instant.now().minus(Duration.ofDays(8))),
+                Timestamp.from(Instant.now().minus(Duration.ofDays(8))),
                 committed.value(),
                 takeover.value());
         dispatcher.cleanup();
@@ -430,8 +438,8 @@ class MessagingInfrastructureIntegrationTest {
 
         /** 非 HTTP 测试使用 Repository 当前版本作为乐观锁条件。 */
         @Bean
-        com.sca4d.core.api.concurrent.VersionConditions versionConditions() {
-            return com.sca4d.core.api.concurrent.VersionCondition::optimistic;
+        VersionConditions versionConditions() {
+            return VersionCondition::optimistic;
         }
 
         @Bean

@@ -13,6 +13,8 @@ import com.sca4d.core.api.authentication.SessionInvalidationListener;
 import com.sca4d.core.api.runtime.RuntimeNamespace;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisStringCommands;
 import org.springframework.data.redis.core.RedisCallback;
@@ -89,7 +91,7 @@ class RedisSessionGenerationTest {
 
         assertThatThrownBy(() -> generations.invalidate(accountId)).isSameAs(failure);
 
-        verify(listener, org.mockito.Mockito.never()).invalidated(accountId);
+        verify(listener, Mockito.never()).invalidated(accountId);
     }
 
     @Test
@@ -101,7 +103,7 @@ class RedisSessionGenerationTest {
         RedisStringCommands strings = mock(RedisStringCommands.class);
         SessionInvalidationListener listener = mock(SessionInvalidationListener.class);
         when(connection.stringCommands()).thenReturn(strings);
-        when(redis.executePipelined(org.mockito.ArgumentMatchers.any(RedisCallback.class)))
+        when(redis.executePipelined(ArgumentMatchers.any(RedisCallback.class)))
                 .thenAnswer(invocation -> {
                     RedisCallback<Object> callback = invocation.getArgument(0);
                     callback.doInRedis(connection);
@@ -114,7 +116,7 @@ class RedisSessionGenerationTest {
 
         generations.invalidate(List.of(42L, 43L, 42L));
 
-        verify(redis, times(1)).executePipelined(org.mockito.ArgumentMatchers.any(RedisCallback.class));
+        verify(redis, times(1)).executePipelined(ArgumentMatchers.any(RedisCallback.class));
         verify(strings).incr("example-app:sca4dj:auth:session-generation:42".getBytes(StandardCharsets.UTF_8));
         verify(strings).incr("example-app:sca4dj:auth:session-generation:43".getBytes(StandardCharsets.UTF_8));
         verify(listener).invalidated(42L);
@@ -130,7 +132,7 @@ class RedisSessionGenerationTest {
         RedisStringCommands strings = mock(RedisStringCommands.class);
         SessionInvalidationListener listener = mock(SessionInvalidationListener.class);
         when(connection.stringCommands()).thenReturn(strings);
-        when(redis.executePipelined(org.mockito.ArgumentMatchers.any(RedisCallback.class)))
+        when(redis.executePipelined(ArgumentMatchers.any(RedisCallback.class)))
                 .thenAnswer(invocation -> {
                     RedisCallback<Object> callback = invocation.getArgument(0);
                     callback.doInRedis(connection);

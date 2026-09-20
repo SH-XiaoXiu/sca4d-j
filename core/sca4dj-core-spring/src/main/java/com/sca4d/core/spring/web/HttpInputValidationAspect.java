@@ -44,6 +44,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
+import java.lang.reflect.Type;
 import java.math.BigInteger;
 import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
@@ -459,7 +460,7 @@ public final class HttpInputValidationAspect {
         private static final ObjectType INSTANCE = new ObjectType();
 
         @Override
-        public java.lang.reflect.Type getType() {
+        public Type getType() {
             return Object.class;
         }
 

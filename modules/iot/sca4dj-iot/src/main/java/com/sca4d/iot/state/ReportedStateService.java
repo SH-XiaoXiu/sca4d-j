@@ -16,6 +16,7 @@ import com.sca4d.iot.api.message.IotMessageTypes;
 import com.sca4d.iot.api.model.ThingEvent;
 import com.sca4d.iot.api.model.ThingEventDelivery;
 import com.sca4d.iot.api.model.ThingModel;
+import com.sca4d.iot.api.model.ThingModelPresentation;
 import com.sca4d.iot.api.model.ThingModelRepository;
 import com.sca4d.iot.api.model.ThingProperty;
 import com.sca4d.iot.api.state.ReportedStateStore;
@@ -135,7 +136,7 @@ public class ReportedStateService {
         // 使用同一 Device 快照解析 Product 和物模型，再把上报值转换成物模型声明的精确类型。
         ProductDefinition product = products.definition(checkedDevice.product());
         ThingModel model = models.find(product.code(), checkedDevice.thingModelVersion())
-                .map(com.sca4d.iot.api.model.ThingModelPresentation::model)
+                .map(ThingModelPresentation::model)
                 .orElseThrow(() -> new BusinessException(IotErrorCode.THING_MODEL_NOT_FOUND));
         Instant receivedAt = clock.instant();
 

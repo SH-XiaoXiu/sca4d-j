@@ -24,9 +24,11 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 
 import java.time.Instant;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -68,9 +70,9 @@ class RbacServiceTest {
         when(invalidation.domain()).thenReturn(PLATFORM_DOMAIN);
         when(permissionCache.find(any())).thenAnswer(invocation -> {
             Map<RbacScope, ? extends Collection<Long>> requested = invocation.getArgument(0);
-            java.util.LinkedHashMap<RbacScope, Map<Long, Long>> revisions = new java.util.LinkedHashMap<>();
+            LinkedHashMap<RbacScope, Map<Long, Long>> revisions = new LinkedHashMap<>();
             requested.forEach((scope, principalIds) -> {
-                java.util.LinkedHashMap<Long, Long> scopeRevisions = new java.util.LinkedHashMap<>();
+                LinkedHashMap<Long, Long> scopeRevisions = new LinkedHashMap<>();
                 principalIds.forEach(principalId -> scopeRevisions.put(principalId, 0L));
                 revisions.put(scope, scopeRevisions);
             });
@@ -145,7 +147,7 @@ class RbacServiceTest {
         assertThat(rbac.findGrantedOperations(PLATFORM, List.of(PRINCIPAL_ID)).get(PRINCIPAL_ID))
                 .extracting(Operation::value)
                 .containsExactly("test:items:manage", "test:items:read");
-        verify(permissionCache).put(any(RbacPermissionCacheLookup.class), org.mockito.ArgumentMatchers.eq(loaded));
+        verify(permissionCache).put(any(RbacPermissionCacheLookup.class), ArgumentMatchers.eq(loaded));
         assertThat(customCode.code()).isNotEqualTo(PlatformRbacService.ROOT);
     }
 
@@ -171,7 +173,7 @@ class RbacServiceTest {
                 .containsExactly("test:items:read");
         assertThat(result.get(PROJECT_B).get(SECOND_PRINCIPAL_ID)).isEmpty();
         verify(repository).findActivePermissionSelectors(request);
-        verify(permissionCache).put(any(RbacPermissionCacheLookup.class), org.mockito.ArgumentMatchers.eq(loaded));
+        verify(permissionCache).put(any(RbacPermissionCacheLookup.class), ArgumentMatchers.eq(loaded));
     }
 
     @Test
@@ -204,7 +206,7 @@ class RbacServiceTest {
                 .containsExactly("test:items:read");
         assertThat(result.get(SECOND_PRINCIPAL_ID)).isEmpty();
         verify(repository).findActivePermissionSelectors(missing);
-        verify(permissionCache).put(any(RbacPermissionCacheLookup.class), org.mockito.ArgumentMatchers.eq(loaded));
+        verify(permissionCache).put(any(RbacPermissionCacheLookup.class), ArgumentMatchers.eq(loaded));
     }
 
     @Test
@@ -281,19 +283,19 @@ class RbacServiceTest {
                 false);
 
         verify(repository).createRole(
-                org.mockito.ArgumentMatchers.eq(PLATFORM),
+                ArgumentMatchers.eq(PLATFORM),
                 any(),
-                org.mockito.ArgumentMatchers.eq(PlatformRbacService.ROOT),
-                org.mockito.ArgumentMatchers.eq(RoleStatus.ACTIVE),
-                org.mockito.ArgumentMatchers.eq(true),
-                org.mockito.ArgumentMatchers.eq(List.of(PermissionSelections.ALL)));
+                ArgumentMatchers.eq(PlatformRbacService.ROOT),
+                ArgumentMatchers.eq(RoleStatus.ACTIVE),
+                ArgumentMatchers.eq(true),
+                ArgumentMatchers.eq(List.of(PermissionSelections.ALL)));
         verify(repository).createRole(
-                org.mockito.ArgumentMatchers.eq(PLATFORM),
+                ArgumentMatchers.eq(PLATFORM),
                 any(),
-                org.mockito.ArgumentMatchers.eq(PlatformRbacService.DEFAULT),
-                org.mockito.ArgumentMatchers.eq(RoleStatus.ACTIVE),
-                org.mockito.ArgumentMatchers.eq(true),
-                org.mockito.ArgumentMatchers.eq(List.of()));
+                ArgumentMatchers.eq(PlatformRbacService.DEFAULT),
+                ArgumentMatchers.eq(RoleStatus.ACTIVE),
+                ArgumentMatchers.eq(true),
+                ArgumentMatchers.eq(List.of()));
     }
 
     @Test

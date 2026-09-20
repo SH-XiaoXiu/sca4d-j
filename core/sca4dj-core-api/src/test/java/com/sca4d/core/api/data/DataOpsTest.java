@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -193,7 +194,7 @@ class DataOpsTest {
         assertEquals("device", binaryJson.requiredText("name"));
         assertEquals(9007199254740991L, binaryJson.requiredLong("id"));
         assertEquals(
-                java.util.Arrays.asList(1L, null),
+                Arrays.asList(1L, null),
                 binaryJson.requiredObject("data").objectValues().get("values"));
         String binaryJsonText = binaryJson.get();
         assertNotNull(binaryJsonText);

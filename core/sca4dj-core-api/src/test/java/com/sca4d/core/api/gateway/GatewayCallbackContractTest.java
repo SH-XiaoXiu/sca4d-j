@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -52,7 +53,7 @@ class GatewayCallbackContractTest {
     @Test
     @DisplayName("实例注册请求和响应使用同一份 JSON 契约")
     void serializesRegistrationContract() throws Exception {
-        com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();
         GatewayRegistrationRequest request = new GatewayRegistrationRequest(
                 "server-1",
                 URI.create("http://localhost:8080"),

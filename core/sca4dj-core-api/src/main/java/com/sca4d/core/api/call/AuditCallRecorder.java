@@ -1,6 +1,7 @@
 package com.sca4d.core.api.call;
 
 import com.sca4d.core.api.annotation.Audit;
+import com.sca4d.core.api.annotation.AuditTarget;
 import com.sca4d.core.api.audit.AuditActor;
 import com.sca4d.core.api.audit.AuditInvocation;
 import com.sca4d.core.api.audit.AuditOperation;
@@ -122,12 +123,12 @@ public final class AuditCallRecorder {
         AuditTargetResolver resolver = audit.targetResolver() == NoAuditTargetResolver.class
                 ? null
                 : resolverLookup.targetResolver(audit.targetResolver());
-        com.sca4d.core.api.annotation.AuditTarget markedTarget = null;
+        AuditTarget markedTarget = null;
         int markedIndex = -1;
         Annotation[][] parameterAnnotations = invocation.method().getParameterAnnotations();
         for (int index = 0; index < parameterAnnotations.length; index++) {
             for (Annotation annotation : parameterAnnotations[index]) {
-                if (annotation instanceof com.sca4d.core.api.annotation.AuditTarget target) {
+                if (annotation instanceof AuditTarget target) {
                     if (markedTarget != null) {
                         throw new IllegalStateException("一次 Audit 只能标记一个目标参数");
                     }

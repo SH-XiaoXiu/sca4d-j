@@ -9,9 +9,12 @@ import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.DefaultResponse;
 import org.springframework.cloud.client.loadbalancer.EmptyResponse;
 import org.springframework.cloud.client.loadbalancer.Request;
+import org.springframework.cloud.client.loadbalancer.RequestDataContext;
 import org.springframework.cloud.client.loadbalancer.Response;
 import org.springframework.cloud.loadbalancer.core.ReactorServiceInstanceLoadBalancer;
 import reactor.core.publisher.Mono;
+
+import java.util.Optional;
 
 /** 根据请求路径从内存注册表选择普通 API 或指定回调的健康 Server 实例。 */
 public final class GatewayLoadBalancer implements ReactorServiceInstanceLoadBalancer {
@@ -32,7 +35,7 @@ public final class GatewayLoadBalancer implements ReactorServiceInstanceLoadBala
      */
     @Override
     public @NotNull Mono<Response<ServiceInstance>> choose(@NotNull Request request) {
-        java.util.Optional<String> callbackCode = callbackCode(request);
+        Optional<String> callbackCode = callbackCode(request);
         GatewayInstance selected = callbackCode.isPresent()
                 ? registry.selectCallback(callbackCode.orElseThrow())
                 : registry.selectApi();
@@ -43,17 +46,17 @@ public final class GatewayLoadBalancer implements ReactorServiceInstanceLoadBala
     }
 
     /** 从负载均衡请求上下文中读取回调路径的最后一段编码。 */
-    private static @NotNull java.util.Optional<String> callbackCode(@NotNull Request<?> request) {
+    private static @NotNull Optional<String> callbackCode(@NotNull Request<?> request) {
         Object context = request.getContext();
-        if (!(context instanceof org.springframework.cloud.client.loadbalancer.RequestDataContext requestContext)) {
-            return java.util.Optional.empty();
+        if (!(context instanceof RequestDataContext requestContext)) {
+            return Optional.empty();
         }
         String path = requestContext.getClientRequest().getUrl().getPath();
         String prefix = GatewayHttpPaths.CALLBACK_PREFIX;
         if (!path.startsWith(prefix) || path.length() == prefix.length()) {
-            return java.util.Optional.empty();
+            return Optional.empty();
         }
         String code = path.substring(prefix.length());
-        return code.indexOf('/') < 0 ? java.util.Optional.of(code) : java.util.Optional.empty();
+        return code.indexOf('/') < 0 ? Optional.of(code) : Optional.empty();
     }
 }

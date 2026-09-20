@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /** 根据各 Operation 模块的领域行为构建并查找 RBAC 权限选择规则。 */
 public final class PermissionSelectionRegistry {
@@ -69,7 +70,7 @@ public final class PermissionSelectionRegistry {
         LinkedHashSet<String> catalogModules = checkedCatalog.tree()
                 .stream()
                 .map(OperationNode.Module::code)
-                .collect(java.util.stream.Collectors.toCollection(LinkedHashSet::new));
+                .collect(Collectors.toCollection(LinkedHashSet::new));
         if (!catalogModules.equals(new LinkedHashSet<>(modulesByCode.keySet()))) {
             LinkedHashSet<String> missing = new LinkedHashSet<>(catalogModules);
             missing.removeAll(modulesByCode.keySet());

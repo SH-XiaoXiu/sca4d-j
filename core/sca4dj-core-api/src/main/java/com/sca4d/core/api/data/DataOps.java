@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.nio.ByteBuffer;
@@ -246,7 +247,7 @@ public final class DataOps {
         }
         try {
             return JSON.readTree(json.clone());
-        } catch (java.io.IOException exception) {
+        } catch (IOException exception) {
             throw new DataAssertionException(null, "JSON 语法无效", null, exception);
         }
     }
@@ -307,7 +308,7 @@ public final class DataOps {
         if (node.isBinary()) {
             try {
                 return node.binaryValue();
-            } catch (java.io.IOException exception) {
+            } catch (IOException exception) {
                 throw new DataAssertionException(null, "JSON binary 值无法读取", null, exception);
             }
         }

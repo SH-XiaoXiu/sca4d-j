@@ -15,6 +15,7 @@ import com.sca4d.iot.emqx.connection.MqttDeviceConnection;
 import com.sca4d.iot.emqx.protocol.MqttProtocolCatalog;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 
 import java.util.List;
 import java.util.Set;
@@ -41,7 +42,7 @@ class EmqxAuthenticationServiceTest {
         DeviceConnectionAdmission admission = mock(DeviceConnectionAdmission.class);
         DeviceConnectionRequest connectionRequest = DeviceConnectionRequest.anonymous(
                 MqttDeviceConnection.clientId("dbg-71"));
-        when(requests.create(org.mockito.ArgumentMatchers.any())).thenReturn(connectionRequest);
+        when(requests.create(ArgumentMatchers.any())).thenReturn(connectionRequest);
         when(admission.admit(connectionRequest))
                 .thenReturn(
                         new DeviceConnectionAccess(

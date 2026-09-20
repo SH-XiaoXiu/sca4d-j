@@ -2,7 +2,9 @@ package com.sca4d.core.spring.dictionary;
 
 import com.sca4d.core.api.dictionary.Dictionary;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.util.ClassUtils;
 
@@ -38,11 +40,11 @@ public final class DictionaryScanner {
             @NotNull Collection<@NotNull String> packages) {
         ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
         scanner.addIncludeFilter(new AssignableTypeFilter(Dictionary.class));
-        scanner.setResourceLoader(new org.springframework.core.io.DefaultResourceLoader(classLoader));
+        scanner.setResourceLoader(new DefaultResourceLoader(classLoader));
 
         Set<Class<? extends Enum<?>>> types = new LinkedHashSet<>();
         for (String basePackage : new LinkedHashSet<>(Objects.requireNonNull(packages, "扫描包不能为空"))) {
-            for (org.springframework.beans.factory.config.BeanDefinition candidate : scanner
+            for (BeanDefinition candidate : scanner
                     .findCandidateComponents(basePackage)) {
                 String className = candidate.getBeanClassName();
                 if (className == null) {

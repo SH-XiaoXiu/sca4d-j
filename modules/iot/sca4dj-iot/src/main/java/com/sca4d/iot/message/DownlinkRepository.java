@@ -9,6 +9,7 @@ import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.iot.api.message.DeviceAcknowledgement;
+import com.sca4d.iot.api.message.DeviceDownlinkKind;
 import com.sca4d.iot.api.message.DeviceDownlinkMessage;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
 import com.sca4d.iot.api.query.DesiredStateSnapshot;
@@ -105,7 +106,7 @@ public class DownlinkRepository {
                                     json.decodeValue(value.valueJson()),
                                     value.convergedAt())));
         }
-        return java.util.Collections.unmodifiableMap(result);
+        return Collections.unmodifiableMap(result);
     }
 
     /** 当 desired sequence 仍等于预期值时更新它。 */
@@ -162,7 +163,7 @@ public class DownlinkRepository {
                 null,
                 deviceId,
                 bindingGeneration,
-                com.sca4d.iot.api.message.DeviceDownlinkKind.DESIRED,
+                DeviceDownlinkKind.DESIRED,
                 propertyCode,
                 ACTIVE_STATUSES,
                 null,

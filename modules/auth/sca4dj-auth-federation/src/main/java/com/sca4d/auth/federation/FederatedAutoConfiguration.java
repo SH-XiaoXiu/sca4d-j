@@ -8,6 +8,7 @@ import com.sca4d.auth.federation.provider.DefaultFederatedProviderRepository;
 import com.sca4d.auth.federation.provider.FederatedProviderRepository;
 import com.sca4d.auth.federation.provider.mapper.ProviderMapper;
 import com.sca4d.core.api.concurrent.VersionConditions;
+import com.sca4d.core.api.i18n.LocaleCatalog;
 import com.sca4d.core.api.runtime.RuntimeNamespace;
 import com.sca4d.core.api.security.SecretKeyring;
 import com.sca4d.core.spring.json.Sca4djJson;
@@ -60,7 +61,7 @@ public class FederatedAutoConfiguration {
     @Bean
     FederatedProviderService federatedProviderService(
             @NotNull FederatedProviderRepository repository,
-            @NotNull com.sca4d.core.api.i18n.LocaleCatalog locales) {
+            @NotNull LocaleCatalog locales) {
         return new FederatedProviderService(repository, locales);
     }
 

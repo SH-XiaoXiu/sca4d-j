@@ -13,6 +13,7 @@ import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.SessionControl;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountDirectory;
 import com.sca4d.core.api.identity.AccountIdentifierType;
@@ -24,7 +25,9 @@ import org.junit.jupiter.api.Test;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneOffset;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 class PasswordAuthenticationMethodTest {
 
@@ -55,7 +58,7 @@ class PasswordAuthenticationMethodTest {
         PasswordAuthenticationMethod method = new PasswordAuthenticationMethod(
                 accounts,
                 ACCOUNT_REALM,
-                java.util.List.of(AccountIdentifierType.USERNAME),
+                List.of(AccountIdentifierType.USERNAME),
                 credentials,
                 hasher,
                 mock(SessionControl.class),
@@ -88,7 +91,7 @@ class PasswordAuthenticationMethodTest {
         PasswordAuthenticationMethod method = new PasswordAuthenticationMethod(
                 accounts,
                 ACCOUNT_REALM,
-                java.util.List.of(AccountIdentifierType.USERNAME),
+                List.of(AccountIdentifierType.USERNAME),
                 credentials,
                 hasher,
                 mock(SessionControl.class),
@@ -119,7 +122,7 @@ class PasswordAuthenticationMethodTest {
         PasswordAuthenticationMethod method = new PasswordAuthenticationMethod(
                 accounts,
                 ACCOUNT_REALM,
-                java.util.List.of(AccountIdentifierType.USERNAME, email),
+                List.of(AccountIdentifierType.USERNAME, email),
                 credentials,
                 hasher,
                 mock(SessionControl.class),
@@ -141,7 +144,7 @@ class PasswordAuthenticationMethodTest {
         PasswordAuthenticationMethod method = new PasswordAuthenticationMethod(
                 accounts,
                 ACCOUNT_REALM,
-                java.util.List.of(AccountIdentifierType.USERNAME, email),
+                List.of(AccountIdentifierType.USERNAME, email),
                 mock(PasswordCredentialRepository.class),
                 mock(SecretHasher.class),
                 mock(SessionControl.class),
@@ -155,7 +158,7 @@ class PasswordAuthenticationMethodTest {
                 () -> method.authenticate(
                         null,
                         new PasswordProof("shared", "secret")))
-                .isInstanceOf(com.sca4d.core.api.error.BusinessException.class);
+                .isInstanceOf(BusinessException.class);
     }
 
     @Test
@@ -175,10 +178,13 @@ class PasswordAuthenticationMethodTest {
                         PasswordCredential.Status.RESET_REQUIRED));
         when(hasher.matches("secret", "hash")).thenReturn(true);
         PasswordAuthenticationMethod method = newMethod(
-                accounts, credentials, hasher, mock(SessionControl.class));
+                accounts,
+                credentials,
+                hasher,
+                mock(SessionControl.class));
 
         assertThatThrownBy(() -> method.authenticate(null, new PasswordProof("admin", "secret")))
-                .isInstanceOf(com.sca4d.core.api.error.BusinessException.class);
+                .isInstanceOf(BusinessException.class);
     }
 
     @Test
@@ -188,20 +194,31 @@ class PasswordAuthenticationMethodTest {
         PasswordCredentialRepository credentials = mock(PasswordCredentialRepository.class);
         SessionControl sessions = mock(SessionControl.class);
         PasswordCredential current = new PasswordCredential(
-                ACCOUNT.accountId(), "hash", Instant.EPOCH, new Version(1));
+                ACCOUNT.accountId(),
+                "hash",
+                Instant.EPOCH,
+                new Version(1));
         PasswordCredential changed = new PasswordCredential(
-                ACCOUNT.accountId(), "hash", Instant.EPOCH, new Version(2),
+                ACCOUNT.accountId(),
+                "hash",
+                Instant.EPOCH,
+                new Version(2),
                 PasswordCredential.Status.RESET_REQUIRED);
-        when(credentials.findByAccountId(
-                ACCOUNT.accountId(), PasswordCredential.Status.ACTIVE)).thenReturn(current);
+        when(
+                credentials.findByAccountId(
+                        ACCOUNT.accountId(),
+                        PasswordCredential.Status.ACTIVE))
+                .thenReturn(current);
         when(credentials.changeStatus(current, PasswordCredential.Status.RESET_REQUIRED))
                 .thenReturn(changed);
         PasswordAuthenticationMethod method = newMethod(accounts, credentials, mock(SecretHasher.class), sessions);
 
-        assertThat(method.changeStatus(
-                ACCOUNT.accountId(),
-                PasswordCredential.Status.ACTIVE,
-                PasswordCredential.Status.RESET_REQUIRED)).isSameAs(changed);
+        assertThat(
+                method.changeStatus(
+                        ACCOUNT.accountId(),
+                        PasswordCredential.Status.ACTIVE,
+                        PasswordCredential.Status.RESET_REQUIRED))
+                .isSameAs(changed);
         verify(sessions).terminateAccount(
                 ACCOUNT.accountId(),
                 com.sca4d.core.api.authentication.SessionTerminationReason.AUTHENTICATION_CHANGED);
@@ -216,10 +233,11 @@ class PasswordAuthenticationMethodTest {
                 mock(SecretHasher.class),
                 mock(SessionControl.class));
 
-        assertThatThrownBy(() -> method.replace(
-                ACCOUNT.accountId(),
-                "secret",
-                PasswordCredential.Status.DISABLED))
+        assertThatThrownBy(
+                () -> method.replace(
+                        ACCOUNT.accountId(),
+                        "secret",
+                        PasswordCredential.Status.DISABLED))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("DISABLED");
     }
@@ -232,7 +250,7 @@ class PasswordAuthenticationMethodTest {
         return new PasswordAuthenticationMethod(
                 accounts,
                 ACCOUNT_REALM,
-                java.util.List.of(AccountIdentifierType.USERNAME),
+                List.of(AccountIdentifierType.USERNAME),
                 credentials,
                 hasher,
                 sessions,
@@ -245,7 +263,7 @@ class PasswordAuthenticationMethodTest {
                 new Authentication(
                         ACCOUNT.accountId(),
                         PasswordAuthenticationMethod.CODE,
-                        java.util.Set.of(AuthenticationFactorKind.KNOWLEDGE),
+                        Set.of(AuthenticationFactorKind.KNOWLEDGE),
                         NOW),
                 Long.toString(ACCOUNT.accountId()),
                 version,

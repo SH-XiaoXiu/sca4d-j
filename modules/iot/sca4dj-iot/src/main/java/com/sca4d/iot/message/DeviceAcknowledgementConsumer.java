@@ -1,5 +1,6 @@
 package com.sca4d.iot.message;
 
+import com.sca4d.core.api.event.EventType;
 import com.sca4d.core.api.messaging.MessageConsumer;
 import com.sca4d.core.api.messaging.MessageDelivery;
 import com.sca4d.iot.api.message.DeviceAcknowledgement;
@@ -24,7 +25,7 @@ public final class DeviceAcknowledgementConsumer implements MessageConsumer<Devi
     }
 
     @Override
-    public @NotNull com.sca4d.core.api.event.EventType<DeviceAcknowledgement> eventType() {
+    public @NotNull EventType<DeviceAcknowledgement> eventType() {
         return IotMessageTypes.ACKNOWLEDGEMENT_REQUESTED;
     }
 

@@ -17,10 +17,12 @@ import com.sca4d.auth.session.codec.ResourceLoaders;
 import com.sca4d.auth.testing.SessionTestFixture;
 import com.sca4d.core.api.authentication.AuthTokenMode;
 import com.sca4d.core.api.authentication.Authentication;
+import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionIdentity;
 import com.sca4d.core.api.authentication.SessionIdentityLoader;
 import com.sca4d.core.api.authentication.SessionTokens;
 import com.sca4d.core.api.authentication.principalsession.PrincipalIdLoader;
+import com.sca4d.core.api.authentication.principalsession.PrincipalLoader;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
@@ -30,11 +32,13 @@ import com.sca4d.core.api.setting.Settings;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 
 import java.time.Clock;
 import java.time.Duration;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Map;
 
 /** 验证 Session 只由已认证账号建立，并要求身份装载结果唯一且一致。 */
 class SessionServiceTest {
@@ -48,7 +52,7 @@ class SessionServiceTest {
         assertThatThrownBy(() -> service.establish(account(), List.of()))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("登录必须至少完成一种认证因素");
-        verify(sessions, never()).establish(any(), any(), org.mockito.ArgumentMatchers.anyLong());
+        verify(sessions, never()).establish(any(), any(), ArgumentMatchers.anyLong());
     }
 
     @Test
@@ -75,7 +79,7 @@ class SessionServiceTest {
                 .hasMessage("多个 SessionIdentityLoader 认领 Account");
 
         verify(resources, never()).load(any());
-        verify(sessions, never()).establish(any(), any(), org.mockito.ArgumentMatchers.anyLong());
+        verify(sessions, never()).establish(any(), any(), ArgumentMatchers.anyLong());
     }
 
     @Test
@@ -103,12 +107,12 @@ class SessionServiceTest {
         Account account = account();
         SaTokenSessionManager sessions = mock(SaTokenSessionManager.class);
         when(sessions.currentGeneration(account.accountId())).thenReturn(7L);
-        when(sessions.establish(any(), any(), org.mockito.ArgumentMatchers.eq(7L)))
+        when(sessions.establish(any(), any(), ArgumentMatchers.eq(7L)))
                 .thenReturn("session-token");
         JwtSessionProjection projection = mock(JwtSessionProjection.class);
-        when(projection.issue(any(), org.mockito.ArgumentMatchers.eq("session-token")))
+        when(projection.issue(any(), ArgumentMatchers.eq("session-token")))
                 .thenAnswer(invocation -> {
-                    com.sca4d.core.api.authentication.Session session = invocation.getArgument(0);
+                    Session session = invocation.getArgument(0);
                     return new SessionTokens(
                             AuthTokenMode.JWT,
                             "Bearer",
@@ -119,7 +123,7 @@ class SessionServiceTest {
                             session.expiresAt());
                 });
         ResourceLoaders resources = mock(ResourceLoaders.class);
-        when(resources.load(any())).thenReturn(java.util.Map.of(33L, List.of()));
+        when(resources.load(any())).thenReturn(Map.of(33L, List.of()));
         SessionService service = service(
                 List.of(new FixedIdentityLoader(account, identity(account))),
                 resources,
@@ -198,7 +202,7 @@ class SessionServiceTest {
     /** 为测试身份返回一个固定 Principal。 */
     private static final class FixedPrincipalLoader
             implements
-                com.sca4d.core.api.authentication.principalsession.PrincipalLoader {
+                PrincipalLoader {
 
         @Override
         public boolean supports(@NotNull SessionIdentity identity) {

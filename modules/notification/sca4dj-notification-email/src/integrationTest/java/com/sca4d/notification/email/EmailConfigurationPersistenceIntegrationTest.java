@@ -7,6 +7,7 @@ import com.sca4d.core.api.concurrent.OptimisticLockException;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.concurrent.VersionConditions;
+import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.security.EncryptedSecret;
 import com.sca4d.core.spring.persistence.mybatis.AffectedRowsAspect;
 import com.sca4d.core.spring.persistence.mybatis.AffectedRowsInterceptor;
@@ -167,7 +168,7 @@ class EmailConfigurationPersistenceIntegrationTest {
         senders.setEnabled(1, true);
         senders.add(2, "second", "smtp.example", 25, SmtpSecurity.NONE, null, null, "from@example.test", null, null);
         assertThatThrownBy(() -> senders.setEnabled(2, true))
-                .isInstanceOf(com.sca4d.core.api.error.BusinessException.class);
+                .isInstanceOf(BusinessException.class);
         assertThat(senders.findEnabledConfiguration().orElseThrow().sender().senderId()).isEqualTo(1);
         assertThat(senders.find(2).orElseThrow().enabled()).isFalse();
     }

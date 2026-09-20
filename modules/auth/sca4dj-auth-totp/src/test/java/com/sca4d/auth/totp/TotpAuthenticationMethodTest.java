@@ -29,6 +29,7 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.OptionalLong;
+import java.util.Set;
 
 /** 验证 TOTP 方法贡献 Possession 因素、拒绝旧时间步并复核凭据版本。 */
 class TotpAuthenticationMethodTest {
@@ -99,7 +100,7 @@ class TotpAuthenticationMethodTest {
                 new Authentication(
                         account.accountId(),
                         TotpAuthenticationMethod.CODE,
-                        java.util.Set.of(AuthenticationFactorKind.POSSESSION),
+                        Set.of(AuthenticationFactorKind.POSSESSION),
                         NOW),
                 Long.toString(account.accountId()),
                 new Version(2),

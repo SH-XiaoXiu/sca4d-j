@@ -2,6 +2,7 @@ package com.sca4d.core.api.storage;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Locale;
 import java.util.Objects;
 
 /** 保存申请上传时已经确认的用途、名称、媒体类型和字节数。 */
@@ -36,7 +37,7 @@ public final class FileUploadIntent {
                 || checkedContentType.chars().anyMatch(Character::isISOControl)) {
             throw new IllegalArgumentException("文件媒体类型格式无效");
         }
-        this.contentType = checkedContentType.toLowerCase(java.util.Locale.ROOT);
+        this.contentType = checkedContentType.toLowerCase(Locale.ROOT);
         if (sizeBytes <= 0)
             throw new IllegalArgumentException("文件字节数必须为正数");
         this.sizeBytes = sizeBytes;

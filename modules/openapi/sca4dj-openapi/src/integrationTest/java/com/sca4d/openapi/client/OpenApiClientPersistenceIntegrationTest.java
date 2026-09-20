@@ -20,12 +20,14 @@ import com.sca4d.core.spring.persistence.mybatis.CoreEnumTypeHandler;
 import com.sca4d.core.spring.persistence.mybatis.LongValueTypeHandler;
 import com.sca4d.openapi.client.mapper.OpenApiClientMapper;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.type.JdbcType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +37,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -42,6 +45,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
@@ -84,7 +88,7 @@ class OpenApiClientPersistenceIntegrationTest {
                 new ClassPathResource("META-INF/sca4dj/schema/auth-hmac.sql"),
                 new ClassPathResource("META-INF/sca4dj/schema/auth-shared-secret.sql"),
                 new ClassPathResource("META-INF/sca4dj/schema/openapi.sql"));
-        schema.setSeparator(org.springframework.jdbc.datasource.init.ScriptUtils.EOF_STATEMENT_SEPARATOR);
+        schema.setSeparator(ScriptUtils.EOF_STATEMENT_SEPARATOR);
         schema.execute(source);
         jdbc = new JdbcTemplate(source);
         SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
@@ -95,7 +99,7 @@ class OpenApiClientPersistenceIntegrationTest {
         configuration.getTypeHandlerRegistry()
                 .register(
                         Version.class,
-                        org.apache.ibatis.type.JdbcType.BIGINT,
+                        JdbcType.BIGINT,
                         new LongValueTypeHandler<>(Version::new, Version::value));
         factory.setConfiguration(configuration);
         factory.setPlugins(new AffectedRowsInterceptor());
@@ -112,7 +116,7 @@ class OpenApiClientPersistenceIntegrationTest {
         context.registerBean(DataSourceTransactionManager.class, () -> manager);
         context.registerBean(SqlBatches.class, () -> new SqlBatches(new SqlBatchProperties()));
         context.registerBean(OpenApiClientRepository.class);
-        org.mybatis.spring.SqlSessionTemplate template = new org.mybatis.spring.SqlSessionTemplate(sessions);
+        SqlSessionTemplate template = new SqlSessionTemplate(sessions);
         context.registerBean(HmacCredentialMapper.class, () -> template.getMapper(HmacCredentialMapper.class));
         context.registerBean(
                 SharedSecretCredentialMapper.class,
@@ -225,7 +229,7 @@ class OpenApiClientPersistenceIntegrationTest {
         List<String> operations = IntStream.range(0, 1001).mapToObj(i -> "operation-" + i).toList();
         clients.create(new OpenApiClient("client-b", 102, "批量 Client", OpenApiClientStatus.ACTIVE), operations);
         assertThat(clients.findOperations("client-b")).containsExactlyInAnyOrderElementsOf(operations);
-        List<String> invalid = new java.util.ArrayList<>(operations.subList(0, 1000));
+        List<String> invalid = new ArrayList<>(operations.subList(0, 1000));
         invalid.add(operations.getFirst());
         assertThatThrownBy(() -> clients.replaceOperations("client-b", invalid)).isInstanceOf(RuntimeException.class);
         assertThat(clients.findOperations("client-b")).containsExactlyInAnyOrderElementsOf(operations);

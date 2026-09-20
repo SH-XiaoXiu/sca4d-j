@@ -48,7 +48,7 @@ class MessagingEnvelopeCodecTest {
                 .hasMessageContaining("EventType");
         assertThatThrownBy(
                 () -> codec.decode(
-                        "{\"envelopeVersion\":1,\"unexpected\":true}".getBytes(java.nio.charset.StandardCharsets.UTF_8),
+                        "{\"envelopeVersion\":1,\"unexpected\":true}".getBytes(StandardCharsets.UTF_8),
                         type,
                         false))
                 .isInstanceOf(IllegalArgumentException.class)

@@ -4,6 +4,8 @@ import cn.hutool.crypto.digest.DigestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -56,12 +58,12 @@ public final class IdempotencyFingerprints {
         if (value.isObject()) {
             TreeMap<String, JsonNode> fields = new TreeMap<>();
             value.properties().forEach(field -> fields.put(field.getKey(), field.getValue()));
-            com.fasterxml.jackson.databind.node.ObjectNode result = objectMapper.createObjectNode();
+            ObjectNode result = objectMapper.createObjectNode();
             fields.forEach((name, child) -> result.set(name, canonicalize(child)));
             return result;
         }
         if (value.isArray()) {
-            com.fasterxml.jackson.databind.node.ArrayNode result = objectMapper.createArrayNode();
+            ArrayNode result = objectMapper.createArrayNode();
             value.forEach(child -> result.add(canonicalize(child)));
             return result;
         }

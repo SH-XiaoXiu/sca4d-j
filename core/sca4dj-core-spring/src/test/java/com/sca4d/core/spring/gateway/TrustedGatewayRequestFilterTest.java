@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -29,7 +30,7 @@ class TrustedGatewayRequestFilterTest {
         filter.doFilter(request, new MockHttpServletResponse(), chain);
 
         ArgumentCaptor<HttpServletRequest> forwarded = ArgumentCaptor.forClass(HttpServletRequest.class);
-        verify(chain).doFilter(forwarded.capture(), org.mockito.ArgumentMatchers.any());
+        verify(chain).doFilter(forwarded.capture(), ArgumentMatchers.any());
         assertThat(TrustedGatewayRequest.externalPath(forwarded.getValue()))
                 .isEqualTo("/api/iot/device-sessions");
         assertThat(TrustedGatewayRequest.clientIp(forwarded.getValue())).isEqualTo("203.0.113.8");
@@ -51,7 +52,7 @@ class TrustedGatewayRequestFilterTest {
         filter.doFilter(request, new MockHttpServletResponse(), chain);
 
         ArgumentCaptor<HttpServletRequest> forwarded = ArgumentCaptor.forClass(HttpServletRequest.class);
-        verify(chain).doFilter(forwarded.capture(), org.mockito.ArgumentMatchers.any());
+        verify(chain).doFilter(forwarded.capture(), ArgumentMatchers.any());
         assertThat(TrustedGatewayRequest.externalPath(forwarded.getValue())).isEqualTo("/resource");
         assertThat(TrustedGatewayRequest.clientIp(forwarded.getValue())).isEqualTo("127.0.0.1");
     }

@@ -31,6 +31,8 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import java.time.Clock;
+
 /** 自动装配 OpenAPI 路由校验、认证端点和 Client Operation 请求检查。 */
 @AutoConfiguration
 @MapperScan(basePackageClasses = OpenApiClientMapper.class)
@@ -43,7 +45,7 @@ public class OpenApiAutoConfiguration {
     OpenApiJwtTokenService openApiJwtTokenService(
             SessionCodec codec,
             OpenApiProperties properties,
-            java.time.Clock clock) {
+            Clock clock) {
         return new OpenApiJwtTokenService(codec, properties, clock);
     }
 

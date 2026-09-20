@@ -1,5 +1,6 @@
 package com.sca4d.iot.telemetry;
 
+import com.sca4d.core.api.event.EventType;
 import com.sca4d.core.api.messaging.MessageConsumer;
 import com.sca4d.core.api.messaging.MessageDelivery;
 import com.sca4d.iot.api.message.IotMessageTypes;
@@ -27,7 +28,7 @@ public class TimescaleTelemetryConsumer implements MessageConsumer<TelemetryBatc
     }
 
     @Override
-    public @NotNull com.sca4d.core.api.event.EventType<TelemetryBatch> eventType() {
+    public @NotNull EventType<TelemetryBatch> eventType() {
         return IotMessageTypes.TELEMETRY_REPORTED;
     }
 

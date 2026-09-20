@@ -64,6 +64,7 @@ import com.sca4d.core.spring.web.ResponseETagContractValidator;
 import com.sca4d.core.spring.web.clientstate.ClientStateFilter;
 import com.sca4d.core.spring.web.clientstate.ClientStateResponseAdvice;
 import com.sca4d.core.spring.web.view.BaseViewJacksonInstaller;
+import jakarta.validation.Validator;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -200,7 +201,7 @@ public class CoreSpringAutoConfiguration {
     /** @param messageSource 共享静态消息源 @return 使用共享消息目录插值的 Bean Validation 入口 */
     @Bean
     @ConditionalOnClass(name = "org.hibernate.validator.HibernateValidator")
-    @ConditionalOnMissingBean(jakarta.validation.Validator.class)
+    @ConditionalOnMissingBean(Validator.class)
     LocalValidatorFactoryBean validator(MessageSource messageSource) {
         LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
         validator.setValidationMessageSource(messageSource);
@@ -215,7 +216,7 @@ public class CoreSpringAutoConfiguration {
      */
     @Bean
     HttpInputValidationAspect httpInputValidationAspect(
-            jakarta.validation.Validator validator,
+            Validator validator,
             TextLocalizer localizer,
             HttpInputValidationProperties properties) {
         return new HttpInputValidationAspect(validator, localizer, properties);

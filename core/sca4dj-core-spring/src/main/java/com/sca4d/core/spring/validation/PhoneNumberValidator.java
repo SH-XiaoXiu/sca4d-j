@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /** 使用 libphonenumber 和 PhoneNumberCondition Bean 执行 PhoneNumber 约束。 */
@@ -113,7 +114,7 @@ public final class PhoneNumberValidator implements ConstraintValidator<PhoneNumb
     private static <T> void addIncluded(
             List<Predicate<? super ParsedPhoneNumber>> predicates,
             Set<T> allowed,
-            java.util.function.Function<ParsedPhoneNumber, T> value) {
+            Function<ParsedPhoneNumber, T> value) {
         if (!allowed.isEmpty()) {
             predicates.add(facts -> allowed.contains(value.apply(facts)));
         }
@@ -123,7 +124,7 @@ public final class PhoneNumberValidator implements ConstraintValidator<PhoneNumb
     private static <T> void addExcluded(
             List<Predicate<? super ParsedPhoneNumber>> predicates,
             Set<T> excluded,
-            java.util.function.Function<ParsedPhoneNumber, T> value) {
+            Function<ParsedPhoneNumber, T> value) {
         if (!excluded.isEmpty()) {
             predicates.add(facts -> !excluded.contains(value.apply(facts)));
         }

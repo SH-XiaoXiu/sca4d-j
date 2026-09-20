@@ -2,6 +2,8 @@ package com.sca4d.auth.federation;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.proc.BadJOSEException;
@@ -25,6 +27,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.text.ParseException;
 import java.time.Clock;
@@ -257,7 +261,7 @@ public final class FederatedAuthorizationService {
             return oidcProfile(config.issuer(), profile);
         } catch (BusinessException exception) {
             throw exception;
-        } catch (ParseException | BadJOSEException | com.nimbusds.jose.JOSEException exception) {
+        } catch (ParseException | BadJOSEException | JOSEException exception) {
             throw new BusinessException(FederatedErrorCode.PROFILE_INVALID, exception);
         } catch (Exception exception) {
             throw new BusinessException(FederatedErrorCode.UPSTREAM_FAILED, exception);
@@ -327,7 +331,7 @@ public final class FederatedAuthorizationService {
 
     /** 合并 UserInfo 到 ID Token，保留 ID Token 中未被外部资料覆盖的字段。 */
     private JsonNode mergeProfile(Object idToken, JsonNode userInfo) {
-        com.fasterxml.jackson.databind.node.ObjectNode merged = mapper.valueToTree(idToken);
+        ObjectNode merged = mapper.valueToTree(idToken);
         userInfo.properties().forEach(entry -> {
             if (entry.getValue() != null && !entry.getValue().isNull() && !entry.getValue().isMissingNode()) {
                 merged.set(entry.getKey(), entry.getValue());
@@ -367,8 +371,8 @@ public final class FederatedAuthorizationService {
     /** 计算 PKCE S256 挑战值。 */
     private static byte[] sha256(String value) {
         try {
-            return java.security.MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.US_ASCII));
-        } catch (java.security.NoSuchAlgorithmException exception) {
+            return MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.US_ASCII));
+        } catch (NoSuchAlgorithmException exception) {
             throw new IllegalStateException(exception);
         }
     }

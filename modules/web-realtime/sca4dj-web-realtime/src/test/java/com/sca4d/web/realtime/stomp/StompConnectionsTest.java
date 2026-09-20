@@ -28,6 +28,7 @@ import com.sca4d.web.realtime.connection.RedisConnectionRegistry;
 import com.sca4d.web.realtime.ticket.TicketHandshakeInterceptor;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
@@ -88,7 +89,7 @@ class StompConnectionsTest {
         assertThat(SimpMessageHeaderAccessor.getSessionId(headersCaptor.getValue()))
                 .isEqualTo("stomp-session-1");
         assertThat(headersCaptor.getValue().get(StompConnections.CLOSE_AFTER_HEADER)).isEqualTo(true);
-        verify(sockets, org.mockito.Mockito.never()).close(any(String.class));
+        verify(sockets, Mockito.never()).close(any(String.class));
     }
 
     /** 创建包含一个可选业务主体的有效 Session。 */

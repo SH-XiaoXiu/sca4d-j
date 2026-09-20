@@ -2,10 +2,12 @@ package com.sca4d.core.api.authentication;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serial;
+
 /** 表示 Account 当前状态或身份关系已经不能恢复为有效 Session。 */
 public final class SessionIdentityUnavailableException extends RuntimeException {
 
-    @java.io.Serial
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

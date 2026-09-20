@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /** 保存一个 Platform 范围内可配置的外部登录 Provider。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
@@ -128,7 +129,7 @@ public final class FederatedProvider {
         return source.entrySet()
                 .stream()
                 .collect(
-                        java.util.stream.Collectors.toUnmodifiableMap(
+                        Collectors.toUnmodifiableMap(
                                 Map.Entry::getKey,
                                 entry -> Map.copyOf(entry.getValue())));
     }

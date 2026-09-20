@@ -24,6 +24,7 @@ import com.sca4d.core.spring.security.AesGcmSecretCipher;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Clock;
@@ -131,7 +132,7 @@ class TotpEnrollmentServiceTest {
 
         verify(fixture.enrollments).consume(enrollment);
         verify(fixture.credentials).delete(ACCOUNT_ID, new Version(4));
-        verify(fixture.sessions, org.mockito.Mockito.times(2))
+        verify(fixture.sessions, Mockito.times(2))
                 .terminateAccount(ACCOUNT_ID, SessionTerminationReason.AUTHENTICATION_CHANGED);
     }
 

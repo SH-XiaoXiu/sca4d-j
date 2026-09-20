@@ -9,6 +9,7 @@ import io.github.bucket4j.ConsumptionProbe;
 import io.github.bucket4j.distributed.proxy.ProxyManager;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.Duration;
 import java.util.Objects;
 
 /** 使用 Redis CAS 原子消耗多个应用实例共享的令牌桶额度。 */
@@ -63,6 +64,6 @@ public final class RedisRateLimiter implements RateLimiter {
         if (probe.isConsumed()) {
             return RateLimitDecision.allow();
         }
-        return RateLimitDecision.deny(java.time.Duration.ofNanos(probe.getNanosToWaitForRefill()));
+        return RateLimitDecision.deny(Duration.ofNanos(probe.getNanosToWaitForRefill()));
     }
 }

@@ -2,6 +2,7 @@ package com.sca4d.auth.federation.provider;
 
 import com.sca4d.auth.federation.FederatedProvider;
 import com.sca4d.auth.federation.FederatedProviderConfiguration;
+import com.sca4d.auth.federation.FederatedProviderStatus;
 import com.sca4d.auth.federation.FederatedUnlinkedIdentityAction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -44,7 +45,7 @@ public interface FederatedProviderRepository {
     @NotNull
     FederatedProvider changeStatus(
             @NotNull String code,
-            @NotNull com.sca4d.auth.federation.FederatedProviderStatus status);
+            @NotNull FederatedProviderStatus status);
 
     /** 删除停用且没有身份绑定的 Provider。 */
     void delete(@NotNull String code);

@@ -137,7 +137,7 @@ public final class RedisConnectionRegistry implements ConnectionRegistry {
     /** 更新公共连接事实的最近活动时间。 */
     @Override
     public void touch(
-            @NotNull com.sca4d.core.api.connection.ConnectionId connectionId,
+            @NotNull ConnectionId connectionId,
             @NotNull Instant lastActivityAt) {
         redis.opsForHash()
                 .put(
@@ -148,14 +148,14 @@ public final class RedisConnectionRegistry implements ConnectionRegistry {
 
     /** 删除公共连接事实。 */
     @Override
-    public void remove(@NotNull com.sca4d.core.api.connection.ConnectionId connectionId) {
+    public void remove(@NotNull ConnectionId connectionId) {
         unregister(connectionId);
     }
 
     /** 读取当前 Session 关联的公共连接事实。 */
     @Override
     public @NotNull List<Connection> findBySession(@NotNull SessionId sessionId) {
-        Map<String, List<com.sca4d.core.api.connection.ConnectionId>> grouped = resolve(
+        Map<String, List<ConnectionId>> grouped = resolve(
                 WebRealtimeTarget.session(Objects.requireNonNull(sessionId, "SessionId 不能为空")));
         List<Connection> result = new ArrayList<>();
         List<ConnectionId> ids = grouped.values().stream().flatMap(List::stream).toList();

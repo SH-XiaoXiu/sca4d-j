@@ -14,6 +14,7 @@ import com.sca4d.core.api.security.EncryptedSecret;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -44,7 +45,7 @@ class RedisTotpEnrollmentStoreTest {
         when(values.setIfAbsent(any(), any(), any(Duration.class))).thenReturn(true);
         when(
                 redis.execute(
-                        org.mockito.ArgumentMatchers.<RedisScript<Long>>any(),
+                        ArgumentMatchers.<RedisScript<Long>>any(),
                         anyList(),
                         eq("0"),
                         eq(TotpEnrollmentStatus.PENDING.name()),

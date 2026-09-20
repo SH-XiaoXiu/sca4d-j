@@ -10,6 +10,7 @@ import com.sca4d.iot.api.message.DeviceDownlinkKind;
 import com.sca4d.iot.api.message.DeviceDownlinkMessage;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
 import com.sca4d.iot.api.model.ThingModel;
+import com.sca4d.iot.api.model.ThingModelPresentation;
 import com.sca4d.iot.api.model.ThingModelRepository;
 import com.sca4d.iot.api.model.ThingProperty;
 import com.sca4d.iot.api.model.ThingPropertyAccess;
@@ -27,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -34,6 +36,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /** 原子修改多个 desired property，并只为实际变化创建新的可靠状态同步消息。 */
 public class DesiredStateService {
@@ -120,7 +123,7 @@ public class DesiredStateService {
                 .orElseThrow(() -> new BusinessException(IotErrorCode.DEVICE_NOT_FOUND));
         ProductDefinition product = products.definition(device.product());
         ThingModel model = models.find(product.code(), device.thingModelVersion())
-                .map(com.sca4d.iot.api.model.ThingModelPresentation::model)
+                .map(ThingModelPresentation::model)
                 .orElseThrow(() -> new BusinessException(IotErrorCode.THING_MODEL_NOT_FOUND));
 
         // 按 ThingModel 规范校验并规范化全部 set/clear；任一值失败时不修改数据库。
@@ -169,7 +172,7 @@ public class DesiredStateService {
             Set<String> changedClear = input.clearCodes()
                     .stream()
                     .filter(code -> existing.get(code).isPresent())
-                    .collect(java.util.stream.Collectors.toCollection(LinkedHashSet::new));
+                    .collect(Collectors.toCollection(LinkedHashSet::new));
             if (changedSet.isEmpty() && changedClear.isEmpty()) {
                 result = new DesiredStateResult(currentDesiredSequence, List.of());
                 break;
@@ -180,7 +183,7 @@ public class DesiredStateService {
             }
 
             // 只为实际变化的 set 创建新消息并终止旧消息；clear 取消旧消息并删除当前值。
-            List<DeviceDownlinkMessage> messages = new java.util.ArrayList<>();
+            List<DeviceDownlinkMessage> messages = new ArrayList<>();
             for (Map.Entry<String, Object> changeEntry : changedSet.entrySet()) {
                 String code = changeEntry.getKey();
                 ThingProperty property = Objects.requireNonNull(properties.get(code), "desired 属性定义不存在: " + code);
@@ -236,7 +239,7 @@ public class DesiredStateService {
         // 在同一事务中登记 Device 变化；事务提交后再由通知器发布可见变化。
         changes.changed(
                 deviceId,
-                java.util.List.of(DeviceChangeArea.DESIRED, DeviceChangeArea.DOWNLINK),
+                List.of(DeviceChangeArea.DESIRED, DeviceChangeArea.DOWNLINK),
                 clock.instant());
         LOG.info(
                 "Device desired 已修改 | deviceId={} desiredSequence={} setCount={} clearCount={}",

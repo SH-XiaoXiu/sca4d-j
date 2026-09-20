@@ -14,6 +14,7 @@ import io.github.bucket4j.distributed.BucketProxy;
 import io.github.bucket4j.distributed.proxy.ProxyManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 
 import java.time.Duration;
 import java.util.function.Supplier;
@@ -29,7 +30,7 @@ class RedisRateLimiterTest {
         ConsumptionProbe probe = mock(ConsumptionProbe.class);
         when(
                 proxyManager.getProxy(
-                        org.mockito.ArgumentMatchers.eq(
+                        ArgumentMatchers.eq(
                                 "example-app:sca4dj:rate-limit:login:account:42:5:60000000000"),
                         any(Supplier.class)))
                 .thenReturn(bucket);

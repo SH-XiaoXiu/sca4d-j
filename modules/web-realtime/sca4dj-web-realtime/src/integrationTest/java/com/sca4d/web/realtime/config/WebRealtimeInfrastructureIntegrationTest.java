@@ -85,10 +85,12 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -322,18 +324,18 @@ class WebRealtimeInfrastructureIntegrationTest {
                         request("/other", "http://localhost:5173", wrongPath.value()),
                         response(),
                         new TextWebSocketHandler(),
-                        new java.util.HashMap<>()))
+                        new HashMap<>()))
                 .isFalse();
         assertThat(
                 handshake.beforeHandshake(
                         request("http://localhost:5173", wrongPath.value()),
                         response(),
                         new TextWebSocketHandler(),
-                        new java.util.HashMap<>()))
+                        new HashMap<>()))
                 .isFalse();
 
         WebRealtimeTicket accepted = tickets.issue(session, "/events/ws");
-        Map<String, Object> attributes = new java.util.HashMap<>();
+        Map<String, Object> attributes = new HashMap<>();
         assertThat(
                 handshake.beforeHandshake(
                         request("http://localhost:5173", accepted.value()),
@@ -347,7 +349,7 @@ class WebRealtimeInfrastructureIntegrationTest {
                         request("http://localhost:5173", accepted.value()),
                         response(),
                         new TextWebSocketHandler(),
-                        new java.util.HashMap<>()))
+                        new HashMap<>()))
                 .isFalse();
 
         WebRealtimeTicket offline = tickets.issue(session, "/events/ws");
@@ -357,7 +359,7 @@ class WebRealtimeInfrastructureIntegrationTest {
                         request("http://localhost:5173", offline.value()),
                         response(),
                         new TextWebSocketHandler(),
-                        new java.util.HashMap<>()))
+                        new HashMap<>()))
                 .isFalse();
     }
 
@@ -381,10 +383,10 @@ class WebRealtimeInfrastructureIntegrationTest {
                         request("http://untrusted.example", ticket.value()),
                         response(),
                         new TextWebSocketHandler(),
-                        new java.util.HashMap<>()))
+                        new HashMap<>()))
                 .isFalse();
 
-        Map<String, Object> attributes = new java.util.HashMap<>();
+        Map<String, Object> attributes = new HashMap<>();
         MockHttpServletResponse servletResponse = new MockHttpServletResponse();
         ServletServerHttpResponse acceptedResponse = new ServletServerHttpResponse(servletResponse);
         assertThat(
@@ -402,7 +404,7 @@ class WebRealtimeInfrastructureIntegrationTest {
                         request("http://localhost:5173", ticket.value()),
                         response(),
                         new TextWebSocketHandler(),
-                        new java.util.HashMap<>()))
+                        new HashMap<>()))
                 .isFalse();
     }
 
@@ -503,7 +505,7 @@ class WebRealtimeInfrastructureIntegrationTest {
     private static StompHeaderAccessor stompHeaders(Session session, StompCommand command) {
         StompHeaderAccessor headers = StompHeaderAccessor.create(command);
         headers.setSessionId("stomp-integration-session");
-        headers.setSessionAttributes(new java.util.HashMap<>());
+        headers.setSessionAttributes(new HashMap<>());
         Objects.requireNonNull(headers.getSessionAttributes())
                 .put(TicketHandshakeInterceptor.SESSION_ATTRIBUTE, session);
         headers.setLeaveMutable(true);
@@ -563,7 +565,7 @@ class WebRealtimeInfrastructureIntegrationTest {
                         new Authentication(
                                 account.accountId(),
                                 new AuthenticationMethodCode("test"),
-                                java.util.Set.of(AuthenticationFactorKind.KNOWLEDGE),
+                                Set.of(AuthenticationFactorKind.KNOWLEDGE),
                                 issuedAt)),
                 Map.of(principal.principalId(), List.of()),
                 Map.of(),

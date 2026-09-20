@@ -12,6 +12,7 @@ import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
+import com.sca4d.core.api.security.SecretKeyring;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -58,7 +59,7 @@ public class TotpAuthenticationMethod implements AuthenticationMethod<TotpProof>
             @NotNull TotpCredentialRepository credentials,
             @NotNull RedisTotpEnrollmentStore enrollments,
             @NotNull TotpCodeVerifier verifier,
-            @NotNull com.sca4d.core.api.security.SecretKeyring keyring,
+            @NotNull SecretKeyring keyring,
             @NotNull Clock clock) {
         this.credentials = Objects.requireNonNull(credentials, "TOTP 凭据 Repository 不能为空");
         this.enrollments = Objects.requireNonNull(enrollments, "TOTP enrollment store 不能为空");

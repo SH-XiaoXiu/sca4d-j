@@ -6,6 +6,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.core.MessageDeliveryMode;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
@@ -51,7 +52,7 @@ public final class RabbitMessageSender {
             @NotNull String eventCode,
             byte @NotNull [] envelope) {
         MessageId checkedId = Objects.requireNonNull(messageId, "MessageId 不能为空");
-        org.springframework.amqp.core.Message rabbitMessage = MessageBuilder
+        Message rabbitMessage = MessageBuilder
                 .withBody(Objects.requireNonNull(envelope, "消息信封不能为空"))
                 .setContentType("application/json")
                 .setContentEncoding("UTF-8")

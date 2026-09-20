@@ -11,6 +11,7 @@ import com.sca4d.core.api.authentication.SessionControl;
 import com.sca4d.core.api.authentication.SessionTerminationReason;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.security.EncryptedSecret;
+import com.sca4d.core.api.security.SecretKeyring;
 import com.sca4d.core.api.setting.Settings;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Clock;
 import java.time.Instant;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.OptionalLong;
 import java.util.UUID;
 
@@ -57,7 +59,7 @@ public class TotpEnrollmentService {
             @NotNull RedisTotpEnrollmentStore enrollments,
             @NotNull TotpCredentialRepository credentials,
             @NotNull TotpCodeVerifier verifier,
-            @NotNull com.sca4d.core.api.security.SecretKeyring keyring,
+            @NotNull SecretKeyring keyring,
             @NotNull SessionControl sessions,
             @NotNull Settings settings,
             @NotNull Clock clock) {
@@ -178,7 +180,7 @@ public class TotpEnrollmentService {
             long accountId,
             @NotNull String enrollmentId,
             @NotNull String code) {
-        TotpCredential current = java.util.Optional.ofNullable(credentials.findByAccountId(accountId))
+        TotpCredential current = Optional.ofNullable(credentials.findByAccountId(accountId))
                 .orElseThrow(() -> new BusinessException(TotpErrorCode.CREDENTIAL_UNAVAILABLE));
         TotpEnrollmentState enrollment = ownedEnrollment(accountId, enrollmentId);
         String secret = secrets.decrypt(enrollmentPurpose(enrollment.id()), enrollment.secret());
@@ -206,7 +208,7 @@ public class TotpEnrollmentService {
      */
     @Transactional
     public void delete(long accountId) {
-        TotpCredential current = java.util.Optional.ofNullable(credentials.findByAccountId(accountId))
+        TotpCredential current = Optional.ofNullable(credentials.findByAccountId(accountId))
                 .orElseThrow(() -> new BusinessException(TotpErrorCode.CREDENTIAL_UNAVAILABLE));
         credentials.delete(accountId, current.version());
         sessions.terminateAccount(accountId, SessionTerminationReason.AUTHENTICATION_CHANGED);

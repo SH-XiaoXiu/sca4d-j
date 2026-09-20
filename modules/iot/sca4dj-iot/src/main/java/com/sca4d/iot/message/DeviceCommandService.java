@@ -13,6 +13,7 @@ import com.sca4d.iot.api.message.DeviceDownlinkMessage;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
 import com.sca4d.iot.api.model.ThingCommand;
 import com.sca4d.iot.api.model.ThingModel;
+import com.sca4d.iot.api.model.ThingModelPresentation;
 import com.sca4d.iot.api.model.ThingModelRepository;
 import com.sca4d.iot.change.DeviceChangeNotifier;
 import com.sca4d.iot.device.DeviceRepository;
@@ -214,7 +215,7 @@ public class DeviceCommandService {
                 .orElseThrow(() -> new BusinessException(IotErrorCode.DEVICE_NOT_FOUND));
         ProductDefinition product = products.definition(device.product());
         ThingModel model = models.find(product.code(), device.thingModelVersion())
-                .map(com.sca4d.iot.api.model.ThingModelPresentation::model)
+                .map(ThingModelPresentation::model)
                 .orElseThrow(() -> new BusinessException(IotErrorCode.THING_MODEL_NOT_FOUND));
         ThingCommand command = model.commands().get(commandCode);
         if (command == null || !command.inputs().keySet().equals(inputs.keySet())) {

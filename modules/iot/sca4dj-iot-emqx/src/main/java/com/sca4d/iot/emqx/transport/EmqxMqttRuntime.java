@@ -280,7 +280,7 @@ public final class EmqxMqttRuntime implements SmartLifecycle {
     }
 
     /** 使用应用配置的统一 MQTT 操作超时等待异步结果。 */
-    private void await(java.util.concurrent.CompletableFuture<?> future) {
+    private void await(CompletableFuture<?> future) {
         try {
             future.orTimeout(properties.getOperationTimeout().toMillis(), TimeUnit.MILLISECONDS).join();
         } catch (CompletionException exception) {

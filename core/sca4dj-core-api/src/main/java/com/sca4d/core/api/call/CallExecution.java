@@ -1,5 +1,6 @@
 package com.sca4d.core.api.call;
 
+import com.sca4d.core.api.annotation.AnonymousAccess;
 import com.sca4d.core.api.annotation.Audit;
 import com.sca4d.core.api.annotation.Idempotent;
 import com.sca4d.core.api.annotation.Locked;
@@ -76,8 +77,8 @@ public final class CallExecution {
         this.method = Objects.requireNonNull(method, "业务方法不能为空");
         this.arguments = Arrays.copyOf(Objects.requireNonNull(arguments, "业务方法实参不能为空"), arguments.length);
         this.resultType = Objects.requireNonNull(resultType, "业务返回类型不能为空");
-        this.anonymous = declaringType.isAnnotationPresent(com.sca4d.core.api.annotation.AnonymousAccess.class)
-                || method.isAnnotationPresent(com.sca4d.core.api.annotation.AnonymousAccess.class);
+        this.anonymous = declaringType.isAnnotationPresent(AnonymousAccess.class)
+                || method.isAnnotationPresent(AnonymousAccess.class);
         List<RequirePermission> permissions = new ArrayList<>();
         permissions.addAll(Arrays.asList(declaringType.getAnnotationsByType(RequirePermission.class)));
         permissions.addAll(Arrays.asList(method.getAnnotationsByType(RequirePermission.class)));

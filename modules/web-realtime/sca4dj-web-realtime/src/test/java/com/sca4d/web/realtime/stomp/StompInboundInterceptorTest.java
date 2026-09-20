@@ -15,6 +15,7 @@ import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.concurrent.RateLimitDecision;
+import com.sca4d.core.api.concurrent.RateLimiter;
 import com.sca4d.core.api.connection.ConnectionId;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
@@ -42,6 +43,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 /** 验证 Spring STOMP 入站命令的协议、订阅处理和 Call 绑定。 */
@@ -222,7 +224,7 @@ class StompInboundInterceptorTest {
 
     /** 创建使用指定共享限流结果和订阅策略的入站拦截器。 */
     private static StompInboundInterceptor interceptor(
-            com.sca4d.core.api.concurrent.RateLimiter limiter,
+            RateLimiter limiter,
             RedisConnectionRegistry shared,
             List<WebRealtimeSubscriptionPolicy> policies) {
         return new StompInboundInterceptor(
@@ -306,7 +308,7 @@ class StompInboundInterceptorTest {
                         new Authentication(
                                 account.accountId(),
                                 new AuthenticationMethodCode("test"),
-                                java.util.Set.of(AuthenticationFactorKind.KNOWLEDGE),
+                                Set.of(AuthenticationFactorKind.KNOWLEDGE),
                                 issuedAt)),
                 Map.of(principal.principalId(), List.of()),
                 Map.of(),

@@ -19,6 +19,7 @@ import com.yubico.webauthn.RelyingParty;
 import com.yubico.webauthn.StartRegistrationOptions;
 import com.yubico.webauthn.data.AuthenticatorAttestationResponse;
 import com.yubico.webauthn.data.AuthenticatorSelectionCriteria;
+import com.yubico.webauthn.data.AuthenticatorTransport;
 import com.yubico.webauthn.data.ByteArray;
 import com.yubico.webauthn.data.ClientRegistrationExtensionOutputs;
 import com.yubico.webauthn.data.PublicKeyCredential;
@@ -185,7 +186,7 @@ public class PasskeyRegistrationService {
             Set<String> transports = response.getResponse()
                     .getTransports()
                     .stream()
-                    .map(com.yubico.webauthn.data.AuthenticatorTransport::getId)
+                    .map(AuthenticatorTransport::getId)
                     .collect(Collectors.toUnmodifiableSet());
             byte authenticatorFlags = response.getResponse()
                     .getParsedAuthenticatorData()

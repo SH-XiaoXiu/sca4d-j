@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.http.HttpTimeoutException;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
@@ -122,7 +123,7 @@ class HttpEmqxManagementClientTest {
             assertThatThrownBy(
                     () -> client.publish(new MqttPublication("debug/custom", new byte[0], 1, false)))
                     .isInstanceOf(EmqxPublishResultUnknownException.class)
-                    .hasRootCauseInstanceOf(java.net.http.HttpTimeoutException.class);
+                    .hasRootCauseInstanceOf(HttpTimeoutException.class);
         } finally {
             releasePublication.countDown();
         }

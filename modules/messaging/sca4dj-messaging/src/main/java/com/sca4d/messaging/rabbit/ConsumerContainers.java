@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.AmqpIOException;
 import org.springframework.amqp.core.AcknowledgeMode;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.api.ChannelAwareMessageListener;
@@ -93,7 +94,7 @@ public final class ConsumerContainers implements SmartLifecycle {
     /** 按具体 payload 类型解码、调用 Consumer，并明确 ACK 或拒绝。 */
     private <T> void consume(
             @NotNull MessageConsumer<T> consumer,
-            @NotNull org.springframework.amqp.core.Message rabbitMessage,
+            @NotNull Message rabbitMessage,
             @NotNull Channel channel) {
         long deliveryTag = rabbitMessage.getMessageProperties().getDeliveryTag();
         String messageId = rabbitMessage.getMessageProperties().getMessageId();

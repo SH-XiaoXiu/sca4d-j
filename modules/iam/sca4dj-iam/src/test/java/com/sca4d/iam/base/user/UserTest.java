@@ -15,6 +15,7 @@ import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
+import com.sca4d.core.api.resource.Resource;
 import com.sca4d.iam.base.PlatformIdentityService;
 import com.sca4d.iam.base.PlatformPrincipal;
 import org.junit.jupiter.api.DisplayName;
@@ -122,7 +123,7 @@ class UserTest {
             Subject subject,
             Account account,
             List<? extends Principal> principals) {
-        Map<Long, List<com.sca4d.core.api.resource.Resource>> resources = new LinkedHashMap<>();
+        Map<Long, List<Resource>> resources = new LinkedHashMap<>();
         for (Principal principal : principals) {
             resources.put(principal.principalId(), List.of());
         }

@@ -27,6 +27,7 @@ import com.sca4d.core.spring.web.ResponseETagContractValidator;
 import io.swagger.v3.oas.models.OpenAPI;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
@@ -73,7 +74,7 @@ class CoreSpringAutoConfigurationTest {
                     assertThat(context).hasFailed();
                     assertThat(context.getStartupFailure())
                             .hasRootCauseInstanceOf(
-                                    org.springframework.beans.factory.NoSuchBeanDefinitionException.class);
+                                    NoSuchBeanDefinitionException.class);
                 });
     }
 

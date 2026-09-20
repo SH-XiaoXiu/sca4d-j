@@ -22,6 +22,7 @@ import com.sca4d.iot.api.message.IotMessageTypes;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
+import org.mockito.Mockito;
 
 import java.time.Clock;
 import java.time.Instant;
@@ -81,7 +82,7 @@ class DeviceDisconnectConsumerTest {
     @Test
     @DisplayName("协议终止失败时不提前删除投影并登记延迟重试")
     void retriesWithoutRemovingProjectionWhenTerminationFails() {
-        org.mockito.Mockito.doThrow(new IllegalStateException("broker unavailable"))
+        Mockito.doThrow(new IllegalStateException("broker unavailable"))
                 .when(terminators)
                 .disconnect(MQTT, CONNECTION_ID, "identity-unavailable");
         when(messages.publishReliably(any(), eq(NOW.plusSeconds(1))))

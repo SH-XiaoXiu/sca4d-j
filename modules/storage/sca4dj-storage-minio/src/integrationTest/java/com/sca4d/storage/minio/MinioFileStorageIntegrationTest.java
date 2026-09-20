@@ -17,6 +17,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -127,7 +128,7 @@ class MinioFileStorageIntegrationTest extends FileStorageContract {
     }
 
     private static HttpResponse<byte[]> sendPut(URI url, String contentType, byte[] content)
-            throws java.io.IOException, InterruptedException {
+            throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder(url)
                 .header("Content-Type", contentType)
                 .PUT(HttpRequest.BodyPublishers.ofByteArray(content))

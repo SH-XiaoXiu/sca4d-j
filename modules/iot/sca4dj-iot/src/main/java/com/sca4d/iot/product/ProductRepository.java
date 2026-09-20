@@ -213,7 +213,7 @@ public class ProductRepository {
                 1,
                 0,
                 mapper::selectProductAccessMethodsBatch)) {
-            accessMethods.computeIfAbsent(state.productId(), ignored -> new java.util.ArrayList<>())
+            accessMethods.computeIfAbsent(state.productId(), ignored -> new ArrayList<>())
                     .add(DeviceAccessMethod.parse(state.methodCode()));
         }
         Map<Long, List<String>> protocols = new LinkedHashMap<>();
@@ -222,7 +222,7 @@ public class ProductRepository {
                 1,
                 0,
                 mapper::selectProductProtocolsBatch)) {
-            protocols.computeIfAbsent(state.productId(), ignored -> new java.util.ArrayList<>())
+            protocols.computeIfAbsent(state.productId(), ignored -> new ArrayList<>())
                     .add(state.protocolCode());
         }
         // 按标量查询的原顺序组装 Product，缺少关联行时使用空集合。

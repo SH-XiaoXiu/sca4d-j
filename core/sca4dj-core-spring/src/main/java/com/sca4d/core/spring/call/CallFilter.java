@@ -12,6 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.time.Clock;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -33,7 +34,7 @@ public final class CallFilter extends OncePerRequestFilter {
      * @param clock 创建调用开始时间使用的时钟
      */
     public CallFilter(Clock clock) {
-        this.clock = java.util.Objects.requireNonNull(clock, "时钟不能为空");
+        this.clock = Objects.requireNonNull(clock, "时钟不能为空");
     }
 
     @Override

@@ -13,8 +13,10 @@ import org.apache.ibatis.session.Configuration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /** 验证 Device 部分更新 XML 按 Patch 状态生成明确列赋值。 */
@@ -60,7 +62,7 @@ class DeviceMapperPatchSqlTest {
         parameters.put("directConnection", true);
         parameters.put("offset", 20L);
         parameters.put("size", 10);
-        parameters.put("sort", java.util.List.of(Sort.CREATED_AT.desc(), Sort.NAME.asc()));
+        parameters.put("sort", List.of(Sort.CREATED_AT.desc(), Sort.NAME.asc()));
 
         MappedStatement statement = configuration().getMappedStatement(
                 "com.sca4d.iot.persistence.mapper.DeviceMapper.selectDevices");
@@ -90,7 +92,7 @@ class DeviceMapperPatchSqlTest {
         try (InputStream input = DeviceMapperPatchSqlTest.class.getClassLoader().getResourceAsStream(resource)) {
             assertThat(input).isNotNull();
             new XMLMapperBuilder(input, configuration, resource, configuration.getSqlFragments()).parse();
-        } catch (java.io.IOException exception) {
+        } catch (IOException exception) {
             throw new IllegalStateException("无法读取 Device Mapper XML", exception);
         }
         return configuration;

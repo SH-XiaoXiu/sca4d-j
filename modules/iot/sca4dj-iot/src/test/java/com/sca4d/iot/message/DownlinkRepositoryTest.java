@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import com.sca4d.core.api.concurrent.OptimisticLockException;
 import com.sca4d.core.spring.persistence.batch.SqlBatchProperties;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.iot.api.message.AcknowledgementPolicy;
@@ -14,6 +15,8 @@ import com.sca4d.iot.api.message.DeviceDownlinkKind;
 import com.sca4d.iot.api.message.DeviceDownlinkMessage;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
 import com.sca4d.iot.api.message.RetryPolicy;
+import com.sca4d.iot.message.policy.NoAcknowledgementPolicy;
+import com.sca4d.iot.message.policy.NoRetryPolicy;
 import com.sca4d.iot.model.ThingDataJsonCodec;
 import com.sca4d.iot.persistence.EncodedDownlinkMessage;
 import com.sca4d.iot.persistence.mapper.DesiredPropertyMapper;
@@ -101,14 +104,14 @@ class DownlinkRepositoryTest {
                 Instant.EPOCH);
         when(messages.selectDownlinkMessages(List.of(11L))).thenReturn(List.of(cancelled));
         when(json.decodeMap("{}")).thenReturn(Map.of());
-        when(policies.acknowledgement("none")).thenReturn(new com.sca4d.iot.message.policy.NoAcknowledgementPolicy());
-        when(policies.retry("none")).thenReturn(new com.sca4d.iot.message.policy.NoRetryPolicy());
+        when(policies.acknowledgement("none")).thenReturn(new NoAcknowledgementPolicy());
+        when(policies.retry("none")).thenReturn(new NoRetryPolicy());
         assertThat(repository.markPublished(11L, 1, DeviceDownlinkStatus.WAITING_ACK, Instant.EPOCH, Instant.EPOCH))
                 .isFalse();
         assertThat(repository.reschedule(11L, 1, "transport")).isFalse();
         assertThat(repository.rescheduleAfterAcknowledgement(11L, "timeout")).isFalse();
         assertThatThrownBy(() -> repository.reschedule(12L, 1, "transport"))
-                .isInstanceOf(com.sca4d.core.api.concurrent.OptimisticLockException.class);
+                .isInstanceOf(OptimisticLockException.class);
     }
 
     @Test

@@ -25,6 +25,8 @@ import com.sca4d.iot.emqx.protocol.PrefixedMqttTopicIdentityMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
 
 import java.time.Instant;
 import java.util.List;
@@ -138,9 +140,9 @@ class MqttMessageRouterTest {
     void propagatesUnclassifiedApplicationFailure() {
         MqttMessageRoute applicationRoute = mock(MqttMessageRoute.class);
         when(applicationRoute.topicFilter()).thenReturn("vendor/gateways/+/frame");
-        org.mockito.Mockito.doThrow(new IllegalArgumentException("application failure"))
+        Mockito.doThrow(new IllegalArgumentException("application failure"))
                 .when(applicationRoute)
-                .route(org.mockito.ArgumentMatchers.any());
+                .route(ArgumentMatchers.any());
         MqttMessageRouter router = new MqttMessageRouter(
                 new MqttProtocolCatalog(List.of()),
                 mock(DeviceConnectionResolver.class),

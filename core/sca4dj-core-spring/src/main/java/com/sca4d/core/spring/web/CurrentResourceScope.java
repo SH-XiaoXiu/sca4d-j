@@ -7,6 +7,8 @@ import com.sca4d.core.api.permission.Permission;
 import com.sca4d.core.api.permission.ResourceScope;
 import com.sca4d.core.spring.call.CallHolder;
 
+import java.util.Optional;
+
 /** 为数据仓库读取当前调用已经批准的业务资源范围。 */
 public final class CurrentResourceScope {
 
@@ -25,7 +27,7 @@ public final class CurrentResourceScope {
     public <S extends ResourceScope> S scope(Permission permission, Class<S> scopeType) {
         S nearest = null;
         for (CallExecution execution : CallHolder.executions()) {
-            java.util.Optional<S> consumed = execution.consumeResourceScope(permission, scopeType);
+            Optional<S> consumed = execution.consumeResourceScope(permission, scopeType);
             if (nearest == null && consumed.isPresent()) {
                 nearest = consumed.orElseThrow();
             }

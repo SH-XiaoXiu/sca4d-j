@@ -15,6 +15,7 @@ import com.sca4d.core.api.runtime.RuntimeNamespace;
 import com.sca4d.core.api.setting.Settings;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
@@ -52,6 +53,6 @@ class PasskeyCeremonyStoreTest {
                         BusinessException.class,
                         exception -> assertThat(exception.errorCode())
                                 .isEqualTo(PasskeyErrorCode.CEREMONY_UNAVAILABLE));
-        verify(values, org.mockito.Mockito.times(2)).getAndDelete(key);
+        verify(values, Mockito.times(2)).getAndDelete(key);
     }
 }

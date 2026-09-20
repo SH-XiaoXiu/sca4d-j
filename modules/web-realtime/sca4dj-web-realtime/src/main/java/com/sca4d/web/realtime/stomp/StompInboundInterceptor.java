@@ -4,6 +4,7 @@ import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.connection.ConnectionId;
 import com.sca4d.core.api.identity.Principal;
+import com.sca4d.core.api.webrealtime.WebRealtimeTarget;
 import com.sca4d.core.spring.call.CallHolder;
 import com.sca4d.web.realtime.connection.RedisConnectionRegistry;
 import com.sca4d.web.realtime.ticket.TicketHandshakeInterceptor;
@@ -164,7 +165,7 @@ public final class StompInboundInterceptor implements ExecutorChannelInterceptor
         }
         try {
             CallHolder.set(call);
-            com.sca4d.core.api.webrealtime.WebRealtimeTarget target = matched.getFirst()
+            WebRealtimeTarget target = matched.getFirst()
                     .authorize(call, destination);
             if (!shared.subscribe(connectionId, subscriptionId, target)) {
                 throw new IllegalStateException("Web Realtime 连接共享状态已经失效");

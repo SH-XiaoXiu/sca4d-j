@@ -21,6 +21,7 @@ import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.time.Clock;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Objects;
@@ -192,7 +193,7 @@ public class HmacAuthenticationMethod implements AuthenticationMethod<HmacProof>
      * @return 本次调用完成撤销时为 {@code true}，已经撤销时为 {@code false}
     */
     @Transactional
-    public boolean revoke(long accountId, @NotNull java.time.Instant revokedAt) {
+    public boolean revoke(long accountId, @NotNull Instant revokedAt) {
         HmacCredential current = credentials.find(accountId);
         if (current == null) {
             throw new BusinessException(HmacErrorCode.CREDENTIAL_NOT_FOUND);

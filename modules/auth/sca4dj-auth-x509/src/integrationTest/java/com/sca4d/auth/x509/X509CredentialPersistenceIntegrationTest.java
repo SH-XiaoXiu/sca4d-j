@@ -30,6 +30,9 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.time.Instant;
+import java.util.Objects;
+
 /** 用隔离 PostgreSQL 验证凭据版本、状态及所属账号边界。 */
 @Testcontainers
 class X509CredentialPersistenceIntegrationTest {
@@ -72,7 +75,7 @@ class X509CredentialPersistenceIntegrationTest {
         factory.setConfiguration(configuration);
         factory.setPlugins(new AffectedRowsInterceptor());
         factory.setMapperLocations(new ClassPathResource("mapper/auth/X509CredentialMapper.xml"));
-        SqlSessionTemplate template = new SqlSessionTemplate(java.util.Objects.requireNonNull(factory.getObject()));
+        SqlSessionTemplate template = new SqlSessionTemplate(Objects.requireNonNull(factory.getObject()));
         context = new AnnotationConfigApplicationContext();
         context.register(Transactions.class);
         context.registerBean(DataSourceTransactionManager.class, () -> new DataSourceTransactionManager(source));
@@ -95,7 +98,7 @@ class X509CredentialPersistenceIntegrationTest {
     @Test
     @DisplayName("证书有效期边界、批量撤销及旧版本保护保持一致")
     void preservesValidityAndRevocationScope() {
-        java.time.Instant now = java.time.Instant.parse("2026-09-15T00:00:00Z");
+        Instant now = Instant.parse("2026-09-15T00:00:00Z");
         X509Credential first = new X509Credential(
                 1,
                 101,

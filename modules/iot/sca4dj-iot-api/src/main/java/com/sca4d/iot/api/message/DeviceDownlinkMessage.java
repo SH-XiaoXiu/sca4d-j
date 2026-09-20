@@ -9,6 +9,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.OptionalLong;
 
 /** 保存 desired 或 command 共用的标准下行消息快照。 */
@@ -137,8 +138,8 @@ public final class DeviceDownlinkMessage {
     }
 
     /** @return 设备定时规则本次原定触发时间；即时下行为空 */
-    public @NotNull java.util.Optional<Instant> scheduledAt() {
-        return java.util.Optional.ofNullable(scheduledAt);
+    public @NotNull Optional<Instant> scheduledAt() {
+        return Optional.ofNullable(scheduledAt);
     }
 
     /** @return 不可修改标准数据 */
@@ -172,8 +173,8 @@ public final class DeviceDownlinkMessage {
     }
 
     /** @return 首次成功发布的最晚时间；没有限制时为空 */
-    public @NotNull java.util.Optional<Instant> expiresAt() {
-        return java.util.Optional.ofNullable(expiresAt);
+    public @NotNull Optional<Instant> expiresAt() {
+        return Optional.ofNullable(expiresAt);
     }
 
     /** @return 消息创建时间 */

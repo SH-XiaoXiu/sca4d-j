@@ -32,6 +32,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.time.Clock;
+import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,19 +48,19 @@ public class FileAutoConfiguration {
 
     /** @return 文件上传有效期设置 */
     @Bean
-    SystemSetting<java.time.Duration> fileUploadTtlSetting() {
+    SystemSetting<Duration> fileUploadTtlSetting() {
         return FileSettings.UPLOAD_TTL;
     }
 
     /** @return 文件访问地址有效期设置 */
     @Bean
-    SystemSetting<java.time.Duration> fileAccessTtlSetting() {
+    SystemSetting<Duration> fileAccessTtlSetting() {
         return FileSettings.ACCESS_TTL;
     }
 
     /** @return 待绑定文件保留期设置 */
     @Bean
-    SystemSetting<java.time.Duration> fileReadyRetentionSetting() {
+    SystemSetting<Duration> fileReadyRetentionSetting() {
         return FileSettings.READY_RETENTION;
     }
 

@@ -10,10 +10,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 校验可由管理 API 保存的 ACTION 编码，并把内部全量选择符展开为具体 {@link Operation}。
@@ -64,11 +66,11 @@ public final class PermissionSelections {
             throw new NullPointerException("Operation 不能为空");
         }
         this.allOperations = checkedOperations.stream()
-                .sorted(java.util.Comparator.comparing(Operation::value))
+                .sorted(Comparator.comparing(Operation::value))
                 .toList();
         this.actionCodes = this.allOperations.stream()
                 .map(Operation::value)
-                .collect(java.util.stream.Collectors.toUnmodifiableSet());
+                .collect(Collectors.toUnmodifiableSet());
         if (this.actionCodes.size() != this.allOperations.size()) {
             throw new IllegalArgumentException("RBAC 权限目录包含重复 Operation");
         }

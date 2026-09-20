@@ -34,8 +34,10 @@ import com.sca4d.iot.message.DeviceCommandService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.time.Clock;
@@ -93,7 +95,7 @@ class DefaultDeviceScheduleServiceTest {
                 .thenAnswer(invocation -> ((Supplier<?>) invocation.getArgument(2)).get());
         when(transactions.execute(any()))
                 .thenAnswer(
-                        invocation -> invocation.<org.springframework.transaction.support.TransactionCallback<?>>getArgument(
+                        invocation -> invocation.<TransactionCallback<?>>getArgument(
                                 0)
                                 .doInTransaction(mock(TransactionStatus.class)));
         doAnswer(invocation -> {
@@ -189,7 +191,7 @@ class DefaultDeviceScheduleServiceTest {
                                 && "schedule-execution:10:2026-08-05T10:00:00Z".equals(event.businessKey())));
         verify(distributedLock).execute(
                 argThat(key -> new LockKey("iot", "schedule", "10").equals(key)),
-                org.mockito.ArgumentMatchers.eq(Duration.ofSeconds(10)),
+                ArgumentMatchers.eq(Duration.ofSeconds(10)),
                 any(Supplier.class));
     }
 

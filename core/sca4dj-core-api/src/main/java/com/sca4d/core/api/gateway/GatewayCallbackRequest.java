@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeMap;
 
@@ -70,7 +71,7 @@ public final class GatewayCallbackRequest<I> {
         source.forEach((name, values) -> {
             ArrayList<String> copiedValues = new ArrayList<>(values.size());
             for (String value : values) {
-                copiedValues.add(java.util.Objects.requireNonNull(value, "Gateway 回调 Header 值不能为空"));
+                copiedValues.add(Objects.requireNonNull(value, "Gateway 回调 Header 值不能为空"));
             }
             copied.put(name, List.copyOf(copiedValues));
         });

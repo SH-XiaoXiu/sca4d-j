@@ -2,6 +2,7 @@ package com.sca4d.iot.message;
 
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
+import com.sca4d.core.api.event.EventType;
 import com.sca4d.core.api.messaging.MessageConsumer;
 import com.sca4d.core.api.messaging.MessageDelivery;
 import com.sca4d.iot.api.change.DeviceChangeArea;
@@ -67,7 +68,7 @@ public class DeviceDownlinkDispatchConsumer implements MessageConsumer<DeviceDow
     }
 
     @Override
-    public @NotNull com.sca4d.core.api.event.EventType<DeviceDownlinkDispatch> eventType() {
+    public @NotNull EventType<DeviceDownlinkDispatch> eventType() {
         return IotMessageTypes.DOWNLINK_DISPATCH;
     }
 

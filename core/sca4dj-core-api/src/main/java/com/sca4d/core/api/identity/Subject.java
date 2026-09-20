@@ -3,6 +3,8 @@ package com.sca4d.core.api.identity;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 /** 表示完成认证或建立受控调用的具体接入者。 */
 public final class Subject {
 
@@ -24,7 +26,7 @@ public final class Subject {
             throw new IllegalArgumentException("Subject 标识必须为正数");
         }
         this.id = id;
-        this.type = java.util.Objects.requireNonNull(type, "Subject 类型不能为空");
+        this.type = Objects.requireNonNull(type, "Subject 类型不能为空");
     }
 
     /**

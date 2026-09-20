@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 /** 验证异步通知事件只传输公共通知值并可稳定往返。 */
 class NotificationRequestedTest {
@@ -24,7 +25,7 @@ class NotificationRequestedTest {
                 Locale.SIMPLIFIED_CHINESE,
                 Map.of("code", "123456"),
                 new Region("CN"),
-                java.util.Set.of(NotificationChannel.EMAIL));
+                Set.of(NotificationChannel.EMAIL));
         ObjectMapper mapper = new ObjectMapper();
 
         NotificationRequested decoded = mapper.readValue(

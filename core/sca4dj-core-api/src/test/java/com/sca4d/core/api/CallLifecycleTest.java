@@ -16,6 +16,7 @@ import com.sca4d.core.api.annotation.Locked;
 import com.sca4d.core.api.annotation.RateLimited;
 import com.sca4d.core.api.annotation.RequirePermission;
 import com.sca4d.core.api.audit.AuditPayloadFactory;
+import com.sca4d.core.api.audit.AuditRecord;
 import com.sca4d.core.api.audit.AuditRecorder;
 import com.sca4d.core.api.audit.AuditResolverLookup;
 import com.sca4d.core.api.audit.AuditTargetResolver;
@@ -36,6 +37,7 @@ import com.sca4d.core.api.call.IdempotentCallExecutor;
 import com.sca4d.core.api.call.LockedCallExecutor;
 import com.sca4d.core.api.call.PermissionCallAssessor;
 import com.sca4d.core.api.call.RateLimitedCallAssessor;
+import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.IdempotencyBeginResult;
 import com.sca4d.core.api.concurrent.IdempotencyFingerprints;
 import com.sca4d.core.api.concurrent.IdempotencyKey;
@@ -58,6 +60,7 @@ import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.Permission;
 import com.sca4d.core.api.permission.PermissionAssessment;
 import com.sca4d.core.api.permission.PermissionDecision;
+import com.sca4d.core.api.permission.PermissionPolicy;
 import com.sca4d.core.api.permission.ResourceScope;
 import com.sca4d.core.api.resource.Resource;
 import com.sca4d.core.api.resource.ResourceReference;
@@ -281,7 +284,7 @@ class CallLifecycleTest {
     @Test
     @DisplayName("从 AuditTarget 参数建立 ResourceReference")
     void resolvesSimpleAuditTargetParameter() throws Exception {
-        AtomicReference<com.sca4d.core.api.audit.AuditRecord> recorded = new AtomicReference<>();
+        AtomicReference<AuditRecord> recorded = new AtomicReference<>();
         CallLifecycle executor = lifecycle(
                 new PermissionAssessment(List.of()),
                 (key, limit) -> RateLimitDecision.allow(),
@@ -856,7 +859,7 @@ class CallLifecycleTest {
             PermissionAssessment permissionAssessment,
             RateLimiter rateLimiter,
             IdempotencyStore idempotencyStore,
-            com.sca4d.core.api.concurrent.DistributedLock distributedLock,
+            DistributedLock distributedLock,
             AuditRecorder auditRecorder,
             CallValueResolverLookup resolverLookup,
             Clock clock,
@@ -1122,7 +1125,7 @@ class CallLifecycleTest {
     /** 记录批量资源的判断顺序，并可拒绝指定资源。 */
     private static final class BatchPermissionPolicy
             implements
-                com.sca4d.core.api.permission.PermissionPolicy {
+                PermissionPolicy {
 
         private final List<String> events;
 
@@ -1150,7 +1153,7 @@ class CallLifecycleTest {
 
     private static final class DevicePolicy
             implements
-                com.sca4d.core.api.permission.PermissionPolicy {
+                PermissionPolicy {
 
         private final DeviceScope scope;
 
@@ -1192,7 +1195,7 @@ class CallLifecycleTest {
 
     private static final class OperationPolicy
             implements
-                com.sca4d.core.api.permission.PermissionPolicy {
+                PermissionPolicy {
 
         private final List<String> events;
 
@@ -1201,7 +1204,7 @@ class CallLifecycleTest {
         }
 
         @Override
-        public boolean supports(com.sca4d.core.api.resource.@NotNull Resource resource) {
+        public boolean supports(@NotNull Resource resource) {
             return resource instanceof Operation;
         }
 
@@ -1270,7 +1273,7 @@ class CallLifecycleTest {
 
     private static final class RecordingDistributedLock
             implements
-                com.sca4d.core.api.concurrent.DistributedLock {
+                DistributedLock {
 
         private final List<String> events;
 

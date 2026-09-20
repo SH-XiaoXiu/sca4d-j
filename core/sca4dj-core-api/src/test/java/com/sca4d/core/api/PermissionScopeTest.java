@@ -31,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Method;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
@@ -171,7 +172,7 @@ class PermissionScopeTest {
 
     private static CallExecution execution(Call call) {
         try {
-            java.lang.reflect.Method method = TestCall.class.getDeclaredMethod("invoke");
+            Method method = TestCall.class.getDeclaredMethod("invoke");
             return new CallExecution(call, TestCall.class, method, new Object[0], method.getGenericReturnType());
         } catch (NoSuchMethodException exception) {
             throw new AssertionError(exception);

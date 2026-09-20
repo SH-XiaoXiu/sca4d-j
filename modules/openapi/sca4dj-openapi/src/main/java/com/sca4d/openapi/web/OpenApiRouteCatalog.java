@@ -1,5 +1,6 @@
 package com.sca4d.openapi.web;
 
+import com.sca4d.core.api.annotation.RequirePermission;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.OperationCatalog;
 import com.sca4d.openapi.web.annotation.OpenApiRoute;
@@ -98,8 +99,8 @@ public final class OpenApiRouteCatalog implements SmartInitializingSingleton {
 
     /** 校验 Controller 方法声明了与开放 Operation 一致的 {@code @RequirePermission}。 */
     private static void validatePermissionAnnotation(Method method, Operation operation) {
-        com.sca4d.core.api.annotation.RequirePermission permission = AnnotatedElementUtils
-                .findMergedAnnotation(method, com.sca4d.core.api.annotation.RequirePermission.class);
+        RequirePermission permission = AnnotatedElementUtils
+                .findMergedAnnotation(method, RequirePermission.class);
         if (permission == null
                 || !operation.value().equals(permission.operation())
                 || permission.operation().isBlank()) {

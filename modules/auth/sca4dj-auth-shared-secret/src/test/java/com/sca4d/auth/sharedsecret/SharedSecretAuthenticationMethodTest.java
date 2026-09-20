@@ -20,6 +20,7 @@ import java.security.SecureRandom;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneOffset;
+import java.util.Set;
 
 /** 验证 Shared Secret 只认证已确定的 Account，并用凭据版本使旧证据失效。 */
 class SharedSecretAuthenticationMethodTest {
@@ -79,7 +80,7 @@ class SharedSecretAuthenticationMethodTest {
                 new Authentication(
                         ACCOUNT.accountId(),
                         SharedSecretAuthenticationMethod.CODE,
-                        java.util.Set.of(AuthenticationFactorKind.POSSESSION),
+                        Set.of(AuthenticationFactorKind.POSSESSION),
                         NOW),
                 Long.toString(ACCOUNT.accountId()),
                 version,

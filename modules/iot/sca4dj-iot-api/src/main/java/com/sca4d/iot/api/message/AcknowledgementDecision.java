@@ -4,6 +4,8 @@ import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 /** 表示 ACK 策略对当前下行消息给出的无副作用判断。 */
 public final class AcknowledgementDecision {
 
@@ -40,7 +42,7 @@ public final class AcknowledgementDecision {
     public static @NotNull AcknowledgementDecision fail(@NotNull IotFailureCode failure) {
         return new AcknowledgementDecision(
                 Outcome.FAIL,
-                java.util.Objects.requireNonNull(failure, "ACK 失败 code 不能为空"));
+                Objects.requireNonNull(failure, "ACK 失败 code 不能为空"));
     }
 
     /** @return 策略判断结果 */

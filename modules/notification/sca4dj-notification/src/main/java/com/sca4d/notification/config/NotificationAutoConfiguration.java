@@ -31,6 +31,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.time.Clock;
 import java.util.List;
+import java.util.Optional;
 
 /** 自动装配类型化通知、Settings 包装、渠道路由和默认模板引擎。 */
 @AutoConfiguration
@@ -98,7 +99,7 @@ public class NotificationAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     NotificationRegionResolver notificationRegionResolver() {
-        return recipient -> java.util.Optional.empty();
+        return recipient -> Optional.empty();
     }
 
     /** @return 同步选择并执行所有可用渠道的路由器 */

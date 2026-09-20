@@ -20,6 +20,7 @@ import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
 import com.sca4d.core.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -134,11 +135,11 @@ class SessionContractTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new LongIdSet(List.of(3L, 2L, 3L)));
-        org.junit.jupiter.api.Assertions.assertFalse(
+        Assertions.assertFalse(
                 session.grants(principal.principalId(), new TestResource("project", "01927273629")));
-        org.junit.jupiter.api.Assertions.assertFalse(
+        Assertions.assertFalse(
                 session.grants(principal.principalId(), new TestResource("project", "project.read")));
-        org.junit.jupiter.api.Assertions.assertFalse(
+        Assertions.assertFalse(
                 session.grants(principal.principalId(), new TestResource("other", "1927273629")));
     }
 

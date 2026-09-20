@@ -12,7 +12,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import java.io.ByteArrayInputStream;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
@@ -66,7 +68,7 @@ class LocalFileStorageTest extends FileStorageContract {
                         object,
                         "application/octet-stream",
                         3,
-                        new java.io.ByteArrayInputStream(new byte[] {1, 2})))
+                        new ByteArrayInputStream(new byte[] {1, 2})))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("上传内容字节数与申请不一致");
         assertThatThrownBy(
@@ -74,7 +76,7 @@ class LocalFileStorageTest extends FileStorageContract {
                         object,
                         "application/octet-stream",
                         3,
-                        new java.io.ByteArrayInputStream(new byte[] {1, 2, 3, 4})))
+                        new ByteArrayInputStream(new byte[] {1, 2, 3, 4})))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("上传内容字节数与申请不一致");
         assertThat(Files.exists(root.resolve("uploads/exact.bin"))).isFalse();
@@ -83,12 +85,12 @@ class LocalFileStorageTest extends FileStorageContract {
                 object,
                 "application/octet-stream",
                 3,
-                new java.io.ByteArrayInputStream(new byte[] {1, 2, 3}));
+                new ByteArrayInputStream(new byte[] {1, 2, 3}));
         storage.write(
                 object,
                 "application/octet-stream",
                 3,
-                new java.io.ByteArrayInputStream(new byte[] {4, 5, 6}));
+                new ByteArrayInputStream(new byte[] {4, 5, 6}));
         try (var input = storage.open(object)) {
             assertThat(input.readAllBytes()).containsExactly(4, 5, 6);
         }
@@ -106,9 +108,9 @@ class LocalFileStorageTest extends FileStorageContract {
     void preservesContentTypeWithoutAFileExtension() throws Exception {
         StorageObject upload = new StorageObject("files", "uploads/without-extension");
         StorageObject stored = new StorageObject("files", "objects/without-extension");
-        byte[] content = "%PDF-1.7".getBytes(java.nio.charset.StandardCharsets.US_ASCII);
+        byte[] content = "%PDF-1.7".getBytes(StandardCharsets.US_ASCII);
 
-        storage.write(upload, "application/pdf", content.length, new java.io.ByteArrayInputStream(content));
+        storage.write(upload, "application/pdf", content.length, new ByteArrayInputStream(content));
         assertThat(storage.inspect(upload).orElseThrow().contentType()).isEqualTo("application/pdf");
 
         storage.promote(upload, stored);

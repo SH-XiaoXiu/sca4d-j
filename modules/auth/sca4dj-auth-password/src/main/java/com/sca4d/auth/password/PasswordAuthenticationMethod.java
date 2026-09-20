@@ -291,7 +291,7 @@ public class PasswordAuthenticationMethod implements AuthenticationMethod<Passwo
             @NotNull PasswordCredential.Status expectedStatus,
             @NotNull PasswordCredential.Status status) {
         if ((expectedStatus == PasswordCredential.Status.ACTIVE
-                        && status == PasswordCredential.Status.RESET_REQUIRED)
+                && status == PasswordCredential.Status.RESET_REQUIRED)
                 || (expectedStatus == PasswordCredential.Status.RESET_REQUIRED
                         && status == PasswordCredential.Status.ACTIVE)) {
             return;

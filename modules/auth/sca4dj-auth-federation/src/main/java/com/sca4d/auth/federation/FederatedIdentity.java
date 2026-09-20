@@ -1,6 +1,7 @@
 package com.sca4d.auth.federation;
 
 import java.time.Instant;
+import java.util.Objects;
 
 /** 保存 Provider 与本地 Account 之间的外部身份绑定。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
@@ -34,9 +35,9 @@ public final class FederatedIdentity {
         this.id = id;
         this.providerId = providerId;
         this.accountId = accountId;
-        this.profile = java.util.Objects.requireNonNull(profile, "外部资料不能为空");
+        this.profile = Objects.requireNonNull(profile, "外部资料不能为空");
         this.version = version;
-        this.linkedAt = java.util.Objects.requireNonNull(linkedAt, "绑定时间不能为空");
+        this.linkedAt = Objects.requireNonNull(linkedAt, "绑定时间不能为空");
     }
 
     /** @return 绑定标识 */

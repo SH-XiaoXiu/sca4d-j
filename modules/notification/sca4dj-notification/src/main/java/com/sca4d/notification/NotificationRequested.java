@@ -18,6 +18,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /** 保存 `notification.requested@2` 已冻结接收人、语言、区域、变量和渠道的线路字段。 */
 public final class NotificationRequested {
@@ -49,7 +50,7 @@ public final class NotificationRequested {
         Set<NotificationChannel> parsedChannels = Objects.requireNonNull(channels, "通知渠道不能为空")
                 .stream()
                 .map(NotificationChannel::new)
-                .collect(java.util.stream.Collectors.toUnmodifiableSet());
+                .collect(Collectors.toUnmodifiableSet());
         Notification checked = new Notification(
                 new NotificationCode(code),
                 new NotificationRecipient(new NotificationRecipientType(recipientType), recipientId),
@@ -133,6 +134,6 @@ public final class NotificationRequested {
                 regionCode == null ? null : new Region(regionCode),
                 channels.stream()
                         .map(NotificationChannel::new)
-                        .collect(java.util.stream.Collectors.toUnmodifiableSet()));
+                        .collect(Collectors.toUnmodifiableSet()));
     }
 }

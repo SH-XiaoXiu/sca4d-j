@@ -9,6 +9,8 @@ import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.ProductDefinition;
 import com.sca4d.iot.api.change.DeviceChangeArea;
 import com.sca4d.iot.api.connection.DeviceConnectionBinding;
+import com.sca4d.iot.api.model.ThingModel;
+import com.sca4d.iot.api.model.ThingModelPresentation;
 import com.sca4d.iot.api.model.ThingModelRepository;
 import com.sca4d.iot.api.protocol.DeviceProtocol;
 import com.sca4d.iot.api.state.ReportedStateStore;
@@ -190,8 +192,8 @@ public class DeviceService {
                 || !product.protocolCodes().contains(device.protocolCode())) {
             throw new BusinessException(IotErrorCode.STATE_CONFLICT);
         }
-        com.sca4d.iot.api.model.ThingModel model = models.find(product.code(), device.thingModelVersion())
-                .map(com.sca4d.iot.api.model.ThingModelPresentation::model)
+        ThingModel model = models.find(product.code(), device.thingModelVersion())
+                .map(ThingModelPresentation::model)
                 .orElseThrow(() -> new BusinessException(IotErrorCode.THING_MODEL_NOT_FOUND));
         try {
             DeviceProtocol protocol = protocols.loadByCode(device.protocolCode());
@@ -259,8 +261,8 @@ public class DeviceService {
                 || downlinks.hasActiveMessages(deviceId, current.bindingGeneration())) {
             throw new BusinessException(IotErrorCode.STATE_CONFLICT);
         }
-        com.sca4d.iot.api.model.ThingModel model = models.find(product.code(), input.thingModelVersion())
-                .map(com.sca4d.iot.api.model.ThingModelPresentation::model)
+        ThingModel model = models.find(product.code(), input.thingModelVersion())
+                .map(ThingModelPresentation::model)
                 .orElseThrow(() -> new BusinessException(IotErrorCode.THING_MODEL_NOT_FOUND));
         try {
             protocols.loadByCode(input.protocolCode()).validate(model);
@@ -404,8 +406,8 @@ public class DeviceService {
         if (!product.protocolCodes().contains(input.protocolCode())) {
             throw new BusinessException(IotErrorCode.PROTOCOL_CONFLICT);
         }
-        com.sca4d.iot.api.model.ThingModel model = models.find(product.code(), input.thingModelVersion())
-                .map(com.sca4d.iot.api.model.ThingModelPresentation::model)
+        ThingModel model = models.find(product.code(), input.thingModelVersion())
+                .map(ThingModelPresentation::model)
                 .orElseThrow(() -> new BusinessException(IotErrorCode.THING_MODEL_NOT_FOUND));
         DeviceProtocol protocol = protocols.loadByCode(input.protocolCode());
         protocol.validate(model);

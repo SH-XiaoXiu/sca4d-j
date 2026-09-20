@@ -13,9 +13,11 @@ import com.sca4d.iot.api.message.IotFailureCode;
 import com.sca4d.iot.api.message.RetryDecision;
 import com.sca4d.iot.api.message.RetryPolicy;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
+import java.util.Set;
 
 /** 验证物模型命令同时保存命令 code、策略和类型化输入键。 */
 class ThingCommandTest {
@@ -69,7 +71,7 @@ class ThingCommandTest {
                 .retryPolicy(RETRY)
                 .build();
 
-        assertEquals(java.util.Set.of("level"), command.inputs().keySet());
+        assertEquals(Set.of("level"), command.inputs().keySet());
         assertSame(level, command.inputKeys().get("level"));
     }
 
@@ -92,7 +94,7 @@ class ThingCommandTest {
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
                 () -> ThingCommand.builder("set-level").input(level, integer));
-        org.junit.jupiter.api.Assertions.assertTrue(
+        Assertions.assertTrue(
                 exception.getMessage().contains("DataKey Java 类型与物模型不一致"));
     }
 }

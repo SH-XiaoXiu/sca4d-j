@@ -1,5 +1,6 @@
 package com.sca4d.openapi.oauth;
 
+import com.sca4d.auth.session.SessionService;
 import com.sca4d.auth.sharedsecret.SharedSecretAuthenticationMethod;
 import com.sca4d.auth.sharedsecret.SharedSecretProof;
 import com.sca4d.core.api.annotation.AnonymousAccess;
@@ -39,7 +40,7 @@ public class OpenApiTokenEndpointHandler {
 
     private final @NotNull SharedSecretAuthenticationMethod sharedSecrets;
 
-    private final @NotNull com.sca4d.auth.session.SessionService sessions;
+    private final @NotNull SessionService sessions;
 
     private final @NotNull OpenApiJwtTokenService jwtTokens;
 
@@ -56,7 +57,7 @@ public class OpenApiTokenEndpointHandler {
             @NotNull OpenApiClientService clients,
             @NotNull IdentityService identities,
             @NotNull SharedSecretAuthenticationMethod sharedSecrets,
-            @NotNull com.sca4d.auth.session.SessionService sessions,
+            @NotNull SessionService sessions,
             @NotNull OpenApiJwtTokenService jwtTokens) {
         this.clients = Objects.requireNonNull(clients, "OpenAPI Client 服务不能为空");
         this.identities = Objects.requireNonNull(identities, "身份服务不能为空");

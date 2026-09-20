@@ -7,6 +7,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.OperationCatalog;
 import com.sca4d.core.api.permission.OperationNode;
 import com.sca4d.core.api.runtime.RuntimeNamespace;
@@ -14,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.core.script.RedisScript;
@@ -65,8 +67,8 @@ class RedisRbacPermissionCacheTest {
                                 invocation.getArguments().length)))
                 .when(redis)
                 .execute(
-                        org.mockito.ArgumentMatchers.<RedisScript<Long>>any(),
-                        org.mockito.ArgumentMatchers.anyList(),
+                        ArgumentMatchers.<RedisScript<Long>>any(),
+                        ArgumentMatchers.anyList(),
                         any(Object[].class));
         cache = new RedisRbacPermissionCache(
                 redis,
@@ -230,7 +232,7 @@ class RedisRbacPermissionCacheTest {
             @Override
             public boolean canGrant(
                     @NotNull RbacDomain domain,
-                    @NotNull com.sca4d.core.api.permission.Operation operation) {
+                    @NotNull Operation operation) {
                 return DOMAIN.equals(domain);
             }
         };

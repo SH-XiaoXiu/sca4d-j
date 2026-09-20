@@ -14,6 +14,7 @@ import com.sca4d.core.api.storage.StorageUpload;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.time.Instant;
 
@@ -42,7 +43,7 @@ public abstract class FileStorageContract {
         assertTrue(upload.url().isAbsolute());
         assertFalse(upload.headers().isEmpty());
 
-        storage.write(uploadObject, "image/png", content.length, new java.io.ByteArrayInputStream(content));
+        storage.write(uploadObject, "image/png", content.length, new ByteArrayInputStream(content));
         StorageObjectMetadata metadata = storage.inspect(uploadObject).orElseThrow();
         assertEquals("image/png", metadata.contentType());
         assertEquals(content.length, metadata.sizeBytes());
@@ -77,7 +78,7 @@ public abstract class FileStorageContract {
                         shortObject,
                         "application/octet-stream",
                         3,
-                        new java.io.ByteArrayInputStream(new byte[] {1, 2})));
+                        new ByteArrayInputStream(new byte[] {1, 2})));
         assertTrue(storage.inspect(shortObject).isEmpty());
 
         assertThrows(
@@ -86,7 +87,7 @@ public abstract class FileStorageContract {
                         longObject,
                         "application/octet-stream",
                         2,
-                        new java.io.ByteArrayInputStream(new byte[] {1, 2, 3})));
+                        new ByteArrayInputStream(new byte[] {1, 2, 3})));
         assertTrue(storage.inspect(longObject).isEmpty());
     }
 }

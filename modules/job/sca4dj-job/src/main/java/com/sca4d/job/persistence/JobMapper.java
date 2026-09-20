@@ -2,6 +2,7 @@ package com.sca4d.job.persistence;
 
 import com.sca4d.core.api.job.JobRunStatus;
 import com.sca4d.core.api.persistence.Patch;
+import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.job.JobAttemptStatus;
 import com.sca4d.job.JobNodeStatus;
 import org.apache.ibatis.annotations.Param;
@@ -30,7 +31,7 @@ public interface JobMapper {
             @Param("jobKey") @NotNull String jobKey,
             @Param("definitionVersion") int definitionVersion,
             @Param("nodeKey") @NotNull String nodeKey,
-            @Param("page") @NotNull com.sca4d.core.api.query.PageRequest page);
+            @Param("page") @NotNull PageRequest page);
 
     /** 插入根运行并返回数据库主键。 */
     long insertRun(

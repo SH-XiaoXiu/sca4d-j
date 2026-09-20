@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Clock;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -248,7 +249,7 @@ public final class SaTokenSessionManager {
             invalidToken.run();
             return Optional.empty();
         }
-        java.time.Instant now = clock.instant();
+        Instant now = clock.instant();
         if (loginId != session.account().accountId()
                 || now.isBefore(session.issuedAt())
                 || !now.isBefore(session.expiresAt())) {

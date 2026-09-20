@@ -37,6 +37,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.Instant;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
 /** 使用 PostgreSQL 17 验证审计追加、Raw JSON 和组合分页查询。 */
@@ -75,7 +76,7 @@ class AuditPersistenceIntegrationTest {
         jdbc.execute("DROP TABLE IF EXISTS audit_record");
         ResourceDatabasePopulator schema = new ResourceDatabasePopulator(
                 new ClassPathResource("META-INF/sca4dj/schema/audit.sql"));
-        schema.execute(java.util.Objects.requireNonNull(jdbc.getDataSource()));
+        schema.execute(Objects.requireNonNull(jdbc.getDataSource()));
     }
 
     @Test

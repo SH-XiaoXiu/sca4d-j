@@ -16,6 +16,7 @@ import io.swagger.v3.oas.models.media.ObjectSchema;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.parameters.RequestBody;
+import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
@@ -24,14 +25,17 @@ import org.springdoc.core.customizers.GlobalOpenApiCustomizer;
 import org.springdoc.core.customizers.OperationCustomizer;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.Order;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -95,7 +99,7 @@ public class OpenApiSpringdocAutoConfiguration {
                     .findMergedAnnotation(handlerMethod.getMethod(), OpenApiRoute.class);
             if (route != null) {
                 String operationId = route.toolGroup()
-                        + route.toolName().substring(0, 1).toUpperCase(java.util.Locale.ROOT)
+                        + route.toolName().substring(0, 1).toUpperCase(Locale.ROOT)
                         + route.toolName().substring(1);
                 operation.setOperationId(operationId);
                 if (operation.getTags() == null || operation.getTags().isEmpty()) {
@@ -120,7 +124,7 @@ public class OpenApiSpringdocAutoConfiguration {
     GroupedOpenApi openApiGroup(
             ObjectProvider<OpenApiAuthenticationEndpointRegistrar> authenticationEndpointRegistrar,
             ObjectProvider<OpenApiAuthenticationEndpoint> authenticationEndpoint,
-            @org.springframework.beans.factory.annotation.Qualifier("openApiOperationCustomizer") OperationCustomizer operationCustomizer) {
+            @Qualifier("openApiOperationCustomizer") OperationCustomizer operationCustomizer) {
         authenticationEndpointRegistrar.getIfAvailable();
         OpenApiAuthenticationEndpoint endpoint = authenticationEndpoint.getIfAvailable();
         return GroupedOpenApi.builder()
@@ -180,7 +184,7 @@ public class OpenApiSpringdocAutoConfiguration {
                         new ApiResponses()
                                 .addApiResponse(
                                         "200",
-                                        new io.swagger.v3.oas.models.responses.ApiResponse()
+                                        new ApiResponse()
                                                 .description("认证成功并签发 Access Token")
                                                 .content(
                                                         new Content().addMediaType(
@@ -223,7 +227,7 @@ public class OpenApiSpringdocAutoConfiguration {
                 "expires_in",
                 new IntegerSchema()
                         .description("Token 剩余有效秒数。")
-                        .minimum(java.math.BigDecimal.ONE)
+                        .minimum(BigDecimal.ONE)
                         .example(300));
         schema.addProperty(
                 "scope",
@@ -268,7 +272,7 @@ public class OpenApiSpringdocAutoConfiguration {
     }
 
     /** 为开放业务方法补充认证、授权、参数和服务端固定失败响应。 */
-    private static void addCommonToolResponses(io.swagger.v3.oas.models.Operation operation) {
+    private static void addCommonToolResponses(Operation operation) {
         ApiResponses responses = operation.getResponses();
         if (responses == null) {
             responses = new ApiResponses();
@@ -281,11 +285,11 @@ public class OpenApiSpringdocAutoConfiguration {
     }
 
     /** 创建引用 {@code OpenApiError} 并包含指定示例的错误响应。 */
-    private static io.swagger.v3.oas.models.responses.ApiResponse errorResponse(
+    private static ApiResponse errorResponse(
             String description,
             String code,
             String message) {
-        return new io.swagger.v3.oas.models.responses.ApiResponse()
+        return new ApiResponse()
                 .description(description)
                 .content(
                         new Content().addMediaType(

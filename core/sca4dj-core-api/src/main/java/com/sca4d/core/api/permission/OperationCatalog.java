@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /** 收集业务模块的 Operation 聚合，并提供完整目录、ACTION 索引和子集投影。 */
 public final class OperationCatalog {
@@ -157,7 +158,7 @@ public final class OperationCatalog {
         String canonical = Objects.requireNonNull(actionCodes, "Operation 编码集合不能为空")
                 .stream()
                 .sorted()
-                .collect(java.util.stream.Collectors.joining("\n"));
+                .collect(Collectors.joining("\n"));
         try {
             byte[] digest = MessageDigest.getInstance("SHA-256")
                     .digest(canonical.getBytes(StandardCharsets.UTF_8));

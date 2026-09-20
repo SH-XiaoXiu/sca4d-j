@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.SmartLifecycle;
 
 import java.time.Clock;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
@@ -194,7 +195,7 @@ public final class JobWorker implements SmartLifecycle {
                     claim.nodeKey(),
                     claim.attempt(),
                     workerId,
-                    java.time.Duration.between(startedAt, clock.instant()).toMillis());
+                    Duration.between(startedAt, clock.instant()).toMillis());
         } catch (RuntimeException exception) {
             String error = errorSummary(exception);
             try {

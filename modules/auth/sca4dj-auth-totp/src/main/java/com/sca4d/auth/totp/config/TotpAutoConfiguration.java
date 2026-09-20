@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.time.Clock;
+import java.time.Duration;
 
 /** 自动装配 TOTP 方法、SQL 凭据和 Redis enrollment，不注册 HTTP 或二维码实现。 */
 @AutoConfiguration
@@ -32,7 +33,7 @@ public class TotpAutoConfiguration {
 
     /** @return TOTP enrollment 有效期设置 */
     @Bean
-    SystemSetting<java.time.Duration> totpEnrollmentTtlSetting() {
+    SystemSetting<Duration> totpEnrollmentTtlSetting() {
         return TotpSettings.ENROLLMENT_TTL;
     }
 
