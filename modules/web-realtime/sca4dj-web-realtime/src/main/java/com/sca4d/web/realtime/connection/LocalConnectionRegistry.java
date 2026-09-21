@@ -41,7 +41,7 @@ public final class LocalConnectionRegistry implements AutoCloseable {
     }
 
     /** 把 RabbitMQ 节点消息投递给当前仍存在的本机连接。 */
-    public void deliver(@NotNull ConnectionId connectionId, @NotNull ConnectionDelivery delivery) {
+    public void deliver(@NotNull ConnectionId connectionId, @NotNull BrowserWrite delivery) {
         LocalConnection connection = connections.get(connectionId);
         if (connection != null) {
             connection.offer(delivery);

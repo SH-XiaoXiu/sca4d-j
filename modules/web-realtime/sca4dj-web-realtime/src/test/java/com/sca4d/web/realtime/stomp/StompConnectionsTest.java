@@ -20,10 +20,10 @@ import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
 import com.sca4d.web.realtime.connection.BrowserEnvelope;
-import com.sca4d.web.realtime.connection.ConnectionDelivery;
+import com.sca4d.web.realtime.connection.BrowserWrite;
 import com.sca4d.web.realtime.connection.LocalConnection;
 import com.sca4d.web.realtime.connection.LocalConnectionRegistry;
-import com.sca4d.web.realtime.connection.NodeTransport;
+import com.sca4d.web.realtime.connection.NodeRouter;
 import com.sca4d.web.realtime.connection.RedisConnectionRegistry;
 import com.sca4d.web.realtime.ticket.TicketHandshakeInterceptor;
 import org.junit.jupiter.api.Test;
@@ -50,7 +50,7 @@ class StompConnectionsTest {
         Session session = session();
         RedisConnectionRegistry shared = mock(RedisConnectionRegistry.class);
         LocalConnectionRegistry local = mock(LocalConnectionRegistry.class);
-        NodeTransport transport = mock(NodeTransport.class);
+        NodeRouter transport = mock(NodeRouter.class);
         SimpMessagingTemplate messaging = mock(SimpMessagingTemplate.class);
         WebSocketSessions sockets = mock(WebSocketSessions.class);
         when(transport.nodeId()).thenReturn("node-1");
@@ -77,7 +77,7 @@ class StompConnectionsTest {
                 1,
                 Instant.parse("2026-07-30T00:00:00Z"),
                 JsonNodeFactory.instance.objectNode());
-        connection.offer(new ConnectionDelivery(envelope, true));
+        connection.offer(new BrowserWrite(envelope, true));
 
         @SuppressWarnings("unchecked")
         ArgumentCaptor<Map<String, Object>> headersCaptor = ArgumentCaptor.forClass(Map.class);

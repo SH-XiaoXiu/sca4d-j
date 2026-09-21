@@ -1,13 +1,12 @@
 package com.sca4d.iot.connection;
 
 import com.sca4d.core.api.connection.ConnectionRegistry;
-import com.sca4d.core.api.event.Event;
+import com.sca4d.core.api.messaging.DispatchPolicy;
+import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageId;
-import com.sca4d.core.api.messaging.MessagePublisher;
 import com.sca4d.iot.api.connection.DeviceConnection;
 import com.sca4d.iot.api.connection.DeviceConnectionQueryService;
 import com.sca4d.iot.api.connection.DeviceDisconnectMessage;
-import com.sca4d.iot.api.message.IotMessageTypes;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,7 +25,7 @@ public class DeviceConnectionService {
 
     private final @NotNull DeviceConnectionQueryService connections;
 
-    private final @NotNull MessagePublisher messages;
+    private final @NotNull MessageBus messages;
 
     private final @NotNull Clock clock;
 
@@ -36,11 +35,11 @@ public class DeviceConnectionService {
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "ConnectionRegistry 是注入的共享协作接口，服务不拥有或修改其内部表示")
     public DeviceConnectionService(
             @NotNull DeviceConnectionQueryService connections,
-            @NotNull MessagePublisher messages,
+            @NotNull MessageBus messages,
             @NotNull Clock clock,
             @Nullable ConnectionRegistry commonConnections) {
         this.connections = Objects.requireNonNull(connections, "Device Connection Repository 不能为空");
-        this.messages = Objects.requireNonNull(messages, "MessagePublisher 不能为空");
+        this.messages = Objects.requireNonNull(messages, "MessageBus 不能为空");
         this.clock = Objects.requireNonNull(clock, "连接操作时钟不能为空");
         this.commonConnections = commonConnections;
     }
@@ -72,12 +71,9 @@ public class DeviceConnectionService {
                     connection.protocol(),
                     checkedReason,
                     1);
-            MessageId disconnectMessageId = messages.publishReliably(
-                    new Event<>(
-                            IotMessageTypes.DEVICE_DISCONNECT,
-                            "disconnect:" + connection.protocol().code() + ':' + connection.id().value() + ":1",
-                            clock.instant(),
-                            payload));
+            MessageId disconnectMessageId = messages.dispatch(
+                    payload,
+                    DispatchPolicy.outbox()).messageId();
             LOG.trace(
                     "Device 断连消息已登记 | deviceId={} connectionId={} disconnectMessageId={}",
                     deviceId,

@@ -1,6 +1,7 @@
 package com.sca4d.notification.sms.mapper;
 
 import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.notification.sms.SmsDeliveryAttempt;
 import com.sca4d.notification.sms.SmsDeliveryStatus;
 import org.apache.ibatis.annotations.Param;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 public interface SmsDeliveryMapper {
     /** @return 已存在状态；尚未尝试时为空 */
     @Nullable
-    SmsDeliveryStatus selectStatus(
+    SmsDeliveryAttempt selectAttempt(
             @Param("messageId") @NotNull MessageId messageId,
             @Param("providerId") long providerId);
 

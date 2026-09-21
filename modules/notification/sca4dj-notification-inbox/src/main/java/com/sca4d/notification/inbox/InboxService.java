@@ -2,6 +2,7 @@ package com.sca4d.notification.inbox;
 
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.event.EventType;
+import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.webrealtime.WebRealtimePublisher;
 import com.sca4d.core.api.webrealtime.WebRealtimeTarget;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +17,7 @@ public class InboxService {
 
     /** 浏览器收件箱变化事件。 */
     public static final @NotNull EventType<InboxChanged> CHANGED = new EventType<>(
-            "notification.inbox.changed",
+            "NOTIFICATION/INBOX/CHANGED",
             1,
             InboxChanged.class);
 
@@ -71,6 +72,7 @@ public class InboxService {
     void publish(long accountId) {
         realtime.publish(
                 WebRealtimeTarget.account(accountId),
-                new Event<>(CHANGED, Long.toString(accountId), clock.instant(), new InboxChanged(accountId)));
+                new Event<>(CHANGED, Long.toString(accountId), clock.instant(), new InboxChanged(accountId)),
+                DispatchPolicy.afterCommit());
     }
 }

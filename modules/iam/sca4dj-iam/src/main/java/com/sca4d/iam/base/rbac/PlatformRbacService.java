@@ -160,7 +160,7 @@ public class PlatformRbacService {
 
         return write(roleCodeLock(checkedCode), () -> {
             PlatformRoleDetails created = repository.createRole(
-                    idGenerator.nextId(),
+                    idGenerator.nextId().value(),
                     checkedCode,
                     checkedI18n,
                     RoleStatus.ACTIVE,
@@ -518,7 +518,7 @@ public class PlatformRbacService {
                             locales.defaultLocale(),
                             Map.of("name", code)));
             PlatformRoleDetails created = repository.createRole(
-                    idGenerator.nextId(),
+                    idGenerator.nextId().value(),
                     code,
                     i18n,
                     RoleStatus.ACTIVE,

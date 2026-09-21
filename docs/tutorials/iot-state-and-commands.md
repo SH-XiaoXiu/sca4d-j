@@ -20,7 +20,7 @@
 - DeviceConnectionBinding 保存 Device 可选的直接连接协议、身份类型和值。网关中继等间接 Device 不登记直接连接，也不登记认证接入方式；
 - [DeviceConnectionAdmission](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/connection/DeviceConnectionAdmission.html)、DeviceConnectionReceiver 与 DeviceConnectionTerminator 分别处理连接准入、当前连接事实和协议断连；
 - DeviceUplinkDispatcher 按 Device 当前的 `protocolCode` 选择 DeviceUplinkProtocol，解码 DeviceProtocolMessage 后交给 DeviceUplinkReceiver；具体应用可以替换 Receiver，在同一业务事务中更新 IoT 当前事实和应用业务表；
-- DeviceDownlinkPublisher 接收完整 Device，由设备协议适配器选择直接连接或应用业务路由并发送标准下行；
+- DeviceTransport 接收完整 Device，由设备协议适配器选择直接连接或应用业务路由并发送标准下行；
 - [ReportedStateStore](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/state/ReportedStateStore.html) 保存 latest reported，可以由 PostgreSQL、Redis 或具体应用的其他实现提供；
 - [DeviceHistoryStore](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/history/DeviceHistoryStore.html) 读取遥测、事件、ACK 和设备定时执行历史；IoT base 只依赖契约，不拥有历史数据库；
 - [DeviceRuntimeQueryService](/tutorials/iot-state-and-commands)、[DeviceHistoryQueryService](/tutorials/iot-state-and-commands)、[DeviceScheduleService](/tutorials/iot-state-and-commands) 和 [DeviceScheduleQueryService](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/schedule/DeviceScheduleQueryService.html) 分别管理当前状态、历史查询和设备定时；
@@ -55,7 +55,7 @@ Device 的 Credential 由通用 Auth 方法模块按 `account_id` 保存。Share
 
 ## 消息与历史边界
 
-IoT 使用通用 [MessagePublisher](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/messaging/MessagePublisher.html)，不创建 IoT 专用 Outbox：
+IoT 使用通用 `MessageBus`，不创建 IoT 专用 Outbox：
 
 - Telemetry 在 reported 主事务提交后使用 `publishAfterCommit(...)`。它不写 Outbox；代理发布失败可能丢失这一批历史样本，但不会回滚 latest reported。
 - 物模型事件按 ThingEvent 的 delivery 声明发布。`RELIABLE` 在主事务写通用 `messaging_outbox`，其他事件在提交后直接发布。
@@ -74,9 +74,9 @@ IoT 使用通用 [MessagePublisher](/javadoc/core/sca4dj-core-api/com/sca4d/core
 加入 `sca4dj-iot` 后，自动配置安装 MyBatis Repository、领域 Service、Redis 连接投影和上行入口。运行应用还必须提供：
 
 - Core Spring、主 PostgreSQL、Redis、IdGenerator 和统一 JSON ObjectMapper；
-- 通用 Messaging 的 MessagePublisher，用于提交后消息和可靠消息；
+- 通用 Messaging 的 MessageBus，用于提交后消息和可靠消息；
 - 至少一个符合 Product 声明的 DeviceProtocol；
-- 发送下行与处理 ACK 超时的 MessageConsumer 运行环境；
+- 发送下行与处理 ACK 超时的 MessageHandler 运行环境；
 - 需要历史查询时安装一个 DeviceHistoryStore，例如独立的 `sca4dj-iot-timescale`。
 
 模块结构片段由应用的 Flyway 初始迁移收集，已生成的迁移由应用继续维护。Timescale 模块使用自己的 DataSource 和 Flyway，不拼入应用主库 V1。

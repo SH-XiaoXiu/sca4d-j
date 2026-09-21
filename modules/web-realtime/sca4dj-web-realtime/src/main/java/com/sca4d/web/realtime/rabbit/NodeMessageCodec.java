@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sca4d.core.api.connection.ConnectionId;
 import com.sca4d.web.realtime.connection.BrowserEnvelope;
-import com.sca4d.web.realtime.connection.ConnectionDelivery;
+import com.sca4d.web.realtime.connection.BrowserWrite;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,8 +44,8 @@ public final class NodeMessageCodec {
     /** 编码不包含内部目标、业务键、`MessageId` 和 RabbitMQ 元数据的临时节点消息。 */
     byte @NotNull [] encode(
             @NotNull List<@NotNull ConnectionId> connectionIds,
-            @NotNull ConnectionDelivery delivery) {
-        ConnectionDelivery checked = Objects.requireNonNull(delivery, "连接投递不能为空");
+            @NotNull BrowserWrite delivery) {
+        BrowserWrite checked = Objects.requireNonNull(delivery, "连接投递不能为空");
         BrowserEnvelope envelope = checked.envelope();
         if (connectionIds.isEmpty()) {
             throw new IllegalArgumentException("Web Realtime 节点投递至少需要一个 ConnectionId");
@@ -109,7 +109,7 @@ public final class NodeMessageCodec {
                     payload);
             return new NodeDelivery(
                     List.copyOf(connections),
-                    new ConnectionDelivery(envelope, closeAfter.booleanValue()));
+                    new BrowserWrite(envelope, closeAfter.booleanValue()));
         } catch (IOException | RuntimeException exception) {
             if (exception instanceof IllegalArgumentException illegalArgumentException) {
                 throw illegalArgumentException;
@@ -165,12 +165,12 @@ public final class NodeMessageCodec {
     static final class NodeDelivery {
         private final @NotNull List<@NotNull ConnectionId> connections;
 
-        private final @NotNull ConnectionDelivery delivery;
+        private final @NotNull BrowserWrite delivery;
 
         /** 创建已完成字段校验的节点投递。 */
         NodeDelivery(
                 @NotNull List<@NotNull ConnectionId> connections,
-                @NotNull ConnectionDelivery delivery) {
+                @NotNull BrowserWrite delivery) {
             this.connections = connections;
             this.delivery = delivery;
         }
@@ -183,7 +183,7 @@ public final class NodeMessageCodec {
 
         /** @return 每个连接收到的相同投递 */
         @NotNull
-        ConnectionDelivery delivery() {
+        BrowserWrite delivery() {
             return delivery;
         }
     }

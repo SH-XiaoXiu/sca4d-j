@@ -178,7 +178,7 @@ public class FileAutoConfiguration {
         Objects.requireNonNull(jobExecutor, "文件清理计划要求应用提供 JobExecutor Bean");
         Objects.requireNonNull(jobScheduler, "文件清理计划要求应用提供 JobScheduler Bean");
         return new JobSchedule<>(
-                new ScheduleKey("storage.file.cleanup"),
+                new ScheduleKey("STORAGE/FILE/CLEANUP"),
                 1,
                 job,
                 null,

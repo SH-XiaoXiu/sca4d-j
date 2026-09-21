@@ -1,5 +1,6 @@
 package com.sca4d.messaging.outbox;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.messaging.MessageId;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,7 +14,7 @@ final class OutboxClaim {
 
     private final @NotNull MessageId messageId;
 
-    private final @NotNull String eventCode;
+    private final @NotNull TreeCode messageCode;
 
     private final byte @NotNull [] envelope;
 
@@ -34,13 +35,13 @@ final class OutboxClaim {
     /** 创建已被当前派发批次改为 {@link OutboxStatus#SENDING} 的领取结果。 */
     OutboxClaim(
             @NotNull MessageId messageId,
-            @NotNull String eventCode,
+            @NotNull TreeCode messageCode,
             byte @NotNull [] envelope,
             int attemptCount,
             @NotNull String leaseId,
             long version) {
         this.messageId = Objects.requireNonNull(messageId, "MessageId 不能为空");
-        this.eventCode = Objects.requireNonNull(eventCode, "事件编码不能为空");
+        this.messageCode = Objects.requireNonNull(messageCode, "消息编码不能为空");
         this.envelope = Arrays.copyOf(Objects.requireNonNull(envelope, "消息信封不能为空"), envelope.length);
         this.attemptCount = attemptCount;
         this.leaseId = Objects.requireNonNull(leaseId, "Outbox 租约标识不能为空");
@@ -53,10 +54,10 @@ final class OutboxClaim {
         return messageId;
     }
 
-    /** @return RabbitMQ routing key 使用的事件编码 */
+    /** @return RabbitMQ routing key 使用的消息编码 */
     @NotNull
-    String eventCode() {
-        return eventCode;
+    TreeCode messageCode() {
+        return messageCode;
     }
 
     /** @return 已序列化业务消息信封的副本 */
@@ -82,7 +83,7 @@ final class OutboxClaim {
 
     /** 在 RabbitMQ 确认后记录本次租约的成功结果。 */
     OutboxClaim sent(@NotNull Instant at) {
-        OutboxClaim result = new OutboxClaim(messageId, eventCode, envelope, attemptCount, leaseId, version);
+        OutboxClaim result = new OutboxClaim(messageId, messageCode, envelope, attemptCount, leaseId, version);
         result.status = OutboxStatus.SENT;
         result.sentAt = Objects.requireNonNull(at, "Outbox 确认时间不能为空");
         return result;
@@ -90,7 +91,7 @@ final class OutboxClaim {
 
     /** 记录本次租约失败及业务层确定的下一次尝试时间。 */
     OutboxClaim failed(@NotNull Instant nextAttemptAt, @NotNull String error) {
-        OutboxClaim result = new OutboxClaim(messageId, eventCode, envelope, attemptCount, leaseId, version);
+        OutboxClaim result = new OutboxClaim(messageId, messageCode, envelope, attemptCount, leaseId, version);
         result.status = OutboxStatus.FAILED;
         result.availableAt = Objects.requireNonNull(nextAttemptAt, "Outbox 重试时间不能为空");
         result.lastError = Objects.requireNonNull(error, "Outbox 失败摘要不能为空");

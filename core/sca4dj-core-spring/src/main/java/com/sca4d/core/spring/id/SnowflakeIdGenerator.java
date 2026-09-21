@@ -1,6 +1,7 @@
 package com.sca4d.core.spring.id;
 
 import cn.hutool.core.lang.Snowflake;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
 
 /**
@@ -39,8 +40,8 @@ public final class SnowflakeIdGenerator implements IdGenerator {
      * @return 下一个雪花 ID
      */
     @Override
-    public long nextId() {
-        return snowflake.nextId();
+    public Id nextId() {
+        return Id.of(snowflake.nextId());
     }
 
     /**

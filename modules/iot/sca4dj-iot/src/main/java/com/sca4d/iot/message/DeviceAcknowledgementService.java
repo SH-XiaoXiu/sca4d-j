@@ -4,14 +4,15 @@ import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.event.Event;
+import com.sca4d.core.api.messaging.DispatchPolicy;
+import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageId;
-import com.sca4d.core.api.messaging.MessagePublisher;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.change.DeviceChangeArea;
 import com.sca4d.iot.api.history.DeviceEventMessage;
 import com.sca4d.iot.api.message.AcknowledgementDecision;
 import com.sca4d.iot.api.message.DeviceAcknowledgement;
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
+import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
 import com.sca4d.iot.api.message.IotFailureCode;
 import com.sca4d.iot.api.message.IotMessageTypes;
@@ -41,9 +42,9 @@ public class DeviceAcknowledgementService {
 
     private final @NotNull DeviceChangeNotifier changes;
 
-    private final @NotNull DeviceDownlinkMessagePublisher downlinkMessages;
+    private final @NotNull DeviceDeliveryScheduler downlinkMessages;
 
-    private final @NotNull MessagePublisher messages;
+    private final @NotNull MessageBus messages;
 
     private final @NotNull DistributedLock distributedLock;
 
@@ -54,15 +55,15 @@ public class DeviceAcknowledgementService {
             @NotNull DownlinkRepository downlinks,
             @NotNull Clock clock,
             @NotNull DeviceChangeNotifier changes,
-            @NotNull DeviceDownlinkMessagePublisher downlinkMessages,
-            @NotNull MessagePublisher messages,
+            @NotNull DeviceDeliveryScheduler downlinkMessages,
+            @NotNull MessageBus messages,
             @NotNull DistributedLock distributedLock,
             @NotNull TransactionTemplate transactions) {
         this.downlinks = Objects.requireNonNull(downlinks, "Downlink Repository 不能为空");
         this.clock = Objects.requireNonNull(clock, "ACK 时钟不能为空");
         this.changes = Objects.requireNonNull(changes, "Device 变化通知器不能为空");
         this.downlinkMessages = Objects.requireNonNull(downlinkMessages, "下行消息发布器不能为空");
-        this.messages = Objects.requireNonNull(messages, "MessagePublisher 不能为空");
+        this.messages = Objects.requireNonNull(messages, "MessageBus 不能为空");
         this.distributedLock = Objects.requireNonNull(distributedLock, "ACK 分布式锁不能为空");
         this.transactions = Objects.requireNonNull(transactions, "ACK 事务模板不能为空");
     }
@@ -90,7 +91,7 @@ public class DeviceAcknowledgementService {
      * @param acknowledgement 已关联 messageId 的统一业务 ACK
      * @return ACK 后读取到的消息状态
      */
-    public @NotNull DeviceDownlinkMessage acknowledge(
+    public @NotNull DeviceDownlink acknowledge(
             long deviceId,
             @NotNull DeviceAcknowledgement acknowledgement) {
         if (deviceId <= 0) {
@@ -106,11 +107,11 @@ public class DeviceAcknowledgementService {
     }
 
     /** 在同一事务内校验可选 Device 归属并执行 ACK 状态转换。 */
-    private @NotNull DeviceDownlinkMessage acknowledgeExpected(
+    private @NotNull DeviceDownlink acknowledgeExpected(
             Long expectedDeviceId,
             @NotNull DeviceAcknowledgement acknowledgement) {
         DeviceAcknowledgement checked = Objects.requireNonNull(acknowledgement, "Device ACK 不能为空");
-        DeviceDownlinkMessage message = downlinks.find(checked.messageId())
+        DeviceDownlink message = downlinks.find(checked.messageId())
                 .orElseThrow(() -> new BusinessException(IotErrorCode.STATE_CONFLICT));
         if (expectedDeviceId != null && message.deviceId() != expectedDeviceId) {
             throw new BusinessException(IotErrorCode.STATE_CONFLICT);
@@ -144,7 +145,7 @@ public class DeviceAcknowledgementService {
 
     /** ACK 策略失败后交给独立 retry 策略。 */
     private void applyRetry(
-            @NotNull DeviceDownlinkMessage message,
+            @NotNull DeviceDownlink message,
             @NotNull IotFailureCode failure,
             @NotNull Instant now) {
         RetryDecision retry = message.retryPolicy().evaluate(message, failure, now);
@@ -169,7 +170,7 @@ public class DeviceAcknowledgementService {
 
     /** 把每个首次接受的 ACK 阶段可靠发布成统一 IoT 事件。 */
     private void publishAcknowledgementEvent(
-            @NotNull DeviceDownlinkMessage message,
+            @NotNull DeviceDownlink message,
             @NotNull DeviceAcknowledgement acknowledgement,
             @NotNull String acknowledgementIdentity) {
         LinkedHashMap<String, Object> data = new LinkedHashMap<>();
@@ -195,7 +196,7 @@ public class DeviceAcknowledgementService {
                 "downlink-ack:" + message.messageId() + ':' + acknowledgementIdentity,
                 acknowledgement.acknowledgedAt(),
                 payload);
-        MessageId eventMessageId = messages.publishReliably(event);
+        MessageId eventMessageId = messages.dispatch(event, DispatchPolicy.outbox()).messageId();
         LOG.trace(
                 "Device ACK 事件已登记 | messageId={} acknowledgementIdentity={} eventMessageId={}",
                 message.messageId(),

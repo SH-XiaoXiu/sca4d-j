@@ -9,8 +9,8 @@ import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.DeviceAccessMethod;
 import com.sca4d.iot.api.ProductBinding;
 import com.sca4d.iot.api.message.DeviceAcknowledgement;
+import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.message.DeviceDownlinkKind;
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
 import com.sca4d.iot.api.message.DeviceUplink;
 import com.sca4d.iot.api.protocol.DeviceProtocolMessage;
@@ -238,8 +238,8 @@ class ExampleDeviceProtocolTest {
     }
 
     /** 创建一个等待发送的 desired 属性消息。 */
-    private static DeviceDownlinkMessage desiredMessage() {
-        return new DeviceDownlinkMessage(
+    private static DeviceDownlink desiredMessage() {
+        return new DeviceDownlink(
                 101,
                 1,
                 1,
@@ -259,8 +259,8 @@ class ExampleDeviceProtocolTest {
     }
 
     /** 创建一个等待发送的 set-mode command。 */
-    private static DeviceDownlinkMessage commandMessage(long messageId, String mode) {
-        return new DeviceDownlinkMessage(
+    private static DeviceDownlink commandMessage(long messageId, String mode) {
+        return new DeviceDownlink(
                 messageId,
                 1,
                 1,

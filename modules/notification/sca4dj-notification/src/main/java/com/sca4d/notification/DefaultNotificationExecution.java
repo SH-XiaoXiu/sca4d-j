@@ -1,6 +1,7 @@
 package com.sca4d.notification;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.sca4d.core.api.message.MessageContent;
 import com.sca4d.core.api.notification.Notification;
 import com.sca4d.core.api.notification.NotificationChannel;
 import com.sca4d.core.api.notification.NotificationDefinition;
@@ -14,8 +15,10 @@ import com.sca4d.notification.config.NotificationSettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -40,6 +43,8 @@ final class DefaultNotificationExecution<T> implements NotificationExecution {
     private @Nullable Locale explicitLocale;
 
     private @Nullable Region explicitRegion;
+
+    private final @NotNull List<@NotNull MessageContent> contents = new ArrayList<>();
 
     private @Nullable Notification result;
 
@@ -78,6 +83,13 @@ final class DefaultNotificationExecution<T> implements NotificationExecution {
     }
 
     @Override
+    public @NotNull NotificationExecution content(@NotNull MessageContent content) {
+        requireUnresolved();
+        contents.add(Objects.requireNonNull(content, "通知内容不能为空"));
+        return this;
+    }
+
+    @Override
     public void sendToAccount(long accountId) {
         sendTo(NotificationRecipient.account(accountId));
     }
@@ -108,15 +120,27 @@ final class DefaultNotificationExecution<T> implements NotificationExecution {
                 checkedRecipient,
                 locale,
                 variables,
+                contents,
                 region,
-                intended);
+                intended,
+                type.definition().requiredChannels());
 
         // 必发渠道不可用时拒绝发布；当前不可用的可选渠道不进入最终消息。
         Set<NotificationChannel> available = availableChannels(candidate, intended);
         if (available.isEmpty()) {
             throw new IllegalStateException("通知没有可用渠道: " + type.code());
         }
-        result = new Notification(type.code(), checkedRecipient, locale, variables, region, available);
+        result = new Notification(
+                type.code(),
+                checkedRecipient,
+                locale,
+                variables,
+                contents,
+                region,
+                available,
+                available.stream()
+                        .filter(type.definition().requiredChannels()::contains)
+                        .collect(java.util.stream.Collectors.toUnmodifiableSet()));
     }
 
     /** @return 回调完成后产生的唯一标准通知 */

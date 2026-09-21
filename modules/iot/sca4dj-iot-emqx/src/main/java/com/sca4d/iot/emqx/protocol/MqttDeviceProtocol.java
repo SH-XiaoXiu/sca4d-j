@@ -6,8 +6,8 @@ import com.sca4d.core.api.pipeline.Pipeline;
 import com.sca4d.core.api.utils.TextUtils;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.message.DeviceAcknowledgement;
+import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.message.DeviceDownlinkKind;
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
 import com.sca4d.iot.api.message.DeviceUplink;
 import com.sca4d.iot.api.model.ThingCommand;
 import com.sca4d.iot.api.model.ThingModel;
@@ -212,9 +212,9 @@ public final class MqttDeviceProtocol implements DeviceUplinkProtocol {
      * @throws IllegalArgumentException 没有匹配下行定义或消息数据缺少已声明字段时抛出
      */
     public @NotNull EncodedMqttMessage encode(
-            @NotNull DeviceDownlinkMessage message,
+            @NotNull DeviceDownlink message,
             @NotNull String clientId) {
-        DeviceDownlinkMessage checked = Objects.requireNonNull(message, "下行消息不能为空");
+        DeviceDownlink checked = Objects.requireNonNull(message, "下行消息不能为空");
         String key = routeKey(checked.kind(), checked.targetCode());
         DownlinkDefinition definition = downlinks.get(key);
         if (definition == null) {

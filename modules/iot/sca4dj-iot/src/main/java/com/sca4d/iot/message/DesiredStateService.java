@@ -6,8 +6,8 @@ import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.ProductDefinition;
 import com.sca4d.iot.api.change.DeviceChangeArea;
+import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.message.DeviceDownlinkKind;
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
 import com.sca4d.iot.api.model.ThingModel;
 import com.sca4d.iot.api.model.ThingModelPresentation;
@@ -63,7 +63,7 @@ public class DesiredStateService {
 
     private final @NotNull ThingDataJsonCodec json;
 
-    private final @NotNull DeviceDownlinkMessagePublisher messagePublisher;
+    private final @NotNull DeviceDeliveryScheduler messagePublisher;
 
     private final int maxProperties;
 
@@ -78,7 +78,7 @@ public class DesiredStateService {
             @NotNull Clock clock,
             @NotNull DeviceChangeNotifier changes,
             @NotNull ThingDataJsonCodec json,
-            @NotNull DeviceDownlinkMessagePublisher messagePublisher,
+            @NotNull DeviceDeliveryScheduler messagePublisher,
             int maxProperties) {
         this.devices = Objects.requireNonNull(devices, "Device Repository 不能为空");
         this.products = Objects.requireNonNull(products, "ProductDefinition 目录不能为空");
@@ -143,7 +143,7 @@ public class DesiredStateService {
         LinkedHashMap<String, Long> messageIds = new LinkedHashMap<>();
         normalized.keySet().forEach(code -> {
             properties.put(code, writableProperty(model, code));
-            messageIds.put(code, ids.nextId());
+            messageIds.put(code, ids.nextId().value());
         });
         Instant changedAt = clock.instant();
         DesiredStateResult result = null;
@@ -183,7 +183,7 @@ public class DesiredStateService {
             }
 
             // 只为实际变化的 set 创建新消息并终止旧消息；clear 取消旧消息并删除当前值。
-            List<DeviceDownlinkMessage> messages = new ArrayList<>();
+            List<DeviceDownlink> messages = new ArrayList<>();
             for (Map.Entry<String, Object> changeEntry : changedSet.entrySet()) {
                 String code = changeEntry.getKey();
                 ThingProperty property = Objects.requireNonNull(properties.get(code), "desired 属性定义不存在: " + code);
@@ -199,7 +199,7 @@ public class DesiredStateService {
                         code,
                         desiredSequence,
                         changeEntry.getValue());
-                DeviceDownlinkMessage message = new DeviceDownlinkMessage(
+                DeviceDownlink message = new DeviceDownlink(
                         Objects.requireNonNull(messageIds.get(code), "desired messageId 不存在: " + code),
                         device.id(),
                         device.bindingGeneration(),

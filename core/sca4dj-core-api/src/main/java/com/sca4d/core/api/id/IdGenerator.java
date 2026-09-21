@@ -8,5 +8,5 @@ public interface IdGenerator {
      *
      * @return 下一个正整数标识
      */
-    long nextId();
+    Id nextId();
 }

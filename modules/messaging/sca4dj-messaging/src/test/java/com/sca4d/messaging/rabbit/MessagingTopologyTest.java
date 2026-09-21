@@ -3,9 +3,12 @@ package com.sca4d.messaging.rabbit;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.event.EventType;
-import com.sca4d.core.api.messaging.MessageConsumer;
-import com.sca4d.core.api.messaging.MessageDelivery;
+import com.sca4d.core.api.messaging.EventHandler;
+import com.sca4d.core.api.messaging.HandlingPolicy;
+import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.runtime.RuntimeNamespace;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
@@ -13,23 +16,21 @@ import org.junit.jupiter.api.Test;
 import org.springframework.amqp.core.Declarable;
 import org.springframework.amqp.core.Queue;
 
+import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 
-/** 验证每个 Consumer 只有主队列和直接 DLQ，不声明自动重试队列。 */
-class MessagingTopologyTest {
+/** 验证每个 Handler 获得独立主队列、可选 retry queue 和 DLQ。 */
+class RabbitMessageTopologyTest {
 
     @Test
-    @DisplayName("Declares One Durable Queue And Direct DLQ Per Consumer")
-    void declaresOneDurableQueueAndDirectDlqPerConsumer() {
-        TestConsumer consumer = new TestConsumer("billing.invoice", "invoice.created");
-        MessagingTopology topology = new MessagingTopology(new RuntimeNamespace("test-app"));
+    @DisplayName("无重试 Handler 只声明持久主队列和 DLQ")
+    void declaresMainQueueAndDlqWithoutRetryQueue() {
+        TestHandler handler = new TestHandler("BILLING/INVOICE", "INVOICE/CREATED", HandlingPolicy.noRetry());
+        RabbitMessageTopology topology = new RabbitMessageTopology(new RuntimeNamespace("test-app"));
 
-        Collection<Declarable> declarations = topology.declarables(List.of(consumer)).getDeclarables();
-        List<Queue> queues = declarations.stream()
-                .filter(Queue.class::isInstance)
-                .map(Queue.class::cast)
-                .toList();
+        Collection<Declarable> declarations = topology.declarables(List.of(handler), List.of()).getDeclarables();
+        List<Queue> queues = declarations.stream().filter(Queue.class::isInstance).map(Queue.class::cast).toList();
 
         assertThat(queues).hasSize(2);
         Queue main = queues.stream()
@@ -46,49 +47,80 @@ class MessagingTopologyTest {
                 .containsEntry("x-dead-letter-routing-key", main.getName())
                 .doesNotContainKeys("x-message-ttl");
         assertThat(deadLetter.isDurable()).isTrue();
-        assertThat(deadLetter.getArguments()).doesNotContainKeys("x-dead-letter-exchange", "x-message-ttl");
-        assertThat(declarations).noneMatch(
-                item -> item instanceof Queue queue
-                        && queue.getName().contains("retry"));
+        assertThat(declarations).noneMatch(item -> item instanceof Queue queue && queue.getName().endsWith(":retry"));
     }
 
     @Test
-    @DisplayName("Rejects Duplicate Consumer Codes")
-    void rejectsDuplicateConsumerCodes() {
+    @DisplayName("重试 Handler 声明带固定延迟的 retry queue")
+    void declaresRetryQueueForRetryingHandler() {
+        TestHandler handler = new TestHandler(
+                "BILLING/INVOICE",
+                "INVOICE/CREATED",
+                new HandlingPolicy(3, Duration.ofSeconds(5)));
+        Collection<Declarable> declarations = new RabbitMessageTopology(new RuntimeNamespace("test-app"))
+                .declarables(List.of(handler), List.of())
+                .getDeclarables();
+
+        Queue retry = declarations.stream()
+                .filter(Queue.class::isInstance)
+                .map(Queue.class::cast)
+                .filter(queue -> queue.getName().endsWith(":retry"))
+                .findFirst()
+                .orElseThrow();
+        assertThat(retry.getArguments()).containsEntry("x-message-ttl", 5000);
+    }
+
+    @Test
+    @DisplayName("重复 Handler 编码被拒绝")
+    void rejectsDuplicateHandlerCodes() {
         assertThatThrownBy(
-                () -> new MessagingTopology(new RuntimeNamespace("test-app"))
+                () -> new RabbitMessageTopology(new RuntimeNamespace("test-app"))
                         .declarables(
                                 List.of(
-                                        new TestConsumer("duplicate", "invoice.created"),
-                                        new TestConsumer("duplicate", "invoice.cancelled"))))
+                                        new TestHandler(
+                                                "BILLING/DUPLICATE",
+                                                "INVOICE/CREATED",
+                                                HandlingPolicy.noRetry()),
+                                        new TestHandler(
+                                                "BILLING/DUPLICATE",
+                                                "INVOICE/CANCELLED",
+                                                HandlingPolicy.noRetry())),
+                                List.of()))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("重复");
     }
 
-    /** 测试使用的稳定 Consumer 契约。 */
-    private static final class TestConsumer implements MessageConsumer<String> {
-        private final String code;
+    /** 测试使用的稳定 EventHandler 契约。 */
+    private static final class TestHandler implements EventHandler<String> {
+        private final TreeCode code;
 
-        private final String event;
+        private final EventType<String> eventType;
 
-        /** 创建测试 Consumer。 */
-        private TestConsumer(String code, String event) {
-            this.code = code;
-            this.event = event;
+        private final HandlingPolicy policy;
+
+        private TestHandler(String code, String eventCode, HandlingPolicy policy) {
+            this.code = TreeCode.of(code);
+            this.eventType = new EventType<>(eventCode, 1, String.class);
+            this.policy = policy;
         }
 
         @Override
-        public @NotNull String consumerCode() {
+        public @NotNull TreeCode code() {
             return code;
         }
 
         @Override
         public @NotNull EventType<String> eventType() {
-            return new EventType<>(event, 1, String.class);
+            return eventType;
         }
 
         @Override
-        public void consume(@NotNull MessageDelivery<String> delivery) {
+        public @NotNull HandlingPolicy handlingPolicy() {
+            return policy;
+        }
+
+        @Override
+        public void handleEvent(@NotNull IncomingMessage<Event<String>> message) {
         }
     }
 }

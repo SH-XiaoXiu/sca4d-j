@@ -3,8 +3,6 @@ package com.sca4d.app.server.iot.view;
 import com.sca4d.core.api.i18n.LocalizableText;
 import com.sca4d.core.spring.web.view.BaseView;
 import com.sca4d.core.spring.web.view.Localize;
-import com.sca4d.iot.api.message.AcknowledgementPolicy;
-import com.sca4d.iot.api.message.RetryPolicy;
 import com.sca4d.iot.api.model.ThingCommand;
 import com.sca4d.iot.api.model.ThingEvent;
 import com.sca4d.iot.api.model.ThingModel;
@@ -159,9 +157,9 @@ public final class IotThingModelView extends BaseView {
             this.access = property.access().name();
             this.telemetry = property.telemetry();
             this.acknowledgementPolicy = property.acknowledgementPolicy()
-                    .map(AcknowledgementPolicy::code)
+                    .map(policy -> policy.code().value())
                     .orElse(null);
-            this.retryPolicy = property.retryPolicy().map(RetryPolicy::code).orElse(null);
+            this.retryPolicy = property.retryPolicy().map(policy -> policy.code().value()).orElse(null);
         }
 
         /** @return 属性稳定 code */
@@ -284,8 +282,8 @@ public final class IotThingModelView extends BaseView {
             this.displayName = command.code();
             this.localizedDisplayName = presentation.textAt(path + "/displayName");
             this.inputs = fields(presentation, path + "/inputs", command.inputs());
-            this.acknowledgementPolicy = command.acknowledgementPolicy().code();
-            this.retryPolicy = command.retryPolicy().code();
+            this.acknowledgementPolicy = command.acknowledgementPolicy().code().value();
+            this.retryPolicy = command.retryPolicy().code().value();
         }
 
         /** @return 命令稳定 code */

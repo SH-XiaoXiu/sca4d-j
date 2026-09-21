@@ -1,5 +1,6 @@
 package com.sca4d.notification;
 
+import com.sca4d.core.api.delivery.DeliveryOutcome;
 import com.sca4d.core.api.messaging.MessageId;
 import com.sca4d.core.api.notification.Notification;
 import com.sca4d.core.api.notification.NotificationChannel;
@@ -40,24 +41,27 @@ public final class NotificationDeliveryRouter {
     public void deliver(@NotNull MessageId messageId, @NotNull Notification notification) {
         Notification checked = Objects.requireNonNull(notification, "通知不能为空");
         for (NotificationChannel channel : checked.channels()) {
-            deliver(channel, messageId, checked);
+            DeliveryOutcome outcome = deliver(channel, messageId, checked);
+            if (outcome.status() != DeliveryOutcome.Status.CONFIRMED) {
+                throw new IllegalStateException("同步通知渠道没有确认投递: " + channel + '/' + outcome.status());
+            }
         }
     }
 
     /** 只执行一个 Consumer 自己负责的渠道。 */
-    public void deliver(
+    public @NotNull DeliveryOutcome deliver(
             @NotNull NotificationChannel channel,
             @NotNull MessageId messageId,
             @NotNull Notification notification) {
         NotificationChannel checkedChannel = Objects.requireNonNull(channel, "通知渠道不能为空");
         Notification checked = Objects.requireNonNull(notification, "通知不能为空");
         if (!checked.channels().contains(checkedChannel)) {
-            return;
+            return DeliveryOutcome.confirmed();
         }
         NotificationDelivery delivery = deliveries.get(checkedChannel);
         if (delivery == null || !delivery.available(checked)) {
             throw new IllegalStateException("通知渠道在消费时不可用: " + checkedChannel);
         }
-        delivery.deliver(Objects.requireNonNull(messageId, "通知消息标识不能为空"), checked);
+        return delivery.deliver(Objects.requireNonNull(messageId, "通知消息标识不能为空"), checked);
     }
 }

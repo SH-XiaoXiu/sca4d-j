@@ -1,19 +1,25 @@
 package com.sca4d.notification.sms;
 
+import com.sca4d.core.api.delivery.DeliveryOutcome;
+import com.sca4d.core.api.messaging.DispatchPolicy;
+import com.sca4d.core.api.messaging.HandlingPolicy;
+import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageId;
 import com.sca4d.core.api.notification.Notification;
 import com.sca4d.core.api.notification.NotificationChannel;
 import com.sca4d.core.api.notification.NotificationDelivery;
 import com.sca4d.core.api.region.ParsedPhoneNumber;
 import com.sca4d.core.api.region.RegionCatalog;
-import com.sca4d.notification.template.NotificationTemplateRepository;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.Clock;
+import java.time.Duration;
 import java.util.HexFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -24,6 +30,10 @@ import java.util.Objects;
 public final class SmsNotificationDelivery implements NotificationDelivery {
 
     private static final Logger LOG = LoggerFactory.getLogger(SmsNotificationDelivery.class);
+
+    private static final int MAXIMUM_CHECK_ATTEMPTS = 10;
+
+    private static final Duration CHECK_DELAY = Duration.ofSeconds(30);
 
     private final SmsRecipientResolver recipients;
 
@@ -37,9 +47,13 @@ public final class SmsNotificationDelivery implements NotificationDelivery {
 
     private final SmsDeliveryStore deliveries;
 
-    private final Map<String, SmsTransport> transports;
+    private final Map<String, SmsProviderClient> transports;
 
-    private final NotificationTemplateRepository templates;
+    private final Clock clock;
+
+    private final MessageBus messages;
+
+    private final TransactionTemplate transactions;
 
     /** 创建 SMS 渠道投递实现。 */
     public SmsNotificationDelivery(
@@ -49,18 +63,23 @@ public final class SmsNotificationDelivery implements NotificationDelivery {
             @NotNull SmsProviderSelector selector,
             @NotNull SmsRepository repository,
             @NotNull SmsDeliveryStore deliveries,
-            @NotNull List<@NotNull SmsTransport> transports,
-            @NotNull NotificationTemplateRepository templates) {
+            @NotNull List<@NotNull SmsProviderClient> transports,
+            @NotNull Clock clock,
+            @NotNull MessageBus messages,
+            @NotNull org.springframework.transaction.PlatformTransactionManager transactionManager) {
         this.recipients = Objects.requireNonNull(recipients, "SMS 接收人解析器不能为空");
         this.regions = Objects.requireNonNull(regions, "RegionCatalog 不能为空");
         this.routes = Objects.requireNonNull(routes, "SMS 路由解析器不能为空");
         this.selector = Objects.requireNonNull(selector, "SMS Provider 选择器不能为空");
         this.repository = Objects.requireNonNull(repository, "SmsRepository 不能为空");
         this.deliveries = Objects.requireNonNull(deliveries, "SmsDeliveryStore 不能为空");
-        this.templates = Objects.requireNonNull(templates, "统一通知模板 Repository 不能为空");
-        Map<String, SmsTransport> byType = new LinkedHashMap<>();
-        for (SmsTransport transport : Objects.requireNonNull(transports, "SMS Transport 不能为空")) {
-            SmsTransport value = Objects.requireNonNull(transport, "SMS Transport 不能包含 null");
+        this.clock = Objects.requireNonNull(clock, "SMS 时钟不能为空");
+        this.messages = Objects.requireNonNull(messages, "MessageBus 不能为空");
+        this.transactions = new TransactionTemplate(
+                Objects.requireNonNull(transactionManager, "SMS 事务管理器不能为空"));
+        Map<String, SmsProviderClient> byType = new LinkedHashMap<>();
+        for (SmsProviderClient transport : Objects.requireNonNull(transports, "SMS Transport 不能为空")) {
+            SmsProviderClient value = Objects.requireNonNull(transport, "SMS Transport 不能包含 null");
             if (byType.putIfAbsent(value.providerType(), value) != null) {
                 throw new IllegalArgumentException("重复 SMS Provider Transport: " + value.providerType());
             }
@@ -70,14 +89,14 @@ public final class SmsNotificationDelivery implements NotificationDelivery {
 
     @Override
     public @NotNull NotificationChannel channel() {
-        return NotificationChannel.SMS;
+        return SmsChannels.SMS;
     }
 
     @Override
     public boolean available(@NotNull Notification notification) {
         Notification checked = Objects.requireNonNull(notification, "通知不能为空");
         String phone = recipients.resolve(checked.recipient()).orElse(null);
-        if (phone == null || templates.findEnabled(checked.code()).isEmpty())
+        if (phone == null)
             return false;
         ParsedPhoneNumber parsed = regions.parse(phone);
         if (parsed == null)
@@ -92,7 +111,12 @@ public final class SmsNotificationDelivery implements NotificationDelivery {
     }
 
     @Override
-    public void deliver(@NotNull MessageId messageId, @NotNull Notification notification) {
+    public @NotNull HandlingPolicy handlingPolicy() {
+        return new HandlingPolicy(11, Duration.ofSeconds(5));
+    }
+
+    @Override
+    public @NotNull DeliveryOutcome deliver(@NotNull MessageId messageId, @NotNull Notification notification) {
         Notification checked = Objects.requireNonNull(notification, "通知不能为空");
         String phone = recipients.resolve(checked.recipient())
                 .orElseThrow(() -> new IllegalStateException("SMS 接收人没有已验证手机号"));
@@ -107,23 +131,36 @@ public final class SmsNotificationDelivery implements NotificationDelivery {
                     route,
                     checked.locale())
                     .orElse(null);
-            SmsTransport transport = transports.get(provider.type());
+            SmsProviderClient transport = transports.get(provider.type());
             if (binding == null || transport == null)
                 continue;
 
             // 已接受的尝试直接完成；结果未知时禁止切换 Provider，明确拒绝时才尝试下一项。
-            SmsDeliveryStatus existing = deliveries.status(messageId, provider.providerId());
-            if (existing == SmsDeliveryStatus.ACCEPTED)
-                return;
-            if (existing == SmsDeliveryStatus.UNKNOWN || existing == SmsDeliveryStatus.PENDING) {
-                throw new IllegalStateException("SMS Provider 上次提交结果未知，禁止自动切换平台");
+            SmsDeliveryAttempt existing = deliveries.attempt(messageId, provider.providerId());
+            if (existing != null && existing.status() == SmsDeliveryStatus.DELIVERED)
+                return DeliveryOutcome.confirmed();
+            if (existing != null
+                    && (existing.status() == SmsDeliveryStatus.ACCEPTED
+                            || existing.status() == SmsDeliveryStatus.UNKNOWN
+                            || existing.status() == SmsDeliveryStatus.PENDING)) {
+                scheduleCheck(
+                        new SmsDeliveryCheck(
+                                checked,
+                                messageId,
+                                provider.providerId(),
+                                existing.requestId(),
+                                existing.bizId(),
+                                1));
+                return DeliveryOutcome.pending(clock.instant().plus(CHECK_DELAY), existing.requestId());
             }
-            if (existing == SmsDeliveryStatus.REJECTED)
+            if (existing != null
+                    && (existing.status() == SmsDeliveryStatus.REJECTED
+                            || existing.status() == SmsDeliveryStatus.FAILED))
                 continue;
 
             if (!deliveries.begin(messageId, provider, route, hash(phone), mask(phone)))
                 continue;
-            SmsTransportResult result = transport.send(
+            SmsProviderResult result = transport.send(
                     provider,
                     binding,
                     parsed,
@@ -137,13 +174,82 @@ public final class SmsNotificationDelivery implements NotificationDelivery {
                     result.status(),
                     result.requestId(),
                     result.failureCode());
-            if (result.status() == SmsDeliveryStatus.ACCEPTED)
-                return;
-            if (result.status() == SmsDeliveryStatus.UNKNOWN) {
-                throw new IllegalStateException("SMS Provider 返回结果未知，禁止自动切换平台");
+            if (result.status() == SmsDeliveryStatus.DELIVERED)
+                return DeliveryOutcome.confirmed();
+            if (result.status() == SmsDeliveryStatus.ACCEPTED
+                    || result.status() == SmsDeliveryStatus.UNKNOWN
+                    || result.status() == SmsDeliveryStatus.PENDING) {
+                scheduleCheck(
+                        new SmsDeliveryCheck(
+                                checked,
+                                messageId,
+                                provider.providerId(),
+                                result.requestId(),
+                                result.bizId(),
+                                1));
+                return DeliveryOutcome.pending(clock.instant().plus(CHECK_DELAY), result.requestId());
             }
         }
-        throw new IllegalStateException("没有 SMS Provider 接受通知请求");
+        return DeliveryOutcome.rejected("SMS_PROVIDER_REJECTED");
+    }
+
+    /** 查询一次 Provider 最终状态；未知时只登记下一条查询消息，不重新发送短信。 */
+    public @NotNull DeliveryOutcome check(@NotNull SmsDeliveryCheck check) {
+        SmsDeliveryCheck checked = Objects.requireNonNull(check, "SMS 查询消息不能为空");
+        if (checked.attempt() > MAXIMUM_CHECK_ATTEMPTS) {
+            return DeliveryOutcome.rejected("SMS_DELIVERY_CHECK_EXHAUSTED");
+        }
+        Notification notification = checked.notification();
+        String phone = recipients.resolve(notification.recipient())
+                .orElseThrow(() -> new IllegalStateException("SMS 接收人没有已验证手机号"));
+        ParsedPhoneNumber parsed = Objects.requireNonNull(regions.parse(phone), "SMS 接收手机号不是规范 E.164");
+        SmsRoute route = route(notification, parsed);
+        SmsProvider provider = selector.candidates(route)
+                .stream()
+                .filter(candidate -> candidate.providerId() == checked.providerId())
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("SMS Provider 已不在当前路由中"));
+        SmsProviderBinding binding = repository.binding(
+                provider.providerId(),
+                notification.code(),
+                route,
+                notification.locale())
+                .orElseThrow(() -> new IllegalStateException("SMS Provider Binding 已不存在"));
+        SmsProviderClient transport = transports.get(provider.type());
+        if (transport == null) {
+            throw new IllegalStateException("SMS Provider Client 未安装: " + provider.type());
+        }
+        SmsProviderResult result = transport.query(
+                provider,
+                binding,
+                parsed,
+                checked.requestId(),
+                checked.bizId());
+        deliveries.finish(checked.messageId(), provider, result);
+        if (result.status() == SmsDeliveryStatus.DELIVERED)
+            return DeliveryOutcome.confirmed();
+        if (result.status() == SmsDeliveryStatus.ACCEPTED
+                || result.status() == SmsDeliveryStatus.PENDING
+                || result.status() == SmsDeliveryStatus.UNKNOWN) {
+            scheduleCheck(
+                    new SmsDeliveryCheck(
+                            notification,
+                            checked.messageId(),
+                            provider.providerId(),
+                            result.requestId() == null ? checked.requestId() : result.requestId(),
+                            result.bizId() == null ? checked.bizId() : result.bizId(),
+                            checked.attempt() + 1));
+            return DeliveryOutcome.pending(clock.instant().plus(CHECK_DELAY), result.requestId());
+        }
+        return DeliveryOutcome.rejected(
+                result.failureCode() == null ? "SMS_DELIVERY_FAILED" : result.failureCode());
+    }
+
+    private void scheduleCheck(@NotNull SmsDeliveryCheck check) {
+        transactions.executeWithoutResult(
+                status -> messages.dispatch(
+                        check,
+                        DispatchPolicy.outboxNotBefore(clock.instant().plus(CHECK_DELAY))));
     }
 
     /** 使用类型化通知事实取得具体应用声明的 SMS 路由。 */

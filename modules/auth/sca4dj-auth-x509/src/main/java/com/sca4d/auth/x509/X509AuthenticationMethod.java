@@ -154,7 +154,7 @@ public class X509AuthenticationMethod implements AuthenticationMethod<X509Transp
             throw new BusinessException(X509ErrorCode.INVALID_CERTIFICATE);
         }
         X509Credential credential = new X509Credential(
-                ids.nextId(),
+                ids.nextId().value(),
                 checkedAccount.accountId(),
                 X509Certificates.fingerprint(der),
                 certificate.getSerialNumber().toString(16),

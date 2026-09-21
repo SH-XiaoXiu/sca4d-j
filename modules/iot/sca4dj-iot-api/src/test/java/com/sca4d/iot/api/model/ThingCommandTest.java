@@ -4,11 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.data.DataKey;
 import com.sca4d.iot.api.message.AcknowledgementDecision;
 import com.sca4d.iot.api.message.AcknowledgementPolicy;
 import com.sca4d.iot.api.message.DeviceAcknowledgement;
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
+import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.message.IotFailureCode;
 import com.sca4d.iot.api.message.RetryDecision;
 import com.sca4d.iot.api.message.RetryPolicy;
@@ -24,8 +25,8 @@ class ThingCommandTest {
 
     private static final AcknowledgementPolicy ACKNOWLEDGEMENT = new AcknowledgementPolicy() {
         @Override
-        public @NotNull String code() {
-            return "ack";
+        public @NotNull TreeCode code() {
+            return TreeCode.of("TEST/ACK");
         }
 
         @Override
@@ -35,7 +36,7 @@ class ThingCommandTest {
 
         @Override
         public @NotNull AcknowledgementDecision evaluate(
-                @NotNull DeviceDownlinkMessage message,
+                @NotNull DeviceDownlink message,
                 @NotNull DeviceAcknowledgement acknowledgement,
                 @NotNull Instant now) {
             return AcknowledgementDecision.succeed();
@@ -44,13 +45,13 @@ class ThingCommandTest {
 
     private static final RetryPolicy RETRY = new RetryPolicy() {
         @Override
-        public @NotNull String code() {
-            return "retry";
+        public @NotNull TreeCode code() {
+            return TreeCode.of("TEST/RETRY");
         }
 
         @Override
         public @NotNull RetryDecision evaluate(
-                @NotNull DeviceDownlinkMessage message,
+                @NotNull DeviceDownlink message,
                 @NotNull IotFailureCode failure,
                 @NotNull Instant now) {
             return RetryDecision.stop(failure);

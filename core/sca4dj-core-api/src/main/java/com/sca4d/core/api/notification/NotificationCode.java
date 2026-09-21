@@ -1,37 +1,35 @@
 package com.sca4d.core.api.notification;
 
-import com.sca4d.core.api.utils.TextUtils;
+import com.sca4d.core.api.code.TreeCode;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 /** 表示跨通知调用方、模板和投递实现保持稳定的通知编码。 */
 public final class NotificationCode {
 
-    private static final Pattern VALUE = Pattern.compile("[A-Za-z0-9][A-Za-z0-9._-]{0,127}");
-
-    private final @NotNull String value;
+    private final @NotNull TreeCode value;
 
     /**
      * 创建通知编码。
      *
-     * @param value 只包含字母、数字、点、下划线和连字符的稳定编码
+     * @param value 具有领域层级的稳定编码
      */
     public NotificationCode(@NotNull String value) {
-        String checked = TextUtils.requireText(value, "通知编码");
-        if (!VALUE.matcher(checked).matches()) {
-            throw new IllegalArgumentException("通知编码只能包含字母、数字、点、下划线和连字符");
-        }
-        this.value = checked;
+        this(TreeCode.of(value));
+    }
+
+    /** 创建已经规范化的通知编码。 */
+    public NotificationCode(@NotNull TreeCode value) {
+        this.value = Objects.requireNonNull(value, "通知编码不能为空");
     }
 
     /** @return 稳定通知编码 */
     @Contract(pure = true)
     public @NotNull String value() {
-        return value;
+        return value.value();
     }
 
     @Override
@@ -49,6 +47,6 @@ public final class NotificationCode {
     @Override
     @Contract(pure = true)
     public @NotNull String toString() {
-        return value;
+        return value.value();
     }
 }

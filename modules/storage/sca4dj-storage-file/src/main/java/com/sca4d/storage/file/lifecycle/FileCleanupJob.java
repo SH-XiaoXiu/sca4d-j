@@ -17,7 +17,7 @@ import java.util.Objects;
  */
 public final class FileCleanupJob extends DirectJob<Void, Void> {
 
-    private static final JobKey KEY = new JobKey("storage.file.cleanup");
+    private static final JobKey KEY = new JobKey("STORAGE/FILE/CLEANUP");
 
     private final @NotNull FileCleanupService cleanupService;
 

@@ -5,18 +5,20 @@ import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.notification.NotificationDelivery;
 import com.sca4d.core.api.security.SecretKeyring;
 import com.sca4d.notification.NotificationDeliveryRouter;
-import com.sca4d.notification.NotificationRequestedConsumer;
+import com.sca4d.notification.NotificationMessageCodec;
+import com.sca4d.notification.NotificationMessageHandler;
 import com.sca4d.notification.config.NotificationAutoConfiguration;
 import com.sca4d.notification.email.EmailMessageService;
 import com.sca4d.notification.email.EmailNotificationDelivery;
 import com.sca4d.notification.email.EmailRecipientResolver;
+import com.sca4d.notification.email.EmailRenderer;
+import com.sca4d.notification.email.EmailTemplateRepository;
+import com.sca4d.notification.email.mapper.EmailTemplateMapper;
+import com.sca4d.notification.email.sender.EmailGateway;
 import com.sca4d.notification.email.sender.EmailSenderRepository;
 import com.sca4d.notification.email.sender.EmailSenderService;
-import com.sca4d.notification.email.sender.EmailTransport;
-import com.sca4d.notification.email.sender.SmtpEmailTransport;
+import com.sca4d.notification.email.sender.SmtpEmailGateway;
 import com.sca4d.notification.email.sender.mapper.EmailSenderMapper;
-import com.sca4d.notification.template.NotificationTemplateRenderers;
-import com.sca4d.notification.template.NotificationTemplateRepository;
 import org.jetbrains.annotations.NotNull;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -26,7 +28,7 @@ import org.springframework.context.annotation.Bean;
 
 /** 自动装配 Email 模板、SMTP 配置管理和通知投递实现。 */
 @AutoConfiguration(after = NotificationAutoConfiguration.class)
-@MapperScan(basePackageClasses = EmailSenderMapper.class)
+@MapperScan(basePackageClasses = {EmailSenderMapper.class, EmailTemplateMapper.class})
 @EnableConfigurationProperties(EmailNotificationProperties.class)
 public class EmailNotificationAutoConfiguration {
 
@@ -42,20 +44,35 @@ public class EmailNotificationAutoConfiguration {
         return new EmailSenderRepository(mapper, versionConditions);
     }
 
+    /** @return Email 模板持久化语义 */
+    @Bean
+    EmailTemplateRepository emailTemplateRepository(
+            @NotNull EmailTemplateMapper mapper,
+            @NotNull VersionConditions versionConditions,
+            @NotNull com.fasterxml.jackson.databind.ObjectMapper objectMapper) {
+        return new EmailTemplateRepository(mapper, versionConditions, objectMapper);
+    }
+
+    /** @return Email 模板检查与渲染入口 */
+    @Bean
+    EmailRenderer emailRenderer() {
+        return new EmailRenderer();
+    }
+
     /** @return 使用 JavaMail 和 SecretKeyring 的默认 SMTP 操作 */
     @Bean
     @ConditionalOnMissingBean
-    EmailTransport emailTransport(
+    EmailGateway emailTransport(
             @NotNull SecretKeyring keyring,
             @NotNull EmailNotificationProperties properties) {
-        return new SmtpEmailTransport(keyring, properties);
+        return new SmtpEmailGateway(keyring, properties);
     }
 
     /** @return SMTP 配置管理服务 */
     @Bean
     EmailSenderService emailSenderService(
             @NotNull EmailSenderRepository senders,
-            @NotNull EmailTransport transport,
+            @NotNull EmailGateway transport,
             @NotNull SecretKeyring keyring,
             @NotNull IdGenerator ids) {
         return new EmailSenderService(senders, transport, keyring, ids);
@@ -65,14 +82,14 @@ public class EmailNotificationAutoConfiguration {
     @Bean
     EmailMessageService emailMessageService(
             @NotNull EmailSenderRepository senders,
-            @NotNull NotificationTemplateRepository templates,
-            @NotNull NotificationTemplateRenderers renderers,
-            @NotNull EmailTransport transport,
+            @NotNull EmailTemplateRepository templates,
+            @NotNull EmailRenderer renderer,
+            @NotNull EmailGateway transport,
             @NotNull EmailNotificationProperties properties) {
         return new EmailMessageService(
                 senders,
                 templates,
-                renderers,
+                renderer,
                 transport,
                 properties.getMaxAttachmentBytes());
     }
@@ -82,17 +99,18 @@ public class EmailNotificationAutoConfiguration {
     NotificationDelivery emailNotificationDelivery(
             @NotNull EmailRecipientResolver recipients,
             @NotNull EmailSenderRepository senders,
-            @NotNull NotificationTemplateRepository templates,
-            @NotNull NotificationTemplateRenderers renderers,
-            @NotNull EmailTransport transport) {
-        return new EmailNotificationDelivery(recipients, senders, templates, renderers, transport);
+            @NotNull EmailTemplateRepository templates,
+            @NotNull EmailRenderer renderer,
+            @NotNull EmailGateway transport) {
+        return new EmailNotificationDelivery(recipients, senders, templates, renderer, transport);
     }
 
     /** @return Email 渠道独立确认和进入独立 DLQ 的通知 Consumer */
     @Bean
-    NotificationRequestedConsumer emailNotificationRequestedConsumer(
+    NotificationMessageHandler emailNotificationMessageHandler(
             @NotNull NotificationDelivery emailNotificationDelivery,
-            @NotNull NotificationDeliveryRouter deliveries) {
-        return new NotificationRequestedConsumer(emailNotificationDelivery, deliveries);
+            @NotNull NotificationDeliveryRouter deliveries,
+            @NotNull NotificationMessageCodec codec) {
+        return new NotificationMessageHandler(emailNotificationDelivery, deliveries, codec);
     }
 }

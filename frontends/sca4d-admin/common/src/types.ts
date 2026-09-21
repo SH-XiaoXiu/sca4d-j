@@ -312,8 +312,18 @@ export type NotificationTemplateContent = Readonly<
   Record<string, NotificationTemplateLocaleContent>
 >;
 
-/** 已保存的多语言统一通知模板。 */
+/** Email 模板一个 Locale 的源码。 */
+export interface EmailTemplateSource {
+  readonly html: string;
+  readonly subject: string;
+  readonly text: string;
+}
+
+/** 已保存的多语言 Email 模板。 */
 export interface EmailTemplate {
+  /** 后端持久化的 Email 源码，旧编辑器状态没有该字段时为空。 */
+  readonly locales?: Readonly<Record<string, EmailTemplateSource>>;
+  /** 管理端富文本编辑器使用的派生内容。 */
   readonly content: NotificationTemplateContent;
   readonly enabled: boolean;
   readonly notificationCode: string;
@@ -332,13 +342,15 @@ export interface EmailTemplatePage {
 
 /** 创建或完整替换统一通知模板的输入。 */
 export interface EmailTemplateInput {
-  readonly content: NotificationTemplateContent;
+  readonly content?: NotificationTemplateContent;
+  readonly locales?: Readonly<Record<string, EmailTemplateSource>>;
   readonly notificationCode: string;
 }
 
 /** 使用未保存模板生成预览的输入。 */
 export interface PreviewEmailTemplateInput {
-  readonly content: NotificationTemplateContent;
+  readonly content?: NotificationTemplateContent;
+  readonly source?: EmailTemplateSource;
   readonly languageTag: string;
   readonly variables: Readonly<Record<string, string>>;
 }

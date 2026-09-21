@@ -8,8 +8,8 @@ import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.ProductDefinition;
 import com.sca4d.iot.api.change.DeviceChangeArea;
+import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.message.DeviceDownlinkKind;
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
 import com.sca4d.iot.api.model.ThingCommand;
 import com.sca4d.iot.api.model.ThingModel;
@@ -55,7 +55,7 @@ public class DeviceCommandService {
 
     private final @NotNull DeviceChangeNotifier changes;
 
-    private final @NotNull DeviceDownlinkMessagePublisher messagePublisher;
+    private final @NotNull DeviceDeliveryScheduler messagePublisher;
 
     /** 创建 command 事务服务。 */
     public DeviceCommandService(
@@ -67,7 +67,7 @@ public class DeviceCommandService {
             @NotNull IdGenerator ids,
             @NotNull Clock clock,
             @NotNull DeviceChangeNotifier changes,
-            @NotNull DeviceDownlinkMessagePublisher messagePublisher) {
+            @NotNull DeviceDeliveryScheduler messagePublisher) {
         this.devices = Objects.requireNonNull(devices, "Device Repository 不能为空");
         this.products = Objects.requireNonNull(products, "ProductDefinition 目录不能为空");
         this.downlinks = Objects.requireNonNull(downlinks, "Downlink Repository 不能为空");
@@ -90,7 +90,7 @@ public class DeviceCommandService {
     @Transactional
     @CheckReturnValue
     @SuppressWarnings("DuplicatedCode")
-    public @NotNull DeviceDownlinkMessage submit(
+    public @NotNull DeviceDownlink submit(
             long deviceId,
             @NotNull String commandCode,
             @NotNull Map<String, ?> inputs,
@@ -121,7 +121,7 @@ public class DeviceCommandService {
      */
     @Transactional
     @CheckReturnValue
-    public @NotNull DeviceDownlinkMessage submit(
+    public @NotNull DeviceDownlink submit(
             long deviceId,
             @NotNull ThingCommand command,
             @NotNull DataValues inputs,
@@ -151,7 +151,7 @@ public class DeviceCommandService {
      */
     @Transactional
     @CheckReturnValue
-    public @NotNull DeviceDownlinkMessage submitScheduled(
+    public @NotNull DeviceDownlink submitScheduled(
             long deviceId,
             @NotNull String commandCode,
             @NotNull Map<String, ?> inputs,
@@ -184,7 +184,7 @@ public class DeviceCommandService {
     @Transactional
     @CheckReturnValue
     public boolean cancel(long messageId) {
-        DeviceDownlinkMessage message = downlinks.find(messageId)
+        DeviceDownlink message = downlinks.find(messageId)
                 .orElseThrow(() -> new BusinessException(IotErrorCode.INVALID_INPUT));
         if (message.kind() != DeviceDownlinkKind.COMMAND) {
             throw new BusinessException(IotErrorCode.INVALID_INPUT);
@@ -203,7 +203,7 @@ public class DeviceCommandService {
     }
 
     /** 校验 command 并在当前事务内保存业务状态和可靠发送消息。 */
-    private @NotNull DeviceDownlinkMessage submitCommand(
+    private @NotNull DeviceDownlink submitCommand(
             long deviceId,
             @NotNull String commandCode,
             @NotNull Map<String, ?> inputs,
@@ -228,8 +228,8 @@ public class DeviceCommandService {
             throw new BusinessException(IotErrorCode.INVALID_INPUT, exception);
         }
         Instant now = clock.instant();
-        DeviceDownlinkMessage message = new DeviceDownlinkMessage(
-                ids.nextId(),
+        DeviceDownlink message = new DeviceDownlink(
+                ids.nextId().value(),
                 deviceId,
                 device.bindingGeneration(),
                 DeviceDownlinkKind.COMMAND,

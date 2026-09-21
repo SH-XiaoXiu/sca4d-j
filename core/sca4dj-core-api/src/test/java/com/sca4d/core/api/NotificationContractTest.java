@@ -25,7 +25,7 @@ class NotificationContractTest {
                 Locale.SIMPLIFIED_CHINESE,
                 Map.of("code", "123456"),
                 null,
-                Set.of(NotificationChannel.EMAIL));
+                Set.of(new NotificationChannel("TEST/EMAIL")));
 
         assertEquals("42", notification.recipient().id());
         assertEquals("zh-CN", notification.locale().toLanguageTag());
@@ -44,7 +44,7 @@ class NotificationContractTest {
                         Locale.ROOT,
                         Map.of(),
                         null,
-                        Set.of(NotificationChannel.EMAIL)));
+                        Set.of(new NotificationChannel("TEST/EMAIL"))));
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new Notification(
@@ -53,7 +53,7 @@ class NotificationContractTest {
                         Locale.ENGLISH,
                         Map.of("not-valid", "value"),
                         null,
-                        Set.of(NotificationChannel.EMAIL)));
+                        Set.of(new NotificationChannel("TEST/EMAIL"))));
     }
 
     @Test
@@ -71,7 +71,7 @@ class NotificationContractTest {
                         Locale.ENGLISH,
                         excessiveVariables,
                         null,
-                        Set.of(NotificationChannel.EMAIL)));
+                        Set.of(new NotificationChannel("TEST/EMAIL"))));
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new Notification(
@@ -80,7 +80,7 @@ class NotificationContractTest {
                         Locale.ENGLISH,
                         Map.of("value", "x".repeat(4097)),
                         null,
-                        Set.of(NotificationChannel.EMAIL)));
+                        Set.of(new NotificationChannel("TEST/EMAIL"))));
 
         assertThrows(
                 IllegalArgumentException.class,

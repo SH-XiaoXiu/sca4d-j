@@ -277,7 +277,7 @@ public class DefaultFileService implements FileService {
                 checked.sizeBytes());
 
         // 保存 PENDING 记录以及不可猜测的临时、正式对象键。
-        long fileId = ids.nextId();
+        long fileId = ids.nextId().value();
         Instant now = clock.instant();
         Instant expiresAt = now.plus(fileLimits.get(FileSettings.UPLOAD_TTL));
         String nonce = UUID.randomUUID().toString().replace("-", "");

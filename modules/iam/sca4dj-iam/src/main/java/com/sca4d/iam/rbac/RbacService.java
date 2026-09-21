@@ -102,7 +102,7 @@ public class RbacService {
         Role role = repository(checkedScope)
                 .createRole(
                         checkedScope,
-                        idGenerator.nextId(),
+                        idGenerator.nextId().value(),
                         checkedCode,
                         RoleStatus.ACTIVE,
                         false,
@@ -447,7 +447,7 @@ public class RbacService {
         Role role = repository.findRole(checkedScope, checkedCode).orElseGet(() -> {
             Role created = repository.createRole(
                     checkedScope,
-                    idGenerator.nextId(),
+                    idGenerator.nextId().value(),
                     checkedCode,
                     RoleStatus.ACTIVE,
                     true,

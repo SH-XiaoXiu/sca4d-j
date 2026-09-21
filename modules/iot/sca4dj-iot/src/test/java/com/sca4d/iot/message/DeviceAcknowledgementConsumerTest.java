@@ -16,7 +16,7 @@ import java.time.Instant;
 import java.util.Map;
 
 /** 验证可靠 ACK 请求 Consumer 使用稳定事件类型并委托现有 ACK 服务。 */
-class DeviceAcknowledgementConsumerTest {
+class DeviceAcknowledgementHandlerTest {
 
     private static final Instant NOW = Instant.parse("2026-08-18T08:00:00Z");
 
@@ -24,7 +24,7 @@ class DeviceAcknowledgementConsumerTest {
     @DisplayName("消费可靠 ACK 请求时委托消息级状态转换")
     void delegatesAcknowledgementRequest() {
         DeviceAcknowledgementService acknowledgements = mock(DeviceAcknowledgementService.class);
-        DeviceAcknowledgementConsumer consumer = new DeviceAcknowledgementConsumer(acknowledgements);
+        DeviceAcknowledgementHandler consumer = new DeviceAcknowledgementHandler(acknowledgements);
         DeviceAcknowledgement acknowledgement = new DeviceAcknowledgement(
                 10,
                 "reported-equals-desired",

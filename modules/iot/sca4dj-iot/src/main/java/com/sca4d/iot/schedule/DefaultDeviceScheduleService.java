@@ -5,8 +5,9 @@ import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.id.IdGenerator;
+import com.sca4d.core.api.messaging.DispatchPolicy;
+import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageId;
-import com.sca4d.core.api.messaging.MessagePublisher;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.iot.IotErrorCode;
@@ -14,7 +15,7 @@ import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.change.DeviceChangeArea;
 import com.sca4d.iot.api.history.DeviceEventMessage;
 import com.sca4d.iot.api.history.DeviceHistoryStore;
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
+import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.message.IotMessageTypes;
 import com.sca4d.iot.api.schedule.DeviceSchedule;
 import com.sca4d.iot.api.schedule.DeviceScheduleExecution;
@@ -69,7 +70,7 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
 
     private final @NotNull IotProperties properties;
 
-    private final @NotNull MessagePublisher messages;
+    private final @NotNull MessageBus messages;
 
     private final @NotNull ObjectProvider<DeviceHistoryStore> history;
 
@@ -87,7 +88,7 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
             @NotNull Clock clock,
             @NotNull DeviceChangeNotifier changes,
             @NotNull IotProperties properties,
-            @NotNull MessagePublisher messages,
+            @NotNull MessageBus messages,
             @NotNull ObjectProvider<DeviceHistoryStore> history,
             @NotNull DistributedLock distributedLock,
             @NotNull TransactionTemplate transactions) {
@@ -98,7 +99,7 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
         this.clock = Objects.requireNonNull(clock, "设备定时时钟不能为空");
         this.changes = Objects.requireNonNull(changes, "Device 变化通知器不能为空");
         this.properties = Objects.requireNonNull(properties, "IoT 配置不能为空");
-        this.messages = Objects.requireNonNull(messages, "MessagePublisher 不能为空");
+        this.messages = Objects.requireNonNull(messages, "MessageBus 不能为空");
         this.history = Objects.requireNonNull(history, "DeviceHistoryStore Provider 不能为空");
         this.distributedLock = Objects.requireNonNull(distributedLock, "设备定时分布式锁不能为空");
         this.transactions = Objects.requireNonNull(transactions, "设备定时事务模板不能为空");
@@ -115,7 +116,7 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
         validateDeviceId(deviceId);
         Instant now = clock.instant();
         DeviceScheduleTrigger checkedTrigger = validatedTrigger(trigger);
-        long scheduleId = ids.nextId();
+        long scheduleId = ids.nextId().value();
         schedules.add(
                 scheduleId,
                 deviceId,
@@ -266,7 +267,7 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
             executionStatus = DeviceScheduleExecutionStatus.EXPIRED;
         } else {
             try {
-                DeviceDownlinkMessage message = commands.submitScheduled(
+                DeviceDownlink message = commands.submitScheduled(
                         schedule.deviceId(),
                         schedule.command().commandCode(),
                         schedule.command().inputs(),
@@ -383,12 +384,13 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
                 plannedAt,
                 true,
                 triggeredAt);
-        MessageId eventMessageId = messages.publishReliably(
+        MessageId eventMessageId = messages.dispatch(
                 new Event<>(
                         IotMessageTypes.DEVICE_EVENT_OCCURRED,
                         "schedule-execution:" + sourceEventId,
                         plannedAt,
-                        payload));
+                        payload),
+                DispatchPolicy.outbox()).messageId();
         changes.changed(schedule.deviceId(), DeviceChangeArea.SCHEDULE, triggeredAt);
         LOG.debug(
                 "设备定时执行结果已保存 | scheduleId={} plannedAt={} status={} messageId={} eventMessageId={}",

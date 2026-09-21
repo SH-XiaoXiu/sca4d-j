@@ -12,13 +12,13 @@ import static org.mockito.Mockito.when;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.id.IdGenerator;
-import com.sca4d.core.api.messaging.MessagePublisher;
+import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.ProductBinding;
 import com.sca4d.iot.api.history.DeviceHistoryStore;
 import com.sca4d.iot.api.message.AcknowledgementPolicy;
+import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.message.DeviceDownlinkKind;
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
 import com.sca4d.iot.api.message.IotMessageTypes;
 import com.sca4d.iot.api.message.RetryPolicy;
@@ -66,7 +66,7 @@ class DefaultDeviceScheduleServiceTest {
 
     private final DeviceCommandService commands = mock(DeviceCommandService.class);
 
-    private final MessagePublisher messages = mock(MessagePublisher.class);
+    private final MessageBus messages = mock(MessageBus.class);
 
     @SuppressWarnings("unchecked")
     private final ObjectProvider<DeviceHistoryStore> history = mock(ObjectProvider.class);
@@ -130,7 +130,7 @@ class DefaultDeviceScheduleServiceTest {
                 DeviceScheduleStatus.ACTIVE,
                 PLANNED_AT,
                 3);
-        DeviceDownlinkMessage downlink = new DeviceDownlinkMessage(
+        DeviceDownlink downlink = new DeviceDownlink(
                 200,
                 20,
                 4,

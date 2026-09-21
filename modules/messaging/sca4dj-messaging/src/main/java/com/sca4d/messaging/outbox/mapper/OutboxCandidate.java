@@ -11,7 +11,7 @@ public final class OutboxCandidate {
 
     private final long messageId;
 
-    private final @NotNull String eventCode;
+    private final @NotNull String messageCode;
 
     private final byte @NotNull [] envelope;
 
@@ -22,12 +22,12 @@ public final class OutboxCandidate {
     /** 创建已经登记租约、尝试次数和版本的 Outbox 领取数据。 */
     public OutboxCandidate(
             long messageId,
-            @NotNull String eventCode,
+            @NotNull String messageCode,
             byte @NotNull [] envelope,
             int attemptCount,
             long version) {
         this.messageId = messageId;
-        this.eventCode = Objects.requireNonNull(eventCode, "事件编码不能为空");
+        this.messageCode = Objects.requireNonNull(messageCode, "消息编码不能为空");
         this.envelope = Arrays.copyOf(Objects.requireNonNull(envelope, "消息信封不能为空"), envelope.length);
         this.attemptCount = attemptCount;
         this.version = version;
@@ -38,9 +38,9 @@ public final class OutboxCandidate {
         return messageId;
     }
 
-    /** @return RabbitMQ routing key 使用的事件编码 */
-    public @NotNull String eventCode() {
-        return eventCode;
+    /** @return RabbitMQ routing key 使用的消息编码 */
+    public @NotNull String messageCode() {
+        return messageCode;
     }
 
     /** @return 已序列化消息信封的副本 */

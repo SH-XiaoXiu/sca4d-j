@@ -1,5 +1,6 @@
 package com.sca4d.core.api.resource;
 
+import com.sca4d.core.api.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -19,6 +20,15 @@ public interface Resource {
      */
     @NotNull
     String type();
+
+    /**
+     * 返回规范化的层级资源类型。
+     *
+     * @return 由 {@link #type()} 解析得到的 TreeCode
+     */
+    default @NotNull TreeCode typeCode() {
+        return TreeCode.of(type());
+    }
 
     /**
      * 返回资源标识。

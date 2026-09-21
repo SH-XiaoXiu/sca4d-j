@@ -6,7 +6,7 @@ import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.history.DeviceHistoryStore;
 import com.sca4d.iot.api.message.DeviceAcknowledgement;
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
+import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.query.DeviceEvent;
 import com.sca4d.iot.api.query.DeviceHistoryQueryService;
 import com.sca4d.iot.api.telemetry.TelemetrySample;
@@ -43,18 +43,18 @@ public final class DefaultDeviceHistoryQueryService implements DeviceHistoryQuer
     }
 
     @Override
-    public @NotNull Optional<DeviceDownlinkMessage> downlink(long messageId) {
+    public @NotNull Optional<DeviceDownlink> downlink(long messageId) {
         return downlinks.find(messageId);
     }
 
     @Override
-    public @NotNull @Unmodifiable Map<@NotNull Long, @NotNull DeviceDownlinkMessage> downlinks(
+    public @NotNull @Unmodifiable Map<@NotNull Long, @NotNull DeviceDownlink> downlinks(
             @NotNull Collection<@NotNull Long> messageIds) {
         return downlinks.findAll(messageIds);
     }
 
     @Override
-    public @NotNull Page<DeviceDownlinkMessage> downlinks(long deviceId, @NotNull PageRequest page) {
+    public @NotNull Page<DeviceDownlink> downlinks(long deviceId, @NotNull PageRequest page) {
         validateDeviceId(deviceId);
         return downlinks.findDownlinks(deviceId, page);
     }

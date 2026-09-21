@@ -47,6 +47,16 @@ public final class WebRealtimeTarget {
         }
     }
 
+    /** 按已经持久化的目标类型、限定类型和标识恢复目标。 */
+    @CheckReturnValue
+    @Contract("_, _, _ -> new")
+    public static @NotNull WebRealtimeTarget of(
+            @NotNull Type type,
+            @Nullable String qualifier,
+            @NotNull String id) {
+        return new WebRealtimeTarget(type, qualifier, id);
+    }
+
     /** @param accountId Account 标识 @return Account 目标 */
     @CheckReturnValue
     @Contract(value = "_ -> new", pure = true)

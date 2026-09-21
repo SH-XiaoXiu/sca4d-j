@@ -74,7 +74,7 @@
 
 - 使用 `AuthenticationAttempts`、`AuthenticationMethod` 和 `SessionLifecycle` 完成认证与 Session；
 - 使用 `Call`、`PermissionPolicy` 和 `ResourceScope` 传递一次调用的身份和权限结果；
-- 使用 `MessagePublisher` 发布业务消息，不在业务代码中操作 RabbitMQ 或 Outbox 表；
+- 使用 `MessageBus` 发布业务消息，不在业务代码中操作 RabbitMQ 或 Outbox 表；
 - 使用 `WebRealtimePublisher` 发布浏览器短暂通知，不操作 SSE emitter、WebSocket session 或本地连接表；
 - 使用 `FileService` 管理文件状态，使用 `FileStorage` 实现字节存储，业务表不保存 MinIO bucket、object key 或本地路径；
 - 使用 Spring 的类型化配置、事务、消息转换和生命周期，使用 MyBatis 的 Mapper 与 XML，使用 Jackson 公共配置，不包装等价 API。

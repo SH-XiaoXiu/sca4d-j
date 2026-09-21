@@ -86,7 +86,7 @@ public class ProductService {
             definitions.validateDatabaseCodeAvailable(input.code());
             input.protocolCodes().forEach(protocols::loadByCode);
             Product product = new Product(
-                    ids.nextId(),
+                    ids.nextId().value(),
                     input.code(),
                     validateI18n(input.i18n()),
                     input.accessMethods(),

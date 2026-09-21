@@ -1,6 +1,6 @@
 package com.sca4d.iot.message;
 
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
+import com.sca4d.iot.api.message.DeviceDownlink;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -12,10 +12,10 @@ public final class DesiredStateResult {
 
     private final long desiredSequence;
 
-    private final @NotNull List<DeviceDownlinkMessage> messages;
+    private final @NotNull List<DeviceDownlink> messages;
 
     /** @param desiredSequence Device 当前 desired sequence @param messages 本次实际变化生成的消息 */
-    public DesiredStateResult(long desiredSequence, @NotNull List<DeviceDownlinkMessage> messages) {
+    public DesiredStateResult(long desiredSequence, @NotNull List<DeviceDownlink> messages) {
         if (desiredSequence < 0)
             throw new IllegalArgumentException("desired sequence 不能为负数");
         this.desiredSequence = desiredSequence;
@@ -28,7 +28,7 @@ public final class DesiredStateResult {
     }
 
     /** @return 本次实际生成的消息 */
-    public @NotNull @Unmodifiable List<DeviceDownlinkMessage> messages() {
+    public @NotNull @Unmodifiable List<DeviceDownlink> messages() {
         return messages;
     }
 }

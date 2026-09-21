@@ -72,7 +72,7 @@ public class AuditRepository {
         Resource target = record.target().orElse(null);
         HttpCall httpCall = record.httpCall().orElse(null);
         return new EncodedAuditEntry(
-                ids.nextId(),
+                ids.nextId().value(),
                 required(record.requestId(), "调用标识"),
                 record.actor().subjectId(),
                 record.actor().accountId().orElse(null),

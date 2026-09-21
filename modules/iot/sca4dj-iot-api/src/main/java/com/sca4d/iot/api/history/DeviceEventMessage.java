@@ -11,7 +11,7 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.Objects;
 
-/** 保存已经通过物模型校验、准备由 `MessagePublisher` 发布的一次 Device 事件。 */
+/** 保存已经通过物模型校验、准备由 `MessageBus` 发布的一次 Device 事件。 */
 public final class DeviceEventMessage {
 
     private final long deviceId;

@@ -12,8 +12,8 @@ import static org.mockito.Mockito.when;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.id.IdGenerator;
+import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageId;
-import com.sca4d.core.api.messaging.MessagePublisher;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.ProductBinding;
@@ -66,7 +66,7 @@ class ReportedStateServiceTest {
                 mock(DownlinkRepository.class),
                 mock(ThingModelRepository.class),
                 mock(ThingValueValidator.class),
-                mock(MessagePublisher.class),
+                mock(MessageBus.class),
                 mock(DeviceChangeNotifier.class),
                 1);
         ReportedStateUpdate update = new ReportedStateUpdate(
@@ -115,7 +115,7 @@ class ReportedStateServiceTest {
         DownlinkRepository downlinks = mock(DownlinkRepository.class);
         when(downlinks.convergeDesired(anyLong(), anyLong(), any(), any()))
                 .thenReturn(List.of(new DesiredConvergence("power", 99)));
-        MessagePublisher messages = mock(MessagePublisher.class);
+        MessageBus messages = mock(MessageBus.class);
         when(messages.publishReliably(any())).thenReturn(new MessageId(1000));
         DeviceChangeNotifier changes = mock(DeviceChangeNotifier.class);
         ReportedStateService service = service(
@@ -157,7 +157,7 @@ class ReportedStateServiceTest {
             DownlinkRepository downlinks,
             ThingModelRepository models,
             ThingValueValidator validator,
-            MessagePublisher messages,
+            MessageBus messages,
             DeviceChangeNotifier changes,
             int maxReportedProperties) {
         return new ReportedStateService(

@@ -11,10 +11,12 @@ import com.sca4d.core.api.concurrent.OptimisticLockException;
 import com.sca4d.core.spring.persistence.batch.SqlBatchProperties;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.iot.api.message.AcknowledgementPolicy;
+import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.message.DeviceDownlinkKind;
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
 import com.sca4d.iot.api.message.RetryPolicy;
+import com.sca4d.iot.message.policy.DefaultCommandRetryPolicy;
+import com.sca4d.iot.message.policy.DeviceResultAcknowledgementPolicy;
 import com.sca4d.iot.message.policy.NoAcknowledgementPolicy;
 import com.sca4d.iot.message.policy.NoRetryPolicy;
 import com.sca4d.iot.model.ThingDataJsonCodec;
@@ -28,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.LongStream;
 
-/** 验证下行 Repository 去重、分片查询并返回 `DeviceDownlinkMessage`。 */
+/** 验证下行 Repository 去重、分片查询并返回 `DeviceDownlink`。 */
 class DownlinkRepositoryTest {
 
     private final DeviceDownlinkMapper messages = mock(DeviceDownlinkMapper.class);
@@ -62,9 +64,9 @@ class DownlinkRepositoryTest {
                 null,
                 null,
                 "{}",
-                "device-result",
+                DeviceResultAcknowledgementPolicy.CODE.value(),
                 30_000L,
-                "default",
+                DefaultCommandRetryPolicy.CODE.value(),
                 DeviceDownlinkStatus.PENDING,
                 0,
                 null,
@@ -73,10 +75,10 @@ class DownlinkRepositoryTest {
         RetryPolicy retry = mock(RetryPolicy.class);
         when(messages.selectDownlinkMessages(List.of(12L, 11L))).thenReturn(List.of(row));
         when(json.decodeMap("{}")).thenReturn(Map.of());
-        when(policies.acknowledgement("device-result")).thenReturn(acknowledgement);
-        when(policies.retry("default")).thenReturn(retry);
+        when(policies.acknowledgement(DeviceResultAcknowledgementPolicy.CODE.value())).thenReturn(acknowledgement);
+        when(policies.retry(DefaultCommandRetryPolicy.CODE.value())).thenReturn(retry);
 
-        Map<Long, DeviceDownlinkMessage> result = repository.findAll(List.of(12L, 11L, 12L));
+        Map<Long, DeviceDownlink> result = repository.findAll(List.of(12L, 11L, 12L));
 
         assertThat(result).containsOnlyKeys(11L);
         assertThat(result.get(11L).deviceId()).isEqualTo(21L);
@@ -95,17 +97,17 @@ class DownlinkRepositoryTest {
                 null,
                 null,
                 "{}",
-                "none",
+                NoAcknowledgementPolicy.CODE.value(),
                 1000L,
-                "none",
+                NoRetryPolicy.CODE.value(),
                 DeviceDownlinkStatus.CANCELLED,
                 1,
                 null,
                 Instant.EPOCH);
         when(messages.selectDownlinkMessages(List.of(11L))).thenReturn(List.of(cancelled));
         when(json.decodeMap("{}")).thenReturn(Map.of());
-        when(policies.acknowledgement("none")).thenReturn(new NoAcknowledgementPolicy());
-        when(policies.retry("none")).thenReturn(new NoRetryPolicy());
+        when(policies.acknowledgement(NoAcknowledgementPolicy.CODE.value())).thenReturn(new NoAcknowledgementPolicy());
+        when(policies.retry(NoRetryPolicy.CODE.value())).thenReturn(new NoRetryPolicy());
         assertThat(repository.markPublished(11L, 1, DeviceDownlinkStatus.WAITING_ACK, Instant.EPOCH, Instant.EPOCH))
                 .isFalse();
         assertThat(repository.reschedule(11L, 1, "transport")).isFalse();

@@ -1,10 +1,13 @@
 package com.sca4d.core.api.notification;
 
+import com.sca4d.core.api.delivery.Delivery;
+import com.sca4d.core.api.delivery.DeliveryOutcome;
+import com.sca4d.core.api.messaging.HandlingPolicy;
 import com.sca4d.core.api.messaging.MessageId;
 import org.jetbrains.annotations.NotNull;
 
 /** 由一个具体渠道实现通知可用性判断和一次幂等投递。 */
-public interface NotificationDelivery {
+public interface NotificationDelivery extends Delivery<Notification> {
 
     /** @return 当前实现负责的唯一通知渠道 */
     @NotNull
@@ -18,6 +21,12 @@ public interface NotificationDelivery {
      */
     boolean available(@NotNull Notification notification);
 
+    /** @return 当前渠道 Handler 发生技术失败或结果未知时的再次处理策略 */
+    @NotNull
+    default HandlingPolicy handlingPolicy() {
+        return HandlingPolicy.noRetry();
+    }
+
     /**
      * 同步投递通知，正常返回表示具体提供方已经接受。
      *
@@ -25,5 +34,7 @@ public interface NotificationDelivery {
      * @param notification 已冻结接收人、Locale、区域、变量和渠道的通知
      * @throws RuntimeException 接收人、模板、配置、渲染或外部投递失败时抛出
      */
-    void deliver(@NotNull MessageId messageId, @NotNull Notification notification);
+    @Override
+    @NotNull
+    DeliveryOutcome deliver(@NotNull MessageId messageId, @NotNull Notification notification);
 }

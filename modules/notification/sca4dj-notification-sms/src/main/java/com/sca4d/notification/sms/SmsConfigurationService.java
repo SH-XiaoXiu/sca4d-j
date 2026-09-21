@@ -35,13 +35,13 @@ public class SmsConfigurationService {
     public SmsConfigurationService(
             @NotNull SmsRepository repository,
             @NotNull NotificationTypeCatalog notificationTypes,
-            @NotNull List<@NotNull SmsTransport> transports,
+            @NotNull List<@NotNull SmsProviderClient> transports,
             @NotNull IdGenerator ids) {
         this.repository = Objects.requireNonNull(repository, "SmsRepository 不能为空");
         this.notificationTypes = Objects.requireNonNull(notificationTypes, "NotificationTypeCatalog 不能为空");
         this.transportTypes = List.copyOf(Objects.requireNonNull(transports, "SMS Transport 不能为空"))
                 .stream()
-                .map(SmsTransport::providerType)
+                .map(SmsProviderClient::providerType)
                 .collect(Collectors.toUnmodifiableSet());
         this.ids = Objects.requireNonNull(ids, "IdGenerator 不能为空");
     }
@@ -86,7 +86,7 @@ public class SmsConfigurationService {
             @NotNull String credentialRef,
             int priority) {
         CheckedProvider checked = checkedProvider(code, type, credentialRef, priority);
-        long providerId = ids.nextId();
+        long providerId = ids.nextId().value();
         repository.addProvider(providerId, checked.code, checked.type, checked.credentialRef, priority);
         LOG.info(
                 "SMS Provider 已创建 | providerId={} code={} type={} enabled=false",
@@ -161,7 +161,7 @@ public class SmsConfigurationService {
                 signName,
                 providerTemplateCode,
                 parameterMapping);
-        long bindingId = ids.nextId();
+        long bindingId = ids.nextId().value();
         repository.addBinding(
                 bindingId,
                 providerId,

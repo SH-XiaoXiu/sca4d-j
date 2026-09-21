@@ -225,7 +225,7 @@ HTTP 使用 account、role 和 permission 命名公开资源。其中 permission
 
 ### SMS Provider 与绑定契约
 
-Provider 请求包含 `code`、已安装 `SmsTransport` 的 `type`、部署配置引用 `credentialRef` 和整数 `priority`。阿里云 Transport 类型是 `ALIYUN`。HTTP 不接收或返回 AccessKey；运行配置见[阿里云 SMS](/reference/runtime/sca4d-server#阿里云-sms)。
+Provider 请求包含 `code`、已安装 `SmsProviderClient` 的 `type`、部署配置引用 `credentialRef` 和整数 `priority`。阿里云 Transport 类型是 `ALIYUN`。HTTP 不接收或返回 AccessKey；运行配置见[阿里云 SMS](/reference/runtime/sca4d-server#阿里云-sms)。
 
 绑定请求包含 `notificationCode`、具体应用声明的 `route`、BCP 47 `languageTag`、`signName`、`providerTemplateCode` 和 `parameterMapping`。`parameterMapping` 的键是供应商模板参数名，值是 `NotificationType` 变量名。通知类型未注册、变量未声明或 Locale 不合法时，创建、替换和启用绑定都会失败。
 

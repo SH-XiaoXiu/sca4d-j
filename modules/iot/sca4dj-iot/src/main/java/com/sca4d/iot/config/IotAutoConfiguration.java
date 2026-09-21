@@ -5,7 +5,7 @@ import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.connection.ConnectionRegistry;
 import com.sca4d.core.api.i18n.LocaleCatalog;
 import com.sca4d.core.api.id.IdGenerator;
-import com.sca4d.core.api.messaging.MessagePublisher;
+import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.runtime.RuntimeNamespace;
 import com.sca4d.core.spring.json.Sca4djJson;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
@@ -40,7 +40,7 @@ import com.sca4d.iot.message.BuiltInDevicePolicies;
 import com.sca4d.iot.message.DesiredStateService;
 import com.sca4d.iot.message.DeviceAcknowledgementService;
 import com.sca4d.iot.message.DeviceCommandService;
-import com.sca4d.iot.message.DeviceDownlinkMessagePublisher;
+import com.sca4d.iot.message.DeviceDeliveryScheduler;
 import com.sca4d.iot.message.DevicePolicyCatalog;
 import com.sca4d.iot.message.DownlinkRepository;
 import com.sca4d.iot.message.StandardDeviceUplinkReceiver;
@@ -164,10 +164,9 @@ public class IotAutoConfiguration {
 
     /** @return 在业务事务中登记下行发送和 ACK 超时消息的发布器 */
     @Bean
-    DeviceDownlinkMessagePublisher deviceDownlinkMessagePublisher(
-            MessagePublisher messages,
-            Clock clock) {
-        return new DeviceDownlinkMessagePublisher(messages, clock);
+    DeviceDeliveryScheduler deviceDeliveryScheduler(
+            MessageBus messages) {
+        return new DeviceDeliveryScheduler(messages);
     }
 
     /** @return 默认使用 PostgreSQL 保存 latest reported 投影 */
@@ -352,7 +351,7 @@ public class IotAutoConfiguration {
     @Bean
     DeviceConnectionService deviceConnectionService(
             DeviceConnectionQueryService connections,
-            MessagePublisher messages,
+            MessageBus messages,
             Clock clock,
             ObjectProvider<ConnectionRegistry> commonConnections) {
         return new DeviceConnectionService(
@@ -400,7 +399,7 @@ public class IotAutoConfiguration {
             Clock clock,
             DeviceChangeNotifier changes,
             ThingDataJsonCodec json,
-            DeviceDownlinkMessagePublisher messagePublisher,
+            DeviceDeliveryScheduler messagePublisher,
             IotProperties properties) {
         properties.validate();
         return new DesiredStateService(
@@ -428,7 +427,7 @@ public class IotAutoConfiguration {
             IdGenerator ids,
             Clock clock,
             DeviceChangeNotifier changes,
-            DeviceDownlinkMessagePublisher messagePublisher) {
+            DeviceDeliveryScheduler messagePublisher) {
         return new DeviceCommandService(
                 devices,
                 products,
@@ -447,8 +446,8 @@ public class IotAutoConfiguration {
             DownlinkRepository downlinks,
             Clock clock,
             DeviceChangeNotifier changes,
-            DeviceDownlinkMessagePublisher downlinkMessages,
-            MessagePublisher messages,
+            DeviceDeliveryScheduler downlinkMessages,
+            MessageBus messages,
             DistributedLock distributedLock,
             PlatformTransactionManager transactionManager) {
         return new DeviceAcknowledgementService(
@@ -471,7 +470,7 @@ public class IotAutoConfiguration {
             Clock clock,
             DeviceChangeNotifier changes,
             IotProperties properties,
-            MessagePublisher messages,
+            MessageBus messages,
             ObjectProvider<DeviceHistoryStore> history,
             DistributedLock distributedLock,
             PlatformTransactionManager transactionManager) {
@@ -518,7 +517,7 @@ public class IotAutoConfiguration {
             ThingModelRepository models,
             ThingValueValidator validator,
             IdGenerator ids,
-            MessagePublisher messages,
+            MessageBus messages,
             Clock clock,
             DeviceChangeNotifier changes,
             IotProperties properties) {

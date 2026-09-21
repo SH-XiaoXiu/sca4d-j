@@ -163,7 +163,7 @@ public class TimescaleIotAutoConfiguration {
             @NotNull TimescaleRetentionTask task,
             @NotNull IotTimescaleProperties properties) {
         return new ClusterTaskSchedule(
-                new ScheduleKey("iot.timescale.retention"),
+                new ScheduleKey("IOT/TIMESCALE/RETENTION"),
                 1,
                 task,
                 new IntervalSchedule(properties.getCleanupInterval(), properties.getCleanupInterval()),

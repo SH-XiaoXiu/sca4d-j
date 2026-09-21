@@ -16,7 +16,7 @@ import com.sca4d.core.api.messaging.MessageId;
 import com.sca4d.core.spring.persistence.batch.SqlBatchProperties;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.core.spring.persistence.mybatis.CoreEnumTypeHandler;
-import com.sca4d.iot.api.message.DeviceDownlinkDispatch;
+import com.sca4d.iot.api.message.DeviceDispatchMessage;
 import com.sca4d.iot.api.message.DeviceDownlinkKind;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
 import com.sca4d.iot.api.message.IotMessageTypes;
@@ -73,7 +73,7 @@ class DeviceCommandCancellationIntegrationTest {
     /** 实际 SqlSession 由 Spring 按事务关闭，SqlSessionTemplate 本身不允许调用 close。 */
     private SqlSessionTemplate sessions;
 
-    private final DeviceDownlinkMessagePublisher publisher = mock(DeviceDownlinkMessagePublisher.class);
+    private final DeviceDeliveryScheduler publisher = mock(DeviceDeliveryScheduler.class);
 
     private final DeviceChangeNotifier changes = new DeviceChangeNotifier(List.of());
 
@@ -187,7 +187,7 @@ class DeviceCommandCancellationIntegrationTest {
 
     /** 在协议发布与结果写回之间提交取消，验证两种发布结果均保留 CANCELLED。 */
     private void dispatchWithCancellation(boolean failPublish) {
-        DeviceDownlinkRouter router = mock(DeviceDownlinkRouter.class);
+        DeviceTransportRouter router = mock(DeviceTransportRouter.class);
         doAnswer(invocation -> {
             transactions.executeWithoutResult(status -> assertThat(commands.cancel(11L)).isTrue());
             if (failPublish)
@@ -200,7 +200,7 @@ class DeviceCommandCancellationIntegrationTest {
                 return task.get();
             }
         };
-        var consumer = new DeviceDownlinkDispatchConsumer(
+        var consumer = new DeviceDispatchHandler(
                 repository,
                 router,
                 publisher,
@@ -215,7 +215,7 @@ class DeviceCommandCancellationIntegrationTest {
                                 IotMessageTypes.DOWNLINK_DISPATCH,
                                 "dispatch-11",
                                 NOW,
-                                new DeviceDownlinkDispatch(11L, 1)),
+                                new DeviceDispatchMessage(11L, 1)),
                         "test",
                         NOW,
                         false));

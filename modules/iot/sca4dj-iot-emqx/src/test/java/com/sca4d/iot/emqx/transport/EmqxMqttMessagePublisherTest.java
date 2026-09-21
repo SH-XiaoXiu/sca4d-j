@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.ObjectProvider;
 
 /** 验证 MQTT 发布入口不会在路由 Bean 装配期间创建运行时。 */
-class EmqxMqttMessagePublisherTest {
+class EmqxMqttTransportTest {
 
     @Test
     @DisplayName("只在实际发布消息时取得 EMQX MQTT 运行时")
@@ -20,7 +20,7 @@ class EmqxMqttMessagePublisherTest {
         ObjectProvider<EmqxMqttRuntime> runtimes = mock(ObjectProvider.class);
         EmqxMqttRuntime runtime = mock(EmqxMqttRuntime.class);
         when(runtimes.getObject()).thenReturn(runtime);
-        EmqxMqttMessagePublisher publisher = new EmqxMqttMessagePublisher(runtimes);
+        EmqxMqttTransport publisher = new EmqxMqttTransport(runtimes);
 
         verify(runtimes, never()).getObject();
 

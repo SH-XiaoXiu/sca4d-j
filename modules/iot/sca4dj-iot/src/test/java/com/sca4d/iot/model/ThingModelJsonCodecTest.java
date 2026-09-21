@@ -79,7 +79,7 @@ class ThingModelJsonCodecTest {
                         + "\"properties\":["
                         + "{\"code\":\"power\",\"valueType\":{\"kind\":\"BOOLEAN\"},"
                         + "\"access\":\"READ_WRITE\",\"telemetry\":false,"
-                        + "\"acknowledgementPolicy\":\"reported-equals-desired\",\"retryPolicy\":\"state-sync-default\"},"
+                        + "\"acknowledgementPolicy\":\"IOT/DOWNLINK/ACK/REPORTED/EQUALS/DESIRED\",\"retryPolicy\":\"IOT/DOWNLINK/RETRY/STATE/SYNC/DEFAULT\"},"
                         + "{\"code\":\"temperature\",\"valueType\":{\"kind\":\"DECIMAL\","
                         + "\"minimum\":\"-40\",\"maximum\":\"100\",\"scale\":1,\"unit\":\"celsius\"},"
                         + "\"access\":\"READ_ONLY\",\"telemetry\":true}],"
@@ -89,7 +89,7 @@ class ThingModelJsonCodecTest {
                         + "\"commands\":[{\"code\":\"set-mode\",\"inputs\":[{\"code\":\"mode\",\"valueType\":{"
                         + "\"kind\":\"ENUM\",\"enumValues\":[{\"code\":\"cool\"},"
                         + "{\"code\":\"heat\"}]}}],"
-                        + "\"acknowledgementPolicy\":\"device-result\",\"retryPolicy\":\"command-default\"}]}");
+                        + "\"acknowledgementPolicy\":\"IOT/DOWNLINK/ACK/DEVICE/RESULT\",\"retryPolicy\":\"IOT/DOWNLINK/RETRY/COMMAND/DEFAULT\"}]}");
         assertThat(codec.encode(codec.decode(encoded))).isEqualTo(encoded);
     }
 

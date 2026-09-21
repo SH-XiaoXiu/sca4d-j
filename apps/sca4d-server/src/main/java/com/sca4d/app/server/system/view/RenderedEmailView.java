@@ -1,7 +1,6 @@
 package com.sca4d.app.server.system.view;
 
 import com.sca4d.notification.email.RenderedEmail;
-import com.sca4d.notification.template.RenderedNotification;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,12 +27,6 @@ public final class RenderedEmailView {
     @CheckReturnValue
     public static @NotNull RenderedEmailView from(@NotNull RenderedEmail email) {
         return new RenderedEmailView(Objects.requireNonNull(email, "已渲染 Email 不能为空"));
-    }
-
-    /** @return 统一通知模板渲染结果的管理 HTTP 投影 */
-    public static @NotNull RenderedEmailView from(@NotNull RenderedNotification notification) {
-        RenderedNotification checked = Objects.requireNonNull(notification, "已渲染通知不能为空");
-        return new RenderedEmailView(new RenderedEmail(checked.title(), checked.text(), checked.html()));
     }
 
     /** @return 不含换行的主题 */

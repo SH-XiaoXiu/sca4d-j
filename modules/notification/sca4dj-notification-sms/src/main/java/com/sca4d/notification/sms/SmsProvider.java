@@ -55,7 +55,7 @@ public final class SmsProvider {
         return code;
     }
 
-    /** @return 选择 `SmsTransport` 使用的 Provider 类型 */
+    /** @return 选择 `SmsProviderClient` 使用的 Provider 类型 */
     @Contract(pure = true)
     public @NotNull String type() {
         return type;

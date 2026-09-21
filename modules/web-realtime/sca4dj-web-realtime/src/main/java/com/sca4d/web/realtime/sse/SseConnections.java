@@ -3,10 +3,10 @@ package com.sca4d.web.realtime.sse;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.connection.ConnectionId;
 import com.sca4d.web.realtime.config.WebRealtimeProperties;
-import com.sca4d.web.realtime.connection.ConnectionDelivery;
+import com.sca4d.web.realtime.connection.BrowserWrite;
 import com.sca4d.web.realtime.connection.LocalConnection;
 import com.sca4d.web.realtime.connection.LocalConnectionRegistry;
-import com.sca4d.web.realtime.connection.NodeTransport;
+import com.sca4d.web.realtime.connection.NodeRouter;
 import com.sca4d.web.realtime.connection.RedisConnectionRegistry;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +40,7 @@ public final class SseConnections implements WebRealtimeSseConnector {
 
     private final @NotNull LocalConnectionRegistry local;
 
-    private final @NotNull NodeTransport nodeTransport;
+    private final @NotNull NodeRouter nodeTransport;
 
     private final @NotNull WebRealtimeProperties properties;
 
@@ -54,7 +54,7 @@ public final class SseConnections implements WebRealtimeSseConnector {
     public SseConnections(
             @NotNull RedisConnectionRegistry shared,
             @NotNull LocalConnectionRegistry local,
-            @NotNull NodeTransport nodeTransport,
+            @NotNull NodeRouter nodeTransport,
             @NotNull WebRealtimeProperties properties) {
         this.shared = Objects.requireNonNull(shared, "Web Realtime 共享索引不能为空");
         this.local = Objects.requireNonNull(local, "本机连接注册表不能为空");
@@ -145,7 +145,7 @@ public final class SseConnections implements WebRealtimeSseConnector {
 
         /** 加入浏览器投递；慢连接队列已满时立即关闭。 */
         @Override
-        public void offer(@NotNull ConnectionDelivery delivery) {
+        public void offer(@NotNull BrowserWrite delivery) {
             if (!closed.get() && !queue.offer(Objects.requireNonNull(delivery, "连接投递不能为空"))) {
                 LOG.warn(
                         "SSE 慢连接队列已满，连接已关闭 | connectionId={} queueCapacity={}",
@@ -176,7 +176,7 @@ public final class SseConnections implements WebRealtimeSseConnector {
                         emitter.send(SseEmitter.event().comment("heartbeat"));
                         continue;
                     }
-                    ConnectionDelivery delivery = (ConnectionDelivery) item;
+                    BrowserWrite delivery = (BrowserWrite) item;
                     emitter.send(
                             SseEmitter.event()
                                     .name(delivery.envelope().getEventCode())

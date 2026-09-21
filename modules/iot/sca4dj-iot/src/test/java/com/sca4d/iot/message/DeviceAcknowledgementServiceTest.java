@@ -9,11 +9,11 @@ import static org.mockito.Mockito.when;
 
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
-import com.sca4d.core.api.messaging.MessagePublisher;
+import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.iot.api.message.AcknowledgementPolicy;
 import com.sca4d.iot.api.message.DeviceAcknowledgement;
+import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.message.DeviceDownlinkKind;
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
 import com.sca4d.iot.api.message.RetryPolicy;
 import com.sca4d.iot.change.DeviceChangeNotifier;
@@ -41,7 +41,7 @@ class DeviceAcknowledgementServiceTest {
     @SuppressWarnings("unchecked")
     void ignoresAcknowledgementAfterExpiry() {
         DownlinkRepository downlinks = mock(DownlinkRepository.class);
-        DeviceDownlinkMessage expired = new DeviceDownlinkMessage(
+        DeviceDownlink expired = new DeviceDownlink(
                 10,
                 20,
                 1,
@@ -72,8 +72,8 @@ class DeviceAcknowledgementServiceTest {
                 downlinks,
                 Clock.fixed(NOW, ZoneOffset.UTC),
                 mock(DeviceChangeNotifier.class),
-                mock(DeviceDownlinkMessagePublisher.class),
-                mock(MessagePublisher.class),
+                mock(DeviceDeliveryScheduler.class),
+                mock(MessageBus.class),
                 distributedLock,
                 transactions);
         DeviceAcknowledgement acknowledgement = new DeviceAcknowledgement(

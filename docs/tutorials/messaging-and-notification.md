@@ -1,12 +1,12 @@
 # 发布消息与通知
 
-业务事件通过 MessagePublisher 发送给消费者；面向用户的邮件、站内信和短信通过 Notifications 发送。先确定接收方，再选择发布入口和失败后的处理方式。
+业务消息通过 `MessageBus` 发送给 RabbitMQ；已经发生的业务事实使用 `Event`，面向用户的邮件、站内信和短信通过 `Notifications` 发送。先确定消息类型，再选择发布入口和失败后的处理方式。
 
 ## 注册事件并可靠发布
 
-用 `EventType` 声明稳定编码、协议版本和 payload 类型，payload 使用只包含消费所需字段的普通 Java 类。为事件注册 `MessageConsumer`，为每个消费职责使用唯一编码。
+用 `EventType` 声明稳定编码、协议版本和 payload 类型，payload 使用只包含消费所需字段的普通 Java 类。为事件注册 `EventHandler`，为动作消息注册 `MessageHandler`，每个消费职责使用唯一 TreeCode。
 
-在业务 Service 的数据库事务中完成写入后，调用 `MessagePublisher.publishReliably(event)`。该方法要求活跃事务；返回的 MessageId 对应同一事务中的 Outbox 记录。事务回滚时业务写入和 Outbox 一起回滚。
+在业务 Service 的数据库事务中完成写入后，调用 `MessageBus.dispatch(message, DispatchPolicy.outbox())`。该方法要求活跃事务；返回的 MessageId 对应同一事务中的 Outbox 记录。事务回滚时业务写入和 Outbox 一起回滚。
 
 消费者按 MessageId 或业务唯一键防止重复执行。验证时分别检查事务回滚没有留下 Outbox、正常发送进入消费者、同一消息重复投递没有重复修改业务数据。消费失败进入独立 DLQ，修复原因后再决定重新发布或删除。
 
@@ -18,7 +18,7 @@
 
 ## 业务消息与可靠发布
 
-业务事件表示已经发生且可以由其他模块异步处理的业务事实。Sca4d-J 使用 [Event](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/event/Event.html) 保存可选业务键、发生时间和 payload，使用 [EventType](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/event/EventType.html) 声明稳定事件编码、协议版本和 payload 类型，使用 [MessagePublisher](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/messaging/MessagePublisher.html) 选择立即发布、事务提交后发布或 Outbox 可靠发布。
+业务事件表示已经发生且可以由其他模块异步处理的业务事实。Sca4d-J 使用 [Event](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/event/Event.html) 保存可选业务键、发生时间和 payload，使用 [EventType](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/event/EventType.html) 声明稳定事件编码、协议版本和 payload 类型，使用 `MessageBus.dispatch` 选择立即发布、事务提交后发布或 Outbox 可靠发布。
 
 Messaging 和 [Web Realtime](/tutorials/realtime-events) 共用 Event 表达业务事实，但它们是两条独立路径。Messaging 面向业务 Consumer，RabbitMQ 持久保存消息；Web Realtime 面向当前在线浏览器，允许丢失且不回放。
 
@@ -29,14 +29,14 @@ flowchart LR
     Service[业务 Service]
     Tx[(业务事务)]
     Outbox[(messaging_outbox)]
-    Publisher[Messaging Publisher]
+    Publisher[MessageBus]
     Rabbit[(RabbitMQ 持久消息)]
-    Consumer[MessageConsumer]
+    Consumer[EventHandler 或 MessageHandler]
     DLQ[(Consumer 独立 DLQ)]
 
-    Service -->|publishNow| Publisher
-    Service -->|publishAfterCommit| Tx --> Publisher
-    Service -->|publishReliably| Tx --> Outbox
+    Service -->|immediate| Publisher
+    Service -->|afterCommit| Tx --> Publisher
+    Service -->|outbox| Tx --> Outbox
     Outbox -->|持续派发直到 confirm| Publisher --> Rabbit --> Consumer
     Consumer -->|失败时 reject, requeue=false| DLQ
 ```
@@ -56,7 +56,7 @@ RabbitMQ 已确认而 Outbox 状态更新失败时，同一 `MessageId` 可能�
 
 ### Consumer 与死信
 
-每个 [MessageConsumer](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/messaging/MessageConsumer.html) 编码对应一条持久队列和一条独立 DLQ。同一 Consumer 的多个 App 实例竞争消费；不同 Consumer 分别获得一份消息。
+每个 `EventHandler` 或 `MessageHandler` 编码对应一条持久队列和一条独立 DLQ。同一 Handler 的多个 App 实例竞争消费；不同 Handler 分别获得一份消息。
 
 Consumer 正常返回后才 ACK。业务异常、payload 反序列化失败或协议版本不匹配时，消息直接 `reject(requeue=false)` 进入该 Consumer 的 DLQ，不经过自动重试队列。人工核对失败原因后，只能选择重新发布或删除死信。Messaging 不自动重放 DLQ，也不提供 Inbox、补偿工作流或 DLQ 管理页面。
 
@@ -78,14 +78,14 @@ flowchart LR
     Type[NotificationType]
     Service[Notifications]
     Outbox[Messaging Outbox]
-    Consumer[NotificationRequestedConsumer]
+    Consumer[NotificationMessageHandler]
     Router[NotificationDeliveryRouter]
     Inbox[Inbox NotificationDelivery]
     Email[Email NotificationDelivery]
     Sms[SMS NotificationDelivery]
 
     Caller --> Type --> Service
-    Service -->|enqueue| Outbox --> Consumer --> Router
+    Service -->|enqueue NotificationMessage| Outbox --> Consumer --> Router
     Service -->|sendNow| Router
     Router --> Inbox & Email & Sms
 ```
@@ -96,7 +96,7 @@ flowchart LR
 
 [Notification](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/notification/Notification.html) 是框架内部标准结果，保存通知编码、内部接收人、Locale、Region、变量和已经冻结的渠道集合。渠道只解析地址、渲染同一模板并执行自己的外部操作。
 
-`sendNow` 同步执行已经选择的渠道。`enqueue` 把 `notification.requested@2` 写入 Messaging Outbox，返回 MessageId 只表示请求已经可靠登记。Inbox、Email 和 SMS 使用独立 Consumer 身份和 DLQ；一个渠道失败不会让已经成功的其他渠道重复执行。渠道使用原始 MessageId 实现自己的幂等或尝试记录。
+`sendNow` 同步执行已经选择的渠道。`enqueue` 把 `NotificationMessage` 写入 Messaging Outbox，返回 MessageId 只表示请求已经可靠登记。Inbox、Email 和 SMS 使用独立 Handler 身份和 DLQ；一个渠道失败不会让已经成功的其他渠道重复执行。渠道使用原始 MessageId 实现自己的幂等或尝试记录。
 
 ### 接入一种领域通知
 
@@ -110,9 +110,9 @@ public final class PasswordChanged {
             "security.password-changed",
             PasswordChanged.class,
             definition -> {
-                definition.required(NotificationChannel.SMS);
-                definition.optional(NotificationChannel.EMAIL, true);
-                definition.optional(NotificationChannel.INBOX, true);
+                definition.required(SmsChannels.SMS);
+                definition.optional(EmailChannels.EMAIL, true);
+                definition.optional(InboxChannels.INBOX, true);
                 definition.variable(
                         "changedAt",
                         (notice, locale) -> notice.changedAt().toString());
@@ -333,10 +333,10 @@ public final class MarkdownNotificationTemplateRenderer
 flowchart LR
     Notification[Notification]
     Resolver[EmailRecipientResolver]
-    Template[(notification_template)]
+    Template[(notification_email_template)]
     Sender[(notification_email_sender)]
-    Renderer[NotificationTemplateRenderers]
-    Transport[SmtpEmailTransport]
+    Renderer[EmailRenderer]
+    Transport[SmtpEmailGateway]
     Server[SMTP Server]
 
     Notification --> Resolver

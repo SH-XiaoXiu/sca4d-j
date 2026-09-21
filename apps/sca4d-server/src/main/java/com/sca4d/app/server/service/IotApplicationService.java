@@ -41,7 +41,7 @@ import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.*;
 import com.sca4d.iot.api.change.DeviceChangeArea;
 import com.sca4d.iot.api.connection.DeviceConnectionBinding;
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
+import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.model.ThingModel;
 import com.sca4d.iot.api.model.ThingModelPresentation;
 import com.sca4d.iot.api.model.ThingModelRepository;
@@ -531,7 +531,7 @@ public class IotApplicationService {
 
     /** 只允许启用的 Device 提交物模型中声明的 command。 */
     @CheckReturnValue
-    public @NotNull DeviceDownlinkMessage submitCommand(
+    public @NotNull DeviceDownlink submitCommand(
             long deviceId,
             @NotNull String commandCode,
             @NotNull java.util.Map<String, ?> inputs) {

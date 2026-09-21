@@ -1,3 +1,26 @@
+CREATE TABLE notification_email_template (
+    id BIGINT PRIMARY KEY,
+    notification_code VARCHAR(128) NOT NULL,
+    locales JSONB NOT NULL,
+    enabled BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    version BIGINT NOT NULL DEFAULT 0,
+    deleted SMALLINT NOT NULL DEFAULT 0
+);
+
+CREATE UNIQUE INDEX uk_notification_email_template_code
+    ON notification_email_template (notification_code) WHERE deleted = 0;
+
+COMMENT ON TABLE notification_email_template IS '保存 Email 渠道使用的多语言主题、纯文本和 HTML 源码模板';
+COMMENT ON COLUMN notification_email_template.locales IS 'Locale 到 subject、text、html 源码的 JSON object';
+COMMENT ON COLUMN notification_email_template.version IS '模板并发修改使用的乐观版本';
+COMMENT ON COLUMN notification_email_template.deleted IS '逻辑删除标记；0 表示保留，1 表示已删除';
+
+CREATE TRIGGER set_notification_email_template_updated_at
+    BEFORE UPDATE ON notification_email_template
+    FOR EACH ROW EXECUTE FUNCTION sca4dj_set_updated_at();
+
 CREATE TABLE notification_email_sender (
     id BIGINT PRIMARY KEY,
     name VARCHAR(128) NOT NULL,

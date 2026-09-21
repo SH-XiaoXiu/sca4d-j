@@ -3,7 +3,7 @@ package com.sca4d.iot.api.query;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.iot.api.message.DeviceAcknowledgement;
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
+import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.telemetry.TelemetrySample;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -22,7 +22,7 @@ public interface DeviceHistoryQueryService {
      * @return 当前主库中的下行消息快照；不存在或已按保留策略删除时为空
      */
     @NotNull
-    Optional<DeviceDownlinkMessage> downlink(long messageId);
+    Optional<DeviceDownlink> downlink(long messageId);
 
     /**
      * @param messageIds 全局下行消息标识；重复标识只查询一次
@@ -30,7 +30,7 @@ public interface DeviceHistoryQueryService {
      */
     @NotNull
     @Unmodifiable
-    Map<@NotNull Long, @NotNull DeviceDownlinkMessage> downlinks(
+    Map<@NotNull Long, @NotNull DeviceDownlink> downlinks(
             @NotNull Collection<@NotNull Long> messageIds);
 
     /**
@@ -41,7 +41,7 @@ public interface DeviceHistoryQueryService {
      * @throws IllegalArgumentException 分页参数超出范围时抛出
      */
     @NotNull
-    Page<DeviceDownlinkMessage> downlinks(long deviceId, @NotNull PageRequest page);
+    Page<DeviceDownlink> downlinks(long deviceId, @NotNull PageRequest page);
 
     /**
      * @param deviceId Device 标识

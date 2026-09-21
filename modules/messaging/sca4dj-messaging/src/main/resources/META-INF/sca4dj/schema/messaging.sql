@@ -1,6 +1,6 @@
 CREATE TABLE messaging_outbox (
     message_id BIGINT PRIMARY KEY,
-    event_code VARCHAR(128) NOT NULL,
+    message_code VARCHAR(128) NOT NULL,
     envelope BYTEA NOT NULL,
     status VARCHAR(16) NOT NULL,
     available_at TIMESTAMP WITH TIME ZONE NOT NULL,
@@ -28,7 +28,7 @@ CREATE INDEX idx_messaging_outbox_sent
 
 COMMENT ON TABLE messaging_outbox IS '保存业务事务中登记且尚未由 RabbitMQ 确认发布的消息信封';
 COMMENT ON COLUMN messaging_outbox.message_id IS '消息信封全局标识';
-COMMENT ON COLUMN messaging_outbox.event_code IS '消费者选择消息类型使用的稳定事件编码';
+COMMENT ON COLUMN messaging_outbox.message_code IS '消费者选择消息类型使用的稳定消息编码';
 COMMENT ON COLUMN messaging_outbox.envelope IS '已经校验并序列化的 RabbitMQ 业务消息信封';
 COMMENT ON COLUMN messaging_outbox.status IS 'PENDING、SENDING、FAILED 或 SENT，不包含发布端 DEAD 状态';
 COMMENT ON COLUMN messaging_outbox.available_at IS '发布 Worker 下一次允许领取的时间';

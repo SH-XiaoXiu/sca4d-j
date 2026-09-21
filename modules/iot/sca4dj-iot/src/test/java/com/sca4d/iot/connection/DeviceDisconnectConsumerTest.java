@@ -11,9 +11,9 @@ import static org.mockito.Mockito.when;
 import com.sca4d.core.api.connection.ConnectionId;
 import com.sca4d.core.api.connection.ConnectionRegistry;
 import com.sca4d.core.api.event.Event;
+import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageDelivery;
 import com.sca4d.core.api.messaging.MessageId;
-import com.sca4d.core.api.messaging.MessagePublisher;
 import com.sca4d.iot.api.connection.DeviceConnectionId;
 import com.sca4d.iot.api.connection.DeviceConnectionProtocol;
 import com.sca4d.iot.api.connection.DeviceConnectionReceiver;
@@ -29,7 +29,7 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 
 /** 验证可靠断连同时终止协议连接和全部通用连接投影。 */
-class DeviceDisconnectConsumerTest {
+class DeviceDisconnectHandlerTest {
 
     private static final Instant NOW = Instant.parse("2026-08-24T11:00:00Z");
 
@@ -41,11 +41,11 @@ class DeviceDisconnectConsumerTest {
 
     private final DeviceConnectionReceiver connections = mock(DeviceConnectionReceiver.class);
 
-    private final MessagePublisher messages = mock(MessagePublisher.class);
+    private final MessageBus messages = mock(MessageBus.class);
 
     private final ConnectionRegistry commonConnections = mock(ConnectionRegistry.class);
 
-    private final DeviceDisconnectConsumer consumer = new DeviceDisconnectConsumer(
+    private final DeviceDisconnectHandler consumer = new DeviceDisconnectHandler(
             terminators,
             connections,
             messages,

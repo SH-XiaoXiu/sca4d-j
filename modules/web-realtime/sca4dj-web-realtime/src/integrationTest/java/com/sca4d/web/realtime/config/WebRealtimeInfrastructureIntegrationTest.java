@@ -25,13 +25,13 @@ import com.sca4d.core.api.webrealtime.WebRealtimeTarget;
 import com.sca4d.core.spring.redis.RedisBatches;
 import com.sca4d.core.spring.redis.RedisPipelineProperties;
 import com.sca4d.core.spring.redis.RedisRateLimiter;
-import com.sca4d.web.realtime.connection.ConnectionDelivery;
+import com.sca4d.web.realtime.connection.BrowserWrite;
 import com.sca4d.web.realtime.connection.LocalConnection;
 import com.sca4d.web.realtime.connection.LocalConnectionRegistry;
 import com.sca4d.web.realtime.connection.RedisConnectionRegistry;
 import com.sca4d.web.realtime.connection.TargetPublisher;
 import com.sca4d.web.realtime.rabbit.NodeMessageCodec;
-import com.sca4d.web.realtime.rabbit.RabbitNodeTransport;
+import com.sca4d.web.realtime.rabbit.RabbitNodeRouter;
 import com.sca4d.web.realtime.stomp.StompConnections;
 import com.sca4d.web.realtime.stomp.StompInboundInterceptor;
 import com.sca4d.web.realtime.stomp.StompRateLimits;
@@ -138,9 +138,9 @@ class WebRealtimeInfrastructureIntegrationTest {
 
     private LocalConnectionRegistry secondLocal;
 
-    private RabbitNodeTransport firstNode;
+    private RabbitNodeRouter firstNode;
 
-    private RabbitNodeTransport secondNode;
+    private RabbitNodeRouter secondNode;
 
     @BeforeAll
     static void connectInfrastructure() {
@@ -191,14 +191,14 @@ class WebRealtimeInfrastructureIntegrationTest {
         firstLocal = new LocalConnectionRegistry(firstRegistry);
         secondLocal = new LocalConnectionRegistry(secondRegistry);
         NodeMessageCodec codec = new NodeMessageCodec(OBJECT_MAPPER);
-        firstNode = new RabbitNodeTransport(
+        firstNode = new RabbitNodeRouter(
                 names,
                 rabbit,
                 rabbitConnectionFactory,
                 codec,
                 firstLocal,
                 PROPERTIES);
-        secondNode = new RabbitNodeTransport(
+        secondNode = new RabbitNodeRouter(
                 names,
                 rabbit,
                 rabbitConnectionFactory,
@@ -245,7 +245,7 @@ class WebRealtimeInfrastructureIntegrationTest {
         publisher.publishNow(WebRealtimeTarget.account(session.account().accountId()), event);
 
         assertThat(firstConnection.received()).isNotNull();
-        ConnectionDelivery crossNode = secondConnection.received();
+        BrowserWrite crossNode = secondConnection.received();
         assertThat(crossNode).isNotNull();
         assertThat(crossNode.envelope().getEventCode()).isEqualTo("invoice.changed");
         assertThat(crossNode.envelope().getProtocolVersion()).isEqualTo(1);
@@ -537,7 +537,7 @@ class WebRealtimeInfrastructureIntegrationTest {
     }
 
     /** 使用 RabbitAdmin 声明指定节点的临时 exchange、queue 和 binding。 */
-    private static void declare(RabbitNodeTransport node) {
+    private static void declare(RabbitNodeRouter node) {
         for (Declarable declarable : node.declarables().getDeclarables()) {
             if (declarable instanceof Exchange exchange) {
                 rabbitAdmin.declareExchange(exchange);
@@ -577,7 +577,7 @@ class WebRealtimeInfrastructureIntegrationTest {
     private static final class TestConnection implements LocalConnection {
         private final ConnectionId id;
 
-        private final BlockingQueue<ConnectionDelivery> deliveries = new LinkedBlockingQueue<>();
+        private final BlockingQueue<BrowserWrite> deliveries = new LinkedBlockingQueue<>();
 
         private TestConnection(String id) {
             this.id = new ConnectionId(id);
@@ -589,7 +589,7 @@ class WebRealtimeInfrastructureIntegrationTest {
         }
 
         @Override
-        public void offer(@NotNull ConnectionDelivery delivery) {
+        public void offer(@NotNull BrowserWrite delivery) {
             deliveries.add(delivery);
         }
 
@@ -598,12 +598,12 @@ class WebRealtimeInfrastructureIntegrationTest {
         }
 
         /** 最多等待五秒并返回节点投递结果。 */
-        private ConnectionDelivery received() throws InterruptedException {
+        private BrowserWrite received() throws InterruptedException {
             return received(5_000);
         }
 
         /** 在指定毫秒数内等待节点投递，超时返回 null。 */
-        private ConnectionDelivery received(long timeoutMillis) throws InterruptedException {
+        private BrowserWrite received(long timeoutMillis) throws InterruptedException {
             return deliveries.poll(timeoutMillis, TimeUnit.MILLISECONDS);
         }
     }

@@ -76,8 +76,8 @@ curl --fail-with-body --silent --show-error \
         "valueType": { "kind": "BOOLEAN" },
         "access": "READ_WRITE",
         "telemetry": false,
-        "acknowledgementPolicy": "reported-equals-desired",
-        "retryPolicy": "state-sync-default"
+        "acknowledgementPolicy": "IOT/DOWNLINK/ACK/REPORTED/EQUALS/DESIRED",
+        "retryPolicy": "IOT/DOWNLINK/RETRY/STATE/SYNC/DEFAULT"
       }
     ],
     "events": [],
@@ -234,7 +234,7 @@ Pipeline 阶段失败时抛出 PipelineExecutionException，`stageCode()` 等于
 
 ### 下行编码
 
-`encode(message, clientId)` 按 DeviceDownlinkKind 和 target code 查找定义。desired 消息从 `message.data().get("value")` 取出单个属性值并写入该路由的 DataKey；command 消息按每个 DataKey 的名称读取输入。MqttDownlinkFrame 同时包含标准 DeviceDownlinkMessage 和已检查类型的 DataValues。
+`encode(message, clientId)` 按 DeviceDownlinkKind 和 target code 查找定义。desired 消息从 `message.data().get("value")` 取出单个属性值并写入该路由的 DataKey；command 消息按每个 DataKey 的名称读取输入。MqttDownlinkFrame 同时包含标准 DeviceDownlink 和已检查类型的 DataValues。
 
 下行 Pipeline 返回厂商 payload 后，协议使用路由模板生成最终 Topic，并返回 EncodedMqttMessage。消息没有对应路由、数据缺少声明字段或字段 Java 类型错误时编码失败。encoder 只生成 Topic 和 payload；业务 ACK、reported 收敛和 RetryPolicy 由 IoT 消息服务处理。
 

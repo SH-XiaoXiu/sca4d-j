@@ -17,7 +17,7 @@ public final class WebRealtimeProperties {
 
     private Duration leaseDuration = Duration.ofSeconds(90);
 
-    private NodeTransportMode nodeTransport = NodeTransportMode.LOCAL;
+    private NodeRouterMode nodeTransport = NodeRouterMode.LOCAL;
 
     private int routingBatchSize = 500;
 
@@ -64,12 +64,12 @@ public final class WebRealtimeProperties {
     }
 
     /** @return 单实例本地投递或 RabbitMQ 跨节点投递 */
-    public NodeTransportMode getNodeTransport() {
+    public NodeRouterMode getNodeTransport() {
         return nodeTransport;
     }
 
     /** @param value `LOCAL` 或 `RABBIT` */
-    public void setNodeTransport(NodeTransportMode value) {
+    public void setNodeTransport(NodeRouterMode value) {
         nodeTransport = Objects.requireNonNull(value, "节点传输模式不能为空");
     }
 

@@ -1,8 +1,10 @@
 package com.sca4d.core.api.permission;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.resource.Resource;
-import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 /**
  * 表示能够被权限判断和审计的固定业务入口（Operation）。
@@ -13,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 public final class Operation implements Resource {
 
     /** 操作资源使用的资源类型。 */
-    public static final @NotNull String RESOURCE_TYPE = "operation";
+    public static final @NotNull String RESOURCE_TYPE = "CORE/OPERATIONS";
 
     private final @NotNull String value;
 
@@ -25,7 +27,7 @@ public final class Operation implements Resource {
      * @throws IllegalArgumentException value 为空白时抛出
      */
     public Operation(@NotNull String value) {
-        this.value = TextUtils.requireText(value, "操作键");
+        this.value = normalize(value);
     }
 
     /**
@@ -70,5 +72,27 @@ public final class Operation implements Resource {
     @Override
     public @NotNull String toString() {
         return value;
+    }
+
+    /** 规范化具体操作或末段为通配符的权限选择器。 */
+    static @NotNull String normalize(@NotNull String value) {
+        String checked = Objects.requireNonNull(value, "操作键不能为空").strip();
+        if (checked.isEmpty()) {
+            throw new IllegalArgumentException("操作键不能为空白");
+        }
+        int wildcard = checked.indexOf('*');
+        if (wildcard < 0) {
+            return TreeCode.of(checked).value();
+        }
+        if (wildcard != checked.length() - 1 || checked.indexOf('*', wildcard + 1) >= 0) {
+            throw new IllegalArgumentException("操作通配符只能位于最后一个层级");
+        }
+        int separator = Math.max(checked.lastIndexOf(':'), checked.lastIndexOf('/'));
+        if (separator <= 0 || separator == checked.length() - 1) {
+            throw new IllegalArgumentException("操作通配符必须跟随完整资源层级");
+        }
+        char delimiter = checked.charAt(separator);
+        String prefix = TreeCode.of(checked.substring(0, separator)).value();
+        return prefix + delimiter + '*';
     }
 }

@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 /** 表示模块、业务资源或可授予 Operation 构成的固定三层目录节点。 */
 public abstract class OperationNode {
 
-    private static final @NotNull Pattern SEGMENT = Pattern.compile("[a-z0-9][a-z0-9-]*|\\*");
+    private static final @NotNull Pattern SEGMENT = Pattern.compile("[A-Za-z0-9_]+|\\*");
 
     private static final @NotNull Comparator<@NotNull OperationNode> NODE_ORDER = Comparator
             .comparingInt(OperationNode::sortOrder)
@@ -39,8 +39,8 @@ public abstract class OperationNode {
             @Nullable String parentCode,
             @NotNull String nameKey,
             int sortOrder) {
-        this.code = TextUtils.requireText(code, "Operation 节点编码");
-        this.parentCode = parentCode;
+        this.code = normalizeNodeCode(code);
+        this.parentCode = parentCode == null ? null : normalizeNodeCode(parentCode);
         this.nameKey = TextUtils.requireText(nameKey, "Operation 节点名称消息键");
         this.sortOrder = sortOrder;
     }
@@ -162,11 +162,20 @@ public abstract class OperationNode {
             @NotNull String value,
             @NotNull String name,
             boolean wildcardAllowed) {
-        String checked = TextUtils.requireText(value, name);
+        String checked = TextUtils.requireText(value, name).toUpperCase(java.util.Locale.ROOT);
         if (!SEGMENT.matcher(checked).matches() || !wildcardAllowed && "*".equals(checked)) {
-            throw new IllegalArgumentException(name + "只能包含小写字母、数字和连字符: " + checked);
+            throw new IllegalArgumentException(name + "只能包含字母、数字和下划线: " + checked);
         }
         return checked;
+    }
+
+    /** 规范化目录节点，允许 MODULE 根节点只有一个局部段。 */
+    private static @NotNull String normalizeNodeCode(@NotNull String value) {
+        String checked = TextUtils.requireText(value, "Operation 节点编码");
+        if (checked.indexOf(':') < 0 && checked.indexOf('/') < 0 && checked.indexOf('*') < 0) {
+            return requireSegment(checked, "Operation 节点编码", false);
+        }
+        return Operation.normalize(checked);
     }
 
     /** MODULE 工厂使用的局部 RESOURCE 声明，不参与最终目录。 */

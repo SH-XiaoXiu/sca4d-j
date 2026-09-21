@@ -1,5 +1,9 @@
 package com.sca4d.iot.api.message;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.message.Message;
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,7 +14,11 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 保存显式回执或 reported 推导结果共用的业务确认事实。 */
-public final class DeviceAcknowledgement {
+public final class DeviceAcknowledgement extends Message {
+
+    public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/ACK/PROCESS");
+
+    public static final int PROTOCOL_VERSION = 1;
 
     private final long messageId;
 
@@ -27,14 +35,15 @@ public final class DeviceAcknowledgement {
     private final @NotNull Instant receivedAt;
 
     /** 创建一条由设备接入实现解析、尚未分配数据库标识的业务确认。 */
+    @JsonCreator
     public DeviceAcknowledgement(
-            long messageId,
-            @NotNull String ackCode,
-            @NotNull Map<String, Object> data,
-            @NotNull String source,
-            @Nullable String sourceAcknowledgementId,
-            @NotNull Instant acknowledgedAt,
-            @NotNull Instant receivedAt) {
+            @JsonProperty("messageId") long messageId,
+            @JsonProperty("ackCode") @NotNull String ackCode,
+            @JsonProperty("data") @NotNull Map<String, Object> data,
+            @JsonProperty("source") @NotNull String source,
+            @JsonProperty("sourceAcknowledgementId") @Nullable String sourceAcknowledgementId,
+            @JsonProperty("acknowledgedAt") @NotNull Instant acknowledgedAt,
+            @JsonProperty("receivedAt") @NotNull Instant receivedAt) {
         if (messageId <= 0) {
             throw new IllegalArgumentException("ACK messageId 必须为正数");
         }
@@ -82,6 +91,16 @@ public final class DeviceAcknowledgement {
     /** @return Sca4d-J 接收时间 */
     public @NotNull Instant receivedAt() {
         return receivedAt;
+    }
+
+    @Override
+    public @NotNull TreeCode code() {
+        return CODE;
+    }
+
+    @Override
+    public int protocolVersion() {
+        return PROTOCOL_VERSION;
     }
 
     /** 校验与主 PostgreSQL ACK 快照列一致的文本长度。 */

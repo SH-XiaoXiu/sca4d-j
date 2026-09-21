@@ -2,15 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sca4d.messaging.outbox.mapper.OutboxMapper">
     <sql id="claimColumns">
-        message_id, event_code, envelope, attempt_count, version
+        message_id, message_code, envelope, attempt_count, version
     </sql>
 
     <insert id="insert">
         INSERT INTO messaging_outbox
-        (message_id, event_code, envelope, status, available_at, attempt_count,
+        (message_id, message_code, envelope, status, available_at, attempt_count,
         lease_id, lease_until, last_error, sent_at, version)
         VALUES
-        (#{messageId}, #{eventCode}, #{envelope}, #{status}, #{availableAt}, 0,
+        (#{messageId}, #{messageCode}, #{envelope}, #{status}, #{availableAt}, 0,
         NULL, NULL, NULL, NULL, 0)
     </insert>
 
@@ -33,7 +33,7 @@
               AND message.version = candidate.version
               AND ((message.status IN ('PENDING', 'FAILED') AND message.available_at &lt;= #{now})
                    OR (message.status = 'SENDING' AND message.lease_until &lt;= #{now}))
-            RETURNING message.message_id, message.event_code, message.envelope,
+            RETURNING message.message_id, message.message_code, message.envelope,
                       message.attempt_count, message.version, candidate.claim_at
         )
         SELECT <include refid="claimColumns"/>

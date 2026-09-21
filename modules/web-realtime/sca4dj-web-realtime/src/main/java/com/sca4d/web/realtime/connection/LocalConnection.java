@@ -13,7 +13,7 @@ public interface LocalConnection {
     ConnectionId id();
 
     /** 把一次投递加入有界写出缓冲；缓冲已满时实现关闭连接。 */
-    void offer(@NotNull ConnectionDelivery delivery);
+    void offer(@NotNull BrowserWrite delivery);
 
     /** 关闭连接句柄并删除共享索引。 */
     void close();

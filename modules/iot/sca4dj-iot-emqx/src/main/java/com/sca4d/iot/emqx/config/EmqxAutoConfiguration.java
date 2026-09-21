@@ -14,7 +14,7 @@ import com.sca4d.iot.api.connection.DeviceConnectionAdmission;
 import com.sca4d.iot.api.connection.DeviceConnectionReceiver;
 import com.sca4d.iot.api.connection.DeviceConnectionResolver;
 import com.sca4d.iot.api.connection.DeviceConnectionTerminator;
-import com.sca4d.iot.api.message.DeviceDownlinkPublisher;
+import com.sca4d.iot.api.message.DeviceTransport;
 import com.sca4d.iot.api.protocol.DeviceUplinkDispatcher;
 import com.sca4d.iot.emqx.authentication.EmqxAuthenticationService;
 import com.sca4d.iot.emqx.authentication.EmqxDeviceConnectionRequestFactory;
@@ -27,15 +27,15 @@ import com.sca4d.iot.emqx.management.EmqxManagementClient;
 import com.sca4d.iot.emqx.management.HttpEmqxManagementClient;
 import com.sca4d.iot.emqx.protocol.MqttDeviceProtocol;
 import com.sca4d.iot.emqx.protocol.MqttProtocolCatalog;
-import com.sca4d.iot.emqx.transport.EmqxMqttDownlinkPublisher;
-import com.sca4d.iot.emqx.transport.EmqxMqttMessagePublisher;
+import com.sca4d.iot.emqx.transport.EmqxMqttDeviceTransport;
 import com.sca4d.iot.emqx.transport.EmqxMqttRuntime;
+import com.sca4d.iot.emqx.transport.EmqxMqttTransport;
 import com.sca4d.iot.emqx.transport.MqttInboundFailureStore;
 import com.sca4d.iot.emqx.transport.MqttMessageObserver;
 import com.sca4d.iot.emqx.transport.MqttMessageProcessingObserver;
-import com.sca4d.iot.emqx.transport.MqttMessagePublisher;
 import com.sca4d.iot.emqx.transport.MqttMessageRoute;
 import com.sca4d.iot.emqx.transport.MqttMessageRouter;
+import com.sca4d.iot.emqx.transport.MqttTransport;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -122,16 +122,16 @@ public class EmqxAutoConfiguration {
 
     /** @return 路由和设备下行使用的 MQTT QoS 1 发布入口 */
     @Bean
-    @ConditionalOnMissingBean(MqttMessagePublisher.class)
-    MqttMessagePublisher mqttMessagePublisher(ObjectProvider<EmqxMqttRuntime> runtimes) {
-        return new EmqxMqttMessagePublisher(runtimes);
+    @ConditionalOnMissingBean(MqttTransport.class)
+    MqttTransport mqttTransport(ObjectProvider<EmqxMqttRuntime> runtimes) {
+        return new EmqxMqttTransport(runtimes);
     }
 
     /** @return 使用 MQTT QoS 1、Retain=false 的下行 Publisher */
     @Bean
-    @ConditionalOnMissingBean(EmqxMqttDownlinkPublisher.class)
-    DeviceDownlinkPublisher<MqttDeviceProtocol> emqxMqttDownlinkPublisher(MqttMessagePublisher publisher) {
-        return new EmqxMqttDownlinkPublisher(publisher);
+    @ConditionalOnMissingBean(EmqxMqttDeviceTransport.class)
+    DeviceTransport<MqttDeviceProtocol> emqxMqttDeviceTransport(MqttTransport publisher) {
+        return new EmqxMqttDeviceTransport(publisher);
     }
 
     /** @return EMQX `5.8.9` Management API HTTP 客户端 */
@@ -190,7 +190,7 @@ public class EmqxAutoConfiguration {
             EmqxConnectionReconciler reconciler,
             EmqxProperties properties) {
         return new ClusterTaskSchedule(
-                new ScheduleKey("iot.emqx.connection-reconciliation"),
+                new ScheduleKey("IOT/EMQX/CONNECTION_RECONCILIATION"),
                 1,
                 reconciler,
                 new IntervalSchedule(

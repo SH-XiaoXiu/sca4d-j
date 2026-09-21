@@ -75,7 +75,7 @@ public class IdentityService {
     @CheckReturnValue
     public @NotNull Subject createSubject(@NotNull SubjectType type) {
         SubjectType checkedType = Objects.requireNonNull(type, "接入者类型不能为空");
-        Long id = idGenerator.nextId();
+        Long id = idGenerator.nextId().value();
         repository.insertSubject(id, checkedType, IdentityStatus.ACTIVE);
         Subject subject = new Subject(id, checkedType);
         LOG.info("Subject 已创建 | subjectId={} type={}", id, checkedType);
@@ -180,7 +180,7 @@ public class IdentityService {
             repository.findSubject(checkedSubjectId)
                     .orElseThrow(() -> new BusinessException(IamErrorCode.SUBJECT_UNAVAILABLE));
         }
-        Long id = idGenerator.nextId();
+        Long id = idGenerator.nextId().value();
         repository.insertAccount(id, checkedSubjectId, checkedRealm, checkedStatus);
         Account account = new Account(id, checkedSubjectId, checkedRealm);
         LOG.info(
@@ -272,7 +272,7 @@ public class IdentityService {
     @CheckReturnValue
     public @NotNull Long createPrincipal(@NotNull Class<? extends Principal> type) {
         PrincipalType discriminator = principalTypes.principalType(Objects.requireNonNull(type, "业务主体类型不能为空"));
-        Long id = idGenerator.nextId();
+        Long id = idGenerator.nextId().value();
         repository.insertPrincipal(id, discriminator, IdentityStatus.ACTIVE);
         LOG.info(
                 "Principal 已创建 | principalId={} principalType={}",
@@ -611,7 +611,7 @@ public class IdentityService {
                 .orElseThrow(() -> new BusinessException(IamErrorCode.ACCOUNT_UNAVAILABLE));
         String normalized = normalize(type, rawValue);
         AccountIdentifier identifier = new AccountIdentifier(
-                idGenerator.nextId(),
+                idGenerator.nextId().value(),
                 accountId,
                 account.realmKey(),
                 type,

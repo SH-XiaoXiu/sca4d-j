@@ -4,7 +4,7 @@ import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.messaging.MessageId;
 import com.sca4d.core.api.notification.Notification;
 import com.sca4d.notification.inbox.mapper.InboxMessageMapper;
-import com.sca4d.notification.template.RenderedNotification;
+import com.sca4d.notification.inbox.template.RenderedInboxMessage;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,7 +44,7 @@ public final class InboxRepository {
             @NotNull MessageId messageId,
             long accountId,
             @NotNull Notification notification,
-            @NotNull RenderedNotification rendered) {
+            @NotNull RenderedInboxMessage rendered) {
         return mapper.insert(
                 inboxMessageId,
                 messageId,

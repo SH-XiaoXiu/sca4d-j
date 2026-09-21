@@ -31,7 +31,7 @@ public final class WebRealtimeProtocol {
     public static final String PRINCIPAL_ID_HEADER = "principal-id";
 
     /** Session 变化后要求浏览器重新读取当前 Session 的事件编码。 */
-    public static final String AUTHENTICATION_SESSION_CHANGED_EVENT = "authentication.session.changed";
+    public static final String AUTHENTICATION_SESSION_CHANGED_EVENT = "AUTHENTICATION/SESSION/CHANGED";
 
     private WebRealtimeProtocol() {
     }

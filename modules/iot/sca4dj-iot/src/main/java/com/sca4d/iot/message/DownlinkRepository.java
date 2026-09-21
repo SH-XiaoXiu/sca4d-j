@@ -9,8 +9,8 @@ import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.iot.api.message.DeviceAcknowledgement;
+import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.message.DeviceDownlinkKind;
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
 import com.sca4d.iot.api.query.DesiredStateSnapshot;
 import com.sca4d.iot.model.ThingDataJsonCodec;
@@ -177,8 +177,8 @@ public class DownlinkRepository {
 
     /** 保存一条标准下行消息。 */
     @AffectedRows(target = "新增下行消息")
-    public void add(@NotNull DeviceDownlinkMessage message) {
-        DeviceDownlinkMessage checked = Objects.requireNonNull(message, "下行消息不能为空");
+    public void add(@NotNull DeviceDownlink message) {
+        DeviceDownlink checked = Objects.requireNonNull(message, "下行消息不能为空");
         messages.insertDownlinkMessage(
                 checked.messageId(),
                 checked.deviceId(),
@@ -189,15 +189,15 @@ public class DownlinkRepository {
                 checked.scheduleId().isPresent() ? checked.scheduleId().getAsLong() : null,
                 checked.scheduledAt().orElse(null),
                 json.encodeMap(checked.data()),
-                checked.acknowledgementPolicy().code(),
+                checked.acknowledgementPolicy().code().value(),
                 checked.acknowledgementTimeout().toMillis(),
-                checked.retryPolicy().code(),
+                checked.retryPolicy().code().value(),
                 checked.expiresAt().orElse(null));
     }
 
     /** 按标识查询标准下行消息。 */
     @CheckReturnValue
-    public @NotNull Optional<DeviceDownlinkMessage> find(long messageId) {
+    public @NotNull Optional<DeviceDownlink> find(long messageId) {
         return messages.selectDownlinkMessages(List.of(messageId)).stream().findFirst().map(this::toMessage);
     }
 
@@ -208,7 +208,7 @@ public class DownlinkRepository {
      * @return 不可修改映射；不存在的消息不进入结果
      */
     @CheckReturnValue
-    public @NotNull @Unmodifiable Map<@NotNull Long, @NotNull DeviceDownlinkMessage> findAll(
+    public @NotNull @Unmodifiable Map<@NotNull Long, @NotNull DeviceDownlink> findAll(
             @NotNull Collection<@NotNull Long> messageIds) {
         LinkedHashSet<Long> uniqueIds = new LinkedHashSet<>();
         Objects.requireNonNull(messageIds, "下行消息标识不能为空")
@@ -216,7 +216,7 @@ public class DownlinkRepository {
         if (uniqueIds.isEmpty()) {
             return Map.of();
         }
-        LinkedHashMap<Long, DeviceDownlinkMessage> result = new LinkedHashMap<>();
+        LinkedHashMap<Long, DeviceDownlink> result = new LinkedHashMap<>();
         sqlBatches.query(uniqueIds, 1, 0, messages::selectDownlinkMessages)
                 .stream()
                 .map(this::toMessage)
@@ -240,12 +240,12 @@ public class DownlinkRepository {
 
     /** 分页读取 Device 下行消息。 */
     @CheckReturnValue
-    public @NotNull Page<DeviceDownlinkMessage> findDownlinks(
+    public @NotNull Page<DeviceDownlink> findDownlinks(
             long deviceId,
             @NotNull PageRequest page) {
         PageRequest checked = Objects.requireNonNull(page, "下行分页要求不能为空").requireMaxSize(100);
         long total = messages.countDeviceDownlinks(deviceId);
-        List<DeviceDownlinkMessage> items = total == 0
+        List<DeviceDownlink> items = total == 0
                 ? List.of()
                 : messages.selectDeviceDownlinks(deviceId, checked.offset(), checked.size())
                         .stream()
@@ -457,9 +457,9 @@ public class DownlinkRepository {
     }
 
     /** 将下行消息查询结果转换成包含具体策略实例的领域消息。 */
-    private DeviceDownlinkMessage toMessage(EncodedDownlinkMessage row) {
+    private DeviceDownlink toMessage(EncodedDownlinkMessage row) {
         Long desiredSequence = row.desiredSequence();
-        return new DeviceDownlinkMessage(
+        return new DeviceDownlink(
                 row.messageId(),
                 row.deviceId(),
                 row.bindingGeneration(),

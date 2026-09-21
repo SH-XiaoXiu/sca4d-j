@@ -1,5 +1,7 @@
 package com.sca4d.core.api.event;
 
+import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.message.Message;
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -9,7 +11,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 保存一种已经发生的业务事实及其强类型 payload。 */
-public final class Event<T> {
+public final class Event<T> extends Message {
 
     private final @NotNull EventType<T> type;
 
@@ -53,6 +55,16 @@ public final class Event<T> {
     @Contract(pure = true)
     public @NotNull EventType<T> type() {
         return type;
+    }
+
+    @Override
+    public @NotNull TreeCode code() {
+        return type.treeCode();
+    }
+
+    @Override
+    public int protocolVersion() {
+        return type.protocolVersion();
     }
 
     /** @return 可选的业务幂等或顺序键 */

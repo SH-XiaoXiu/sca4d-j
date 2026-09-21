@@ -11,10 +11,10 @@ import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.event.EventType;
 import com.sca4d.core.api.id.IdGenerator;
+import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageConsumer;
 import com.sca4d.core.api.messaging.MessageDelivery;
 import com.sca4d.core.api.messaging.MessageId;
-import com.sca4d.core.api.messaging.MessagePublisher;
 import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
 import com.sca4d.core.api.scheduling.JobSchedule;
 import com.sca4d.core.spring.config.CoreJacksonAutoConfiguration;
@@ -100,13 +100,13 @@ class MessagingInfrastructureIntegrationTest {
             .withAdminPassword("sca4dj");
 
     @Autowired
-    private MessagePublisher publisher;
+    private MessageBus publisher;
 
     @Autowired
-    private OutboxDispatcher dispatcher;
+    private MessageOutboxDispatcher dispatcher;
 
     @Autowired
-    private OutboxRepository outbox;
+    private MessageOutboxRepository outbox;
 
     @Autowired
     private TransactionTemplate transactions;

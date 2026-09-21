@@ -5,9 +5,12 @@ import type {
   EmailSender,
   EmailTemplate,
   EmailTemplateInput,
+  EmailTemplateSource,
   EmailTemplatePage,
   Int64String,
   LocaleCatalog,
+  NotificationRichTextNode,
+  NotificationTemplateContent,
   PreviewEmailTemplateInput,
   RenderedEmail,
   ReplaceEmailSenderInput,
@@ -243,7 +246,7 @@ export class EmailTemplatesController extends ObservableController<EmailTemplate
     try {
       const result = await this.api.post<EmailTemplate>(
         '/system/email/templates',
-        input,
+        normalizeTemplateInput(input),
       );
       await this.load(1, this.state.size);
       return freezeTemplate(result.data);
@@ -308,7 +311,7 @@ export class EmailTemplatesController extends ObservableController<EmailTemplate
     try {
       const result = await this.api.post<RenderedEmail>(
         '/system/email/templates/previews',
-        input,
+        normalizePreviewInput(input),
       );
       const preview = Object.freeze({ ...result.data });
       this.publish({ ...this.state, error: null, preview });
@@ -346,7 +349,7 @@ export class EmailTemplatesController extends ObservableController<EmailTemplate
     try {
       const result = await this.api.put<EmailTemplate>(
         templatePath(detail.templateId),
-        input,
+        normalizeTemplateInput(input),
         { 'If-Match': etag },
       );
       if (!result.etag) throw new Error('Email template response has no ETag');
@@ -416,11 +419,78 @@ function freezeSender(sender: EmailSender): EmailSender {
 
 /** 冻结模板、多语言富文本和变量集合。 */
 function freezeTemplate(template: EmailTemplate): EmailTemplate {
+  const content = template.content ?? contentFromLocales(template.locales ?? {});
+  const locales = template.locales ?? sourcesFromContent(content);
   return Object.freeze({
     ...template,
-    content: freezeTemplateContent(template.content),
+    content: freezeTemplateContent(content),
+    locales: Object.freeze({ ...locales }),
     variables: Object.freeze([...template.variables]),
   });
+}
+
+function normalizeTemplateInput(input: EmailTemplateInput) {
+  if (input.locales) return input;
+  if (!input.content) throw new Error('Email template content is missing');
+  return { notificationCode: input.notificationCode, locales: sourcesFromContent(input.content) };
+}
+
+function normalizePreviewInput(input: PreviewEmailTemplateInput) {
+  if (input.source) {
+    return { source: input.source, languageTag: input.languageTag, variables: input.variables };
+  }
+  if (!input.content) throw new Error('Email preview content is missing');
+  const source = sourcesFromContent(input.content)[input.languageTag];
+  if (!source) throw new Error(`Email preview locale is missing: ${input.languageTag}`);
+  return { source, languageTag: input.languageTag, variables: input.variables };
+}
+
+function sourcesFromContent(
+  content: NotificationTemplateContent,
+): Readonly<Record<string, EmailTemplateSource>> {
+  return Object.fromEntries(
+    Object.entries(content).map(([locale, value]) => [
+      locale,
+      {
+        html: htmlFromNode(value.body),
+        subject: textFromNode(value.title),
+        text: textFromNode(value.body),
+      },
+    ]),
+  );
+}
+
+function contentFromLocales(
+  locales: Readonly<Record<string, EmailTemplateSource>>,
+): NotificationTemplateContent {
+  return Object.fromEntries(
+    Object.entries(locales).map(([locale, source]) => [
+      locale,
+      { body: documentFromText(source.text), title: documentFromText(source.subject) },
+    ]),
+  );
+}
+
+function documentFromText(text: string): NotificationRichTextNode {
+  return {
+    content: [{ content: [{ text, type: 'text' }], type: 'paragraph' }],
+    type: 'doc',
+  };
+}
+
+function textFromNode(node: NotificationRichTextNode): string {
+  if (node.type === 'text') return node.text ?? '';
+  if (node.type === 'notificationVariable') return `{{${String(node.attrs?.name ?? '')}}}`;
+  if (node.type === 'hardBreak') return '\n';
+  return (node.content ?? []).map(textFromNode).join('');
+}
+
+function htmlFromNode(node: NotificationRichTextNode): string {
+  return textFromNode(node)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('\n', '<br>');
 }
 
 /** 递归冻结统一通知模板，避免页面改写 Controller 状态。 */

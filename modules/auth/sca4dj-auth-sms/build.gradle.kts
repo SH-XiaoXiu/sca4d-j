@@ -19,6 +19,7 @@ dependencies {
     api(project(":core:sca4dj-core-api"))
     runtimeOnly(project(":core:sca4dj-core-spring"))
     implementation(project(":modules:auth:sca4dj-auth"))
+    implementation(project(":modules:notification:sca4dj-notification-sms"))
     implementation(libs.jackson.databind)
     implementation(libs.slf4j.api)
     api(libs.spring.boot.autoconfigure)

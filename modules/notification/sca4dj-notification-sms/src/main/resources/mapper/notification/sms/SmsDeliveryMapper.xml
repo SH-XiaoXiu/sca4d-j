@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sca4d.notification.sms.mapper.SmsDeliveryMapper">
-    <select id="selectStatus" resultType="com.sca4d.notification.sms.SmsDeliveryStatus">
-        SELECT status FROM notification_sms_delivery
+    <resultMap id="attempt" type="com.sca4d.notification.sms.SmsDeliveryAttempt">
+        <constructor>
+            <idArg column="status" javaType="com.sca4d.notification.sms.SmsDeliveryStatus"/>
+            <arg column="request_id" javaType="java.lang.String"/>
+            <arg column="biz_id" javaType="java.lang.String"/>
+        </constructor>
+    </resultMap>
+    <select id="selectAttempt" resultMap="attempt">
+        SELECT status, request_id, biz_id FROM notification_sms_delivery
         WHERE message_id = #{messageId} AND provider_id = #{providerId}
     </select>
     <insert id="insertAttempt">
@@ -16,6 +23,7 @@
         UPDATE notification_sms_delivery
         SET status = #{status}, request_id = #{requestId}, biz_id = #{bizId},
             failure_code = #{failureCode}, completed_at = CURRENT_TIMESTAMP
-        WHERE message_id = #{messageId} AND provider_id = #{providerId} AND status = 'PENDING'
+        WHERE message_id = #{messageId} AND provider_id = #{providerId}
+          AND status IN ('PENDING', 'ACCEPTED', 'UNKNOWN')
     </update>
 </mapper>

@@ -113,7 +113,7 @@ public class JobAutoConfiguration {
             @NotNull JobHistoryCleanupTask task,
             @NotNull JobProperties properties) {
         return new ClusterTaskSchedule(
-                new ScheduleKey("job.history.cleanup"),
+                new ScheduleKey("JOB/HISTORY/CLEANUP"),
                 1,
                 task,
                 new IntervalSchedule(

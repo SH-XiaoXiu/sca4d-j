@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.id.IdGenerator;
-import com.sca4d.core.api.notification.NotificationChannel;
 import com.sca4d.core.api.notification.NotificationType;
 import com.sca4d.notification.NotificationTypeCatalog;
 import org.junit.jupiter.api.DisplayName;
@@ -21,10 +20,10 @@ import java.util.Optional;
 class SmsConfigurationServiceTest {
 
     private static final NotificationType<TestNotice> TYPE = NotificationType.define(
-            "test.sms",
+            "TEST/SMS",
             TestNotice.class,
             definition -> {
-                definition.required(NotificationChannel.SMS);
+                definition.required(SmsChannels.SMS);
                 definition.variable("code", (notice, locale) -> notice.code);
             },
             (notice, execution) -> execution.sendToAccount(notice.accountId));
@@ -36,7 +35,7 @@ class SmsConfigurationServiceTest {
                 mock(SmsRepository.class),
                 new NotificationTypeCatalog(List.of(TYPE)),
                 List.of(transport("ALIYUN")),
-                () -> 1L);
+                () -> com.sca4d.core.api.id.Id.of(1L));
 
         assertThatThrownBy(() -> service.createProvider("primary", "UNKNOWN", "primary", 10))
                 .isInstanceOfSatisfying(
@@ -94,14 +93,14 @@ class SmsConfigurationServiceTest {
         return new SmsProvider(1L, "primary", "ALIYUN", "primary", 10, false, new Version(0));
     }
 
-    private static SmsTransport transport(String type) {
-        SmsTransport transport = mock(SmsTransport.class);
+    private static SmsProviderClient transport(String type) {
+        SmsProviderClient transport = mock(SmsProviderClient.class);
         when(transport.providerType()).thenReturn(type);
         return transport;
     }
 
     private static IdGenerator idGenerator() {
-        return () -> 2L;
+        return () -> com.sca4d.core.api.id.Id.of(2L);
     }
 
     private static final class TestNotice {

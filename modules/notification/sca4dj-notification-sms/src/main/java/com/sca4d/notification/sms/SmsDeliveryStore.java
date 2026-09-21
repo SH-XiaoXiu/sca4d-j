@@ -22,10 +22,10 @@ public class SmsDeliveryStore {
         this.ids = Objects.requireNonNull(ids, "IdGenerator 不能为空");
     }
 
-    /** @return 已存在的 Provider 尝试状态；尚未尝试时为空 */
+    /** @return 已存在的 Provider 尝试和外部标识；尚未尝试时为空 */
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
-    public @Nullable SmsDeliveryStatus status(@NotNull MessageId messageId, long providerId) {
-        return mapper.selectStatus(messageId, providerId);
+    public @Nullable SmsDeliveryAttempt attempt(@NotNull MessageId messageId, long providerId) {
+        return mapper.selectAttempt(messageId, providerId);
     }
 
     /** @return 首次登记本次 Provider 尝试时为 true */
@@ -37,7 +37,7 @@ public class SmsDeliveryStore {
             @NotNull String recipientHash,
             @NotNull String recipientMasked) {
         return mapper.insertAttempt(
-                ids.nextId(),
+                ids.nextId().value(),
                 messageId,
                 provider.providerId(),
                 route.value(),
@@ -50,8 +50,8 @@ public class SmsDeliveryStore {
     public void finish(
             @NotNull MessageId messageId,
             @NotNull SmsProvider provider,
-            @NotNull SmsTransportResult result) {
-        SmsTransportResult checked = Objects.requireNonNull(result, "SMS Transport 结果不能为空");
+            @NotNull SmsProviderResult result) {
+        SmsProviderResult checked = Objects.requireNonNull(result, "SMS Transport 结果不能为空");
         if (mapper.finish(
                 messageId,
                 provider.providerId(),

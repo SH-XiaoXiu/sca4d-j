@@ -1,9 +1,9 @@
 package com.sca4d.notification.sms.aliyun.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sca4d.notification.sms.SmsTransport;
+import com.sca4d.notification.sms.SmsProviderClient;
 import com.sca4d.notification.sms.aliyun.AliyunSmsProperties;
-import com.sca4d.notification.sms.aliyun.AliyunSmsTransport;
+import com.sca4d.notification.sms.aliyun.AliyunSmsProviderClient;
 import com.sca4d.notification.sms.config.SmsNotificationAutoConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -19,11 +19,11 @@ public class AliyunSmsAutoConfiguration {
     public AliyunSmsAutoConfiguration() {
     }
 
-    /** @return 使用部署凭据和数据库 Provider 配置的阿里云 Transport */
+    /** @return 使用部署凭据和数据库 Provider 配置的阿里云 Provider Client */
     @Bean
-    SmsTransport aliyunSmsTransport(
+    SmsProviderClient aliyunSmsProviderClient(
             @NotNull AliyunSmsProperties properties,
             @NotNull ObjectMapper objectMapper) {
-        return new AliyunSmsTransport(properties, objectMapper);
+        return new AliyunSmsProviderClient(properties, objectMapper);
     }
 }

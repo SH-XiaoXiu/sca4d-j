@@ -371,8 +371,8 @@ public final class ThingModelJsonCodec {
         value.put("valueType", typeMap(property.valueType()));
         value.put("access", property.access().name());
         value.put("telemetry", property.telemetry());
-        property.acknowledgementPolicy().ifPresent(policy -> value.put("acknowledgementPolicy", policy.code()));
-        property.retryPolicy().ifPresent(policy -> value.put("retryPolicy", policy.code()));
+        property.acknowledgementPolicy().ifPresent(policy -> value.put("acknowledgementPolicy", policy.code().value()));
+        property.retryPolicy().ifPresent(policy -> value.put("retryPolicy", policy.code().value()));
         return value;
     }
 
@@ -390,8 +390,8 @@ public final class ThingModelJsonCodec {
         LinkedHashMap<String, Object> value = new LinkedHashMap<>();
         value.put("code", command.code());
         value.put("inputs", fields(command.inputs()));
-        value.put("acknowledgementPolicy", command.acknowledgementPolicy().code());
-        value.put("retryPolicy", command.retryPolicy().code());
+        value.put("acknowledgementPolicy", command.acknowledgementPolicy().code().value());
+        value.put("retryPolicy", command.retryPolicy().code().value());
         return value;
     }
 

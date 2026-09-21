@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.sca4d.core.api.messaging.MessagePublisher;
+import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.storage.FileErrorCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -85,8 +85,8 @@ class ProfileAvatarWorkflowIntegrationTest {
 
         /** @return 头像流程不会调用的消息发布接口 */
         @Bean
-        MessagePublisher messagePublisher() {
-            return mock(MessagePublisher.class);
+        MessageBus messagePublisher() {
+            return mock(MessageBus.class);
         }
     }
 

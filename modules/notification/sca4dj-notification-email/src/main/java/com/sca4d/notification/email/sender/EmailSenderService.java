@@ -25,7 +25,7 @@ public class EmailSenderService {
 
     private final @NotNull EmailSenderRepository senders;
 
-    private final @NotNull EmailTransport transport;
+    private final @NotNull EmailGateway transport;
 
     private final @NotNull SecretKeyring keyring;
 
@@ -34,11 +34,11 @@ public class EmailSenderService {
     /** @param senders SMTP 配置持久化语义 @param transport SMTP 操作 @param keyring 密码加密密钥环 @param ids 全局标识生成器 */
     public EmailSenderService(
             @NotNull EmailSenderRepository senders,
-            @NotNull EmailTransport transport,
+            @NotNull EmailGateway transport,
             @NotNull SecretKeyring keyring,
             @NotNull IdGenerator ids) {
         this.senders = Objects.requireNonNull(senders, "EmailSenderRepository 不能为空");
-        this.transport = Objects.requireNonNull(transport, "EmailTransport 不能为空");
+        this.transport = Objects.requireNonNull(transport, "EmailGateway 不能为空");
         this.keyring = Objects.requireNonNull(keyring, "SecretKeyring 不能为空");
         this.ids = Objects.requireNonNull(ids, "IdGenerator 不能为空");
     }
@@ -69,7 +69,7 @@ public class EmailSenderService {
             @NotNull String fromAddress,
             @Nullable String fromName,
             @Nullable String replyTo) {
-        long senderId = ids.nextId();
+        long senderId = ids.nextId().value();
         CheckedSender checked = validate(
                 name,
                 host,
@@ -217,7 +217,7 @@ public class EmailSenderService {
     private @NotNull EncryptedSecret encrypt(long senderId, @NotNull String password) {
         byte[] bytes = password.getBytes(StandardCharsets.UTF_8);
         try {
-            return keyring.activeCipher().encrypt(SmtpEmailTransport.passwordPurpose(senderId), bytes);
+            return keyring.activeCipher().encrypt(SmtpEmailGateway.passwordPurpose(senderId), bytes);
         } finally {
             Arrays.fill(bytes, (byte) 0);
         }

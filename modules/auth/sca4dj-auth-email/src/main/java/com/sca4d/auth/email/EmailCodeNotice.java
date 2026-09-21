@@ -1,7 +1,7 @@
 package com.sca4d.auth.email;
 
-import com.sca4d.core.api.notification.NotificationChannel;
 import com.sca4d.core.api.notification.NotificationType;
+import com.sca4d.notification.email.EmailChannels;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,7 +15,7 @@ public final class EmailCodeNotice {
             "authentication.email-code",
             EmailCodeNotice.class,
             definition -> {
-                definition.required(NotificationChannel.EMAIL);
+                definition.required(EmailChannels.EMAIL);
                 definition.variable("code", (notice, locale) -> notice.code());
                 definition.variable(
                         "expiresInMinutes",

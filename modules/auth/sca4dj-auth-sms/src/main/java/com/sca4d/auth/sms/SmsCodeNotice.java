@@ -1,7 +1,7 @@
 package com.sca4d.auth.sms;
 
-import com.sca4d.core.api.notification.NotificationChannel;
 import com.sca4d.core.api.notification.NotificationType;
+import com.sca4d.notification.sms.SmsChannels;
 import org.jetbrains.annotations.NotNull;
 
 /** 保存一次 SMS 验证码通知需要投递的 Account、验证码和有效分钟数。 */
@@ -12,7 +12,7 @@ public final class SmsCodeNotice {
             "authentication.sms-code",
             SmsCodeNotice.class,
             definition -> {
-                definition.required(NotificationChannel.SMS);
+                definition.required(SmsChannels.SMS);
                 definition.variable("code", (notice, locale) -> notice.code());
                 definition.variable("expiresInMinutes", (notice, locale) -> Long.toString(notice.expiresInMinutes()));
             },

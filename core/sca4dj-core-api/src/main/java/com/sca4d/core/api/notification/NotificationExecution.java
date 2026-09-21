@@ -1,5 +1,6 @@
 package com.sca4d.core.api.notification;
 
+import com.sca4d.core.api.message.MessageContent;
 import com.sca4d.core.api.region.Region;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,6 +16,10 @@ public interface NotificationExecution {
     /** 指定本次通知发生或面向的业务区域。 */
     @NotNull
     NotificationExecution region(@NotNull Region region);
+
+    /** 增加一项由最终渠道解释的消息内容。 */
+    @NotNull
+    NotificationExecution content(@NotNull MessageContent content);
 
     /** 把通知发送给指定 Account。 */
     void sendToAccount(long accountId);
