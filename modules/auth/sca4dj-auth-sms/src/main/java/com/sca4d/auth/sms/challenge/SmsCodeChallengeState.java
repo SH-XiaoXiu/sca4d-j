@@ -52,12 +52,10 @@ public final class SmsCodeChallengeState {
         this.version = Objects.requireNonNull(version, "Challenge 版本不能为空");
     }
 
-    /** 执行 challengeId 方法表示的业务操作。 */
     public @NotNull SmsCodeChallengeId challengeId() {
         return challengeId;
     }
 
-    /** 执行 accountId 方法表示的业务操作。 */
     public long accountId() {
         return accountId;
     }
@@ -67,7 +65,6 @@ public final class SmsCodeChallengeState {
         return codeHash;
     }
 
-    /** 执行 maskedRecipient 方法表示的业务操作。 */
     public @NotNull String maskedRecipient() {
         return maskedRecipient;
     }
@@ -77,7 +74,6 @@ public final class SmsCodeChallengeState {
         return expiresAt;
     }
 
-    /** 执行 resendAt 方法表示的业务操作。 */
     public @NotNull Instant resendAt() {
         return resendAt;
     }
@@ -97,7 +93,6 @@ public final class SmsCodeChallengeState {
         return version;
     }
 
-    /** 执行 publicChallenge 方法表示的业务操作。 */
     public @NotNull SmsCodeChallenge publicChallenge() {
         return new SmsCodeChallenge(challengeId, maskedRecipient, expiresAt, resendAt);
     }

@@ -47,7 +47,6 @@ public final class RabbitMessageEnvelopeCodec {
 
     private final @NotNull MessageCodecRegistry codecs;
 
-    /** 创建当前对象。 */
     public RabbitMessageEnvelopeCodec(
             @NotNull ObjectMapper json,
             @NotNull List<? extends @NotNull MessageHandler<?>> handlers) {

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-/** 定义联邦 Provider 和协议配置的最小 SQL 形状。 */
+/** 读写联邦 Provider、协议配置和版本条件。 */
 public interface ProviderMapper {
 
     /** 按可选编码、状态和展示标志读取未删除 Provider，按展示顺序排序。 */

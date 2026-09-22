@@ -65,67 +65,56 @@ public final class InboxMessage {
         this.version = Objects.requireNonNull(version, "站内信版本不能为空");
     }
 
-    /** 执行 Contract 方法表示的业务操作。 */
     @Contract(pure = true)
     public long inboxMessageId() {
         return inboxMessageId;
     }
 
-    /** 执行 Contract 方法表示的业务操作。 */
     @Contract(pure = true)
     public @NotNull MessageId messageId() {
         return messageId;
     }
 
-    /** 执行 Contract 方法表示的业务操作。 */
     @Contract(pure = true)
     public long accountId() {
         return accountId;
     }
 
-    /** 执行 Contract 方法表示的业务操作。 */
     @Contract(pure = true)
     public @NotNull NotificationCode code() {
         return code;
     }
 
-    /** 执行 Contract 方法表示的业务操作。 */
     @Contract(pure = true)
     public @NotNull Locale locale() {
         return locale;
     }
 
-    /** 执行 Contract 方法表示的业务操作。 */
     @Contract(pure = true)
     public @NotNull String title() {
         return title;
     }
 
-    /** 执行 Contract 方法表示的业务操作。 */
     @Contract(pure = true)
     public @NotNull String text() {
         return text;
     }
 
-    /** 执行 Contract 方法表示的业务操作。 */
     @Contract(pure = true)
     public @NotNull String html() {
         return html;
     }
 
-    /** 执行 Contract 方法表示的业务操作。 */
     @Contract(pure = true)
     public @NotNull Instant createdAt() {
         return createdAt;
     }
 
-    /** 执行 Contract 方法表示的业务操作。 */
     @Contract(pure = true)
     public @Nullable Instant readAt() {
         return readAt;
     }
 
-    /** 执行 Contract 方法表示的业务操作。 */
     @Contract(pure = true)
     public @NotNull Version version() {
         return version;

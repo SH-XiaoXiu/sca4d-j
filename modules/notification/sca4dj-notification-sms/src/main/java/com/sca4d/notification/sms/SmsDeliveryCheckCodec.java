@@ -21,7 +21,6 @@ public final class SmsDeliveryCheckCodec implements MessageCodec<SmsDeliveryChec
 
     private final @NotNull NotificationMessageCodec notifications;
 
-    /** 创建当前对象。 */
     public SmsDeliveryCheckCodec(@NotNull ObjectMapper json) {
         this.json = Objects.requireNonNull(json, "ObjectMapper 不能为空");
         this.notifications = new NotificationMessageCodec(json);

@@ -35,7 +35,6 @@ public final class NotificationMessageCodec implements MessageCodec<Notification
 
     private final @NotNull MessageContentCodec contents = new MessageContentCodec();
 
-    /** 创建当前对象。 */
     public NotificationMessageCodec(@NotNull ObjectMapper json) {
         this.json = Objects.requireNonNull(json, "ObjectMapper 不能为空");
     }

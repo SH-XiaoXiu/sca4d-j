@@ -19,7 +19,6 @@ public final class SmsCodeChallengeId {
         this.value = checked;
     }
 
-    /** 执行 Contract 方法表示的业务操作。 */
     @Contract(pure = true)
     public @NotNull String value() {
         return value;

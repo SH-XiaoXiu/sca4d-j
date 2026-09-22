@@ -38,7 +38,6 @@ public final class RabbitMessageBus implements MessageBus {
 
     private final @NotNull String sourceApplication;
 
-    /** 创建当前对象。 */
     public RabbitMessageBus(
             @NotNull IdGenerator ids,
             @NotNull RabbitMessageEnvelopeCodec codec,

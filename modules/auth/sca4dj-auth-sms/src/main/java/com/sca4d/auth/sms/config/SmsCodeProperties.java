@@ -11,7 +11,6 @@ public final class SmsCodeProperties {
         return accountRealm;
     }
 
-    /** 执行 setAccountRealm 方法表示的业务操作。 */
     public void setAccountRealm(String accountRealm) {
         if (accountRealm == null || accountRealm.isBlank())
             throw new IllegalArgumentException("SMS Code Realm 不能为空");

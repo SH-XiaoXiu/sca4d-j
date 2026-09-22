@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-/** 定义联邦身份绑定的最小 SQL 形状。 */
+/** 读写 Account 与外部身份之间的绑定及其资料快照。 */
 public interface FederatedIdentityMapper {
 
     /** 按外部身份或账号读取完整绑定；必须提供 Provider 或 Account 范围。 */

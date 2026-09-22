@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-/** 读取启用 SMS Provider 和对应平台模板绑定的最小 SQL 形状。 */
+/** 读写 SMS Provider、线路绑定及其版本条件。 */
 public interface SmsProviderMapper {
     /** 按可选标识、启用状态和路由读取未删除 Provider。 */
     @NotNull

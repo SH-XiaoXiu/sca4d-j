@@ -16,7 +16,6 @@ public final class SmsDeliveryCheckHandler implements MessageHandler<SmsDelivery
 
     private final @NotNull SmsDeliveryCheckCodec codec;
 
-    /** 创建当前对象。 */
     public SmsDeliveryCheckHandler(
             @NotNull SmsNotificationDelivery delivery,
             @NotNull SmsDeliveryCheckCodec codec) {

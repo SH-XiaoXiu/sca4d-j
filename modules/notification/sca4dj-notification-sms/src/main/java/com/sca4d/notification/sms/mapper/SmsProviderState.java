@@ -39,7 +39,6 @@ public final class SmsProviderState {
         this.version = Objects.requireNonNull(version, "Provider 版本不能为空");
     }
 
-    /** 执行 providerId 方法表示的业务操作。 */
     public long providerId() {
         return providerId;
     }
@@ -54,17 +53,14 @@ public final class SmsProviderState {
         return type;
     }
 
-    /** 执行 credentialRef 方法表示的业务操作。 */
     public @NotNull String credentialRef() {
         return credentialRef;
     }
 
-    /** 执行 priority 方法表示的业务操作。 */
     public int priority() {
         return priority;
     }
 
-    /** 执行 enabled 方法表示的业务操作。 */
     public boolean enabled() {
         return enabled;
     }

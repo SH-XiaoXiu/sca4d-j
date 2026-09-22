@@ -21,7 +21,6 @@ public final class DeviceAcknowledgementHandler implements MessageHandler<Device
 
     private final @NotNull MessageCodec<DeviceAcknowledgement> codec;
 
-    /** 创建当前对象。 */
     public DeviceAcknowledgementHandler(
             @NotNull DeviceAcknowledgementService acknowledgements,
             @NotNull ObjectMapper json) {

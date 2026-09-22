@@ -28,25 +28,21 @@ public final class SmsCodeChallenge {
         this.resendAt = Objects.requireNonNull(resendAt, "重发时间不能为空");
     }
 
-    /** 执行 Contract 方法表示的业务操作。 */
     @Contract(pure = true)
     public @NotNull SmsCodeChallengeId challengeId() {
         return challengeId;
     }
 
-    /** 执行 Contract 方法表示的业务操作。 */
     @Contract(pure = true)
     public @NotNull String maskedRecipient() {
         return maskedRecipient;
     }
 
-    /** 执行 Contract 方法表示的业务操作。 */
     @Contract(pure = true)
     public @NotNull Instant expiresAt() {
         return expiresAt;
     }
 
-    /** 执行 Contract 方法表示的业务操作。 */
     @Contract(pure = true)
     public @NotNull Instant resendAt() {
         return resendAt;

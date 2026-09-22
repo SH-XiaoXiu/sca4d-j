@@ -21,7 +21,6 @@ public final class WebRealtimeMessageCodec implements MessageCodec<WebRealtimeMe
 
     private final @NotNull ObjectMapper json;
 
-    /** 创建当前对象。 */
     public WebRealtimeMessageCodec(@NotNull ObjectMapper json) {
         this.json = Objects.requireNonNull(json, "ObjectMapper 不能为空");
     }

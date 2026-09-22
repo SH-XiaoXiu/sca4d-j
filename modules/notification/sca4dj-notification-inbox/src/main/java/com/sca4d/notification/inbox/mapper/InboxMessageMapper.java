@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import java.time.Instant;
 import java.util.List;
 
-/** 读写 Account 站内信快照的最小 SQL 形状。 */
+/** 读写 Account 站内信快照，并处理未读计数和已读状态。 */
 public interface InboxMessageMapper {
 
     /** @return 按游标倒序读取的站内信 */

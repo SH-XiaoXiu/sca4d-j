@@ -25,7 +25,6 @@ public final class EmailMessageService {
 
     private final long maxAttachmentBytes;
 
-    /** 创建当前对象。 */
     public EmailMessageService(
             @NotNull EmailSenderRepository senders,
             @NotNull EmailTemplateRepository templates,

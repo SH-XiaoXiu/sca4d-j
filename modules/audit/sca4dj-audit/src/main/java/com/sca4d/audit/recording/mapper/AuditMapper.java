@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-/** 追加和查询 audit_record 的最小 SQL 形状。 */
+/** 读写 `audit_record` 的审计列，并提供按条件统计、分页和单条查询。 */
 public interface AuditMapper {
     /** @param row 待追加的审计列值 @return 影响行数 */
     int insert(@Param("row") @NotNull EncodedAuditEntry row);

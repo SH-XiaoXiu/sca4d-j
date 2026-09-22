@@ -162,7 +162,7 @@ public final class DeviceConnectionRepository implements DeviceConnectionReceive
             retained.add(connection.id());
             connected(connection);
         }
-        for (DeviceConnection projected : findByProtocol(checkedProtocol)) {
+        for (DeviceConnection projected : find(protocolKey(checkedProtocol))) {
             if (!projected.connectedAt().isAfter(cutoff) && !retained.contains(projected.id())) {
                 disconnected(checkedProtocol, projected.id());
             }
@@ -215,11 +215,6 @@ public final class DeviceConnectionRepository implements DeviceConnectionReceive
             }
         });
         return Collections.unmodifiableMap(result);
-    }
-
-    /** 读取一种连接协议的当前共享投影。 */
-    private @NotNull List<DeviceConnection> findByProtocol(@NotNull DeviceConnectionProtocol protocol) {
-        return find(protocolKey(protocol));
     }
 
     /** 清理过期索引，并忽略已经没有 Redis 主记录的 DeviceConnectionId。 */

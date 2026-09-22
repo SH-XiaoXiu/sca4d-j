@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-/** 读写站内信模板的最小 SQL 形状。 */
+/** 读写站内信模板，并按版本条件执行修改和逻辑删除。 */
 public interface InboxTemplateMapper {
 
     /** 按可选标识、通知编码和启用状态读取未删除模板。 */

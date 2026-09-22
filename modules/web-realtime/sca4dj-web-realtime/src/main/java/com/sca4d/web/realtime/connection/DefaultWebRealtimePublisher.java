@@ -32,7 +32,6 @@ public final class DefaultWebRealtimePublisher implements WebRealtimePublisher, 
 
     private final @NotNull Clock clock;
 
-    /** 创建当前对象。 */
     public DefaultWebRealtimePublisher(
             @NotNull MessageBus messages,
             @NotNull WebRealtimeProperties properties,
