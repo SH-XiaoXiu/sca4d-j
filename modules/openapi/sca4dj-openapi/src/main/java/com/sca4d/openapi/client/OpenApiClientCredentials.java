@@ -1,5 +1,6 @@
 package com.sca4d.openapi.client;
 
+import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -19,8 +20,8 @@ public final class OpenApiClientCredentials {
             @NotNull String method,
             @NotNull String secret) {
         this.client = Objects.requireNonNull(client, "OpenAPI Client 不能为空");
-        this.method = requireText(method, "认证方法");
-        this.secret = requireText(secret, "Client 凭据");
+        this.method = TextUtils.requireText(method, "认证方法");
+        this.secret = TextUtils.requireText(secret, "Client 凭据");
     }
 
     /** @return Client 元数据 */
@@ -38,12 +39,4 @@ public final class OpenApiClientCredentials {
         return secret;
     }
 
-    private static String requireText(String value, String name) {
-        Objects.requireNonNull(value, name + "不能为空");
-        String checked = value.trim();
-        if (checked.isEmpty()) {
-            throw new IllegalArgumentException(name + "不能为空");
-        }
-        return checked;
-    }
 }

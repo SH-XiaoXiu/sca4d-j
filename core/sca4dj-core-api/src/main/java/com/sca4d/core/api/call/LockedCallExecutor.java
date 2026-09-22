@@ -73,7 +73,7 @@ public final class LockedCallExecutor {
                         }
                     });
         } catch (InvocationFailure failure) {
-            throw failure.original();
+            throw failure.original;
         }
     }
 
@@ -88,9 +88,5 @@ public final class LockedCallExecutor {
             this.original = original;
         }
 
-        /** @return 业务方法抛出的原始异常 */
-        private Exception original() {
-            return original;
-        }
     }
 }

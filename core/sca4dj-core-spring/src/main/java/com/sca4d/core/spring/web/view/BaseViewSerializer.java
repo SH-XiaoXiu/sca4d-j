@@ -113,12 +113,12 @@ public final class BaseViewSerializer extends StdSerializer<BaseView> {
         Locale requestLocale = Objects.requireNonNull(LocaleContextHolder.getLocale(), "当前请求 Locale 不能为空");
         for (Localization localization : localizations) {
             String text;
-            String key = localization.key();
+            String key = localization.key;
             if (key != null) {
                 LocalizedFields fields = value.localizedFields();
                 if (fields == null) {
                     throw new DataAssertionException(
-                            localization.target(),
+                            localization.target,
                             "动态 @Localize 要求 View 提供 LocalizedFields",
                             null);
                 }
@@ -127,18 +127,18 @@ public final class BaseViewSerializer extends StdSerializer<BaseView> {
                     text = localizer.localize(checkedFields, key, requestLocale);
                 } catch (IllegalArgumentException exception) {
                     throw new DataAssertionException(
-                            localization.target(),
+                            localization.target,
                             exception.getMessage(),
                             null);
                 }
             } else {
                 LocalizableText source = invoke(
-                        Objects.requireNonNull(localization.source()),
+                        Objects.requireNonNull(localization.source),
                         value,
-                        localization.target());
+                        localization.target);
                 text = localizer.localize(source, requestLocale);
             }
-            json.put(localization.target(), text);
+            json.put(localization.target, text);
         }
         value.apply(json);
 
@@ -319,19 +319,5 @@ public final class BaseViewSerializer extends StdSerializer<BaseView> {
             this.key = key;
         }
 
-        /** 读取最终 JSON 中接收本地化文本的字段名。 */
-        private @NotNull String target() {
-            return target;
-        }
-
-        /** 读取当前 View 中返回 LocalizableText 的来源方法。 */
-        private @Nullable Method source() {
-            return source;
-        }
-
-        /** 读取动态国际化字段键；静态文本来源没有该值。 */
-        private @Nullable String key() {
-            return key;
-        }
     }
 }

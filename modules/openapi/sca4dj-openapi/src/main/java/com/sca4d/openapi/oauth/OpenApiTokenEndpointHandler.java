@@ -117,12 +117,12 @@ public class OpenApiTokenEndpointHandler {
 
         // 统一校验 Client、Account 和 Shared Secret，不向调用者泄露具体失败对象。
         BasicCredentials credentials = parseBasic(authorization);
-        OpenApiClient client = loadClientById(credentials.clientId());
+        OpenApiClient client = loadClientById(credentials.clientId);
         if (!client.active()) {
             throw new BusinessException(AuthErrorCode.AUTHENTICATION_FAILED);
         }
         Account account = activeClientAccountById(client.accountId());
-        var verified = sharedSecrets.authenticate(account, new SharedSecretProof(credentials.secret()));
+        var verified = sharedSecrets.authenticate(account, new SharedSecretProof(credentials.secret));
 
         // 建立 Application Session，并按应用配置签发现有 Session Token 或独立 OpenAPI JWT。
         EstablishedSession established = sessions.establish(account, List.of(verified.authentication()));
@@ -195,14 +195,5 @@ public class OpenApiTokenEndpointHandler {
             this.secret = secret;
         }
 
-        /** @return Client ID */
-        private @NotNull String clientId() {
-            return clientId;
-        }
-
-        /** @return Shared Secret 明文 */
-        private @NotNull String secret() {
-            return secret;
-        }
     }
 }

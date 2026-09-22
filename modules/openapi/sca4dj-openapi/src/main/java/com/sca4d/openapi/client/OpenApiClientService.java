@@ -11,6 +11,7 @@ import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.OperationCatalog;
+import com.sca4d.core.api.utils.TextUtils;
 import com.sca4d.iam.identity.IdentityService;
 import com.sca4d.openapi.web.OpenApiRouteCatalog;
 import org.jetbrains.annotations.CheckReturnValue;
@@ -150,7 +151,7 @@ public class OpenApiClientService {
     private LinkedHashSet<String> validateOperations(Session creator, Collection<String> requestedOperations) {
         LinkedHashSet<String> result = new LinkedHashSet<>();
         for (String code : Objects.requireNonNull(requestedOperations, "Operation 列表不能为空")) {
-            Operation operation = operations.actionByCode(requireText(code, "Operation")).operation();
+            Operation operation = operations.actionByCode(TextUtils.requireText(code, "Operation")).operation();
             if (routes.routes().stream().noneMatch(route -> route.operation().equals(operation.value()))) {
                 throw new IllegalArgumentException("Operation 尚未声明为 OpenAPI 路由: " + operation.value());
             }
@@ -165,19 +166,11 @@ public class OpenApiClientService {
     }
 
     private static String requireMethod(String method) {
-        String checked = requireText(method, "认证方法");
+        String checked = TextUtils.requireText(method, "认证方法");
         if (!"shared-secret".equals(checked) && !"hmac".equals(checked)) {
             throw new IllegalArgumentException("OpenAPI 认证方法只能是 shared-secret 或 hmac");
         }
         return checked;
     }
 
-    private static String requireText(String value, String name) {
-        Objects.requireNonNull(value, name + "不能为空");
-        String checked = value.trim();
-        if (checked.isEmpty()) {
-            throw new IllegalArgumentException(name + "不能为空");
-        }
-        return checked;
-    }
 }

@@ -267,11 +267,11 @@ public final class ThingModelJsonCodec {
             throw invalidField(path(path, "kind"), exception);
         }
         if (kind == ThingValueKind.BOOLEAN) {
-            requireOnly(node, Set.of("kind"), path);
+            rejectUnknown(node, Set.of("kind"), path);
             return ThingValueType.booleanType();
         }
         if (kind == ThingValueKind.TIMESTAMP) {
-            requireOnly(node, Set.of("kind"), path);
+            rejectUnknown(node, Set.of("kind"), path);
             return ThingValueType.timestampType();
         }
         ThingValueType.Builder builder = switch (kind) {
@@ -526,11 +526,6 @@ public final class ThingModelJsonCodec {
                 throw invalidField(path(path, field), null);
             }
         });
-    }
-
-    /** 对没有约束字段的类型拒绝额外配置。 */
-    private static void requireOnly(JsonNode node, Set<String> allowed, String path) {
-        rejectUnknown(node, allowed, path);
     }
 
     /** 把字段名追加到 RFC 6901 JSON Pointer。 */

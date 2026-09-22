@@ -122,19 +122,19 @@ public abstract class InitFlywayTask extends DefaultTask {
             List<SchemaFragment> componentFragments = readFragments(artifact);
             if (componentFragments.size() > 1) {
                 throw new GradleException("组件 " + componentId.getDisplayName() + " 提供了多个数据库结构片段："
-                        + componentFragments.stream().map(SchemaFragment::name).sorted().toList());
+                        + componentFragments.stream().map(fragment -> fragment.name).sorted().toList());
             }
             if (componentFragments.isEmpty()) {
                 continue;
             }
             SchemaFragment fragment = componentFragments.getFirst();
-            if (fragment.content().isBlank()) {
+            if (fragment.content.isBlank()) {
                 throw new GradleException("组件 " + componentId.getDisplayName() + " 的数据库结构片段 "
-                        + fragment.name() + ".sql 为空");
+                        + fragment.name + ".sql 为空");
             }
-            String previousOwner = fragmentOwners.putIfAbsent(fragment.name(), componentId.getDisplayName());
+            String previousOwner = fragmentOwners.putIfAbsent(fragment.name, componentId.getDisplayName());
             if (previousOwner != null) {
-                throw new GradleException("数据库结构片段名称 " + fragment.name() + ".sql 重复：" + previousOwner
+                throw new GradleException("数据库结构片段名称 " + fragment.name + ".sql 重复：" + previousOwner
                         + "、" + componentId.getDisplayName());
             }
             fragments.put(componentId, fragment);
@@ -291,18 +291,18 @@ public abstract class InitFlywayTask extends DefaultTask {
             ComponentIdentifier componentId = orderedComponents.get(index);
             SchemaFragment fragment = Objects.requireNonNull(
                     fragments.get(componentId), "有序组件必须对应数据库结构片段: " + componentId.getDisplayName());
-            String content = fragment.content().replace("\r\n", "\n").replace('\r', '\n').stripTrailing();
+            String content = fragment.content.replace("\r\n", "\n").replace('\r', '\n').stripTrailing();
             migration.append("-- 组件：").append(componentId.getDisplayName()).append('\n');
-            migration.append("-- 结构：").append(fragment.name()).append(".sql\n");
+            migration.append("-- 结构：").append(fragment.name).append(".sql\n");
             migration.append(content).append('\n');
             if (index + 1 < orderedComponents.size() || appFragment != null) {
                 migration.append('\n');
             }
         }
         if (appFragment != null) {
-            String content = appFragment.content().replace("\r\n", "\n").replace('\r', '\n').stripTrailing();
+            String content = appFragment.content.replace("\r\n", "\n").replace('\r', '\n').stripTrailing();
             migration.append("-- App：自有结构\n");
-            migration.append("-- 结构：").append(appFragment.name()).append(".sql\n");
+            migration.append("-- 结构：").append(appFragment.name).append(".sql\n");
             migration.append(content).append('\n');
         }
 
@@ -333,12 +333,5 @@ public abstract class InitFlywayTask extends DefaultTask {
             this.content = content;
         }
 
-        private String name() {
-            return name;
-        }
-
-        private String content() {
-            return content;
-        }
     }
 }

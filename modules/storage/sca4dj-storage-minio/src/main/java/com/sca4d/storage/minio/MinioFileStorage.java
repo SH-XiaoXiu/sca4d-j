@@ -228,8 +228,8 @@ public final class MinioFileStorage implements FileStorage {
                             .stream(checkedContent, sizeBytes, -1L)
                             .contentType(contentType)
                             .build());
-            if (checkedContent.bytesRead() > sizeBytes
-                    || checkedContent.bytesRead() == sizeBytes && checkedContent.read() != -1) {
+            if (checkedContent.bytesRead > sizeBytes
+                    || checkedContent.bytesRead == sizeBytes && checkedContent.read() != -1) {
                 throw new IllegalArgumentException("上传内容字节数与申请不一致");
             }
         } catch (InsufficientDataException exception) {
@@ -332,9 +332,5 @@ public final class MinioFileStorage implements FileStorage {
             return count;
         }
 
-        /** 返回 MinIO SDK 和尾部探测已经读取的总字节数。 */
-        private long bytesRead() {
-            return bytesRead;
-        }
     }
 }
