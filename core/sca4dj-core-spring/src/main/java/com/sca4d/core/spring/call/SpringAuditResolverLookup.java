@@ -22,11 +22,13 @@ public final class SpringAuditResolverLookup implements AuditResolverLookup {
         this.applicationContext = Objects.requireNonNull(applicationContext, "Spring 容器不能为空");
     }
 
+    /** @param resolverType 审计目标解析器类型 @return Spring 容器中的解析器 */
     public @NotNull AuditTargetResolver targetResolver(
             @NotNull Class<? extends AuditTargetResolver> resolverType) {
         return applicationContext.getBean(resolverType);
     }
 
+    /** @param factoryType 审计载荷工厂类型 @return Spring 容器中的载荷工厂 */
     public @NotNull AuditPayloadFactory payloadFactory(
             @NotNull Class<? extends AuditPayloadFactory> factoryType) {
         return applicationContext.getBean(factoryType);

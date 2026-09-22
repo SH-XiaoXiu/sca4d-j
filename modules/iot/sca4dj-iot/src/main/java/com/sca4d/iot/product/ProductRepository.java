@@ -134,7 +134,7 @@ public class ProductRepository {
      */
     @CheckReturnValue
     public @NotNull Page<Product> findPage(@NotNull PageRequest page) {
-        PageRequest checked = Objects.requireNonNull(page, "Product 分页要求不能为空").requireMaxSize(100);
+        PageRequest checked = Objects.requireNonNull(page, "Product 分页要求不能为空").verifyMaxSize(100);
         long total = mapper.countProducts();
         List<ProductState> rows = total == 0
                 ? List.of()

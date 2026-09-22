@@ -1,14 +1,14 @@
 package com.sca4d.iot.message;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import com.sca4d.core.api.event.Event;
-import com.sca4d.core.api.messaging.MessageDelivery;
+import com.sca4d.core.api.messaging.HandlingDecision;
+import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.MessageId;
 import com.sca4d.iot.api.message.DeviceAcknowledgement;
-import com.sca4d.iot.api.message.IotMessageTypes;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +24,7 @@ class DeviceAcknowledgementHandlerTest {
     @DisplayName("消费可靠 ACK 请求时委托消息级状态转换")
     void delegatesAcknowledgementRequest() {
         DeviceAcknowledgementService acknowledgements = mock(DeviceAcknowledgementService.class);
-        DeviceAcknowledgementHandler consumer = new DeviceAcknowledgementHandler(acknowledgements);
+        DeviceAcknowledgementHandler consumer = new DeviceAcknowledgementHandler(acknowledgements, new ObjectMapper());
         DeviceAcknowledgement acknowledgement = new DeviceAcknowledgement(
                 10,
                 "reported-equals-desired",
@@ -33,17 +33,17 @@ class DeviceAcknowledgementHandlerTest {
                 "status:1:power",
                 NOW,
                 NOW);
-        MessageDelivery<DeviceAcknowledgement> delivery = new MessageDelivery<>(
+        IncomingMessage<DeviceAcknowledgement> delivery = new IncomingMessage<>(
                 new MessageId(20),
-                new Event<>(IotMessageTypes.ACKNOWLEDGEMENT_REQUESTED, "ack:10", NOW, acknowledgement),
+                acknowledgement,
                 "test-app",
                 NOW,
-                false);
+                false,
+                1);
 
-        consumer.consume(delivery);
+        assertThat(consumer.handle(delivery).status()).isEqualTo(HandlingDecision.Status.ACKNOWLEDGE);
 
-        assertThat(consumer.eventType()).isSameAs(IotMessageTypes.ACKNOWLEDGEMENT_REQUESTED);
-        assertThat(consumer.consumerCode()).isEqualTo("iot.downlink.ack-requested");
+        assertThat(consumer.code()).isEqualTo(com.sca4d.core.api.code.TreeCode.of("IOT/DOWNLINK/ACK/HANDLER"));
         verify(acknowledgements).acknowledge(acknowledgement);
     }
 }

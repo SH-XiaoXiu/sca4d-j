@@ -22,21 +22,26 @@ public final class EmailTemplateRequest {
     @Size(min = 1, max = 100)
     private @Nullable Map<@NotBlank @Size(max = 35) String, @Valid EmailTemplateSourceRequest> locales;
 
+    /** 创建空的请求对象，供 JSON 绑定使用。 */
     public EmailTemplateRequest() {
     }
 
+    /** @return 通知编码 */
     public @NotNull String getNotificationCode() {
         return Objects.requireNonNull(notificationCode, "通知编码不能为空");
     }
 
+    /** @param notificationCode 通知编码 */
     public void setNotificationCode(@Nullable String notificationCode) {
         this.notificationCode = notificationCode;
     }
 
+    /** @return 多语言 Email 模板源码 */
     public @NotNull Map<String, EmailTemplateSourceRequest> getLocales() {
         return Map.copyOf(Objects.requireNonNull(locales, "Email 模板 Locale 不能为空"));
     }
 
+    /** @param locales 多语言 Email 模板源码 */
     public void setLocales(@Nullable Map<String, EmailTemplateSourceRequest> locales) {
         this.locales = locales == null ? null : new LinkedHashMap<>(locales);
     }

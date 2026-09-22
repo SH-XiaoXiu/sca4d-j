@@ -502,17 +502,25 @@ public class PlatformAccountApplicationService {
         }
         AccountIdentifier current = identifiers.isEmpty() ? null : identifiers.getFirst();
         if (current == null) {
-            identityFacts.addIdentifier(
+            AccountIdentifier added = identityFacts.addIdentifier(
                     account.accountId(),
                     SmsCodeAuthenticationMethod.PHONE_IDENTIFIER_TYPE,
                     phoneNumber);
+            LOG.debug(
+                    "Platform Account PHONE 标识已新增 | accountId={} identifierId={}",
+                    account.accountId(),
+                    added.id());
             return;
         }
         AccountIdentifier updated = current.value().equals(phoneNumber)
                 ? current
                 : identityFacts.changeIdentifierValue(current.id(), phoneNumber);
         if (updated.status() != IdentityStatus.ACTIVE) {
-            identityFacts.changeIdentifierStatus(updated.id(), IdentityStatus.ACTIVE);
+            AccountIdentifier activated = identityFacts.changeIdentifierStatus(updated.id(), IdentityStatus.ACTIVE);
+            LOG.debug(
+                    "Platform Account PHONE 标识已启用 | accountId={} identifierId={}",
+                    account.accountId(),
+                    activated.id());
         }
     }
 }

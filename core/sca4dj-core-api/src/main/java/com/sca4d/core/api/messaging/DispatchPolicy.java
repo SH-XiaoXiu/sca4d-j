@@ -20,6 +20,7 @@ public final class DispatchPolicy {
 
     private final @Nullable Instant notBefore;
 
+    /** 创建消息分发策略。 */
     private DispatchPolicy(@NotNull Mode mode, @Nullable Instant notBefore) {
         this.mode = Objects.requireNonNull(mode, "消息分发方式不能为空");
         if (mode != Mode.OUTBOX && notBefore != null) {
@@ -28,30 +29,36 @@ public final class DispatchPolicy {
         this.notBefore = notBefore;
     }
 
+    /** @return 立即向 Broker 分发的策略 */
     @CheckReturnValue
     public static @NotNull DispatchPolicy immediate() {
         return new DispatchPolicy(Mode.IMMEDIATE, null);
     }
 
+    /** @return 当前事务提交后分发的策略 */
     @CheckReturnValue
     public static @NotNull DispatchPolicy afterCommit() {
         return new DispatchPolicy(Mode.AFTER_COMMIT, null);
     }
 
+    /** @return 加入当前事务 Outbox 的策略 */
     @CheckReturnValue
     public static @NotNull DispatchPolicy outbox() {
         return new DispatchPolicy(Mode.OUTBOX, null);
     }
 
+    /** @param notBefore 最早允许发布的时间 @return 带最早发布时间的 Outbox 策略 */
     @CheckReturnValue
     public static @NotNull DispatchPolicy outboxNotBefore(@NotNull Instant notBefore) {
         return new DispatchPolicy(Mode.OUTBOX, Objects.requireNonNull(notBefore, "最早发布时间不能为空"));
     }
 
+    /** @return 当前分发模式 */
     public @NotNull Mode mode() {
         return mode;
     }
 
+    /** @return Outbox 消息最早发布时间；其他模式返回空 */
     public @Nullable Instant notBefore() {
         return notBefore;
     }

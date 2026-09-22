@@ -73,7 +73,7 @@ public final class PageRequest {
      */
     @CheckReturnValue
     @Contract(value = "_ -> this", pure = true)
-    public @NotNull PageRequest requireMaxSize(int maxSize) {
+    public @NotNull PageRequest verifyMaxSize(int maxSize) {
         if (maxSize < 1 || size > maxSize) {
             throw new IllegalArgumentException("每页数量超过允许的最大值");
         }

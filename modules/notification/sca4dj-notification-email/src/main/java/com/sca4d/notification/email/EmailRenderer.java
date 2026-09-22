@@ -40,7 +40,6 @@ public final class EmailRenderer implements Renderer<EmailTemplateSource, Render
             @NotNull EmailTemplateSource source,
             @NotNull Locale locale,
             @NotNull Map<String, String> variables) {
-        TemplateInspection inspection = inspect(source);
         String subject = replace(source.subject(), variables, false)
                 .replace('\r', ' ')
                 .replace('\n', ' ')

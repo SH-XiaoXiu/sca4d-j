@@ -21,7 +21,7 @@ public class PlatformAclRepository implements AclRepository {
     public static final @NotNull DomainScope PLATFORM = new DomainScope("PLATFORM");
 
     /** 内置 Platform ACL 示例认领的资源类型。 */
-    public static final @NotNull String RESOURCE_TYPE = "platform-resource";
+    public static final @NotNull String RESOURCE_TYPE = "IAM/PLATFORM_RESOURCE";
 
     private final @NotNull PlatformAclMapper mapper;
 

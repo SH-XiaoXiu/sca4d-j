@@ -11,6 +11,7 @@ import com.sca4d.core.api.data.DataKey;
 import com.sca4d.core.api.data.DataValues;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.i18n.MessageText;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.Device;
@@ -87,7 +88,7 @@ class DeviceCommandServiceTest {
     @Test
     void submitsTypedCommandUsingBoundThingModel() {
         prepareDevice();
-        when(ids.nextId().value()).thenReturn(91L);
+        when(ids.nextId()).thenReturn(Id.of(91L));
         Duration timeout = Duration.ofSeconds(30);
 
         DeviceDownlink result = service.submit(

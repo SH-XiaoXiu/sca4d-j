@@ -344,7 +344,7 @@ public class RbacService {
         LinkedHashSet<Long> matched = new LinkedHashSet<>();
         for (Long principalId : checkedQuery.principalIds()) {
             List<Operation> principalOperations = granted.getOrDefault(principalId, List.of());
-            boolean accepted = checkedQuery.requiresAll()
+            boolean accepted = checkedQuery.matchesAll()
                     ? new HashSet<>(principalOperations).containsAll(requiredOperations)
                     : requiredOperations.stream().anyMatch(principalOperations::contains);
             if (accepted) {

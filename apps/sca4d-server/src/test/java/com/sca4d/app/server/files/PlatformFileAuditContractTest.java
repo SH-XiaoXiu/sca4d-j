@@ -134,7 +134,7 @@ class PlatformFileAuditContractTest {
                     assertThat(permission.action()).isEqualTo(Action.WRITE);
                 });
         assertThat(records).singleElement().satisfies(record -> {
-            assertThat(record.operation().id()).isEqualTo("storage/file/upload/create");
+            assertThat(record.operation().id()).isEqualTo("STORAGE/FILE/UPLOAD/CREATE");
             assertThat(record.target()).hasValueSatisfying(targetResource -> {
                 assertThat(targetResource.type()).isEqualTo(PlatformUserProfile.RESOURCE_TYPE);
                 assertThat(targetResource.id()).isEqualTo(Long.toString(principalId));
@@ -175,7 +175,7 @@ class PlatformFileAuditContractTest {
                     assertThat(permission.action()).isEqualTo(Action.WRITE);
                 });
         assertThat(records).singleElement().satisfies(record -> {
-            assertThat(record.operation().id()).isEqualTo("storage/file/upload/complete");
+            assertThat(record.operation().id()).isEqualTo("STORAGE/FILE/UPLOAD/COMPLETE");
             assertThat(record.target()).hasValueSatisfying(targetResource -> {
                 assertThat(targetResource.type()).isEqualTo(StoredFile.RESOURCE_TYPE);
                 assertThat(targetResource.id()).isEqualTo(Long.toString(fileId));

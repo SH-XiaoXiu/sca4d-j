@@ -18,6 +18,7 @@ public final class EmailTemplateState {
 
     private final @NotNull Version version;
 
+    /** 创建当前对象。 */
     public EmailTemplateState(
             long templateId,
             @NotNull NotificationCode code,
@@ -31,22 +32,27 @@ public final class EmailTemplateState {
         this.version = Objects.requireNonNull(version, "Email 模板版本不能为空");
     }
 
+    /** 执行 templateId 方法表示的业务操作。 */
     public long templateId() {
         return templateId;
     }
 
+    /** 返回 code 方法提供的结果。 */
     public @NotNull NotificationCode code() {
         return code;
     }
 
+    /** 执行 localesJson 方法表示的业务操作。 */
     public @NotNull String localesJson() {
         return localesJson;
     }
 
+    /** 执行 enabled 方法表示的业务操作。 */
     public boolean enabled() {
         return enabled;
     }
 
+    /** 返回 version 方法提供的结果。 */
     public @NotNull Version version() {
         return version;
     }

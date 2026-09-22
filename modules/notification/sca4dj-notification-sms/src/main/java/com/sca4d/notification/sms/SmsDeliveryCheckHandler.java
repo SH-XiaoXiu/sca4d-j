@@ -16,6 +16,7 @@ public final class SmsDeliveryCheckHandler implements MessageHandler<SmsDelivery
 
     private final @NotNull SmsDeliveryCheckCodec codec;
 
+    /** 创建当前对象。 */
     public SmsDeliveryCheckHandler(
             @NotNull SmsNotificationDelivery delivery,
             @NotNull SmsDeliveryCheckCodec codec) {
@@ -35,11 +36,13 @@ public final class SmsDeliveryCheckHandler implements MessageHandler<SmsDelivery
 
     @Override
     public @NotNull HandlingDecision handle(@NotNull IncomingMessage<SmsDeliveryCheck> incoming) {
-        DeliveryOutcome outcome = delivery.check(Objects.requireNonNull(incoming, "SMS 查询消息不能为空").message());
+        IncomingMessage<SmsDeliveryCheck> checked = Objects.requireNonNull(incoming, "SMS 查询消息不能为空");
+        DeliveryOutcome outcome = delivery.check(checked.message());
+        String failureCode = outcome.failureCode();
         return switch (outcome.status()) {
             case CONFIRMED, PENDING -> HandlingDecision.acknowledge();
             case REJECTED, RETRYABLE_FAILURE, UNKNOWN -> HandlingDecision.reject(
-                    outcome.failureCode() == null ? "SMS_DELIVERY_CHECK_FAILED" : outcome.failureCode());
+                    failureCode == null ? "SMS_DELIVERY_CHECK_FAILED" : failureCode);
         };
     }
 }

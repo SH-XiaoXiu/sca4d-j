@@ -40,14 +40,14 @@ class SessionContractTest {
         Subject subject = new Subject(10, SubjectType.HUMAN);
         Account account = new Account(20, subject.subjectId(), new RealmKey("test"));
         TestPrincipal principal = new TestPrincipal(30);
-        TestResource resource = new TestResource("operation", "platform.account.read");
+        TestResource resource = new TestResource("operation", "platform:account:read");
         Session session = session(subject, account, principal, List.of(resource));
 
         assertSame(subject, session.subject());
         assertSame(account, session.account());
         assertSame(principal, session.principalById(principal.principalId()));
         assertSame(resource, session.resources(principal.principalId()).getFirst());
-        assertTrue(session.grants(principal.principalId(), new TestResource("operation", "platform.account.read")));
+        assertTrue(session.grants(principal.principalId(), new TestResource("operation", "platform:account:read")));
     }
 
     @Test
@@ -123,7 +123,7 @@ class SessionContractTest {
                 List.of(principal),
                 List.of(),
                 authentications(account),
-                Map.of(principal.principalId(), List.of(new TestResource("operation", "project.read"))),
+                Map.of(principal.principalId(), List.of(new TestResource("operation", "project:read"))),
                 Map.of(
                         principal.principalId(),
                         List.of(new ResourceIdSet("project", List.of(1_927_273_629L, 1_927_273_630L)))),
@@ -131,14 +131,14 @@ class SessionContractTest {
                 NOW.plusSeconds(3600));
 
         assertTrue(session.grants(principal.principalId(), new TestResource("project", "1927273629")));
-        assertTrue(session.grants(principal.principalId(), new TestResource("operation", "project.read")));
+        assertTrue(session.grants(principal.principalId(), new TestResource("operation", "project:read")));
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new LongIdSet(List.of(3L, 2L, 3L)));
         Assertions.assertFalse(
                 session.grants(principal.principalId(), new TestResource("project", "01927273629")));
         Assertions.assertFalse(
-                session.grants(principal.principalId(), new TestResource("project", "project.read")));
+                session.grants(principal.principalId(), new TestResource("project", "project:read")));
         Assertions.assertFalse(
                 session.grants(principal.principalId(), new TestResource("other", "1927273629")));
     }

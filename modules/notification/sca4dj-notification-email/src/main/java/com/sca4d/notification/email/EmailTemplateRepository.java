@@ -47,20 +47,23 @@ public final class EmailTemplateRepository {
         this.json = Objects.requireNonNull(json, "ObjectMapper 不能为空");
     }
 
+    /** 执行 当前对象 方法表示的业务操作。 */
     @CheckReturnValue
     public @NotNull Optional<EmailTemplate> findEnabled(@NotNull NotificationCode code) {
         return mapper.select(null, Objects.requireNonNull(code, "通知编码不能为空"), true).stream().findFirst().map(this::map);
     }
 
+    /** 执行 当前对象 方法表示的业务操作。 */
     @CheckReturnValue
     public @NotNull Optional<EmailTemplate> find(long templateId) {
         return mapper.select(templateId, null, null).stream().findFirst().map(this::map);
     }
 
+    /** 执行 当前对象 方法表示的业务操作。 */
     @CheckReturnValue
     public @NotNull Page<EmailTemplate> page(@NotNull ListRequest request) {
         ListRequest checked = Objects.requireNonNull(request, "Email 模板列表要求不能为空");
-        var page = checked.getPage().requireMaxSize(100);
+        var page = checked.getPage().verifyMaxSize(100);
         for (SortOrder order : checked.getSort()) {
             if (!SORT_FIELDS.contains(order.getField())) {
                 throw new IllegalArgumentException("Email 模板列表包含不支持的排序字段: " + order.getField());
@@ -76,6 +79,7 @@ public final class EmailTemplateRepository {
         return new Page<>(items, page, total);
     }
 
+    /** 执行 add 方法表示的业务操作。 */
     public void add(
             long templateId,
             @NotNull NotificationCode code,
@@ -87,6 +91,7 @@ public final class EmailTemplateRepository {
         }
     }
 
+    /** 执行 replace 方法表示的业务操作。 */
     public void replace(
             long templateId,
             @NotNull NotificationCode code,
@@ -108,6 +113,7 @@ public final class EmailTemplateRepository {
         }
     }
 
+    /** 执行 setEnabled 方法表示的业务操作。 */
     public void setEnabled(long templateId, boolean enabled) {
         EmailTemplate current = require(templateId);
         VersionCondition condition = versions.resolve(current.version());
@@ -117,6 +123,7 @@ public final class EmailTemplateRepository {
                 "Email Template");
     }
 
+    /** 执行 delete 方法表示的业务操作。 */
     public void delete(long templateId) {
         EmailTemplate current = require(templateId);
         VersionCondition condition = versions.resolve(current.version());

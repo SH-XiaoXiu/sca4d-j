@@ -13,6 +13,7 @@ public final class HandlingPolicy {
 
     private final @NotNull Duration retryDelay;
 
+    /** 创建 Handler 技术失败后的重试策略。 */
     public HandlingPolicy(int maximumAttempts, @NotNull Duration retryDelay) {
         if (maximumAttempts < 1) {
             throw new IllegalArgumentException("消息处理最大尝试次数必须为正数");
@@ -25,15 +26,18 @@ public final class HandlingPolicy {
         this.retryDelay = checkedDelay;
     }
 
+    /** @return 不进行重试的处理策略 */
     @CheckReturnValue
     public static @NotNull HandlingPolicy noRetry() {
         return new HandlingPolicy(1, Duration.ZERO);
     }
 
+    /** @return 最大处理尝试次数 */
     public int maximumAttempts() {
         return maximumAttempts;
     }
 
+    /** @return 两次处理尝试之间的等待时间 */
     public @NotNull Duration retryDelay() {
         return retryDelay;
     }

@@ -74,7 +74,7 @@ public final class SessionTestFixture {
                                 NOW)),
                 Map.of(
                         principal.principalId(),
-                        List.of(new TestResource("operation", "platform.account.read", "resource-field"))),
+                        List.of(new TestResource("operation", "platform:account:read", "resource-field"))),
                 Map.of(),
                 NOW,
                 expiresAt);

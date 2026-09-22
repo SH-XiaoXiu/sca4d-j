@@ -102,7 +102,7 @@ public final class OpenApiRouteCatalog implements SmartInitializingSingleton {
         RequirePermission permission = AnnotatedElementUtils
                 .findMergedAnnotation(method, RequirePermission.class);
         if (permission == null
-                || !operation.value().equals(permission.operation())
+                || !operation.value().equals(new Operation(permission.operation()).value())
                 || permission.operation().isBlank()) {
             throw new IllegalStateException(
                     "OpenAPI 路由必须声明相同 Operation 的 @RequirePermission: " + method.toGenericString());

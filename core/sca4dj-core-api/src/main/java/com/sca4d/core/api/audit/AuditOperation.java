@@ -29,7 +29,7 @@ public final class AuditOperation implements Resource {
     /**
      * 校验并创建业务代码中新声明的层级审计操作。
      *
-     * @param value 使用小写字母、数字或连字符组成的层级操作键
+     * @param value 使用大写字母、数字或下划线组成的层级操作键
      * @return 已校验的审计操作
      * @throws NullPointerException value 为空时抛出
      * @throws IllegalArgumentException 操作键不符合层级命名规则时抛出

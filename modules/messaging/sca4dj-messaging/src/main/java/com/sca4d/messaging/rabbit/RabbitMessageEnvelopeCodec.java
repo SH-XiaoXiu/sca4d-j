@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -46,9 +47,10 @@ public final class RabbitMessageEnvelopeCodec {
 
     private final @NotNull MessageCodecRegistry codecs;
 
+    /** 创建当前对象。 */
     public RabbitMessageEnvelopeCodec(
             @NotNull ObjectMapper json,
-            @NotNull java.util.List<? extends @NotNull MessageHandler<?>> handlers) {
+            @NotNull List<? extends @NotNull MessageHandler<?>> handlers) {
         this.json = Objects.requireNonNull(json, "ObjectMapper 不能为空");
         this.codecs = new MessageCodecRegistry(handlers, json);
     }

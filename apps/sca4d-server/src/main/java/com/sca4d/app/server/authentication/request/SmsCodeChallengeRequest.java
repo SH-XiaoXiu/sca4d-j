@@ -15,13 +15,16 @@ public final class SmsCodeChallengeRequest {
     @PhoneNumber
     private @Nullable String phoneNumber;
 
+    /** 创建空的请求对象，供 JSON 绑定使用。 */
     public SmsCodeChallengeRequest() {
     }
 
+    /** @return 规范化前的 E.164 手机号 */
     public @NotNull String getPhoneNumber() {
         return Objects.requireNonNull(phoneNumber, "手机号不能为空");
     }
 
+    /** @param phoneNumber E.164 手机号 */
     public void setPhoneNumber(@Nullable String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }

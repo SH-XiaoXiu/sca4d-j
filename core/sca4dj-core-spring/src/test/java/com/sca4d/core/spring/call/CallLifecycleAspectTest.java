@@ -75,7 +75,7 @@ class CallLifecycleAspectTest {
         assertThat(result).isEqualTo("checked");
         assertThat(execution.getValue().requiredPermissions())
                 .extracting(RequirePermission::operation)
-                .containsExactly("project.read", "project.scope.read");
+                .containsExactly("project:read", "project:scope:read");
     }
 
     @Test
@@ -98,7 +98,7 @@ class CallLifecycleAspectTest {
         assertThat(result).isEqualTo("checked");
         assertThat(execution.getValue().requiredPermissions())
                 .extracting(RequirePermission::operation)
-                .containsExactly("project.manage", "project.scope.manage");
+                .containsExactly("project:manage", "project:scope:manage");
     }
 
     /** 声明 JDK 代理暴露的测试调用接口。 */
@@ -129,16 +129,16 @@ class CallLifecycleAspectTest {
     private static final class MethodPermissionService implements PermissionService {
 
         @Override
-        @RequirePermission(operation = "project.read")
-        @RequirePermission(operation = "project.scope.read")
+        @RequirePermission(operation = "project:read")
+        @RequirePermission(operation = "project:scope:read")
         public String invoke(String value) {
             return value;
         }
     }
 
     /** 在具体目标类型上声明两个权限要求。 */
-    @RequirePermission(operation = "project.manage")
-    @RequirePermission(operation = "project.scope.manage")
+    @RequirePermission(operation = "project:manage")
+    @RequirePermission(operation = "project:scope:manage")
     private static final class ClassPermissionService implements PermissionService {
 
         @Override

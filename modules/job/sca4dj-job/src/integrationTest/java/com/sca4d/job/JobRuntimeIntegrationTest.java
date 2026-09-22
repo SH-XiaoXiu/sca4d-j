@@ -101,7 +101,7 @@ class JobRuntimeIntegrationTest {
     void directJobRetriesAndReturnsPersistedResult() {
         AtomicInteger attempts = new AtomicInteger();
         DirectJob<String, String> job = new DirectJob<>() {
-            private final JobKey key = new JobKey("test.direct.retry");
+            private final JobKey key = new JobKey("TEST/DIRECT/RETRY");
 
             @Override
             public @NotNull JobKey key() {
@@ -158,7 +158,7 @@ class JobRuntimeIntegrationTest {
     void waitTimeoutDoesNotCancelPersistedRun() {
         CountDownLatch release = new CountDownLatch(1);
         DirectJob<String, String> job = new DirectJob<>() {
-            private final JobKey key = new JobKey("test.direct.timeout");
+            private final JobKey key = new JobKey("TEST/DIRECT/TIMEOUT");
 
             @Override
             public @NotNull JobKey key() {
@@ -265,7 +265,7 @@ class JobRuntimeIntegrationTest {
             }
         });
         PipelineJob<String, String> job = new PipelineJob<>() {
-            private final JobKey key = new JobKey("test.pipeline.failure");
+            private final JobKey key = new JobKey("TEST/PIPELINE/FAILURE");
 
             @Override
             public @NotNull JobKey key() {
@@ -404,7 +404,7 @@ class JobRuntimeIntegrationTest {
             }
         });
         PipelineJob<String, String> job = new PipelineJob<>() {
-            private final JobKey key = new JobKey("test.pipeline.parallel");
+            private final JobKey key = new JobKey("TEST/PIPELINE/PARALLEL");
 
             @Override
             public @NotNull JobKey key() {
@@ -454,7 +454,7 @@ class JobRuntimeIntegrationTest {
     @Test
     void scheduledSubmissionDeduplicatesFireAndHonorsOverlapPolicy() {
         DirectJob<Void, Void> job = new DirectJob<>() {
-            private final JobKey key = new JobKey("test.scheduled");
+            private final JobKey key = new JobKey("TEST/SCHEDULED");
 
             @Override
             public @NotNull JobKey key() {
@@ -487,7 +487,7 @@ class JobRuntimeIntegrationTest {
             }
         };
         Runtime runtime = runtime(List.of(job));
-        ScheduleKey scheduleKey = new ScheduleKey("test.scheduled");
+        ScheduleKey scheduleKey = new ScheduleKey("TEST/SCHEDULED");
         Instant first = Instant.parse("2026-07-30T00:00:00Z");
         JobRunId firstRun = runtime.executor.submitScheduled(
                 job,
@@ -637,7 +637,7 @@ class JobRuntimeIntegrationTest {
 
             @Override
             public @NotNull JobKey key() {
-                return new JobKey("test.scheduled-history");
+                return new JobKey("TEST/SCHEDULED_HISTORY");
             }
 
             @Override
@@ -650,7 +650,7 @@ class JobRuntimeIntegrationTest {
                 return definition;
             }
         };
-        ScheduleKey scheduleKey = new ScheduleKey("test.history.schedule");
+        ScheduleKey scheduleKey = new ScheduleKey("TEST/HISTORY/SCHEDULE");
         Instant first = Instant.parse("2026-09-05T01:00:00Z");
         Instant second = first.plusSeconds(60);
         long failed = insertScheduledRun(
@@ -831,7 +831,7 @@ class JobRuntimeIntegrationTest {
                 jdbc.queryForObject(
                         "INSERT INTO job.job_run "
                                 + "(runtime_namespace, job_key, job_definition_version, job_kind, status, created_at, completed_at) "
-                                + "VALUES (?, 'test.history', 1, 'DIRECT', ?, ?, ?) RETURNING id",
+                                + "VALUES (?, 'TEST/HISTORY', 1, 'DIRECT', ?, ?, ?) RETURNING id",
                         Long.class,
                         namespace,
                         status,

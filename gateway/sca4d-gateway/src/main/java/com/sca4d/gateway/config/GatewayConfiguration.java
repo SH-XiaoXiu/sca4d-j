@@ -19,7 +19,7 @@ public class GatewayConfiguration {
      * @throws IllegalStateException Secret 或时长配置不合法时抛出
      */
     public GatewayConfiguration(@NotNull GatewayProperties properties) {
-        String secret = properties.requireSecret();
+        String secret = properties.validatedSecret();
         properties.setSecret(secret);
         properties.validate();
     }

@@ -9,9 +9,8 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
-import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.id.IdGenerator;
-import com.sca4d.core.api.messaging.MessageDelivery;
+import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.MessageId;
 import com.sca4d.core.spring.persistence.batch.SqlBatchProperties;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
@@ -19,7 +18,6 @@ import com.sca4d.core.spring.persistence.mybatis.CoreEnumTypeHandler;
 import com.sca4d.iot.api.message.DeviceDispatchMessage;
 import com.sca4d.iot.api.message.DeviceDownlinkKind;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
-import com.sca4d.iot.api.message.IotMessageTypes;
 import com.sca4d.iot.api.model.ThingModelRepository;
 import com.sca4d.iot.change.DeviceChangeNotifier;
 import com.sca4d.iot.device.DeviceRepository;
@@ -137,9 +135,9 @@ class DeviceCommandCancellationIntegrationTest {
                 null,
                 null,
                 "{}",
-                acknowledgement.code(),
+                acknowledgement.code().value(),
                 1000L,
-                retry.code(),
+                retry.code().value(),
                 null);
     }
 
@@ -207,18 +205,16 @@ class DeviceCommandCancellationIntegrationTest {
                 Clock.fixed(NOW, ZoneOffset.UTC),
                 changes,
                 lock,
-                transactions);
-        consumer.consume(
-                new MessageDelivery<>(
+                transactions,
+                new ObjectMapper());
+        consumer.handle(
+                new IncomingMessage<>(
                         new MessageId(31L),
-                        new Event<>(
-                                IotMessageTypes.DOWNLINK_DISPATCH,
-                                "dispatch-11",
-                                NOW,
-                                new DeviceDispatchMessage(11L, 1)),
+                        new DeviceDispatchMessage(11L, 1),
                         "test",
                         NOW,
-                        false));
+                        false,
+                        1));
         assertThat(repository.find(11L).orElseThrow().status()).isEqualTo(DeviceDownlinkStatus.CANCELLED);
         verifyNoInteractions(publisher);
     }

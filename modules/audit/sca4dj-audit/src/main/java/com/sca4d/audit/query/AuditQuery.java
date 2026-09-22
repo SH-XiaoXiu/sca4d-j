@@ -77,7 +77,7 @@ public final class AuditQuery {
         }
         this.occurredFrom = occurredFrom;
         this.occurredTo = occurredTo;
-        this.page = page.requireMaxSize(100);
+        this.page = page.verifyMaxSize(100);
     }
 
     /** @return 可选精确调用标识 */

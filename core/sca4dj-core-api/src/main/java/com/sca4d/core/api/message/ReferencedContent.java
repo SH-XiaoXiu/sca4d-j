@@ -11,15 +11,18 @@ public final class ReferencedContent implements ContentBody {
 
     private final @NotNull String key;
 
+    /** 创建外部内容引用。 */
     public ReferencedContent(@NotNull String scheme, @NotNull String key) {
         this.scheme = required(scheme, "内容引用 scheme");
         this.key = required(key, "内容引用标识");
     }
 
+    /** @return 解析引用所使用的 scheme */
     public @NotNull String scheme() {
         return scheme;
     }
 
+    /** @return scheme 内的外部内容标识 */
     public @NotNull String key() {
         return key;
     }

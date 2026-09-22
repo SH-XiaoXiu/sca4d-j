@@ -124,6 +124,9 @@ public class JobRepository {
     public void saveNodeResult(@NotNull NodeClaim result, @NotNull String workerId) {
         NodeClaim checked = Objects.requireNonNull(result, "Job 节点尝试结果不能为空");
         boolean succeeded = checked.attemptStatus() == JobAttemptStatus.SUCCEEDED;
+        String outputJson = checked.outputJson();
+        String error = checked.error();
+        Instant availableAt = checked.availableAt();
         AffectedRowCounts.requireSingle(
                 mapper.updateNodeProgress(
                         checked.nodeId(),
@@ -132,10 +135,10 @@ public class JobRepository {
                         Patch.set(checked.resultStatus()),
                         Patch.set(checked.attemptStatus()),
                         succeeded
-                                ? checked.outputJson() == null ? Patch.clear() : Patch.set(checked.outputJson())
+                                ? outputJson == null ? Patch.clear() : Patch.set(outputJson)
                                 : Patch.ignore(),
-                        checked.error() == null ? Patch.ignore() : Patch.set(checked.error()),
-                        checked.availableAt() == null ? Patch.ignore() : Patch.set(checked.availableAt()),
+                        error == null ? Patch.ignore() : Patch.set(error),
+                        availableAt == null ? Patch.ignore() : Patch.set(availableAt),
                         checked.resultStatus() == JobNodeStatus.SUCCEEDED
                                 ? Patch.set(checked.completedAt())
                                 : Patch.ignore(),

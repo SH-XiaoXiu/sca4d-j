@@ -111,8 +111,8 @@ class PermissionScopeTest {
     @Test
     @DisplayName("Uses Session Snapshot Only For Operation Policy")
     void usesSessionSnapshotOnlyForOperationPolicy() {
-        Permission allowed = new Permission(new Operation("device.read"), Action.INVOKE);
-        Permission denied = new Permission(new Operation("device.update"), Action.INVOKE);
+        Permission allowed = new Permission(new Operation("device:read"), Action.INVOKE);
+        Permission denied = new Permission(new Operation("device:update"), Action.INVOKE);
         Call call = userCall(Set.of((Operation) allowed.resource()));
         SessionOperationPermissionPolicy policy = new SessionOperationPermissionPolicy();
 

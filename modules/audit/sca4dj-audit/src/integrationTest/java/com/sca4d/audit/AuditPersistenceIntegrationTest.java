@@ -13,6 +13,7 @@ import com.sca4d.core.api.audit.AuditRecord;
 import com.sca4d.core.api.audit.AuditRecorder;
 import com.sca4d.core.api.audit.AuditResult;
 import com.sca4d.core.api.audit.HttpCall;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
@@ -167,7 +168,7 @@ class AuditPersistenceIntegrationTest {
                 "request-" + fileId,
                 new AuditActor(11L, 21L, principalId),
                 new AuditOperation(operation),
-                new ResourceReference("file", fileId),
+                new ResourceReference("STORAGE/FILE", fileId),
                 result,
                 new RawPayload(Map.of("reason", "test")),
                 new HttpCall("POST", "/files/" + fileId + "?token=secret", "127.0.0.1", "test\r\n client"),
@@ -202,7 +203,7 @@ class AuditPersistenceIntegrationTest {
         @Bean
         IdGenerator idGenerator() {
             AtomicLong ids = new AtomicLong(1000L);
-            return ids::incrementAndGet;
+            return () -> Id.of(ids.incrementAndGet());
         }
     }
 }

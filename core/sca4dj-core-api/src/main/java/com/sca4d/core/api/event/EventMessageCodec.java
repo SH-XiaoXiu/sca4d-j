@@ -19,6 +19,7 @@ public final class EventMessageCodec<T> implements MessageCodec<Event<T>> {
 
     private final @NotNull ObjectMapper json;
 
+    /** 创建指定事件类型的 JSON 编解码器。 */
     public EventMessageCodec(@NotNull EventType<T> type, @NotNull ObjectMapper json) {
         this.type = Objects.requireNonNull(type, "EventType 不能为空");
         this.json = Objects.requireNonNull(json, "ObjectMapper 不能为空");

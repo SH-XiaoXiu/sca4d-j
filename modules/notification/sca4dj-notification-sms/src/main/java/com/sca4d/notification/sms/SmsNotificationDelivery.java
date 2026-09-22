@@ -2,6 +2,7 @@ package com.sca4d.notification.sms;
 
 import com.sca4d.core.api.delivery.DeliveryOutcome;
 import com.sca4d.core.api.messaging.DispatchPolicy;
+import com.sca4d.core.api.messaging.DispatchReceipt;
 import com.sca4d.core.api.messaging.HandlingPolicy;
 import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageId;
@@ -13,6 +14,7 @@ import com.sca4d.core.api.region.RegionCatalog;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.nio.charset.StandardCharsets;
@@ -66,7 +68,7 @@ public final class SmsNotificationDelivery implements NotificationDelivery {
             @NotNull List<@NotNull SmsProviderClient> transports,
             @NotNull Clock clock,
             @NotNull MessageBus messages,
-            @NotNull org.springframework.transaction.PlatformTransactionManager transactionManager) {
+            @NotNull PlatformTransactionManager transactionManager) {
         this.recipients = Objects.requireNonNull(recipients, "SMS 接收人解析器不能为空");
         this.regions = Objects.requireNonNull(regions, "RegionCatalog 不能为空");
         this.routes = Objects.requireNonNull(routes, "SMS 路由解析器不能为空");
@@ -231,13 +233,15 @@ public final class SmsNotificationDelivery implements NotificationDelivery {
         if (result.status() == SmsDeliveryStatus.ACCEPTED
                 || result.status() == SmsDeliveryStatus.PENDING
                 || result.status() == SmsDeliveryStatus.UNKNOWN) {
+            String requestId = result.requestId() == null ? checked.requestId() : result.requestId();
+            String bizId = result.bizId() == null ? checked.bizId() : result.bizId();
             scheduleCheck(
                     new SmsDeliveryCheck(
                             notification,
                             checked.messageId(),
                             provider.providerId(),
-                            result.requestId() == null ? checked.requestId() : result.requestId(),
-                            result.bizId() == null ? checked.bizId() : result.bizId(),
+                            requestId,
+                            bizId,
                             checked.attempt() + 1));
             return DeliveryOutcome.pending(clock.instant().plus(CHECK_DELAY), result.requestId());
         }
@@ -247,9 +251,15 @@ public final class SmsNotificationDelivery implements NotificationDelivery {
 
     private void scheduleCheck(@NotNull SmsDeliveryCheck check) {
         transactions.executeWithoutResult(
-                status -> messages.dispatch(
-                        check,
-                        DispatchPolicy.outboxNotBefore(clock.instant().plus(CHECK_DELAY))));
+                status -> {
+                    DispatchReceipt receipt = messages.dispatch(
+                            check,
+                            DispatchPolicy.outboxNotBefore(clock.instant().plus(CHECK_DELAY)));
+                    LOG.trace(
+                            "SMS 投递查询已登记 | messageId={} dispatchStatus={}",
+                            check.messageId(),
+                            receipt.status());
+                });
     }
 
     /** 使用类型化通知事实取得具体应用声明的 SMS 路由。 */

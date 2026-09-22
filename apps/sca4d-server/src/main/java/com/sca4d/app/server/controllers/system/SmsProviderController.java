@@ -44,6 +44,7 @@ public final class SmsProviderController {
 
     private final SmsConfigurationService sms;
 
+    /** 创建 SMS Provider 管理控制器。 */
     public SmsProviderController(@NotNull SmsConfigurationService sms) {
         this.sms = Objects.requireNonNull(sms, "SMS 配置服务不能为空");
     }

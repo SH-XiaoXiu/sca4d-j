@@ -9,6 +9,7 @@ import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.IdempotencyFingerprints;
 import com.sca4d.core.api.concurrent.IdempotencyStore;
 import com.sca4d.core.api.concurrent.RateLimiter;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.permission.OperationCatalog;
 import com.sca4d.core.api.permission.OperationModule;
@@ -151,14 +152,14 @@ class CoreSpringAutoConfigurationTest {
                     assertThat(context).hasNotFailed();
                     assertThat(context.getBean(OperationCatalog.class).actions())
                             .extracting(OperationNode.OperationAction::code)
-                            .containsExactly("platform:roles:read");
+                            .containsExactly("PLATFORM:ROLES:READ");
                 });
     }
 
     @Test
     @DisplayName("Keeps Application ID Generator")
     void keepsApplicationIdGenerator() {
-        IdGenerator applicationGenerator = () -> 42L;
+        IdGenerator applicationGenerator = () -> Id.of(42L);
 
         contextRunner
                 .withBean(IdGenerator.class, () -> applicationGenerator)

@@ -328,9 +328,10 @@ public class IdentityService {
     @CheckReturnValue
     public @NotNull @Unmodifiable Set<Long> findPrincipalIds(@NotNull PrincipalQuery query) {
         PrincipalQuery checked = Objects.requireNonNull(query, "Principal 查询不能为空");
-        PrincipalType type = checked.type() == null
-                ? null
-                : principalTypes.principalType(checked.type());
+        PrincipalType type = null;
+        if (checked.type() != null) {
+            type = principalTypes.principalType(checked.type());
+        }
         Set<Long> matched = repository.findPrincipalIds(
                 checked.principalIds(),
                 type,

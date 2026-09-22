@@ -4,17 +4,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.OptimisticLockException;
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.concurrent.VersionConditions;
 import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.event.EventType;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageConsumer;
 import com.sca4d.core.api.messaging.MessageDelivery;
 import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
 import com.sca4d.core.api.scheduling.JobSchedule;
 import com.sca4d.core.spring.config.CoreJacksonAutoConfiguration;
@@ -79,7 +82,7 @@ import javax.sql.DataSource;
 })
 class MessagingInfrastructureIntegrationTest {
 
-    private static final String EVENT_CODE = "invoice.created";
+    private static final TreeCode EVENT_CODE = TreeCode.of("INVOICE/CREATED");
 
     private static final EventType<Map> EVENT_TYPE = new EventType<>(EVENT_CODE, 1, Map.class);
 
@@ -184,7 +187,7 @@ class MessagingInfrastructureIntegrationTest {
     void publisherConfirmRequiresRouteAndEachConsumerReceivesCopy() throws InterruptedException {
         assertThat(rabbit.isMandatoryFor(MessageBuilder.withBody(new byte[0]).build())).isFalse();
 
-        MessageId messageId = publisher.publishNow(message());
+        MessageId messageId = publisher.dispatch(message(), DispatchPolicy.immediate()).messageId();
 
         assertThat(primaryConsumer.receivedMessage()).isEqualTo(messageId);
         assertThat(copyConsumer.receivedMessage()).isEqualTo(messageId);
@@ -200,12 +203,13 @@ class MessagingInfrastructureIntegrationTest {
         assertThat(failureConsumer.attempts).hasValue(1);
 
         assertThatThrownBy(() -> {
-            MessageId unexpected = publisher.publishNow(
+            MessageId unexpected = publisher.dispatch(
                     new Event<>(
-                            new EventType<>("invoice.unrouted", 1, Map.class),
+                            new EventType<>(TreeCode.of("INVOICE/UNROUTED"), 1, Map.class),
                             "invoice:42",
                             Instant.now(),
-                            Map.of("invoiceId", 42)));
+                            Map.of("invoiceId", 42)),
+                    DispatchPolicy.immediate()).messageId();
             assertThat(unexpected).isNotNull();
         })
                 .isInstanceOf(IllegalStateException.class)
@@ -216,7 +220,8 @@ class MessagingInfrastructureIntegrationTest {
     @DisplayName("AMQP Message Id Must Match The Envelope")
     void amqpMessageIdMustMatchEnvelope() throws InterruptedException {
         MessageId envelopeMessageId = Objects.requireNonNull(
-                transactions.execute(status -> publisher.publishReliably(message())));
+                transactions.execute(
+                        status -> publisher.dispatch(message(), DispatchPolicy.outbox()).messageId()));
         byte[] envelope = jdbc.queryForObject(
                 "SELECT envelope FROM messaging_outbox WHERE message_id = ?",
                 byte[].class,
@@ -239,12 +244,13 @@ class MessagingInfrastructureIntegrationTest {
     @Test
     @DisplayName("Outbox Follows Transaction Delay Lease And Retention Rules")
     void outboxFollowsTransactionDelayLeaseAndRetentionRules() {
-        MessageId committed = transactions.execute(status -> publisher.publishReliably(message()));
+        MessageId committed = transactions.execute(
+                status -> publisher.dispatch(message(), DispatchPolicy.outbox()).messageId());
         assertThat(committed).isNotNull();
         assertThat(status(committed)).isEqualTo(OutboxStatus.PENDING);
 
         assertThatThrownBy(() -> transactions.executeWithoutResult(status -> {
-            MessageId rolledBack = publisher.publishReliably(message());
+            MessageId rolledBack = publisher.dispatch(message(), DispatchPolicy.outbox()).messageId();
             assertThat(rolledBack).isNotNull();
             throw new IllegalStateException("rollback");
         }))
@@ -258,12 +264,13 @@ class MessagingInfrastructureIntegrationTest {
 
         Instant delayedUntil = Instant.now().plus(Duration.ofHours(1));
         MessageId delayed = transactions.execute(
-                status -> publisher.publishReliably(message(), delayedUntil));
+                status -> publisher.dispatch(message(), DispatchPolicy.outboxNotBefore(delayedUntil)).messageId());
         assertThat(delayed).isNotNull();
         dispatcher.dispatch();
         assertThat(status(delayed)).isEqualTo(OutboxStatus.PENDING);
 
-        MessageId takeover = transactions.execute(status -> publisher.publishReliably(message()));
+        MessageId takeover = transactions.execute(
+                status -> publisher.dispatch(message(), DispatchPolicy.outbox()).messageId());
         assertThat(takeover).isNotNull();
         transactions.executeWithoutResult(
                 status -> assertThat(
@@ -320,7 +327,8 @@ class MessagingInfrastructureIntegrationTest {
                     assertThat(exception.messageArguments()).containsExactly("Outbox 消息派发结果");
                 });
 
-        MessageId id = transactions.execute(status -> publisher.publishReliably(message()));
+        MessageId id = transactions.execute(
+                status -> publisher.dispatch(message(), DispatchPolicy.outbox()).messageId());
         Instant now = Instant.now().plusSeconds(1);
         OutboxClaim first = transactions
                 .execute(status -> outbox.claim(now, 1, "first", now.plusSeconds(10)).getFirst());
@@ -456,7 +464,7 @@ class MessagingInfrastructureIntegrationTest {
         @Bean
         IdGenerator idGenerator() {
             AtomicLong ids = new AtomicLong(10_000);
-            return ids::incrementAndGet;
+            return () -> Id.of(ids.incrementAndGet());
         }
 
         @Bean

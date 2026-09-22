@@ -14,6 +14,7 @@ import static org.mockito.Mockito.when;
 
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.OperationCatalog;
@@ -110,7 +111,7 @@ class RbacServiceTest {
                 new RbacSessionInvalidationRegistry(List.of(invalidation)),
                 new PermissionSelectionRegistry(operationCatalog, List.of(operationModule)),
                 permissionCache,
-                () -> 30);
+                () -> Id.of(30L));
     }
 
     @Test
@@ -146,7 +147,7 @@ class RbacServiceTest {
 
         assertThat(rbac.findGrantedOperations(PLATFORM, List.of(PRINCIPAL_ID)).get(PRINCIPAL_ID))
                 .extracting(Operation::value)
-                .containsExactly("test:items:manage", "test:items:read");
+                .containsExactly("TEST:ITEMS:MANAGE", "TEST:ITEMS:READ");
         verify(permissionCache).put(any(RbacPermissionCacheLookup.class), ArgumentMatchers.eq(loaded));
         assertThat(customCode.code()).isNotEqualTo(PlatformRbacService.ROOT);
     }
@@ -161,7 +162,7 @@ class RbacServiceTest {
                 List.of(SECOND_PRINCIPAL_ID));
         Map<RbacScope, Map<Long, List<PermissionSelector>>> loaded = Map.of(
                 PROJECT_A,
-                Map.of(PRINCIPAL_ID, List.of(new PermissionSelector("test:items:read"))),
+                Map.of(PRINCIPAL_ID, List.of(new PermissionSelector("TEST:ITEMS:READ"))),
                 PROJECT_B,
                 Map.of(SECOND_PRINCIPAL_ID, List.of()));
         when(repository.findActivePermissionSelectors(request)).thenReturn(loaded);
@@ -170,7 +171,7 @@ class RbacServiceTest {
 
         assertThat(result.get(PROJECT_A).get(PRINCIPAL_ID))
                 .extracting(Operation::value)
-                .containsExactly("test:items:read");
+                .containsExactly("TEST:ITEMS:READ");
         assertThat(result.get(PROJECT_B).get(SECOND_PRINCIPAL_ID)).isEmpty();
         verify(repository).findActivePermissionSelectors(request);
         verify(permissionCache).put(any(RbacPermissionCacheLookup.class), ArgumentMatchers.eq(loaded));
@@ -185,7 +186,7 @@ class RbacServiceTest {
                                 PROJECT_A,
                                 Map.of(
                                         PRINCIPAL_ID,
-                                        List.of(new PermissionSelector("test:items:read")))),
+                                        List.of(new PermissionSelector("TEST:ITEMS:READ")))),
                         Map.of(
                                 PROJECT_A,
                                 Map.of(PRINCIPAL_ID, 4L, SECOND_PRINCIPAL_ID, 7L))))
@@ -203,7 +204,7 @@ class RbacServiceTest {
 
         assertThat(result.get(PRINCIPAL_ID))
                 .extracting(Operation::value)
-                .containsExactly("test:items:read");
+                .containsExactly("TEST:ITEMS:READ");
         assertThat(result.get(SECOND_PRINCIPAL_ID)).isEmpty();
         verify(repository).findActivePermissionSelectors(missing);
         verify(permissionCache).put(any(RbacPermissionCacheLookup.class), ArgumentMatchers.eq(loaded));
@@ -220,24 +221,24 @@ class RbacServiceTest {
                 Map.of(
                         PRINCIPAL_ID,
                         List.of(
-                                new PermissionSelector("test:items:read"),
-                                new PermissionSelector("test:items:manage")),
+                                new PermissionSelector("TEST:ITEMS:READ"),
+                                new PermissionSelector("TEST:ITEMS:MANAGE")),
                         SECOND_PRINCIPAL_ID,
-                        List.of(new PermissionSelector("test:items:read"))));
+                        List.of(new PermissionSelector("TEST:ITEMS:READ"))));
         when(repository.findActivePermissionSelectors(request)).thenReturn(loaded);
 
         assertThat(
                 rbac.findPrincipalIds(
                         PLATFORM,
                         PrincipalGrantQuery.forIds(List.of(PRINCIPAL_ID, SECOND_PRINCIPAL_ID))
-                                .requireAll("test:items:read", "test:items:manage")
+                                .allOf("TEST:ITEMS:READ", "TEST:ITEMS:MANAGE")
                                 .build()))
                 .containsExactly(PRINCIPAL_ID);
         assertThat(
                 rbac.findPrincipalIds(
                         PLATFORM,
                         PrincipalGrantQuery.forIds(List.of(PRINCIPAL_ID, SECOND_PRINCIPAL_ID))
-                                .requireAny("test:items:manage")
+                                .anyOf("TEST:ITEMS:MANAGE")
                                 .build()))
                 .containsExactly(PRINCIPAL_ID);
     }
@@ -249,7 +250,7 @@ class RbacServiceTest {
                 () -> rbac.findPrincipalIds(
                         PLATFORM,
                         PrincipalGrantQuery.forIds(List.of(PRINCIPAL_ID))
-                                .requireAll("other:items:read")
+                                .allOf("other:items:read")
                                 .build()),
                 RbacErrorCode.OPERATION_INVALID);
 
@@ -315,7 +316,7 @@ class RbacServiceTest {
                         exception -> assertThat(exception.errorCode())
                                 .isEqualTo(RbacErrorCode.BUILT_IN_ROLE_PROTECTED));
         assertBusinessFailure(
-                () -> rbac.replaceRolePermissions(PLATFORM, ROOT_ID, List.of("test:items:read")),
+                () -> rbac.replaceRolePermissions(PLATFORM, ROOT_ID, List.of("TEST:ITEMS:READ")),
                 RbacErrorCode.BUILT_IN_ROLE_PROTECTED);
     }
 
@@ -330,15 +331,15 @@ class RbacServiceTest {
                 repository.replacePermissionSelectors(
                         PLATFORM,
                         DEFAULT_ID,
-                        List.of(new PermissionSelector("test:items:read"))))
+                        List.of(new PermissionSelector("TEST:ITEMS:READ"))))
                 .thenReturn(updated);
         when(repository.findRolePrincipalIds(PLATFORM, DEFAULT_ID)).thenReturn(List.of(PRINCIPAL_ID));
 
         assertThat(
-                rbac.replaceRolePermissions(PLATFORM, DEFAULT_ID, List.of("test:items:read"))
+                rbac.replaceRolePermissions(PLATFORM, DEFAULT_ID, List.of("TEST:ITEMS:READ"))
                         .operations())
                 .extracting(Operation::value)
-                .containsExactly("test:items:read");
+                .containsExactly("TEST:ITEMS:READ");
         verify(permissionCache).evict(Map.of(PLATFORM, List.of(PRINCIPAL_ID)));
         verify(invalidation).invalidate(PLATFORM, List.of(PRINCIPAL_ID));
     }

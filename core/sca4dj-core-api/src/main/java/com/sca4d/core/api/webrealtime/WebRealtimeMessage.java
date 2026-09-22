@@ -23,6 +23,7 @@ public final class WebRealtimeMessage extends Message {
 
     private final @NotNull Instant expiresAt;
 
+    /** 创建交给实时消息处理器的浏览器事件投递请求。 */
     public WebRealtimeMessage(
             @NotNull WebRealtimeTarget target,
             @NotNull Event<?> browserEvent,
@@ -47,18 +48,22 @@ public final class WebRealtimeMessage extends Message {
         return PROTOCOL_VERSION;
     }
 
+    /** @return 当前消息匹配的实时目标 */
     public @NotNull WebRealtimeTarget target() {
         return target;
     }
 
+    /** @return 要发送给浏览器的业务事件 */
     public @NotNull Event<?> browserEvent() {
         return browserEvent;
     }
 
+    /** @return 写出事件后是否关闭连接 */
     public boolean closeAfter() {
         return closeAfter;
     }
 
+    /** @return 消息失效时间 */
     public @NotNull Instant expiresAt() {
         return expiresAt;
     }

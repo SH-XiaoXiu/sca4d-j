@@ -25,7 +25,7 @@ class ExtensionContractTest {
         PrincipalResolver<PlatformOperator> resolver = principalId -> operator.principalId() == principalId
                 ? Optional.of(operator)
                 : Optional.empty();
-        Operation readAccount = new Operation("platform.account.read");
+        Operation readAccount = new Operation("platform:account:read");
         ResourceLoader loader = principals -> Map.of(operator.principalId(), Set.of(readAccount));
 
         Principal resolved = resolver.resolve(operator.principalId()).orElseThrow();

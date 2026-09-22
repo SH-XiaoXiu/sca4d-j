@@ -1,5 +1,6 @@
 package com.sca4d.notification.sms;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.VersionCondition;
@@ -104,7 +105,7 @@ public final class SmsRepository {
             @NotNull String type,
             @NotNull String credentialRef,
             int priority) {
-        SmsProvider current = requireProvider(providerId);
+        SmsProvider current = loadProvider(providerId);
         VersionCondition condition = versionConditions.resolve(current.version());
         try {
             AffectedRowCounts.requireSingle(
@@ -124,7 +125,7 @@ public final class SmsRepository {
 
     /** 按版本条件修改 Provider 启用状态。 */
     public void setProviderEnabled(long providerId, boolean enabled) {
-        SmsProvider current = requireProvider(providerId);
+        SmsProvider current = loadProvider(providerId);
         VersionCondition condition = versionConditions.resolve(current.version());
         AffectedRowCounts.requireSingle(
                 mapper.setProviderEnabled(providerId, enabled, condition.expected()),
@@ -134,7 +135,7 @@ public final class SmsRepository {
 
     /** 按版本条件逻辑删除停用且没有绑定的 Provider。 */
     public void deleteProvider(long providerId) {
-        SmsProvider current = requireProvider(providerId);
+        SmsProvider current = loadProvider(providerId);
         VersionCondition condition = versionConditions.resolve(current.version());
         AffectedRowCounts.requireSingle(
                 mapper.deleteProvider(providerId, condition.expected()),
@@ -176,7 +177,7 @@ public final class SmsRepository {
             @NotNull String signName,
             @NotNull String providerTemplateCode,
             @NotNull Map<String, String> parameterMapping) {
-        SmsProviderBinding current = requireBinding(bindingId);
+        SmsProviderBinding current = loadBinding(bindingId);
         VersionCondition condition = versionConditions.resolve(current.version());
         try {
             AffectedRowCounts.requireSingle(
@@ -198,7 +199,7 @@ public final class SmsRepository {
 
     /** 按版本条件修改绑定启用状态。 */
     public void setBindingEnabled(long bindingId, boolean enabled) {
-        SmsProviderBinding current = requireBinding(bindingId);
+        SmsProviderBinding current = loadBinding(bindingId);
         VersionCondition condition = versionConditions.resolve(current.version());
         AffectedRowCounts.requireSingle(
                 mapper.setBindingEnabled(bindingId, enabled, condition.expected()),
@@ -208,7 +209,7 @@ public final class SmsRepository {
 
     /** 按版本条件逻辑删除停用绑定。 */
     public void deleteBinding(long bindingId) {
-        SmsProviderBinding current = requireBinding(bindingId);
+        SmsProviderBinding current = loadBinding(bindingId);
         VersionCondition condition = versionConditions.resolve(current.version());
         AffectedRowCounts.requireSingle(
                 mapper.deleteBinding(bindingId, condition.expected()),
@@ -216,12 +217,12 @@ public final class SmsRepository {
                 "SMS Provider Binding");
     }
 
-    private @NotNull SmsProvider requireProvider(long providerId) {
+    private @NotNull SmsProvider loadProvider(long providerId) {
         return provider(providerId)
                 .orElseThrow(() -> new BusinessException(SmsNotificationErrorCode.PROVIDER_NOT_FOUND));
     }
 
-    private @NotNull SmsProviderBinding requireBinding(long bindingId) {
+    private @NotNull SmsProviderBinding loadBinding(long bindingId) {
         return binding(bindingId)
                 .orElseThrow(() -> new BusinessException(SmsNotificationErrorCode.BINDING_NOT_FOUND));
     }
@@ -254,7 +255,7 @@ public final class SmsRepository {
                     mapping,
                     state.enabled(),
                     state.version());
-        } catch (com.fasterxml.jackson.core.JsonProcessingException exception) {
+        } catch (JsonProcessingException exception) {
             throw new IllegalStateException("数据库中的 SMS 参数映射无法解析", exception);
         }
     }
@@ -263,7 +264,7 @@ public final class SmsRepository {
         try {
             return objectMapper.writeValueAsString(
                     Map.copyOf(Objects.requireNonNull(parameterMapping, "SMS 参数映射不能为空")));
-        } catch (com.fasterxml.jackson.core.JsonProcessingException exception) {
+        } catch (JsonProcessingException exception) {
             throw new IllegalArgumentException("SMS 参数映射无法编码", exception);
         }
     }

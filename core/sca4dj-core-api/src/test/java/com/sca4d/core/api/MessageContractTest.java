@@ -74,11 +74,11 @@ class MessageContractTest {
         assertEquals("SUBJECT:12", WebRealtimeTarget.subject(12).key());
         assertEquals("PRINCIPAL:13", WebRealtimeTarget.principal(13).key());
         assertEquals(
-                "RESOURCE:6:TENANT:2:14",
+                "RESOURCE:15:TENANT/RESOURCE:2:14",
                 WebRealtimeTarget.resource(new ResourceReference("TENANT/RESOURCE", "14")).key());
         assertNotEquals(
                 WebRealtimeTarget.resource(new ResourceReference("A/B", "c")).key(),
-                WebRealtimeTarget.resource(new ResourceReference("A", "b:c")).key());
+                WebRealtimeTarget.resource(new ResourceReference("A/OTHER", "b:c")).key());
         assertEquals("TOPIC:orders", WebRealtimeTarget.topic("orders").key());
         assertEquals("SESSION:session-15", WebRealtimeTarget.session(new SessionId("session-15")).key());
         assertEquals(

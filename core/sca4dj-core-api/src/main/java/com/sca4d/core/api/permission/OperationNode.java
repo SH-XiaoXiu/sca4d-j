@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -162,7 +163,7 @@ public abstract class OperationNode {
             @NotNull String value,
             @NotNull String name,
             boolean wildcardAllowed) {
-        String checked = TextUtils.requireText(value, name).toUpperCase(java.util.Locale.ROOT);
+        String checked = TextUtils.requireText(value, name).toUpperCase(Locale.ROOT);
         if (!SEGMENT.matcher(checked).matches() || !wildcardAllowed && "*".equals(checked)) {
             throw new IllegalArgumentException(name + "只能包含字母、数字和下划线: " + checked);
         }

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.messaging.MessageCodec;
+import com.sca4d.core.api.messaging.MessageId;
 import com.sca4d.notification.NotificationMessage;
 import com.sca4d.notification.NotificationMessageCodec;
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +21,7 @@ public final class SmsDeliveryCheckCodec implements MessageCodec<SmsDeliveryChec
 
     private final @NotNull NotificationMessageCodec notifications;
 
+    /** 创建当前对象。 */
     public SmsDeliveryCheckCodec(@NotNull ObjectMapper json) {
         this.json = Objects.requireNonNull(json, "ObjectMapper 不能为空");
         this.notifications = new NotificationMessageCodec(json);
@@ -77,7 +79,7 @@ public final class SmsDeliveryCheckCodec implements MessageCodec<SmsDeliveryChec
             JsonNode bizId = root.get("bizId");
             return new SmsDeliveryCheck(
                     message.notification(),
-                    new com.sca4d.core.api.messaging.MessageId(root.required("messageId").longValue()),
+                    new MessageId(root.required("messageId").longValue()),
                     root.required("providerId").longValue(),
                     requestId == null || requestId.isNull() ? null : requestId.textValue(),
                     bizId == null || bizId.isNull() ? null : bizId.textValue(),

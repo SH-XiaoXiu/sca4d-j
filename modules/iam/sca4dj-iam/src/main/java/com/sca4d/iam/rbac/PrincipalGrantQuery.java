@@ -18,16 +18,16 @@ public final class PrincipalGrantQuery {
 
     private final @NotNull @Unmodifiable List<@NotNull Operation> operations;
 
-    private final boolean requireAll;
+    private final boolean allOf;
 
     /** 保存 Builder 已校验的不可变授权查询。 */
     private PrincipalGrantQuery(
             @NotNull List<@NotNull Long> principalIds,
             @NotNull List<@NotNull Operation> operations,
-            boolean requireAll) {
+            boolean allOf) {
         this.principalIds = principalIds;
         this.operations = operations;
-        this.requireAll = requireAll;
+        this.allOf = allOf;
     }
 
     /**
@@ -60,8 +60,8 @@ public final class PrincipalGrantQuery {
 
     /** @return {@code true} 表示必须拥有全部 Operation，{@code false} 表示拥有任意一个即可 */
     @Contract(pure = true)
-    boolean requiresAll() {
-        return requireAll;
+    boolean matchesAll() {
+        return allOf;
     }
 
     /** 逐项声明 Principal 授权筛选条件。 */
@@ -71,7 +71,7 @@ public final class PrincipalGrantQuery {
 
         private List<Operation> operations;
 
-        private boolean requireAll;
+        private boolean allOf;
 
         /** 复制、校验并去重查询标识。 */
         private Builder(@NotNull Collection<@NotNull Long> principalIds) {
@@ -95,7 +95,7 @@ public final class PrincipalGrantQuery {
          * @throws IllegalStateException 已经声明任一匹配条件时抛出
          */
         @Contract(value = "_ -> this", mutates = "this")
-        public @NotNull Builder requireAll(@NotNull String... operationCodes) {
+        public @NotNull Builder allOf(@NotNull String... operationCodes) {
             setOperations(true, operationCodes);
             return this;
         }
@@ -108,7 +108,7 @@ public final class PrincipalGrantQuery {
          * @throws IllegalStateException 已经声明全部匹配条件时抛出
          */
         @Contract(value = "_ -> this", mutates = "this")
-        public @NotNull Builder requireAny(@NotNull String... operationCodes) {
+        public @NotNull Builder anyOf(@NotNull String... operationCodes) {
             setOperations(false, operationCodes);
             return this;
         }
@@ -120,7 +120,7 @@ public final class PrincipalGrantQuery {
             if (operations == null) {
                 throw new IllegalStateException("必须声明 Principal 需要的 Operation");
             }
-            return new PrincipalGrantQuery(principalIds, operations, requireAll);
+            return new PrincipalGrantQuery(principalIds, operations, allOf);
         }
 
         /** 校验并保存唯一一种 Operation 匹配方式。 */
@@ -137,7 +137,7 @@ public final class PrincipalGrantQuery {
                 unique.add(new Operation(code));
             }
             this.operations = List.copyOf(unique);
-            this.requireAll = all;
+            this.allOf = all;
         }
     }
 }

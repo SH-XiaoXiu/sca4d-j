@@ -19,22 +19,27 @@ public final class SmsCodeProofRequest {
     @Pattern(regexp = "\\d{6}")
     private @Nullable String code;
 
+    /** 创建空的请求对象，供 JSON 绑定使用。 */
     public SmsCodeProofRequest() {
     }
 
+    /** @return Challenge 标识 */
     public @NotNull SmsCodeChallengeId challengeId() {
         return new SmsCodeChallengeId(
                 Objects.requireNonNull(challengeId, "SMS Challenge 标识不能为空"));
     }
 
+    /** @param challengeId Challenge 标识 */
     public void setChallengeId(@Nullable String challengeId) {
         this.challengeId = challengeId;
     }
 
+    /** @return 六位验证码 */
     public @NotNull String getCode() {
         return Objects.requireNonNull(code, "SMS 验证码不能为空");
     }
 
+    /** @param code 六位验证码 */
     public void setCode(@Nullable String code) {
         this.code = code;
     }

@@ -87,7 +87,7 @@ public final class SmsCodeAuthenticationMethod implements AuthenticationMethod<S
 
     @Override
     public void verifyCurrent(@NotNull Account account, @NotNull VerifiedAuthentication authentication) {
-        challenges.requireConsumed(
+        challenges.verifyConsumed(
                 new SmsCodeChallengeId(authentication.reference()),
                 account.accountId(),
                 authentication.version());

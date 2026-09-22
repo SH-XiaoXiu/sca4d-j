@@ -48,7 +48,7 @@ public final class GatewayRegistrationController {
             @NotNull GatewayInstanceRegistry registry,
             @NotNull GatewayProperties properties) {
         this.registry = registry;
-        this.expectedSecret = properties.requireSecret().getBytes(StandardCharsets.UTF_8);
+        this.expectedSecret = properties.validatedSecret().getBytes(StandardCharsets.UTF_8);
     }
 
     /** @return 新租约 ID；注册失败或 Secret 错误时不会修改注册表 */
@@ -56,7 +56,7 @@ public final class GatewayRegistrationController {
     public @NotNull ResponseEntity<GatewayRegistrationResponse> register(
             @RequestHeader(name = GatewayHttpHeaders.SECRET, required = false) @Nullable String secret,
             @RequestBody @NotNull GatewayRegistrationRequest request) {
-        requireSecret(secret);
+        verifySecret(secret);
         GatewayInstance instance = registry.register(request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new GatewayRegistrationResponse(instance.leaseId()));
@@ -68,7 +68,7 @@ public final class GatewayRegistrationController {
             @RequestHeader(name = GatewayHttpHeaders.SECRET, required = false) @Nullable String secret,
             @PathVariable @NotNull String instanceId,
             @PathVariable @NotNull String leaseId) {
-        requireSecret(secret);
+        verifySecret(secret);
         return registry.renew(instanceId, leaseId)
                 ? ResponseEntity.noContent().build()
                 : ResponseEntity.notFound().build();
@@ -80,14 +80,14 @@ public final class GatewayRegistrationController {
             @RequestHeader(name = GatewayHttpHeaders.SECRET, required = false) @Nullable String secret,
             @PathVariable @NotNull String instanceId,
             @PathVariable @NotNull String leaseId) {
-        requireSecret(secret);
+        verifySecret(secret);
         return registry.remove(instanceId, leaseId)
                 ? ResponseEntity.noContent().build()
                 : ResponseEntity.notFound().build();
     }
 
     /** 使用固定时间字节比较验证控制 API Secret。 */
-    private void requireSecret(@Nullable String candidate) {
+    private void verifySecret(@Nullable String candidate) {
         byte[] actual = candidate == null ? new byte[0] : candidate.getBytes(StandardCharsets.UTF_8);
         if (!MessageDigest.isEqual(expectedSecret, actual)) {
             LOGGER.warn(

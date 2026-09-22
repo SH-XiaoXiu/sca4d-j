@@ -20,6 +20,7 @@ public final class JacksonMessageCodec<M extends Message> implements MessageCode
 
     private final @NotNull ObjectMapper json;
 
+    /** 创建使用指定 JSON 映射器的消息编解码器。 */
     public JacksonMessageCodec(
             @NotNull TreeCode code,
             int version,

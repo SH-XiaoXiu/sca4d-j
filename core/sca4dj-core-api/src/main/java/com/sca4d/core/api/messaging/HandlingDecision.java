@@ -19,30 +19,36 @@ public final class HandlingDecision {
 
     private final @Nullable String detail;
 
+    /** 创建消息处理决定。 */
     private HandlingDecision(@NotNull Status status, @Nullable String detail) {
         this.status = Objects.requireNonNull(status, "消息处理决定不能为空");
         this.detail = detail == null || detail.isBlank() ? null : detail.strip();
     }
 
+    /** @return 确认当前消息并结束处理 */
     @CheckReturnValue
     public static @NotNull HandlingDecision acknowledge() {
         return new HandlingDecision(Status.ACKNOWLEDGE, null);
     }
 
+    /** @param detail 再次处理原因 @return 要求基础设施再次处理当前消息 */
     @CheckReturnValue
     public static @NotNull HandlingDecision retry(@NotNull String detail) {
         return new HandlingDecision(Status.RETRY, detail);
     }
 
+    /** @param detail 拒绝原因 @return 拒绝当前消息 */
     @CheckReturnValue
     public static @NotNull HandlingDecision reject(@NotNull String detail) {
         return new HandlingDecision(Status.REJECT, detail);
     }
 
+    /** @return 处理决定状态 */
     public @NotNull Status status() {
         return status;
     }
 
+    /** @return 面向日志和重试记录的附加说明 */
     public @Nullable String detail() {
         return detail;
     }

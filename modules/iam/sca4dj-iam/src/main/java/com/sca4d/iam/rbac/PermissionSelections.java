@@ -10,7 +10,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
@@ -86,7 +88,7 @@ public final class PermissionSelections {
     /** @return 当前 RBAC 领域角色可以获得的全部具体 Operation */
     @Contract(pure = true)
     public @NotNull @Unmodifiable List<@NotNull Operation> operations() {
-        return allOperations;
+        return Collections.unmodifiableList(new ArrayList<>(allOperations));
     }
 
     /**

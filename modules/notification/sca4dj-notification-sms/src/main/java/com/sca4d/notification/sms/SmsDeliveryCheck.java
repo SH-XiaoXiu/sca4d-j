@@ -27,6 +27,7 @@ public final class SmsDeliveryCheck extends Message {
 
     private final int attempt;
 
+    /** 创建当前对象。 */
     public SmsDeliveryCheck(
             @NotNull Notification notification,
             @NotNull MessageId messageId,
@@ -45,26 +46,32 @@ public final class SmsDeliveryCheck extends Message {
         this.attempt = attempt;
     }
 
+    /** 执行 notification 方法表示的业务操作。 */
     public @NotNull Notification notification() {
         return notification;
     }
 
+    /** 返回 messageId 方法提供的结果。 */
     public @NotNull MessageId messageId() {
         return messageId;
     }
 
+    /** 执行 providerId 方法表示的业务操作。 */
     public long providerId() {
         return providerId;
     }
 
+    /** 执行 requestId 方法表示的业务操作。 */
     public @Nullable String requestId() {
         return requestId;
     }
 
+    /** 执行 bizId 方法表示的业务操作。 */
     public @Nullable String bizId() {
         return bizId;
     }
 
+    /** 返回 attempt 方法提供的结果。 */
     public int attempt() {
         return attempt;
     }

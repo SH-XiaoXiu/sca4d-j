@@ -202,7 +202,7 @@ class PipelineJobTest {
 
         @Override
         public @NotNull JobKey key() {
-            return new JobKey("test.pipeline");
+            return new JobKey("TEST/PIPELINE");
         }
 
         @Override

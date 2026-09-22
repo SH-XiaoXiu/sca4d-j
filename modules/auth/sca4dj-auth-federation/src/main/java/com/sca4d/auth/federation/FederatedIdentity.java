@@ -8,7 +8,7 @@ import java.util.Objects;
 public final class FederatedIdentity {
 
     /** 外部身份绑定接口和审计记录使用的资源类型。 */
-    public static final String RESOURCE_TYPE = "authentication:federated-identity";
+    public static final String RESOURCE_TYPE = "AUTH/FEDERATED_IDENTITY";
 
     private final long id;
 

@@ -48,7 +48,7 @@ public class GatewayRoutes {
                                     filters -> filters
                                             .filter(new LokiPushAuthenticationFilter(logging))
                                             .setPath("/loki/api/v1/push"))
-                            .uri(logging.requireLokiOrigin().toString()));
+                            .uri(logging.validatedLokiOrigin().toString()));
         }
         return routes
                 .route(

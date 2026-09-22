@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import com.sca4d.core.api.data.DataOps;
-import com.sca4d.core.api.pipeline.PipelineExecutionException;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.DeviceAccessMethod;
 import com.sca4d.iot.api.ProductBinding;
@@ -19,6 +18,8 @@ import com.sca4d.iot.api.state.ReportedStateUpdate;
 import com.sca4d.iot.emqx.connection.MqttDeviceConnection;
 import com.sca4d.iot.emqx.protocol.EncodedMqttMessage;
 import com.sca4d.iot.emqx.protocol.MqttDeviceProtocol;
+import com.sca4d.iot.emqx.transport.MqttMessageRejectedException;
+import com.sca4d.iot.emqx.transport.MqttMessageRejectionReason;
 import com.sca4d.iot.message.policy.DefaultCommandRetryPolicy;
 import com.sca4d.iot.message.policy.DefaultStateSyncRetryPolicy;
 import com.sca4d.iot.message.policy.DeviceResultAcknowledgementPolicy;
@@ -189,12 +190,12 @@ class ExampleDeviceProtocolTest {
     }
 
     @Test
-    @DisplayName("旧冷柜坏帧报告失败的 Core Pipeline 阶段")
+    @DisplayName("旧冷柜坏帧按 MQTT Payload 错误拒绝")
     void reportsLegacyPipelineStageForMalformedFrame() {
         MqttDeviceProtocol protocol = LegacyFreezerDeviceProtocol.protocol();
         Device device = device(protocol, "freezer-1");
 
-        assertThatExceptionOfType(PipelineExecutionException.class)
+        assertThatExceptionOfType(MqttMessageRejectedException.class)
                 .isThrownBy(
                         () -> protocol
                                 .decode(
@@ -204,9 +205,8 @@ class ExampleDeviceProtocolTest {
                                                 "factory/raw/+/S",
                                                 new byte[] {0, 0, 0, 0, 0},
                                                 NOW)))
-                .satisfies(
-                        failure -> assertThat(failure.stageCode())
-                                .isEqualTo("decode-legacy-reported-frame"));
+                .satisfies(failure -> assertThat(failure.reason())
+                        .isEqualTo(MqttMessageRejectionReason.MESSAGE_INVALID));
     }
 
     /** 使用传输路由已经定位的 Device 和消息类型调用设备协议。 */

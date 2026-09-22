@@ -8,6 +8,7 @@ import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.SystemPrincipal;
@@ -537,7 +538,7 @@ class FileServiceIntegrationTest {
         @Bean
         IdGenerator idGenerator() {
             AtomicLong values = new AtomicLong(1000L);
-            return values::incrementAndGet;
+            return () -> Id.of(values.incrementAndGet());
         }
 
         @Bean

@@ -36,7 +36,7 @@ class ResourceLoadersTest {
     void mergesMultipleContributorsForTheSamePrincipal() {
         ResourceLoader operations = principals -> Map.of(
                 PRINCIPAL.principalId(),
-                List.of(new Operation("platform.account.read")));
+                List.of(new Operation("platform:account:read")));
         ResourceLoader businessResources = principals -> Map.of(
                 PRINCIPAL.principalId(),
                 List.of(new TestResource("tenant", "42")));
@@ -48,7 +48,7 @@ class ResourceLoadersTest {
 
         assertThat(resources.get(PRINCIPAL.principalId()))
                 .extracting(resource -> resource.type() + "/" + resource.id())
-                .containsExactly("operation/platform.account.read", "tenant/42");
+                .containsExactly("CORE/OPERATIONS/PLATFORM:ACCOUNT:READ", "tenant/42");
     }
 
     @Test
@@ -56,13 +56,13 @@ class ResourceLoadersTest {
     void rejectsDuplicateResourcesAndPrincipalsOutsideTheInput() {
         ResourceLoader first = principals -> Map.of(
                 PRINCIPAL.principalId(),
-                List.of(new Operation("platform.account.read")));
+                List.of(new Operation("platform:account:read")));
         ResourceLoader duplicate = principals -> Map.of(
                 PRINCIPAL.principalId(),
-                List.of(new Operation("platform.account.read")));
+                List.of(new Operation("platform:account:read")));
         ResourceLoader extraPrincipal = principals -> Map.of(
                 2L,
-                List.of(new Operation("platform.account.read")));
+                List.of(new Operation("platform:account:read")));
 
         assertThatThrownBy(
                 () -> new ResourceLoaders(List.of(first, duplicate), Runnable::run)

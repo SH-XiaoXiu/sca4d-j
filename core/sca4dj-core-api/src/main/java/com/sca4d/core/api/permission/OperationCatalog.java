@@ -130,13 +130,14 @@ public final class OperationCatalog {
     /** @return 匹配的 ACTION；编码不存在时为空 */
     @CheckReturnValue
     public @NotNull Optional<OperationNode.OperationAction> action(@NotNull String code) {
-        return Optional.ofNullable(actionsByCode.get(TextUtils.requireText(code, "Operation 编码")));
+        String normalized = new Operation(TextUtils.requireText(code, "Operation 编码")).value();
+        return Optional.ofNullable(actionsByCode.get(normalized));
     }
 
     /** @return 必须存在且可以直接授权的 ACTION */
     @CheckReturnValue
     public @NotNull OperationNode.OperationAction actionByCode(@NotNull String code) {
-        String checkedCode = TextUtils.requireText(code, "Operation 编码");
+        String checkedCode = new Operation(TextUtils.requireText(code, "Operation 编码")).value();
         return action(checkedCode)
                 .orElseThrow(() -> new IllegalArgumentException("未知或不可授权的 Operation: " + checkedCode));
     }

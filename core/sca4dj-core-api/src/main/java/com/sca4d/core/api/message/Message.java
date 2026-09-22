@@ -12,10 +12,12 @@ public abstract class Message {
 
     private final @NotNull List<@NotNull MessageContent> contents;
 
+    /** 创建不携带媒体内容的消息。 */
     protected Message() {
         this(List.of());
     }
 
+    /** @param contents 消息携带的媒体内容 */
     protected Message(@NotNull List<? extends @NotNull MessageContent> contents) {
         this.contents = List.copyOf(Objects.requireNonNull(contents, "消息内容不能为空"));
     }

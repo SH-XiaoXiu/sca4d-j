@@ -27,6 +27,7 @@ public final class NotificationSettingsController {
 
     private final NotificationTypeCatalog notificationTypes;
 
+    /** 创建当前 Account 通知设置控制器。 */
     public NotificationSettingsController(
             @NotNull NotificationSettingsService settings,
             @NotNull NotificationTypeCatalog notificationTypes) {

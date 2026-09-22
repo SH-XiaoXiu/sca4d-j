@@ -122,7 +122,7 @@ class QuartzSchedulingIntegrationTest {
                     jdbc.queryForObject(
                             "SELECT is_nonconcurrent FROM quartz.qrtz_job_details "
                                     + "WHERE sched_name = 'quartz-test:sca4dj:scheduling:quartz' "
-                                    + "AND job_name = 'test.quartz.cluster-task' "
+                                    + "AND job_name = 'TEST/QUARTZ/CLUSTER_TASK' "
                                     + "AND job_group = 'sca4dj-cluster-task'",
                             Boolean.class))
                     .isTrue();
@@ -130,11 +130,11 @@ class QuartzSchedulingIntegrationTest {
             // 持久化定义缺少当前版本键时，以当前代码定义重建 JobDetail。
             scheduler.standby();
             JobDetail incompleteSchedule = scheduler.getJobDetail(
-                    new org.quartz.JobKey("test.quartz.dispatch", "sca4dj-code"));
+                    new org.quartz.JobKey("TEST/QUARTZ/DISPATCH", "sca4dj-code"));
             incompleteSchedule.getJobDataMap().remove(QuartzDispatchJob.SCHEDULE_DEFINITION_VERSION);
             scheduler.addJob(incompleteSchedule, true);
             JobDetail incompleteClusterTask = scheduler.getJobDetail(
-                    new org.quartz.JobKey("test.quartz.cluster-task", "sca4dj-cluster-task"));
+                    new org.quartz.JobKey("TEST/QUARTZ/CLUSTER_TASK", "sca4dj-cluster-task"));
             incompleteClusterTask.getJobDataMap().remove(QuartzClusterTaskJob.TASK_DEFINITION_VERSION);
             scheduler.addJob(incompleteClusterTask, true);
 
@@ -145,13 +145,13 @@ class QuartzSchedulingIntegrationTest {
             ClusterTaskSchedule clusterTaskSchedule = context.getBean(ClusterTaskSchedule.class);
             clusterTaskScheduler.reconcileClusterTasks(List.of(clusterTaskSchedule));
             assertThat(
-                    scheduler.getJobDetail(new org.quartz.JobKey("test.quartz.dispatch", "sca4dj-code"))
+                    scheduler.getJobDetail(new org.quartz.JobKey("TEST/QUARTZ/DISPATCH", "sca4dj-code"))
                             .getJobDataMap())
                     .containsEntry(QuartzDispatchJob.SCHEDULE_DEFINITION_VERSION, "1");
             assertThat(
                     scheduler.getJobDetail(
                             new org.quartz.JobKey(
-                                    "test.quartz.cluster-task",
+                                    "TEST/QUARTZ/CLUSTER_TASK",
                                     "sca4dj-cluster-task"))
                             .getJobDataMap())
                     .containsEntry(QuartzClusterTaskJob.TASK_DEFINITION_VERSION, "1");
@@ -168,13 +168,13 @@ class QuartzSchedulingIntegrationTest {
             jdbc.update(
                     "UPDATE quartz.qrtz_triggers SET trigger_state = 'ERROR' "
                             + "WHERE sched_name = 'quartz-test:sca4dj:scheduling:quartz' "
-                            + "AND trigger_name = 'test.quartz.dispatch'");
+                            + "AND trigger_name = 'TEST/QUARTZ/DISPATCH'");
             jobScheduler.reconcile(List.of(schedule));
             assertThat(
                     jdbc.queryForObject(
                             "SELECT trigger_state FROM quartz.qrtz_triggers "
                                     + "WHERE sched_name = 'quartz-test:sca4dj:scheduling:quartz' "
-                                    + "AND trigger_name = 'test.quartz.dispatch'",
+                            + "AND trigger_name = 'TEST/QUARTZ/DISPATCH'",
                             String.class))
                     .isEqualTo("WAITING");
             scheduler.start();
@@ -276,7 +276,7 @@ class QuartzSchedulingIntegrationTest {
         @ConditionalOnProperty(name = "test.job-schedule.enabled", havingValue = "true", matchIfMissing = true)
         DirectJob<Void, Void> scheduledJob() {
             return new DirectJob<>() {
-                private final JobKey key = new JobKey("test.quartz.dispatch");
+                private final JobKey key = new JobKey("TEST/QUARTZ/DISPATCH");
 
                 @Override
                 public @NotNull JobKey key() {
@@ -316,7 +316,7 @@ class QuartzSchedulingIntegrationTest {
         @ConditionalOnProperty(name = "test.job-schedule.enabled", havingValue = "true", matchIfMissing = true)
         JobSchedule<Void, Void> schedule(DirectJob<Void, Void> scheduledJob) {
             return new JobSchedule<>(
-                    new ScheduleKey("test.quartz.dispatch"),
+                    new ScheduleKey("TEST/QUARTZ/DISPATCH"),
                     1,
                     scheduledJob,
                     null,
@@ -333,7 +333,7 @@ class QuartzSchedulingIntegrationTest {
         @Bean
         ClusterTaskSchedule clusterTaskSchedule(CountingClusterTask task) {
             return new ClusterTaskSchedule(
-                    new ScheduleKey("test.quartz.cluster-task"),
+                    new ScheduleKey("TEST/QUARTZ/CLUSTER_TASK"),
                     1,
                     task,
                     new IntervalSchedule(Duration.ofMillis(100), Duration.ofMillis(50)),

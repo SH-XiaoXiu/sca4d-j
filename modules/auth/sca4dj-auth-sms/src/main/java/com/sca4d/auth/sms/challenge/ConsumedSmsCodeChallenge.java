@@ -25,14 +25,17 @@ public final class ConsumedSmsCodeChallenge {
         this.version = Objects.requireNonNull(version, "Challenge 版本不能为空");
     }
 
+    /** 执行 challengeId 方法表示的业务操作。 */
     public @NotNull SmsCodeChallengeId challengeId() {
         return challengeId;
     }
 
+    /** 执行 account 方法表示的业务操作。 */
     public @NotNull Account account() {
         return account;
     }
 
+    /** 返回 version 方法提供的结果。 */
     public @NotNull Version version() {
         return version;
     }

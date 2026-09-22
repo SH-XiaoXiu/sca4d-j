@@ -11,15 +11,18 @@ public final class InboxPageView {
 
     private final long unreadCount;
 
+    /** 创建站内信分页响应。 */
     public InboxPageView(@NotNull List<InboxMessageView> messages, long unreadCount) {
         this.messages = List.copyOf(messages);
         this.unreadCount = unreadCount;
     }
 
+    /** @return 当前页站内信 */
     public List<InboxMessageView> getMessages() {
         return messages;
     }
 
+    /** @return 未读数量 */
     public long getUnreadCount() {
         return unreadCount;
     }

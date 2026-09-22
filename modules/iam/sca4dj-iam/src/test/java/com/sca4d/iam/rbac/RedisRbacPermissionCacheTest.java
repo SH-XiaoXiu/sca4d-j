@@ -119,7 +119,7 @@ class RedisRbacPermissionCacheTest {
                 lookup,
                 Map.of(
                         FIRST_SCOPE,
-                        Map.of(PRINCIPAL_ID, List.of(new PermissionSelector("projects:items:read")))));
+                        Map.of(PRINCIPAL_ID, List.of(new PermissionSelector("PROJECTS:ITEMS:READ")))));
         List<String> originalKeys = List.copyOf(lastReadKeys);
 
         RedisRbacPermissionCache reordered = new RedisRbacPermissionCache(
@@ -132,7 +132,7 @@ class RedisRbacPermissionCacheTest {
         assertThat(lastReadKeys).isEqualTo(originalKeys);
         assertThat(cached.cachedSelectors().get(FIRST_SCOPE).get(PRINCIPAL_ID))
                 .extracting(PermissionSelector::value)
-                .containsExactly("projects:items:read");
+                .containsExactly("PROJECTS:ITEMS:READ");
     }
 
     @Test
@@ -144,7 +144,7 @@ class RedisRbacPermissionCacheTest {
                 lookup,
                 Map.of(
                         FIRST_SCOPE,
-                        Map.of(PRINCIPAL_ID, List.of(new PermissionSelector("projects:items:read")))));
+                        Map.of(PRINCIPAL_ID, List.of(new PermissionSelector("PROJECTS:ITEMS:READ")))));
         List<String> originalKeys = List.copyOf(lastReadKeys);
 
         RedisRbacPermissionCache expanded = new RedisRbacPermissionCache(

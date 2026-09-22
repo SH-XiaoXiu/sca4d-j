@@ -52,7 +52,7 @@ class CallTest {
     @DisplayName("Binds Session Identity Principal And Resources Once")
     void bindsSessionIdentityPrincipalAndResourcesOnce() {
         Identity identity = new Identity(10, 20, 30);
-        Operation operation = new Operation("platform.account.read");
+        Operation operation = new Operation("platform:account:read");
         Session session = session(identity, Set.of(operation));
         Call call = new Call("call-1", STARTED_AT);
 
@@ -64,9 +64,9 @@ class CallTest {
         assertSame(session.account(), call.account().orElseThrow());
         assertSame(session.principals().getFirst(), call.principal().orElseThrow());
         assertTrue(call.grants(operation));
-        assertTrue(call.grants("platform.account.read"));
-        assertFalse(call.grants(new Operation("platform.account.update")));
-        assertFalse(call.grants("platform.account.update"));
+        assertTrue(call.grants("platform:account:read"));
+        assertFalse(call.grants(new Operation("platform:account:update")));
+        assertFalse(call.grants("platform:account:update"));
         call.selectPrincipal(identity.principal);
         assertThrows(IllegalStateException.class, () -> call.authenticate(session));
     }
@@ -114,7 +114,7 @@ class CallTest {
 
         assertSame(selected, call.principal().orElseThrow());
         assertTrue(session.principals().isEmpty());
-        assertFalse(call.grants(new Operation("project.read")));
+        assertFalse(call.grants(new Operation("project:read")));
         Call wrongType = new Call("call-wrong-type", STARTED_AT);
         wrongType.authenticate(session);
         assertThrows(IllegalArgumentException.class, () -> wrongType.selectPrincipal(new OtherPrincipal(30)));
@@ -132,7 +132,7 @@ class CallTest {
         assertTrue(call.account().isEmpty());
         assertTrue(call.isAuthenticationAssessed());
         assertTrue(call.isPrincipalAssessed());
-        assertFalse(call.grants(new Operation("system.operation")));
+        assertFalse(call.grants(new Operation("system:operation")));
     }
 
     private static Session session(Identity identity, Set<Operation> operations) {

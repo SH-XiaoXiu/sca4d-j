@@ -32,6 +32,7 @@ public final class DefaultWebRealtimePublisher implements WebRealtimePublisher, 
 
     private final @NotNull Clock clock;
 
+    /** 创建当前对象。 */
     public DefaultWebRealtimePublisher(
             @NotNull MessageBus messages,
             @NotNull WebRealtimeProperties properties,
@@ -71,13 +72,17 @@ public final class DefaultWebRealtimePublisher implements WebRealtimePublisher, 
                         ? DispatchPolicy.afterCommit()
                         : DispatchPolicy.immediate();
         try {
-            messages.dispatch(
+            DispatchReceipt receipt = messages.dispatch(
                     new WebRealtimeMessage(
                             WebRealtimeTarget.account(accountId),
                             event,
                             true,
                             event.occurredAt().plus(properties.getNodeMessageTtl())),
                     policy);
+            LOG.trace(
+                    "Session 变化的 Web Realtime 消息已登记 | accountId={} dispatchStatus={}",
+                    accountId,
+                    receipt.status());
         } catch (RuntimeException exception) {
             LOG.warn(
                     "Session 变化的 Web Realtime 消息登记失败，客户端后续请求仍会读取最新状态 | accountId={}",

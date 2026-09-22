@@ -14,7 +14,7 @@ public final class AliyunSmsProperties {
 
     /** @return 凭据引用到部署凭据的映射 */
     public @NotNull Map<String, Credential> getCredentials() {
-        return credentials;
+        return Map.copyOf(credentials);
     }
 
     /** @param credentials 从环境或配置注入且不得写入数据库的凭据映射 */

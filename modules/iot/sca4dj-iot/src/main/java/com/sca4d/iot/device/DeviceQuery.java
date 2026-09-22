@@ -85,7 +85,7 @@ public final class DeviceQuery {
     @CheckReturnValue
     public static @NotNull Builder list(@NotNull ListRequest request) {
         ListRequest checked = Objects.requireNonNull(request, "Device 列表要求不能为空");
-        PageRequest page = checked.getPage().requireMaxSize(100);
+        PageRequest page = checked.getPage().verifyMaxSize(100);
         for (SortOrder order : checked.getSort()) {
             if (!SORT_FIELDS.contains(order.getField())) {
                 throw new IllegalArgumentException("Device 列表包含不支持的排序字段: " + order.getField());

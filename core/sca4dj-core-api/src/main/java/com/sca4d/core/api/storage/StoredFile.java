@@ -8,7 +8,7 @@ import java.util.Objects;
 /** 返回文件标识、上传 Principal、业务用途、内容信息和当前状态。 */
 public final class StoredFile implements Resource {
     /** 文件使用的稳定 Resource 类型。 */
-    public static final @NotNull String RESOURCE_TYPE = "file";
+    public static final @NotNull String RESOURCE_TYPE = "STORAGE/FILE";
 
     private final long id;
 

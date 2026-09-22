@@ -73,7 +73,7 @@ public final class GatewayProperties {
 
     /** @return 去除首尾空白后的必填 Gateway Secret */
     @CheckReturnValue
-    public @NotNull String requireSecret() {
+    public @NotNull String validatedSecret() {
         if (secret == null || secret.isBlank()) {
             throw new IllegalStateException("sca4dj.gateway.secret 不能为空");
         }
@@ -92,8 +92,8 @@ public final class GatewayProperties {
         logging.validate();
         if (logging.isEnabled()
                 && MessageDigest.isEqual(
-                        requireSecret().getBytes(StandardCharsets.UTF_8),
-                        logging.requirePassword().getBytes(StandardCharsets.UTF_8))) {
+                        validatedSecret().getBytes(StandardCharsets.UTF_8),
+                        logging.validatedPassword().getBytes(StandardCharsets.UTF_8))) {
             throw new IllegalStateException("Loki 写入密码不能与 Gateway Secret 相同");
         }
     }
@@ -158,7 +158,7 @@ public final class GatewayProperties {
 
         /** @return 已校验且不带结尾斜杠的 Loki Origin */
         @CheckReturnValue
-        public @NotNull URI requireLokiOrigin() {
+        public @NotNull URI validatedLokiOrigin() {
             String value = requireText(lokiOrigin, "sca4dj.gateway.logging.loki-origin");
             URI uri;
             try {
@@ -180,7 +180,7 @@ public final class GatewayProperties {
 
         /** @return 去除首尾空白后的 Loki 写入用户名 */
         @CheckReturnValue
-        public @NotNull String requireUsername() {
+        public @NotNull String validatedUsername() {
             String value = requireText(username, "sca4dj.gateway.logging.username");
             if (value.indexOf(':') >= 0 || value.chars().anyMatch(Character::isISOControl)) {
                 throw new IllegalStateException("sca4dj.gateway.logging.username 不能包含冒号或控制字符");
@@ -190,7 +190,7 @@ public final class GatewayProperties {
 
         /** @return 保留原始字符的 Loki 写入密码 */
         @CheckReturnValue
-        public @NotNull String requirePassword() {
+        public @NotNull String validatedPassword() {
             if (password == null || password.isBlank()) {
                 throw new IllegalStateException("sca4dj.gateway.logging.password 不能为空");
             }
@@ -205,9 +205,9 @@ public final class GatewayProperties {
             if (!enabled) {
                 return;
             }
-            lokiOrigin = requireLokiOrigin().toString();
-            username = requireUsername();
-            password = requirePassword();
+            lokiOrigin = validatedLokiOrigin().toString();
+            username = validatedUsername();
+            password = validatedPassword();
         }
 
         /** 返回去除首尾空白后的必填文本。 */

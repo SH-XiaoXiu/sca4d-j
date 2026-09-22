@@ -12,12 +12,14 @@ public final class EmailTemplateSource {
 
     private final @NotNull String html;
 
+    /** 创建当前对象。 */
     public EmailTemplateSource(@NotNull String subject, @NotNull String text, @NotNull String html) {
         this.subject = Objects.requireNonNull(subject, "Email 主题模板不能为空");
         this.text = Objects.requireNonNull(text, "Email 纯文本模板不能为空");
         this.html = Objects.requireNonNull(html, "Email HTML 模板不能为空");
     }
 
+    /** 执行 subject 方法表示的业务操作。 */
     public @NotNull String subject() {
         return subject;
     }
@@ -26,6 +28,7 @@ public final class EmailTemplateSource {
         return subject;
     }
 
+    /** 执行 text 方法表示的业务操作。 */
     public @NotNull String text() {
         return text;
     }

@@ -16,10 +16,12 @@ public final class SmsCodeProof {
         this.code = Objects.requireNonNull(code, "SMS 验证码不能为空");
     }
 
+    /** 执行 challengeId 方法表示的业务操作。 */
     public @NotNull SmsCodeChallengeId challengeId() {
         return challengeId;
     }
 
+    /** 返回 code 方法提供的结果。 */
     public @NotNull String code() {
         return code;
     }

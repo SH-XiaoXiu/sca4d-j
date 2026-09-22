@@ -33,6 +33,7 @@ import java.util.Objects;
 public final class InboxController {
     private final InboxService inbox;
 
+    /** 创建站内信控制器。 */
     public InboxController(@NotNull InboxService inbox) {
         this.inbox = Objects.requireNonNull(inbox, "InboxService 不能为空");
     }

@@ -12,7 +12,7 @@ public final class EmailCodeNotice {
 
     /** Email Code 使用 Email 必发渠道的类型化通知定义。 */
     public static final @NotNull NotificationType<EmailCodeNotice> TYPE = NotificationType.define(
-            "authentication.email-code",
+            "AUTHENTICATION/EMAIL_CODE",
             EmailCodeNotice.class,
             definition -> {
                 definition.required(EmailChannels.EMAIL);

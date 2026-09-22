@@ -1,6 +1,8 @@
 package com.sca4d.core.spring.id;
 
+import com.sca4d.core.api.id.Id;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -27,19 +29,19 @@ class SnowflakeIdGeneratorTest {
     void generatesOrderedIdsAndSeparatesNodes() {
         SnowflakeIdGenerator firstNode = new SnowflakeIdGenerator(7);
         SnowflakeIdGenerator secondNode = new SnowflakeIdGenerator(8);
-        long first = firstNode.nextId();
-        long second = firstNode.nextId();
+        Id first = firstNode.nextId();
+        Id second = firstNode.nextId();
 
-        assertTrue(first > 1);
-        assertTrue(second > first);
-        assertTrue(secondNode.nextId() != first);
+        assertTrue(first.isGreaterThan(1));
+        assertTrue(second.isGreaterThan(first));
+        assertFalse(secondNode.nextId().isEqualTo(first));
     }
 
     @Test
     @DisplayName("Generates Unique IDs Concurrently")
     void generatesUniqueIdsConcurrently() throws InterruptedException {
         SnowflakeIdGenerator generator = new SnowflakeIdGenerator(9);
-        Set<Long> ids = ConcurrentHashMap.newKeySet();
+        Set<Id> ids = ConcurrentHashMap.newKeySet();
         try (ExecutorService executor = Executors.newFixedThreadPool(8)) {
             for (int index = 0; index < 8_000; index++) {
                 executor.submit(() -> ids.add(generator.nextId()));

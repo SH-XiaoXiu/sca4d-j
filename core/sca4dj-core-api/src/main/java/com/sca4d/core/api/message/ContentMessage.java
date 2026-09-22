@@ -13,6 +13,7 @@ public final class ContentMessage extends Message {
 
     private final int protocolVersion;
 
+    /** 创建只携带媒体内容的普通消息。 */
     public ContentMessage(
             @NotNull TreeCode code,
             int protocolVersion,

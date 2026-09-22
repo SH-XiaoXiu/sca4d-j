@@ -309,7 +309,7 @@ class CallLifecycleTest {
 
         assertEquals("done", result);
         Resource target = recorded.get().target().orElseThrow();
-        assertEquals(new ResourceReference("account", "42"), target);
+        assertEquals(new ResourceReference(Account.RESOURCE_TYPE, "42"), target);
     }
 
     @Test
@@ -544,7 +544,7 @@ class CallLifecycleTest {
                                 new AuthenticationMethodCode("test"),
                                 Set.of(AuthenticationFactorKind.KNOWLEDGE),
                                 NOW)),
-                Map.of(principal.principalId(), List.of(new Operation("platform.account.update"))),
+                Map.of(principal.principalId(), List.of(new Operation("platform:account:update"))),
                 Map.of(),
                 NOW,
                 NOW.plusSeconds(3600));
@@ -965,7 +965,7 @@ class CallLifecycleTest {
 
     private static final class SecuredService {
 
-        @RequirePermission(operation = "platform.account.update")
+        @RequirePermission(operation = "platform:account:update")
         @RateLimited(keyResolver = RateKeyResolver.class, permits = 10, windowSeconds = 60)
         @Idempotent(keyResolver = IdempotencyKeyResolver.class, retentionSeconds = 300)
         @Locked(keyResolver = LockKeyResolver.class, waitMillis = 1000)
@@ -1028,10 +1028,10 @@ class CallLifecycleTest {
         }
     }
 
-    @RequirePermission(operation = "duplicate.operation")
+    @RequirePermission(operation = "duplicate:operation")
     private static final class DuplicatePermissionService {
 
-        @RequirePermission(operation = "duplicate.operation")
+        @RequirePermission(operation = "duplicate:operation")
         private String invoke() {
             return "unused";
         }
@@ -1094,7 +1094,7 @@ class CallLifecycleTest {
                 throw new IllegalStateException("批量资源解析要求第一个参数为标识列表");
             }
             return ids.stream()
-                    .map(value -> (Resource) new ResourceReference("batch-item", value.toString()))
+                    .map(value -> (Resource) new ResourceReference("BATCH/ITEM", value.toString()))
                     .toList();
         }
     }
@@ -1138,7 +1138,7 @@ class CallLifecycleTest {
 
         @Override
         public boolean supports(Resource resource) {
-            return "batch-item".equals(resource.type());
+            return "BATCH/ITEM".equals(resource.type());
         }
 
         @Override

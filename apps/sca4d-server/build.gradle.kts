@@ -1,4 +1,5 @@
 import org.springframework.boot.gradle.tasks.bundling.BootJar
+import org.gradle.api.tasks.testing.Test
 
 plugins {
     java
@@ -86,4 +87,11 @@ sca4djApp {
 
 tasks.named<BootJar>("bootJar") {
     archiveFileName.set("${project.name}-$buildVersion.jar")
+}
+
+tasks.withType<Test>().configureEach {
+    systemProperty(
+        "javax.xml.parsers.SAXParserFactory",
+        "com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
+    )
 }

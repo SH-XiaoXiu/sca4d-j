@@ -10,7 +10,7 @@ import java.util.Objects;
 public final class Account implements Resource {
 
     /** Account 使用的稳定 Resource 类型。 */
-    public static final @NotNull String RESOURCE_TYPE = "account";
+    public static final @NotNull String RESOURCE_TYPE = "IAM/ACCOUNT";
 
     private final long id;
 

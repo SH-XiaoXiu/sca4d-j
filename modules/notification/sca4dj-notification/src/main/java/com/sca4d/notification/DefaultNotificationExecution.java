@@ -66,7 +66,7 @@ final class DefaultNotificationExecution<T> implements NotificationExecution {
 
     @Override
     public @NotNull NotificationExecution locale(@NotNull Locale locale) {
-        requireUnresolved();
+        verifyUnresolved();
         Locale checked = Locale.forLanguageTag(Objects.requireNonNull(locale, "通知 Locale 不能为空").toLanguageTag());
         if (checked.getLanguage().isBlank()) {
             throw new IllegalArgumentException("通知 Locale 必须包含语言");
@@ -77,14 +77,14 @@ final class DefaultNotificationExecution<T> implements NotificationExecution {
 
     @Override
     public @NotNull NotificationExecution region(@NotNull Region region) {
-        requireUnresolved();
+        verifyUnresolved();
         explicitRegion = Objects.requireNonNull(region, "通知区域不能为空");
         return this;
     }
 
     @Override
     public @NotNull NotificationExecution content(@NotNull MessageContent content) {
-        requireUnresolved();
+        verifyUnresolved();
         contents.add(Objects.requireNonNull(content, "通知内容不能为空"));
         return this;
     }
@@ -96,7 +96,7 @@ final class DefaultNotificationExecution<T> implements NotificationExecution {
 
     @Override
     public void sendTo(@NotNull NotificationRecipient recipient) {
-        requireUnresolved();
+        verifyUnresolved();
         NotificationRecipient checkedRecipient = Objects.requireNonNull(recipient, "通知接收人不能为空");
 
         // 按显式值或具体应用解析器确定接收人的最终 Locale、业务区域和模板变量。
@@ -203,7 +203,7 @@ final class DefaultNotificationExecution<T> implements NotificationExecution {
     }
 
     /** 回调确定接收人后不允许继续改写 Locale、区域或接收人。 */
-    private void requireUnresolved() {
+    private void verifyUnresolved() {
         if (result != null) {
             throw new IllegalStateException("一次领域通知只能确定一个接收人");
         }

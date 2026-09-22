@@ -204,6 +204,7 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
         changes.changed(current.deviceId(), DeviceChangeArea.SCHEDULE, now);
     }
 
+    /** 按计划标识读取设备计划，并在不存在时抛出稳定的业务错误。 */
     @Transactional(readOnly = true)
     @CheckReturnValue
     public @NotNull DeviceSchedule loadById(long scheduleId) {

@@ -78,12 +78,13 @@ public class FileRepository {
         if (current.id() != changed.id()) {
             throw new IllegalArgumentException("文件状态必须属于同一文件");
         }
+        Instant readyExpiresAt = changed.readyExpiresAt();
         return AffectedRowCounts.changed(
                 mapper.updateStatus(
                         current.id(),
                         current.status(),
                         Patch.set(changed.status()),
-                        changed.readyExpiresAt() == null ? Patch.clear() : Patch.set(changed.readyExpiresAt()),
+                        readyExpiresAt == null ? Patch.clear() : Patch.set(readyExpiresAt),
                         nextDeleteAt == null ? Patch.clear() : Patch.set(nextDeleteAt)),
                 "保存文件状态");
     }

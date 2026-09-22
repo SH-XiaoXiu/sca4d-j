@@ -122,7 +122,7 @@ public class TimescaleRepository {
         if (deviceId <= 0) {
             throw new IllegalArgumentException("Device 标识必须为正数");
         }
-        PageRequest checked = Objects.requireNonNull(page, "事件分页要求不能为空").requireMaxSize(100);
+        PageRequest checked = Objects.requireNonNull(page, "事件分页要求不能为空").verifyMaxSize(100);
         long total = mapper.countEvents(deviceId, null, null);
         List<DeviceEvent> items = total == 0
                 ? List.of()
@@ -140,7 +140,7 @@ public class TimescaleRepository {
         if (deviceId <= 0) {
             throw new IllegalArgumentException("Device 标识必须为正数");
         }
-        PageRequest checked = Objects.requireNonNull(page, "业务回执分页要求不能为空").requireMaxSize(100);
+        PageRequest checked = Objects.requireNonNull(page, "业务回执分页要求不能为空").verifyMaxSize(100);
         long total = mapper.countEvents(deviceId, "$downlink.ack", null);
         List<DeviceAcknowledgement> items = total == 0
                 ? List.of()
@@ -158,7 +158,7 @@ public class TimescaleRepository {
         if (scheduleId <= 0) {
             throw new IllegalArgumentException("设备定时规则标识必须为正数");
         }
-        PageRequest checked = Objects.requireNonNull(page, "设备定时执行分页要求不能为空").requireMaxSize(100);
+        PageRequest checked = Objects.requireNonNull(page, "设备定时执行分页要求不能为空").verifyMaxSize(100);
         long total = mapper.countEvents(null, null, scheduleId);
         List<DeviceScheduleExecution> items = total == 0
                 ? List.of()

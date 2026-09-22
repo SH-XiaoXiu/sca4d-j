@@ -31,10 +31,10 @@ class PermissionSelectionRegistryTest {
 
         assertThat(registry.selection(PLATFORM).operations())
                 .extracting(Operation::value)
-                .containsExactly("projects:items:read");
+                .containsExactly("PROJECTS:ITEMS:READ");
         assertThat(registry.selection(PROJECT).operations())
                 .extracting(Operation::value)
-                .containsExactly("projects:items:manage", "projects:items:read");
+                .containsExactly("PROJECTS:ITEMS:MANAGE", "PROJECTS:ITEMS:READ");
         assertThat(registry.domains()).containsExactlyInAnyOrder(PLATFORM, PROJECT);
     }
 
@@ -48,7 +48,7 @@ class PermissionSelectionRegistryTest {
                         new OperationCatalog(List.of(module)),
                         List.of()))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("missing=[projects]");
+                .hasMessageContaining("missing=[PROJECTS]");
     }
 
     @Test
@@ -94,7 +94,7 @@ class PermissionSelectionRegistryTest {
 
             @Override
             public boolean canGrant(@NotNull RbacDomain domain, @NotNull Operation operation) {
-                return PROJECT.equals(domain) || operation.value().endsWith(":" + Action.READ_VALUE);
+                return PROJECT.equals(domain) || operation.value().endsWith(":READ");
             }
         };
     }

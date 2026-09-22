@@ -22,6 +22,7 @@ public final class IncomingMessage<M extends Message> {
 
     private final int attempt;
 
+    /** 创建一条包含 RabbitMQ 投递元数据的业务消息。 */
     public IncomingMessage(
             @NotNull MessageId messageId,
             @NotNull M message,
@@ -40,26 +41,32 @@ public final class IncomingMessage<M extends Message> {
         this.attempt = attempt;
     }
 
+    /** @return 发布端分配的消息标识 */
     public @NotNull MessageId messageId() {
         return messageId;
     }
 
+    /** @return 已解码的业务消息 */
     public @NotNull M message() {
         return message;
     }
 
+    /** @return 发布消息的应用标识 */
     public @NotNull String sourceApplication() {
         return sourceApplication;
     }
 
+    /** @return 消息首次发布时间 */
     public @NotNull Instant publishedAt() {
         return publishedAt;
     }
 
+    /** @return RabbitMQ 是否标记为重新投递 */
     public boolean redelivered() {
         return redelivered;
     }
 
+    /** @return 当前消息的处理尝试序号 */
     public int attempt() {
         return attempt;
     }

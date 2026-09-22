@@ -20,6 +20,7 @@ public final class EmailTemplate {
 
     private final @NotNull Version version;
 
+    /** 创建当前对象。 */
     public EmailTemplate(
             long templateId,
             @NotNull NotificationCode code,
@@ -39,18 +40,22 @@ public final class EmailTemplate {
         this.version = Objects.requireNonNull(version, "Email 模板版本不能为空");
     }
 
+    /** 执行 templateId 方法表示的业务操作。 */
     public long templateId() {
         return templateId;
     }
 
+    /** 返回 code 方法提供的结果。 */
     public @NotNull NotificationCode code() {
         return code;
     }
 
+    /** 执行 locales 方法表示的业务操作。 */
     public @NotNull Map<@NotNull String, @NotNull EmailTemplateSource> locales() {
         return locales;
     }
 
+    /** 返回 source 方法提供的结果。 */
     public @NotNull EmailTemplateSource source(@NotNull Locale requested) {
         Locale checked = Objects.requireNonNull(requested, "Email 模板 Locale 不能为空");
         EmailTemplateSource exact = locales.get(checked.toLanguageTag());
@@ -65,10 +70,12 @@ public final class EmailTemplate {
         return locales.values().iterator().next();
     }
 
+    /** 执行 enabled 方法表示的业务操作。 */
     public boolean enabled() {
         return enabled;
     }
 
+    /** 返回 version 方法提供的结果。 */
     public @NotNull Version version() {
         return version;
     }

@@ -16,6 +16,7 @@ public final class NotificationMessage extends Message {
 
     private final @NotNull Notification notification;
 
+    /** 创建当前对象。 */
     public NotificationMessage(@NotNull Notification notification) {
         super(Objects.requireNonNull(notification, "通知不能为空").contents());
         this.notification = notification;
@@ -31,6 +32,7 @@ public final class NotificationMessage extends Message {
         return PROTOCOL_VERSION;
     }
 
+    /** 执行 notification 方法表示的业务操作。 */
     public @NotNull Notification notification() {
         return notification;
     }

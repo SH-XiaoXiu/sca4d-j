@@ -1,7 +1,7 @@
 package com.sca4d.iot.connection;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -10,15 +10,15 @@ import static org.mockito.Mockito.when;
 
 import com.sca4d.core.api.connection.ConnectionId;
 import com.sca4d.core.api.connection.ConnectionRegistry;
-import com.sca4d.core.api.event.Event;
+import com.sca4d.core.api.messaging.DispatchPolicy;
+import com.sca4d.core.api.messaging.DispatchReceipt;
+import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.MessageBus;
-import com.sca4d.core.api.messaging.MessageDelivery;
 import com.sca4d.core.api.messaging.MessageId;
 import com.sca4d.iot.api.connection.DeviceConnectionId;
 import com.sca4d.iot.api.connection.DeviceConnectionProtocol;
 import com.sca4d.iot.api.connection.DeviceConnectionReceiver;
 import com.sca4d.iot.api.connection.DeviceDisconnectMessage;
-import com.sca4d.iot.api.message.IotMessageTypes;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
@@ -50,20 +50,21 @@ class DeviceDisconnectHandlerTest {
             connections,
             messages,
             Clock.fixed(NOW, ZoneOffset.UTC),
-            commonConnections);
+            commonConnections,
+            new ObjectMapper());
 
     @Test
     @DisplayName("协议连接终止后立即删除 Device 和公共连接投影")
     void removesEveryProjectionAfterProtocolTermination() {
         when(connections.disconnected(MQTT, CONNECTION_ID)).thenReturn(true);
 
-        consumer.consume(delivery());
+        consumer.handle(delivery());
 
         InOrder order = inOrder(terminators, connections, commonConnections);
         order.verify(terminators).disconnect(MQTT, CONNECTION_ID, "identity-unavailable");
         order.verify(connections).disconnected(MQTT, CONNECTION_ID);
         order.verify(commonConnections).remove(new ConnectionId(CONNECTION_ID.value()));
-        verify(messages, never()).publishReliably(any(), any());
+        verify(messages, never()).dispatch(any(), any());
     }
 
     @Test
@@ -71,12 +72,12 @@ class DeviceDisconnectHandlerTest {
     void keepsRepeatedDisconnectIdempotent() {
         when(connections.disconnected(MQTT, CONNECTION_ID)).thenReturn(false);
 
-        consumer.consume(delivery());
+        consumer.handle(delivery());
 
         verify(terminators).disconnect(MQTT, CONNECTION_ID, "identity-unavailable");
         verify(connections).disconnected(MQTT, CONNECTION_ID);
         verify(commonConnections).remove(new ConnectionId(CONNECTION_ID.value()));
-        verify(messages, never()).publishReliably(any(), any());
+        verify(messages, never()).dispatch(any(), any());
     }
 
     @Test
@@ -85,14 +86,22 @@ class DeviceDisconnectHandlerTest {
         Mockito.doThrow(new IllegalStateException("broker unavailable"))
                 .when(terminators)
                 .disconnect(MQTT, CONNECTION_ID, "identity-unavailable");
-        when(messages.publishReliably(any(), eq(NOW.plusSeconds(1))))
-                .thenReturn(new MessageId(90L));
+        when(messages.dispatch(
+                any(),
+                org.mockito.ArgumentMatchers.argThat(
+                        policy -> policy.mode() == DispatchPolicy.Mode.OUTBOX
+                                && NOW.plusSeconds(1).equals(policy.notBefore()))))
+                .thenReturn(new DispatchReceipt(new MessageId(90L), DispatchReceipt.Status.OUTBOX_ENLISTED));
 
-        consumer.consume(delivery());
+        consumer.handle(delivery());
 
         verify(connections, never()).disconnected(MQTT, CONNECTION_ID);
         verify(commonConnections, never()).remove(any());
-        verify(messages).publishReliably(any(), eq(NOW.plusSeconds(1)));
+        verify(messages).dispatch(
+                any(),
+                org.mockito.ArgumentMatchers.argThat(
+                        policy -> policy.mode() == DispatchPolicy.Mode.OUTBOX
+                                && NOW.plusSeconds(1).equals(policy.notBefore())));
     }
 
     @Test
@@ -100,29 +109,38 @@ class DeviceDisconnectHandlerTest {
     void retriesTerminationAndProjectionRemovalWhenProjectionRemovalFails() {
         when(connections.disconnected(MQTT, CONNECTION_ID))
                 .thenThrow(new IllegalStateException("redis unavailable"));
-        when(messages.publishReliably(any(), eq(NOW.plusSeconds(1))))
-                .thenReturn(new MessageId(91L));
+        when(messages.dispatch(
+                any(),
+                org.mockito.ArgumentMatchers.argThat(
+                        policy -> policy.mode() == DispatchPolicy.Mode.OUTBOX
+                                && NOW.plusSeconds(1).equals(policy.notBefore()))))
+                .thenReturn(new DispatchReceipt(new MessageId(91L), DispatchReceipt.Status.OUTBOX_ENLISTED));
 
-        consumer.consume(delivery());
+        consumer.handle(delivery());
 
         verify(terminators).disconnect(MQTT, CONNECTION_ID, "identity-unavailable");
         verify(commonConnections, never()).remove(any());
-        verify(messages).publishReliably(any(), eq(NOW.plusSeconds(1)));
+        verify(messages).dispatch(
+                any(),
+                org.mockito.ArgumentMatchers.argThat(
+                        policy -> policy.mode() == DispatchPolicy.Mode.OUTBOX
+                                && NOW.plusSeconds(1).equals(policy.notBefore())));
     }
 
     /** 创建第一次断连尝试使用的可靠消息投递。 */
-    private static MessageDelivery<DeviceDisconnectMessage> delivery() {
+    private static IncomingMessage<DeviceDisconnectMessage> delivery() {
         DeviceDisconnectMessage payload = new DeviceDisconnectMessage(
                 71L,
                 CONNECTION_ID,
                 MQTT,
                 "identity-unavailable",
                 1);
-        return new MessageDelivery<>(
+        return new IncomingMessage<>(
                 new MessageId(80L),
-                new Event<>(IotMessageTypes.DEVICE_DISCONNECT, "disconnect:71", NOW, payload),
+                payload,
                 "test-app",
                 NOW,
-                false);
+                false,
+                1);
     }
 }

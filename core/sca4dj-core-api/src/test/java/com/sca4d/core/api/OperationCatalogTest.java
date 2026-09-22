@@ -25,12 +25,12 @@ class OperationCatalogTest {
                         module("account", 10)));
 
         assertEquals(
-                List.of("account", "platform"),
+                List.of("ACCOUNT", "PLATFORM"),
                 catalog.tree().stream().map(OperationNode::code).toList());
         assertEquals(
-                List.of("account:items:read", "account:items:manage", "platform:items:read", "platform:items:manage"),
+                List.of("ACCOUNT:ITEMS:READ", "ACCOUNT:ITEMS:MANAGE", "PLATFORM:ITEMS:READ", "PLATFORM:ITEMS:MANAGE"),
                 catalog.actions().stream().map(OperationNode::code).toList());
-        assertEquals("platform:items", catalog.actionByCode("platform:items:read").parentCode());
+        assertEquals("PLATFORM:ITEMS", catalog.actionByCode("platform:items:read").parentCode());
     }
 
     @Test
@@ -46,12 +46,12 @@ class OperationCatalogTest {
                         new Operation("account:items:manage"),
                         new Operation("platform:items:read")));
 
-        assertEquals(List.of("account", "platform"), projected.stream().map(OperationNode::code).toList());
+        assertEquals(List.of("ACCOUNT", "PLATFORM"), projected.stream().map(OperationNode::code).toList());
         assertEquals(
-                List.of("account:items:manage"),
+                List.of("ACCOUNT:ITEMS:MANAGE"),
                 projected.get(0).children().getFirst().children().stream().map(OperationNode::code).toList());
         assertEquals(
-                List.of("platform:items:read"),
+                List.of("PLATFORM:ITEMS:READ"),
                 projected.get(1).children().getFirst().children().stream().map(OperationNode::code).toList());
     }
 
@@ -65,10 +65,10 @@ class OperationCatalogTest {
 
         assertEquals(
                 List.of(
-                        "project:items:read",
-                        "project:items:manage",
-                        "inventory:items:read",
-                        "inventory:items:manage"),
+                        "PROJECT:ITEMS:READ",
+                        "PROJECT:ITEMS:MANAGE",
+                        "INVENTORY:ITEMS:READ",
+                        "INVENTORY:ITEMS:MANAGE"),
                 catalog.actions().stream().map(OperationNode::code).toList());
     }
 

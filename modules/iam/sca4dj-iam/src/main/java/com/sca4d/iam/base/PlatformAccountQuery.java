@@ -31,7 +31,7 @@ public final class PlatformAccountQuery {
         if (checkedSearch != null && checkedSearch.length() > 128) {
             throw new IllegalArgumentException("账号搜索词长度不能超过 128");
         }
-        this.page = page.requireMaxSize(100);
+        this.page = page.verifyMaxSize(100);
         this.search = checkedSearch == null || checkedSearch.isEmpty() ? null : checkedSearch;
         this.status = status;
     }

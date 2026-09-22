@@ -20,16 +20,25 @@ import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
+import com.sca4d.core.api.messaging.DispatchPolicy;
+import com.sca4d.core.api.messaging.DispatchReceipt;
+import com.sca4d.core.api.messaging.IncomingMessage;
+import com.sca4d.core.api.messaging.MessageBus;
+import com.sca4d.core.api.messaging.MessageId;
 import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.webrealtime.WebRealtimeMessage;
+import com.sca4d.core.api.webrealtime.WebRealtimePublisher;
 import com.sca4d.core.api.webrealtime.WebRealtimeTarget;
 import com.sca4d.core.spring.redis.RedisBatches;
 import com.sca4d.core.spring.redis.RedisPipelineProperties;
 import com.sca4d.core.spring.redis.RedisRateLimiter;
 import com.sca4d.web.realtime.connection.BrowserWrite;
+import com.sca4d.web.realtime.connection.DefaultWebRealtimePublisher;
 import com.sca4d.web.realtime.connection.LocalConnection;
 import com.sca4d.web.realtime.connection.LocalConnectionRegistry;
 import com.sca4d.web.realtime.connection.RedisConnectionRegistry;
-import com.sca4d.web.realtime.connection.TargetPublisher;
+import com.sca4d.web.realtime.connection.WebRealtimeMessageCodec;
+import com.sca4d.web.realtime.connection.WebRealtimeMessageHandler;
 import com.sca4d.web.realtime.rabbit.NodeMessageCodec;
 import com.sca4d.web.realtime.rabbit.RabbitNodeRouter;
 import com.sca4d.web.realtime.stomp.StompConnections;
@@ -230,30 +239,46 @@ class WebRealtimeInfrastructureIntegrationTest {
         firstRegistry.register(firstConnection.id(), firstNode.nodeId(), session);
         secondRegistry.register(secondConnection.id(), secondNode.nodeId(), session);
 
-        TargetPublisher publisher = new TargetPublisher(
+        WebRealtimeMessageHandler handler = new WebRealtimeMessageHandler(
                 firstRegistry,
                 firstNode,
                 PROPERTIES,
                 clock,
-                OBJECT_MAPPER);
+                OBJECT_MAPPER,
+                new WebRealtimeMessageCodec(OBJECT_MAPPER));
+        MessageBus messages = (message, policy) -> {
+            assertThat(policy.mode()).isEqualTo(DispatchPolicy.Mode.IMMEDIATE);
+            handler.handle(new IncomingMessage<>(
+                    new MessageId(1L),
+                    (WebRealtimeMessage) message,
+                    "web-realtime-test",
+                    clock.instant(),
+                    false,
+                    1));
+            return new DispatchReceipt(new MessageId(1L), DispatchReceipt.Status.BROKER_ACCEPTED);
+        };
+        WebRealtimePublisher publisher = new DefaultWebRealtimePublisher(messages, PROPERTIES, clock);
         ObjectNode payload = OBJECT_MAPPER.createObjectNode().put("invoiceId", 42);
         Event<ObjectNode> event = new Event<>(
-                new EventType<>("invoice.changed", 1, ObjectNode.class),
+                new EventType<>("INVOICE/CHANGED", 1, ObjectNode.class),
                 null,
                 clock.instant(),
                 payload);
-        publisher.publishNow(WebRealtimeTarget.account(session.account().accountId()), event);
+        publisher.publish(
+                WebRealtimeTarget.account(session.account().accountId()),
+                event,
+                DispatchPolicy.immediate());
 
         assertThat(firstConnection.received()).isNotNull();
         BrowserWrite crossNode = secondConnection.received();
         assertThat(crossNode).isNotNull();
-        assertThat(crossNode.envelope().getEventCode()).isEqualTo("invoice.changed");
+        assertThat(crossNode.envelope().getEventCode()).isEqualTo("INVOICE/CHANGED");
         assertThat(crossNode.envelope().getProtocolVersion()).isEqualTo(1);
         assertThat(crossNode.envelope().getPayload().path("invoiceId").intValue()).isEqualTo(42);
 
         WebRealtimeTarget topic = WebRealtimeTarget.topic("invoice:42");
         assertThat(secondRegistry.subscribe(secondConnection.id(), "invoice", topic)).isTrue();
-        publisher.publishNow(topic, event);
+        publisher.publish(topic, event, DispatchPolicy.immediate());
         assertThat(secondConnection.received()).isNotNull();
         assertThat(firstConnection.received(300)).isNull();
 

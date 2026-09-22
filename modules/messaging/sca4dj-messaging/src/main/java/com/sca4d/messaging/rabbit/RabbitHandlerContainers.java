@@ -43,6 +43,7 @@ public final class RabbitHandlerContainers implements SmartLifecycle {
 
     private volatile boolean running;
 
+    /** 创建当前对象。 */
     public RabbitHandlerContainers(
             @NotNull ConnectionFactory connectionFactory,
             @NotNull RabbitMessageTopology topology,

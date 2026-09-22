@@ -13,6 +13,7 @@ public final class SmsDeliveryAttempt {
 
     private final @Nullable String bizId;
 
+    /** 创建当前对象。 */
     public SmsDeliveryAttempt(
             @NotNull SmsDeliveryStatus status,
             @Nullable String requestId,
@@ -22,14 +23,17 @@ public final class SmsDeliveryAttempt {
         this.bizId = bizId;
     }
 
+    /** 返回 status 方法提供的结果。 */
     public @NotNull SmsDeliveryStatus status() {
         return status;
     }
 
+    /** 执行 requestId 方法表示的业务操作。 */
     public @Nullable String requestId() {
         return requestId;
     }
 
+    /** 执行 bizId 方法表示的业务操作。 */
     public @Nullable String bizId() {
         return bizId;
     }

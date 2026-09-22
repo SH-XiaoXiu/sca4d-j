@@ -52,42 +52,52 @@ public final class SmsBindingState {
         this.version = Objects.requireNonNull(version, "绑定版本不能为空");
     }
 
+    /** 执行 bindingId 方法表示的业务操作。 */
     public long bindingId() {
         return bindingId;
     }
 
+    /** 执行 providerId 方法表示的业务操作。 */
     public long providerId() {
         return providerId;
     }
 
+    /** 返回 code 方法提供的结果。 */
     public @NotNull NotificationCode code() {
         return code;
     }
 
+    /** 执行 route 方法表示的业务操作。 */
     public @NotNull String route() {
         return route;
     }
 
+    /** 执行 languageTag 方法表示的业务操作。 */
     public @NotNull String languageTag() {
         return languageTag;
     }
 
+    /** 执行 signName 方法表示的业务操作。 */
     public @NotNull String signName() {
         return signName;
     }
 
+    /** 执行 providerTemplateCode 方法表示的业务操作。 */
     public @NotNull String providerTemplateCode() {
         return providerTemplateCode;
     }
 
+    /** 执行 parameterMappingJson 方法表示的业务操作。 */
     public @NotNull String parameterMappingJson() {
         return parameterMappingJson;
     }
 
+    /** 执行 enabled 方法表示的业务操作。 */
     public boolean enabled() {
         return enabled;
     }
 
+    /** 返回 version 方法提供的结果。 */
     public @NotNull Version version() {
         return version;
     }

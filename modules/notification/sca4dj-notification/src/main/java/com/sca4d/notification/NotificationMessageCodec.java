@@ -25,6 +25,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.Comparator;
+import java.util.stream.StreamSupport;
 
 /** 把 NotificationMessage 编解码为 RabbitMQ 与 Outbox 使用的稳定 JSON payload。 */
 public final class NotificationMessageCodec implements MessageCodec<NotificationMessage> {
@@ -33,6 +35,7 @@ public final class NotificationMessageCodec implements MessageCodec<Notification
 
     private final @NotNull MessageContentCodec contents = new MessageContentCodec();
 
+    /** 创建当前对象。 */
     public NotificationMessageCodec(@NotNull ObjectMapper json) {
         this.json = Objects.requireNonNull(json, "ObjectMapper 不能为空");
     }
@@ -60,16 +63,17 @@ public final class NotificationMessageCodec implements MessageCodec<Notification
         root.put("recipientType", notification.recipient().type().value());
         root.put("recipientId", notification.recipient().id());
         root.put("languageTag", notification.locale().toLanguageTag());
-        if (notification.region() == null) {
+        Region region = notification.region();
+        if (region == null) {
             root.putNull("regionCode");
         } else {
-            root.put("regionCode", notification.region().code());
+            root.put("regionCode", region.code());
         }
         root.set("variables", json.valueToTree(notification.variables()));
         ArrayNode channelValues = root.putArray("channels");
         notification.channels()
                 .stream()
-                .sorted(java.util.Comparator.comparing(NotificationChannel::value))
+                .sorted(Comparator.comparing(NotificationChannel::value))
                 .forEach(
                         channel -> channelValues.addObject()
                                 .put("code", channel.value())
@@ -103,7 +107,7 @@ public final class NotificationMessageCodec implements MessageCodec<Notification
                     requiredChannels.add(value);
                 }
             });
-            List<MessageContent> decodedContents = java.util.stream.StreamSupport
+            List<MessageContent> decodedContents = StreamSupport
                     .stream(root.required("contents").spliterator(), false)
                     .map(contents::decode)
                     .toList();

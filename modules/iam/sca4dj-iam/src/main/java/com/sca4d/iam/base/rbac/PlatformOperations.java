@@ -18,7 +18,7 @@ public final class PlatformOperations implements RbacOperationModule {
 
     private static final @NotNull String ACCOUNTS_RESOURCE = "accounts";
 
-    private static final @NotNull String PRINCIPAL_ROLES_RESOURCE = "principal-roles";
+    private static final @NotNull String PRINCIPAL_ROLES_RESOURCE = "principal_roles";
 
     /** 读取 Platform 角色。 */
     public static final @NotNull String ROLES_READ = MODULE + ':' + ROLES_RESOURCE + ':' + Action.READ_VALUE;
@@ -62,15 +62,15 @@ public final class PlatformOperations implements RbacOperationModule {
                         OperationNode.action(Action.MANAGE.value(), "operation.platform.accounts.manage", 200)),
                 OperationNode.resource(
                         PRINCIPAL_ROLES_RESOURCE,
-                        "operation.platform.principal-roles",
+                        "operation.platform.principal_roles",
                         300,
                         OperationNode.action(
                                 Action.READ_VALUE,
-                                "operation.platform.principal-roles.read",
+                                "operation.platform.principal_roles.read",
                                 100),
                         OperationNode.action(
                                 Action.MANAGE.value(),
-                                "operation.platform.principal-roles.manage",
+                                "operation.platform.principal_roles.manage",
                                 200)));
     }
 

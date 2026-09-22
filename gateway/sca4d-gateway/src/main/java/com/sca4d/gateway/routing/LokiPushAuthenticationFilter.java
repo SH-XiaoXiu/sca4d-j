@@ -29,7 +29,7 @@ public final class LokiPushAuthenticationFilter implements GatewayFilter {
 
     /** @param properties 已校验并启用的 Loki 写入配置 */
     public LokiPushAuthenticationFilter(@NotNull GatewayProperties.Logging properties) {
-        this.expectedCredential = (properties.requireUsername() + ":" + properties.requirePassword())
+        this.expectedCredential = (properties.validatedUsername() + ":" + properties.validatedPassword())
                 .getBytes(StandardCharsets.UTF_8);
     }
 

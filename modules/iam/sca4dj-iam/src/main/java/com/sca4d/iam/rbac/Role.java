@@ -12,7 +12,7 @@ import java.util.Objects;
 public final class Role implements Resource {
 
     /** Role 使用的稳定 Resource 类型。 */
-    public static final @NotNull String RESOURCE_TYPE = "role";
+    public static final @NotNull String RESOURCE_TYPE = "IAM/ROLE";
 
     private final @NotNull Long id;
 

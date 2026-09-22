@@ -26,6 +26,7 @@ import java.time.Duration;
 @AutoConfiguration
 @EnableConfigurationProperties(SmsCodeProperties.class)
 public class SmsCodeAutoConfiguration {
+    /** 创建当前对象。 */
     public SmsCodeAutoConfiguration() {
     }
 

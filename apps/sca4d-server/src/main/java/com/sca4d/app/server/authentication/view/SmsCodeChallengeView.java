@@ -17,6 +17,7 @@ public final class SmsCodeChallengeView {
 
     private final Instant resendAt;
 
+    /** 创建 SMS Challenge 响应视图。 */
     private SmsCodeChallengeView(SmsCodeChallenge challenge) {
         this.challengeId = challenge.challengeId().value();
         this.maskedRecipient = challenge.maskedRecipient();
@@ -24,22 +25,27 @@ public final class SmsCodeChallengeView {
         this.resendAt = challenge.resendAt();
     }
 
+    /** @param challenge SMS Challenge @return 脱敏后的响应视图 */
     public static @NotNull SmsCodeChallengeView from(@NotNull SmsCodeChallenge challenge) {
         return new SmsCodeChallengeView(Objects.requireNonNull(challenge, "SMS Challenge 不能为空"));
     }
 
+    /** @return Challenge 标识 */
     public String getChallengeId() {
         return challengeId;
     }
 
+    /** @return 脱敏后的接收方 */
     public String getMaskedRecipient() {
         return maskedRecipient;
     }
 
+    /** @return 到期时间 */
     public Instant getExpiresAt() {
         return expiresAt;
     }
 
+    /** @return 允许重新发送的时间 */
     public Instant getResendAt() {
         return resendAt;
     }

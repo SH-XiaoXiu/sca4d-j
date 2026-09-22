@@ -24,7 +24,7 @@ public final class TrustedProxyHeadersFilter implements GlobalFilter, Ordered {
 
     /** @param properties 已校验的 Gateway 运行配置 */
     public TrustedProxyHeadersFilter(@NotNull GatewayProperties properties) {
-        this.secret = properties.requireSecret();
+        this.secret = properties.validatedSecret();
     }
 
     /** @return 在路由匹配和 Gateway 内置 ForwardedHeadersFilter 之前执行 */

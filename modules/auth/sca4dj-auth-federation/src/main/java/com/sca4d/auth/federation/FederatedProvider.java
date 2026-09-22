@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public final class FederatedProvider {
 
     /** Provider 管理接口和审计记录使用的资源类型。 */
-    public static final @NotNull String RESOURCE_TYPE = "authentication:federated-provider";
+    public static final @NotNull String RESOURCE_TYPE = "AUTH/FEDERATED_PROVIDER";
 
     private final long id;
 

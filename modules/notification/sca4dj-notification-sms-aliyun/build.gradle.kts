@@ -18,7 +18,9 @@ dependencyManagement {
 dependencies {
     implementation(project(":core:sca4dj-core-api"))
     implementation(project(":modules:notification:sca4dj-notification-sms"))
-    implementation(libs.aliyun.sms)
+    implementation(libs.aliyun.sms) {
+        exclude(group = "xpp3", module = "xpp3")
+    }
     api(libs.spring.boot.autoconfigure)
     annotationProcessor(libs.spring.boot.autoconfigure.processor)
     annotationProcessor(libs.spring.boot.configuration.processor)

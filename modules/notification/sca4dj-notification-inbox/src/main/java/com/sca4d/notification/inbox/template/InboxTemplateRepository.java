@@ -53,7 +53,7 @@ public class InboxTemplateRepository {
     @CheckReturnValue
     public @NotNull Page<InboxTemplate> page(@NotNull ListRequest request) {
         ListRequest checked = Objects.requireNonNull(request, "站内信模板列表要求不能为空");
-        var page = checked.getPage().requireMaxSize(100);
+        var page = checked.getPage().verifyMaxSize(100);
         for (SortOrder order : checked.getSort()) {
             if (!SORT_FIELDS.contains(order.getField())) {
                 throw new IllegalArgumentException("站内信模板列表包含不支持的排序字段: " + order.getField());

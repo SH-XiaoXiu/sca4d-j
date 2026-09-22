@@ -243,7 +243,7 @@ public class DownlinkRepository {
     public @NotNull Page<DeviceDownlink> findDownlinks(
             long deviceId,
             @NotNull PageRequest page) {
-        PageRequest checked = Objects.requireNonNull(page, "下行分页要求不能为空").requireMaxSize(100);
+        PageRequest checked = Objects.requireNonNull(page, "下行分页要求不能为空").verifyMaxSize(100);
         long total = messages.countDeviceDownlinks(deviceId);
         List<DeviceDownlink> items = total == 0
                 ? List.of()
@@ -259,7 +259,7 @@ public class DownlinkRepository {
     public @NotNull Page<DeviceAcknowledgement> findAcknowledgements(
             long deviceId,
             @NotNull PageRequest page) {
-        PageRequest checked = Objects.requireNonNull(page, "业务回执分页要求不能为空").requireMaxSize(100);
+        PageRequest checked = Objects.requireNonNull(page, "业务回执分页要求不能为空").verifyMaxSize(100);
         long total = messages.countLatestAcknowledgements(deviceId);
         List<DeviceAcknowledgement> items = total == 0
                 ? List.of()

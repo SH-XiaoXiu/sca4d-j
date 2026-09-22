@@ -33,22 +33,27 @@ public final class InboxTemplateState {
         this.version = Objects.requireNonNull(version, "站内信模板版本不能为空");
     }
 
+    /** 执行 templateId 方法表示的业务操作。 */
     public long templateId() {
         return templateId;
     }
 
+    /** 返回 code 方法提供的结果。 */
     public @NotNull NotificationCode code() {
         return code;
     }
 
+    /** 执行 contentJson 方法表示的业务操作。 */
     public @NotNull String contentJson() {
         return contentJson;
     }
 
+    /** 执行 enabled 方法表示的业务操作。 */
     public boolean enabled() {
         return enabled;
     }
 
+    /** 返回 version 方法提供的结果。 */
     public @NotNull Version version() {
         return version;
     }

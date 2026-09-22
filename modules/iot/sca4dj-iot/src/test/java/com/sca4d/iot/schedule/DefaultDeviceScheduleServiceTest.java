@@ -9,10 +9,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.id.IdGenerator;
+import com.sca4d.core.api.messaging.DispatchReceipt;
 import com.sca4d.core.api.messaging.MessageBus;
+import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.ProductBinding;
 import com.sca4d.iot.api.history.DeviceHistoryStore;
@@ -91,6 +95,8 @@ class DefaultDeviceScheduleServiceTest {
     @BeforeEach
     @SuppressWarnings("unchecked")
     void executeLockAndTransactionCallbacks() {
+        when(messages.dispatch(any(), any()))
+                .thenReturn(new DispatchReceipt(new MessageId(201L), DispatchReceipt.Status.OUTBOX_ENLISTED));
         when(distributedLock.execute(any(LockKey.class), any(Duration.class), any(Supplier.class)))
                 .thenAnswer(invocation -> ((Supplier<?>) invocation.getArgument(2)).get());
         when(transactions.execute(any()))
@@ -185,10 +191,14 @@ class DefaultDeviceScheduleServiceTest {
                 DeviceScheduleExecutionStatus.ENQUEUED,
                 200L,
                 null);
-        verify(messages).publishReliably(
+        verify(messages).dispatch(
                 argThat(
-                        event -> IotMessageTypes.DEVICE_EVENT_OCCURRED.equals(event.type())
-                                && "schedule-execution:10:2026-08-05T10:00:00Z".equals(event.businessKey())));
+                        message -> {
+                            Event<?> event = (Event<?>) message;
+                            return IotMessageTypes.DEVICE_EVENT_OCCURRED.equals(event.type())
+                                    && "schedule-execution:10:2026-08-05T10:00:00Z".equals(event.businessKey());
+                        }),
+                argThat(policy -> policy.mode() == DispatchPolicy.Mode.OUTBOX));
         verify(distributedLock).execute(
                 argThat(key -> new LockKey("iot", "schedule", "10").equals(key)),
                 ArgumentMatchers.eq(Duration.ofSeconds(10)),

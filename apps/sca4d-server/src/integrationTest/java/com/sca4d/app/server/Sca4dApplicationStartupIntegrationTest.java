@@ -9,9 +9,9 @@ import com.sca4d.app.server.iot.DeviceCreationRequestRecord;
 import com.sca4d.app.server.iot.IotProductProfile;
 import com.sca4d.app.server.iot.IotProfileStatus;
 import com.sca4d.app.server.mapper.IotApplicationMapper;
+import com.sca4d.auth.passkey.credential.PasskeyCredential;
 import com.sca4d.auth.passkey.credential.mapper.PasskeyAccountState;
 import com.sca4d.auth.passkey.credential.mapper.PasskeyCredentialMapper;
-import com.sca4d.auth.passkey.credential.mapper.PasskeyCredentialState;
 import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.enums.BaseEnum;
 import com.sca4d.core.api.i18n.LocalizedFields;
@@ -63,6 +63,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -212,7 +213,7 @@ class Sca4dApplicationStartupIntegrationTest {
 
         assertThat(defaultFlyway.info().current()).isNotNull();
         assertThat(historyFlyway.info().current()).isNotNull();
-        assertThat(settingMapper.selectSystem(List.of("startup.integration.missing"))).isEmpty();
+        assertThat(settingMapper.select("SYSTEM", "1", List.of("startup.integration.missing"))).isEmpty();
         assertThat(
                 timescaleMapper.selectTelemetry(
                         1L,
@@ -251,9 +252,9 @@ class Sca4dApplicationStartupIntegrationTest {
         byte[] credentialId = new byte[] {10, 20, 30, 40};
         byte[] publicKeyCose = new byte[] {50, 60, 70, 80};
 
-        assertThat(passkeyCredentialMapper.selectAccountByAccountId(accountId)).isNull();
+        assertThat(passkeyCredentialMapper.selectAccount(accountId, null)).isNull();
         assertThat(passkeyCredentialMapper.insertAccountIfAbsent(accountId, userHandle)).isOne();
-        PasskeyAccountState account = passkeyCredentialMapper.selectAccountByAccountId(accountId);
+        PasskeyAccountState account = passkeyCredentialMapper.selectAccount(accountId, null);
         assertThat(account).isNotNull();
         assertThat(account.userHandle()).containsExactly(userHandle);
         assertThat(account.version().value()).isZero();
@@ -263,12 +264,15 @@ class Sca4dApplicationStartupIntegrationTest {
                 credentialId,
                 publicKeyCose,
                 7,
-                "internal,usb",
+                Set.of("internal", "usb"),
                 true,
                 false,
                 "Integration key");
         assertThat(credentialRecordId).isNotNull().isPositive();
-        PasskeyCredentialState credential = passkeyCredentialMapper.selectByCredentialId(credentialId);
+        PasskeyCredential credential = passkeyCredentialMapper.selectCredentials(null, credentialId, null)
+                .stream()
+                .findFirst()
+                .orElse(null);
         assertThat(credential).isNotNull();
         assertThat(credential.userHandle()).containsExactly(userHandle);
         assertThat(credential.credentialId()).containsExactly(credentialId);
@@ -344,7 +348,10 @@ class Sca4dApplicationStartupIntegrationTest {
                                         Map.of("/displayName", "Startup integration product"))),
                         now))
                 .isOne();
-        EncodedThingModel thingModel = thingModelMapper.selectThingModel(productCode, 1);
+        EncodedThingModel thingModel = thingModelMapper.selectThingModels(productCode, 1)
+                .stream()
+                .findFirst()
+                .orElse(null);
         assertThat(thingModel).isNotNull();
         assertThat(thingModel.version()).isOne();
         assertThat(thingModel.modelJson()).isEqualTo("{}");

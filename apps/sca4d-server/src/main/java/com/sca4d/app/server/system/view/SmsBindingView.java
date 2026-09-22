@@ -78,8 +78,8 @@ public final class SmsBindingView {
         return providerTemplateCode;
     }
 
-    public Map<String, String> getParameterMapping() {
-        return parameterMapping;
+    public @NotNull Map<String, String> getParameterMapping() {
+        return Map.copyOf(parameterMapping);
     }
 
     public boolean isEnabled() {

@@ -34,7 +34,7 @@ class GatewayPropertiesTest {
 
         properties.getLogging().setLokiOrigin("http://localhost:3100/");
         properties.validate();
-        assertThat(properties.getLogging().requireLokiOrigin().toString())
+        assertThat(properties.getLogging().validatedLokiOrigin().toString())
                 .isEqualTo("http://localhost:3100");
     }
 

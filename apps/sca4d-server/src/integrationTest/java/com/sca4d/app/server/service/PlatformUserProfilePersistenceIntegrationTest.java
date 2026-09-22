@@ -13,6 +13,7 @@ import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.id.IdGenerator;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.job.JobExecutor;
 import com.sca4d.core.api.resource.ResourceReference;
 import com.sca4d.core.api.runtime.RuntimeNamespace;
@@ -277,7 +278,7 @@ class PlatformUserProfilePersistenceIntegrationTest {
         @Bean
         IdGenerator idGenerator() {
             AtomicLong values = new AtomicLong(1000L);
-            return values::incrementAndGet;
+            return () -> Id.of(values.incrementAndGet());
         }
 
         @Bean

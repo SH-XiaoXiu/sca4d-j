@@ -24,6 +24,7 @@ public final class NotificationMessageHandler implements MessageHandler<Notifica
 
     private final @NotNull NotificationMessageCodec codec;
 
+    /** 创建当前对象。 */
     public NotificationMessageHandler(
             @NotNull NotificationDelivery delivery,
             @NotNull NotificationDeliveryRouter deliveries,
@@ -59,14 +60,15 @@ public final class NotificationMessageHandler implements MessageHandler<Notifica
                 channel,
                 checked.messageId(),
                 checked.message().notification());
+        String failureCode = outcome.failureCode();
         return switch (outcome.status()) {
             case CONFIRMED, PENDING -> HandlingDecision.acknowledge();
             case UNKNOWN -> HandlingDecision.retry(
-                    outcome.failureCode() == null ? "NOTIFICATION_RESULT_UNKNOWN" : outcome.failureCode());
+                    failureCode == null ? "NOTIFICATION_RESULT_UNKNOWN" : failureCode);
             case RETRYABLE_FAILURE -> HandlingDecision.retry(
-                    outcome.failureCode() == null ? "NOTIFICATION_RETRYABLE_FAILURE" : outcome.failureCode());
+                    failureCode == null ? "NOTIFICATION_RETRYABLE_FAILURE" : failureCode);
             case REJECTED -> HandlingDecision.reject(
-                    outcome.failureCode() == null ? "NOTIFICATION_REJECTED" : outcome.failureCode());
+                    failureCode == null ? "NOTIFICATION_REJECTED" : failureCode);
         };
     }
 }

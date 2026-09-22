@@ -1,5 +1,6 @@
 package com.sca4d.notification.email.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.VersionConditions;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.notification.NotificationDelivery;
@@ -49,7 +50,7 @@ public class EmailNotificationAutoConfiguration {
     EmailTemplateRepository emailTemplateRepository(
             @NotNull EmailTemplateMapper mapper,
             @NotNull VersionConditions versionConditions,
-            @NotNull com.fasterxml.jackson.databind.ObjectMapper objectMapper) {
+            @NotNull ObjectMapper objectMapper) {
         return new EmailTemplateRepository(mapper, versionConditions, objectMapper);
     }
 

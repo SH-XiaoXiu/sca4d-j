@@ -1,5 +1,6 @@
 package com.sca4d.notification.sms.aliyun;
 
+import com.aliyun.dysmsapi20170525.Client;
 import com.aliyun.dysmsapi20170525.models.QuerySendDetailsRequest;
 import com.aliyun.dysmsapi20170525.models.SendSmsRequest;
 import com.aliyun.teaopenapi.models.Config;
@@ -34,7 +35,7 @@ public final class AliyunSmsProviderClient implements SmsProviderClient {
 
     private final ObjectMapper objectMapper;
 
-    private final Map<String, com.aliyun.dysmsapi20170525.Client> clients = new ConcurrentHashMap<>();
+    private final Map<String, Client> clients = new ConcurrentHashMap<>();
 
     /** 创建阿里云 SMS Transport。 */
     public AliyunSmsProviderClient(@NotNull AliyunSmsProperties properties, @NotNull ObjectMapper objectMapper) {
@@ -144,7 +145,7 @@ public final class AliyunSmsProviderClient implements SmsProviderClient {
     }
 
     /** 按部署凭据引用创建并缓存 SDK Client。 */
-    private com.aliyun.dysmsapi20170525.Client client(String credentialRef) {
+    private Client client(String credentialRef) {
         return clients.computeIfAbsent(credentialRef, ignored -> {
             AliyunSmsProperties.Credential credential = properties.getCredentials().get(credentialRef);
             if (credential == null) {
@@ -156,7 +157,7 @@ public final class AliyunSmsProviderClient implements SmsProviderClient {
                         .setAccessKeySecret(required(credential.getAccessKeySecret(), "AccessKey Secret"))
                         .setEndpoint(required(credential.getEndpoint(), "Endpoint"))
                         .setRegionId(required(credential.getRegionId(), "Region ID"));
-                return new com.aliyun.dysmsapi20170525.Client(config);
+                return new Client(config);
             } catch (Exception exception) {
                 throw new IllegalStateException("阿里云 SMS Client 创建失败", exception);
             }

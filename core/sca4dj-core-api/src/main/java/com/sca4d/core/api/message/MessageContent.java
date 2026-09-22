@@ -17,6 +17,7 @@ public final class MessageContent {
 
     private final @Nullable String name;
 
+    /** 创建一项消息内容。 */
     public MessageContent(
             @NotNull String mediaType,
             @NotNull ContentDisposition disposition,
@@ -28,10 +29,12 @@ public final class MessageContent {
         this.name = name == null || name.isBlank() ? null : name.strip();
     }
 
+    /** @return 创建一项内联文本内容 */
     public static @NotNull MessageContent text(@NotNull String mediaType, @NotNull String value) {
         return new MessageContent(mediaType, ContentDisposition.INLINE, new TextContent(value), null);
     }
 
+    /** @return 创建一项内联二进制附件 */
     public static @NotNull MessageContent attachment(
             @NotNull String mediaType,
             byte @NotNull [] value,
@@ -39,6 +42,7 @@ public final class MessageContent {
         return new MessageContent(mediaType, ContentDisposition.ATTACHMENT, new BinaryContent(value), name);
     }
 
+    /** @return 创建一项外部内容引用 */
     public static @NotNull MessageContent reference(
             @NotNull String mediaType,
             @NotNull ContentDisposition disposition,
@@ -48,18 +52,22 @@ public final class MessageContent {
         return new MessageContent(mediaType, disposition, new ReferencedContent(scheme, key), name);
     }
 
+    /** @return 标准化后的媒体类型 */
     public @NotNull String mediaType() {
         return mediaType;
     }
 
+    /** @return 内容在消息中的使用方式 */
     public @NotNull ContentDisposition disposition() {
         return disposition;
     }
 
+    /** @return 内容正文或外部引用 */
     public @NotNull ContentBody body() {
         return body;
     }
 
+    /** @return 可选的内容名称 */
     public @Nullable String name() {
         return name;
     }

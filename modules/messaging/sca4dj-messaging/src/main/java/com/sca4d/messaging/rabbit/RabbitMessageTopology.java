@@ -31,6 +31,7 @@ public final class RabbitMessageTopology {
 
     private final @NotNull RuntimeNamespace runtimeNamespace;
 
+    /** 创建当前对象。 */
     public RabbitMessageTopology(@NotNull RuntimeNamespace runtimeNamespace) {
         RuntimeNamespace namespace = Objects.requireNonNull(runtimeNamespace, "运行时命名空间不能为空");
         this.runtimeNamespace = namespace;
@@ -39,6 +40,7 @@ public final class RabbitMessageTopology {
         this.deadLetterExchangeName = namespace.sca4dj("messaging", "dead-letter");
     }
 
+    /** 执行 exchangeName 方法表示的业务操作。 */
     public @NotNull String exchangeName() {
         return exchangeName;
     }
@@ -63,6 +65,7 @@ public final class RabbitMessageTopology {
         return runtimeNamespace.sca4dj("messaging", "handler", handler.code().value(), "dead-letter");
     }
 
+    /** 执行 declarables 方法表示的业务操作。 */
     public @NotNull Declarables declarables(
             @NotNull List<? extends @NotNull EventHandler<?>> eventHandlers,
             @NotNull List<? extends @NotNull MessageHandler<?>> messageHandlers) {

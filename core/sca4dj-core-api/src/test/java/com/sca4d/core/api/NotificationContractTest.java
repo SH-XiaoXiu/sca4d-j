@@ -20,7 +20,7 @@ class NotificationContractTest {
     @Test
     void createsAccountNotificationWithoutChannelAddress() {
         Notification notification = new Notification(
-                new NotificationCode("authentication.email-code"),
+                new NotificationCode("AUTHENTICATION/EMAIL_CODE"),
                 NotificationRecipient.account(42),
                 Locale.SIMPLIFIED_CHINESE,
                 Map.of("code", "123456"),
@@ -39,7 +39,7 @@ class NotificationContractTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new Notification(
-                        new NotificationCode("valid"),
+                        new NotificationCode("TEST/VALID"),
                         NotificationRecipient.account(1),
                         Locale.ROOT,
                         Map.of(),
@@ -48,7 +48,7 @@ class NotificationContractTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new Notification(
-                        new NotificationCode("valid"),
+                        new NotificationCode("TEST/VALID"),
                         NotificationRecipient.account(1),
                         Locale.ENGLISH,
                         Map.of("not-valid", "value"),
@@ -66,7 +66,7 @@ class NotificationContractTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new Notification(
-                        new NotificationCode("valid"),
+                        new NotificationCode("TEST/VALID"),
                         NotificationRecipient.account(1),
                         Locale.ENGLISH,
                         excessiveVariables,
@@ -75,7 +75,7 @@ class NotificationContractTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new Notification(
-                        new NotificationCode("valid"),
+                        new NotificationCode("TEST/VALID"),
                         NotificationRecipient.account(1),
                         Locale.ENGLISH,
                         Map.of("value", "x".repeat(4097)),
@@ -85,7 +85,7 @@ class NotificationContractTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new Notification(
-                        new NotificationCode("valid"),
+                        new NotificationCode("TEST/VALID"),
                         NotificationRecipient.account(1),
                         Locale.ENGLISH,
                         Map.of(),

@@ -146,7 +146,7 @@ public class SmsCodeChallengeService {
     }
 
     /** 最终完成认证前复核 Challenge 仍属于相同可用 Account 和消费版本。 */
-    public void requireConsumed(@NotNull SmsCodeChallengeId challengeId, long accountId, @NotNull Version version) {
+    public void verifyConsumed(@NotNull SmsCodeChallengeId challengeId, long accountId, @NotNull Version version) {
         SmsCodeChallengeState state = store.find(challengeId);
         if (state == null
                 || state.accountId() != accountId

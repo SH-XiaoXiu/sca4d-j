@@ -133,7 +133,11 @@ describe('Email notification controllers', () => {
     ).toBe('Code ');
     expect(controller.state.preview?.subject).toBe('验证码');
     expect(requests[3]?.body).toEqual({
-      content: current.content,
+      source: {
+        html: '验证码 {{code}}',
+        subject: '验证码 {{code}}',
+        text: '验证码 {{code}}',
+      },
       languageTag: 'zh-CN',
       variables: { code: '123456', expiresInMinutes: '5' },
     });

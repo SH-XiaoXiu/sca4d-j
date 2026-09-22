@@ -27,6 +27,7 @@ public final class EmailNotificationDelivery implements NotificationDelivery {
 
     private final @NotNull EmailGateway transport;
 
+    /** 创建当前对象。 */
     public EmailNotificationDelivery(
             @NotNull EmailRecipientResolver recipients,
             @NotNull EmailSenderRepository senders,

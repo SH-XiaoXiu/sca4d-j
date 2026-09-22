@@ -11,27 +11,25 @@ import org.junit.jupiter.api.Test;
 class AuditOperationTest {
 
     @Test
-    @DisplayName("Audit 操作使用小写层级键")
+    @DisplayName("Audit 操作使用规范层级键")
     void acceptsHierarchicalOperation() {
-        AuditOperation operation = AuditOperation.declared("platform/account/status/change");
+        AuditOperation operation = AuditOperation.declared("PLATFORM/ACCOUNT/STATUS/CHANGE");
 
-        assertEquals("audit-operation", operation.type());
-        assertEquals("platform/account/status/change", operation.value());
+        assertEquals("AUDIT/OPERATIONS", operation.type());
+        assertEquals("PLATFORM/ACCOUNT/STATUS/CHANGE", operation.value());
         assertEquals(operation.value(), operation.id());
-        assertEquals("legacy:operation", new AuditOperation("legacy:operation").id());
+        assertEquals("LEGACY:OPERATION", new AuditOperation("legacy:operation").id());
     }
 
     @Test
-    @DisplayName("Audit 操作拒绝权限风格和空层级键")
+    @DisplayName("Audit 操作拒绝点号分隔和空层级键")
     void rejectsNonHierarchicalOperation() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> AuditOperation.declared("platform.account.update"));
+                () -> AuditOperation.declared("PLATFORM.ACCOUNT.UPDATE"));
         assertThrows(
                 IllegalArgumentException.class,
                 () -> AuditOperation.declared("platform//update"));
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> AuditOperation.declared("Platform/account/update"));
+        assertEquals("PLATFORM/ACCOUNT/UPDATE", AuditOperation.declared("Platform/ACCOUNT/UPDATE").value());
     }
 }

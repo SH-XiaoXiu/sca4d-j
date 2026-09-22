@@ -39,6 +39,7 @@ public class EmailTemplateManagementService {
 
     private final @NotNull EmailRenderer renderer;
 
+    /** 创建 Email 模板管理服务。 */
     public EmailTemplateManagementService(
             @NotNull LocaleCatalog locales,
             @NotNull EmailTemplateRepository templates,
@@ -52,17 +53,20 @@ public class EmailTemplateManagementService {
         this.renderer = Objects.requireNonNull(renderer, "Email Renderer 不能为空");
     }
 
+    /** @param request 分页查询条件 @return Email 模板分页结果 */
     @Transactional(readOnly = true)
     public @NotNull Page<EmailTemplate> find(@NotNull ListRequest request) {
         return templates.page(request);
     }
 
+    /** @param templateId 模板标识 @return 已存在的 Email 模板 */
     @Transactional(readOnly = true)
     public @NotNull EmailTemplate loadById(long templateId) {
         return templates.find(templateId)
                 .orElseThrow(() -> new BusinessException(EmailNotificationErrorCode.TEMPLATE_NOT_FOUND));
     }
 
+    /** @param code 通知编码 @param submitted 按 Locale 提交的模板源码 @return 新建模板 */
     @Transactional
     public @NotNull EmailTemplate create(
             @NotNull NotificationCode code,
@@ -73,6 +77,7 @@ public class EmailTemplateManagementService {
         return loadById(templateId);
     }
 
+    /** @param templateId 模板标识 @param code 通知编码 @param submitted 新的多语言源码 @return 替换后的模板 */
     @Transactional
     public @NotNull EmailTemplate replace(
             long templateId,
@@ -82,12 +87,14 @@ public class EmailTemplateManagementService {
         return loadById(templateId);
     }
 
+    /** @param templateId 模板标识 @param enabled 是否启用 @return 更新后的模板 */
     @Transactional
     public @NotNull EmailTemplate setEnabled(long templateId, boolean enabled) {
         templates.setEnabled(templateId, enabled);
         return loadById(templateId);
     }
 
+    /** 删除未启用的 Email 模板。 */
     @Transactional
     public void delete(long templateId) {
         EmailTemplate current = loadById(templateId);
@@ -97,12 +104,14 @@ public class EmailTemplateManagementService {
         templates.delete(templateId);
     }
 
+    /** @param sources 多语言模板源码 @return 源码中声明的变量名 */
     public @NotNull Set<String> variables(@NotNull Map<String, EmailTemplateSource> sources) {
         Set<String> result = new java.util.LinkedHashSet<>();
         sources.values().forEach(source -> result.addAll(renderer.inspect(source).variables()));
         return Set.copyOf(result);
     }
 
+    /** @param source 模板源码 @param locale 目标 Locale @param variables 渲染变量 @return 安全渲染结果 */
     public @NotNull RenderedEmail preview(
             @NotNull EmailTemplateSource source,
             @NotNull Locale locale,
