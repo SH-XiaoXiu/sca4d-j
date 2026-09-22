@@ -1,4 +1,4 @@
-# 命名、类型与代码结构
+# 03 命名、类型与代码结构
 
 ## 目标
 
@@ -22,7 +22,7 @@
 
 Gradle 项目表示可以单独选择、替换或运行的功能，Java 包表示项目内的对象和职责。文件数量多不是拆分 Gradle 项目的理由；两个包使用不同名称，也不表示它们应当分属不同模块。
 
-顶层项目的职责和依赖见 [项目结构与模块边界](/standards/project-structure)。新建 Gradle 项目或顶层目录时，先说明现有位置为什么不适合，并确认新边界带来的裁切、替换或部署价值。
+顶层项目的职责和依赖见[架构与边界](/standards/02_architecture)。新建 Gradle 项目或顶层目录时，先说明现有位置为什么不适合，并确认新边界带来的选择、替换或部署价值。
 
 ## 包名先表达对象
 
@@ -38,7 +38,7 @@ com.sca4d.storage.file.lifecycle
 
 `identity`、`credential`、`device` 和 `lifecycle` 在这些位置都能排除一组不相关的类。只有当一个子包内已有或明确会有多个同类职责时，才建立子包；不为了包裹一个类机械地增加目录。
 
-对象和职责已经表达清楚时，不再增加按 Java 形式分类的层级。例如 `com.sca4d.iam.identity.AccountStatus` 已经足够准确，`com.sca4d.iam.identity.enums.AccountStatus` 只补充了“这是 enum”，没有补充业务信息。
+对象和职责已经表达清楚时，不再增加按 Java 形式分类的层级。例如 `com.sca4d.iam.identity.AccountStatus` 已经足够准确，`com.sca4d.iam.identity.enums.AccountStatus` 只补充了「这是 enum」，没有补充业务信息。
 
 ## 职责子包
 
@@ -131,13 +131,13 @@ OrderHelper.publish(order);
 
 类、方法、字段和路由必须使用项目业务语言。动词说明动作，名词说明稳定对象；禁止 `process`、`handle`、`data`、`info` 等无法预测职责的泛化名称。
 
-方法名按 `接收者.方法` 阅读。接收者已经表达对象时，方法名只保留动作或返回对象：`DeviceService.loadById(...)`、`IotDeviceController.get(...)`、`ProductDefinitionCatalog.definition(...)`。只有“按某个关系取得对象”本身是方法的主要语义、且名词方法会产生歧义时才使用 `For`，例如明确的解析器或策略映射。同一个方法名可以出现在不同接收者中，只要组合后的语义自然；不为了全局唯一或形式统一增加前后缀。
+方法名按 `接收者.方法` 阅读。接收者已经表达对象时，方法名只保留动作或返回对象：`DeviceService.loadById(...)`、`IotDeviceController.get(...)`、`ProductDefinitionCatalog.definition(...)`。只有「按某个关系取得对象」本身是方法的主要含义、且名词方法会产生歧义时才使用 `For`，例如明确的解析器或策略映射。同一个方法名可以出现在不同接收者中，只要组合后的含义自然；不为了全局唯一或形式统一增加前后缀。
 
 业务方法不使用裸 `require(...)`，也不使用 `requireActive`、`requireCurrent` 等把异常策略当作领域动作的前缀。可缺失查询返回 `Optional`、集合或分页并使用 `find...`；找不到即失败的读取使用 `loadById`、`loadByCode` 或 `loadAt`；确认已有状态使用 `verify...`、`assert...` 或状态名；向对象登记内容使用 `add...`、`register...` 或 `record...`。底层文本、数值、协议字段和影响行数断言可以使用 `require...`，但必须由接收者和参数名称明确说明校验对象。
 
 Request 只用于 HTTP 输入，View 只用于 HTTP 输出。一次操作返回值必须使用说明业务语义的类型名，不能以泛化 `result` 包收纳；数据库映射类型由 Repository 处理。对外返回业务对象，HTTP 响应由 View 转换；不为同一个业务对象机械复制 DTO、VO、BO 等类型。
 
-`Util` 和 `Helper` 不是禁用后缀，但必须准确描述真实的无状态通用操作或有限技术协助。处理状态机、事务、持久化调用和副作用顺序的类型必须使用对应的业务动作或对象名称。完整判断见[代码结构与分包](/standards/naming-and-code-structure)。
+`Util` 和 `Helper` 不是禁用后缀，但必须准确描述真实的无状态通用操作或有限技术协助。处理状态机、事务、持久化调用和副作用顺序的类型必须使用对应的业务动作或对象名称。完整判断见本页的[代码结构与分包](/standards/03_code-structure)。
 
 ### 类型
 

@@ -112,7 +112,7 @@ Core Spring 自己声明的 HTTP 错误如下：
 
 路由不存在和静态资源不存在使用 Core 的 `NOT_FOUND`。未分类服务端异常使用 Core 的 `INTERNAL`，响应中只保留固定安全文案，原始异常写入服务端日志。
 
-`@RateLimited` 拒绝的请求使用 Core 错误码 `1005` 和 HTTP 429，并返回 `Retry-After: <seconds>`。秒数是 Bucket4j 当前令牌桶补充出一个可用令牌所需时间向上取整后的正整数；客户端应至少等待该秒数再发起新的尝试。限流维度和令牌补充规则见[并发规则](/standards/persistence)。
+`@RateLimited` 拒绝的请求使用 Core 错误码 `1005` 和 HTTP 429，并返回 `Retry-After: <seconds>`。秒数是 Bucket4j 当前令牌桶补充出一个可用令牌所需时间向上取整后的正整数；客户端应至少等待该秒数再发起新的尝试。限流维度和令牌补充规则见[并发规则](/standards/05_persistence)。
 
 `@Idempotent` 请求仍由另一个执行者处理时使用 Core 错误码 `1006`、HTTP 409 和 `Retry-After: <seconds>`。同一幂等键已经绑定不同方法参数时使用 Core 错误码 `1007` 和 HTTP 409，不返回等待时间。两种情况都不会进入业务方法。
 
@@ -187,7 +187,7 @@ Page 的 JSON 形状如下：
 
 路由要求 `If-Match` 时，先读取资源及其 ETag，再把 ETag 原样放入修改请求。资源已经被其他请求修改时返回 412，客户端需要重新读取并确认修改内容。
 
-服务端在完整资源编辑存在并发覆盖风险、且客户端能够处理 412 时采用这一机制。状态命令、字段级 Patch、列表和动态投影通常不采用，具体以路由声明为准。设计要求见[并发规则](/standards/persistence)。
+服务端在完整资源编辑存在并发覆盖风险、且客户端能够处理 412 时采用这一机制。状态命令、字段级 Patch、列表和动态投影通常不采用，具体以路由声明为准。设计要求见[并发规则](/standards/05_persistence)。
 
 数据库 `Version` 可以作为强 ETag 返回，例如 Version 3 对应：
 

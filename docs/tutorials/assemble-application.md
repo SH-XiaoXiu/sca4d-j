@@ -8,7 +8,7 @@
 
 给应用设置稳定的 `spring.application.name`。同一应用的多个实例使用相同名称，不同应用使用不同名称；Job、Quartz、Redis 和 RabbitMQ 的运行命名依赖它。
 
-新 App 尚无任何 Flyway 迁移时，应用 `com.sca4dj.app` 插件，配置 `sca4djApp.migrationName`，需要应用表时再配置 `schemaFragment`，然后运行该 App 的 `initFlyway`。任务从运行依赖收集结构片段，生成 `src/main/resources/db/migration/V1__init_<migrationName>.sql`。具体配置见[App Gradle 插件](/standards/gradle-plugins#app-gradle-插件)。
+新 App 尚无任何 Flyway 迁移时，应用 `com.sca4dj.app` 插件，配置 `sca4djApp.migrationName`，需要应用表时再配置 `schemaFragment`，然后运行该 App 的 `initFlyway`。任务从运行依赖收集结构片段，生成 `src/main/resources/db/migration/V1__init_<migrationName>.sql`。具体配置见[App Gradle 插件](/standards/10_gradle-plugins#app-gradle-插件)。
 
 已有数据库通过新的 Flyway 迁移修改结构。删减依赖不会自动删除数据库表，也不能通过重建 V1 更新已经运行的数据库。
 

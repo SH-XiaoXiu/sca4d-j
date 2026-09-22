@@ -10,7 +10,7 @@ Sca4d-J 采用[分布式单体](/home/architecture)：业务体系作为完整�
 
 新增功能通常从[后端业务接口](/tutorials/backend-feature)开始，再接入[管理端页面](/tutorials/admin-feature)。身份建模先区分[接入者、账号和业务身份](/home/identity)，接口与数据权限使用[Resource、Action 和 Permission](/home/permission)。登录和敏感操作验证见[认证与 Session](/home/authentication-session)。
 
-编写和评审代码遵守[项目规范](/standards/principles)。查路由、配置或 Java 方法时使用[参考](/reference/)；定义具体业务规则时使用[需求与实现设计](/requirements/)；交给 AI 执行的任务见[AI 协作](/ai-collaboration/)。
+编写和评审代码遵守[项目规范](/standards/)。查路由、配置或 Java 方法时使用[参考](/reference/)；定义具体业务规则时使用[需求与实现设计](/requirements/)；协作任务的准备和验收见[AI 协作](/ai-collaboration/)。
 
 ## 内置功能
 

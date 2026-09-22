@@ -1,6 +1,6 @@
-# 测试规范
+# 11 测试规范
 
-本页定义如何根据变更选择测试。文件覆盖、失败处理和证据格式见 [Review 规范](/standards/review)。
+本页定义如何根据变更选择测试。文件覆盖、失败处理和证据格式见 [代码评审规范](/standards/12_review)。
 
 ## 选择能发现问题的检查
 
@@ -65,7 +65,7 @@ nice -n 10 pnpm exec vitest run <scope> --maxWorkers=1
 
 验收范围包括业务语义与状态机、分层和依赖、类型与空值、SQL 和事务、认证权限、并发和集群、外部失败、前端状态、测试证据、文档同步。
 
-Java 变更同时检查[命名、类型与代码结构](/standards/naming-and-code-structure)和[注释、文档注释与日志](/standards/comments-and-logging)。改动类型必须位于可预测的领域或职责包；业务流程必须留下足以判断阶段、结果和恢复方式的日志。
+Java 变更同时检查[命名、类型与代码结构](/standards/03_code-structure)和[注释、文档注释与日志](/standards/08_comments-and-logging)。改动类型必须位于可预测的领域或职责包；业务流程必须留下足以判断阶段、结果和恢复方式的日志。
 
 ## SQL 与调用数量
 

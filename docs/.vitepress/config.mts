@@ -185,60 +185,41 @@ const tutorialsSidebar: DefaultTheme.SidebarItem[] = [
 
 const standardsSidebar: DefaultTheme.SidebarItem[] = [
   {
+    "text": "规范入口",
+    "link": "/standards/"
+  },
+  {
     "text": "工程原则",
-    "link": "/standards/principles"
+    "items": [
+      { "text": "工程原则", "link": "/standards/01_principles" },
+      { "text": "架构与边界", "link": "/standards/02_architecture" },
+      { "text": "命名与代码结构", "link": "/standards/03_code-structure" },
+      { "text": "Java 与 Spring", "link": "/standards/04_java-and-spring" }
+    ]
   },
   {
-    "text": "项目结构",
-    "link": "/standards/project-structure"
+    "text": "技术实现",
+    "items": [
+      { "text": "SQL 与持久化", "link": "/standards/05_persistence" },
+      { "text": "数据库", "link": "/standards/06_database" },
+      { "text": "Vue、TypeScript 与交互", "link": "/standards/07_frontend" },
+      { "text": "注释、文档注释与日志", "link": "/standards/08_comments-and-logging" }
+    ]
   },
   {
-    "text": "分层与 API",
-    "link": "/standards/layers-and-api"
+    "text": "构建与验收",
+    "items": [
+      { "text": "格式化与构建", "link": "/standards/09_build" },
+      { "text": "Sca4d-J 构建 Gradle 插件", "link": "/standards/10_gradle-plugins" },
+      { "text": "测试与验证", "link": "/standards/11_testing" },
+      { "text": "代码评审", "link": "/standards/12_review" }
+    ]
   },
   {
-    "text": "命名与代码结构",
-    "link": "/standards/naming-and-code-structure"
-  },
-  {
-    "text": "Java 与 Spring",
-    "link": "/standards/java-and-spring"
-  },
-  {
-    "text": "持久化与并发",
-    "link": "/standards/persistence"
-  },
-  {
-    "text": "PostgreSQL",
-    "link": "/standards/postgresql"
-  },
-  {
-    "text": "前端开发",
-    "link": "/standards/frontend"
-  },
-  {
-    "text": "注释与日志",
-    "link": "/standards/comments-and-logging"
-  },
-  {
-    "text": "格式化与构建",
-    "link": "/standards/build"
-  },
-  {
-    "text": "Gradle 插件",
-    "link": "/standards/gradle-plugins"
-  },
-  {
-    "text": "测试",
-    "link": "/standards/testing"
-  },
-  {
-    "text": "代码评审",
-    "link": "/standards/review"
-  },
-  {
-    "text": "文档编写",
-    "link": "/standards/documentation"
+    "text": "文档",
+    "items": [
+      { "text": "文档规范", "link": "/standards/13_documentation" }
+    ]
   }
 ]
 
@@ -281,7 +262,7 @@ const themeConfig = {
   nav: [
     { text: '首页', link: '/' },
     { text: '教程', link: '/tutorials/local-start' },
-    { text: '项目规范', link: '/standards/principles' },
+    { text: '项目规范', link: '/standards/' },
     { text: '参考', link: '/reference/' },
     { text: '需求文档', link: '/requirements/' },
     { text: 'AI 协作', link: '/ai-collaboration/' }

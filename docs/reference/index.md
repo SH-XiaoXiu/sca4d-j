@@ -77,4 +77,4 @@ IAM 管理 Subject、Account、Principal 和授权关系；Auth 管理认证尝�
 - [sca4dj-build-gradle-plugin](/javadoc/tools/sca4dj-build-gradle-plugin/index.html)
 - [sca4dj-app-gradle-plugin](/javadoc/tools/sca4dj-app-gradle-plugin/index.html)
 
-Java API 由源码 Javadoc 生成，保存在 `docs/public/javadoc/` 并随仓库提交。本地预览和文档打包直接使用这些文件，更新方法见[Javadoc 构建](/standards/build#javadoc)。
+Java API 由源码 Javadoc 生成，保存在 `docs/public/javadoc/` 并随仓库提交。本地预览和文档打包直接使用这些文件，更新方法见[Javadoc 构建](/standards/09_build#javadoc)。

@@ -21,7 +21,7 @@ Sca4d Server 的个人资料接口包含读取、修改和头像绑定。增加�
 
 ## 定义字段和写入规则
 
-为字段确定类型、长度、空值含义、默认值和允许修改的条件。已有数据库通过新的 Flyway 迁移增加字段；检查旧记录怎样取得有效值，再增加非空或唯一约束。迁移要求见[PostgreSQL 规范](/standards/postgresql)。
+为字段确定类型、长度、空值含义、默认值和允许修改的条件。已有数据库通过新的 Flyway 迁移增加字段；检查旧记录怎样取得有效值，再增加非空或唯一约束。迁移要求见[数据库规范](/standards/06_database)。
 
 在 `ReplaceProfileRequest` 中声明输入及校验，在 `ProfileView` 中声明返回值。确认修改是替换完整资料还是只改变一个字段：完整替换中，空值可能表示清除；局部修改中，未提交字段必须与明确清空区分。
 
@@ -33,7 +33,7 @@ Sca4d Server 的个人资料接口包含读取、修改和头像绑定。增加�
 
 Controller 返回 `ApiResponse.ok(ProfileView.from(updated))`，并通过 `@Audit` 和 `@AuditTarget` 声明操作及资料目标。审计只保存允许记录的标识和字段变化，不写入密码、验证码或完整个人资料。
 
-Repository 组合 Mapper 查询与写入，向 Service 返回业务对象。SQL 明确列出本次更新的列，保留访问范围、状态和必要的版本条件。影响行数由 Repository 解释，具体写法见[持久化规范](/standards/persistence)。
+Repository 组合 Mapper 查询与写入，向 Service 返回业务对象。SQL 明确列出本次更新的列，保留访问范围、状态和必要的版本条件。影响行数由 Repository 解释，具体写法见[持久化规范](/standards/05_persistence)。
 
 ## 调用接口确认资料变化
 
@@ -55,7 +55,7 @@ Authorization: Bearer <sessionToken>
 
 再次读取，应得到修改后的资料。这个请求会清除邮箱和手机号，只在测试账号上执行。当前个人资料接口没有要求 `If-Match`；增加其他资源的完整编辑接口时，按[HTTP 并发契约](/reference/http/common#etag、if-match-与修改冲突)判断是否需要 ETag。
 
-测试覆盖有效输入、非法值、清空和事务失败。涉及邮箱时，还要覆盖标识冲突及回滚后资料与 Account 是否一致。只修改本应用时，先编译 `:apps:sca4d-server:compileJava`，再运行直接相关测试；资源限制见[测试规范](/standards/testing#资源限制)。
+测试覆盖有效输入、非法值、清空和事务失败。涉及邮箱时，还要覆盖标识冲突及回滚后资料与 Account 是否一致。只修改本应用时，先编译 `:apps:sca4d-server:compileJava`，再运行直接相关测试；资源限制见[测试规范](/standards/11_testing#资源限制)。
 
 ## 列表查询
 
@@ -245,4 +245,4 @@ Patch 不生成 SQL，也不通过反射推断列名。Mapper 方法可以直接
 </choose>
 ```
 
-Repository 将允许修改的字段转换为明确的 SQL 列。完整规则见[持久化规范](/standards/persistence)。
+Repository 将允许修改的字段转换为明确的 SQL 列。完整规则见[持久化规范](/standards/05_persistence)。

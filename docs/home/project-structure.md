@@ -42,4 +42,4 @@ gateway -> 实例注册与转发契约
 
 Core 不依赖 Module 或 App，Module 不依赖 App。不使用事件、反射、静态全局变量或工具类隐藏反向依赖。新建模块或顶层目录前，先说明现有位置为什么不适合，并确认新边界。
 
-选择或删除模块见[组装应用](/tutorials/assemble-application)，新增代码的分层要求见[分层与 API](/standards/layers-and-api)。
+选择或删除模块见[组装应用](/tutorials/assemble-application)，新增代码的分层要求见[架构与边界](/standards/02_architecture)。

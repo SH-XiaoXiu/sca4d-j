@@ -1,4 +1,4 @@
-# Sca4d-J 构建 Gradle 插件
+# 10 Sca4d-J 构建 Gradle 插件
 
 源码：`tools/sca4dj-build-gradle-plugin`
 
@@ -21,7 +21,7 @@ flowchart TD
     Java --> Mapping
     Publish --> Mapping
     Mapping --> Extension[sca4djBuild]
-    Extension --> Local[当前项目阶段]
+    Extension --> Local[当前 Gradle 项目阶段]
     Aggregate --> Children[直接子项目阶段]
     Local --> Report[sca4djQualityReport]
     Children --> Report
@@ -74,7 +74,7 @@ Included Build 也不属于主构建的项目树。根 `settings.gradle.kts` 另
 Mapping 为每个阶段注册两类任务：
 
 - `sca4djLocalCompile`、`sca4djLocalTest` 等 `sca4djLocal*` 任务只执行当前 Gradle 项目通过 `sca4djBuild` 登记的任务。
-- `sca4djCompile`、`sca4djTest` 等不带 `Local` 的任务先执行当前项目阶段；应用 Aggregate 后，它们还连接已登记的直接子项目同名阶段。
+- `sca4djCompile`、`sca4djTest` 等不带 `Local` 的任务先执行当前 Gradle 项目阶段；应用 Aggregate 后，它们还连接已登记的直接子项目同名阶段。
 
 技术栈项目通过扩展登记自己的任务：
 
@@ -96,7 +96,7 @@ sca4djBuild {
 }
 ```
 
-`compile(...)`、`test(...)`、`integrationTest(...)`、`assemble(...)`、`format(...)`、`formatCheck(...)`、`audit(...)`、`fullAudit(...)` 与 `publish(...)` 只给当前项目对应的本地阶段增加依赖。`projectReports`、`checkstyleReports` 和 `spotBugsReports` 是当前项目的原始报告；`importedReports` 接受其他构建或子项目已经转换成统一格式的 `quality-report.json`。
+`compile(...)`、`test(...)`、`integrationTest(...)`、`assemble(...)`、`format(...)`、`formatCheck(...)`、`audit(...)`、`fullAudit(...)` 与 `publish(...)` 只给当前 Gradle 项目对应的本地阶段增加依赖。`projectReports`、`checkstyleReports` 和 `spotBugsReports` 是当前 Gradle 项目的原始报告；`importedReports` 接受其他构建或子项目已经转换成统一格式的 `quality-report.json`。
 
 Aggregate 只观察直接子项目是否应用 Mapping。未应用 Mapping 的项目不会进入任何阶段；孙项目必须先由中间项目应用 Aggregate，才能继续传到父项目。父项目的 `minimumLevel` 作为子项目的默认值，子项目显式设置后不会被父项目覆盖。
 
@@ -118,12 +118,12 @@ plugins {
 - Java Toolchain 使用 Java 21，所有 `JavaCompile` 增加 `-parameters`。
 - 所有 `Test` 使用 JUnit Platform；Javadoc 允许省略项目规则明确不要求的重复注释，其他文档警告仍作为错误。
 - 创建 `integrationTest` SourceSet 和同名 Test 任务。它复用测试依赖，并可读取 main 与 test 输出，但不会自动成为普通 `test` 的依赖。
-- Spotless 格式化所有 SourceSet 的 Java、SQL 和 XML，以及当前项目的 `build.gradle.kts`。Java 规则删除未使用 import，并读取插件内置 Eclipse formatter 配置。
+- Spotless 格式化所有 SourceSet 的 Java、SQL 和 XML，以及当前 Gradle 项目的 `build.gradle.kts`。Java 规则删除未使用 import，并读取插件内置 Eclipse formatter 配置。
 - Checkstyle 10.26.1 对全部 Checkstyle 任务生成 XML、HTML 和 SARIF；任务本身不立即让构建失败。
 - SpotBugs 引擎固定为 4.10.3，应用共享排除文件并生成 XML、SARIF；普通 Java 项目的完整审计默认执行 `spotbugsMain`，不自动执行 `spotbugsTest`。
 - `classes`、`test`、`integrationTest`、`assemble`、`spotlessApply` 和 `spotlessCheck` 分别映射到对应构建阶段；Checkstyle 与 `spotbugsMain` 映射到完整审计。
 
-Checkstyle 和 SpotBugs 设置 `ignoreFailures`，是为了先生成完整报告，再由 QualityGateTask 按当前项目质量级别统一判断，而不是让第一个分析器发现问题后立即中断。分析器无法执行、配置文件缺失或报告无法解析仍会使任务失败。
+Checkstyle 和 SpotBugs 设置 `ignoreFailures`，是为了先生成完整报告，再由 QualityGateTask 按当前 Gradle 项目质量级别统一判断，而不是让第一个分析器发现问题后立即中断。分析器无法执行、配置文件缺失或报告无法解析仍会使任务失败。
 
 ## 质量级别
 
@@ -135,14 +135,14 @@ effective = stricter(-Pquality.level, sca4djBuild.minimumLevel)
 
 未传 `-Pquality.level` 时，请求级别是 `ELEGANT`。属性值忽略大小写和首尾空白；其他值在 Gradle 配置阶段失败。命令行只能提高检查深度，不能把项目降到它声明的最低级别以下。
 
-| 有效级别 | `sca4djBuild` 在装配和报告之外增加的阶段 | 当前项目结果怎样记录 |
+| 有效级别 | `sca4djBuild` 在装配和报告之外增加的阶段 | 当前 Gradle 项目结果怎样记录 |
 |---|---|---|
 | `SHIT` | 无 | 使用下面的共同映射规则 |
 | `AGILE` | 单元测试、格式检查、基础审计 | 使用下面的共同映射规则 |
 | `ELEGANT` | `AGILE` 的阶段，再加集成测试和完整审计 | 使用下面的共同映射规则 |
-| `OBSESSIVE` | 与 `ELEGANT` 执行相同阶段 | 当前项目全部非 `ERROR` 结果提升为 `ERROR` |
+| `OBSESSIVE` | 与 `ELEGANT` 执行相同阶段 | 当前 Gradle 项目全部非 `ERROR` 结果提升为 `ERROR` |
 
-`SHIT`、`AGILE` 和 `ELEGANT` 使用同一套结果映射：项目 JSON 保留自己声明的严重程度；Checkstyle 结果记为 `WARNING`；高优先级的正确性、并发正确性、安全和恶意代码 SpotBugs 结果记为 `ERROR`，其他 SpotBugs 结果记为 `WARNING`。只要报告被登记为输入，这套映射就会执行。质量级别之间的主要差异是构建会自动执行哪些阶段；`OBSESSIVE` 再把当前项目的非 `ERROR` 结果提升为 `ERROR`。
+`SHIT`、`AGILE` 和 `ELEGANT` 使用同一套结果映射：项目 JSON 保留自己声明的严重程度；Checkstyle 结果记为 `WARNING`；高优先级的正确性、并发正确性、安全和恶意代码 SpotBugs 结果记为 `ERROR`，其他 SpotBugs 结果记为 `WARNING`。只要报告被登记为输入，这套映射就会执行。质量级别之间的主要差异是构建会自动执行哪些阶段；`OBSESSIVE` 再把当前 Gradle 项目的非 `ERROR` 结果提升为 `ERROR`。
 
 阶段是否有实际工作取决于项目登记的任务。例如 Java 插件把 Checkstyle 和 SpotBugs 登记为 `fullAudit`，没有把它们登记为 `audit`；前端项目则可以把 ESLint 报告登记为 `audit`。
 
@@ -334,7 +334,7 @@ Root 配置所有主构建项目的 `group=com.sca4dj` 与 `version=0.0.1-alpha`
 - `audit` 只执行审计和报告，不隐式执行测试；`format` 会修改文件，`formatCheck` 才是只读检查。
 - `-Pquality.level` 不能降低项目最低级别。非法值会在执行任务前失败。
 - 项目 JSON、Checkstyle XML 或 SpotBugs XML 无法读取时，QualityGateTask 失败，不把损坏报告当成零问题。
-- OBSESSIVE 只提升当前项目的原始审计结果；从子项目导入的结果保留子项目已经确定的严重程度。
+- OBSESSIVE 只提升当前 Gradle 项目的原始审计结果；从子项目导入的结果保留子项目已经确定的严重程度。
 - 当前插件不注册 Qodana 或依赖漏洞审计任务。需要这类检查时，项目必须显式创建任务和报告，再通过 `fullAudit(...)`、`projectReports` 或 `importedReports` 接入。
 
 ## App Gradle 插件

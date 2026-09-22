@@ -1,4 +1,4 @@
-# 格式化与构建规范
+# 09 格式化与构建规范
 
 格式化、编译、测试、审计和装配用于发现不同问题。修改完成后根据受影响内容选择对应检查，不把所有命令组成每次都运行的固定套餐。
 
@@ -14,7 +14,7 @@ Java 项目通过 Sca4d-J 构建插件把自己的编译、测试、集成测试
 - 跨多个项目的公开契约变化：增加直接消费项目的编译和测试；
 - 发布或确实影响全仓库的变化：使用根 `compile`、`test`、`integrationTest`、`audit` 或 `build`。
 
-根任务的准确阶段和质量级别见 [Sca4d-J 构建 Gradle 插件](/standards/gradle-plugins)。普通局部修改不以根 `build` 作为默认入口。
+根任务的准确阶段和质量级别见 [Sca4d-J 构建 Gradle 插件](/standards/10_gradle-plugins)。普通局部修改不以根 `build` 作为默认入口。
 
 ## Spotless
 
@@ -87,7 +87,7 @@ Spotless 的配置是被覆盖文件的格式来源。Java 使用构建插件中
 ./gradlew :spotlessCheck
 ```
 
-运行 `spotlessApply` 前确认目标范围内没有任务发起人的原有脏文件。无法隔离时只运行检查并手工修正本次文件。
+运行 `spotlessApply` 前确认目标范围内没有与本次修改无关的已有变更。无法隔离时只运行检查并手工修正本次文件。
 
 ### VitePress
 
