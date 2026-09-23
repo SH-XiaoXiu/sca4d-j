@@ -1,18 +1,31 @@
 package com.sca4d.notification.email;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.notification.NotificationCode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-/** Email 模板聚合；每个 Locale 保存 subject、text 和 html 源码。 */
+/**
+ * Email 模板聚合；每个 Locale 保存 subject、text 和 html 源码。
+ */
 public final class EmailTemplate {
+
+    /**
+     * Email Template 审计使用的稳定资源类型。
+     */
+    public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofColon("NOTIFICATION:EMAIL:TEMPLATES");
+
+    /**
+     * 供 Java 注解参数使用的资源类型文本。
+     */
+    public static final @NotNull String RESOURCE_TYPE_VALUE = "NOTIFICATION:EMAIL:TEMPLATES";
+
     private final long templateId;
 
-    private final @NotNull NotificationCode code;
+    private final @NotNull TreeCode code;
 
     private final @NotNull Map<@NotNull String, @NotNull EmailTemplateSource> locales;
 
@@ -22,7 +35,7 @@ public final class EmailTemplate {
 
     public EmailTemplate(
             long templateId,
-            @NotNull NotificationCode code,
+            @NotNull TreeCode code,
             @NotNull Map<String, EmailTemplateSource> locales,
             boolean enabled,
             @NotNull Version version) {
@@ -43,8 +56,10 @@ public final class EmailTemplate {
         return templateId;
     }
 
-    /** 返回 code 方法提供的结果。 */
-    public @NotNull NotificationCode code() {
+    /**
+     * 返回 code 方法提供的结果。
+     */
+    public @NotNull TreeCode code() {
         return code;
     }
 
@@ -52,7 +67,9 @@ public final class EmailTemplate {
         return locales;
     }
 
-    /** 返回 source 方法提供的结果。 */
+    /**
+     * 返回 source 方法提供的结果。
+     */
     public @NotNull EmailTemplateSource source(@NotNull Locale requested) {
         Locale checked = Objects.requireNonNull(requested, "Email 模板 Locale 不能为空");
         EmailTemplateSource exact = locales.get(checked.toLanguageTag());
@@ -71,7 +88,9 @@ public final class EmailTemplate {
         return enabled;
     }
 
-    /** 返回 version 方法提供的结果。 */
+    /**
+     * 返回 version 方法提供的结果。
+     */
     public @NotNull Version version() {
         return version;
     }

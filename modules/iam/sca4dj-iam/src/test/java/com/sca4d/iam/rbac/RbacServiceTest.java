@@ -12,6 +12,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.id.Id;
@@ -83,19 +84,19 @@ class RbacServiceTest {
             @Override
             public OperationNode.@NotNull Module operationTree() {
                 return OperationNode.module(
-                        "test",
+                        TreeCode.ofSegment("TEST"),
                         "operation.test",
                         100,
                         OperationNode.resource(
-                                "items",
+                                TreeCode.ofSegment("ITEMS"),
                                 "operation.test.items",
                                 100,
                                 OperationNode.action(
-                                        Action.READ_VALUE,
+                                        Action.READ.code(),
                                         "operation.test.items.read",
                                         100),
                                 OperationNode.action(
-                                        Action.MANAGE_VALUE,
+                                        Action.MANAGE.code(),
                                         "operation.test.items.manage",
                                         200)));
             }
@@ -128,7 +129,7 @@ class RbacServiceTest {
     @DisplayName("Rejects Internal Selector From Role Management API")
     void rejectsInternalSelectorFromRoleManagementApi() {
         assertBusinessFailure(
-                () -> rbac.createRole(PLATFORM, "ADMIN", List.of("*")),
+                () -> rbac.createRole(PLATFORM, "ADMIN", List.of(TreeCode.ofSegment("*"))),
                 RbacErrorCode.OPERATION_INVALID);
 
         verify(repository, never())
@@ -146,7 +147,7 @@ class RbacServiceTest {
         when(repository.findActivePermissionSelectors(request)).thenReturn(loaded);
 
         assertThat(rbac.findGrantedOperations(PLATFORM, List.of(PRINCIPAL_ID)).get(PRINCIPAL_ID))
-                .extracting(Operation::value)
+                .extracting(operation -> operation.code().value())
                 .containsExactly("TEST:ITEMS:MANAGE", "TEST:ITEMS:READ");
         verify(permissionCache).put(any(RbacPermissionCacheLookup.class), ArgumentMatchers.eq(loaded));
         assertThat(customCode.code()).isNotEqualTo(PlatformRbacService.ROOT);
@@ -170,7 +171,7 @@ class RbacServiceTest {
         Map<RbacScope, Map<Long, List<Operation>>> result = rbac.findGrantedOperations(request);
 
         assertThat(result.get(PROJECT_A).get(PRINCIPAL_ID))
-                .extracting(Operation::value)
+                .extracting(operation -> operation.code().value())
                 .containsExactly("TEST:ITEMS:READ");
         assertThat(result.get(PROJECT_B).get(SECOND_PRINCIPAL_ID)).isEmpty();
         verify(repository).findActivePermissionSelectors(request);
@@ -203,7 +204,7 @@ class RbacServiceTest {
                 List.of(PRINCIPAL_ID, SECOND_PRINCIPAL_ID));
 
         assertThat(result.get(PRINCIPAL_ID))
-                .extracting(Operation::value)
+                .extracting(operation -> operation.code().value())
                 .containsExactly("TEST:ITEMS:READ");
         assertThat(result.get(SECOND_PRINCIPAL_ID)).isEmpty();
         verify(repository).findActivePermissionSelectors(missing);
@@ -231,14 +232,14 @@ class RbacServiceTest {
                 rbac.findPrincipalIds(
                         PLATFORM,
                         PrincipalGrantQuery.forIds(List.of(PRINCIPAL_ID, SECOND_PRINCIPAL_ID))
-                                .allOf("TEST:ITEMS:READ", "TEST:ITEMS:MANAGE")
+                                .allOf(TreeCode.ofColon("TEST:ITEMS:READ"), TreeCode.ofColon("TEST:ITEMS:MANAGE"))
                                 .build()))
                 .containsExactly(PRINCIPAL_ID);
         assertThat(
                 rbac.findPrincipalIds(
                         PLATFORM,
                         PrincipalGrantQuery.forIds(List.of(PRINCIPAL_ID, SECOND_PRINCIPAL_ID))
-                                .anyOf("TEST:ITEMS:MANAGE")
+                                .anyOf(TreeCode.ofColon("TEST:ITEMS:MANAGE"))
                                 .build()))
                 .containsExactly(PRINCIPAL_ID);
     }
@@ -250,7 +251,7 @@ class RbacServiceTest {
                 () -> rbac.findPrincipalIds(
                         PLATFORM,
                         PrincipalGrantQuery.forIds(List.of(PRINCIPAL_ID))
-                                .allOf("other:items:read")
+                                .allOf(TreeCode.ofColon("OTHER:ITEMS:READ"))
                                 .build()),
                 RbacErrorCode.OPERATION_INVALID);
 
@@ -316,7 +317,10 @@ class RbacServiceTest {
                         exception -> assertThat(exception.errorCode())
                                 .isEqualTo(RbacErrorCode.BUILT_IN_ROLE_PROTECTED));
         assertBusinessFailure(
-                () -> rbac.replaceRolePermissions(PLATFORM, ROOT_ID, List.of("TEST:ITEMS:READ")),
+                () -> rbac.replaceRolePermissions(
+                        PLATFORM,
+                        ROOT_ID,
+                        List.of(TreeCode.ofColon("TEST:ITEMS:READ"))),
                 RbacErrorCode.BUILT_IN_ROLE_PROTECTED);
     }
 
@@ -336,9 +340,12 @@ class RbacServiceTest {
         when(repository.findRolePrincipalIds(PLATFORM, DEFAULT_ID)).thenReturn(List.of(PRINCIPAL_ID));
 
         assertThat(
-                rbac.replaceRolePermissions(PLATFORM, DEFAULT_ID, List.of("TEST:ITEMS:READ"))
+                rbac.replaceRolePermissions(
+                        PLATFORM,
+                        DEFAULT_ID,
+                        List.of(TreeCode.ofColon("TEST:ITEMS:READ")))
                         .operations())
-                .extracting(Operation::value)
+                .extracting(operation -> operation.code().value())
                 .containsExactly("TEST:ITEMS:READ");
         verify(permissionCache).evict(Map.of(PLATFORM, List.of(PRINCIPAL_ID)));
         verify(invalidation).invalidate(PLATFORM, List.of(PRINCIPAL_ID));
@@ -416,7 +423,9 @@ class RbacServiceTest {
                 new Version(0));
     }
 
-    /** 验证有返回值的 RBAC 调用在产生结果前按指定业务错误失败。 */
+    /**
+     * 验证有返回值的 RBAC 调用在产生结果前按指定业务错误失败。
+     */
     private void assertBusinessFailure(Supplier<?> invocation, RbacErrorCode errorCode) {
         assertThatThrownBy(() -> {
             Object unexpectedResult = invocation.get();

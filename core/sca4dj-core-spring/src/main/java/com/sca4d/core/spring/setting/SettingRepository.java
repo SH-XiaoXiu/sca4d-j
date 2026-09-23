@@ -18,20 +18,26 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-/** 隔离 Settings 对 MyBatis、影响行数、条件写入和初始化锁 SQL 的依赖。 */
+/**
+ * 隔离 Settings 对 MyBatis、影响行数、条件写入和初始化锁 SQL 的依赖。
+ */
 public class SettingRepository {
 
     private final SettingMapper mapper;
 
     private final @NotNull SqlBatches sqlBatches;
 
-    /** 创建设置 Repository。 */
+    /**
+     * 创建设置 Repository。
+     */
     public SettingRepository(@NotNull SettingMapper mapper, @NotNull SqlBatches sqlBatches) {
         this.mapper = Objects.requireNonNull(mapper, "设置 Mapper 不能为空");
         this.sqlBatches = Objects.requireNonNull(sqlBatches, "SQL 批处理器不能为空");
     }
 
-    /** 按键批量读取 `Subject.SYSTEM` 当前设置行。 */
+    /**
+     * 按键批量读取 `Subject.SYSTEM` 当前设置行。
+     */
     @CheckReturnValue
     public @NotNull Map<@NotNull String, @NotNull StoredSetting> findAllSystem(
             @NotNull Collection<@NotNull String> keys) {
@@ -45,7 +51,7 @@ public class SettingRepository {
                 uniqueKeys,
                 1,
                 2,
-                batch -> mapper.select(owner.type(), owner.id(), batch))) {
+                batch -> mapper.select(owner.type().value(), owner.id(), batch))) {
             if (values.putIfAbsent(value.key(), value) != null) {
                 throw new IllegalStateException("数据库返回重复 SystemSetting: " + value.key());
             }
@@ -53,19 +59,23 @@ public class SettingRepository {
         return Map.copyOf(values);
     }
 
-    /** 按 owner 和键读取一个设置行。 */
+    /**
+     * 按 owner 和键读取一个设置行。
+     */
     @CheckReturnValue
     public @NotNull Optional<StoredSetting> find(
             @NotNull SettingOwner owner,
             @NotNull String key) {
         SettingOwner checkedOwner = Objects.requireNonNull(owner, "设置 owner 不能为空");
         return mapper.select(
-                checkedOwner.type(),
+                checkedOwner.type().value(),
                 checkedOwner.id(),
                 List.of(Objects.requireNonNull(key, "设置键不能为空"))).stream().findFirst();
     }
 
-    /** 只在 SystemSetting 不存在时写入初始化值。 */
+    /**
+     * 只在 SystemSetting 不存在时写入初始化值。
+     */
     public void initializeSystem(
             @NotNull String key,
             int schemaVersion,
@@ -75,7 +85,7 @@ public class SettingRepository {
             @Nullable Integer encryptionContextVersion) {
         AffectedRowCounts.requireSingle(
                 mapper.insertManaged(
-                        SettingOwner.system().type(),
+                        SettingOwner.system().type().value(),
                         SettingOwner.system().id(),
                         key,
                         schemaVersion,
@@ -87,7 +97,9 @@ public class SettingRepository {
                 "初始化系统设置");
     }
 
-    /** 写入并标记初始化节点持续同步的 SystemSetting。 */
+    /**
+     * 写入并标记初始化节点持续同步的 SystemSetting。
+     */
     public void synchronizeSystem(
             @NotNull String key,
             int schemaVersion,
@@ -107,7 +119,9 @@ public class SettingRepository {
                 "同步系统设置");
     }
 
-    /** 解除 SystemSetting 的 ENV 同步状态并保留最后一次值。 */
+    /**
+     * 解除 SystemSetting 的 ENV 同步状态并保留最后一次值。
+     */
     public void releaseSystemSynchronization(@NotNull String key) {
         AffectedRowCounts.requireSingle(
                 mapper.releaseSystemSynchronization(key),
@@ -115,7 +129,9 @@ public class SettingRepository {
                 "解除系统设置同步");
     }
 
-    /** 按版本条件写入一个 owner 的完整覆盖值。 */
+    /**
+     * 按版本条件写入一个 owner 的完整覆盖值。
+     */
     public void replace(
             @NotNull SettingOwner owner,
             @NotNull String key,
@@ -129,7 +145,7 @@ public class SettingRepository {
         VersionCondition checkedCondition = Objects.requireNonNull(condition, "设置版本条件不能为空");
         int changed = checkedCondition.expected().value() == 0
                 ? mapper.insertManaged(
-                        checkedOwner.type(),
+                        checkedOwner.type().value(),
                         checkedOwner.id(),
                         key,
                         schemaVersion,
@@ -138,7 +154,7 @@ public class SettingRepository {
                         valueCiphertext,
                         encryptionContextVersion)
                 : mapper.updateManaged(
-                        checkedOwner.type(),
+                        checkedOwner.type().value(),
                         checkedOwner.id(),
                         key,
                         Patch.set(schemaVersion),
@@ -151,7 +167,9 @@ public class SettingRepository {
         AffectedRowCounts.requireSingle(changed, checkedCondition.whenZero(), "替换设置 " + key);
     }
 
-    /** 按版本条件将已有 owner 设置行改为 tombstone。 */
+    /**
+     * 按版本条件将已有 owner 设置行改为 tombstone。
+     */
     public void reset(
             @NotNull SettingOwner owner,
             @NotNull String key,
@@ -161,7 +179,7 @@ public class SettingRepository {
         VersionCondition checkedCondition = Objects.requireNonNull(condition, "设置版本条件不能为空");
         AffectedRowCounts.requireSingle(
                 mapper.updateManaged(
-                        checkedOwner.type(),
+                        checkedOwner.type().value(),
                         checkedOwner.id(),
                         key,
                         Patch.set(schemaVersion),
@@ -175,14 +193,18 @@ public class SettingRepository {
                 "恢复设置默认值 " + key);
     }
 
-    /** owner 生命周期结束时物理删除指定设置行。 */
+    /**
+     * owner 生命周期结束时物理删除指定设置行。
+     */
     @AffectedRows(target = "删除 owner 设置", whenZero = ZeroRowPolicy.ALLOW)
     public void erase(@NotNull SettingOwner owner, @NotNull String key) {
         SettingOwner checkedOwner = Objects.requireNonNull(owner, "设置 owner 不能为空");
-        mapper.erase(checkedOwner.type(), checkedOwner.id(), Objects.requireNonNull(key, "设置键不能为空"));
+        mapper.erase(checkedOwner.type().value(), checkedOwner.id(), Objects.requireNonNull(key, "设置键不能为空"));
     }
 
-    /** 取得当前事务持有的初始化互斥锁。 */
+    /**
+     * 取得当前事务持有的初始化互斥锁。
+     */
     public void lockBootstrap() {
         if (!mapper.tryLockBootstrap()) {
             throw new IllegalStateException("已有其他初始化节点正在同步 Settings");

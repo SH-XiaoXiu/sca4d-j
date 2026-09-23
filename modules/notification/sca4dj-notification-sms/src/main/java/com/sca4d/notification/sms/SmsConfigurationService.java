@@ -1,8 +1,8 @@
 package com.sca4d.notification.sms;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.id.IdGenerator;
-import com.sca4d.core.api.notification.NotificationCode;
 import com.sca4d.core.api.utils.TextUtils;
 import com.sca4d.notification.NotificationTypeCatalog;
 import org.jetbrains.annotations.CheckReturnValue;
@@ -19,7 +19,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/** 管理 SMS Provider 实例和统一通知到供应商模板的传输绑定。 */
+/**
+ * 管理 SMS Provider 实例和统一通知到供应商模板的传输绑定。
+ */
 public class SmsConfigurationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SmsConfigurationService.class);
@@ -32,7 +34,9 @@ public class SmsConfigurationService {
 
     private final IdGenerator ids;
 
-    /** 创建 SMS 配置管理服务。 */
+    /**
+     * 创建 SMS 配置管理服务。
+     */
     public SmsConfigurationService(
             @NotNull SmsRepository repository,
             @NotNull NotificationTypeCatalog notificationTypes,
@@ -47,27 +51,35 @@ public class SmsConfigurationService {
         this.ids = Objects.requireNonNull(ids, "IdGenerator 不能为空");
     }
 
-    /** @return 全部未删除 Provider */
+    /**
+     * @return 全部未删除 Provider
+     */
     @Transactional(readOnly = true)
     public @NotNull List<@NotNull SmsProvider> providers() {
         return repository.providers();
     }
 
-    /** @return 指定 Provider；不存在时抛出稳定错误 */
+    /**
+     * @return 指定 Provider；不存在时抛出稳定错误
+     */
     @Transactional(readOnly = true)
     public @NotNull SmsProvider provider(long providerId) {
         return repository.provider(providerId)
                 .orElseThrow(() -> new BusinessException(SmsNotificationErrorCode.PROVIDER_NOT_FOUND));
     }
 
-    /** @return 指定 Provider 的全部未删除绑定 */
+    /**
+     * @return 指定 Provider 的全部未删除绑定
+     */
     @Transactional(readOnly = true)
     public @NotNull List<@NotNull SmsProviderBinding> bindings(long providerId) {
         provider(providerId);
         return repository.bindings(providerId);
     }
 
-    /** @return 指定绑定；不存在时抛出稳定错误 */
+    /**
+     * @return 指定绑定；不存在时抛出稳定错误
+     */
     @Transactional(readOnly = true)
     public @NotNull SmsProviderBinding binding(long providerId, long bindingId) {
         SmsProviderBinding value = repository.binding(bindingId)
@@ -78,7 +90,9 @@ public class SmsConfigurationService {
         return value;
     }
 
-    /** 创建默认停用 Provider。 */
+    /**
+     * 创建默认停用 Provider。
+     */
     @Transactional
     @CheckReturnValue
     public @NotNull SmsProvider createProvider(
@@ -97,7 +111,9 @@ public class SmsConfigurationService {
         return provider(providerId);
     }
 
-    /** 完整替换停用 Provider。 */
+    /**
+     * 完整替换停用 Provider。
+     */
     @Transactional
     @CheckReturnValue
     public @NotNull SmsProvider replaceProvider(
@@ -115,7 +131,9 @@ public class SmsConfigurationService {
         return provider(providerId);
     }
 
-    /** 启用或停用 Provider；启用前至少需要一个启用绑定。 */
+    /**
+     * 启用或停用 Provider；启用前至少需要一个启用绑定。
+     */
     @Transactional
     @CheckReturnValue
     public @NotNull SmsProvider setProviderEnabled(long providerId, boolean enabled) {
@@ -132,7 +150,9 @@ public class SmsConfigurationService {
         return provider(providerId);
     }
 
-    /** 删除停用且没有绑定的 Provider。 */
+    /**
+     * 删除停用且没有绑定的 Provider。
+     */
     @Transactional
     public void deleteProvider(long providerId) {
         SmsProvider current = provider(providerId);
@@ -143,7 +163,9 @@ public class SmsConfigurationService {
         LOG.info("SMS Provider 已删除 | providerId={}", providerId);
     }
 
-    /** 创建默认停用的 Provider 模板绑定。 */
+    /**
+     * 创建默认停用的 Provider 模板绑定。
+     */
     @Transactional
     @CheckReturnValue
     public @NotNull SmsProviderBinding createBinding(
@@ -182,7 +204,9 @@ public class SmsConfigurationService {
         return binding(providerId, bindingId);
     }
 
-    /** 完整替换停用绑定。 */
+    /**
+     * 完整替换停用绑定。
+     */
     @Transactional
     @CheckReturnValue
     public @NotNull SmsProviderBinding replaceBinding(
@@ -222,16 +246,18 @@ public class SmsConfigurationService {
         return binding(providerId, bindingId);
     }
 
-    /** 启用或停用 Provider 模板绑定。 */
+    /**
+     * 启用或停用 Provider 模板绑定。
+     */
     @Transactional
     @CheckReturnValue
     public @NotNull SmsProviderBinding setBindingEnabled(long providerId, long bindingId, boolean enabled) {
         SmsProviderBinding current = binding(providerId, bindingId);
         if (enabled) {
             checkedBinding(
-                    current.code().value(),
-                    current.route().value(),
-                    current.locale().toLanguageTag(),
+                    current.code(),
+                    current.route(),
+                    current.locale(),
                     current.signName(),
                     current.providerTemplateCode(),
                     current.parameterMapping());
@@ -246,7 +272,9 @@ public class SmsConfigurationService {
         return binding(providerId, bindingId);
     }
 
-    /** 删除停用绑定。 */
+    /**
+     * 删除停用绑定。
+     */
     @Transactional
     public void deleteBinding(long providerId, long bindingId) {
         if (binding(providerId, bindingId).enabled()) {
@@ -256,7 +284,9 @@ public class SmsConfigurationService {
         LOG.info("SMS Provider 绑定已删除 | providerId={} bindingId={}", providerId, bindingId);
     }
 
-    /** 校验 Provider 字段并要求类型存在已安装 Transport。 */
+    /**
+     * 校验 Provider 字段并要求类型存在已安装 Transport。
+     */
     private @NotNull CheckedProvider checkedProvider(String code, String type, String credentialRef, int priority) {
         try {
             SmsProvider checked = new SmsProvider(
@@ -276,7 +306,9 @@ public class SmsConfigurationService {
         }
     }
 
-    /** 校验绑定引用的通知类型、路由、Locale、供应商字段和变量映射。 */
+    /**
+     * 校验绑定引用的通知类型、路由、Locale、供应商字段和变量映射。
+     */
     private @NotNull CheckedBinding checkedBinding(
             String notificationCode,
             String route,
@@ -285,14 +317,38 @@ public class SmsConfigurationService {
             String providerTemplateCode,
             Map<String, String> parameterMapping) {
         try {
-            NotificationCode code = new NotificationCode(notificationCode);
+            return checkedBinding(
+                    TreeCode.of(notificationCode),
+                    new SmsRoute(route),
+                    Locale.forLanguageTag(Objects.requireNonNull(languageTag, "Locale 不能为空")),
+                    signName,
+                    providerTemplateCode,
+                    parameterMapping);
+        } catch (IllegalArgumentException exception) {
+            throw new BusinessException(SmsNotificationErrorCode.BINDING_INVALID, exception);
+        }
+    }
+
+    /**
+     * 校验已经解析的绑定编码、Locale、供应商字段和变量映射。
+     */
+    private @NotNull CheckedBinding checkedBinding(
+            @NotNull TreeCode code,
+            @NotNull SmsRoute route,
+            @NotNull Locale locale,
+            String signName,
+            String providerTemplateCode,
+            Map<String, String> parameterMapping) {
+        try {
+            TreeCode checkedCode = Objects.requireNonNull(code, "通知编码不能为空");
             var type = notificationTypes.types()
                     .stream()
-                    .filter(candidate -> candidate.code().equals(code))
+                    .filter(candidate -> candidate.code().equals(checkedCode))
                     .findFirst()
-                    .orElseThrow(() -> new IllegalArgumentException("通知类型未安装: " + code));
-            Locale locale = Locale.forLanguageTag(Objects.requireNonNull(languageTag, "Locale 不能为空"));
-            if (locale.getLanguage().isBlank()) {
+                    .orElseThrow(() -> new IllegalArgumentException("通知类型未安装: " + checkedCode));
+            SmsRoute checkedRoute = Objects.requireNonNull(route, "SMS Route 不能为空");
+            Locale checkedLocale = Objects.requireNonNull(locale, "Locale 不能为空");
+            if (checkedLocale.getLanguage().isBlank()) {
                 throw new IllegalArgumentException("Locale 必须包含语言");
             }
             Map<String, String> mapping = new LinkedHashMap<>();
@@ -306,9 +362,9 @@ public class SmsConfigurationService {
                         mapping.put(checkedProviderParameter, checkedVariable);
                     });
             return new CheckedBinding(
-                    code,
-                    new SmsRoute(route),
-                    locale,
+                    checkedCode,
+                    checkedRoute,
+                    checkedLocale,
                     TextUtils.requireText(signName, "短信签名", 128),
                     TextUtils.requireText(providerTemplateCode, "Provider 模板编码", 128),
                     Map.copyOf(mapping));
@@ -332,7 +388,7 @@ public class SmsConfigurationService {
     }
 
     private static final class CheckedBinding {
-        private final NotificationCode code;
+        private final TreeCode code;
 
         private final SmsRoute route;
 
@@ -345,7 +401,7 @@ public class SmsConfigurationService {
         private final Map<String, String> parameterMapping;
 
         private CheckedBinding(
-                NotificationCode code,
+                TreeCode code,
                 SmsRoute route,
                 Locale locale,
                 String signName,

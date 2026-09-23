@@ -1,6 +1,7 @@
 package com.sca4d.notification.sms;
 
 import cn.hutool.crypto.digest.DigestUtil;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.delivery.DeliveryOutcome;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.DispatchReceipt;
@@ -8,7 +9,6 @@ import com.sca4d.core.api.messaging.HandlingPolicy;
 import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageId;
 import com.sca4d.core.api.notification.Notification;
-import com.sca4d.core.api.notification.NotificationChannel;
 import com.sca4d.core.api.notification.NotificationDelivery;
 import com.sca4d.core.api.region.ParsedPhoneNumber;
 import com.sca4d.core.api.region.RegionCatalog;
@@ -25,7 +25,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/** 解析手机号、线路、Provider 与平台绑定，并提交一个必发或可选 SMS 渠道请求。 */
+/**
+ * 解析手机号、线路、Provider 与平台绑定，并提交一个必发或可选 SMS 渠道请求。
+ */
 public final class SmsNotificationDelivery implements NotificationDelivery {
 
     private static final Logger LOG = LoggerFactory.getLogger(SmsNotificationDelivery.class);
@@ -54,7 +56,9 @@ public final class SmsNotificationDelivery implements NotificationDelivery {
 
     private final TransactionTemplate transactions;
 
-    /** 创建 SMS 渠道投递实现。 */
+    /**
+     * 创建 SMS 渠道投递实现。
+     */
     public SmsNotificationDelivery(
             @NotNull SmsRecipientResolver recipients,
             @NotNull RegionCatalog regions,
@@ -87,7 +91,7 @@ public final class SmsNotificationDelivery implements NotificationDelivery {
     }
 
     @Override
-    public @NotNull NotificationChannel channel() {
+    public @NotNull TreeCode channel() {
         return SmsChannels.SMS;
     }
 
@@ -192,7 +196,9 @@ public final class SmsNotificationDelivery implements NotificationDelivery {
         return DeliveryOutcome.rejected("SMS_PROVIDER_REJECTED");
     }
 
-    /** 查询一次 Provider 最终状态；未知时只登记下一条查询消息，不重新发送短信。 */
+    /**
+     * 查询一次 Provider 最终状态；未知时只登记下一条查询消息，不重新发送短信。
+     */
     public @NotNull DeliveryOutcome check(@NotNull SmsDeliveryCheck check) {
         SmsDeliveryCheck checked = Objects.requireNonNull(check, "SMS 查询消息不能为空");
         if (checked.attempt() > MAXIMUM_CHECK_ATTEMPTS) {
@@ -259,7 +265,9 @@ public final class SmsNotificationDelivery implements NotificationDelivery {
                 });
     }
 
-    /** 使用类型化通知事实取得具体应用声明的 SMS 路由。 */
+    /**
+     * 使用类型化通知事实取得具体应用声明的 SMS 路由。
+     */
     private SmsRoute route(Notification notification, ParsedPhoneNumber destination) {
         return routes.resolve(
                 notification.code(),

@@ -29,7 +29,9 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Objects;
 
-/** 每次调用都查询统一 `sys_setting`，并处理 owner、结构版本、Pipeline 和敏感值。 */
+/**
+ * 每次调用都查询统一 `sys_setting`，并处理 owner、结构版本、Pipeline 和敏感值。
+ */
 public class DatabaseSettings implements Settings, PreferenceSettings {
 
     private static final int LEGACY_ENCRYPTION_CONTEXT_VERSION = 1;
@@ -49,9 +51,9 @@ public class DatabaseSettings implements Settings, PreferenceSettings {
     /**
      * 创建数据库 Settings。
      *
-     * @param catalog 当前应用设置目录
-     * @param repository 设置持久化边界
-     * @param keyring 敏感设置使用的密钥环；应用没有安装密钥环时为空
+     * @param catalog           当前应用设置目录
+     * @param repository        设置持久化边界
+     * @param keyring           敏感设置使用的密钥环；应用没有安装密钥环时为空
      * @param versionConditions 为 HTTP 和内部写入选择版本条件
      */
     public DatabaseSettings(
@@ -180,7 +182,9 @@ public class DatabaseSettings implements Settings, PreferenceSettings {
         repository.erase(Objects.requireNonNull(owner, "设置 owner 不能为空"), registered(setting).key());
     }
 
-    /** 把规范化后的设置值编码为数据库文本或绑定 owner 的密文。 */
+    /**
+     * 把规范化后的设置值编码为数据库文本或绑定 owner 的密文。
+     */
     EncodedSetting encode(@NotNull Setting<?> setting, @NotNull SettingOwner owner, @NotNull Object value) {
         String text = encodeValue(setting, value);
         if (!setting.secret()) {
@@ -197,7 +201,9 @@ public class DatabaseSettings implements Settings, PreferenceSettings {
                 OWNER_ENCRYPTION_CONTEXT_VERSION);
     }
 
-    /** 完整替换一个 owner 设置并回读新版本。 */
+    /**
+     * 完整替换一个 owner 设置并回读新版本。
+     */
     private <T> @NotNull SettingValue<T> replaceValue(
             @NotNull Setting<T> setting,
             @NotNull SettingOwner owner,
@@ -224,7 +230,9 @@ public class DatabaseSettings implements Settings, PreferenceSettings {
         return inspectValue(setting, checkedOwner);
     }
 
-    /** 将一个 owner 的已有设置行改为 tombstone 并回读默认值。 */
+    /**
+     * 将一个 owner 的已有设置行改为 tombstone 并回读默认值。
+     */
     private <T> @NotNull SettingValue<T> resetValue(
             @NotNull Setting<T> setting,
             @NotNull SettingOwner owner) {
@@ -244,7 +252,9 @@ public class DatabaseSettings implements Settings, PreferenceSettings {
         return inspectValue(setting, checkedOwner);
     }
 
-    /** 读取数据库行或构造没有行的默认值。 */
+    /**
+     * 读取数据库行或构造没有行的默认值。
+     */
     private <T> @NotNull SettingValue<T> inspectValue(
             @NotNull Setting<T> setting,
             @NotNull SettingOwner owner) {
@@ -254,7 +264,9 @@ public class DatabaseSettings implements Settings, PreferenceSettings {
                 .orElseGet(() -> defaultValue(setting, checkedOwner, EMPTY_VERSION));
     }
 
-    /** 把数据库文本、密文或 tombstone 转换为类型化设置值。 */
+    /**
+     * 把数据库文本、密文或 tombstone 转换为类型化设置值。
+     */
     private <T> @NotNull SettingValue<T> value(
             @NotNull Setting<T> setting,
             @NotNull SettingOwner owner,
@@ -292,7 +304,9 @@ public class DatabaseSettings implements Settings, PreferenceSettings {
         }
     }
 
-    /** 解密敏感设置并兼容没有 owner 的旧加密用途。 */
+    /**
+     * 解密敏感设置并兼容没有 owner 的旧加密用途。
+     */
     private <T> @NotNull String decrypt(
             @NotNull Setting<T> setting,
             @NotNull SettingOwner owner,
@@ -315,7 +329,9 @@ public class DatabaseSettings implements Settings, PreferenceSettings {
                 StandardCharsets.UTF_8);
     }
 
-    /** 创建数据库不存在或 tombstone 使用的默认值。 */
+    /**
+     * 创建数据库不存在或 tombstone 使用的默认值。
+     */
     private static <T> @NotNull SettingValue<T> defaultValue(
             @NotNull Setting<T> setting,
             @NotNull SettingOwner owner,
@@ -323,7 +339,9 @@ public class DatabaseSettings implements Settings, PreferenceSettings {
         return new SettingValue<>(setting, owner, setting.defaultValue(), false, false, version);
     }
 
-    /** 使用设置自身 Pipeline 和 Codec 校验并编码未知泛型值。 */
+    /**
+     * 使用设置自身 Pipeline 和 Codec 校验并编码未知泛型值。
+     */
     @SuppressWarnings("unchecked")
     private static <T> @NotNull String encodeValue(@NotNull Setting<T> setting, @NotNull Object value) {
         try {
@@ -334,13 +352,17 @@ public class DatabaseSettings implements Settings, PreferenceSettings {
         }
     }
 
-    /** 校验设置属于当前应用并恢复泛型。 */
+    /**
+     * 校验设置属于当前应用并恢复泛型。
+     */
     private <T, S extends Setting<T>> @NotNull S registered(@NotNull S setting) {
         catalog.assertRegistered(setting);
         return setting;
     }
 
-    /** 返回敏感设置所需密钥环。 */
+    /**
+     * 返回敏感设置所需密钥环。
+     */
     private @NotNull SecretKeyring keyring(@NotNull String key) {
         if (keyring == null) {
             throw new IllegalStateException("应用注册了敏感设置但没有 SecretKeyring: " + key);
@@ -348,16 +370,20 @@ public class DatabaseSettings implements Settings, PreferenceSettings {
         return keyring;
     }
 
-    /** 创建长度分隔且绑定 owner 的版本二加密用途。 */
+    /**
+     * 创建长度分隔且绑定 owner 的版本二加密用途。
+     */
     private static @NotNull String ownerSecretPurpose(
             @NotNull SettingOwner owner,
             @NotNull String key) {
-        String type = owner.type();
+        String type = owner.type().value();
         String id = owner.id();
         return "setting:v2:" + type.length() + ":" + type + ":" + id.length() + ":" + id + ":" + key;
     }
 
-    /** 保存一个设置编码后互斥的文本或密文字段。 */
+    /**
+     * 保存一个设置编码后互斥的文本或密文字段。
+     */
     @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
     static final class EncodedSetting {
         private final String text;
@@ -368,7 +394,9 @@ public class DatabaseSettings implements Settings, PreferenceSettings {
 
         private final Integer encryptionContextVersion;
 
-        /** 创建已编码设置。 */
+        /**
+         * 创建已编码设置。
+         */
         EncodedSetting(
                 @Nullable String text,
                 @Nullable String keyId,
@@ -385,24 +413,32 @@ public class DatabaseSettings implements Settings, PreferenceSettings {
             }
         }
 
-        /** @return 普通设置文本 */
+        /**
+         * @return 普通设置文本
+         */
         @Nullable
         String text() {
             return text;
         }
 
-        /** @return 敏感设置密钥标识 */
+        /**
+         * @return 敏感设置密钥标识
+         */
         @Nullable
         String keyId() {
             return keyId;
         }
 
-        /** @return 敏感设置密文副本 */
+        /**
+         * @return 敏感设置密文副本
+         */
         byte @Nullable [] ciphertext() {
             return ciphertext == null ? null : ciphertext.clone();
         }
 
-        /** @return 敏感设置加密用途版本 */
+        /**
+         * @return 敏感设置加密用途版本
+         */
         @Nullable
         Integer encryptionContextVersion() {
             return encryptionContextVersion;

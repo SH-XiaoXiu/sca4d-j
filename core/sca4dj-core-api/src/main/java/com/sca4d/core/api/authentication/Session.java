@@ -3,10 +3,12 @@ package com.sca4d.core.api.authentication;
 import com.sca4d.core.api.authentication.principalsession.LongIdSet;
 import com.sca4d.core.api.authentication.principalsession.PrincipalIdSet;
 import com.sca4d.core.api.authentication.principalsession.ResourceIdSet;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.resource.Resource;
+import com.sca4d.core.api.resource.ResourceReference;
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -21,7 +23,9 @@ import java.util.Optional;
 import java.util.OptionalLong;
 import java.util.Set;
 
-/** 保存 Principal、静态授权资源和认证记录的不可变 Session 快照。 */
+/**
+ * 保存 Principal、静态授权资源和认证记录的不可变 Session 快照。
+ */
 public final class Session {
 
     private final SessionId id;
@@ -44,7 +48,7 @@ public final class Session {
 
     private final Map<Long, List<ResourceIdSet>> resourceIdSetsByPrincipal;
 
-    private final Map<Long, Map<String, LongIdSet>> resourceIdsByPrincipal;
+    private final Map<Long, Map<TreeCode, LongIdSet>> resourceIdsByPrincipal;
 
     private final Instant issuedAt;
 
@@ -53,17 +57,17 @@ public final class Session {
     /**
      * 创建完整的 Session 快照，并校验身份、认证、Principal、资源和有效时间之间的关系。
      *
-     * @param id Session 标识
-     * @param subject 完成认证的 Subject
-     * @param account 完成认证且属于 {@code subject} 的 Account
-     * @param principals 当前 Account 可以直接选择的完整 Principal
-     * @param principalIdSets 当前 Account 可以在请求期解析的 Principal 类型和标识
-     * @param authentications 当前 Account 的非空成功认证列表
-     * @param resourcesByPrincipal 每个完整 Principal 对应的授权资源
+     * @param id                        Session 标识
+     * @param subject                   完成认证的 Subject
+     * @param account                   完成认证且属于 {@code subject} 的 Account
+     * @param principals                当前 Account 可以直接选择的完整 Principal
+     * @param principalIdSets           当前 Account 可以在请求期解析的 Principal 类型和标识
+     * @param authentications           当前 Account 的非空成功认证列表
+     * @param resourcesByPrincipal      每个完整 Principal 对应的授权资源
      * @param resourceIdSetsByPrincipal 每个完整 Principal 对应的数字授权 Resource 标识
-     * @param issuedAt Session 签发时间
-     * @param expiresAt 晚于 {@code issuedAt} 的过期时间
-     * @throws NullPointerException 任一必需值、集合元素或资源值为 {@code null} 时抛出
+     * @param issuedAt                  Session 签发时间
+     * @param expiresAt                 晚于 {@code issuedAt} 的过期时间
+     * @throws NullPointerException     任一必需值、集合元素或资源值为 {@code null} 时抛出
      * @throws IllegalArgumentException 身份关系、认证归属、Principal、资源或有效时间不合法时抛出
      */
     public Session(
@@ -118,7 +122,9 @@ public final class Session {
         this.resourceIdsByPrincipal = indexResourceIds(this.resourceIdSetsByPrincipal);
     }
 
-    /** 校验紧凑 Principal 标识的类型唯一性，以及与其他 Principal 标识的全局唯一性。 */
+    /**
+     * 校验紧凑 Principal 标识的类型唯一性，以及与其他 Principal 标识的全局唯一性。
+     */
     private static Map<Class<? extends Principal>, LongIdSet> normalizePrincipalIds(
             Collection<? extends PrincipalIdSet<?>> principalIdSets,
             Set<Long> principalIds) {
@@ -143,7 +149,7 @@ public final class Session {
      * 校验资源索引完整覆盖全部完整 Principal，并复制为不可修改列表。
      *
      * @param resourcesByPrincipal 待校验的 Principal 资源索引
-     * @param principalIds 当前 Session 完整装载的 Principal 标识
+     * @param principalIds         当前 Session 完整装载的 Principal 标识
      * @return 仅包含已校验资源副本的不可修改索引
      */
     private static Map<Long, List<Resource>> normalizeResources(
@@ -156,12 +162,12 @@ public final class Session {
         }
         LinkedHashMap<Long, List<Resource>> normalized = new LinkedHashMap<>();
         for (Long principalId : principalIds) {
-            LinkedHashMap<String, Resource> resources = new LinkedHashMap<>();
+            LinkedHashMap<ResourceReference, Resource> resources = new LinkedHashMap<>();
             for (Resource resource : Objects.requireNonNull(checked.get(principalId), "Principal 授权资源不能为空")) {
                 Resource checkedResource = Objects.requireNonNull(resource, "Session 授权资源不能为空");
-                String type = TextUtils.requireText(checkedResource.type(), "资源类型");
+                var type = Objects.requireNonNull(checkedResource.type(), "资源类型不能为空");
                 String resourceId = TextUtils.requireText(checkedResource.id(), "资源标识");
-                String key = type + "\u0000" + resourceId;
+                ResourceReference key = new ResourceReference(type, resourceId);
                 if (resources.putIfAbsent(key, checkedResource) != null) {
                     throw new IllegalArgumentException("Session 包含重复资源: " + type + "/" + resourceId);
                 }
@@ -171,7 +177,9 @@ public final class Session {
         return Map.copyOf(normalized);
     }
 
-    /** 校验数字 Resource 标识只属于完整 Principal，并拒绝重复类型和重复资源。 */
+    /**
+     * 校验数字 Resource 标识只属于完整 Principal，并拒绝重复类型和重复资源。
+     */
     private static Map<Long, List<ResourceIdSet>> normalizeResourceIds(
             Map<Long, ? extends Collection<ResourceIdSet>> resourceIdSetsByPrincipal,
             Set<Long> principalIds,
@@ -183,7 +191,7 @@ public final class Session {
         }
         LinkedHashMap<Long, List<ResourceIdSet>> normalized = new LinkedHashMap<>();
         for (Long principalId : principalIds) {
-            LinkedHashMap<String, ResourceIdSet> byType = new LinkedHashMap<>();
+            LinkedHashMap<TreeCode, ResourceIdSet> byType = new LinkedHashMap<>();
             Collection<ResourceIdSet> contributed = checked.containsKey(principalId)
                     ? Objects.requireNonNull(checked.get(principalId), "Principal 数字 Resource 标识不能为空")
                     : List.of();
@@ -196,14 +204,7 @@ public final class Session {
                             "Session 包含重复数字 Resource 类型: " + checkedSet.resourceType());
                 }
                 for (Resource resource : resourcesByPrincipal.get(principalId)) {
-                    if (!checkedSet.resourceType().equals(resource.type())) {
-                        continue;
-                    }
-                    OptionalLong resourceId = parseCanonicalPositiveId(resource.id());
-                    if (resourceId.isPresent() && checkedSet.ids().contains(resourceId.getAsLong())) {
-                        throw new IllegalArgumentException(
-                                "Session 包含重复资源: " + resource.type() + "/" + resource.id());
-                    }
+                    resource.type();
                 }
             }
             normalized.put(principalId, List.copyOf(byType.values()));
@@ -211,12 +212,14 @@ public final class Session {
         return Map.copyOf(normalized);
     }
 
-    /** 按完整 Principal 和 Resource 类型建立数字标识查询索引。 */
-    private static Map<Long, Map<String, LongIdSet>> indexResourceIds(
+    /**
+     * 按完整 Principal 和 Resource 类型建立数字标识查询索引。
+     */
+    private static Map<Long, Map<TreeCode, LongIdSet>> indexResourceIds(
             Map<Long, List<ResourceIdSet>> resourceIdSetsByPrincipal) {
-        LinkedHashMap<Long, Map<String, LongIdSet>> indexed = new LinkedHashMap<>();
+        LinkedHashMap<Long, Map<TreeCode, LongIdSet>> indexed = new LinkedHashMap<>();
         for (Map.Entry<Long, List<ResourceIdSet>> entry : resourceIdSetsByPrincipal.entrySet()) {
-            LinkedHashMap<String, LongIdSet> byType = new LinkedHashMap<>();
+            LinkedHashMap<TreeCode, LongIdSet> byType = new LinkedHashMap<>();
             for (ResourceIdSet resourceIdSet : entry.getValue()) {
                 byType.put(resourceIdSet.resourceType(), resourceIdSet.ids());
             }
@@ -299,9 +302,9 @@ public final class Session {
      *
      * @param candidate 业务选择器在当前请求中解析的 Principal
      * @return Session 中的完整 Principal，或通过类型和标识校验的候选 Principal
-    * @throws NullPointerException 候选 Principal 为 {@code null} 时抛出
-    * @throws IllegalArgumentException 类型或标识不属于当前 Session 时抛出
-    */
+     * @throws NullPointerException     候选 Principal 为 {@code null} 时抛出
+     * @throws IllegalArgumentException 类型或标识不属于当前 Session 时抛出
+     */
     public Principal principal(Principal candidate) {
         Principal checked = Objects.requireNonNull(candidate, "候选 Principal 不能为空");
         long principalId = requirePositivePrincipalId(checked.principalId());
@@ -325,7 +328,7 @@ public final class Session {
      * 判断指定精确 Java 类型和标识是否属于当前 Session。
      *
      * @param principalType Principal 精确 Java 类型
-     * @param principalId Principal 标识
+     * @param principalId   Principal 标识
      * @return 完整对象或紧凑标识集合同时匹配类型和标识时返回 {@code true}
      */
     public boolean containsPrincipal(
@@ -394,7 +397,7 @@ public final class Session {
      * 判断指定 Principal 是否拥有类型和标识均匹配的资源。
      *
      * @param principalId Principal 标识
-     * @param resource 待匹配的资源
+     * @param resource    待匹配的资源
      * @return 存在匹配资源时为 {@code true}
      * @throws IllegalArgumentException Principal 不属于当前 Session 时抛出
      */
@@ -411,7 +414,7 @@ public final class Session {
                         .anyMatch(item -> item.type().equals(checked.type()) && item.id().equals(checked.id()))) {
             return true;
         }
-        Map<String, LongIdSet> resourceIds = resourceIdsByPrincipal.get(checkedPrincipalId);
+        Map<TreeCode, LongIdSet> resourceIds = resourceIdsByPrincipal.get(checkedPrincipalId);
         if (resourceIds == null) {
             return false;
         }
@@ -423,12 +426,16 @@ public final class Session {
         return parsed.isPresent() && ids.contains(parsed.getAsLong());
     }
 
-    /** 在不建立每个 Principal 对象索引的情况下查询紧凑 Principal 标识。 */
+    /**
+     * 在不建立每个 Principal 对象索引的情况下查询紧凑 Principal 标识。
+     */
     private boolean containsCompactPrincipalId(long principalId) {
         return principalIdsByType.values().stream().anyMatch(ids -> ids.contains(principalId));
     }
 
-    /** 把规范的正十进制 Resource 标识转换为紧凑索引使用的 long。 */
+    /**
+     * 把规范的正十进制 Resource 标识转换为紧凑索引使用的 long。
+     */
     private static OptionalLong parseCanonicalPositiveId(String resourceId) {
         try {
             long parsed = Long.parseLong(Objects.requireNonNull(resourceId, "Resource 标识不能为空"));
@@ -441,7 +448,9 @@ public final class Session {
         }
     }
 
-    /** 校验调用方传入的 Principal 标识。 */
+    /**
+     * 校验调用方传入的 Principal 标识。
+     */
     private static long requirePositivePrincipalId(long principalId) {
         if (principalId <= 0) {
             throw new IllegalArgumentException("Principal 标识必须为正数");

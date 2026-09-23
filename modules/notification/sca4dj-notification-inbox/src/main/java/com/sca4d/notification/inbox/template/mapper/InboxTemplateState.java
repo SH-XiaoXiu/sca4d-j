@@ -1,17 +1,19 @@
 package com.sca4d.notification.inbox.template.mapper;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.notification.NotificationCode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-/** 保存 Inbox Template Mapper 从数据库读取的 JSON 文本状态。 */
+/**
+ * 保存 Inbox Template Mapper 从数据库读取的 JSON 文本状态。
+ */
 public final class InboxTemplateState {
 
     private final long templateId;
 
-    private final @NotNull NotificationCode code;
+    private final @NotNull TreeCode code;
 
     private final @NotNull String contentJson;
 
@@ -19,10 +21,12 @@ public final class InboxTemplateState {
 
     private final @NotNull Version version;
 
-    /** 创建模板数据库状态。 */
+    /**
+     * 创建模板数据库状态。
+     */
     public InboxTemplateState(
             long templateId,
-            @NotNull NotificationCode code,
+            @NotNull TreeCode code,
             @NotNull String contentJson,
             boolean enabled,
             @NotNull Version version) {
@@ -37,8 +41,10 @@ public final class InboxTemplateState {
         return templateId;
     }
 
-    /** 返回 code 方法提供的结果。 */
-    public @NotNull NotificationCode code() {
+    /**
+     * 返回 code 方法提供的结果。
+     */
+    public @NotNull TreeCode code() {
         return code;
     }
 
@@ -50,7 +56,9 @@ public final class InboxTemplateState {
         return enabled;
     }
 
-    /** 返回 version 方法提供的结果。 */
+    /**
+     * 返回 version 方法提供的结果。
+     */
     public @NotNull Version version() {
         return version;
     }

@@ -5,6 +5,7 @@ import com.sca4d.auth.hmac.IssuedHmacKey;
 import com.sca4d.auth.sharedsecret.IssuedSharedSecret;
 import com.sca4d.auth.sharedsecret.SharedSecretAuthenticationMethod;
 import com.sca4d.core.api.authentication.Session;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
@@ -24,7 +25,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-/** 创建、轮换、停用 OpenAPI Client，并限制其 Operation 为创建者当前权限的子集。 */
+/**
+ * 创建、轮换、停用 OpenAPI Client，并限制其 Operation 为创建者当前权限的子集。
+ */
 public class OpenApiClientService {
 
     private static final @NotNull RealmKey REALM = new RealmKey("openapi");
@@ -41,7 +44,9 @@ public class OpenApiClientService {
 
     private final @NotNull HmacAuthenticationMethod hmac;
 
-    /** 创建 OpenAPI Client 应用服务。 */
+    /**
+     * 创建 OpenAPI Client 应用服务。
+     */
     public OpenApiClientService(
             @NotNull IdentityService identities,
             @NotNull OperationCatalog operations,
@@ -60,10 +65,10 @@ public class OpenApiClientService {
     /**
      * 根据当前 Session 创建 Application Client。
      *
-     * @param creator 当前请求 Session；其中全部可选 Principal 会复制为 Client 关系
-     * @param displayName Client 管理名称
+     * @param creator             当前请求 Session；其中全部可选 Principal 会复制为 Client 关系
+     * @param displayName         Client 管理名称
      * @param requestedOperations 要开放的 Operation
-     * @param method shared-secret 或 hmac
+     * @param method              shared-secret 或 hmac
      * @return Client 元数据和一次性明文凭据
      */
     @Transactional
@@ -74,7 +79,7 @@ public class OpenApiClientService {
             @NotNull Collection<String> requestedOperations,
             @NotNull String method) {
         Session checkedCreator = Objects.requireNonNull(creator, "创建者 Session 不能为空");
-        LinkedHashSet<String> allowed = validateOperations(checkedCreator, requestedOperations);
+        LinkedHashSet<TreeCode> allowed = validateOperations(checkedCreator, requestedOperations);
         String checkedMethod = requireMethod(method);
         Subject subject = identities.createSubject(SubjectType.APPLICATION);
         Account account = identities.createAccount(subject.subjectId(), REALM);
@@ -94,14 +99,18 @@ public class OpenApiClientService {
         return new OpenApiClientCredentials(client, checkedMethod, issued.key());
     }
 
-    /** 读取指定 Client。 */
+    /**
+     * 读取指定 Client。
+     */
     @Transactional(readOnly = true)
     @CheckReturnValue
     public @NotNull OpenApiClient loadByClientId(@NotNull String clientId) {
         return clients.find(clientId).orElseThrow(() -> new IllegalArgumentException("OpenAPI Client 不存在"));
     }
 
-    /** 按认证 Account 读取对应 Client。 */
+    /**
+     * 按认证 Account 读取对应 Client。
+     */
     @Transactional(readOnly = true)
     @CheckReturnValue
     public @NotNull OpenApiClient findByAccountId(long accountId) {
@@ -109,58 +118,68 @@ public class OpenApiClientService {
                 .orElseThrow(() -> new IllegalArgumentException("认证 Account 不是 OpenAPI Client"));
     }
 
-    /** 读取仍然启用的 Client Account，供 HMAC 认证提交给认证方法。 */
+    /**
+     * 读取仍然启用的 Client Account，供 HMAC 认证提交给认证方法。
+     */
     @Transactional(readOnly = true)
     public @NotNull Account account(long accountId) {
         return identities.activeAccountById(accountId);
     }
 
-    /** 判断 Client 是否有效且已经开放指定 Operation。 */
+    /**
+     * 判断 Client 是否有效且已经开放指定 Operation。
+     */
     @Transactional(readOnly = true)
-    public boolean allows(@NotNull String clientId, @NotNull String operation) {
+    public boolean allows(@NotNull String clientId, @NotNull TreeCode operation) {
         OpenApiClient client = loadByClientId(clientId);
         return client.active() && clients.hasOperation(client.clientId(), operation);
     }
 
-    /** 读取 Client 当前返回给 OAuth scope 的 Operation 列表。 */
+    /**
+     * 读取 Client 当前返回给 OAuth scope 的 Operation 列表。
+     */
     @Transactional(readOnly = true)
     @CheckReturnValue
-    public @NotNull List<@NotNull String> operations(@NotNull String clientId) {
+    public @NotNull List<@NotNull TreeCode> operations(@NotNull String clientId) {
         OpenApiClient client = loadByClientId(clientId);
         return clients.findOperations(client.clientId());
     }
 
-    /** 替换 Client 的 Operation 列表，仍要求当前 Session 拥有目标权限。 */
+    /**
+     * 替换 Client 的 Operation 列表，仍要求当前 Session 拥有目标权限。
+     */
     @Transactional
     public void replaceOperations(
             @NotNull Session editor,
             @NotNull String clientId,
             @NotNull Collection<String> requestedOperations) {
-        LinkedHashSet<String> allowed = validateOperations(
+        LinkedHashSet<TreeCode> allowed = validateOperations(
                 Objects.requireNonNull(editor, "编辑者 Session 不能为空"),
                 requestedOperations);
         clients.replaceOperations(clientId, allowed);
     }
 
-    /** 修改 Client 状态。 */
+    /**
+     * 修改 Client 状态。
+     */
     @Transactional
     public void changeStatus(@NotNull String clientId, @NotNull OpenApiClientStatus status) {
         clients.updateStatus(clientId, status);
     }
 
-    private LinkedHashSet<String> validateOperations(Session creator, Collection<String> requestedOperations) {
-        LinkedHashSet<String> result = new LinkedHashSet<>();
+    private LinkedHashSet<TreeCode> validateOperations(Session creator, Collection<String> requestedOperations) {
+        LinkedHashSet<TreeCode> result = new LinkedHashSet<>();
         for (String code : Objects.requireNonNull(requestedOperations, "Operation 列表不能为空")) {
             Operation operation = operations.actionByCode(TextUtils.requireText(code, "Operation")).operation();
-            if (routes.routes().stream().noneMatch(route -> route.operation().equals(operation.value()))) {
-                throw new IllegalArgumentException("Operation 尚未声明为 OpenAPI 路由: " + operation.value());
+            if (routes.routes().stream().noneMatch(route -> route.operation().equals(operation.code()))) {
+                throw new IllegalArgumentException("Operation 尚未声明为 OpenAPI 路由: " + operation.code());
             }
             if (creator.principals()
                     .stream()
                     .noneMatch(principal -> creator.grants(principal.principalId(), operation))) {
-                throw new IllegalArgumentException("当前 Session 没有 Operation 权限: " + operation.value());
+                throw new IllegalArgumentException("当前 Session 没有 Operation 权限: " + operation.code());
             }
-            result.add(operation.value());
+            result.add(operation.code());
         }
         return result;
     }

@@ -1,7 +1,7 @@
 package com.sca4d.notification.email;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.error.BusinessException;
-import com.sca4d.core.api.notification.NotificationCode;
 import com.sca4d.core.api.render.TemplateVariables;
 import com.sca4d.notification.email.sender.EmailGateway;
 import com.sca4d.notification.email.sender.EmailSenderRepository;
@@ -12,7 +12,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-/** 使用 Email 模板和当前 SMTP 配置同步发送带可选附件的邮件。 */
+/**
+ * 使用 Email 模板和当前 SMTP 配置同步发送带可选附件的邮件。
+ */
 public final class EmailMessageService {
 
     private final @NotNull EmailSenderRepository senders;
@@ -41,9 +43,11 @@ public final class EmailMessageService {
         this.maxAttachmentBytes = maxAttachmentBytes;
     }
 
-    /** 渲染指定模板并向已校验邮箱同步发送附件。 */
+    /**
+     * 渲染指定模板并向已校验邮箱同步发送附件。
+     */
     public void sendNow(
-            @NotNull NotificationCode code,
+            @NotNull TreeCode code,
             @NotNull String recipient,
             @NotNull Locale locale,
             @NotNull Map<String, String> variables,

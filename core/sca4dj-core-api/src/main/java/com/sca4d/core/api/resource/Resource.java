@@ -19,16 +19,7 @@ public interface Resource {
      * @return 非空白资源类型
      */
     @NotNull
-    String type();
-
-    /**
-     * 返回规范化的层级资源类型。
-     *
-     * @return 由 {@link #type()} 解析得到的 TreeCode
-     */
-    default @NotNull TreeCode typeCode() {
-        return TreeCode.of(type());
-    }
+    TreeCode type();
 
     /**
      * 返回资源标识。

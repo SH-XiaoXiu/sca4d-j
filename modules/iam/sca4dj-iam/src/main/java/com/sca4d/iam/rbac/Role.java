@@ -1,5 +1,6 @@
 package com.sca4d.iam.rbac;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.resource.Resource;
 import org.jetbrains.annotations.Contract;
@@ -8,11 +9,20 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Instant;
 import java.util.Objects;
 
-/** 保存一个 Repository 读取的角色标识、授权状态和生命周期时间。 */
+/**
+ * 保存一个 Repository 读取的角色标识、授权状态和生命周期时间。
+ */
 public final class Role implements Resource {
 
-    /** Role 使用的稳定 Resource 类型。 */
-    public static final @NotNull String RESOURCE_TYPE = "IAM/ROLE";
+    /**
+     * Role 使用的稳定 Resource 类型。
+     */
+    public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofSlash("IAM/ROLE");
+
+    /**
+     * 供 Java 注解参数使用的资源类型文本。
+     */
+    public static final @NotNull String RESOURCE_TYPE_VALUE = "IAM/ROLE";
 
     private final @NotNull Long id;
 
@@ -33,14 +43,14 @@ public final class Role implements Resource {
     /**
      * 创建从持久化层读取的角色。
      *
-     * @param id 角色标识
-     * @param scope 角色所属的 RBAC 范围
-     * @param code 当前 RBAC 范围中不可变的角色编码
-     * @param status 角色状态
-     * @param builtIn 是否为实现声明的内置角色
+     * @param id        角色标识
+     * @param scope     角色所属的 RBAC 范围
+     * @param code      当前 RBAC 范围中不可变的角色编码
+     * @param status    角色状态
+     * @param builtIn   是否为实现声明的内置角色
      * @param createdAt 创建时间
      * @param updatedAt 最近更新时间
-     * @param version 名称、状态、Operation 和删除共享的当前版本
+     * @param version   名称、状态、Operation 和删除共享的当前版本
      */
     public Role(
             @NotNull Long id,
@@ -71,10 +81,12 @@ public final class Role implements Resource {
         return id;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Contract(pure = true)
-    public @NotNull String type() {
+    public @NotNull TreeCode type() {
         return RESOURCE_TYPE;
     }
 

@@ -1,6 +1,7 @@
 package com.sca4d.openapi.client;
 
 import com.sca4d.core.api.call.Call;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.identity.Account;
@@ -21,7 +22,7 @@ public final class OpenApiClientOperationCheckerImpl implements OpenApiClientOpe
 
     /** 拒绝停用、未知或未开放目标 Operation 的 Client。 */
     @Override
-    public void verifyAllowed(@NotNull Call call, @NotNull String operation) {
+    public void verifyAllowed(@NotNull Call call, @NotNull TreeCode operation) {
         long accountId = Objects.requireNonNull(call, "调用不能为空")
                 .account()
                 .map(Account::accountId)

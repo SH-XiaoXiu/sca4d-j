@@ -16,20 +16,30 @@ import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Objects;
 
-/** 由指定初始化节点按每个设置的 INIT 或 SYNC 标记更新数据库。 */
+/**
+ * 由指定初始化节点按每个设置的 INIT 或 SYNC 标记更新数据库。
+ */
 public class SettingBootstrap {
 
     private static final Logger LOG = LoggerFactory.getLogger(SettingBootstrap.class);
 
     private static final int OWNER_ENCRYPTION_CONTEXT_VERSION = 2;
 
-    /** 区分设置初始化标记未声明、启用和明确禁用三种状态。 */
+    /**
+     * 区分设置初始化标记未声明、启用和明确禁用三种状态。
+     */
     private enum BootstrapFlag {
-        /** 环境中没有声明标记。 */
+        /**
+         * 环境中没有声明标记。
+         */
         ABSENT,
-        /** 环境标记值为 {@code true}。 */
+        /**
+         * 环境标记值为 {@code true}。
+         */
         ENABLED,
-        /** 环境标记值为 {@code false}。 */
+        /**
+         * 环境标记值为 {@code false}。
+         */
         DISABLED
     }
 
@@ -41,7 +51,9 @@ public class SettingBootstrap {
 
     private final Environment environment;
 
-    /** 创建 Settings ENV 初始化器。 */
+    /**
+     * 创建 Settings ENV 初始化器。
+     */
     public SettingBootstrap(
             @NotNull SettingCatalog catalog,
             @NotNull SettingRepository repository,
@@ -114,7 +126,9 @@ public class SettingBootstrap {
                 released);
     }
 
-    /** 读取严格布尔标记；未声明时返回 {@link BootstrapFlag#ABSENT}。 */
+    /**
+     * 读取严格布尔标记；未声明时返回 {@link BootstrapFlag#ABSENT}。
+     */
     private @NotNull BootstrapFlag flag(@NotNull String name) {
         String value = environment.getProperty(name);
         if (value == null) {
@@ -127,7 +141,9 @@ public class SettingBootstrap {
         };
     }
 
-    /** 返回标记要求的非空设置文本。 */
+    /**
+     * 返回标记要求的非空设置文本。
+     */
     private static @NotNull String requiredValue(@NotNull String variable, String value) {
         if (value == null || value.isBlank()) {
             throw new IllegalStateException("Settings ENV 标记缺少值: " + variable);
@@ -135,7 +151,9 @@ public class SettingBootstrap {
         return value;
     }
 
-    /** 使用设置编解码器校验 ENV 后生成持久化字段。 */
+    /**
+     * 使用设置编解码器校验 ENV 后生成持久化字段。
+     */
     private <T> DatabaseSettings.@NotNull EncodedSetting encoded(
             @NotNull SystemSetting<T> setting,
             @NotNull String rawValue) {
@@ -163,11 +181,13 @@ public class SettingBootstrap {
                 OWNER_ENCRYPTION_CONTEXT_VERSION);
     }
 
-    /** 创建绑定 System owner 的版本二敏感设置加密用途。 */
+    /**
+     * 创建绑定 System owner 的版本二敏感设置加密用途。
+     */
     private static @NotNull String ownerSecretPurpose(@NotNull String key) {
         SettingOwner owner = SettingOwner.system();
         return "setting:v2:"
-                + owner.type().length()
+                + owner.type().value().length()
                 + ":"
                 + owner.type()
                 + ":"

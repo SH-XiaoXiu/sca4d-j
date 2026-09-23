@@ -3,10 +3,10 @@ package com.sca4d.auth.x509;
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.AuthenticationMethod;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.SessionControl;
 import com.sca4d.core.api.authentication.SessionTerminationReason;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.id.IdGenerator;
@@ -27,13 +27,17 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-/** 登记、查询、撤销和验证 Account 的 X.509 公钥证书 Credential。 */
+/**
+ * 登记、查询、撤销和验证 Account 的 X.509 公钥证书 Credential。
+ */
 public class X509AuthenticationMethod implements AuthenticationMethod<X509TransportProof> {
 
     private static final Logger LOG = LoggerFactory.getLogger(X509AuthenticationMethod.class);
 
-    /** X.509 方法稳定编码。 */
-    public static final AuthenticationMethodCode CODE = new AuthenticationMethodCode("x509");
+    /**
+     * X.509 方法稳定编码。
+     */
+    public static final TreeCode CODE = TreeCode.ofSlash("AUTHENTICATION/X509");
 
     private final @NotNull X509CredentialRepository credentials;
 
@@ -45,7 +49,9 @@ public class X509AuthenticationMethod implements AuthenticationMethod<X509Transp
 
     private final @NotNull Clock clock;
 
-    /** 创建从证书指纹识别 Account 的 X.509 认证方法。 */
+    /**
+     * 创建从证书指纹识别 Account 的 X.509 认证方法。
+     */
     public X509AuthenticationMethod(
             @NotNull X509CredentialRepository credentials,
             @NotNull AccountDirectory accounts,
@@ -60,7 +66,7 @@ public class X509AuthenticationMethod implements AuthenticationMethod<X509Transp
     }
 
     @Override
-    public @NotNull AuthenticationMethodCode code() {
+    public @NotNull TreeCode code() {
         return CODE;
     }
 
@@ -136,10 +142,10 @@ public class X509AuthenticationMethod implements AuthenticationMethod<X509Transp
     /**
      * 为 Account 登记一张外部签发的 X.509 公钥证书。
      *
-     * @param account 已经由管理流程确认存在的 Account；Account 停用时仍允许预置证书
+     * @param account      已经由管理流程确认存在的 Account；Account 停用时仍允许预置证书
      * @param registration 只包含 DER 公钥证书的登记数据
      * @return 已保存且不包含 DER 或私钥的 Credential
-    */
+     */
     @Transactional
     public @NotNull X509Credential register(
             @NotNull Account account,
@@ -204,7 +210,7 @@ public class X509AuthenticationMethod implements AuthenticationMethod<X509Transp
     /**
      * 撤销 Account 的指定 X.509 Credential，并终止该 Account 的全部旧 Session。
      *
-     * @param accountId Account 标识
+     * @param accountId    Account 标识
      * @param credentialId Credential 标识
      * @return 本次完成撤销时为 {@code true}，已经撤销时为 {@code false}
      */
@@ -241,7 +247,9 @@ public class X509AuthenticationMethod implements AuthenticationMethod<X509Transp
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional
     public void eraseAccount(long accountId) {

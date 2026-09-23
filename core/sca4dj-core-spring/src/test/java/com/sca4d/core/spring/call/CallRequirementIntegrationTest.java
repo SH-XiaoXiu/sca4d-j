@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallExecution;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.permission.Permission;
@@ -26,7 +27,9 @@ import org.springframework.transaction.TransactionExecution;
 import java.lang.reflect.Method;
 import java.time.Instant;
 
-/** 验证 Spring 事务和嵌套方法执行会共同落实调用成功要求。 */
+/**
+ * 验证 Spring 事务和嵌套方法执行会共同落实调用成功要求。
+ */
 class CallRequirementIntegrationTest {
 
     private final RequestVersionConditions versionConditions = new RequestVersionConditions();
@@ -84,7 +87,9 @@ class CallRequirementIntegrationTest {
         return new CallExecution(call, Fixture.class, method, new Object[0], method.getGenericReturnType());
     }
 
-    /** 提供普通、嵌套和版本保护方法声明。 */
+    /**
+     * 提供普通、嵌套和版本保护方法声明。
+     */
     private static final class Fixture {
 
         private void plain() {
@@ -98,12 +103,14 @@ class CallRequirementIntegrationTest {
         }
     }
 
-    /** 表示测试中的设备集合资源。 */
+    /**
+     * 表示测试中的设备集合资源。
+     */
     private static final class DeviceCollection implements Resource {
 
         @Override
-        public @NotNull String type() {
-            return "device";
+        public @NotNull TreeCode type() {
+            return TreeCode.ofSlash("TEST/DEVICE");
         }
 
         @Override
@@ -112,12 +119,14 @@ class CallRequirementIntegrationTest {
         }
     }
 
-    /** 表示测试中的设备数据范围。 */
+    /**
+     * 表示测试中的设备数据范围。
+     */
     private static final class DeviceScope implements ResourceScope {
 
         @Override
-        public String resourceType() {
-            return "device";
+        public TreeCode resourceType() {
+            return TreeCode.ofSlash("TEST/DEVICE");
         }
     }
 }

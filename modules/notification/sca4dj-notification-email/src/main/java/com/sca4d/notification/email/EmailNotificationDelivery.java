@@ -1,10 +1,10 @@
 package com.sca4d.notification.email;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.delivery.DeliveryOutcome;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.messaging.MessageId;
 import com.sca4d.core.api.notification.Notification;
-import com.sca4d.core.api.notification.NotificationChannel;
 import com.sca4d.core.api.notification.NotificationDelivery;
 import com.sca4d.core.api.render.TemplateVariables;
 import com.sca4d.notification.email.sender.EmailGateway;
@@ -14,7 +14,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-/** 把渠道无关通知解析为收件邮箱、Email 模板和 SMTP 配置并执行投递。 */
+/**
+ * 把渠道无关通知解析为收件邮箱、Email 模板和 SMTP 配置并执行投递。
+ */
 public final class EmailNotificationDelivery implements NotificationDelivery {
 
     private final @NotNull EmailRecipientResolver recipients;
@@ -41,7 +43,7 @@ public final class EmailNotificationDelivery implements NotificationDelivery {
     }
 
     @Override
-    public @NotNull NotificationChannel channel() {
+    public @NotNull TreeCode channel() {
         return EmailChannels.EMAIL;
     }
 

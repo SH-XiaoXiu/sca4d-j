@@ -1,6 +1,6 @@
 package com.sca4d.iot.api;
 
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.Contract;
@@ -10,36 +10,46 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 import java.util.Optional;
 
-/** 表示 Device 允许使用的匿名、Session 或 Account 认证连接方式。 */
+/**
+ * 表示 Device 允许使用的匿名、Session 或 Account 认证连接方式。
+ */
 public final class DeviceAccessMethod {
 
-    /** 不提交 Account 认证材料的匿名连接方式编码。 */
+    /**
+     * 不提交 Account 认证材料的匿名连接方式编码。
+     */
     public static final @NotNull String ANONYMOUS_CODE = "anonymous";
 
-    /** 使用已经建立的通用 Session Token 连接的方式编码。 */
+    /**
+     * 使用已经建立的通用 Session Token 连接的方式编码。
+     */
     public static final @NotNull String SESSION_CODE = "session";
 
     private static final String ACCOUNT_PREFIX = "account:";
 
     private final @NotNull String code;
 
-    private final @Nullable AuthenticationMethodCode authenticationMethodCode;
+    private final @Nullable TreeCode authenticationMethodCode;
 
     private DeviceAccessMethod(
             @NotNull String code,
-            @Nullable AuthenticationMethodCode authenticationMethodCode) {
+            @Nullable TreeCode authenticationMethodCode) {
         this.code = code;
         this.authenticationMethodCode = authenticationMethodCode;
     }
 
-    /** @return 不要求 Account 或 Credential 的匿名连接方式 */
+    /**
+     * @return 不要求 Account 或 Credential 的匿名连接方式
+     */
     @CheckReturnValue
     @Contract(pure = true)
     public static @NotNull DeviceAccessMethod anonymous() {
         return new DeviceAccessMethod(ANONYMOUS_CODE, null);
     }
 
-    /** @return 使用通用 Session Token 的连接方式 */
+    /**
+     * @return 使用通用 Session Token 的连接方式
+     */
     @CheckReturnValue
     @Contract(pure = true)
     public static @NotNull DeviceAccessMethod session() {
@@ -55,8 +65,8 @@ public final class DeviceAccessMethod {
     @CheckReturnValue
     @Contract(pure = true)
     public static @NotNull DeviceAccessMethod authentication(
-            @NotNull AuthenticationMethodCode methodCode) {
-        AuthenticationMethodCode checked = Objects.requireNonNull(methodCode, "认证方法编码不能为空");
+            @NotNull TreeCode methodCode) {
+        TreeCode checked = Objects.requireNonNull(methodCode, "认证方法编码不能为空");
         return new DeviceAccessMethod(ACCOUNT_PREFIX + checked.value(), checked);
     }
 
@@ -83,28 +93,36 @@ public final class DeviceAccessMethod {
         if (methodCode.isBlank() || methodCode.indexOf(':') >= 0) {
             throw new IllegalArgumentException("Device Account 认证方法编码无效");
         }
-        return authentication(new AuthenticationMethodCode(methodCode));
+        return authentication(TreeCode.ofSlash("AUTHENTICATION/" + methodCode.replace('-', '_')));
     }
 
-    /** @return 数据库、配置和协议共同使用的稳定编码 */
+    /**
+     * @return 数据库、配置和协议共同使用的稳定编码
+     */
     @Contract(pure = true)
     public @NotNull String code() {
         return code;
     }
 
-    /** @return 直接 Account 认证方式对应的方法编码；匿名或 Session 方式为空 */
+    /**
+     * @return 直接 Account 认证方式对应的方法编码；匿名或 Session 方式为空
+     */
     @Contract(pure = true)
-    public @NotNull Optional<AuthenticationMethodCode> authenticationMethodCode() {
+    public @NotNull Optional<TreeCode> authenticationMethodCode() {
         return Optional.ofNullable(authenticationMethodCode);
     }
 
-    /** @return 当前方式是否使用已经建立的通用 Session */
+    /**
+     * @return 当前方式是否使用已经建立的通用 Session
+     */
     @Contract(pure = true)
     public boolean usesSession() {
         return SESSION_CODE.equals(code);
     }
 
-    /** @return 当前方式是否不要求 Account 认证 */
+    /**
+     * @return 当前方式是否不要求 Account 认证
+     */
     @Contract(pure = true)
     public boolean anonymousAccess() {
         return ANONYMOUS_CODE.equals(code);

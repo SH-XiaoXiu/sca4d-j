@@ -23,7 +23,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-/** 向 `audit_record` 追加审计行，并按查询条件读取审计行。 */
+/**
+ * 向 `audit_record` 追加审计行，并按查询条件读取审计行。
+ */
 @ApiStatus.Internal
 public class AuditRepository {
     private static final int PERSISTED_TEXT_MAX_LENGTH = 128;
@@ -34,7 +36,9 @@ public class AuditRepository {
 
     private final @NotNull AuditPayloadJson payloadJson;
 
-    /** 创建负责审计领域对象和数据库列值转换的 Repository。 */
+    /**
+     * 创建负责审计领域对象和数据库列值转换的 Repository。
+     */
     public AuditRepository(
             @NotNull AuditMapper mapper,
             @NotNull IdGenerator ids,
@@ -44,19 +48,25 @@ public class AuditRepository {
         this.payloadJson = Objects.requireNonNull(payloadJson, "审计 payload 处理器不能为空");
     }
 
-    /** 追加一条后续不再更新的审计行。 */
+    /**
+     * 追加一条后续不再更新的审计行。
+     */
     @AffectedRows(target = "新增审计记录")
     public void append(@NotNull AuditRecord record) {
         mapper.insert(encode(Objects.requireNonNull(record, "审计记录不能为空")));
     }
 
-    /** 按标识读取审计行。 */
+    /**
+     * 按标识读取审计行。
+     */
     @NotNull
     public Optional<AuditEntry> find(long id) {
         return Optional.ofNullable(mapper.selectById(id)).map(this::decode);
     }
 
-    /** @return 满足查询条件的一页审计记录和完整命中数量 */
+    /**
+     * @return 满足查询条件的一页审计记录和完整命中数量
+     */
     public @NotNull Page<AuditEntry> page(@NotNull AuditQuery query) {
         AuditQuery checked = Objects.requireNonNull(query, "审计查询不能为空");
         long total = mapper.count(checked);
@@ -66,7 +76,9 @@ public class AuditRepository {
         return new Page<>(items, checked.page(), total);
     }
 
-    /** 将待记录审计事实编码成 Mapper 使用的列值。 */
+    /**
+     * 将待记录审计事实编码成 Mapper 使用的列值。
+     */
     private @NotNull EncodedAuditEntry encode(@NotNull AuditRecord record) {
         EncodedAuditPayload payload = payloadJson.encode(record.payload().orElse(null));
         Resource target = record.target().orElse(null);
@@ -78,7 +90,7 @@ public class AuditRepository {
                 record.actor().accountId().orElse(null),
                 record.actor().principalId(),
                 required(record.operation().id(), "审计操作"),
-                target == null ? null : required(target.type(), "目标资源类型"),
+                target == null ? null : required(target.type().value(), "目标资源类型"),
                 target == null ? null : required(target.id(), "目标资源标识"),
                 record.result(),
                 payload == null ? null : payload.type(),
@@ -91,7 +103,9 @@ public class AuditRepository {
                 record.occurredAt());
     }
 
-    /** 将 Mapper 返回的列值恢复成查询服务使用的审计领域对象。 */
+    /**
+     * 将 Mapper 返回的列值恢复成查询服务使用的审计领域对象。
+     */
     private @NotNull AuditEntry decode(@NotNull EncodedAuditEntry row) {
         String targetType = row.targetType();
         String payloadType = row.payloadType();
@@ -124,7 +138,9 @@ public class AuditRepository {
                 row.occurredAt());
     }
 
-    /** 校验数据库短文本字段的长度和空白限制。 */
+    /**
+     * 校验数据库短文本字段的长度和空白限制。
+     */
     private static @NotNull String required(@NotNull String value, @NotNull String name) {
         String checked = Objects.requireNonNull(value, name + "不能为空");
         if (checked.isBlank() || checked.length() > PERSISTED_TEXT_MAX_LENGTH) {

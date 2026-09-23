@@ -1,12 +1,12 @@
 package com.sca4d.notification.inbox;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.delivery.DeliveryOutcome;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.messaging.MessageId;
 import com.sca4d.core.api.notification.Notification;
-import com.sca4d.core.api.notification.NotificationChannel;
 import com.sca4d.core.api.notification.NotificationDelivery;
-import com.sca4d.core.api.notification.NotificationRecipientType;
+import com.sca4d.core.api.notification.NotificationRecipient;
 import com.sca4d.notification.inbox.template.InboxTemplateRenderer;
 import com.sca4d.notification.inbox.template.InboxTemplateRepository;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
-/** 把站内信模板渲染成持久站内信快照。 */
+/**
+ * 把站内信模板渲染成持久站内信快照。
+ */
 public class InboxNotificationDelivery implements NotificationDelivery {
 
     private final InboxTemplateRepository templates;
@@ -27,7 +29,9 @@ public class InboxNotificationDelivery implements NotificationDelivery {
 
     private final IdGenerator ids;
 
-    /** 创建站内信渠道投递实现。 */
+    /**
+     * 创建站内信渠道投递实现。
+     */
     public InboxNotificationDelivery(
             @NotNull InboxTemplateRepository templates,
             @NotNull InboxTemplateRenderer renderers,
@@ -42,14 +46,14 @@ public class InboxNotificationDelivery implements NotificationDelivery {
     }
 
     @Override
-    public @NotNull NotificationChannel channel() {
+    public @NotNull TreeCode channel() {
         return InboxChannels.INBOX;
     }
 
     @Override
     public boolean available(@NotNull Notification notification) {
         Notification checked = Objects.requireNonNull(notification, "通知不能为空");
-        return NotificationRecipientType.ACCOUNT.equals(checked.recipient().type())
+        return NotificationRecipient.ACCOUNT_TYPE.equals(checked.recipient().type())
                 && templates.findEnabled(checked.code()).isPresent();
     }
 

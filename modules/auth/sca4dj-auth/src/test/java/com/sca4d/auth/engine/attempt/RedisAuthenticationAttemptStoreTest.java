@@ -8,8 +8,8 @@ import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationActionCode;
 import com.sca4d.core.api.authentication.AuthenticationAttemptId;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.concurrent.Version;
@@ -27,7 +27,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
-/** 验证认证尝试状态编码和分布式锁协作。 */
+/**
+ * 验证认证尝试状态编码和分布式锁协作。
+ */
 class RedisAuthenticationAttemptStoreTest {
 
     @Test
@@ -38,7 +40,7 @@ class RedisAuthenticationAttemptStoreTest {
         Account account = new Account(20, 10, new RealmKey("device"));
         Authentication authentication = new Authentication(
                 account.accountId(),
-                new AuthenticationMethodCode("x509"),
+                TreeCode.ofSlash("AUTHENTICATION/X509"),
                 Set.of(AuthenticationFactorKind.POSSESSION),
                 authenticatedAt);
         AuthenticationAttemptState state = new AuthenticationAttemptState(
@@ -89,7 +91,9 @@ class RedisAuthenticationAttemptStoreTest {
         assertThat(distributedLock.waitTime).isEqualTo(Duration.ofSeconds(2));
     }
 
-    /** 立即执行任务并保留本次锁参数。 */
+    /**
+     * 立即执行任务并保留本次锁参数。
+     */
     private static final class ImmediateDistributedLock implements DistributedLock {
 
         private LockKey key;

@@ -1,5 +1,6 @@
 package com.sca4d.iam.acl;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.iam.DomainScope;
 import org.jetbrains.annotations.CheckReturnValue;
@@ -8,10 +9,13 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
-/** 汇总 ACL 认领的资源类型并在启动时拒绝冲突。 */
+/**
+ * 汇总 ACL 认领的资源类型并在启动时拒绝冲突。
+ */
 public final class AclResourceTypes {
-    private final @NotNull @Unmodifiable Map<@NotNull String, @NotNull DomainScope> scopes;
+    private final @NotNull @Unmodifiable Map<@NotNull TreeCode, @NotNull DomainScope> scopes;
 
     /**
      * 汇总全部 ACL 实现认领的资源类型。
@@ -19,10 +23,10 @@ public final class AclResourceTypes {
      * @param repositories ACL Repository 注册表
      */
     public AclResourceTypes(@NotNull AclRepositoryRegistry repositories) {
-        LinkedHashMap<String, DomainScope> values = new LinkedHashMap<>();
+        LinkedHashMap<TreeCode, DomainScope> values = new LinkedHashMap<>();
         for (AclRepository repository : repositories.repositories()) {
-            for (String type : repository.resourceTypes()) {
-                if (type.isBlank() || Operation.RESOURCE_TYPE.equals(type)) {
+            for (TreeCode type : repository.resourceTypes()) {
+                if (Operation.RESOURCE_TYPE.equals(type)) {
                     throw new IllegalStateException("ACL 资源类型非法或与 Operation 冲突: " + type);
                 }
                 // PermissionAssessment 要求每种资源恰好由一个策略处理，因此启动时拒绝跨领域重复认领。
@@ -42,8 +46,8 @@ public final class AclResourceTypes {
      * @return 已认领时为 {@code true}
      */
     @CheckReturnValue
-    public boolean contains(@NotNull String resourceType) {
-        return scopes.containsKey(resourceType);
+    public boolean contains(@NotNull TreeCode resourceType) {
+        return scopes.containsKey(Objects.requireNonNull(resourceType, "ACL 资源类型不能为空"));
     }
 
     /**
@@ -53,10 +57,11 @@ public final class AclResourceTypes {
      * @return 领域范围
      */
     @CheckReturnValue
-    public @NotNull DomainScope scope(@NotNull String resourceType) {
-        DomainScope scope = scopes.get(resourceType);
+    public @NotNull DomainScope scope(@NotNull TreeCode resourceType) {
+        TreeCode checked = Objects.requireNonNull(resourceType, "ACL 资源类型不能为空");
+        DomainScope scope = scopes.get(checked);
         if (scope == null) {
-            throw new IllegalArgumentException("ACL 资源类型未注册: " + resourceType);
+            throw new IllegalArgumentException("ACL 资源类型未注册: " + checked);
         }
         return scope;
     }

@@ -1,11 +1,11 @@
 package com.sca4d.notification;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageId;
 import com.sca4d.core.api.notification.Notification;
-import com.sca4d.core.api.notification.NotificationChannel;
 import com.sca4d.core.api.notification.NotificationRecipient;
 import com.sca4d.core.api.notification.NotificationType;
 import com.sca4d.core.api.notification.Notifications;
@@ -16,7 +16,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-/** 使用通知类型回调解析领域对象，并执行同步或 Outbox 发布。 */
+/**
+ * 使用通知类型回调解析领域对象，并执行同步或 Outbox 发布。
+ */
 public final class DefaultNotifications implements Notifications {
 
     private final @NotNull NotificationTypeCatalog types;
@@ -33,7 +35,9 @@ public final class DefaultNotifications implements Notifications {
 
     private final @NotNull IdGenerator ids;
 
-    /** 创建类型化通知发布入口。 */
+    /**
+     * 创建类型化通知发布入口。
+     */
     public DefaultNotifications(
             @NotNull NotificationTypeCatalog types,
             @NotNull Settings settings,
@@ -55,7 +59,7 @@ public final class DefaultNotifications implements Notifications {
     public boolean isAvailable(@NotNull NotificationType<?> type, @NotNull NotificationRecipient recipient) {
         NotificationType<?> checkedType = types.require(type);
         NotificationRecipient checkedRecipient = Objects.requireNonNull(recipient, "通知接收人不能为空");
-        Set<NotificationChannel> required = checkedType.definition().requiredChannels();
+        Set<TreeCode> required = checkedType.definition().requiredChannels();
         if (required.isEmpty()) {
             return true;
         }
@@ -81,7 +85,9 @@ public final class DefaultNotifications implements Notifications {
         return messages.dispatch(new NotificationMessage(notification), DispatchPolicy.outbox()).messageId();
     }
 
-    /** 执行类型回调并取得一个已经冻结路由事实的标准通知。 */
+    /**
+     * 执行类型回调并取得一个已经冻结路由事实的标准通知。
+     */
     private <T> @NotNull Notification resolve(@NotNull NotificationType<T> type, @NotNull T value) {
         NotificationType<T> checkedType = types.require(type);
         DefaultNotificationExecution<T> execution = new DefaultNotificationExecution<>(

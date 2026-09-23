@@ -9,6 +9,7 @@ import com.sca4d.auth.hmac.HmacCredentialRepository;
 import com.sca4d.auth.sharedsecret.SharedSecretCredential;
 import com.sca4d.auth.sharedsecret.SharedSecretCredentialMapper;
 import com.sca4d.auth.sharedsecret.SharedSecretCredentialRepository;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.OptimisticLockException;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.security.EncryptedSecret;
@@ -57,6 +58,11 @@ import javax.sql.DataSource;
 /** 在隔离 PostgreSQL 中验证 Client 授权关系的原子替换与并发隔离。 */
 @Testcontainers
 class OpenApiClientPersistenceIntegrationTest {
+
+    private static final TreeCode READ = TreeCode.ofColon("TEST:READ");
+
+    private static final TreeCode WRITE = TreeCode.ofColon("TEST:WRITE");
+
     @Container
     private static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:17-alpine");
 
@@ -207,18 +213,18 @@ class OpenApiClientPersistenceIntegrationTest {
     @DisplayName("关系插入失败回滚新 Client，替换失败保留原授权，空集合明确清空")
     void aggregateWritesAreAtomic() {
         OpenApiClient client = new OpenApiClient("client-a", 101, "测试 Client", OpenApiClientStatus.ACTIVE);
-        assertThatThrownBy(() -> clients.create(client, List.of("read", "read"))).isInstanceOf(RuntimeException.class);
+        assertThatThrownBy(() -> clients.create(client, List.of(READ, READ))).isInstanceOf(RuntimeException.class);
         assertThat(clients.find("client-a")).isEmpty();
-        clients.create(client, List.of("read"));
-        assertThatThrownBy(() -> clients.replaceOperations("client-a", List.of("write", "write")))
+        clients.create(client, List.of(READ));
+        assertThatThrownBy(() -> clients.replaceOperations("client-a", List.of(WRITE, WRITE)))
                 .isInstanceOf(RuntimeException.class);
-        assertThat(clients.findOperations("client-a")).containsExactly("read");
+        assertThat(clients.findOperations("client-a")).containsExactly(READ);
         assertThat(clients.findByAccountId(101).orElseThrow().clientId()).isEqualTo("client-a");
         clients.updateStatus("client-a", OpenApiClientStatus.DISABLED);
         assertThat(clients.find("client-a").orElseThrow().active()).isFalse();
         clients.replaceOperations("client-a", List.of());
-        assertThat(clients.hasOperation("client-a", "read")).isFalse();
-        assertThatThrownBy(() -> clients.replaceOperations("missing", List.of("read")))
+        assertThat(clients.hasOperation("client-a", READ)).isFalse();
+        assertThatThrownBy(() -> clients.replaceOperations("missing", List.of(READ)))
                 .isInstanceOf(IllegalArgumentException.class);
         assertThat(clients.findOperations("missing")).isEmpty();
     }
@@ -226,10 +232,12 @@ class OpenApiClientPersistenceIntegrationTest {
     @Test
     @DisplayName("超过一个批次的完整授权保存及跨批次失败整体回滚")
     void batchesPreserveTheCompleteSelection() {
-        List<String> operations = IntStream.range(0, 1001).mapToObj(i -> "operation-" + i).toList();
+        List<TreeCode> operations = IntStream.range(0, 1001)
+                .mapToObj(i -> TreeCode.ofColon("TEST:OPERATION_" + i))
+                .toList();
         clients.create(new OpenApiClient("client-b", 102, "批量 Client", OpenApiClientStatus.ACTIVE), operations);
         assertThat(clients.findOperations("client-b")).containsExactlyInAnyOrderElementsOf(operations);
-        List<String> invalid = new ArrayList<>(operations.subList(0, 1000));
+        List<TreeCode> invalid = new ArrayList<>(operations.subList(0, 1000));
         invalid.add(operations.getFirst());
         assertThatThrownBy(() -> clients.replaceOperations("client-b", invalid)).isInstanceOf(RuntimeException.class);
         assertThat(clients.findOperations("client-b")).containsExactlyInAnyOrderElementsOf(operations);
@@ -243,7 +251,7 @@ class OpenApiClientPersistenceIntegrationTest {
         CountDownLatch secondStarted = new CountDownLatch(1);
         try (var executor = Executors.newFixedThreadPool(2)) {
             var first = executor.submit(() -> transactions.executeWithoutResult(status -> {
-                clients.replaceOperations("client-c", List.of("read"));
+                clients.replaceOperations("client-c", List.of(READ));
                 firstWritten.countDown();
                 try {
                     assertThat(secondStarted.await(10, TimeUnit.SECONDS)).isTrue();
@@ -255,12 +263,12 @@ class OpenApiClientPersistenceIntegrationTest {
             var second = executor.submit(() -> {
                 assertThat(firstWritten.await(10, TimeUnit.SECONDS)).isTrue();
                 secondStarted.countDown();
-                clients.replaceOperations("client-c", List.of("write"));
+                clients.replaceOperations("client-c", List.of(WRITE));
                 return null;
             });
             first.get(15, TimeUnit.SECONDS);
             second.get(15, TimeUnit.SECONDS);
         }
-        assertThat(clients.findOperations("client-c")).containsExactly("write");
+        assertThat(clients.findOperations("client-c")).containsExactly(WRITE);
     }
 }

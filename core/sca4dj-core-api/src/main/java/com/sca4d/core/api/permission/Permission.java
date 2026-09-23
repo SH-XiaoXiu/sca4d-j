@@ -19,12 +19,12 @@ public final class Permission {
      * 创建权限。
      *
      * @param resource 受保护资源
-     * @param action 对资源执行的动作
+     * @param action   对资源执行的动作
      */
     public Permission(Resource resource, Action action) {
         this.resource = Objects.requireNonNull(resource, "权限资源不能为空");
         this.action = Objects.requireNonNull(action, "权限动作不能为空");
-        requireText(resource.type(), "资源类型");
+        Objects.requireNonNull(resource.type(), "资源类型不能为空");
         requireText(resource.id(), "资源标识");
     }
 
@@ -62,7 +62,7 @@ public final class Permission {
 
     @Override
     public String toString() {
-        return resource.type() + ":" + resource.id() + ":" + action.value();
+        return resource.type() + ":" + resource.id() + ":" + action.code();
     }
 
     private static void requireText(String value, String name) {

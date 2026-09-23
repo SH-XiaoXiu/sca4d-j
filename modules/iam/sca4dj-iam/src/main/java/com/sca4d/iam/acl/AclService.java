@@ -1,5 +1,6 @@
 package com.sca4d.iam.acl;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.utils.TextUtils;
@@ -16,7 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 
-/** 校验并路由指定领域的 ACL 操作。 */
+/**
+ * 校验并路由指定领域的 ACL 操作。
+ */
 @SuppressWarnings("unused")
 public class AclService {
     private static final Logger LOG = LoggerFactory.getLogger(AclService.class);
@@ -30,9 +33,9 @@ public class AclService {
     /**
      * 创建统一 ACL 服务。
      *
-     * @param repositories 领域 Repository 注册表
+     * @param repositories  领域 Repository 注册表
      * @param resourceTypes 资源类型归属表
-     * @param identities 身份事实服务
+     * @param identities    身份事实服务
      */
     public AclService(
             @NotNull AclRepositoryRegistry repositories,
@@ -46,17 +49,17 @@ public class AclService {
     /**
      * 幂等授予资源动作权限。
      *
-     * @param scope 领域范围
+     * @param scope       领域范围
      * @param principalId 业务主体标识
-     * @param type 资源类型
-     * @param id 资源标识
-     * @param action 动作
+     * @param type        资源类型
+     * @param id          资源标识
+     * @param action      动作
      */
     @Transactional
     public void grant(
             @NotNull DomainScope scope,
             @NotNull Long principalId,
-            @NotNull String type,
+            @NotNull TreeCode type,
             @NotNull String id,
             @NotNull Action action) {
         validate(scope, principalId, type, id, action);
@@ -67,23 +70,23 @@ public class AclService {
                 principalId,
                 type,
                 id,
-                action.value());
+                action.code());
     }
 
     /**
      * 幂等撤销资源动作权限。
      *
-     * @param scope 领域范围
+     * @param scope       领域范围
      * @param principalId 业务主体标识
-     * @param type 资源类型
-     * @param id 资源标识
-     * @param action 动作
+     * @param type        资源类型
+     * @param id          资源标识
+     * @param action      动作
      */
     @Transactional
     public void revoke(
             @NotNull DomainScope scope,
             @NotNull Long principalId,
-            @NotNull String type,
+            @NotNull TreeCode type,
             @NotNull String id,
             @NotNull Action action) {
         validate(scope, principalId, type, id, action);
@@ -94,17 +97,17 @@ public class AclService {
                 principalId,
                 type,
                 id,
-                action.value());
+                action.code());
     }
 
     /**
      * 判断业务主体是否拥有资源动作权限。
      *
-     * @param scope 领域范围
+     * @param scope       领域范围
      * @param principalId 业务主体标识
-     * @param type 资源类型
-     * @param id 资源标识
-     * @param action 动作
+     * @param type        资源类型
+     * @param id          资源标识
+     * @param action      动作
      * @return 已授予时为 {@code true}
      */
     @Transactional(readOnly = true)
@@ -112,7 +115,7 @@ public class AclService {
     public boolean allows(
             @NotNull DomainScope scope,
             @NotNull Long principalId,
-            @NotNull String type,
+            @NotNull TreeCode type,
             @NotNull String id,
             @NotNull Action action) {
         validate(scope, principalId, type, id, action);
@@ -123,7 +126,7 @@ public class AclService {
                 principalId,
                 type,
                 id,
-                action.value(),
+                action.code(),
                 allowed);
         return allowed;
     }
@@ -131,10 +134,10 @@ public class AclService {
     /**
      * 查找业务主体可执行指定动作的资源实例。
      *
-     * @param scope 领域范围
+     * @param scope       领域范围
      * @param principalId 业务主体标识
-     * @param type 资源类型
-     * @param action 动作
+     * @param type        资源类型
+     * @param action      动作
      * @return 不可修改的资源标识列表
      */
     @Transactional(readOnly = true)
@@ -142,7 +145,7 @@ public class AclService {
     public @NotNull @Unmodifiable List<@NotNull String> findAllowedResourceIds(
             @NotNull DomainScope scope,
             @NotNull Long principalId,
-            @NotNull String type,
+            @NotNull TreeCode type,
             @NotNull Action action) {
         validate(scope, principalId, type, "*", action);
         List<String> resourceIds = List.copyOf(
@@ -152,7 +155,7 @@ public class AclService {
                 scope.value(),
                 principalId,
                 type,
-                action.value(),
+                action.code(),
                 resourceIds.size());
         return resourceIds;
     }
@@ -160,9 +163,9 @@ public class AclService {
     /**
      * 查找业务主体在一种资源类型下的全部授权。
      *
-     * @param scope 领域范围
+     * @param scope       领域范围
      * @param principalId 业务主体标识
-     * @param type 资源类型
+     * @param type        资源类型
      * @return 不可修改的 ACL 条目列表
      */
     @Transactional(readOnly = true)
@@ -170,7 +173,7 @@ public class AclService {
     public @NotNull @Unmodifiable List<@NotNull AclEntry> findEntries(
             @NotNull DomainScope scope,
             @NotNull Long principalId,
-            @NotNull String type) {
+            @NotNull TreeCode type) {
         validate(scope, principalId, type, "*", Action.READ);
         List<AclEntry> entries = List.copyOf(repositories.repository(scope).findEntries(principalId, type));
         LOG.debug(
@@ -187,7 +190,7 @@ public class AclService {
      *
      * <p>清理操作不要求 Principal 仍处于启用状态，以便领域在停用或删除身份后移除残留授权。
      *
-     * @param scope 领域范围
+     * @param scope       领域范围
      * @param principalId 业务主体标识
      */
     @Transactional
@@ -205,14 +208,14 @@ public class AclService {
      * 撤销资源实例在一个领域内的全部 ACL。
      *
      * @param scope 领域范围
-     * @param type 资源类型
-     * @param id 资源标识
+     * @param type  资源类型
+     * @param id    资源标识
      */
     @Transactional
     public void revokeByResource(
             @NotNull DomainScope scope,
-            @NotNull String type,
-        @NotNull String id) {
+            @NotNull TreeCode type,
+            @NotNull String id) {
         validateResource(scope, type);
         TextUtils.requireExactText(id, "资源标识");
         repositories.repository(scope).revokeByResource(type, id);
@@ -223,11 +226,13 @@ public class AclService {
                 id);
     }
 
-    /** 校验通用 ACL 写入和读取都只能使用启用主体与已认领资源类型。 */
+    /**
+     * 校验通用 ACL 写入和读取都只能使用启用主体与已认领资源类型。
+     */
     private void validate(
             @NotNull DomainScope scope,
             @NotNull Long principalId,
-            @NotNull String type,
+            @NotNull TreeCode type,
             @NotNull String id,
             @NotNull Action action) {
         if (!identities.isActivePrincipal(Objects.requireNonNull(principalId, "业务主体标识不能为空"))) {
@@ -238,11 +243,12 @@ public class AclService {
         Objects.requireNonNull(action, "动作不能为空");
     }
 
-    /** 验证资源类型属于调用方指定领域，阻止跨领域 Repository 路由。 */
-    private void validateResource(@NotNull DomainScope scope, @NotNull String type) {
-        String checkedType = TextUtils.requireExactText(type, "资源类型");
+    /**
+     * 验证资源类型属于调用方指定领域，阻止跨领域 Repository 路由。
+     */
+    private void validateResource(@NotNull DomainScope scope, @NotNull TreeCode type) {
         // 类型归属在启动时已验证唯一；这里同时阻止调用方用错误 scope 访问另一领域的数据。
-        if (!resourceTypes.scope(checkedType).equals(scope)) {
+        if (!resourceTypes.scope(Objects.requireNonNull(type, "资源类型不能为空")).equals(scope)) {
             throw new IllegalArgumentException("ACL 资源类型不属于指定 scope");
         }
     }

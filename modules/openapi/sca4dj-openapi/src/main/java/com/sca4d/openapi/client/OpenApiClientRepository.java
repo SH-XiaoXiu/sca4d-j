@@ -1,10 +1,11 @@
 package com.sca4d.openapi.client;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.core.api.persistence.ZeroRowPolicy;
-import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.core.api.utils.TextUtils;
+import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.openapi.client.mapper.OpenApiClientMapper;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +30,7 @@ public class OpenApiClientRepository {
 
     /** 原子保存 Client 及完整 Operation 选择，关系写入失败时 Client 也回滚。 */
     @Transactional
-    public void create(@NotNull OpenApiClient client, @NotNull Collection<String> operations) {
+    public void create(@NotNull OpenApiClient client, @NotNull Collection<TreeCode> operations) {
         OpenApiClient checked = Objects.requireNonNull(client, "OpenAPI Client 不能为空");
         AffectedRowCounts.requireSingle(
                 mapper.insertClient(checked.clientId(), checked.accountId(), checked.displayName(), checked.status()),
@@ -56,24 +57,29 @@ public class OpenApiClientRepository {
 
     /** 判断 Client 是否开放一个 Operation。 */
     @Transactional(readOnly = true)
-    public boolean hasOperation(@NotNull String clientId, @NotNull String operation) {
-        return !mapper.selectOperations(TextUtils.requireText(clientId, "Client ID"), TextUtils.requireText(operation, "Operation"))
+    public boolean hasOperation(@NotNull String clientId, @NotNull TreeCode operation) {
+        return !mapper.selectOperations(
+                TextUtils.requireText(clientId, "Client ID"),
+                Objects.requireNonNull(operation, "Operation 不能为空").value())
                 .isEmpty();
     }
 
     /** 读取 Client 当前开放的全部 Operation。 */
     @Transactional(readOnly = true)
-    public @NotNull List<@NotNull String> findOperations(@NotNull String clientId) {
-        return List.copyOf(mapper.selectOperations(TextUtils.requireText(clientId, "Client ID"), null));
+    public @NotNull List<@NotNull TreeCode> findOperations(@NotNull String clientId) {
+        return mapper.selectOperations(TextUtils.requireText(clientId, "Client ID"), null)
+                .stream()
+                .map(TreeCode::ofColon)
+                .toList();
     }
 
     /** 锁定 Client 后原子替换完整 Operation 列表；空集合清空，失败保留原关系。 */
     @Transactional
-    public void replaceOperations(@NotNull String clientId, @NotNull Collection<String> operations) {
+    public void replaceOperations(@NotNull String clientId, @NotNull Collection<TreeCode> operations) {
         String checkedClientId = TextUtils.requireText(clientId, "Client ID");
-        List<String> checkedOperations = Objects.requireNonNull(operations, "Operation 列表不能为空")
+        List<TreeCode> checkedOperations = Objects.requireNonNull(operations, "Operation 列表不能为空")
                 .stream()
-                .map(operation -> TextUtils.requireText(operation, "Operation"))
+                .map(operation -> Objects.requireNonNull(operation, "Operation 不能为空"))
                 .toList();
         // 对同一 Client 的关系替换串行提交，避免并发删除和插入产生混合授权。
         Optional.ofNullable(mapper.selectClient(checkedClientId, null, true))
@@ -81,7 +87,9 @@ public class OpenApiClientRepository {
         mapper.deleteOperations(checkedClientId);
         sqlBatches.forEach(checkedOperations, 2, 0, batch -> {
             AffectedRowCounts.requireExactly(
-                    mapper.insertOperations(checkedClientId, batch),
+                    mapper.insertOperations(
+                            checkedClientId,
+                            batch.stream().map(TreeCode::value).toList()),
                     batch.size(),
                     "新增 Client Operation 关系");
         });

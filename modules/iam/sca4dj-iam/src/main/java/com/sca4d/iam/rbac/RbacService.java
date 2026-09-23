@@ -1,5 +1,6 @@
 package com.sca4d.iam.rbac;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.permission.Operation;
@@ -23,7 +24,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-/** 校验并修改具体 {@link RbacScope} 中的角色、权限和 Principal 角色关系。 */
+/**
+ * 校验并修改具体 {@link RbacScope} 中的角色、权限和 Principal 角色关系。
+ */
 public class RbacService {
 
     private static final Logger LOG = LoggerFactory.getLogger(RbacService.class);
@@ -43,11 +46,11 @@ public class RbacService {
     /**
      * 创建通用 RBAC 服务。
      *
-     * @param repositories 按 RBAC 领域登记的角色 Repository
-     * @param invalidations 按 RBAC 领域登记的可选 Session 失效实现
+     * @param repositories         按 RBAC 领域登记的角色 Repository
+     * @param invalidations        按 RBAC 领域登记的可选 Session 失效实现
      * @param permissionSelections 按 RBAC 领域登记的权限选择规则
-     * @param permissionCache Principal 有效权限选择符缓存
-     * @param idGenerator 角色标识生成器
+     * @param permissionCache      Principal 有效权限选择符缓存
+     * @param idGenerator          角色标识生成器
      */
     public RbacService(
             @NotNull RbacRepositoryRegistry repositories,
@@ -62,7 +65,9 @@ public class RbacService {
         this.idGenerator = Objects.requireNonNull(idGenerator, "ID 生成器不能为空");
     }
 
-    /** @return 指定角色空间中按角色编码排序的全部角色 */
+    /**
+     * @return 指定角色空间中按角色编码排序的全部角色
+     */
     @CheckReturnValue
     @Transactional(readOnly = true)
     public @NotNull @Unmodifiable List<@NotNull Role> findRoles(@NotNull RbacScope scope) {
@@ -88,17 +93,19 @@ public class RbacService {
         return role;
     }
 
-    /** 创建自定义角色并保存当前领域允许的初始权限编码。 */
+    /**
+     * 创建自定义角色并保存当前领域允许的初始权限编码。
+     */
     @CheckReturnValue
     @Transactional
     public @NotNull RolePermissions createRole(
             @NotNull RbacScope scope,
             @NotNull String code,
-            @NotNull Collection<@NotNull String> permissionCodes) {
+            @NotNull Collection<@NotNull TreeCode> permissionCodes) {
         RbacScope checkedScope = Objects.requireNonNull(scope, "RBAC 范围不能为空");
         String checkedCode = validateRoleCode(code);
         PermissionSelections selections = permissionSelections.selection(checkedScope.domain());
-        List<PermissionSelector> selectors = selections.validateGrantable(permissionCodes);
+        List<PermissionSelector> selectors = selections.validateGrantableCodes(permissionCodes);
         Role role = repository(checkedScope)
                 .createRole(
                         checkedScope,
@@ -115,7 +122,9 @@ public class RbacService {
         return new RolePermissions(role, selections.expand(selectors));
     }
 
-    /** 修改角色状态，并在事务提交后清除所有使用者的授权缓存和可选 Session。 */
+    /**
+     * 修改角色状态，并在事务提交后清除所有使用者的授权缓存和可选 Session。
+     */
     @CheckReturnValue
     @Transactional
     public @NotNull Role updateRoleStatus(
@@ -141,7 +150,9 @@ public class RbacService {
         return updated;
     }
 
-    /** 删除没有分配给 Principal 的自定义角色。 */
+    /**
+     * 删除没有分配给 Principal 的自定义角色。
+     */
     @Transactional
     public void deleteRole(@NotNull RbacScope scope, @NotNull Long roleId) {
         RbacScope checkedScope = Objects.requireNonNull(scope, "RBAC 范围不能为空");
@@ -154,7 +165,9 @@ public class RbacService {
         LOG.debug("角色删除已写入事务 | scope={} roleId={}", checkedScope, role.roleId());
     }
 
-    /** @return 角色及其当前得到的具体 Operation */
+    /**
+     * @return 角色及其当前得到的具体 Operation
+     */
     @CheckReturnValue
     @Transactional(readOnly = true)
     public @NotNull RolePermissions findRolePermissions(@NotNull RbacScope scope, @NotNull Long roleId) {
@@ -167,13 +180,15 @@ public class RbacService {
                         .expand(repository.findPermissionSelectors(checkedScope, roleId)));
     }
 
-    /** 原子替换角色的具体权限编码。 */
+    /**
+     * 原子替换角色的具体权限编码。
+     */
     @CheckReturnValue
     @Transactional
     public @NotNull RolePermissions replaceRolePermissions(
             @NotNull RbacScope scope,
             @NotNull Long roleId,
-            @NotNull Collection<@NotNull String> permissionCodes) {
+            @NotNull Collection<@NotNull TreeCode> permissionCodes) {
         RbacScope checkedScope = Objects.requireNonNull(scope, "RBAC 范围不能为空");
         RbacRepository repository = repository(checkedScope);
         Role current = loadRoleById(checkedScope, roleId);
@@ -181,7 +196,7 @@ public class RbacService {
             throw new BusinessException(RbacErrorCode.BUILT_IN_ROLE_PROTECTED);
         }
         PermissionSelections selections = permissionSelections.selection(checkedScope.domain());
-        List<PermissionSelector> selectors = selections.validateGrantable(permissionCodes);
+        List<PermissionSelector> selectors = selections.validateGrantableCodes(permissionCodes);
         Role updated = repository.replacePermissionSelectors(checkedScope, roleId, selectors);
         invalidateRolePrincipals(repository, checkedScope, roleId);
         LOG.debug(
@@ -192,7 +207,9 @@ public class RbacService {
         return new RolePermissions(updated, selections.expand(selectors));
     }
 
-    /** @return Principal 当前角色和角色集合版本 */
+    /**
+     * @return Principal 当前角色和角色集合版本
+     */
     @CheckReturnValue
     @Transactional(readOnly = true)
     public @NotNull PrincipalRoles findPrincipalRoles(
@@ -204,7 +221,9 @@ public class RbacService {
                 "RbacRepository 必须返回输入 Principal");
     }
 
-    /** 一次读取同一角色空间中多个 Principal 的角色关系。 */
+    /**
+     * 一次读取同一角色空间中多个 Principal 的角色关系。
+     */
     @CheckReturnValue
     @Transactional(readOnly = true)
     public @NotNull @Unmodifiable Map<@NotNull Long, @NotNull PrincipalRoles> findPrincipalRoles(
@@ -220,7 +239,9 @@ public class RbacService {
         return Map.copyOf(result);
     }
 
-    /** 原子替换 Principal 的非保护角色关系。 */
+    /**
+     * 原子替换 Principal 的非保护角色关系。
+     */
     @CheckReturnValue
     @Transactional
     public @NotNull PrincipalRoles replacePrincipalRoles(
@@ -250,9 +271,9 @@ public class RbacService {
      * <p>空集合不执行持久化写入。任一标识重复、同时出现在添加和移除集合，或者角色和
      * Principal 无效时整批失败。只有实际变化的 Principal 会在事务提交后失效权限缓存和 Session。
      *
-     * @param scope 角色空间
-     * @param roleId 目标角色标识
-     * @param addPrincipalIds 需要增加目标角色的 Principal 标识
+     * @param scope              角色空间
+     * @param roleId             目标角色标识
+     * @param addPrincipalIds    需要增加目标角色的 Principal 标识
      * @param removePrincipalIds 需要移除目标角色的 Principal 标识
      * @return 每个请求 Principal 修改后的角色关系
      */
@@ -338,7 +359,7 @@ public class RbacService {
         PrincipalGrantQuery checkedQuery = Objects.requireNonNull(query, "Principal 授权查询不能为空");
         PermissionSelections selections = permissionSelections.selection(checkedScope.domain());
         List<Operation> requiredOperations = selections.expand(
-                selections.validateGrantable(checkedQuery.operations().stream().map(Operation::value).toList()));
+                selections.validateGrantableOperations(checkedQuery.operations()));
 
         Map<Long, List<Operation>> granted = findGrantedOperations(checkedScope, checkedQuery.principalIds());
         LinkedHashSet<Long> matched = new LinkedHashSet<>();
@@ -428,7 +449,9 @@ public class RbacService {
         return Map.copyOf(result);
     }
 
-    /** 创建尚不存在的内置角色，并校验已有角色的保护状态和可选固定权限。 */
+    /**
+     * 创建尚不存在的内置角色，并校验已有角色的保护状态和可选固定权限。
+     */
     @Transactional
     public void initializeBuiltInRole(
             @NotNull RbacScope scope,
@@ -468,7 +491,9 @@ public class RbacService {
         }
     }
 
-    /** 按角色编码为 Principal 建立关系。 */
+    /**
+     * 按角色编码为 Principal 建立关系。
+     */
     @Transactional
     public void bindRole(
             @NotNull RbacScope scope,
@@ -490,7 +515,9 @@ public class RbacService {
                 protectedRelation);
     }
 
-    /** 在当前事务提交后精确清除指定 Principal 的授权缓存和可选 Session。 */
+    /**
+     * 在当前事务提交后精确清除指定 Principal 的授权缓存和可选 Session。
+     */
     public void invalidatePermissions(
             @NotNull RbacScope scope,
             @NotNull Collection<@NotNull Long> principalIds) {
@@ -499,7 +526,9 @@ public class RbacService {
                 uniquePrincipalIds(principalIds));
     }
 
-    /** 查询角色使用者，并在事务提交后清除其授权缓存和可选 Session。 */
+    /**
+     * 查询角色使用者，并在事务提交后清除其授权缓存和可选 Session。
+     */
     private void invalidateRolePrincipals(
             @NotNull RbacRepository repository,
             @NotNull RbacScope scope,
@@ -513,7 +542,9 @@ public class RbacService {
         invalidatePermissions(scope, principalIds);
     }
 
-    /** 注册事务提交后的批量精确缓存删除和可选 Session 失效。 */
+    /**
+     * 注册事务提交后的批量精确缓存删除和可选 Session 失效。
+     */
     private void invalidateAfterCommit(
             @NotNull RbacScope scope,
             @NotNull Collection<@NotNull Long> principalIds) {
@@ -538,12 +569,16 @@ public class RbacService {
         action.run();
     }
 
-    /** @return 与指定 RBAC 范围领域匹配的 Repository */
+    /**
+     * @return 与指定 RBAC 范围领域匹配的 Repository
+     */
     private @NotNull RbacRepository repository(@NotNull RbacScope scope) {
         return repositories.repository(scope.domain());
     }
 
-    /** 校验并复制多个 RBAC 范围及其不重复 Principal 标识。 */
+    /**
+     * 校验并复制多个 RBAC 范围及其不重复 Principal 标识。
+     */
     private @NotNull LinkedHashMap<RbacScope, Collection<Long>> normalizeRequests(
             @NotNull Map<@NotNull RbacScope, ? extends Collection<@NotNull Long>> principalIdsByScope) {
         LinkedHashMap<RbacScope, Collection<Long>> result = new LinkedHashMap<>();
@@ -559,7 +594,9 @@ public class RbacService {
         return result;
     }
 
-    /** 校验 Repository 为每个请求坐标返回且只返回一个选择符列表。 */
+    /**
+     * 校验 Repository 为每个请求坐标返回且只返回一个选择符列表。
+     */
     private static void validateSelectorResult(
             @NotNull Map<RbacScope, Collection<Long>> requested,
             @NotNull Map<RbacScope, Map<Long, List<PermissionSelector>>> result) {
@@ -580,7 +617,9 @@ public class RbacService {
         }
     }
 
-    /** @return 保持输入顺序且不包含空值或重复值的 Principal 标识 */
+    /**
+     * @return 保持输入顺序且不包含空值或重复值的 Principal 标识
+     */
     private static @NotNull LinkedHashSet<Long> uniquePrincipalIds(
             @NotNull Collection<@NotNull Long> principalIds) {
         LinkedHashSet<Long> unique = new LinkedHashSet<>();
@@ -593,7 +632,9 @@ public class RbacService {
         return unique;
     }
 
-    /** @return 保持输入顺序且不包含空值或重复值的角色标识 */
+    /**
+     * @return 保持输入顺序且不包含空值或重复值的角色标识
+     */
     private static @NotNull LinkedHashSet<Long> uniqueRoleIds(
             @NotNull Collection<@NotNull Long> roleIds) {
         LinkedHashSet<Long> unique = new LinkedHashSet<>();
@@ -606,7 +647,9 @@ public class RbacService {
         return unique;
     }
 
-    /** 校验 Repository 为全部请求 Principal 返回同一范围的角色结果。 */
+    /**
+     * 校验 Repository 为全部请求 Principal 返回同一范围的角色结果。
+     */
     private static void validatePrincipalRolesResult(
             @NotNull RbacScope scope,
             @NotNull Collection<@NotNull Long> principalIds,
@@ -617,7 +660,9 @@ public class RbacService {
         }
     }
 
-    /** @return 去除首尾空白且长度符合要求的角色编码 */
+    /**
+     * @return 去除首尾空白且长度符合要求的角色编码
+     */
     @CheckReturnValue
     private static @NotNull String validateRoleCode(@NotNull String value) {
         final String checked;

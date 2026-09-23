@@ -5,8 +5,8 @@ import com.sca4d.auth.sms.challenge.SmsCodeChallengeService;
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.AuthenticationMethod;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountIdentifierType;
@@ -17,9 +17,11 @@ import java.time.Clock;
 import java.util.Objects;
 import java.util.Set;
 
-/** 单次消费 SMS Challenge，并向认证引擎返回持有因素证据。 */
+/**
+ * 单次消费 SMS Challenge，并向认证引擎返回持有因素证据。
+ */
 public final class SmsCodeAuthenticationMethod implements AuthenticationMethod<SmsCodeProof> {
-    public static final @NotNull AuthenticationMethodCode CODE = new AuthenticationMethodCode("sms-code");
+    public static final @NotNull TreeCode CODE = TreeCode.ofSlash("AUTHENTICATION/SMS_CODE");
 
     public static final @NotNull AccountIdentifierType PHONE_IDENTIFIER_TYPE = new AccountIdentifierType("PHONE");
 
@@ -29,14 +31,16 @@ public final class SmsCodeAuthenticationMethod implements AuthenticationMethod<S
 
     private final Clock clock;
 
-    /** 创建 SMS Code 认证方法。 */
+    /**
+     * 创建 SMS Code 认证方法。
+     */
     public SmsCodeAuthenticationMethod(@NotNull SmsCodeChallengeService challenges, @NotNull Clock clock) {
         this.challenges = Objects.requireNonNull(challenges, "SMS Challenge 服务不能为空");
         this.clock = Objects.requireNonNull(clock, "Clock 不能为空");
     }
 
     @Override
-    public @NotNull AuthenticationMethodCode code() {
+    public @NotNull TreeCode code() {
         return CODE;
     }
 

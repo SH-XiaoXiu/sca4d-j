@@ -1,6 +1,7 @@
 package com.sca4d.core.api.permission;
 
 import cn.hutool.crypto.digest.DigestUtil;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +20,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/** 收集业务模块的 Operation 聚合，并提供完整目录、ACTION 索引和子集投影。 */
+/**
+ * 收集业务模块的 Operation 聚合，并提供完整目录、ACTION 索引和子集投影。
+ */
 public final class OperationCatalog {
 
     private static final @NotNull Comparator<OperationNode.Module> MODULE_ORDER = Comparator
@@ -30,7 +33,7 @@ public final class OperationCatalog {
 
     private final @NotNull @Unmodifiable List<OperationNode.OperationAction> actions;
 
-    private final @NotNull @Unmodifiable Map<@NotNull String, OperationNode.OperationAction> actionsByCode;
+    private final @NotNull @Unmodifiable Map<@NotNull TreeCode, OperationNode.OperationAction> actionsByCode;
 
     private final @NotNull String fingerprint;
 
@@ -42,7 +45,7 @@ public final class OperationCatalog {
      */
     public OperationCatalog(@NotNull Collection<? extends @NotNull OperationModule> modules) {
         List<OperationNode.Module> roots = new ArrayList<>();
-        LinkedHashMap<String, OperationNode> nodesByCode = new LinkedHashMap<>();
+        LinkedHashMap<TreeCode, OperationNode> nodesByCode = new LinkedHashMap<>();
         for (OperationModule module : Objects.requireNonNull(modules, "Operation 模块集合不能为空")) {
             OperationModule checked = Objects.requireNonNull(module, "Operation 模块不能为空");
             OperationNode.Module root = Objects.requireNonNull(
@@ -54,11 +57,11 @@ public final class OperationCatalog {
         }
         this.tree = List.copyOf(roots.stream().sorted(MODULE_ORDER).toList());
 
-        LinkedHashMap<String, OperationNode.OperationAction> indexedActions = new LinkedHashMap<>();
+        LinkedHashMap<TreeCode, OperationNode.OperationAction> indexedActions = new LinkedHashMap<>();
         for (OperationNode.Module module : tree) {
             for (OperationNode.Resource resource : module.children()) {
                 for (OperationNode.OperationAction action : resource.children()) {
-                    indexedActions.put(action.code(), action);
+                    indexedActions.put(action.operation().code(), action);
                 }
             }
         }
@@ -67,17 +70,21 @@ public final class OperationCatalog {
         this.fingerprint = fingerprint(indexedActions.keySet());
     }
 
-    /** 递归登记完整节点编码并拒绝跨模块冲突。 */
+    /**
+     * 递归登记完整节点编码并拒绝跨模块冲突。
+     */
     private static void register(
             @NotNull OperationNode node,
-            @NotNull Map<@NotNull String, @NotNull OperationNode> nodesByCode) {
+            @NotNull Map<@NotNull TreeCode, @NotNull OperationNode> nodesByCode) {
         if (nodesByCode.putIfAbsent(node.code(), node) != null) {
             throw new IllegalArgumentException("Operation 节点编码重复: " + node.code());
         }
         node.children().forEach(child -> register(child, nodesByCode));
     }
 
-    /** @return 按模块和节点排序的完整不可变 Operation 树 */
+    /**
+     * @return 按模块和节点排序的完整不可变 Operation 树
+     */
     public @NotNull @Unmodifiable List<OperationNode.Module> tree() {
         return tree;
     }
@@ -96,7 +103,9 @@ public final class OperationCatalog {
         return tree.stream().map(module -> module.retaining(checked)).flatMap(Optional::stream).toList();
     }
 
-    /** @return 按目录顺序排列的全部不可变 ACTION */
+    /**
+     * @return 按目录顺序排列的全部不可变 ACTION
+     */
     public @NotNull @Unmodifiable List<OperationNode.OperationAction> actions() {
         return actions;
     }
@@ -125,38 +134,66 @@ public final class OperationCatalog {
         return actions.stream().filter(action -> checked.contains(action.operation())).toList();
     }
 
-    /** @return 匹配的 ACTION；编码不存在时为空 */
+    /**
+     * @return 匹配的 ACTION；编码不存在时为空
+     */
     @CheckReturnValue
     public @NotNull Optional<OperationNode.OperationAction> action(@NotNull String code) {
-        String normalized = new Operation(TextUtils.requireText(code, "Operation 编码")).value();
-        return Optional.ofNullable(actionsByCode.get(normalized));
+        return action(TreeCode.ofColon(TextUtils.requireText(code, "Operation 编码")));
     }
 
-    /** @return 必须存在且可以直接授权的 ACTION */
+    /**
+     * @return 匹配的 ACTION；编码不存在时为空
+     */
+    @CheckReturnValue
+    public @NotNull Optional<OperationNode.OperationAction> action(@NotNull TreeCode code) {
+        TreeCode checked = Objects.requireNonNull(code, "Operation 编码不能为空");
+        if (checked.separator() != ':') {
+            throw new IllegalArgumentException("Operation 必须使用冒号分层: " + checked);
+        }
+        return Optional.ofNullable(actionsByCode.get(checked));
+    }
+
+    /**
+     * @return 必须存在且可以直接授权的 ACTION
+     */
     @CheckReturnValue
     public @NotNull OperationNode.OperationAction actionByCode(@NotNull String code) {
-        String checkedCode = new Operation(TextUtils.requireText(code, "Operation 编码")).value();
+        return actionByCode(TreeCode.ofColon(TextUtils.requireText(code, "Operation 编码")));
+    }
+
+    /**
+     * @return 必须存在且可以直接授权的 ACTION
+     */
+    @CheckReturnValue
+    public @NotNull OperationNode.OperationAction actionByCode(@NotNull TreeCode code) {
+        TreeCode checkedCode = Objects.requireNonNull(code, "Operation 编码不能为空");
         return action(checkedCode)
                 .orElseThrow(() -> new IllegalArgumentException("未知或不可授权的 Operation: " + checkedCode));
     }
 
-    /** 校验并去重一组来自当前 Catalog 的 Operation。 */
+    /**
+     * 校验并去重一组来自当前 Catalog 的 Operation。
+     */
     private @NotNull Set<@NotNull Operation> canonicalOperations(
             @NotNull Collection<@NotNull Operation> operations) {
         Collection<Operation> source = Objects.requireNonNull(operations, "Operation 集合不能为空");
         LinkedHashSet<Operation> checked = new LinkedHashSet<>();
         for (Operation operation : source) {
             Operation value = Objects.requireNonNull(operation, "Operation 不能为空");
-            checked.add(actionByCode(value.value()).operation());
+            checked.add(actionByCode(value.code()).operation());
         }
         return Set.copyOf(checked);
     }
 
-    /** 只摘要排序后的具体 Operation 编码，避免展示元数据变化使在线 Session 失效。 */
-    private static @NotNull String fingerprint(@NotNull Collection<@NotNull String> actionCodes) {
+    /**
+     * 只摘要排序后的具体 Operation 编码，避免展示元数据变化使在线 Session 失效。
+     */
+    private static @NotNull String fingerprint(@NotNull Collection<@NotNull TreeCode> actionCodes) {
         String canonical = Objects.requireNonNull(actionCodes, "Operation 编码集合不能为空")
                 .stream()
                 .sorted()
+                .map(TreeCode::value)
                 .collect(Collectors.joining("\n"));
         return Base64.getUrlEncoder()
                 .withoutPadding()

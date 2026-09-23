@@ -3,10 +3,10 @@ package com.sca4d.notification.inbox.template;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.concurrent.VersionConditions;
-import com.sca4d.core.api.notification.NotificationCode;
 import com.sca4d.core.api.query.ListRequest;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
@@ -39,7 +39,9 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
 
-/** 使用 PostgreSQL 验证站内信模板分页、统一条件查询、Patch 更新和乐观版本。 */
+/**
+ * 使用 PostgreSQL 验证站内信模板分页、统一条件查询、Patch 更新和乐观版本。
+ */
 @Testcontainers
 class InboxTemplateRepositoryIntegrationTest {
 
@@ -52,14 +54,18 @@ class InboxTemplateRepositoryIntegrationTest {
 
     private static InboxTemplateRepository templates;
 
-    /** 装配 Mapper 和实际影响行数检查。 */
+    /**
+     * 装配 Mapper 和实际影响行数检查。
+     */
     @Configuration(proxyBeanMethods = false)
     @EnableAspectJAutoProxy
     @MapperScan(basePackageClasses = InboxTemplateMapper.class)
     static class PersistenceConfiguration {
     }
 
-    /** 在隔离数据库加载正式 schema、Mapper 和值类型处理器。 */
+    /**
+     * 在隔离数据库加载正式 schema、Mapper 和值类型处理器。
+     */
     @BeforeAll
     static void initialize() throws Exception {
         DriverManagerDataSource source = new DriverManagerDataSource(
@@ -79,9 +85,9 @@ class InboxTemplateRepositoryIntegrationTest {
                 .register(Version.class, JdbcType.BIGINT, new LongValueTypeHandler<>(Version::new, Version::value));
         mybatis.getTypeHandlerRegistry()
                 .register(
-                        NotificationCode.class,
+                        TreeCode.class,
                         JdbcType.VARCHAR,
-                        new StringValueTypeHandler<>(NotificationCode::new, NotificationCode::value));
+                        new StringValueTypeHandler<>(TreeCode::of, TreeCode::value));
         SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
         factory.setDataSource(source);
         factory.setConfiguration(mybatis);
@@ -116,9 +122,9 @@ class InboxTemplateRepositoryIntegrationTest {
     @DisplayName("分页排序、点查询和 Patch 更新使用同一模板持久化语义")
     void pagesFindsAndUpdatesTemplates() throws Exception {
         ObjectMapper json = new ObjectMapper();
-        templates.add(1, new NotificationCode("ALPHA/NOTICE"), json.readTree("{\"zh-CN\":{}}"));
-        templates.add(2, new NotificationCode("BETA/NOTICE"), json.readTree("{\"zh-CN\":{}}"));
-        templates.add(3, new NotificationCode("GAMMA/NOTICE"), json.readTree("{\"zh-CN\":{}}"));
+        templates.add(1, TreeCode.of("ALPHA/NOTICE"), json.readTree("{\"zh-CN\":{}}"));
+        templates.add(2, TreeCode.of("BETA/NOTICE"), json.readTree("{\"zh-CN\":{}}"));
+        templates.add(3, TreeCode.of("GAMMA/NOTICE"), json.readTree("{\"zh-CN\":{}}"));
 
         Page<InboxTemplate> page = templates.page(
                 new ListRequest(
@@ -130,10 +136,10 @@ class InboxTemplateRepositoryIntegrationTest {
                 .containsExactly("GAMMA/NOTICE", "BETA/NOTICE");
         assertThat(templates.find(1).orElseThrow().code().value()).isEqualTo("ALPHA/NOTICE");
 
-        templates.replace(1, new NotificationCode("ALPHA/CHANGED"), json.readTree("{\"en-US\":{}}"));
+        templates.replace(1, TreeCode.of("ALPHA/CHANGED"), json.readTree("{\"en-US\":{}}"));
         templates.setEnabled(1, true);
 
-        InboxTemplate enabled = templates.findEnabled(new NotificationCode("ALPHA/CHANGED")).orElseThrow();
+        InboxTemplate enabled = templates.findEnabled(TreeCode.of("ALPHA/CHANGED")).orElseThrow();
         assertThat(enabled.enabled()).isTrue();
         assertThat(enabled.version().value()).isEqualTo(2);
         assertThat(enabled.content().has("en-US")).isTrue();

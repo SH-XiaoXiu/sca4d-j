@@ -113,7 +113,7 @@ pnpm dev
 
 ## 配置本地邮件
 
-清空数据库后没有 SMTP 发送方或统一通知模板。登录初始管理员后，通过 Swagger UI 或管理端调用 `/system/email/senders` 创建一个 `host=localhost`、`port=1025`、`security=NONE` 且不带用户名和密码的 Mailpit 发送方，测试连接并启用它。再为实际要发送的 NotificationCode 创建并启用统一通知模板；这两类资源保存在数据库，不应写入环境变量。认证邮件会出现在 `http://localhost:8025`。
+清空数据库后没有 SMTP 发送方或统一通知模板。登录初始管理员后，通过 Swagger UI 或管理端调用 `/system/email/senders` 创建一个 `host=localhost`、`port=1025`、`security=NONE` 且不带用户名和密码的 Mailpit 发送方，测试连接并启用它。再为实际要发送的通知 `TreeCode` 创建并启用统一通知模板；这两类资源保存在数据库，不应写入环境变量。认证邮件会出现在 `http://localhost:8025`。
 
 ## 检查结果
 

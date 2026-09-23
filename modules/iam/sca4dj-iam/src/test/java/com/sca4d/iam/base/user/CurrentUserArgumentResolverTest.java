@@ -5,10 +5,10 @@ import static org.mockito.Mockito.mock;
 
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.core.api.call.Call;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
@@ -54,7 +54,7 @@ class CurrentUserArgumentResolverTest {
                 List.of(
                         new Authentication(
                                 account.accountId(),
-                                new AuthenticationMethodCode("password"),
+                                TreeCode.ofSlash("AUTHENTICATION/PASSWORD"),
                                 Set.of(AuthenticationFactorKind.KNOWLEDGE),
                                 NOW)),
                 Map.of(principal.principalId(), List.of()),
@@ -82,7 +82,9 @@ class CurrentUserArgumentResolverTest {
         assertThat(call.principal()).contains(principal);
     }
 
-    /** 提供参数解析测试使用的 Controller 方法签名。 */
+    /**
+     * 提供参数解析测试使用的 Controller 方法签名。
+     */
     private static final class TestController {
 
         void current(@CurrentUser User user, @CurrentUser Long principalId) {

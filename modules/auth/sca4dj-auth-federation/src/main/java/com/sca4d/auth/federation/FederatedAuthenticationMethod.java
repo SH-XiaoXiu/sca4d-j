@@ -5,8 +5,8 @@ import com.sca4d.auth.federation.identity.FederatedIdentityService;
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.AuthenticationMethod;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
@@ -20,13 +20,17 @@ import java.time.Clock;
 import java.util.Objects;
 import java.util.Set;
 
-/** 消费已完成的 OIDC/OAuth2 授权并向认证引擎返回外部身份因素。 */
+/**
+ * 消费已完成的 OIDC/OAuth2 授权并向认证引擎返回外部身份因素。
+ */
 public class FederatedAuthenticationMethod implements AuthenticationMethod<FederatedProof> {
 
     private static final Logger LOG = LoggerFactory.getLogger(FederatedAuthenticationMethod.class);
 
-    /** 联邦登录方法的稳定编码。 */
-    public static final AuthenticationMethodCode CODE = new AuthenticationMethodCode("federated");
+    /**
+     * 联邦登录方法的稳定编码。
+     */
+    public static final TreeCode CODE = TreeCode.ofSlash("AUTHENTICATION/FEDERATED");
 
     private static final Set<AuthenticationFactorKind> FACTORS = Set.of(AuthenticationFactorKind.POSSESSION);
 
@@ -42,7 +46,9 @@ public class FederatedAuthenticationMethod implements AuthenticationMethod<Feder
 
     private final Clock clock;
 
-    /** 创建联邦认证方法。 */
+    /**
+     * 创建联邦认证方法。
+     */
     public FederatedAuthenticationMethod(
             FederatedAuthorizationStore authorizations,
             FederatedProviderService providers,
@@ -59,7 +65,7 @@ public class FederatedAuthenticationMethod implements AuthenticationMethod<Feder
     }
 
     @Override
-    public @NotNull AuthenticationMethodCode code() {
+    public @NotNull TreeCode code() {
         return CODE;
     }
 
@@ -132,7 +138,9 @@ public class FederatedAuthenticationMethod implements AuthenticationMethod<Feder
                         authentication.version().value()));
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional
     public void eraseAccount(long accountId) {

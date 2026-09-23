@@ -1,11 +1,10 @@
 package com.sca4d.core.spring.persistence.mybatis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.identity.RealmKey;
-import com.sca4d.core.api.notification.NotificationCode;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.spring.config.CoreJacksonAutoConfiguration;
 import com.sca4d.core.spring.json.Sca4djJson;
@@ -28,7 +27,9 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import java.io.IOException;
 
-/** 注册 Core 标识、版本、认证域和枚举在 MyBatis 中使用的类型处理器。 */
+/**
+ * 注册 Core 标识、版本、认证域和枚举在 MyBatis 中使用的类型处理器。
+ */
 @AutoConfiguration(after = CoreJacksonAutoConfiguration.class, afterName = "org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration")
 @ConditionalOnClass(name = "org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration")
 @EnableAspectJAutoProxy
@@ -36,17 +37,23 @@ public class CoreMyBatisAutoConfiguration {
 
     private static final String DEFAULT_MAPPER_LOCATIONS = "classpath*:/mapper/**/*.xml";
 
-    /** 创建 MyBatis 自动配置。 */
+    /**
+     * 创建 MyBatis 自动配置。
+     */
     public CoreMyBatisAutoConfiguration() {
     }
 
-    /** @return 执行 Repository 影响行数声明的切面 */
+    /**
+     * @return 执行 Repository 影响行数声明的切面
+     */
     @Bean
     AffectedRowsAspect affectedRowsAspect() {
         return new AffectedRowsAspect();
     }
 
-    /** @return 捕获 MyBatis DML 真实影响行数的插件 */
+    /**
+     * @return 捕获 MyBatis DML 真实影响行数的插件
+     */
     @Bean
     AffectedRowsInterceptor affectedRowsInterceptor() {
         return new AffectedRowsInterceptor();
@@ -69,11 +76,11 @@ public class CoreMyBatisAutoConfiguration {
     /**
      * 创建只继承公共 MyBatis 行为、不继承默认 Mapper 资源的附加会话工厂构建器。
      *
-     * @param properties MyBatis 公共配置
-     * @param interceptors MyBatis 插件
-     * @param typeHandlers 容器注册的类型处理器
-     * @param languageDrivers 脚本语言实现
-     * @param databaseIdProvider 可选数据库标识提供器
+     * @param properties               MyBatis 公共配置
+     * @param interceptors             MyBatis 插件
+     * @param typeHandlers             容器注册的类型处理器
+     * @param languageDrivers          脚本语言实现
+     * @param databaseIdProvider       可选数据库标识提供器
      * @param configurationCustomizers MyBatis Configuration 定制器
      * @return 附加数据源使用的会话工厂构建器
      */
@@ -138,19 +145,12 @@ public class CoreMyBatisAutoConfiguration {
                     .register(
                             Action.class,
                             JdbcType.VARCHAR,
-                            new StringValueTypeHandler<>(Action::new, Action::value));
+                            new StringValueTypeHandler<>(Action::new, action -> action.code().value()));
             configuration.getTypeHandlerRegistry()
                     .register(
-                            AuthenticationMethodCode.class,
+                            TreeCode.class,
                             JdbcType.VARCHAR,
-                            new StringValueTypeHandler<>(
-                                    AuthenticationMethodCode::new,
-                                    AuthenticationMethodCode::value));
-            configuration.getTypeHandlerRegistry()
-                    .register(
-                            NotificationCode.class,
-                            JdbcType.VARCHAR,
-                            new StringValueTypeHandler<>(NotificationCode::new, NotificationCode::value));
+                            new StringValueTypeHandler<>(TreeCode::of, TreeCode::value));
             configuration.getTypeHandlerRegistry()
                     .register(
                             LocalizedFields.class,

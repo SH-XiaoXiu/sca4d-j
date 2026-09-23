@@ -14,13 +14,13 @@ import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationActionCode;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.AuthenticationMethod;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.AuthenticationPolicy;
 import com.sca4d.core.api.authentication.AuthenticationProgress;
 import com.sca4d.core.api.authentication.AuthenticationRequirement;
 import com.sca4d.core.api.authentication.AuthenticationResult;
 import com.sca4d.core.api.authentication.AuthenticationSubmission;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.RealmKey;
@@ -240,7 +240,7 @@ class RedisAuthenticationAttemptsTest {
             Supplier<?> action = invocation.getArgument(1);
             return action.get();
         });
-        Set<AuthenticationMethodCode> allowed = Arrays.stream(methods)
+        Set<TreeCode> allowed = Arrays.stream(methods)
                 .map(Method::code)
                 .collect(Collectors.toUnmodifiableSet());
         AuthenticationPolicy policy = new AuthenticationPolicy() {
@@ -252,7 +252,7 @@ class RedisAuthenticationAttemptsTest {
             }
 
             @Override
-            public @NotNull Set<AuthenticationMethodCode> allowedMethods(
+            public @NotNull Set<TreeCode> allowedMethods(
                     @NotNull Account account,
                     @NotNull AuthenticationActionCode actionCode,
                     @NotNull List<Authentication> completedAuthentications) {
@@ -280,7 +280,7 @@ class RedisAuthenticationAttemptsTest {
             Instant authenticatedAt) {
         return new Authentication(
                 ACCOUNT.accountId(),
-                new AuthenticationMethodCode(method),
+                authenticationMethodCode(method),
                 Set.of(kind),
                 authenticatedAt);
     }
@@ -299,7 +299,7 @@ class RedisAuthenticationAttemptsTest {
      */
     @SuppressWarnings("ClassCanBeRecord") // 项目禁止使用 Java record，保留普通测试类型。
     private static final class Method implements AuthenticationMethod<String> {
-        private final AuthenticationMethodCode code;
+        private final TreeCode code;
 
         private final AuthenticationFactorKind kind;
 
@@ -316,14 +316,14 @@ class RedisAuthenticationAttemptsTest {
                 AuthenticationFactorKind kind,
                 boolean identifiesAccount,
                 Instant authenticatedAt) {
-            this.code = new AuthenticationMethodCode(code);
+            this.code = authenticationMethodCode(code);
             this.kind = kind;
             this.identifiesAccount = identifiesAccount;
             this.authenticatedAt = authenticatedAt;
         }
 
         @Override
-        public @NotNull AuthenticationMethodCode code() {
+        public @NotNull TreeCode code() {
             return code;
         }
 
@@ -369,6 +369,13 @@ class RedisAuthenticationAttemptsTest {
         @Override
         public void eraseAccount(long accountId) {
         }
+    }
+
+    /**
+     * @return 测试认证方法使用的稳定编码
+     */
+    private static @NotNull TreeCode authenticationMethodCode(@NotNull String value) {
+        return TreeCode.ofSlash("AUTHENTICATION/" + value.toUpperCase(java.util.Locale.ROOT).replace('-', '_'));
     }
 
     /**

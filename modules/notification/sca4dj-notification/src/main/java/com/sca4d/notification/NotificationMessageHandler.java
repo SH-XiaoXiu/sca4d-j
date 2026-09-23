@@ -7,16 +7,17 @@ import com.sca4d.core.api.messaging.HandlingPolicy;
 import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.api.messaging.MessageHandler;
-import com.sca4d.core.api.notification.NotificationChannel;
 import com.sca4d.core.api.notification.NotificationDelivery;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-/** 让一个 NotificationDelivery 独立消费 NotificationMessage 并拥有自己的队列和 DLQ。 */
+/**
+ * 让一个 NotificationDelivery 独立消费 NotificationMessage 并拥有自己的队列和 DLQ。
+ */
 public final class NotificationMessageHandler implements MessageHandler<NotificationMessage> {
 
-    private final @NotNull NotificationChannel channel;
+    private final @NotNull TreeCode channel;
 
     private final @NotNull HandlingPolicy handlingPolicy;
 

@@ -3,10 +3,10 @@ package com.sca4d.notification.inbox.template;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.concurrent.VersionConditions;
 import com.sca4d.core.api.error.BusinessException;
-import com.sca4d.core.api.notification.NotificationCode;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.core.api.persistence.AffectedRows;
 import com.sca4d.core.api.persistence.Patch;
@@ -26,7 +26,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-/** 隐藏站内信模板的 JSONB、Mapper 和影响行数语义。 */
+/**
+ * 隐藏站内信模板的 JSONB、Mapper 和影响行数语义。
+ */
 public class InboxTemplateRepository {
 
     private static final Sort NOTIFICATION_CODE = Sort.of("NOTIFICATION_CODE");
@@ -39,7 +41,9 @@ public class InboxTemplateRepository {
 
     private final @NotNull ObjectMapper objectMapper;
 
-    /** 创建站内信模板 Repository。 */
+    /**
+     * 创建站内信模板 Repository。
+     */
     public InboxTemplateRepository(
             @NotNull InboxTemplateMapper mapper,
             @NotNull VersionConditions versionConditions,
@@ -49,7 +53,9 @@ public class InboxTemplateRepository {
         this.objectMapper = Objects.requireNonNull(objectMapper, "ObjectMapper 不能为空");
     }
 
-    /** @return 按安全排序要求读取的一页站内信模板和完整命中数量 */
+    /**
+     * @return 按安全排序要求读取的一页站内信模板和完整命中数量
+     */
     @CheckReturnValue
     public @NotNull Page<InboxTemplate> page(@NotNull ListRequest request) {
         ListRequest checked = Objects.requireNonNull(request, "站内信模板列表要求不能为空");
@@ -72,24 +78,30 @@ public class InboxTemplateRepository {
         return new Page<>(items, page, total);
     }
 
-    /** @return 指定模板；不存在时为空 */
+    /**
+     * @return 指定模板；不存在时为空
+     */
     @CheckReturnValue
     public @NotNull Optional<InboxTemplate> find(long templateId) {
         return mapper.select(templateId, null, null).stream().findFirst().map(this::template);
     }
 
-    /** @return 指定通知编码当前启用的统一模板 */
+    /**
+     * @return 指定通知编码当前启用的统一模板
+     */
     @CheckReturnValue
-    public @NotNull Optional<InboxTemplate> findEnabled(@NotNull NotificationCode code) {
+    public @NotNull Optional<InboxTemplate> findEnabled(@NotNull TreeCode code) {
         return mapper.select(null, Objects.requireNonNull(code, "通知编码不能为空"), true)
                 .stream()
                 .findFirst()
                 .map(this::template);
     }
 
-    /** 新增默认停用模板。 */
+    /**
+     * 新增默认停用模板。
+     */
     @AffectedRows(target = "新增 Inbox Template")
-    public void add(long templateId, @NotNull NotificationCode code, @NotNull JsonNode content) {
+    public void add(long templateId, @NotNull TreeCode code, @NotNull JsonNode content) {
         try {
             mapper.insert(templateId, Objects.requireNonNull(code, "通知编码不能为空"), write(content));
         } catch (DataIntegrityViolationException exception) {
@@ -97,8 +109,10 @@ public class InboxTemplateRepository {
         }
     }
 
-    /** 按当前请求版本条件完整替换编码和模板内容。 */
-    public void replace(long templateId, @NotNull NotificationCode code, @NotNull JsonNode content) {
+    /**
+     * 按当前请求版本条件完整替换编码和模板内容。
+     */
+    public void replace(long templateId, @NotNull TreeCode code, @NotNull JsonNode content) {
         InboxTemplate current = require(templateId);
         VersionCondition condition = versionConditions.resolve(current.version());
         try {
@@ -116,7 +130,9 @@ public class InboxTemplateRepository {
         }
     }
 
-    /** 按当前请求版本条件修改模板启用状态。 */
+    /**
+     * 按当前请求版本条件修改模板启用状态。
+     */
     public void setEnabled(long templateId, boolean enabled) {
         InboxTemplate current = require(templateId);
         VersionCondition condition = versionConditions.resolve(current.version());
@@ -131,7 +147,9 @@ public class InboxTemplateRepository {
                 "Inbox Template");
     }
 
-    /** 按当前请求版本条件删除停用模板。 */
+    /**
+     * 按当前请求版本条件删除停用模板。
+     */
     public void delete(long templateId) {
         InboxTemplate current = require(templateId);
         VersionCondition condition = versionConditions.resolve(current.version());

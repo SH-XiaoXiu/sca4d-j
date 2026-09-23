@@ -5,8 +5,8 @@ import com.sca4d.auth.email.challenge.EmailCodeChallengeService;
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.AuthenticationMethod;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountIdentifierType;
@@ -17,13 +17,19 @@ import java.time.Clock;
 import java.util.Objects;
 import java.util.Set;
 
-/** 单次消费 Email Code Challenge，并向认证引擎返回持有因素证据。 */
+/**
+ * 单次消费 Email Code Challenge，并向认证引擎返回持有因素证据。
+ */
 public final class EmailCodeAuthenticationMethod implements AuthenticationMethod<EmailCodeProof> {
 
-    /** Email Code 方法稳定编码。 */
-    public static final @NotNull AuthenticationMethodCode CODE = new AuthenticationMethodCode("email-code");
+    /**
+     * Email Code 方法稳定编码。
+     */
+    public static final @NotNull TreeCode CODE = TreeCode.ofSlash("AUTHENTICATION/EMAIL_CODE");
 
-    /** Email 登录标识类型由 auth-email 自己定义，Core 和 IAM 保持开放类型。 */
+    /**
+     * Email 登录标识类型由 auth-email 自己定义，Core 和 IAM 保持开放类型。
+     */
     public static final @NotNull AccountIdentifierType EMAIL_IDENTIFIER_TYPE = new AccountIdentifierType("EMAIL");
 
     private static final Set<AuthenticationFactorKind> FACTORS = Set.of(AuthenticationFactorKind.POSSESSION);
@@ -32,7 +38,9 @@ public final class EmailCodeAuthenticationMethod implements AuthenticationMethod
 
     private final @NotNull Clock clock;
 
-    /** @param challenges Challenge 签发、消费和复核服务 @param clock 认证时间来源 */
+    /**
+     * @param challenges Challenge 签发、消费和复核服务 @param clock 认证时间来源
+     */
     public EmailCodeAuthenticationMethod(
             @NotNull EmailCodeChallengeService challenges,
             @NotNull Clock clock) {
@@ -41,7 +49,7 @@ public final class EmailCodeAuthenticationMethod implements AuthenticationMethod
     }
 
     @Override
-    public @NotNull AuthenticationMethodCode code() {
+    public @NotNull TreeCode code() {
         return CODE;
     }
 

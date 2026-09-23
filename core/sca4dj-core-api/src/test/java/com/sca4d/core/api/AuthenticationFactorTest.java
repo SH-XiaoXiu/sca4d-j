@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.core.api.call.Call;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
@@ -44,12 +44,12 @@ class AuthenticationFactorTest {
                 List.of(
                         new Authentication(
                                 identity.account.accountId(),
-                                new AuthenticationMethodCode("password"),
+                                TreeCode.ofSlash("AUTHENTICATION/PASSWORD"),
                                 Set.of(AuthenticationFactorKind.KNOWLEDGE),
                                 NOW.minusSeconds(60)),
                         new Authentication(
                                 identity.account.accountId(),
-                                new AuthenticationMethodCode("passkey"),
+                                TreeCode.ofSlash("AUTHENTICATION/PASSKEY"),
                                 Set.of(AuthenticationFactorKind.POSSESSION),
                                 NOW.minusSeconds(30))));
         EnumSet<AuthenticationFactorKind> kinds = EnumSet.noneOf(AuthenticationFactorKind.class);
@@ -69,7 +69,7 @@ class AuthenticationFactorTest {
                 List.of(
                         new Authentication(
                                 identity.account.accountId(),
-                                new AuthenticationMethodCode("password"),
+                                TreeCode.ofSlash("AUTHENTICATION/PASSWORD"),
                                 Set.of(AuthenticationFactorKind.KNOWLEDGE),
                                 NOW.minusSeconds(10))));
         call.selectPrincipal(identity.principal);
@@ -98,8 +98,8 @@ class AuthenticationFactorTest {
         }
 
         @Override
-        public @NotNull String type() {
-            return "device";
+        public @NotNull TreeCode type() {
+            return TreeCode.ofSlash("TEST/DEVICE");
         }
 
         @Override
@@ -112,7 +112,7 @@ class AuthenticationFactorTest {
 
         @Override
         public boolean supports(Resource resource) {
-            return resource.type().equals("device");
+            return resource.type().equals(TreeCode.ofSlash("TEST/DEVICE"));
         }
 
         @Override

@@ -52,7 +52,7 @@ public final class PermissionDecision {
     @Contract(pure = true)
     public static PermissionDecision allow(ResourceScope scope) {
         ResourceScope checked = Objects.requireNonNull(scope, "资源范围不能为空");
-        TextUtils.requireText(checked.resourceType(), "资源范围类型");
+        Objects.requireNonNull(checked.resourceType(), "资源范围类型");
         return new PermissionDecision(true, null, checked);
     }
 
@@ -102,7 +102,7 @@ public final class PermissionDecision {
      * 按明确类型取得允许判定携带的业务资源范围。
      *
      * @param scopeType 业务模块定义的资源范围类型
-     * @param <S> 资源范围类型
+     * @param <S>       资源范围类型
      * @return 类型匹配的业务资源范围
      * @throws IllegalStateException 当前判定未允许、没有携带范围或范围类型不匹配时抛出
      */

@@ -1,18 +1,20 @@
 package com.sca4d.notification.sms.mapper;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.notification.NotificationCode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-/** 保存 SMS Provider Binding Mapper 返回的参数映射 JSON 文本。 */
+/**
+ * 保存 SMS Provider Binding Mapper 返回的参数映射 JSON 文本。
+ */
 public final class SmsBindingState {
     private final long bindingId;
 
     private final long providerId;
 
-    private final @NotNull NotificationCode code;
+    private final @NotNull TreeCode code;
 
     private final @NotNull String route;
 
@@ -28,11 +30,13 @@ public final class SmsBindingState {
 
     private final @NotNull Version version;
 
-    /** 创建供应商模板绑定数据库状态。 */
+    /**
+     * 创建供应商模板绑定数据库状态。
+     */
     public SmsBindingState(
             long bindingId,
             long providerId,
-            @NotNull NotificationCode code,
+            @NotNull TreeCode code,
             @NotNull String route,
             @NotNull String languageTag,
             @NotNull String signName,
@@ -60,8 +64,10 @@ public final class SmsBindingState {
         return providerId;
     }
 
-    /** 返回 code 方法提供的结果。 */
-    public @NotNull NotificationCode code() {
+    /**
+     * 返回 code 方法提供的结果。
+     */
+    public @NotNull TreeCode code() {
         return code;
     }
 
@@ -89,7 +95,9 @@ public final class SmsBindingState {
         return enabled;
     }
 
-    /** 返回 version 方法提供的结果。 */
+    /**
+     * 返回 version 方法提供的结果。
+     */
     public @NotNull Version version() {
         return version;
     }

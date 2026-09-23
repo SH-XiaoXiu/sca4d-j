@@ -9,11 +9,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.core.api.authentication.principalsession.PrincipalIdSet;
 import com.sca4d.core.api.call.Call;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
@@ -86,7 +86,8 @@ class CallTest {
 
     @Test
     @DisplayName("Binds A Runtime Principal Only After Compact Session Validation")
-    @SuppressWarnings("ExtractMethodRecommender") // Session 准备、选择和拒绝结果共同表达一个公开行为。
+    @SuppressWarnings("ExtractMethodRecommender")
+    // Session 准备、选择和拒绝结果共同表达一个公开行为。
     void bindsARuntimePrincipalOnlyAfterCompactSessionValidation() {
         Subject subject = new Subject(10, SubjectType.HUMAN);
         Account account = new Account(20, subject.subjectId(), new RealmKey("test"));
@@ -99,7 +100,7 @@ class CallTest {
                 List.of(
                         new Authentication(
                                 account.accountId(),
-                                new AuthenticationMethodCode("test"),
+                                TreeCode.ofSlash("AUTHENTICATION/TEST"),
                                 Set.of(AuthenticationFactorKind.KNOWLEDGE),
                                 STARTED_AT)),
                 Map.of(),
@@ -145,7 +146,7 @@ class CallTest {
                 List.of(
                         new Authentication(
                                 identity.account.accountId(),
-                                new AuthenticationMethodCode("test"),
+                                TreeCode.ofSlash("AUTHENTICATION/TEST"),
                                 Set.of(AuthenticationFactorKind.KNOWLEDGE),
                                 STARTED_AT)),
                 Map.of(identity.principal.principalId(), operations),

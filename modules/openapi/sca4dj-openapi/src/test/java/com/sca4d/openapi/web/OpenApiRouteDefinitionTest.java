@@ -3,6 +3,7 @@ package com.sca4d.openapi.web;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.openapi.web.annotation.OpenApiRoute;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ class OpenApiRouteDefinitionTest {
         assertThat(definition.toolGroup()).isEqualTo("iot");
         assertThat(definition.toolName()).isEqualTo("getDevice");
         assertThat(definition.openApiOperationId()).isEqualTo("iotGetDevice");
-        assertThat(definition.operation()).isEqualTo("iot:devices:read");
+        assertThat(definition.operation()).isEqualTo(TreeCode.ofColon("IOT:DEVICES:READ"));
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.sca4d.auth.federation;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.NotNull;
@@ -10,12 +11,21 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-/** 保存一个 Platform 范围内可配置的外部登录 Provider。 */
+/**
+ * 保存一个 Platform 范围内可配置的外部登录 Provider。
+ */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public final class FederatedProvider {
 
-    /** Provider 管理接口和审计记录使用的资源类型。 */
-    public static final @NotNull String RESOURCE_TYPE = "AUTH/FEDERATED_PROVIDER";
+    /**
+     * Provider 管理接口和审计记录使用的资源类型。
+     */
+    public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofSlash("AUTH/FEDERATED_PROVIDER");
+
+    /**
+     * 供 Java 注解参数使用的资源类型文本。
+     */
+    public static final @NotNull String RESOURCE_TYPE_VALUE = "AUTH/FEDERATED_PROVIDER";
 
     private final long id;
 
@@ -39,7 +49,9 @@ public final class FederatedProvider {
 
     private final @NotNull Version version;
 
-    /** 创建外部登录 Provider。 */
+    /**
+     * 创建外部登录 Provider。
+     */
     public FederatedProvider(
             long id,
             @NotNull String code,
@@ -68,62 +80,86 @@ public final class FederatedProvider {
         this.version = Objects.requireNonNull(version, "Provider 版本不能为空");
     }
 
-    /** @return 数据库标识 */
+    /**
+     * @return 数据库标识
+     */
     public long id() {
         return id;
     }
 
-    /** @return 不可变 Provider 编码 */
+    /**
+     * @return 不可变 Provider 编码
+     */
     public @NotNull String code() {
         return code;
     }
 
-    /** @return Provider 协议 */
+    /**
+     * @return Provider 协议
+     */
     public @NotNull FederatedProviderProtocol protocol() {
         return protocol;
     }
 
-    /** @return 启用状态 */
+    /**
+     * @return 启用状态
+     */
     public @NotNull FederatedProviderStatus status() {
         return status;
     }
 
-    /** @return 是否允许登录页展示 */
+    /**
+     * @return 是否允许登录页展示
+     */
     public boolean loginPageVisible() {
         return loginPageVisible;
     }
 
-    /** @return 登录页排序 */
+    /**
+     * @return 登录页排序
+     */
     public int displayOrder() {
         return displayOrder;
     }
 
-    /** @return 未绑定身份处理策略 */
+    /**
+     * @return 未绑定身份处理策略
+     */
     public @NotNull FederatedUnlinkedIdentityAction unlinkedIdentityAction() {
         return unlinkedIdentityAction;
     }
 
-    /** @return 是否尝试使用已验证邮箱自动关联 */
+    /**
+     * @return 是否尝试使用已验证邮箱自动关联
+     */
     public boolean autoLinkVerifiedEmail() {
         return autoLinkVerifiedEmail;
     }
 
-    /** @return 按语言代码保存的 name 和 buttonText 文本 */
+    /**
+     * @return 按语言代码保存的 name 和 buttonText 文本
+     */
     public @NotNull @Unmodifiable Map<String, Map<String, String>> i18n() {
         return Map.copyOf(i18n);
     }
 
-    /** @return 内置图标键或应用文件引用 */
+    /**
+     * @return 内置图标键或应用文件引用
+     */
     public @Nullable String iconReference() {
         return iconReference;
     }
 
-    /** @return 乐观并发版本 */
+    /**
+     * @return 乐观并发版本
+     */
     public @NotNull Version version() {
         return version;
     }
 
-    /** 复制多语言字段，避免调用方在对象创建后修改内部 Map。 */
+    /**
+     * 复制多语言字段，避免调用方在对象创建后修改内部 Map。
+     */
     private static @NotNull Map<String, Map<String, String>> copyI18n(
             @NotNull Map<String, Map<String, String>> source) {
         return source.entrySet()

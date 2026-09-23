@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.IdempotencyFingerprints;
 import com.sca4d.core.api.concurrent.IdempotencyStore;
@@ -134,15 +135,15 @@ class CoreSpringAutoConfigurationTest {
     @DisplayName("Collects Application Operation Modules")
     void collectsApplicationOperationModules() {
         OperationModule module = () -> OperationNode.module(
-                "platform",
+                TreeCode.ofSegment("PLATFORM"),
                 "operation.platform",
                 10,
                 OperationNode.resource(
-                        "roles",
+                        TreeCode.ofSegment("ROLES"),
                         "operation.platform.roles",
                         10,
                         OperationNode.action(
-                                "read",
+                                TreeCode.ofSegment("READ"),
                                 "operation.platform.roles.read",
                                 10)));
 
@@ -152,7 +153,7 @@ class CoreSpringAutoConfigurationTest {
                     assertThat(context).hasNotFailed();
                     assertThat(context.getBean(OperationCatalog.class).actions())
                             .extracting(OperationNode.OperationAction::code)
-                            .containsExactly("PLATFORM:ROLES:READ");
+                            .containsExactly(TreeCode.ofColon("PLATFORM:ROLES:READ"));
                 });
     }
 

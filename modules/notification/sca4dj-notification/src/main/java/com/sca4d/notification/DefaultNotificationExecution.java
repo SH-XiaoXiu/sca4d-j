@@ -1,9 +1,9 @@
 package com.sca4d.notification;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.message.MessageContent;
 import com.sca4d.core.api.notification.Notification;
-import com.sca4d.core.api.notification.NotificationChannel;
 import com.sca4d.core.api.notification.NotificationDefinition;
 import com.sca4d.core.api.notification.NotificationExecution;
 import com.sca4d.core.api.notification.NotificationRecipient;
@@ -25,7 +25,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-/** 执行一个通知类型的接收人回调，并把 Settings、语言和区域解析成标准通知。 */
+/**
+ * 执行一个通知类型的接收人回调，并把 Settings、语言和区域解析成标准通知。
+ */
 final class DefaultNotificationExecution<T> implements NotificationExecution {
 
     private final @NotNull NotificationType<T> type;
@@ -48,7 +50,9 @@ final class DefaultNotificationExecution<T> implements NotificationExecution {
 
     private @Nullable Notification result;
 
-    /** 创建一次只能确定一个接收人的通知执行。 */
+    /**
+     * 创建一次只能确定一个接收人的通知执行。
+     */
     DefaultNotificationExecution(
             @NotNull NotificationType<T> type,
             @NotNull T value,
@@ -110,8 +114,8 @@ final class DefaultNotificationExecution<T> implements NotificationExecution {
         JsonNode systemDefaults = settings.get(NotificationSettings.CHANNEL_DEFAULTS);
         JsonNode preferences = settings.get(
                 NotificationSettings.CHANNEL_PREFERENCES,
-                new SettingOwner(checkedRecipient.type().value(), checkedRecipient.id()));
-        Set<NotificationChannel> intended = intendedChannels(systemDefaults, preferences);
+                new SettingOwner(checkedRecipient.type(), checkedRecipient.id()));
+        Set<TreeCode> intended = intendedChannels(systemDefaults, preferences);
         if (intended.isEmpty()) {
             throw new IllegalStateException("通知没有选中任何渠道: " + type.code());
         }
@@ -126,7 +130,7 @@ final class DefaultNotificationExecution<T> implements NotificationExecution {
                 type.definition().requiredChannels());
 
         // 必发渠道不可用时拒绝发布；当前不可用的可选渠道不进入最终消息。
-        Set<NotificationChannel> available = availableChannels(candidate, intended);
+        Set<TreeCode> available = availableChannels(candidate, intended);
         if (available.isEmpty()) {
             throw new IllegalStateException("通知没有可用渠道: " + type.code());
         }
@@ -143,13 +147,17 @@ final class DefaultNotificationExecution<T> implements NotificationExecution {
                         .collect(java.util.stream.Collectors.toUnmodifiableSet()));
     }
 
-    /** @return 回调完成后产生的唯一标准通知 */
+    /**
+     * @return 回调完成后产生的唯一标准通知
+     */
     @NotNull
     Notification result() {
         return Objects.requireNonNull(result, "通知类型回调没有指定接收人");
     }
 
-    /** 按最终 Locale 从领域对象提取模板变量。 */
+    /**
+     * 按最终 Locale 从领域对象提取模板变量。
+     */
     private @NotNull Map<String, String> variables(@NotNull Locale locale) {
         Map<String, String> resolved = new LinkedHashMap<>();
         type.definition()
@@ -161,12 +169,14 @@ final class DefaultNotificationExecution<T> implements NotificationExecution {
         return Map.copyOf(resolved);
     }
 
-    /** 按代码硬约束、接收人覆盖、系统覆盖和 Java 初值确定目标渠道。 */
-    private @NotNull Set<NotificationChannel> intendedChannels(
+    /**
+     * 按代码硬约束、接收人覆盖、系统覆盖和 Java 初值确定目标渠道。
+     */
+    private @NotNull Set<TreeCode> intendedChannels(
             @NotNull JsonNode systemDefaults,
             @NotNull JsonNode preferences) {
         NotificationDefinition<T> definition = type.definition();
-        Set<NotificationChannel> selected = new LinkedHashSet<>(definition.requiredChannels());
+        Set<TreeCode> selected = new LinkedHashSet<>(definition.requiredChannels());
         definition.optionalChannels().forEach((channel, defaultEnabled) -> {
             if (preference(preferences, channel)
                     .or(() -> preference(systemDefaults, channel))
@@ -177,12 +187,14 @@ final class DefaultNotificationExecution<T> implements NotificationExecution {
         return Set.copyOf(selected);
     }
 
-    /** 要求必发渠道可用，并忽略当前不可用的可选渠道。 */
-    private @NotNull Set<NotificationChannel> availableChannels(
+    /**
+     * 要求必发渠道可用，并忽略当前不可用的可选渠道。
+     */
+    private @NotNull Set<TreeCode> availableChannels(
             @NotNull Notification candidate,
-            @NotNull Set<NotificationChannel> intended) {
-        Set<NotificationChannel> available = new LinkedHashSet<>();
-        for (NotificationChannel channel : intended) {
+            @NotNull Set<TreeCode> intended) {
+        Set<TreeCode> available = new LinkedHashSet<>();
+        for (TreeCode channel : intended) {
             if (deliveries.available(channel, candidate)) {
                 available.add(channel);
             } else if (type.definition().requiredChannels().contains(channel)) {
@@ -192,17 +204,21 @@ final class DefaultNotificationExecution<T> implements NotificationExecution {
         return Set.copyOf(available);
     }
 
-    /** 读取当前通知类型下一个渠道的显式布尔覆盖。 */
+    /**
+     * 读取当前通知类型下一个渠道的显式布尔覆盖。
+     */
     private @NotNull Optional<Boolean> preference(
             @NotNull JsonNode root,
-            @NotNull NotificationChannel channel) {
+            @NotNull TreeCode channel) {
         JsonNode valueNode = Objects.requireNonNull(root, "通知渠道设置不能为空")
                 .path(type.code().value())
                 .path(channel.value());
         return valueNode.isBoolean() ? Optional.of(valueNode.booleanValue()) : Optional.empty();
     }
 
-    /** 回调确定接收人后不允许继续改写 Locale、区域或接收人。 */
+    /**
+     * 回调确定接收人后不允许继续改写 Locale、区域或接收人。
+     */
     private void verifyUnresolved() {
         if (result != null) {
             throw new IllegalStateException("一次领域通知只能确定一个接收人");

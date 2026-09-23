@@ -32,7 +32,7 @@
 
 `DeviceHistoryQueryService.downlinks(Collection<Long>)` 批量读取主库仍保留的下行消息。实现先去重，再按公共 SQL 批次条目和绑定参数限制执行查询；空集合不访问数据库，不存在或已经按保留策略删除的标识不出现在结果中。应用在列表中组合下行状态时应使用这个入口，不按记录逐条查询。
 
-DeviceService 只保存 Product、物模型、设备协议、可选 DeviceConnectionBinding 和 [DeviceAccessMethod](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/DeviceAccessMethod.html)。DeviceProtocol 不声明 MQTT、TCP 或连接身份；同一种设备消息协议可以由不同传输带入。DeviceService 不依赖 IAM 或 Auth，不创建 Subject、Account、Credential 或 Session。匿名使用 `anonymous`，通用 Session 使用 `session`，直接 Account 认证使用 `account:<AuthenticationMethodCode>`。具体应用实现 DeviceConnectionAdmission，把协议输入转换为 AuthenticationSubmission 或 Session Token，再组合 Device、Account、Auth 和 Session。
+DeviceService 只保存 Product、物模型、设备协议、可选 DeviceConnectionBinding 和 [DeviceAccessMethod](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/DeviceAccessMethod.html)。DeviceProtocol 不声明 MQTT、TCP 或连接身份；同一种设备消息协议可以由不同传输带入。DeviceService 不依赖 IAM 或 Auth，不创建 Subject、Account、Credential 或 Session。匿名使用 `anonymous`，通用 Session 使用 `session`，直接 Account 认证使用 `account:<AuthenticationMethod.code()>`。具体应用实现 DeviceConnectionAdmission，把协议输入转换为 AuthenticationSubmission 或 Session Token，再组合 Device、Account、Auth 和 Session。
 
 ## 模块拥有的数据
 

@@ -3,10 +3,10 @@ package com.sca4d.notification.email;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.concurrent.VersionConditions;
 import com.sca4d.core.api.error.BusinessException;
-import com.sca4d.core.api.notification.NotificationCode;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.core.api.query.ListRequest;
@@ -26,7 +26,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-/** Email 模块拥有的模板持久化边界。 */
+/**
+ * Email 模块拥有的模板持久化边界。
+ */
 public final class EmailTemplateRepository {
     private static final Sort NOTIFICATION_CODE = Sort.of("NOTIFICATION_CODE");
 
@@ -47,25 +49,33 @@ public final class EmailTemplateRepository {
         this.json = Objects.requireNonNull(json, "ObjectMapper 不能为空");
     }
 
-    /** 读取指定通知编码当前启用的第一份 Email 模板；没有启用模板时返回空。 */
+    /**
+     * 读取指定通知编码当前启用的第一份 Email 模板；没有启用模板时返回空。
+     */
     @CheckReturnValue
-    public @NotNull Optional<EmailTemplate> findEnabled(@NotNull NotificationCode code) {
+    public @NotNull Optional<EmailTemplate> findEnabled(@NotNull TreeCode code) {
         return mapper.select(null, Objects.requireNonNull(code, "通知编码不能为空"), true).stream().findFirst().map(this::map);
     }
 
-    /** 按通知编码读取未删除模板，无论模板当前是否启用。 */
+    /**
+     * 按通知编码读取未删除模板，无论模板当前是否启用。
+     */
     @CheckReturnValue
-    public @NotNull Optional<EmailTemplate> findByCode(@NotNull NotificationCode code) {
+    public @NotNull Optional<EmailTemplate> findByCode(@NotNull TreeCode code) {
         return mapper.select(null, Objects.requireNonNull(code, "通知编码不能为空"), null).stream().findFirst().map(this::map);
     }
 
-    /** 按模板标识读取 Email 模板；模板不存在或已经逻辑删除时返回空。 */
+    /**
+     * 按模板标识读取 Email 模板；模板不存在或已经逻辑删除时返回空。
+     */
     @CheckReturnValue
     public @NotNull Optional<EmailTemplate> find(long templateId) {
         return mapper.select(templateId, null, null).stream().findFirst().map(this::map);
     }
 
-    /** 分页读取未删除 Email 模板，并验证排序字段和最大页大小。 */
+    /**
+     * 分页读取未删除 Email 模板，并验证排序字段和最大页大小。
+     */
     @CheckReturnValue
     public @NotNull Page<EmailTemplate> page(@NotNull ListRequest request) {
         ListRequest checked = Objects.requireNonNull(request, "Email 模板列表要求不能为空");
@@ -85,10 +95,12 @@ public final class EmailTemplateRepository {
         return new Page<>(items, page, total);
     }
 
-    /** 新增 Email 模板；通知编码冲突时抛出模板冲突异常。 */
+    /**
+     * 新增 Email 模板；通知编码冲突时抛出模板冲突异常。
+     */
     public void add(
             long templateId,
-            @NotNull NotificationCode code,
+            @NotNull TreeCode code,
             @NotNull Map<String, EmailTemplateSource> locales) {
         try {
             mapper.insert(templateId, Objects.requireNonNull(code, "通知编码不能为空"), write(locales));
@@ -97,10 +109,12 @@ public final class EmailTemplateRepository {
         }
     }
 
-    /** 按当前版本替换 Email 模板内容；版本冲突或通知编码冲突时失败。 */
+    /**
+     * 按当前版本替换 Email 模板内容；版本冲突或通知编码冲突时失败。
+     */
     public void replace(
             long templateId,
-            @NotNull NotificationCode code,
+            @NotNull TreeCode code,
             @NotNull Map<String, EmailTemplateSource> locales) {
         EmailTemplate current = require(templateId);
         VersionCondition condition = versions.resolve(current.version());
@@ -119,7 +133,9 @@ public final class EmailTemplateRepository {
         }
     }
 
-    /** 按当前版本修改 Email 模板的启用状态。 */
+    /**
+     * 按当前版本修改 Email 模板的启用状态。
+     */
     public void setEnabled(long templateId, boolean enabled) {
         EmailTemplate current = require(templateId);
         VersionCondition condition = versions.resolve(current.version());
@@ -129,7 +145,9 @@ public final class EmailTemplateRepository {
                 "Email Template");
     }
 
-    /** 按当前版本逻辑删除 Email 模板。 */
+    /**
+     * 按当前版本逻辑删除 Email 模板。
+     */
     public void delete(long templateId) {
         EmailTemplate current = require(templateId);
         VersionCondition condition = versions.resolve(current.version());

@@ -11,9 +11,9 @@ import static org.mockito.Mockito.when;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
@@ -42,7 +42,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/** 验证 STOMP 连接不依赖 Spring Principal，并按 Spring Session 精确投递。 */
+/**
+ * 验证 STOMP 连接不依赖 Spring Principal，并按 Spring Session 精确投递。
+ */
 class StompConnectionsTest {
 
     @Test
@@ -92,7 +94,9 @@ class StompConnectionsTest {
         verify(sockets, Mockito.never()).close(any(String.class));
     }
 
-    /** 创建包含一个可选业务主体的有效 Session。 */
+    /**
+     * 创建包含一个可选业务主体的有效 Session。
+     */
     private static Session session() {
         Instant issuedAt = Instant.parse("2026-07-30T00:00:00Z");
         Subject subject = new Subject(11, SubjectType.HUMAN);
@@ -107,7 +111,7 @@ class StompConnectionsTest {
                 List.of(
                         new Authentication(
                                 account.accountId(),
-                                new AuthenticationMethodCode("test"),
+                                TreeCode.ofSlash("AUTHENTICATION/TEST"),
                                 Set.of(AuthenticationFactorKind.KNOWLEDGE),
                                 issuedAt)),
                 Map.of(principal.principalId(), List.of()),

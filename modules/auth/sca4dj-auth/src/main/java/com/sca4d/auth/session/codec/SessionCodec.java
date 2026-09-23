@@ -6,7 +6,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.core.api.authentication.principalsession.LongIdSet;
@@ -14,6 +13,7 @@ import com.sca4d.core.api.authentication.principalsession.PrincipalCodec;
 import com.sca4d.core.api.authentication.principalsession.PrincipalIdSet;
 import com.sca4d.core.api.authentication.principalsession.ResourceCodec;
 import com.sca4d.core.api.authentication.principalsession.ResourceIdSet;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
@@ -42,7 +42,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
-/** 将完整 {@link Session} 编解码为 Sa-Token 和 JWT 共用的版本化 JSON wire。 */
+/**
+ * 将完整 {@link Session} 编解码为 Sa-Token 和 JWT 共用的版本化 JSON wire。
+ */
 public final class SessionCodec {
 
     private static final int FORMAT_VERSION = 1;
@@ -62,9 +64,9 @@ public final class SessionCodec {
     /**
      * 创建 Session wire Codec，并按 Java 类型和 wire 类型登记 payload Codec。
      *
-     * @param objectMapper 读写完整 Session wire 的 JSON 映射器
+     * @param objectMapper    读写完整 Session wire 的 JSON 映射器
      * @param principalCodecs Principal payload Codec
-     * @param resourceCodecs Resource payload Codec
+     * @param resourceCodecs  Resource payload Codec
      * @throws IllegalArgumentException 同类 Codec 使用重复的 Java 类型或 wire 类型时抛出
      */
     public SessionCodec(
@@ -117,7 +119,7 @@ public final class SessionCodec {
                 resourceIdSets.add(
                         new ResourceIdSetData(
                                 principal.principalId(),
-                                resourceIdSet.resourceType(),
+                                resourceIdSet.resourceType().value(),
                                 encodeIds(resourceIdSet.ids())));
             }
         }
@@ -196,7 +198,7 @@ public final class SessionCodec {
                     resourceIdSets.computeIfAbsent(checkedSet.principalId, ignored -> new ArrayList<>())
                             .add(
                                     new ResourceIdSet(
-                                            TextUtils.requireText(checkedSet.type, "Resource 类型"),
+                                            TreeCode.of(TextUtils.requireText(checkedSet.type, "Resource 类型")),
                                             decodeIds(checkedSet.encoding, checkedSet.payload)));
                 }
             }
@@ -216,7 +218,9 @@ public final class SessionCodec {
         }
     }
 
-    /** 使用与具体 Principal 类型精确匹配的 Codec 编码 payload。 */
+    /**
+     * 使用与具体 Principal 类型精确匹配的 Codec 编码 payload。
+     */
     private @NotNull TypedPayload encodePrincipal(@NotNull Principal value) {
         Principal checked = Objects.requireNonNull(value, "Principal 不能为空");
         PrincipalCodec<?> codec = principalCodecs.get(checked.getClass());
@@ -226,7 +230,9 @@ public final class SessionCodec {
         return new TypedPayload(codec.type(), encode(codec, checked));
     }
 
-    /** 使用与具体 Resource 类型精确匹配的 Codec 编码 payload。 */
+    /**
+     * 使用与具体 Resource 类型精确匹配的 Codec 编码 payload。
+     */
     private @NotNull TypedPayload encodeResource(@NotNull Resource value) {
         Resource checked = Objects.requireNonNull(value, "Resource 不能为空");
         ResourceCodec<?> codec = resourceCodecs.get(checked.getClass());
@@ -236,7 +242,9 @@ public final class SessionCodec {
         return new TypedPayload(codec.type(), encode(codec, checked));
     }
 
-    /** 让已经通过精确 Java 类型索引选中的 Codec 编码 Principal。 */
+    /**
+     * 让已经通过精确 Java 类型索引选中的 Codec 编码 Principal。
+     */
     private static <P extends Principal> byte @NotNull [] encode(
             @NotNull PrincipalCodec<P> codec,
             @NotNull Principal value) {
@@ -244,7 +252,9 @@ public final class SessionCodec {
         return Objects.requireNonNull(payload, "Session Codec payload 不能为空");
     }
 
-    /** 让已经通过精确 Java 类型索引选中的 Codec 编码 Resource。 */
+    /**
+     * 让已经通过精确 Java 类型索引选中的 Codec 编码 Resource。
+     */
     private static <R extends Resource> byte @NotNull [] encode(
             @NotNull ResourceCodec<R> codec,
             @NotNull Resource value) {
@@ -252,7 +262,9 @@ public final class SessionCodec {
         return Objects.requireNonNull(payload, "Session Codec payload 不能为空");
     }
 
-    /** 使用 wire 类型指定的 Codec 恢复并校验 Principal 精确类型。 */
+    /**
+     * 使用 wire 类型指定的 Codec 恢复并校验 Principal 精确类型。
+     */
     private @NotNull Principal decodePrincipal(@NotNull TypedPayload value) {
         TypedPayload checked = Objects.requireNonNull(value, "Principal payload 不能为空");
         PrincipalCodec<?> codec = principalCodecsByType.get(checked.type);
@@ -268,7 +280,9 @@ public final class SessionCodec {
         return decoded;
     }
 
-    /** 使用 Principal Codec 的 wire type 编码请求期解析的 Principal 标识集合。 */
+    /**
+     * 使用 Principal Codec 的 wire type 编码请求期解析的 Principal 标识集合。
+     */
     private @NotNull PrincipalIdSetData encodePrincipalIds(@NotNull PrincipalIdSet<?> value) {
         PrincipalIdSet<?> checked = Objects.requireNonNull(value, "Principal 标识集合不能为空");
         PrincipalCodec<?> codec = principalCodecs.get(checked.principalType());
@@ -278,7 +292,9 @@ public final class SessionCodec {
         return new PrincipalIdSetData(codec.type(), encodeIds(checked.ids()));
     }
 
-    /** 使用 wire 类型对应的 Principal Codec 恢复精确 Java 类型和可信标识。 */
+    /**
+     * 使用 wire 类型对应的 Principal Codec 恢复精确 Java 类型和可信标识。
+     */
     private @NotNull PrincipalIdSet<?> decodePrincipalIds(@NotNull PrincipalIdSetData value) {
         PrincipalIdSetData checked = Objects.requireNonNull(value, "Principal 标识集合 wire 不能为空");
         PrincipalCodec<?> codec = principalCodecsByType.get(TextUtils.requireText(checked.type, "Principal Codec 类型"));
@@ -288,14 +304,18 @@ public final class SessionCodec {
         return createPrincipalIdSet(codec, decodeIds(checked.encoding, checked.payload));
     }
 
-    /** 使用已经由 wire 类型选中的 Codec 泛型创建 Principal 标识集合。 */
+    /**
+     * 使用已经由 wire 类型选中的 Codec 泛型创建 Principal 标识集合。
+     */
     private static <P extends Principal> @NotNull PrincipalIdSet<P> createPrincipalIdSet(
             @NotNull PrincipalCodec<P> codec,
             @NotNull Collection<@NotNull Long> ids) {
         return new PrincipalIdSet<>(codec.valueType(), ids);
     }
 
-    /** 把正数标识集合编码为经过 run 优化的 Roaring64 portable payload。 */
+    /**
+     * 把正数标识集合编码为经过 run 优化的 Roaring64 portable payload。
+     */
     private static byte @NotNull [] encodeIds(@NotNull LongIdSet ids) {
         LongIdSet checked = Objects.requireNonNull(ids, "标识集合不能为空");
         Roaring64NavigableMap bitmap = new Roaring64NavigableMap(true);
@@ -313,7 +333,9 @@ public final class SessionCodec {
         }
     }
 
-    /** 校验编码名称并把 Roaring64 portable payload 恢复为正数标识集合。 */
+    /**
+     * 校验编码名称并把 Roaring64 portable payload 恢复为正数标识集合。
+     */
     @SuppressWarnings("ExtractMethodRecommender") // payload、数量和正数校验属于一次完整解码，不拆成步骤方法。
     private static @NotNull List<@NotNull Long> decodeIds(
             @NotNull String encoding,
@@ -349,7 +371,9 @@ public final class SessionCodec {
         return List.copyOf(ids);
     }
 
-    /** 使用 wire 类型指定的 Codec 恢复并校验 Resource 精确类型。 */
+    /**
+     * 使用 wire 类型指定的 Codec 恢复并校验 Resource 精确类型。
+     */
     private @NotNull Resource decodeResource(@NotNull TypedPayload value) {
         TypedPayload checked = Objects.requireNonNull(value, "Resource payload 不能为空");
         ResourceCodec<?> codec = resourceCodecsByType.get(checked.type);
@@ -365,7 +389,9 @@ public final class SessionCodec {
         return decoded;
     }
 
-    /** 从 wire 字段恢复一次成功认证记录。 */
+    /**
+     * 从 wire 字段恢复一次成功认证记录。
+     */
     private static @NotNull Authentication decodeAuthentication(@NotNull AuthenticationData value) {
         AuthenticationData checked = Objects.requireNonNull(value, "认证记录不能为空");
         Set<AuthenticationFactorKind> factorKinds = new LinkedHashSet<>();
@@ -374,12 +400,14 @@ public final class SessionCodec {
         }
         return new Authentication(
                 checked.accountId,
-                new AuthenticationMethodCode(checked.methodCode),
+                TreeCode.ofSlash(checked.methodCode),
                 factorKinds,
                 Objects.requireNonNull(checked.authenticatedAt, "认证时间不能为空"));
     }
 
-    /** 按 Codec 声明的精确 Java 类型建立唯一索引。 */
+    /**
+     * 按 Codec 声明的精确 Java 类型建立唯一索引。
+     */
     private static <C> @NotNull Map<Class<?>, C> codecsByValueType(
             @NotNull List<@NotNull C> codecs,
             @NotNull Function<C, Class<?>> key,
@@ -395,7 +423,9 @@ public final class SessionCodec {
         return Map.copyOf(result);
     }
 
-    /** 按 Codec 声明的 wire type 建立唯一索引。 */
+    /**
+     * 按 Codec 声明的 wire type 建立唯一索引。
+     */
     private static <C> @NotNull Map<String, C> codecsByType(
             @NotNull List<@NotNull C> codecs,
             @NotNull Function<C, String> key,
@@ -411,7 +441,9 @@ public final class SessionCodec {
         return Map.copyOf(result);
     }
 
-    /** 保存完整 Session JSON wire 字段。 */
+    /**
+     * 保存完整 Session JSON wire 字段。
+     */
     private static final class SessionData {
         @JsonProperty("formatVersion")
         private int formatVersion;
@@ -446,13 +478,17 @@ public final class SessionCodec {
         @JsonProperty("expiresAt")
         private Instant expiresAt;
 
-        /** 供 Jackson 创建反序列化中间对象。 */
+        /**
+         * 供 Jackson 创建反序列化中间对象。
+         */
         @JsonCreator
         private SessionData() {
         }
     }
 
-    /** 保存一种 Principal Codec 类型和 Roaring64 标识集合。 */
+    /**
+     * 保存一种 Principal Codec 类型和 Roaring64 标识集合。
+     */
     private static final class PrincipalIdSetData {
         @JsonProperty("type")
         private String type;
@@ -463,7 +499,9 @@ public final class SessionCodec {
         @JsonProperty("payload")
         private String payload;
 
-        /** 供 Jackson 创建反序列化中间对象。 */
+        /**
+         * 供 Jackson 创建反序列化中间对象。
+         */
         @JsonCreator
         private PrincipalIdSetData() {
         }
@@ -475,7 +513,9 @@ public final class SessionCodec {
         }
     }
 
-    /** 保存 Subject 的 Session JSON 字段。 */
+    /**
+     * 保存 Subject 的 Session JSON 字段。
+     */
     private static final class SubjectData {
         @JsonProperty("subjectId")
         private long subjectId;
@@ -483,7 +523,9 @@ public final class SessionCodec {
         @JsonProperty("type")
         private String type;
 
-        /** 供 Jackson 创建反序列化中间对象。 */
+        /**
+         * 供 Jackson 创建反序列化中间对象。
+         */
         @JsonCreator
         private SubjectData() {
         }
@@ -494,7 +536,9 @@ public final class SessionCodec {
         }
     }
 
-    /** 保存 Account 的 Session JSON 字段。 */
+    /**
+     * 保存 Account 的 Session JSON 字段。
+     */
     private static final class AccountData {
         @JsonProperty("accountId")
         private long accountId;
@@ -505,7 +549,9 @@ public final class SessionCodec {
         @JsonProperty("realmKey")
         private String realmKey;
 
-        /** 供 Jackson 创建反序列化中间对象。 */
+        /**
+         * 供 Jackson 创建反序列化中间对象。
+         */
         @JsonCreator
         private AccountData() {
         }
@@ -517,7 +563,9 @@ public final class SessionCodec {
         }
     }
 
-    /** 保存 Codec 类型和 Base64 payload。 */
+    /**
+     * 保存 Codec 类型和 Base64 payload。
+     */
     private static final class TypedPayload {
         @JsonProperty("type")
         private String type;
@@ -525,7 +573,9 @@ public final class SessionCodec {
         @JsonProperty("payload")
         private String payload;
 
-        /** 供 Jackson 创建反序列化中间对象。 */
+        /**
+         * 供 Jackson 创建反序列化中间对象。
+         */
         @JsonCreator
         private TypedPayload() {
         }
@@ -535,13 +585,17 @@ public final class SessionCodec {
             this.payload = Base64.getEncoder().encodeToString(payload);
         }
 
-        /** 恢复 Codec 原始字节；Base64 无效时抛出参数异常。 */
+        /**
+         * 恢复 Codec 原始字节；Base64 无效时抛出参数异常。
+         */
         private byte @NotNull [] payload() {
             return Base64.getDecoder().decode(TextUtils.requireText(payload, "Session Codec payload"));
         }
     }
 
-    /** 保存一次成功认证的 Session JSON 字段。 */
+    /**
+     * 保存一次成功认证的 Session JSON 字段。
+     */
     private static final class AuthenticationData {
         @JsonProperty("accountId")
         private long accountId;
@@ -555,7 +609,9 @@ public final class SessionCodec {
         @JsonProperty("authenticatedAt")
         private Instant authenticatedAt;
 
-        /** 供 Jackson 创建反序列化中间对象。 */
+        /**
+         * 供 Jackson 创建反序列化中间对象。
+         */
         @JsonCreator
         private AuthenticationData() {
         }
@@ -568,7 +624,9 @@ public final class SessionCodec {
         }
     }
 
-    /** 保存 Principal 与静态授权 Resource 的 Session JSON 关联。 */
+    /**
+     * 保存 Principal 与静态授权 Resource 的 Session JSON 关联。
+     */
     private static final class ResourceData {
         @JsonProperty("principalId")
         private long principalId;
@@ -576,7 +634,9 @@ public final class SessionCodec {
         @JsonProperty("resource")
         private TypedPayload resource;
 
-        /** 供 Jackson 创建反序列化中间对象。 */
+        /**
+         * 供 Jackson 创建反序列化中间对象。
+         */
         @JsonCreator
         private ResourceData() {
         }
@@ -587,7 +647,9 @@ public final class SessionCodec {
         }
     }
 
-    /** 保存完整 Principal 与一种数字 Resource 标识集合的 Session JSON 关联。 */
+    /**
+     * 保存完整 Principal 与一种数字 Resource 标识集合的 Session JSON 关联。
+     */
     private static final class ResourceIdSetData {
         @JsonProperty("principalId")
         private long principalId;
@@ -601,7 +663,9 @@ public final class SessionCodec {
         @JsonProperty("payload")
         private String payload;
 
-        /** 供 Jackson 创建反序列化中间对象。 */
+        /**
+         * 供 Jackson 创建反序列化中间对象。
+         */
         @JsonCreator
         private ResourceIdSetData() {
         }

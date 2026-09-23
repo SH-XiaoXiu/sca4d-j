@@ -3,10 +3,10 @@ package com.sca4d.auth.sharedsecret;
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.AuthenticationMethod;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.SessionControl;
 import com.sca4d.core.api.authentication.SessionTerminationReason;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.security.SecretHasher;
@@ -25,13 +25,17 @@ import java.util.Base64;
 import java.util.Objects;
 import java.util.Set;
 
-/** 签发、轮换、撤销和验证 Account 的 Shared Secret Credential。 */
+/**
+ * 签发、轮换、撤销和验证 Account 的 Shared Secret Credential。
+ */
 public class SharedSecretAuthenticationMethod implements AuthenticationMethod<SharedSecretProof> {
 
     private static final Logger LOG = LoggerFactory.getLogger(SharedSecretAuthenticationMethod.class);
 
-    /** Shared Secret 方法稳定编码。 */
-    public static final AuthenticationMethodCode CODE = new AuthenticationMethodCode("shared-secret");
+    /**
+     * Shared Secret 方法稳定编码。
+     */
+    public static final TreeCode CODE = TreeCode.ofSlash("AUTHENTICATION/SHARED_SECRET");
 
     private final @NotNull SharedSecretCredentialRepository credentials;
 
@@ -43,7 +47,9 @@ public class SharedSecretAuthenticationMethod implements AuthenticationMethod<Sh
 
     private final @NotNull Clock clock;
 
-    /** 创建只接受已确定 Account 的 Shared Secret 认证方法。 */
+    /**
+     * 创建只接受已确定 Account 的 Shared Secret 认证方法。
+     */
     public SharedSecretAuthenticationMethod(
             @NotNull SharedSecretCredentialRepository credentials,
             @NotNull SecretHasher hasher,
@@ -58,7 +64,7 @@ public class SharedSecretAuthenticationMethod implements AuthenticationMethod<Sh
     }
 
     @Override
-    public @NotNull AuthenticationMethodCode code() {
+    public @NotNull TreeCode code() {
         return CODE;
     }
 
@@ -167,7 +173,7 @@ public class SharedSecretAuthenticationMethod implements AuthenticationMethod<Sh
      * @param accountId Account 标识
      * @param revokedAt 撤销时间
      * @return 本次调用完成撤销时为 {@code true}，已经撤销时为 {@code false}
-    */
+     */
     @Transactional
     public boolean revoke(long accountId, @NotNull Instant revokedAt) {
         SharedSecretCredential current = credentials.find(accountId);
@@ -189,7 +195,9 @@ public class SharedSecretAuthenticationMethod implements AuthenticationMethod<Sh
         return revoked;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional
     public void eraseAccount(long accountId) {
@@ -200,7 +208,9 @@ public class SharedSecretAuthenticationMethod implements AuthenticationMethod<Sh
         LOG.debug("Shared Secret Credential 已擦除 | accountId={}", accountId);
     }
 
-    /** 生成 32 字节无填充 Base64URL Secret。 */
+    /**
+     * 生成 32 字节无填充 Base64URL Secret。
+     */
     private @NotNull String generate() {
         byte[] bytes = new byte[32];
         random.nextBytes(bytes);

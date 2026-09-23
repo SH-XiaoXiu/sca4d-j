@@ -1,16 +1,26 @@
 package com.sca4d.core.api.identity;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.resource.Resource;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-/** 表示 Subject 在某个认证域内使用的登录账号。 */
+/**
+ * 表示 Subject 在某个认证域内使用的登录账号。
+ */
 public final class Account implements Resource {
 
-    /** Account 使用的稳定 Resource 类型。 */
-    public static final @NotNull String RESOURCE_TYPE = "IAM/ACCOUNT";
+    /**
+     * Account 使用的稳定 Resource 类型。
+     */
+    public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofSlash("IAM/ACCOUNT");
+
+    /**
+     * 供 Java 注解参数使用的资源类型文本。
+     */
+    public static final @NotNull String RESOURCE_TYPE_VALUE = "IAM/ACCOUNT";
 
     private final long id;
 
@@ -21,9 +31,9 @@ public final class Account implements Resource {
     /**
      * 创建认证域内的登录账号。
      *
-     * @param id Account 标识
+     * @param id        Account 标识
      * @param subjectId 所属 Subject 标识
-     * @param realmKey 创建时确定的认证域
+     * @param realmKey  创建时确定的认证域
      */
     public Account(
             long id,
@@ -47,14 +57,18 @@ public final class Account implements Resource {
         return id;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Contract(pure = true)
-    public @NotNull String type() {
+    public @NotNull TreeCode type() {
         return RESOURCE_TYPE;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Contract(pure = true)
     public @NotNull String id() {

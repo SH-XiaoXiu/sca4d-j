@@ -7,6 +7,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.OperationCatalog;
 import com.sca4d.core.api.permission.OperationNode;
@@ -74,7 +75,7 @@ class RedisRbacPermissionCacheTest {
                 redis,
                 new RuntimeNamespace("example-app"),
                 new ObjectMapper(),
-                permissionSelections("read"));
+                permissionSelections(TreeCode.ofSegment("READ")));
     }
 
     @Test
@@ -112,7 +113,7 @@ class RedisRbacPermissionCacheTest {
                 redis,
                 new RuntimeNamespace("example-app"),
                 new ObjectMapper(),
-                permissionSelections("read", "manage"));
+                permissionSelections(TreeCode.ofSegment("READ"), TreeCode.ofSegment("MANAGE")));
         Map<RbacScope, List<Long>> requested = Map.of(FIRST_SCOPE, List.of(PRINCIPAL_ID));
         RbacPermissionCacheLookup lookup = cache.find(requested);
         cache.put(
@@ -126,7 +127,7 @@ class RedisRbacPermissionCacheTest {
                 redis,
                 new RuntimeNamespace("example-app"),
                 new ObjectMapper(),
-                permissionSelections("manage", "read"));
+                permissionSelections(TreeCode.ofSegment("MANAGE"), TreeCode.ofSegment("READ")));
         RbacPermissionCacheLookup cached = reordered.find(requested);
 
         assertThat(lastReadKeys).isEqualTo(originalKeys);
@@ -151,7 +152,7 @@ class RedisRbacPermissionCacheTest {
                 redis,
                 new RuntimeNamespace("example-app"),
                 new ObjectMapper(),
-                permissionSelections("read", "manage"));
+                permissionSelections(TreeCode.ofSegment("READ"), TreeCode.ofSegment("MANAGE")));
         RbacPermissionCacheLookup cached = expanded.find(requested);
 
         assertThat(lastReadKeys).isNotEqualTo(originalKeys);
@@ -206,19 +207,19 @@ class RedisRbacPermissionCacheTest {
     }
 
     /** 创建把指定动作全部授予测试 RBAC 领域的权限选择规则。 */
-    private static PermissionSelectionRegistry permissionSelections(String... actions) {
+    private static PermissionSelectionRegistry permissionSelections(TreeCode... actions) {
         OperationNode.ActionDeclaration[] declarations = Arrays.stream(actions)
-                .map(action -> OperationNode.action(action, "operation.projects.items." + action, 100))
+                .map(action -> OperationNode.action(action, "operation.projects.items.action", 100))
                 .toArray(OperationNode.ActionDeclaration[]::new);
         RbacOperationModule module = new RbacOperationModule() {
             @Override
             public OperationNode.@NotNull Module operationTree() {
                 return OperationNode.module(
-                        "projects",
+                        TreeCode.ofSegment("PROJECTS"),
                         "operation.projects",
                         100,
                         OperationNode.resource(
-                                "items",
+                                TreeCode.ofSegment("ITEMS"),
                                 "operation.projects.items",
                                 100,
                                 declarations));

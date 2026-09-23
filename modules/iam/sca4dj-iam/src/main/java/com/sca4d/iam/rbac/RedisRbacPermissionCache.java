@@ -25,7 +25,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.OptionalLong;
 
-/** 使用应用基础设施 Redis 按权限目录指纹批量缓存 RBAC 权限选择符。 */
+/**
+ * 使用应用基础设施 Redis 按权限目录指纹批量缓存 RBAC 权限选择符。
+ */
 public final class RedisRbacPermissionCache implements RbacPermissionCache {
 
     private static final Logger LOG = LoggerFactory.getLogger(RedisRbacPermissionCache.class);
@@ -52,9 +54,9 @@ public final class RedisRbacPermissionCache implements RbacPermissionCache {
     /**
      * 创建 Redis RBAC 权限缓存。
      *
-     * @param redis 脚手架字符串 Redis 模板
-     * @param namespace 当前应用运行时命名空间
-     * @param objectMapper 脚手架 JSON 映射器
+     * @param redis                脚手架字符串 Redis 模板
+     * @param namespace            当前应用运行时命名空间
+     * @param objectMapper         脚手架 JSON 映射器
      * @param permissionSelections 应用安装的 RBAC 权限选择规则
      */
     public RedisRbacPermissionCache(
@@ -69,7 +71,9 @@ public final class RedisRbacPermissionCache implements RbacPermissionCache {
         this.catalogFingerprints = catalogFingerprints(permissionSelections);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull RbacPermissionCacheLookup find(
             @NotNull Map<@NotNull RbacScope, ? extends Collection<@NotNull Long>> principalIdsByScope) {
@@ -130,7 +134,9 @@ public final class RedisRbacPermissionCache implements RbacPermissionCache {
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void put(
             @NotNull RbacPermissionCacheLookup lookup,
@@ -182,7 +188,9 @@ public final class RedisRbacPermissionCache implements RbacPermissionCache {
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void evict(
             @NotNull Map<@NotNull RbacScope, ? extends Collection<@NotNull Long>> principalIdsByScope) {
@@ -201,7 +209,9 @@ public final class RedisRbacPermissionCache implements RbacPermissionCache {
         }
     }
 
-    /** 把嵌套批量输入按稳定迭代顺序转换为缓存坐标和 Redis key。 */
+    /**
+     * 把嵌套批量输入按稳定迭代顺序转换为缓存坐标和 Redis key。
+     */
     private void flatten(
             @NotNull Map<@NotNull RbacScope, ? extends Collection<@NotNull Long>> principalIdsByScope,
             @NotNull List<RbacScope> scopes,
@@ -221,17 +231,23 @@ public final class RedisRbacPermissionCache implements RbacPermissionCache {
         }
     }
 
-    /** @return 指定缓存坐标的修订号 key */
+    /**
+     * @return 指定缓存坐标的修订号 key
+     */
     private @NotNull String revisionKey(@NotNull RbacScope scope, @NotNull Long principalId) {
         return coordinateKey(scope, principalId) + ":revision";
     }
 
-    /** @return 指定缓存坐标的权限选择符 key */
+    /**
+     * @return 指定缓存坐标的权限选择符 key
+     */
     private @NotNull String selectorsKey(@NotNull RbacScope scope, @NotNull Long principalId) {
         return coordinateKey(scope, principalId) + ":selectors";
     }
 
-    /** @return 包含应用、RBAC 领域、具体范围和 Principal 的稳定缓存坐标 */
+    /**
+     * @return 包含应用、RBAC 领域、具体范围和 Principal 的稳定缓存坐标
+     */
     private @NotNull String coordinateKey(@NotNull RbacScope scope, @NotNull Long principalId) {
         String catalogFingerprint = catalogFingerprints.get(scope.domain());
         if (catalogFingerprint == null) {
@@ -248,7 +264,9 @@ public final class RedisRbacPermissionCache implements RbacPermissionCache {
                 Objects.requireNonNull(principalId, "Principal 标识不能为空").toString());
     }
 
-    /** @return 每个 RBAC 领域按 Operation 编码生成的稳定目录指纹 */
+    /**
+     * @return 每个 RBAC 领域按 Operation 编码生成的稳定目录指纹
+     */
     private static @NotNull Map<@NotNull RbacDomain, @NotNull String> catalogFingerprints(
             @NotNull PermissionSelectionRegistry permissionSelections) {
         PermissionSelectionRegistry registry = Objects.requireNonNull(
@@ -265,13 +283,15 @@ public final class RedisRbacPermissionCache implements RbacPermissionCache {
         return Map.copyOf(fingerprints);
     }
 
-    /** @return 排序后 Operation 编码的 SHA-256 Base64URL 指纹 */
+    /**
+     * @return 排序后 Operation 编码的 SHA-256 Base64URL 指纹
+     */
     private static @NotNull String catalogFingerprint(
             @NotNull Collection<@NotNull Operation> operations) {
         StringBuilder canonical = new StringBuilder();
         Objects.requireNonNull(operations, "RBAC Operation 集合不能为空")
                 .stream()
-                .map(operation -> Objects.requireNonNull(operation, "RBAC Operation 不能为空").value())
+                .map(operation -> Objects.requireNonNull(operation, "RBAC Operation 不能为空").code().value())
                 .sorted()
                 .forEach(value -> canonical.append(value).append('\0'));
         return Base64.getUrlEncoder()
@@ -279,7 +299,9 @@ public final class RedisRbacPermissionCache implements RbacPermissionCache {
                 .encodeToString(DigestUtil.sha256(canonical.toString()));
     }
 
-    /** @return UTF-8 文本的无填充 Base64URL 编码 */
+    /**
+     * @return UTF-8 文本的无填充 Base64URL 编码
+     */
     private static @NotNull String encoded(@NotNull String value) {
         return Base64.getUrlEncoder()
                 .withoutPadding()
@@ -287,7 +309,9 @@ public final class RedisRbacPermissionCache implements RbacPermissionCache {
                         Objects.requireNonNull(value, "命名值不能为空").getBytes(StandardCharsets.UTF_8));
     }
 
-    /** 从 classpath 加载返回 Long 的 RBAC 权限缓存 Redis 脚本。 */
+    /**
+     * 从 classpath 加载返回 Long 的 RBAC 权限缓存 Redis 脚本。
+     */
     private static @NotNull DefaultRedisScript<Long> script(@NotNull String fileName) {
         DefaultRedisScript<Long> script = new DefaultRedisScript<>();
         script.setLocation(new ClassPathResource("redis/iam/rbac/" + fileName));

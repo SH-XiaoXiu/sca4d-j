@@ -23,7 +23,6 @@ import com.sca4d.core.api.audit.AuditTargetResolver;
 import com.sca4d.core.api.audit.HttpCall;
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.core.api.call.AuditCallRecorder;
@@ -37,6 +36,7 @@ import com.sca4d.core.api.call.IdempotentCallExecutor;
 import com.sca4d.core.api.call.LockedCallExecutor;
 import com.sca4d.core.api.call.PermissionCallAssessor;
 import com.sca4d.core.api.call.RateLimitedCallAssessor;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.IdempotencyBeginResult;
 import com.sca4d.core.api.concurrent.IdempotencyFingerprints;
@@ -493,7 +493,9 @@ class CallLifecycleTest {
         }
     }
 
-    /** 创建批量资源权限测试使用的调用执行器。 */
+    /**
+     * 创建批量资源权限测试使用的调用执行器。
+     */
     private static CallLifecycle batchExecutor(
             List<String> events,
             @Nullable String deniedId,
@@ -541,7 +543,7 @@ class CallLifecycleTest {
                 List.of(
                         new Authentication(
                                 account.accountId(),
-                                new AuthenticationMethodCode("test"),
+                                TreeCode.ofSlash("AUTHENTICATION/TEST"),
                                 Set.of(AuthenticationFactorKind.KNOWLEDGE),
                                 NOW)),
                 Map.of(principal.principalId(), List.of(new Operation("platform:account:update"))),
@@ -798,7 +800,9 @@ class CallLifecycleTest {
         assertEquals(0, invocations.get());
     }
 
-    /** 创建只执行限流阶段的测试调用执行器。 */
+    /**
+     * 创建只执行限流阶段的测试调用执行器。
+     */
     private static CallLifecycle rateLimitExecutor(
             RateLimiter limiter,
             CallValueResolverLookup resolverLookup) {
@@ -815,7 +819,9 @@ class CallLifecycleTest {
                 Duration.ofSeconds(3));
     }
 
-    /** 创建包含固定 Subject、Account 和可选 HTTP 快照的已认证 Call。 */
+    /**
+     * 创建包含固定 Subject、Account 和可选 HTTP 快照的已认证 Call。
+     */
     private static Call authenticatedCall(@Nullable HttpCall httpCall) {
         Subject subject = new Subject(101, SubjectType.HUMAN);
         Account account = new Account(102, subject.subjectId(), new RealmKey("test"));
@@ -829,7 +835,7 @@ class CallLifecycleTest {
                 List.of(
                         new Authentication(
                                 account.accountId(),
-                                new AuthenticationMethodCode("test"),
+                                TreeCode.ofSlash("AUTHENTICATION/TEST"),
                                 Set.of(AuthenticationFactorKind.KNOWLEDGE),
                                 NOW)),
                 Map.of(principal.principalId(), List.of()),
@@ -845,14 +851,14 @@ class CallLifecycleTest {
      * 使用原行为测试需要的依赖组装固定 {@code CallLifecycle}。
      *
      * @param permissionAssessment 权限策略入口
-     * @param rateLimiter 限流器
-     * @param idempotencyStore 幂等存储
-     * @param distributedLock 分布式锁
-     * @param auditRecorder 审计记录器
-     * @param resolverLookup 调用值解析器目录
-     * @param clock 审计时钟
-     * @param processingTtl 幂等处理租约
-     * @param retryAfter 幂等建议重试时间
+     * @param rateLimiter          限流器
+     * @param idempotencyStore     幂等存储
+     * @param distributedLock      分布式锁
+     * @param auditRecorder        审计记录器
+     * @param resolverLookup       调用值解析器目录
+     * @param clock                审计时钟
+     * @param processingTtl        幂等处理租约
+     * @param retryAfter           幂等建议重试时间
      * @return 使用真实阶段组件的 {@code CallLifecycle}
      */
     private static CallLifecycle lifecycle(
@@ -881,12 +887,12 @@ class CallLifecycleTest {
     /**
      * 建立 {@code CallExecution} 并交给固定 {@code CallLifecycle}。
      *
-     * @param lifecycle 待测试的 {@code CallLifecycle}
-     * @param call 当前调用
+     * @param lifecycle     待测试的 {@code CallLifecycle}
+     * @param call          当前调用
      * @param declaringType 具体业务类型
-     * @param method 业务方法
-     * @param arguments 方法实参
-     * @param invocation 实际业务调用
+     * @param method        业务方法
+     * @param arguments     方法实参
+     * @param invocation    实际业务调用
      * @return 业务调用或幂等重放的文本结果
      * @throws Exception {@code CallLifecycle} 抛出的失败
      */
@@ -902,7 +908,9 @@ class CallLifecycleTest {
                 invocation);
     }
 
-    /** 声明内置、自定义和非法限流组合的测试服务。 */
+    /**
+     * 声明内置、自定义和非法限流组合的测试服务。
+     */
     private static final class RateLimitedService {
 
         @RateLimited(dimensions = {
@@ -986,7 +994,7 @@ class CallLifecycleTest {
     private static final class TargetedService {
 
         @Audit(operation = "platform/account/status/change")
-        private String update(@AuditTarget(resourceType = Account.RESOURCE_TYPE) long accountId) {
+        private String update(@AuditTarget(resourceType = Account.RESOURCE_TYPE_VALUE) long accountId) {
             return Long.toString(accountId);
         }
     }
@@ -999,7 +1007,9 @@ class CallLifecycleTest {
         }
     }
 
-    /** 声明一次读取一组动态资源的测试服务。 */
+    /**
+     * 声明一次读取一组动态资源的测试服务。
+     */
     private static final class BatchService {
 
         @RequirePermission(resourceResolver = BatchResourcesResolver.class, action = Action.READ_VALUE)
@@ -1008,7 +1018,9 @@ class CallLifecycleTest {
         }
     }
 
-    /** 声明返回空元素资源集合的测试服务。 */
+    /**
+     * 声明返回空元素资源集合的测试服务。
+     */
     private static final class NullResourceService {
 
         @RequirePermission(resourceResolver = NullResourceResolver.class, action = Action.READ_VALUE)
@@ -1018,7 +1030,9 @@ class CallLifecycleTest {
         }
     }
 
-    /** 声明返回错误元素资源集合的测试服务。 */
+    /**
+     * 声明返回错误元素资源集合的测试服务。
+     */
     private static final class InvalidResourceService {
 
         @RequirePermission(resourceResolver = InvalidResourceResolver.class, action = Action.READ_VALUE)
@@ -1045,7 +1059,9 @@ class CallLifecycleTest {
         }
     }
 
-    /** 返回空白自定义限流键的测试解析器。 */
+    /**
+     * 返回空白自定义限流键的测试解析器。
+     */
     private static final class BlankRateKeyResolver implements CallValueResolver<String> {
 
         @Override
@@ -1082,7 +1098,9 @@ class CallLifecycleTest {
         }
     }
 
-    /** 把方法第一个参数中的标识转为批量测试资源。 */
+    /**
+     * 把方法第一个参数中的标识转为批量测试资源。
+     */
     private static final class BatchResourcesResolver
             implements
                 CallValueResolver<Collection<Resource>> {
@@ -1099,7 +1117,9 @@ class CallLifecycleTest {
         }
     }
 
-    /** 返回包含空元素的集合，用于验证 Core 拒绝非法解析结果。 */
+    /**
+     * 返回包含空元素的集合，用于验证 Core 拒绝非法解析结果。
+     */
     private static final class NullResourceResolver
             implements
                 CallValueResolver<Collection<Resource>> {
@@ -1110,7 +1130,9 @@ class CallLifecycleTest {
         }
     }
 
-    /** 通过原始集合模拟编译期约束外的错误元素。 */
+    /**
+     * 通过原始集合模拟编译期约束外的错误元素。
+     */
     private static final class InvalidResourceResolver
             implements
                 CallValueResolver<Collection<Resource>> {
@@ -1122,7 +1144,9 @@ class CallLifecycleTest {
         }
     }
 
-    /** 记录批量资源的判断顺序，并可拒绝指定资源。 */
+    /**
+     * 记录批量资源的判断顺序，并可拒绝指定资源。
+     */
     private static final class BatchPermissionPolicy
             implements
                 PermissionPolicy {
@@ -1163,7 +1187,7 @@ class CallLifecycleTest {
 
         @Override
         public boolean supports(Resource resource) {
-            return resource.type().equals("device");
+            return resource.type().equals(TreeCode.ofSlash("TEST/DEVICE"));
         }
 
         @Override
@@ -1175,8 +1199,8 @@ class CallLifecycleTest {
     private static final class DeviceCollection implements Resource {
 
         @Override
-        public @NotNull String type() {
-            return "device";
+        public @NotNull TreeCode type() {
+            return TreeCode.ofSlash("TEST/DEVICE");
         }
 
         @Override
@@ -1188,8 +1212,8 @@ class CallLifecycleTest {
     private static final class DeviceScope implements ResourceScope {
 
         @Override
-        public String resourceType() {
-            return "device";
+        public TreeCode resourceType() {
+            return TreeCode.ofSlash("TEST/DEVICE");
         }
     }
 

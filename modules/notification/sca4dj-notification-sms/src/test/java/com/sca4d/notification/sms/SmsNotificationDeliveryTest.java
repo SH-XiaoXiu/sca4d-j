@@ -7,10 +7,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.messaging.MessageId;
 import com.sca4d.core.api.notification.Notification;
-import com.sca4d.core.api.notification.NotificationCode;
 import com.sca4d.core.api.notification.NotificationRecipient;
 import com.sca4d.core.api.region.ParsedPhoneNumber;
 import com.sca4d.core.api.region.Region;
@@ -26,7 +26,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-/** 验证 SMS 公共投递器不内置国家分区，并向应用路由策略提供类型化事实。 */
+/**
+ * 验证 SMS 公共投递器不内置国家分区，并向应用路由策略提供类型化事实。
+ */
 class SmsNotificationDeliveryTest {
 
     @Test
@@ -44,7 +46,7 @@ class SmsNotificationDeliveryTest {
         SmsProviderBinding binding = new SmsProviderBinding(
                 12,
                 provider.providerId(),
-                new NotificationCode("AUTHENTICATION/SMS_CODE"),
+                TreeCode.of("AUTHENTICATION/SMS_CODE"),
                 route,
                 "zh-CN",
                 "Sca4d",

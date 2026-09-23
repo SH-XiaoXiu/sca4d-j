@@ -1,6 +1,7 @@
 package com.sca4d.openapi.web;
 
 import com.sca4d.core.api.call.Call;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.identity.SubjectType;
@@ -46,7 +47,7 @@ public final class OpenApiRequestInterceptor extends CallHandlerInterceptor {
                         .orElse(false)) {
             throw new BusinessException(CoreErrorCode.AUTHENTICATION_REQUIRED);
         }
-        checker.verifyAllowed(call, route.operation());
+        checker.verifyAllowed(call, TreeCode.ofColon(route.operation()));
         return true;
     }
 }

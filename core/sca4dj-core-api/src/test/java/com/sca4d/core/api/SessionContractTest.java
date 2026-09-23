@@ -6,13 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.core.api.authentication.SessionIdentity;
 import com.sca4d.core.api.authentication.principalsession.LongIdSet;
 import com.sca4d.core.api.authentication.principalsession.PrincipalIdSet;
 import com.sca4d.core.api.authentication.principalsession.ResourceIdSet;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
@@ -126,7 +126,10 @@ class SessionContractTest {
                 Map.of(principal.principalId(), List.of(new TestResource("operation", "project:read"))),
                 Map.of(
                         principal.principalId(),
-                        List.of(new ResourceIdSet("project", List.of(1_927_273_629L, 1_927_273_630L)))),
+                        List.of(
+                                new ResourceIdSet(
+                                        TreeCode.ofSegment("PROJECT"),
+                                        List.of(1_927_273_629L, 1_927_273_630L)))),
                 NOW,
                 NOW.plusSeconds(3600));
 
@@ -179,7 +182,7 @@ class SessionContractTest {
         return List.of(
                 new Authentication(
                         account.accountId(),
-                        new AuthenticationMethodCode("test"),
+                        TreeCode.ofSlash("AUTHENTICATION/TEST"),
                         Set.of(AuthenticationFactorKind.KNOWLEDGE),
                         NOW));
     }
@@ -211,17 +214,17 @@ class SessionContractTest {
     }
 
     private static final class TestResource implements Resource {
-        private final String type;
+        private final TreeCode type;
 
         private final String id;
 
         private TestResource(String type, String id) {
-            this.type = type;
+            this.type = TreeCode.ofSegment(type);
             this.id = id;
         }
 
         @Override
-        public @NotNull String type() {
+        public @NotNull TreeCode type() {
             return type;
         }
 

@@ -14,29 +14,45 @@ import java.util.Objects;
 @SuppressWarnings("ClassCanBeRecord") // 项目禁止使用 Java record，保留普通 class。
 public final class Operation implements Resource {
 
-    /** 操作资源使用的资源类型。 */
-    public static final @NotNull String RESOURCE_TYPE = "CORE/OPERATIONS";
+    /**
+     * 操作资源使用的资源类型。
+     */
+    public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofColon("CORE:OPERATIONS");
 
-    private final @NotNull String value;
+    /**
+     * 供 Java 注解参数使用的资源类型文本。
+     */
+    public static final @NotNull String RESOURCE_TYPE_VALUE = "CORE:OPERATIONS";
+
+    private final @NotNull TreeCode code;
 
     /**
      * 创建操作资源。
      *
      * @param value 非空白操作键
-     * @throws NullPointerException value 为 {@code null} 时抛出
+     * @throws NullPointerException     value 为 {@code null} 时抛出
      * @throws IllegalArgumentException value 为空白时抛出
      */
     public Operation(@NotNull String value) {
-        this.value = normalize(value);
+        this(TreeCode.ofColon(value));
     }
 
     /**
-     * 返回操作键。
-     *
-     * @return 操作键
+     * 创建使用已经规范化操作编码的操作资源。
      */
-    public @NotNull String value() {
-        return value;
+    public Operation(@NotNull TreeCode code) {
+        TreeCode checked = Objects.requireNonNull(code, "操作编码不能为空");
+        if (checked.separator() != ':') {
+            throw new IllegalArgumentException("Operation 必须使用冒号分层: " + checked);
+        }
+        this.code = checked;
+    }
+
+    /**
+     * @return 已规范化的操作 TreeCode
+     */
+    public @NotNull TreeCode code() {
+        return code;
     }
 
     /**
@@ -45,7 +61,7 @@ public final class Operation implements Resource {
      * @return 固定值 {@value #RESOURCE_TYPE}
      */
     @Override
-    public @NotNull String type() {
+    public @NotNull TreeCode type() {
         return RESOURCE_TYPE;
     }
 
@@ -56,43 +72,21 @@ public final class Operation implements Resource {
      */
     @Override
     public @NotNull String id() {
-        return value;
+        return code.value();
     }
 
     @Override
     public boolean equals(Object other) {
-        return this == other || other instanceof Operation operation && value.equals(operation.value);
+        return this == other || other instanceof Operation operation && code.equals(operation.code);
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return code.hashCode();
     }
 
     @Override
     public @NotNull String toString() {
-        return value;
-    }
-
-    /** 规范化具体操作或末段为通配符的权限选择器。 */
-    static @NotNull String normalize(@NotNull String value) {
-        String checked = Objects.requireNonNull(value, "操作键不能为空").strip();
-        if (checked.isEmpty()) {
-            throw new IllegalArgumentException("操作键不能为空白");
-        }
-        int wildcard = checked.indexOf('*');
-        if (wildcard < 0) {
-            return TreeCode.of(checked).value();
-        }
-        if (wildcard != checked.length() - 1 || checked.indexOf('*', wildcard + 1) >= 0) {
-            throw new IllegalArgumentException("操作通配符只能位于最后一个层级");
-        }
-        int separator = Math.max(checked.lastIndexOf(':'), checked.lastIndexOf('/'));
-        if (separator <= 0 || separator == checked.length() - 1) {
-            throw new IllegalArgumentException("操作通配符必须跟随完整资源层级");
-        }
-        char delimiter = checked.charAt(separator);
-        String prefix = TreeCode.of(checked.substring(0, separator)).value();
-        return prefix + delimiter + '*';
+        return code.toString();
     }
 }

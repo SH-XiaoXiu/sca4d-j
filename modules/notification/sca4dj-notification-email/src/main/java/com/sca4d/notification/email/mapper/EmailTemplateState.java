@@ -1,16 +1,18 @@
 package com.sca4d.notification.email.mapper;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.notification.NotificationCode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-/** Email 模板 Mapper 读取的数据库状态。 */
+/**
+ * Email 模板 Mapper 读取的数据库状态。
+ */
 public final class EmailTemplateState {
     private final long templateId;
 
-    private final @NotNull NotificationCode code;
+    private final @NotNull TreeCode code;
 
     private final @NotNull String localesJson;
 
@@ -20,7 +22,7 @@ public final class EmailTemplateState {
 
     public EmailTemplateState(
             long templateId,
-            @NotNull NotificationCode code,
+            @NotNull TreeCode code,
             @NotNull String localesJson,
             boolean enabled,
             @NotNull Version version) {
@@ -35,8 +37,10 @@ public final class EmailTemplateState {
         return templateId;
     }
 
-    /** 返回 code 方法提供的结果。 */
-    public @NotNull NotificationCode code() {
+    /**
+     * 返回 code 方法提供的结果。
+     */
+    public @NotNull TreeCode code() {
         return code;
     }
 
@@ -48,7 +52,9 @@ public final class EmailTemplateState {
         return enabled;
     }
 
-    /** 返回 version 方法提供的结果。 */
+    /**
+     * 返回 version 方法提供的结果。
+     */
     public @NotNull Version version() {
         return version;
     }

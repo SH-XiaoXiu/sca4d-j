@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.sca4d.core.api.authentication.principalsession.ResourceLoader;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.resource.Resource;
@@ -121,17 +122,17 @@ class ResourceLoadersTest {
     }
 
     private static final class TestResource implements Resource {
-        private final String type;
+        private final TreeCode type;
 
         private final String id;
 
         private TestResource(String type, String id) {
-            this.type = type;
+            this.type = TreeCode.ofSegment(type);
             this.id = id;
         }
 
         @Override
-        public @NotNull String type() {
+        public @NotNull TreeCode type() {
             return type;
         }
 

@@ -2,6 +2,7 @@ package com.sca4d.auth.session.codec;
 
 import com.sca4d.core.api.authentication.principalsession.ResourceIdLoader;
 import com.sca4d.core.api.authentication.principalsession.ResourceIdSet;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Principal;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +20,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.Executor;
 
-/** 并发合并所有 ResourceIdLoader 为完整 Principal 贡献的数字 Resource 标识。 */
+/**
+ * 并发合并所有 ResourceIdLoader 为完整 Principal 贡献的数字 Resource 标识。
+ */
 public final class ResourceIdLoaders {
 
     private final @NotNull List<ResourceIdLoader> loaders;
@@ -29,7 +32,7 @@ public final class ResourceIdLoaders {
     /**
      * 创建并发调用所有数字 Resource 标识 Loader 的装载服务。
      *
-     * @param loaders 为完整 Principal 提供数字 Resource 标识的 Loader
+     * @param loaders  为完整 Principal 提供数字 Resource 标识的 Loader
      * @param executor 并发执行 Loader 的执行器
      */
     public ResourceIdLoaders(
@@ -70,8 +73,8 @@ public final class ResourceIdLoaders {
         }
 
         // 多个 Loader 可以贡献同一种 Resource 类型；两个 Loader 返回同一个标识时直接拒绝建立 Session。
-        LinkedHashMap<Long, LinkedHashMap<String, List<Long>>> merged = new LinkedHashMap<>();
-        LinkedHashMap<Long, LinkedHashMap<String, Set<Long>>> seen = new LinkedHashMap<>();
+        LinkedHashMap<Long, LinkedHashMap<TreeCode, List<Long>>> merged = new LinkedHashMap<>();
+        LinkedHashMap<Long, LinkedHashMap<TreeCode, Set<Long>>> seen = new LinkedHashMap<>();
         for (Long principalId : principalIds) {
             merged.put(principalId, new LinkedHashMap<>());
             seen.put(principalId, new LinkedHashMap<>());
@@ -107,7 +110,7 @@ public final class ResourceIdLoaders {
             }
         }
         LinkedHashMap<Long, List<ResourceIdSet>> result = new LinkedHashMap<>();
-        for (Map.Entry<Long, LinkedHashMap<String, List<Long>>> entry : merged.entrySet()) {
+        for (Map.Entry<Long, LinkedHashMap<TreeCode, List<Long>>> entry : merged.entrySet()) {
             List<ResourceIdSet> values = entry.getValue()
                     .entrySet()
                     .stream()

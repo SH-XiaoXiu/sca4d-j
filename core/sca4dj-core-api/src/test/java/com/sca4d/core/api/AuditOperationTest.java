@@ -7,7 +7,9 @@ import com.sca4d.core.api.audit.AuditOperation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-/** 验证 AuditOperation 与权限 Operation 分离后的操作键约束。 */
+/**
+ * 验证 AuditOperation 与权限 Operation 分离后的操作键约束。
+ */
 class AuditOperationTest {
 
     @Test
@@ -16,8 +18,8 @@ class AuditOperationTest {
         AuditOperation operation = AuditOperation.declared("PLATFORM/ACCOUNT/STATUS/CHANGE");
 
         assertEquals("AUDIT/OPERATIONS", operation.type());
-        assertEquals("PLATFORM/ACCOUNT/STATUS/CHANGE", operation.value());
-        assertEquals(operation.value(), operation.id());
+        assertEquals("PLATFORM/ACCOUNT/STATUS/CHANGE", operation.code().value());
+        assertEquals(operation.code().value(), operation.id());
         assertEquals("LEGACY:OPERATION", new AuditOperation("legacy:operation").id());
     }
 
@@ -30,6 +32,6 @@ class AuditOperationTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> AuditOperation.declared("platform//update"));
-        assertEquals("PLATFORM/ACCOUNT/UPDATE", AuditOperation.declared("Platform/ACCOUNT/UPDATE").value());
+        assertEquals("PLATFORM/ACCOUNT/UPDATE", AuditOperation.declared("Platform/ACCOUNT/UPDATE").code().value());
     }
 }

@@ -3,10 +3,10 @@ package com.sca4d.notification.sms;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.concurrent.VersionConditions;
 import com.sca4d.core.api.error.BusinessException;
-import com.sca4d.core.api.notification.NotificationCode;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.notification.sms.mapper.SmsBindingState;
 import com.sca4d.notification.sms.mapper.SmsProviderMapper;
@@ -20,7 +20,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-/** 隐藏 SMS Provider 和传输绑定的 Mapper 与 JSON 字段。 */
+/**
+ * 隐藏 SMS Provider 和传输绑定的 Mapper 与 JSON 字段。
+ */
 public final class SmsRepository {
     private final SmsProviderMapper mapper;
 
@@ -28,7 +30,9 @@ public final class SmsRepository {
 
     private final VersionConditions versionConditions;
 
-    /** 创建 SMS 配置 Repository。 */
+    /**
+     * 创建 SMS 配置 Repository。
+     */
     public SmsRepository(
             @NotNull SmsProviderMapper mapper,
             @NotNull ObjectMapper objectMapper,
@@ -38,17 +42,23 @@ public final class SmsRepository {
         this.versionConditions = Objects.requireNonNull(versionConditions, "版本条件不能为空");
     }
 
-    /** @return 全部未删除 SMS Provider */
+    /**
+     * @return 全部未删除 SMS Provider
+     */
     public @NotNull List<@NotNull SmsProvider> providers() {
         return mapper.selectProviders(null, null, null).stream().map(SmsRepository::provider).toList();
     }
 
-    /** @return 指定 Provider；不存在时为空 */
+    /**
+     * @return 指定 Provider；不存在时为空
+     */
     public @NotNull Optional<SmsProvider> provider(long providerId) {
         return mapper.selectProviders(providerId, null, null).stream().findFirst().map(SmsRepository::provider);
     }
 
-    /** @return 指定 Provider 的全部未删除传输绑定 */
+    /**
+     * @return 指定 Provider 的全部未删除传输绑定
+     */
     public @NotNull List<@NotNull SmsProviderBinding> bindings(long providerId) {
         return mapper.selectBindings(null, providerId, null, null, null, null)
                 .stream()
@@ -56,7 +66,9 @@ public final class SmsRepository {
                 .toList();
     }
 
-    /** @return 指定绑定；不存在时为空 */
+    /**
+     * @return 指定绑定；不存在时为空
+     */
     public @NotNull Optional<SmsProviderBinding> binding(long bindingId) {
         return mapper.selectBindings(bindingId, null, null, null, null, null)
                 .stream()
@@ -64,7 +76,9 @@ public final class SmsRepository {
                 .map(this::binding);
     }
 
-    /** @return 支持指定线路并按数据库优先级排列的启用 Provider */
+    /**
+     * @return 支持指定线路并按数据库优先级排列的启用 Provider
+     */
     public @NotNull List<@NotNull SmsProvider> enabledProviders(@NotNull SmsRoute route) {
         return mapper.selectEnabledProviders(Objects.requireNonNull(route, "SMS 路由不能为空").value())
                 .stream()
@@ -72,10 +86,12 @@ public final class SmsRepository {
                 .toList();
     }
 
-    /** @return Provider 对当前通知、线路和 Locale 的启用传输绑定 */
+    /**
+     * @return Provider 对当前通知、线路和 Locale 的启用传输绑定
+     */
     public @NotNull Optional<SmsProviderBinding> binding(
             long providerId,
-            @NotNull NotificationCode code,
+            @NotNull TreeCode code,
             @NotNull SmsRoute route,
             @NotNull Locale locale) {
         return mapper.selectBindings(null, providerId, code, route.value(), locale.toLanguageTag(), true)
@@ -84,7 +100,9 @@ public final class SmsRepository {
                 .map(this::binding);
     }
 
-    /** 新增默认停用的 SMS Provider。 */
+    /**
+     * 新增默认停用的 SMS Provider。
+     */
     public void addProvider(
             long providerId,
             @NotNull String code,
@@ -98,7 +116,9 @@ public final class SmsRepository {
         }
     }
 
-    /** 按版本条件完整替换停用 Provider。 */
+    /**
+     * 按版本条件完整替换停用 Provider。
+     */
     public void replaceProvider(
             long providerId,
             @NotNull String code,
@@ -123,7 +143,9 @@ public final class SmsRepository {
         }
     }
 
-    /** 按版本条件修改 Provider 启用状态。 */
+    /**
+     * 按版本条件修改 Provider 启用状态。
+     */
     public void setProviderEnabled(long providerId, boolean enabled) {
         SmsProvider current = loadProvider(providerId);
         VersionCondition condition = versionConditions.resolve(current.version());
@@ -133,7 +155,9 @@ public final class SmsRepository {
                 "SMS Provider");
     }
 
-    /** 按版本条件逻辑删除停用且没有绑定的 Provider。 */
+    /**
+     * 按版本条件逻辑删除停用且没有绑定的 Provider。
+     */
     public void deleteProvider(long providerId) {
         SmsProvider current = loadProvider(providerId);
         VersionCondition condition = versionConditions.resolve(current.version());
@@ -143,11 +167,13 @@ public final class SmsRepository {
                 "SMS Provider");
     }
 
-    /** 新增默认停用的 Provider 模板绑定。 */
+    /**
+     * 新增默认停用的 Provider 模板绑定。
+     */
     public void addBinding(
             long bindingId,
             long providerId,
-            @NotNull NotificationCode code,
+            @NotNull TreeCode code,
             @NotNull SmsRoute route,
             @NotNull Locale locale,
             @NotNull String signName,
@@ -168,10 +194,12 @@ public final class SmsRepository {
         }
     }
 
-    /** 按版本条件完整替换停用绑定。 */
+    /**
+     * 按版本条件完整替换停用绑定。
+     */
     public void replaceBinding(
             long bindingId,
-            @NotNull NotificationCode code,
+            @NotNull TreeCode code,
             @NotNull SmsRoute route,
             @NotNull Locale locale,
             @NotNull String signName,
@@ -197,7 +225,9 @@ public final class SmsRepository {
         }
     }
 
-    /** 按版本条件修改绑定启用状态。 */
+    /**
+     * 按版本条件修改绑定启用状态。
+     */
     public void setBindingEnabled(long bindingId, boolean enabled) {
         SmsProviderBinding current = loadBinding(bindingId);
         VersionCondition condition = versionConditions.resolve(current.version());
@@ -207,7 +237,9 @@ public final class SmsRepository {
                 "SMS Provider Binding");
     }
 
-    /** 按版本条件逻辑删除停用绑定。 */
+    /**
+     * 按版本条件逻辑删除停用绑定。
+     */
     public void deleteBinding(long bindingId) {
         SmsProviderBinding current = loadBinding(bindingId);
         VersionCondition condition = versionConditions.resolve(current.version());

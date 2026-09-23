@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.OptimisticLockException;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.concurrent.VersionCondition;
@@ -40,7 +41,9 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import java.util.List;
 import java.util.Map;
 
-/** 在隔离 PostgreSQL 中验证设置值、字典聚合删除与版本冲突。 */
+/**
+ * 在隔离 PostgreSQL 中验证设置值、字典聚合删除与版本冲突。
+ */
 @Testcontainers
 class ConfigurationPersistenceIntegrationTest {
     @Container
@@ -54,13 +57,17 @@ class ConfigurationPersistenceIntegrationTest {
 
     private static JdbcTemplate jdbc;
 
-    /** 字典完整删除使用真实事务代理。 */
+    /**
+     * 字典完整删除使用真实事务代理。
+     */
     @Configuration(proxyBeanMethods = false)
     @EnableTransactionManagement
     static class Transactions {
     }
 
-    /** 加载正式表结构和 Mapper，设置保留行内的版本字段为 long。 */
+    /**
+     * 加载正式表结构和 Mapper，设置保留行内的版本字段为 long。
+     */
     @BeforeAll
     static void initialize() throws Exception {
         DriverManagerDataSource source = new DriverManagerDataSource(
@@ -100,7 +107,9 @@ class ConfigurationPersistenceIntegrationTest {
         settings = context.getBean(SettingRepository.class);
     }
 
-    /** 关闭隔离测试上下文。 */
+    /**
+     * 关闭隔离测试上下文。
+     */
     @AfterAll
     static void close() {
         if (context != null) {
@@ -108,7 +117,9 @@ class ConfigurationPersistenceIntegrationTest {
         }
     }
 
-    /** 每例使用独立配置记录。 */
+    /**
+     * 每例使用独立配置记录。
+     */
     @BeforeEach
     void reset() {
         jdbc.execute("TRUNCATE sys_dictionary_option, sys_dictionary, sys_setting");
@@ -149,7 +160,7 @@ class ConfigurationPersistenceIntegrationTest {
     @Test
     @DisplayName("设置从明文切换密文、恢复默认和再次覆盖时保持版本与 ENV 写保护")
     void settingReplacementPreservesOwnerAndTombstoneSemantics() {
-        SettingOwner owner = new SettingOwner("test", "one");
+        SettingOwner owner = new SettingOwner(TreeCode.ofSegment("TEST"), "one");
         settings.replace(owner, "value", 1, "plain", null, null, null, VersionCondition.optimistic(new Version(0)));
         settings.replace(
                 owner,
@@ -186,6 +197,6 @@ class ConfigurationPersistenceIntegrationTest {
                 null,
                 VersionCondition.optimistic(new Version(3)));
         assertThat(settings.findAllSystem(List.of("env", "env", "missing"))).hasSize(1);
-        assertThat(settings.find(new SettingOwner("test", "other"), "value")).isEmpty();
+        assertThat(settings.find(new SettingOwner(TreeCode.ofSegment("TEST"), "other"), "value")).isEmpty();
     }
 }

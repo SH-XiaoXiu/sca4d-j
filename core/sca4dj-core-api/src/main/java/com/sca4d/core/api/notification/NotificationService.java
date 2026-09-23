@@ -1,21 +1,24 @@
 package com.sca4d.core.api.notification;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.messaging.MessageId;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 
-/** 提供渠道无关的通知可用性、同步投递和可靠异步入队操作。 */
+/**
+ * 提供渠道无关的通知可用性、同步投递和可靠异步入队操作。
+ */
 public interface NotificationService {
 
     /**
      * 判断当前配置能否处理指定通知和接收人。
      *
-     * @param code 通知编码
+     * @param code      通知编码
      * @param recipient 内部接收人
      * @return 存在可用投递配置时为 {@code true}
      */
     @CheckReturnValue
-    boolean isAvailable(@NotNull NotificationCode code, @NotNull NotificationRecipient recipient);
+    boolean isAvailable(@NotNull TreeCode code, @NotNull NotificationRecipient recipient);
 
     /**
      * 同步投递通知。

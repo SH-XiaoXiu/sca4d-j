@@ -20,7 +20,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/** 扫描、校验并保存具体应用通过 Spring MVC 声明的 OpenAPI 路由。 */
+/**
+ * 扫描、校验并保存具体应用通过 Spring MVC 声明的 OpenAPI 路由。
+ */
 public final class OpenApiRouteCatalog implements SmartInitializingSingleton {
 
     private final @NotNull ApplicationContext context;
@@ -34,7 +36,7 @@ public final class OpenApiRouteCatalog implements SmartInitializingSingleton {
     /**
      * 保存 Spring Controller 和 Operation 目录，等所有单例创建完成后扫描路由。
      *
-     * @param context 应用 Spring 容器
+     * @param context    应用 Spring 容器
      * @param operations 已安装且完成结构校验的 Operation 目录
      */
     public OpenApiRouteCatalog(
@@ -44,13 +46,17 @@ public final class OpenApiRouteCatalog implements SmartInitializingSingleton {
         this.operations = Objects.requireNonNull(operations, "Operation 目录不能为空");
     }
 
-    /** 在 Spring 完成全部单例创建后扫描并校验 OpenAPI 路由。 */
+    /**
+     * 在 Spring 完成全部单例创建后扫描并校验 OpenAPI 路由。
+     */
     @Override
     public synchronized void afterSingletonsInstantiated() {
         initialize();
     }
 
-    /** 扫描并校验具体应用声明的路由；重复调用不会重新扫描或覆盖路由目录。 */
+    /**
+     * 扫描并校验具体应用声明的路由；重复调用不会重新扫描或覆盖路由目录。
+     */
     public synchronized void initialize() {
         if (initialized) {
             return;
@@ -92,17 +98,21 @@ public final class OpenApiRouteCatalog implements SmartInitializingSingleton {
         initialized = true;
     }
 
-    /** @return 按路径和 HTTP 方法稳定排序的公开路由 */
+    /**
+     * @return 按路径和 HTTP 方法稳定排序的公开路由
+     */
     public @NotNull List<@NotNull OpenApiRouteDefinition> routes() {
         return routes;
     }
 
-    /** 校验 Controller 方法声明了与开放 Operation 一致的 {@code @RequirePermission}。 */
+    /**
+     * 校验 Controller 方法声明了与开放 Operation 一致的 {@code @RequirePermission}。
+     */
     private static void validatePermissionAnnotation(Method method, Operation operation) {
         RequirePermission permission = AnnotatedElementUtils
                 .findMergedAnnotation(method, RequirePermission.class);
         if (permission == null
-                || !operation.value().equals(new Operation(permission.operation()).value())
+                || !operation.code().equals(new Operation(permission.operation()).code())
                 || permission.operation().isBlank()) {
             throw new IllegalStateException(
                     "OpenAPI 路由必须声明相同 Operation 的 @RequirePermission: " + method.toGenericString());

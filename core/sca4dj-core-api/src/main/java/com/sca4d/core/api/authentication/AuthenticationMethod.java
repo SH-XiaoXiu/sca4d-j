@@ -1,5 +1,6 @@
 package com.sca4d.core.api.authentication;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Account;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,7 +21,7 @@ public interface AuthenticationMethod<P> {
      * @return 全局唯一且跨版本保持不变的认证方法编码
      */
     @NotNull
-    AuthenticationMethodCode code();
+    TreeCode code();
 
     /**
      * 读取 Engine 在调用认证方法前执行精确类型检查所需的类型。
@@ -58,7 +59,7 @@ public interface AuthenticationMethod<P> {
      * 验证 Proof 并返回可由 Engine 保存的成功证据。
      *
      * @param account 已确定的 Account；首次账号发现时为 {@code null}
-     * @param proof 调用方提交且未持久化的 Proof
+     * @param proof   调用方提交且未持久化的 Proof
      * @return 成功验证结果
      */
     @NotNull
@@ -67,7 +68,7 @@ public interface AuthenticationMethod<P> {
     /**
      * 在完成动作认证前确认先前生成的证据仍然有效。
      *
-     * @param account 证据所属 Account
+     * @param account        证据所属 Account
      * @param authentication 先前生成且不包含秘密的验证结果
      */
     void verifyCurrent(@NotNull Account account, @NotNull VerifiedAuthentication authentication);
@@ -79,7 +80,7 @@ public interface AuthenticationMethod<P> {
      *
      * @param accountId 要清理的 Account 标识
      * @throws IllegalArgumentException Account 标识不是正数时抛出
-     * @throws RuntimeException 持久化删除失败时抛出
+     * @throws RuntimeException         持久化删除失败时抛出
      */
     void eraseAccount(long accountId);
 }

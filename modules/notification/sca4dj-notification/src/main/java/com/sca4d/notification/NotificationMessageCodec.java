@@ -10,14 +10,12 @@ import com.sca4d.core.api.message.MessageContent;
 import com.sca4d.core.api.message.MessageContentCodec;
 import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.api.notification.Notification;
-import com.sca4d.core.api.notification.NotificationChannel;
-import com.sca4d.core.api.notification.NotificationCode;
 import com.sca4d.core.api.notification.NotificationRecipient;
-import com.sca4d.core.api.notification.NotificationRecipientType;
 import com.sca4d.core.api.region.Region;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -25,10 +23,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.Comparator;
 import java.util.stream.StreamSupport;
 
-/** 把 NotificationMessage 编解码为 RabbitMQ 与 Outbox 使用的稳定 JSON payload。 */
+/**
+ * 把 NotificationMessage 编解码为 RabbitMQ 与 Outbox 使用的稳定 JSON payload。
+ */
 public final class NotificationMessageCodec implements MessageCodec<NotificationMessage> {
 
     private final @NotNull ObjectMapper json;
@@ -72,7 +71,7 @@ public final class NotificationMessageCodec implements MessageCodec<Notification
         ArrayNode channelValues = root.putArray("channels");
         notification.channels()
                 .stream()
-                .sorted(Comparator.comparing(NotificationChannel::value))
+                .sorted(Comparator.comparing(TreeCode::value))
                 .forEach(
                         channel -> channelValues.addObject()
                                 .put("code", channel.value())
@@ -97,10 +96,10 @@ public final class NotificationMessageCodec implements MessageCodec<Notification
                             entry -> variables.put(
                                     entry.getKey(),
                                     entry.getValue().textValue()));
-            Set<NotificationChannel> channels = new LinkedHashSet<>();
-            Set<NotificationChannel> requiredChannels = new LinkedHashSet<>();
+            Set<TreeCode> channels = new LinkedHashSet<>();
+            Set<TreeCode> requiredChannels = new LinkedHashSet<>();
             root.required("channels").forEach(channel -> {
-                NotificationChannel value = new NotificationChannel(channel.required("code").textValue());
+                TreeCode value = TreeCode.of(channel.required("code").textValue());
                 channels.add(value);
                 if (channel.required("required").booleanValue()) {
                     requiredChannels.add(value);
@@ -112,9 +111,9 @@ public final class NotificationMessageCodec implements MessageCodec<Notification
                     .toList();
             JsonNode region = root.get("regionCode");
             Notification notification = new Notification(
-                    new NotificationCode(root.required("notificationCode").textValue()),
+                    TreeCode.of(root.required("notificationCode").textValue()),
                     new NotificationRecipient(
-                            new NotificationRecipientType(root.required("recipientType").textValue()),
+                            TreeCode.ofSegment(root.required("recipientType").textValue()),
                             root.required("recipientId").textValue()),
                     Locale.forLanguageTag(root.required("languageTag").textValue()),
                     Map.copyOf(variables),

@@ -15,7 +15,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/** 按 Message TreeCode 和协议版本索引应用安装的非 Event Codec。 */
+/**
+ * 按 Message TreeCode 和协议版本索引应用安装的非 Event Codec。
+ */
 @ApiStatus.Internal
 final class MessageCodecRegistry {
 
@@ -49,7 +51,7 @@ final class MessageCodecRegistry {
         MessageCodec<?> codec = codecs.get(new Key(checked.code(), checked.protocolVersion()));
         if (codec == null || !codec.valueType().isInstance(checked)) {
             throw new IllegalArgumentException(
-                    "消息没有匹配 Codec: " + checked.code().value() + '@' + checked.protocolVersion());
+                    "消息没有匹配 Codec: " + checked.code() + '@' + checked.protocolVersion());
         }
         return (MessageCodec<Message>) codec;
     }
@@ -77,7 +79,7 @@ final class MessageCodecRegistry {
 
         @Override
         public String toString() {
-            return code.value() + '@' + version;
+            return code + "@" + version;
         }
     }
 }

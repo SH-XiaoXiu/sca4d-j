@@ -8,13 +8,13 @@ import com.sca4d.core.api.authentication.AuthenticationActionCode;
 import com.sca4d.core.api.authentication.AuthenticationAttemptId;
 import com.sca4d.core.api.authentication.AuthenticationAttempts;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.AuthenticationPolicy;
 import com.sca4d.core.api.authentication.AuthenticationProgress;
 import com.sca4d.core.api.authentication.AuthenticationRequirement;
 import com.sca4d.core.api.authentication.AuthenticationResult;
 import com.sca4d.core.api.authentication.AuthenticationSubmission;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.setting.Settings;
 import org.jetbrains.annotations.NotNull;
@@ -51,11 +51,11 @@ public final class RedisAuthenticationAttempts implements AuthenticationAttempts
     /**
      * 创建默认认证引擎。
      *
-     * @param methods    应用安装的认证方法
-     * @param attempts   Redis 尝试存储
-     * @param policy     具体应用提供的动作认证策略
+     * @param methods  应用安装的认证方法
+     * @param attempts Redis 尝试存储
+     * @param policy   具体应用提供的动作认证策略
      * @param settings 每次开始认证时读取尝试有效期的 Settings
-     * @param clock      时间来源
+     * @param clock    时间来源
      */
     public RedisAuthenticationAttempts(
             @NotNull AuthenticationMethods methods,
@@ -83,7 +83,7 @@ public final class RedisAuthenticationAttempts implements AuthenticationAttempts
         Account account = verification.account();
 
         // 账号只能在首个材料验证成功后确定；随后仍按空进度检查该方法是否被应用策略允许。
-        Set<AuthenticationMethodCode> initiallyAllowed = policy.allowedMethods(account, checkedAction, List.of());
+        Set<TreeCode> initiallyAllowed = policy.allowedMethods(account, checkedAction, List.of());
         if (!methods.available(account, initiallyAllowed).contains(checkedSubmission.methodCode())) {
             throw new IllegalArgumentException("认证方法不允许用于当前动作");
         }
@@ -155,7 +155,7 @@ public final class RedisAuthenticationAttempts implements AuthenticationAttempts
 
             Instant now = clock.instant();
             List<Authentication> completed = currentAuthentications(state, now);
-            Set<AuthenticationMethodCode> allowed = policy
+            Set<TreeCode> allowed = policy
                     .allowedMethods(state.account(), state.actionCode(), completed);
             if (!methods.available(state.account(), allowed).contains(checkedSubmission.methodCode())) {
                 throw new IllegalArgumentException("认证方法不允许用于当前动作");
@@ -229,7 +229,7 @@ public final class RedisAuthenticationAttempts implements AuthenticationAttempts
         int remaining = Math.max(0, requirement.factorCount() - verifiedKinds.size());
         state.satisfied(remaining == 0);
 
-        List<AuthenticationMethodCode> available = state.satisfied()
+        List<TreeCode> available = state.satisfied()
                 ? List.of()
                 : methods.available(
                         state.account(),

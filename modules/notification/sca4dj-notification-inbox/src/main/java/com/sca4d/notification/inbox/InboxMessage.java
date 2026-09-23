@@ -1,8 +1,8 @@
 package com.sca4d.notification.inbox;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.messaging.MessageId;
-import com.sca4d.core.api.notification.NotificationCode;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,7 +11,9 @@ import java.time.Instant;
 import java.util.Locale;
 import java.util.Objects;
 
-/** 保存 Account 收件箱中一项不会随模板修改而变化的通知快照。 */
+/**
+ * 保存 Account 收件箱中一项不会随模板修改而变化的通知快照。
+ */
 public final class InboxMessage {
 
     private final long inboxMessageId;
@@ -20,7 +22,7 @@ public final class InboxMessage {
 
     private final long accountId;
 
-    private final @NotNull NotificationCode code;
+    private final @NotNull TreeCode code;
 
     private final @NotNull Locale locale;
 
@@ -36,12 +38,14 @@ public final class InboxMessage {
 
     private final @NotNull Version version;
 
-    /** 创建从数据库读取的站内信快照。 */
+    /**
+     * 创建从数据库读取的站内信快照。
+     */
     public InboxMessage(
             long inboxMessageId,
             @NotNull MessageId messageId,
             long accountId,
-            @NotNull NotificationCode code,
+            @NotNull TreeCode code,
             @NotNull String languageTag,
             @NotNull String title,
             @NotNull String text,
@@ -81,7 +85,7 @@ public final class InboxMessage {
     }
 
     @Contract(pure = true)
-    public @NotNull NotificationCode code() {
+    public @NotNull TreeCode code() {
         return code;
     }
 

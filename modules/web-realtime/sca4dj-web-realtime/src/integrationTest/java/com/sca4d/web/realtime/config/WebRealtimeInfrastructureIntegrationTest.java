@@ -8,10 +8,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.core.api.authentication.SessionLifecycle;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.connection.ConnectionId;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.event.EventType;
@@ -105,7 +105,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/** 使用 Redis 和 RabbitMQ 验证共享连接索引、节点路由和一次性票据。 */
+/**
+ * 使用 Redis 和 RabbitMQ 验证共享连接索引、节点路由和一次性票据。
+ */
 @Testcontainers
 @SuppressWarnings("resource")
 class WebRealtimeInfrastructureIntegrationTest {
@@ -183,7 +185,9 @@ class WebRealtimeInfrastructureIntegrationTest {
         rabbitAdmin = new RabbitAdmin(rabbitConnectionFactory);
     }
 
-    /** 关闭测试创建的 Redis 和 RabbitMQ 客户端。 */
+    /**
+     * 关闭测试创建的 Redis 和 RabbitMQ 客户端。
+     */
     @AfterAll
     static void disconnectInfrastructure() {
         redisson.shutdown();
@@ -248,13 +252,14 @@ class WebRealtimeInfrastructureIntegrationTest {
                 new WebRealtimeMessageCodec(OBJECT_MAPPER));
         MessageBus messages = (message, policy) -> {
             assertThat(policy.mode()).isEqualTo(DispatchPolicy.Mode.IMMEDIATE);
-            handler.handle(new IncomingMessage<>(
-                    new MessageId(1L),
-                    (WebRealtimeMessage) message,
-                    "web-realtime-test",
-                    clock.instant(),
-                    false,
-                    1));
+            handler.handle(
+                    new IncomingMessage<>(
+                            new MessageId(1L),
+                            (WebRealtimeMessage) message,
+                            "web-realtime-test",
+                            clock.instant(),
+                            false,
+                            1));
             return new DispatchReceipt(new MessageId(1L), DispatchReceipt.Status.BROKER_ACCEPTED);
         };
         WebRealtimePublisher publisher = new DefaultWebRealtimePublisher(messages, PROPERTIES, clock);
@@ -322,7 +327,9 @@ class WebRealtimeInfrastructureIntegrationTest {
         assertThat(registry.findBySession(session.id())).isEmpty();
     }
 
-    /** 创建使用默认命令上限的 Redis 批处理器。 */
+    /**
+     * 创建使用默认命令上限的 Redis 批处理器。
+     */
     private static RedisBatches redisBatches() {
         return new RedisBatches(new RedisPipelineProperties());
     }
@@ -490,7 +497,9 @@ class WebRealtimeInfrastructureIntegrationTest {
         throw new AssertionError("持续请求未耗尽令牌桶: " + expectedMessage);
     }
 
-    /** 创建绑定握手 Session、远端 IP 和 STOMP 1.2 的 CONNECT 消息。 */
+    /**
+     * 创建绑定握手 Session、远端 IP 和 STOMP 1.2 的 CONNECT 消息。
+     */
     private static Message<?> connect(Session session) {
         StompHeaderAccessor headers = stompHeaders(session, StompCommand.CONNECT);
         headers.setAcceptVersion(WebRealtimeProtocol.STOMP_VERSION);
@@ -499,7 +508,9 @@ class WebRealtimeInfrastructureIntegrationTest {
         return stompMessage(headers);
     }
 
-    /** 创建固定用户事件订阅消息，使测试只观察共享 SUBSCRIBE 限流。 */
+    /**
+     * 创建固定用户事件订阅消息，使测试只观察共享 SUBSCRIBE 限流。
+     */
     private static Message<?> subscribe(Session session) {
         StompHeaderAccessor headers = businessHeaders(session, StompCommand.SUBSCRIBE, "connection-subscribe");
         headers.setDestination(WebRealtimeProtocol.USER_EVENT_DESTINATION);
@@ -507,14 +518,18 @@ class WebRealtimeInfrastructureIntegrationTest {
         return stompMessage(headers);
     }
 
-    /** 创建 App destination 消息，使测试只观察共享 SEND 限流。 */
+    /**
+     * 创建 App destination 消息，使测试只观察共享 SEND 限流。
+     */
     private static Message<?> send(Session session) {
         StompHeaderAccessor headers = businessHeaders(session, StompCommand.SEND, "connection-send");
         headers.setDestination(WebRealtimeProtocol.APPLICATION_DESTINATION_PREFIX + "/test");
         return stompMessage(headers);
     }
 
-    /** 创建已经登记 ConnectionId 且选择测试 Principal 的业务消息 header。 */
+    /**
+     * 创建已经登记 ConnectionId 且选择测试 Principal 的业务消息 header。
+     */
     private static StompHeaderAccessor businessHeaders(
             Session session,
             StompCommand command,
@@ -526,7 +541,9 @@ class WebRealtimeInfrastructureIntegrationTest {
         return headers;
     }
 
-    /** 创建具有独立 Spring Session 属性和票据握手 Session 的 STOMP header。 */
+    /**
+     * 创建具有独立 Spring Session 属性和票据握手 Session 的 STOMP header。
+     */
     private static StompHeaderAccessor stompHeaders(Session session, StompCommand command) {
         StompHeaderAccessor headers = StompHeaderAccessor.create(command);
         headers.setSessionId("stomp-integration-session");
@@ -537,17 +554,23 @@ class WebRealtimeInfrastructureIntegrationTest {
         return headers;
     }
 
-    /** 把 Spring STOMP header 包装为入站消息。 */
+    /**
+     * 把 Spring STOMP header 包装为入站消息。
+     */
     private static Message<?> stompMessage(StompHeaderAccessor headers) {
         return MessageBuilder.createMessage(new byte[0], headers.getMessageHeaders());
     }
 
-    /** 创建固定 `/events/ws` 路径的 WebSocket 握手请求。 */
+    /**
+     * 创建固定 `/events/ws` 路径的 WebSocket 握手请求。
+     */
     private static ServletServerHttpRequest request(String origin, String ticket) {
         return request("/events/ws", origin, ticket);
     }
 
-    /** 创建指定握手路径、Origin 和 Ticket 的请求。 */
+    /**
+     * 创建指定握手路径、Origin 和 Ticket 的请求。
+     */
     private static ServletServerHttpRequest request(String path, String origin, String ticket) {
         MockHttpServletRequest request = new MockHttpServletRequest("GET", path);
         request.setQueryString("ticket=" + ticket);
@@ -556,12 +579,16 @@ class WebRealtimeInfrastructureIntegrationTest {
         return new ServletServerHttpRequest(request);
     }
 
-    /** 创建用于读取握手响应头的空 Servlet 响应。 */
+    /**
+     * 创建用于读取握手响应头的空 Servlet 响应。
+     */
     private static ServletServerHttpResponse response() {
         return new ServletServerHttpResponse(new MockHttpServletResponse());
     }
 
-    /** 使用 RabbitAdmin 声明指定节点的临时 exchange、queue 和 binding。 */
+    /**
+     * 使用 RabbitAdmin 声明指定节点的临时 exchange、queue 和 binding。
+     */
     private static void declare(RabbitNodeRouter node) {
         for (Declarable declarable : node.declarables().getDeclarables()) {
             if (declarable instanceof Exchange exchange) {
@@ -574,7 +601,9 @@ class WebRealtimeInfrastructureIntegrationTest {
         }
     }
 
-    /** 创建包含一个可选 Principal 的有效测试 Session。 */
+    /**
+     * 创建包含一个可选 Principal 的有效测试 Session。
+     */
     private static Session session() {
         Instant issuedAt = Instant.parse("2026-07-28T00:00:00Z");
         Subject subject = new Subject(11, SubjectType.HUMAN);
@@ -589,7 +618,7 @@ class WebRealtimeInfrastructureIntegrationTest {
                 List.of(
                         new Authentication(
                                 account.accountId(),
-                                new AuthenticationMethodCode("test"),
+                                TreeCode.ofSlash("AUTHENTICATION/TEST"),
                                 Set.of(AuthenticationFactorKind.KNOWLEDGE),
                                 issuedAt)),
                 Map.of(principal.principalId(), List.of()),
@@ -598,7 +627,9 @@ class WebRealtimeInfrastructureIntegrationTest {
                 issuedAt.plus(Duration.ofHours(1)));
     }
 
-    /** 保存节点投递，供测试线程等待并检查。 */
+    /**
+     * 保存节点投递，供测试线程等待并检查。
+     */
     private static final class TestConnection implements LocalConnection {
         private final ConnectionId id;
 
@@ -622,18 +653,24 @@ class WebRealtimeInfrastructureIntegrationTest {
         public void close() {
         }
 
-        /** 最多等待五秒并返回节点投递结果。 */
+        /**
+         * 最多等待五秒并返回节点投递结果。
+         */
         private BrowserWrite received() throws InterruptedException {
             return received(5_000);
         }
 
-        /** 在指定毫秒数内等待节点投递，超时返回 null。 */
+        /**
+         * 在指定毫秒数内等待节点投递，超时返回 null。
+         */
         private BrowserWrite received(long timeoutMillis) throws InterruptedException {
             return deliveries.poll(timeoutMillis, TimeUnit.MILLISECONDS);
         }
     }
 
-    /** 允许测试推进 Redis 索引使用的逻辑时间。 */
+    /**
+     * 允许测试推进 Redis 索引使用的逻辑时间。
+     */
     private static final class MutableClock extends Clock {
         private Instant instant;
 
@@ -659,7 +696,9 @@ class WebRealtimeInfrastructureIntegrationTest {
             return instant;
         }
 
-        /** 把逻辑时间向前推进指定时长。 */
+        /**
+         * 把逻辑时间向前推进指定时长。
+         */
         private void advance(Duration duration) {
             instant = instant.plus(duration);
         }

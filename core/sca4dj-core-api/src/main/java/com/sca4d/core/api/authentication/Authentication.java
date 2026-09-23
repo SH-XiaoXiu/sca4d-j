@@ -1,5 +1,7 @@
 package com.sca4d.core.api.authentication;
 
+import com.sca4d.core.api.code.TreeCode;
+
 import java.time.Instant;
 import java.util.Objects;
 import java.util.Set;
@@ -14,7 +16,7 @@ public final class Authentication {
 
     private final long accountId;
 
-    private final AuthenticationMethodCode methodCode;
+    private final TreeCode methodCode;
 
     private final Set<AuthenticationFactorKind> factorKinds;
 
@@ -23,14 +25,14 @@ public final class Authentication {
     /**
      * 创建认证证据。
      *
-     * @param accountId 已验证的 Account
-     * @param methodCode 完成验证的认证方式编码
-     * @param factorKinds 已验证的认证因素
+     * @param accountId       已验证的 Account
+     * @param methodCode      完成验证的认证方式编码
+     * @param factorKinds     已验证的认证因素
      * @param authenticatedAt 验证完成时间
      */
     public Authentication(
             long accountId,
-            AuthenticationMethodCode methodCode,
+            TreeCode methodCode,
             Set<AuthenticationFactorKind> factorKinds,
             Instant authenticatedAt) {
         if (accountId <= 0) {
@@ -56,7 +58,7 @@ public final class Authentication {
      *
      * @return 完成验证的认证方式编码
      */
-    public AuthenticationMethodCode methodCode() {
+    public TreeCode methodCode() {
         return methodCode;
     }
 

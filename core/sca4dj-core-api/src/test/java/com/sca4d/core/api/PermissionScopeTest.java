@@ -8,11 +8,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallExecution;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
@@ -100,7 +100,7 @@ class PermissionScopeTest {
         assertTrue(decision.reason().isEmpty());
         assertTrue(decision.scope().isPresent());
         assertEquals("read", decision.scopeAs(DeviceScope.class).name);
-        assertThrows(IllegalArgumentException.class, () -> PermissionDecision.allow(() -> " "));
+        assertThrows(NullPointerException.class, () -> PermissionDecision.allow(() -> null));
 
         PermissionDecision denied = PermissionDecision.deny("没有权限");
         assertFalse(denied.isAllowed());
@@ -157,7 +157,7 @@ class PermissionScopeTest {
                 List.of(
                         new Authentication(
                                 accountId,
-                                new AuthenticationMethodCode("test"),
+                                TreeCode.ofSlash("AUTHENTICATION/TEST"),
                                 Set.of(AuthenticationFactorKind.KNOWLEDGE),
                                 NOW)),
                 Map.of(principalId, operations),
@@ -202,7 +202,7 @@ class PermissionScopeTest {
 
         @Override
         public boolean supports(Resource resource) {
-            return resource.type().equals("device");
+            return resource.type().equals(TreeCode.ofSlash("TEST/DEVICE"));
         }
 
         @Override
@@ -220,8 +220,8 @@ class PermissionScopeTest {
         }
 
         @Override
-        public @NotNull String type() {
-            return "device";
+        public @NotNull TreeCode type() {
+            return TreeCode.ofSlash("TEST/DEVICE");
         }
 
         @Override
@@ -239,8 +239,8 @@ class PermissionScopeTest {
         }
 
         @Override
-        public @NotNull String type() {
-            return "account";
+        public @NotNull TreeCode type() {
+            return Account.RESOURCE_TYPE;
         }
 
         @Override
@@ -258,16 +258,16 @@ class PermissionScopeTest {
         }
 
         @Override
-        public String resourceType() {
-            return "device";
+        public TreeCode resourceType() {
+            return TreeCode.ofSlash("TEST/DEVICE");
         }
     }
 
     private static final class AccountScope implements ResourceScope {
 
         @Override
-        public String resourceType() {
-            return "account";
+        public TreeCode resourceType() {
+            return Account.RESOURCE_TYPE;
         }
     }
 }

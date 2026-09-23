@@ -8,12 +8,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.messaging.MessageId;
 import com.sca4d.core.api.notification.Notification;
-import com.sca4d.core.api.notification.NotificationCode;
 import com.sca4d.core.api.notification.NotificationRecipient;
 import com.sca4d.notification.inbox.template.InboxTemplate;
 import com.sca4d.notification.inbox.template.InboxTemplateRenderer;
@@ -27,7 +27,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-/** 验证站内信按原始 MessageId 幂等保存，并只在首次新增后发布刷新事件。 */
+/**
+ * 验证站内信按原始 MessageId 幂等保存，并只在首次新增后发布刷新事件。
+ */
 class InboxNotificationDeliveryTest {
 
     @Test
@@ -39,7 +41,7 @@ class InboxNotificationDeliveryTest {
         InboxService service = mock(InboxService.class);
         IdGenerator ids = mock(IdGenerator.class);
         Notification notification = new Notification(
-                new NotificationCode("SECURITY/CHANGED"),
+                TreeCode.of("SECURITY/CHANGED"),
                 NotificationRecipient.account(7),
                 Locale.SIMPLIFIED_CHINESE,
                 Map.of(),
