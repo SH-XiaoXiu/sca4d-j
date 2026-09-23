@@ -6,9 +6,7 @@ import com.sca4d.iam.DomainScope;
 import com.sca4d.iam.identity.IamErrorCode;
 import com.sca4d.iam.identity.IdentityService;
 import org.jetbrains.annotations.CheckReturnValue;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -215,7 +213,10 @@ public class AclService {
             @NotNull String type,
             @NotNull String id) {
         validateResource(scope, type);
-        requireText(id, "资源标识");
+        Objects.requireNonNull(id, "资源标识不能为空");
+        if (id.isBlank()) {
+            throw new IllegalArgumentException("资源标识不能为空白");
+        }
         repositories.repository(scope).revokeByResource(type, id);
         LOG.trace(
                 "Resource ACL 清理写入已执行 | scope={} resourceType={} resourceId={}",
@@ -235,24 +236,22 @@ public class AclService {
             throw new BusinessException(IamErrorCode.PRINCIPAL_UNAVAILABLE);
         }
         validateResource(scope, type);
-        requireText(id, "资源标识");
+        Objects.requireNonNull(id, "资源标识不能为空");
+        if (id.isBlank()) {
+            throw new IllegalArgumentException("资源标识不能为空白");
+        }
         Objects.requireNonNull(action, "动作不能为空");
     }
 
     /** 验证资源类型属于调用方指定领域，阻止跨领域 Repository 路由。 */
     private void validateResource(@NotNull DomainScope scope, @NotNull String type) {
+        Objects.requireNonNull(type, "资源类型不能为空");
+        if (type.isBlank()) {
+            throw new IllegalArgumentException("资源类型不能为空白");
+        }
         // 类型归属在启动时已验证唯一；这里同时阻止调用方用错误 scope 访问另一领域的数据。
-        if (!resourceTypes.scope(requireText(type, "资源类型")).equals(scope)) {
+        if (!resourceTypes.scope(type).equals(scope)) {
             throw new IllegalArgumentException("ACL 资源类型不属于指定 scope");
         }
-    }
-
-    /** 校验开放资源编码必须存在且可用于精确匹配。 */
-    @Contract("null, _ -> fail")
-    private static @NotNull String requireText(@Nullable String value, @NotNull String name) {
-        if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException(name + "不能为空白");
-        }
-        return value;
     }
 }

@@ -3,7 +3,6 @@ package com.sca4d.iam.acl;
 import com.sca4d.core.api.permission.Action;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -29,11 +28,14 @@ public final class AclEntry {
     public AclEntry(
             @NotNull Long principalId,
             @NotNull String resourceType,
-            @NotNull String resourceId,
-            @NotNull Action action) {
+        @NotNull String resourceId,
+        @NotNull Action action) {
         this.principalId = Objects.requireNonNull(principalId, "业务主体标识不能为空");
-        this.resourceType = requireText(resourceType, "资源类型");
-        this.resourceId = requireText(resourceId, "资源标识");
+        this.resourceType = Objects.requireNonNull(resourceType, "资源类型不能为空");
+        this.resourceId = Objects.requireNonNull(resourceId, "资源标识不能为空");
+        if (resourceType.isBlank() || resourceId.isBlank()) {
+            throw new IllegalArgumentException("资源类型和资源标识不能为空白");
+        }
         this.action = Objects.requireNonNull(action, "动作不能为空");
     }
 
@@ -77,12 +79,4 @@ public final class AclEntry {
         return action;
     }
 
-    /** 校验 ACL 开放字符串标识必须存在且可用于精确匹配。 */
-    @Contract("null, _ -> fail")
-    private static @NotNull String requireText(@Nullable String value, @NotNull String name) {
-        if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException(name + "不能为空白");
-        }
-        return value;
-    }
 }
