@@ -53,6 +53,12 @@ public final class EmailTemplateRepository {
         return mapper.select(null, Objects.requireNonNull(code, "通知编码不能为空"), true).stream().findFirst().map(this::map);
     }
 
+    /** 按通知编码读取未删除模板，无论模板当前是否启用。 */
+    @CheckReturnValue
+    public @NotNull Optional<EmailTemplate> findByCode(@NotNull NotificationCode code) {
+        return mapper.select(null, Objects.requireNonNull(code, "通知编码不能为空"), null).stream().findFirst().map(this::map);
+    }
+
     /** 按模板标识读取 Email 模板；模板不存在或已经逻辑删除时返回空。 */
     @CheckReturnValue
     public @NotNull Optional<EmailTemplate> find(long templateId) {
