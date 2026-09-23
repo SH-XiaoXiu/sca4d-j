@@ -1,6 +1,7 @@
 package com.sca4d.iam.acl;
 
 import com.sca4d.core.api.permission.Action;
+import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,14 +29,11 @@ public final class AclEntry {
     public AclEntry(
             @NotNull Long principalId,
             @NotNull String resourceType,
-        @NotNull String resourceId,
-        @NotNull Action action) {
+            @NotNull String resourceId,
+            @NotNull Action action) {
         this.principalId = Objects.requireNonNull(principalId, "业务主体标识不能为空");
-        this.resourceType = Objects.requireNonNull(resourceType, "资源类型不能为空");
-        this.resourceId = Objects.requireNonNull(resourceId, "资源标识不能为空");
-        if (resourceType.isBlank() || resourceId.isBlank()) {
-            throw new IllegalArgumentException("资源类型和资源标识不能为空白");
-        }
+        this.resourceType = TextUtils.requireExactText(resourceType, "资源类型");
+        this.resourceId = TextUtils.requireExactText(resourceId, "资源标识");
         this.action = Objects.requireNonNull(action, "动作不能为空");
     }
 

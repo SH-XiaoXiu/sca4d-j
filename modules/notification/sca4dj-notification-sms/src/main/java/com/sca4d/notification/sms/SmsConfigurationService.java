@@ -3,6 +3,7 @@ package com.sca4d.notification.sms;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.notification.NotificationCode;
+import com.sca4d.core.api.utils.TextUtils;
 import com.sca4d.notification.NotificationTypeCatalog;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
@@ -297,8 +298,8 @@ public class SmsConfigurationService {
             Map<String, String> mapping = new LinkedHashMap<>();
             Map.copyOf(Objects.requireNonNull(parameterMapping, "参数映射不能为空"))
                     .forEach((providerParameter, variable) -> {
-                        String checkedProviderParameter = requireText(providerParameter, "Provider 参数名");
-                        String checkedVariable = requireText(variable, "通知变量名");
+                        String checkedProviderParameter = TextUtils.requireText(providerParameter, "Provider 参数名", 128);
+                        String checkedVariable = TextUtils.requireText(variable, "通知变量名", 128);
                         if (!type.definition().variables().containsKey(checkedVariable)) {
                             throw new IllegalArgumentException("绑定引用了通知类型未声明的变量: " + checkedVariable);
                         }
@@ -308,21 +309,12 @@ public class SmsConfigurationService {
                     code,
                     new SmsRoute(route),
                     locale,
-                    requireText(signName, "短信签名"),
-                    requireText(providerTemplateCode, "Provider 模板编码"),
+                    TextUtils.requireText(signName, "短信签名", 128),
+                    TextUtils.requireText(providerTemplateCode, "Provider 模板编码", 128),
                     Map.copyOf(mapping));
         } catch (IllegalArgumentException exception) {
             throw new BusinessException(SmsNotificationErrorCode.BINDING_INVALID, exception);
         }
-    }
-
-    /** 规范化一个最长 128 字符的非空白供应商字段。 */
-    private static @NotNull String requireText(String value, String label) {
-        String checked = Objects.requireNonNull(value, label + "不能为空").strip();
-        if (checked.isEmpty() || checked.length() > 128) {
-            throw new IllegalArgumentException(label + "不合法");
-        }
-        return checked;
     }
 
     private static final class CheckedProvider {
