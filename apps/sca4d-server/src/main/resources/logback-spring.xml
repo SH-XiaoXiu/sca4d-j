@@ -2,6 +2,8 @@
 <configuration>
     <springProperty scope="context" name="LOG_PATH" source="logging.file.path" defaultValue="logs"/>
 
+    <turboFilter class="com.sca4d.core.spring.logging.TransactionLogTurboFilter"/>
+
     <conversionRule conversionWord="clr" class="org.springframework.boot.logging.logback.ColorConverter"/>
     <conversionRule conversionWord="source" class="com.sca4d.app.server.logging.LogSourceConverter"/>
     <conversionRule conversionWord="context" class="com.sca4d.app.server.logging.LogContextConverter"/>

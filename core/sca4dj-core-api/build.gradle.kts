@@ -9,7 +9,7 @@ dependencies {
     api(libs.hutool.all)
     compileOnlyApi(libs.jetbrains.annotations)
     compileOnly(libs.spotbugs.annotations)
-    implementation(libs.slf4j.api)
+    api(libs.slf4j.api)
     api(libs.jackson.databind)
     implementation(libs.libphonenumber)
 

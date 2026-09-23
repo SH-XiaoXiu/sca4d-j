@@ -35,7 +35,7 @@ public final class DispatchPolicy {
         return new DispatchPolicy(Mode.IMMEDIATE, null);
     }
 
-    /** @return 当前事务提交后分发的策略 */
+    /** @return 当前事务提交后尝试一次的策略；进程退出或 Broker 失败时允许丢失，必须发布的消息使用 Outbox */
     @CheckReturnValue
     public static @NotNull DispatchPolicy afterCommit() {
         return new DispatchPolicy(Mode.AFTER_COMMIT, null);

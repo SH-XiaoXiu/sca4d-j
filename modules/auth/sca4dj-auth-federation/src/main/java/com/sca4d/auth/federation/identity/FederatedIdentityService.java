@@ -3,12 +3,11 @@ package com.sca4d.auth.federation.identity;
 import com.sca4d.auth.federation.FederatedIdentity;
 import com.sca4d.auth.federation.FederatedProfile;
 import com.sca4d.auth.federation.FederatedProvider;
+import com.sca4d.core.api.logging.LogMark;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronization;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.List;
 import java.util.Objects;
@@ -53,7 +52,9 @@ public class FederatedIdentityService {
                 ? repository.insert(provider, accountId, profile)
                 : repository.updateProfile(existing, profile);
         if (existing == null) {
-            logAfterCommit("联邦身份已绑定", linked.id(), accountId);
+            LOG.atInfo()
+                    .addMarker(LogMark.AFTER_COMMIT)
+                    .log("联邦身份已绑定 | identityId={} accountId={}", linked.id(), accountId);
         } else {
             LOG.debug(
                     "联邦身份绑定资料已写入事务 | identityId={} accountId={}",
@@ -78,7 +79,9 @@ public class FederatedIdentityService {
     @Transactional
     public void unlink(long identityId, long accountId, long version) {
         repository.delete(identityId, accountId, version);
-        logAfterCommit("联邦身份已解绑", identityId, accountId);
+        LOG.atInfo()
+                .addMarker(LogMark.AFTER_COMMIT)
+                .log("联邦身份已解绑 | identityId={} accountId={}", identityId, accountId);
     }
 
     /** 复核认证证据仍然对应当前账号的绑定。 */
@@ -87,18 +90,4 @@ public class FederatedIdentityService {
         repository.verifyCurrentBinding(identityId, accountId, version);
     }
 
-    /** 在当前事务提交后记录身份绑定结果；没有事务同步时立即记录。 */
-    private static void logAfterCommit(@NotNull String event, long identityId, long accountId) {
-        Runnable log = () -> LOG.info("{} | identityId={} accountId={}", event, identityId, accountId);
-        if (!TransactionSynchronizationManager.isSynchronizationActive()) {
-            log.run();
-            return;
-        }
-        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-            @Override
-            public void afterCommit() {
-                log.run();
-            }
-        });
-    }
 }

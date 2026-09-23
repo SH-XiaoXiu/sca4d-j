@@ -5,14 +5,13 @@ import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.utils.TextUtils;
+import com.sca4d.core.spring.transaction.TransactionCallbacks;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronization;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -556,17 +555,7 @@ public class RbacService {
             permissionCache.evict(Map.of(scope, checkedIds));
             invalidations.invalidate(scope, checkedIds);
         };
-        if (TransactionSynchronizationManager.isActualTransactionActive()
-                && TransactionSynchronizationManager.isSynchronizationActive()) {
-            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-                @Override
-                public void afterCommit() {
-                    action.run();
-                }
-            });
-            return;
-        }
-        action.run();
+        TransactionCallbacks.afterCommitOrNow(action);
     }
 
     /**

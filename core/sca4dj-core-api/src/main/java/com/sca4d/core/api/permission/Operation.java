@@ -58,7 +58,7 @@ public final class Operation implements Resource {
     /**
      * 返回操作资源类型。
      *
-     * @return 固定值 {@value #RESOURCE_TYPE}
+     * @return 固定的 {@link #RESOURCE_TYPE} 类型
      */
     @Override
     public @NotNull TreeCode type() {
@@ -68,7 +68,7 @@ public final class Operation implements Resource {
     /**
      * 返回操作资源标识。
      *
-     * @return 与 {@link #value()} 相同的操作键
+     * @return 与 {@link #code()} 对应的操作键文本
      */
     @Override
     public @NotNull String id() {

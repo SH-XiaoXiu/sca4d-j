@@ -277,6 +277,22 @@ log.info("Subject 关系清理批次完成 | successCount={} retryCount={} durat
 
 当前层吞掉异常并转换成重试、降级或部分结果时，由当前层记录影响和恢复方式。正常的校验失败、未找到和无权限不在多个层重复打印 WARN。
 
+### 事务提交后动作与日志
+
+生产代码通过 `TransactionCallbacks` 登记提交后动作。要求当前事务的流程使用 `afterCommit`；公开契约明确允许事务外调用时使用 `afterCommitOrNow`。没有真实事务时，`afterCommit` 立即抛出异常；真实事务未启用同步时两个方法都拒绝提前执行。业务代码不直接调用 `TransactionSynchronizationManager.registerSynchronization`，也不使用事务事件只为延迟日志。
+
+事务成功提交后，回调在提交线程按登记顺序执行；回滚时不执行。一个回调失败不阻止其他已登记回调，最后传播首个运行时异常。回调在进程退出时可能丢失，不持久化或重试。必须可靠完成的事件和跨系统操作使用 Outbox 或持久任务；回调不能依赖原事务继续写入数据库。
+
+只有重要数据库结果必须等提交后才成立，且值得默认观察时，才使用 `LogMark.AFTER_COMMIT` 记录 `INFO`。普通写入只用 `DEBUG` 描述「已写入事务」。提交后日志不作为审计记录、可靠事件、恢复依据或消息投递证明；消息不能把尚未完成的外部副作用写成成功。字段只传已经冻结的 ID、状态、版本、数量或短文本，不传 Entity、Request、集合、可变对象、完整 Payload 或秘密。
+
+```java
+LOG.atInfo()
+        .addMarker(LogMark.AFTER_COMMIT)
+        .log("网关已退役 | gatewayId={} deviceId={}", gatewayId, deviceId);
+```
+
+应用需安装 `TransactionLogTurboFilter`。它在登记时检查真实事务、`INFO` 级别、Marker 和参数，保存参数与 MDC，并在提交后通过原 logger 输出。禁止用 `TransactionCallbacks.afterCommit(() -> LOG.info(...))` 绕过这些检查。允许丢失的缓存、刷新和通知应由负责该动作的代码记录失败及恢复方式；已有失败契约的 Session 等动作可继续传播异常，但调用边界不能把已提交的事务表述为回滚。
+
 ### 请求与后台任务
 
 请求日志复用现有 MDC 中的 `callId`、`subjectId`、`accountId` 和 `principalId`，不在每条消息中重复拼接。后台任务使用真实的 scheduleId、executionId、taskId、messageId、batchId 或节点标识，不伪造 HTTP 请求关系；异步线程不隐式继承可能已经失效的请求 MDC。

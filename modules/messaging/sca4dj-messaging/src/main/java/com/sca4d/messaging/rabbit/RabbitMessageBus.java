@@ -8,12 +8,12 @@ import com.sca4d.core.api.messaging.DispatchReceipt;
 import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageId;
 import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.spring.transaction.TransactionCallbacks;
 import com.sca4d.messaging.outbox.MessageOutboxRepository;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.Clock;
@@ -81,10 +81,15 @@ public final class RabbitMessageBus implements MessageBus {
         Instant now = clock.instant();
         MessageId messageId = new MessageId(ids.nextId());
         byte[] envelope = codec.encode(messageId, message, now, sourceApplication);
-        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-            @Override
-            public void afterCommit() {
+        TransactionCallbacks.afterCommit(() -> {
+            try {
                 publisher.send(messageId, message.code(), envelope);
+            } catch (RuntimeException exception) {
+                LOG.warn(
+                        "事务已提交但允许丢失的业务消息发布失败，本次不重试 | messageId={} messageCode={}",
+                        messageId,
+                        message.code(),
+                        exception);
             }
         });
         return new DispatchReceipt(messageId, DispatchReceipt.Status.AFTER_COMMIT_REGISTERED);
