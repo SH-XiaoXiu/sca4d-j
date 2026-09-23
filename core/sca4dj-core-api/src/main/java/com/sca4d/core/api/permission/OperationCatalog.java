@@ -1,13 +1,11 @@
 package com.sca4d.core.api.permission;
 
+import cn.hutool.crypto.digest.DigestUtil;
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
@@ -160,12 +158,8 @@ public final class OperationCatalog {
                 .stream()
                 .sorted()
                 .collect(Collectors.joining("\n"));
-        try {
-            byte[] digest = MessageDigest.getInstance("SHA-256")
-                    .digest(canonical.getBytes(StandardCharsets.UTF_8));
-            return Base64.getUrlEncoder().withoutPadding().encodeToString(digest);
-        } catch (NoSuchAlgorithmException exception) {
-            throw new IllegalStateException("当前 Java 运行时不支持 SHA-256", exception);
-        }
+        return Base64.getUrlEncoder()
+                .withoutPadding()
+                .encodeToString(DigestUtil.sha256(canonical));
     }
 }

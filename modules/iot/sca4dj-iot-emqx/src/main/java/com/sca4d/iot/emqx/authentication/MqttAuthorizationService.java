@@ -1,5 +1,6 @@
 package com.sca4d.iot.emqx.authentication;
 
+import cn.hutool.crypto.digest.DigestUtil;
 import com.sca4d.core.api.runtime.RuntimeNamespace;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.emqx.protocol.MqttDeviceProtocol;
@@ -7,13 +8,12 @@ import com.sca4d.iot.emqx.protocol.MqttProtocolCatalog;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -124,30 +124,26 @@ public final class MqttAuthorizationService {
 
     /** 按有序规则和规范化 QoS 计算跨进程稳定的 SHA-256。 */
     private @NotNull String fingerprint(List<EmqxAclRule> rules) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            update(digest, fingerprintSchema);
-            for (EmqxAclRule rule : rules) {
-                update(digest, rule.permission());
-                update(digest, rule.action());
-                update(digest, rule.topic());
-                rule.qos()
-                        .stream()
-                        .sorted()
-                        .forEach(qos -> update(digest, Integer.toString(qos)));
-                Boolean retain = rule.retain();
-                update(digest, retain == null ? "null" : retain.toString());
-            }
-            return HexFormat.of().formatHex(digest.digest());
-        } catch (NoSuchAlgorithmException exception) {
-            throw new IllegalStateException("当前 JVM 不支持 SHA-256", exception);
+        ByteArrayOutputStream canonical = new ByteArrayOutputStream();
+        appendFingerprintField(canonical, fingerprintSchema);
+        for (EmqxAclRule rule : rules) {
+            appendFingerprintField(canonical, rule.permission());
+            appendFingerprintField(canonical, rule.action());
+            appendFingerprintField(canonical, rule.topic());
+            rule.qos()
+                    .stream()
+                    .sorted()
+                    .forEach(qos -> appendFingerprintField(canonical, Integer.toString(qos)));
+            Boolean retain = rule.retain();
+            appendFingerprintField(canonical, retain == null ? "null" : retain.toString());
         }
+        return DigestUtil.sha256Hex(canonical.toByteArray());
     }
 
     /** 使用长度前缀消除相邻字段连接后的歧义。 */
-    private static void update(MessageDigest digest, String value) {
+    private static void appendFingerprintField(ByteArrayOutputStream canonical, String value) {
         byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
-        digest.update(ByteBuffer.allocate(Integer.BYTES).putInt(bytes.length).array());
-        digest.update(bytes);
+        canonical.writeBytes(ByteBuffer.allocate(Integer.BYTES).putInt(bytes.length).array());
+        canonical.writeBytes(bytes);
     }
 }

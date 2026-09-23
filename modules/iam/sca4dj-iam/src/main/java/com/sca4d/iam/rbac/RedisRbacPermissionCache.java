@@ -1,5 +1,6 @@
 package com.sca4d.iam.rbac;
 
+import cn.hutool.crypto.digest.DigestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,8 +14,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -269,20 +268,15 @@ public final class RedisRbacPermissionCache implements RbacPermissionCache {
     /** @return 排序后 Operation 编码的 SHA-256 Base64URL 指纹 */
     private static @NotNull String catalogFingerprint(
             @NotNull Collection<@NotNull Operation> operations) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            Objects.requireNonNull(operations, "RBAC Operation 集合不能为空")
-                    .stream()
-                    .map(operation -> Objects.requireNonNull(operation, "RBAC Operation 不能为空").value())
-                    .sorted()
-                    .forEach(value -> {
-                        digest.update(value.getBytes(StandardCharsets.UTF_8));
-                        digest.update((byte) 0);
-                    });
-            return Base64.getUrlEncoder().withoutPadding().encodeToString(digest.digest());
-        } catch (NoSuchAlgorithmException exception) {
-            throw new IllegalStateException("JVM 不支持 SHA-256", exception);
-        }
+        StringBuilder canonical = new StringBuilder();
+        Objects.requireNonNull(operations, "RBAC Operation 集合不能为空")
+                .stream()
+                .map(operation -> Objects.requireNonNull(operation, "RBAC Operation 不能为空").value())
+                .sorted()
+                .forEach(value -> canonical.append(value).append('\0'));
+        return Base64.getUrlEncoder()
+                .withoutPadding()
+                .encodeToString(DigestUtil.sha256(canonical.toString()));
     }
 
     /** @return UTF-8 文本的无填充 Base64URL 编码 */

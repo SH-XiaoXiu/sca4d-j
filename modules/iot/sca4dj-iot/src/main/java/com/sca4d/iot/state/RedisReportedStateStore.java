@@ -139,7 +139,7 @@ public final class RedisReportedStateStore implements ReportedStateStore {
         // 按索引排序逐一恢复 pipeline 返回的 Hash；缺失 Hash 延后批量清理索引成员。
         for (int index = 0; index < sortedGroups.size(); index++) {
             String groupCode = sortedGroups.get(index);
-            Map<Object, Object> fields = hash(hashes.get(index));
+            Map<Object, Object> fields = redisHash(hashes.get(index));
             if (fields.isEmpty()) {
                 missingGroups.add(groupCode);
                 continue;
@@ -180,7 +180,7 @@ public final class RedisReportedStateStore implements ReportedStateStore {
                             .map(binding -> groupKey(binding.getKey(), binding.getValue(), groupCode))
                             .toList());
             for (int index = 0; index < batch.size(); index++) {
-                Map<Object, Object> fields = hash(hashes.get(index));
+                Map<Object, Object> fields = redisHash(hashes.get(index));
                 if (fields.isEmpty()) {
                     continue;
                 }
@@ -260,7 +260,7 @@ public final class RedisReportedStateStore implements ReportedStateStore {
 
     /** 把 pipeline 返回值恢复为字符串 Hash。 */
     @SuppressWarnings("unchecked")
-    private static @NotNull Map<Object, Object> hash(@NotNull Object value) {
+    private static @NotNull Map<Object, Object> redisHash(@NotNull Object value) {
         if (!(value instanceof Map<?, ?> fields)) {
             throw new IllegalStateException("Reported Redis pipeline 返回了无法识别的 Hash");
         }

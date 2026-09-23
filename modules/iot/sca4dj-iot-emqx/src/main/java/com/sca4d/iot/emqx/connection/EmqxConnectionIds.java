@@ -1,5 +1,6 @@
 package com.sca4d.iot.emqx.connection;
 
+import cn.hutool.crypto.digest.DigestUtil;
 import com.sca4d.core.api.utils.TextUtils;
 import com.sca4d.iot.api.connection.DeviceConnectionId;
 import org.jetbrains.annotations.CheckReturnValue;
@@ -7,8 +8,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.Objects;
@@ -27,17 +26,12 @@ final class EmqxConnectionIds {
     @CheckReturnValue
     static @NotNull DeviceConnectionId from(@NotNull String clientId, @NotNull Instant connectedAt) {
         byte[] identity = TextUtils.requireText(clientId, "EMQX clientId").getBytes(StandardCharsets.UTF_8);
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            digest.update(ByteBuffer.allocate(Integer.BYTES).putInt(identity.length).array());
-            digest.update(identity);
-            digest.update(
-                    ByteBuffer.allocate(Long.BYTES)
-                            .putLong(Objects.requireNonNull(connectedAt, "EMQX connectedAt 不能为空").toEpochMilli())
-                            .array());
-            return new DeviceConnectionId(Base64.getUrlEncoder().withoutPadding().encodeToString(digest.digest()));
-        } catch (NoSuchAlgorithmException exception) {
-            throw new IllegalStateException("JVM 不支持 SHA-256", exception);
-        }
+        byte[] canonical = ByteBuffer.allocate(Integer.BYTES + identity.length + Long.BYTES)
+                .putInt(identity.length)
+                .put(identity)
+                .putLong(Objects.requireNonNull(connectedAt, "EMQX connectedAt 不能为空").toEpochMilli())
+                .array();
+        return new DeviceConnectionId(
+                Base64.getUrlEncoder().withoutPadding().encodeToString(DigestUtil.sha256(canonical)));
     }
 }

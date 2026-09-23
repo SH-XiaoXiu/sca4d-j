@@ -1,5 +1,6 @@
 package com.sca4d.auth.sms.challenge;
 
+import cn.hutool.crypto.digest.DigestUtil;
 import com.sca4d.auth.sms.SmsCodeAuthenticationMethod;
 import com.sca4d.auth.sms.SmsCodeChallenge;
 import com.sca4d.auth.sms.SmsCodeChallengeId;
@@ -22,14 +23,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.HexFormat;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
@@ -97,7 +94,9 @@ public class SmsCodeChallengeService {
         String raw = Objects.requireNonNull(phoneNumber, "PHONE 登录标识不能为空");
         Account account = accounts.resolve(accountRealm, SmsCodeAuthenticationMethod.PHONE_IDENTIFIER_TYPE, raw)
                 .orElse(null);
-        String targetHash = account == null ? targetHash("phone:" + raw) : targetHash("account:" + account.accountId());
+        String targetHash = account == null
+                ? DigestUtil.sha256Hex("phone:" + raw)
+                : DigestUtil.sha256Hex("account:" + account.accountId());
         return issue(account != null && available(account) ? account : null, mask(raw), targetHash);
     }
 
@@ -107,7 +106,7 @@ public class SmsCodeChallengeService {
         Account active = accounts.activeById(Objects.requireNonNull(account, "Account 不能为空").accountId());
         if (!available(active))
             throw new BusinessException(SmsCodeErrorCode.CHALLENGE_UNAVAILABLE);
-        return issue(active, "***", targetHash("account:" + active.accountId()));
+        return issue(active, "***", DigestUtil.sha256Hex("account:" + active.accountId()));
     }
 
     /** @return 当前 Account 是否存在可用 SMS 渠道和已验证手机号 */
@@ -209,14 +208,4 @@ public class SmsCodeChallengeService {
                 : checked.substring(0, 4) + "***" + checked.substring(checked.length() - 4);
     }
 
-    private static String targetHash(String value) {
-        try {
-            return HexFormat.of()
-                    .formatHex(
-                            MessageDigest.getInstance("SHA-256")
-                                    .digest(value.getBytes(StandardCharsets.UTF_8)));
-        } catch (NoSuchAlgorithmException exception) {
-            throw new IllegalStateException("JVM 不支持 SHA-256", exception);
-        }
-    }
 }

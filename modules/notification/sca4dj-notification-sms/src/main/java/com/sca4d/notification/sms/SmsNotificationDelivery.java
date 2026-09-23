@@ -1,5 +1,6 @@
 package com.sca4d.notification.sms;
 
+import cn.hutool.crypto.digest.DigestUtil;
 import com.sca4d.core.api.delivery.DeliveryOutcome;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.DispatchReceipt;
@@ -17,12 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.time.Clock;
 import java.time.Duration;
-import java.util.HexFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -160,7 +157,7 @@ public final class SmsNotificationDelivery implements NotificationDelivery {
                             || existing.status() == SmsDeliveryStatus.FAILED))
                 continue;
 
-            if (!deliveries.begin(messageId, provider, route, hash(phone), mask(phone)))
+            if (!deliveries.begin(messageId, provider, route, DigestUtil.sha256Hex(phone), mask(phone)))
                 continue;
             SmsProviderResult result = transport.send(
                     provider,
@@ -282,17 +279,6 @@ public final class SmsNotificationDelivery implements NotificationDelivery {
             result.put(providerName, value);
         });
         return Map.copyOf(result);
-    }
-
-    private static String hash(String value) {
-        try {
-            return HexFormat.of()
-                    .formatHex(
-                            MessageDigest.getInstance("SHA-256")
-                                    .digest(value.getBytes(StandardCharsets.UTF_8)));
-        } catch (NoSuchAlgorithmException exception) {
-            throw new IllegalStateException("JVM 不支持 SHA-256", exception);
-        }
     }
 
     private static String mask(String value) {

@@ -287,7 +287,7 @@ public final class EmqxConnectionRepository {
                     return null;
                 }
             });
-            return values.stream().map(EmqxConnectionRepository::hash).toList();
+            return values.stream().map(EmqxConnectionRepository::redisHash).toList();
         });
     }
 
@@ -331,9 +331,9 @@ public final class EmqxConnectionRepository {
         });
     }
 
-    /** 把 pipeline 返回值恢复为字符串 Hash。 */
+    /** 把 pipeline 返回值恢复为 Redis Hash 字段。 */
     @SuppressWarnings("unchecked")
-    private static @NotNull Map<Object, Object> hash(@NotNull Object value) {
+    private static @NotNull Map<Object, Object> redisHash(@NotNull Object value) {
         if (!(value instanceof Map<?, ?> fields)) {
             throw new IllegalStateException("EMQX Connection pipeline 返回了无法识别的 Hash");
         }

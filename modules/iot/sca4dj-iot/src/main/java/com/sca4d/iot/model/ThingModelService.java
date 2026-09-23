@@ -1,5 +1,6 @@
 package com.sca4d.iot.model;
 
+import cn.hutool.crypto.digest.DigestUtil;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.error.BusinessException;
@@ -19,11 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
-import java.util.HexFormat;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -95,7 +92,7 @@ public class ThingModelService {
                 throw new BusinessException(IotErrorCode.PROTOCOL_CONFLICT, exception);
             }
             // 相同版本、相同技术内容按幂等结果返回；其他版本必须严格连续且内容不能重复。
-            String hash = sha256(codec.encode(checked));
+            String hash = DigestUtil.sha256Hex(codec.encode(checked));
             List<ThingModelPresentation> published = models.findPublished(checked.productCode());
             if (published.isEmpty()) {
                 if (checked.version() != 1) {
@@ -104,13 +101,13 @@ public class ThingModelService {
             } else {
                 ThingModel latest = published.getLast().model();
                 if (checked.version() == latest.version()) {
-                    if (hash.equals(sha256(codec.encode(latest)))) {
+                    if (hash.equals(DigestUtil.sha256Hex(codec.encode(latest)))) {
                         return published.getLast();
                     }
                     throw new BusinessException(IotErrorCode.THING_MODEL_CONFLICT);
                 }
                 if (checked.version() != latest.version() + 1
-                        || hash.equals(sha256(codec.encode(latest)))) {
+                        || hash.equals(DigestUtil.sha256Hex(codec.encode(latest)))) {
                     throw new BusinessException(IotErrorCode.THING_MODEL_CONFLICT);
                 }
             }
@@ -172,15 +169,4 @@ public class ThingModelService {
         policies.retry(command.retryPolicy().code());
     }
 
-    /** 计算规范 JSON 的小写 SHA-256 摘要，用于版本幂等和连续性判断。 */
-    private static @NotNull String sha256(@NotNull String value) {
-        try {
-            return HexFormat.of()
-                    .formatHex(
-                            MessageDigest.getInstance("SHA-256")
-                                    .digest(value.getBytes(StandardCharsets.UTF_8)));
-        } catch (NoSuchAlgorithmException exception) {
-            throw new IllegalStateException("JVM 不支持 SHA-256", exception);
-        }
-    }
 }

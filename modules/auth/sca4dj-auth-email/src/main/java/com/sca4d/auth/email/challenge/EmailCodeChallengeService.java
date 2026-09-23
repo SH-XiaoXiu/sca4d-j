@@ -1,5 +1,6 @@
 package com.sca4d.auth.email.challenge;
 
+import cn.hutool.crypto.digest.DigestUtil;
 import com.sca4d.auth.email.EmailCodeAuthenticationMethod;
 import com.sca4d.auth.email.EmailCodeChallenge;
 import com.sca4d.auth.email.EmailCodeChallengeId;
@@ -24,14 +25,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.HexFormat;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
@@ -119,8 +116,8 @@ public class EmailCodeChallengeService {
                 rawEmail)
                 .orElse(null);
         String targetHash = account == null
-                ? targetHash("email:" + rawEmail.strip().toLowerCase(Locale.ROOT))
-                : targetHash("account:" + account.accountId());
+                ? DigestUtil.sha256Hex("email:" + rawEmail.strip().toLowerCase(Locale.ROOT))
+                : DigestUtil.sha256Hex("account:" + account.accountId());
         boolean deliverable = account != null && available(account);
         return issue(deliverable ? account : null, mask(rawEmail), targetHash);
     }
@@ -138,7 +135,7 @@ public class EmailCodeChallengeService {
         if (!available(active)) {
             throw new BusinessException(EmailCodeErrorCode.CHALLENGE_UNAVAILABLE);
         }
-        return issue(active, "***", targetHash("account:" + active.accountId()));
+        return issue(active, "***", DigestUtil.sha256Hex("account:" + active.accountId()));
     }
 
     /** @return 当前 Account 是否存在启用 Email 模板、SMTP 配置和可解析邮箱 */
@@ -264,15 +261,4 @@ public class EmailCodeChallengeService {
         return localHint + '@' + domainHint;
     }
 
-    /** @return 不直接把原始邮箱或 Account 标识写入 Redis key 的固定长度冷却目标 */
-    private static @NotNull String targetHash(@NotNull String value) {
-        try {
-            return HexFormat.of()
-                    .formatHex(
-                            MessageDigest.getInstance("SHA-256")
-                                    .digest(value.getBytes(StandardCharsets.UTF_8)));
-        } catch (NoSuchAlgorithmException exception) {
-            throw new IllegalStateException("JVM 不支持 SHA-256", exception);
-        }
-    }
 }

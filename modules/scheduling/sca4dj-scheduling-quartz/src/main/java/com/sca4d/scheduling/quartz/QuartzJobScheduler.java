@@ -1,5 +1,6 @@
 package com.sca4d.scheduling.quartz;
 
+import cn.hutool.crypto.digest.DigestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.DistributedLock;
@@ -33,16 +34,12 @@ import org.springframework.context.SmartLifecycle;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HexFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -485,13 +482,7 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
                 + "|" + schedule.job().inputType().getName() + "|" + schedule.job().outputType().getName()
                 + "|" + timing + "|" + schedule.misfirePolicy() + "|" + schedule.overlapPolicy()
                 + "|" + input;
-        try {
-            byte[] digest = MessageDigest.getInstance("SHA-256")
-                    .digest(definition.getBytes(StandardCharsets.UTF_8));
-            return HexFormat.of().formatHex(digest);
-        } catch (NoSuchAlgorithmException exception) {
-            throw new IllegalStateException("JDK 缺少 SHA-256", exception);
-        }
+        return DigestUtil.sha256Hex(definition);
     }
 
     /** 计算集群任务同定义版本不可静默变化的稳定摘要。 */
@@ -500,7 +491,7 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
         String definition = schedule.key().value() + "|" + schedule.definitionVersion()
                 + "|" + schedule.task().getClass().getName()
                 + "|" + timing + "|" + schedule.misfirePolicy();
-        return sha256(definition);
+        return DigestUtil.sha256Hex(definition);
     }
 
     /** 返回计划时间定义的稳定摘要片段。 */
@@ -512,17 +503,6 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
             return "interval|" + interval.interval() + "|" + interval.initialDelay();
         }
         throw new IllegalArgumentException("不支持的 ScheduleTiming: " + timing.getClass().getName());
-    }
-
-    /** 返回文本的 SHA-256 十六进制摘要。 */
-    private static @NotNull String sha256(@NotNull String value) {
-        try {
-            byte[] digest = MessageDigest.getInstance("SHA-256")
-                    .digest(value.getBytes(StandardCharsets.UTF_8));
-            return HexFormat.of().formatHex(digest);
-        } catch (NoSuchAlgorithmException exception) {
-            throw new IllegalStateException("JDK 缺少 SHA-256", exception);
-        }
     }
 
     /** 返回代码计划对应的 Quartz JobKey。 */

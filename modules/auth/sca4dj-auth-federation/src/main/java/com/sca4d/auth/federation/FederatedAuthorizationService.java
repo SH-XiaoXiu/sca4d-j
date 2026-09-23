@@ -1,5 +1,6 @@
 package com.sca4d.auth.federation;
 
+import cn.hutool.crypto.digest.DigestUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -27,8 +28,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.text.ParseException;
 import java.time.Clock;
@@ -95,7 +94,9 @@ public final class FederatedAuthorizationService {
                         redirectUri.toString(),
                         clock.instant().plus(AUTHORIZATION_TTL)),
                 AUTHORIZATION_TTL);
-        String challenge = Base64.getUrlEncoder().withoutPadding().encodeToString(sha256(verifier));
+        String challenge = Base64.getUrlEncoder()
+                .withoutPadding()
+                .encodeToString(DigestUtil.sha256(verifier.getBytes(StandardCharsets.US_ASCII)));
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(discovery.authorizationEndpoint)
                 .queryParam("response_type", "code")
                 .queryParam("client_id", configured.clientId())
@@ -366,15 +367,6 @@ public final class FederatedAuthorizationService {
         if (node == null || node.isNull() || !node.isValueNode())
             return null;
         return node.asText();
-    }
-
-    /** 计算 PKCE S256 挑战值。 */
-    private static byte[] sha256(String value) {
-        try {
-            return MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.US_ASCII));
-        } catch (NoSuchAlgorithmException exception) {
-            throw new IllegalStateException(exception);
-        }
     }
 
     /** 创建用于 state、nonce、PKCE 和完成结果的随机 URL 安全标识。 */

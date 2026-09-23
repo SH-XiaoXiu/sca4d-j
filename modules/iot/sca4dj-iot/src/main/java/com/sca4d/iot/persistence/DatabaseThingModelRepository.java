@@ -1,5 +1,6 @@
 package com.sca4d.iot.persistence;
 
+import cn.hutool.crypto.digest.DigestUtil;
 import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.persistence.AffectedRows;
 import com.sca4d.iot.api.model.ThingModel;
@@ -10,11 +11,7 @@ import com.sca4d.iot.persistence.mapper.ThingModelMapper;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.time.Clock;
-import java.util.HexFormat;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -72,7 +69,7 @@ public class DatabaseThingModelRepository implements ThingModelRepository {
                 productId,
                 checked.version(),
                 json,
-                sha256(json),
+                DigestUtil.sha256Hex(json),
                 checkedI18n,
                 clock.instant());
         return ThingModelPresentation.translated(checked, checkedI18n);
@@ -97,15 +94,4 @@ public class DatabaseThingModelRepository implements ThingModelRepository {
         return ThingModelPresentation.translated(codec.decode(checked.modelJson()), checked.i18n());
     }
 
-    /** 计算保存到数据库的规范 JSON SHA-256 摘要。 */
-    private static @NotNull String sha256(@NotNull String value) {
-        try {
-            return HexFormat.of()
-                    .formatHex(
-                            MessageDigest.getInstance("SHA-256")
-                                    .digest(value.getBytes(StandardCharsets.UTF_8)));
-        } catch (NoSuchAlgorithmException exception) {
-            throw new IllegalStateException("JVM 不支持 SHA-256", exception);
-        }
-    }
 }

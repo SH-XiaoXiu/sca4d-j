@@ -1,11 +1,10 @@
 package com.sca4d.openapi.web;
 
+import cn.hutool.crypto.digest.DigestUtil;
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.Locale;
 import java.util.Objects;
@@ -75,22 +74,10 @@ public final class OpenApiHmacCanonicalRequest {
                 + method + '\n'
                 + path + '\n'
                 + canonicalQuery + '\n'
-                + sha256Hex(body) + '\n'
+                + DigestUtil.sha256Hex(body) + '\n'
                 + timestamp.getEpochSecond() + '\n'
                 + nonce;
         return value.getBytes(StandardCharsets.UTF_8);
     }
 
-    private static String sha256Hex(byte[] body) {
-        try {
-            byte[] digest = MessageDigest.getInstance("SHA-256").digest(body);
-            StringBuilder result = new StringBuilder(digest.length * 2);
-            for (byte value : digest) {
-                result.append(String.format(Locale.ROOT, "%02x", value));
-            }
-            return result.toString();
-        } catch (NoSuchAlgorithmException exception) {
-            throw new IllegalStateException("JVM 不支持 SHA-256", exception);
-        }
-    }
 }
