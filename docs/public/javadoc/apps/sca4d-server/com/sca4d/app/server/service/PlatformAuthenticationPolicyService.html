@@ -128,7 +128,7 @@ implements com.sca4d.core.api.authentication.AuthenticationPolicy</span></div>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;com.sca4d.core.api.authentication.AuthenticationMethodCode&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;com.sca4d.core.api.code.TreeCode&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#allowedMethods(com.sca4d.core.api.identity.Account,com.sca4d.core.api.authentication.AuthenticationActionCode,java.util.List)" class="member-name-link">allowedMethods</a><wbr>(@NotNull com.sca4d.core.api.identity.Account&nbsp;account,
  @NotNull com.sca4d.core.api.authentication.AuthenticationActionCode&nbsp;actionCode,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.core.api.authentication.Authentication&gt;&nbsp;completedAuthentications)</code></div>
@@ -136,14 +136,14 @@ implements com.sca4d.core.api.authentication.AuthenticationPolicy</span></div>
 <div class="block">根据登录阶段或敏感动作开关返回仍能贡献新因素的认证方法。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#allowsMethodUnavailable(com.sca4d.core.api.identity.Account,com.sca4d.core.api.authentication.AuthenticationMethodCode)" class="member-name-link">allowsMethodUnavailable</a><wbr>(@NotNull com.sca4d.core.api.identity.Account&nbsp;account,
- @NotNull com.sca4d.core.api.authentication.AuthenticationMethodCode&nbsp;unavailableMethod)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#allowsMethodUnavailable(com.sca4d.core.api.identity.Account,com.sca4d.core.api.code.TreeCode)" class="member-name-link">allowsMethodUnavailable</a><wbr>(@NotNull com.sca4d.core.api.identity.Account&nbsp;account,
+ @NotNull com.sca4d.core.api.code.TreeCode&nbsp;unavailableMethod)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">返回指定认证方法完全不可用后，账号当前设置是否仍能满足全部认证要求。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#assertMethodRemovalAllowed(com.sca4d.core.api.identity.Account,com.sca4d.core.api.authentication.AuthenticationMethodCode)" class="member-name-link">assertMethodRemovalAllowed</a><wbr>(@NotNull com.sca4d.core.api.identity.Account&nbsp;account,
- @NotNull com.sca4d.core.api.authentication.AuthenticationMethodCode&nbsp;unavailableMethod)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#assertMethodRemovalAllowed(com.sca4d.core.api.identity.Account,com.sca4d.core.api.code.TreeCode)" class="member-name-link">assertMethodRemovalAllowed</a><wbr>(@NotNull com.sca4d.core.api.identity.Account&nbsp;account,
+ @NotNull com.sca4d.core.api.code.TreeCode&nbsp;unavailableMethod)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">确认指定认证方法完全不可用后，账号当前设置仍能满足登录和敏感动作要求。</div>
 </div>
@@ -261,13 +261,13 @@ implements com.sca4d.core.api.authentication.AuthenticationPolicy</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="assertMethodRemovalAllowed(com.sca4d.core.api.identity.Account,com.sca4d.core.api.authentication.AuthenticationMethodCode)">
+<section class="detail" id="assertMethodRemovalAllowed(com.sca4d.core.api.identity.Account,com.sca4d.core.api.code.TreeCode)">
 <h3>assertMethodRemovalAllowed</h3>
 <div class="member-signature"><span class="annotations">@Transactional(readOnly=true)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">assertMethodRemovalAllowed</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.identity.Account&nbsp;account,
  @NotNull
- @NotNull com.sca4d.core.api.authentication.AuthenticationMethodCode&nbsp;unavailableMethod)</span></div>
+ @NotNull com.sca4d.core.api.code.TreeCode&nbsp;unavailableMethod)</span></div>
 <div class="block">确认指定认证方法完全不可用后，账号当前设置仍能满足登录和敏感动作要求。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -279,13 +279,13 @@ implements com.sca4d.core.api.authentication.AuthenticationPolicy</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="allowsMethodUnavailable(com.sca4d.core.api.identity.Account,com.sca4d.core.api.authentication.AuthenticationMethodCode)">
+<section class="detail" id="allowsMethodUnavailable(com.sca4d.core.api.identity.Account,com.sca4d.core.api.code.TreeCode)">
 <h3>allowsMethodUnavailable</h3>
 <div class="member-signature"><span class="annotations">@Transactional(readOnly=true)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">allowsMethodUnavailable</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.identity.Account&nbsp;account,
  @NotNull
- @NotNull com.sca4d.core.api.authentication.AuthenticationMethodCode&nbsp;unavailableMethod)</span></div>
+ @NotNull com.sca4d.core.api.code.TreeCode&nbsp;unavailableMethod)</span></div>
 <div class="block">返回指定认证方法完全不可用后，账号当前设置是否仍能满足全部认证要求。</div>
 </section>
 </li>
@@ -310,7 +310,7 @@ implements com.sca4d.core.api.authentication.AuthenticationPolicy</span></div>
 <h3>allowedMethods</h3>
 <div class="member-signature"><span class="annotations">@Transactional(readOnly=true)
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;com.sca4d.core.api.authentication.AuthenticationMethodCode&gt;</span>&nbsp;<span class="element-name">allowedMethods</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;com.sca4d.core.api.code.TreeCode&gt;</span>&nbsp;<span class="element-name">allowedMethods</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.identity.Account&nbsp;account,
  @NotNull
  @NotNull com.sca4d.core.api.authentication.AuthenticationActionCode&nbsp;actionCode,

@@ -103,17 +103,17 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">调用 EMQX `5.8.9` Management API 查询、终止连接并发布 MQTT 消息。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/transport/EmqxMqttDownlinkPublisher.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttDownlinkPublisher</a></div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/transport/EmqxMqttDeviceTransport.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttDeviceTransport</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用目标 Device 的 MQTT 协议和已登记 Client ID 编码下行，并等待 EMQX PUBACK。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/transport/EmqxMqttMessagePublisher.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttMessagePublisher</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/transport/EmqxMqttRuntime.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttRuntime</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">延迟取得 `EmqxMqttRuntime`，使 MQTT 消息路由能够返回协议响应。</div>
-</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/transport/EmqxMqttRuntime.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttRuntime</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">维护单个应用实例的 MQTT 5 客户端、业务共享订阅、连接事件订阅和 QoS 1 发布。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/transport/EmqxMqttTransport.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttTransport</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">延迟取得 `EmqxMqttRuntime`，使 MQTT 消息路由能够返回协议响应。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/config/EmqxProperties.html" title="class in com.sca4d.iot.emqx.config">EmqxProperties</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
@@ -187,37 +187,37 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">观察 MQTT 上行的拒绝、再次处理和最终失败，不参与消息确认决定。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/emqx/transport/MqttMessagePublisher.html" title="interface in com.sca4d.iot.emqx.transport">MqttMessagePublisher</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
-<div class="block">发布协议已经编码完成的 MQTT Topic 和 payload。</div>
-</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/iot/emqx/transport/MqttMessageRejectedException.html" title="class in com.sca4d.iot.emqx.transport">MqttMessageRejectedException</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab5">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/iot/emqx/transport/MqttMessageRejectedException.html" title="class in com.sca4d.iot.emqx.transport">MqttMessageRejectedException</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab5">
 <div class="block">表示 MQTT 上行存在确定的输入错误，记录后应确认消息且不再执行同一业务动作。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iot/emqx/transport/MqttMessageRejectionReason.html" title="enum class in com.sca4d.iot.emqx.transport">MqttMessageRejectionReason</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iot/emqx/transport/MqttMessageRejectionReason.html" title="enum class in com.sca4d.iot.emqx.transport">MqttMessageRejectionReason</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
 <div class="block">区分 MQTT 上行无法通过再次处理恢复的 Topic、身份和 Payload 错误。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/emqx/transport/MqttMessageRoute.html" title="interface in com.sca4d.iot.emqx.transport">MqttMessageRoute</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/emqx/transport/MqttMessageRoute.html" title="interface in com.sca4d.iot.emqx.transport">MqttMessageRoute</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">声明一条 MQTT Topic Filter 到目标消息流的路由。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/transport/MqttMessageRouter.html" title="class in com.sca4d.iot.emqx.transport">MqttMessageRouter</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/transport/MqttMessageRouter.html" title="class in com.sca4d.iot.emqx.transport">MqttMessageRouter</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">汇总自动生成的 MQTT DeviceProtocol 路由和具体应用登记的消息路由。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/protocol/MqttProtocolCatalog.html" title="class in com.sca4d.iot.emqx.protocol">MqttProtocolCatalog</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/protocol/MqttProtocolCatalog.html" title="class in com.sca4d.iot.emqx.protocol">MqttProtocolCatalog</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">按 code 索引具体应用安装的 MQTT 协议并汇总共享订阅 Topic。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/management/MqttPublication.html" title="class in com.sca4d.iot.emqx.management">MqttPublication</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/management/MqttPublication.html" title="class in com.sca4d.iot.emqx.management">MqttPublication</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存一次通过 EMQX Management API 发布的 MQTT Topic、原始 payload、QoS 和 Retain。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/emqx/protocol/MqttTopicIdentityMapper.html" title="interface in com.sca4d.iot.emqx.protocol">MqttTopicIdentityMapper</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/emqx/protocol/MqttTopicIdentityMapper.html" title="interface in com.sca4d.iot.emqx.protocol">MqttTopicIdentityMapper</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">在 MQTT Client ID 与 Topic 中的设备身份之间执行可逆转换。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/emqx/transport/MqttTransport.html" title="interface in com.sca4d.iot.emqx.transport">MqttTransport</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="block">发布协议已经编码完成的 MQTT Topic 和 payload。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/emqx/protocol/MqttUplinkDefinition.html" title="class in com.sca4d.iot.emqx.protocol">MqttUplinkDefinition</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">

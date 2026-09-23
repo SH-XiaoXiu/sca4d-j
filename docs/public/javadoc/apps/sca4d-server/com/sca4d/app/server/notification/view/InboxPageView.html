@@ -105,7 +105,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.List,long)" class="member-name-link">InboxPageView</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="InboxMessageView.html" title="class in com.sca4d.app.server.notification.view">InboxMessageView</a>&gt;&nbsp;messages,
  long&nbsp;unreadCount)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">创建站内信分页响应。</div>
+</div>
 </div>
 </section>
 </li>
@@ -149,6 +151,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">InboxPageView</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="InboxMessageView.html" title="class in com.sca4d.app.server.notification.view">InboxMessageView</a>&gt;&nbsp;messages,
  long&nbsp;unreadCount)</span></div>
+<div class="block">创建站内信分页响应。</div>
 </section>
 </li>
 </ul>
@@ -163,12 +166,20 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getMessages()">
 <h3>getMessages</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="InboxMessageView.html" title="class in com.sca4d.app.server.notification.view">InboxMessageView</a>&gt;</span>&nbsp;<span class="element-name">getMessages</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>当前页站内信</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getUnreadCount()">
 <h3>getUnreadCount</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">getUnreadCount</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>未读数量</dd>
+</dl>
 </section>
 </li>
 </ul>

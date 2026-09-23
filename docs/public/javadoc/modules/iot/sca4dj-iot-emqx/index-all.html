@@ -298,20 +298,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">调用 EMQX `5.8.9` Management API 查询、终止连接并发布 MQTT 消息。</div>
 </dd>
-<dt><a href="com/sca4d/iot/emqx/transport/EmqxMqttDownlinkPublisher.html" class="type-name-link" title="class in com.sca4d.iot.emqx.transport">EmqxMqttDownlinkPublisher</a> - Class in <a href="com/sca4d/iot/emqx/transport/package-summary.html">com.sca4d.iot.emqx.transport</a></dt>
+<dt><a href="com/sca4d/iot/emqx/transport/EmqxMqttDeviceTransport.html" class="type-name-link" title="class in com.sca4d.iot.emqx.transport">EmqxMqttDeviceTransport</a> - Class in <a href="com/sca4d/iot/emqx/transport/package-summary.html">com.sca4d.iot.emqx.transport</a></dt>
 <dd>
 <div class="block">使用目标 Device 的 MQTT 协议和已登记 Client ID 编码下行，并等待 EMQX PUBACK。</div>
 </dd>
-<dt><a href="com/sca4d/iot/emqx/transport/EmqxMqttDownlinkPublisher.html#%3Cinit%3E(com.sca4d.iot.emqx.transport.MqttMessagePublisher)" class="member-name-link">EmqxMqttDownlinkPublisher(MqttMessagePublisher)</a> - Constructor for class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/EmqxMqttDownlinkPublisher.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttDownlinkPublisher</a></dt>
+<dt><a href="com/sca4d/iot/emqx/transport/EmqxMqttDeviceTransport.html#%3Cinit%3E(com.sca4d.iot.emqx.transport.MqttTransport)" class="member-name-link">EmqxMqttDeviceTransport(MqttTransport)</a> - Constructor for class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/EmqxMqttDeviceTransport.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttDeviceTransport</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/emqx/transport/EmqxMqttMessagePublisher.html" class="type-name-link" title="class in com.sca4d.iot.emqx.transport">EmqxMqttMessagePublisher</a> - Class in <a href="com/sca4d/iot/emqx/transport/package-summary.html">com.sca4d.iot.emqx.transport</a></dt>
-<dd>
-<div class="block">延迟取得 `EmqxMqttRuntime`，使 MQTT 消息路由能够返回协议响应。</div>
-</dd>
-<dt><a href="com/sca4d/iot/emqx/transport/EmqxMqttMessagePublisher.html#%3Cinit%3E(org.springframework.beans.factory.ObjectProvider)" class="member-name-link">EmqxMqttMessagePublisher(ObjectProvider&lt;EmqxMqttRuntime&gt;)</a> - Constructor for class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/EmqxMqttMessagePublisher.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttMessagePublisher</a></dt>
-<dd>
-<div class="block">创建不会在路由 Bean 装配期间提前取得 MQTT 运行时的发布器。</div>
-</dd>
 <dt><a href="com/sca4d/iot/emqx/transport/EmqxMqttRuntime.html" class="type-name-link" title="class in com.sca4d.iot.emqx.transport">EmqxMqttRuntime</a> - Class in <a href="com/sca4d/iot/emqx/transport/package-summary.html">com.sca4d.iot.emqx.transport</a></dt>
 <dd>
 <div class="block">维护单个应用实例的 MQTT 5 客户端、业务共享订阅、连接事件订阅和 QoS 1 发布。</div>
@@ -319,6 +311,14 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/iot/emqx/transport/EmqxMqttRuntime.html#%3Cinit%3E(com.sca4d.iot.emqx.config.EmqxProperties,com.sca4d.iot.emqx.transport.MqttMessageRouter,java.time.Clock,java.util.Collection,java.util.Collection,com.sca4d.iot.emqx.transport.MqttInboundFailureStore,com.sca4d.iot.emqx.connection.EmqxConnectionReconciler)" class="member-name-link">EmqxMqttRuntime(EmqxProperties, MqttMessageRouter, Clock, Collection&lt;MqttMessageObserver&gt;, Collection&lt;MqttMessageProcessingObserver&gt;, MqttInboundFailureStore, EmqxConnectionReconciler)</a> - Constructor for class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/EmqxMqttRuntime.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttRuntime</a></dt>
 <dd>
 <div class="block">创建使用唯一 clientId 且自动重连后重新订阅的 MQTT 运行时。</div>
+</dd>
+<dt><a href="com/sca4d/iot/emqx/transport/EmqxMqttTransport.html" class="type-name-link" title="class in com.sca4d.iot.emqx.transport">EmqxMqttTransport</a> - Class in <a href="com/sca4d/iot/emqx/transport/package-summary.html">com.sca4d.iot.emqx.transport</a></dt>
+<dd>
+<div class="block">延迟取得 `EmqxMqttRuntime`，使 MQTT 消息路由能够返回协议响应。</div>
+</dd>
+<dt><a href="com/sca4d/iot/emqx/transport/EmqxMqttTransport.html#%3Cinit%3E(org.springframework.beans.factory.ObjectProvider)" class="member-name-link">EmqxMqttTransport(ObjectProvider&lt;EmqxMqttRuntime&gt;)</a> - Constructor for class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/EmqxMqttTransport.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttTransport</a></dt>
+<dd>
+<div class="block">创建不会在路由 Bean 装配期间提前取得 MQTT 运行时的发布器。</div>
 </dd>
 <dt><a href="com/sca4d/iot/emqx/config/EmqxProperties.html" class="type-name-link" title="class in com.sca4d.iot.emqx.config">EmqxProperties</a> - Class in <a href="com/sca4d/iot/emqx/config/package-summary.html">com.sca4d.iot.emqx.config</a></dt>
 <dd>
@@ -334,7 +334,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">保留底层传输异常，异常消息不包含请求载荷或 Management API 凭据。</div>
 </dd>
-<dt><a href="com/sca4d/iot/emqx/protocol/MqttDeviceProtocol.html#encode(com.sca4d.iot.api.message.DeviceDownlinkMessage,java.lang.String)" class="member-name-link">encode(DeviceDownlinkMessage, String)</a> - Method in class com.sca4d.iot.emqx.protocol.<a href="com/sca4d/iot/emqx/protocol/MqttDeviceProtocol.html" title="class in com.sca4d.iot.emqx.protocol">MqttDeviceProtocol</a></dt>
+<dt><a href="com/sca4d/iot/emqx/protocol/MqttDeviceProtocol.html#encode(com.sca4d.iot.api.message.DeviceDownlink,java.lang.String)" class="member-name-link">encode(DeviceDownlink, String)</a> - Method in class com.sca4d.iot.emqx.protocol.<a href="com/sca4d/iot/emqx/protocol/MqttDeviceProtocol.html" title="class in com.sca4d.iot.emqx.protocol">MqttDeviceProtocol</a></dt>
 <dd>
 <div class="block">执行目标路由绑定的 Core Pipeline 并生成 MQTT 消息。</div>
 </dd>
@@ -549,7 +549,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">把标准下行消息元数据和已按 `DataKey` 整理的值交给协议 Pipeline。</div>
 </dd>
-<dt><a href="com/sca4d/iot/emqx/protocol/MqttDownlinkFrame.html#%3Cinit%3E(com.sca4d.iot.api.message.DeviceDownlinkMessage,com.sca4d.core.api.data.DataValues)" class="member-name-link">MqttDownlinkFrame(DeviceDownlinkMessage, DataValues)</a> - Constructor for class com.sca4d.iot.emqx.protocol.<a href="com/sca4d/iot/emqx/protocol/MqttDownlinkFrame.html" title="class in com.sca4d.iot.emqx.protocol">MqttDownlinkFrame</a></dt>
+<dt><a href="com/sca4d/iot/emqx/protocol/MqttDownlinkFrame.html#%3Cinit%3E(com.sca4d.iot.api.message.DeviceDownlink,com.sca4d.core.api.data.DataValues)" class="member-name-link">MqttDownlinkFrame(DeviceDownlink, DataValues)</a> - Constructor for class com.sca4d.iot.emqx.protocol.<a href="com/sca4d/iot/emqx/protocol/MqttDownlinkFrame.html" title="class in com.sca4d.iot.emqx.protocol">MqttDownlinkFrame</a></dt>
 <dd>
 <div class="block">创建只供协议 encoder 读取的下行帧输入。</div>
 </dd>
@@ -593,10 +593,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">观察 MQTT 上行的拒绝、再次处理和最终失败，不参与消息确认决定。</div>
 </dd>
-<dt><a href="com/sca4d/iot/emqx/transport/MqttMessagePublisher.html" class="type-name-link" title="interface in com.sca4d.iot.emqx.transport">MqttMessagePublisher</a> - Interface in <a href="com/sca4d/iot/emqx/transport/package-summary.html">com.sca4d.iot.emqx.transport</a></dt>
-<dd>
-<div class="block">发布协议已经编码完成的 MQTT Topic 和 payload。</div>
-</dd>
 <dt><a href="com/sca4d/iot/emqx/transport/MqttMessageRejectedException.html" class="type-name-link" title="class in com.sca4d.iot.emqx.transport">MqttMessageRejectedException</a> - Exception Class in <a href="com/sca4d/iot/emqx/transport/package-summary.html">com.sca4d.iot.emqx.transport</a></dt>
 <dd>
 <div class="block">表示 MQTT 上行存在确定的输入错误，记录后应确认消息且不再执行同一业务动作。</div>
@@ -638,6 +634,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/iot/emqx/protocol/MqttTopicIdentityMapper.html" class="type-name-link" title="interface in com.sca4d.iot.emqx.protocol">MqttTopicIdentityMapper</a> - Interface in <a href="com/sca4d/iot/emqx/protocol/package-summary.html">com.sca4d.iot.emqx.protocol</a></dt>
 <dd>
 <div class="block">在 MQTT Client ID 与 Topic 中的设备身份之间执行可逆转换。</div>
+</dd>
+<dt><a href="com/sca4d/iot/emqx/transport/MqttTransport.html" class="type-name-link" title="interface in com.sca4d.iot.emqx.transport">MqttTransport</a> - Interface in <a href="com/sca4d/iot/emqx/transport/package-summary.html">com.sca4d.iot.emqx.transport</a></dt>
+<dd>
+<div class="block">发布协议已经编码完成的 MQTT Topic 和 payload。</div>
 </dd>
 <dt><a href="com/sca4d/iot/emqx/protocol/MqttUplinkDefinition.html" class="type-name-link" title="class in com.sca4d.iot.emqx.protocol">MqttUplinkDefinition</a> - Class in <a href="com/sca4d/iot/emqx/protocol/package-summary.html">com.sca4d.iot.emqx.protocol</a></dt>
 <dd>
@@ -687,7 +687,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/protocol/MqttProtocolCatalog.html#protocols()" class="member-name-link">protocols()</a> - Method in class com.sca4d.iot.emqx.protocol.<a href="com/sca4d/iot/emqx/protocol/MqttProtocolCatalog.html" title="class in com.sca4d.iot.emqx.protocol">MqttProtocolCatalog</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/emqx/transport/EmqxMqttDownlinkPublisher.html#protocolType()" class="member-name-link">protocolType()</a> - Method in class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/EmqxMqttDownlinkPublisher.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttDownlinkPublisher</a></dt>
+<dt><a href="com/sca4d/iot/emqx/transport/EmqxMqttDeviceTransport.html#protocolType()" class="member-name-link">protocolType()</a> - Method in class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/EmqxMqttDeviceTransport.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttDeviceTransport</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/emqx/management/EmqxManagementClient.html#publish(com.sca4d.iot.emqx.management.MqttPublication)" class="member-name-link">publish(MqttPublication)</a> - Method in interface com.sca4d.iot.emqx.management.<a href="com/sca4d/iot/emqx/management/EmqxManagementClient.html" title="interface in com.sca4d.iot.emqx.management">EmqxManagementClient</a></dt>
 <dd>
@@ -697,19 +697,19 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用 Base64 编码提交原始 payload，不把消息内容写入日志。</div>
 </dd>
-<dt><a href="com/sca4d/iot/emqx/transport/EmqxMqttMessagePublisher.html#publish(com.sca4d.iot.emqx.protocol.EncodedMqttMessage)" class="member-name-link">publish(EncodedMqttMessage)</a> - Method in class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/EmqxMqttMessagePublisher.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttMessagePublisher</a></dt>
-<dd>
-<div class="block">发布时才取得已经完成 Bean 装配的 MQTT 运行时。</div>
-</dd>
 <dt><a href="com/sca4d/iot/emqx/transport/EmqxMqttRuntime.html#publish(com.sca4d.iot.emqx.protocol.EncodedMqttMessage)" class="member-name-link">publish(EncodedMqttMessage)</a> - Method in class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/EmqxMqttRuntime.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttRuntime</a></dt>
 <dd>
 <div class="block">使用 QoS 1 和 Retain=false 发布，并等待 EMQX PUBACK。</div>
 </dd>
-<dt><a href="com/sca4d/iot/emqx/transport/MqttMessagePublisher.html#publish(com.sca4d.iot.emqx.protocol.EncodedMqttMessage)" class="member-name-link">publish(EncodedMqttMessage)</a> - Method in interface com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/MqttMessagePublisher.html" title="interface in com.sca4d.iot.emqx.transport">MqttMessagePublisher</a></dt>
+<dt><a href="com/sca4d/iot/emqx/transport/EmqxMqttTransport.html#publish(com.sca4d.iot.emqx.protocol.EncodedMqttMessage)" class="member-name-link">publish(EncodedMqttMessage)</a> - Method in class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/EmqxMqttTransport.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttTransport</a></dt>
+<dd>
+<div class="block">发布时才取得已经完成 Bean 装配的 MQTT 运行时。</div>
+</dd>
+<dt><a href="com/sca4d/iot/emqx/transport/MqttTransport.html#publish(com.sca4d.iot.emqx.protocol.EncodedMqttMessage)" class="member-name-link">publish(EncodedMqttMessage)</a> - Method in interface com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/MqttTransport.html" title="interface in com.sca4d.iot.emqx.transport">MqttTransport</a></dt>
 <dd>
 <div class="block">使用 QoS 1、Retain=false 发布消息，并等待 Broker 返回 PUBACK。</div>
 </dd>
-<dt><a href="com/sca4d/iot/emqx/transport/EmqxMqttDownlinkPublisher.html#publish(com.sca4d.iot.emqx.protocol.MqttDeviceProtocol,com.sca4d.iot.api.Device,com.sca4d.iot.api.message.DeviceDownlinkMessage)" class="member-name-link">publish(MqttDeviceProtocol, Device, DeviceDownlinkMessage)</a> - Method in class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/EmqxMqttDownlinkPublisher.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttDownlinkPublisher</a></dt>
+<dt><a href="com/sca4d/iot/emqx/transport/EmqxMqttDeviceTransport.html#publish(com.sca4d.iot.emqx.protocol.MqttDeviceProtocol,com.sca4d.iot.api.Device,com.sca4d.iot.api.message.DeviceDownlink)" class="member-name-link">publish(MqttDeviceProtocol, Device, DeviceDownlink)</a> - Method in class com.sca4d.iot.emqx.transport.<a href="com/sca4d/iot/emqx/transport/EmqxMqttDeviceTransport.html" title="class in com.sca4d.iot.emqx.transport">EmqxMqttDeviceTransport</a></dt>
 <dd>
 <div class="block">publish 成功只表示 EMQX 已返回 PUBACK，不表示业务 ACK 成功。</div>
 </dd>

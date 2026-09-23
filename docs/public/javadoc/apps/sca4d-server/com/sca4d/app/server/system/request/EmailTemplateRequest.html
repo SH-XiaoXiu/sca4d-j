@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">EmailTemplateRequest</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">接收通知编码和平台无关的完整 Tiptap JSON 模板。</div>
+<div class="block">接收通知编码和完整多语言 Email 源码模板。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -105,7 +105,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">EmailTemplateRequest</a>()</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建供 JSON 反序列化使用的空请求。</div>
+<div class="block">创建空的请求对象，供 JSON 绑定使用。</div>
 </div>
 </div>
 </section>
@@ -121,14 +121,14 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.fasterxml.jackson.databind.JsonNode</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getContent()" class="member-name-link">getContent</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="EmailTemplateSourceRequest.html" title="class in com.sca4d.app.server.system.request">EmailTemplateSourceRequest</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLocales()" class="member-name-link">getLocales</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getNotificationCode()" class="member-name-link">getNotificationCode</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setContent(com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">setContent</a><wbr>(@Nullable com.fasterxml.jackson.databind.JsonNode&nbsp;content)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLocales(java.util.Map)" class="member-name-link">setLocales</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="EmailTemplateSourceRequest.html" title="class in com.sca4d.app.server.system.request">EmailTemplateSourceRequest</a>&gt;&nbsp;locales)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setNotificationCode(java.lang.String)" class="member-name-link">setNotificationCode</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;notificationCode)</code></div>
@@ -154,7 +154,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="&lt;init&gt;()">
 <h3>EmailTemplateRequest</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">EmailTemplateRequest</span>()</div>
-<div class="block">创建供 JSON 反序列化使用的空请求。</div>
+<div class="block">创建空的请求对象，供 JSON 绑定使用。</div>
 </section>
 </li>
 </ul>
@@ -172,7 +172,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getNotificationCode</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>渠道无关通知编码</dd>
+<dd>通知编码</dd>
 </dl>
 </section>
 </li>
@@ -183,29 +183,29 @@ loadScripts(document, 'script');</script>
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;notificationCode)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>notificationCode</code> - 渠道无关通知编码</dd>
+<dd><code>notificationCode</code> - 通知编码</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="getContent()">
-<h3>getContent</h3>
+<section class="detail" id="getLocales()">
+<h3>getLocales</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.fasterxml.jackson.databind.JsonNode</span>&nbsp;<span class="element-name">getContent</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="EmailTemplateSourceRequest.html" title="class in com.sca4d.app.server.system.request">EmailTemplateSourceRequest</a>&gt;</span>&nbsp;<span class="element-name">getLocales</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>Locale 到 title/body ProseMirror 文档的完整 JSON</dd>
+<dd>多语言 Email 模板源码</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="setContent(com.fasterxml.jackson.databind.JsonNode)">
-<h3>setContent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setContent</span><wbr><span class="parameters">(@Nullable
- @Nullable com.fasterxml.jackson.databind.JsonNode&nbsp;content)</span></div>
+<section class="detail" id="setLocales(java.util.Map)">
+<h3>setLocales</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setLocales</span><wbr><span class="parameters">(@Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="EmailTemplateSourceRequest.html" title="class in com.sca4d.app.server.system.request">EmailTemplateSourceRequest</a>&gt;&nbsp;locales)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>content</code> - Locale 到 title/body ProseMirror 文档的完整 JSON</dd>
+<dd><code>locales</code> - 多语言 Email 模板源码</dd>
 </dl>
 </section>
 </li>

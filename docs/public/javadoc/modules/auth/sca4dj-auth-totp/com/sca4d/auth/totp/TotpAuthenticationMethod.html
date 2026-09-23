@@ -109,7 +109,7 @@ implements com.sca4d.core.api.authentication.AuthenticationMethod&lt;<a href="To
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final com.sca4d.core.api.authentication.AuthenticationMethodCode</code></div>
+<div class="col-first even-row-color"><code>static final com.sca4d.core.api.code.TreeCode</code></div>
 <div class="col-second even-row-color"><code><a href="#CODE" class="member-name-link">CODE</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">TOTP 方法稳定编码。</div>
@@ -128,7 +128,7 @@ implements com.sca4d.core.api.authentication.AuthenticationMethod&lt;<a href="To
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.auth.totp.credential.TotpCredentialRepository,com.sca4d.auth.totp.enrollment.RedisTotpEnrollmentStore,com.sca4d.auth.totp.credential.TotpCodeVerifier,com.sca4d.core.api.security.SecretKeyring,java.time.Clock)" class="member-name-link">TotpAuthenticationMethod</a><wbr>(@NotNull <a href="credential/TotpCredentialRepository.html" title="class in com.sca4d.auth.totp.credential">TotpCredentialRepository</a>&nbsp;credentials,
  @NotNull <a href="enrollment/RedisTotpEnrollmentStore.html" title="class in com.sca4d.auth.totp.enrollment">RedisTotpEnrollmentStore</a>&nbsp;enrollments,
  @NotNull <a href="credential/TotpCodeVerifier.html" title="class in com.sca4d.auth.totp.credential">TotpCodeVerifier</a>&nbsp;verifier,
- com.sca4d.core.api.security.SecretKeyring&nbsp;keyring,
+ @NotNull com.sca4d.core.api.security.SecretKeyring&nbsp;keyring,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建 TOTP 认证方法。</div>
@@ -157,7 +157,7 @@ implements com.sca4d.core.api.authentication.AuthenticationMethod&lt;<a href="To
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#canIdentifyAccount()" class="member-name-link">canIdentifyAccount</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.authentication.AuthenticationMethodCode</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.code.TreeCode</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#code()" class="member-name-link">code</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
@@ -198,7 +198,7 @@ implements com.sca4d.core.api.authentication.AuthenticationMethod&lt;<a href="To
 <li>
 <section class="detail" id="CODE">
 <h3>CODE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">com.sca4d.core.api.authentication.AuthenticationMethodCode</span>&nbsp;<span class="element-name">CODE</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">com.sca4d.core.api.code.TreeCode</span>&nbsp;<span class="element-name">CODE</span></div>
 <div class="block">TOTP 方法稳定编码。</div>
 </section>
 </li>
@@ -220,7 +220,7 @@ implements com.sca4d.core.api.authentication.AuthenticationMethod&lt;<a href="To
  @NotNull
  @NotNull <a href="credential/TotpCodeVerifier.html" title="class in com.sca4d.auth.totp.credential">TotpCodeVerifier</a>&nbsp;verifier,
  @NotNull
- com.sca4d.core.api.security.SecretKeyring&nbsp;keyring,
+ @NotNull com.sca4d.core.api.security.SecretKeyring&nbsp;keyring,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</span></div>
 <div class="block">创建 TOTP 认证方法。</div>
@@ -246,7 +246,7 @@ implements com.sca4d.core.api.authentication.AuthenticationMethod&lt;<a href="To
 <section class="detail" id="code()">
 <h3>code</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.authentication.AuthenticationMethodCode</span>&nbsp;<span class="element-name">code</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.code.TreeCode</span>&nbsp;<span class="element-name">code</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>code</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.authentication.AuthenticationMethod&lt;<a href="TotpProof.html" title="class in com.sca4d.auth.totp">TotpProof</a>&gt;</code></dd>

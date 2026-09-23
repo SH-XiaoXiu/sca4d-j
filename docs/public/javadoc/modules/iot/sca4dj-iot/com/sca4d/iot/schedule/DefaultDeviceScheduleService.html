@@ -108,14 +108,14 @@ implements com.sca4d.iot.api.schedule.DeviceScheduleService, com.sca4d.iot.api.s
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.iot.schedule.DeviceScheduleRepository,com.sca4d.iot.device.DeviceRepository,com.sca4d.iot.message.DeviceCommandService,com.sca4d.core.api.id.IdGenerator,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.iot.config.IotProperties,com.sca4d.core.api.messaging.MessagePublisher,org.springframework.beans.factory.ObjectProvider,com.sca4d.core.api.concurrent.DistributedLock,org.springframework.transaction.support.TransactionTemplate)" class="member-name-link">DefaultDeviceScheduleService</a><wbr>(@NotNull <a href="DeviceScheduleRepository.html" title="class in com.sca4d.iot.schedule">DeviceScheduleRepository</a>&nbsp;schedules,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.iot.schedule.DeviceScheduleRepository,com.sca4d.iot.device.DeviceRepository,com.sca4d.iot.message.DeviceCommandService,com.sca4d.core.api.id.IdGenerator,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.iot.config.IotProperties,com.sca4d.core.api.messaging.MessageBus,org.springframework.beans.factory.ObjectProvider,com.sca4d.core.api.concurrent.DistributedLock,org.springframework.transaction.support.TransactionTemplate)" class="member-name-link">DefaultDeviceScheduleService</a><wbr>(@NotNull <a href="DeviceScheduleRepository.html" title="class in com.sca4d.iot.schedule">DeviceScheduleRepository</a>&nbsp;schedules,
  @NotNull <a href="../device/DeviceRepository.html" title="class in com.sca4d.iot.device">DeviceRepository</a>&nbsp;devices,
  @NotNull <a href="../message/DeviceCommandService.html" title="class in com.sca4d.iot.message">DeviceCommandService</a>&nbsp;commands,
  @NotNull com.sca4d.core.api.id.IdGenerator&nbsp;ids,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
  @NotNull <a href="../change/DeviceChangeNotifier.html" title="class in com.sca4d.iot.change">DeviceChangeNotifier</a>&nbsp;changes,
  @NotNull <a href="../config/IotProperties.html" title="class in com.sca4d.iot.config">IotProperties</a>&nbsp;properties,
- @NotNull com.sca4d.core.api.messaging.MessagePublisher&nbsp;messages,
+ @NotNull com.sca4d.core.api.messaging.MessageBus&nbsp;messages,
  @NotNull org.springframework.beans.factory.ObjectProvider&lt;com.sca4d.iot.api.history.DeviceHistoryStore&gt;&nbsp;history,
  @NotNull com.sca4d.core.api.concurrent.DistributedLock&nbsp;distributedLock,
  @NotNull org.springframework.transaction.support.TransactionTemplate&nbsp;transactions)</code></div>
@@ -157,7 +157,9 @@ implements com.sca4d.iot.api.schedule.DeviceScheduleService, com.sca4d.iot.api.s
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.schedule.DeviceSchedule</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#loadById(long)" class="member-name-link">loadById</a><wbr>(long&nbsp;scheduleId)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">按计划标识读取设备计划，并在不存在时抛出稳定的业务错误。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pauseFailedSchedule(com.sca4d.iot.schedule.DeviceScheduleTriggerFailure)" class="member-name-link">pauseFailedSchedule</a><wbr>(@NotNull <a href="DeviceScheduleTriggerFailure.html" title="class in com.sca4d.iot.schedule">DeviceScheduleTriggerFailure</a>&nbsp;failure)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -197,7 +199,7 @@ implements com.sca4d.iot.api.schedule.DeviceScheduleService, com.sca4d.iot.api.s
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.iot.schedule.DeviceScheduleRepository,com.sca4d.iot.device.DeviceRepository,com.sca4d.iot.message.DeviceCommandService,com.sca4d.core.api.id.IdGenerator,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.iot.config.IotProperties,com.sca4d.core.api.messaging.MessagePublisher,org.springframework.beans.factory.ObjectProvider,com.sca4d.core.api.concurrent.DistributedLock,org.springframework.transaction.support.TransactionTemplate)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.iot.schedule.DeviceScheduleRepository,com.sca4d.iot.device.DeviceRepository,com.sca4d.iot.message.DeviceCommandService,com.sca4d.core.api.id.IdGenerator,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.iot.config.IotProperties,com.sca4d.core.api.messaging.MessageBus,org.springframework.beans.factory.ObjectProvider,com.sca4d.core.api.concurrent.DistributedLock,org.springframework.transaction.support.TransactionTemplate)">
 <h3>DefaultDeviceScheduleService</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">DefaultDeviceScheduleService</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="DeviceScheduleRepository.html" title="class in com.sca4d.iot.schedule">DeviceScheduleRepository</a>&nbsp;schedules,
@@ -214,7 +216,7 @@ implements com.sca4d.iot.api.schedule.DeviceScheduleService, com.sca4d.iot.api.s
  @NotNull
  @NotNull <a href="../config/IotProperties.html" title="class in com.sca4d.iot.config">IotProperties</a>&nbsp;properties,
  @NotNull
- @NotNull com.sca4d.core.api.messaging.MessagePublisher&nbsp;messages,
+ @NotNull com.sca4d.core.api.messaging.MessageBus&nbsp;messages,
  @NotNull
  @NotNull org.springframework.beans.factory.ObjectProvider&lt;com.sca4d.iot.api.history.DeviceHistoryStore&gt;&nbsp;history,
  @NotNull
@@ -306,6 +308,7 @@ implements com.sca4d.iot.api.schedule.DeviceScheduleService, com.sca4d.iot.api.s
 @CheckReturnValue
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.iot.api.schedule.DeviceSchedule</span>&nbsp;<span class="element-name">loadById</span><wbr><span class="parameters">(long&nbsp;scheduleId)</span></div>
+<div class="block">按计划标识读取设备计划，并在不存在时抛出稳定的业务错误。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>loadById</code>&nbsp;in interface&nbsp;<code>com.sca4d.iot.api.schedule.DeviceScheduleQueryService</code></dd>

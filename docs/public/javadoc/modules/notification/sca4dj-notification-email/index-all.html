@@ -52,6 +52,10 @@ loadScripts(document, 'script');</script>
 <a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
+<dt><a href="com/sca4d/notification/email/EmailTemplateRepository.html#add(long,com.sca4d.core.api.code.TreeCode,java.util.Map)" class="member-name-link">add(long, TreeCode, Map&lt;String, EmailTemplateSource&gt;)</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplateRepository.html" title="class in com.sca4d.notification.email">EmailTemplateRepository</a></dt>
+<dd>
+<div class="block">新增 Email 模板；通知编码冲突时抛出模板冲突异常。</div>
+</dd>
 <dt><a href="com/sca4d/notification/email/sender/EmailSenderRepository.html#add(long,java.lang.String,java.lang.String,int,com.sca4d.notification.email.sender.SmtpSecurity,java.lang.String,com.sca4d.core.api.security.EncryptedSecret,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">add(long, String, String, int, SmtpSecurity, String, EncryptedSecret, String, String, String)</a> - Method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSenderRepository.html" title="class in com.sca4d.notification.email.sender">EmailSenderRepository</a></dt>
 <dd>
 <div class="block">新增一项默认停用的 SMTP 配置。</div>
@@ -67,6 +71,14 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/EmailNotificationErrorCode.html#code()" class="member-name-link">code()</a> - Method in enum class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailNotificationErrorCode.html" title="enum class in com.sca4d.notification.email">EmailNotificationErrorCode</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/email/EmailTemplate.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplate.html" title="class in com.sca4d.notification.email">EmailTemplate</a></dt>
+<dd>
+<div class="block">返回 code 方法提供的结果。</div>
+</dd>
+<dt><a href="com/sca4d/notification/email/mapper/EmailTemplateState.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.notification.email.mapper.<a href="com/sca4d/notification/email/mapper/EmailTemplateState.html" title="class in com.sca4d.notification.email.mapper">EmailTemplateState</a></dt>
+<dd>
+<div class="block">返回 code 方法提供的结果。</div>
+</dd>
 <dt><a href="com/sca4d/notification/email/package-summary.html">com.sca4d.notification.email</a> - package com.sca4d.notification.email</dt>
 <dd>
 <div class="block">实现 Email 通知模板、SMTP 配置、接收人解析和投递。</div>
@@ -75,6 +87,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">自动装配 Email 通知的持久化、模板和 SMTP 投递。</div>
 </dd>
+<dt><a href="com/sca4d/notification/email/mapper/package-summary.html">com.sca4d.notification.email.mapper</a> - package com.sca4d.notification.email.mapper</dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/sender/package-summary.html">com.sca4d.notification.email.sender</a> - package com.sca4d.notification.email.sender</dt>
 <dd>
 <div class="block">保存、管理和使用 SMTP 发件配置。</div>
@@ -87,6 +101,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/EmailAttachment.html#contentType()" class="member-name-link">contentType()</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailAttachment.html" title="class in com.sca4d.notification.email">EmailAttachment</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/email/mapper/EmailTemplateMapper.html#count()" class="member-name-link">count()</a> - Method in interface com.sca4d.notification.email.mapper.<a href="com/sca4d/notification/email/mapper/EmailTemplateMapper.html" title="interface in com.sca4d.notification.email.mapper">EmailTemplateMapper</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/sender/EmailSenderService.html#create(java.lang.String,java.lang.String,int,com.sca4d.notification.email.sender.SmtpSecurity,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">create(String, String, int, SmtpSecurity, String, String, String, String, String)</a> - Method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSenderService.html" title="class in com.sca4d.notification.email.sender">EmailSenderService</a></dt>
 <dd>
 <div class="block">创建默认停用的 SMTP 配置，认证用户名和密码必须同时提供。</div>
@@ -94,6 +110,10 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:D">D</h2>
 <dl class="index">
+<dt><a href="com/sca4d/notification/email/EmailTemplateRepository.html#delete(long)" class="member-name-link">delete(long)</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplateRepository.html" title="class in com.sca4d.notification.email">EmailTemplateRepository</a></dt>
+<dd>
+<div class="block">按当前版本逻辑删除 Email 模板。</div>
+</dd>
 <dt><a href="com/sca4d/notification/email/sender/EmailSenderRepository.html#delete(long)" class="member-name-link">delete(long)</a> - Method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSenderRepository.html" title="class in com.sca4d.notification.email.sender">EmailSenderRepository</a></dt>
 <dd>
 <div class="block">按请求版本条件或内部调用读取的当前版本逻辑删除停用配置。</div>
@@ -113,6 +133,8 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:E">E</h2>
 <dl class="index">
+<dt><a href="com/sca4d/notification/email/EmailChannels.html#EMAIL" class="member-name-link">EMAIL</a> - Static variable in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailChannels.html" title="class in com.sca4d.notification.email">EmailChannels</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/EmailAddresses.html" class="type-name-link" title="class in com.sca4d.notification.email">EmailAddresses</a> - Class in <a href="com/sca4d/notification/email/package-summary.html">com.sca4d.notification.email</a></dt>
 <dd>
 <div class="block">校验并规范 Email 通知配置和解析结果使用的邮箱地址。</div>
@@ -125,14 +147,20 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建一个不可修改的 Email 附件。</div>
 </dd>
+<dt><a href="com/sca4d/notification/email/EmailChannels.html" class="type-name-link" title="class in com.sca4d.notification.email">EmailChannels</a> - Class in <a href="com/sca4d/notification/email/package-summary.html">com.sca4d.notification.email</a></dt>
+<dd>
+<div class="block">Email 模块声明的通知渠道。</div>
+</dd>
+<dt><a href="com/sca4d/notification/email/sender/EmailGateway.html" class="type-name-link" title="interface in com.sca4d.notification.email.sender">EmailGateway</a> - Interface in <a href="com/sca4d/notification/email/sender/package-summary.html">com.sca4d.notification.email.sender</a></dt>
+<dd>
+<div class="block">使用一项 SMTP 配置测试连接或发送已经渲染的 Email。</div>
+</dd>
 <dt><a href="com/sca4d/notification/email/EmailMessageService.html" class="type-name-link" title="class in com.sca4d.notification.email">EmailMessageService</a> - Class in <a href="com/sca4d/notification/email/package-summary.html">com.sca4d.notification.email</a></dt>
 <dd>
-<div class="block">使用当前 Email 模板和 SMTP 配置同步发送带可选附件的邮件。</div>
+<div class="block">使用 Email 模板和当前 SMTP 配置同步发送带可选附件的邮件。</div>
 </dd>
-<dt><a href="com/sca4d/notification/email/EmailMessageService.html#%3Cinit%3E(com.sca4d.notification.email.sender.EmailSenderRepository,com.sca4d.notification.template.NotificationTemplateRepository,com.sca4d.notification.template.NotificationTemplateRenderers,com.sca4d.notification.email.sender.EmailTransport,long)" class="member-name-link">EmailMessageService(EmailSenderRepository, NotificationTemplateRepository, NotificationTemplateRenderers, EmailTransport, long)</a> - Constructor for class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailMessageService.html" title="class in com.sca4d.notification.email">EmailMessageService</a></dt>
-<dd>
-<div class="block">创建使用数据库模板、当前启用 Sender 和 SMTP Transport 的同步发送服务。</div>
-</dd>
+<dt><a href="com/sca4d/notification/email/EmailMessageService.html#%3Cinit%3E(com.sca4d.notification.email.sender.EmailSenderRepository,com.sca4d.notification.email.EmailTemplateRepository,com.sca4d.notification.email.EmailRenderer,com.sca4d.notification.email.sender.EmailGateway,long)" class="member-name-link">EmailMessageService(EmailSenderRepository, EmailTemplateRepository, EmailRenderer, EmailGateway, long)</a> - Constructor for class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailMessageService.html" title="class in com.sca4d.notification.email">EmailMessageService</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/config/EmailNotificationAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.notification.email.config">EmailNotificationAutoConfiguration</a> - Class in <a href="com/sca4d/notification/email/config/package-summary.html">com.sca4d.notification.email.config</a></dt>
 <dd>
 <div class="block">自动装配 Email 模板、SMTP 配置管理和通知投递实现。</div>
@@ -143,9 +171,9 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/notification/email/EmailNotificationDelivery.html" class="type-name-link" title="class in com.sca4d.notification.email">EmailNotificationDelivery</a> - Class in <a href="com/sca4d/notification/email/package-summary.html">com.sca4d.notification.email</a></dt>
 <dd>
-<div class="block">把渠道无关通知解析为收件邮箱、多语言模板和当前 SMTP 配置并执行投递。</div>
+<div class="block">把渠道无关通知解析为收件邮箱、Email 模板和 SMTP 配置并执行投递。</div>
 </dd>
-<dt><a href="com/sca4d/notification/email/EmailNotificationDelivery.html#%3Cinit%3E(com.sca4d.notification.email.EmailRecipientResolver,com.sca4d.notification.email.sender.EmailSenderRepository,com.sca4d.notification.template.NotificationTemplateRepository,com.sca4d.notification.template.NotificationTemplateRenderers,com.sca4d.notification.email.sender.EmailTransport)" class="member-name-link">EmailNotificationDelivery(EmailRecipientResolver, EmailSenderRepository, NotificationTemplateRepository, NotificationTemplateRenderers, EmailTransport)</a> - Constructor for class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailNotificationDelivery.html" title="class in com.sca4d.notification.email">EmailNotificationDelivery</a></dt>
+<dt><a href="com/sca4d/notification/email/EmailNotificationDelivery.html#%3Cinit%3E(com.sca4d.notification.email.EmailRecipientResolver,com.sca4d.notification.email.sender.EmailSenderRepository,com.sca4d.notification.email.EmailTemplateRepository,com.sca4d.notification.email.EmailRenderer,com.sca4d.notification.email.sender.EmailGateway)" class="member-name-link">EmailNotificationDelivery(EmailRecipientResolver, EmailSenderRepository, EmailTemplateRepository, EmailRenderer, EmailGateway)</a> - Constructor for class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailNotificationDelivery.html" title="class in com.sca4d.notification.email">EmailNotificationDelivery</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/EmailNotificationErrorCode.html" class="type-name-link" title="enum class in com.sca4d.notification.email">EmailNotificationErrorCode</a> - Enum Class in <a href="com/sca4d/notification/email/package-summary.html">com.sca4d.notification.email</a></dt>
 <dd>
@@ -163,6 +191,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">把通知内部接收人解析为当前有效邮箱，具体数据归属仍由 App 决定。</div>
 </dd>
+<dt><a href="com/sca4d/notification/email/EmailRenderer.html" class="type-name-link" title="class in com.sca4d.notification.email">EmailRenderer</a> - Class in <a href="com/sca4d/notification/email/package-summary.html">com.sca4d.notification.email</a></dt>
+<dd>
+<div class="block">把 Email 源码模板渲染为主题、纯文本正文和安全 HTML 正文。</div>
+</dd>
+<dt><a href="com/sca4d/notification/email/EmailRenderer.html#%3Cinit%3E()" class="member-name-link">EmailRenderer()</a> - Constructor for class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailRenderer.html" title="class in com.sca4d.notification.email">EmailRenderer</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/sender/EmailSender.html" class="type-name-link" title="class in com.sca4d.notification.email.sender">EmailSender</a> - Class in <a href="com/sca4d/notification/email/sender/package-summary.html">com.sca4d.notification.email.sender</a></dt>
 <dd>
 <div class="block">保存可安全返回给管理调用方的 SMTP 地址、发件资料、状态和版本。</div>
@@ -177,7 +211,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/sender/mapper/EmailSenderMapper.html" class="type-name-link" title="interface in com.sca4d.notification.email.sender.mapper">EmailSenderMapper</a> - Interface in <a href="com/sca4d/notification/email/sender/mapper/package-summary.html">com.sca4d.notification.email.sender.mapper</a></dt>
 <dd>
-<div class="block">读写 SMTP 配置的最小 SQL 形状。</div>
+<div class="block">读写 SMTP 发件配置，并按版本条件更新或逻辑删除配置。</div>
 </dd>
 <dt><a href="com/sca4d/notification/email/sender/EmailSenderRepository.html" class="type-name-link" title="class in com.sca4d.notification.email.sender">EmailSenderRepository</a> - Class in <a href="com/sca4d/notification/email/sender/package-summary.html">com.sca4d.notification.email.sender</a></dt>
 <dd>
@@ -189,7 +223,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">管理 SMTP 配置、加密密码、启用状态和连接测试。</div>
 </dd>
-<dt><a href="com/sca4d/notification/email/sender/EmailSenderService.html#%3Cinit%3E(com.sca4d.notification.email.sender.EmailSenderRepository,com.sca4d.notification.email.sender.EmailTransport,com.sca4d.core.api.security.SecretKeyring,com.sca4d.core.api.id.IdGenerator)" class="member-name-link">EmailSenderService(EmailSenderRepository, EmailTransport, SecretKeyring, IdGenerator)</a> - Constructor for class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSenderService.html" title="class in com.sca4d.notification.email.sender">EmailSenderService</a></dt>
+<dt><a href="com/sca4d/notification/email/sender/EmailSenderService.html#%3Cinit%3E(com.sca4d.notification.email.sender.EmailSenderRepository,com.sca4d.notification.email.sender.EmailGateway,com.sca4d.core.api.security.SecretKeyring,com.sca4d.core.api.id.IdGenerator)" class="member-name-link">EmailSenderService(EmailSenderRepository, EmailGateway, SecretKeyring, IdGenerator)</a> - Constructor for class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSenderService.html" title="class in com.sca4d.notification.email.sender">EmailSenderService</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/sender/mapper/EmailSenderState.html" class="type-name-link" title="class in com.sca4d.notification.email.sender.mapper">EmailSenderState</a> - Class in <a href="com/sca4d/notification/email/sender/mapper/package-summary.html">com.sca4d.notification.email.sender.mapper</a></dt>
 <dd>
@@ -197,27 +231,69 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/notification/email/sender/mapper/EmailSenderState.html#%3Cinit%3E(long,java.lang.String,java.lang.String,int,com.sca4d.notification.email.sender.SmtpSecurity,java.lang.String,java.lang.String,byte%5B%5D,java.lang.String,java.lang.String,java.lang.String,boolean,com.sca4d.core.api.concurrent.Version)" class="member-name-link">EmailSenderState(long, String, String, int, SmtpSecurity, String, String, byte[], String, String, String, boolean, Version)</a> - Constructor for class com.sca4d.notification.email.sender.mapper.<a href="com/sca4d/notification/email/sender/mapper/EmailSenderState.html" title="class in com.sca4d.notification.email.sender.mapper">EmailSenderState</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/notification/email/sender/EmailTransport.html" class="type-name-link" title="interface in com.sca4d.notification.email.sender">EmailTransport</a> - Interface in <a href="com/sca4d/notification/email/sender/package-summary.html">com.sca4d.notification.email.sender</a></dt>
+<dt><a href="com/sca4d/notification/email/EmailTemplate.html" class="type-name-link" title="class in com.sca4d.notification.email">EmailTemplate</a> - Class in <a href="com/sca4d/notification/email/package-summary.html">com.sca4d.notification.email</a></dt>
 <dd>
-<div class="block">使用一项 SMTP 配置测试连接或发送已经渲染的 Email。</div>
+<div class="block">Email 模板聚合；每个 Locale 保存 subject、text 和 html 源码。</div>
 </dd>
+<dt><a href="com/sca4d/notification/email/EmailTemplate.html#%3Cinit%3E(long,com.sca4d.core.api.code.TreeCode,java.util.Map,boolean,com.sca4d.core.api.concurrent.Version)" class="member-name-link">EmailTemplate(long, TreeCode, Map&lt;String, EmailTemplateSource&gt;, boolean, Version)</a> - Constructor for class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplate.html" title="class in com.sca4d.notification.email">EmailTemplate</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/email/mapper/EmailTemplateMapper.html" class="type-name-link" title="interface in com.sca4d.notification.email.mapper">EmailTemplateMapper</a> - Interface in <a href="com/sca4d/notification/email/mapper/package-summary.html">com.sca4d.notification.email.mapper</a></dt>
+<dd>
+<div class="block">读写 Email 模板及其启用状态和版本条件。</div>
+</dd>
+<dt><a href="com/sca4d/notification/email/EmailTemplateRepository.html" class="type-name-link" title="class in com.sca4d.notification.email">EmailTemplateRepository</a> - Class in <a href="com/sca4d/notification/email/package-summary.html">com.sca4d.notification.email</a></dt>
+<dd>
+<div class="block">Email 模块拥有的模板持久化边界。</div>
+</dd>
+<dt><a href="com/sca4d/notification/email/EmailTemplateRepository.html#%3Cinit%3E(com.sca4d.notification.email.mapper.EmailTemplateMapper,com.sca4d.core.api.concurrent.VersionConditions,com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">EmailTemplateRepository(EmailTemplateMapper, VersionConditions, ObjectMapper)</a> - Constructor for class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplateRepository.html" title="class in com.sca4d.notification.email">EmailTemplateRepository</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/email/EmailTemplateSource.html" class="type-name-link" title="class in com.sca4d.notification.email">EmailTemplateSource</a> - Class in <a href="com/sca4d/notification/email/package-summary.html">com.sca4d.notification.email</a></dt>
+<dd>
+<div class="block">保存 Email 模板的主题、纯文本正文和 HTML 正文源码。</div>
+</dd>
+<dt><a href="com/sca4d/notification/email/EmailTemplateSource.html#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">EmailTemplateSource(String, String, String)</a> - Constructor for class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplateSource.html" title="class in com.sca4d.notification.email">EmailTemplateSource</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/email/mapper/EmailTemplateState.html" class="type-name-link" title="class in com.sca4d.notification.email.mapper">EmailTemplateState</a> - Class in <a href="com/sca4d/notification/email/mapper/package-summary.html">com.sca4d.notification.email.mapper</a></dt>
+<dd>
+<div class="block">Email 模板 Mapper 读取的数据库状态。</div>
+</dd>
+<dt><a href="com/sca4d/notification/email/mapper/EmailTemplateState.html#%3Cinit%3E(long,com.sca4d.core.api.code.TreeCode,java.lang.String,boolean,com.sca4d.core.api.concurrent.Version)" class="member-name-link">EmailTemplateState(long, TreeCode, String, boolean, Version)</a> - Constructor for class com.sca4d.notification.email.mapper.<a href="com/sca4d/notification/email/mapper/EmailTemplateState.html" title="class in com.sca4d.notification.email.mapper">EmailTemplateState</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/email/EmailTemplate.html#enabled()" class="member-name-link">enabled()</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplate.html" title="class in com.sca4d.notification.email">EmailTemplate</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/email/mapper/EmailTemplateState.html#enabled()" class="member-name-link">enabled()</a> - Method in class com.sca4d.notification.email.mapper.<a href="com/sca4d/notification/email/mapper/EmailTemplateState.html" title="class in com.sca4d.notification.email.mapper">EmailTemplateState</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/sender/EmailSender.html#enabled()" class="member-name-link">enabled()</a> - Method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSender.html" title="class in com.sca4d.notification.email.sender">EmailSender</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/sender/mapper/EmailSenderState.html#enabled()" class="member-name-link">enabled()</a> - Method in class com.sca4d.notification.email.sender.mapper.<a href="com/sca4d/notification/email/sender/mapper/EmailSenderState.html" title="class in com.sca4d.notification.email.sender.mapper">EmailSenderState</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/email/EmailTemplateSource.html#equals(java.lang.Object)" class="member-name-link">equals(Object)</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplateSource.html" title="class in com.sca4d.notification.email">EmailTemplateSource</a></dt>
 <dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:F">F</h2>
 <dl class="index">
 <dt><a href="com/sca4d/notification/email/EmailAttachment.html#filename()" class="member-name-link">filename()</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailAttachment.html" title="class in com.sca4d.notification.email">EmailAttachment</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/email/EmailTemplateRepository.html#find(long)" class="member-name-link">find(long)</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplateRepository.html" title="class in com.sca4d.notification.email">EmailTemplateRepository</a></dt>
+<dd>
+<div class="block">按模板标识读取 Email 模板；模板不存在或已经逻辑删除时返回空。</div>
+</dd>
 <dt><a href="com/sca4d/notification/email/sender/EmailSenderRepository.html#find(long)" class="member-name-link">find(long)</a> - Method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSenderRepository.html" title="class in com.sca4d.notification.email.sender">EmailSenderRepository</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/sender/EmailSenderRepository.html#findAll()" class="member-name-link">findAll()</a> - Method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSenderRepository.html" title="class in com.sca4d.notification.email.sender">EmailSenderRepository</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/sender/EmailSenderService.html#findAll()" class="member-name-link">findAll()</a> - Method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSenderService.html" title="class in com.sca4d.notification.email.sender">EmailSenderService</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/email/EmailTemplateRepository.html#findByCode(com.sca4d.core.api.code.TreeCode)" class="member-name-link">findByCode(TreeCode)</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplateRepository.html" title="class in com.sca4d.notification.email">EmailTemplateRepository</a></dt>
+<dd>
+<div class="block">按通知编码读取未删除模板，无论模板当前是否启用。</div>
+</dd>
 <dt><a href="com/sca4d/notification/email/sender/EmailSenderRepository.html#findConfiguration(long)" class="member-name-link">findConfiguration(long)</a> - Method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSenderRepository.html" title="class in com.sca4d.notification.email.sender">EmailSenderRepository</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/email/EmailTemplateRepository.html#findEnabled(com.sca4d.core.api.code.TreeCode)" class="member-name-link">findEnabled(TreeCode)</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplateRepository.html" title="class in com.sca4d.notification.email">EmailTemplateRepository</a></dt>
+<dd>
+<div class="block">读取指定通知编码当前启用的第一份 Email 模板；没有启用模板时返回空。</div>
+</dd>
 <dt><a href="com/sca4d/notification/email/sender/EmailSenderRepository.html#findEnabledConfiguration()" class="member-name-link">findEnabledConfiguration()</a> - Method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSenderRepository.html" title="class in com.sca4d.notification.email.sender">EmailSenderRepository</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/sender/EmailSender.html#fromAddress()" class="member-name-link">fromAddress()</a> - Method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSender.html" title="class in com.sca4d.notification.email.sender">EmailSender</a></dt>
@@ -233,36 +309,56 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/notification/email/config/EmailNotificationProperties.html#getConnectionTimeout()" class="member-name-link">getConnectionTimeout()</a> - Method in class com.sca4d.notification.email.config.<a href="com/sca4d/notification/email/config/EmailNotificationProperties.html" title="class in com.sca4d.notification.email.config">EmailNotificationProperties</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/email/EmailTemplateSource.html#getHtml()" class="member-name-link">getHtml()</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplateSource.html" title="class in com.sca4d.notification.email">EmailTemplateSource</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/config/EmailNotificationProperties.html#getMaxAttachmentBytes()" class="member-name-link">getMaxAttachmentBytes()</a> - Method in class com.sca4d.notification.email.config.<a href="com/sca4d/notification/email/config/EmailNotificationProperties.html" title="class in com.sca4d.notification.email.config">EmailNotificationProperties</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/config/EmailNotificationProperties.html#getReadTimeout()" class="member-name-link">getReadTimeout()</a> - Method in class com.sca4d.notification.email.config.<a href="com/sca4d/notification/email/config/EmailNotificationProperties.html" title="class in com.sca4d.notification.email.config">EmailNotificationProperties</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/email/EmailTemplateSource.html#getSubject()" class="member-name-link">getSubject()</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplateSource.html" title="class in com.sca4d.notification.email">EmailTemplateSource</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/email/EmailTemplateSource.html#getText()" class="member-name-link">getText()</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplateSource.html" title="class in com.sca4d.notification.email">EmailTemplateSource</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/config/EmailNotificationProperties.html#getWriteTimeout()" class="member-name-link">getWriteTimeout()</a> - Method in class com.sca4d.notification.email.config.<a href="com/sca4d/notification/email/config/EmailNotificationProperties.html" title="class in com.sca4d.notification.email.config">EmailNotificationProperties</a></dt>
 <dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:H">H</h2>
 <dl class="index">
+<dt><a href="com/sca4d/notification/email/EmailTemplateSource.html#hashCode()" class="member-name-link">hashCode()</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplateSource.html" title="class in com.sca4d.notification.email">EmailTemplateSource</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/sender/EmailSender.html#host()" class="member-name-link">host()</a> - Method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSender.html" title="class in com.sca4d.notification.email.sender">EmailSender</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/sender/mapper/EmailSenderState.html#host()" class="member-name-link">host()</a> - Method in class com.sca4d.notification.email.sender.mapper.<a href="com/sca4d/notification/email/sender/mapper/EmailSenderState.html" title="class in com.sca4d.notification.email.sender.mapper">EmailSenderState</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/email/EmailTemplateSource.html#html()" class="member-name-link">html()</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplateSource.html" title="class in com.sca4d.notification.email">EmailTemplateSource</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/RenderedEmail.html#html()" class="member-name-link">html()</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/RenderedEmail.html" title="class in com.sca4d.notification.email">RenderedEmail</a></dt>
 <dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:I">I</h2>
 <dl class="index">
+<dt><a href="com/sca4d/notification/email/mapper/EmailTemplateMapper.html#insert(long,com.sca4d.core.api.code.TreeCode,java.lang.String)" class="member-name-link">insert(long, TreeCode, String)</a> - Method in interface com.sca4d.notification.email.mapper.<a href="com/sca4d/notification/email/mapper/EmailTemplateMapper.html" title="interface in com.sca4d.notification.email.mapper">EmailTemplateMapper</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/sender/mapper/EmailSenderMapper.html#insert(long,java.lang.String,java.lang.String,int,com.sca4d.notification.email.sender.SmtpSecurity,java.lang.String,java.lang.String,byte%5B%5D,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">insert(long, String, String, int, SmtpSecurity, String, String, byte[], String, String, String)</a> - Method in interface com.sca4d.notification.email.sender.mapper.<a href="com/sca4d/notification/email/sender/mapper/EmailSenderMapper.html" title="interface in com.sca4d.notification.email.sender.mapper">EmailSenderMapper</a></dt>
 <dd>
 <div class="block">新增默认停用的 SMTP 配置。</div>
 </dd>
+<dt><a href="com/sca4d/notification/email/EmailRenderer.html#inspect(com.sca4d.notification.email.EmailTemplateSource)" class="member-name-link">inspect(EmailTemplateSource)</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailRenderer.html" title="class in com.sca4d.notification.email">EmailRenderer</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:L">L</h2>
 <dl class="index">
 <dt><a href="com/sca4d/notification/email/sender/EmailSenderService.html#loadById(long)" class="member-name-link">loadById(long)</a> - Method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSenderService.html" title="class in com.sca4d.notification.email.sender">EmailSenderService</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/email/EmailTemplate.html#locales()" class="member-name-link">locales()</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplate.html" title="class in com.sca4d.notification.email">EmailTemplate</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/email/mapper/EmailTemplateState.html#localesJson()" class="member-name-link">localesJson()</a> - Method in class com.sca4d.notification.email.mapper.<a href="com/sca4d/notification/email/mapper/EmailTemplateState.html" title="class in com.sca4d.notification.email.mapper">EmailTemplateState</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:M">M</h2>
 <dl class="index">
+<dt><a href="com/sca4d/notification/email/mapper/EmailTemplateMapper.html#markDeleted(long,com.sca4d.core.api.concurrent.Version)" class="member-name-link">markDeleted(long, Version)</a> - Method in interface com.sca4d.notification.email.mapper.<a href="com/sca4d/notification/email/mapper/EmailTemplateMapper.html" title="interface in com.sca4d.notification.email.mapper">EmailTemplateMapper</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/sender/mapper/EmailSenderMapper.html#markDeleted(long,com.sca4d.core.api.concurrent.Version)" class="member-name-link">markDeleted(long, Version)</a> - Method in interface com.sca4d.notification.email.sender.mapper.<a href="com/sca4d/notification/email/sender/mapper/EmailSenderMapper.html" title="interface in com.sca4d.notification.email.sender.mapper">EmailSenderMapper</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/RenderedEmail.html#MAXIMUM_SUBJECT_LENGTH" class="member-name-link">MAXIMUM_SUBJECT_LENGTH</a> - Static variable in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/RenderedEmail.html" title="class in com.sca4d.notification.email">RenderedEmail</a></dt>
@@ -285,6 +381,10 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:P">P</h2>
 <dl class="index">
+<dt><a href="com/sca4d/notification/email/EmailTemplateRepository.html#page(com.sca4d.core.api.query.ListRequest)" class="member-name-link">page(ListRequest)</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplateRepository.html" title="class in com.sca4d.notification.email">EmailTemplateRepository</a></dt>
+<dd>
+<div class="block">分页读取未删除 Email 模板，并验证排序字段和最大页大小。</div>
+</dd>
 <dt><a href="com/sca4d/notification/email/sender/EmailSenderConfiguration.html#password()" class="member-name-link">password()</a> - Method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSenderConfiguration.html" title="class in com.sca4d.notification.email.sender">EmailSenderConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/sender/mapper/EmailSenderState.html#passwordCiphertext()" class="member-name-link">passwordCiphertext()</a> - Method in class com.sca4d.notification.email.sender.mapper.<a href="com/sca4d/notification/email/sender/mapper/EmailSenderState.html" title="class in com.sca4d.notification.email.sender.mapper">EmailSenderState</a></dt>
@@ -293,7 +393,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/sender/mapper/EmailSenderState.html#passwordKeyId()" class="member-name-link">passwordKeyId()</a> - Method in class com.sca4d.notification.email.sender.mapper.<a href="com/sca4d/notification/email/sender/mapper/EmailSenderState.html" title="class in com.sca4d.notification.email.sender.mapper">EmailSenderState</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/notification/email/sender/SmtpEmailTransport.html#passwordPurpose(long)" class="member-name-link">passwordPurpose(long)</a> - Static method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/SmtpEmailTransport.html" title="class in com.sca4d.notification.email.sender">SmtpEmailTransport</a></dt>
+<dt><a href="com/sca4d/notification/email/sender/SmtpEmailGateway.html#passwordPurpose(long)" class="member-name-link">passwordPurpose(long)</a> - Static method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/SmtpEmailGateway.html" title="class in com.sca4d.notification.email.sender">SmtpEmailGateway</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/sender/EmailSender.html#port()" class="member-name-link">port()</a> - Method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSender.html" title="class in com.sca4d.notification.email.sender">EmailSender</a></dt>
 <dd>&nbsp;</dd>
@@ -302,12 +402,18 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:R">R</h2>
 <dl class="index">
+<dt><a href="com/sca4d/notification/email/EmailRenderer.html#render(com.sca4d.notification.email.EmailTemplateSource,java.util.Locale,java.util.Map)" class="member-name-link">render(EmailTemplateSource, Locale, Map&lt;String, String&gt;)</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailRenderer.html" title="class in com.sca4d.notification.email">EmailRenderer</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/RenderedEmail.html" class="type-name-link" title="class in com.sca4d.notification.email">RenderedEmail</a> - Class in <a href="com/sca4d/notification/email/package-summary.html">com.sca4d.notification.email</a></dt>
 <dd>
 <div class="block">保存已经完成变量转义、主题校验和 HTML 清洗的 Email 内容。</div>
 </dd>
 <dt><a href="com/sca4d/notification/email/RenderedEmail.html#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">RenderedEmail(String, String, String)</a> - Constructor for class com.sca4d.notification.email.<a href="com/sca4d/notification/email/RenderedEmail.html" title="class in com.sca4d.notification.email">RenderedEmail</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/email/EmailTemplateRepository.html#replace(long,com.sca4d.core.api.code.TreeCode,java.util.Map)" class="member-name-link">replace(long, TreeCode, Map&lt;String, EmailTemplateSource&gt;)</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplateRepository.html" title="class in com.sca4d.notification.email">EmailTemplateRepository</a></dt>
+<dd>
+<div class="block">按当前版本替换 Email 模板内容；版本冲突或通知编码冲突时失败。</div>
+</dd>
 <dt><a href="com/sca4d/notification/email/sender/EmailSenderRepository.html#replace(long,java.lang.String,java.lang.String,int,com.sca4d.notification.email.sender.SmtpSecurity,java.lang.String,boolean,com.sca4d.core.api.security.EncryptedSecret,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">replace(long, String, String, int, SmtpSecurity, String, boolean, EncryptedSecret, String, String, String)</a> - Method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSenderRepository.html" title="class in com.sca4d.notification.email.sender">EmailSenderRepository</a></dt>
 <dd>
 <div class="block">按请求版本条件或内部调用读取的当前版本原子替换 SMTP 配置。</div>
@@ -324,6 +430,22 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/EmailRecipientResolver.html#resolve(com.sca4d.core.api.notification.NotificationRecipient)" class="member-name-link">resolve(NotificationRecipient)</a> - Method in interface com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailRecipientResolver.html" title="interface in com.sca4d.notification.email">EmailRecipientResolver</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/email/EmailTemplate.html#RESOURCE_TYPE" class="member-name-link">RESOURCE_TYPE</a> - Static variable in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplate.html" title="class in com.sca4d.notification.email">EmailTemplate</a></dt>
+<dd>
+<div class="block">Email Template 审计使用的稳定资源类型。</div>
+</dd>
+<dt><a href="com/sca4d/notification/email/sender/EmailSender.html#RESOURCE_TYPE" class="member-name-link">RESOURCE_TYPE</a> - Static variable in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSender.html" title="class in com.sca4d.notification.email.sender">EmailSender</a></dt>
+<dd>
+<div class="block">Email Sender 审计使用的稳定资源类型。</div>
+</dd>
+<dt><a href="com/sca4d/notification/email/EmailTemplate.html#RESOURCE_TYPE_VALUE" class="member-name-link">RESOURCE_TYPE_VALUE</a> - Static variable in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplate.html" title="class in com.sca4d.notification.email">EmailTemplate</a></dt>
+<dd>
+<div class="block">供 Java 注解参数使用的资源类型文本。</div>
+</dd>
+<dt><a href="com/sca4d/notification/email/sender/EmailSender.html#RESOURCE_TYPE_VALUE" class="member-name-link">RESOURCE_TYPE_VALUE</a> - Static variable in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSender.html" title="class in com.sca4d.notification.email.sender">EmailSender</a></dt>
+<dd>
+<div class="block">供 Java 注解参数使用的资源类型文本。</div>
+</dd>
 </dl>
 <h2 class="title" id="I:S">S</h2>
 <dl class="index">
@@ -331,19 +453,23 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/sender/mapper/EmailSenderState.html#security()" class="member-name-link">security()</a> - Method in class com.sca4d.notification.email.sender.mapper.<a href="com/sca4d/notification/email/sender/mapper/EmailSenderState.html" title="class in com.sca4d.notification.email.sender.mapper">EmailSenderState</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/email/mapper/EmailTemplateMapper.html#select(java.lang.Long,com.sca4d.core.api.code.TreeCode,java.lang.Boolean)" class="member-name-link">select(Long, TreeCode, Boolean)</a> - Method in interface com.sca4d.notification.email.mapper.<a href="com/sca4d/notification/email/mapper/EmailTemplateMapper.html" title="interface in com.sca4d.notification.email.mapper">EmailTemplateMapper</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/sender/mapper/EmailSenderMapper.html#select(java.lang.Long,java.lang.Boolean)" class="member-name-link">select(Long, Boolean)</a> - Method in interface com.sca4d.notification.email.sender.mapper.<a href="com/sca4d/notification/email/sender/mapper/EmailSenderMapper.html" title="interface in com.sca4d.notification.email.sender.mapper">EmailSenderMapper</a></dt>
 <dd>
 <div class="block">按可选标识和启用状态读取未删除 SMTP 配置。</div>
 </dd>
-<dt><a href="com/sca4d/notification/email/sender/EmailTransport.html#send(com.sca4d.notification.email.sender.EmailSenderConfiguration,java.lang.String,com.sca4d.notification.email.RenderedEmail)" class="member-name-link">send(EmailSenderConfiguration, String, RenderedEmail)</a> - Method in interface com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailTransport.html" title="interface in com.sca4d.notification.email.sender">EmailTransport</a></dt>
+<dt><a href="com/sca4d/notification/email/mapper/EmailTemplateMapper.html#selectPage(long,int,java.util.List)" class="member-name-link">selectPage(long, int, List&lt;SortOrder&gt;)</a> - Method in interface com.sca4d.notification.email.mapper.<a href="com/sca4d/notification/email/mapper/EmailTemplateMapper.html" title="interface in com.sca4d.notification.email.mapper">EmailTemplateMapper</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/notification/email/sender/SmtpEmailTransport.html#send(com.sca4d.notification.email.sender.EmailSenderConfiguration,java.lang.String,com.sca4d.notification.email.RenderedEmail)" class="member-name-link">send(EmailSenderConfiguration, String, RenderedEmail)</a> - Method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/SmtpEmailTransport.html" title="class in com.sca4d.notification.email.sender">SmtpEmailTransport</a></dt>
+<dt><a href="com/sca4d/notification/email/sender/EmailGateway.html#send(com.sca4d.notification.email.sender.EmailSenderConfiguration,java.lang.String,com.sca4d.notification.email.RenderedEmail)" class="member-name-link">send(EmailSenderConfiguration, String, RenderedEmail)</a> - Method in interface com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailGateway.html" title="interface in com.sca4d.notification.email.sender">EmailGateway</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/notification/email/sender/EmailTransport.html#send(com.sca4d.notification.email.sender.EmailSenderConfiguration,java.lang.String,com.sca4d.notification.email.RenderedEmail,java.util.List)" class="member-name-link">send(EmailSenderConfiguration, String, RenderedEmail, List&lt;EmailAttachment&gt;)</a> - Method in interface com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailTransport.html" title="interface in com.sca4d.notification.email.sender">EmailTransport</a></dt>
+<dt><a href="com/sca4d/notification/email/sender/SmtpEmailGateway.html#send(com.sca4d.notification.email.sender.EmailSenderConfiguration,java.lang.String,com.sca4d.notification.email.RenderedEmail)" class="member-name-link">send(EmailSenderConfiguration, String, RenderedEmail)</a> - Method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/SmtpEmailGateway.html" title="class in com.sca4d.notification.email.sender">SmtpEmailGateway</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/email/sender/EmailGateway.html#send(com.sca4d.notification.email.sender.EmailSenderConfiguration,java.lang.String,com.sca4d.notification.email.RenderedEmail,java.util.List)" class="member-name-link">send(EmailSenderConfiguration, String, RenderedEmail, List&lt;EmailAttachment&gt;)</a> - Method in interface com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailGateway.html" title="interface in com.sca4d.notification.email.sender">EmailGateway</a></dt>
 <dd>
 <div class="block">发送带附件的 Email。默认实现只接受空附件，支持附件的 Transport 必须覆盖本方法。</div>
 </dd>
-<dt><a href="com/sca4d/notification/email/sender/SmtpEmailTransport.html#send(com.sca4d.notification.email.sender.EmailSenderConfiguration,java.lang.String,com.sca4d.notification.email.RenderedEmail,java.util.List)" class="member-name-link">send(EmailSenderConfiguration, String, RenderedEmail, List&lt;EmailAttachment&gt;)</a> - Method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/SmtpEmailTransport.html" title="class in com.sca4d.notification.email.sender">SmtpEmailTransport</a></dt>
+<dt><a href="com/sca4d/notification/email/sender/SmtpEmailGateway.html#send(com.sca4d.notification.email.sender.EmailSenderConfiguration,java.lang.String,com.sca4d.notification.email.RenderedEmail,java.util.List)" class="member-name-link">send(EmailSenderConfiguration, String, RenderedEmail, List&lt;EmailAttachment&gt;)</a> - Method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/SmtpEmailGateway.html" title="class in com.sca4d.notification.email.sender">SmtpEmailGateway</a></dt>
 <dd>
 <div class="block">使用 MIME multipart 发送带可选附件的 Email。</div>
 </dd>
@@ -365,12 +491,16 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/sender/mapper/EmailSenderState.html#senderId()" class="member-name-link">senderId()</a> - Method in class com.sca4d.notification.email.sender.mapper.<a href="com/sca4d/notification/email/sender/mapper/EmailSenderState.html" title="class in com.sca4d.notification.email.sender.mapper">EmailSenderState</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/notification/email/EmailMessageService.html#sendNow(com.sca4d.core.api.notification.NotificationCode,java.lang.String,java.util.Locale,java.util.Map,java.util.List)" class="member-name-link">sendNow(NotificationCode, String, Locale, Map&lt;String, String&gt;, List&lt;EmailAttachment&gt;)</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailMessageService.html" title="class in com.sca4d.notification.email">EmailMessageService</a></dt>
+<dt><a href="com/sca4d/notification/email/EmailMessageService.html#sendNow(com.sca4d.core.api.code.TreeCode,java.lang.String,java.util.Locale,java.util.Map,java.util.List)" class="member-name-link">sendNow(TreeCode, String, Locale, Map&lt;String, String&gt;, List&lt;EmailAttachment&gt;)</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailMessageService.html" title="class in com.sca4d.notification.email">EmailMessageService</a></dt>
 <dd>
 <div class="block">渲染指定模板并向已校验邮箱同步发送附件。</div>
 </dd>
 <dt><a href="com/sca4d/notification/email/config/EmailNotificationProperties.html#setConnectionTimeout(java.time.Duration)" class="member-name-link">setConnectionTimeout(Duration)</a> - Method in class com.sca4d.notification.email.config.<a href="com/sca4d/notification/email/config/EmailNotificationProperties.html" title="class in com.sca4d.notification.email.config">EmailNotificationProperties</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/email/EmailTemplateRepository.html#setEnabled(long,boolean)" class="member-name-link">setEnabled(long, boolean)</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplateRepository.html" title="class in com.sca4d.notification.email">EmailTemplateRepository</a></dt>
+<dd>
+<div class="block">按当前版本修改 Email 模板的启用状态。</div>
+</dd>
 <dt><a href="com/sca4d/notification/email/sender/EmailSenderRepository.html#setEnabled(long,boolean)" class="member-name-link">setEnabled(long, boolean)</a> - Method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSenderRepository.html" title="class in com.sca4d.notification.email.sender">EmailSenderRepository</a></dt>
 <dd>
 <div class="block">按请求版本条件或内部调用读取的当前版本原子修改启用状态。</div>
@@ -391,20 +521,26 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">SMTP 连接、认证或发送失败。</div>
 </dd>
-<dt><a href="com/sca4d/notification/email/sender/SmtpEmailTransport.html" class="type-name-link" title="class in com.sca4d.notification.email.sender">SmtpEmailTransport</a> - Class in <a href="com/sca4d/notification/email/sender/package-summary.html">com.sca4d.notification.email.sender</a></dt>
+<dt><a href="com/sca4d/notification/email/sender/SmtpEmailGateway.html" class="type-name-link" title="class in com.sca4d.notification.email.sender">SmtpEmailGateway</a> - Class in <a href="com/sca4d/notification/email/sender/package-summary.html">com.sca4d.notification.email.sender</a></dt>
 <dd>
 <div class="block">使用 JavaMail 和 SecretKeyring 建立三种 TLS 模式的 SMTP 连接。</div>
 </dd>
-<dt><a href="com/sca4d/notification/email/sender/SmtpEmailTransport.html#%3Cinit%3E(com.sca4d.core.api.security.SecretKeyring,com.sca4d.notification.email.config.EmailNotificationProperties)" class="member-name-link">SmtpEmailTransport(SecretKeyring, EmailNotificationProperties)</a> - Constructor for class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/SmtpEmailTransport.html" title="class in com.sca4d.notification.email.sender">SmtpEmailTransport</a></dt>
+<dt><a href="com/sca4d/notification/email/sender/SmtpEmailGateway.html#%3Cinit%3E(com.sca4d.core.api.security.SecretKeyring,com.sca4d.notification.email.config.EmailNotificationProperties)" class="member-name-link">SmtpEmailGateway(SecretKeyring, EmailNotificationProperties)</a> - Constructor for class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/SmtpEmailGateway.html" title="class in com.sca4d.notification.email.sender">SmtpEmailGateway</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/sender/SmtpSecurity.html" class="type-name-link" title="enum class in com.sca4d.notification.email.sender">SmtpSecurity</a> - Enum Class in <a href="com/sca4d/notification/email/sender/package-summary.html">com.sca4d.notification.email.sender</a></dt>
 <dd>
 <div class="block">声明 SMTP 连接使用明文、STARTTLS 升级或隐式 TLS。</div>
 </dd>
+<dt><a href="com/sca4d/notification/email/EmailTemplate.html#source(java.util.Locale)" class="member-name-link">source(Locale)</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplate.html" title="class in com.sca4d.notification.email">EmailTemplate</a></dt>
+<dd>
+<div class="block">返回 source 方法提供的结果。</div>
+</dd>
 <dt><a href="com/sca4d/notification/email/sender/SmtpSecurity.html#STARTTLS" class="member-name-link">STARTTLS</a> - Enum constant in enum class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/SmtpSecurity.html" title="enum class in com.sca4d.notification.email.sender">SmtpSecurity</a></dt>
 <dd>
 <div class="block">建立 SMTP 连接后要求使用 STARTTLS 升级。</div>
 </dd>
+<dt><a href="com/sca4d/notification/email/EmailTemplateSource.html#subject()" class="member-name-link">subject()</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplateSource.html" title="class in com.sca4d.notification.email">EmailTemplateSource</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/RenderedEmail.html#subject()" class="member-name-link">subject()</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/RenderedEmail.html" title="class in com.sca4d.notification.email">RenderedEmail</a></dt>
 <dd>&nbsp;</dd>
 </dl>
@@ -422,13 +558,19 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Email 模板不存在。</div>
 </dd>
+<dt><a href="com/sca4d/notification/email/EmailTemplate.html#templateId()" class="member-name-link">templateId()</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplate.html" title="class in com.sca4d.notification.email">EmailTemplate</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/email/mapper/EmailTemplateState.html#templateId()" class="member-name-link">templateId()</a> - Method in class com.sca4d.notification.email.mapper.<a href="com/sca4d/notification/email/mapper/EmailTemplateState.html" title="class in com.sca4d.notification.email.mapper">EmailTemplateState</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/sender/EmailSenderService.html#testConnection(long)" class="member-name-link">testConnection(long)</a> - Method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSenderService.html" title="class in com.sca4d.notification.email.sender">EmailSenderService</a></dt>
 <dd>
 <div class="block">使用指定配置建立并关闭一次 SMTP 连接，不发送邮件。</div>
 </dd>
-<dt><a href="com/sca4d/notification/email/sender/EmailTransport.html#testConnection(com.sca4d.notification.email.sender.EmailSenderConfiguration)" class="member-name-link">testConnection(EmailSenderConfiguration)</a> - Method in interface com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailTransport.html" title="interface in com.sca4d.notification.email.sender">EmailTransport</a></dt>
+<dt><a href="com/sca4d/notification/email/sender/EmailGateway.html#testConnection(com.sca4d.notification.email.sender.EmailSenderConfiguration)" class="member-name-link">testConnection(EmailSenderConfiguration)</a> - Method in interface com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailGateway.html" title="interface in com.sca4d.notification.email.sender">EmailGateway</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/notification/email/sender/SmtpEmailTransport.html#testConnection(com.sca4d.notification.email.sender.EmailSenderConfiguration)" class="member-name-link">testConnection(EmailSenderConfiguration)</a> - Method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/SmtpEmailTransport.html" title="class in com.sca4d.notification.email.sender">SmtpEmailTransport</a></dt>
+<dt><a href="com/sca4d/notification/email/sender/SmtpEmailGateway.html#testConnection(com.sca4d.notification.email.sender.EmailSenderConfiguration)" class="member-name-link">testConnection(EmailSenderConfiguration)</a> - Method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/SmtpEmailGateway.html" title="class in com.sca4d.notification.email.sender">SmtpEmailGateway</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/email/EmailTemplateSource.html#text()" class="member-name-link">text()</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplateSource.html" title="class in com.sca4d.notification.email">EmailTemplateSource</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/RenderedEmail.html#text()" class="member-name-link">text()</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/RenderedEmail.html" title="class in com.sca4d.notification.email">RenderedEmail</a></dt>
 <dd>&nbsp;</dd>
@@ -439,6 +581,8 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:U">U</h2>
 <dl class="index">
+<dt><a href="com/sca4d/notification/email/mapper/EmailTemplateMapper.html#update(long,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.concurrent.Version)" class="member-name-link">update(long, Patch&lt;TreeCode&gt;, Patch&lt;String&gt;, Patch&lt;Boolean&gt;, Version)</a> - Method in interface com.sca4d.notification.email.mapper.<a href="com/sca4d/notification/email/mapper/EmailTemplateMapper.html" title="interface in com.sca4d.notification.email.mapper">EmailTemplateMapper</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/email/sender/mapper/EmailSenderMapper.html#update(long,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.concurrent.Version)" class="member-name-link">update(long, Patch&lt;String&gt;, Patch&lt;String&gt;, Patch&lt;Integer&gt;, Patch&lt;SmtpSecurity&gt;, Patch&lt;String&gt;, Patch&lt;String&gt;, Patch&lt;byte[]&gt;, Patch&lt;String&gt;, Patch&lt;String&gt;, Patch&lt;String&gt;, Patch&lt;Boolean&gt;, Version)</a> - Method in interface com.sca4d.notification.email.sender.mapper.<a href="com/sca4d/notification/email/sender/mapper/EmailSenderMapper.html" title="interface in com.sca4d.notification.email.sender.mapper">EmailSenderMapper</a></dt>
 <dd>
 <div class="block">按预期版本原子替换 SMTP 地址、认证和发件资料。</div>
@@ -469,6 +613,14 @@ the order they are declared.</div>
 <dd>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
+</dd>
+<dt><a href="com/sca4d/notification/email/EmailTemplate.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplate.html" title="class in com.sca4d.notification.email">EmailTemplate</a></dt>
+<dd>
+<div class="block">返回 version 方法提供的结果。</div>
+</dd>
+<dt><a href="com/sca4d/notification/email/mapper/EmailTemplateState.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.notification.email.mapper.<a href="com/sca4d/notification/email/mapper/EmailTemplateState.html" title="class in com.sca4d.notification.email.mapper">EmailTemplateState</a></dt>
+<dd>
+<div class="block">返回 version 方法提供的结果。</div>
 </dd>
 <dt><a href="com/sca4d/notification/email/sender/EmailSender.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSender.html" title="class in com.sca4d.notification.email.sender">EmailSender</a></dt>
 <dd>&nbsp;</dd>

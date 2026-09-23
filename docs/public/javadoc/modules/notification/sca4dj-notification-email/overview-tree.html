@@ -53,6 +53,7 @@ loadScripts(document, 'script');</script>
 <ul class="horizontal contents-list">
 <li><a href="com/sca4d/notification/email/package-tree.html">com.sca4d.notification.email</a>, </li>
 <li><a href="com/sca4d/notification/email/config/package-tree.html">com.sca4d.notification.email.config</a>, </li>
+<li><a href="com/sca4d/notification/email/mapper/package-tree.html">com.sca4d.notification.email.mapper</a>, </li>
 <li><a href="com/sca4d/notification/email/sender/package-tree.html">com.sca4d.notification.email.sender</a>, </li>
 <li><a href="com/sca4d/notification/email/sender/mapper/package-tree.html">com.sca4d.notification.email.sender.mapper</a></li>
 </ul>
@@ -63,17 +64,23 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailAddresses.html" class="type-name-link" title="class in com.sca4d.notification.email">EmailAddresses</a></li>
 <li class="circle">com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailAttachment.html" class="type-name-link" title="class in com.sca4d.notification.email">EmailAttachment</a></li>
+<li class="circle">com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailChannels.html" class="type-name-link" title="class in com.sca4d.notification.email">EmailChannels</a></li>
 <li class="circle">com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailMessageService.html" class="type-name-link" title="class in com.sca4d.notification.email">EmailMessageService</a></li>
 <li class="circle">com.sca4d.notification.email.config.<a href="com/sca4d/notification/email/config/EmailNotificationAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.notification.email.config">EmailNotificationAutoConfiguration</a></li>
 <li class="circle">com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailNotificationDelivery.html" class="type-name-link" title="class in com.sca4d.notification.email">EmailNotificationDelivery</a> (implements com.sca4d.core.api.notification.NotificationDelivery)</li>
 <li class="circle">com.sca4d.notification.email.config.<a href="com/sca4d/notification/email/config/EmailNotificationProperties.html" class="type-name-link" title="class in com.sca4d.notification.email.config">EmailNotificationProperties</a></li>
+<li class="circle">com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailRenderer.html" class="type-name-link" title="class in com.sca4d.notification.email">EmailRenderer</a> (implements com.sca4d.core.api.render.Renderer&lt;S,<wbr>R&gt;)</li>
 <li class="circle">com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSender.html" class="type-name-link" title="class in com.sca4d.notification.email.sender">EmailSender</a></li>
 <li class="circle">com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSenderConfiguration.html" class="type-name-link" title="class in com.sca4d.notification.email.sender">EmailSenderConfiguration</a></li>
 <li class="circle">com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSenderRepository.html" class="type-name-link" title="class in com.sca4d.notification.email.sender">EmailSenderRepository</a></li>
 <li class="circle">com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailSenderService.html" class="type-name-link" title="class in com.sca4d.notification.email.sender">EmailSenderService</a></li>
 <li class="circle">com.sca4d.notification.email.sender.mapper.<a href="com/sca4d/notification/email/sender/mapper/EmailSenderState.html" class="type-name-link" title="class in com.sca4d.notification.email.sender.mapper">EmailSenderState</a></li>
+<li class="circle">com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplate.html" class="type-name-link" title="class in com.sca4d.notification.email">EmailTemplate</a></li>
+<li class="circle">com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplateRepository.html" class="type-name-link" title="class in com.sca4d.notification.email">EmailTemplateRepository</a></li>
+<li class="circle">com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailTemplateSource.html" class="type-name-link" title="class in com.sca4d.notification.email">EmailTemplateSource</a></li>
+<li class="circle">com.sca4d.notification.email.mapper.<a href="com/sca4d/notification/email/mapper/EmailTemplateState.html" class="type-name-link" title="class in com.sca4d.notification.email.mapper">EmailTemplateState</a></li>
 <li class="circle">com.sca4d.notification.email.<a href="com/sca4d/notification/email/RenderedEmail.html" class="type-name-link" title="class in com.sca4d.notification.email">RenderedEmail</a></li>
-<li class="circle">com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/SmtpEmailTransport.html" class="type-name-link" title="class in com.sca4d.notification.email.sender">SmtpEmailTransport</a> (implements com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailTransport.html" title="interface in com.sca4d.notification.email.sender">EmailTransport</a>)</li>
+<li class="circle">com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/SmtpEmailGateway.html" class="type-name-link" title="class in com.sca4d.notification.email.sender">SmtpEmailGateway</a> (implements com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailGateway.html" title="interface in com.sca4d.notification.email.sender">EmailGateway</a>)</li>
 </ul>
 </li>
 </ul>
@@ -81,9 +88,10 @@ loadScripts(document, 'script');</script>
 <section class="hierarchy">
 <h2 title="Interface Hierarchy">Interface Hierarchy</h2>
 <ul>
+<li class="circle">com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailGateway.html" class="type-name-link" title="interface in com.sca4d.notification.email.sender">EmailGateway</a></li>
 <li class="circle">com.sca4d.notification.email.<a href="com/sca4d/notification/email/EmailRecipientResolver.html" class="type-name-link" title="interface in com.sca4d.notification.email">EmailRecipientResolver</a></li>
 <li class="circle">com.sca4d.notification.email.sender.mapper.<a href="com/sca4d/notification/email/sender/mapper/EmailSenderMapper.html" class="type-name-link" title="interface in com.sca4d.notification.email.sender.mapper">EmailSenderMapper</a></li>
-<li class="circle">com.sca4d.notification.email.sender.<a href="com/sca4d/notification/email/sender/EmailTransport.html" class="type-name-link" title="interface in com.sca4d.notification.email.sender">EmailTransport</a></li>
+<li class="circle">com.sca4d.notification.email.mapper.<a href="com/sca4d/notification/email/mapper/EmailTemplateMapper.html" class="type-name-link" title="interface in com.sca4d.notification.email.mapper">EmailTemplateMapper</a></li>
 </ul>
 </section>
 <section class="hierarchy">

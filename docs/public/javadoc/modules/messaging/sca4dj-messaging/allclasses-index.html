@@ -55,37 +55,29 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary" aria-labelledby="all-classes-table-tab0">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/messaging/rabbit/ConsumerContainers.html" title="class in com.sca4d.messaging.rabbit">ConsumerContainers</a></div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/messaging/outbox/MessageOutboxDispatcher.html" title="class in com.sca4d.messaging.outbox">MessageOutboxDispatcher</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">为每个 MessageConsumer 启动竞争消费容器，并把任意消费失败直接拒绝到该 Consumer 的 DLQ。</div>
+<div class="block">多实例领取 Outbox 记录，在事务外发布，并用独立事务写回确认或失败结果。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/messaging/config/MessagingAutoConfiguration.html" title="class in com.sca4d.messaging.config">MessagingAutoConfiguration</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/messaging/outbox/MessageOutboxRepository.html" title="class in com.sca4d.messaging.outbox">MessageOutboxRepository</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">自动装配业务消息 RabbitMQ 拓扑、Consumer 容器、发布器和 Outbox 派发。</div>
+<div class="block">保存 Outbox 消息，并用租约和版本条件领取及完成派发。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/messaging/rabbit/MessagingEnvelopeCodec.html" title="class in com.sca4d.messaging.rabbit">MessagingEnvelopeCodec</a></div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/messaging/config/MessagingAutoConfiguration.html" title="class in com.sca4d.messaging.config">MessagingAutoConfiguration</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">编码和严格校验 RabbitMQ 与 Outbox 共用的业务事件 JSON 信封。</div>
+<div class="block">自动装配业务消息 RabbitMQ 拓扑、Consumer 容器、发布器和 Outbox 派发。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/messaging/config/MessagingProperties.html" title="class in com.sca4d.messaging.config">MessagingProperties</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">配置 RabbitMQ 发布确认以及 Outbox 派发、租约、退避和清理。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/messaging/rabbit/MessagingTopology.html" title="class in com.sca4d.messaging.rabbit">MessagingTopology</a></div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/messaging/outbox/mapper/OutboxCandidate.html" title="class in com.sca4d.messaging.outbox.mapper">OutboxCandidate</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">校验 MessageConsumer 契约，并声明持久业务 exchange、Consumer 队列和独立 DLQ。</div>
-</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/messaging/outbox/mapper/OutboxCandidate.html" title="class in com.sca4d.messaging.outbox.mapper">OutboxCandidate</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存 Outbox 已写入领取租约后执行发布所需的列。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/messaging/outbox/OutboxCleanupTask.html" title="class in com.sca4d.messaging.outbox">OutboxCleanupTask</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">由集群定时器直接触发一次超过保留期的 SENT Outbox 记录分批删除。</div>
-</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/messaging/outbox/OutboxDispatcher.html" title="class in com.sca4d.messaging.outbox">OutboxDispatcher</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/messaging/outbox/OutboxCleanupTask.html" title="class in com.sca4d.messaging.outbox">OutboxCleanupTask</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">多实例领取 Outbox 记录，在事务外发布，并用独立事务写回确认或失败结果。</div>
+<div class="block">由集群定时器直接触发一次超过保留期的 SENT Outbox 记录分批删除。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/messaging/outbox/OutboxDispatchTask.html" title="class in com.sca4d.messaging.outbox">OutboxDispatchTask</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
@@ -95,21 +87,29 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">执行 messaging_outbox 最小行写入、条件领取、状态更新和清理 SQL。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/messaging/outbox/OutboxRepository.html" title="class in com.sca4d.messaging.outbox">OutboxRepository</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">保存 Outbox 消息，并用租约和版本条件领取及完成派发。</div>
-</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/messaging/outbox/OutboxStatus.html" title="enum class in com.sca4d.messaging.outbox">OutboxStatus</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/messaging/outbox/OutboxStatus.html" title="enum class in com.sca4d.messaging.outbox">OutboxStatus</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
 <div class="block">表示 Outbox 记录等待、发送中、失败待重试或已经发送。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/messaging/rabbit/RabbitMessagePublisher.html" title="class in com.sca4d.messaging.rabbit">RabbitMessagePublisher</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">实现立即、提交后和 Outbox 三种业务消息发布时机。</div>
-</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/messaging/rabbit/RabbitMessageSender.html" title="class in com.sca4d.messaging.rabbit">RabbitMessageSender</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/messaging/rabbit/RabbitHandlerContainers.html" title="class in com.sca4d.messaging.rabbit">RabbitHandlerContainers</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">使用 mandatory routing 和 publisher confirm 同步判断一次 RabbitMQ 发布是否成功。</div>
+<div class="block">为每个 MessageHandler 启动手动确认的竞争消费容器。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/messaging/rabbit/RabbitMessageBus.html" title="class in com.sca4d.messaging.rabbit">RabbitMessageBus</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">使用固定 RabbitMQ 基座实现立即、提交后和 Outbox 三种 Message 分发方式。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/messaging/rabbit/RabbitMessageEnvelopeCodec.html" title="class in com.sca4d.messaging.rabbit">RabbitMessageEnvelopeCodec</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">编码和严格校验 RabbitMQ 与 Outbox 共用的通用 Message 信封。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/messaging/rabbit/RabbitMessageTopology.html" title="class in com.sca4d.messaging.rabbit">RabbitMessageTopology</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">校验 Message Handler 契约，并声明持久业务 exchange、Handler 队列、retry queue 和 DLQ。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/messaging/rabbit/RabbitPublisher.html" title="class in com.sca4d.messaging.rabbit">RabbitPublisher</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">使用 mandatory routing 和 publisher confirm 同步判断 RabbitMQ 发布是否成功。</div>
 </div>
 </div>
 </div>

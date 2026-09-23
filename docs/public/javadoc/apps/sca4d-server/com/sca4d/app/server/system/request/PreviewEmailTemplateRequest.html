@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">PreviewEmailTemplateRequest</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">接收未保存 Email 模板、目标 Locale 和预览变量。</div>
+<div class="block">接收一份未保存 Email 源码、目标 Locale 和预览变量。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -105,7 +105,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">PreviewEmailTemplateRequest</a>()</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建供 JSON 反序列化使用的空请求。</div>
+<div class="block">创建空的请求对象，供 JSON 绑定使用。</div>
 </div>
 </div>
 </section>
@@ -121,22 +121,22 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.fasterxml.jackson.databind.JsonNode</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getContent()" class="member-name-link">getContent</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="EmailTemplateSourceRequest.html" title="class in com.sca4d.app.server.system.request">EmailTemplateSourceRequest</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSource()" class="member-name-link">getSource</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#locale()" class="member-name-link">locale</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setContent(com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">setContent</a><wbr>(@Nullable com.fasterxml.jackson.databind.JsonNode&nbsp;content)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLanguageTag(java.lang.String)" class="member-name-link">setLanguageTag</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;languageTag)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLanguageTag(java.lang.String)" class="member-name-link">setLanguageTag</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;languageTag)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setSource(com.sca4d.app.server.system.request.EmailTemplateSourceRequest)" class="member-name-link">setSource</a><wbr>(@Nullable <a href="EmailTemplateSourceRequest.html" title="class in com.sca4d.app.server.system.request">EmailTemplateSourceRequest</a>&nbsp;source)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setVariables(java.util.Map)" class="member-name-link">setVariables</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;variables)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#variables()" class="member-name-link">variables</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
@@ -160,7 +160,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="&lt;init&gt;()">
 <h3>PreviewEmailTemplateRequest</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">PreviewEmailTemplateRequest</span>()</div>
-<div class="block">创建供 JSON 反序列化使用的空请求。</div>
+<div class="block">创建空的请求对象，供 JSON 绑定使用。</div>
 </section>
 </li>
 </ul>
@@ -172,24 +172,24 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="getContent()">
-<h3>getContent</h3>
+<section class="detail" id="getSource()">
+<h3>getSource</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.fasterxml.jackson.databind.JsonNode</span>&nbsp;<span class="element-name">getContent</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="EmailTemplateSourceRequest.html" title="class in com.sca4d.app.server.system.request">EmailTemplateSourceRequest</a></span>&nbsp;<span class="element-name">getSource</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>未保存的完整多语言模板字段</dd>
+<dd>Email 模板源码</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="setContent(com.fasterxml.jackson.databind.JsonNode)">
-<h3>setContent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setContent</span><wbr><span class="parameters">(@Nullable
- @Nullable com.fasterxml.jackson.databind.JsonNode&nbsp;content)</span></div>
+<section class="detail" id="setSource(com.sca4d.app.server.system.request.EmailTemplateSourceRequest)">
+<h3>setSource</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setSource</span><wbr><span class="parameters">(@Nullable
+ @Nullable <a href="EmailTemplateSourceRequest.html" title="class in com.sca4d.app.server.system.request">EmailTemplateSourceRequest</a>&nbsp;source)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>content</code> - 未保存的完整多语言模板字段</dd>
+<dd><code>source</code> - Email 模板源码</dd>
 </dl>
 </section>
 </li>
@@ -200,7 +200,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a></span>&nbsp;<span class="element-name">locale</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>预览使用的规范 Locale</dd>
+<dd>校验后的目标 Locale</dd>
 </dl>
 </section>
 </li>
@@ -211,7 +211,7 @@ loadScripts(document, 'script');</script>
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;languageTag)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>languageTag</code> - 预览使用的 BCP 47 Locale 标签</dd>
+<dd><code>languageTag</code> - BCP 47 Locale 标签</dd>
 </dl>
 </section>
 </li>
@@ -219,10 +219,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="variables()">
 <h3>variables</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">variables</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">variables</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>模板变量的不可修改副本</dd>
+<dd>不可修改的渲染变量</dd>
 </dl>
 </section>
 </li>
@@ -233,7 +233,7 @@ loadScripts(document, 'script');</script>
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;variables)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>variables</code> - 模板引用的变量</dd>
+<dd><code>variables</code> - 渲染变量</dd>
 </dl>
 </section>
 </li>

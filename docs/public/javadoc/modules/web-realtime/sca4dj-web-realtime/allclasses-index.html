@@ -59,81 +59,81 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存 SSE 与 STOMP 共同发送给浏览器的事件编码、版本、发生时间和 payload。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/connection/ConnectionDelivery.html" title="class in com.sca4d.web.realtime.connection">ConnectionDelivery</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/connection/BrowserWrite.html" title="class in com.sca4d.web.realtime.connection">BrowserWrite</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存发送给本机连接的浏览器信封以及发送后是否关闭连接。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/web/realtime/connection/LocalConnection.html" title="interface in com.sca4d.web.realtime.connection">LocalConnection</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/connection/DefaultWebRealtimePublisher.html" title="class in com.sca4d.web.realtime.connection">DefaultWebRealtimePublisher</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">把应用实时事件转换成 WebRealtimeMessage 并交给固定 MessageBus。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/web/realtime/connection/LocalConnection.html" title="interface in com.sca4d.web.realtime.connection">LocalConnection</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">表示当前 JVM 无法迁移的一个 SSE 或 WebSocket 句柄。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/connection/LocalConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">LocalConnectionRegistry</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/connection/LocalConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">LocalConnectionRegistry</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存当前节点的实际连接句柄，并定时续租对应 Redis 共享索引。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/connection/LocalNodeTransport.html" title="class in com.sca4d.web.realtime.connection">LocalNodeTransport</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/connection/LocalNodeRouter.html" title="class in com.sca4d.web.realtime.connection">LocalNodeRouter</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在单个 JVM 内把 Web Realtime 事件直接交给本机连接。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/rabbit/NodeMessageCodec.html" title="class in com.sca4d.web.realtime.rabbit">NodeMessageCodec</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/rabbit/NodeMessageCodec.html" title="class in com.sca4d.web.realtime.rabbit">NodeMessageCodec</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">编解码 RabbitMQ 节点队列使用的连接列表和浏览器事件信封。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/web/realtime/connection/NodeTransport.html" title="interface in com.sca4d.web.realtime.connection">NodeTransport</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/web/realtime/connection/NodeRouter.html" title="interface in com.sca4d.web.realtime.connection">NodeRouter</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">标识当前 Web Realtime 节点，并把浏览器事件交给持有目标连接的节点。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/web/realtime/config/NodeTransportMode.html" title="enum class in com.sca4d.web.realtime.config">NodeTransportMode</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/web/realtime/config/NodeRouterMode.html" title="enum class in com.sca4d.web.realtime.config">NodeRouterMode</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
 <div class="block">选择 Web Realtime 在单个 JVM 内投递，或通过 RabbitMQ 支持跨节点投递。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/rabbit/RabbitNodeTransport.html" title="class in com.sca4d.web.realtime.rabbit">RabbitNodeTransport</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/rabbit/RabbitNodeRouter.html" title="class in com.sca4d.web.realtime.rabbit">RabbitNodeRouter</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">通过当前节点的临时 RabbitMQ 队列收发允许丢失的 Web Realtime 投递。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用 Redis Hash、Set 和按租约到期时间排序的 ZSET 保存所有 Web Realtime 共享索引。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/ticket/RedisTicketService.html" title="class in com.sca4d.web.realtime.ticket">RedisTicketService</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/ticket/RedisTicketService.html" title="class in com.sca4d.web.realtime.ticket">RedisTicketService</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">把短期一次性 WebSocket 票据保存到 Redis，并在握手时原子读取和删除。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/sse/SseConnections.html" title="class in com.sca4d.web.realtime.sse">SseConnections</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/sse/SseConnections.html" title="class in com.sca4d.web.realtime.sse">SseConnections</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">建立 SSE 连接，并用有界队列串行写出浏览器信封和心跳。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/web/realtime/stomp/StompBrokerMode.html" title="enum class in com.sca4d.web.realtime.stomp">StompBrokerMode</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/web/realtime/stomp/StompBrokerMode.html" title="enum class in com.sca4d.web.realtime.stomp">StompBrokerMode</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
 <div class="block">选择 Spring STOMP destination 由当前节点还是 RabbitMQ STOMP 插件代理。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/stomp/StompConfiguration.html" title="class in com.sca4d.web.realtime.stomp">StompConfiguration</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/stomp/StompConfiguration.html" title="class in com.sca4d.web.realtime.stomp">StompConfiguration</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用 Spring STOMP 配置 WebSocket 端点、broker 模式和入出站拦截器。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/stomp/StompConnections.html" title="class in com.sca4d.web.realtime.stomp">StompConnections</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/stomp/StompConnections.html" title="class in com.sca4d.web.realtime.stomp">StompConnections</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">把 Spring STOMP Session 生命周期接入 ConnectionId、Redis 路由和本机连接句柄。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/stomp/StompInboundInterceptor.html" title="class in com.sca4d.web.realtime.stomp">StompInboundInterceptor</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/stomp/StompInboundInterceptor.html" title="class in com.sca4d.web.realtime.stomp">StompInboundInterceptor</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">校验 Spring STOMP 入站命令，并在 SUBSCRIBE、SEND 处理期间绑定独立 Call。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/stomp/StompOutboundInterceptor.html" title="class in com.sca4d.web.realtime.stomp">StompOutboundInterceptor</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/stomp/StompOutboundInterceptor.html" title="class in com.sca4d.web.realtime.stomp">StompOutboundInterceptor</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在 Spring 已写出会话失效事件后关闭对应 WebSocket。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/stomp/StompRateLimits.html" title="class in com.sca4d.web.realtime.stomp">StompRateLimits</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/stomp/StompRateLimits.html" title="class in com.sca4d.web.realtime.stomp">StompRateLimits</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">声明 Web Realtime STOMP 各命令的限流额度和业务维度。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/stomp/StompRelayPortCheck.html" title="class in com.sca4d.web.realtime.stomp">StompRelayPortCheck</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">在 `BROKER_RELAY` 模式启动完成前确认 RabbitMQ STOMP plugin TCP 端口可连接。</div>
-</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/connection/TargetPublisher.html" title="class in com.sca4d.web.realtime.connection">TargetPublisher</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/stomp/StompRelayPortCheck.html" title="class in com.sca4d.web.realtime.stomp">StompRelayPortCheck</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">使用 Redis 解析目标连接，并通过当前节点传输发送 Web Realtime 消息。</div>
+<div class="block">在 `BROKER_RELAY` 模式启动完成前确认 RabbitMQ STOMP plugin TCP 端口可连接。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/ticket/TicketHandshakeInterceptor.html" title="class in com.sca4d.web.realtime.ticket">TicketHandshakeInterceptor</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
@@ -146,6 +146,14 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html" title="class in com.sca4d.web.realtime.config">WebRealtimeInfrastructureNames</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">为 Web Realtime 的 Redis 键和 RabbitMQ 对象生成无歧义运行时名称。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/connection/WebRealtimeMessageCodec.html" title="class in com.sca4d.web.realtime.connection">WebRealtimeMessageCodec</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">把 WebRealtimeMessage 编解码为 RabbitMQ 与 Outbox 使用的稳定 JSON payload。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/connection/WebRealtimeMessageHandler.html" title="class in com.sca4d.web.realtime.connection">WebRealtimeMessageHandler</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">消费 WebRealtimeMessage，并通过共享索引和 NodeRouter 写入目标浏览器连接缓冲。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">

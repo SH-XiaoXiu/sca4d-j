@@ -132,14 +132,14 @@ implements com.sca4d.iot.api.query.DeviceHistoryQueryService</span></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#acknowledgements(long,com.sca4d.core.api.query.PageRequest)" class="member-name-link">acknowledgements</a><wbr>(long&nbsp;deviceId,
  @NotNull com.sca4d.core.api.query.PageRequest&nbsp;page)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;com.sca4d.iot.api.message.DeviceDownlinkMessage&gt;</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;com.sca4d.iot.api.message.DeviceDownlink&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#downlink(long)" class="member-name-link">downlink</a><wbr>(long&nbsp;messageId)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.query.Page<wbr>&lt;com.sca4d.iot.api.message.DeviceDownlinkMessage&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.query.Page<wbr>&lt;com.sca4d.iot.api.message.DeviceDownlink&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#downlinks(long,com.sca4d.core.api.query.PageRequest)" class="member-name-link">downlinks</a><wbr>(long&nbsp;deviceId,
  @NotNull com.sca4d.core.api.query.PageRequest&nbsp;page)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr>@NotNull com.sca4d.iot.api.message.DeviceDownlinkMessage&gt;</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr>@NotNull com.sca4d.iot.api.message.DeviceDownlink&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#downlinks(java.util.Collection)" class="member-name-link">downlinks</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;messageIds)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.query.Page<wbr>&lt;com.sca4d.iot.api.query.DeviceEvent&gt;</code></div>
@@ -194,7 +194,7 @@ implements com.sca4d.iot.api.query.DeviceHistoryQueryService</span></div>
 <section class="detail" id="downlink(long)">
 <h3>downlink</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;com.sca4d.iot.api.message.DeviceDownlinkMessage&gt;</span>&nbsp;<span class="element-name">downlink</span><wbr><span class="parameters">(long&nbsp;messageId)</span></div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;com.sca4d.iot.api.message.DeviceDownlink&gt;</span>&nbsp;<span class="element-name">downlink</span><wbr><span class="parameters">(long&nbsp;messageId)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>downlink</code>&nbsp;in interface&nbsp;<code>com.sca4d.iot.api.query.DeviceHistoryQueryService</code></dd>
@@ -205,7 +205,7 @@ implements com.sca4d.iot.api.query.DeviceHistoryQueryService</span></div>
 <section class="detail" id="downlinks(java.util.Collection)">
 <h3>downlinks</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr>@NotNull com.sca4d.iot.api.message.DeviceDownlinkMessage&gt;</span>&nbsp;<span class="element-name">downlinks</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr>@NotNull com.sca4d.iot.api.message.DeviceDownlink&gt;</span>&nbsp;<span class="element-name">downlinks</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;messageIds)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -217,7 +217,7 @@ implements com.sca4d.iot.api.query.DeviceHistoryQueryService</span></div>
 <section class="detail" id="downlinks(long,com.sca4d.core.api.query.PageRequest)">
 <h3>downlinks</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.query.Page&lt;com.sca4d.iot.api.message.DeviceDownlinkMessage&gt;</span>&nbsp;<span class="element-name">downlinks</span><wbr><span class="parameters">(long&nbsp;deviceId,
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.query.Page&lt;com.sca4d.iot.api.message.DeviceDownlink&gt;</span>&nbsp;<span class="element-name">downlinks</span><wbr><span class="parameters">(long&nbsp;deviceId,
  @NotNull
  @NotNull com.sca4d.core.api.query.PageRequest&nbsp;page)</span></div>
 <dl class="notes">

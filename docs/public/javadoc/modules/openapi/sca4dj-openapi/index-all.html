@@ -72,7 +72,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">在 Spring 完成全部单例创建后扫描并校验 OpenAPI 路由。</div>
 </dd>
-<dt><a href="com/sca4d/openapi/client/OpenApiClientService.html#allows(java.lang.String,java.lang.String)" class="member-name-link">allows(String, String)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientService.html" title="class in com.sca4d.openapi.client">OpenApiClientService</a></dt>
+<dt><a href="com/sca4d/openapi/client/OpenApiClientService.html#allows(java.lang.String,com.sca4d.core.api.code.TreeCode)" class="member-name-link">allows(String, TreeCode)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientService.html" title="class in com.sca4d.openapi.client">OpenApiClientService</a></dt>
 <dd>
 <div class="block">判断 Client 是否有效且已经开放指定 Operation。</div>
 </dd>
@@ -124,7 +124,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">根据当前 Session 创建 Application Client。</div>
 </dd>
-<dt><a href="com/sca4d/openapi/client/OpenApiClientRepository.html#create(com.sca4d.openapi.client.OpenApiClient,java.util.Collection)" class="member-name-link">create(OpenApiClient, Collection&lt;String&gt;)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientRepository.html" title="class in com.sca4d.openapi.client">OpenApiClientRepository</a></dt>
+<dt><a href="com/sca4d/openapi/client/OpenApiClientRepository.html#create(com.sca4d.openapi.client.OpenApiClient,java.util.Collection)" class="member-name-link">create(OpenApiClient, Collection&lt;TreeCode&gt;)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientRepository.html" title="class in com.sca4d.openapi.client">OpenApiClientRepository</a></dt>
 <dd>
 <div class="block">原子保存 Client 及完整 Operation 选择，关系写入失败时 Client 也回滚。</div>
 </dd>
@@ -209,7 +209,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:H">H</h2>
 <dl class="index">
-<dt><a href="com/sca4d/openapi/client/OpenApiClientRepository.html#hasOperation(java.lang.String,java.lang.String)" class="member-name-link">hasOperation(String, String)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientRepository.html" title="class in com.sca4d.openapi.client">OpenApiClientRepository</a></dt>
+<dt><a href="com/sca4d/openapi/client/OpenApiClientRepository.html#hasOperation(java.lang.String,com.sca4d.core.api.code.TreeCode)" class="member-name-link">hasOperation(String, TreeCode)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientRepository.html" title="class in com.sca4d.openapi.client">OpenApiClientRepository</a></dt>
 <dd>
 <div class="block">判断 Client 是否开放一个 Operation。</div>
 </dd>
@@ -481,7 +481,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">替换 Client 的 Operation 列表，仍要求当前 Session 拥有目标权限。</div>
 </dd>
-<dt><a href="com/sca4d/openapi/client/OpenApiClientRepository.html#replaceOperations(java.lang.String,java.util.Collection)" class="member-name-link">replaceOperations(String, Collection&lt;String&gt;)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientRepository.html" title="class in com.sca4d.openapi.client">OpenApiClientRepository</a></dt>
+<dt><a href="com/sca4d/openapi/client/OpenApiClientRepository.html#replaceOperations(java.lang.String,java.util.Collection)" class="member-name-link">replaceOperations(String, Collection&lt;TreeCode&gt;)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientRepository.html" title="class in com.sca4d.openapi.client">OpenApiClientRepository</a></dt>
 <dd>
 <div class="block">锁定 Client 后原子替换完整 Operation 列表；空集合清空，失败保留原关系。</div>
 </dd>
@@ -570,11 +570,11 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
 </dd>
-<dt><a href="com/sca4d/openapi/client/OpenApiClientOperationCheckerImpl.html#verifyAllowed(com.sca4d.core.api.call.Call,java.lang.String)" class="member-name-link">verifyAllowed(Call, String)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientOperationCheckerImpl.html" title="class in com.sca4d.openapi.client">OpenApiClientOperationCheckerImpl</a></dt>
+<dt><a href="com/sca4d/openapi/client/OpenApiClientOperationCheckerImpl.html#verifyAllowed(com.sca4d.core.api.call.Call,com.sca4d.core.api.code.TreeCode)" class="member-name-link">verifyAllowed(Call, TreeCode)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientOperationCheckerImpl.html" title="class in com.sca4d.openapi.client">OpenApiClientOperationCheckerImpl</a></dt>
 <dd>
 <div class="block">拒绝停用、未知或未开放目标 Operation 的 Client。</div>
 </dd>
-<dt><a href="com/sca4d/openapi/web/OpenApiClientOperationChecker.html#verifyAllowed(com.sca4d.core.api.call.Call,java.lang.String)" class="member-name-link">verifyAllowed(Call, String)</a> - Method in interface com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiClientOperationChecker.html" title="interface in com.sca4d.openapi.web">OpenApiClientOperationChecker</a></dt>
+<dt><a href="com/sca4d/openapi/web/OpenApiClientOperationChecker.html#verifyAllowed(com.sca4d.core.api.call.Call,com.sca4d.core.api.code.TreeCode)" class="member-name-link">verifyAllowed(Call, TreeCode)</a> - Method in interface com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiClientOperationChecker.html" title="interface in com.sca4d.openapi.web">OpenApiClientOperationChecker</a></dt>
 <dd>
 <div class="block">检查一次 OpenAPI 调用。</div>
 </dd>

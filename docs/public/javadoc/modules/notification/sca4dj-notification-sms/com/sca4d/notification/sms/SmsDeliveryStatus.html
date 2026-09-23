@@ -122,6 +122,14 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Provider 已明确接受请求，不表示手机最终送达。</div>
 </div>
+<div class="col-first odd-row-color"><code><a href="#DELIVERED" class="member-name-link">DELIVERED</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Provider 查询确认手机已经收到短信。</div>
+</div>
+<div class="col-first even-row-color"><code><a href="#FAILED" class="member-name-link">FAILED</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Provider 查询确认短信最终失败。</div>
+</div>
 <div class="col-first odd-row-color"><code><a href="#PENDING" class="member-name-link">PENDING</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">已登记尝试，Provider 调用尚未给出结果。</div>
@@ -194,10 +202,24 @@ the order they are declared.</div>
 </section>
 </li>
 <li>
+<section class="detail" id="DELIVERED">
+<h3>DELIVERED</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="SmsDeliveryStatus.html" title="enum class in com.sca4d.notification.sms">SmsDeliveryStatus</a></span>&nbsp;<span class="element-name">DELIVERED</span></div>
+<div class="block">Provider 查询确认手机已经收到短信。</div>
+</section>
+</li>
+<li>
 <section class="detail" id="REJECTED">
 <h3>REJECTED</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="SmsDeliveryStatus.html" title="enum class in com.sca4d.notification.sms">SmsDeliveryStatus</a></span>&nbsp;<span class="element-name">REJECTED</span></div>
 <div class="block">Provider 明确拒绝请求，可以按策略尝试下一候选。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="FAILED">
+<h3>FAILED</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="SmsDeliveryStatus.html" title="enum class in com.sca4d.notification.sms">SmsDeliveryStatus</a></span>&nbsp;<span class="element-name">FAILED</span></div>
+<div class="block">Provider 查询确认短信最终失败。</div>
 </section>
 </li>
 <li>

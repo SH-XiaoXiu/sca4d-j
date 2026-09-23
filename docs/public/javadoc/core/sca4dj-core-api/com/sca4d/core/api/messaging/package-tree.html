@@ -58,8 +58,22 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" class="type-name-link external-link" title="class or interface in java.lang">Object</a>
 <ul>
+<li class="circle">com.sca4d.core.api.messaging.<a href="DispatchPolicy.html" class="type-name-link" title="class in com.sca4d.core.api.messaging">DispatchPolicy</a></li>
+<li class="circle">com.sca4d.core.api.messaging.<a href="DispatchReceipt.html" class="type-name-link" title="class in com.sca4d.core.api.messaging">DispatchReceipt</a></li>
+<li class="circle">com.sca4d.core.api.messaging.<a href="HandlingDecision.html" class="type-name-link" title="class in com.sca4d.core.api.messaging">HandlingDecision</a></li>
+<li class="circle">com.sca4d.core.api.messaging.<a href="HandlingPolicy.html" class="type-name-link" title="class in com.sca4d.core.api.messaging">HandlingPolicy</a></li>
+<li class="circle">com.sca4d.core.api.messaging.<a href="IncomingMessage.html" class="type-name-link" title="class in com.sca4d.core.api.messaging">IncomingMessage</a>&lt;M&gt;</li>
+<li class="circle">com.sca4d.core.api.messaging.<a href="JacksonMessageCodec.html" class="type-name-link" title="class in com.sca4d.core.api.messaging">JacksonMessageCodec</a>&lt;M&gt; (implements com.sca4d.core.api.messaging.<a href="MessageCodec.html" title="interface in com.sca4d.core.api.messaging">MessageCodec</a>&lt;M&gt;)</li>
 <li class="circle">com.sca4d.core.api.messaging.<a href="MessageDelivery.html" class="type-name-link" title="class in com.sca4d.core.api.messaging">MessageDelivery</a>&lt;T&gt;</li>
+<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Number.html" class="type-name-link external-link" title="class or interface in java.lang">Number</a> (implements java.io.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a>)
+<ul>
+<li class="circle">com.sca4d.core.api.id.<a href="../id/Id.html" class="type-name-link" title="class in com.sca4d.core.api.id">Id</a> (implements java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;T&gt;)
+<ul>
 <li class="circle">com.sca4d.core.api.messaging.<a href="MessageId.html" class="type-name-link" title="class in com.sca4d.core.api.messaging">MessageId</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -67,8 +81,35 @@ loadScripts(document, 'script');</script>
 <section class="hierarchy">
 <h2 title="Interface Hierarchy">Interface Hierarchy</h2>
 <ul>
+<li class="circle">com.sca4d.core.api.codec.<a href="../codec/Codec.html" class="type-name-link" title="interface in com.sca4d.core.api.codec">Codec</a>&lt;V,<wbr>W&gt;
+<ul>
+<li class="circle">com.sca4d.core.api.codec.<a href="../codec/VersionedCodec.html" class="type-name-link" title="interface in com.sca4d.core.api.codec">VersionedCodec</a>&lt;V,<wbr>W&gt;
+<ul>
+<li class="circle">com.sca4d.core.api.messaging.<a href="MessageCodec.html" class="type-name-link" title="interface in com.sca4d.core.api.messaging">MessageCodec</a>&lt;M&gt;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="circle">com.sca4d.core.api.messaging.<a href="EventHandler.html" class="type-name-link" title="interface in com.sca4d.core.api.messaging">EventHandler</a>&lt;T&gt;</li>
+<li class="circle">com.sca4d.core.api.messaging.<a href="MessageBus.html" class="type-name-link" title="interface in com.sca4d.core.api.messaging">MessageBus</a></li>
 <li class="circle">com.sca4d.core.api.messaging.<a href="MessageConsumer.html" class="type-name-link" title="interface in com.sca4d.core.api.messaging">MessageConsumer</a>&lt;T&gt;</li>
-<li class="circle">com.sca4d.core.api.messaging.<a href="MessagePublisher.html" class="type-name-link" title="interface in com.sca4d.core.api.messaging">MessagePublisher</a></li>
+<li class="circle">com.sca4d.core.api.messaging.<a href="MessageHandler.html" class="type-name-link" title="interface in com.sca4d.core.api.messaging">MessageHandler</a>&lt;M&gt;</li>
+</ul>
+</section>
+<section class="hierarchy">
+<h2 title="Enum Class Hierarchy">Enum Class Hierarchy</h2>
+<ul>
+<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" class="type-name-link external-link" title="class or interface in java.lang">Object</a>
+<ul>
+<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" class="type-name-link external-link" title="class or interface in java.lang">Enum</a>&lt;E&gt; (implements java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;T&gt;, java.lang.constant.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/constant/Constable.html" title="class or interface in java.lang.constant" class="external-link">Constable</a>, java.io.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a>)
+<ul>
+<li class="circle">com.sca4d.core.api.messaging.<a href="DispatchPolicy.Mode.html" class="type-name-link" title="enum class in com.sca4d.core.api.messaging">DispatchPolicy.Mode</a></li>
+<li class="circle">com.sca4d.core.api.messaging.<a href="DispatchReceipt.Status.html" class="type-name-link" title="enum class in com.sca4d.core.api.messaging">DispatchReceipt.Status</a></li>
+<li class="circle">com.sca4d.core.api.messaging.<a href="HandlingDecision.Status.html" class="type-name-link" title="enum class in com.sca4d.core.api.messaging">HandlingDecision.Status</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </section>
 </main>

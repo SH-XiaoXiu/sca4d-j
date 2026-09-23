@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">GatewayHttpPaths</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">定义 Gateway 与应用实例共同使用的稳定 HTTP 路径。</div>
+<div class="block">定义 Gateway 与应用实例共同使用且不能由单侧配置改变的内部 HTTP 路径。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -105,38 +105,23 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#API_PATTERN" class="member-name-link">API_PATTERN</a></code></div>
+<div class="col-second even-row-color"><code><a href="#CALLBACK_PREFIX" class="member-name-link">CALLBACK_PREFIX</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Gateway 匹配全部公开 Server API 时使用的路径模式。</div>
+<div class="block">Server 内部回调编码前的路径前缀。</div>
 </div>
 <div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#API_PREFIX" class="member-name-link">API_PREFIX</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#CALLBACKS" class="member-name-link">CALLBACKS</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">外部调用 Server API 时使用的公开路径前缀。</div>
+<div class="block">Server 内部回调分发器的路径根。</div>
 </div>
 <div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#CALLBACK_PATTERN" class="member-name-link">CALLBACK_PATTERN</a></code></div>
+<div class="col-second even-row-color"><code><a href="#REGISTRATION_LEASE_PATTERN" class="member-name-link">REGISTRATION_LEASE_PATTERN</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Gateway 匹配单段回调编码时使用的路径模式。</div>
-</div>
-<div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#CALLBACK_PREFIX" class="member-name-link">CALLBACK_PREFIX</a></code></div>
-<div class="col-last odd-row-color">
-<div class="block">Gateway 回调编码前的路径前缀。</div>
-</div>
-<div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#CALLBACKS" class="member-name-link">CALLBACKS</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">Gateway 回调的路径根。</div>
-</div>
-<div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#REGISTRATION_LEASE_PATTERN" class="member-name-link">REGISTRATION_LEASE_PATTERN</a></code></div>
-<div class="col-last odd-row-color">
 <div class="block">Gateway 控制 API 匹配单个 Server 实例租约时使用的路径模式。</div>
 </div>
-<div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#REGISTRATIONS" class="member-name-link">REGISTRATIONS</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#REGISTRATIONS" class="member-name-link">REGISTRATIONS</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Server 实例注册、续租和注销使用的控制 API 路径根。</div>
 </div>
 </div>
@@ -161,40 +146,10 @@ loadScripts(document, 'script');</script>
 <h2>Field Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="API_PREFIX">
-<h3>API_PREFIX</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">API_PREFIX</span></div>
-<div class="block">外部调用 Server API 时使用的公开路径前缀。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.core.api.gateway.GatewayHttpPaths.API_PREFIX">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="API_PATTERN">
-<h3>API_PATTERN</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">API_PATTERN</span></div>
-<div class="block">Gateway 匹配全部公开 Server API 时使用的路径模式。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.core.api.gateway.GatewayHttpPaths.API_PATTERN">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="CALLBACKS">
 <h3>CALLBACKS</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">CALLBACKS</span></div>
-<div class="block">Gateway 回调的路径根。</div>
+<div class="block">Server 内部回调分发器的路径根。</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -209,27 +164,12 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="CALLBACK_PREFIX">
 <h3>CALLBACK_PREFIX</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">CALLBACK_PREFIX</span></div>
-<div class="block">Gateway 回调编码前的路径前缀。</div>
+<div class="block">Server 内部回调编码前的路径前缀。</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
 <ul class="tag-list">
 <li><a href="../../../../../constant-values.html#com.sca4d.core.api.gateway.GatewayHttpPaths.CALLBACK_PREFIX">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="CALLBACK_PATTERN">
-<h3>CALLBACK_PATTERN</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">CALLBACK_PATTERN</span></div>
-<div class="block">Gateway 匹配单段回调编码时使用的路径模式。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.core.api.gateway.GatewayHttpPaths.CALLBACK_PATTERN">Constant Field Values</a></li>
 </ul>
 </dd>
 </dl>

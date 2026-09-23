@@ -109,9 +109,9 @@ implements <a href="WebRealtimeSseConnector.html" title="interface in com.sca4d.
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.web.realtime.connection.RedisConnectionRegistry,com.sca4d.web.realtime.connection.LocalConnectionRegistry,com.sca4d.web.realtime.connection.NodeTransport,com.sca4d.web.realtime.config.WebRealtimeProperties)" class="member-name-link">SseConnections</a><wbr>(@NotNull <a href="../connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a>&nbsp;shared,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.web.realtime.connection.RedisConnectionRegistry,com.sca4d.web.realtime.connection.LocalConnectionRegistry,com.sca4d.web.realtime.connection.NodeRouter,com.sca4d.web.realtime.config.WebRealtimeProperties)" class="member-name-link">SseConnections</a><wbr>(@NotNull <a href="../connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a>&nbsp;shared,
  @NotNull <a href="../connection/LocalConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">LocalConnectionRegistry</a>&nbsp;local,
- @NotNull <a href="../connection/NodeTransport.html" title="interface in com.sca4d.web.realtime.connection">NodeTransport</a>&nbsp;nodeTransport,
+ @NotNull <a href="../connection/NodeRouter.html" title="interface in com.sca4d.web.realtime.connection">NodeRouter</a>&nbsp;nodeTransport,
  @NotNull <a href="../config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a>&nbsp;properties)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建使用共享索引和当前节点临时传输的 SSE 连接入口。</div>
@@ -158,14 +158,14 @@ implements <a href="WebRealtimeSseConnector.html" title="interface in com.sca4d.
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.web.realtime.connection.RedisConnectionRegistry,com.sca4d.web.realtime.connection.LocalConnectionRegistry,com.sca4d.web.realtime.connection.NodeTransport,com.sca4d.web.realtime.config.WebRealtimeProperties)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.web.realtime.connection.RedisConnectionRegistry,com.sca4d.web.realtime.connection.LocalConnectionRegistry,com.sca4d.web.realtime.connection.NodeRouter,com.sca4d.web.realtime.config.WebRealtimeProperties)">
 <h3>SseConnections</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">SseConnections</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a>&nbsp;shared,
  @NotNull
  @NotNull <a href="../connection/LocalConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">LocalConnectionRegistry</a>&nbsp;local,
  @NotNull
- @NotNull <a href="../connection/NodeTransport.html" title="interface in com.sca4d.web.realtime.connection">NodeTransport</a>&nbsp;nodeTransport,
+ @NotNull <a href="../connection/NodeRouter.html" title="interface in com.sca4d.web.realtime.connection">NodeRouter</a>&nbsp;nodeTransport,
  @NotNull
  @NotNull <a href="../config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a>&nbsp;properties)</span></div>
 <div class="block">创建使用共享索引和当前节点临时传输的 SSE 连接入口。</div>

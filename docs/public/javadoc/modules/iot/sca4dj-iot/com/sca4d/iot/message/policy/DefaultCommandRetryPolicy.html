@@ -38,7 +38,7 @@ loadScripts(document, 'script');</script>
 <p>Summary:</p>
 <ul>
 <li>Nested</li>
-<li>Field</li>
+<li><a href="#field-summary">Field</a></li>
 <li><a href="#constructor-summary">Constr</a></li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
@@ -46,7 +46,7 @@ loadScripts(document, 'script');</script>
 <li>
 <p>Detail:</p>
 <ul>
-<li>Field</li>
+<li><a href="#field-detail">Field</a></li>
 <li><a href="#constructor-detail">Constr</a></li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -58,13 +58,13 @@ loadScripts(document, 'script');</script>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
 <ul class="sub-nav-list">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field-detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -100,6 +100,21 @@ implements com.sca4d.iot.api.message.RetryPolicy</span></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- =========== FIELD SUMMARY =========== -->
+<li>
+<section class="field-summary" id="field-summary">
+<h2>Field Summary</h2>
+<div class="caption"><span>Fields</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Field</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.code.TreeCode</code></div>
+<div class="col-second even-row-color"><code><a href="#CODE" class="member-name-link">CODE</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+</div>
+</section>
+</li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <li>
 <section class="constructor-summary" id="constructor-summary">
@@ -126,11 +141,11 @@ implements com.sca4d.iot.api.message.RetryPolicy</span></div>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.code.TreeCode</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#code()" class="member-name-link">code</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.message.RetryDecision</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#evaluate(com.sca4d.iot.api.message.DeviceDownlinkMessage,com.sca4d.iot.api.message.IotFailureCode,java.time.Instant)" class="member-name-link">evaluate</a><wbr>(@NotNull com.sca4d.iot.api.message.DeviceDownlinkMessage&nbsp;message,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#evaluate(com.sca4d.iot.api.message.DeviceDownlink,com.sca4d.iot.api.message.IotFailureCode,java.time.Instant)" class="member-name-link">evaluate</a><wbr>(@NotNull com.sca4d.iot.api.message.DeviceDownlink&nbsp;message,
  @NotNull com.sca4d.iot.api.message.IotFailureCode&nbsp;failure,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -146,6 +161,21 @@ implements com.sca4d.iot.api.message.RetryPolicy</span></div>
 </section>
 <section class="details">
 <ul class="details-list">
+<!-- ============ FIELD DETAIL =========== -->
+<li>
+<section class="field-details" id="field-detail">
+<h2>Field Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="CODE">
+<h3>CODE</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.code.TreeCode</span>&nbsp;<span class="element-name">CODE</span></div>
+</section>
+</li>
+</ul>
+</section>
+</li>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <li>
 <section class="constructor-details" id="constructor-detail">
@@ -170,7 +200,7 @@ implements com.sca4d.iot.api.message.RetryPolicy</span></div>
 <section class="detail" id="code()">
 <h3>code</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">code</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.code.TreeCode</span>&nbsp;<span class="element-name">code</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>code</code>&nbsp;in interface&nbsp;<code>com.sca4d.iot.api.message.RetryPolicy</code></dd>
@@ -178,11 +208,11 @@ implements com.sca4d.iot.api.message.RetryPolicy</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="evaluate(com.sca4d.iot.api.message.DeviceDownlinkMessage,com.sca4d.iot.api.message.IotFailureCode,java.time.Instant)">
+<section class="detail" id="evaluate(com.sca4d.iot.api.message.DeviceDownlink,com.sca4d.iot.api.message.IotFailureCode,java.time.Instant)">
 <h3>evaluate</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.iot.api.message.RetryDecision</span>&nbsp;<span class="element-name">evaluate</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.iot.api.message.DeviceDownlinkMessage&nbsp;message,
+ @NotNull com.sca4d.iot.api.message.DeviceDownlink&nbsp;message,
  @NotNull
  @NotNull com.sca4d.iot.api.message.IotFailureCode&nbsp;failure,
  @NotNull

@@ -109,9 +109,12 @@ implements com.sca4d.core.api.resource.Resource</span></div>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.code.TreeCode</code></div>
 <div class="col-second even-row-color"><code><a href="#RESOURCE_TYPE" class="member-name-link">RESOURCE_TYPE</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#RESOURCE_TYPE_VALUE" class="member-name-link">RESOURCE_TYPE_VALUE</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Platform 用户资料使用的稳定 Resource 类型。</div>
 </div>
 </div>
@@ -182,7 +185,7 @@ implements com.sca4d.core.api.resource.Resource</span></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">返回 IAM Principal 标识。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.code.TreeCode</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#type()" class="member-name-link">type</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"></div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
@@ -208,19 +211,26 @@ implements com.sca4d.core.api.resource.Resource</span></div>
 <h2>Field Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="RESOURCE_TYPE">
-<h3>RESOURCE_TYPE</h3>
+<section class="detail" id="RESOURCE_TYPE_VALUE">
+<h3>RESOURCE_TYPE_VALUE</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">RESOURCE_TYPE</span></div>
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">RESOURCE_TYPE_VALUE</span></div>
 <div class="block">Platform 用户资料使用的稳定 Resource 类型。</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
 <ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.app.server.entity.PlatformUserProfile.RESOURCE_TYPE">Constant Field Values</a></li>
+<li><a href="../../../../../constant-values.html#com.sca4d.app.server.entity.PlatformUserProfile.RESOURCE_TYPE_VALUE">Constant Field Values</a></li>
 </ul>
 </dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="RESOURCE_TYPE">
+<h3>RESOURCE_TYPE</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.code.TreeCode</span>&nbsp;<span class="element-name">RESOURCE_TYPE</span></div>
 </section>
 </li>
 </ul>
@@ -287,7 +297,7 @@ implements com.sca4d.core.api.resource.Resource</span></div>
 <h3>type</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">type</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.code.TreeCode</span>&nbsp;<span class="element-name">type</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>type</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.resource.Resource</code></dd>

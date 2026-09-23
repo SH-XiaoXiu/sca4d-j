@@ -104,7 +104,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(long,java.lang.String,byte%5B%5D,int,long)" class="member-name-link">OutboxCandidate</a><wbr>(long&nbsp;messageId,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;eventCode,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;messageCode,
  byte @NotNull []&nbsp;envelope,
  int&nbsp;attemptCount,
  long&nbsp;version)</code></div>
@@ -132,7 +132,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#envelope()" class="member-name-link">envelope</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#eventCode()" class="member-name-link">eventCode</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#messageCode()" class="member-name-link">messageCode</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#messageId()" class="member-name-link">messageId</a>()</code></div>
@@ -162,7 +162,7 @@ loadScripts(document, 'script');</script>
 <h3>OutboxCandidate</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">OutboxCandidate</span><wbr><span class="parameters">(long&nbsp;messageId,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;eventCode,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;messageCode,
  byte @NotNull []&nbsp;envelope,
  int&nbsp;attemptCount,
  long&nbsp;version)</span></div>
@@ -188,13 +188,13 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="eventCode()">
-<h3>eventCode</h3>
+<section class="detail" id="messageCode()">
+<h3>messageCode</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">eventCode</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">messageCode</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>RabbitMQ routing key 使用的事件编码</dd>
+<dd>RabbitMQ routing key 使用的消息编码</dd>
 </dl>
 </section>
 </li>

@@ -126,7 +126,8 @@ implements org.springframework.cloud.loadbalancer.core.ReactorServiceInstanceLoa
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.gateway.registration.GatewayInstanceRegistry)" class="member-name-link">GatewayLoadBalancer</a><wbr>(@NotNull <a href="../registration/GatewayInstanceRegistry.html" title="class in com.sca4d.gateway.registration">GatewayInstanceRegistry</a>&nbsp;registry)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.gateway.registration.GatewayInstanceRegistry,java.lang.String)" class="member-name-link">GatewayLoadBalancer</a><wbr>(@NotNull <a href="../registration/GatewayInstanceRegistry.html" title="class in com.sca4d.gateway.registration">GatewayInstanceRegistry</a>&nbsp;registry,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;serviceId)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
@@ -168,13 +169,16 @@ implements org.springframework.cloud.loadbalancer.core.ReactorServiceInstanceLoa
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.gateway.registration.GatewayInstanceRegistry)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.gateway.registration.GatewayInstanceRegistry,java.lang.String)">
 <h3>GatewayLoadBalancer</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">GatewayLoadBalancer</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../registration/GatewayInstanceRegistry.html" title="class in com.sca4d.gateway.registration">GatewayInstanceRegistry</a>&nbsp;registry)</span></div>
+ @NotNull <a href="../registration/GatewayInstanceRegistry.html" title="class in com.sca4d.gateway.registration">GatewayInstanceRegistry</a>&nbsp;registry,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;serviceId)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>registry</code> - 管理租约、readiness 和轮询游标的实例注册表</dd>
+<dd><code>serviceId</code> - 当前注册 Server 集群的 LoadBalancer service ID</dd>
 </dl>
 </section>
 </li>

@@ -91,10 +91,14 @@ loadScripts(document, 'script');</script>
 <div class="block">把一种登录标识转换成查找和唯一约束使用的稳定值。</div>
 </dd>
 <dt><a href="com/sca4d/iam/base/rbac/PlatformOperations.html#ACCOUNTS_MANAGE" class="member-name-link">ACCOUNTS_MANAGE</a> - Static variable in class com.sca4d.iam.base.rbac.<a href="com/sca4d/iam/base/rbac/PlatformOperations.html" title="class in com.sca4d.iam.base.rbac">PlatformOperations</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iam/base/rbac/PlatformOperations.html#ACCOUNTS_MANAGE_VALUE" class="member-name-link">ACCOUNTS_MANAGE_VALUE</a> - Static variable in class com.sca4d.iam.base.rbac.<a href="com/sca4d/iam/base/rbac/PlatformOperations.html" title="class in com.sca4d.iam.base.rbac">PlatformOperations</a></dt>
 <dd>
 <div class="block">创建和修改 Platform Account。</div>
 </dd>
 <dt><a href="com/sca4d/iam/base/rbac/PlatformOperations.html#ACCOUNTS_READ" class="member-name-link">ACCOUNTS_READ</a> - Static variable in class com.sca4d.iam.base.rbac.<a href="com/sca4d/iam/base/rbac/PlatformOperations.html" title="class in com.sca4d.iam.base.rbac">PlatformOperations</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iam/base/rbac/PlatformOperations.html#ACCOUNTS_READ_VALUE" class="member-name-link">ACCOUNTS_READ_VALUE</a> - Static variable in class com.sca4d.iam.base.rbac.<a href="com/sca4d/iam/base/rbac/PlatformOperations.html" title="class in com.sca4d.iam.base.rbac">PlatformOperations</a></dt>
 <dd>
 <div class="block">读取 Platform Account 目录。</div>
 </dd>
@@ -102,7 +106,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">一条直接授予业务主体的资源动作权限。</div>
 </dd>
-<dt><a href="com/sca4d/iam/acl/AclEntry.html#%3Cinit%3E(java.lang.Long,java.lang.String,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">AclEntry(Long, String, String, Action)</a> - Constructor for class com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclEntry.html" title="class in com.sca4d.iam.acl">AclEntry</a></dt>
+<dt><a href="com/sca4d/iam/acl/AclEntry.html#%3Cinit%3E(java.lang.Long,com.sca4d.core.api.code.TreeCode,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">AclEntry(Long, TreeCode, String, Action)</a> - Constructor for class com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclEntry.html" title="class in com.sca4d.iam.acl">AclEntry</a></dt>
 <dd>
 <div class="block">创建一条 ACL 授权事实。</div>
 </dd>
@@ -130,7 +134,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">ACL 对集合资源允许访问的资源标识范围。</div>
 </dd>
-<dt><a href="com/sca4d/iam/acl/AclResourceScope.html#%3Cinit%3E(java.lang.String,java.util.List)" class="member-name-link">AclResourceScope(String, List&lt;String&gt;)</a> - Constructor for class com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclResourceScope.html" title="class in com.sca4d.iam.acl">AclResourceScope</a></dt>
+<dt><a href="com/sca4d/iam/acl/AclResourceScope.html#%3Cinit%3E(com.sca4d.core.api.code.TreeCode,java.util.List)" class="member-name-link">AclResourceScope(TreeCode, List&lt;String&gt;)</a> - Constructor for class com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclResourceScope.html" title="class in com.sca4d.iam.acl">AclResourceScope</a></dt>
 <dd>
 <div class="block">创建集合资源的可访问实例范围。</div>
 </dd>
@@ -204,17 +208,25 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">表示 Operation Catalog 当前全部 ACTION 的内部选择符。</div>
 </dd>
-<dt><a href="com/sca4d/iam/acl/AclService.html#allows(com.sca4d.iam.DomainScope,java.lang.Long,java.lang.String,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">allows(DomainScope, Long, String, String, Action)</a> - Method in class com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclService.html" title="class in com.sca4d.iam.acl">AclService</a></dt>
+<dt><a href="com/sca4d/iam/rbac/PrincipalGrantQuery.Builder.html#allOf(com.sca4d.core.api.code.TreeCode...)" class="member-name-link">allOf(TreeCode...)</a> - Method in class com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/PrincipalGrantQuery.Builder.html" title="class in com.sca4d.iam.rbac">PrincipalGrantQuery.Builder</a></dt>
+<dd>
+<div class="block">要求 Principal 同时获得给定的全部 Operation。</div>
+</dd>
+<dt><a href="com/sca4d/iam/acl/AclService.html#allows(com.sca4d.iam.DomainScope,java.lang.Long,com.sca4d.core.api.code.TreeCode,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">allows(DomainScope, Long, TreeCode, String, Action)</a> - Method in class com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclService.html" title="class in com.sca4d.iam.acl">AclService</a></dt>
 <dd>
 <div class="block">判断业务主体是否拥有资源动作权限。</div>
 </dd>
-<dt><a href="com/sca4d/iam/acl/AclRepository.html#allows(java.lang.Long,java.lang.String,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">allows(Long, String, String, Action)</a> - Method in interface com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclRepository.html" title="interface in com.sca4d.iam.acl">AclRepository</a></dt>
+<dt><a href="com/sca4d/iam/acl/AclRepository.html#allows(java.lang.Long,com.sca4d.core.api.code.TreeCode,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">allows(Long, TreeCode, String, Action)</a> - Method in interface com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclRepository.html" title="interface in com.sca4d.iam.acl">AclRepository</a></dt>
 <dd>
 <div class="block">判断一项直接权限是否存在。</div>
 </dd>
-<dt><a href="com/sca4d/iam/base/acl/PlatformAclRepository.html#allows(java.lang.Long,java.lang.String,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">allows(Long, String, String, Action)</a> - Method in class com.sca4d.iam.base.acl.<a href="com/sca4d/iam/base/acl/PlatformAclRepository.html" title="class in com.sca4d.iam.base.acl">PlatformAclRepository</a></dt>
+<dt><a href="com/sca4d/iam/base/acl/PlatformAclRepository.html#allows(java.lang.Long,com.sca4d.core.api.code.TreeCode,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">allows(Long, TreeCode, String, Action)</a> - Method in class com.sca4d.iam.base.acl.<a href="com/sca4d/iam/base/acl/PlatformAclRepository.html" title="class in com.sca4d.iam.base.acl">PlatformAclRepository</a></dt>
 <dd>
 <div class="block">判断一项直接权限是否存在。</div>
+</dd>
+<dt><a href="com/sca4d/iam/rbac/PrincipalGrantQuery.Builder.html#anyOf(com.sca4d.core.api.code.TreeCode...)" class="member-name-link">anyOf(TreeCode...)</a> - Method in class com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/PrincipalGrantQuery.Builder.html" title="class in com.sca4d.iam.rbac">PrincipalGrantQuery.Builder</a></dt>
+<dd>
+<div class="block">要求 Principal 至少获得给定 Operation 中的一个。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:B">B</h2>
@@ -322,6 +334,8 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iam/identity/IamErrorCode.html#code()" class="member-name-link">code()</a> - Method in enum class com.sca4d.iam.identity.<a href="com/sca4d/iam/identity/IamErrorCode.html" title="enum class in com.sca4d.iam.identity">IamErrorCode</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iam/rbac/PermissionSelector.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/PermissionSelector.html" title="class in com.sca4d.iam.rbac">PermissionSelector</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iam/rbac/RbacErrorCode.html#code()" class="member-name-link">code()</a> - Method in enum class com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/RbacErrorCode.html" title="enum class in com.sca4d.iam.rbac">RbacErrorCode</a></dt>
 <dd>
 <div class="block">返回全局错误码。</div>
@@ -382,7 +396,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">身份事实已被其他调用方修改。</div>
 </dd>
-<dt><a href="com/sca4d/iam/acl/AclResourceTypes.html#contains(java.lang.String)" class="member-name-link">contains(String)</a> - Method in class com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclResourceTypes.html" title="class in com.sca4d.iam.acl">AclResourceTypes</a></dt>
+<dt><a href="com/sca4d/iam/acl/AclResourceTypes.html#contains(com.sca4d.core.api.code.TreeCode)" class="member-name-link">contains(TreeCode)</a> - Method in class com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclResourceTypes.html" title="class in com.sca4d.iam.acl">AclResourceTypes</a></dt>
 <dd>
 <div class="block">判断资源类型是否由 ACL 策略处理。</div>
 </dd>
@@ -420,7 +434,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">原子保存角色及初始权限选择符。</div>
 </dd>
-<dt><a href="com/sca4d/iam/rbac/RbacService.html#createRole(com.sca4d.iam.rbac.RbacScope,java.lang.String,java.util.Collection)" class="member-name-link">createRole(RbacScope, String, Collection&lt;String&gt;)</a> - Method in class com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/RbacService.html" title="class in com.sca4d.iam.rbac">RbacService</a></dt>
+<dt><a href="com/sca4d/iam/rbac/RbacService.html#createRole(com.sca4d.iam.rbac.RbacScope,java.lang.String,java.util.Collection)" class="member-name-link">createRole(RbacScope, String, Collection&lt;TreeCode&gt;)</a> - Method in class com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/RbacService.html" title="class in com.sca4d.iam.rbac">RbacService</a></dt>
 <dd>
 <div class="block">创建自定义角色并保存当前领域允许的初始权限编码。</div>
 </dd>
@@ -428,7 +442,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">原子保存带完整多语言字段的 Platform 角色及初始 Operation 选择符。</div>
 </dd>
-<dt><a href="com/sca4d/iam/base/rbac/PlatformRbacService.html#createRole(java.lang.String,com.sca4d.core.api.i18n.LocalizedFields,java.util.Collection)" class="member-name-link">createRole(String, LocalizedFields, Collection&lt;String&gt;)</a> - Method in class com.sca4d.iam.base.rbac.<a href="com/sca4d/iam/base/rbac/PlatformRbacService.html" title="class in com.sca4d.iam.base.rbac">PlatformRbacService</a></dt>
+<dt><a href="com/sca4d/iam/base/rbac/PlatformRbacService.html#createRole(java.lang.String,com.sca4d.core.api.i18n.LocalizedFields,java.util.Collection)" class="member-name-link">createRole(String, LocalizedFields, Collection&lt;TreeCode&gt;)</a> - Method in class com.sca4d.iam.base.rbac.<a href="com/sca4d/iam/base/rbac/PlatformRbacService.html" title="class in com.sca4d.iam.base.rbac">PlatformRbacService</a></dt>
 <dd>
 <div class="block">创建自定义 Platform 角色并保存初始 ACTION。</div>
 </dd>
@@ -651,27 +665,27 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">一次读取当前领域中多个角色空间内启用角色贡献的权限选择符。</div>
 </dd>
-<dt><a href="com/sca4d/iam/acl/AclService.html#findAllowedResourceIds(com.sca4d.iam.DomainScope,java.lang.Long,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">findAllowedResourceIds(DomainScope, Long, String, Action)</a> - Method in class com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclService.html" title="class in com.sca4d.iam.acl">AclService</a></dt>
+<dt><a href="com/sca4d/iam/acl/AclService.html#findAllowedResourceIds(com.sca4d.iam.DomainScope,java.lang.Long,com.sca4d.core.api.code.TreeCode,com.sca4d.core.api.permission.Action)" class="member-name-link">findAllowedResourceIds(DomainScope, Long, TreeCode, Action)</a> - Method in class com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclService.html" title="class in com.sca4d.iam.acl">AclService</a></dt>
 <dd>
 <div class="block">查找业务主体可执行指定动作的资源实例。</div>
 </dd>
-<dt><a href="com/sca4d/iam/acl/AclRepository.html#findAllowedResourceIds(java.lang.Long,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">findAllowedResourceIds(Long, String, Action)</a> - Method in interface com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclRepository.html" title="interface in com.sca4d.iam.acl">AclRepository</a></dt>
+<dt><a href="com/sca4d/iam/acl/AclRepository.html#findAllowedResourceIds(java.lang.Long,com.sca4d.core.api.code.TreeCode,com.sca4d.core.api.permission.Action)" class="member-name-link">findAllowedResourceIds(Long, TreeCode, Action)</a> - Method in interface com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclRepository.html" title="interface in com.sca4d.iam.acl">AclRepository</a></dt>
 <dd>
 <div class="block">查找业务主体可执行指定动作的资源实例。</div>
 </dd>
-<dt><a href="com/sca4d/iam/base/acl/PlatformAclRepository.html#findAllowedResourceIds(java.lang.Long,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">findAllowedResourceIds(Long, String, Action)</a> - Method in class com.sca4d.iam.base.acl.<a href="com/sca4d/iam/base/acl/PlatformAclRepository.html" title="class in com.sca4d.iam.base.acl">PlatformAclRepository</a></dt>
+<dt><a href="com/sca4d/iam/base/acl/PlatformAclRepository.html#findAllowedResourceIds(java.lang.Long,com.sca4d.core.api.code.TreeCode,com.sca4d.core.api.permission.Action)" class="member-name-link">findAllowedResourceIds(Long, TreeCode, Action)</a> - Method in class com.sca4d.iam.base.acl.<a href="com/sca4d/iam/base/acl/PlatformAclRepository.html" title="class in com.sca4d.iam.base.acl">PlatformAclRepository</a></dt>
 <dd>
 <div class="block">查找业务主体可执行指定动作的资源实例。</div>
 </dd>
-<dt><a href="com/sca4d/iam/acl/AclService.html#findEntries(com.sca4d.iam.DomainScope,java.lang.Long,java.lang.String)" class="member-name-link">findEntries(DomainScope, Long, String)</a> - Method in class com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclService.html" title="class in com.sca4d.iam.acl">AclService</a></dt>
+<dt><a href="com/sca4d/iam/acl/AclService.html#findEntries(com.sca4d.iam.DomainScope,java.lang.Long,com.sca4d.core.api.code.TreeCode)" class="member-name-link">findEntries(DomainScope, Long, TreeCode)</a> - Method in class com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclService.html" title="class in com.sca4d.iam.acl">AclService</a></dt>
 <dd>
 <div class="block">查找业务主体在一种资源类型下的全部授权。</div>
 </dd>
-<dt><a href="com/sca4d/iam/acl/AclRepository.html#findEntries(java.lang.Long,java.lang.String)" class="member-name-link">findEntries(Long, String)</a> - Method in interface com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclRepository.html" title="interface in com.sca4d.iam.acl">AclRepository</a></dt>
+<dt><a href="com/sca4d/iam/acl/AclRepository.html#findEntries(java.lang.Long,com.sca4d.core.api.code.TreeCode)" class="member-name-link">findEntries(Long, TreeCode)</a> - Method in interface com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclRepository.html" title="interface in com.sca4d.iam.acl">AclRepository</a></dt>
 <dd>
 <div class="block">查找业务主体在一种资源类型下的全部授权。</div>
 </dd>
-<dt><a href="com/sca4d/iam/base/acl/PlatformAclRepository.html#findEntries(java.lang.Long,java.lang.String)" class="member-name-link">findEntries(Long, String)</a> - Method in class com.sca4d.iam.base.acl.<a href="com/sca4d/iam/base/acl/PlatformAclRepository.html" title="class in com.sca4d.iam.base.acl">PlatformAclRepository</a></dt>
+<dt><a href="com/sca4d/iam/base/acl/PlatformAclRepository.html#findEntries(java.lang.Long,com.sca4d.core.api.code.TreeCode)" class="member-name-link">findEntries(Long, TreeCode)</a> - Method in class com.sca4d.iam.base.acl.<a href="com/sca4d/iam/base/acl/PlatformAclRepository.html" title="class in com.sca4d.iam.base.acl">PlatformAclRepository</a></dt>
 <dd>
 <div class="block">查找业务主体在一种资源类型下的全部授权。</div>
 </dd>
@@ -820,15 +834,15 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建一个领域唯一的全局角色空间。</div>
 </dd>
-<dt><a href="com/sca4d/iam/acl/AclService.html#grant(com.sca4d.iam.DomainScope,java.lang.Long,java.lang.String,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">grant(DomainScope, Long, String, String, Action)</a> - Method in class com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclService.html" title="class in com.sca4d.iam.acl">AclService</a></dt>
+<dt><a href="com/sca4d/iam/acl/AclService.html#grant(com.sca4d.iam.DomainScope,java.lang.Long,com.sca4d.core.api.code.TreeCode,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">grant(DomainScope, Long, TreeCode, String, Action)</a> - Method in class com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclService.html" title="class in com.sca4d.iam.acl">AclService</a></dt>
 <dd>
 <div class="block">幂等授予资源动作权限。</div>
 </dd>
-<dt><a href="com/sca4d/iam/acl/AclRepository.html#grant(java.lang.Long,java.lang.String,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">grant(Long, String, String, Action)</a> - Method in interface com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclRepository.html" title="interface in com.sca4d.iam.acl">AclRepository</a></dt>
+<dt><a href="com/sca4d/iam/acl/AclRepository.html#grant(java.lang.Long,com.sca4d.core.api.code.TreeCode,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">grant(Long, TreeCode, String, Action)</a> - Method in interface com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclRepository.html" title="interface in com.sca4d.iam.acl">AclRepository</a></dt>
 <dd>
 <div class="block">幂等授予一项直接权限。</div>
 </dd>
-<dt><a href="com/sca4d/iam/base/acl/PlatformAclRepository.html#grant(java.lang.Long,java.lang.String,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">grant(Long, String, String, Action)</a> - Method in class com.sca4d.iam.base.acl.<a href="com/sca4d/iam/base/acl/PlatformAclRepository.html" title="class in com.sca4d.iam.base.acl">PlatformAclRepository</a></dt>
+<dt><a href="com/sca4d/iam/base/acl/PlatformAclRepository.html#grant(java.lang.Long,com.sca4d.core.api.code.TreeCode,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">grant(Long, TreeCode, String, Action)</a> - Method in class com.sca4d.iam.base.acl.<a href="com/sca4d/iam/base/acl/PlatformAclRepository.html" title="class in com.sca4d.iam.base.acl">PlatformAclRepository</a></dt>
 <dd>
 <div class="block">幂等授予一项直接权限。</div>
 </dd>
@@ -1026,6 +1040,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">判断任意已登记类型的 Principal 是否启用。</div>
 </dd>
+<dt><a href="com/sca4d/iam/rbac/PermissionSelector.html#isAll()" class="member-name-link">isAll()</a> - Method in class com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/PermissionSelector.html" title="class in com.sca4d.iam.rbac">PermissionSelector</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iam/config/IamProperties.html#isEnabled()" class="member-name-link">isEnabled()</a> - Method in class com.sca4d.iam.config.<a href="com/sca4d/iam/config/IamProperties.html" title="class in com.sca4d.iam.config">IamProperties</a></dt>
 <dd>
 <div class="block">返回应用启动时是否确保平台账号存在。</div>
@@ -1186,6 +1202,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/iam/rbac/PermissionSelector.html" class="type-name-link" title="class in com.sca4d.iam.rbac">PermissionSelector</a> - Class in <a href="com/sca4d/iam/rbac/package-summary.html">com.sca4d.iam.rbac</a></dt>
 <dd>
 <div class="block">RBAC 表保存的具体 Operation 键或内部全量选择符。</div>
+</dd>
+<dt><a href="com/sca4d/iam/rbac/PermissionSelector.html#%3Cinit%3E(com.sca4d.core.api.code.TreeCode)" class="member-name-link">PermissionSelector(TreeCode)</a> - Constructor for class com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/PermissionSelector.html" title="class in com.sca4d.iam.rbac">PermissionSelector</a></dt>
+<dd>
+<div class="block">创建使用已经规范化 Operation TreeCode 的选择符。</div>
 </dd>
 <dt><a href="com/sca4d/iam/rbac/PermissionSelector.html#%3Cinit%3E(java.lang.String)" class="member-name-link">PermissionSelector(String)</a> - Constructor for class com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/PermissionSelector.html" title="class in com.sca4d.iam.rbac">PermissionSelector</a></dt>
 <dd>
@@ -1406,10 +1426,14 @@ loadScripts(document, 'script');</script>
 <div class="block">Principal 角色重复或包含其他 Repository 的角色。</div>
 </dd>
 <dt><a href="com/sca4d/iam/base/rbac/PlatformOperations.html#PRINCIPAL_ROLES_MANAGE" class="member-name-link">PRINCIPAL_ROLES_MANAGE</a> - Static variable in class com.sca4d.iam.base.rbac.<a href="com/sca4d/iam/base/rbac/PlatformOperations.html" title="class in com.sca4d.iam.base.rbac">PlatformOperations</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iam/base/rbac/PlatformOperations.html#PRINCIPAL_ROLES_MANAGE_VALUE" class="member-name-link">PRINCIPAL_ROLES_MANAGE_VALUE</a> - Static variable in class com.sca4d.iam.base.rbac.<a href="com/sca4d/iam/base/rbac/PlatformOperations.html" title="class in com.sca4d.iam.base.rbac">PlatformOperations</a></dt>
 <dd>
 <div class="block">替换 PlatformPrincipal 的角色。</div>
 </dd>
 <dt><a href="com/sca4d/iam/base/rbac/PlatformOperations.html#PRINCIPAL_ROLES_READ" class="member-name-link">PRINCIPAL_ROLES_READ</a> - Static variable in class com.sca4d.iam.base.rbac.<a href="com/sca4d/iam/base/rbac/PlatformOperations.html" title="class in com.sca4d.iam.base.rbac">PlatformOperations</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iam/base/rbac/PlatformOperations.html#PRINCIPAL_ROLES_READ_VALUE" class="member-name-link">PRINCIPAL_ROLES_READ_VALUE</a> - Static variable in class com.sca4d.iam.base.rbac.<a href="com/sca4d/iam/base/rbac/PlatformOperations.html" title="class in com.sca4d.iam.base.rbac">PlatformOperations</a></dt>
 <dd>
 <div class="block">读取 PlatformPrincipal 的角色。</div>
 </dd>
@@ -1655,11 +1679,11 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">原子替换 Platform 角色的完整多语言字段。</div>
 </dd>
-<dt><a href="com/sca4d/iam/rbac/RbacService.html#replaceRolePermissions(com.sca4d.iam.rbac.RbacScope,java.lang.Long,java.util.Collection)" class="member-name-link">replaceRolePermissions(RbacScope, Long, Collection&lt;String&gt;)</a> - Method in class com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/RbacService.html" title="class in com.sca4d.iam.rbac">RbacService</a></dt>
+<dt><a href="com/sca4d/iam/rbac/RbacService.html#replaceRolePermissions(com.sca4d.iam.rbac.RbacScope,java.lang.Long,java.util.Collection)" class="member-name-link">replaceRolePermissions(RbacScope, Long, Collection&lt;TreeCode&gt;)</a> - Method in class com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/RbacService.html" title="class in com.sca4d.iam.rbac">RbacService</a></dt>
 <dd>
 <div class="block">原子替换角色的具体权限编码。</div>
 </dd>
-<dt><a href="com/sca4d/iam/base/rbac/PlatformRbacService.html#replaceRolePermissions(java.lang.Long,java.util.Collection)" class="member-name-link">replaceRolePermissions(Long, Collection&lt;String&gt;)</a> - Method in class com.sca4d.iam.base.rbac.<a href="com/sca4d/iam/base/rbac/PlatformRbacService.html" title="class in com.sca4d.iam.base.rbac">PlatformRbacService</a></dt>
+<dt><a href="com/sca4d/iam/base/rbac/PlatformRbacService.html#replaceRolePermissions(java.lang.Long,java.util.Collection)" class="member-name-link">replaceRolePermissions(Long, Collection&lt;TreeCode&gt;)</a> - Method in class com.sca4d.iam.base.rbac.<a href="com/sca4d/iam/base/rbac/PlatformRbacService.html" title="class in com.sca4d.iam.base.rbac">PlatformRbacService</a></dt>
 <dd>
 <div class="block">原子替换 Platform 角色的具体 ACTION。</div>
 </dd>
@@ -1674,14 +1698,6 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/iam/rbac/RbacRepositoryRegistry.html#repository(com.sca4d.iam.rbac.RbacDomain)" class="member-name-link">repository(RbacDomain)</a> - Method in class com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/RbacRepositoryRegistry.html" title="class in com.sca4d.iam.rbac">RbacRepositoryRegistry</a></dt>
 <dd>
 <div class="block">取得负责指定领域的 Repository。</div>
-</dd>
-<dt><a href="com/sca4d/iam/rbac/PrincipalGrantQuery.Builder.html#requireAll(java.lang.String...)" class="member-name-link">requireAll(String...)</a> - Method in class com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/PrincipalGrantQuery.Builder.html" title="class in com.sca4d.iam.rbac">PrincipalGrantQuery.Builder</a></dt>
-<dd>
-<div class="block">要求 Principal 同时获得给定的全部 Operation。</div>
-</dd>
-<dt><a href="com/sca4d/iam/rbac/PrincipalGrantQuery.Builder.html#requireAny(java.lang.String...)" class="member-name-link">requireAny(String...)</a> - Method in class com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/PrincipalGrantQuery.Builder.html" title="class in com.sca4d.iam.rbac">PrincipalGrantQuery.Builder</a></dt>
-<dd>
-<div class="block">要求 Principal 至少获得给定 Operation 中的一个。</div>
 </dd>
 <dt><a href="com/sca4d/iam/identity/IamAccountDirectory.html#resolve(com.sca4d.core.api.identity.RealmKey,com.sca4d.core.api.identity.AccountIdentifierType,java.lang.String)" class="member-name-link">resolve(RealmKey, AccountIdentifierType, String)</a> - Method in class com.sca4d.iam.identity.<a href="com/sca4d/iam/identity/IamAccountDirectory.html" title="class in com.sca4d.iam.identity">IamAccountDirectory</a></dt>
 <dd>&nbsp;</dd>
@@ -1708,6 +1724,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/iam/rbac/Role.html#RESOURCE_TYPE" class="member-name-link">RESOURCE_TYPE</a> - Static variable in class com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/Role.html" title="class in com.sca4d.iam.rbac">Role</a></dt>
 <dd>
 <div class="block">Role 使用的稳定 Resource 类型。</div>
+</dd>
+<dt><a href="com/sca4d/iam/rbac/Role.html#RESOURCE_TYPE_VALUE" class="member-name-link">RESOURCE_TYPE_VALUE</a> - Static variable in class com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/Role.html" title="class in com.sca4d.iam.rbac">Role</a></dt>
+<dd>
+<div class="block">供 Java 注解参数使用的资源类型文本。</div>
 </dd>
 <dt><a href="com/sca4d/iam/acl/AclEntry.html#resourceId()" class="member-name-link">resourceId()</a> - Method in class com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclEntry.html" title="class in com.sca4d.iam.acl">AclEntry</a></dt>
 <dd>
@@ -1738,15 +1758,15 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回缓存读取时指定坐标的修订号。</div>
 </dd>
-<dt><a href="com/sca4d/iam/acl/AclService.html#revoke(com.sca4d.iam.DomainScope,java.lang.Long,java.lang.String,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">revoke(DomainScope, Long, String, String, Action)</a> - Method in class com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclService.html" title="class in com.sca4d.iam.acl">AclService</a></dt>
+<dt><a href="com/sca4d/iam/acl/AclService.html#revoke(com.sca4d.iam.DomainScope,java.lang.Long,com.sca4d.core.api.code.TreeCode,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">revoke(DomainScope, Long, TreeCode, String, Action)</a> - Method in class com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclService.html" title="class in com.sca4d.iam.acl">AclService</a></dt>
 <dd>
 <div class="block">幂等撤销资源动作权限。</div>
 </dd>
-<dt><a href="com/sca4d/iam/acl/AclRepository.html#revoke(java.lang.Long,java.lang.String,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">revoke(Long, String, String, Action)</a> - Method in interface com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclRepository.html" title="interface in com.sca4d.iam.acl">AclRepository</a></dt>
+<dt><a href="com/sca4d/iam/acl/AclRepository.html#revoke(java.lang.Long,com.sca4d.core.api.code.TreeCode,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">revoke(Long, TreeCode, String, Action)</a> - Method in interface com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclRepository.html" title="interface in com.sca4d.iam.acl">AclRepository</a></dt>
 <dd>
 <div class="block">幂等撤销一项直接权限。</div>
 </dd>
-<dt><a href="com/sca4d/iam/base/acl/PlatformAclRepository.html#revoke(java.lang.Long,java.lang.String,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">revoke(Long, String, String, Action)</a> - Method in class com.sca4d.iam.base.acl.<a href="com/sca4d/iam/base/acl/PlatformAclRepository.html" title="class in com.sca4d.iam.base.acl">PlatformAclRepository</a></dt>
+<dt><a href="com/sca4d/iam/base/acl/PlatformAclRepository.html#revoke(java.lang.Long,com.sca4d.core.api.code.TreeCode,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">revoke(Long, TreeCode, String, Action)</a> - Method in class com.sca4d.iam.base.acl.<a href="com/sca4d/iam/base/acl/PlatformAclRepository.html" title="class in com.sca4d.iam.base.acl">PlatformAclRepository</a></dt>
 <dd>
 <div class="block">幂等撤销一项直接权限。</div>
 </dd>
@@ -1766,17 +1786,17 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">清理业务主体的全部 ACL。</div>
 </dd>
-<dt><a href="com/sca4d/iam/acl/AclService.html#revokeByResource(com.sca4d.iam.DomainScope,java.lang.String,java.lang.String)" class="member-name-link">revokeByResource(DomainScope, String, String)</a> - Method in class com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclService.html" title="class in com.sca4d.iam.acl">AclService</a></dt>
+<dt><a href="com/sca4d/iam/acl/AclRepository.html#revokeByResource(com.sca4d.core.api.code.TreeCode,java.lang.String)" class="member-name-link">revokeByResource(TreeCode, String)</a> - Method in interface com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclRepository.html" title="interface in com.sca4d.iam.acl">AclRepository</a></dt>
+<dd>
+<div class="block">清理资源实例的全部 ACL。</div>
+</dd>
+<dt><a href="com/sca4d/iam/base/acl/PlatformAclRepository.html#revokeByResource(com.sca4d.core.api.code.TreeCode,java.lang.String)" class="member-name-link">revokeByResource(TreeCode, String)</a> - Method in class com.sca4d.iam.base.acl.<a href="com/sca4d/iam/base/acl/PlatformAclRepository.html" title="class in com.sca4d.iam.base.acl">PlatformAclRepository</a></dt>
+<dd>
+<div class="block">清理资源实例的全部 ACL。</div>
+</dd>
+<dt><a href="com/sca4d/iam/acl/AclService.html#revokeByResource(com.sca4d.iam.DomainScope,com.sca4d.core.api.code.TreeCode,java.lang.String)" class="member-name-link">revokeByResource(DomainScope, TreeCode, String)</a> - Method in class com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclService.html" title="class in com.sca4d.iam.acl">AclService</a></dt>
 <dd>
 <div class="block">撤销资源实例在一个领域内的全部 ACL。</div>
-</dd>
-<dt><a href="com/sca4d/iam/acl/AclRepository.html#revokeByResource(java.lang.String,java.lang.String)" class="member-name-link">revokeByResource(String, String)</a> - Method in interface com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclRepository.html" title="interface in com.sca4d.iam.acl">AclRepository</a></dt>
-<dd>
-<div class="block">清理资源实例的全部 ACL。</div>
-</dd>
-<dt><a href="com/sca4d/iam/base/acl/PlatformAclRepository.html#revokeByResource(java.lang.String,java.lang.String)" class="member-name-link">revokeByResource(String, String)</a> - Method in class com.sca4d.iam.base.acl.<a href="com/sca4d/iam/base/acl/PlatformAclRepository.html" title="class in com.sca4d.iam.base.acl">PlatformAclRepository</a></dt>
-<dd>
-<div class="block">清理资源实例的全部 ACL。</div>
 </dd>
 <dt><a href="com/sca4d/iam/base/rbac/PlatformRoleDetails.html#role()" class="member-name-link">role()</a> - Method in class com.sca4d.iam.base.rbac.<a href="com/sca4d/iam/base/rbac/PlatformRoleDetails.html" title="class in com.sca4d.iam.base.rbac">PlatformRoleDetails</a></dt>
 <dd>
@@ -1829,10 +1849,14 @@ loadScripts(document, 'script');</script>
 <div class="block">返回 Principal 当前关联的角色。</div>
 </dd>
 <dt><a href="com/sca4d/iam/base/rbac/PlatformOperations.html#ROLES_MANAGE" class="member-name-link">ROLES_MANAGE</a> - Static variable in class com.sca4d.iam.base.rbac.<a href="com/sca4d/iam/base/rbac/PlatformOperations.html" title="class in com.sca4d.iam.base.rbac">PlatformOperations</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iam/base/rbac/PlatformOperations.html#ROLES_MANAGE_VALUE" class="member-name-link">ROLES_MANAGE_VALUE</a> - Static variable in class com.sca4d.iam.base.rbac.<a href="com/sca4d/iam/base/rbac/PlatformOperations.html" title="class in com.sca4d.iam.base.rbac">PlatformOperations</a></dt>
 <dd>
 <div class="block">管理 Platform 角色及其 Operation。</div>
 </dd>
 <dt><a href="com/sca4d/iam/base/rbac/PlatformOperations.html#ROLES_READ" class="member-name-link">ROLES_READ</a> - Static variable in class com.sca4d.iam.base.rbac.<a href="com/sca4d/iam/base/rbac/PlatformOperations.html" title="class in com.sca4d.iam.base.rbac">PlatformOperations</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iam/base/rbac/PlatformOperations.html#ROLES_READ_VALUE" class="member-name-link">ROLES_READ_VALUE</a> - Static variable in class com.sca4d.iam.base.rbac.<a href="com/sca4d/iam/base/rbac/PlatformOperations.html" title="class in com.sca4d.iam.base.rbac">PlatformOperations</a></dt>
 <dd>
 <div class="block">读取 Platform 角色。</div>
 </dd>
@@ -1864,7 +1888,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回角色所属的 RBAC 范围。</div>
 </dd>
-<dt><a href="com/sca4d/iam/acl/AclResourceTypes.html#scope(java.lang.String)" class="member-name-link">scope(String)</a> - Method in class com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclResourceTypes.html" title="class in com.sca4d.iam.acl">AclResourceTypes</a></dt>
+<dt><a href="com/sca4d/iam/acl/AclResourceTypes.html#scope(com.sca4d.core.api.code.TreeCode)" class="member-name-link">scope(TreeCode)</a> - Method in class com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclResourceTypes.html" title="class in com.sca4d.iam.acl">AclResourceTypes</a></dt>
 <dd>
 <div class="block">返回资源类型唯一归属的领域范围。</div>
 </dd>
@@ -2139,6 +2163,14 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/iam/rbac/PermissionSelections.html#validateGrantable(java.util.Collection)" class="member-name-link">validateGrantable(Collection&lt;String&gt;)</a> - Method in class com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/PermissionSelections.html" title="class in com.sca4d.iam.rbac">PermissionSelections</a></dt>
 <dd>
 <div class="block">校验管理 API 提交的 ACTION 编码。</div>
+</dd>
+<dt><a href="com/sca4d/iam/rbac/PermissionSelections.html#validateGrantableCodes(java.util.Collection)" class="member-name-link">validateGrantableCodes(Collection&lt;TreeCode&gt;)</a> - Method in class com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/PermissionSelections.html" title="class in com.sca4d.iam.rbac">PermissionSelections</a></dt>
+<dd>
+<div class="block">校验已经在字符串边界解析完成的 Operation TreeCode。</div>
+</dd>
+<dt><a href="com/sca4d/iam/rbac/PermissionSelections.html#validateGrantableOperations(java.util.Collection)" class="member-name-link">validateGrantableOperations(Collection&lt;Operation&gt;)</a> - Method in class com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/PermissionSelections.html" title="class in com.sca4d.iam.rbac">PermissionSelections</a></dt>
+<dd>
+<div class="block">校验已经由代码层保存的 Operation，不把 TreeCode 转回字符串。</div>
 </dd>
 <dt><a href="com/sca4d/iam/DomainScope.html#value()" class="member-name-link">value()</a> - Method in class com.sca4d.iam.<a href="com/sca4d/iam/DomainScope.html" title="class in com.sca4d.iam">DomainScope</a></dt>
 <dd>

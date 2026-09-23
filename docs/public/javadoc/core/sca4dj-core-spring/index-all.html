@@ -86,6 +86,14 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/spring/persistence/mybatis/AffectedRowsInterceptor.html#%3Cinit%3E()" class="member-name-link">AffectedRowsInterceptor()</a> - Constructor for class com.sca4d.core.spring.persistence.mybatis.<a href="com/sca4d/core/spring/persistence/mybatis/AffectedRowsInterceptor.html" title="class in com.sca4d.core.spring.persistence.mybatis">AffectedRowsInterceptor</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/transaction/TransactionCallbacks.html#afterCommit(java.lang.Runnable)" class="member-name-link">afterCommit(Runnable)</a> - Static method in class com.sca4d.core.spring.transaction.<a href="com/sca4d/core/spring/transaction/TransactionCallbacks.html" title="class in com.sca4d.core.spring.transaction">TransactionCallbacks</a></dt>
+<dd>
+<div class="block">在当前真实事务提交后执行动作；回滚时不执行。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/transaction/TransactionCallbacks.html#afterCommitOrNow(java.lang.Runnable)" class="member-name-link">afterCommitOrNow(Runnable)</a> - Static method in class com.sca4d.core.spring.transaction.<a href="com/sca4d/core/spring/transaction/TransactionCallbacks.html" title="class in com.sca4d.core.spring.transaction">TransactionCallbacks</a></dt>
+<dd>
+<div class="block">有真实事务时在提交后执行，否则立即执行。</div>
+</dd>
 <dt><a href="com/sca4d/core/spring/web/IdentityMdcInterceptor.html#afterCompletion(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,java.lang.Object,java.lang.Exception)" class="member-name-link">afterCompletion(HttpServletRequest, HttpServletResponse, Object, Exception)</a> - Method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/IdentityMdcInterceptor.html" title="class in com.sca4d.core.spring.web">IdentityMdcInterceptor</a></dt>
 <dd>
 <div class="block">清理当前请求写入的身份标识。</div>
@@ -404,6 +412,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/spring/json/package-summary.html">com.sca4d.core.spring.json</a> - package com.sca4d.core.spring.json</dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/logging/package-summary.html">com.sca4d.core.spring.logging</a> - package com.sca4d.core.spring.logging</dt>
+<dd>
+<div class="block">将公共日志约定接入日志后端。</div>
+</dd>
 <dt><a href="com/sca4d/core/spring/openapi/package-summary.html">com.sca4d.core.spring.openapi</a> - package com.sca4d.core.spring.openapi</dt>
 <dd>
 <div class="block">提供 OpenAPI 基础信息和安全方案。</div>
@@ -423,6 +435,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/spring/setting/package-summary.html">com.sca4d.core.spring.setting</a> - package com.sca4d.core.spring.setting</dt>
 <dd>
 <div class="block">实现数据库 Settings、类型转换、敏感值加密和指定初始化节点。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/transaction/package-summary.html">com.sca4d.core.spring.transaction</a> - package com.sca4d.core.spring.transaction</dt>
+<dd>
+<div class="block">在 Spring 事务提交后执行进程内动作。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/validation/package-summary.html">com.sca4d.core.spring.validation</a> - package com.sca4d.core.spring.validation</dt>
 <dd>
@@ -637,6 +653,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建数据库 Settings。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/logging/TransactionLogTurboFilter.html#decide(ch.qos.logback.classic.Logger,org.slf4j.event.LoggingEvent)" class="member-name-link">decide(Logger, LoggingEvent)</a> - Method in class com.sca4d.core.spring.logging.<a href="com/sca4d/core/spring/logging/TransactionLogTurboFilter.html" title="class in com.sca4d.core.spring.logging">TransactionLogTurboFilter</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/logging/TransactionLogTurboFilter.html#decide(org.slf4j.Marker,ch.qos.logback.classic.Logger,ch.qos.logback.classic.Level,java.lang.String,java.lang.Object%5B%5D,java.lang.Throwable)" class="member-name-link">decide(Marker, Logger, Level, String, Object[], Throwable)</a> - Method in class com.sca4d.core.spring.logging.<a href="com/sca4d/core/spring/logging/TransactionLogTurboFilter.html" title="class in com.sca4d.core.spring.logging">TransactionLogTurboFilter</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/security/AesGcmSecretCipher.html#decrypt(java.lang.String,com.sca4d.core.api.security.EncryptedSecret)" class="member-name-link">decrypt(String, EncryptedSecret)</a> - Method in class com.sca4d.core.spring.security.<a href="com/sca4d/core/spring/security/AesGcmSecretCipher.html" title="class in com.sca4d.core.spring.security">AesGcmSecretCipher</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/web/list/ListDefinition.Builder.html#defaultSort(com.sca4d.core.api.query.SortOrder...)" class="member-name-link">defaultSort(SortOrder...)</a> - Method in class com.sca4d.core.spring.web.list.<a href="com/sca4d/core/spring/web/list/ListDefinition.Builder.html" title="class in com.sca4d.core.spring.web.list">ListDefinition.Builder</a></dt>
@@ -2342,6 +2362,16 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回需要客户端重新读取的状态目标。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/transaction/TransactionCallbacks.html" class="type-name-link" title="class in com.sca4d.core.spring.transaction">TransactionCallbacks</a> - Class in <a href="com/sca4d/core/spring/transaction/package-summary.html">com.sca4d.core.spring.transaction</a></dt>
+<dd>
+<div class="block">把当前事务登记的进程内动作按顺序放到成功提交之后执行。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/logging/TransactionLogTurboFilter.html" class="type-name-link" title="class in com.sca4d.core.spring.logging">TransactionLogTurboFilter</a> - Class in <a href="com/sca4d/core/spring/logging/package-summary.html">com.sca4d.core.spring.logging</a></dt>
+<dd>
+<div class="block">把带 <code>LogMark.AFTER_COMMIT</code> 的 INFO 交给当前事务，并在提交后按原 logger 输出。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/logging/TransactionLogTurboFilter.html#%3Cinit%3E()" class="member-name-link">TransactionLogTurboFilter()</a> - Constructor for class com.sca4d.core.spring.logging.<a href="com/sca4d/core/spring/logging/TransactionLogTurboFilter.html" title="class in com.sca4d.core.spring.logging">TransactionLogTurboFilter</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/gateway/TrustedGatewayRequest.html" class="type-name-link" title="class in com.sca4d.core.spring.gateway">TrustedGatewayRequest</a> - Class in <a href="com/sca4d/core/spring/gateway/package-summary.html">com.sca4d.core.spring.gateway</a></dt>
 <dd>
 <div class="block">读取已经由 `TrustedGatewayRequestFilter` 验证的外部请求路径和客户端地址。</div>

@@ -49,7 +49,7 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1>Index</h1>
 </div>
-<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a>
+<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:Q">Q</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
 <dt><a href="com/sca4d/notification/sms/aliyun/config/AliyunSmsAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.notification.sms.aliyun.config">AliyunSmsAutoConfiguration</a> - Class in <a href="com/sca4d/notification/sms/aliyun/config/package-summary.html">com.sca4d.notification.sms.aliyun.config</a></dt>
@@ -70,11 +70,11 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">保存一个阿里云账号的 AccessKey 和服务 Endpoint。</div>
 </dd>
-<dt><a href="com/sca4d/notification/sms/aliyun/AliyunSmsTransport.html" class="type-name-link" title="class in com.sca4d.notification.sms.aliyun">AliyunSmsTransport</a> - Class in <a href="com/sca4d/notification/sms/aliyun/package-summary.html">com.sca4d.notification.sms.aliyun</a></dt>
+<dt><a href="com/sca4d/notification/sms/aliyun/AliyunSmsProviderClient.html" class="type-name-link" title="class in com.sca4d.notification.sms.aliyun">AliyunSmsProviderClient</a> - Class in <a href="com/sca4d/notification/sms/aliyun/package-summary.html">com.sca4d.notification.sms.aliyun</a></dt>
 <dd>
 <div class="block">使用阿里云 V2 Java SDK 提交国内或账号已开通的国际 SMS 模板请求。</div>
 </dd>
-<dt><a href="com/sca4d/notification/sms/aliyun/AliyunSmsTransport.html#%3Cinit%3E(com.sca4d.notification.sms.aliyun.AliyunSmsProperties,com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">AliyunSmsTransport(AliyunSmsProperties, ObjectMapper)</a> - Constructor for class com.sca4d.notification.sms.aliyun.<a href="com/sca4d/notification/sms/aliyun/AliyunSmsTransport.html" title="class in com.sca4d.notification.sms.aliyun">AliyunSmsTransport</a></dt>
+<dt><a href="com/sca4d/notification/sms/aliyun/AliyunSmsProviderClient.html#%3Cinit%3E(com.sca4d.notification.sms.aliyun.AliyunSmsProperties,com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">AliyunSmsProviderClient(AliyunSmsProperties, ObjectMapper)</a> - Constructor for class com.sca4d.notification.sms.aliyun.<a href="com/sca4d/notification/sms/aliyun/AliyunSmsProviderClient.html" title="class in com.sca4d.notification.sms.aliyun">AliyunSmsProviderClient</a></dt>
 <dd>
 <div class="block">创建阿里云 SMS Transport。</div>
 </dd>
@@ -103,12 +103,17 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:P">P</h2>
 <dl class="index">
-<dt><a href="com/sca4d/notification/sms/aliyun/AliyunSmsTransport.html#providerType()" class="member-name-link">providerType()</a> - Method in class com.sca4d.notification.sms.aliyun.<a href="com/sca4d/notification/sms/aliyun/AliyunSmsTransport.html" title="class in com.sca4d.notification.sms.aliyun">AliyunSmsTransport</a></dt>
+<dt><a href="com/sca4d/notification/sms/aliyun/AliyunSmsProviderClient.html#providerType()" class="member-name-link">providerType()</a> - Method in class com.sca4d.notification.sms.aliyun.<a href="com/sca4d/notification/sms/aliyun/AliyunSmsProviderClient.html" title="class in com.sca4d.notification.sms.aliyun">AliyunSmsProviderClient</a></dt>
+<dd>&nbsp;</dd>
+</dl>
+<h2 class="title" id="I:Q">Q</h2>
+<dl class="index">
+<dt><a href="com/sca4d/notification/sms/aliyun/AliyunSmsProviderClient.html#query(com.sca4d.notification.sms.SmsProvider,com.sca4d.notification.sms.SmsProviderBinding,com.sca4d.core.api.region.ParsedPhoneNumber,java.lang.String,java.lang.String)" class="member-name-link">query(SmsProvider, SmsProviderBinding, ParsedPhoneNumber, String, String)</a> - Method in class com.sca4d.notification.sms.aliyun.<a href="com/sca4d/notification/sms/aliyun/AliyunSmsProviderClient.html" title="class in com.sca4d.notification.sms.aliyun">AliyunSmsProviderClient</a></dt>
 <dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:S">S</h2>
 <dl class="index">
-<dt><a href="com/sca4d/notification/sms/aliyun/AliyunSmsTransport.html#send(com.sca4d.notification.sms.SmsProvider,com.sca4d.notification.sms.SmsProviderBinding,com.sca4d.core.api.region.ParsedPhoneNumber,java.util.Map)" class="member-name-link">send(SmsProvider, SmsProviderBinding, ParsedPhoneNumber, Map&lt;String, String&gt;)</a> - Method in class com.sca4d.notification.sms.aliyun.<a href="com/sca4d/notification/sms/aliyun/AliyunSmsTransport.html" title="class in com.sca4d.notification.sms.aliyun">AliyunSmsTransport</a></dt>
+<dt><a href="com/sca4d/notification/sms/aliyun/AliyunSmsProviderClient.html#send(com.sca4d.notification.sms.SmsProvider,com.sca4d.notification.sms.SmsProviderBinding,com.sca4d.core.api.region.ParsedPhoneNumber,java.util.Map)" class="member-name-link">send(SmsProvider, SmsProviderBinding, ParsedPhoneNumber, Map&lt;String, String&gt;)</a> - Method in class com.sca4d.notification.sms.aliyun.<a href="com/sca4d/notification/sms/aliyun/AliyunSmsProviderClient.html" title="class in com.sca4d.notification.sms.aliyun">AliyunSmsProviderClient</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/sms/aliyun/AliyunSmsProperties.Credential.html#setAccessKeyId(java.lang.String)" class="member-name-link">setAccessKeyId(String)</a> - Method in class com.sca4d.notification.sms.aliyun.<a href="com/sca4d/notification/sms/aliyun/AliyunSmsProperties.Credential.html" title="class in com.sca4d.notification.sms.aliyun">AliyunSmsProperties.Credential</a></dt>
 <dd>&nbsp;</dd>
@@ -123,12 +128,12 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:T">T</h2>
 <dl class="index">
-<dt><a href="com/sca4d/notification/sms/aliyun/AliyunSmsTransport.html#TYPE" class="member-name-link">TYPE</a> - Static variable in class com.sca4d.notification.sms.aliyun.<a href="com/sca4d/notification/sms/aliyun/AliyunSmsTransport.html" title="class in com.sca4d.notification.sms.aliyun">AliyunSmsTransport</a></dt>
+<dt><a href="com/sca4d/notification/sms/aliyun/AliyunSmsProviderClient.html#TYPE" class="member-name-link">TYPE</a> - Static variable in class com.sca4d.notification.sms.aliyun.<a href="com/sca4d/notification/sms/aliyun/AliyunSmsProviderClient.html" title="class in com.sca4d.notification.sms.aliyun">AliyunSmsProviderClient</a></dt>
 <dd>
 <div class="block">数据库 Provider 使用的适配器类型。</div>
 </dd>
 </dl>
-<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a></main>
+<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:Q">Q</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a></main>
 </div>
 </div>
 </body>

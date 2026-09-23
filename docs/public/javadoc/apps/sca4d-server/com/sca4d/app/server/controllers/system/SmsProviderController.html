@@ -106,7 +106,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.notification.sms.SmsConfigurationService)" class="member-name-link">SmsProviderController</a><wbr>(@NotNull com.sca4d.notification.sms.SmsConfigurationService&nbsp;sms)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">创建 SMS Provider 管理控制器。</div>
+</div>
 </div>
 </section>
 </li>
@@ -208,6 +210,7 @@ loadScripts(document, 'script');</script>
 <h3>SmsProviderController</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">SmsProviderController</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.notification.sms.SmsConfigurationService&nbsp;sms)</span></div>
+<div class="block">创建 SMS Provider 管理控制器。</div>
 </section>
 </li>
 </ul>
@@ -222,7 +225,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="providers()">
 <h3>providers</h3>
 <div class="member-signature"><span class="annotations">@GetMapping
-@RequirePermission(operation="system:sms:read")
+@RequirePermission(operation="SYSTEM:SMS:READ")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../system/view/SmsProviderView.html" title="class in com.sca4d.app.server.system.view">SmsProviderView</a>&gt;&gt;</span>&nbsp;<span class="element-name">providers</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -234,7 +237,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="createProvider(com.sca4d.app.server.system.request.SmsProviderRequest)">
 <h3>createProvider</h3>
 <div class="member-signature"><span class="annotations">@PostMapping
-@RequirePermission(operation="system:sms:manage")
+@RequirePermission(operation="SYSTEM:SMS:MANAGE")
 @Audit(operation="system/sms/provider/create")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/SmsProviderView.html" title="class in com.sca4d.app.server.system.view">SmsProviderView</a>&gt;</span>&nbsp;<span class="element-name">createProvider</span><wbr><span class="parameters">(@RequestBody @Valid
  @Valid <a href="../../system/request/SmsProviderRequest.html" title="class in com.sca4d.app.server.system.request">SmsProviderRequest</a>&nbsp;request)</span></div>
@@ -245,7 +248,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="provider(long)">
 <h3>provider</h3>
 <div class="member-signature"><span class="annotations">@GetMapping("/{providerId}")
-@RequirePermission(operation="system:sms:read")
+@RequirePermission(operation="SYSTEM:SMS:READ")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/SmsProviderView.html" title="class in com.sca4d.app.server.system.view">SmsProviderView</a>&gt;</span>&nbsp;<span class="element-name">provider</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;providerId)</span></div>
 <div class="block">读取 Provider 详情并发布 ETag。</div>
@@ -255,7 +258,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="replaceProvider(long,com.sca4d.app.server.system.request.SmsProviderRequest)">
 <h3>replaceProvider</h3>
 <div class="member-signature"><span class="annotations">@PutMapping("/{providerId}")
-@RequirePermission(operation="system:sms:manage")
+@RequirePermission(operation="SYSTEM:SMS:MANAGE")
 @Audit(operation="system/sms/provider/replace")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/SmsProviderView.html" title="class in com.sca4d.app.server.system.view">SmsProviderView</a>&gt;</span>&nbsp;<span class="element-name">replaceProvider</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="notification:sms:provider")
  long&nbsp;providerId,
@@ -268,7 +271,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="setProviderEnabled(long,com.sca4d.app.server.system.request.EmailResourceStatusRequest)">
 <h3>setProviderEnabled</h3>
 <div class="member-signature"><span class="annotations">@PatchMapping("/{providerId}/status")
-@RequirePermission(operation="system:sms:manage")
+@RequirePermission(operation="SYSTEM:SMS:MANAGE")
 @Audit(operation="system/sms/provider/status/change")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/SmsProviderView.html" title="class in com.sca4d.app.server.system.view">SmsProviderView</a>&gt;</span>&nbsp;<span class="element-name">setProviderEnabled</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="notification:sms:provider")
  long&nbsp;providerId,
@@ -281,7 +284,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="deleteProvider(long)">
 <h3>deleteProvider</h3>
 <div class="member-signature"><span class="annotations">@DeleteMapping("/{providerId}")
-@RequirePermission(operation="system:sms:manage")
+@RequirePermission(operation="SYSTEM:SMS:MANAGE")
 @Audit(operation="system/sms/provider/delete")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">deleteProvider</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="notification:sms:provider")
  long&nbsp;providerId)</span></div>
@@ -292,7 +295,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="bindings(long)">
 <h3>bindings</h3>
 <div class="member-signature"><span class="annotations">@GetMapping("/{providerId}/bindings")
-@RequirePermission(operation="system:sms:read")
+@RequirePermission(operation="SYSTEM:SMS:READ")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../system/view/SmsBindingView.html" title="class in com.sca4d.app.server.system.view">SmsBindingView</a>&gt;&gt;</span>&nbsp;<span class="element-name">bindings</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;providerId)</span></div>
 <dl class="notes">
@@ -305,7 +308,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="createBinding(long,com.sca4d.app.server.system.request.SmsBindingRequest)">
 <h3>createBinding</h3>
 <div class="member-signature"><span class="annotations">@PostMapping("/{providerId}/bindings")
-@RequirePermission(operation="system:sms:manage")
+@RequirePermission(operation="SYSTEM:SMS:MANAGE")
 @Audit(operation="system/sms/binding/create")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/SmsBindingView.html" title="class in com.sca4d.app.server.system.view">SmsBindingView</a>&gt;</span>&nbsp;<span class="element-name">createBinding</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="notification:sms:provider")
  long&nbsp;providerId,
@@ -318,7 +321,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="binding(long,long)">
 <h3>binding</h3>
 <div class="member-signature"><span class="annotations">@GetMapping("/{providerId}/bindings/{bindingId}")
-@RequirePermission(operation="system:sms:read")
+@RequirePermission(operation="SYSTEM:SMS:READ")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/SmsBindingView.html" title="class in com.sca4d.app.server.system.view">SmsBindingView</a>&gt;</span>&nbsp;<span class="element-name">binding</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;providerId,
  @PathVariable
@@ -330,7 +333,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="replaceBinding(long,long,com.sca4d.app.server.system.request.SmsBindingRequest)">
 <h3>replaceBinding</h3>
 <div class="member-signature"><span class="annotations">@PutMapping("/{providerId}/bindings/{bindingId}")
-@RequirePermission(operation="system:sms:manage")
+@RequirePermission(operation="SYSTEM:SMS:MANAGE")
 @Audit(operation="system/sms/binding/replace")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/SmsBindingView.html" title="class in com.sca4d.app.server.system.view">SmsBindingView</a>&gt;</span>&nbsp;<span class="element-name">replaceBinding</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;providerId,
@@ -345,7 +348,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="setBindingEnabled(long,long,com.sca4d.app.server.system.request.EmailResourceStatusRequest)">
 <h3>setBindingEnabled</h3>
 <div class="member-signature"><span class="annotations">@PatchMapping("/{providerId}/bindings/{bindingId}/status")
-@RequirePermission(operation="system:sms:manage")
+@RequirePermission(operation="SYSTEM:SMS:MANAGE")
 @Audit(operation="system/sms/binding/status/change")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/SmsBindingView.html" title="class in com.sca4d.app.server.system.view">SmsBindingView</a>&gt;</span>&nbsp;<span class="element-name">setBindingEnabled</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;providerId,
@@ -360,7 +363,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="deleteBinding(long,long)">
 <h3>deleteBinding</h3>
 <div class="member-signature"><span class="annotations">@DeleteMapping("/{providerId}/bindings/{bindingId}")
-@RequirePermission(operation="system:sms:manage")
+@RequirePermission(operation="SYSTEM:SMS:MANAGE")
 @Audit(operation="system/sms/binding/delete")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">deleteBinding</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;providerId,

@@ -110,19 +110,19 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="PrincipalGrantQuery.Builder.html" title="class in com.sca4d.iam.rbac">PrincipalGrantQuery.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#allOf(com.sca4d.core.api.code.TreeCode...)" class="member-name-link">allOf</a><wbr>(@NotNull com.sca4d.core.api.code.TreeCode...&nbsp;operationCodes)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">要求 Principal 同时获得给定的全部 Operation。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="PrincipalGrantQuery.Builder.html" title="class in com.sca4d.iam.rbac">PrincipalGrantQuery.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#anyOf(com.sca4d.core.api.code.TreeCode...)" class="member-name-link">anyOf</a><wbr>(@NotNull com.sca4d.core.api.code.TreeCode...&nbsp;operationCodes)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">要求 Principal 至少获得给定 Operation 中的一个。</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="PrincipalGrantQuery.html" title="class in com.sca4d.iam.rbac">PrincipalGrantQuery</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#build()" class="member-name-link">build</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="PrincipalGrantQuery.Builder.html" title="class in com.sca4d.iam.rbac">PrincipalGrantQuery.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#requireAll(java.lang.String...)" class="member-name-link">requireAll</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;operationCodes)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">要求 Principal 同时获得给定的全部 Operation。</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="PrincipalGrantQuery.Builder.html" title="class in com.sca4d.iam.rbac">PrincipalGrantQuery.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#requireAny(java.lang.String...)" class="member-name-link">requireAny</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;operationCodes)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">要求 Principal 至少获得给定 Operation 中的一个。</div>
-</div>
 </div>
 </div>
 </div>
@@ -141,17 +141,17 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="requireAll(java.lang.String...)">
-<h3>requireAll</h3>
+<section class="detail" id="allOf(com.sca4d.core.api.code.TreeCode...)">
+<h3>allOf</h3>
 <div class="member-signature"><span class="annotations">@Contract(value="_ -&gt; this",
           mutates="this")
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="PrincipalGrantQuery.Builder.html" title="class in com.sca4d.iam.rbac">PrincipalGrantQuery.Builder</a></span>&nbsp;<span class="element-name">requireAll</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;operationCodes)</span></div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="PrincipalGrantQuery.Builder.html" title="class in com.sca4d.iam.rbac">PrincipalGrantQuery.Builder</a></span>&nbsp;<span class="element-name">allOf</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.code.TreeCode...&nbsp;operationCodes)</span></div>
 <div class="block">要求 Principal 同时获得给定的全部 Operation。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>operationCodes</code> - Operation 常量；至少包含一个非空白编码</dd>
+<dd><code>operationCodes</code> - Operation 常量；至少包含一个编码</dd>
 <dt>Returns:</dt>
 <dd>当前 Builder</dd>
 <dt>Throws:</dt>
@@ -160,17 +160,17 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="requireAny(java.lang.String...)">
-<h3>requireAny</h3>
+<section class="detail" id="anyOf(com.sca4d.core.api.code.TreeCode...)">
+<h3>anyOf</h3>
 <div class="member-signature"><span class="annotations">@Contract(value="_ -&gt; this",
           mutates="this")
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="PrincipalGrantQuery.Builder.html" title="class in com.sca4d.iam.rbac">PrincipalGrantQuery.Builder</a></span>&nbsp;<span class="element-name">requireAny</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;operationCodes)</span></div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="PrincipalGrantQuery.Builder.html" title="class in com.sca4d.iam.rbac">PrincipalGrantQuery.Builder</a></span>&nbsp;<span class="element-name">anyOf</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.code.TreeCode...&nbsp;operationCodes)</span></div>
 <div class="block">要求 Principal 至少获得给定 Operation 中的一个。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>operationCodes</code> - Operation 常量；至少包含一个非空白编码</dd>
+<dd><code>operationCodes</code> - Operation 常量；至少包含一个编码</dd>
 <dt>Returns:</dt>
 <dd>当前 Builder</dd>
 <dt>Throws:</dt>

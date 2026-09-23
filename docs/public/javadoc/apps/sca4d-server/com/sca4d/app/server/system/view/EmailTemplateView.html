@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">EmailTemplateView</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">返回 Email 模板完整多语言字段、变量、状态和版本。</div>
+<div class="block">返回 Email 模板多语言源码、变量、状态和版本。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -107,11 +107,11 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="EmailTemplateView.html" title="class in com.sca4d.app.server.system.view">EmailTemplateView</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#from(com.sca4d.notification.template.NotificationTemplate,java.util.Set)" class="member-name-link">from</a><wbr>(@NotNull com.sca4d.notification.template.NotificationTemplate&nbsp;template,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;variables)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#from(com.sca4d.notification.email.EmailTemplate,java.util.Set)" class="member-name-link">from</a><wbr>(@NotNull com.sca4d.notification.email.EmailTemplate&nbsp;template,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;variables)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.fasterxml.jackson.databind.JsonNode</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getContent()" class="member-name-link">getContent</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>com.sca4d.notification.email.EmailTemplateSource&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLocales()" class="member-name-link">getLocales</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getNotificationCode()" class="member-name-link">getNotificationCode</a>()</code></div>
@@ -119,7 +119,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTemplateId()" class="member-name-link">getTemplateId</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getVariables()" class="member-name-link">getVariables</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
@@ -149,17 +149,17 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="from(com.sca4d.notification.template.NotificationTemplate,java.util.Set)">
+<section class="detail" id="from(com.sca4d.notification.email.EmailTemplate,java.util.Set)">
 <h3>from</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
 </span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="EmailTemplateView.html" title="class in com.sca4d.app.server.system.view">EmailTemplateView</a></span>&nbsp;<span class="element-name">from</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.notification.template.NotificationTemplate&nbsp;template,
+ @NotNull com.sca4d.notification.email.EmailTemplate&nbsp;template,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;variables)</span></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;variables)</span></div>
 <dl class="notes">
-<dt>Returns:</dt>
-<dd>Email 模板的管理 HTTP 投影</dd>
+<dt>Parameters:</dt>
+<dd><code>template</code> - 模板领域对象 @param variables 可用变量 @return 响应视图</dd>
 </dl>
 </section>
 </li>
@@ -180,18 +180,18 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getNotificationCode</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>渠道无关通知编码</dd>
+<dd>通知编码</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="getContent()">
-<h3>getContent</h3>
+<section class="detail" id="getLocales()">
+<h3>getLocales</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.fasterxml.jackson.databind.JsonNode</span>&nbsp;<span class="element-name">getContent</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>com.sca4d.notification.email.EmailTemplateSource&gt;</span>&nbsp;<span class="element-name">getLocales</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>完整多语言模板字段</dd>
+<dd>按 Locale 保存的源码</dd>
 </dl>
 </section>
 </li>
@@ -199,10 +199,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getVariables()">
 <h3>getVariables</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">getVariables</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">getVariables</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>模板引用的不可修改变量集合</dd>
+<dd>模板变量名</dd>
 </dl>
 </section>
 </li>
@@ -212,7 +212,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isEnabled</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>是否参与实际投递</dd>
+<dd>是否启用</dd>
 </dl>
 </section>
 </li>
@@ -222,7 +222,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">getVersion</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>Email 模板当前版本</dd>
+<dd>模板版本数值</dd>
 </dl>
 </section>
 </li>
@@ -234,7 +234,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.concurrent.Version</span>&nbsp;<span class="element-name">revision</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>生成当前完整 Email 模板表示的版本</dd>
+<dd>模板乐观锁版本</dd>
 </dl>
 </section>
 </li>

@@ -196,7 +196,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="findAll()">
 <h3>findAll</h3>
 <div class="member-signature"><span class="annotations">@GetMapping
-@RequirePermission(operation="system:email:read")
+@RequirePermission(operation="SYSTEM:EMAIL:READ")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../system/view/EmailSenderView.html" title="class in com.sca4d.app.server.system.view">EmailSenderView</a>&gt;&gt;</span>&nbsp;<span class="element-name">findAll</span>()</div>
 <dl class="notes">
@@ -209,7 +209,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="create(com.sca4d.app.server.system.request.CreateEmailSenderRequest)">
 <h3>create</h3>
 <div class="member-signature"><span class="annotations">@PostMapping
-@RequirePermission(operation="system:email:manage")
+@RequirePermission(operation="SYSTEM:EMAIL:MANAGE")
 @Audit(operation="system/email/sender/create")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/EmailSenderView.html" title="class in com.sca4d.app.server.system.view">EmailSenderView</a>&gt;</span>&nbsp;<span class="element-name">create</span><wbr><span class="parameters">(@RequestBody @Valid @NotNull
@@ -221,7 +221,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="get(long)">
 <h3>get</h3>
 <div class="member-signature"><span class="annotations">@GetMapping("/{senderId}")
-@RequirePermission(operation="system:email:read")
+@RequirePermission(operation="SYSTEM:EMAIL:READ")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/EmailSenderView.html" title="class in com.sca4d.app.server.system.view">EmailSenderView</a>&gt;</span>&nbsp;<span class="element-name">get</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;senderId)</span></div>
@@ -232,7 +232,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="replace(long,com.sca4d.app.server.system.request.ReplaceEmailSenderRequest)">
 <h3>replace</h3>
 <div class="member-signature"><span class="annotations">@PutMapping("/{senderId}")
-@RequirePermission(operation="system:email:manage")
+@RequirePermission(operation="SYSTEM:EMAIL:MANAGE")
 @Audit(operation="system/email/sender/replace")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/EmailSenderView.html" title="class in com.sca4d.app.server.system.view">EmailSenderView</a>&gt;</span>&nbsp;<span class="element-name">replace</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="notification:email:sender")
@@ -246,7 +246,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="setEnabled(long,com.sca4d.app.server.system.request.EmailResourceStatusRequest)">
 <h3>setEnabled</h3>
 <div class="member-signature"><span class="annotations">@PatchMapping("/{senderId}/status")
-@RequirePermission(operation="system:email:manage")
+@RequirePermission(operation="SYSTEM:EMAIL:MANAGE")
 @Audit(operation="system/email/sender/status/change")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/EmailSenderView.html" title="class in com.sca4d.app.server.system.view">EmailSenderView</a>&gt;</span>&nbsp;<span class="element-name">setEnabled</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="notification:email:sender")
@@ -260,7 +260,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="testConnection(long)">
 <h3>testConnection</h3>
 <div class="member-signature"><span class="annotations">@PostMapping("/{senderId}/connection-tests")
-@RequirePermission(operation="system:email:manage")
+@RequirePermission(operation="SYSTEM:EMAIL:MANAGE")
 @Audit(operation="system/email/sender/connection/test")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">testConnection</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="notification:email:sender")
@@ -272,7 +272,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="delete(long)">
 <h3>delete</h3>
 <div class="member-signature"><span class="annotations">@DeleteMapping("/{senderId}")
-@RequirePermission(operation="system:email:manage")
+@RequirePermission(operation="SYSTEM:EMAIL:MANAGE")
 @Audit(operation="system/email/sender/delete")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">delete</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="notification:email:sender")

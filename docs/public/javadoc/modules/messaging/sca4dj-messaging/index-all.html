@@ -52,7 +52,7 @@ loadScripts(document, 'script');</script>
 <a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
-<dt><a href="com/sca4d/messaging/outbox/OutboxRepository.html#add(com.sca4d.core.api.messaging.MessageId,java.lang.String,byte%5B%5D,java.time.Instant)" class="member-name-link">add(MessageId, String, byte[], Instant)</a> - Method in class com.sca4d.messaging.outbox.<a href="com/sca4d/messaging/outbox/OutboxRepository.html" title="class in com.sca4d.messaging.outbox">OutboxRepository</a></dt>
+<dt><a href="com/sca4d/messaging/outbox/MessageOutboxRepository.html#add(com.sca4d.core.api.messaging.MessageId,com.sca4d.core.api.code.TreeCode,byte%5B%5D,java.time.Instant)" class="member-name-link">add(MessageId, TreeCode, byte[], Instant)</a> - Method in class com.sca4d.messaging.outbox.<a href="com/sca4d/messaging/outbox/MessageOutboxRepository.html" title="class in com.sca4d.messaging.outbox">MessageOutboxRepository</a></dt>
 <dd>
 <div class="block">在调用方事务内保存一条已经序列化的待发布消息。</div>
 </dd>
@@ -61,7 +61,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:C">C</h2>
 <dl class="index">
-<dt><a href="com/sca4d/messaging/outbox/OutboxDispatcher.html#cleanup()" class="member-name-link">cleanup()</a> - Method in class com.sca4d.messaging.outbox.<a href="com/sca4d/messaging/outbox/OutboxDispatcher.html" title="class in com.sca4d.messaging.outbox">OutboxDispatcher</a></dt>
+<dt><a href="com/sca4d/messaging/outbox/MessageOutboxDispatcher.html#cleanup()" class="member-name-link">cleanup()</a> - Method in class com.sca4d.messaging.outbox.<a href="com/sca4d/messaging/outbox/MessageOutboxDispatcher.html" title="class in com.sca4d.messaging.outbox">MessageOutboxDispatcher</a></dt>
 <dd>
 <div class="block">分批删除保留期已经结束的 SENT 记录。</div>
 </dd>
@@ -81,37 +81,27 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">声明 RabbitMQ 拓扑，并编码、发送和消费业务消息。</div>
 </dd>
-<dt><a href="com/sca4d/messaging/rabbit/ConsumerContainers.html" class="type-name-link" title="class in com.sca4d.messaging.rabbit">ConsumerContainers</a> - Class in <a href="com/sca4d/messaging/rabbit/package-summary.html">com.sca4d.messaging.rabbit</a></dt>
-<dd>
-<div class="block">为每个 MessageConsumer 启动竞争消费容器，并把任意消费失败直接拒绝到该 Consumer 的 DLQ。</div>
-</dd>
-<dt><a href="com/sca4d/messaging/rabbit/ConsumerContainers.html#%3Cinit%3E(org.springframework.amqp.rabbit.connection.ConnectionFactory,com.sca4d.messaging.rabbit.MessagingTopology,com.sca4d.messaging.rabbit.MessagingEnvelopeCodec,java.util.List)" class="member-name-link">ConsumerContainers(ConnectionFactory, MessagingTopology, MessagingEnvelopeCodec, List&lt;MessageConsumer&lt;?&gt;&gt;)</a> - Constructor for class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/ConsumerContainers.html" title="class in com.sca4d.messaging.rabbit">ConsumerContainers</a></dt>
-<dd>
-<div class="block">创建使用手动 ACK 且失败不重新入队的 Consumer 容器。</div>
-</dd>
 </dl>
 <h2 class="title" id="I:D">D</h2>
 <dl class="index">
-<dt><a href="com/sca4d/messaging/rabbit/MessagingTopology.html#declarables(java.util.List)" class="member-name-link">declarables(List&lt;MessageConsumer&lt;?&gt;&gt;)</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/MessagingTopology.html" title="class in com.sca4d.messaging.rabbit">MessagingTopology</a></dt>
-<dd>
-<div class="block">为已经安装的 Consumer 创建 Spring AMQP 持久对象和绑定。</div>
-</dd>
+<dt><a href="com/sca4d/messaging/rabbit/RabbitMessageTopology.html#declarables(java.util.List,java.util.List)" class="member-name-link">declarables(List&lt;? extends EventHandler&lt;?&gt;&gt;, List&lt;? extends MessageHandler&lt;?&gt;&gt;)</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitMessageTopology.html" title="class in com.sca4d.messaging.rabbit">RabbitMessageTopology</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/messaging/outbox/mapper/OutboxMapper.html#deleteSentBefore(java.time.Instant,int)" class="member-name-link">deleteSentBefore(Instant, int)</a> - Method in interface com.sca4d.messaging.outbox.mapper.<a href="com/sca4d/messaging/outbox/mapper/OutboxMapper.html" title="interface in com.sca4d.messaging.outbox.mapper">OutboxMapper</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/messaging/outbox/OutboxStatus.html#description()" class="member-name-link">description()</a> - Method in enum class com.sca4d.messaging.outbox.<a href="com/sca4d/messaging/outbox/OutboxStatus.html" title="enum class in com.sca4d.messaging.outbox">OutboxStatus</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/messaging/outbox/OutboxDispatcher.html#dispatch()" class="member-name-link">dispatch()</a> - Method in class com.sca4d.messaging.outbox.<a href="com/sca4d/messaging/outbox/OutboxDispatcher.html" title="class in com.sca4d.messaging.outbox">OutboxDispatcher</a></dt>
+<dt><a href="com/sca4d/messaging/outbox/MessageOutboxDispatcher.html#dispatch()" class="member-name-link">dispatch()</a> - Method in class com.sca4d.messaging.outbox.<a href="com/sca4d/messaging/outbox/MessageOutboxDispatcher.html" title="class in com.sca4d.messaging.outbox">MessageOutboxDispatcher</a></dt>
 <dd>
 <div class="block">领取一批到期记录并逐条尝试发布；单条失败不阻止其他消息。</div>
 </dd>
+<dt><a href="com/sca4d/messaging/rabbit/RabbitMessageBus.html#dispatch(com.sca4d.core.api.message.Message,com.sca4d.core.api.messaging.DispatchPolicy)" class="member-name-link">dispatch(Message, DispatchPolicy)</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitMessageBus.html" title="class in com.sca4d.messaging.rabbit">RabbitMessageBus</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:E">E</h2>
 <dl class="index">
 <dt><a href="com/sca4d/messaging/outbox/mapper/OutboxCandidate.html#envelope()" class="member-name-link">envelope()</a> - Method in class com.sca4d.messaging.outbox.mapper.<a href="com/sca4d/messaging/outbox/mapper/OutboxCandidate.html" title="class in com.sca4d.messaging.outbox.mapper">OutboxCandidate</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/messaging/outbox/mapper/OutboxCandidate.html#eventCode()" class="member-name-link">eventCode()</a> - Method in class com.sca4d.messaging.outbox.mapper.<a href="com/sca4d/messaging/outbox/mapper/OutboxCandidate.html" title="class in com.sca4d.messaging.outbox.mapper">OutboxCandidate</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="com/sca4d/messaging/rabbit/MessagingTopology.html#exchangeName()" class="member-name-link">exchangeName()</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/MessagingTopology.html" title="class in com.sca4d.messaging.rabbit">MessagingTopology</a></dt>
+<dt><a href="com/sca4d/messaging/rabbit/RabbitMessageTopology.html#exchangeName()" class="member-name-link">exchangeName()</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitMessageTopology.html" title="class in com.sca4d.messaging.rabbit">RabbitMessageTopology</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/messaging/outbox/OutboxCleanupTask.html#execute()" class="member-name-link">execute()</a> - Method in class com.sca4d.messaging.outbox.<a href="com/sca4d/messaging/outbox/OutboxCleanupTask.html" title="class in com.sca4d.messaging.outbox">OutboxCleanupTask</a></dt>
 <dd>&nbsp;</dd>
@@ -159,7 +149,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回发布失败退避时长的上限。</div>
 </dd>
-<dt><a href="com/sca4d/messaging/rabbit/ConsumerContainers.html#getPhase()" class="member-name-link">getPhase()</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/ConsumerContainers.html" title="class in com.sca4d.messaging.rabbit">ConsumerContainers</a></dt>
+<dt><a href="com/sca4d/messaging/rabbit/RabbitHandlerContainers.html#getPhase()" class="member-name-link">getPhase()</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitHandlerContainers.html" title="class in com.sca4d.messaging.rabbit">RabbitHandlerContainers</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/messaging/config/MessagingProperties.html#getSentRetention()" class="member-name-link">getSentRetention()</a> - Method in class com.sca4d.messaging.config.<a href="com/sca4d/messaging/config/MessagingProperties.html" title="class in com.sca4d.messaging.config">MessagingProperties</a></dt>
 <dd>
@@ -172,15 +162,33 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">新增一条待发布消息。</div>
 </dd>
-<dt><a href="com/sca4d/messaging/rabbit/ConsumerContainers.html#isAutoStartup()" class="member-name-link">isAutoStartup()</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/ConsumerContainers.html" title="class in com.sca4d.messaging.rabbit">ConsumerContainers</a></dt>
+<dt><a href="com/sca4d/messaging/rabbit/RabbitHandlerContainers.html#isAutoStartup()" class="member-name-link">isAutoStartup()</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitHandlerContainers.html" title="class in com.sca4d.messaging.rabbit">RabbitHandlerContainers</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/messaging/rabbit/ConsumerContainers.html#isRunning()" class="member-name-link">isRunning()</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/ConsumerContainers.html" title="class in com.sca4d.messaging.rabbit">ConsumerContainers</a></dt>
+<dt><a href="com/sca4d/messaging/rabbit/RabbitHandlerContainers.html#isRunning()" class="member-name-link">isRunning()</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitHandlerContainers.html" title="class in com.sca4d.messaging.rabbit">RabbitHandlerContainers</a></dt>
 <dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:M">M</h2>
 <dl class="index">
+<dt><a href="com/sca4d/messaging/outbox/mapper/OutboxCandidate.html#messageCode()" class="member-name-link">messageCode()</a> - Method in class com.sca4d.messaging.outbox.mapper.<a href="com/sca4d/messaging/outbox/mapper/OutboxCandidate.html" title="class in com.sca4d.messaging.outbox.mapper">OutboxCandidate</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/messaging/outbox/mapper/OutboxCandidate.html#messageId()" class="member-name-link">messageId()</a> - Method in class com.sca4d.messaging.outbox.mapper.<a href="com/sca4d/messaging/outbox/mapper/OutboxCandidate.html" title="class in com.sca4d.messaging.outbox.mapper">OutboxCandidate</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/messaging/outbox/MessageOutboxDispatcher.html" class="type-name-link" title="class in com.sca4d.messaging.outbox">MessageOutboxDispatcher</a> - Class in <a href="com/sca4d/messaging/outbox/package-summary.html">com.sca4d.messaging.outbox</a></dt>
+<dd>
+<div class="block">多实例领取 Outbox 记录，在事务外发布，并用独立事务写回确认或失败结果。</div>
+</dd>
+<dt><a href="com/sca4d/messaging/outbox/MessageOutboxDispatcher.html#%3Cinit%3E(com.sca4d.messaging.outbox.MessageOutboxRepository,com.sca4d.messaging.rabbit.RabbitPublisher,org.springframework.transaction.support.TransactionTemplate,com.sca4d.messaging.config.MessagingProperties,java.time.Clock)" class="member-name-link">MessageOutboxDispatcher(MessageOutboxRepository, RabbitPublisher, TransactionTemplate, MessagingProperties, Clock)</a> - Constructor for class com.sca4d.messaging.outbox.<a href="com/sca4d/messaging/outbox/MessageOutboxDispatcher.html" title="class in com.sca4d.messaging.outbox">MessageOutboxDispatcher</a></dt>
+<dd>
+<div class="block">创建保留消息级租约、退避和分批清理语义的 Outbox 操作。</div>
+</dd>
+<dt><a href="com/sca4d/messaging/outbox/MessageOutboxRepository.html" class="type-name-link" title="class in com.sca4d.messaging.outbox">MessageOutboxRepository</a> - Class in <a href="com/sca4d/messaging/outbox/package-summary.html">com.sca4d.messaging.outbox</a></dt>
+<dd>
+<div class="block">保存 Outbox 消息，并用租约和版本条件领取及完成派发。</div>
+</dd>
+<dt><a href="com/sca4d/messaging/outbox/MessageOutboxRepository.html#%3Cinit%3E(com.sca4d.messaging.outbox.mapper.OutboxMapper)" class="member-name-link">MessageOutboxRepository(OutboxMapper)</a> - Constructor for class com.sca4d.messaging.outbox.<a href="com/sca4d/messaging/outbox/MessageOutboxRepository.html" title="class in com.sca4d.messaging.outbox">MessageOutboxRepository</a></dt>
+<dd>
+<div class="block">创建使用指定 Mapper 的 Outbox Repository。</div>
+</dd>
 <dt><a href="com/sca4d/messaging/config/MessagingAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.messaging.config">MessagingAutoConfiguration</a> - Class in <a href="com/sca4d/messaging/config/package-summary.html">com.sca4d.messaging.config</a></dt>
 <dd>
 <div class="block">自动装配业务消息 RabbitMQ 拓扑、Consumer 容器、发布器和 Outbox 派发。</div>
@@ -189,14 +197,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建 Messaging 模块自动配置。</div>
 </dd>
-<dt><a href="com/sca4d/messaging/rabbit/MessagingEnvelopeCodec.html" class="type-name-link" title="class in com.sca4d.messaging.rabbit">MessagingEnvelopeCodec</a> - Class in <a href="com/sca4d/messaging/rabbit/package-summary.html">com.sca4d.messaging.rabbit</a></dt>
-<dd>
-<div class="block">编码和严格校验 RabbitMQ 与 Outbox 共用的业务事件 JSON 信封。</div>
-</dd>
-<dt><a href="com/sca4d/messaging/rabbit/MessagingEnvelopeCodec.html#%3Cinit%3E(com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">MessagingEnvelopeCodec(ObjectMapper)</a> - Constructor for class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/MessagingEnvelopeCodec.html" title="class in com.sca4d.messaging.rabbit">MessagingEnvelopeCodec</a></dt>
-<dd>
-<div class="block">创建直接使用脚手架固定 `@Sca4djJson` 映射器的信封编解码器。</div>
-</dd>
 <dt><a href="com/sca4d/messaging/config/MessagingProperties.html" class="type-name-link" title="class in com.sca4d.messaging.config">MessagingProperties</a> - Class in <a href="com/sca4d/messaging/config/package-summary.html">com.sca4d.messaging.config</a></dt>
 <dd>
 <div class="block">配置 RabbitMQ 发布确认以及 Outbox 派发、租约、退避和清理。</div>
@@ -204,14 +204,6 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/messaging/config/MessagingProperties.html#%3Cinit%3E()" class="member-name-link">MessagingProperties()</a> - Constructor for class com.sca4d.messaging.config.<a href="com/sca4d/messaging/config/MessagingProperties.html" title="class in com.sca4d.messaging.config">MessagingProperties</a></dt>
 <dd>
 <div class="block">创建使用默认发布确认、派发和清理参数的配置。</div>
-</dd>
-<dt><a href="com/sca4d/messaging/rabbit/MessagingTopology.html" class="type-name-link" title="class in com.sca4d.messaging.rabbit">MessagingTopology</a> - Class in <a href="com/sca4d/messaging/rabbit/package-summary.html">com.sca4d.messaging.rabbit</a></dt>
-<dd>
-<div class="block">校验 MessageConsumer 契约，并声明持久业务 exchange、Consumer 队列和独立 DLQ。</div>
-</dd>
-<dt><a href="com/sca4d/messaging/rabbit/MessagingTopology.html#%3Cinit%3E(com.sca4d.core.api.runtime.RuntimeNamespace)" class="member-name-link">MessagingTopology(RuntimeNamespace)</a> - Constructor for class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/MessagingTopology.html" title="class in com.sca4d.messaging.rabbit">MessagingTopology</a></dt>
-<dd>
-<div class="block">创建当前 App 的 Messaging exchange 命名。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:O">O</h2>
@@ -228,37 +220,21 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">由集群定时器直接触发一次超过保留期的 SENT Outbox 记录分批删除。</div>
 </dd>
-<dt><a href="com/sca4d/messaging/outbox/OutboxCleanupTask.html#%3Cinit%3E(com.sca4d.messaging.outbox.OutboxDispatcher)" class="member-name-link">OutboxCleanupTask(OutboxDispatcher)</a> - Constructor for class com.sca4d.messaging.outbox.<a href="com/sca4d/messaging/outbox/OutboxCleanupTask.html" title="class in com.sca4d.messaging.outbox">OutboxCleanupTask</a></dt>
+<dt><a href="com/sca4d/messaging/outbox/OutboxCleanupTask.html#%3Cinit%3E(com.sca4d.messaging.outbox.MessageOutboxDispatcher)" class="member-name-link">OutboxCleanupTask(MessageOutboxDispatcher)</a> - Constructor for class com.sca4d.messaging.outbox.<a href="com/sca4d/messaging/outbox/OutboxCleanupTask.html" title="class in com.sca4d.messaging.outbox">OutboxCleanupTask</a></dt>
 <dd>
 <div class="block">创建执行一次过期 SENT 记录清理的集群任务。</div>
-</dd>
-<dt><a href="com/sca4d/messaging/outbox/OutboxDispatcher.html" class="type-name-link" title="class in com.sca4d.messaging.outbox">OutboxDispatcher</a> - Class in <a href="com/sca4d/messaging/outbox/package-summary.html">com.sca4d.messaging.outbox</a></dt>
-<dd>
-<div class="block">多实例领取 Outbox 记录，在事务外发布，并用独立事务写回确认或失败结果。</div>
-</dd>
-<dt><a href="com/sca4d/messaging/outbox/OutboxDispatcher.html#%3Cinit%3E(com.sca4d.messaging.outbox.OutboxRepository,com.sca4d.messaging.rabbit.RabbitMessageSender,org.springframework.transaction.support.TransactionTemplate,com.sca4d.messaging.config.MessagingProperties,java.time.Clock)" class="member-name-link">OutboxDispatcher(OutboxRepository, RabbitMessageSender, TransactionTemplate, MessagingProperties, Clock)</a> - Constructor for class com.sca4d.messaging.outbox.<a href="com/sca4d/messaging/outbox/OutboxDispatcher.html" title="class in com.sca4d.messaging.outbox">OutboxDispatcher</a></dt>
-<dd>
-<div class="block">创建保留消息级租约、退避和分批清理语义的 Outbox 操作。</div>
 </dd>
 <dt><a href="com/sca4d/messaging/outbox/OutboxDispatchTask.html" class="type-name-link" title="class in com.sca4d.messaging.outbox">OutboxDispatchTask</a> - Class in <a href="com/sca4d/messaging/outbox/package-summary.html">com.sca4d.messaging.outbox</a></dt>
 <dd>
 <div class="block">由集群定时器直接触发一次到期 Outbox 消息领取和发布。</div>
 </dd>
-<dt><a href="com/sca4d/messaging/outbox/OutboxDispatchTask.html#%3Cinit%3E(com.sca4d.messaging.outbox.OutboxDispatcher)" class="member-name-link">OutboxDispatchTask(OutboxDispatcher)</a> - Constructor for class com.sca4d.messaging.outbox.<a href="com/sca4d/messaging/outbox/OutboxDispatchTask.html" title="class in com.sca4d.messaging.outbox">OutboxDispatchTask</a></dt>
+<dt><a href="com/sca4d/messaging/outbox/OutboxDispatchTask.html#%3Cinit%3E(com.sca4d.messaging.outbox.MessageOutboxDispatcher)" class="member-name-link">OutboxDispatchTask(MessageOutboxDispatcher)</a> - Constructor for class com.sca4d.messaging.outbox.<a href="com/sca4d/messaging/outbox/OutboxDispatchTask.html" title="class in com.sca4d.messaging.outbox">OutboxDispatchTask</a></dt>
 <dd>
 <div class="block">创建执行一次 Outbox 派发批次的集群任务。</div>
 </dd>
 <dt><a href="com/sca4d/messaging/outbox/mapper/OutboxMapper.html" class="type-name-link" title="interface in com.sca4d.messaging.outbox.mapper">OutboxMapper</a> - Interface in <a href="com/sca4d/messaging/outbox/mapper/package-summary.html">com.sca4d.messaging.outbox.mapper</a></dt>
 <dd>
 <div class="block">执行 messaging_outbox 最小行写入、条件领取、状态更新和清理 SQL。</div>
-</dd>
-<dt><a href="com/sca4d/messaging/outbox/OutboxRepository.html" class="type-name-link" title="class in com.sca4d.messaging.outbox">OutboxRepository</a> - Class in <a href="com/sca4d/messaging/outbox/package-summary.html">com.sca4d.messaging.outbox</a></dt>
-<dd>
-<div class="block">保存 Outbox 消息，并用租约和版本条件领取及完成派发。</div>
-</dd>
-<dt><a href="com/sca4d/messaging/outbox/OutboxRepository.html#%3Cinit%3E(com.sca4d.messaging.outbox.mapper.OutboxMapper)" class="member-name-link">OutboxRepository(OutboxMapper)</a> - Constructor for class com.sca4d.messaging.outbox.<a href="com/sca4d/messaging/outbox/OutboxRepository.html" title="class in com.sca4d.messaging.outbox">OutboxRepository</a></dt>
-<dd>
-<div class="block">创建使用指定 Mapper 的 Outbox Repository。</div>
 </dd>
 <dt><a href="com/sca4d/messaging/outbox/OutboxStatus.html" class="type-name-link" title="enum class in com.sca4d.messaging.outbox">OutboxStatus</a> - Enum Class in <a href="com/sca4d/messaging/outbox/package-summary.html">com.sca4d.messaging.outbox</a></dt>
 <dd>
@@ -271,51 +247,55 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">等待达到最早发布时间。</div>
 </dd>
-<dt><a href="com/sca4d/messaging/rabbit/RabbitMessagePublisher.html#publishAfterCommit(com.sca4d.core.api.event.Event)" class="member-name-link">publishAfterCommit(Event&lt;?&gt;)</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitMessagePublisher.html" title="class in com.sca4d.messaging.rabbit">RabbitMessagePublisher</a></dt>
-<dd>
-<div class="block">在当前事务提交后发送；事务回滚时不发送。</div>
-</dd>
-<dt><a href="com/sca4d/messaging/rabbit/RabbitMessagePublisher.html#publishNow(com.sca4d.core.api.event.Event)" class="member-name-link">publishNow(Event&lt;?&gt;)</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitMessagePublisher.html" title="class in com.sca4d.messaging.rabbit">RabbitMessagePublisher</a></dt>
-<dd>
-<div class="block">立即编码、发送并等待 RabbitMQ 确认。</div>
-</dd>
-<dt><a href="com/sca4d/messaging/rabbit/RabbitMessagePublisher.html#publishReliably(com.sca4d.core.api.event.Event)" class="member-name-link">publishReliably(Event&lt;?&gt;)</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitMessagePublisher.html" title="class in com.sca4d.messaging.rabbit">RabbitMessagePublisher</a></dt>
-<dd>
-<div class="block">在当前事务中写入可立即派发的 Outbox 记录。</div>
-</dd>
-<dt><a href="com/sca4d/messaging/rabbit/RabbitMessagePublisher.html#publishReliably(com.sca4d.core.api.event.Event,java.time.Instant)" class="member-name-link">publishReliably(Event&lt;?&gt;, Instant)</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitMessagePublisher.html" title="class in com.sca4d.messaging.rabbit">RabbitMessagePublisher</a></dt>
-<dd>
-<div class="block">在当前事务中写入不早于指定时间派发的 Outbox 记录。</div>
-</dd>
 </dl>
 <h2 class="title" id="I:R">R</h2>
 <dl class="index">
-<dt><a href="com/sca4d/messaging/rabbit/RabbitMessagePublisher.html" class="type-name-link" title="class in com.sca4d.messaging.rabbit">RabbitMessagePublisher</a> - Class in <a href="com/sca4d/messaging/rabbit/package-summary.html">com.sca4d.messaging.rabbit</a></dt>
+<dt><a href="com/sca4d/messaging/rabbit/RabbitHandlerContainers.html" class="type-name-link" title="class in com.sca4d.messaging.rabbit">RabbitHandlerContainers</a> - Class in <a href="com/sca4d/messaging/rabbit/package-summary.html">com.sca4d.messaging.rabbit</a></dt>
 <dd>
-<div class="block">实现立即、提交后和 Outbox 三种业务消息发布时机。</div>
+<div class="block">为每个 MessageHandler 启动手动确认的竞争消费容器。</div>
 </dd>
-<dt><a href="com/sca4d/messaging/rabbit/RabbitMessagePublisher.html#%3Cinit%3E(com.sca4d.core.api.id.IdGenerator,com.sca4d.messaging.rabbit.MessagingEnvelopeCodec,com.sca4d.messaging.rabbit.RabbitMessageSender,com.sca4d.messaging.outbox.OutboxRepository,java.time.Clock,com.sca4d.core.api.runtime.RuntimeNamespace)" class="member-name-link">RabbitMessagePublisher(IdGenerator, MessagingEnvelopeCodec, RabbitMessageSender, OutboxRepository, Clock, RuntimeNamespace)</a> - Constructor for class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitMessagePublisher.html" title="class in com.sca4d.messaging.rabbit">RabbitMessagePublisher</a></dt>
+<dt><a href="com/sca4d/messaging/rabbit/RabbitHandlerContainers.html#%3Cinit%3E(org.springframework.amqp.rabbit.connection.ConnectionFactory,com.sca4d.messaging.rabbit.RabbitMessageTopology,com.sca4d.messaging.rabbit.RabbitMessageEnvelopeCodec,com.sca4d.messaging.config.MessagingProperties,com.sca4d.messaging.rabbit.RabbitPublisher,java.util.List,java.util.List)" class="member-name-link">RabbitHandlerContainers(ConnectionFactory, RabbitMessageTopology, RabbitMessageEnvelopeCodec, MessagingProperties, RabbitPublisher, List&lt;? extends EventHandler&lt;?&gt;&gt;, List&lt;? extends MessageHandler&lt;?&gt;&gt;)</a> - Constructor for class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitHandlerContainers.html" title="class in com.sca4d.messaging.rabbit">RabbitHandlerContainers</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/messaging/rabbit/RabbitMessageBus.html" class="type-name-link" title="class in com.sca4d.messaging.rabbit">RabbitMessageBus</a> - Class in <a href="com/sca4d/messaging/rabbit/package-summary.html">com.sca4d.messaging.rabbit</a></dt>
 <dd>
-<div class="block">创建使用当前 App RabbitMQ 与 Outbox 的消息发布器。</div>
+<div class="block">使用固定 RabbitMQ 基座实现立即、提交后和 Outbox 三种 Message 分发方式。</div>
 </dd>
-<dt><a href="com/sca4d/messaging/rabbit/RabbitMessageSender.html" class="type-name-link" title="class in com.sca4d.messaging.rabbit">RabbitMessageSender</a> - Class in <a href="com/sca4d/messaging/rabbit/package-summary.html">com.sca4d.messaging.rabbit</a></dt>
+<dt><a href="com/sca4d/messaging/rabbit/RabbitMessageBus.html#%3Cinit%3E(com.sca4d.core.api.id.IdGenerator,com.sca4d.messaging.rabbit.RabbitMessageEnvelopeCodec,com.sca4d.messaging.rabbit.RabbitPublisher,com.sca4d.messaging.outbox.MessageOutboxRepository,java.time.Clock,com.sca4d.core.api.runtime.RuntimeNamespace)" class="member-name-link">RabbitMessageBus(IdGenerator, RabbitMessageEnvelopeCodec, RabbitPublisher, MessageOutboxRepository, Clock, RuntimeNamespace)</a> - Constructor for class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitMessageBus.html" title="class in com.sca4d.messaging.rabbit">RabbitMessageBus</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/messaging/rabbit/RabbitMessageEnvelopeCodec.html" class="type-name-link" title="class in com.sca4d.messaging.rabbit">RabbitMessageEnvelopeCodec</a> - Class in <a href="com/sca4d/messaging/rabbit/package-summary.html">com.sca4d.messaging.rabbit</a></dt>
 <dd>
-<div class="block">使用 mandatory routing 和 publisher confirm 同步判断一次 RabbitMQ 发布是否成功。</div>
+<div class="block">编码和严格校验 RabbitMQ 与 Outbox 共用的通用 Message 信封。</div>
 </dd>
-<dt><a href="com/sca4d/messaging/rabbit/RabbitMessageSender.html#%3Cinit%3E(org.springframework.amqp.rabbit.core.RabbitTemplate,com.sca4d.messaging.rabbit.MessagingTopology,com.sca4d.messaging.config.MessagingProperties)" class="member-name-link">RabbitMessageSender(RabbitTemplate, MessagingTopology, MessagingProperties)</a> - Constructor for class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitMessageSender.html" title="class in com.sca4d.messaging.rabbit">RabbitMessageSender</a></dt>
+<dt><a href="com/sca4d/messaging/rabbit/RabbitMessageEnvelopeCodec.html#%3Cinit%3E(com.fasterxml.jackson.databind.ObjectMapper,java.util.List)" class="member-name-link">RabbitMessageEnvelopeCodec(ObjectMapper, List&lt;? extends MessageHandler&lt;?&gt;&gt;)</a> - Constructor for class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitMessageEnvelopeCodec.html" title="class in com.sca4d.messaging.rabbit">RabbitMessageEnvelopeCodec</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/messaging/rabbit/RabbitMessageTopology.html" class="type-name-link" title="class in com.sca4d.messaging.rabbit">RabbitMessageTopology</a> - Class in <a href="com/sca4d/messaging/rabbit/package-summary.html">com.sca4d.messaging.rabbit</a></dt>
 <dd>
-<div class="block">创建向业务消息 exchange 发布持久消息的操作。</div>
+<div class="block">校验 Message Handler 契约，并声明持久业务 exchange、Handler 队列、retry queue 和 DLQ。</div>
+</dd>
+<dt><a href="com/sca4d/messaging/rabbit/RabbitMessageTopology.html#%3Cinit%3E(com.sca4d.core.api.runtime.RuntimeNamespace)" class="member-name-link">RabbitMessageTopology(RuntimeNamespace)</a> - Constructor for class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitMessageTopology.html" title="class in com.sca4d.messaging.rabbit">RabbitMessageTopology</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/messaging/rabbit/RabbitPublisher.html" class="type-name-link" title="class in com.sca4d.messaging.rabbit">RabbitPublisher</a> - Class in <a href="com/sca4d/messaging/rabbit/package-summary.html">com.sca4d.messaging.rabbit</a></dt>
+<dd>
+<div class="block">使用 mandatory routing 和 publisher confirm 同步判断 RabbitMQ 发布是否成功。</div>
+</dd>
+<dt><a href="com/sca4d/messaging/rabbit/RabbitPublisher.html#%3Cinit%3E(org.springframework.amqp.rabbit.core.RabbitTemplate,com.sca4d.messaging.rabbit.RabbitMessageTopology,com.sca4d.messaging.config.MessagingProperties)" class="member-name-link">RabbitPublisher(RabbitTemplate, RabbitMessageTopology, MessagingProperties)</a> - Constructor for class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitPublisher.html" title="class in com.sca4d.messaging.rabbit">RabbitPublisher</a></dt>
+<dd>
+<div class="block">创建向业务消息 exchange 和 Handler retry exchange 发布持久消息的操作。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:S">S</h2>
 <dl class="index">
-<dt><a href="com/sca4d/messaging/rabbit/RabbitMessageSender.html#send(com.sca4d.core.api.messaging.MessageId,java.lang.String,byte%5B%5D)" class="member-name-link">send(MessageId, String, byte[])</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitMessageSender.html" title="class in com.sca4d.messaging.rabbit">RabbitMessageSender</a></dt>
+<dt><a href="com/sca4d/messaging/rabbit/RabbitPublisher.html#send(com.sca4d.core.api.messaging.MessageId,com.sca4d.core.api.code.TreeCode,byte%5B%5D)" class="member-name-link">send(MessageId, TreeCode, byte[])</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitPublisher.html" title="class in com.sca4d.messaging.rabbit">RabbitPublisher</a></dt>
 <dd>
-<div class="block">发布持久消息，并等待 mandatory return 与 publisher confirm 的最终结果。</div>
+<div class="block">发布持久业务消息，并等待 mandatory return 与 publisher confirm。</div>
 </dd>
 <dt><a href="com/sca4d/messaging/outbox/OutboxStatus.html#SENDING" class="member-name-link">SENDING</a> - Enum constant in enum class com.sca4d.messaging.outbox.<a href="com/sca4d/messaging/outbox/OutboxStatus.html" title="enum class in com.sca4d.messaging.outbox">OutboxStatus</a></dt>
 <dd>
 <div class="block">已被一个实例租用并正在发布。</div>
+</dd>
+<dt><a href="com/sca4d/messaging/rabbit/RabbitPublisher.html#sendRetry(com.sca4d.core.api.code.TreeCode,org.springframework.amqp.core.Message,int)" class="member-name-link">sendRetry(TreeCode, Message, int)</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitPublisher.html" title="class in com.sca4d.messaging.rabbit">RabbitPublisher</a></dt>
+<dd>
+<div class="block">把 Handler 请求再次处理的原消息发布到对应 retry queue，并在确认成功后返回。</div>
 </dd>
 <dt><a href="com/sca4d/messaging/outbox/OutboxStatus.html#SENT" class="member-name-link">SENT</a> - Enum constant in enum class com.sca4d.messaging.outbox.<a href="com/sca4d/messaging/outbox/OutboxStatus.html" title="enum class in com.sca4d.messaging.outbox">OutboxStatus</a></dt>
 <dd>
@@ -357,14 +337,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">修改 SENT Outbox 记录的保留时间。</div>
 </dd>
-<dt><a href="com/sca4d/messaging/rabbit/ConsumerContainers.html#start()" class="member-name-link">start()</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/ConsumerContainers.html" title="class in com.sca4d.messaging.rabbit">ConsumerContainers</a></dt>
-<dd>
-<div class="block">启动全部 Consumer 容器。</div>
-</dd>
-<dt><a href="com/sca4d/messaging/rabbit/ConsumerContainers.html#stop()" class="member-name-link">stop()</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/ConsumerContainers.html" title="class in com.sca4d.messaging.rabbit">ConsumerContainers</a></dt>
-<dd>
-<div class="block">停止全部 Consumer 容器。</div>
-</dd>
+<dt><a href="com/sca4d/messaging/rabbit/RabbitHandlerContainers.html#start()" class="member-name-link">start()</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitHandlerContainers.html" title="class in com.sca4d.messaging.rabbit">RabbitHandlerContainers</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/messaging/rabbit/RabbitHandlerContainers.html#stop()" class="member-name-link">stop()</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitHandlerContainers.html" title="class in com.sca4d.messaging.rabbit">RabbitHandlerContainers</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:U">U</h2>
 <dl class="index">

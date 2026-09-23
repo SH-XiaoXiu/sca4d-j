@@ -301,7 +301,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@PostMapping("/credential")
 @Audit(operation="authentication/account/totp/activate")
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../authentication/view/TotpCredentialView.html" title="class in com.sca4d.app.server.authentication.view">TotpCredentialView</a>&gt;</span>&nbsp;<span class="element-name">activate</span><wbr><span class="parameters">(@AuditTarget(resourceType="account") @NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../authentication/view/TotpCredentialView.html" title="class in com.sca4d.app.server.authentication.view">TotpCredentialView</a>&gt;</span>&nbsp;<span class="element-name">activate</span><wbr><span class="parameters">(@AuditTarget(resourceType="IAM/ACCOUNT") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;accountId,
  @RequestBody @NotNull
  @NotNull <a href="../authentication/request/TotpCredentialRequest.html" title="class in com.sca4d.app.server.authentication.request">TotpCredentialRequest</a>&nbsp;request)</span></div>
@@ -321,7 +321,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@PutMapping("/credential")
 @Audit(operation="authentication/account/totp/replace")
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../authentication/view/TotpCredentialView.html" title="class in com.sca4d.app.server.authentication.view">TotpCredentialView</a>&gt;</span>&nbsp;<span class="element-name">replace</span><wbr><span class="parameters">(@AuditTarget(resourceType="account") @NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../authentication/view/TotpCredentialView.html" title="class in com.sca4d.app.server.authentication.view">TotpCredentialView</a>&gt;</span>&nbsp;<span class="element-name">replace</span><wbr><span class="parameters">(@AuditTarget(resourceType="IAM/ACCOUNT") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;accountId,
  @RequestBody @NotNull
  @NotNull <a href="../authentication/request/TotpCredentialRequest.html" title="class in com.sca4d.app.server.authentication.request">TotpCredentialRequest</a>&nbsp;request)</span></div>
@@ -341,7 +341,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@DeleteMapping("/credential")
 @Audit(operation="authentication/account/totp/delete")
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">delete</span><wbr><span class="parameters">(@AuditTarget(resourceType="account") @NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">delete</span><wbr><span class="parameters">(@AuditTarget(resourceType="IAM/ACCOUNT") @NotNull
  @NotNull com.sca4d.core.api.identity.Account&nbsp;account)</span></div>
 <div class="block">删除不会令账号认证设置失效的 TOTP。</div>
 <dl class="notes">

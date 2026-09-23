@@ -156,7 +156,7 @@ implements com.sca4d.iot.api.protocol.DeviceUplinkProtocol</span></div>
 <div class="block">把协议 Topic Filter 中的 Device 层替换为指定 clientId。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="EncodedMqttMessage.html" title="class in com.sca4d.iot.emqx.protocol">EncodedMqttMessage</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#encode(com.sca4d.iot.api.message.DeviceDownlinkMessage,java.lang.String)" class="member-name-link">encode</a><wbr>(@NotNull com.sca4d.iot.api.message.DeviceDownlinkMessage&nbsp;message,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#encode(com.sca4d.iot.api.message.DeviceDownlink,java.lang.String)" class="member-name-link">encode</a><wbr>(@NotNull com.sca4d.iot.api.message.DeviceDownlink&nbsp;message,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;clientId)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">执行目标路由绑定的 Core Pipeline 并生成 MQTT 消息。</div>
@@ -313,11 +313,11 @@ implements com.sca4d.iot.api.protocol.DeviceUplinkProtocol</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="encode(com.sca4d.iot.api.message.DeviceDownlinkMessage,java.lang.String)">
+<section class="detail" id="encode(com.sca4d.iot.api.message.DeviceDownlink,java.lang.String)">
 <h3>encode</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="EncodedMqttMessage.html" title="class in com.sca4d.iot.emqx.protocol">EncodedMqttMessage</a></span>&nbsp;<span class="element-name">encode</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.iot.api.message.DeviceDownlinkMessage&nbsp;message,
+ @NotNull com.sca4d.iot.api.message.DeviceDownlink&nbsp;message,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;clientId)</span></div>
 <div class="block">执行目标路由绑定的 Core Pipeline 并生成 MQTT 消息。</div>

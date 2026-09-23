@@ -149,7 +149,7 @@ implements com.sca4d.core.api.connection.ConnectionRegistry</span></div>
 <div class="block">原子登记连接元数据和自动身份目标，并设置共同租约。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#remove(com.sca4d.core.api.connection.ConnectionId)" class="member-name-link">remove</a><wbr>(com.sca4d.core.api.connection.ConnectionId&nbsp;connectionId)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#remove(com.sca4d.core.api.connection.ConnectionId)" class="member-name-link">remove</a><wbr>(@NotNull com.sca4d.core.api.connection.ConnectionId&nbsp;connectionId)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">删除公共连接事实。</div>
 </div>
@@ -177,7 +177,7 @@ implements com.sca4d.core.api.connection.ConnectionRegistry</span></div>
 <div class="block">删除当前 Session 的全部共享连接事实。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#touch(com.sca4d.core.api.connection.ConnectionId,java.time.Instant)" class="member-name-link">touch</a><wbr>(com.sca4d.core.api.connection.ConnectionId&nbsp;connectionId,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#touch(com.sca4d.core.api.connection.ConnectionId,java.time.Instant)" class="member-name-link">touch</a><wbr>(@NotNull com.sca4d.core.api.connection.ConnectionId&nbsp;connectionId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;lastActivityAt)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">更新公共连接事实的最近活动时间。</div>
@@ -262,7 +262,7 @@ implements com.sca4d.core.api.connection.ConnectionRegistry</span></div>
 <section class="detail" id="touch(com.sca4d.core.api.connection.ConnectionId,java.time.Instant)">
 <h3>touch</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">touch</span><wbr><span class="parameters">(@NotNull
- com.sca4d.core.api.connection.ConnectionId&nbsp;connectionId,
+ @NotNull com.sca4d.core.api.connection.ConnectionId&nbsp;connectionId,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;lastActivityAt)</span></div>
 <div class="block">更新公共连接事实的最近活动时间。</div>
@@ -276,7 +276,7 @@ implements com.sca4d.core.api.connection.ConnectionRegistry</span></div>
 <section class="detail" id="remove(com.sca4d.core.api.connection.ConnectionId)">
 <h3>remove</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">remove</span><wbr><span class="parameters">(@NotNull
- com.sca4d.core.api.connection.ConnectionId&nbsp;connectionId)</span></div>
+ @NotNull com.sca4d.core.api.connection.ConnectionId&nbsp;connectionId)</span></div>
 <div class="block">删除公共连接事实。</div>
 <dl class="notes">
 <dt>Specified by:</dt>

@@ -121,7 +121,13 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.message.AcknowledgementPolicy</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#acknowledgement(java.lang.String)" class="member-name-link">acknowledgement</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#acknowledgement(com.sca4d.core.api.code.TreeCode)" class="member-name-link">acknowledgement</a><wbr>(@NotNull com.sca4d.core.api.code.TreeCode&nbsp;code)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.message.AcknowledgementPolicy</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#acknowledgement(java.lang.String)" class="member-name-link">acknowledgement</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.message.RetryPolicy</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#retry(com.sca4d.core.api.code.TreeCode)" class="member-name-link">retry</a><wbr>(@NotNull com.sca4d.core.api.code.TreeCode&nbsp;code)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.message.RetryPolicy</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#retry(java.lang.String)" class="member-name-link">retry</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code)</code></div>
@@ -177,6 +183,18 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="acknowledgement(com.sca4d.core.api.code.TreeCode)">
+<h3>acknowledgement</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.iot.api.message.AcknowledgementPolicy</span>&nbsp;<span class="element-name">acknowledgement</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.code.TreeCode&nbsp;code)</span></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>code</code> - 规范化策略 code @return 匹配 ACK 策略 @throws IllegalArgumentException 没有登记时抛出</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="retry(java.lang.String)">
 <h3>retry</h3>
 <div class="member-signature"><span class="annotations">@NotNull
@@ -185,6 +203,18 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>code</code> - 策略 code @return 匹配 retry 策略 @throws IllegalArgumentException 没有登记时抛出</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="retry(com.sca4d.core.api.code.TreeCode)">
+<h3>retry</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.iot.api.message.RetryPolicy</span>&nbsp;<span class="element-name">retry</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.code.TreeCode&nbsp;code)</span></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>code</code> - 规范化策略 code @return 匹配 retry 策略 @throws IllegalArgumentException 没有登记时抛出</dd>
 </dl>
 </section>
 </li>

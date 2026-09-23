@@ -174,7 +174,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="findAll()">
 <h3>findAll</h3>
 <div class="member-signature"><span class="annotations">@GetMapping
-@RequirePermission(operation="system:settings:read")
+@RequirePermission(operation="SYSTEM:SETTINGS:READ")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/SystemSettingsView.html" title="class in com.sca4d.app.server.system.view">SystemSettingsView</a>&gt;</span>&nbsp;<span class="element-name">findAll</span>()</div>
 <dl class="notes">
@@ -187,7 +187,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="replace(java.lang.String,com.sca4d.app.server.system.request.ReplaceSettingRequest)">
 <h3>replace</h3>
 <div class="member-signature"><span class="annotations">@PutMapping("/{key}")
-@RequirePermission(operation="system:settings:manage")
+@RequirePermission(operation="SYSTEM:SETTINGS:MANAGE")
 @Audit(operation="system/setting/replace")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/SystemSettingsView.html" title="class in com.sca4d.app.server.system.view">SystemSettingsView</a>&gt;</span>&nbsp;<span class="element-name">replace</span><wbr><span class="parameters">(@PathVariable @NotNull
@@ -201,7 +201,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="reset(java.lang.String)">
 <h3>reset</h3>
 <div class="member-signature"><span class="annotations">@DeleteMapping("/{key}")
-@RequirePermission(operation="system:settings:manage")
+@RequirePermission(operation="SYSTEM:SETTINGS:MANAGE")
 @Audit(operation="system/setting/reset")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/SystemSettingsView.html" title="class in com.sca4d.app.server.system.view">SystemSettingsView</a>&gt;</span>&nbsp;<span class="element-name">reset</span><wbr><span class="parameters">(@PathVariable @NotNull

@@ -209,7 +209,7 @@ loadScripts(document, 'script');</script>
 @Audit(operation="platform/profile/replace",
        payloadFactory=<a href="../audit/ApplicationAuditValues.MutationDetails.html" title="class in com.sca4d.app.server.audit">MutationDetails.class</a>)
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../platform/view/ProfileView.html" title="class in com.sca4d.app.server.platform.view">ProfileView</a>&gt;</span>&nbsp;<span class="element-name">replace</span><wbr><span class="parameters">(@NotNull @AuditTarget(resourceType="platform:user:profile")
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../platform/view/ProfileView.html" title="class in com.sca4d.app.server.platform.view">ProfileView</a>&gt;</span>&nbsp;<span class="element-name">replace</span><wbr><span class="parameters">(@NotNull @AuditTarget(resourceType="PLATFORM:USERS:PROFILES")
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
  @RequestBody @NotNull @AuditPayload
  @NotNull <a href="../platform/request/ReplaceProfileRequest.html" title="class in com.sca4d.app.server.platform.request">ReplaceProfileRequest</a>&nbsp;request)</span></div>
@@ -230,7 +230,7 @@ loadScripts(document, 'script');</script>
 @Audit(operation="platform/profile/avatar/replace",
        payloadFactory=<a href="../audit/ApplicationAuditValues.MutationDetails.html" title="class in com.sca4d.app.server.audit">MutationDetails.class</a>)
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../platform/view/ProfileView.html" title="class in com.sca4d.app.server.platform.view">ProfileView</a>&gt;</span>&nbsp;<span class="element-name">replaceAvatar</span><wbr><span class="parameters">(@NotNull @AuditTarget(resourceType="platform:user:profile")
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../platform/view/ProfileView.html" title="class in com.sca4d.app.server.platform.view">ProfileView</a>&gt;</span>&nbsp;<span class="element-name">replaceAvatar</span><wbr><span class="parameters">(@NotNull @AuditTarget(resourceType="PLATFORM:USERS:PROFILES")
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
  @RequestBody @NotNull @AuditPayload
  @NotNull <a href="../platform/request/ReplaceAvatarRequest.html" title="class in com.sca4d.app.server.platform.request">ReplaceAvatarRequest</a>&nbsp;request)</span></div>
@@ -250,7 +250,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@DeleteMapping("/avatar")
 @Audit(operation="platform/profile/avatar/delete")
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../platform/view/ProfileView.html" title="class in com.sca4d.app.server.platform.view">ProfileView</a>&gt;</span>&nbsp;<span class="element-name">deleteAvatar</span><wbr><span class="parameters">(@NotNull @AuditTarget(resourceType="platform:user:profile")
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../platform/view/ProfileView.html" title="class in com.sca4d.app.server.platform.view">ProfileView</a>&gt;</span>&nbsp;<span class="element-name">deleteAvatar</span><wbr><span class="parameters">(@NotNull @AuditTarget(resourceType="PLATFORM:USERS:PROFILES")
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId)</span></div>
 <div class="block">删除当前账号头像。</div>
 <dl class="notes">

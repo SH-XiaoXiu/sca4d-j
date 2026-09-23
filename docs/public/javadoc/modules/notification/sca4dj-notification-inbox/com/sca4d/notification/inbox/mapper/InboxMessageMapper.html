@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">InboxMessageMapper</span></div>
-<div class="block">读写 Account 站内信快照的最小 SQL 形状。</div>
+<div class="block">读写 Account 站内信快照，并处理未读计数和已读状态。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -106,10 +106,10 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#countUnread(long)" class="member-name-link">countUnread</a><wbr>(long&nbsp;accountId)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insert(long,com.sca4d.core.api.messaging.MessageId,long,com.sca4d.core.api.notification.NotificationCode,java.lang.String,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">insert</a><wbr>(long&nbsp;inboxMessageId,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insert(long,com.sca4d.core.api.messaging.MessageId,long,com.sca4d.core.api.code.TreeCode,java.lang.String,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">insert</a><wbr>(long&nbsp;inboxMessageId,
  @NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
  long&nbsp;accountId,
- @NotNull com.sca4d.core.api.notification.NotificationCode&nbsp;notificationCode,
+ @NotNull com.sca4d.core.api.code.TreeCode&nbsp;notificationCode,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;languageTag,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text,
@@ -173,7 +173,7 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="insert(long,com.sca4d.core.api.messaging.MessageId,long,com.sca4d.core.api.notification.NotificationCode,java.lang.String,java.lang.String,java.lang.String,java.lang.String)">
+<section class="detail" id="insert(long,com.sca4d.core.api.messaging.MessageId,long,com.sca4d.core.api.code.TreeCode,java.lang.String,java.lang.String,java.lang.String,java.lang.String)">
 <h3>insert</h3>
 <div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">insert</span><wbr><span class="parameters">(@Param("inboxMessageId")
  long&nbsp;inboxMessageId,
@@ -182,7 +182,7 @@ loadScripts(document, 'script');</script>
  @Param("accountId")
  long&nbsp;accountId,
  @Param("notificationCode") @NotNull
- @NotNull com.sca4d.core.api.notification.NotificationCode&nbsp;notificationCode,
+ @NotNull com.sca4d.core.api.code.TreeCode&nbsp;notificationCode,
  @Param("languageTag") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;languageTag,
  @Param("title") @NotNull

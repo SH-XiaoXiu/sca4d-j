@@ -206,7 +206,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="findAll(com.sca4d.core.api.query.PageRequest)">
 <h3>findAll</h3>
 <div class="member-signature"><span class="annotations">@GetMapping
-@RequirePermission(operation="iot:devices:read")
+@RequirePermission(operation="IOT:DEVICES:READ")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;com.sca4d.core.api.query.Page&lt;<a href="../../iot/view/IotDeviceView.html" title="class in com.sca4d.app.server.iot.view">IotDeviceView</a>&gt;&gt;</span>&nbsp;<span class="element-name">findAll</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.query.PageRequest&nbsp;page)</span></div>
@@ -220,7 +220,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="get(long)">
 <h3>get</h3>
 <div class="member-signature"><span class="annotations">@GetMapping("/{deviceId}")
-@RequirePermission(operation="iot:devices:read")
+@RequirePermission(operation="IOT:DEVICES:READ")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../iot/view/IotDeviceView.html" title="class in com.sca4d.app.server.iot.view">IotDeviceView</a>&gt;</span>&nbsp;<span class="element-name">get</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;deviceId)</span></div>
@@ -234,7 +234,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="create(java.lang.String,com.sca4d.app.server.iot.request.IotDeviceRequest)">
 <h3>create</h3>
 <div class="member-signature"><span class="annotations">@PostMapping
-@RequirePermission(operation="iot:devices:manage")
+@RequirePermission(operation="IOT:DEVICES:MANAGE")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../iot/view/IotDeviceCredentialView.html" title="class in com.sca4d.app.server.iot.view">IotDeviceCredentialView</a>&gt;</span>&nbsp;<span class="element-name">create</span><wbr><span class="parameters">(@RequestHeader("Idempotency-Key") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;idempotencyKey,
@@ -250,7 +250,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="updateDetails(long,com.sca4d.app.server.iot.request.IotDeviceDetailsRequest)">
 <h3>updateDetails</h3>
 <div class="member-signature"><span class="annotations">@PutMapping("/{deviceId}/details")
-@RequirePermission(operation="iot:devices:manage")
+@RequirePermission(operation="IOT:DEVICES:MANAGE")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../iot/view/IotDeviceView.html" title="class in com.sca4d.app.server.iot.view">IotDeviceView</a>&gt;</span>&nbsp;<span class="element-name">updateDetails</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;deviceId,
@@ -266,7 +266,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="rebind(long,com.sca4d.app.server.iot.request.IotDeviceBindingRequest)">
 <h3>rebind</h3>
 <div class="member-signature"><span class="annotations">@PutMapping("/{deviceId}/binding")
-@RequirePermission(operation="iot:devices:manage")
+@RequirePermission(operation="IOT:DEVICES:MANAGE")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../iot/view/IotDeviceView.html" title="class in com.sca4d.app.server.iot.view">IotDeviceView</a>&gt;</span>&nbsp;<span class="element-name">rebind</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;deviceId,
@@ -282,7 +282,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="changeConnection(long,com.sca4d.app.server.iot.request.IotDeviceConnectionRequest)">
 <h3>changeConnection</h3>
 <div class="member-signature"><span class="annotations">@PutMapping("/{deviceId}/connection")
-@RequirePermission(operation="iot:devices:manage")
+@RequirePermission(operation="IOT:DEVICES:MANAGE")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../iot/view/IotDeviceCredentialView.html" title="class in com.sca4d.app.server.iot.view">IotDeviceCredentialView</a>&gt;</span>&nbsp;<span class="element-name">changeConnection</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;deviceId,
@@ -298,7 +298,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="resetSharedSecret(long)">
 <h3>resetSharedSecret</h3>
 <div class="member-signature"><span class="annotations">@PostMapping("/{deviceId}/shared-secret/reset")
-@RequirePermission(operation="iot:devices:manage")
+@RequirePermission(operation="IOT:DEVICES:MANAGE")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../iot/view/IotSecretView.html" title="class in com.sca4d.app.server.iot.view">IotSecretView</a>&gt;</span>&nbsp;<span class="element-name">resetSharedSecret</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;deviceId)</span></div>
@@ -312,7 +312,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="resetHmacKey(long)">
 <h3>resetHmacKey</h3>
 <div class="member-signature"><span class="annotations">@PostMapping("/{deviceId}/hmac-key/reset")
-@RequirePermission(operation="iot:devices:manage")
+@RequirePermission(operation="IOT:DEVICES:MANAGE")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../iot/view/IotSecretView.html" title="class in com.sca4d.app.server.iot.view">IotSecretView</a>&gt;</span>&nbsp;<span class="element-name">resetHmacKey</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;deviceId)</span></div>
@@ -326,7 +326,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="changeStatus(long,com.sca4d.app.server.iot.request.IotStatusRequest)">
 <h3>changeStatus</h3>
 <div class="member-signature"><span class="annotations">@PatchMapping("/{deviceId}/status")
-@RequirePermission(operation="iot:devices:manage")
+@RequirePermission(operation="IOT:DEVICES:MANAGE")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../iot/view/IotDeviceView.html" title="class in com.sca4d.app.server.iot.view">IotDeviceView</a>&gt;</span>&nbsp;<span class="element-name">changeStatus</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;deviceId,
@@ -342,7 +342,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="changeDesired(long,com.sca4d.app.server.iot.request.DesiredStateRequest)">
 <h3>changeDesired</h3>
 <div class="member-signature"><span class="annotations">@PutMapping("/{deviceId}/desired")
-@RequirePermission(operation="iot:devices:operate")
+@RequirePermission(operation="IOT:DEVICES:OPERATE")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../iot/view/IotDesiredStateView.html" title="class in com.sca4d.app.server.iot.view">IotDesiredStateView</a>&gt;</span>&nbsp;<span class="element-name">changeDesired</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;deviceId,
@@ -358,7 +358,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="submitCommand(long,java.lang.String,java.util.Map)">
 <h3>submitCommand</h3>
 <div class="member-signature"><span class="annotations">@PostMapping("/{deviceId}/commands/{commandCode}")
-@RequirePermission(operation="iot:devices:operate")
+@RequirePermission(operation="IOT:DEVICES:OPERATE")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../iot/view/IotDownlinkMessageView.html" title="class in com.sca4d.app.server.iot.view">IotDownlinkMessageView</a>&gt;</span>&nbsp;<span class="element-name">submitCommand</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;deviceId,

@@ -203,7 +203,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="findAll()">
 <h3>findAll</h3>
 <div class="member-signature"><span class="annotations">@GetMapping
-@RequirePermission(operation="platform:accounts:read")
+@RequirePermission(operation="PLATFORM:ACCOUNTS:READ")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../authentication/view/FederatedProviderView.html" title="class in com.sca4d.app.server.authentication.view">FederatedProviderView</a>&gt;&gt;</span>&nbsp;<span class="element-name">findAll</span>()</div>
 <div class="block">查询全部未删除 Provider。</div>
@@ -213,9 +213,9 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="find(java.lang.String)">
 <h3>find</h3>
 <div class="member-signature"><span class="annotations">@GetMapping("/{code}")
-@RequirePermission(operation="platform:accounts:read")
+@RequirePermission(operation="PLATFORM:ACCOUNTS:READ")
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../authentication/view/FederatedProviderView.html" title="class in com.sca4d.app.server.authentication.view">FederatedProviderView</a>&gt;</span>&nbsp;<span class="element-name">find</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="authentication:federated-provider") @NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../authentication/view/FederatedProviderView.html" title="class in com.sca4d.app.server.authentication.view">FederatedProviderView</a>&gt;</span>&nbsp;<span class="element-name">find</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="AUTH/FEDERATED_PROVIDER") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code)</span></div>
 <div class="block">查询一个 Provider 的基本信息。</div>
 </section>
@@ -224,7 +224,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="create(com.sca4d.app.server.platform.request.CreateProviderRequest)">
 <h3>create</h3>
 <div class="member-signature"><span class="annotations">@PostMapping
-@RequirePermission(operation="platform:accounts:manage")
+@RequirePermission(operation="PLATFORM:ACCOUNTS:MANAGE")
 @Audit(operation="system/authentication/federated-provider/create")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../authentication/view/FederatedProviderView.html" title="class in com.sca4d.app.server.authentication.view">FederatedProviderView</a>&gt;</span>&nbsp;<span class="element-name">create</span><wbr><span class="parameters">(@RequestBody @Valid @AuditPayload @NotNull
@@ -236,10 +236,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="replace(java.lang.String,com.sca4d.app.server.platform.request.ReplaceProviderRequest)">
 <h3>replace</h3>
 <div class="member-signature"><span class="annotations">@PutMapping("/{code}")
-@RequirePermission(operation="platform:accounts:manage")
+@RequirePermission(operation="PLATFORM:ACCOUNTS:MANAGE")
 @Audit(operation="system/authentication/federated-provider/replace")
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../authentication/view/FederatedProviderView.html" title="class in com.sca4d.app.server.authentication.view">FederatedProviderView</a>&gt;</span>&nbsp;<span class="element-name">replace</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="authentication:federated-provider") @NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../authentication/view/FederatedProviderView.html" title="class in com.sca4d.app.server.authentication.view">FederatedProviderView</a>&gt;</span>&nbsp;<span class="element-name">replace</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="AUTH/FEDERATED_PROVIDER") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code,
  @RequestBody @Valid @AuditPayload @NotNull
  @Valid @NotNull <a href="../../platform/request/ReplaceProviderRequest.html" title="class in com.sca4d.app.server.platform.request">ReplaceProviderRequest</a>&nbsp;request)</span></div>
@@ -250,9 +250,9 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="settings(java.lang.String)">
 <h3>settings</h3>
 <div class="member-signature"><span class="annotations">@GetMapping("/{code}/settings")
-@RequirePermission(operation="platform:accounts:read")
+@RequirePermission(operation="PLATFORM:ACCOUNTS:READ")
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../authentication/view/FederatedProviderSettingsView.html" title="class in com.sca4d.app.server.authentication.view">FederatedProviderSettingsView</a>&gt;</span>&nbsp;<span class="element-name">settings</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="authentication:federated-provider") @NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../authentication/view/FederatedProviderSettingsView.html" title="class in com.sca4d.app.server.authentication.view">FederatedProviderSettingsView</a>&gt;</span>&nbsp;<span class="element-name">settings</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="AUTH/FEDERATED_PROVIDER") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code)</span></div>
 <div class="block">查询协议配置摘要，不返回 Client Secret。</div>
 </section>
@@ -261,10 +261,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="replaceSettings(java.lang.String,com.sca4d.app.server.platform.request.ProviderSettingsRequest)">
 <h3>replaceSettings</h3>
 <div class="member-signature"><span class="annotations">@PutMapping("/{code}/settings")
-@RequirePermission(operation="platform:accounts:manage")
+@RequirePermission(operation="PLATFORM:ACCOUNTS:MANAGE")
 @Audit(operation="system/authentication/federated-provider/settings/replace")
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">replaceSettings</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="authentication:federated-provider") @NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">replaceSettings</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="AUTH/FEDERATED_PROVIDER") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code,
  @RequestBody @Valid @NotNull
  @Valid @NotNull <a href="../../platform/request/ProviderSettingsRequest.html" title="class in com.sca4d.app.server.platform.request">ProviderSettingsRequest</a>&nbsp;request)</span></div>
@@ -275,10 +275,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="replaceStatus(java.lang.String,com.sca4d.app.server.platform.request.ProviderStatusRequest)">
 <h3>replaceStatus</h3>
 <div class="member-signature"><span class="annotations">@PatchMapping("/{code}/status")
-@RequirePermission(operation="platform:accounts:manage")
+@RequirePermission(operation="PLATFORM:ACCOUNTS:MANAGE")
 @Audit(operation="system/authentication/federated-provider/status/replace")
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../authentication/view/FederatedProviderView.html" title="class in com.sca4d.app.server.authentication.view">FederatedProviderView</a>&gt;</span>&nbsp;<span class="element-name">replaceStatus</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="authentication:federated-provider") @NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../authentication/view/FederatedProviderView.html" title="class in com.sca4d.app.server.authentication.view">FederatedProviderView</a>&gt;</span>&nbsp;<span class="element-name">replaceStatus</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="AUTH/FEDERATED_PROVIDER") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code,
  @RequestBody @Valid @NotNull
  @Valid @NotNull <a href="../../platform/request/ProviderStatusRequest.html" title="class in com.sca4d.app.server.platform.request">ProviderStatusRequest</a>&nbsp;request)</span></div>
@@ -289,10 +289,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="delete(java.lang.String)">
 <h3>delete</h3>
 <div class="member-signature"><span class="annotations">@DeleteMapping("/{code}")
-@RequirePermission(operation="platform:accounts:manage")
+@RequirePermission(operation="PLATFORM:ACCOUNTS:MANAGE")
 @Audit(operation="system/authentication/federated-provider/delete")
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">delete</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="authentication:federated-provider") @NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">delete</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="AUTH/FEDERATED_PROVIDER") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code)</span></div>
 <div class="block">按 If-Match 删除停用且没有身份绑定的 Provider。</div>
 </section>

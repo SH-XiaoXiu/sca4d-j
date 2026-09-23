@@ -124,9 +124,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addBinding(long,long,com.sca4d.core.api.notification.NotificationCode,com.sca4d.notification.sms.SmsRoute,java.util.Locale,java.lang.String,java.lang.String,java.util.Map)" class="member-name-link">addBinding</a><wbr>(long&nbsp;bindingId,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addBinding(long,long,com.sca4d.core.api.code.TreeCode,com.sca4d.notification.sms.SmsRoute,java.util.Locale,java.lang.String,java.lang.String,java.util.Map)" class="member-name-link">addBinding</a><wbr>(long&nbsp;bindingId,
  long&nbsp;providerId,
- @NotNull com.sca4d.core.api.notification.NotificationCode&nbsp;code,
+ @NotNull com.sca4d.core.api.code.TreeCode&nbsp;code,
  @NotNull <a href="SmsRoute.html" title="class in com.sca4d.notification.sms">SmsRoute</a>&nbsp;route,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;signName,
@@ -148,8 +148,8 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#binding(long)" class="member-name-link">binding</a><wbr>(long&nbsp;bindingId)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="SmsProviderBinding.html" title="class in com.sca4d.notification.sms">SmsProviderBinding</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#binding(long,com.sca4d.core.api.notification.NotificationCode,com.sca4d.notification.sms.SmsRoute,java.util.Locale)" class="member-name-link">binding</a><wbr>(long&nbsp;providerId,
- @NotNull com.sca4d.core.api.notification.NotificationCode&nbsp;code,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#binding(long,com.sca4d.core.api.code.TreeCode,com.sca4d.notification.sms.SmsRoute,java.util.Locale)" class="member-name-link">binding</a><wbr>(long&nbsp;providerId,
+ @NotNull com.sca4d.core.api.code.TreeCode&nbsp;code,
  @NotNull <a href="SmsRoute.html" title="class in com.sca4d.notification.sms">SmsRoute</a>&nbsp;route,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -176,8 +176,8 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#providers()" class="member-name-link">providers</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#replaceBinding(long,com.sca4d.core.api.notification.NotificationCode,com.sca4d.notification.sms.SmsRoute,java.util.Locale,java.lang.String,java.lang.String,java.util.Map)" class="member-name-link">replaceBinding</a><wbr>(long&nbsp;bindingId,
- @NotNull com.sca4d.core.api.notification.NotificationCode&nbsp;code,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#replaceBinding(long,com.sca4d.core.api.code.TreeCode,com.sca4d.notification.sms.SmsRoute,java.util.Locale,java.lang.String,java.lang.String,java.util.Map)" class="member-name-link">replaceBinding</a><wbr>(long&nbsp;bindingId,
+ @NotNull com.sca4d.core.api.code.TreeCode&nbsp;code,
  @NotNull <a href="SmsRoute.html" title="class in com.sca4d.notification.sms">SmsRoute</a>&nbsp;route,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;signName,
@@ -301,12 +301,12 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="binding(long,com.sca4d.core.api.notification.NotificationCode,com.sca4d.notification.sms.SmsRoute,java.util.Locale)">
+<section class="detail" id="binding(long,com.sca4d.core.api.code.TreeCode,com.sca4d.notification.sms.SmsRoute,java.util.Locale)">
 <h3>binding</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="SmsProviderBinding.html" title="class in com.sca4d.notification.sms">SmsProviderBinding</a>&gt;</span>&nbsp;<span class="element-name">binding</span><wbr><span class="parameters">(long&nbsp;providerId,
  @NotNull
- @NotNull com.sca4d.core.api.notification.NotificationCode&nbsp;code,
+ @NotNull com.sca4d.core.api.code.TreeCode&nbsp;code,
  @NotNull
  @NotNull <a href="SmsRoute.html" title="class in com.sca4d.notification.sms">SmsRoute</a>&nbsp;route,
  @NotNull
@@ -361,12 +361,12 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="addBinding(long,long,com.sca4d.core.api.notification.NotificationCode,com.sca4d.notification.sms.SmsRoute,java.util.Locale,java.lang.String,java.lang.String,java.util.Map)">
+<section class="detail" id="addBinding(long,long,com.sca4d.core.api.code.TreeCode,com.sca4d.notification.sms.SmsRoute,java.util.Locale,java.lang.String,java.lang.String,java.util.Map)">
 <h3>addBinding</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addBinding</span><wbr><span class="parameters">(long&nbsp;bindingId,
  long&nbsp;providerId,
  @NotNull
- @NotNull com.sca4d.core.api.notification.NotificationCode&nbsp;code,
+ @NotNull com.sca4d.core.api.code.TreeCode&nbsp;code,
  @NotNull
  @NotNull <a href="SmsRoute.html" title="class in com.sca4d.notification.sms">SmsRoute</a>&nbsp;route,
  @NotNull
@@ -381,11 +381,11 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="replaceBinding(long,com.sca4d.core.api.notification.NotificationCode,com.sca4d.notification.sms.SmsRoute,java.util.Locale,java.lang.String,java.lang.String,java.util.Map)">
+<section class="detail" id="replaceBinding(long,com.sca4d.core.api.code.TreeCode,com.sca4d.notification.sms.SmsRoute,java.util.Locale,java.lang.String,java.lang.String,java.util.Map)">
 <h3>replaceBinding</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">replaceBinding</span><wbr><span class="parameters">(long&nbsp;bindingId,
  @NotNull
- @NotNull com.sca4d.core.api.notification.NotificationCode&nbsp;code,
+ @NotNull com.sca4d.core.api.code.TreeCode&nbsp;code,
  @NotNull
  @NotNull <a href="SmsRoute.html" title="class in com.sca4d.notification.sms">SmsRoute</a>&nbsp;route,
  @NotNull

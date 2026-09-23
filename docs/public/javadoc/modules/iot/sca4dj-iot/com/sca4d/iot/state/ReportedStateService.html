@@ -103,14 +103,14 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.iot.device.DeviceRepository,com.sca4d.iot.product.ProductDefinitionCatalog,com.sca4d.iot.api.state.ReportedStateStore,com.sca4d.iot.message.DownlinkRepository,com.sca4d.iot.api.model.ThingModelRepository,com.sca4d.iot.model.ThingValueValidator,com.sca4d.core.api.id.IdGenerator,com.sca4d.core.api.messaging.MessagePublisher,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,int,int)" class="member-name-link">ReportedStateService</a><wbr>(@NotNull <a href="../device/DeviceRepository.html" title="class in com.sca4d.iot.device">DeviceRepository</a>&nbsp;devices,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.iot.device.DeviceRepository,com.sca4d.iot.product.ProductDefinitionCatalog,com.sca4d.iot.api.state.ReportedStateStore,com.sca4d.iot.message.DownlinkRepository,com.sca4d.iot.api.model.ThingModelRepository,com.sca4d.iot.model.ThingValueValidator,com.sca4d.core.api.id.IdGenerator,com.sca4d.core.api.messaging.MessageBus,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,int,int)" class="member-name-link">ReportedStateService</a><wbr>(@NotNull <a href="../device/DeviceRepository.html" title="class in com.sca4d.iot.device">DeviceRepository</a>&nbsp;devices,
  @NotNull <a href="../product/ProductDefinitionCatalog.html" title="class in com.sca4d.iot.product">ProductDefinitionCatalog</a>&nbsp;products,
  @NotNull com.sca4d.iot.api.state.ReportedStateStore&nbsp;reportedStates,
  @NotNull <a href="../message/DownlinkRepository.html" title="class in com.sca4d.iot.message">DownlinkRepository</a>&nbsp;downlinks,
  @NotNull com.sca4d.iot.api.model.ThingModelRepository&nbsp;models,
  @NotNull <a href="../model/ThingValueValidator.html" title="class in com.sca4d.iot.model">ThingValueValidator</a>&nbsp;validator,
  @NotNull com.sca4d.core.api.id.IdGenerator&nbsp;ids,
- @NotNull com.sca4d.core.api.messaging.MessagePublisher&nbsp;messages,
+ @NotNull com.sca4d.core.api.messaging.MessageBus&nbsp;messages,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
  @NotNull <a href="../change/DeviceChangeNotifier.html" title="class in com.sca4d.iot.change">DeviceChangeNotifier</a>&nbsp;changes,
  int&nbsp;maxReportedProperties,
@@ -155,7 +155,7 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.iot.device.DeviceRepository,com.sca4d.iot.product.ProductDefinitionCatalog,com.sca4d.iot.api.state.ReportedStateStore,com.sca4d.iot.message.DownlinkRepository,com.sca4d.iot.api.model.ThingModelRepository,com.sca4d.iot.model.ThingValueValidator,com.sca4d.core.api.id.IdGenerator,com.sca4d.core.api.messaging.MessagePublisher,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,int,int)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.iot.device.DeviceRepository,com.sca4d.iot.product.ProductDefinitionCatalog,com.sca4d.iot.api.state.ReportedStateStore,com.sca4d.iot.message.DownlinkRepository,com.sca4d.iot.api.model.ThingModelRepository,com.sca4d.iot.model.ThingValueValidator,com.sca4d.core.api.id.IdGenerator,com.sca4d.core.api.messaging.MessageBus,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,int,int)">
 <h3>ReportedStateService</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ReportedStateService</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../device/DeviceRepository.html" title="class in com.sca4d.iot.device">DeviceRepository</a>&nbsp;devices,
@@ -172,7 +172,7 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull com.sca4d.core.api.id.IdGenerator&nbsp;ids,
  @NotNull
- @NotNull com.sca4d.core.api.messaging.MessagePublisher&nbsp;messages,
+ @NotNull com.sca4d.core.api.messaging.MessageBus&nbsp;messages,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
  @NotNull

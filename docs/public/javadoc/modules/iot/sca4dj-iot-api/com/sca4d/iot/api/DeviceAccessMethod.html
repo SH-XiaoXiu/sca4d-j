@@ -135,11 +135,11 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#anonymousAccess()" class="member-name-link">anonymousAccess</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="DeviceAccessMethod.html" title="class in com.sca4d.iot.api">DeviceAccessMethod</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#authentication(com.sca4d.core.api.authentication.AuthenticationMethodCode)" class="member-name-link">authentication</a><wbr>(@NotNull com.sca4d.core.api.authentication.AuthenticationMethodCode&nbsp;methodCode)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#authentication(com.sca4d.core.api.code.TreeCode)" class="member-name-link">authentication</a><wbr>(@NotNull com.sca4d.core.api.code.TreeCode&nbsp;methodCode)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">创建直接使用一种通用 Account 认证方法的连接方式。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;com.sca4d.core.api.authentication.AuthenticationMethodCode&gt;</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;com.sca4d.core.api.code.TreeCode&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#authenticationMethodCode()" class="member-name-link">authenticationMethodCode</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
@@ -249,13 +249,13 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="authentication(com.sca4d.core.api.authentication.AuthenticationMethodCode)">
+<section class="detail" id="authentication(com.sca4d.core.api.code.TreeCode)">
 <h3>authentication</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="DeviceAccessMethod.html" title="class in com.sca4d.iot.api">DeviceAccessMethod</a></span>&nbsp;<span class="element-name">authentication</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.authentication.AuthenticationMethodCode&nbsp;methodCode)</span></div>
+ @NotNull com.sca4d.core.api.code.TreeCode&nbsp;methodCode)</span></div>
 <div class="block">创建直接使用一种通用 Account 认证方法的连接方式。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -300,7 +300,7 @@ loadScripts(document, 'script');</script>
 <h3>authenticationMethodCode</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;com.sca4d.core.api.authentication.AuthenticationMethodCode&gt;</span>&nbsp;<span class="element-name">authenticationMethodCode</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;com.sca4d.core.api.code.TreeCode&gt;</span>&nbsp;<span class="element-name">authenticationMethodCode</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>直接 Account 认证方式对应的方法编码；匿名或 Session 方式为空</dd>

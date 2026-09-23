@@ -123,17 +123,17 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存批量查询返回的 Device 标识和接入方式编码。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/message/DeviceAcknowledgementConsumer.html" title="class in com.sca4d.iot.message">DeviceAcknowledgementConsumer</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">在来源事务提交后消费可靠 ACK 请求，并执行现有消息级状态转换。</div>
-</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/message/DeviceAcknowledgementService.html" title="class in com.sca4d.iot.message">DeviceAcknowledgementService</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">把显式 Device ACK 和 reported 推导 ACK 交给同一策略及下行状态机。</div>
-</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/message/DeviceAcknowledgementTimeoutConsumer.html" title="class in com.sca4d.iot.message">DeviceAcknowledgementTimeoutConsumer</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/message/DeviceAcknowledgementCheckHandler.html" title="class in com.sca4d.iot.message">DeviceAcknowledgementCheckHandler</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">消费延迟 ACK 超时检查，并按下行消息的 retry policy 登记下一次发送。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/message/DeviceAcknowledgementHandler.html" title="class in com.sca4d.iot.message">DeviceAcknowledgementHandler</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">消费设备 ACK 处理消息，并执行现有消息级状态转换。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/message/DeviceAcknowledgementService.html" title="class in com.sca4d.iot.message">DeviceAcknowledgementService</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">把显式 Device ACK 和 reported 推导 ACK 交给同一策略及下行状态机。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/device/DeviceBindingChange.html" title="class in com.sca4d.iot.device">DeviceBindingChange</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
@@ -163,89 +163,89 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">按 `DeviceConnectionProtocol` 选择唯一的设备连接终止实现。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/device/DeviceDetailsChange.html" title="class in com.sca4d.iot.device">DeviceDetailsChange</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/message/DeviceDeliveryScheduler.html" title="class in com.sca4d.iot.message">DeviceDeliveryScheduler</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">保存不影响 Device 身份、凭据、协议和连接的展示资料修改。</div>
-</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/persistence/DeviceDetailsUpdate.html" title="class in com.sca4d.iot.persistence">DeviceDetailsUpdate</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">保存 Device 展示名称和备注交给 Mapper 执行的字段更新意图。</div>
-</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/connection/DeviceDisconnectConsumer.html" title="class in com.sca4d.iot.connection">DeviceDisconnectConsumer</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">消费可靠断连消息，并在协议实现暂时不可用时登记延迟重试。</div>
-</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/message/DeviceDownlinkDispatchConsumer.html" title="class in com.sca4d.iot.message">DeviceDownlinkDispatchConsumer</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">消费可靠下行发送消息，并把协议发布结果写回业务状态。</div>
-</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/persistence/mapper/DeviceDownlinkMapper.html" title="interface in com.sca4d.iot.persistence.mapper">DeviceDownlinkMapper</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
-<div class="block">读写 `iot_downlink_message` 中的业务下行状态和最新 ACK。</div>
-</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/message/DeviceDownlinkMessagePublisher.html" title="class in com.sca4d.iot.message">DeviceDownlinkMessagePublisher</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在当前事务中可靠发布标准下行发送和 ACK 超时检查消息。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/message/DeviceDownlinkRouter.html" title="class in com.sca4d.iot.message">DeviceDownlinkRouter</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">按 Device 当前绑定的具体协议类型选择唯一的下行 Publisher。</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/device/DeviceDetailsChange.html" title="class in com.sca4d.iot.device">DeviceDetailsChange</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">保存不影响 Device 身份、凭据、协议和连接的展示资料修改。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/persistence/mapper/DeviceMapper.html" title="interface in com.sca4d.iot.persistence.mapper">DeviceMapper</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/persistence/DeviceDetailsUpdate.html" title="class in com.sca4d.iot.persistence">DeviceDetailsUpdate</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">保存 Device 展示名称和备注交给 Mapper 执行的字段更新意图。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/connection/DeviceDisconnectHandler.html" title="class in com.sca4d.iot.connection">DeviceDisconnectHandler</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">消费可靠断连消息，并在协议实现暂时不可用时登记延迟重试。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/message/DeviceDispatchHandler.html" title="class in com.sca4d.iot.message">DeviceDispatchHandler</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">消费可靠下行发送消息，并把协议发布结果写回业务状态。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/persistence/mapper/DeviceDownlinkMapper.html" title="interface in com.sca4d.iot.persistence.mapper">DeviceDownlinkMapper</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="block">读写 `iot_downlink_message` 中的业务下行状态和最新 ACK。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/persistence/mapper/DeviceMapper.html" title="interface in com.sca4d.iot.persistence.mapper">DeviceMapper</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">读写主 PostgreSQL 中的 Device、连接身份、接入方式和物模型绑定。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/message/DevicePolicyCatalog.html" title="class in com.sca4d.iot.message">DevicePolicyCatalog</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/message/DevicePolicyCatalog.html" title="class in com.sca4d.iot.message">DevicePolicyCatalog</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">校验并索引一个 App 登记的 ACK 与 retry 策略。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/protocol/DeviceProtocolCatalog.html" title="class in com.sca4d.iot.protocol">DeviceProtocolCatalog</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/protocol/DeviceProtocolCatalog.html" title="class in com.sca4d.iot.protocol">DeviceProtocolCatalog</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">按稳定 code 索引一个 App 安装的设备协议。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/device/DeviceQuery.html" title="class in com.sca4d.iot.device">DeviceQuery</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/device/DeviceQuery.html" title="class in com.sca4d.iot.device">DeviceQuery</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">描述 Device 台账支持的有界标识查询或分页列表查询。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/device/DeviceQuery.Builder.html" title="class in com.sca4d.iot.device">DeviceQuery.Builder</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/device/DeviceQuery.Builder.html" title="class in com.sca4d.iot.device">DeviceQuery.Builder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">逐项声明 Device 台账筛选条件。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/device/DeviceRegistration.html" title="class in com.sca4d.iot.device">DeviceRegistration</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/device/DeviceRegistration.html" title="class in com.sca4d.iot.device">DeviceRegistration</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存创建 Device 时总是一起校验和写入的公共 Profile 数据。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/device/DeviceRepository.html" title="class in com.sca4d.iot.device">DeviceRepository</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/device/DeviceRepository.html" title="class in com.sca4d.iot.device">DeviceRepository</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">把 Device 持久化状态和接入方式集合转换成完整 Device，并检查写入结果。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/message/policy/DeviceResultAcknowledgementPolicy.html" title="class in com.sca4d.iot.message.policy">DeviceResultAcknowledgementPolicy</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/message/policy/DeviceResultAcknowledgementPolicy.html" title="class in com.sca4d.iot.message.policy">DeviceResultAcknowledgementPolicy</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">根据设备显式返回的 `success` 或 `failed` ackCode 判断下行结果。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/persistence/mapper/DeviceScheduleMapper.html" title="interface in com.sca4d.iot.persistence.mapper">DeviceScheduleMapper</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/persistence/mapper/DeviceScheduleMapper.html" title="interface in com.sca4d.iot.persistence.mapper">DeviceScheduleMapper</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">读写设备定时规则、下一次触发时间和最新执行结果。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/schedule/DeviceScheduleRepository.html" title="class in com.sca4d.iot.schedule">DeviceScheduleRepository</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/schedule/DeviceScheduleRepository.html" title="class in com.sca4d.iot.schedule">DeviceScheduleRepository</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存设备定时规则、下一次触发时间和最新下行生成结果。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/schedule/DeviceScheduleTask.html" title="class in com.sca4d.iot.schedule">DeviceScheduleTask</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/schedule/DeviceScheduleTask.html" title="class in com.sca4d.iot.schedule">DeviceScheduleTask</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">连续触发一批通过 Redis 分布式锁互斥执行的到期设备定时规则。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/iot/schedule/DeviceScheduleTriggerFailure.html" title="class in com.sca4d.iot.schedule">DeviceScheduleTriggerFailure</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab5">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/iot/schedule/DeviceScheduleTriggerFailure.html" title="class in com.sca4d.iot.schedule">DeviceScheduleTriggerFailure</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab5">
 <div class="block">标识一个到期规则生成 command 时发生的业务失败，供新事务保存 FAILED 结果。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/device/DeviceService.html" title="class in com.sca4d.iot.device">DeviceService</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/device/DeviceService.html" title="class in com.sca4d.iot.device">DeviceService</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存和修改 Device、Product、物模型、协议及接入方式等 IoT 技术事实。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/persistence/DeviceState.html" title="class in com.sca4d.iot.persistence">DeviceState</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/persistence/DeviceState.html" title="class in com.sca4d.iot.persistence">DeviceState</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存 Mapper 查询得到的 Device 公共 Profile 标量字段。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/message/DeviceTransportRouter.html" title="class in com.sca4d.iot.message">DeviceTransportRouter</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">按 Device 当前绑定的具体协议类型选择唯一的下行 Publisher。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/message/DownlinkRepository.html" title="class in com.sca4d.iot.message">DownlinkRepository</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">

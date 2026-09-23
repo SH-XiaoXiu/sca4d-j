@@ -109,7 +109,9 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.core.api.concurrent.Version&nbsp;languageVersion,
  @NotNull com.sca4d.core.api.concurrent.Version&nbsp;regionVersion,
  @NotNull com.sca4d.core.api.concurrent.Version&nbsp;channelsVersion)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">创建当前 Account 的通知设置快照。</div>
+</div>
 </div>
 </section>
 </li>
@@ -174,6 +176,7 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.core.api.concurrent.Version&nbsp;regionVersion,
  @NotNull
  @NotNull com.sca4d.core.api.concurrent.Version&nbsp;channelsVersion)</span></div>
+<div class="block">创建当前 Account 的通知设置快照。</div>
 </section>
 </li>
 </ul>
@@ -188,36 +191,60 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="language()">
 <h3>language</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a></span>&nbsp;<span class="element-name">language</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>当前语言</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="region()">
 <h3>region</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.api.region.Region</span>&nbsp;<span class="element-name">region</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>当前业务区域</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="channels()">
 <h3>channels</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">com.fasterxml.jackson.databind.JsonNode</span>&nbsp;<span class="element-name">channels</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>渠道配置副本</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="languageVersion()">
 <h3>languageVersion</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.api.concurrent.Version</span>&nbsp;<span class="element-name">languageVersion</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>语言设置版本</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="regionVersion()">
 <h3>regionVersion</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.api.concurrent.Version</span>&nbsp;<span class="element-name">regionVersion</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>区域设置版本</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="channelsVersion()">
 <h3>channelsVersion</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.api.concurrent.Version</span>&nbsp;<span class="element-name">channelsVersion</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>渠道设置版本</dd>
+</dl>
 </section>
 </li>
 </ul>

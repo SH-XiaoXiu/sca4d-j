@@ -75,11 +75,53 @@ loadScripts(document, 'script');</script>
 <ul class="summary-list">
 <li>
 <div id="class-summary">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab3" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab3', 2)" class="table-tab">Enum Classes</button></div>
 <div id="class-summary.tabpanel" role="tabpanel">
 <div class="summary-table two-column-summary" aria-labelledby="class-summary-tab0">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="DispatchPolicy.html" title="class in com.sca4d.core.api.messaging">DispatchPolicy</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">声明 Message 立即、事务提交后或通过 Outbox 发布到 RabbitMQ。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab3"><a href="DispatchPolicy.Mode.html" title="enum class in com.sca4d.core.api.messaging">DispatchPolicy.Mode</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab3">&nbsp;</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="DispatchReceipt.html" title="class in com.sca4d.core.api.messaging">DispatchReceipt</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">返回 MessageBus 已完成的发布阶段和 MessageId。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab3"><a href="DispatchReceipt.Status.html" title="enum class in com.sca4d.core.api.messaging">DispatchReceipt.Status</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab3">&nbsp;</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="EventHandler.html" title="interface in com.sca4d.core.api.messaging">EventHandler</a>&lt;T&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">声明一个业务 Event 的稳定 RabbitMQ Handler。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="HandlingDecision.html" title="class in com.sca4d.core.api.messaging">HandlingDecision</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">指示 RabbitMQ 对当前 Handler 收到的消息执行确认、再次处理或拒绝。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab3"><a href="HandlingDecision.Status.html" title="enum class in com.sca4d.core.api.messaging">HandlingDecision.Status</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab3">&nbsp;</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="HandlingPolicy.html" title="class in com.sca4d.core.api.messaging">HandlingPolicy</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">限制 MessageHandler 因技术失败再次处理同一 RabbitMQ 消息的次数和间隔。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="IncomingMessage.html" title="class in com.sca4d.core.api.messaging">IncomingMessage</a>&lt;M extends <a href="../message/Message.html" title="class in com.sca4d.core.api.message">Message</a>&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">保存 MessageHandler 收到的业务 Message 和 RabbitMQ 投递元数据。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JacksonMessageCodec.html" title="class in com.sca4d.core.api.messaging">JacksonMessageCodec</a>&lt;M extends <a href="../message/Message.html" title="class in com.sca4d.core.api.message">Message</a>&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">使用项目统一 ObjectMapper 编解码一个具有固定 TreeCode 和版本的 Message 类型。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="MessageBus.html" title="interface in com.sca4d.core.api.messaging">MessageBus</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">把业务 Message 按指定策略交给固定 RabbitMQ 消息总线。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="MessageCodec.html" title="interface in com.sca4d.core.api.messaging">MessageCodec</a>&lt;M extends <a href="../message/Message.html" title="class in com.sca4d.core.api.message">Message</a>&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">把一种 Message 与 RabbitMQ/Outbox 保存的二进制 payload 互相转换。</div>
+</div>
 <div class="col-first even-row-color class-summary class-summary-tab1"><a href="MessageConsumer.html" title="interface in com.sca4d.core.api.messaging">MessageConsumer</a>&lt;T&gt;</div>
 <div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">声明一个稳定的业务事件 Consumer 契约。</div>
@@ -88,13 +130,13 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">保存 RabbitMQ 投递给 `MessageConsumer` 的事件和发布元数据。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="MessageId.html" title="class in com.sca4d.core.api.messaging">MessageId</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">标识一次逻辑消息发布，并供 Consumer 对重复投递执行幂等检查。</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="MessageHandler.html" title="interface in com.sca4d.core.api.messaging">MessageHandler</a>&lt;M extends <a href="../message/Message.html" title="class in com.sca4d.core.api.message">Message</a>&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">声明一种 Message 的稳定 RabbitMQ 消费入口和技术失败处理策略。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="MessagePublisher.html" title="interface in com.sca4d.core.api.messaging">MessagePublisher</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
-<div class="block">发布业务消息，并由具体 Messaging 实现选择立即发送或使用 Outbox 保证发布。</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="MessageId.html" title="class in com.sca4d.core.api.messaging">MessageId</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">标识一次逻辑消息发布，并供 Consumer 对重复投递执行幂等检查。</div>
 </div>
 </div>
 </div>

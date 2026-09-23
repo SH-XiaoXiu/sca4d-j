@@ -127,8 +127,8 @@ implements <a href="../web/OpenApiClientOperationChecker.html" title="interface 
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#verifyAllowed(com.sca4d.core.api.call.Call,java.lang.String)" class="member-name-link">verifyAllowed</a><wbr>(@NotNull com.sca4d.core.api.call.Call&nbsp;call,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;operation)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#verifyAllowed(com.sca4d.core.api.call.Call,com.sca4d.core.api.code.TreeCode)" class="member-name-link">verifyAllowed</a><wbr>(@NotNull com.sca4d.core.api.call.Call&nbsp;call,
+ @NotNull com.sca4d.core.api.code.TreeCode&nbsp;operation)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">拒绝停用、未知或未开放目标 Operation 的 Client。</div>
 </div>
@@ -166,16 +166,16 @@ implements <a href="../web/OpenApiClientOperationChecker.html" title="interface 
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="verifyAllowed(com.sca4d.core.api.call.Call,java.lang.String)">
+<section class="detail" id="verifyAllowed(com.sca4d.core.api.call.Call,com.sca4d.core.api.code.TreeCode)">
 <h3>verifyAllowed</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">verifyAllowed</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.call.Call&nbsp;call,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;operation)</span></div>
+ @NotNull com.sca4d.core.api.code.TreeCode&nbsp;operation)</span></div>
 <div class="block">拒绝停用、未知或未开放目标 Operation 的 Client。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../web/OpenApiClientOperationChecker.html#verifyAllowed(com.sca4d.core.api.call.Call,java.lang.String)">verifyAllowed</a></code>&nbsp;in interface&nbsp;<code><a href="../web/OpenApiClientOperationChecker.html" title="interface in com.sca4d.openapi.web">OpenApiClientOperationChecker</a></code></dd>
+<dd><code><a href="../web/OpenApiClientOperationChecker.html#verifyAllowed(com.sca4d.core.api.call.Call,com.sca4d.core.api.code.TreeCode)">verifyAllowed</a></code>&nbsp;in interface&nbsp;<code><a href="../web/OpenApiClientOperationChecker.html" title="interface in com.sca4d.openapi.web">OpenApiClientOperationChecker</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>call</code> - 当前 HTTP 调用，必须已经完成认证</dd>
 <dd><code>operation</code> - 路由声明的 Operation 编码</dd>

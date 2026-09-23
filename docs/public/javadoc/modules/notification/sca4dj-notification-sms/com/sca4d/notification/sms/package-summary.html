@@ -94,61 +94,81 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">使用数据库优先级提供 SMS Provider 默认候选顺序。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SmsConfigurationService.html" title="class in com.sca4d.notification.sms">SmsConfigurationService</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SmsChannels.html" title="class in com.sca4d.notification.sms">SmsChannels</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">SMS 模块声明的通知渠道。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SmsConfigurationService.html" title="class in com.sca4d.notification.sms">SmsConfigurationService</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">管理 SMS Provider 实例和统一通知到供应商模板的传输绑定。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab3"><a href="SmsDeliveryStatus.html" title="enum class in com.sca4d.notification.sms">SmsDeliveryStatus</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab3">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SmsDeliveryAttempt.html" title="class in com.sca4d.notification.sms">SmsDeliveryAttempt</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">保存一次 SMS Provider 尝试的状态和查询所需的外部标识。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SmsDeliveryCheck.html" title="class in com.sca4d.notification.sms">SmsDeliveryCheck</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">请求查询一次已经提交的 SMS 是否最终送达。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SmsDeliveryCheckCodec.html" title="class in com.sca4d.notification.sms">SmsDeliveryCheckCodec</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">编解码延迟 SMS 送达查询消息。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SmsDeliveryCheckHandler.html" title="class in com.sca4d.notification.sms">SmsDeliveryCheckHandler</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">消费延迟 SMS 查询消息，并把最终送达状态交给 SMS 渠道实现。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab3"><a href="SmsDeliveryStatus.html" title="enum class in com.sca4d.notification.sms">SmsDeliveryStatus</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab3">
 <div class="block">表示 SMS Provider API 对一次提交给出的确定程度。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SmsDeliveryStore.html" title="class in com.sca4d.notification.sms">SmsDeliveryStore</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SmsDeliveryStore.html" title="class in com.sca4d.notification.sms">SmsDeliveryStore</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">使用独立短事务登记和完成 SMS Provider 调用，不让外部请求占用数据库事务。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SmsNotificationDelivery.html" title="class in com.sca4d.notification.sms">SmsNotificationDelivery</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SmsNotificationDelivery.html" title="class in com.sca4d.notification.sms">SmsNotificationDelivery</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">解析手机号、线路、Provider 与平台绑定，并提交一个必发或可选 SMS 渠道请求。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab3"><a href="SmsNotificationErrorCode.html" title="enum class in com.sca4d.notification.sms">SmsNotificationErrorCode</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab3">
+<div class="col-first even-row-color class-summary class-summary-tab3"><a href="SmsNotificationErrorCode.html" title="enum class in com.sca4d.notification.sms">SmsNotificationErrorCode</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab3">
 <div class="block">SMS Provider 与传输绑定管理使用的稳定错误码。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SmsProvider.html" title="class in com.sca4d.notification.sms">SmsProvider</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SmsProvider.html" title="class in com.sca4d.notification.sms">SmsProvider</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">保存一个由系统管理数据库维护的 SMS Provider 实例。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SmsProviderBinding.html" title="class in com.sca4d.notification.sms">SmsProviderBinding</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SmsProviderBinding.html" title="class in com.sca4d.notification.sms">SmsProviderBinding</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">把统一通知变量绑定到一个 Provider 已审核模板，不保存业务模板正文。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="SmsProviderSelector.html" title="interface in com.sca4d.notification.sms">SmsProviderSelector</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
-<div class="block">按具体应用已经确定的 SMS 路由排列可尝试的 Provider。</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="SmsRecipientResolver.html" title="interface in com.sca4d.notification.sms">SmsRecipientResolver</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
-<div class="block">把内部通知接收人解析成当前规范 E.164 手机号。</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SmsRepository.html" title="class in com.sca4d.notification.sms">SmsRepository</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">隐藏 SMS Provider 和传输绑定的 Mapper 与 JSON 字段。</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SmsRoute.html" title="class in com.sca4d.notification.sms">SmsRoute</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">标识具体应用声明的一条 SMS Provider 路由，不预设国家、地区或分区规则。</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="SmsRouteResolver.html" title="interface in com.sca4d.notification.sms">SmsRouteResolver</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
-<div class="block">根据具体应用的业务区域和电话目的地规则选择 SMS Provider 路由。</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="SmsTransport.html" title="interface in com.sca4d.notification.sms">SmsTransport</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="SmsProviderClient.html" title="interface in com.sca4d.notification.sms">SmsProviderClient</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">使用一个 Provider 实例和平台模板绑定提交短信请求。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SmsTransportResult.html" title="class in com.sca4d.notification.sms">SmsTransportResult</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SmsProviderResult.html" title="class in com.sca4d.notification.sms">SmsProviderResult</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">保存 Provider API 接受、拒绝或结果未知及其非敏感标识。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="SmsProviderSelector.html" title="interface in com.sca4d.notification.sms">SmsProviderSelector</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">按具体应用已经确定的 SMS 路由排列可尝试的 Provider。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="SmsRecipientResolver.html" title="interface in com.sca4d.notification.sms">SmsRecipientResolver</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">把内部通知接收人解析成当前规范 E.164 手机号。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SmsRepository.html" title="class in com.sca4d.notification.sms">SmsRepository</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">隐藏 SMS Provider 和传输绑定的 Mapper 与 JSON 字段。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SmsRoute.html" title="class in com.sca4d.notification.sms">SmsRoute</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">标识具体应用声明的一条 SMS Provider 路由，不预设国家、地区或分区规则。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="SmsRouteResolver.html" title="interface in com.sca4d.notification.sms">SmsRouteResolver</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">根据具体应用的业务区域和电话目的地规则选择 SMS Provider 路由。</div>
 </div>
 </div>
 </div>

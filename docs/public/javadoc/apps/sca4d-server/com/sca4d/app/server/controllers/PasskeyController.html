@@ -228,7 +228,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@PostMapping("/me/passkeys")
 @Audit(operation="authentication/account/passkey/register")
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../authentication/view/PasskeyCredentialView.html" title="class in com.sca4d.app.server.authentication.view">PasskeyCredentialView</a>&gt;</span>&nbsp;<span class="element-name">register</span><wbr><span class="parameters">(@AuditTarget(resourceType="account") @NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../authentication/view/PasskeyCredentialView.html" title="class in com.sca4d.app.server.authentication.view">PasskeyCredentialView</a>&gt;</span>&nbsp;<span class="element-name">register</span><wbr><span class="parameters">(@AuditTarget(resourceType="IAM/ACCOUNT") @NotNull
  @NotNull com.sca4d.core.api.identity.Account&nbsp;account,
  @RequestBody @Valid @NotNull
  @Valid @NotNull <a href="../authentication/request/PasskeyRegistrationRequest.html" title="class in com.sca4d.app.server.authentication.request">PasskeyRegistrationRequest</a>&nbsp;request)</span></div>

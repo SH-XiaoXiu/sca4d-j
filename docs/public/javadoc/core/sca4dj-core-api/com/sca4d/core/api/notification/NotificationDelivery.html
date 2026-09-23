@@ -85,8 +85,13 @@ loadScripts(document, 'script');</script>
 <h1 title="Interface NotificationDelivery" class="title">Interface NotificationDelivery</h1>
 </div>
 <section class="class-description" id="class-description">
+<dl class="notes">
+<dt>All Superinterfaces:</dt>
+<dd><code><a href="../delivery/Delivery.html" title="interface in com.sca4d.core.api.delivery">Delivery</a>&lt;<a href="Notification.html" title="class in com.sca4d.core.api.notification">Notification</a>&gt;</code></dd>
+</dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">NotificationDelivery</span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">NotificationDelivery</span><span class="extends-implements">
+extends <a href="../delivery/Delivery.html" title="interface in com.sca4d.core.api.delivery">Delivery</a>&lt;<a href="Notification.html" title="class in com.sca4d.core.api.notification">Notification</a>&gt;</span></div>
 <div class="block">由一个具体渠道实现通知可用性判断和一次幂等投递。</div>
 </section>
 <section class="summary">
@@ -96,7 +101,7 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button><button id="method-summary-table-tab5" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab5', 3)" class="table-tab">Default Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
 <div class="table-header col-first">Modifier and Type</div>
@@ -107,15 +112,18 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">判断当前配置能否处理指定通知编码和接收人。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="NotificationChannel.html" title="class in com.sca4d.core.api.notification">NotificationChannel</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="../code/TreeCode.html" title="class in com.sca4d.core.api.code">TreeCode</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#channel()" class="member-name-link">channel</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="../delivery/DeliveryOutcome.html" title="class in com.sca4d.core.api.delivery">DeliveryOutcome</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#deliver(com.sca4d.core.api.messaging.MessageId,com.sca4d.core.api.notification.Notification)" class="member-name-link">deliver</a><wbr>(@NotNull <a href="../messaging/MessageId.html" title="class in com.sca4d.core.api.messaging">MessageId</a>&nbsp;messageId,
  @NotNull <a href="Notification.html" title="class in com.sca4d.core.api.notification">Notification</a>&nbsp;notification)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">同步投递通知，正常返回表示具体提供方已经接受。</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="../messaging/HandlingPolicy.html" title="class in com.sca4d.core.api.messaging">HandlingPolicy</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#handlingPolicy()" class="member-name-link">handlingPolicy</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -134,7 +142,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="channel()">
 <h3>channel</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="return-type">@NotNull <a href="NotificationChannel.html" title="class in com.sca4d.core.api.notification">NotificationChannel</a></span>&nbsp;<span class="element-name">channel</span>()</div>
+</span><span class="return-type">@NotNull <a href="../code/TreeCode.html" title="class in com.sca4d.core.api.code">TreeCode</a></span>&nbsp;<span class="element-name">channel</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>当前实现负责的唯一通知渠道</dd>
@@ -156,17 +164,33 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="handlingPolicy()">
+<h3>handlingPolicy</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="../messaging/HandlingPolicy.html" title="class in com.sca4d.core.api.messaging">HandlingPolicy</a></span>&nbsp;<span class="element-name">handlingPolicy</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>当前渠道 Handler 发生技术失败或结果未知时的再次处理策略</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="deliver(com.sca4d.core.api.messaging.MessageId,com.sca4d.core.api.notification.Notification)">
 <h3>deliver</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">deliver</span><wbr><span class="parameters">(@NotNull
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="../delivery/DeliveryOutcome.html" title="class in com.sca4d.core.api.delivery">DeliveryOutcome</a></span>&nbsp;<span class="element-name">deliver</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../messaging/MessageId.html" title="class in com.sca4d.core.api.messaging">MessageId</a>&nbsp;messageId,
  @NotNull
  @NotNull <a href="Notification.html" title="class in com.sca4d.core.api.notification">Notification</a>&nbsp;notification)</span></div>
 <div class="block">同步投递通知，正常返回表示具体提供方已经接受。</div>
 <dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../delivery/Delivery.html#deliver(com.sca4d.core.api.messaging.MessageId,R)">deliver</a></code>&nbsp;in interface&nbsp;<code><a href="../delivery/Delivery.html" title="interface in com.sca4d.core.api.delivery">Delivery</a>&lt;<a href="Notification.html" title="class in com.sca4d.core.api.notification">Notification</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>messageId</code> - 原始通知消息标识，渠道可以用它防止重复副作用</dd>
 <dd><code>notification</code> - 已冻结接收人、Locale、区域、变量和渠道的通知</dd>
+<dt>Returns:</dt>
+<dd>当前投递动作的业务结果</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a></code> - 接收人、模板、配置、渲染或外部投递失败时抛出</dd>
 </dl>
