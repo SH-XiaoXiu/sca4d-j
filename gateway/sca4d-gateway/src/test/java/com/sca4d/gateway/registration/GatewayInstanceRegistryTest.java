@@ -56,7 +56,7 @@ class GatewayInstanceRegistryTest {
                 validRequest.getReadinessPath(),
                 validRequest.getCallbackCodes());
 
-        assertThatThrownBy(() -> registry().register(invalidRequest))
+        assertThatThrownBy(() -> assertThat(registry().register(invalidRequest)).isNotNull())
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

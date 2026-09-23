@@ -1,5 +1,6 @@
 package com.sca4d.gateway.routing;
 
+import com.sca4d.gateway.config.GatewayProperties;
 import com.sca4d.gateway.registration.GatewayInstanceRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.cloud.loadbalancer.core.ReactorServiceInstanceLoadBalancer;
@@ -16,7 +17,9 @@ public class GatewayLoadBalancerConfiguration {
      */
     @Bean
     @NotNull
-    ReactorServiceInstanceLoadBalancer gatewayLoadBalancer(@NotNull GatewayInstanceRegistry registry) {
-        return new GatewayLoadBalancer(registry);
+    ReactorServiceInstanceLoadBalancer gatewayLoadBalancer(
+            @NotNull GatewayInstanceRegistry registry,
+            @NotNull GatewayProperties properties) {
+        return new GatewayLoadBalancer(registry, properties.validatedBackendServiceId());
     }
 }

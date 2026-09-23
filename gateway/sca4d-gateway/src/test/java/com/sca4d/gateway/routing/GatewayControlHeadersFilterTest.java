@@ -3,7 +3,6 @@ package com.sca4d.gateway.routing;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.sca4d.core.api.gateway.GatewayHttpHeaders;
-import com.sca4d.gateway.config.GatewayProperties;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.http.server.reactive.MockServerHttpRequest;
@@ -12,15 +11,13 @@ import reactor.core.publisher.Mono;
 
 import java.net.InetSocketAddress;
 
-/** 验证 Gateway 删除伪造代理 Header 并写入自己的可信值。 */
-class TrustedProxyHeadersFilterTest {
+/** 验证 Gateway 全局删除伪造控制 Header，但不向普通路由写入 Secret。 */
+class GatewayControlHeadersFilterTest {
 
     @Test
-    @DisplayName("伪造 Gateway 和 Forwarded Header 被覆盖或删除")
-    void replacesUntrustedHeaders() {
-        GatewayProperties properties = new GatewayProperties();
-        properties.setSecret("trusted-secret");
-        TrustedProxyHeadersFilter filter = new TrustedProxyHeadersFilter(properties);
+    @DisplayName("伪造 Gateway Header 被删除且标准代理 Header 留给 Gateway 处理")
+    void removesGatewayHeadersOnly() {
+        GatewayControlHeadersFilter filter = new GatewayControlHeadersFilter();
         MockServerWebExchange exchange = MockServerWebExchange.from(
                 MockServerHttpRequest.get("/api/resource")
                         .remoteAddress(new InetSocketAddress("203.0.113.8", 12345))
@@ -31,15 +28,14 @@ class TrustedProxyHeadersFilterTest {
                         .build());
 
         filter.filter(exchange, forwarded -> {
-            assertThat(forwarded.getRequest().getHeaders().getFirst(GatewayHttpHeaders.SECRET))
-                    .isEqualTo("trusted-secret");
-            assertThat(forwarded.getRequest().getHeaders().getFirst(GatewayHttpHeaders.CLIENT_IP))
-                    .isEqualTo("203.0.113.8");
+            assertThat(forwarded.getRequest().getHeaders().getFirst(GatewayHttpHeaders.SECRET)).isNull();
+            assertThat(forwarded.getRequest().getHeaders().getFirst(GatewayHttpHeaders.CLIENT_IP)).isNull();
             assertThat(forwarded.getRequest().getHeaders().getFirst(GatewayHttpHeaders.EXTERNAL_PREFIX))
                     .isNull();
             assertThat(forwarded.getRequest().getHeaders().getFirst("X-Forwarded-Host"))
-                    .isNull();
-            assertThat(forwarded.getRequest().getHeaders().getFirst("Forwarded")).isNull();
+                    .isEqualTo("forged.example");
+            assertThat(forwarded.getRequest().getHeaders().getFirst("Forwarded"))
+                    .isEqualTo("for=198.51.100.9");
             return Mono.empty();
         }).block();
     }

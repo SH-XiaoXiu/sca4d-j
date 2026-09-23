@@ -10,7 +10,7 @@
 
 先用有效凭据确认回调能够处理请求，再检查缺少凭据、错误凭据及没有健康实例时的结果。Gateway 不自动重试写请求，调用方需要根据回调业务规则确定幂等与重试方式。
 
-Sca4d-J 把外部 HTTP 入口和具体应用分开。独立 Gradle 项目 `gateway:sca4d-gateway` 接收公开 API、SSE、WebSocket 和外部系统回调，再从当前可用的 Server 实例中选择一个目标。启用集中日志后，它还验证各地 Alloy 的独立写入凭据，并把固定路径转发到中心 Loki。应用不需要为 EMQX 等调用方公开某个固定 Server 节点，也不需要让日志采集进程直接访问 Loki。
+Sca4d-J 把外部 HTTP 入口和具体应用分开。独立 Gradle 项目 `gateway:sca4d-gateway` 接收公开 API、SSE、WebSocket 和外部系统回调，再从当前可用的 Server 实例中选择一个目标。默认 BootJar 还携带可关闭的 `gateway:sca4dj-gateway-loki` addon；其他组装工程可以不添加该依赖。应用不需要为 EMQX 等调用方公开某个固定 Server 节点，也不需要让日志采集进程直接访问 Loki。
 
 ## 参与对象
 
@@ -51,17 +51,17 @@ Server 注册实例标识、Gateway 可访问的 HTTP(S) Origin、readiness 路�
 
 ## 路由与外部路径
 
-`/api/**` 是普通应用入口。Gateway 在转发前移除 `/api`，并用 [GatewayHttpHeaders](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/gateway/GatewayHttpHeaders.html) 告诉 Server 被移除的前缀。SSE `/api/events` 和 WebSocket `/api/events/ws` 使用专门路由，长连接建立后固定在已经选择的实例。Gateway 不托管前端文件。
+默认 `/api/**` 是普通应用入口。Gateway 在转发前移除 `/api`，并用 [GatewayHttpHeaders](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/gateway/GatewayHttpHeaders.html) 告诉 Server 被移除的前缀。SSE `/api/events` 和 WebSocket `/api/events/ws` 使用专门路由，长连接建立后固定在已经选择的实例。路由定义来自 `spring.cloud.gateway.server.webflux.routes`；外部 YAML 可以替换完整列表。转发到注册 Server 的路由必须保留 `RegisteredServer` Filter。
 
-`/callbacks/{code}` 保留完整路径转发，并且只选择注册了该回调编码的健康实例。回调编码由 [GatewayCallbackCode](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/gateway/GatewayCallbackCode.html) 限制为稳定的小写命名空间。一个实例没有安装某项可选功能时，不登记对应回调编码，也不会收到该类回调。
+`/callbacks/{code}` 保留完整路径转发，并且只选择注册了该回调编码的健康实例。回调编码由 [GatewayCallbackCode](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/gateway/GatewayCallbackCode.html) 限制为稳定的小写命名空间。一个实例没有安装某项可选功能时，不登记对应回调编码，也不会收到该类回调。外部 YAML 使用其他 callback 入口时，先通过 `RewritePath` 恢复内部 `/callbacks/{code}`，再执行 `RegisteredServer`。
 
-`POST /internal/logging/push` 是可选的固定目标路由，不读取 Server 租约。Gateway 只接受这一条 Loki 写入路径，不公开查询、删除或管理 API。Grafana 在中心端内部网络直接查询 Loki；详细关系见[集中日志](/tutorials/build-deploy-troubleshoot)。
+Loki addon 默认使用 `POST /internal/logging/push`，但入口路径和 Loki push 路径都可以配置。该路由不读取 Server 租约，也不使用 `RegisteredServer`。addon 不公开查询、删除或管理 API。Grafana 在中心端内部网络直接查询 Loki；详细关系见[集中日志](/tutorials/build-deploy-troubleshoot)。
 
 Server 返回站内绝对路径形式的相对 `Location` 时，Gateway 为普通 API 响应补回 `/api`。外部 URL、签名 canonical path 和审计路径因此都以公开入口为准，而不是以 Server 内部路径为准。
 
 ## 信任边界
 
-注册控制 API 和 Gateway 到 Server 的可信转发共同使用 `X-Gateway-Secret`。Gateway 在写入可信值前删除调用方提交的全部 `X-Gateway-*`、`Forwarded` 和 `X-Forwarded-*` Header，再写入自己的 Secret、客户端地址和公开路径前缀。Server 只有在 Secret 固定时间比较成功后才采用 `X-Gateway-Client-Ip` 和 `X-Gateway-External-Prefix`；Core Spring 随后对 Controller 隐藏这些控制 Header。
+注册控制 API 和 Gateway 到 Server 的可信转发共同使用 `X-Gateway-Secret`。Gateway 对全部路由删除调用方提交的 `X-Gateway-*`。`RegisteredServer` 只允许配置的 backend service ID，并在转发前删除 `Forwarded` 和 `X-Forwarded-*`，再写入自己的 Secret、客户端地址和公开路径前缀。Server 只有在 Secret 固定时间比较成功后才采用这些值；Core Spring 随后对 Controller 隐藏控制 Header。
 
 Gateway Secret 只证明请求经过配置相同 Secret 的 Gateway，不代替回调自己的认证。EMQX 回调继续校验独立的 `X-Iot-Emqx-Secret`，设备 HMAC 请求继续校验 Device 自己的凭据。Gateway 不读取或改写这些应用协议 Header。
 

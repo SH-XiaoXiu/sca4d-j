@@ -21,10 +21,16 @@ public final class GatewayLoadBalancer implements ReactorServiceInstanceLoadBala
 
     private final @NotNull GatewayInstanceRegistry registry;
 
-    /** @param registry 管理租约、readiness 和轮询游标的实例注册表 */
+    private final @NotNull String serviceId;
+
+    /**
+     * @param registry 管理租约、readiness 和轮询游标的实例注册表
+     * @param serviceId 当前注册 Server 集群的 LoadBalancer service ID
+     */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "registry 是注入的共享实例注册协作对象，负载均衡器必须读取同一个注册表")
-    public GatewayLoadBalancer(@NotNull GatewayInstanceRegistry registry) {
+    public GatewayLoadBalancer(@NotNull GatewayInstanceRegistry registry, @NotNull String serviceId) {
         this.registry = registry;
+        this.serviceId = serviceId;
     }
 
     /**
@@ -41,7 +47,7 @@ public final class GatewayLoadBalancer implements ReactorServiceInstanceLoadBala
                 : registry.selectApi();
         Response<ServiceInstance> response = selected == null
                 ? new EmptyResponse()
-                : new DefaultResponse(new GatewayServiceInstance(selected));
+                : new DefaultResponse(new GatewayServiceInstance(selected, serviceId));
         return Mono.just(response);
     }
 

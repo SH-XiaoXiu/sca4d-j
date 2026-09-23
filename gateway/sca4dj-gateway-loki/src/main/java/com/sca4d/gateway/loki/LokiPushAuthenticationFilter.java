@@ -1,6 +1,5 @@
-package com.sca4d.gateway.routing;
+package com.sca4d.gateway.loki;
 
-import com.sca4d.gateway.config.GatewayProperties;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,15 +19,14 @@ import java.util.List;
 /** 验证 Alloy 的独立 Basic Auth 凭据，并在转发到 Loki 前删除认证 Header。 */
 public final class LokiPushAuthenticationFilter implements GatewayFilter {
 
-    /** Gateway 请求属性中标记已认证 Loki 写入请求的名称。 */
-    public static final String LOGGING_PUSH_ATTRIBUTE = LokiPushAuthenticationFilter.class.getName() + ".loggingPush";
-
     private static final Logger LOGGER = LoggerFactory.getLogger(LokiPushAuthenticationFilter.class);
+
+    private static final String GATEWAY_HEADER_PREFIX = "X-Gateway-";
 
     private final byte @NotNull [] expectedCredential;
 
     /** @param properties 已校验并启用的 Loki 写入配置 */
-    public LokiPushAuthenticationFilter(@NotNull GatewayProperties.Logging properties) {
+    public LokiPushAuthenticationFilter(@NotNull LokiGatewayProperties properties) {
         this.expectedCredential = (properties.validatedUsername() + ":" + properties.validatedPassword())
                 .getBytes(StandardCharsets.UTF_8);
     }
@@ -48,26 +46,21 @@ public final class LokiPushAuthenticationFilter implements GatewayFilter {
             return exchange.getResponse().setComplete();
         }
 
-        exchange.getAttributes().put(LOGGING_PUSH_ATTRIBUTE, true);
         return chain.filter(
                 exchange.mutate()
-                        .request(
-                                exchange.getRequest()
-                                        .mutate()
-                                        .headers(headers -> {
-                                            headers.remove(HttpHeaders.AUTHORIZATION);
-                                            for (String name : new ArrayList<>(headers.keySet())) {
-                                                if (name.regionMatches(
-                                                        true,
-                                                        0,
-                                                        "X-Gateway-",
-                                                        0,
-                                                        "X-Gateway-".length())) {
-                                                    headers.remove(name);
-                                                }
-                                            }
-                                        })
-                                        .build())
+                        .request(exchange.getRequest().mutate().headers(headers -> {
+                            headers.remove(HttpHeaders.AUTHORIZATION);
+                            for (String name : new ArrayList<>(headers.keySet())) {
+                                if (name.regionMatches(
+                                        true,
+                                        0,
+                                        GATEWAY_HEADER_PREFIX,
+                                        0,
+                                        GATEWAY_HEADER_PREFIX.length())) {
+                                    headers.remove(name);
+                                }
+                            }
+                        }).build())
                         .build());
     }
 

@@ -1,9 +1,7 @@
-package com.sca4d.gateway.routing;
+package com.sca4d.gateway.loki;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.sca4d.core.api.gateway.GatewayHttpHeaders;
-import com.sca4d.gateway.config.GatewayProperties;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
@@ -16,26 +14,24 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/** 验证 Loki 写入路由只接受独立凭据且不会把凭据转发到 Loki。 */
+/** 验证 Loki 写入路由只接受独立凭据且不会转发认证信息。 */
 class LokiPushAuthenticationFilterTest {
 
     @Test
-    @DisplayName("正确 Basic Auth 继续转发并删除 Authorization")
-    void forwardsWithoutAuthorizationForValidCredential() {
+    @DisplayName("正确 Basic Auth 继续转发并删除 Authorization 和 Gateway Header")
+    void forwardsWithoutSensitiveHeadersForValidCredential() {
         LokiPushAuthenticationFilter filter = new LokiPushAuthenticationFilter(properties());
         MockServerWebExchange exchange = MockServerWebExchange.from(
-                MockServerHttpRequest.post(GatewayRoutes.LOGGING_PUSH_PATH)
+                MockServerHttpRequest.post("/internal/logging/push")
                         .header(HttpHeaders.AUTHORIZATION, basic("alloy", "logging-secret"))
-                        .header(GatewayHttpHeaders.SECRET, "gateway-secret")
+                        .header("X-Gateway-Secret", "gateway-secret")
                         .build());
         AtomicBoolean forwarded = new AtomicBoolean();
 
         filter.filter(exchange, current -> {
             forwarded.set(true);
             assertThat(current.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION)).isNull();
-            assertThat(current.getRequest().getHeaders().get(GatewayHttpHeaders.SECRET)).isNull();
-            Boolean loggingPush = current.getAttribute(LokiPushAuthenticationFilter.LOGGING_PUSH_ATTRIBUTE);
-            assertThat(loggingPush).isTrue();
+            assertThat(current.getRequest().getHeaders().get("X-Gateway-Secret")).isNull();
             return Mono.empty();
         }).block();
 
@@ -48,8 +44,11 @@ class LokiPushAuthenticationFilterTest {
     void rejectsInvalidOrRepeatedAuthorization() {
         LokiPushAuthenticationFilter filter = new LokiPushAuthenticationFilter(properties());
         MockServerWebExchange exchange = MockServerWebExchange.from(
-                MockServerHttpRequest.post(GatewayRoutes.LOGGING_PUSH_PATH)
-                        .header(HttpHeaders.AUTHORIZATION, basic("alloy", "wrong"), basic("alloy", "logging-secret"))
+                MockServerHttpRequest.post("/internal/logging/push")
+                        .header(
+                                HttpHeaders.AUTHORIZATION,
+                                basic("alloy", "wrong"),
+                                basic("alloy", "logging-secret"))
                         .build());
         AtomicBoolean forwarded = new AtomicBoolean();
 
@@ -65,8 +64,8 @@ class LokiPushAuthenticationFilterTest {
     }
 
     /** 创建启用日志写入且包含固定测试凭据的配置。 */
-    private static GatewayProperties.Logging properties() {
-        GatewayProperties.Logging properties = new GatewayProperties.Logging();
+    private static LokiGatewayProperties properties() {
+        LokiGatewayProperties properties = new LokiGatewayProperties();
         properties.setEnabled(true);
         properties.setLokiOrigin("http://127.0.0.1:3100");
         properties.setUsername("alloy");

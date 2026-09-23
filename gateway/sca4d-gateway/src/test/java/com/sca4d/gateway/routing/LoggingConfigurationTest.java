@@ -22,6 +22,9 @@ class LoggingConfigurationTest {
                 .contains("StructuredLogEncoder")
                 .contains("<format>ecs</format>")
                 .contains("application.%d{yyyy-MM-dd}.%i.json.gz")
+                .contains("source=\"logging.logback.rollingpolicy.max-file-size\"")
+                .contains("source=\"logging.logback.rollingpolicy.max-history\"")
+                .contains("source=\"logging.logback.rollingpolicy.total-size-cap\"")
                 .contains("<appender-ref ref=\"CONSOLE\"/>")
                 .contains("<appender-ref ref=\"ECS_JSON_FILE\"/>");
         assertThat(resource("application.yml"))

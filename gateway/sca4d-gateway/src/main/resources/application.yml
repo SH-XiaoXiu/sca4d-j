@@ -12,13 +12,52 @@ spring:
     gateway:
       server:
         webflux:
+          trusted-proxies: ${SCA4DJ_GATEWAY_TRUSTED_PROXIES:}
+          httpserver:
+            customizer-enabled: true
           httpclient:
             connect-timeout: ${SCA4DJ_GATEWAY_CONNECT_TIMEOUT_MILLIS:3000}
             response-timeout: ${SCA4DJ_GATEWAY_RESPONSE_TIMEOUT:PT30S}
+          routes:
+            - id: sca4d-events-websocket
+              order: -300
+              uri: lb:ws://${sca4dj.gateway.backend-service-id}
+              predicates:
+                - Path=${SCA4DJ_GATEWAY_API_PREFIX:/api}/events/ws
+              filters:
+                - RegisteredServer=${SCA4DJ_GATEWAY_API_PREFIX:/api}
+            - id: sca4d-events-sse
+              order: -200
+              uri: lb://${sca4dj.gateway.backend-service-id}
+              predicates:
+                - Path=${SCA4DJ_GATEWAY_API_PREFIX:/api}/events
+              filters:
+                - RegisteredServer=${SCA4DJ_GATEWAY_API_PREFIX:/api}
+              metadata:
+                response-timeout: -1
+            - id: sca4d-callbacks
+              order: -100
+              uri: lb://${sca4dj.gateway.backend-service-id}
+              predicates:
+                - Path=/callbacks/{code}
+                - Method=POST
+              filters:
+                - RegisteredServer
+            - id: sca4d-api
+              uri: lb://${sca4dj.gateway.backend-service-id}
+              predicates:
+                - Path=${SCA4DJ_GATEWAY_API_PREFIX:/api}/**
+              filters:
+                - RegisteredServer=${SCA4DJ_GATEWAY_API_PREFIX:/api}
 
 logging:
   file:
     path: ${SCA4DJ_LOG_PATH:${SCA4DJ_LOG_ROOT:logs}/${spring.application.name}/${SCA4DJ_INSTANCE_ID:${HOSTNAME:local}}}
+  logback:
+    rollingpolicy:
+      max-file-size: ${SCA4DJ_LOG_MAX_FILE_SIZE:100MB}
+      max-history: ${SCA4DJ_LOG_MAX_HISTORY:30}
+      total-size-cap: ${SCA4DJ_LOG_TOTAL_SIZE_CAP:10GB}
   structured:
     json:
       exclude: sessionId
@@ -44,11 +83,14 @@ management:
 sca4dj:
   gateway:
     secret: ${SCA4DJ_GATEWAY_SECRET:}
+    backend-service-id: ${SCA4DJ_GATEWAY_BACKEND_SERVICE_ID:sca4d-server}
     lease-ttl: ${SCA4DJ_GATEWAY_LEASE_TTL:PT30S}
     health-interval: ${SCA4DJ_GATEWAY_HEALTH_INTERVAL:PT5S}
     health-timeout: ${SCA4DJ_GATEWAY_HEALTH_TIMEOUT:PT3S}
     logging:
       enabled: ${SCA4DJ_GATEWAY_LOGGING_ENABLED:false}
       loki-origin: ${SCA4DJ_GATEWAY_LOKI_ORIGIN:}
+      push-path: ${SCA4DJ_GATEWAY_LOGGING_PUSH_PATH:/internal/logging/push}
+      loki-path: ${SCA4DJ_GATEWAY_LOKI_PATH:/loki/api/v1/push}
       username: ${SCA4DJ_LOKI_PUSH_USERNAME:alloy}
       password: ${SCA4DJ_LOKI_PUSH_PASSWORD:}
