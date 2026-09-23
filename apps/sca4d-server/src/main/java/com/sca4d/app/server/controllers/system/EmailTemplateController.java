@@ -12,7 +12,7 @@ import com.sca4d.app.server.system.view.RenderedEmailView;
 import com.sca4d.core.api.annotation.Audit;
 import com.sca4d.core.api.annotation.AuditTarget;
 import com.sca4d.core.api.annotation.RequirePermission;
-import com.sca4d.core.api.notification.NotificationCode;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.Sort;
 import com.sca4d.core.spring.web.ApiResponse;
@@ -68,7 +68,7 @@ public class EmailTemplateController {
     /** @return 按分页和安全排序要求读取的模板及其变量集合 */
     @GetMapping
     @Operation(summary = "查询 Email 模板")
-    @RequirePermission(operation = SystemOperations.EMAIL_READ)
+    @RequirePermission(operation = SystemOperations.EMAIL_READ_VALUE)
     public @NotNull ApiResponse<Page<EmailTemplateView>> find(@NotNull ListParameters parameters) {
         return ApiResponse.ok(templates.find(parameters.resolve(LIST)).map(this::view));
     }
@@ -76,12 +76,12 @@ public class EmailTemplateController {
     /** 创建默认停用的完整多语言 Email 模板。 */
     @PostMapping
     @Operation(summary = "创建 Email 模板")
-    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE)
+    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE_VALUE)
     @Audit(operation = "system/email/template/create")
     public @NotNull ApiResponse<EmailTemplateView> create(
             @RequestBody @Valid @NotNull EmailTemplateRequest request) {
         EmailTemplate created = templates.create(
-                new NotificationCode(request.getNotificationCode()),
+                TreeCode.of(request.getNotificationCode()),
                 sources(request.getLocales()));
         return ApiResponse.created(
                 view(created),
@@ -91,7 +91,7 @@ public class EmailTemplateController {
     /** 读取一个完整 Email 模板，并发布 ETag。 */
     @GetMapping("/{templateId}")
     @Operation(summary = "查询 Email 模板详情")
-    @RequirePermission(operation = SystemOperations.EMAIL_READ)
+    @RequirePermission(operation = SystemOperations.EMAIL_READ_VALUE)
     public @NotNull ApiResponse<EmailTemplateView> get(@PathVariable long templateId) {
         EmailTemplate template = templates.loadById(templateId);
         return ApiResponse.ok(view(template));
@@ -101,14 +101,14 @@ public class EmailTemplateController {
     @PutMapping("/{templateId}")
     @IfMatch
     @Operation(summary = "替换 Email 模板")
-    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE)
+    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE_VALUE)
     @Audit(operation = "system/email/template/replace")
     public @NotNull ApiResponse<EmailTemplateView> replace(
             @PathVariable @AuditTarget(resourceType = RESOURCE_TYPE) long templateId,
             @RequestBody @Valid @NotNull EmailTemplateRequest request) {
         EmailTemplate updated = templates.replace(
                 templateId,
-                new NotificationCode(request.getNotificationCode()),
+                TreeCode.of(request.getNotificationCode()),
                 sources(request.getLocales()));
         return ApiResponse.ok(view(updated));
     }
@@ -117,7 +117,7 @@ public class EmailTemplateController {
     @PatchMapping("/{templateId}/status")
     @IfMatch
     @Operation(summary = "修改 Email 模板状态")
-    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE)
+    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE_VALUE)
     @Audit(operation = "system/email/template/status/change")
     public @NotNull ApiResponse<EmailTemplateView> setEnabled(
             @PathVariable @AuditTarget(resourceType = RESOURCE_TYPE) long templateId,
@@ -129,7 +129,7 @@ public class EmailTemplateController {
     /** 渲染未保存草稿，并返回完成主题检查与 HTML 清洗的内容。 */
     @PostMapping("/previews")
     @Operation(summary = "预览 Email 模板")
-    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE)
+    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE_VALUE)
     public @NotNull ApiResponse<RenderedEmailView> preview(
             @RequestBody @Valid @NotNull PreviewEmailTemplateRequest request) {
         return ApiResponse.ok(
@@ -144,7 +144,7 @@ public class EmailTemplateController {
     @DeleteMapping("/{templateId}")
     @IfMatch
     @Operation(summary = "删除 Email 模板")
-    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE)
+    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE_VALUE)
     @Audit(operation = "system/email/template/delete")
     public @NotNull ApiResponse<Void> delete(
             @PathVariable @AuditTarget(resourceType = RESOURCE_TYPE) long templateId) {

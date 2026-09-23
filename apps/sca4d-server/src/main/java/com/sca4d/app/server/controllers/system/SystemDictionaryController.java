@@ -54,7 +54,7 @@ public class SystemDictionaryController {
     /** @return 代码字典、动态字典及其全部选项的管理结果 */
     @GetMapping
     @Operation(summary = "查询系统字典")
-    @RequirePermission(operation = SystemOperations.DICTIONARIES_READ)
+    @RequirePermission(operation = SystemOperations.DICTIONARIES_READ_VALUE)
     public @NotNull ApiResponse<SystemDictionariesView> findAll() {
         return ApiResponse.ok(SystemDictionariesView.from(management.findAll()));
     }
@@ -67,7 +67,7 @@ public class SystemDictionaryController {
      */
     @GetMapping("/{key}/options")
     @Operation(summary = "查询字典选择项")
-    @RequirePermission(operation = SystemOperations.DICTIONARIES_READ)
+    @RequirePermission(operation = SystemOperations.DICTIONARIES_READ_VALUE)
     public @NotNull ApiResponse<DictionarySelectionView> options(@PathVariable @NotNull String key) {
         return ApiResponse.ok(new DictionarySelectionView(key, dictionaries.options(key)));
     }
@@ -75,7 +75,7 @@ public class SystemDictionaryController {
     /** 创建一个数据库动态字典。 */
     @PostMapping
     @Operation(summary = "创建动态字典")
-    @RequirePermission(operation = SystemOperations.DICTIONARIES_MANAGE)
+    @RequirePermission(operation = SystemOperations.DICTIONARIES_MANAGE_VALUE)
     @Audit(operation = "system/dictionary/create", payloadFactory = ApplicationAuditValues.DictionaryMutationDetails.class)
     public @NotNull ApiResponse<SystemDictionariesView> createDictionary(
             @RequestBody @Valid @NotNull CreateDictionaryRequest request) {
@@ -90,7 +90,7 @@ public class SystemDictionaryController {
     /** 按乐观版本修改一个数据库动态字典。 */
     @PutMapping("/{key}")
     @Operation(summary = "修改动态字典")
-    @RequirePermission(operation = SystemOperations.DICTIONARIES_MANAGE)
+    @RequirePermission(operation = SystemOperations.DICTIONARIES_MANAGE_VALUE)
     @Audit(operation = "system/dictionary/update", payloadFactory = ApplicationAuditValues.DictionaryMutationDetails.class)
     public @NotNull ApiResponse<SystemDictionariesView> updateDictionary(
             @PathVariable @NotNull String key,
@@ -107,7 +107,7 @@ public class SystemDictionaryController {
     /** 按乐观版本删除一个数据库动态字典及其数据库选项。 */
     @DeleteMapping("/{key}")
     @Operation(summary = "删除动态字典")
-    @RequirePermission(operation = SystemOperations.DICTIONARIES_MANAGE)
+    @RequirePermission(operation = SystemOperations.DICTIONARIES_MANAGE_VALUE)
     @Audit(operation = "system/dictionary/delete", payloadFactory = ApplicationAuditValues.DictionaryMutationDetails.class)
     public @NotNull ApiResponse<Void> deleteDictionary(
             @PathVariable @NotNull String key,
@@ -119,7 +119,7 @@ public class SystemDictionaryController {
     /** 给动态字典或可扩展代码字典新增数据库选项。 */
     @PostMapping("/{key}/options")
     @Operation(summary = "创建数据库字典项")
-    @RequirePermission(operation = SystemOperations.DICTIONARIES_MANAGE)
+    @RequirePermission(operation = SystemOperations.DICTIONARIES_MANAGE_VALUE)
     @Audit(operation = "system/dictionary/option/create", payloadFactory = ApplicationAuditValues.DictionaryMutationDetails.class)
     public @NotNull ApiResponse<SystemDictionariesView> createOption(
             @PathVariable @NotNull String key,
@@ -137,7 +137,7 @@ public class SystemDictionaryController {
     /** 按乐观版本修改一个数据库字典项；Java 代码项只读。 */
     @PutMapping("/{key}/options/{value}")
     @Operation(summary = "修改数据库字典项")
-    @RequirePermission(operation = SystemOperations.DICTIONARIES_MANAGE)
+    @RequirePermission(operation = SystemOperations.DICTIONARIES_MANAGE_VALUE)
     @Audit(operation = "system/dictionary/option/update", payloadFactory = ApplicationAuditValues.DictionaryMutationDetails.class)
     public @NotNull ApiResponse<SystemDictionariesView> updateOption(
             @PathVariable @NotNull String key,
@@ -157,7 +157,7 @@ public class SystemDictionaryController {
     /** 按乐观版本删除一个数据库字典项；Java 代码项只读。 */
     @DeleteMapping("/{key}/options/{value}")
     @Operation(summary = "删除数据库字典项")
-    @RequirePermission(operation = SystemOperations.DICTIONARIES_MANAGE)
+    @RequirePermission(operation = SystemOperations.DICTIONARIES_MANAGE_VALUE)
     @Audit(operation = "system/dictionary/option/delete", payloadFactory = ApplicationAuditValues.DictionaryMutationDetails.class)
     public @NotNull ApiResponse<Void> deleteOption(
             @PathVariable @NotNull String key,

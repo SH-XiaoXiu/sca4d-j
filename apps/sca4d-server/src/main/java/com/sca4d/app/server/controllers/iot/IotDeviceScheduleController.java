@@ -63,7 +63,7 @@ public class IotDeviceScheduleController {
     /** @return 新建并登记下一次触发时间的设备定时规则 */
     @PostMapping
     @Operation(summary = "创建设备 command 定时规则")
-    @RequirePermission(operation = IotOperations.DEVICES_OPERATE)
+    @RequirePermission(operation = IotOperations.DEVICES_OPERATE_VALUE)
     public @NotNull ApiResponse<IotDeviceScheduleView> create(
             @PathVariable long deviceId,
             @Valid @RequestBody @NotNull IotDeviceScheduleRequest request) {
@@ -80,7 +80,7 @@ public class IotDeviceScheduleController {
     /** @return Device 的定时规则页 */
     @GetMapping
     @Operation(summary = "查询设备定时规则")
-    @RequirePermission(operation = IotOperations.DEVICES_READ)
+    @RequirePermission(operation = IotOperations.DEVICES_READ_VALUE)
     public @NotNull ApiResponse<Page<IotDeviceScheduleView>> findAll(
             @PathVariable long deviceId,
             @NotNull PageRequest page) {
@@ -90,7 +90,7 @@ public class IotDeviceScheduleController {
     /** @return 指定 Device 的定时规则 */
     @GetMapping("/{scheduleId}")
     @Operation(summary = "查询设备定时规则详情")
-    @RequirePermission(operation = IotOperations.DEVICES_READ)
+    @RequirePermission(operation = IotOperations.DEVICES_READ_VALUE)
     public @NotNull ApiResponse<IotDeviceScheduleView> get(
             @PathVariable long deviceId,
             @PathVariable long scheduleId) {
@@ -100,7 +100,7 @@ public class IotDeviceScheduleController {
     /** @return 按乐观版本完整替换并恢复 ACTIVE 的定时规则 */
     @PutMapping("/{scheduleId}")
     @Operation(summary = "完整替换设备定时规则")
-    @RequirePermission(operation = IotOperations.DEVICES_OPERATE)
+    @RequirePermission(operation = IotOperations.DEVICES_OPERATE_VALUE)
     public @NotNull ApiResponse<IotDeviceScheduleView> replace(
             @PathVariable long deviceId,
             @PathVariable long scheduleId,
@@ -120,7 +120,7 @@ public class IotDeviceScheduleController {
     /** @return 按乐观版本暂停或恢复后的定时规则 */
     @PatchMapping("/{scheduleId}/status")
     @Operation(summary = "暂停或恢复设备定时规则")
-    @RequirePermission(operation = IotOperations.DEVICES_OPERATE)
+    @RequirePermission(operation = IotOperations.DEVICES_OPERATE_VALUE)
     public @NotNull ApiResponse<IotDeviceScheduleView> changeStatus(
             @PathVariable long deviceId,
             @PathVariable long scheduleId,
@@ -138,7 +138,7 @@ public class IotDeviceScheduleController {
     /** 永久取消规则；已经生成的下行继续遵守自己的状态机。 */
     @DeleteMapping("/{scheduleId}")
     @Operation(summary = "取消设备定时规则")
-    @RequirePermission(operation = IotOperations.DEVICES_OPERATE)
+    @RequirePermission(operation = IotOperations.DEVICES_OPERATE_VALUE)
     public @NotNull ApiResponse<Void> cancel(
             @PathVariable long deviceId,
             @PathVariable long scheduleId,
@@ -152,7 +152,7 @@ public class IotDeviceScheduleController {
     /** @return 一个规则每个计划时间的下行生成结果页 */
     @GetMapping("/{scheduleId}/executions")
     @Operation(summary = "查询设备定时执行结果")
-    @RequirePermission(operation = IotOperations.DEVICES_READ)
+    @RequirePermission(operation = IotOperations.DEVICES_READ_VALUE)
     public @NotNull ApiResponse<Page<IotDeviceScheduleExecutionView>> executions(
             @PathVariable long deviceId,
             @PathVariable long scheduleId,

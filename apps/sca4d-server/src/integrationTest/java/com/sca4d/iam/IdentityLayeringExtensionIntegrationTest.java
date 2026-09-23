@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationActionCode;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.AuthenticationPolicy;
 import com.sca4d.core.api.authentication.AuthenticationRequirement;
 import com.sca4d.core.api.authentication.Session;
@@ -15,6 +14,7 @@ import com.sca4d.core.api.authentication.SessionIdentityLoader;
 import com.sca4d.core.api.authentication.principalsession.PrincipalCodec;
 import com.sca4d.core.api.authentication.principalsession.PrincipalLoader;
 import com.sca4d.core.api.call.Call;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
@@ -109,9 +109,9 @@ class IdentityLayeringExtensionIntegrationTest {
 
     private static final RbacScope DELIVERY_ROLES = RbacScope.global(DELIVERY_RBAC);
 
-    private static final String DELIVERY_ORDER = "delivery-order";
+    private static final TreeCode DELIVERY_ORDER = TreeCode.ofSlash("DELIVERY/ORDER");
 
-    private static final String STORE_REPORT = "store-report";
+    private static final TreeCode STORE_REPORT = TreeCode.ofSlash("DELIVERY/STORE_REPORT");
 
     private static final Instant NOW = Instant.parse("2026-07-25T00:00:00Z");
 
@@ -132,11 +132,11 @@ class IdentityLayeringExtensionIntegrationTest {
                 }
 
                 @Override
-                public @NotNull Set<AuthenticationMethodCode> allowedMethods(
+                public @NotNull Set<TreeCode> allowedMethods(
                         @NotNull Account account,
                         @NotNull AuthenticationActionCode actionCode,
                         @NotNull List<Authentication> completedAuthentications) {
-                    return Set.of(new AuthenticationMethodCode("password"));
+                    return Set.of(TreeCode.ofSlash("AUTHENTICATION/PASSWORD"));
                 }
             };
         }
@@ -250,11 +250,11 @@ class IdentityLayeringExtensionIntegrationTest {
                 Map.of("principalId", rider.principalId()));
         assertThat(selected).isInstanceOf(Rider.class);
 
-        String operationCode = operations.actions().getFirst().operation().value();
+        TreeCode operationCode = operations.actions().getFirst().operation().code();
         Role role = rbac.createRole(DELIVERY_ROLES, "DISPATCHER", List.of(operationCode)).role();
         rbac.bindRole(DELIVERY_ROLES, rider.principalId(), role.code(), false);
         assertThat(rbac.findGrantedOperations(DELIVERY_ROLES, List.of(rider.principalId())).get(rider.principalId()))
-                .extracting(Operation::value)
+                .extracting(Operation::code)
                 .containsExactly(operationCode);
 
         Call call = new Call("extension-call", NOW);
@@ -290,7 +290,7 @@ class IdentityLayeringExtensionIntegrationTest {
                 List.of(
                         new Authentication(
                                 accountId,
-                                new AuthenticationMethodCode("phone-test"),
+                                TreeCode.ofSlash("AUTHENTICATION/PHONE_TEST"),
                                 Set.of(AuthenticationFactorKind.POSSESSION),
                                 NOW)),
                 resources,
@@ -458,17 +458,17 @@ class IdentityLayeringExtensionIntegrationTest {
 
     @SuppressWarnings("ClassCanBeRecord")
     private static final class SimpleResource implements Resource {
-        private final String type;
+        private final TreeCode type;
 
         private final String id;
 
-        private SimpleResource(String type, String id) {
+        private SimpleResource(TreeCode type, String id) {
             this.type = type;
             this.id = id;
         }
 
         @Override
-        public @NotNull String type() {
+        public @NotNull TreeCode type() {
             return type;
         }
 
@@ -534,14 +534,14 @@ class IdentityLayeringExtensionIntegrationTest {
 
         @Override
         @CheckReturnValue
-        public @NotNull @Unmodifiable Set<@NotNull String> resourceTypes() {
+        public @NotNull @Unmodifiable Set<@NotNull TreeCode> resourceTypes() {
             return Set.of(DELIVERY_ORDER);
         }
 
         @Override
         public void grant(
                 @NotNull Long principalId,
-                @NotNull String resourceType,
+                @NotNull TreeCode resourceType,
                 @NotNull String resourceId,
                 @NotNull Action action) {
             if (!allows(principalId, resourceType, resourceId, action)) {
@@ -552,7 +552,7 @@ class IdentityLayeringExtensionIntegrationTest {
         @Override
         public void revoke(
                 @NotNull Long principalId,
-                @NotNull String resourceType,
+                @NotNull TreeCode resourceType,
                 @NotNull String resourceId,
                 @NotNull Action action) {
             entries.removeIf(entry -> matches(entry, principalId, resourceType, resourceId, action));
@@ -562,7 +562,7 @@ class IdentityLayeringExtensionIntegrationTest {
         @CheckReturnValue
         public boolean allows(
                 @NotNull Long principalId,
-                @NotNull String resourceType,
+                @NotNull TreeCode resourceType,
                 @NotNull String resourceId,
                 @NotNull Action action) {
             return entries.stream().anyMatch(entry -> matches(entry, principalId, resourceType, resourceId, action));
@@ -572,7 +572,7 @@ class IdentityLayeringExtensionIntegrationTest {
         @CheckReturnValue
         public @NotNull @Unmodifiable List<@NotNull String> findAllowedResourceIds(
                 @NotNull Long principalId,
-                @NotNull String resourceType,
+                @NotNull TreeCode resourceType,
                 @NotNull Action action) {
             return entries.stream()
                     .filter(
@@ -588,7 +588,7 @@ class IdentityLayeringExtensionIntegrationTest {
         @CheckReturnValue
         public @NotNull @Unmodifiable List<@NotNull AclEntry> findEntries(
                 @NotNull Long principalId,
-                @NotNull String resourceType) {
+                @NotNull TreeCode resourceType) {
             return entries.stream()
                     .filter(
                             entry -> entry.principalId().equals(principalId)
@@ -602,7 +602,7 @@ class IdentityLayeringExtensionIntegrationTest {
         }
 
         @Override
-        public void revokeByResource(@NotNull String resourceType, @NotNull String resourceId) {
+        public void revokeByResource(@NotNull TreeCode resourceType, @NotNull String resourceId) {
             entries.removeIf(
                     entry -> entry.resourceType().equals(resourceType)
                             && entry.resourceId().equals(resourceId));
@@ -611,7 +611,7 @@ class IdentityLayeringExtensionIntegrationTest {
         private static boolean matches(
                 AclEntry entry,
                 Long principalId,
-                String resourceType,
+                TreeCode resourceType,
                 String resourceId,
                 Action action) {
             return entry.principalId().equals(principalId)

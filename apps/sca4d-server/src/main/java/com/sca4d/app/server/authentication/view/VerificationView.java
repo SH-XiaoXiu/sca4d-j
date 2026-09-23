@@ -1,7 +1,7 @@
 package com.sca4d.app.server.authentication.view;
 
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.AuthenticationProgress;
+import com.sca4d.core.api.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
@@ -47,7 +47,7 @@ public final class VerificationView {
                 checked.attemptId().value(),
                 checked.satisfied() ? "SATISFIED" : "FACTOR_REQUIRED",
                 checked.remainingFactorCount(),
-                checked.availableMethods().stream().map(AuthenticationMethodCode::value).toList(),
+                checked.availableMethods().stream().map(TreeCode::value).toList(),
                 checked.expiresAt());
     }
 

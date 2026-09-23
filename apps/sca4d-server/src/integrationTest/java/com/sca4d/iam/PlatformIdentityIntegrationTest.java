@@ -5,11 +5,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationActionCode;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.AuthenticationPolicy;
 import com.sca4d.core.api.authentication.AuthenticationRequirement;
 import com.sca4d.core.api.authentication.SessionControl;
 import com.sca4d.core.api.authentication.SessionIdentity;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.concurrent.VersionPreconditionFailedException;
 import com.sca4d.core.api.error.BusinessException;
@@ -94,11 +94,11 @@ class PlatformIdentityIntegrationTest {
                 }
 
                 @Override
-                public @NotNull Set<AuthenticationMethodCode> allowedMethods(
+                public @NotNull Set<TreeCode> allowedMethods(
                         @NotNull Account account,
                         @NotNull AuthenticationActionCode actionCode,
                         @NotNull List<Authentication> completedAuthentications) {
-                    return Set.of(new AuthenticationMethodCode("password"));
+                    return Set.of(TreeCode.ofSlash("AUTHENTICATION/PASSWORD"));
                 }
             };
         }

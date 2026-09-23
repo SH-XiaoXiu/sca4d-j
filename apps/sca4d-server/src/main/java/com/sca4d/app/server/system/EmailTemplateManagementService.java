@@ -1,9 +1,9 @@
 package com.sca4d.app.server.system;
 
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.i18n.LocaleCatalog;
 import com.sca4d.core.api.id.IdGenerator;
-import com.sca4d.core.api.notification.NotificationCode;
 import com.sca4d.core.api.notification.NotificationType;
 import com.sca4d.core.api.query.ListRequest;
 import com.sca4d.core.api.query.Page;
@@ -69,7 +69,7 @@ public class EmailTemplateManagementService {
     /** @param code 通知编码 @param submitted 按 Locale 提交的模板源码 @return 新建模板 */
     @Transactional
     public @NotNull EmailTemplate create(
-            @NotNull NotificationCode code,
+            @NotNull TreeCode code,
             @NotNull Map<String, EmailTemplateSource> submitted) {
         Map<String, EmailTemplateSource> checked = validate(code, submitted);
         long templateId = ids.nextId().value();
@@ -81,7 +81,7 @@ public class EmailTemplateManagementService {
     @Transactional
     public @NotNull EmailTemplate replace(
             long templateId,
-            @NotNull NotificationCode code,
+            @NotNull TreeCode code,
             @NotNull Map<String, EmailTemplateSource> submitted) {
         templates.replace(templateId, code, validate(code, submitted));
         return loadById(templateId);
@@ -123,7 +123,7 @@ public class EmailTemplateManagementService {
     }
 
     private @NotNull Map<String, EmailTemplateSource> validate(
-            @NotNull NotificationCode code,
+            @NotNull TreeCode code,
             @NotNull Map<String, EmailTemplateSource> submitted) {
         NotificationType<?> type = types.types()
                 .stream()

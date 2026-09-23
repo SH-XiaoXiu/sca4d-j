@@ -58,7 +58,7 @@ public class PasswordController {
     @Operation(summary = "修改当前账号密码")
     @Audit(operation = "authentication/account/password/replace")
     public @NotNull ApiResponse<Void> replace(
-            @CurrentAccount @AuditTarget(resourceType = Account.RESOURCE_TYPE) @NotNull Long accountId,
+            @CurrentAccount @AuditTarget(resourceType = Account.RESOURCE_TYPE_VALUE) @NotNull Long accountId,
             @RequestBody @Valid @NotNull ReplacePasswordRequest request) {
         passwords.replace(accountId, request.getPassword());
         return ApiResponse.noContent();

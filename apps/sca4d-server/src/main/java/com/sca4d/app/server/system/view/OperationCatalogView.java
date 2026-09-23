@@ -2,6 +2,7 @@ package com.sca4d.app.server.system.view;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.i18n.LocalizableText;
 import com.sca4d.core.api.i18n.MessageText;
 import com.sca4d.core.api.permission.OperationCatalog;
@@ -117,14 +118,14 @@ public final class OperationCatalogView {
             this.children = List.copyOf(children);
         }
 
-        private static @NotNull Node from(@NotNull OperationNode node, @Nullable String parentCode) {
+        private static @NotNull Node from(@NotNull OperationNode node, @Nullable TreeCode parentCode) {
             List<@NotNull Node> children = node.children()
                     .stream()
                     .map(child -> from(child, node.code()))
                     .toList();
             return new Node(
-                    node.code(),
-                    parentCode,
+                    node.code().value(),
+                    parentCode == null ? null : parentCode.value(),
                     node.nameKey(),
                     node.type(),
                     node.sortOrder(),
@@ -133,8 +134,8 @@ public final class OperationCatalogView {
 
         private static @NotNull Node from(@NotNull OperationNode.OperationAction item) {
             return new Node(
-                    item.code(),
-                    item.parentCode(),
+                    item.code().value(),
+                    item.parentCode() == null ? null : item.parentCode().value(),
                     item.nameKey(),
                     OperationNodeType.ACTION,
                     item.sortOrder(),

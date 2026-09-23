@@ -1,12 +1,12 @@
 package com.sca4d.app.server.preference;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.setting.PreferenceSetting;
 import com.sca4d.core.api.setting.PreferenceSettings;
 import com.sca4d.core.api.setting.SettingOwner;
 import com.sca4d.core.api.setting.SettingValue;
 import com.sca4d.core.spring.setting.SettingCatalog;
-import com.sca4d.iam.base.PlatformPrincipalCodec;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +19,8 @@ import java.util.Objects;
 public final class PreferenceService {
 
     private static final Logger LOG = LoggerFactory.getLogger(PreferenceService.class);
+
+    private static final @NotNull TreeCode PLATFORM_PRINCIPAL_OWNER = TreeCode.ofSegment("PLATFORM_PRINCIPAL");
 
     private final SettingCatalog catalog;
 
@@ -89,6 +91,6 @@ public final class PreferenceService {
         if (principalId <= 0) {
             throw new IllegalArgumentException("Principal 标识必须为正数");
         }
-        return new SettingOwner(PlatformPrincipalCodec.TYPE, Long.toString(principalId));
+        return new SettingOwner(PLATFORM_PRINCIPAL_OWNER, Long.toString(principalId));
     }
 }

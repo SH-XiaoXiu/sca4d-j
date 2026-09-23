@@ -1,6 +1,7 @@
 package com.sca4d.app.server.notification;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.region.Region;
 import com.sca4d.core.api.setting.SettingOwner;
@@ -68,15 +69,16 @@ public class NotificationSettingsService {
         if (!checked.isObject())
             throw new IllegalArgumentException("通知渠道偏好必须是 JSON object");
         checked.properties().forEach(typeEntry -> {
+            TreeCode typeCode = TreeCode.of(typeEntry.getKey());
             var type = types.types()
                     .stream()
-                    .filter(candidate -> candidate.code().value().equals(typeEntry.getKey()))
+                    .filter(candidate -> candidate.code().equals(typeCode))
                     .findFirst()
                     .orElseThrow(() -> new IllegalArgumentException("未知通知类型: " + typeEntry.getKey()));
             if (!typeEntry.getValue().isObject())
                 throw new IllegalArgumentException("通知类型偏好必须是 object");
             typeEntry.getValue().properties().forEach(channelEntry -> {
-                var channel = new com.sca4d.core.api.notification.NotificationChannel(channelEntry.getKey());
+                TreeCode channel = TreeCode.ofSegment(channelEntry.getKey());
                 if (!channelEntry.getValue().isBoolean()
                         || !type.definition().optionalChannels().containsKey(channel)) {
                     throw new IllegalArgumentException("只有可选渠道可以保存布尔偏好: " + typeEntry.getKey() + '/' + channel);

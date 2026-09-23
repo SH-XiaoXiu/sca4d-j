@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.setting.SettingCodec;
 import org.jetbrains.annotations.NotNull;
 
@@ -101,7 +101,7 @@ public final class AccountAuthenticationSettingsCodec implements SettingCodec<Ac
             }
             methods.add(
                     new AuthenticationMethodSettings(
-                            new AuthenticationMethodCode(methodCode.textValue()),
+                            TreeCode.ofSlash(methodCode.textValue()),
                             requireBoolean(method, "loginStartEnabled"),
                             requireBoolean(method, "loginAdditionalEnabled"),
                             requireBoolean(method, "sensitiveActionEnabled")));

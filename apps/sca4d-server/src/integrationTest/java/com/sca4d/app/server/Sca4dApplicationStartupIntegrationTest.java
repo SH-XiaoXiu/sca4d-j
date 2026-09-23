@@ -12,9 +12,10 @@ import com.sca4d.app.server.mapper.IotApplicationMapper;
 import com.sca4d.auth.passkey.credential.PasskeyCredential;
 import com.sca4d.auth.passkey.credential.mapper.PasskeyAccountState;
 import com.sca4d.auth.passkey.credential.mapper.PasskeyCredentialMapper;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.enums.BaseEnum;
 import com.sca4d.core.api.i18n.LocalizedFields;
+import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.setting.SettingOwner;
 import com.sca4d.core.api.setting.SettingValue;
 import com.sca4d.core.api.setting.Settings;
@@ -244,7 +245,7 @@ class Sca4dApplicationStartupIntegrationTest {
     @DisplayName("主数据库直接映射认证设置、Passkey 二进制值和应用 IoT 状态")
     void mapsDefaultDatabaseValues() {
         long accountId = 9_100_001L;
-        AuthenticationMethodCode methodCode = new AuthenticationMethodCode("passkey");
+        TreeCode methodCode = TreeCode.ofSlash("AUTHENTICATION/PASSKEY");
         byte[] userHandle = new byte[32];
         for (int index = 0; index < userHandle.length; index++) {
             userHandle[index] = (byte) index;
@@ -279,7 +280,7 @@ class Sca4dApplicationStartupIntegrationTest {
         assertThat(credential.publicKeyCose()).containsExactly(publicKeyCose);
         assertThat(credential.signatureCount()).isEqualTo(7);
 
-        SettingOwner accountOwner = new SettingOwner("account", Long.toString(accountId));
+        SettingOwner accountOwner = new SettingOwner(Account.RESOURCE_TYPE, Long.toString(accountId));
         SettingValue<AccountAuthenticationSettings> savedAuthentication = settings.replace(
                 AccountAuthenticationSettingConfiguration.ACCOUNT_POLICY,
                 accountOwner,

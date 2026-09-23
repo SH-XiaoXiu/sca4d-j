@@ -53,7 +53,7 @@ class AccountAuthenticationSettingsCodecTest {
                   "sensitiveActionFactorCount": 1,
                   "reusableAuthenticationMaximumAgeSeconds": 300,
                   "methods": [{
-                    "methodCode": "password",
+                    "methodCode": "AUTHENTICATION/PASSWORD",
                     "loginStartEnabled": true,
                     "loginAdditionalEnabled": true,
                     "sensitiveActionEnabled": true
@@ -69,7 +69,7 @@ class AccountAuthenticationSettingsCodecTest {
                   "sensitiveActionFactorCount": 1,
                   "reusableAuthenticationMaximumAgeSeconds": 300,
                   "methods": [{
-                    "methodCode": "password",
+                    "methodCode": "AUTHENTICATION/PASSWORD",
                     "loginStartEnabled": true,
                     "loginAdditionalEnabled": true,
                     "sensitiveActionEnabled": true
@@ -90,13 +90,13 @@ class AccountAuthenticationSettingsCodecTest {
                   "reusableAuthenticationMaximumAgeSeconds": 300,
                   "methods": [
                     {
-                      "methodCode": "password",
+                      "methodCode": "AUTHENTICATION/PASSWORD",
                       "loginStartEnabled": true,
                       "loginAdditionalEnabled": true,
                       "sensitiveActionEnabled": true
                     },
                     {
-                      "methodCode": "password",
+                      "methodCode": "AUTHENTICATION/PASSWORD",
                       "loginStartEnabled": false,
                       "loginAdditionalEnabled": true,
                       "sensitiveActionEnabled": true

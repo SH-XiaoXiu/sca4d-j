@@ -9,9 +9,9 @@ import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationActionCode;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.AuthenticationMethod;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.AuthenticationPolicy;
 import com.sca4d.core.api.authentication.AuthenticationRequirement;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.identity.Account;
@@ -42,7 +42,7 @@ public class PlatformAuthenticationPolicyService implements AuthenticationPolicy
 
     private final Settings settings;
 
-    private final Map<AuthenticationMethodCode, AuthenticationMethod<?>> installedMethods;
+    private final Map<TreeCode, AuthenticationMethod<?>> installedMethods;
 
     /**
      * 创建 Sca4d Server 动作认证策略。
@@ -54,12 +54,12 @@ public class PlatformAuthenticationPolicyService implements AuthenticationPolicy
             @NotNull Settings settings,
             @NotNull List<AuthenticationMethod<?>> installedMethods) {
         this.settings = Objects.requireNonNull(settings, "Settings 不能为空");
-        LinkedHashMap<AuthenticationMethodCode, AuthenticationMethod<?>> indexed = new LinkedHashMap<>();
+        LinkedHashMap<TreeCode, AuthenticationMethod<?>> indexed = new LinkedHashMap<>();
         for (AuthenticationMethod<?> method : List.copyOf(
                 Objects.requireNonNull(installedMethods, "已安装认证方法不能为空"))) {
             AuthenticationMethod<?> duplicate = indexed.putIfAbsent(method.code(), method);
             if (duplicate != null) {
-                throw new IllegalStateException("认证方法编码重复: " + method.code().value());
+                throw new IllegalStateException("认证方法编码重复: " + method.code());
             }
         }
         this.installedMethods = Map.copyOf(indexed);
@@ -136,7 +136,7 @@ public class PlatformAuthenticationPolicyService implements AuthenticationPolicy
     @Transactional(readOnly = true)
     public void assertMethodRemovalAllowed(
             @NotNull Account account,
-            @NotNull AuthenticationMethodCode unavailableMethod) {
+            @NotNull TreeCode unavailableMethod) {
         if (!allowsMethodUnavailable(account, unavailableMethod)) {
             throw new BusinessException(CoreErrorCode.CONFLICT);
         }
@@ -148,9 +148,9 @@ public class PlatformAuthenticationPolicyService implements AuthenticationPolicy
     @Transactional(readOnly = true)
     public boolean allowsMethodUnavailable(
             @NotNull Account account,
-            @NotNull AuthenticationMethodCode unavailableMethod) {
+            @NotNull TreeCode unavailableMethod) {
         Account checkedAccount = Objects.requireNonNull(account, "认证账号不能为空");
-        AuthenticationMethodCode excluded = Objects.requireNonNull(
+        TreeCode excluded = Objects.requireNonNull(
                 unavailableMethod,
                 "不可用认证方法编码不能为空");
         AccountAuthenticationSettings current = settingsByAccountId(checkedAccount.accountId());
@@ -180,7 +180,7 @@ public class PlatformAuthenticationPolicyService implements AuthenticationPolicy
      */
     @Override
     @Transactional(readOnly = true)
-    public @NotNull Set<AuthenticationMethodCode> allowedMethods(
+    public @NotNull Set<TreeCode> allowedMethods(
             @NotNull Account account,
             @NotNull AuthenticationActionCode actionCode,
             @NotNull List<Authentication> completedAuthentications) {
@@ -274,7 +274,7 @@ public class PlatformAuthenticationPolicyService implements AuthenticationPolicy
             AccountAuthenticationSettings replacement,
             java.util.function.Predicate<AuthenticationMethodSettings> enabled,
             Account account,
-            AuthenticationMethodCode excludedMethod) {
+            TreeCode excludedMethod) {
         EnumSet<AuthenticationFactorKind> kinds = EnumSet.noneOf(AuthenticationFactorKind.class);
         for (AuthenticationMethodSettings configured : replacement.methods().values()) {
             AuthenticationMethod<?> installed = installedMethods.get(configured.methodCode());
@@ -294,7 +294,7 @@ public class PlatformAuthenticationPolicyService implements AuthenticationPolicy
     private boolean satisfies(
             AccountAuthenticationSettings current,
             Account account,
-            AuthenticationMethodCode excludedMethod) {
+            TreeCode excludedMethod) {
         // 分别计算排除方法后的登录入口、全部登录因素和敏感动作因素。
         Set<AuthenticationFactorKind> loginStartKinds = factorKinds(
                 current,

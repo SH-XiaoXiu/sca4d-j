@@ -5,8 +5,8 @@ import com.sca4d.auth.sharedsecret.SharedSecretAuthenticationMethod;
 import com.sca4d.auth.sharedsecret.SharedSecretProof;
 import com.sca4d.auth.x509.X509AuthenticationMethod;
 import com.sca4d.auth.x509.X509TransportProof;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.AuthenticationSubmission;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.utils.TextUtils;
 import com.sca4d.iot.api.DeviceAccessMethod;
 import com.sca4d.iot.api.connection.DeviceConnectionRequest;
@@ -54,7 +54,7 @@ public final class Sca4dEmqxDeviceConnectionRequestFactory implements EmqxDevice
                     MqttDeviceConnection.clientId(input.clientId()),
                     TextUtils.requireText(input.password(), "Session Token"));
         }
-        AuthenticationMethodCode methodCode = accessMethod.authenticationMethodCode()
+        TreeCode methodCode = accessMethod.authenticationMethodCode()
                 .orElseThrow(() -> new IllegalArgumentException("Account 接入缺少认证方法编码"));
         if (SharedSecretAuthenticationMethod.CODE.equals(methodCode)) {
             if (StrUtil.isNotBlank(input.certificatePem())) {

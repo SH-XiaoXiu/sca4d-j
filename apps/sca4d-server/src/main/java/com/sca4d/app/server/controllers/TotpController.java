@@ -143,7 +143,7 @@ public class TotpController {
     @Operation(summary = "激活 TOTP Credential")
     @Audit(operation = "authentication/account/totp/activate")
     public @NotNull ApiResponse<TotpCredentialView> activate(
-            @CurrentAccount @AuditTarget(resourceType = Account.RESOURCE_TYPE) @NotNull Long accountId,
+            @CurrentAccount @AuditTarget(resourceType = Account.RESOURCE_TYPE_VALUE) @NotNull Long accountId,
             @RequestBody @NotNull TotpCredentialRequest request) {
         TotpCredential credential = totp.activate(accountId, request.getEnrollmentId(), request.getCode());
         return ApiResponse.created(
@@ -163,7 +163,7 @@ public class TotpController {
     @Operation(summary = "替换 TOTP Credential")
     @Audit(operation = "authentication/account/totp/replace")
     public @NotNull ApiResponse<TotpCredentialView> replace(
-            @CurrentAccount @AuditTarget(resourceType = Account.RESOURCE_TYPE) @NotNull Long accountId,
+            @CurrentAccount @AuditTarget(resourceType = Account.RESOURCE_TYPE_VALUE) @NotNull Long accountId,
             @RequestBody @NotNull TotpCredentialRequest request) {
         TotpCredential credential = totp.replace(
                 accountId,
@@ -184,7 +184,7 @@ public class TotpController {
     @Operation(summary = "删除 TOTP Credential")
     @Audit(operation = "authentication/account/totp/delete")
     public @NotNull ApiResponse<Void> delete(
-            @CurrentAccount @AuditTarget(resourceType = Account.RESOURCE_TYPE) @NotNull Account account) {
+            @CurrentAccount @AuditTarget(resourceType = Account.RESOURCE_TYPE_VALUE) @NotNull Account account) {
         totp.delete(account);
         return ApiResponse.noContent();
     }

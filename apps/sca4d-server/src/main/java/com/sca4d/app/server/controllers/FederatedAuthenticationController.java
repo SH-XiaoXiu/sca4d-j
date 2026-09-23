@@ -210,7 +210,7 @@ public class FederatedAuthenticationController {
     @RequireAuthentication(AuthenticationActions.FEDERATED_LINK_CODE)
     @Audit(operation = "authentication/account/federated-identity/link")
     public @NotNull ApiResponse<FederatedIdentityView> link(
-            @CurrentAccount @AuditTarget(resourceType = Account.RESOURCE_TYPE) @NotNull Account account,
+            @CurrentAccount @AuditTarget(resourceType = Account.RESOURCE_TYPE_VALUE) @NotNull Account account,
             @RequestBody @Valid @NotNull FederatedProofRequest request,
             @NotNull HttpServletRequest httpRequest) {
         FederatedCompletedAuthorization completed = authorizationStore
@@ -238,7 +238,7 @@ public class FederatedAuthenticationController {
     @RequireAuthentication(AuthenticationActions.FEDERATED_UNLINK_CODE)
     @Audit(operation = "authentication/account/federated-identity/unlink")
     public @NotNull ApiResponse<Void> unlink(
-            @CurrentAccount @AuditTarget(resourceType = Account.RESOURCE_TYPE) @NotNull Account account,
+            @CurrentAccount @AuditTarget(resourceType = Account.RESOURCE_TYPE_VALUE) @NotNull Account account,
             @PathVariable long identityId,
             @RequestParam long version) {
         identityBindings.unlink(identityId, account.accountId(), version);

@@ -107,7 +107,7 @@ public class FileController {
     @RequirePermission(resourceResolver = FileResourceResolver.class, action = Action.WRITE_VALUE)
     @Audit(operation = "storage/file/upload/complete")
     public @NotNull ApiResponse<Void> completeUpload(
-            @AuditTarget(resourceType = StoredFile.RESOURCE_TYPE) @PathVariable long fileId,
+            @AuditTarget(resourceType = StoredFile.RESOURCE_TYPE_VALUE) @PathVariable long fileId,
             @CurrentPrincipal @NotNull Long currentPrincipalId) {
         files.completeUpload(fileId, new PlatformPrincipal(currentPrincipalId));
         return ApiResponse.noContent();

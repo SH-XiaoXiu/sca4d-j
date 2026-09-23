@@ -5,9 +5,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
@@ -93,7 +93,7 @@ class PlatformPrincipalSelectionTest {
                 List.of(
                         new Authentication(
                                 account.accountId(),
-                                new AuthenticationMethodCode("password"),
+                                TreeCode.ofSlash("AUTHENTICATION/PASSWORD"),
                                 Set.of(AuthenticationFactorKind.KNOWLEDGE),
                                 NOW)),
                 resources,

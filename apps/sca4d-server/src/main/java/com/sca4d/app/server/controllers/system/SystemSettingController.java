@@ -41,7 +41,7 @@ public class SystemSettingController {
     /** @return 当前应用全部设置分组、定义、值和维护来源 */
     @GetMapping
     @Operation(summary = "查询系统设置")
-    @RequirePermission(operation = SystemOperations.SETTINGS_READ)
+    @RequirePermission(operation = SystemOperations.SETTINGS_READ_VALUE)
     public @NotNull ApiResponse<SystemSettingsView> findAll() {
         return ApiResponse.ok(SystemSettingsView.from(settings.findAll()));
     }
@@ -50,7 +50,7 @@ public class SystemSettingController {
     @PutMapping("/{key}")
     @IfMatch
     @Operation(summary = "修改系统设置")
-    @RequirePermission(operation = SystemOperations.SETTINGS_MANAGE)
+    @RequirePermission(operation = SystemOperations.SETTINGS_MANAGE_VALUE)
     @Audit(operation = "system/setting/replace")
     public @NotNull ApiResponse<SystemSettingsView> replace(
             @PathVariable @NotNull String key,
@@ -63,7 +63,7 @@ public class SystemSettingController {
     @DeleteMapping("/{key}")
     @IfMatch
     @Operation(summary = "恢复系统设置默认值")
-    @RequirePermission(operation = SystemOperations.SETTINGS_MANAGE)
+    @RequirePermission(operation = SystemOperations.SETTINGS_MANAGE_VALUE)
     @Audit(operation = "system/setting/reset")
     public @NotNull ApiResponse<SystemSettingsView> reset(@PathVariable @NotNull String key) {
         settings.reset(key);

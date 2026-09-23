@@ -52,7 +52,7 @@ public class IotDeviceDataController {
     /** @return Device 当前连接、reported 和 desired 权威投影 */
     @GetMapping("/runtime")
     @Operation(summary = "查询 Device 当前运行投影")
-    @RequirePermission(operation = IotOperations.DEVICES_READ)
+    @RequirePermission(operation = IotOperations.DEVICES_READ_VALUE)
     public @NotNull ApiResponse<IotDeviceRuntimeView> runtime(@PathVariable long deviceId) {
         return ApiResponse.ok(IotDeviceRuntimeView.from(runtime.read(deviceId)));
     }
@@ -60,7 +60,7 @@ public class IotDeviceDataController {
     /** @return Device 下行消息页 */
     @GetMapping("/downlinks")
     @Operation(summary = "查询 Device 下行历史")
-    @RequirePermission(operation = IotOperations.DEVICES_READ)
+    @RequirePermission(operation = IotOperations.DEVICES_READ_VALUE)
     public @NotNull ApiResponse<Page<IotDownlinkMessageView>> downlinks(
             @PathVariable long deviceId,
             @NotNull PageRequest page) {
@@ -70,7 +70,7 @@ public class IotDeviceDataController {
     /** @return Device 业务 ACK 页 */
     @GetMapping("/acknowledgements")
     @Operation(summary = "查询 Device ACK 历史")
-    @RequirePermission(operation = IotOperations.DEVICES_READ)
+    @RequirePermission(operation = IotOperations.DEVICES_READ_VALUE)
     public @NotNull ApiResponse<Page<IotAcknowledgementView>> acknowledgements(
             @PathVariable long deviceId,
             @NotNull PageRequest page) {
@@ -80,7 +80,7 @@ public class IotDeviceDataController {
     /** @return Device 离散事件页 */
     @GetMapping("/events")
     @Operation(summary = "查询 Device 事件历史")
-    @RequirePermission(operation = IotOperations.DEVICES_READ)
+    @RequirePermission(operation = IotOperations.DEVICES_READ_VALUE)
     public @NotNull ApiResponse<Page<IotDeviceEventView>> events(
             @PathVariable long deviceId,
             @NotNull PageRequest page) {
@@ -90,7 +90,7 @@ public class IotDeviceDataController {
     /** @return 半开时间范围内的属性 Telemetry */
     @GetMapping("/telemetry")
     @Operation(summary = "查询 Device Telemetry")
-    @RequirePermission(operation = IotOperations.DEVICES_READ)
+    @RequirePermission(operation = IotOperations.DEVICES_READ_VALUE)
     public @NotNull ApiResponse<List<IotTelemetryView>> telemetry(
             @PathVariable long deviceId,
             @RequestParam @NotNull String propertyCode,

@@ -14,6 +14,7 @@ import com.sca4d.auth.password.PasswordAuthenticationMethod;
 import com.sca4d.auth.session.RedisSessionGeneration;
 import com.sca4d.auth.session.SaTokenSessionManager;
 import com.sca4d.core.api.authentication.Session;
+import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountDirectory;
@@ -862,7 +863,7 @@ class SessionLifecycleIntegrationTest {
         assertThat(initial.resources(principal.principalId())).isEmpty();
         long establishedGeneration = generations.current(account.accountId());
 
-        String operationCode = operations.actions().getFirst().operation().value();
+        TreeCode operationCode = operations.actions().getFirst().operation().code();
         Role refreshRole = rbac.createRole(
                 "SESSION_REFRESH_TEST",
                 LocalizedFields.of(
@@ -885,7 +886,7 @@ class SessionLifecycleIntegrationTest {
         assertThat(refreshed.resources(principal.principalId()))
                 .filteredOn(Operation.class::isInstance)
                 .map(Operation.class::cast)
-                .extracting(Operation::value)
+                .extracting(Operation::code)
                 .contains(operationCode);
         assertThat(refreshed.id()).isEqualTo(initial.id());
     }

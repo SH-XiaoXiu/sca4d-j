@@ -6,7 +6,7 @@ import com.sca4d.auth.passkey.PasskeyAuthenticationMethod;
 import com.sca4d.auth.password.PasswordAuthenticationMethod;
 import com.sca4d.auth.sms.SmsCodeAuthenticationMethod;
 import com.sca4d.auth.totp.TotpAuthenticationMethod;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
+import com.sca4d.core.api.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -28,7 +28,7 @@ public final class AccountAuthenticationSettings {
 
     private final Duration reusableAuthenticationMaximumAge;
 
-    private final Map<AuthenticationMethodCode, AuthenticationMethodSettings> methods;
+    private final Map<TreeCode, AuthenticationMethodSettings> methods;
 
     /**
      * 创建账号认证设置。
@@ -55,12 +55,12 @@ public final class AccountAuthenticationSettings {
         if (maximumAge.isZero() || maximumAge.isNegative()) {
             throw new IllegalArgumentException("可复用认证最大年龄必须为正数");
         }
-        LinkedHashMap<AuthenticationMethodCode, AuthenticationMethodSettings> indexed = new LinkedHashMap<>();
+        LinkedHashMap<TreeCode, AuthenticationMethodSettings> indexed = new LinkedHashMap<>();
         for (AuthenticationMethodSettings method : List.copyOf(
                 Objects.requireNonNull(methods, "认证方法设置不能为空"))) {
             AuthenticationMethodSettings duplicate = indexed.putIfAbsent(method.methodCode(), method);
             if (duplicate != null) {
-                throw new IllegalArgumentException("认证方法设置重复: " + method.methodCode().value());
+                throw new IllegalArgumentException("认证方法设置重复: " + method.methodCode());
             }
         }
         this.loginFactorCount = loginFactorCount;
@@ -124,7 +124,7 @@ public final class AccountAuthenticationSettings {
     }
 
     /** 返回按方法编码索引的不可修改认证方法设置。 */
-    public @NotNull @Unmodifiable Map<AuthenticationMethodCode, AuthenticationMethodSettings> methods() {
+    public @NotNull @Unmodifiable Map<TreeCode, AuthenticationMethodSettings> methods() {
         return methods;
     }
 }

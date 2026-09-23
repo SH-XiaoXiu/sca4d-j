@@ -90,7 +90,7 @@ public class PasskeyController {
     @CurrentPrincipal(selection = PlatformPrincipalSelection.class)
     @Audit(operation = "authentication/account/passkey/register")
     public @NotNull ApiResponse<PasskeyCredentialView> register(
-            @CurrentAccount @AuditTarget(resourceType = Account.RESOURCE_TYPE) @NotNull Account account,
+            @CurrentAccount @AuditTarget(resourceType = Account.RESOURCE_TYPE_VALUE) @NotNull Account account,
             @RequestBody @Valid @NotNull PasskeyRegistrationRequest request) {
         PasskeyCredentialView created = PasskeyCredentialView.from(
                 registrations.finish(

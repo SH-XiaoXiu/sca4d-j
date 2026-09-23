@@ -59,7 +59,7 @@ public class PlatformNotificationConfiguration {
         return recipient -> Locale.forLanguageTag(
                 settings.get(
                         LANGUAGE,
-                        new SettingOwner(recipient.type().value(), recipient.id())));
+                        new SettingOwner(recipient.type(), recipient.id())));
     }
 
     /** @return 从 Account 设置读取具体应用业务区域的解析器 */
@@ -69,7 +69,7 @@ public class PlatformNotificationConfiguration {
                 new Region(
                         settings.get(
                                 REGION,
-                                new SettingOwner(recipient.type().value(), recipient.id()))));
+                                new SettingOwner(recipient.type(), recipient.id()))));
     }
 
     /** @return 按类型化电话目的地区域选择此应用 SMS 路由的解析器 */

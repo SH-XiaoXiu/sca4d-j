@@ -61,7 +61,7 @@ public final class CurrentSessionView {
                         .flatMap(principal -> checked.resources(principal.principalId()).stream())
                         .filter(Operation.class::isInstance)
                         .map(Operation.class::cast)
-                        .map(Operation::value)
+                        .map(operation -> operation.code().value())
                         .distinct()
                         .sorted()
                         .toList());

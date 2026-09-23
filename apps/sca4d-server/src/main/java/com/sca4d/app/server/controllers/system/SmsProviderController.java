@@ -51,14 +51,14 @@ public final class SmsProviderController {
 
     /** @return 全部未删除 SMS Provider */
     @GetMapping
-    @RequirePermission(operation = SystemOperations.SMS_READ)
+    @RequirePermission(operation = SystemOperations.SMS_READ_VALUE)
     public ApiResponse<List<SmsProviderView>> providers() {
         return ApiResponse.ok(sms.providers().stream().map(SmsProviderView::from).toList());
     }
 
     /** 创建默认停用 Provider。 */
     @PostMapping
-    @RequirePermission(operation = SystemOperations.SMS_MANAGE)
+    @RequirePermission(operation = SystemOperations.SMS_MANAGE_VALUE)
     @Audit(operation = "system/sms/provider/create")
     public ApiResponse<SmsProviderView> createProvider(@RequestBody @Valid SmsProviderRequest request) {
         var created = sms.createProvider(
@@ -72,7 +72,7 @@ public final class SmsProviderController {
 
     /** 读取 Provider 详情并发布 ETag。 */
     @GetMapping("/{providerId}")
-    @RequirePermission(operation = SystemOperations.SMS_READ)
+    @RequirePermission(operation = SystemOperations.SMS_READ_VALUE)
     public ApiResponse<SmsProviderView> provider(@PathVariable long providerId) {
         return ApiResponse.ok(SmsProviderView.from(sms.provider(providerId)));
     }
@@ -80,7 +80,7 @@ public final class SmsProviderController {
     /** 按 `If-Match` 完整替换停用 Provider。 */
     @PutMapping("/{providerId}")
     @IfMatch
-    @RequirePermission(operation = SystemOperations.SMS_MANAGE)
+    @RequirePermission(operation = SystemOperations.SMS_MANAGE_VALUE)
     @Audit(operation = "system/sms/provider/replace")
     public ApiResponse<SmsProviderView> replaceProvider(
             @PathVariable @AuditTarget(resourceType = PROVIDER_RESOURCE) long providerId,
@@ -98,7 +98,7 @@ public final class SmsProviderController {
     /** 按 `If-Match` 修改 Provider 状态。 */
     @PatchMapping("/{providerId}/status")
     @IfMatch
-    @RequirePermission(operation = SystemOperations.SMS_MANAGE)
+    @RequirePermission(operation = SystemOperations.SMS_MANAGE_VALUE)
     @Audit(operation = "system/sms/provider/status/change")
     public ApiResponse<SmsProviderView> setProviderEnabled(
             @PathVariable @AuditTarget(resourceType = PROVIDER_RESOURCE) long providerId,
@@ -109,7 +109,7 @@ public final class SmsProviderController {
     /** 按 `If-Match` 删除停用且没有绑定的 Provider。 */
     @DeleteMapping("/{providerId}")
     @IfMatch
-    @RequirePermission(operation = SystemOperations.SMS_MANAGE)
+    @RequirePermission(operation = SystemOperations.SMS_MANAGE_VALUE)
     @Audit(operation = "system/sms/provider/delete")
     public ApiResponse<Void> deleteProvider(
             @PathVariable @AuditTarget(resourceType = PROVIDER_RESOURCE) long providerId) {
@@ -119,14 +119,14 @@ public final class SmsProviderController {
 
     /** @return Provider 的全部未删除模板绑定 */
     @GetMapping("/{providerId}/bindings")
-    @RequirePermission(operation = SystemOperations.SMS_READ)
+    @RequirePermission(operation = SystemOperations.SMS_READ_VALUE)
     public ApiResponse<List<SmsBindingView>> bindings(@PathVariable long providerId) {
         return ApiResponse.ok(sms.bindings(providerId).stream().map(SmsBindingView::from).toList());
     }
 
     /** 创建默认停用的 Provider 模板绑定。 */
     @PostMapping("/{providerId}/bindings")
-    @RequirePermission(operation = SystemOperations.SMS_MANAGE)
+    @RequirePermission(operation = SystemOperations.SMS_MANAGE_VALUE)
     @Audit(operation = "system/sms/binding/create")
     public ApiResponse<SmsBindingView> createBinding(
             @PathVariable @AuditTarget(resourceType = PROVIDER_RESOURCE) long providerId,
@@ -146,7 +146,7 @@ public final class SmsProviderController {
 
     /** 读取 Provider 模板绑定详情并发布 ETag。 */
     @GetMapping("/{providerId}/bindings/{bindingId}")
-    @RequirePermission(operation = SystemOperations.SMS_READ)
+    @RequirePermission(operation = SystemOperations.SMS_READ_VALUE)
     public ApiResponse<SmsBindingView> binding(@PathVariable long providerId, @PathVariable long bindingId) {
         return ApiResponse.ok(SmsBindingView.from(sms.binding(providerId, bindingId)));
     }
@@ -154,7 +154,7 @@ public final class SmsProviderController {
     /** 按 `If-Match` 完整替换停用绑定。 */
     @PutMapping("/{providerId}/bindings/{bindingId}")
     @IfMatch
-    @RequirePermission(operation = SystemOperations.SMS_MANAGE)
+    @RequirePermission(operation = SystemOperations.SMS_MANAGE_VALUE)
     @Audit(operation = "system/sms/binding/replace")
     public ApiResponse<SmsBindingView> replaceBinding(
             @PathVariable long providerId,
@@ -176,7 +176,7 @@ public final class SmsProviderController {
     /** 按 `If-Match` 修改绑定状态。 */
     @PatchMapping("/{providerId}/bindings/{bindingId}/status")
     @IfMatch
-    @RequirePermission(operation = SystemOperations.SMS_MANAGE)
+    @RequirePermission(operation = SystemOperations.SMS_MANAGE_VALUE)
     @Audit(operation = "system/sms/binding/status/change")
     public ApiResponse<SmsBindingView> setBindingEnabled(
             @PathVariable long providerId,
@@ -188,7 +188,7 @@ public final class SmsProviderController {
     /** 按 `If-Match` 删除停用绑定。 */
     @DeleteMapping("/{providerId}/bindings/{bindingId}")
     @IfMatch
-    @RequirePermission(operation = SystemOperations.SMS_MANAGE)
+    @RequirePermission(operation = SystemOperations.SMS_MANAGE_VALUE)
     @Audit(operation = "system/sms/binding/delete")
     public ApiResponse<Void> deleteBinding(
             @PathVariable long providerId,

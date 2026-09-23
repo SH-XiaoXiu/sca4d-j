@@ -111,7 +111,7 @@ public final class OperationLogView {
                 entry.actor().principalId(),
                 checked.principalDisplayName(),
                 entry.operation().id(),
-                target == null ? null : target.type(),
+                target == null ? null : target.type().value(),
                 target == null ? null : target.id(),
                 entry.result().name(),
                 payload == null ? null : payload.type(),

@@ -1,6 +1,6 @@
 package com.sca4d.app.server.authentication;
 
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
+import com.sca4d.core.api.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -9,7 +9,7 @@ import java.util.Objects;
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public final class AuthenticationMethodSettings {
 
-    private final AuthenticationMethodCode methodCode;
+    private final TreeCode methodCode;
 
     private final boolean loginStartEnabled;
 
@@ -26,7 +26,7 @@ public final class AuthenticationMethodSettings {
      * @param sensitiveActionEnabled 是否允许该方法认证登录后的敏感动作
      */
     public AuthenticationMethodSettings(
-            @NotNull AuthenticationMethodCode methodCode,
+            @NotNull TreeCode methodCode,
             boolean loginStartEnabled,
             boolean loginAdditionalEnabled,
             boolean sensitiveActionEnabled) {
@@ -37,7 +37,7 @@ public final class AuthenticationMethodSettings {
     }
 
     /** 返回认证模块声明的稳定方法编码。 */
-    public @NotNull AuthenticationMethodCode methodCode() {
+    public @NotNull TreeCode methodCode() {
         return methodCode;
     }
 
