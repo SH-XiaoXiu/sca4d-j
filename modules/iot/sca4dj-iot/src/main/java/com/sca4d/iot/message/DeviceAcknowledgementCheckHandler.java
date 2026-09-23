@@ -1,12 +1,10 @@
 package com.sca4d.iot.message;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.messaging.HandlingDecision;
 import com.sca4d.core.api.messaging.IncomingMessage;
-import com.sca4d.core.api.messaging.JacksonMessageCodec;
 import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.api.messaging.MessageHandler;
 import com.sca4d.iot.api.change.DeviceChangeArea;
@@ -55,17 +53,13 @@ public class DeviceAcknowledgementCheckHandler implements MessageHandler<DeviceA
             @NotNull DeviceChangeNotifier changes,
             @NotNull DistributedLock distributedLock,
             @NotNull TransactionTemplate transactions,
-            @NotNull ObjectMapper json) {
+            @NotNull MessageCodec<DeviceAcknowledgementCheck> codec) {
         this.downlinks = Objects.requireNonNull(downlinks, "Downlink Repository 不能为空");
         this.messages = Objects.requireNonNull(messages, "下行消息发布器不能为空");
         this.clock = Objects.requireNonNull(clock, "ACK 超时时钟不能为空");
         this.changes = Objects.requireNonNull(changes, "Device 变化通知器不能为空");
         this.distributedLock = Objects.requireNonNull(distributedLock, "ACK 超时分布式锁不能为空");
-        this.codec = new JacksonMessageCodec<>(
-                DeviceAcknowledgementCheck.CODE,
-                DeviceAcknowledgementCheck.PROTOCOL_VERSION,
-                DeviceAcknowledgementCheck.class,
-                json);
+        this.codec = Objects.requireNonNull(codec, "ACK 超时消息 Codec 不能为空");
         this.transactions = Objects.requireNonNull(transactions, "ACK 超时事务模板不能为空");
     }
 

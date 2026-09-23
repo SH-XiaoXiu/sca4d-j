@@ -60,7 +60,11 @@ public final class StoredSetting {
             @Nullable Integer encryptionContextVersion,
             boolean synchronizedFromEnvironment,
             long version) {
-        this.owner = new SettingOwner(TreeCode.of(ownerType), ownerId);
+        this.owner = new SettingOwner(
+                ownerType.indexOf('/') < 0 && ownerType.indexOf(':') < 0
+                        ? TreeCode.ofSegment(ownerType)
+                        : TreeCode.of(ownerType),
+                ownerId);
         this.key = Objects.requireNonNull(key, "设置键不能为空");
         if (schemaVersion < 1) {
             throw new IllegalStateException("数据库设置结构版本必须为正数: " + key);

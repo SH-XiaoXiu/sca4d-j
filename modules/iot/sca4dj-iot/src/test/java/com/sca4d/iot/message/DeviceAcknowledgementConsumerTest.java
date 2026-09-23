@@ -1,12 +1,13 @@
 package com.sca4d.iot.message;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.messaging.HandlingDecision;
 import com.sca4d.core.api.messaging.IncomingMessage;
+import com.sca4d.core.api.messaging.JacksonMessageCodec;
 import com.sca4d.core.api.messaging.MessageId;
 import com.sca4d.iot.api.message.DeviceAcknowledgement;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +25,13 @@ class DeviceAcknowledgementHandlerTest {
     @DisplayName("消费可靠 ACK 请求时委托消息级状态转换")
     void delegatesAcknowledgementRequest() {
         DeviceAcknowledgementService acknowledgements = mock(DeviceAcknowledgementService.class);
-        DeviceAcknowledgementHandler consumer = new DeviceAcknowledgementHandler(acknowledgements, new ObjectMapper());
+        DeviceAcknowledgementHandler consumer = new DeviceAcknowledgementHandler(
+                acknowledgements,
+                new JacksonMessageCodec<>(
+                        DeviceAcknowledgement.CODE,
+                        DeviceAcknowledgement.PROTOCOL_VERSION,
+                        DeviceAcknowledgement.class,
+                        new ObjectMapper()));
         DeviceAcknowledgement acknowledgement = new DeviceAcknowledgement(
                 10,
                 "reported-equals-desired",

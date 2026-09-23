@@ -31,6 +31,7 @@ import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
+import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
@@ -140,10 +141,26 @@ class QuartzSchedulingIntegrationTest {
 
             JobScheduler jobScheduler = context.getBean(JobScheduler.class);
             JobSchedule<?, ?> schedule = context.getBean(JobSchedule.class);
+            scheduler.addJob(
+                    JobBuilder.newJob(QuartzDispatchJob.class)
+                            .withIdentity("storage.file.cleanup", "sca4dj-code")
+                            .storeDurably()
+                            .build(),
+                    true);
+            scheduler.addJob(
+                    JobBuilder.newJob(QuartzClusterTaskJob.class)
+                            .withIdentity("iot.downlink.retention", "sca4dj-cluster-task")
+                            .storeDurably()
+                            .build(),
+                    true);
             jobScheduler.reconcile(List.of(schedule));
             ClusterTaskScheduler clusterTaskScheduler = context.getBean(ClusterTaskScheduler.class);
             ClusterTaskSchedule clusterTaskSchedule = context.getBean(ClusterTaskSchedule.class);
             clusterTaskScheduler.reconcileClusterTasks(List.of(clusterTaskSchedule));
+            assertThat(scheduler.checkExists(new org.quartz.JobKey("storage.file.cleanup", "sca4dj-code")))
+                    .isFalse();
+            assertThat(scheduler.checkExists(new org.quartz.JobKey("iot.downlink.retention", "sca4dj-cluster-task")))
+                    .isFalse();
             assertThat(
                     scheduler.getJobDetail(new org.quartz.JobKey("TEST/QUARTZ/DISPATCH", "sca4dj-code"))
                             .getJobDataMap())
@@ -174,7 +191,7 @@ class QuartzSchedulingIntegrationTest {
                     jdbc.queryForObject(
                             "SELECT trigger_state FROM quartz.qrtz_triggers "
                                     + "WHERE sched_name = 'quartz-test:sca4dj:scheduling:quartz' "
-                            + "AND trigger_name = 'TEST/QUARTZ/DISPATCH'",
+                                    + "AND trigger_name = 'TEST/QUARTZ/DISPATCH'",
                             String.class))
                     .isEqualTo("WAITING");
             scheduler.start();

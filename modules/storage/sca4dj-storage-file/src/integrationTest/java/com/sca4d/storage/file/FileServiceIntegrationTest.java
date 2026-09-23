@@ -495,7 +495,9 @@ class FileServiceIntegrationTest {
     }
 
     private static FileUse use(String targetId) {
-        return new FileUse("platform:user:profile:avatar", new ResourceReference("platform:user:profile", targetId));
+        return new FileUse(
+                "PLATFORM:USERS:PROFILES:AVATARS",
+                new ResourceReference("PLATFORM:USERS:PROFILES", targetId));
     }
 
     /** 返回使用指定正数标识的测试 Principal。 */

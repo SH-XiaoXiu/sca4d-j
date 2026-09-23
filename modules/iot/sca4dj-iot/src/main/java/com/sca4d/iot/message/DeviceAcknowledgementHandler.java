@@ -1,10 +1,8 @@
 package com.sca4d.iot.message;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.messaging.HandlingDecision;
 import com.sca4d.core.api.messaging.IncomingMessage;
-import com.sca4d.core.api.messaging.JacksonMessageCodec;
 import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.api.messaging.MessageHandler;
 import com.sca4d.iot.api.message.DeviceAcknowledgement;
@@ -23,13 +21,9 @@ public final class DeviceAcknowledgementHandler implements MessageHandler<Device
 
     public DeviceAcknowledgementHandler(
             @NotNull DeviceAcknowledgementService acknowledgements,
-            @NotNull ObjectMapper json) {
+            @NotNull MessageCodec<DeviceAcknowledgement> codec) {
         this.acknowledgements = Objects.requireNonNull(acknowledgements, "Device ACK 服务不能为空");
-        this.codec = new JacksonMessageCodec<>(
-                DeviceAcknowledgement.CODE,
-                DeviceAcknowledgement.PROTOCOL_VERSION,
-                DeviceAcknowledgement.class,
-                json);
+        this.codec = Objects.requireNonNull(codec, "Device ACK Codec 不能为空");
     }
 
     @Override

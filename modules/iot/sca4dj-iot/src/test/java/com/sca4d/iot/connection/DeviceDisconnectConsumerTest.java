@@ -1,6 +1,5 @@
 package com.sca4d.iot.connection;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -8,11 +7,13 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.connection.ConnectionId;
 import com.sca4d.core.api.connection.ConnectionRegistry;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.DispatchReceipt;
 import com.sca4d.core.api.messaging.IncomingMessage;
+import com.sca4d.core.api.messaging.JacksonMessageCodec;
 import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageId;
 import com.sca4d.iot.api.connection.DeviceConnectionId;
@@ -51,7 +52,11 @@ class DeviceDisconnectHandlerTest {
             messages,
             Clock.fixed(NOW, ZoneOffset.UTC),
             commonConnections,
-            new ObjectMapper());
+            new JacksonMessageCodec<>(
+                    DeviceDisconnectMessage.CODE,
+                    DeviceDisconnectMessage.PROTOCOL_VERSION,
+                    DeviceDisconnectMessage.class,
+                    new ObjectMapper()));
 
     @Test
     @DisplayName("协议连接终止后立即删除 Device 和公共连接投影")
@@ -86,11 +91,12 @@ class DeviceDisconnectHandlerTest {
         Mockito.doThrow(new IllegalStateException("broker unavailable"))
                 .when(terminators)
                 .disconnect(MQTT, CONNECTION_ID, "identity-unavailable");
-        when(messages.dispatch(
-                any(),
-                org.mockito.ArgumentMatchers.argThat(
-                        policy -> policy.mode() == DispatchPolicy.Mode.OUTBOX
-                                && NOW.plusSeconds(1).equals(policy.notBefore()))))
+        when(
+                messages.dispatch(
+                        any(),
+                        org.mockito.ArgumentMatchers.argThat(
+                                policy -> policy.mode() == DispatchPolicy.Mode.OUTBOX
+                                        && NOW.plusSeconds(1).equals(policy.notBefore()))))
                 .thenReturn(new DispatchReceipt(new MessageId(90L), DispatchReceipt.Status.OUTBOX_ENLISTED));
 
         consumer.handle(delivery());
@@ -109,11 +115,12 @@ class DeviceDisconnectHandlerTest {
     void retriesTerminationAndProjectionRemovalWhenProjectionRemovalFails() {
         when(connections.disconnected(MQTT, CONNECTION_ID))
                 .thenThrow(new IllegalStateException("redis unavailable"));
-        when(messages.dispatch(
-                any(),
-                org.mockito.ArgumentMatchers.argThat(
-                        policy -> policy.mode() == DispatchPolicy.Mode.OUTBOX
-                                && NOW.plusSeconds(1).equals(policy.notBefore()))))
+        when(
+                messages.dispatch(
+                        any(),
+                        org.mockito.ArgumentMatchers.argThat(
+                                policy -> policy.mode() == DispatchPolicy.Mode.OUTBOX
+                                        && NOW.plusSeconds(1).equals(policy.notBefore()))))
                 .thenReturn(new DispatchReceipt(new MessageId(91L), DispatchReceipt.Status.OUTBOX_ENLISTED));
 
         consumer.handle(delivery());

@@ -277,7 +277,7 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
         int deletedCount = 0;
         Set<JobKey> stored = scheduler.getJobKeys(GroupMatcher.jobGroupEquals(GROUP));
         for (JobKey key : stored) {
-            if (!definitions.containsKey(new ScheduleKey(key.getName()))) {
+            if (definitions.keySet().stream().noneMatch(definition -> definition.value().equals(key.getName()))) {
                 if (scheduler.deleteJob(key)) {
                     deletedCount++;
                 }
@@ -342,7 +342,8 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
         int deletedCount = 0;
         Set<JobKey> stored = scheduler.getJobKeys(GroupMatcher.jobGroupEquals(CLUSTER_TASK_GROUP));
         for (JobKey key : stored) {
-            if (!definitions.containsKey(new ScheduleKey(key.getName())) && scheduler.deleteJob(key)) {
+            if (definitions.keySet().stream().noneMatch(definition -> definition.value().equals(key.getName()))
+                    && scheduler.deleteJob(key)) {
                 deletedCount++;
             }
         }

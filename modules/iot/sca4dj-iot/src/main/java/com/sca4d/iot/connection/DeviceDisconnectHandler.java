@@ -1,13 +1,11 @@
 package com.sca4d.iot.connection;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.connection.ConnectionId;
 import com.sca4d.core.api.connection.ConnectionRegistry;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.HandlingDecision;
 import com.sca4d.core.api.messaging.IncomingMessage;
-import com.sca4d.core.api.messaging.JacksonMessageCodec;
 import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.api.messaging.MessageHandler;
@@ -61,17 +59,13 @@ public class DeviceDisconnectHandler implements MessageHandler<DeviceDisconnectM
             @NotNull MessageBus messages,
             @NotNull Clock clock,
             @Nullable ConnectionRegistry commonConnections,
-            @NotNull ObjectMapper json) {
+            @NotNull MessageCodec<DeviceDisconnectMessage> codec) {
         this.terminators = Objects.requireNonNull(terminators, "连接终止路由不能为空");
         this.connections = Objects.requireNonNull(connections, "Device 连接事件接收入口不能为空");
         this.messages = Objects.requireNonNull(messages, "MessageBus 不能为空");
         this.clock = Objects.requireNonNull(clock, "断连时钟不能为空");
         this.commonConnections = commonConnections;
-        this.codec = new JacksonMessageCodec<>(
-                DeviceDisconnectMessage.CODE,
-                DeviceDisconnectMessage.PROTOCOL_VERSION,
-                DeviceDisconnectMessage.class,
-                json);
+        this.codec = Objects.requireNonNull(codec, "断连消息 Codec 不能为空");
     }
 
     @Override

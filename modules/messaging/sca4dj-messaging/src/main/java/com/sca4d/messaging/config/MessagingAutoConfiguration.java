@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.messaging.EventHandler;
 import com.sca4d.core.api.messaging.MessageBus;
+import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.api.messaging.MessageHandler;
 import com.sca4d.core.api.runtime.RuntimeNamespace;
 import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
@@ -68,8 +69,8 @@ public class MessagingAutoConfiguration {
     @Bean
     RabbitMessageEnvelopeCodec messagingEnvelopeCodec(
             @Sca4djJson @NotNull ObjectMapper objectMapper,
-            @NotNull List<@NotNull MessageHandler<?>> messageHandlers) {
-        return new RabbitMessageEnvelopeCodec(objectMapper, messageHandlers);
+            @NotNull List<@NotNull MessageCodec<?>> messageCodecs) {
+        return new RabbitMessageEnvelopeCodec(objectMapper, messageCodecs);
     }
 
     /** @return Outbox 持久化语义 */

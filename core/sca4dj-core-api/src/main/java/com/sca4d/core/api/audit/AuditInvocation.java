@@ -38,9 +38,7 @@ public final class AuditInvocation {
     }
 
     /** @return 当前方法执行 */
-    @SuppressFBWarnings(
-            value = "EI_EXPOSE_REP",
-            justification = "审计解析器需要读取完整的 CallExecution；该对象仅在调用生命周期内由框架持有")
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "审计解析器需要读取完整的 CallExecution；该对象仅在调用生命周期内由框架持有")
     public CallExecution execution() {
         return execution;
     }

@@ -6,7 +6,6 @@ import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.event.EventMessageCodec;
 import com.sca4d.core.api.message.Message;
 import com.sca4d.core.api.messaging.MessageCodec;
-import com.sca4d.core.api.messaging.MessageHandler;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,12 +25,12 @@ final class MessageCodecRegistry {
     private final @NotNull ObjectMapper json;
 
     MessageCodecRegistry(
-            @NotNull List<? extends @NotNull MessageHandler<?>> handlers,
+            @NotNull List<? extends @NotNull MessageCodec<?>> codecs,
             @NotNull ObjectMapper json) {
         this.json = Objects.requireNonNull(json, "ObjectMapper 不能为空");
         Map<Key, MessageCodec<?>> registered = new LinkedHashMap<>();
-        for (MessageHandler<?> handler : Objects.requireNonNull(handlers, "MessageHandler 列表不能为空")) {
-            MessageCodec<?> codec = Objects.requireNonNull(handler, "MessageHandler 不能包含 null").codec();
+        for (MessageCodec<?> candidate : Objects.requireNonNull(codecs, "MessageCodec 列表不能为空")) {
+            MessageCodec<?> codec = Objects.requireNonNull(candidate, "MessageCodec 不能包含 null");
             Key key = new Key(codec.code(), codec.version());
             MessageCodec<?> previous = registered.putIfAbsent(key, codec);
             if (previous != null && !previous.valueType().equals(codec.valueType())) {

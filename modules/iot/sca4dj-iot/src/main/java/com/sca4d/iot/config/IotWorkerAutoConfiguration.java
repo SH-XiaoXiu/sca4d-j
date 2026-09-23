@@ -3,13 +3,19 @@ package com.sca4d.iot.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.connection.ConnectionRegistry;
+import com.sca4d.core.api.messaging.JacksonMessageCodec;
 import com.sca4d.core.api.messaging.MessageBus;
+import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
 import com.sca4d.core.api.scheduling.IntervalSchedule;
 import com.sca4d.core.api.scheduling.MisfirePolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.spring.json.Sca4djJson;
 import com.sca4d.iot.api.connection.DeviceConnectionTerminator;
+import com.sca4d.iot.api.connection.DeviceDisconnectMessage;
+import com.sca4d.iot.api.message.DeviceAcknowledgement;
+import com.sca4d.iot.api.message.DeviceAcknowledgementCheck;
+import com.sca4d.iot.api.message.DeviceDispatchMessage;
 import com.sca4d.iot.api.message.DeviceTransport;
 import com.sca4d.iot.change.DeviceChangeNotifier;
 import com.sca4d.iot.connection.DeviceConnectionRepository;
@@ -41,13 +47,57 @@ import java.time.Clock;
 @AutoConfiguration(after = IotAutoConfiguration.class, afterName = "com.sca4d.iot.emqx.config.EmqxAutoConfiguration")
 public class IotWorkerAutoConfiguration {
 
+    /** @return 不依赖 ACK Consumer 实例的消息编码器 */
+    @Bean
+    @ConditionalOnMissingBean(name = "deviceAcknowledgementCodec")
+    MessageCodec<DeviceAcknowledgement> deviceAcknowledgementCodec(@Sca4djJson ObjectMapper json) {
+        return new JacksonMessageCodec<>(
+                DeviceAcknowledgement.CODE,
+                DeviceAcknowledgement.PROTOCOL_VERSION,
+                DeviceAcknowledgement.class,
+                json);
+    }
+
+    /** @return 不依赖下行 Consumer 实例的消息编码器 */
+    @Bean
+    @ConditionalOnMissingBean(name = "deviceDispatchCodec")
+    MessageCodec<DeviceDispatchMessage> deviceDispatchCodec(@Sca4djJson ObjectMapper json) {
+        return new JacksonMessageCodec<>(
+                DeviceDispatchMessage.CODE,
+                DeviceDispatchMessage.PROTOCOL_VERSION,
+                DeviceDispatchMessage.class,
+                json);
+    }
+
+    /** @return 不依赖 ACK 超时 Consumer 实例的消息编码器 */
+    @Bean
+    @ConditionalOnMissingBean(name = "deviceAcknowledgementCheckCodec")
+    MessageCodec<DeviceAcknowledgementCheck> deviceAcknowledgementCheckCodec(@Sca4djJson ObjectMapper json) {
+        return new JacksonMessageCodec<>(
+                DeviceAcknowledgementCheck.CODE,
+                DeviceAcknowledgementCheck.PROTOCOL_VERSION,
+                DeviceAcknowledgementCheck.class,
+                json);
+    }
+
+    /** @return 不依赖断连 Consumer 实例的消息编码器 */
+    @Bean
+    @ConditionalOnMissingBean(name = "deviceDisconnectCodec")
+    MessageCodec<DeviceDisconnectMessage> deviceDisconnectCodec(@Sca4djJson ObjectMapper json) {
+        return new JacksonMessageCodec<>(
+                DeviceDisconnectMessage.CODE,
+                DeviceDisconnectMessage.PROTOCOL_VERSION,
+                DeviceDisconnectMessage.class,
+                json);
+    }
+
     /** @return 在来源事务提交后处理可靠 ACK 请求的业务 Consumer */
     @Bean
     @ConditionalOnMissingBean
     DeviceAcknowledgementHandler deviceAcknowledgementHandler(
             DeviceAcknowledgementService acknowledgements,
-            @Sca4djJson ObjectMapper json) {
-        return new DeviceAcknowledgementHandler(acknowledgements, json);
+            MessageCodec<DeviceAcknowledgement> codec) {
+        return new DeviceAcknowledgementHandler(acknowledgements, codec);
     }
 
     /** @return 按具体 `DeviceProtocol` Java 类型选择下行 Publisher 的路由 */
@@ -73,7 +123,7 @@ public class IotWorkerAutoConfiguration {
             DeviceChangeNotifier changes,
             DistributedLock distributedLock,
             PlatformTransactionManager transactionManager,
-            @Sca4djJson ObjectMapper json) {
+            MessageCodec<DeviceDispatchMessage> codec) {
         return new DeviceDispatchHandler(
                 downlinks,
                 router,
@@ -82,7 +132,7 @@ public class IotWorkerAutoConfiguration {
                 changes,
                 distributedLock,
                 new TransactionTemplate(transactionManager),
-                json);
+                codec);
     }
 
     /** @return 消费延迟消息并处理分阶段 ACK 超时的业务 Consumer */
@@ -96,7 +146,7 @@ public class IotWorkerAutoConfiguration {
             DeviceChangeNotifier changes,
             DistributedLock distributedLock,
             PlatformTransactionManager transactionManager,
-            @Sca4djJson ObjectMapper json) {
+            MessageCodec<DeviceAcknowledgementCheck> codec) {
         return new DeviceAcknowledgementCheckHandler(
                 downlinks,
                 messages,
@@ -104,7 +154,7 @@ public class IotWorkerAutoConfiguration {
                 changes,
                 distributedLock,
                 new TransactionTemplate(transactionManager),
-                json);
+                codec);
     }
 
     /** @return 按 `DeviceConnectionProtocol` 选择连接终止实现的路由 */
@@ -126,14 +176,14 @@ public class IotWorkerAutoConfiguration {
             Clock clock,
             MessageBus messages,
             ObjectProvider<ConnectionRegistry> commonConnections,
-            @Sca4djJson ObjectMapper json) {
+            MessageCodec<DeviceDisconnectMessage> codec) {
         return new DeviceDisconnectHandler(
                 terminators,
                 connections,
                 messages,
                 clock,
                 commonConnections.getIfAvailable(),
-                json);
+                codec);
     }
 
     /** @return 分批删除保留期外终态下行消息的集群任务 */

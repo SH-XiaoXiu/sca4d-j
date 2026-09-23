@@ -150,7 +150,11 @@ public class CoreMyBatisAutoConfiguration {
                     .register(
                             TreeCode.class,
                             JdbcType.VARCHAR,
-                            new StringValueTypeHandler<>(TreeCode::of, TreeCode::value));
+                            new StringValueTypeHandler<>(
+                                    value -> value.indexOf('/') < 0 && value.indexOf(':') < 0
+                                            ? TreeCode.ofSegment(value)
+                                            : TreeCode.of(value),
+                                    TreeCode::value));
             configuration.getTypeHandlerRegistry()
                     .register(
                             LocalizedFields.class,

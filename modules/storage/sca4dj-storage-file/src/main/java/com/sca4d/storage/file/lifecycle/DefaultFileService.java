@@ -853,7 +853,7 @@ public class DefaultFileService implements FileService {
      */
     private static void validateUse(@NotNull FileRecord record, @NotNull FileUse use) {
         if (!record.scene().equals(use.scene())
-                || !record.targetResourceType().equals(use.target().type())
+                || !record.targetResourceType().equals(use.target().type().value())
                 || !record.targetResourceId().equals(use.target().id())) {
             LOG.trace(
                     "文件用途与上传申请不一致 | fileId={} actualScene={} expectedScene={} actualTargetType={} expectedTargetType={} actualTargetId={} expectedTargetId={}",

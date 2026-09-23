@@ -11,7 +11,6 @@ import com.sca4d.core.api.event.EventType;
 import com.sca4d.core.api.message.Message;
 import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.MessageCodec;
-import com.sca4d.core.api.messaging.MessageHandler;
 import com.sca4d.core.api.messaging.MessageId;
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.ApiStatus;
@@ -49,9 +48,9 @@ public final class RabbitMessageEnvelopeCodec {
 
     public RabbitMessageEnvelopeCodec(
             @NotNull ObjectMapper json,
-            @NotNull List<? extends @NotNull MessageHandler<?>> handlers) {
+            @NotNull List<? extends @NotNull MessageCodec<?>> codecs) {
         this.json = Objects.requireNonNull(json, "ObjectMapper 不能为空");
-        this.codecs = new MessageCodecRegistry(handlers, json);
+        this.codecs = new MessageCodecRegistry(codecs, json);
     }
 
     byte @NotNull [] encode(

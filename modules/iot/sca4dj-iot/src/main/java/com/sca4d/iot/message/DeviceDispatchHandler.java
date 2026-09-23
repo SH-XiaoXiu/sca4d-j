@@ -1,12 +1,10 @@
 package com.sca4d.iot.message;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.messaging.HandlingDecision;
 import com.sca4d.core.api.messaging.IncomingMessage;
-import com.sca4d.core.api.messaging.JacksonMessageCodec;
 import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.api.messaging.MessageHandler;
 import com.sca4d.iot.api.change.DeviceChangeArea;
@@ -58,18 +56,14 @@ public class DeviceDispatchHandler implements MessageHandler<DeviceDispatchMessa
             @NotNull DeviceChangeNotifier changes,
             @NotNull DistributedLock distributedLock,
             @NotNull TransactionTemplate transactions,
-            @NotNull ObjectMapper json) {
+            @NotNull MessageCodec<DeviceDispatchMessage> codec) {
         this.downlinks = Objects.requireNonNull(downlinks, "Downlink Repository 不能为空");
         this.router = Objects.requireNonNull(router, "Device 下行路由不能为空");
         this.messages = Objects.requireNonNull(messages, "下行消息发布器不能为空");
         this.clock = Objects.requireNonNull(clock, "下行 Consumer 时钟不能为空");
         this.changes = Objects.requireNonNull(changes, "Device 变化通知器不能为空");
         this.distributedLock = Objects.requireNonNull(distributedLock, "下行分布式锁不能为空");
-        this.codec = new JacksonMessageCodec<>(
-                DeviceDispatchMessage.CODE,
-                DeviceDispatchMessage.PROTOCOL_VERSION,
-                DeviceDispatchMessage.class,
-                json);
+        this.codec = Objects.requireNonNull(codec, "下行消息 Codec 不能为空");
         this.transactions = Objects.requireNonNull(transactions, "下行事务模板不能为空");
     }
 

@@ -11,6 +11,7 @@ import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.messaging.IncomingMessage;
+import com.sca4d.core.api.messaging.JacksonMessageCodec;
 import com.sca4d.core.api.messaging.MessageId;
 import com.sca4d.core.spring.persistence.batch.SqlBatchProperties;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
@@ -206,7 +207,11 @@ class DeviceCommandCancellationIntegrationTest {
                 changes,
                 lock,
                 transactions,
-                new ObjectMapper());
+                new JacksonMessageCodec<>(
+                        DeviceDispatchMessage.CODE,
+                        DeviceDispatchMessage.PROTOCOL_VERSION,
+                        DeviceDispatchMessage.class,
+                        new ObjectMapper()));
         consumer.handle(
                 new IncomingMessage<>(
                         new MessageId(31L),
