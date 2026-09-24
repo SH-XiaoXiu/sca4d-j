@@ -23,7 +23,7 @@ class ConnectionPresentDeviceOnlinePolicyTest {
                 7,
                 DeviceConnectionProtocol.MQTT,
                 null,
-                DeviceAccessMethod.parse("account:shared-secret"),
+                DeviceAccessMethod.parse("ACCOUNT:AUTHENTICATION/SHARED_SECRET"),
                 Instant.parse("2026-08-10T00:00:00Z"));
 
         assertThat(policy.isOnline(List.of())).isFalse();

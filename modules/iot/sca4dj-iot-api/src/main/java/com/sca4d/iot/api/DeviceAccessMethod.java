@@ -18,14 +18,14 @@ public final class DeviceAccessMethod {
     /**
      * 不提交 Account 认证材料的匿名连接方式编码。
      */
-    public static final @NotNull String ANONYMOUS_CODE = "anonymous";
+    public static final @NotNull String ANONYMOUS_CODE = "ANONYMOUS";
 
     /**
      * 使用已经建立的通用 Session Token 连接的方式编码。
      */
-    public static final @NotNull String SESSION_CODE = "session";
+    public static final @NotNull String SESSION_CODE = "SESSION";
 
-    private static final String ACCOUNT_PREFIX = "account:";
+    private static final String ACCOUNT_PREFIX = "ACCOUNT:";
 
     private final @NotNull String code;
 
@@ -60,7 +60,7 @@ public final class DeviceAccessMethod {
      * 创建直接使用一种通用 Account 认证方法的连接方式。
      *
      * @param methodCode 应用已经安装的认证方法编码
-     * @return 编码为 {@code account:<method-code>} 的连接方式
+     * @return 编码为 {@code ACCOUNT:AUTHENTICATION/<method>} 的连接方式
      */
     @CheckReturnValue
     @Contract(pure = true)
@@ -73,7 +73,7 @@ public final class DeviceAccessMethod {
     /**
      * 解析数据库、配置或协议提交的稳定连接方式编码。
      *
-     * @param code {@code anonymous}、{@code session} 或 {@code account:<method-code>}
+     * @param code {@code ANONYMOUS}、{@code SESSION} 或 {@code ACCOUNT:AUTHENTICATION/<method>}
      * @return 类型化连接方式
      * @throws IllegalArgumentException 编码不属于任一允许形状时抛出
      */
@@ -90,10 +90,12 @@ public final class DeviceAccessMethod {
             throw new IllegalArgumentException("Device 接入方式编码无效");
         }
         String methodCode = checked.substring(ACCOUNT_PREFIX.length());
-        if (methodCode.isBlank() || methodCode.indexOf(':') >= 0) {
+        if (!methodCode.startsWith("AUTHENTICATION/")
+                || methodCode.length() == "AUTHENTICATION/".length()
+                || methodCode.indexOf(':') >= 0) {
             throw new IllegalArgumentException("Device Account 认证方法编码无效");
         }
-        return authentication(TreeCode.ofSlash("AUTHENTICATION/" + methodCode.replace('-', '_')));
+        return authentication(TreeCode.ofSlash(methodCode));
     }
 
     /**

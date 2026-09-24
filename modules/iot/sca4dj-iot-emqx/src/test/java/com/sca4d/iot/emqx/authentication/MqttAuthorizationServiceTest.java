@@ -29,7 +29,7 @@ class MqttAuthorizationServiceTest {
             1,
             "mqtt-debug-v1",
             MqttDeviceConnection.clientId("dbg-71"),
-            Set.of(DeviceAccessMethod.parse("account:shared-secret")));
+            Set.of(DeviceAccessMethod.parse("ACCOUNT:AUTHENTICATION/SHARED_SECRET")));
 
     @Test
     @DisplayName("相同 ACL 生成稳定指纹且当前连接匹配")

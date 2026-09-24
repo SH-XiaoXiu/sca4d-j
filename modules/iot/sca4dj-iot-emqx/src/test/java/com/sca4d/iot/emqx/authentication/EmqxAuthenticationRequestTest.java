@@ -18,7 +18,7 @@ class EmqxAuthenticationRequestTest {
                 """
                         {
                           "clientid": "device-7",
-                          "username": "account:shared-secret",
+                          "username": "ACCOUNT:AUTHENTICATION/SHARED_SECRET",
                           "password": "secret",
                           "cert_pem": null
                         }
@@ -26,7 +26,7 @@ class EmqxAuthenticationRequestTest {
                 EmqxAuthenticationRequest.class);
 
         assertThat(request.clientId()).isEqualTo("device-7");
-        assertThat(request.username()).isEqualTo("account:shared-secret");
+        assertThat(request.username()).isEqualTo("ACCOUNT:AUTHENTICATION/SHARED_SECRET");
         assertThat(request.password()).isEqualTo("secret");
         assertThat(request.certificatePem()).isNull();
     }

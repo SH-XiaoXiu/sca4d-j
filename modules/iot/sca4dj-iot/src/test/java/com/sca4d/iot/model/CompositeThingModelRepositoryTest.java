@@ -36,7 +36,7 @@ class CompositeThingModelRepositoryTest {
         ProductDefinition definition = new ProductDefinition(
                 "mqtt-debug",
                 MessageText.of("product.mqtt-debug.display-name"),
-                Set.of(DeviceAccessMethod.parse("account:shared-secret")),
+                Set.of(DeviceAccessMethod.parse("ACCOUNT:AUTHENTICATION/SHARED_SECRET")),
                 Set.of("mqtt-debug-v1"));
         ProductDefinitionCatalog catalog = new ProductDefinitionCatalog(products, List.of(definition));
         ThingModel model = ThingModel.builder("mqtt-debug", 1).build();

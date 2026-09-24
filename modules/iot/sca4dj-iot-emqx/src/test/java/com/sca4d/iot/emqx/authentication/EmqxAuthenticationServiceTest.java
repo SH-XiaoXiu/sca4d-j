@@ -37,7 +37,7 @@ class EmqxAuthenticationServiceTest {
                 1,
                 "mqtt-debug-v1",
                 MqttDeviceConnection.clientId("dbg-71"),
-                Set.of(DeviceAccessMethod.parse("account:shared-secret")));
+                Set.of(DeviceAccessMethod.parse("ACCOUNT:AUTHENTICATION/SHARED_SECRET")));
         EmqxDeviceConnectionRequestFactory requests = mock(EmqxDeviceConnectionRequestFactory.class);
         DeviceConnectionAdmission admission = mock(DeviceConnectionAdmission.class);
         DeviceConnectionRequest connectionRequest = DeviceConnectionRequest.anonymous(
@@ -47,7 +47,7 @@ class EmqxAuthenticationServiceTest {
                 .thenReturn(
                         new DeviceConnectionAccess(
                                 device,
-                                DeviceAccessMethod.parse("account:shared-secret"),
+                                DeviceAccessMethod.parse("ACCOUNT:AUTHENTICATION/SHARED_SECRET"),
                                 null,
                                 null));
         MqttAuthorizationPolicy policy = new MqttAuthorizationPolicy() {
@@ -71,14 +71,14 @@ class EmqxAuthenticationServiceTest {
         EmqxAuthenticationService service = new EmqxAuthenticationService(requests, admission, authorization);
 
         EmqxAuthenticationResponse response = service.authenticate(
-                new EmqxAuthenticationRequest("dbg-71", "account:shared-secret", "secret", null));
+                new EmqxAuthenticationRequest("dbg-71", "ACCOUNT:AUTHENTICATION/SHARED_SECRET", "secret", null));
 
         assertThat(response.result()).isEqualTo("allow");
         assertThat(response.superuser()).isFalse();
         assertThat(response.clientAttributes())
                 .containsEntry("product_code", "mqtt-debug")
                 .containsEntry("product_source", "CODE")
-                .containsEntry("access_method", "account:shared-secret")
+                .containsEntry("access_method", "ACCOUNT:AUTHENTICATION/SHARED_SECRET")
                 .containsKey(MqttAuthorizationService.FINGERPRINT_ATTRIBUTE);
         assertThat(response.acl()).extracting(EmqxAclRule::topic)
                 .containsExactly("$SYS/#", "#", "#");

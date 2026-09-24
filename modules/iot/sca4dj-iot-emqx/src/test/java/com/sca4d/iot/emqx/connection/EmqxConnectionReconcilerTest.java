@@ -86,7 +86,7 @@ class EmqxConnectionReconcilerTest {
                 1,
                 "mqtt-debug-v1",
                 MqttDeviceConnection.clientId("dbg-71"),
-                Set.of(DeviceAccessMethod.parse("account:shared-secret")));
+                Set.of(DeviceAccessMethod.parse("ACCOUNT:AUTHENTICATION/SHARED_SECRET")));
         EmqxClientConnection managed = new EmqxClientConnection(
                 "dbg-71",
                 "emqx@node",
@@ -101,7 +101,7 @@ class EmqxConnectionReconcilerTest {
                         "protocol_code",
                         "mqtt-debug-v1",
                         "access_method",
-                        "account:shared-secret"));
+                        "ACCOUNT:AUTHENTICATION/SHARED_SECRET"));
         when(management.findClients()).thenReturn(List.of(managed));
         when(devices.findDevices(any()))
                 .thenReturn(Map.of(MqttDeviceConnection.clientId("dbg-71"), device));
@@ -165,7 +165,7 @@ class EmqxConnectionReconcilerTest {
                         "protocol_code",
                         "mqtt-debug-v1",
                         "access_method",
-                        "account:shared-secret",
+                        "ACCOUNT:AUTHENTICATION/SHARED_SECRET",
                         MqttAuthorizationService.FINGERPRINT_ATTRIBUTE,
                         authorization.resolve(device, "dbg-71").fingerprint()));
         when(devices.findDevice(MqttDeviceConnection.clientId("dbg-71"))).thenReturn(Optional.of(device));
@@ -220,7 +220,7 @@ class EmqxConnectionReconcilerTest {
                 1,
                 "mqtt-debug-v1",
                 MqttDeviceConnection.clientId("dbg-71"),
-                Set.of(DeviceAccessMethod.parse("account:shared-secret")));
+                Set.of(DeviceAccessMethod.parse("ACCOUNT:AUTHENTICATION/SHARED_SECRET")));
     }
 
     /** 创建固定关闭 ACL 的当前授权服务。 */
