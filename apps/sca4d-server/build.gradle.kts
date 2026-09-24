@@ -1,5 +1,5 @@
-import org.springframework.boot.gradle.tasks.bundling.BootJar
 import org.gradle.api.tasks.testing.Test
+import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
     java

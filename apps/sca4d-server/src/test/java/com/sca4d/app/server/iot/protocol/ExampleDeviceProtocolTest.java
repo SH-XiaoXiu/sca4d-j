@@ -205,8 +205,9 @@ class ExampleDeviceProtocolTest {
                                                 "factory/raw/+/S",
                                                 new byte[] {0, 0, 0, 0, 0},
                                                 NOW)))
-                .satisfies(failure -> assertThat(failure.reason())
-                        .isEqualTo(MqttMessageRejectionReason.MESSAGE_INVALID));
+                .satisfies(
+                        failure -> assertThat(failure.reason())
+                                .isEqualTo(MqttMessageRejectionReason.MESSAGE_INVALID));
     }
 
     /** 使用传输路由已经定位的 Device 和消息类型调用设备协议。 */
