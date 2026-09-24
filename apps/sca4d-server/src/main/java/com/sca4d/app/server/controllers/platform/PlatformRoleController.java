@@ -139,7 +139,7 @@ public class PlatformRoleController {
     @Operation(summary = "批量修改 Platform 角色 Account")
     @RequirePermission(operation = PlatformOperations.ROLES_READ_VALUE)
     @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE_VALUE)
-    @Audit(operation = "platform/role/accounts/change", payloadFactory = ApplicationAuditValues.MutationDetails.class)
+    @Audit(operation = "PLATFORM/ROLE/ACCOUNTS/CHANGE", payloadFactory = ApplicationAuditValues.MutationDetails.class)
     public @NotNull ApiResponse<Void> changeRoleAccounts(
             @PathVariable @AuditTarget(resourceType = Role.RESOURCE_TYPE_VALUE, idPrefix = "platform:") long roleId,
             @Valid @RequestBody @NotNull @AuditPayload ChangeRoleAccountsRequest request) {
@@ -159,7 +159,7 @@ public class PlatformRoleController {
     @PostMapping
     @Operation(summary = "创建 Platform 角色")
     @RequirePermission(operation = PlatformOperations.ROLES_MANAGE_VALUE)
-    @Audit(operation = "platform/role/create", payloadFactory = ApplicationAuditValues.MutationDetails.class)
+    @Audit(operation = "PLATFORM/ROLE/CREATE", payloadFactory = ApplicationAuditValues.MutationDetails.class)
     public @NotNull ApiResponse<RoleView> createRole(
             @RequestBody @NotNull @AuditPayload CreateRoleRequest request) {
         PlatformRoleDetails created = rbac.createRole(
@@ -182,7 +182,7 @@ public class PlatformRoleController {
     @IfMatch
     @Operation(summary = "修改 Platform 角色状态")
     @RequirePermission(operation = PlatformOperations.ROLES_MANAGE_VALUE)
-    @Audit(operation = "platform/role/update", payloadFactory = ApplicationAuditValues.MutationDetails.class)
+    @Audit(operation = "PLATFORM/ROLE/UPDATE", payloadFactory = ApplicationAuditValues.MutationDetails.class)
     public @NotNull ApiResponse<RoleView> updateRoleStatus(
             @PathVariable @AuditTarget(resourceType = Role.RESOURCE_TYPE_VALUE, idPrefix = "platform:") long roleId,
             @RequestBody @NotNull @AuditPayload UpdateRoleStatusRequest request) {
@@ -215,7 +215,7 @@ public class PlatformRoleController {
     @IfMatch
     @Operation(summary = "替换 Platform 角色多语言字段")
     @RequirePermission(operation = PlatformOperations.ROLES_MANAGE_VALUE)
-    @Audit(operation = "platform/role/update", payloadFactory = ApplicationAuditValues.MutationDetails.class)
+    @Audit(operation = "PLATFORM/ROLE/UPDATE", payloadFactory = ApplicationAuditValues.MutationDetails.class)
     public @NotNull ApiResponse<RoleI18nView> replaceRoleI18n(
             @PathVariable @AuditTarget(resourceType = Role.RESOURCE_TYPE_VALUE, idPrefix = "platform:") long roleId,
             @RequestBody @NotNull @AuditPayload ReplaceRoleI18nRequest request) {
@@ -234,7 +234,7 @@ public class PlatformRoleController {
     @RequireSessionToken
     @Operation(summary = "删除 Platform 角色")
     @RequirePermission(operation = PlatformOperations.ROLES_MANAGE_VALUE)
-    @Audit(operation = "platform/role/delete")
+    @Audit(operation = "PLATFORM/ROLE/DELETE")
     public @NotNull ApiResponse<Void> deleteRole(
             @PathVariable @AuditTarget(resourceType = Role.RESOURCE_TYPE_VALUE, idPrefix = "platform:") long roleId) {
         rbac.deleteRole(roleId);
@@ -267,7 +267,7 @@ public class PlatformRoleController {
     @IfMatch
     @Operation(summary = "替换 Platform 角色 Operation")
     @RequirePermission(operation = PlatformOperations.ROLES_MANAGE_VALUE)
-    @Audit(operation = "platform/role/permissions/replace", payloadFactory = ApplicationAuditValues.MutationDetails.class)
+    @Audit(operation = "PLATFORM/ROLE/PERMISSIONS/REPLACE", payloadFactory = ApplicationAuditValues.MutationDetails.class)
     public @NotNull ApiResponse<RolePermissionsView> replaceRolePermissions(
             @PathVariable @AuditTarget(resourceType = Role.RESOURCE_TYPE_VALUE, idPrefix = "platform:") long roleId,
             @RequestBody @NotNull @AuditPayload ReplaceRolePermissionsRequest request) {

@@ -163,7 +163,7 @@ function settings(): AuthenticationSettings {
       {
         loginAdditionalEnabled: true,
         loginStartEnabled: true,
-        methodCode: 'password',
+        methodCode: 'AUTHENTICATION/PASSWORD',
         sensitiveActionEnabled: true,
       },
     ],

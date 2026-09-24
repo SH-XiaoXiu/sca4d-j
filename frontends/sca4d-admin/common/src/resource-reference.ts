@@ -23,7 +23,7 @@ export function resourceReferenceId(
 ): null | string {
   const value = textOrNull(id);
   if (!value) return null;
-  return resourceType === 'role' && value.startsWith('platform:')
+  return resourceType === 'IAM/ROLE' && value.startsWith('platform:')
     ? value.slice('platform:'.length)
     : value;
 }

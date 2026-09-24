@@ -48,8 +48,6 @@ import java.util.Objects;
 @CurrentPrincipal(selection = PlatformPrincipalSelection.class)
 public class EmailTemplateController {
 
-    private static final String RESOURCE_TYPE = "NOTIFICATION/EMAIL/TEMPLATE";
-
     private static final Sort NOTIFICATION_CODE = Sort.of("NOTIFICATION_CODE");
 
     private static final ListDefinition LIST = ListDefinition.builder()
@@ -77,7 +75,7 @@ public class EmailTemplateController {
     @PostMapping
     @Operation(summary = "创建 Email 模板")
     @RequirePermission(operation = SystemOperations.EMAIL_MANAGE_VALUE)
-    @Audit(operation = "system/email/template/create")
+    @Audit(operation = "SYSTEM/EMAIL/TEMPLATE/CREATE")
     public @NotNull ApiResponse<EmailTemplateView> create(
             @RequestBody @Valid @NotNull EmailTemplateRequest request) {
         EmailTemplate created = templates.create(
@@ -102,9 +100,9 @@ public class EmailTemplateController {
     @IfMatch
     @Operation(summary = "替换 Email 模板")
     @RequirePermission(operation = SystemOperations.EMAIL_MANAGE_VALUE)
-    @Audit(operation = "system/email/template/replace")
+    @Audit(operation = "SYSTEM/EMAIL/TEMPLATE/REPLACE")
     public @NotNull ApiResponse<EmailTemplateView> replace(
-            @PathVariable @AuditTarget(resourceType = RESOURCE_TYPE) long templateId,
+            @PathVariable @AuditTarget(resourceType = EmailTemplate.RESOURCE_TYPE_VALUE) long templateId,
             @RequestBody @Valid @NotNull EmailTemplateRequest request) {
         EmailTemplate updated = templates.replace(
                 templateId,
@@ -118,9 +116,9 @@ public class EmailTemplateController {
     @IfMatch
     @Operation(summary = "修改 Email 模板状态")
     @RequirePermission(operation = SystemOperations.EMAIL_MANAGE_VALUE)
-    @Audit(operation = "system/email/template/status/change")
+    @Audit(operation = "SYSTEM/EMAIL/TEMPLATE/STATUS/CHANGE")
     public @NotNull ApiResponse<EmailTemplateView> setEnabled(
-            @PathVariable @AuditTarget(resourceType = RESOURCE_TYPE) long templateId,
+            @PathVariable @AuditTarget(resourceType = EmailTemplate.RESOURCE_TYPE_VALUE) long templateId,
             @RequestBody @Valid @NotNull EmailResourceStatusRequest request) {
         EmailTemplate updated = templates.setEnabled(templateId, request.isEnabled());
         return ApiResponse.ok(view(updated));
@@ -145,9 +143,9 @@ public class EmailTemplateController {
     @IfMatch
     @Operation(summary = "删除 Email 模板")
     @RequirePermission(operation = SystemOperations.EMAIL_MANAGE_VALUE)
-    @Audit(operation = "system/email/template/delete")
+    @Audit(operation = "SYSTEM/EMAIL/TEMPLATE/DELETE")
     public @NotNull ApiResponse<Void> delete(
-            @PathVariable @AuditTarget(resourceType = RESOURCE_TYPE) long templateId) {
+            @PathVariable @AuditTarget(resourceType = EmailTemplate.RESOURCE_TYPE_VALUE) long templateId) {
         templates.delete(templateId);
         return ApiResponse.noContent();
     }

@@ -188,8 +188,8 @@ async function mockResourceReferenceApi(page: Page): Promise<void> {
       if (request.method() === 'GET' && path === '/system/audit/records') {
         await json(route, {
           items: [
-            operationLog('1', 'account', '41'),
-            operationLog('2', 'file', '51'),
+            operationLog('1', 'IAM/ACCOUNT', '41'),
+            operationLog('2', 'STORAGE/FILE', '51'),
           ],
           page: 1,
           size: 20,
@@ -324,7 +324,7 @@ function operationLog(id: string, targetType: string, targetId: string) {
     httpPath: '/platform/accounts/41',
     id,
     occurredAt: '2099-01-01T00:00:00.000Z',
-    operation: 'platform/account/status/change',
+    operation: 'PLATFORM/ACCOUNT/STATUS/CHANGE',
     payloadJson: null,
     payloadType: null,
     payloadVersion: null,

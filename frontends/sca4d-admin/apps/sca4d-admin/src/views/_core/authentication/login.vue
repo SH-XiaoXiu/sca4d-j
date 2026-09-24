@@ -17,6 +17,8 @@ import {
 import { Alert, Button, Divider, Input, message } from 'ant-design-vue';
 import { Globe2, KeyRound, Mail } from 'lucide-vue-next';
 
+import { AUTHENTICATION_METHOD_CODES } from '@sca4d/admin';
+
 import { BrowserPasskeyError } from '#/auth/passkey';
 import { $t } from '#/locales';
 import { useAuthStore } from '#/store';
@@ -145,23 +147,23 @@ async function handlePendingSmsSubmit(): Promise<void> {
 /** 根据当前选择的后续认证方法提交输入。 */
 async function handlePendingSubmit(): Promise<void> {
   switch (activePendingMethod.value) {
-    case 'email-code': {
+    case AUTHENTICATION_METHOD_CODES.emailCode: {
       await handlePendingEmailSubmit();
       break;
     }
-    case 'passkey': {
+    case AUTHENTICATION_METHOD_CODES.passkey: {
       await handlePendingPasskey();
       break;
     }
-    case 'password': {
+    case AUTHENTICATION_METHOD_CODES.password: {
       await handlePasswordSubmit();
       break;
     }
-    case 'sms-code': {
+    case AUTHENTICATION_METHOD_CODES.smsCode: {
       await handlePendingSmsSubmit();
       break;
     }
-    case 'totp': {
+    case AUTHENTICATION_METHOD_CODES.totp: {
       await handleTotpSubmit();
       break;
     }
@@ -247,12 +249,14 @@ onMounted(async () => {
 /** 返回登录方法在当前语言下的名称。 */
 function pendingMethodLabel(method: string): string {
   const labels: Record<string, string> = {
-    'email-code': $t('page.business.emailCode'),
-    'sms-code': $t('page.business.smsCode'),
-    federated: $t('page.security.methods.federated'),
-    passkey: 'Passkey',
-    password: $t('page.business.password'),
-    totp: $t('page.business.totpLabel'),
+    [AUTHENTICATION_METHOD_CODES.emailCode]: $t('page.business.emailCode'),
+    [AUTHENTICATION_METHOD_CODES.smsCode]: $t('page.business.smsCode'),
+    [AUTHENTICATION_METHOD_CODES.federated]: $t(
+      'page.security.methods.federated',
+    ),
+    [AUTHENTICATION_METHOD_CODES.passkey]: 'Passkey',
+    [AUTHENTICATION_METHOD_CODES.password]: $t('page.business.password'),
+    [AUTHENTICATION_METHOD_CODES.totp]: $t('page.business.totpLabel'),
   };
   return labels[method] ?? method;
 }
@@ -311,7 +315,7 @@ watch(
         :key="method"
         :tab="pendingMethodLabel(method)"
       >
-        <template v-if="method === 'password'">
+        <template v-if="method === AUTHENTICATION_METHOD_CODES.password">
           <Input.Password
             v-model:value="pendingPassword"
             :aria-label="$t('page.business.password')"
@@ -329,7 +333,7 @@ watch(
             {{ $t('page.business.continueLogin') }}
           </Button>
         </template>
-        <template v-else-if="method === 'totp'">
+        <template v-else-if="method === AUTHENTICATION_METHOD_CODES.totp">
           <Input
             v-model:value="totpCode"
             :aria-label="$t('page.business.totpLabel')"
@@ -350,7 +354,7 @@ watch(
             {{ $t('page.business.continueLogin') }}
           </Button>
         </template>
-        <template v-else-if="method === 'email-code'">
+        <template v-else-if="method === AUTHENTICATION_METHOD_CODES.emailCode">
           <Alert
             v-if="authStore.pendingEmailCodeChallenge"
             class="mb-4"
@@ -387,7 +391,7 @@ watch(
             {{ $t('page.business.continueLogin') }}
           </Button>
         </template>
-        <template v-else-if="method === 'sms-code'">
+        <template v-else-if="method === AUTHENTICATION_METHOD_CODES.smsCode">
           <Alert
             v-if="authStore.pendingSmsCodeChallenge"
             class="mb-4"
@@ -424,7 +428,7 @@ watch(
           </Button>
         </template>
         <Button
-          v-else-if="method === 'passkey'"
+          v-else-if="method === AUTHENTICATION_METHOD_CODES.passkey"
           class="w-full"
           :loading="authStore.loginLoading"
           size="large"

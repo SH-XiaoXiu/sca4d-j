@@ -5,6 +5,7 @@ import { VbenPinInput } from '@vben/common-ui';
 
 import { message } from 'ant-design-vue';
 import { KeyRound } from 'lucide-vue-next';
+import { AUTHENTICATION_METHOD_CODES } from '@sca4d/admin';
 
 import { useI18n } from '#/i18n';
 import { $t } from '#/locales';
@@ -45,12 +46,17 @@ const methodOptions = computed<MethodOption[]>(() =>
 const title = computed(() => securityActionLabel(store.pendingAction));
 const submitting = computed(() => store.verification.phase === 'loading');
 const canSubmit = computed(() => {
-  if (selectedMethod.value === 'password') return proof.password.length > 0;
-  if (selectedMethod.value === 'totp') return /^\d{6}$/u.test(proof.code);
-  if (selectedMethod.value === 'sms-code') {
+  if (selectedMethod.value === AUTHENTICATION_METHOD_CODES.password)
+    return proof.password.length > 0;
+  if (selectedMethod.value === AUTHENTICATION_METHOD_CODES.totp)
+    return /^\d{6}$/u.test(proof.code);
+  if (selectedMethod.value === AUTHENTICATION_METHOD_CODES.smsCode) {
     return Boolean(store.smsCodeChallenge) && /^\d{6}$/u.test(proof.code);
   }
-  return selectedMethod.value === 'passkey' && store.passkeySupported;
+  return (
+    selectedMethod.value === AUTHENTICATION_METHOD_CODES.passkey &&
+    store.passkeySupported
+  );
 });
 
 watch(
@@ -76,26 +82,32 @@ watch(
 
 /** 判断页面能否提交指定认证方法；未知方法保持可见但不可选择。 */
 function supportsMethod(method: string): boolean {
-  if (method === 'password' || method === 'totp' || method === 'sms-code')
+  if (
+    method === AUTHENTICATION_METHOD_CODES.password ||
+    method === AUTHENTICATION_METHOD_CODES.totp ||
+    method === AUTHENTICATION_METHOD_CODES.smsCode
+  )
     return true;
-  return method === 'passkey' && store.passkeySupported;
+  return (
+    method === AUTHENTICATION_METHOD_CODES.passkey && store.passkeySupported
+  );
 }
 
 /** 提交调用方当前选择的认证因素，并保留后端返回的后续方法。 */
 async function submit(): Promise<void> {
   if (submitting.value || !canSubmit.value) return;
   try {
-    if (selectedMethod.value === 'password') {
+    if (selectedMethod.value === AUTHENTICATION_METHOD_CODES.password) {
       await store.submitPassword(proof.password);
       proof.password = '';
       return;
     }
-    if (selectedMethod.value === 'totp') {
+    if (selectedMethod.value === AUTHENTICATION_METHOD_CODES.totp) {
       await store.submitTotp(proof.code);
       proof.code = '';
       return;
     }
-    if (selectedMethod.value === 'sms-code') {
+    if (selectedMethod.value === AUTHENTICATION_METHOD_CODES.smsCode) {
       await store.submitSmsCode(proof.code);
       proof.code = '';
       return;
@@ -161,7 +173,7 @@ function secondsUntil(value: string | undefined): number {
 
       <a-form layout="vertical" @finish="submit">
         <a-form-item
-          v-if="selectedMethod === 'password'"
+          v-if="selectedMethod === AUTHENTICATION_METHOD_CODES.password"
           :label="$t('page.security.verification.password')"
           required
         >
@@ -174,7 +186,7 @@ function secondsUntil(value: string | undefined): number {
         </a-form-item>
 
         <a-form-item
-          v-else-if="selectedMethod === 'totp'"
+          v-else-if="selectedMethod === AUTHENTICATION_METHOD_CODES.totp"
           :label="$t('page.security.verification.totp')"
           required
         >
@@ -193,7 +205,7 @@ function secondsUntil(value: string | undefined): number {
         </a-form-item>
 
         <a-form-item
-          v-else-if="selectedMethod === 'sms-code'"
+          v-else-if="selectedMethod === AUTHENTICATION_METHOD_CODES.smsCode"
           :label="$t('page.security.verification.smsCode')"
           required
         >
@@ -224,7 +236,7 @@ function secondsUntil(value: string | undefined): number {
         </a-form-item>
 
         <a-alert
-          v-else-if="selectedMethod === 'passkey'"
+          v-else-if="selectedMethod === AUTHENTICATION_METHOD_CODES.passkey"
           :message="$t('page.security.verification.passkey')"
           show-icon
           type="info"

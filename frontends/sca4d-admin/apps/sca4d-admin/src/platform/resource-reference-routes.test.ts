@@ -10,35 +10,35 @@ const ALL_ACCESS = { accounts: true, email: true, roles: true };
 
 describe('resource reference routes', () => {
   it('routes the four supported resource types to their existing pages', () => {
-    expect(route('account', '41')).toEqual({
+    expect(route('IAM/ACCOUNT', '41')).toEqual({
       path: '/sca4d-server/accounts',
       query: { accountId: '41' },
     });
-    expect(route('role', 'platform:42')).toEqual({
+    expect(route('IAM/ROLE', 'platform:42')).toEqual({
       path: '/sca4d-server/roles',
       query: { roleId: '42' },
     });
-    expect(route('notification:email:sender', '43')).toEqual({
+    expect(route('NOTIFICATION/EMAIL/SENDERS', '43')).toEqual({
       path: '/sca4d-server/email',
       query: { senderId: '43', tab: 'senders' },
     });
-    expect(route('notification:email:template', '44')).toEqual({
+    expect(route('NOTIFICATION/EMAIL/TEMPLATES', '44')).toEqual({
       path: '/sca4d-server/email',
       query: { tab: 'templates', templateId: '44' },
     });
   });
 
   it('does not route unknown, file, or empty references', () => {
-    expect(route('file', '41')).toBeNull();
+    expect(route('STORAGE/FILE', '41')).toBeNull();
     expect(route('unknown', '41')).toBeNull();
-    expect(route('account', null)).toBeNull();
-    expect(route('account', 'not-an-id')).toBeNull();
+    expect(route('IAM/ACCOUNT', null)).toBeNull();
+    expect(route('IAM/ACCOUNT', 'not-an-id')).toBeNull();
   });
 
   it('does not create links without matching resource read access', () => {
     expect(
       resourceReferenceRoute(
-        { id: '41', name: null, resourceType: 'account', typeLabel: null },
+        { id: '41', name: null, resourceType: 'IAM/ACCOUNT', typeLabel: null },
         { accounts: false, email: true, roles: true },
       ),
     ).toBeNull();

@@ -18,7 +18,7 @@ const security = reactive({
     error: null,
     phase: 'ready',
     verification: {
-      availableMethods: ['password'],
+      availableMethods: ['AUTHENTICATION/PASSWORD'],
       remainingFactorCount: 1,
     },
   },

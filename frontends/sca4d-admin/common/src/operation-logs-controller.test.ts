@@ -33,7 +33,7 @@ describe('operation logs controller', () => {
     await app.operationLogs.load({
       accountId: '2081571083525292033',
       actorPrincipalId: '2081571083525292034',
-      operation: 'platform:account:delete',
+      operation: 'PLATFORM/ACCOUNT/DELETE',
       page: 2,
       result: 'SUCCESS',
       size: 50,
@@ -43,7 +43,7 @@ describe('operation logs controller', () => {
     expect(requests[0]?.query).toMatchObject({
       accountId: '2081571083525292033',
       actorPrincipalId: '2081571083525292034',
-      operation: 'platform:account:delete',
+      operation: 'PLATFORM/ACCOUNT/DELETE',
       page: 2,
       result: 'SUCCESS',
       size: 50,
@@ -67,7 +67,7 @@ function operationLog(id: string): OperationLog {
     httpPath: '/platform/accounts/31',
     id,
     occurredAt: '2026-08-02T12:00:00Z',
-    operation: 'platform:account:delete',
+    operation: 'PLATFORM/ACCOUNT/DELETE',
     payloadJson: null,
     payloadType: null,
     payloadVersion: null,
@@ -77,7 +77,7 @@ function operationLog(id: string): OperationLog {
     result: 'SUCCESS',
     subjectId: '11',
     targetId: '41',
-    targetType: 'account',
+    targetType: 'IAM/ACCOUNT',
     userAgent: 'test client',
   };
 }

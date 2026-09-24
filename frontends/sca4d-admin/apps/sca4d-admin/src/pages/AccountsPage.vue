@@ -23,7 +23,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { Page } from '@vben/common-ui';
 import { useUserStore } from '@vben/stores';
 
-import { AdminError } from '@sca4d/admin';
+import { AdminError, AUTHENTICATION_METHOD_CODES } from '@sca4d/admin';
 import { message } from 'ant-design-vue';
 import {
   Camera,
@@ -67,7 +67,11 @@ const selectedAccount = ref<null | PlatformAccount>(null);
 const selectedRoleIds = ref<string[]>([]);
 const deleteOpen = ref(false);
 const deleteSaving = ref(false);
-const deleteStage = ref<'passkey' | 'password' | 'totp'>('password');
+const deleteStage = ref<
+  | typeof AUTHENTICATION_METHOD_CODES.passkey
+  | typeof AUTHENTICATION_METHOD_CODES.password
+  | typeof AUTHENTICATION_METHOD_CODES.totp
+>(AUTHENTICATION_METHOD_CODES.password);
 const deleteAccount = ref<null | PlatformAccount>(null);
 const deleteForm = reactive({ code: '', password: '' });
 const avatarUrls = ref(new Map<Int64String, string>());
@@ -90,15 +94,16 @@ const accountStatusOptions = computed(() =>
       value: option.value,
     })),
 );
-const deletionMethodOptions = computed(() => {
+const deletionMethodOptions = computed<{ label: string; value: string }[]>(() => {
   const methods =
     store.accounts.pendingDeletion?.verification.availableMethods ?? [];
-  return methods.flatMap((method) => {
-    if (method === 'password')
+  return methods.flatMap<{ label: string; value: string }>((method) => {
+    if (method === AUTHENTICATION_METHOD_CODES.password)
       return [{ label: t('passwordCredential'), value: method }];
-    if (method === 'totp')
+    if (method === AUTHENTICATION_METHOD_CODES.totp)
       return [{ label: t('totpCredential'), value: method }];
-    if (method === 'passkey') return [{ label: t('passkeys'), value: method }];
+    if (method === AUTHENTICATION_METHOD_CODES.passkey)
+      return [{ label: t('passkeys'), value: method }];
     return [];
   });
 });
@@ -229,9 +234,9 @@ async function submitDeletion(): Promise<void> {
   deleteSaving.value = true;
   try {
     let outcome: AccountDeletionOutcome;
-    if (deleteStage.value === 'totp') {
+    if (deleteStage.value === AUTHENTICATION_METHOD_CODES.totp) {
       outcome = await store.submitAccountDeletionTotp(deleteForm.code.trim());
-    } else if (deleteStage.value === 'passkey') {
+    } else if (deleteStage.value === AUTHENTICATION_METHOD_CODES.passkey) {
       outcome = await store.submitAccountDeletionPasskey();
     } else {
       outcome = await store.submitAccountDeletionPassword(deleteForm.password);
@@ -255,7 +260,11 @@ async function submitDeletion(): Promise<void> {
 /** 优先选择当前 verification 返回的第一个已支持认证方法。 */
 function selectAvailableDeletionMethod(): void {
   const method = deletionMethodOptions.value[0]?.value;
-  if (method === 'password' || method === 'totp' || method === 'passkey') {
+  if (
+    method === AUTHENTICATION_METHOD_CODES.password ||
+    method === AUTHENTICATION_METHOD_CODES.totp ||
+    method === AUTHENTICATION_METHOD_CODES.passkey
+  ) {
     deleteStage.value = method;
   }
 }
@@ -827,7 +836,11 @@ function isAccountStatus(value: string): value is AccountStatus {
         :model="deleteForm"
         @finish="submitDeletion"
       >
-        <a-form-item v-if="deleteStage === 'totp'" :label="t('totp')" required>
+        <a-form-item
+          v-if="deleteStage === AUTHENTICATION_METHOD_CODES.totp"
+          :label="t('totp')"
+          required
+        >
           <a-input
             v-model:value="deleteForm.code"
             :aria-label="t('totp')"
@@ -842,7 +855,7 @@ function isAccountStatus(value: string): value is AccountStatus {
           </a-input>
         </a-form-item>
         <a-form-item
-          v-else-if="deleteStage === 'password'"
+          v-else-if="deleteStage === AUTHENTICATION_METHOD_CODES.password"
           :label="t('currentPassword')"
           required
         >

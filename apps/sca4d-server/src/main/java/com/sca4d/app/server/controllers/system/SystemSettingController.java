@@ -51,7 +51,7 @@ public class SystemSettingController {
     @IfMatch
     @Operation(summary = "修改系统设置")
     @RequirePermission(operation = SystemOperations.SETTINGS_MANAGE_VALUE)
-    @Audit(operation = "system/setting/replace")
+    @Audit(operation = "SYSTEM/SETTING/REPLACE")
     public @NotNull ApiResponse<SystemSettingsView> replace(
             @PathVariable @NotNull String key,
             @RequestBody @Valid @NotNull ReplaceSettingRequest request) {
@@ -64,7 +64,7 @@ public class SystemSettingController {
     @IfMatch
     @Operation(summary = "恢复系统设置默认值")
     @RequirePermission(operation = SystemOperations.SETTINGS_MANAGE_VALUE)
-    @Audit(operation = "system/setting/reset")
+    @Audit(operation = "SYSTEM/SETTING/RESET")
     public @NotNull ApiResponse<SystemSettingsView> reset(@PathVariable @NotNull String key) {
         settings.reset(key);
         return ApiResponse.ok(SystemSettingsView.from(settings.findAll()));

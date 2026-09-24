@@ -73,23 +73,23 @@ const displayText = computed<OperationLogDisplayText>(() => ({
 const targetNames = computed<Readonly<Record<string, string>>>(() => {
   const values = new Map<string, string>();
   store.accounts.page.items.forEach((account) => {
-    const key = resourceReferenceKey('account', account.id);
+    const key = resourceReferenceKey('IAM/ACCOUNT', account.id);
     if (key) values.set(key, account.displayName);
   });
   store.roles.roles.forEach((role: PlatformRole) => {
-    const key = resourceReferenceKey('role', role.id);
+    const key = resourceReferenceKey('IAM/ROLE', role.id);
     if (key) values.set(key, role.name);
   });
   store.emailSenders.senders.forEach((sender: EmailSender) => {
     const key = resourceReferenceKey(
-      'notification:email:sender',
+      'NOTIFICATION/EMAIL/SENDERS',
       sender.senderId,
     );
     if (key) values.set(key, sender.name);
   });
   store.emailTemplates.templates.forEach((template: EmailTemplate) => {
     const key = resourceReferenceKey(
-      'notification:email:template',
+      'NOTIFICATION/EMAIL/TEMPLATES',
       template.templateId,
     );
     if (key) values.set(key, template.notificationCode);
@@ -97,102 +97,102 @@ const targetNames = computed<Readonly<Record<string, string>>>(() => {
   return Object.fromEntries(values);
 });
 const operationLabels = computed<Readonly<Record<string, string>>>(() => ({
-  'authentication/account/passkey/delete': t(
+  'AUTHENTICATION/ACCOUNT/PASSKEY/DELETE': t(
     'auditOperationAuthenticationAccountPasskeyDelete',
   ),
-  'authentication/account/passkey/register': t(
+  'AUTHENTICATION/ACCOUNT/PASSKEY/REGISTER': t(
     'auditOperationAuthenticationAccountPasskeyRegister',
   ),
-  'authentication/account/password/replace': t(
+  'AUTHENTICATION/ACCOUNT/PASSWORD/REPLACE': t(
     'auditOperationAuthenticationAccountPasswordReplace',
   ),
-  'authentication/account/settings/replace': t(
+  'AUTHENTICATION/ACCOUNT/SETTINGS/REPLACE': t(
     'auditOperationAuthenticationAccountSettingsReplace',
   ),
-  'authentication/account/totp/activate': t(
+  'AUTHENTICATION/ACCOUNT/TOTP/ACTIVATE': t(
     'auditOperationAuthenticationAccountTotpActivate',
   ),
-  'authentication/account/totp/delete': t(
+  'AUTHENTICATION/ACCOUNT/TOTP/DELETE': t(
     'auditOperationAuthenticationAccountTotpDelete',
   ),
-  'authentication/account/totp/replace': t(
+  'AUTHENTICATION/ACCOUNT/TOTP/REPLACE': t(
     'auditOperationAuthenticationAccountTotpReplace',
   ),
-  'platform/account/avatar/delete': t(
+  'PLATFORM/ACCOUNT/AVATAR/DELETE': t(
     'auditOperationPlatformAccountAvatarDelete',
   ),
-  'platform/account/avatar/replace': t(
+  'PLATFORM/ACCOUNT/AVATAR/REPLACE': t(
     'auditOperationPlatformAccountAvatarReplace',
   ),
-  'platform/account/create': t('auditOperationPlatformAccountCreate'),
-  'platform/account/delete': t('auditOperationPlatformAccountDelete'),
-  'platform/account/roles/replace': t(
+  'PLATFORM/ACCOUNT/CREATE': t('auditOperationPlatformAccountCreate'),
+  'PLATFORM/ACCOUNT/DELETE': t('auditOperationPlatformAccountDelete'),
+  'PLATFORM/ACCOUNT/ROLES/REPLACE': t(
     'auditOperationPlatformAccountRolesReplace',
   ),
-  'platform/account/status/change': t(
+  'PLATFORM/ACCOUNT/STATUS/CHANGE': t(
     'auditOperationPlatformAccountStatusChange',
   ),
-  'platform/profile/avatar/delete': t(
+  'PLATFORM/PROFILE/AVATAR/DELETE': t(
     'auditOperationPlatformProfileAvatarDelete',
   ),
-  'platform/profile/avatar/replace': t(
+  'PLATFORM/PROFILE/AVATAR/REPLACE': t(
     'auditOperationPlatformProfileAvatarReplace',
   ),
-  'platform/profile/replace': t('auditOperationPlatformProfileReplace'),
-  'platform/role/create': t('auditOperationPlatformRoleCreate'),
-  'platform/role/delete': t('auditOperationPlatformRoleDelete'),
-  'platform/role/permissions/replace': t(
+  'PLATFORM/PROFILE/REPLACE': t('auditOperationPlatformProfileReplace'),
+  'PLATFORM/ROLE/CREATE': t('auditOperationPlatformRoleCreate'),
+  'PLATFORM/ROLE/DELETE': t('auditOperationPlatformRoleDelete'),
+  'PLATFORM/ROLE/PERMISSIONS/REPLACE': t(
     'auditOperationPlatformRolePermissionsReplace',
   ),
-  'platform/role/update': t('auditOperationPlatformRoleUpdate'),
-  'storage/file/access-url/create': t(
+  'PLATFORM/ROLE/UPDATE': t('auditOperationPlatformRoleUpdate'),
+  'STORAGE/FILE/ACCESS_URL/CREATE': t(
     'auditOperationStorageFileAccessUrlCreate',
   ),
-  'storage/file/upload/complete': t('auditOperationStorageFileUploadComplete'),
-  'storage/file/upload/create': t('auditOperationStorageFileUploadCreate'),
-  'system/dictionary/create': t('auditOperationSystemDictionaryCreate'),
-  'system/dictionary/delete': t('auditOperationSystemDictionaryDelete'),
-  'system/dictionary/option/create': t(
+  'STORAGE/FILE/UPLOAD/COMPLETE': t('auditOperationStorageFileUploadComplete'),
+  'STORAGE/FILE/UPLOAD/CREATE': t('auditOperationStorageFileUploadCreate'),
+  'SYSTEM/DICTIONARY/CREATE': t('auditOperationSystemDictionaryCreate'),
+  'SYSTEM/DICTIONARY/DELETE': t('auditOperationSystemDictionaryDelete'),
+  'SYSTEM/DICTIONARY/OPTION/CREATE': t(
     'auditOperationSystemDictionaryOptionCreate',
   ),
-  'system/dictionary/option/delete': t(
+  'SYSTEM/DICTIONARY/OPTION/DELETE': t(
     'auditOperationSystemDictionaryOptionDelete',
   ),
-  'system/dictionary/option/update': t(
+  'SYSTEM/DICTIONARY/OPTION/UPDATE': t(
     'auditOperationSystemDictionaryOptionUpdate',
   ),
-  'system/dictionary/update': t('auditOperationSystemDictionaryUpdate'),
-  'system/email/sender/connection/test': t(
+  'SYSTEM/DICTIONARY/UPDATE': t('auditOperationSystemDictionaryUpdate'),
+  'SYSTEM/EMAIL/SENDER/CONNECTION/TEST': t(
     'auditOperationSystemEmailSenderConnectionTest',
   ),
-  'system/email/sender/create': t('auditOperationSystemEmailSenderCreate'),
-  'system/email/sender/delete': t('auditOperationSystemEmailSenderDelete'),
-  'system/email/sender/replace': t('auditOperationSystemEmailSenderReplace'),
-  'system/email/sender/status/change': t(
+  'SYSTEM/EMAIL/SENDER/CREATE': t('auditOperationSystemEmailSenderCreate'),
+  'SYSTEM/EMAIL/SENDER/DELETE': t('auditOperationSystemEmailSenderDelete'),
+  'SYSTEM/EMAIL/SENDER/REPLACE': t('auditOperationSystemEmailSenderReplace'),
+  'SYSTEM/EMAIL/SENDER/STATUS/CHANGE': t(
     'auditOperationSystemEmailSenderStatusChange',
   ),
-  'system/email/template/create': t('auditOperationSystemEmailTemplateCreate'),
-  'system/email/template/delete': t('auditOperationSystemEmailTemplateDelete'),
-  'system/email/template/replace': t(
+  'SYSTEM/EMAIL/TEMPLATE/CREATE': t('auditOperationSystemEmailTemplateCreate'),
+  'SYSTEM/EMAIL/TEMPLATE/DELETE': t('auditOperationSystemEmailTemplateDelete'),
+  'SYSTEM/EMAIL/TEMPLATE/REPLACE': t(
     'auditOperationSystemEmailTemplateReplace',
   ),
-  'system/email/template/status/change': t(
+  'SYSTEM/EMAIL/TEMPLATE/STATUS/CHANGE': t(
     'auditOperationSystemEmailTemplateStatusChange',
   ),
-  'system/email/template/test-message/send': t(
+  'SYSTEM/EMAIL/TEMPLATE/TEST_MESSAGE/SEND': t(
     'auditOperationSystemEmailTemplateTestMessageSend',
   ),
-  'system/setting/replace': t('auditOperationSystemSettingReplace'),
-  'system/setting/reset': t('auditOperationSystemSettingReset'),
+  'SYSTEM/SETTING/REPLACE': t('auditOperationSystemSettingReplace'),
+  'SYSTEM/SETTING/RESET': t('auditOperationSystemSettingReset'),
 }));
 const targetTypeLabels = computed<Readonly<Record<string, string>>>(() => ({
-  account: t('auditTargetAccount'),
-  file: t('auditTargetFile'),
-  'notification:email:sender': t('auditTargetEmailSender'),
-  'notification:email:template': t('auditTargetEmailTemplate'),
-  'passkey:credential': t('auditTargetPasskeyCredential'),
-  'platform:user:profile': t('auditTargetPlatformUserProfile'),
-  role: t('auditTargetRole'),
+  'IAM/ACCOUNT': t('auditTargetAccount'),
+  'STORAGE/FILE': t('auditTargetFile'),
+  'NOTIFICATION/EMAIL/SENDERS': t('auditTargetEmailSender'),
+  'NOTIFICATION/EMAIL/TEMPLATES': t('auditTargetEmailTemplate'),
+  'AUTHENTICATION/PASSKEY/CREDENTIALS': t('auditTargetPasskeyCredential'),
+  'PLATFORM:USERS:PROFILES': t('auditTargetPlatformUserProfile'),
+  'IAM/ROLE': t('auditTargetRole'),
 }));
 
 watch(
@@ -457,7 +457,7 @@ function accountReference(log: OperationLog): ResourceReferenceData {
   return {
     id: log.accountId,
     name: account?.displayName ?? null,
-    resourceType: 'account',
+    resourceType: 'IAM/ACCOUNT',
     typeLabel: t('auditTargetAccount'),
   };
 }
@@ -504,7 +504,7 @@ function resourceRouteAccess() {
 /** 返回当前账号有权读取的头像文件短期地址。 */
 function targetExternalUrl(log: OperationLog): null | string {
   const reference = targetReference(log);
-  return reference.resourceType === 'file' && reference.id
+  return reference.resourceType === 'STORAGE/FILE' && reference.id
     ? (fileAccessUrls.value.get(reference.id) ?? null)
     : null;
 }
@@ -517,7 +517,9 @@ async function loadFileAccessUrls(
   const fileIds = [
     ...new Set(
       items.flatMap((item) =>
-        item.targetType === 'file' && item.targetId ? [item.targetId] : [],
+        item.targetType === 'STORAGE/FILE' && item.targetId
+          ? [item.targetId]
+          : [],
       ),
     ),
   ];

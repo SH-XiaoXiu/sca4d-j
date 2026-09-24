@@ -61,7 +61,7 @@ public class AccountAuthenticationSettingsController {
     @IfMatch
     @RequireAuthentication(AuthenticationActions.AUTHENTICATION_SETTINGS_REPLACE_CODE)
     @Operation(summary = "替换当前账号认证设置")
-    @Audit(operation = "authentication/account/settings/replace", payloadFactory = ApplicationAuditValues.MutationDetails.class)
+    @Audit(operation = "AUTHENTICATION/ACCOUNT/SETTINGS/REPLACE", payloadFactory = ApplicationAuditValues.MutationDetails.class)
     public @NotNull ApiResponse<AuthenticationSettingsView> replace(
             @CurrentAccount @AuditTarget(resourceType = Account.RESOURCE_TYPE_VALUE) @NotNull Account account,
             @RequestBody @Valid @AuditPayload @NotNull ReplaceAuthenticationSettingsRequest request) {

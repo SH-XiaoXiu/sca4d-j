@@ -964,7 +964,8 @@ class SessionLifecycleIntegrationTest {
         JsonNode pendingLogin = startLogin("totp-user", "totp@123");
         assertThat(pendingLogin.path("authentication").path("status").asText()).isEqualTo("FACTOR_REQUIRED");
         assertThat(pendingLogin.path("session").isNull()).isTrue();
-        assertThat(pendingLogin.path("authentication").path("availableMethods").toString()).contains("\"totp\"");
+        assertThat(pendingLogin.path("authentication").path("availableMethods").toString())
+                .contains("\"AUTHENTICATION/TOTP\"");
         String loginAttempt = pendingLogin.path("authentication").path("attemptId").asText();
         String loginCode = totpCode(secret, Instant.now().plusSeconds(30));
         JsonNode completedLogin = postJson(
@@ -1353,7 +1354,7 @@ class SessionLifecycleIntegrationTest {
         return List.of(
                 Map.of(
                         "methodCode",
-                        "password",
+                        "AUTHENTICATION/PASSWORD",
                         "loginStartEnabled",
                         true,
                         "loginAdditionalEnabled",
@@ -1362,7 +1363,7 @@ class SessionLifecycleIntegrationTest {
                         true),
                 Map.of(
                         "methodCode",
-                        "totp",
+                        "AUTHENTICATION/TOTP",
                         "loginStartEnabled",
                         false,
                         "loginAdditionalEnabled",
@@ -1371,7 +1372,7 @@ class SessionLifecycleIntegrationTest {
                         true),
                 Map.of(
                         "methodCode",
-                        "passkey",
+                        "AUTHENTICATION/PASSKEY",
                         "loginStartEnabled",
                         true,
                         "loginAdditionalEnabled",

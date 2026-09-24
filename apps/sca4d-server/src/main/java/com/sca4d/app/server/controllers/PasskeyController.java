@@ -88,7 +88,7 @@ public class PasskeyController {
     @PostMapping("/me/passkeys")
     @RequireAuthentication(AuthenticationActions.PASSKEY_REGISTER_CODE)
     @CurrentPrincipal(selection = PlatformPrincipalSelection.class)
-    @Audit(operation = "authentication/account/passkey/register")
+    @Audit(operation = "AUTHENTICATION/ACCOUNT/PASSKEY/REGISTER")
     public @NotNull ApiResponse<PasskeyCredentialView> register(
             @CurrentAccount @AuditTarget(resourceType = Account.RESOURCE_TYPE_VALUE) @NotNull Account account,
             @RequestBody @Valid @NotNull PasskeyRegistrationRequest request) {
@@ -105,10 +105,10 @@ public class PasskeyController {
     @DeleteMapping("/me/passkeys/{credentialId}")
     @RequireAuthentication(AuthenticationActions.PASSKEY_DELETE_CODE)
     @CurrentPrincipal(selection = PlatformPrincipalSelection.class)
-    @Audit(operation = "authentication/account/passkey/delete")
+    @Audit(operation = "AUTHENTICATION/ACCOUNT/PASSKEY/DELETE")
     public @NotNull ApiResponse<Void> delete(
             @CurrentAccount @NotNull Account account,
-            @PathVariable @AuditTarget(resourceType = "passkey:credential") long credentialId) {
+            @PathVariable @AuditTarget(resourceType = "AUTHENTICATION/PASSKEY/CREDENTIALS") long credentialId) {
         deletions.delete(account, credentialId);
         return ApiResponse.noContent();
     }

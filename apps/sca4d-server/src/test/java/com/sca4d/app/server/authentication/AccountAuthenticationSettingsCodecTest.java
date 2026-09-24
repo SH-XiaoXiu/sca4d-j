@@ -33,6 +33,7 @@ class AccountAuthenticationSettingsCodecTest {
         AccountAuthenticationSettings decoded = codec.decodeJson(json);
 
         assertThat(json.has("accountId")).isFalse();
+        assertThat(json.path("methods").get(0).path("methodCode").asText()).isEqualTo("AUTHENTICATION/PASSWORD");
         assertThat(decoded.loginFactorCount()).isEqualTo(2);
         assertThat(decoded.sensitiveActionFactorCount()).isOne();
         assertThat(decoded.reusableAuthenticationMaximumAge()).isEqualTo(Duration.ofSeconds(600));
@@ -42,6 +43,26 @@ class AccountAuthenticationSettingsCodecTest {
             assertThat(method.loginAdditionalEnabled()).isFalse();
             assertThat(method.sensitiveActionEnabled()).isTrue();
         });
+    }
+
+    @Test
+    @DisplayName("账号认证设置拒绝未经迁移的短方法编码")
+    void rejectsUnmigratedMethodCode() {
+        assertThatThrownBy(() -> codec.decode("""
+                {
+                  "loginFactorCount": 1,
+                  "sensitiveActionFactorCount": 1,
+                  "reusableAuthenticationMaximumAgeSeconds": 300,
+                  "methods": [{
+                    "methodCode": "password",
+                    "loginStartEnabled": true,
+                    "loginAdditionalEnabled": true,
+                    "sensitiveActionEnabled": true
+                  }]
+                }
+                """))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("TreeCode");
     }
 
     @Test

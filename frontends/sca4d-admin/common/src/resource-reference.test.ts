@@ -8,15 +8,15 @@ import {
 
 describe('resource reference', () => {
   it('normalizes prefixed role identifiers for lookup and routing', () => {
-    expect(resourceReferenceId('role', 'platform:41')).toBe('41');
-    expect(resourceReferenceKey('role', 'platform:41')).toBe('role:41');
+    expect(resourceReferenceId('IAM/ROLE', 'platform:41')).toBe('41');
+    expect(resourceReferenceKey('IAM/ROLE', 'platform:41')).toBe('IAM/ROLE:41');
   });
 
   it('keeps other identifiers unchanged', () => {
-    expect(resourceReferenceId('account', '9007199254740993')).toBe(
+    expect(resourceReferenceId('IAM/ACCOUNT', '9007199254740993')).toBe(
       '9007199254740993',
     );
-    expect(resourceReferenceKey('file', '41')).toBe('file:41');
+    expect(resourceReferenceKey('STORAGE/FILE', '41')).toBe('STORAGE/FILE:41');
   });
 
   it('uses name, type label, identifier, then empty text in that order', () => {
@@ -25,7 +25,7 @@ describe('resource reference', () => {
         {
           id: '41',
           name: 'Administrator',
-          resourceType: 'account',
+          resourceType: 'IAM/ACCOUNT',
           typeLabel: 'Account',
         },
         '-',
@@ -33,13 +33,18 @@ describe('resource reference', () => {
     ).toBe('Administrator');
     expect(
       resourceReferenceLabel(
-        { id: '41', name: null, resourceType: 'account', typeLabel: 'Account' },
+        {
+          id: '41',
+          name: null,
+          resourceType: 'IAM/ACCOUNT',
+          typeLabel: 'Account',
+        },
         '-',
       ),
     ).toBe('Account');
     expect(
       resourceReferenceLabel(
-        { id: '41', name: null, resourceType: 'account', typeLabel: null },
+        { id: '41', name: null, resourceType: 'IAM/ACCOUNT', typeLabel: null },
         '-',
       ),
     ).toBe('41');

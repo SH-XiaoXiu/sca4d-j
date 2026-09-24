@@ -170,7 +170,7 @@ async function mockEmailLoginApi(
           contentType: 'application/json',
           json: success(
             flow === 'email-then-password'
-              ? loginOutcome(['password'], null)
+              ? loginOutcome(['AUTHENTICATION/PASSWORD'], null)
               : loginOutcome([], TOKENS),
           ),
           status: 201,
@@ -184,7 +184,7 @@ async function mockEmailLoginApi(
         });
         await route.fulfill({
           contentType: 'application/json',
-          json: success(loginOutcome(['email-code'], null)),
+          json: success(loginOutcome(['AUTHENTICATION/EMAIL_CODE'], null)),
           status: 201,
         });
         return;

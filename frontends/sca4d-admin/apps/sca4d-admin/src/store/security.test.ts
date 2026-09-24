@@ -133,8 +133,11 @@ describe('useSecurityStore', () => {
   });
 
   it('允许在 TOTP 和 Passkey 同时可用时先选择 Passkey 再提交 TOTP', async () => {
-    const first = verification(2, ['totp', 'passkey']);
-    const second = verification(1, ['totp']);
+    const first = verification(2, [
+      'AUTHENTICATION/TOTP',
+      'AUTHENTICATION/PASSKEY',
+    ]);
+    const second = verification(1, ['AUTHENTICATION/TOTP']);
     const satisfied = verification(0, []);
     fixtures.verification.start.mockImplementation(async () => {
       fixtures.verification.publish({
@@ -173,13 +176,15 @@ describe('useSecurityStore', () => {
 
     await expect(store.replacePassword('new-password')).resolves.toBeNull();
     expect(store.verification.verification?.availableMethods).toEqual([
-      'totp',
-      'passkey',
+      'AUTHENTICATION/TOTP',
+      'AUTHENTICATION/PASSKEY',
     ]);
 
     await expect(store.submitPasskey()).resolves.toBeNull();
     expect(fixtures.password.replace).not.toHaveBeenCalled();
-    expect(store.verification.verification?.availableMethods).toEqual(['totp']);
+    expect(store.verification.verification?.availableMethods).toEqual([
+      'AUTHENTICATION/TOTP',
+    ]);
 
     await expect(store.submitTotp('123456')).resolves.toBe('password.replace');
     expect(fixtures.password.replace).toHaveBeenCalledWith(

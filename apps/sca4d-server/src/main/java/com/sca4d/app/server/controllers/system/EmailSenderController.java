@@ -39,8 +39,6 @@ import java.util.Objects;
 @CurrentPrincipal(selection = PlatformPrincipalSelection.class)
 public class EmailSenderController {
 
-    private static final String RESOURCE_TYPE = "notification:email:sender";
-
     private final @NotNull EmailSenderService senders;
 
     /** @param senders SMTP 配置管理服务 */
@@ -60,7 +58,7 @@ public class EmailSenderController {
     @PostMapping
     @Operation(summary = "创建 SMTP 配置")
     @RequirePermission(operation = SystemOperations.EMAIL_MANAGE_VALUE)
-    @Audit(operation = "system/email/sender/create")
+    @Audit(operation = "SYSTEM/EMAIL/SENDER/CREATE")
     public @NotNull ApiResponse<EmailSenderView> create(
             @RequestBody @Valid @NotNull CreateEmailSenderRequest request) {
         EmailSender created = senders.create(
@@ -92,9 +90,9 @@ public class EmailSenderController {
     @IfMatch
     @Operation(summary = "替换 SMTP 配置")
     @RequirePermission(operation = SystemOperations.EMAIL_MANAGE_VALUE)
-    @Audit(operation = "system/email/sender/replace")
+    @Audit(operation = "SYSTEM/EMAIL/SENDER/REPLACE")
     public @NotNull ApiResponse<EmailSenderView> replace(
-            @PathVariable @AuditTarget(resourceType = RESOURCE_TYPE) long senderId,
+            @PathVariable @AuditTarget(resourceType = EmailSender.RESOURCE_TYPE_VALUE) long senderId,
             @RequestBody @Valid @NotNull ReplaceEmailSenderRequest request) {
         EmailSender updated = senders.replace(
                 senderId,
@@ -116,9 +114,9 @@ public class EmailSenderController {
     @IfMatch
     @Operation(summary = "修改 SMTP 配置状态")
     @RequirePermission(operation = SystemOperations.EMAIL_MANAGE_VALUE)
-    @Audit(operation = "system/email/sender/status/change")
+    @Audit(operation = "SYSTEM/EMAIL/SENDER/STATUS/CHANGE")
     public @NotNull ApiResponse<EmailSenderView> setEnabled(
-            @PathVariable @AuditTarget(resourceType = RESOURCE_TYPE) long senderId,
+            @PathVariable @AuditTarget(resourceType = EmailSender.RESOURCE_TYPE_VALUE) long senderId,
             @RequestBody @Valid @NotNull EmailResourceStatusRequest request) {
         EmailSender updated = senders.setEnabled(senderId, request.isEnabled());
         return ApiResponse.ok(EmailSenderView.from(updated));
@@ -128,9 +126,9 @@ public class EmailSenderController {
     @PostMapping("/{senderId}/connection-tests")
     @Operation(summary = "测试 SMTP 连接")
     @RequirePermission(operation = SystemOperations.EMAIL_MANAGE_VALUE)
-    @Audit(operation = "system/email/sender/connection/test")
+    @Audit(operation = "SYSTEM/EMAIL/SENDER/CONNECTION/TEST")
     public @NotNull ApiResponse<Void> testConnection(
-            @PathVariable @AuditTarget(resourceType = RESOURCE_TYPE) long senderId) {
+            @PathVariable @AuditTarget(resourceType = EmailSender.RESOURCE_TYPE_VALUE) long senderId) {
         senders.testConnection(senderId);
         return ApiResponse.noContent();
     }
@@ -140,9 +138,9 @@ public class EmailSenderController {
     @IfMatch
     @Operation(summary = "删除 SMTP 配置")
     @RequirePermission(operation = SystemOperations.EMAIL_MANAGE_VALUE)
-    @Audit(operation = "system/email/sender/delete")
+    @Audit(operation = "SYSTEM/EMAIL/SENDER/DELETE")
     public @NotNull ApiResponse<Void> delete(
-            @PathVariable @AuditTarget(resourceType = RESOURCE_TYPE) long senderId) {
+            @PathVariable @AuditTarget(resourceType = EmailSender.RESOURCE_TYPE_VALUE) long senderId) {
         senders.delete(senderId);
         return ApiResponse.noContent();
     }

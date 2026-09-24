@@ -376,7 +376,7 @@ function emailDrawerVisibilityChanged(
 
 /** 返回 Email 资源在当前管理端中的统一深链接。 */
 function emailResourceRoute(
-  resourceType: 'notification:email:sender' | 'notification:email:template',
+  resourceType: 'NOTIFICATION/EMAIL/SENDERS' | 'NOTIFICATION/EMAIL/TEMPLATES',
   id: Int64String,
 ) {
   return (
@@ -681,7 +681,7 @@ function t(key: string, values?: Record<string, unknown>): string {
                   :name="record.name"
                   :to="
                     emailResourceRoute(
-                      'notification:email:sender',
+                      'NOTIFICATION/EMAIL/SENDERS',
                       record.senderId,
                     )
                   "
@@ -817,7 +817,7 @@ function t(key: string, values?: Record<string, unknown>): string {
                   :name="record.notificationCode"
                   :to="
                     emailResourceRoute(
-                      'notification:email:template',
+                      'NOTIFICATION/EMAIL/TEMPLATES',
                       record.templateId,
                     )
                   "
@@ -1258,7 +1258,8 @@ function t(key: string, values?: Record<string, unknown>): string {
           <a-tab-pane key="text" :tab="t('textBody')">
             <pre
               class="max-h-80 overflow-auto whitespace-pre-wrap rounded border p-3 text-sm"
-              >{{ previewResult.text }}</pre>
+              >{{ previewResult.text }}</pre
+            >
           </a-tab-pane>
           <a-tab-pane v-if="previewResult.html" key="html" :tab="t('htmlBody')">
             <iframe

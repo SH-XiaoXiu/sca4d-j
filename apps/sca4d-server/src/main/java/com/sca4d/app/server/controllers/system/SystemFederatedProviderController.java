@@ -70,7 +70,7 @@ public class SystemFederatedProviderController {
     /** 创建默认停用的 Provider。 */
     @PostMapping
     @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE_VALUE)
-    @Audit(operation = "system/authentication/federated-provider/create")
+    @Audit(operation = "SYSTEM/AUTHENTICATION/FEDERATED_PROVIDER/CREATE")
     @Operation(summary = "创建联邦 Provider")
     public @NotNull ApiResponse<FederatedProviderView> create(
             @RequestBody @Valid @AuditPayload @NotNull CreateProviderRequest request) {
@@ -92,7 +92,7 @@ public class SystemFederatedProviderController {
     @PutMapping("/{code}")
     @IfMatch
     @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE_VALUE)
-    @Audit(operation = "system/authentication/federated-provider/replace")
+    @Audit(operation = "SYSTEM/AUTHENTICATION/FEDERATED_PROVIDER/REPLACE")
     @Operation(summary = "替换联邦 Provider")
     public @NotNull ApiResponse<FederatedProviderView> replace(
             @PathVariable @AuditTarget(resourceType = FederatedProvider.RESOURCE_TYPE_VALUE) @NotNull String code,
@@ -125,7 +125,7 @@ public class SystemFederatedProviderController {
     @PutMapping("/{code}/settings")
     @IfMatch
     @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE_VALUE)
-    @Audit(operation = "system/authentication/federated-provider/settings/replace")
+    @Audit(operation = "SYSTEM/AUTHENTICATION/FEDERATED_PROVIDER/SETTINGS/REPLACE")
     @Operation(summary = "替换联邦 Provider 协议配置")
     public @NotNull ApiResponse<Void> replaceSettings(
             @PathVariable @AuditTarget(resourceType = FederatedProvider.RESOURCE_TYPE_VALUE) @NotNull String code,
@@ -141,7 +141,7 @@ public class SystemFederatedProviderController {
     @PatchMapping("/{code}/status")
     @IfMatch
     @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE_VALUE)
-    @Audit(operation = "system/authentication/federated-provider/status/replace")
+    @Audit(operation = "SYSTEM/AUTHENTICATION/FEDERATED_PROVIDER/STATUS/REPLACE")
     @Operation(summary = "修改联邦 Provider 状态")
     public @NotNull ApiResponse<FederatedProviderView> replaceStatus(
             @PathVariable @AuditTarget(resourceType = FederatedProvider.RESOURCE_TYPE_VALUE) @NotNull String code,
@@ -154,7 +154,7 @@ public class SystemFederatedProviderController {
     @DeleteMapping("/{code}")
     @IfMatch
     @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE_VALUE)
-    @Audit(operation = "system/authentication/federated-provider/delete")
+    @Audit(operation = "SYSTEM/AUTHENTICATION/FEDERATED_PROVIDER/DELETE")
     @Operation(summary = "删除联邦 Provider")
     public @NotNull ApiResponse<Void> delete(
             @PathVariable @AuditTarget(resourceType = FederatedProvider.RESOURCE_TYPE_VALUE) @NotNull String code) {

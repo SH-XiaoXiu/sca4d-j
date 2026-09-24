@@ -1,20 +1,25 @@
 import type { SecurityAction } from '#/store/security';
 
+import { AUTHENTICATION_METHOD_CODES } from '@sca4d/admin';
+
 import { BrowserPasskeyError } from '#/auth/passkey';
 import { $t } from '#/locales';
 
 /** 返回认证方法编码对应的页面名称。 */
 export function authenticationMethodLabel(methodCode: string): string {
-  if (methodCode === 'password') return $t('page.security.methods.password');
-  if (methodCode === 'totp') return $t('page.security.methods.totp');
-  if (methodCode === 'passkey') return $t('page.security.methods.passkey');
-  if (methodCode === 'email-code') {
+  if (methodCode === AUTHENTICATION_METHOD_CODES.password)
+    return $t('page.security.methods.password');
+  if (methodCode === AUTHENTICATION_METHOD_CODES.totp)
+    return $t('page.security.methods.totp');
+  if (methodCode === AUTHENTICATION_METHOD_CODES.passkey)
+    return $t('page.security.methods.passkey');
+  if (methodCode === AUTHENTICATION_METHOD_CODES.emailCode) {
     return $t('page.security.methods.emailCode');
   }
-  if (methodCode === 'sms-code') {
+  if (methodCode === AUTHENTICATION_METHOD_CODES.smsCode) {
     return $t('page.security.methods.smsCode');
   }
-  if (methodCode === 'federated') {
+  if (methodCode === AUTHENTICATION_METHOD_CODES.federated) {
     return $t('page.security.methods.federated');
   }
   return methodCode;

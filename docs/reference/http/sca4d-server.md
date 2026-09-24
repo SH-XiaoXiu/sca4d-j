@@ -406,14 +406,14 @@ Sca4d Server 把 Password 登录标识类型配置为 `USERNAME,EMAIL`，所以 
     "attemptId": "opaque-attempt-id",
     "status": "FACTOR_REQUIRED",
     "remainingFactorCount": 1,
-    "availableMethods": ["totp"],
+    "availableMethods": ["AUTHENTICATION/TOTP"],
     "expiresAt": "2026-08-23T10:20:30Z"
   },
   "session": null
 }
 ```
 
-登录要求满足时，`authentication.status` 为 `SATISFIED`，`session` 包含 Token 模式、access Token、可选 Session Token、Session 标识和两个过期时间。仍需因素时，客户端从 `availableMethods` 选择 Password、TOTP、Passkey 或 Email Code，并向同一 attempt 的对应 proofs 路由提交。attempt 过期、Proof 无效、方法不可用或提交方法不能贡献新的因素时不建立 Session。
+登录要求满足时，`authentication.status` 为 `SATISFIED`，`session` 包含 Token 模式、access Token、可选 Session Token、Session 标识和两个过期时间。仍需因素时，客户端按 `availableMethods` 返回的 `AUTHENTICATION/PASSWORD`、`AUTHENTICATION/TOTP`、`AUTHENTICATION/PASSKEY`、`AUTHENTICATION/EMAIL_CODE` 等 TreeCode 选择方法，并向同一 attempt 的对应 proofs 路由提交。attempt 过期、Proof 无效、方法不可用或提交方法不能贡献新的因素时不建立 Session。
 
 Passkey 登录先调用 `POST /passkey/assertions/options`，浏览器完成 WebAuthn assertion 后，把 `ceremonyId` 与 `responseJson` 提交到 `POST /login/attempts/passkey`。后续因素使用 Passkey 时提交到当前 attempt 的 passkey proofs 路由。
 
@@ -453,7 +453,7 @@ verification 必须已经满足动作要求，并且只能由绑定的 Session�
   "expiresAt": "2026-08-23T10:15:30Z",
   "subject": { "subjectId": "2081571083508514816", "type": "HUMAN" },
   "account": { "accountId": "2081571083525292032", "realmKey": "platform" },
-  "permissions": ["platform:accounts:read"]
+  "permissions": ["PLATFORM:ACCOUNTS:READ"]
 }
 ```
 

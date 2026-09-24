@@ -59,7 +59,7 @@ public final class SmsProviderController {
     /** 创建默认停用 Provider。 */
     @PostMapping
     @RequirePermission(operation = SystemOperations.SMS_MANAGE_VALUE)
-    @Audit(operation = "system/sms/provider/create")
+    @Audit(operation = "SYSTEM/SMS/PROVIDER/CREATE")
     public ApiResponse<SmsProviderView> createProvider(@RequestBody @Valid SmsProviderRequest request) {
         var created = sms.createProvider(
                 request.getCode(),
@@ -81,7 +81,7 @@ public final class SmsProviderController {
     @PutMapping("/{providerId}")
     @IfMatch
     @RequirePermission(operation = SystemOperations.SMS_MANAGE_VALUE)
-    @Audit(operation = "system/sms/provider/replace")
+    @Audit(operation = "SYSTEM/SMS/PROVIDER/REPLACE")
     public ApiResponse<SmsProviderView> replaceProvider(
             @PathVariable @AuditTarget(resourceType = PROVIDER_RESOURCE) long providerId,
             @RequestBody @Valid SmsProviderRequest request) {
@@ -99,7 +99,7 @@ public final class SmsProviderController {
     @PatchMapping("/{providerId}/status")
     @IfMatch
     @RequirePermission(operation = SystemOperations.SMS_MANAGE_VALUE)
-    @Audit(operation = "system/sms/provider/status/change")
+    @Audit(operation = "SYSTEM/SMS/PROVIDER/STATUS/CHANGE")
     public ApiResponse<SmsProviderView> setProviderEnabled(
             @PathVariable @AuditTarget(resourceType = PROVIDER_RESOURCE) long providerId,
             @RequestBody @Valid EmailResourceStatusRequest request) {
@@ -110,7 +110,7 @@ public final class SmsProviderController {
     @DeleteMapping("/{providerId}")
     @IfMatch
     @RequirePermission(operation = SystemOperations.SMS_MANAGE_VALUE)
-    @Audit(operation = "system/sms/provider/delete")
+    @Audit(operation = "SYSTEM/SMS/PROVIDER/DELETE")
     public ApiResponse<Void> deleteProvider(
             @PathVariable @AuditTarget(resourceType = PROVIDER_RESOURCE) long providerId) {
         sms.deleteProvider(providerId);
@@ -127,7 +127,7 @@ public final class SmsProviderController {
     /** 创建默认停用的 Provider 模板绑定。 */
     @PostMapping("/{providerId}/bindings")
     @RequirePermission(operation = SystemOperations.SMS_MANAGE_VALUE)
-    @Audit(operation = "system/sms/binding/create")
+    @Audit(operation = "SYSTEM/SMS/BINDING/CREATE")
     public ApiResponse<SmsBindingView> createBinding(
             @PathVariable @AuditTarget(resourceType = PROVIDER_RESOURCE) long providerId,
             @RequestBody @Valid SmsBindingRequest request) {
@@ -155,7 +155,7 @@ public final class SmsProviderController {
     @PutMapping("/{providerId}/bindings/{bindingId}")
     @IfMatch
     @RequirePermission(operation = SystemOperations.SMS_MANAGE_VALUE)
-    @Audit(operation = "system/sms/binding/replace")
+    @Audit(operation = "SYSTEM/SMS/BINDING/REPLACE")
     public ApiResponse<SmsBindingView> replaceBinding(
             @PathVariable long providerId,
             @PathVariable @AuditTarget(resourceType = BINDING_RESOURCE) long bindingId,
@@ -177,7 +177,7 @@ public final class SmsProviderController {
     @PatchMapping("/{providerId}/bindings/{bindingId}/status")
     @IfMatch
     @RequirePermission(operation = SystemOperations.SMS_MANAGE_VALUE)
-    @Audit(operation = "system/sms/binding/status/change")
+    @Audit(operation = "SYSTEM/SMS/BINDING/STATUS/CHANGE")
     public ApiResponse<SmsBindingView> setBindingEnabled(
             @PathVariable long providerId,
             @PathVariable @AuditTarget(resourceType = BINDING_RESOURCE) long bindingId,
@@ -189,7 +189,7 @@ public final class SmsProviderController {
     @DeleteMapping("/{providerId}/bindings/{bindingId}")
     @IfMatch
     @RequirePermission(operation = SystemOperations.SMS_MANAGE_VALUE)
-    @Audit(operation = "system/sms/binding/delete")
+    @Audit(operation = "SYSTEM/SMS/BINDING/DELETE")
     public ApiResponse<Void> deleteBinding(
             @PathVariable long providerId,
             @PathVariable @AuditTarget(resourceType = BINDING_RESOURCE) long bindingId) {
