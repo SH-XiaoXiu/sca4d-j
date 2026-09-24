@@ -1,8 +1,8 @@
 package com.sca4d.notification.inbox;
 
+import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.event.EventType;
-import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.webrealtime.WebRealtimePublisher;
 import com.sca4d.core.api.webrealtime.WebRealtimeTarget;
