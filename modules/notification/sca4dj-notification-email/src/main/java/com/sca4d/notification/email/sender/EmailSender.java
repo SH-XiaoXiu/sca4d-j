@@ -16,12 +16,12 @@ public final class EmailSender {
     /**
      * Email Sender 审计使用的稳定资源类型。
      */
-    public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofColon("NOTIFICATION:EMAIL:SENDERS");
+    public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofSlash("NOTIFICATION/EMAIL/SENDERS");
 
     /**
      * 供 Java 注解参数使用的资源类型文本。
      */
-    public static final @NotNull String RESOURCE_TYPE_VALUE = "NOTIFICATION:EMAIL:SENDERS";
+    public static final @NotNull String RESOURCE_TYPE_VALUE = "NOTIFICATION/EMAIL/SENDERS";
 
     private final long senderId;
 

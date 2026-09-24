@@ -17,12 +17,12 @@ public final class Operation implements Resource {
     /**
      * 操作资源使用的资源类型。
      */
-    public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofColon("CORE:OPERATIONS");
+    public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofSlash("CORE/OPERATIONS");
 
     /**
      * 供 Java 注解参数使用的资源类型文本。
      */
-    public static final @NotNull String RESOURCE_TYPE_VALUE = "CORE:OPERATIONS";
+    public static final @NotNull String RESOURCE_TYPE_VALUE = "CORE/OPERATIONS";
 
     private final @NotNull TreeCode code;
 
