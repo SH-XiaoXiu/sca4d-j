@@ -45,7 +45,7 @@ curl --fail-with-body --silent --show-error \
       "zh-CN":{"displayName":"规范温控器"},
       "en-US":{"displayName":"Standard climate controller"}
     },
-    "accessMethods":["account:shared-secret"],
+    "accessMethods":["ACCOUNT:AUTHENTICATION/SHARED_SECRET"],
     "protocolCodes":["standard-climate-json-v1"]
   }' \
   "$BASE_URL/iot/products"
@@ -124,7 +124,7 @@ curl --fail-with-body --silent --show-error \
     \"connectionProtocol\":\"mqtt\",
     \"connectionIdentityType\":\"mqtt-client-id\",
     \"connectionIdentity\":\"climate-1\",
-    \"accessMethods\":[\"account:shared-secret\"]
+    \"accessMethods\":[\"ACCOUNT:AUTHENTICATION/SHARED_SECRET\"]
   }" \
   "$BASE_URL/iot/devices"
 ```
