@@ -174,22 +174,21 @@ class QuartzSchedulingIntegrationTest {
                     .containsEntry(QuartzClusterTaskJob.TASK_DEFINITION_VERSION, "1");
             scheduler.start();
 
-            // 历史记录只保存旧 fingerprint 时，当前机制按可恢复 Trigger 字段接管并写入当前契约。
+            // 历史记录缺少当前调度契约时，运行时严格拒绝，不在公共机制中保留历史兼容分支。
             scheduler.standby();
             JobDetail legacyClusterTask = scheduler.getJobDetail(
                     new org.quartz.JobKey("TEST/QUARTZ/CLUSTER_TASK", "sca4dj-cluster-task"));
+            String currentClusterContract = legacyClusterTask.getJobDataMap().getString("scheduleContract");
+            String currentClusterFingerprint = legacyClusterTask.getJobDataMap().getString("scheduleFingerprint");
             legacyClusterTask.getJobDataMap().remove("scheduleContract");
             legacyClusterTask.getJobDataMap().put("scheduleFingerprint", "legacy-implementation-fingerprint");
             scheduler.addJob(legacyClusterTask, true);
-            clusterTaskScheduler.reconcileClusterTasks(List.of(clusterTaskSchedule));
-            assertThat(
-                    scheduler.getJobDetail(
-                            new org.quartz.JobKey(
-                                    "TEST/QUARTZ/CLUSTER_TASK",
-                                    "sca4dj-cluster-task"))
-                            .getJobDataMap()
-                            .getString("scheduleContract"))
-                    .isNotBlank();
+            assertThatThrownBy(() -> clusterTaskScheduler.reconcileClusterTasks(List.of(clusterTaskSchedule)))
+                    .isInstanceOf(IllegalStateException.class)
+                    .hasMessageContaining("同 definitionVersion 定义发生变化");
+            legacyClusterTask.getJobDataMap().put("scheduleContract", currentClusterContract);
+            legacyClusterTask.getJobDataMap().put("scheduleFingerprint", currentClusterFingerprint);
+            scheduler.addJob(legacyClusterTask, true);
 
             // 任务实现类更换但调度契约不变时不需要递增 definitionVersion。
             ClusterTaskSchedule movedTask = new ClusterTaskSchedule(

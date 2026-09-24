@@ -15,9 +15,7 @@ import com.sca4d.core.api.scheduling.MisfirePolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.api.scheduling.ScheduleTiming;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.quartz.CronScheduleBuilder;
-import org.quartz.CronTrigger;
 import org.quartz.JobBuilder;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
@@ -25,7 +23,6 @@ import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SimpleScheduleBuilder;
-import org.quartz.SimpleTrigger;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
@@ -260,28 +257,20 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
                     int existingDefinitionVersion = Integer.parseInt(storedDefinitionVersion);
                     String existingFingerprint = existingData.getString(FINGERPRINT);
                     String existingContract = existingData.getString(CONTRACT);
-                    Trigger legacyTrigger = existingContract == null ? scheduler.getTrigger(triggerKey) : null;
-                    Trigger currentTrigger = existingContract == null ? trigger(schedule, jobKey) : null;
                     if (schedule.definitionVersion() < existingDefinitionVersion) {
                         throw new IllegalStateException(
                                 "Quartz 计划 definitionVersion 不能倒退: " + key + ", stored="
                                         + existingDefinitionVersion + ", current=" + schedule.definitionVersion());
                     }
                     if (existingDefinitionVersion == schedule.definitionVersion()) {
-                        if (existingContract != null && !contracts.get(key).equals(existingContract)
-                                || existingContract == null && !legacyTriggerMatches(legacyTrigger, currentTrigger)) {
+                        if (!contracts.get(key).equals(existingContract)
+                                || !fingerprint.equals(existingFingerprint)) {
                             throw new IllegalStateException(
                                     "Quartz 计划同 definitionVersion 定义发生变化: " + key
                                             + ", definitionVersion=" + schedule.definitionVersion());
                         }
-                        if (existingContract == null) {
-                            log.warn(
-                                    "Quartz 计划采用历史调度记录并写入当前契约 | scheduleKey={} definitionVersion={}",
-                                    key,
-                                    schedule.definitionVersion());
-                        }
                     }
-                    if (existingContract != null
+                    if (contracts.get(key).equals(existingContract)
                             && fingerprint.equals(existingFingerprint)
                             && scheduler.checkExists(triggerKey)
                             && triggerState != Trigger.TriggerState.ERROR) {
@@ -335,35 +324,20 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
                     int existingDefinitionVersion = Integer.parseInt(storedDefinitionVersion);
                     String existingFingerprint = existingData.getString(FINGERPRINT);
                     String existingContract = existingData.getString(CONTRACT);
-                    Trigger legacyTrigger = existingContract == null ? scheduler.getTrigger(triggerKey) : null;
-                    Trigger currentTrigger = existingContract == null
-                            ? trigger(
-                                    schedule.key(),
-                                    schedule.timing(),
-                                    schedule.misfirePolicy(),
-                                    jobKey,
-                                    CLUSTER_TASK_GROUP)
-                            : null;
                     if (schedule.definitionVersion() < existingDefinitionVersion) {
                         throw new IllegalStateException(
                                 "Quartz 集群任务 definitionVersion 不能倒退: " + key + ", stored="
                                         + existingDefinitionVersion + ", current=" + schedule.definitionVersion());
                     }
                     if (existingDefinitionVersion == schedule.definitionVersion()) {
-                        if (existingContract != null && !contracts.get(key).equals(existingContract)
-                                || existingContract == null && !legacyTriggerMatches(legacyTrigger, currentTrigger)) {
+                        if (!contracts.get(key).equals(existingContract)
+                                || !fingerprint.equals(existingFingerprint)) {
                             throw new IllegalStateException(
                                     "Quartz 集群任务同 definitionVersion 定义发生变化: " + key
                                             + ", definitionVersion=" + schedule.definitionVersion());
                         }
-                        if (existingContract == null) {
-                            log.warn(
-                                    "Quartz 集群任务采用历史调度记录并写入当前契约 | scheduleKey={} definitionVersion={}",
-                                    key,
-                                    schedule.definitionVersion());
-                        }
                     }
-                    if (existingContract != null
+                    if (contracts.get(key).equals(existingContract)
                             && fingerprint.equals(existingFingerprint)
                             && scheduler.checkExists(triggerKey)
                             && triggerState != Trigger.TriggerState.ERROR) {
@@ -541,23 +515,6 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
         String timing = timingFingerprint(schedule.timing());
         return schedule.key().value() + "|" + schedule.definitionVersion()
                 + "|" + timing + "|" + schedule.misfirePolicy();
-    }
-
-    /** 比较历史 Quartz Trigger 中仍可恢复的调度字段。 */
-    private static boolean legacyTriggerMatches(@Nullable Trigger stored, @NotNull Trigger current) {
-        if (stored == null
-                || stored.getClass() != current.getClass()
-                || stored.getMisfireInstruction() != current.getMisfireInstruction()) {
-            return false;
-        }
-        if (stored instanceof CronTrigger oldCron && current instanceof CronTrigger newCron) {
-            return oldCron.getCronExpression().equals(newCron.getCronExpression())
-                    && oldCron.getTimeZone().getID().equals(newCron.getTimeZone().getID());
-        }
-        if (stored instanceof SimpleTrigger oldSimple && current instanceof SimpleTrigger newSimple) {
-            return oldSimple.getRepeatInterval() == newSimple.getRepeatInterval();
-        }
-        return false;
     }
 
     /** 返回计划时间定义的稳定摘要片段。 */
