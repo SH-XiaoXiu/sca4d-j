@@ -15,7 +15,9 @@ import com.sca4d.core.api.scheduling.MisfirePolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.api.scheduling.ScheduleTiming;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.quartz.CronScheduleBuilder;
+import org.quartz.CronTrigger;
 import org.quartz.JobBuilder;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
@@ -23,6 +25,7 @@ import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SimpleScheduleBuilder;
+import org.quartz.SimpleTrigger;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
@@ -58,6 +61,8 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
     private static final String CLUSTER_TASK_GROUP = "sca4dj-cluster-task";
 
     private static final String FINGERPRINT = "scheduleFingerprint";
+
+    private static final String CONTRACT = "scheduleContract";
 
     private static final LockKey RECONCILE_LOCK = new LockKey("scheduling", "quartz", "reconcile");
 
@@ -131,15 +136,20 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
     public void reconcile(@NotNull Collection<@NotNull JobSchedule<?, ?>> schedules) {
         // 在写入 Quartz 前完整校验计划 key，并计算用于阻止同定义版本静默变化的摘要。
         Map<ScheduleKey, JobSchedule<?, ?>> definitions = definitions(schedules);
+        Map<ScheduleKey, String> contracts = new HashMap<>();
         Map<ScheduleKey, String> fingerprints = new HashMap<>();
-        definitions.forEach((key, schedule) -> fingerprints.put(key, fingerprint(schedule)));
+        definitions.forEach((key, schedule) -> {
+            String contract = scheduleContract(schedule);
+            contracts.put(key, contract);
+            fingerprints.put(key, DigestUtil.sha256Hex(contract));
+        });
         // 先取得 Redis 锁，再开始数据库事务，使同一应用的多个实例串行修改代码计划。
         Integer deletedCount = distributedLock.execute(
                 RECONCILE_LOCK,
                 LOCK_WAIT,
                 () -> transactions.execute(status -> {
                     try {
-                        return reconcileQuartz(definitions, fingerprints);
+                        return reconcileQuartz(definitions, contracts, fingerprints);
                     } catch (SchedulerException exception) {
                         throw new IllegalStateException("Quartz 代码计划对账失败", exception);
                     }
@@ -157,14 +167,19 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
     public void reconcileClusterTasks(@NotNull Collection<@NotNull ClusterTaskSchedule> schedules) {
         // 在写入 Quartz 前完整校验计划 key，并计算用于阻止同定义版本静默变化的摘要。
         Map<ScheduleKey, ClusterTaskSchedule> definitions = clusterTaskDefinitions(schedules);
+        Map<ScheduleKey, String> contracts = new HashMap<>();
         Map<ScheduleKey, String> fingerprints = new HashMap<>();
-        definitions.forEach((key, schedule) -> fingerprints.put(key, clusterTaskFingerprint(schedule)));
+        definitions.forEach((key, schedule) -> {
+            String contract = clusterTaskContract(schedule);
+            contracts.put(key, contract);
+            fingerprints.put(key, DigestUtil.sha256Hex(contract));
+        });
         Integer deletedCount = distributedLock.execute(
                 RECONCILE_LOCK,
                 LOCK_WAIT,
                 () -> transactions.execute(status -> {
                     try {
-                        return reconcileClusterTasksQuartz(definitions, fingerprints);
+                        return reconcileClusterTasksQuartz(definitions, contracts, fingerprints);
                     } catch (SchedulerException exception) {
                         throw new IllegalStateException("Quartz 集群任务计划对账失败", exception);
                     }
@@ -226,6 +241,7 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
     /** 更新当前计划并删除代码中已经移除的 JobDetail。 */
     private int reconcileQuartz(
             @NotNull Map<ScheduleKey, JobSchedule<?, ?>> definitions,
+            @NotNull Map<ScheduleKey, String> contracts,
             @NotNull Map<ScheduleKey, String> fingerprints) throws SchedulerException {
         for (Map.Entry<ScheduleKey, JobSchedule<?, ?>> entry : definitions.entrySet()) {
             ScheduleKey key = entry.getKey();
@@ -243,18 +259,30 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
                 if (storedDefinitionVersion != null) {
                     int existingDefinitionVersion = Integer.parseInt(storedDefinitionVersion);
                     String existingFingerprint = existingData.getString(FINGERPRINT);
+                    String existingContract = existingData.getString(CONTRACT);
+                    Trigger legacyTrigger = existingContract == null ? scheduler.getTrigger(triggerKey) : null;
+                    Trigger currentTrigger = existingContract == null ? trigger(schedule, jobKey) : null;
                     if (schedule.definitionVersion() < existingDefinitionVersion) {
                         throw new IllegalStateException(
                                 "Quartz 计划 definitionVersion 不能倒退: " + key + ", stored="
                                         + existingDefinitionVersion + ", current=" + schedule.definitionVersion());
                     }
-                    if (existingDefinitionVersion == schedule.definitionVersion()
-                            && !fingerprint.equals(existingFingerprint)) {
-                        throw new IllegalStateException(
-                                "Quartz 计划同 definitionVersion 定义发生变化: " + key
-                                        + ", definitionVersion=" + schedule.definitionVersion());
+                    if (existingDefinitionVersion == schedule.definitionVersion()) {
+                        if (existingContract != null && !contracts.get(key).equals(existingContract)
+                                || existingContract == null && !legacyTriggerMatches(legacyTrigger, currentTrigger)) {
+                            throw new IllegalStateException(
+                                    "Quartz 计划同 definitionVersion 定义发生变化: " + key
+                                            + ", definitionVersion=" + schedule.definitionVersion());
+                        }
+                        if (existingContract == null) {
+                            log.warn(
+                                    "Quartz 计划采用历史调度记录并写入当前契约 | scheduleKey={} definitionVersion={}",
+                                    key,
+                                    schedule.definitionVersion());
+                        }
                     }
-                    if (fingerprint.equals(existingFingerprint)
+                    if (existingContract != null
+                            && fingerprint.equals(existingFingerprint)
                             && scheduler.checkExists(triggerKey)
                             && triggerState != Trigger.TriggerState.ERROR) {
                         continue;
@@ -263,7 +291,7 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
             }
 
             // 新计划、摘要变化、trigger 缺失或 ERROR 都用当前代码定义重建。
-            JobDetail detail = jobDetail(schedule, fingerprint);
+            JobDetail detail = jobDetail(schedule, contracts.get(key), fingerprint);
             scheduler.addJob(detail, true);
             Trigger trigger = trigger(schedule, jobKey);
             if (scheduler.checkExists(triggerKey)) {
@@ -289,6 +317,7 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
     /** 更新当前集群任务计划并删除代码中已经移除的集群任务 JobDetail。 */
     private int reconcileClusterTasksQuartz(
             @NotNull Map<ScheduleKey, ClusterTaskSchedule> definitions,
+            @NotNull Map<ScheduleKey, String> contracts,
             @NotNull Map<ScheduleKey, String> fingerprints) throws SchedulerException {
         for (Map.Entry<ScheduleKey, ClusterTaskSchedule> entry : definitions.entrySet()) {
             ScheduleKey key = entry.getKey();
@@ -305,18 +334,37 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
                 if (storedDefinitionVersion != null) {
                     int existingDefinitionVersion = Integer.parseInt(storedDefinitionVersion);
                     String existingFingerprint = existingData.getString(FINGERPRINT);
+                    String existingContract = existingData.getString(CONTRACT);
+                    Trigger legacyTrigger = existingContract == null ? scheduler.getTrigger(triggerKey) : null;
+                    Trigger currentTrigger = existingContract == null
+                            ? trigger(
+                                    schedule.key(),
+                                    schedule.timing(),
+                                    schedule.misfirePolicy(),
+                                    jobKey,
+                                    CLUSTER_TASK_GROUP)
+                            : null;
                     if (schedule.definitionVersion() < existingDefinitionVersion) {
                         throw new IllegalStateException(
                                 "Quartz 集群任务 definitionVersion 不能倒退: " + key + ", stored="
                                         + existingDefinitionVersion + ", current=" + schedule.definitionVersion());
                     }
-                    if (existingDefinitionVersion == schedule.definitionVersion()
-                            && !fingerprint.equals(existingFingerprint)) {
-                        throw new IllegalStateException(
-                                "Quartz 集群任务同 definitionVersion 定义发生变化: " + key
-                                        + ", definitionVersion=" + schedule.definitionVersion());
+                    if (existingDefinitionVersion == schedule.definitionVersion()) {
+                        if (existingContract != null && !contracts.get(key).equals(existingContract)
+                                || existingContract == null && !legacyTriggerMatches(legacyTrigger, currentTrigger)) {
+                            throw new IllegalStateException(
+                                    "Quartz 集群任务同 definitionVersion 定义发生变化: " + key
+                                            + ", definitionVersion=" + schedule.definitionVersion());
+                        }
+                        if (existingContract == null) {
+                            log.warn(
+                                    "Quartz 集群任务采用历史调度记录并写入当前契约 | scheduleKey={} definitionVersion={}",
+                                    key,
+                                    schedule.definitionVersion());
+                        }
                     }
-                    if (fingerprint.equals(existingFingerprint)
+                    if (existingContract != null
+                            && fingerprint.equals(existingFingerprint)
                             && scheduler.checkExists(triggerKey)
                             && triggerState != Trigger.TriggerState.ERROR) {
                         continue;
@@ -324,7 +372,7 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
                 }
             }
 
-            JobDetail detail = clusterTaskJobDetail(schedule, fingerprint);
+            JobDetail detail = clusterTaskJobDetail(schedule, contracts.get(key), fingerprint);
             scheduler.addJob(detail, true);
             Trigger trigger = trigger(
                     schedule.key(),
@@ -353,6 +401,7 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
     /** 创建只保存代码计划定位信息的 durable JobDetail。 */
     private static @NotNull JobDetail jobDetail(
             @NotNull JobSchedule<?, ?> schedule,
+            @NotNull String contract,
             @NotNull String fingerprint) {
         JobDataMap data = new JobDataMap();
         data.put(QuartzDispatchJob.SCHEDULE_KEY, schedule.key().value());
@@ -360,6 +409,7 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
                 QuartzDispatchJob.SCHEDULE_DEFINITION_VERSION,
                 Integer.toString(schedule.definitionVersion()));
         data.put(FINGERPRINT, fingerprint);
+        data.put(CONTRACT, contract);
         return JobBuilder.newJob(QuartzDispatchJob.class)
                 .withIdentity(quartzJobKey(schedule.key()))
                 .usingJobData(data)
@@ -371,6 +421,7 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
     /** 创建只保存集群任务定位信息的 durable JobDetail。 */
     private static @NotNull JobDetail clusterTaskJobDetail(
             @NotNull ClusterTaskSchedule schedule,
+            @NotNull String contract,
             @NotNull String fingerprint) {
         JobDataMap data = new JobDataMap();
         data.put(QuartzClusterTaskJob.TASK_KEY, schedule.key().value());
@@ -378,6 +429,7 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
                 QuartzClusterTaskJob.TASK_DEFINITION_VERSION,
                 Integer.toString(schedule.definitionVersion()));
         data.put(FINGERPRINT, fingerprint);
+        data.put(CONTRACT, contract);
         return JobBuilder.newJob(QuartzClusterTaskJob.class)
                 .withIdentity(quartzClusterTaskJobKey(schedule.key()))
                 .usingJobData(data)
@@ -462,7 +514,7 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
     }
 
     /** 计算同定义版本不可静默变化的稳定摘要。 */
-    private @NotNull String fingerprint(@NotNull JobSchedule<?, ?> schedule) {
+    private @NotNull String scheduleContract(@NotNull JobSchedule<?, ?> schedule) {
         String timing;
         if (schedule.timing() instanceof CronSchedule cron) {
             timing = "cron|" + cron.expression() + "|" + cron.zone().getId();
@@ -478,21 +530,34 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
         } catch (JsonProcessingException exception) {
             throw new IllegalArgumentException("Quartz 计划输入无法序列化: " + schedule.key(), exception);
         }
-        String definition = schedule.key().value() + "|" + schedule.definitionVersion()
+        return schedule.key().value() + "|" + schedule.definitionVersion()
                 + "|" + schedule.job().key().value() + "|" + schedule.job().definitionVersion()
-                + "|" + schedule.job().inputType().getName() + "|" + schedule.job().outputType().getName()
                 + "|" + timing + "|" + schedule.misfirePolicy() + "|" + schedule.overlapPolicy()
                 + "|" + input;
-        return DigestUtil.sha256Hex(definition);
     }
 
-    /** 计算集群任务同定义版本不可静默变化的稳定摘要。 */
-    private static @NotNull String clusterTaskFingerprint(@NotNull ClusterTaskSchedule schedule) {
+    /** 计算集群任务不包含实现类名称的稳定调度契约。 */
+    private static @NotNull String clusterTaskContract(@NotNull ClusterTaskSchedule schedule) {
         String timing = timingFingerprint(schedule.timing());
-        String definition = schedule.key().value() + "|" + schedule.definitionVersion()
-                + "|" + schedule.task().getClass().getName()
+        return schedule.key().value() + "|" + schedule.definitionVersion()
                 + "|" + timing + "|" + schedule.misfirePolicy();
-        return DigestUtil.sha256Hex(definition);
+    }
+
+    /** 比较历史 Quartz Trigger 中仍可恢复的调度字段。 */
+    private static boolean legacyTriggerMatches(@Nullable Trigger stored, @NotNull Trigger current) {
+        if (stored == null
+                || stored.getClass() != current.getClass()
+                || stored.getMisfireInstruction() != current.getMisfireInstruction()) {
+            return false;
+        }
+        if (stored instanceof CronTrigger oldCron && current instanceof CronTrigger newCron) {
+            return oldCron.getCronExpression().equals(newCron.getCronExpression())
+                    && oldCron.getTimeZone().getID().equals(newCron.getTimeZone().getID());
+        }
+        if (stored instanceof SimpleTrigger oldSimple && current instanceof SimpleTrigger newSimple) {
+            return oldSimple.getRepeatInterval() == newSimple.getRepeatInterval();
+        }
+        return false;
     }
 
     /** 返回计划时间定义的稳定摘要片段。 */

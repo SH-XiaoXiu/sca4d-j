@@ -18,6 +18,8 @@ Optional<Output> output = jobExecutor.result(runId, job);
 
 需要定时执行同一个 Job 时，再注册 `JobSchedule`，声明稳定 key、固定输入、Cron 或间隔、misfire 与重叠策略。修改定义时递增 `definitionVersion`。运行后检查 run 状态和业务结果，并用重复执行验证幂等规则。
 
+Quartz 计划的稳定身份由 `ScheduleKey`、`definitionVersion`、时间定义、misfire/overlap 策略和固定输入组成。`JobSchedule` 或 `ClusterTaskSchedule` 的实现类、包名和模块目录不属于计划定义；移动任务类不需要递增 `definitionVersion`。Quartz 的持久化对账由脚手架完成：新代码会接管没有当前契约描述的历史记录，并在日志中记录一次兼容升级；接管后同一版本的稳定定义变化仍会阻止 Scheduler 启动。
+
 Pipeline、Job 和 Scheduler 解决三个不同问题。类型化处理线（[Pipeline](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/pipeline/Pipeline.html)）在调用线程中直接执行固定的输入输出转换；持久化工作（[Job](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/job/Job.html)）描述一个可独立提交和恢复的执行单元；JobScheduler 在时间到达时提交 Job，[ClusterTaskScheduler](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/scheduling/ClusterTaskScheduler.html) 则直接执行不需要业务运行历史的基础设施任务。
 
 Flow 仍表示由业务调用逐步推进的无状态流程定义。Flow 不执行 Pipeline，不领取 Job，也不保存 Quartz trigger。需要继续处理 Flow 时，由业务代码明确发起下一次推进；不能把 Job 的持久化状态或 Pipeline 的输入输出线称为 Flow。

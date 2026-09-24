@@ -140,7 +140,7 @@ class QuartzSchedulingIntegrationTest {
             scheduler.addJob(incompleteClusterTask, true);
 
             JobScheduler jobScheduler = context.getBean(JobScheduler.class);
-            JobSchedule<?, ?> schedule = context.getBean(JobSchedule.class);
+            JobSchedule<Void, Void> schedule = context.getBean(JobSchedule.class);
             scheduler.addJob(
                     JobBuilder.newJob(QuartzDispatchJob.class)
                             .withIdentity("storage.file.cleanup", "sca4dj-code")
@@ -172,6 +172,42 @@ class QuartzSchedulingIntegrationTest {
                                     "sca4dj-cluster-task"))
                             .getJobDataMap())
                     .containsEntry(QuartzClusterTaskJob.TASK_DEFINITION_VERSION, "1");
+            scheduler.start();
+
+            // 历史记录只保存旧 fingerprint 时，当前机制按可恢复 Trigger 字段接管并写入当前契约。
+            scheduler.standby();
+            JobDetail legacyClusterTask = scheduler.getJobDetail(
+                    new org.quartz.JobKey("TEST/QUARTZ/CLUSTER_TASK", "sca4dj-cluster-task"));
+            legacyClusterTask.getJobDataMap().remove("scheduleContract");
+            legacyClusterTask.getJobDataMap().put("scheduleFingerprint", "legacy-implementation-fingerprint");
+            scheduler.addJob(legacyClusterTask, true);
+            clusterTaskScheduler.reconcileClusterTasks(List.of(clusterTaskSchedule));
+            assertThat(
+                    scheduler.getJobDetail(
+                            new org.quartz.JobKey(
+                                    "TEST/QUARTZ/CLUSTER_TASK",
+                                    "sca4dj-cluster-task"))
+                            .getJobDataMap()
+                            .getString("scheduleContract"))
+                    .isNotBlank();
+
+            // 任务实现类更换但调度契约不变时不需要递增 definitionVersion。
+            ClusterTaskSchedule movedTask = new ClusterTaskSchedule(
+                    clusterTaskSchedule.key(),
+                    clusterTaskSchedule.definitionVersion(),
+                    new RenamedCountingClusterTask(),
+                    clusterTaskSchedule.timing(),
+                    clusterTaskSchedule.misfirePolicy());
+            clusterTaskScheduler.reconcileClusterTasks(List.of(movedTask));
+            JobSchedule<Void, Void> movedSchedule = new JobSchedule<>(
+                    schedule.key(),
+                    schedule.definitionVersion(),
+                    new RenamedDirectJob(),
+                    schedule.input(),
+                    schedule.timing(),
+                    schedule.misfirePolicy(),
+                    schedule.overlapPolicy());
+            jobScheduler.reconcile(List.of(movedSchedule));
             scheduler.start();
 
             JobSchedule<?, ?> changedWithoutVersion = withInterval(
@@ -365,6 +401,50 @@ class QuartzSchedulingIntegrationTest {
         @Override
         public void execute() {
             execution.countDown();
+        }
+    }
+
+    /** 用于验证实现类更换不改变稳定调度契约。 */
+    static final class RenamedCountingClusterTask implements ClusterTask {
+        @Override
+        public void execute() {
+        }
+    }
+
+    /** 用于验证 Job 实现类更换不改变稳定调度契约。 */
+    static final class RenamedDirectJob extends DirectJob<Void, Void> {
+        private final JobKey key = new JobKey("TEST/QUARTZ/DISPATCH");
+
+        @Override
+        public @NotNull JobKey key() {
+            return key;
+        }
+
+        @Override
+        public int definitionVersion() {
+            return 1;
+        }
+
+        @Override
+        public @NotNull Class<Void> inputType() {
+            return Void.class;
+        }
+
+        @Override
+        public @NotNull Class<Void> outputType() {
+            return Void.class;
+        }
+
+        @Override
+        public @NotNull JobRetryPolicy retryPolicy() {
+            return JobRetryPolicy.once();
+        }
+
+        @Override
+        protected @Nullable Void execute(
+                @NotNull JobExecution execution,
+                @Nullable Void input) {
+            return null;
         }
     }
 
