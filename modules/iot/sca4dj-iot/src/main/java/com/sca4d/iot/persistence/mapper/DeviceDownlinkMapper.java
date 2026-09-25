@@ -36,6 +36,10 @@ public interface DeviceDownlinkMapper {
             @Param("offset") long offset,
             @Param("limit") int limit);
 
+    /** 按下行消息标识读取主库保存的最近 ACK 投影。 */
+    @Nullable
+    EncodedDeviceAcknowledgement selectAcknowledgementByMessageId(@Param("messageId") long messageId);
+
     /** 查询当前物模型绑定仍未完成的下行消息数量。 */
     long countActiveDownlinkMessages(
             @Param("deviceId") long deviceId,

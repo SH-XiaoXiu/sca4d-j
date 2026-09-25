@@ -33,6 +33,18 @@
         ORDER BY occurred_at DESC, message_id DESC
         OFFSET #{offset} LIMIT #{limit}
     </select>
+    <select id="countAcknowledgementsByMessageId" resultType="long">
+        SELECT COUNT(*)
+        FROM iot_event
+        WHERE message_id = #{messageId} AND event_code = '$downlink.ack'
+    </select>
+    <select id="selectAcknowledgementsByMessageId" resultType="com.sca4d.iot.timescale.persistence.TimescaleThingEvent">
+        SELECT <include refid="eventColumns"/>
+        FROM iot_event
+        WHERE message_id = #{messageId} AND event_code = '$downlink.ack'
+        ORDER BY received_at DESC, occurred_at DESC, event_id DESC
+        OFFSET #{offset} LIMIT #{limit}
+    </select>
 
     <insert id="insertTelemetrySamples">
         INSERT INTO iot_telemetry_sample (

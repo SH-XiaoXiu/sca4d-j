@@ -201,6 +201,24 @@ public class DownlinkRepository {
         return messages.selectDownlinkMessages(List.of(messageId)).stream().findFirst().map(this::toMessage);
     }
 
+    /** 分页读取主库保存的指定下行 ACK 投影；主库最多返回一条。 */
+    @CheckReturnValue
+    public @NotNull Page<DeviceAcknowledgement> findAcknowledgementsByMessageId(
+            long messageId,
+            @NotNull PageRequest page) {
+        if (messageId <= 0) {
+            throw new IllegalArgumentException("下行消息标识必须为正数");
+        }
+        PageRequest checked = Objects.requireNonNull(page, "业务回执分页要求不能为空").verifyMaxSize(100);
+        if (checked.page() != 1) {
+            return Page.empty(checked);
+        }
+        EncodedDeviceAcknowledgement row = messages.selectAcknowledgementByMessageId(messageId);
+        return row == null
+                ? Page.empty(checked)
+                : new Page<>(List.of(toAcknowledgement(row)), checked, 1);
+    }
+
     /**
      * 批量读取指定标识的下行消息。
      *

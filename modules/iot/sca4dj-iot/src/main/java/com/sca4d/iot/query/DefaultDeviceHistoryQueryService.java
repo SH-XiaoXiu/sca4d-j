@@ -48,6 +48,21 @@ public final class DefaultDeviceHistoryQueryService implements DeviceHistoryQuer
     }
 
     @Override
+    public @NotNull Page<DeviceAcknowledgement> acknowledgementsByMessageId(
+            long messageId,
+            @NotNull PageRequest page) {
+        PageRequest checked = Objects.requireNonNull(page, "业务回执分页要求不能为空").verifyMaxSize(100);
+        DeviceHistoryStore store = history.getIfAvailable();
+        if (store != null) {
+            Page<DeviceAcknowledgement> historical = store.acknowledgementsByMessageId(messageId, checked);
+            if (historical.getTotal() > 0) {
+                return historical;
+            }
+        }
+        return downlinks.findAcknowledgementsByMessageId(messageId, checked);
+    }
+
+    @Override
     public @NotNull @Unmodifiable Map<@NotNull Long, @NotNull DeviceDownlink> downlinks(
             @NotNull Collection<@NotNull Long> messageIds) {
         return downlinks.findAll(messageIds);

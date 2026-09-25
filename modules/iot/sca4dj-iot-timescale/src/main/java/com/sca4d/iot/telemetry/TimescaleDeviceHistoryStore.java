@@ -35,6 +35,13 @@ public final class TimescaleDeviceHistoryStore implements DeviceHistoryStore {
     }
 
     @Override
+    public @NotNull Page<DeviceAcknowledgement> acknowledgementsByMessageId(
+            long messageId,
+            @NotNull PageRequest page) {
+        return repository.findAcknowledgementsByMessageId(messageId, page);
+    }
+
+    @Override
     public @NotNull Page<DeviceScheduleExecution> scheduleExecutions(
             long scheduleId,
             @NotNull PageRequest page) {

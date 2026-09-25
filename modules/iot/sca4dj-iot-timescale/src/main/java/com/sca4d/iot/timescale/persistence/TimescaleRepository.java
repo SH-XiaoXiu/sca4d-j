@@ -151,6 +151,24 @@ public class TimescaleRepository {
         return new Page<>(items, checked, total);
     }
 
+    /** 分页读取指定下行消息的完整 ACK 阶段历史。 */
+    public @NotNull Page<DeviceAcknowledgement> findAcknowledgementsByMessageId(
+            long messageId,
+            @NotNull PageRequest page) {
+        if (messageId <= 0) {
+            throw new IllegalArgumentException("下行消息标识必须为正数");
+        }
+        PageRequest checked = Objects.requireNonNull(page, "业务回执分页要求不能为空").verifyMaxSize(100);
+        long total = mapper.countAcknowledgementsByMessageId(messageId);
+        List<DeviceAcknowledgement> items = total == 0
+                ? List.of()
+                : mapper.selectAcknowledgementsByMessageId(messageId, checked.offset(), checked.size())
+                        .stream()
+                        .map(this::toAcknowledgement)
+                        .toList();
+        return new Page<>(items, checked, total);
+    }
+
     /** 分页读取一个设备定时规则的完整执行历史。 */
     public @NotNull Page<DeviceScheduleExecution> findScheduleExecutions(
             long scheduleId,

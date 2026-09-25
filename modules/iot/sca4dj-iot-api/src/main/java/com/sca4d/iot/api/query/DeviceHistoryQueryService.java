@@ -25,6 +25,14 @@ public interface DeviceHistoryQueryService {
     Optional<DeviceDownlink> downlink(long messageId);
 
     /**
+     * @param messageId 全局下行消息标识
+     * @param page 从 1 开始且页大小不超过 100 的分页要求
+     * @return 按接收时间倒序排列的该下行 ACK 历史；主库只保留最新投影
+     */
+    @NotNull
+    Page<DeviceAcknowledgement> acknowledgementsByMessageId(long messageId, @NotNull PageRequest page);
+
+    /**
      * @param messageIds 全局下行消息标识；重复标识只查询一次
      * @return 仍保存在主库中的下行消息；已删除或不存在的标识不出现在结果中
      */
