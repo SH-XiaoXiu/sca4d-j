@@ -9,6 +9,8 @@ import com.sca4d.core.api.permission.Permission;
 import com.sca4d.core.api.permission.PermissionAssessment;
 import com.sca4d.core.api.permission.PermissionDecision;
 import com.sca4d.core.api.resource.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,6 +21,8 @@ import java.util.Set;
 
 /** 解析 `@RequirePermission`，执行权限判断，并登记必须由 Repository 消费的资源范围。 */
 public final class PermissionCallAssessor {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PermissionCallAssessor.class);
 
     private final PermissionAssessment permissionAssessment;
 
@@ -69,6 +73,12 @@ public final class PermissionCallAssessor {
                 return assessed;
             });
             if (!decision.isAllowed()) {
+                LOG.trace(
+                        "权限判断拒绝 | callId={} principalId={} permission={} reason={}",
+                        checked.call().callId(),
+                        checked.call().principal().map(principal -> principal.principalId()).orElse(null),
+                        permission,
+                        decision.reason().orElse(null));
                 throw new BusinessException(CoreErrorCode.PERMISSION_DENIED);
             }
             if (decision.scope().isPresent()) {
