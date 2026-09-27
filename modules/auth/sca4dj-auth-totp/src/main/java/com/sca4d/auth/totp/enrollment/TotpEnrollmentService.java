@@ -12,7 +12,6 @@ import com.sca4d.core.api.authentication.SessionTerminationReason;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.security.EncryptedSecret;
 import com.sca4d.core.api.security.SecretKeyring;
-import com.sca4d.core.api.setting.Settings;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +39,7 @@ public class TotpEnrollmentService {
 
     private final SessionControl sessions;
 
-    private final Settings settings;
+    private final TotpSettings settings;
 
     private final Clock clock;
 
@@ -61,7 +60,7 @@ public class TotpEnrollmentService {
             @NotNull TotpCodeVerifier verifier,
             @NotNull SecretKeyring keyring,
             @NotNull SessionControl sessions,
-            @NotNull Settings settings,
+            @NotNull TotpSettings settings,
             @NotNull Clock clock) {
         this.enrollments = Objects.requireNonNull(enrollments, "TOTP enrollment store 不能为空");
         this.credentials = Objects.requireNonNull(credentials, "TOTP 凭据 Repository 不能为空");
@@ -80,7 +79,7 @@ public class TotpEnrollmentService {
      */
     public @NotNull TotpEnrollment create(long accountId) {
         String enrollmentId = UUID.randomUUID().toString();
-        Instant expiresAt = clock.instant().plus(settings.get(TotpSettings.ENROLLMENT_TTL));
+        Instant expiresAt = clock.instant().plus(settings.ENROLLMENT_TTL.get());
         String secret = verifier.generateSecret();
         TotpEnrollmentState state = new TotpEnrollmentState(
                 enrollmentId,

@@ -35,7 +35,7 @@ CREATE UNIQUE INDEX uk_iam_single_system ON iam_subject(subject_type) WHERE subj
 CREATE TABLE iam_system_identity (
     code VARCHAR(128) PRIMARY KEY,
     principal_id BIGINT NOT NULL UNIQUE,
-    subject_id BIGINT NOT NULL CHECK (subject_id = 1),
+    subject_id BIGINT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CHECK (code ~ '^[A-Z0-9_]+(:[A-Z0-9_]+)*$')
 );
@@ -119,7 +119,7 @@ CREATE INDEX idx_platform_acl_entry_list ON platform_acl_entry (principal_id, re
 
 COMMENT ON TABLE iam_subject IS '记录完成认证或建立受控调用的具体接入者';
 COMMENT ON COLUMN iam_subject.id IS '接入者全局标识';
-COMMENT ON COLUMN iam_subject.subject_type IS '接入者类型；SYSTEM 表示整个业务系统，其固定 ID 为 1';
+COMMENT ON COLUMN iam_subject.subject_type IS '接入者类型；SYSTEM 表示整个业务系统，其 ID 由应用配置确定';
 COMMENT ON COLUMN iam_subject.status IS '接入者当前状态';
 COMMENT ON COLUMN iam_subject.created_at IS '接入者创建时间';
 COMMENT ON COLUMN iam_subject.updated_at IS '接入者最近更新时间';

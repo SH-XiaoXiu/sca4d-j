@@ -37,8 +37,9 @@ import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.OperationCatalog;
-import com.sca4d.core.api.setting.Settings;
-import com.sca4d.core.api.setting.SystemSetting;
+import com.sca4d.core.api.setting.access.SettingReader;
+import com.sca4d.core.api.setting.access.SettingWriter;
+import com.sca4d.core.api.setting.definition.SystemSetting;
 import com.sca4d.core.spring.json.Sca4djJson;
 import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.core.spring.redis.Sca4djRedis;
@@ -65,6 +66,12 @@ import java.util.concurrent.Executors;
 @EnableConfigurationProperties(AuthProperties.class)
 public class AuthAutoConfiguration {
 
+    /** 创建本应用上下文的模块设置，来源由 Spring 显式注入。 */
+    @Bean
+    AuthSettings authSettings(SettingReader<String> reader, SettingWriter<String> writer) {
+        return new AuthSettings(reader, writer);
+    }
+
     /** 只在官方 Sa-Token Redis DAO 初始化完成后安装内部资源 Key 的序列化器。 */
     @Bean
     static SaTokenRedisSerialization saTokenRedisSerialization() {
@@ -73,20 +80,20 @@ public class AuthAutoConfiguration {
 
     /** @return Session 有效期设置 */
     @Bean
-    SystemSetting<Duration> authSessionTtlSetting() {
-        return AuthSettings.SESSION_TTL;
+    SystemSetting<Duration> authSessionTtlSetting(AuthSettings settings) {
+        return settings.SESSION_TTL;
     }
 
     /** @return 认证尝试有效期设置 */
     @Bean
-    SystemSetting<Duration> authenticationAttemptTtlSetting() {
-        return AuthSettings.ATTEMPT_TTL;
+    SystemSetting<Duration> authenticationAttemptTtlSetting(AuthSettings settings) {
+        return settings.ATTEMPT_TTL;
     }
 
     /** @return JWT access 有效期设置 */
     @Bean
-    SystemSetting<Duration> jwtAccessTtlSetting() {
-        return AuthSettings.JWT_ACCESS_TTL;
+    SystemSetting<Duration> jwtAccessTtlSetting(AuthSettings settings) {
+        return settings.JWT_ACCESS_TTL;
     }
 
     @Bean
@@ -228,7 +235,7 @@ public class AuthAutoConfiguration {
     JwtSessionProjection jwtSessionProjection(
             SessionCodec codec,
             AuthProperties properties,
-            Settings settings,
+            AuthSettings settings,
             Clock clock) {
         return new JwtSessionProjection(codec, properties, settings, clock);
     }
@@ -253,7 +260,7 @@ public class AuthAutoConfiguration {
             AuthenticationMethods methods,
             RedisAuthenticationAttemptStore attempts,
             AuthenticationPolicy policy,
-            Settings settings,
+            AuthSettings settings,
             Clock clock) {
         return new RedisAuthenticationAttempts(
                 methods,
@@ -272,7 +279,7 @@ public class AuthAutoConfiguration {
             ResourceIdLoaders resourceIds,
             SaTokenSessionManager sessions,
             JwtSessionProjection tokenProjection,
-            Settings settings,
+            AuthSettings settings,
             Clock clock) {
         return new SessionService(
                 identities,

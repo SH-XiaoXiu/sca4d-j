@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.security.EncryptedSecret;
 import com.sca4d.core.api.security.SecretCipher;
-import com.sca4d.core.api.setting.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingOwner;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

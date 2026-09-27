@@ -17,13 +17,17 @@ import com.sca4d.auth.email.EmailCodeErrorCode;
 import com.sca4d.auth.email.config.EmailCodeSettings;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountDirectory;
 import com.sca4d.core.api.identity.RealmKey;
-import com.sca4d.core.api.id.Id;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.Notifications;
 import com.sca4d.core.api.security.SecretHasher;
-import com.sca4d.core.api.setting.Settings;
+import com.sca4d.core.api.setting.access.SettingReader;
+import com.sca4d.core.api.setting.access.SettingWriter;
+import com.sca4d.core.api.setting.value.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingValue;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -55,9 +59,26 @@ class EmailCodeChallengeServiceTest {
         when(store.reserveCooldown(anyString(), any())).thenReturn(true, false);
         SecretHasher hasher = mock(SecretHasher.class);
         when(hasher.hash(anyString())).thenReturn("secret-hash");
-        Settings settings = mock(Settings.class);
-        when(settings.get(EmailCodeSettings.CHALLENGE_TTL)).thenReturn(Duration.ofMinutes(5));
-        when(settings.get(EmailCodeSettings.RESEND_INTERVAL)).thenReturn(Duration.ofMinutes(1));
+        TestAccess source = mock(TestAccess.class);
+        EmailCodeSettings settings = new EmailCodeSettings(source, source);
+        when(source.read(settings.CHALLENGE_TTL.code(), SettingOwner.system())).thenReturn(
+                SettingValue.read(
+                        TreeCode.of("SETTING:TEST"),
+                        settings.CHALLENGE_TTL.code(),
+                        SettingOwner.system(),
+                        settings.CHALLENGE_TTL.codec().encode(Duration.ofMinutes(5)),
+                        1,
+                        new Version(0),
+                        false));
+        when(source.read(settings.RESEND_INTERVAL.code(), SettingOwner.system())).thenReturn(
+                SettingValue.read(
+                        TreeCode.of("SETTING:TEST"),
+                        settings.RESEND_INTERVAL.code(),
+                        SettingOwner.system(),
+                        settings.RESEND_INTERVAL.codec().encode(Duration.ofMinutes(1)),
+                        1,
+                        new Version(0),
+                        false));
         SecureRandom random = mock(SecureRandom.class);
         when(random.nextInt(1_000_000)).thenReturn(123456);
         EmailCodeChallengeService service = new EmailCodeChallengeService(
@@ -114,7 +135,7 @@ class EmailCodeChallengeServiceTest {
                 mock(Notifications.class),
                 store,
                 hasher,
-                mock(Settings.class),
+                mock(EmailCodeSettings.class),
                 Clock.fixed(Instant.parse("2026-08-11T01:02:00Z"), ZoneOffset.UTC),
                 mock(SecureRandom.class));
 
@@ -123,5 +144,9 @@ class EmailCodeChallengeServiceTest {
                 .hasMessage("Email Code Challenge 已变化或不可用")
                 .hasCauseInstanceOf(BusinessException.class);
         verify(accounts).activeById(accountId);
+    }
+
+    /** 测试替身同时实现读取和写入契约，避免引入生产组合接口。 */
+    private interface TestAccess extends SettingReader<String>, SettingWriter<String> {
     }
 }

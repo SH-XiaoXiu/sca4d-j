@@ -2,7 +2,7 @@ package com.sca4d.core.spring.setting;
 
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.name.code.TreeCode;
-import com.sca4d.core.api.setting.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingOwner;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sca4d.core.spring.setting.SettingMapper">
+    <select id="selectCanonicalOrLegacy" resultType="com.sca4d.core.spring.setting.StoredSetting">
+        SELECT <include refid="settingColumns"/> FROM sys_setting
+        WHERE owner_type = #{ownerType} AND owner_id = #{ownerId}
+          AND UPPER(REPLACE(REPLACE(REPLACE(setting_key, '-', '_'), '.', ':'), '/', ':')) = #{key}
+    </select>
 
     <sql id="settingColumns">
         owner_type AS ownerType,
@@ -34,7 +39,7 @@
             synchronized_from_environment, version
         )
         VALUES (
-            'SYSTEM', '1', #{key}, #{schemaVersion}, TRUE,
+            #{ownerType}, #{ownerId}, #{key}, #{schemaVersion}, TRUE,
             <if test="valueText.set">#{valueText.value}</if><if test="valueText.clear">NULL</if>,
             <if test="valueKeyId.set">#{valueKeyId.value}</if><if test="valueKeyId.clear">NULL</if>,
             <if test="valueCiphertext.set">#{valueCiphertext.value,jdbcType=BINARY}</if><if test="valueCiphertext.clear">NULL</if>,
@@ -56,8 +61,8 @@
         UPDATE sys_setting
         SET synchronized_from_environment = FALSE,
             version = version + 1
-        WHERE owner_type = 'SYSTEM'
-          AND owner_id = '1'
+        WHERE owner_type = #{ownerType}
+          AND owner_id = #{ownerId}
           AND setting_key = #{key}
           AND synchronized_from_environment = TRUE
     </update>

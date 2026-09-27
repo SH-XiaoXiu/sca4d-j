@@ -12,7 +12,7 @@ import { message, Modal } from 'ant-design-vue';
 
 import { $t } from '#/locales';
 
-const PREFERENCE_KEY = 'admin.ui-preferences';
+const PREFERENCE_KEY = 'ADMIN:UI_PREFERENCES';
 const SAVE_DELAY_MILLISECONDS = 150;
 
 const pending = ref(false);

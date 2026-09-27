@@ -7,6 +7,7 @@ import com.sca4d.app.server.system.request.ReplaceSettingRequest;
 import com.sca4d.app.server.system.view.SystemSettingsView;
 import com.sca4d.core.api.annotation.Audit;
 import com.sca4d.core.api.annotation.RequirePermission;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.spring.web.ApiResponse;
 import com.sca4d.core.spring.web.annotation.CurrentPrincipal;
 import com.sca4d.core.spring.web.annotation.IfMatch;
@@ -55,7 +56,7 @@ public class SystemSettingController {
     public @NotNull ApiResponse<SystemSettingsView> replace(
             @PathVariable @NotNull String key,
             @RequestBody @Valid @NotNull ReplaceSettingRequest request) {
-        settings.replace(key, request.getValue());
+        settings.replace(TreeCode.of(key), request.getValue());
         return ApiResponse.ok(SystemSettingsView.from(settings.findAll()));
     }
 
@@ -66,7 +67,7 @@ public class SystemSettingController {
     @RequirePermission(operation = SystemOperations.SETTINGS_MANAGE_VALUE)
     @Audit(operation = "SYSTEM/SETTING/RESET")
     public @NotNull ApiResponse<SystemSettingsView> reset(@PathVariable @NotNull String key) {
-        settings.reset(key);
+        settings.reset(TreeCode.of(key));
         return ApiResponse.ok(SystemSettingsView.from(settings.findAll()));
     }
 }

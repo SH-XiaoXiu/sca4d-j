@@ -26,7 +26,10 @@ import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.name.code.TreeCode;
-import com.sca4d.core.api.setting.Settings;
+import com.sca4d.core.api.setting.access.SettingReader;
+import com.sca4d.core.api.setting.access.SettingWriter;
+import com.sca4d.core.api.setting.value.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.DisplayName;
@@ -261,8 +264,17 @@ class RedisAuthenticationAttemptsTest {
                 return allowed;
             }
         };
-        Settings settings = mock(Settings.class);
-        when(settings.get(AuthSettings.ATTEMPT_TTL)).thenReturn(Duration.ofMinutes(5));
+        TestAccess source = mock(TestAccess.class);
+        AuthSettings settings = new AuthSettings(source, source);
+        when(source.read(settings.ATTEMPT_TTL.code(), SettingOwner.system())).thenReturn(
+                SettingValue.read(
+                        TreeCode.of("SETTING:TEST"),
+                        settings.ATTEMPT_TTL.code(),
+                        SettingOwner.system(),
+                        settings.ATTEMPT_TTL.codec().encode(Duration.ofMinutes(5)),
+                        1,
+                        new Version(0),
+                        false));
         RedisAuthenticationAttempts engine = new RedisAuthenticationAttempts(
                 new AuthenticationMethods(List.of(methods)),
                 store,
@@ -411,5 +423,9 @@ class RedisAuthenticationAttemptsTest {
             index++;
             return instants[current];
         }
+    }
+
+    /** 测试替身同时实现读取和写入契约，避免引入生产组合接口。 */
+    private interface TestAccess extends SettingReader<String>, SettingWriter<String> {
     }
 }

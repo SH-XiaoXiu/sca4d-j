@@ -15,7 +15,6 @@ import com.sca4d.core.api.concurrent.OptimisticLockException;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
-import com.sca4d.core.api.setting.Settings;
 import com.sca4d.core.api.utils.TextUtils;
 import com.yubico.webauthn.FinishRegistrationOptions;
 import com.yubico.webauthn.RegistrationResult;
@@ -67,7 +66,7 @@ public class PasskeyRegistrationService {
 
     private final PasskeyCredentialRepository credentials;
 
-    private final Settings settings;
+    private final PasskeySettings settings;
 
     private final Clock clock;
 
@@ -87,7 +86,7 @@ public class PasskeyRegistrationService {
             @NotNull RelyingParty relyingParty,
             @NotNull PasskeyCeremonyStore ceremonies,
             @NotNull PasskeyCredentialRepository credentials,
-            @NotNull Settings settings,
+            @NotNull PasskeySettings settings,
             @NotNull Clock clock,
             @NotNull SecureRandom secureRandom) {
         this.relyingParty = Objects.requireNonNull(relyingParty, "WebAuthn RelyingParty 不能为空");
@@ -214,7 +213,7 @@ public class PasskeyRegistrationService {
                     now,
                     null,
                     new Version(0));
-            int maximumCredentials = settings.get(PasskeySettings.MAXIMUM_CREDENTIALS);
+            int maximumCredentials = settings.MAXIMUM_CREDENTIALS.get();
             byte[] storedUserHandle = credentials.findUserHandle(checkedAccount.accountId());
             if (storedUserHandle == null || !Arrays.equals(storedUserHandle, credential.userHandle())) {
                 throw new IllegalStateException("Passkey 账号锚点不存在或 user handle 不一致");

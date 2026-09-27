@@ -50,7 +50,7 @@ Name 是不可变字符串值对象。Code 表达代码中声明的稳定编码�
 
 `sca4dj.instance.id` 是执行实例标识，默认启动时固定 UUID；`sca4dj.instance.enabled-capabilities` 未配置时启用全部声明，空集合启用零项，未知编码拒绝启动。能力影响 API、监听器和工作线程，不改变权限或行级数据范围。Gateway 根据完整路径要求筛选健康实例，没有候选返回 503。
 
-`sca4dj.iam.system-principal-ids` 保存稳定系统身份的人工 ID，MAIN 默认 1，IOT 配置 2。数据库确认并提交后才能发布身份常量并启动后台任务；占用 ID 提示换 ID，历史绑定不同或状态异常要求人工迁移。所有实例共享同一 SYSTEM Subject 和领域 Principal ID，审计另外记录执行实例 ID。
+`sca4dj.iam.system-subject-id` 保存整个业务系统共享的 SYSTEM Subject ID，默认 1；`sca4dj.iam.system-principal-ids` 保存 MAIN、IOT 等系统身份的人工 Principal ID，MAIN 默认 1，IOT 配置 2。数据库确认并提交后才能发布身份常量并启动后台任务；占用 ID 提示换 ID，历史绑定不同或状态异常要求人工迁移。所有实例共享同一 SYSTEM Subject ID 和领域 Principal ID，审计另外记录执行实例 ID。
 
 `Sca4djMapper` 通过 `@Sca4djJson` 供脚手架持久化、Session 与内部消息使用；业务和 HTTP 使用自己的 `ObjectMapper`。`NameJacksonModule` 只注册名称值类型，不猜测 JSON 字符串是否需要隔离。
 
@@ -102,7 +102,7 @@ Server 通过 `sca4dj.gateway.registration` 接入 Gateway。`SCA4DJ_GATEWAY_REG
 
 ## Setting 初始化节点
 
-Settings 默认只读取数据库覆盖值或 Java 默认值，不把普通运行节点上的 ENV 直接当作覆盖值。只有设置 `SCA4DJ_BOOTSTRAP_ENABLED=true` 的初始化节点解释每个 Setting 声明的 `<ENV>`、`<ENV>_INIT` 和 `<ENV>_SYNC`。
+Setting 默认读取数据库覆盖值或 Java 默认值，不把普通运行节点上的 ENV 直接当作覆盖值。只有设置 `SCA4DJ_BOOTSTRAP_ENABLED=true` 的初始化节点解释每个 SystemSetting 声明的 `<ENV>`、`<ENV>_INIT` 和 `<ENV>_SYNC`。
 
 | 环境声明 | 启动结果 |
 |---|---|

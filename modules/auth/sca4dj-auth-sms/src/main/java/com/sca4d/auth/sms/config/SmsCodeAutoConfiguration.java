@@ -10,8 +10,9 @@ import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.notification.NotificationType;
 import com.sca4d.core.api.notification.Notifications;
 import com.sca4d.core.api.security.SecretHasher;
-import com.sca4d.core.api.setting.Settings;
-import com.sca4d.core.api.setting.SystemSetting;
+import com.sca4d.core.api.setting.access.SettingReader;
+import com.sca4d.core.api.setting.access.SettingWriter;
+import com.sca4d.core.api.setting.definition.SystemSetting;
 import com.sca4d.core.spring.redis.Sca4djRedis;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -26,24 +27,31 @@ import java.time.Duration;
 @AutoConfiguration
 @EnableConfigurationProperties(SmsCodeProperties.class)
 public class SmsCodeAutoConfiguration {
+
+    /** 创建本应用上下文的模块设置，来源由 Spring 显式注入。 */
+    @Bean
+    SmsCodeSettings smsCodeSettings(SettingReader<String> reader, SettingWriter<String> writer) {
+        return new SmsCodeSettings(reader, writer);
+    }
+
     @Bean
     NotificationType<SmsCodeNotice> smsCodeNotificationType() {
         return SmsCodeNotice.TYPE;
     }
 
     @Bean
-    SystemSetting<Duration> smsCodeChallengeTtlSetting() {
-        return SmsCodeSettings.CHALLENGE_TTL;
+    SystemSetting<Duration> smsCodeChallengeTtlSetting(SmsCodeSettings settings) {
+        return settings.CHALLENGE_TTL;
     }
 
     @Bean
-    SystemSetting<Duration> smsCodeResendIntervalSetting() {
-        return SmsCodeSettings.RESEND_INTERVAL;
+    SystemSetting<Duration> smsCodeResendIntervalSetting(SmsCodeSettings settings) {
+        return settings.RESEND_INTERVAL;
     }
 
     @Bean
-    SystemSetting<Integer> smsCodeMaximumAttemptsSetting() {
-        return SmsCodeSettings.MAXIMUM_ATTEMPTS;
+    SystemSetting<Integer> smsCodeMaximumAttemptsSetting(SmsCodeSettings settings) {
+        return settings.MAXIMUM_ATTEMPTS;
     }
 
     @Bean
@@ -59,7 +67,7 @@ public class SmsCodeAutoConfiguration {
             @NotNull Notifications notifications,
             @NotNull RedisSmsCodeChallengeStore store,
             @NotNull SecretHasher hasher,
-            @NotNull Settings settings,
+            @NotNull SmsCodeSettings settings,
             @NotNull Clock clock,
             @NotNull SmsCodeProperties properties) {
         return new SmsCodeChallengeService(

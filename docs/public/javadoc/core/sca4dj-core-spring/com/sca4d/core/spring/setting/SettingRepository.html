@@ -123,13 +123,13 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#erase(com.sca4d.core.api.setting.SettingOwner,java.lang.String)" class="member-name-link">erase</a><wbr>(@NotNull com.sca4d.core.api.setting.SettingOwner&nbsp;owner,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#erase(com.sca4d.core.api.setting.value.SettingOwner,java.lang.String)" class="member-name-link">erase</a><wbr>(@NotNull com.sca4d.core.api.setting.value.SettingOwner&nbsp;owner,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">owner 生命周期结束时物理删除指定设置行。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="StoredSetting.html" title="class in com.sca4d.core.spring.setting">StoredSetting</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#find(com.sca4d.core.api.setting.SettingOwner,java.lang.String)" class="member-name-link">find</a><wbr>(@NotNull com.sca4d.core.api.setting.SettingOwner&nbsp;owner,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#find(com.sca4d.core.api.setting.value.SettingOwner,java.lang.String)" class="member-name-link">find</a><wbr>(@NotNull com.sca4d.core.api.setting.value.SettingOwner&nbsp;owner,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">按 owner 和键读取一个设置行。</div>
@@ -137,30 +137,36 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>@NotNull <a href="StoredSetting.html" title="class in com.sca4d.core.spring.setting">StoredSetting</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findAllSystem(java.util.Collection)" class="member-name-link">findAllSystem</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;keys)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">按键批量读取 `Subject.SYSTEM` 当前设置行。</div>
+<div class="block">按键批量读取运行时 `Subject.SYSTEM` 当前设置行。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#initializeSystem(java.lang.String,int,java.lang.String,java.lang.String,byte%5B%5D,java.lang.Integer)" class="member-name-link">initializeSystem</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="StoredSetting.html" title="class in com.sca4d.core.spring.setting">StoredSetting</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findCanonical(com.sca4d.core.api.setting.value.SettingOwner,java.lang.String)" class="member-name-link">findCanonical</a><wbr>(@NotNull com.sca4d.core.api.setting.value.SettingOwner&nbsp;owner,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">拒绝旧编码和归一冲突；只有确实不存在任何对应记录时才返回空。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#initializeSystem(java.lang.String,int,java.lang.String,java.lang.String,byte%5B%5D,java.lang.Integer)" class="member-name-link">initializeSystem</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  int&nbsp;schemaVersion,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;valueText,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;valueKeyId,
  byte @Nullable []&nbsp;valueCiphertext,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;encryptionContextVersion)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">只在 SystemSetting 不存在时写入初始化值。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#lockBootstrap()" class="member-name-link">lockBootstrap</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#lockBootstrap()" class="member-name-link">lockBootstrap</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">取得当前事务持有的初始化互斥锁。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#releaseSystemSynchronization(java.lang.String)" class="member-name-link">releaseSystemSynchronization</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#releaseSystemSynchronization(java.lang.String)" class="member-name-link">releaseSystemSynchronization</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">解除 SystemSetting 的 ENV 同步状态并保留最后一次值。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#replace(com.sca4d.core.api.setting.SettingOwner,java.lang.String,int,java.lang.String,java.lang.String,byte%5B%5D,java.lang.Integer,com.sca4d.core.api.concurrent.VersionCondition)" class="member-name-link">replace</a><wbr>(@NotNull com.sca4d.core.api.setting.SettingOwner&nbsp;owner,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#replace(com.sca4d.core.api.setting.value.SettingOwner,java.lang.String,int,java.lang.String,java.lang.String,byte%5B%5D,java.lang.Integer,com.sca4d.core.api.concurrent.VersionCondition)" class="member-name-link">replace</a><wbr>(@NotNull com.sca4d.core.api.setting.value.SettingOwner&nbsp;owner,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  int&nbsp;schemaVersion,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;valueText,
@@ -168,25 +174,25 @@ loadScripts(document, 'script');</script>
  byte @Nullable []&nbsp;valueCiphertext,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;encryptionContextVersion,
  @NotNull com.sca4d.core.api.concurrent.VersionCondition&nbsp;condition)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">按版本条件写入一个 owner 的完整覆盖值。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#reset(com.sca4d.core.api.setting.SettingOwner,java.lang.String,int,com.sca4d.core.api.concurrent.VersionCondition)" class="member-name-link">reset</a><wbr>(@NotNull com.sca4d.core.api.setting.SettingOwner&nbsp;owner,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#reset(com.sca4d.core.api.setting.value.SettingOwner,java.lang.String,int,com.sca4d.core.api.concurrent.VersionCondition)" class="member-name-link">reset</a><wbr>(@NotNull com.sca4d.core.api.setting.value.SettingOwner&nbsp;owner,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  int&nbsp;schemaVersion,
  @NotNull com.sca4d.core.api.concurrent.VersionCondition&nbsp;condition)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">按版本条件将已有 owner 设置行改为 tombstone。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#synchronizeSystem(java.lang.String,int,java.lang.String,java.lang.String,byte%5B%5D,java.lang.Integer)" class="member-name-link">synchronizeSystem</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#synchronizeSystem(java.lang.String,int,java.lang.String,java.lang.String,byte%5B%5D,java.lang.Integer)" class="member-name-link">synchronizeSystem</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  int&nbsp;schemaVersion,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;valueText,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;valueKeyId,
  byte @Nullable []&nbsp;valueCiphertext,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;encryptionContextVersion)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">写入并标记初始化节点持续同步的 SystemSetting。</div>
 </div>
 </div>
@@ -231,16 +237,16 @@ loadScripts(document, 'script');</script>
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>@NotNull <a href="StoredSetting.html" title="class in com.sca4d.core.spring.setting">StoredSetting</a>&gt;</span>&nbsp;<span class="element-name">findAllSystem</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;keys)</span></div>
-<div class="block">按键批量读取 `Subject.SYSTEM` 当前设置行。</div>
+<div class="block">按键批量读取运行时 `Subject.SYSTEM` 当前设置行。</div>
 </section>
 </li>
 <li>
-<section class="detail" id="find(com.sca4d.core.api.setting.SettingOwner,java.lang.String)">
+<section class="detail" id="find(com.sca4d.core.api.setting.value.SettingOwner,java.lang.String)">
 <h3>find</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="StoredSetting.html" title="class in com.sca4d.core.spring.setting">StoredSetting</a>&gt;</span>&nbsp;<span class="element-name">find</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.setting.SettingOwner&nbsp;owner,
+ @NotNull com.sca4d.core.api.setting.value.SettingOwner&nbsp;owner,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <div class="block">按 owner 和键读取一个设置行。</div>
@@ -287,10 +293,10 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="replace(com.sca4d.core.api.setting.SettingOwner,java.lang.String,int,java.lang.String,java.lang.String,byte[],java.lang.Integer,com.sca4d.core.api.concurrent.VersionCondition)">
+<section class="detail" id="replace(com.sca4d.core.api.setting.value.SettingOwner,java.lang.String,int,java.lang.String,java.lang.String,byte[],java.lang.Integer,com.sca4d.core.api.concurrent.VersionCondition)">
 <h3>replace</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">replace</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.setting.SettingOwner&nbsp;owner,
+ @NotNull com.sca4d.core.api.setting.value.SettingOwner&nbsp;owner,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  int&nbsp;schemaVersion,
@@ -307,10 +313,10 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="reset(com.sca4d.core.api.setting.SettingOwner,java.lang.String,int,com.sca4d.core.api.concurrent.VersionCondition)">
+<section class="detail" id="reset(com.sca4d.core.api.setting.value.SettingOwner,java.lang.String,int,com.sca4d.core.api.concurrent.VersionCondition)">
 <h3>reset</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">reset</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.setting.SettingOwner&nbsp;owner,
+ @NotNull com.sca4d.core.api.setting.value.SettingOwner&nbsp;owner,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  int&nbsp;schemaVersion,
@@ -320,12 +326,12 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="erase(com.sca4d.core.api.setting.SettingOwner,java.lang.String)">
+<section class="detail" id="erase(com.sca4d.core.api.setting.value.SettingOwner,java.lang.String)">
 <h3>erase</h3>
 <div class="member-signature"><span class="annotations">@AffectedRows(target="\u5220\u9664 owner \u8bbe\u7f6e",
               whenZero=ALLOW)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">erase</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.setting.SettingOwner&nbsp;owner,
+ @NotNull com.sca4d.core.api.setting.value.SettingOwner&nbsp;owner,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <div class="block">owner 生命周期结束时物理删除指定设置行。</div>
@@ -336,6 +342,17 @@ loadScripts(document, 'script');</script>
 <h3>lockBootstrap</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">lockBootstrap</span>()</div>
 <div class="block">取得当前事务持有的初始化互斥锁。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="findCanonical(com.sca4d.core.api.setting.value.SettingOwner,java.lang.String)">
+<h3>findCanonical</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="StoredSetting.html" title="class in com.sca4d.core.spring.setting">StoredSetting</a>&gt;</span>&nbsp;<span class="element-name">findCanonical</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.setting.value.SettingOwner&nbsp;owner,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code)</span></div>
+<div class="block">拒绝旧编码和归一冲突；只有确实不存在任何对应记录时才返回空。</div>
 </section>
 </li>
 </ul>

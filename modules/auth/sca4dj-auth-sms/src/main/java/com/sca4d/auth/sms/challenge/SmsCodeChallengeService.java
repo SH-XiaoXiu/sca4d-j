@@ -13,14 +13,13 @@ import com.sca4d.auth.sms.SmsCodeProof;
 import com.sca4d.auth.sms.config.SmsCodeSettings;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountDirectory;
 import com.sca4d.core.api.identity.RealmKey;
-import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.notification.NotificationRecipient;
 import com.sca4d.core.api.notification.Notifications;
 import com.sca4d.core.api.security.SecretHasher;
-import com.sca4d.core.api.setting.Settings;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +50,7 @@ public class SmsCodeChallengeService {
 
     private final SecretHasher hasher;
 
-    private final Settings settings;
+    private final SmsCodeSettings settings;
 
     private final Clock clock;
 
@@ -66,7 +65,7 @@ public class SmsCodeChallengeService {
             @NotNull Notifications notifications,
             @NotNull RedisSmsCodeChallengeStore store,
             @NotNull SecretHasher hasher,
-            @NotNull Settings settings,
+            @NotNull SmsCodeSettings settings,
             @NotNull Clock clock) {
         this(accounts, accountRealm, notifications, store, hasher, settings, clock, new SecureRandom());
     }
@@ -77,7 +76,7 @@ public class SmsCodeChallengeService {
             Notifications notifications,
             RedisSmsCodeChallengeStore store,
             SecretHasher hasher,
-            Settings settings,
+            SmsCodeSettings settings,
             Clock clock,
             SecureRandom random) {
         this.accounts = Objects.requireNonNull(accounts, "AccountDirectory 不能为空");
@@ -135,7 +134,7 @@ public class SmsCodeChallengeService {
                 && state.accountId() > 0
                 && CODE.matcher(checked.code()).matches()
                 && matches;
-        Version consumed = store.verify(state, valid, settings.get(SmsCodeSettings.MAXIMUM_ATTEMPTS));
+        Version consumed = store.verify(state, valid, settings.MAXIMUM_ATTEMPTS.get());
         if (!valid || consumed == null)
             throw new BusinessException(SmsCodeErrorCode.CODE_REJECTED);
 
@@ -168,8 +167,8 @@ public class SmsCodeChallengeService {
     }
 
     private SmsCodeChallenge issue(Account account, String maskedRecipient, String targetHash) {
-        Duration ttl = settings.get(SmsCodeSettings.CHALLENGE_TTL);
-        Duration resend = settings.get(SmsCodeSettings.RESEND_INTERVAL);
+        Duration ttl = settings.CHALLENGE_TTL.get();
+        Duration resend = settings.RESEND_INTERVAL.get();
         if (!store.reserveCooldown(targetHash, resend))
             throw new BusinessException(SmsCodeErrorCode.RESEND_TOO_SOON);
         Instant now = clock.instant();

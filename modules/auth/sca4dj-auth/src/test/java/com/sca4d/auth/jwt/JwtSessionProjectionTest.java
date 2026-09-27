@@ -13,7 +13,12 @@ import com.sca4d.auth.testing.SessionTestFixture;
 import com.sca4d.core.api.authentication.AuthTokenMode;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionTokens;
-import com.sca4d.core.api.setting.Settings;
+import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.setting.access.SettingReader;
+import com.sca4d.core.api.setting.access.SettingWriter;
+import com.sca4d.core.api.setting.value.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingValue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -195,9 +200,18 @@ class JwtSessionProjectionTest {
     }
 
     /** @return 固定返回五分钟 JWT 有效期的 Settings */
-    private static Settings settings() {
-        Settings settings = mock(Settings.class);
-        when(settings.get(AuthSettings.JWT_ACCESS_TTL)).thenReturn(Duration.ofMinutes(5));
+    private static AuthSettings settings() {
+        TestAccess source = mock(TestAccess.class);
+        AuthSettings settings = new AuthSettings(source, source);
+        when(source.read(settings.JWT_ACCESS_TTL.code(), SettingOwner.system())).thenReturn(
+                SettingValue.read(
+                        TreeCode.of("SETTING:TEST"),
+                        settings.JWT_ACCESS_TTL.code(),
+                        SettingOwner.system(),
+                        settings.JWT_ACCESS_TTL.codec().encode(Duration.ofMinutes(5)),
+                        1,
+                        new Version(0),
+                        false));
         return settings;
     }
 
@@ -205,5 +219,9 @@ class JwtSessionProjectionTest {
         byte[] source = seed.getBytes(StandardCharsets.UTF_8);
         byte[] key = Arrays.copyOf(source, 32);
         return Base64.getEncoder().encodeToString(key);
+    }
+
+    /** 测试替身同时实现读取和写入契约，避免引入生产组合接口。 */
+    private interface TestAccess extends SettingReader<String>, SettingWriter<String> {
     }
 }

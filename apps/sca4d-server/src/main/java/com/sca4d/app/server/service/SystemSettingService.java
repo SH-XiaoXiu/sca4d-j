@@ -4,11 +4,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.sca4d.app.server.system.ManagedSetting;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
-import com.sca4d.core.api.setting.SettingReadOnlyException;
-import com.sca4d.core.api.setting.SettingValue;
-import com.sca4d.core.api.setting.SettingValues;
-import com.sca4d.core.api.setting.Settings;
-import com.sca4d.core.api.setting.SystemSetting;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.setting.definition.SystemSetting;
+import com.sca4d.core.api.setting.exception.SettingReadOnlyException;
+import com.sca4d.core.api.setting.value.SettingValue;
+import com.sca4d.core.api.setting.value.SettingValues;
 import com.sca4d.core.spring.setting.SettingCatalog;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
@@ -28,19 +28,16 @@ public final class SystemSettingService {
 
     private final SettingCatalog catalog;
 
-    private final Settings settings;
-
     /** 创建系统设置应用服务。 */
-    public SystemSettingService(@NotNull SettingCatalog catalog, @NotNull Settings settings) {
+    public SystemSettingService(@NotNull SettingCatalog catalog) {
         this.catalog = Objects.requireNonNull(catalog, "设置目录不能为空");
-        this.settings = Objects.requireNonNull(settings, "Settings 不能为空");
     }
 
     /** @return 按分组和设置顺序排列的全部管理结果 */
     @CheckReturnValue
     public @NotNull @Unmodifiable List<@NotNull ManagedSetting> findAll() {
         List<SystemSetting<?>> definitions = catalog.systemSettings();
-        SettingValues values = settings.get(definitions);
+        SettingValues values = new SettingValues(definitions.stream().map(SystemSetting::inspect).toList());
         return definitions.stream()
                 .map(definition -> managedValue(definition, values))
                 .toList();
@@ -52,11 +49,11 @@ public final class SystemSettingService {
      * @param key 已注册设置键
      * @param value 管理端提交的完整 JSON 值
      */
-    public @NotNull SettingValue<?> replace(@NotNull String key, @NotNull JsonNode value) {
+    public @NotNull SettingValue<?> replace(@NotNull TreeCode key, @NotNull JsonNode value) {
         SystemSetting<?> setting = settingByKey(key);
         try {
             SettingValue<?> replaced = replaceValue(setting, Objects.requireNonNull(value, "设置值不能为空"));
-            LOG.info("系统设置已修改 | settingKey={} version={}", setting.key(), replaced.version().value());
+            LOG.info("系统设置已修改 | settingKey={} version={}", setting.code(), replaced.revision().orElseThrow().value());
             return replaced;
         } catch (SettingReadOnlyException exception) {
             throw new BusinessException(CoreErrorCode.CONFLICT, exception);
@@ -68,11 +65,11 @@ public final class SystemSettingService {
      *
      * @param key 已注册设置键
      */
-    public @NotNull SettingValue<?> reset(@NotNull String key) {
+    public @NotNull SettingValue<?> reset(@NotNull TreeCode key) {
         SystemSetting<?> setting = settingByKey(key);
         try {
-            SettingValue<?> reset = settings.reset(setting);
-            LOG.info("系统设置已恢复默认值 | settingKey={} version={}", setting.key(), reset.version().value());
+            SettingValue<?> reset = setting.reset();
+            LOG.info("系统设置已恢复默认值 | settingKey={} version={}", setting.code(), reset.revision().orElseThrow().value());
             return reset;
         } catch (SettingReadOnlyException exception) {
             throw new BusinessException(CoreErrorCode.CONFLICT, exception);
@@ -80,8 +77,8 @@ public final class SystemSettingService {
     }
 
     /** 查找必须存在的设置定义。 */
-    private @NotNull SystemSetting<?> settingByKey(@NotNull String key) {
-        return catalog.findSystem(Objects.requireNonNull(key, "设置键不能为空"))
+    private @NotNull SystemSetting<?> settingByKey(@NotNull TreeCode key) {
+        return catalog.findSystem(Objects.requireNonNull(key, "设置编码不能为空"))
                 .orElseThrow(() -> new IllegalArgumentException("设置不存在: " + key));
     }
 
@@ -89,7 +86,7 @@ public final class SystemSettingService {
     private <T> @NotNull SettingValue<T> replaceValue(
             @NotNull SystemSetting<T> setting,
             @NotNull JsonNode value) {
-        return settings.replace(setting, setting.codec().decodeJson(value));
+        return setting.replace(setting.codec().decodeJson(value));
     }
 
     /** 捕获设置定义的泛型，并读取对应的类型化查询值。 */
@@ -107,7 +104,7 @@ public final class SystemSettingService {
                 setting,
                 setting.secret() ? null : setting.codec().encodeJson(value.value()),
                 value.stored(),
-                value.synchronizedFromEnvironment(),
-                value.version());
+                value.locked(),
+                value.revision().orElseThrow());
     }
 }

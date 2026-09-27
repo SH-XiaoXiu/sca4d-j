@@ -16,7 +16,6 @@ import com.sca4d.core.api.authentication.AuthenticationSubmission;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.name.code.TreeCode;
-import com.sca4d.core.api.setting.Settings;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +43,7 @@ public final class RedisAuthenticationAttempts implements AuthenticationAttempts
 
     private final AuthenticationPolicy policy;
 
-    private final Settings settings;
+    private final AuthSettings settings;
 
     private final Clock clock;
 
@@ -61,7 +60,7 @@ public final class RedisAuthenticationAttempts implements AuthenticationAttempts
             @NotNull AuthenticationMethods methods,
             @NotNull RedisAuthenticationAttemptStore attempts,
             @NotNull AuthenticationPolicy policy,
-            @NotNull Settings settings,
+            @NotNull AuthSettings settings,
             @NotNull Clock clock) {
         this.methods = Objects.requireNonNull(methods, "认证方法目录不能为空");
         this.attempts = Objects.requireNonNull(attempts, "认证尝试存储不能为空");
@@ -89,7 +88,7 @@ public final class RedisAuthenticationAttempts implements AuthenticationAttempts
         }
 
         Instant now = clock.instant();
-        Duration attemptTtl = settings.get(AuthSettings.ATTEMPT_TTL);
+        Duration attemptTtl = settings.ATTEMPT_TTL.get();
         AuthenticationAttemptState state = new AuthenticationAttemptState(
                 new AuthenticationAttemptId(UUID.randomUUID().toString()),
                 account,
@@ -118,7 +117,7 @@ public final class RedisAuthenticationAttempts implements AuthenticationAttempts
             @NotNull AuthenticationActionCode actionCode,
             @NotNull List<Authentication> reusableAuthentications) {
         Instant now = clock.instant();
-        Duration attemptTtl = settings.get(AuthSettings.ATTEMPT_TTL);
+        Duration attemptTtl = settings.ATTEMPT_TTL.get();
         AuthenticationAttemptState state = new AuthenticationAttemptState(
                 new AuthenticationAttemptId(UUID.randomUUID().toString()),
                 Objects.requireNonNull(account, "认证账号不能为空"),

@@ -1,10 +1,12 @@
 package com.sca4d.app.server.controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.sca4d.app.server.platform.PlatformPrincipalSelection;
 import com.sca4d.app.server.preference.PreferenceService;
 import com.sca4d.app.server.preference.request.ReplacePreferenceRequest;
 import com.sca4d.app.server.preference.view.PreferenceView;
-import com.sca4d.core.api.setting.SettingValue;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.setting.value.SettingValue;
 import com.sca4d.core.spring.web.ApiResponse;
 import com.sca4d.core.spring.web.annotation.CurrentPrincipal;
 import com.sca4d.core.spring.web.annotation.IfMatch;
@@ -42,7 +44,7 @@ public class PreferenceController {
     public @NotNull ApiResponse<PreferenceView> inspect(
             @CurrentPrincipal @NotNull Long principalId,
             @PathVariable @NotNull String key) {
-        SettingValue<?> current = preferences.inspect(principalId, key);
+        SettingValue<JsonNode> current = preferences.inspect(principalId, TreeCode.of(key));
         return ApiResponse.ok(PreferenceView.from(current));
     }
 
@@ -54,7 +56,7 @@ public class PreferenceController {
             @CurrentPrincipal @NotNull Long principalId,
             @PathVariable @NotNull String key,
             @RequestBody @Valid @NotNull ReplacePreferenceRequest request) {
-        SettingValue<?> replaced = preferences.replace(principalId, key, request.getValue());
+        SettingValue<JsonNode> replaced = preferences.replace(principalId, TreeCode.of(key), request.getValue());
         return ApiResponse.ok(PreferenceView.from(replaced));
     }
 
@@ -65,7 +67,7 @@ public class PreferenceController {
     public @NotNull ApiResponse<PreferenceView> reset(
             @CurrentPrincipal @NotNull Long principalId,
             @PathVariable @NotNull String key) {
-        SettingValue<?> reset = preferences.reset(principalId, key);
+        SettingValue<JsonNode> reset = preferences.reset(principalId, TreeCode.of(key));
         return ApiResponse.ok(PreferenceView.from(reset));
     }
 }

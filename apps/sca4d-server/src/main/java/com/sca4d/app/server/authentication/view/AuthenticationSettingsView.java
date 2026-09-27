@@ -4,7 +4,7 @@ import static com.sca4d.core.api.name.NameFormat.SLASH;
 
 import com.sca4d.app.server.authentication.AccountAuthenticationSettings;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.setting.SettingValue;
+import com.sca4d.core.api.setting.value.SettingValue;
 import com.sca4d.core.spring.web.annotation.ETag;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,7 +39,7 @@ public final class AuthenticationSettingsView {
                 .sorted(Comparator.comparing(item -> item.methodCode().format(SLASH)))
                 .map(AuthenticationMethodSettingsView::from)
                 .toList();
-        this.revision = setting.version();
+        this.revision = setting.revision().orElseThrow();
     }
 
     /**

@@ -1,15 +1,15 @@
 package com.sca4d.notification;
 
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.MessageBus;
-import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.Notification;
 import com.sca4d.core.api.notification.NotificationRecipient;
 import com.sca4d.core.api.notification.NotificationType;
 import com.sca4d.core.api.notification.Notifications;
-import com.sca4d.core.api.setting.Settings;
+import com.sca4d.notification.config.NotificationSettings;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -23,7 +23,7 @@ public final class DefaultNotifications implements Notifications {
 
     private final @NotNull NotificationTypeCatalog types;
 
-    private final @NotNull Settings settings;
+    private final @NotNull NotificationSettings settings;
 
     private final @NotNull NotificationLocaleResolver locales;
 
@@ -40,7 +40,7 @@ public final class DefaultNotifications implements Notifications {
      */
     public DefaultNotifications(
             @NotNull NotificationTypeCatalog types,
-            @NotNull Settings settings,
+            @NotNull NotificationSettings settings,
             @NotNull NotificationLocaleResolver locales,
             @NotNull NotificationRegionResolver regions,
             @NotNull NotificationDeliveryRouter deliveries,

@@ -10,10 +10,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.auth.passkey.PasskeyCeremonyId;
 import com.sca4d.auth.passkey.PasskeyErrorCode;
 import com.sca4d.auth.passkey.config.PasskeySettings;
+import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
-import com.sca4d.core.api.setting.Settings;
+import com.sca4d.core.api.setting.access.SettingReader;
+import com.sca4d.core.api.setting.access.SettingWriter;
+import com.sca4d.core.api.setting.value.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingValue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -39,8 +43,17 @@ class PasskeyCeremonyStoreTest {
         Key key = Key.of(TreeCode.ofColon("PASSKEY:ASSERTION")).part("ceremony-1");
         when(values.getAndDelete(key))
                 .thenReturn("{\"version\":1,\"request\":\"request-json\"}", (String) null);
-        Settings settings = mock(Settings.class);
-        when(settings.get(PasskeySettings.CEREMONY_TTL)).thenReturn(Duration.ofMinutes(5));
+        TestAccess source = mock(TestAccess.class);
+        PasskeySettings settings = new PasskeySettings(source, source);
+        when(source.read(settings.CEREMONY_TTL.code(), SettingOwner.system())).thenReturn(
+                SettingValue.read(
+                        TreeCode.of("SETTING:TEST"),
+                        settings.CEREMONY_TTL.code(),
+                        SettingOwner.system(),
+                        settings.CEREMONY_TTL.codec().encode(Duration.ofMinutes(5)),
+                        1,
+                        new Version(0),
+                        false));
         PasskeyCeremonyStore store = new PasskeyCeremonyStore(
                 redis,
                 new ObjectMapper(),
@@ -55,5 +68,9 @@ class PasskeyCeremonyStoreTest {
                         exception -> assertThat(exception.errorCode())
                                 .isEqualTo(PasskeyErrorCode.CEREMONY_UNAVAILABLE));
         verify(values, Mockito.times(2)).getAndDelete(key);
+    }
+
+    /** 测试替身同时实现读取和写入契约，避免引入生产组合接口。 */
+    private interface TestAccess extends SettingReader<String>, SettingWriter<String> {
     }
 }

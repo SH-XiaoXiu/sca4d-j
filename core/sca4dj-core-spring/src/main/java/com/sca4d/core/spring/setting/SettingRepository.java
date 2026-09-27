@@ -5,7 +5,7 @@ import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.core.api.persistence.AffectedRows;
 import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.core.api.persistence.ZeroRowPolicy;
-import com.sca4d.core.api.setting.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingOwner;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +36,7 @@ public class SettingRepository {
     }
 
     /**
-     * 按键批量读取 `Subject.SYSTEM` 当前设置行。
+     * 按键批量读取运行时 `Subject.SYSTEM` 当前设置行。
      */
     @CheckReturnValue
     public @NotNull Map<@NotNull String, @NotNull StoredSetting> findAllSystem(
@@ -109,6 +109,8 @@ public class SettingRepository {
             @Nullable Integer encryptionContextVersion) {
         AffectedRowCounts.requireSingle(
                 mapper.synchronizeSystem(
+                        SettingOwner.system().type(),
+                        SettingOwner.system().id(),
                         key,
                         schemaVersion,
                         valueText == null ? Patch.clear() : Patch.set(valueText),
@@ -124,7 +126,7 @@ public class SettingRepository {
      */
     public void releaseSystemSynchronization(@NotNull String key) {
         AffectedRowCounts.requireSingle(
-                mapper.releaseSystemSynchronization(key),
+                mapper.releaseSystemSynchronization(SettingOwner.system().type(), SettingOwner.system().id(), key),
                 ZeroRowPolicy.ALLOW,
                 "解除系统设置同步");
     }
@@ -210,4 +212,14 @@ public class SettingRepository {
             throw new IllegalStateException("已有其他初始化节点正在同步 Settings");
         }
     }
+
+    /** 拒绝旧编码和归一冲突；只有确实不存在任何对应记录时才返回空。 */
+    public @NotNull Optional<StoredSetting> findCanonical(@NotNull SettingOwner owner, @NotNull String code) {
+        List<StoredSetting> values = mapper.selectCanonicalOrLegacy(owner.type(), owner.id(), code);
+        if (values.size() > 1 || !values.isEmpty() && !values.getFirst().key().equals(code)) {
+            throw new IllegalStateException("设置编码需要显式迁移或处理冲突: " + code);
+        }
+        return values.stream().findFirst();
+    }
+
 }

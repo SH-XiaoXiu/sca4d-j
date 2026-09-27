@@ -66,11 +66,11 @@ public final class SystemIdentityRepository {
                     ZeroRowPolicy.ALLOW,
                     "登记 SYSTEM Subject");
         } catch (DuplicateKeyException exception) {
-            throw new IllegalStateException("已有 SYSTEM Subject 与保留 ID 1 冲突，请人工迁移后重启", exception);
+            throw new IllegalStateException("已有 SYSTEM Subject 与配置 ID 冲突，请人工迁移后重启", exception);
         }
         Subject subject = identities.selectSubject(Subject.SYSTEM.subjectId(), IdentityStatus.ACTIVE);
         if (subject == null || subject.type() != SubjectType.SYSTEM) {
-            throw new IllegalStateException("SYSTEM Subject 的保留 ID 1 已被占用或状态异常，请人工迁移后重启");
+            throw new IllegalStateException("SYSTEM Subject 的配置 ID 已被占用或状态异常，请人工迁移后重启");
         }
 
         // 一个集合 SQL 只绑定本次实际创建的 Principal，唯一约束协调并发实例，不需要全局锁。

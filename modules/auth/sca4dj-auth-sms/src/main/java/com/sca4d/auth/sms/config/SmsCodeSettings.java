@@ -1,56 +1,69 @@
 package com.sca4d.auth.sms.config;
 
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.pipeline.Pipeline;
-import com.sca4d.core.api.setting.SettingCodec;
 import com.sca4d.core.api.setting.SettingGroup;
-import com.sca4d.core.api.setting.SystemSetting;
+import com.sca4d.core.api.setting.access.SettingReader;
+import com.sca4d.core.api.setting.access.SettingWriter;
+import com.sca4d.core.api.setting.codec.SettingCodec;
+import com.sca4d.core.api.setting.definition.SystemSetting;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 
 /** 声明 SMS Code Challenge 有效期、重发间隔和错误次数上限。 */
 public final class SmsCodeSettings {
-    private static final SettingGroup GROUP = new SettingGroup("authentication", "setting.group.authentication", 100);
+    private static final SettingGroup GROUP = new SettingGroup(
+            TreeCode.of("AUTHENTICATION"),
+            "setting.group.authentication",
+            100);
 
-    public static final @NotNull SystemSetting<Duration> CHALLENGE_TTL = new SystemSetting<>(
-            "auth.sms-code.challenge-ttl",
-            1,
-            GROUP,
-            "setting.auth.sms-code.challenge-ttl",
-            "setting.auth.sms-code.challenge-ttl.description",
-            "SCA4DJ_AUTH_SMS_CODE_CHALLENGE_TTL",
-            Duration.ofMinutes(5),
-            SettingCodec.positiveDuration(),
-            Pipeline.identity(Duration.class),
-            false,
-            530);
+    public final @NotNull SystemSetting<Duration> CHALLENGE_TTL;
 
-    public static final @NotNull SystemSetting<Duration> RESEND_INTERVAL = new SystemSetting<>(
-            "auth.sms-code.resend-interval",
-            1,
-            GROUP,
-            "setting.auth.sms-code.resend-interval",
-            "setting.auth.sms-code.resend-interval.description",
-            "SCA4DJ_AUTH_SMS_CODE_RESEND_INTERVAL",
-            Duration.ofSeconds(60),
-            SettingCodec.positiveDuration(),
-            Pipeline.identity(Duration.class),
-            false,
-            540);
+    public final @NotNull SystemSetting<Duration> RESEND_INTERVAL;
 
-    public static final @NotNull SystemSetting<Integer> MAXIMUM_ATTEMPTS = new SystemSetting<>(
-            "auth.sms-code.maximum-attempts",
-            1,
-            GROUP,
-            "setting.auth.sms-code.maximum-attempts",
-            "setting.auth.sms-code.maximum-attempts.description",
-            "SCA4DJ_AUTH_SMS_CODE_MAXIMUM_ATTEMPTS",
-            5,
-            SettingCodec.positiveInteger(),
-            Pipeline.identity(Integer.class),
-            false,
-            550);
+    public final @NotNull SystemSetting<Integer> MAXIMUM_ATTEMPTS;
 
-    private SmsCodeSettings() {
+    /** 构造模块设置，每个应用上下文独立保存 Source。 */
+    public SmsCodeSettings(@NotNull SettingReader<String> reader, SettingWriter<String> writer) {
+        this.CHALLENGE_TTL = new SystemSetting<>(
+                reader,
+                writer,
+                TreeCode.of("AUTH:SMS_CODE:CHALLENGE_TTL"),
+                GROUP,
+                "setting.auth.sms-code.challenge-ttl",
+                "setting.auth.sms-code.challenge-ttl.description",
+                "SCA4DJ_AUTH_SMS_CODE_CHALLENGE_TTL",
+                Duration.ofMinutes(5),
+                SettingCodec.positiveDuration(),
+                Pipeline.identity(Duration.class),
+                false,
+                530);
+        this.RESEND_INTERVAL = new SystemSetting<>(
+                reader,
+                writer,
+                TreeCode.of("AUTH:SMS_CODE:RESEND_INTERVAL"),
+                GROUP,
+                "setting.auth.sms-code.resend-interval",
+                "setting.auth.sms-code.resend-interval.description",
+                "SCA4DJ_AUTH_SMS_CODE_RESEND_INTERVAL",
+                Duration.ofSeconds(60),
+                SettingCodec.positiveDuration(),
+                Pipeline.identity(Duration.class),
+                false,
+                540);
+        this.MAXIMUM_ATTEMPTS = new SystemSetting<>(
+                reader,
+                writer,
+                TreeCode.of("AUTH:SMS_CODE:MAXIMUM_ATTEMPTS"),
+                GROUP,
+                "setting.auth.sms-code.maximum-attempts",
+                "setting.auth.sms-code.maximum-attempts.description",
+                "SCA4DJ_AUTH_SMS_CODE_MAXIMUM_ATTEMPTS",
+                5,
+                SettingCodec.positiveInteger(),
+                Pipeline.identity(Integer.class),
+                false,
+                550);
     }
 }

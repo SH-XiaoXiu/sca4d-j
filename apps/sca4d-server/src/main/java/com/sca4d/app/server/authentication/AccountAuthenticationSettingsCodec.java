@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sca4d.core.api.data.DataOps;
 import com.sca4d.core.api.name.code.TreeCode;
-import com.sca4d.core.api.setting.SettingCodec;
+import com.sca4d.core.api.setting.codec.SettingCodec;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -20,6 +20,21 @@ import java.util.Set;
 
 /** 把账号认证策略转换为不包含 Account 标识的稳定 JSON 文档。 */
 public final class AccountAuthenticationSettingsCodec implements SettingCodec<AccountAuthenticationSettings> {
+
+    @Override
+    public @NotNull TreeCode code() {
+        return TreeCode.of("SETTING:ACCOUNT_AUTHENTICATION");
+    }
+
+    @Override
+    public int version() {
+        return 1;
+    }
+
+    @Override
+    public @NotNull Class<AccountAuthenticationSettings> valueType() {
+        return AccountAuthenticationSettings.class;
+    }
 
     private static final Set<String> ROOT_FIELDS = Set.of(
             "loginFactorCount",
@@ -123,7 +138,7 @@ public final class AccountAuthenticationSettingsCodec implements SettingCodec<Ac
 
     /** {@inheritDoc} */
     @Override
-    public @NotNull String valueType() {
+    public @NotNull String presentationType() {
         return "object";
     }
 

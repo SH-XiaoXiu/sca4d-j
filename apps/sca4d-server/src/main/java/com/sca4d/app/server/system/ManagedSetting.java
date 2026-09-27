@@ -2,7 +2,7 @@ package com.sca4d.app.server.system;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.setting.SystemSetting;
+import com.sca4d.core.api.setting.definition.SystemSetting;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

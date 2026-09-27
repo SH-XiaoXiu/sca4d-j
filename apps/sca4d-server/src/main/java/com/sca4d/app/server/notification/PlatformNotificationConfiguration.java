@@ -1,11 +1,13 @@
 package com.sca4d.app.server.notification;
 
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.pipeline.Pipeline;
 import com.sca4d.core.api.region.Region;
-import com.sca4d.core.api.setting.LogicSetting;
-import com.sca4d.core.api.setting.SettingCodec;
-import com.sca4d.core.api.setting.SettingOwner;
-import com.sca4d.core.api.setting.Settings;
+import com.sca4d.core.api.setting.access.SettingReader;
+import com.sca4d.core.api.setting.access.SettingWriter;
+import com.sca4d.core.api.setting.codec.SettingCodec;
+import com.sca4d.core.api.setting.definition.LogicSetting;
+import com.sca4d.core.api.setting.value.SettingOwner;
 import com.sca4d.notification.NotificationLocaleResolver;
 import com.sca4d.notification.NotificationRegionResolver;
 import com.sca4d.notification.sms.SmsRoute;
@@ -20,6 +22,26 @@ import java.util.Optional;
 /** 用 Account LogicSetting 为 Notification 框架解析全局语言和业务区域。 */
 @Configuration(proxyBeanMethods = false)
 public class PlatformNotificationConfiguration {
+    /** 构造 App 设置并显式选择数据库来源。 */
+    public PlatformNotificationConfiguration(@NotNull SettingReader<String> reader, SettingWriter<String> writer) {
+        this.LANGUAGE = new LogicSetting<>(
+                reader,
+                writer,
+                TreeCode.of("ACCOUNT:LANGUAGE"),
+                "zh-CN",
+                SettingCodec.text(64),
+                Pipeline.identity(String.class),
+                false);
+        this.REGION = new LogicSetting<>(
+                reader,
+                writer,
+                TreeCode.of("ACCOUNT:REGION"),
+                "GLOBAL",
+                SettingCodec.text(128),
+                Pipeline.identity(String.class),
+                false);
+    }
+
     private static final Region CHINA_MAINLAND = new Region("CN");
 
     /** 中国大陆手机号使用的 SMS Provider 路由。 */
@@ -28,21 +50,9 @@ public class PlatformNotificationConfiguration {
     /** 非中国大陆手机号使用的 SMS Provider 路由。 */
     public static final @NotNull SmsRoute INTERNATIONAL_SMS = new SmsRoute("international");
 
-    public static final @NotNull LogicSetting<String> LANGUAGE = new LogicSetting<>(
-            "account.language",
-            1,
-            "zh-CN",
-            SettingCodec.text(64),
-            Pipeline.identity(String.class),
-            false);
+    public final @NotNull LogicSetting<String> LANGUAGE;
 
-    public static final @NotNull LogicSetting<String> REGION = new LogicSetting<>(
-            "account.region",
-            1,
-            "GLOBAL",
-            SettingCodec.text(128),
-            Pipeline.identity(String.class),
-            false);
+    public final @NotNull LogicSetting<String> REGION;
 
     @Bean
     LogicSetting<String> accountLanguageSetting() {
@@ -56,20 +66,18 @@ public class PlatformNotificationConfiguration {
 
     /** @return 从 Account 设置读取 BCP 47 全局语言的解析器 */
     @Bean
-    NotificationLocaleResolver platformNotificationLocaleResolver(@NotNull Settings settings) {
+    NotificationLocaleResolver platformNotificationLocaleResolver() {
         return recipient -> Locale.forLanguageTag(
-                settings.get(
-                        LANGUAGE,
+                LANGUAGE.get(
                         new SettingOwner(recipient.type(), recipient.id())));
     }
 
     /** @return 从 Account 设置读取具体应用业务区域的解析器 */
     @Bean
-    NotificationRegionResolver platformNotificationRegionResolver(@NotNull Settings settings) {
+    NotificationRegionResolver platformNotificationRegionResolver() {
         return recipient -> Optional.of(
                 new Region(
-                        settings.get(
-                                REGION,
+                        REGION.get(
                                 new SettingOwner(recipient.type(), recipient.id()))));
     }
 

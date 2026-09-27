@@ -118,28 +118,39 @@ loadScripts(document, 'script');</script>
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;encryptionContextVersion)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#releaseSystemSynchronization(java.lang.String)" class="member-name-link">releaseSystemSynchronization</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#releaseSystemSynchronization(com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.String)" class="member-name-link">releaseSystemSynchronization</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;ownerType,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ownerId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="StoredSetting.html" title="class in com.sca4d.core.spring.setting">StoredSetting</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#select(com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.util.Collection)" class="member-name-link">select</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;ownerType,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ownerId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;keys)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#synchronizeSystem(java.lang.String,int,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch)" class="member-name-link">synchronizeSystem</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="StoredSetting.html" title="class in com.sca4d.core.spring.setting">StoredSetting</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectCanonicalOrLegacy(com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.String)" class="member-name-link">selectCanonicalOrLegacy</a><wbr>(com.sca4d.core.api.name.code.TreeCode&nbsp;ownerType,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ownerId,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">查询规范编码及可能冲突的旧编码，旧值只用于阻止静默采用默认值。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#synchronizeSystem(com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.String,int,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch)" class="member-name-link">synchronizeSystem</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;ownerType,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ownerId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  int&nbsp;schemaVersion,
  @NotNull com.sca4d.core.api.persistence.Patch&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;valueText,
  @NotNull com.sca4d.core.api.persistence.Patch&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;valueKeyId,
  @NotNull com.sca4d.core.api.persistence.Patch&lt;byte[]&gt;&nbsp;valueCiphertext,
  @NotNull com.sca4d.core.api.persistence.Patch&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;&nbsp;encryptionContextVersion)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">写入初始化节点持续同步的 SystemSetting，并禁止管理端修改。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#tryLockBootstrap()" class="member-name-link">tryLockBootstrap</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateManaged(com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.String,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,long)" class="member-name-link">updateManaged</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;ownerType,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#tryLockBootstrap()" class="member-name-link">tryLockBootstrap</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateManaged(com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.String,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,long)" class="member-name-link">updateManaged</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;ownerType,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ownerId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  @NotNull com.sca4d.core.api.persistence.Patch&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;&nbsp;schemaVersion,
@@ -149,7 +160,7 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.core.api.persistence.Patch&lt;byte[]&gt;&nbsp;valueCiphertext,
  @NotNull com.sca4d.core.api.persistence.Patch&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;&nbsp;encryptionContextVersion,
  long&nbsp;expectedVersion)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -164,6 +175,19 @@ loadScripts(document, 'script');</script>
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="selectCanonicalOrLegacy(com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.String)">
+<h3>selectCanonicalOrLegacy</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="StoredSetting.html" title="class in com.sca4d.core.spring.setting">StoredSetting</a>&gt;</span>&nbsp;<span class="element-name">selectCanonicalOrLegacy</span><wbr><span class="parameters">(@Param("ownerType")
+ com.sca4d.core.api.name.code.TreeCode&nbsp;ownerType,
+ @Param("ownerId")
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ownerId,
+ @Param("key")
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+<div class="block">查询规范编码及可能冲突的旧编码，旧值只用于阻止静默采用默认值。</div>
+</section>
+</li>
 <li>
 <section class="detail" id="select(com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.util.Collection)">
 <h3>select</h3>
@@ -182,10 +206,14 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="synchronizeSystem(java.lang.String,int,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch)">
+<section class="detail" id="synchronizeSystem(com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.String,int,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch)">
 <h3>synchronizeSystem</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
-</span><span class="return-type">int</span>&nbsp;<span class="element-name">synchronizeSystem</span><wbr><span class="parameters">(@Param("key") @NotNull
+</span><span class="return-type">int</span>&nbsp;<span class="element-name">synchronizeSystem</span><wbr><span class="parameters">(@Param("ownerType") @NotNull
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;ownerType,
+ @Param("ownerId") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ownerId,
+ @Param("key") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  @Param("schemaVersion")
  int&nbsp;schemaVersion,
@@ -205,10 +233,14 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="releaseSystemSynchronization(java.lang.String)">
+<section class="detail" id="releaseSystemSynchronization(com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.String)">
 <h3>releaseSystemSynchronization</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
-</span><span class="return-type">int</span>&nbsp;<span class="element-name">releaseSystemSynchronization</span><wbr><span class="parameters">(@Param("key") @NotNull
+</span><span class="return-type">int</span>&nbsp;<span class="element-name">releaseSystemSynchronization</span><wbr><span class="parameters">(@Param("ownerType") @NotNull
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;ownerType,
+ @Param("ownerId") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ownerId,
+ @Param("key") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <dl class="notes">
 <dt>Returns:</dt>

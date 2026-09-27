@@ -16,9 +16,8 @@ import com.sca4d.core.api.enums.BaseEnum;
 import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.name.code.TreeCode;
-import com.sca4d.core.api.setting.SettingOwner;
-import com.sca4d.core.api.setting.SettingValue;
-import com.sca4d.core.api.setting.Settings;
+import com.sca4d.core.api.setting.value.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingValue;
 import com.sca4d.core.spring.dictionary.DatabaseDictionaryOption;
 import com.sca4d.core.spring.dictionary.DictionaryMapper;
 import com.sca4d.core.spring.setting.SettingMapper;
@@ -110,14 +109,14 @@ class Sca4dApplicationStartupIntegrationTest {
     /** 把完整应用的外部依赖绑定到本测试拥有的隔离容器。 */
     @DynamicPropertySource
     static void infrastructureProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
-        registry.add("spring.datasource.username", POSTGRES::getUsername);
-        registry.add("spring.datasource.password", POSTGRES::getPassword);
+        registry.add("spring.datasource.dynamic.datasource.main.url", POSTGRES::getJdbcUrl);
+        registry.add("spring.datasource.dynamic.datasource.main.username", POSTGRES::getUsername);
+        registry.add("spring.datasource.dynamic.datasource.main.password", POSTGRES::getPassword);
 
         registry.add("sca4dj.iot.timescale.enabled", () -> true);
-        registry.add("sca4dj.iot.timescale.url", TIMESCALE::getJdbcUrl);
-        registry.add("sca4dj.iot.timescale.username", TIMESCALE::getUsername);
-        registry.add("sca4dj.iot.timescale.password", TIMESCALE::getPassword);
+        registry.add("spring.datasource.dynamic.datasource.iot-history.url", TIMESCALE::getJdbcUrl);
+        registry.add("spring.datasource.dynamic.datasource.iot-history.username", TIMESCALE::getUsername);
+        registry.add("spring.datasource.dynamic.datasource.iot-history.password", TIMESCALE::getPassword);
 
         registry.add("spring.data.redis.host", REDIS::getHost);
         registry.add("spring.data.redis.port", () -> REDIS.getMappedPort(6379));
@@ -180,7 +179,7 @@ class Sca4dApplicationStartupIntegrationTest {
     private DictionaryMapper dictionaryMapper;
 
     @Autowired
-    private Settings settings;
+    private AccountAuthenticationSettingConfiguration settings;
 
     @Autowired
     private PasskeyCredentialMapper passkeyCredentialMapper;
@@ -284,8 +283,7 @@ class Sca4dApplicationStartupIntegrationTest {
         assertThat(credential.signatureCount()).isEqualTo(7);
 
         SettingOwner accountOwner = new SettingOwner(Account.RESOURCE_TYPE, Long.toString(accountId));
-        SettingValue<AccountAuthenticationSettings> savedAuthentication = settings.replace(
-                AccountAuthenticationSettingConfiguration.ACCOUNT_POLICY,
+        SettingValue<AccountAuthenticationSettings> savedAuthentication = settings.ACCOUNT_POLICY.replace(
                 accountOwner,
                 new AccountAuthenticationSettings(
                         2,

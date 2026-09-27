@@ -6,7 +6,7 @@ import com.sca4d.core.api.codec.SecretCodec;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.security.EncryptedSecret;
 import com.sca4d.core.api.security.SecretCipher;
-import com.sca4d.core.api.setting.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingOwner;
 import org.jetbrains.annotations.NotNull;
 
 /** 使用 owner、Setting key 和长度分隔上下文读写当前版本二敏感设置密文。 */

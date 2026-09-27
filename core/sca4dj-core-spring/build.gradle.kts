@@ -41,6 +41,7 @@ dependencies {
     spotbugsAnnotations(libs.spotbugs.annotations)
     implementation(libs.slf4j.api)
     implementation(libs.jackson.datatype.jsr310)
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
     implementation(libs.bucket4j.redisson)
     implementation(libs.spring.security.crypto)
     api(libs.spring.aspectjweaver)

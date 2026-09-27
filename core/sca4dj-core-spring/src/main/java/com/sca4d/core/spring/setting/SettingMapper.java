@@ -12,6 +12,12 @@ import java.util.List;
 
 /** 定义统一 `sys_setting` 表的最小查询、条件写入和初始化锁 SQL。 */
 public interface SettingMapper {
+    /** 查询规范编码及可能冲突的旧编码，旧值只用于阻止静默采用默认值。 */
+    @NotNull
+    List<StoredSetting> selectCanonicalOrLegacy(
+            @Param("ownerType") TreeCode ownerType,
+            @Param("ownerId") String ownerId,
+            @Param("key") String key);
 
     /** @return 指定 owner 的非空键集合对应设置行 */
     @CheckReturnValue
@@ -28,6 +34,8 @@ public interface SettingMapper {
      */
     @CheckReturnValue
     int synchronizeSystem(
+            @Param("ownerType") @NotNull TreeCode ownerType,
+            @Param("ownerId") @NotNull String ownerId,
             @Param("key") @NotNull String key,
             @Param("schemaVersion") int schemaVersion,
             @Param("valueText") @NotNull Patch<String> valueText,
@@ -37,7 +45,10 @@ public interface SettingMapper {
 
     /** @return 解除 SystemSetting ENV 同步状态的修改行数 */
     @CheckReturnValue
-    int releaseSystemSynchronization(@Param("key") @NotNull String key);
+    int releaseSystemSynchronization(
+            @Param("ownerType") @NotNull TreeCode ownerType,
+            @Param("ownerId") @NotNull String ownerId,
+            @Param("key") @NotNull String key);
 
     /** @return 预期版本为零且 owner 设置行不存在时新增的行数 */
     @CheckReturnValue

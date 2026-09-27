@@ -10,8 +10,9 @@ import com.sca4d.core.api.scheduling.MisfirePolicy;
 import com.sca4d.core.api.scheduling.OverlapPolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.api.security.SecretKeyring;
-import com.sca4d.core.api.setting.Settings;
-import com.sca4d.core.api.setting.SystemSetting;
+import com.sca4d.core.api.setting.access.SettingReader;
+import com.sca4d.core.api.setting.access.SettingWriter;
+import com.sca4d.core.api.setting.definition.SystemSetting;
 import com.sca4d.core.api.storage.FileService;
 import com.sca4d.core.api.storage.FileStorage;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
@@ -41,32 +42,39 @@ import java.util.Objects;
 @EnableConfigurationProperties(FileProperties.class)
 @EnableTransactionManagement
 public class FileAutoConfiguration {
+
+    /** 创建本应用上下文的模块设置，来源由 Spring 显式注入。 */
+    @Bean
+    FileSettings fileSettings(SettingReader<String> reader, SettingWriter<String> writer) {
+        return new FileSettings(reader, writer);
+    }
+
     /** 创建文件模块自动配置。 */
     public FileAutoConfiguration() {
     }
 
     /** @return 文件上传有效期设置 */
     @Bean
-    SystemSetting<Duration> fileUploadTtlSetting() {
-        return FileSettings.UPLOAD_TTL;
+    SystemSetting<Duration> fileUploadTtlSetting(FileSettings settings) {
+        return settings.UPLOAD_TTL;
     }
 
     /** @return 文件访问地址有效期设置 */
     @Bean
-    SystemSetting<Duration> fileAccessTtlSetting() {
-        return FileSettings.ACCESS_TTL;
+    SystemSetting<Duration> fileAccessTtlSetting(FileSettings settings) {
+        return settings.ACCESS_TTL;
     }
 
     /** @return 待绑定文件保留期设置 */
     @Bean
-    SystemSetting<Duration> fileReadyRetentionSetting() {
-        return FileSettings.READY_RETENTION;
+    SystemSetting<Duration> fileReadyRetentionSetting(FileSettings settings) {
+        return settings.READY_RETENTION;
     }
 
     /** @return 文件大小上限设置 */
     @Bean
-    SystemSetting<Long> fileMaximumSizeSetting() {
-        return FileSettings.MAXIMUM_SIZE_BYTES;
+    SystemSetting<Long> fileMaximumSizeSetting(FileSettings settings) {
+        return settings.MAXIMUM_SIZE_BYTES;
     }
 
     /**
@@ -108,7 +116,7 @@ public class FileAutoConfiguration {
             @NotNull StorageRegistry storages,
             @NotNull IdGenerator ids,
             @NotNull FileProperties properties,
-            @NotNull Settings settings,
+            @NotNull FileSettings settings,
             @NotNull TransferTokenService tokens,
             @NotNull Clock storageClock,
             @NotNull DistributedLock distributedLock,

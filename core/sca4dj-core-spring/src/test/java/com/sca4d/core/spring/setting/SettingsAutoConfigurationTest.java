@@ -27,6 +27,6 @@ class SettingsAutoConfigurationTest {
     @Test
     void installsSettingsWithExplicitVersionConditions() {
         runner.withBean(VersionConditions.class, () -> VersionCondition::optimistic)
-                .run(context -> assertThat(context).hasNotFailed().hasSingleBean(DatabaseSettings.class));
+                .run(context -> assertThat(context).hasNotFailed().hasSingleBean(DatabaseSettingStore.class));
     }
 }

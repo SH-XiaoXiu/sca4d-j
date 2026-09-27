@@ -23,12 +23,17 @@ import com.sca4d.core.api.authentication.SessionIdentityLoader;
 import com.sca4d.core.api.authentication.SessionTokens;
 import com.sca4d.core.api.authentication.principalsession.PrincipalIdLoader;
 import com.sca4d.core.api.authentication.principalsession.PrincipalLoader;
+import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
-import com.sca4d.core.api.setting.Settings;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.setting.access.SettingReader;
+import com.sca4d.core.api.setting.access.SettingWriter;
+import com.sca4d.core.api.setting.value.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingValue;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -154,8 +159,17 @@ class SessionServiceTest {
             ResourceLoaders resources,
             SaTokenSessionManager sessions,
             JwtSessionProjection projection) {
-        Settings settings = mock(Settings.class);
-        when(settings.get(AuthSettings.SESSION_TTL)).thenReturn(Duration.ofHours(1));
+        TestAccess source = mock(TestAccess.class);
+        AuthSettings settings = new AuthSettings(source, source);
+        when(source.read(settings.SESSION_TTL.code(), SettingOwner.system())).thenReturn(
+                SettingValue.read(
+                        TreeCode.of("SETTING:TEST"),
+                        settings.SESSION_TTL.code(),
+                        SettingOwner.system(),
+                        settings.SESSION_TTL.codec().encode(Duration.ofHours(1)),
+                        1,
+                        new Version(0),
+                        false));
         return new SessionService(
                 new SessionIdentityLoadService(loaders),
                 new PrincipalLoaders(List.of(new FixedPrincipalLoader())),
@@ -234,5 +248,9 @@ class SessionServiceTest {
         public @NotNull List<@NotNull Long> load(@NotNull SessionIdentity identity) {
             return List.of(34L);
         }
+    }
+
+    /** 测试替身同时实现读取和写入契约，避免引入生产组合接口。 */
+    private interface TestAccess extends SettingReader<String>, SettingWriter<String> {
     }
 }

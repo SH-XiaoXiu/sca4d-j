@@ -126,13 +126,13 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">校验调用方使用的是目录中注册的同一个设置对象。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;com.sca4d.core.api.setting.PreferenceSetting&lt;?&gt;&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findPreference(java.lang.String)" class="member-name-link">findPreference</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;com.sca4d.core.api.setting.definition.PreferenceSetting&lt;?&gt;&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findPreference(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">findPreference</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;key)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;com.sca4d.core.api.setting.SystemSetting&lt;?&gt;&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findSystem(java.lang.String)" class="member-name-link">findSystem</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;com.sca4d.core.api.setting.definition.SystemSetting&lt;?&gt;&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findSystem(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">findSystem</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;key)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull com.sca4d.core.api.setting.SystemSetting&lt;?&gt;&gt;</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull com.sca4d.core.api.setting.definition.SystemSetting&lt;?&gt;&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#systemSettings()" class="member-name-link">systemSettings</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
@@ -177,7 +177,7 @@ loadScripts(document, 'script');</script>
 <h3>systemSettings</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull com.sca4d.core.api.setting.SystemSetting&lt;?&gt;&gt;</span>&nbsp;<span class="element-name">systemSettings</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull com.sca4d.core.api.setting.definition.SystemSetting&lt;?&gt;&gt;</span>&nbsp;<span class="element-name">systemSettings</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>按分组和设置顺序排列的全部 SystemSetting</dd>
@@ -185,12 +185,12 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="findSystem(java.lang.String)">
+<section class="detail" id="findSystem(com.sca4d.core.api.name.code.TreeCode)">
 <h3>findSystem</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;com.sca4d.core.api.setting.SystemSetting&lt;?&gt;&gt;</span>&nbsp;<span class="element-name">findSystem</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;com.sca4d.core.api.setting.definition.SystemSetting&lt;?&gt;&gt;</span>&nbsp;<span class="element-name">findSystem</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;key)</span></div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>指定键的 SystemSetting；未注册或类型不匹配时返回空</dd>
@@ -198,12 +198,12 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="findPreference(java.lang.String)">
+<section class="detail" id="findPreference(com.sca4d.core.api.name.code.TreeCode)">
 <h3>findPreference</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;com.sca4d.core.api.setting.PreferenceSetting&lt;?&gt;&gt;</span>&nbsp;<span class="element-name">findPreference</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;com.sca4d.core.api.setting.definition.PreferenceSetting&lt;?&gt;&gt;</span>&nbsp;<span class="element-name">findPreference</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;key)</span></div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>指定键的 PreferenceSetting；未注册或类型不匹配时返回空</dd>

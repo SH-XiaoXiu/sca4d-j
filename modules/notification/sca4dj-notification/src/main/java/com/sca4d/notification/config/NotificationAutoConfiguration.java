@@ -7,9 +7,10 @@ import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.notification.NotificationDelivery;
 import com.sca4d.core.api.notification.NotificationType;
 import com.sca4d.core.api.notification.Notifications;
-import com.sca4d.core.api.setting.LogicSetting;
-import com.sca4d.core.api.setting.Settings;
-import com.sca4d.core.api.setting.SystemSetting;
+import com.sca4d.core.api.setting.access.SettingReader;
+import com.sca4d.core.api.setting.access.SettingWriter;
+import com.sca4d.core.api.setting.definition.LogicSetting;
+import com.sca4d.core.api.setting.definition.SystemSetting;
 import com.sca4d.core.spring.json.Sca4djJson;
 import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.notification.DefaultNotifications;
@@ -30,20 +31,26 @@ import java.util.Optional;
 @AutoConfiguration
 public class NotificationAutoConfiguration {
 
+    /** 创建本应用上下文的模块设置，来源由 Spring 显式注入。 */
+    @Bean
+    NotificationSettings notificationSettings(SettingReader<String> reader, SettingWriter<String> writer) {
+        return new NotificationSettings(reader, writer);
+    }
+
     /** 创建 Notification 模块自动配置。 */
     public NotificationAutoConfiguration() {
     }
 
     /** @return 管理员维护的通知渠道系统默认值定义 */
     @Bean
-    SystemSetting<JsonNode> notificationChannelDefaultsSetting() {
-        return NotificationSettings.CHANNEL_DEFAULTS;
+    SystemSetting<JsonNode> notificationChannelDefaultsSetting(NotificationSettings settings) {
+        return settings.CHANNEL_DEFAULTS;
     }
 
     /** @return 接收人维护的通知渠道覆盖值定义 */
     @Bean
-    LogicSetting<JsonNode> notificationChannelPreferencesSetting() {
-        return NotificationSettings.CHANNEL_PREFERENCES;
+    LogicSetting<JsonNode> notificationChannelPreferencesSetting(NotificationSettings settings) {
+        return settings.CHANNEL_PREFERENCES;
     }
 
     /** @return 校验重复编码并保存当前应用安装通知类型的目录 */
@@ -84,7 +91,7 @@ public class NotificationAutoConfiguration {
     @Bean
     Notifications notifications(
             @NotNull NotificationTypeCatalog types,
-            @NotNull Settings settings,
+            @NotNull NotificationSettings settings,
             @NotNull NotificationLocaleResolver locales,
             @NotNull NotificationRegionResolver regions,
             @NotNull NotificationDeliveryRouter deliveries,

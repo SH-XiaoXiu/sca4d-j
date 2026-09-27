@@ -84,6 +84,13 @@ app:
     device-creation-cleanup-interval: ${SCA4DJ_IOT_DEVICE_CREATION_CLEANUP_INTERVAL:PT10M}
 
 sca4dj:
+  plugin:
+    enabled: true
+    api: SCA4D:SERVER
+    artifacts:
+      - ${SCA4DJ_MFA_PLUGIN:plugins/sca4d-server-mfa.jar}
+    cache-directory: ${SCA4DJ_PLUGIN_CACHE:build/plugin-cache}
+    drain-timeout: PT30S
   instance:
     id: ${SCA4DJ_INSTANCE_ID:${random.uuid}}
     enabled-capabilities: ${SCA4DJ_INSTANCE_CAPABILITIES:MAIN:API,IOT:API,IOT:TRANSPORT,JOB:WORKER,SCHEDULING:WORKER}
@@ -243,6 +250,7 @@ sca4dj:
       bucket: ${SCA4DJ_STORAGE_MINIO_BUCKET:sca4dj}
       create-bucket: ${SCA4DJ_STORAGE_MINIO_CREATE_BUCKET:true}
   iam:
+    system-subject-id: ${SCA4DJ_IAM_SYSTEM_SUBJECT_ID:1}
     system-principal-ids:
       MAIN: 1
       IOT: 2
