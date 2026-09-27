@@ -153,7 +153,7 @@ public class Key extends Name {
                 }
             } else {
                 String logical = segment.startsWith("C_") ? segment.substring(2) : segment;
-                if (!logical.matches("[A-Z0-9_-]+") || !segment.equals(stableSegment(logical))) {
+                if (!logical.matches("[A-Z0-9_]+") || !segment.equals(stableSegment(logical))) {
                     throw new IllegalArgumentException("Key 稳定节点不规范");
                 }
             }

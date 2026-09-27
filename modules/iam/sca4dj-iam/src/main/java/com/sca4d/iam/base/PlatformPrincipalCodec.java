@@ -17,7 +17,7 @@ import java.util.Objects;
 public final class PlatformPrincipalCodec implements PrincipalCodec<PlatformPrincipal> {
 
     /** Platform Principal 在 Session 和设置 owner 中使用的稳定类型。 */
-    public static final @NotNull TreeCode TYPE = TreeCode.of("IAM.PLATFORM-PRINCIPAL");
+    public static final @NotNull TreeCode TYPE = TreeCode.ofColon("IAM:PLATFORM_PRINCIPAL");
 
     private final @NotNull ObjectMapper objectMapper;
 

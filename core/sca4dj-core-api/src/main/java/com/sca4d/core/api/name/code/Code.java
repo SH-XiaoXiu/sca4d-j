@@ -28,8 +28,8 @@ public abstract class Code extends Name implements Comparable<Code> {
         Node next = null;
         for (int index = nodes.size() - 1; index >= 0; index--) {
             String value = Objects.requireNonNull(nodes.get(index), "Code 节点不能为空").toUpperCase(Locale.ROOT);
-            if (!value.matches("[A-Z0-9_-]+|\\*")) {
-                throw new IllegalArgumentException("Code 节点只能包含字母、数字、下划线、连字符或完整通配节点");
+            if (!value.matches("[A-Z0-9_]+|\\*")) {
+                throw new IllegalArgumentException("Code 节点只能包含字母、数字、下划线或完整通配节点");
             }
             next = new Node(value, next);
         }

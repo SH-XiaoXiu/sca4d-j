@@ -93,5 +93,9 @@ class NameTest {
         assertThrows(IllegalArgumentException.class, () -> Key.fromSegments(List.of("V_FF")));
         assertThrows(IllegalArgumentException.class, () -> Key.fromSegments(List.of("V_6a")));
         assertThrows(IllegalArgumentException.class, () -> Key.fromSegments(List.of("04")));
+        assertThrows(IllegalArgumentException.class, () -> Key.fromSegments(List.of("PLATFORM-PRINCIPAL")));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> Key.parse("SCA4D_TEST:IAM:PLATFORM-PRINCIPAL", NameFormat.COLON));
     }
 }

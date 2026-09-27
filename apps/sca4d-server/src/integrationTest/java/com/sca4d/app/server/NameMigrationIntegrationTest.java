@@ -63,7 +63,7 @@ class NameMigrationIntegrationTest {
                 "INSERT INTO quartz.qrtz_simple_triggers(sched_name,trigger_name,trigger_group,repeat_count,repeat_interval,times_triggered) VALUES ('sca4d-server:sca4dj:scheduling:quartz','TEST/JOB','sca4dj-code',0,1000,0)");
         flyway(null).migrate();
         assertThat(jdbc.queryForObject("SELECT principal_type FROM iam_principal WHERE id=100", String.class))
-                .isEqualTo("IAM.PLATFORM-PRINCIPAL");
+                .isEqualTo("IAM.PLATFORM_PRINCIPAL");
         assertThat(jdbc.queryForObject("SELECT app_name FROM job.job_run WHERE id=200", String.class))
                 .isEqualTo("SCA4D_SERVER");
         assertThat(jdbc.queryForObject("SELECT sched_name FROM quartz.qrtz_simple_triggers", String.class))

@@ -7,15 +7,19 @@ spring:
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:local}
   datasource:
+    url: ${SCA4DJ_DB_URL:jdbc:postgresql://localhost:5432/sca4dj?options=-c%20TimeZone%3DUTC}
+    username: ${SCA4DJ_DB_USERNAME:sca4dj}
+    password: ${SCA4DJ_DB_PASSWORD:sca4dj}
+    driver-class-name: org.postgresql.Driver
     dynamic:
       primary: main
       strict: true
       datasource:
         main:
-          url: ${SCA4DJ_DB_URL:jdbc:postgresql://localhost:5432/sca4dj?options=-c%20TimeZone%3DUTC}
-          username: ${SCA4DJ_DB_USERNAME:sca4dj}
-          password: ${SCA4DJ_DB_PASSWORD:sca4dj}
-          driver-class-name: org.postgresql.Driver
+          url: ${spring.datasource.url}
+          username: ${spring.datasource.username}
+          password: ${spring.datasource.password}
+          driver-class-name: ${spring.datasource.driver-class-name}
         iot-history:
           lazy: true
           url: ${SCA4DJ_IOT_TIMESCALE_URL:jdbc:postgresql://localhost:5433/sca4dj_iot?options=-c%20TimeZone%3DUTC}
