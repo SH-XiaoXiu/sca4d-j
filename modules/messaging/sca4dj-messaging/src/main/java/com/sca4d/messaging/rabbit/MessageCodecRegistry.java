@@ -37,7 +37,8 @@ final class MessageCodecRegistry {
         }
         Map<TreeCode, VersionedCodecCatalog<Message, byte[]>> registered = new LinkedHashMap<>();
         for (Map.Entry<TreeCode, List<MessageCodec<?>>> entry : grouped.entrySet()) {
-            List<MessageCodec<Message>> values = entry.getValue().stream()
+            List<MessageCodec<Message>> values = entry.getValue()
+                    .stream()
                     .map(MessageCodecRegistry::asMessageCodec)
                     .toList();
             MessageCodec<Message> current = values.stream()

@@ -1,7 +1,7 @@
 package com.sca4d.core.api.messaging;
 
-import com.sca4d.core.api.message.Message;
 import com.sca4d.core.api.id.Id;
+import com.sca4d.core.api.message.Message;
 import com.sca4d.core.api.name.Name;
 import org.jetbrains.annotations.NotNull;
 

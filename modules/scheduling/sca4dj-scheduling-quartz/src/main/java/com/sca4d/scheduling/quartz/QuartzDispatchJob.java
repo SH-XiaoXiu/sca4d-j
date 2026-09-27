@@ -1,7 +1,7 @@
 package com.sca4d.scheduling.quartz;
 
-import com.sca4d.core.api.job.JobExecutor;
 import com.sca4d.core.api.id.Id;
+import com.sca4d.core.api.job.JobExecutor;
 import com.sca4d.core.api.scheduling.JobSchedule;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import org.jetbrains.annotations.NotNull;

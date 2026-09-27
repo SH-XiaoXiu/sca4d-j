@@ -1,8 +1,8 @@
 package com.sca4d.iot.message;
 
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.MessageBus;
-import com.sca4d.core.api.id.Id;
 import com.sca4d.iot.api.message.DeviceAcknowledgementCheck;
 import com.sca4d.iot.api.message.DeviceDispatchMessage;
 import org.jetbrains.annotations.NotNull;

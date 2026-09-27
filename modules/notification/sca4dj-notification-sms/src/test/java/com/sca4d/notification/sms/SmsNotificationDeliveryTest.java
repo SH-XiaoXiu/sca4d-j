@@ -8,8 +8,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.id.Id;
+import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.Notification;
 import com.sca4d.core.api.notification.NotificationRecipient;

@@ -17,7 +17,6 @@ import com.sca4d.core.api.isolation.AppName;
 import com.sca4d.core.api.message.Message;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.DispatchReceipt;
-import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.Name;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.messaging.outbox.MessageOutboxRepository;

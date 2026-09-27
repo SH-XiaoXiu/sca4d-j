@@ -1,7 +1,7 @@
 package com.sca4d.notification.sms;
 
-import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.id.Id;
+import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.notification.sms.mapper.SmsDeliveryMapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
