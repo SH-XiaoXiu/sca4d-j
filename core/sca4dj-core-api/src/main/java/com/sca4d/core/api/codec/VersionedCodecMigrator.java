@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /** 按相邻版本步骤串联执行手工序列化迁移，不访问任何持久化介质。 */
-public final class VersionedCodecMigrator<W> {
+public class VersionedCodecMigrator<W> {
 
     private final @NotNull Map<Integer, @NotNull Migratable<W>> steps;
 

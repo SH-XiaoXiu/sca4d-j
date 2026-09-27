@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 保存显式回执或 reported 推导结果共用的业务确认事实。 */
-public final class DeviceAcknowledgement extends Message {
+public class DeviceAcknowledgement extends Message {
 
     public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/ACK/PROCESS");
 

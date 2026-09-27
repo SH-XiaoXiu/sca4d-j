@@ -6,7 +6,7 @@ import java.time.Duration;
 
 /** 保存具体应用为 IoT 连接、设备定时、ACK 和 reported 存储选择的运行参数。 */
 @ConfigurationProperties("sca4dj.iot")
-public final class IotProperties {
+public class IotProperties {
 
     private Duration connectionTtl = Duration.ofMinutes(30);
 

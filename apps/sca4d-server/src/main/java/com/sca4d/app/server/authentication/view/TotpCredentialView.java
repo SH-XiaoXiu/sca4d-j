@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 不包含 Secret 和重放游标的当前 Account TOTP 状态。 */
-public final class TotpCredentialView {
+public class TotpCredentialView {
 
     private final boolean enabled;
 

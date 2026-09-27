@@ -13,14 +13,13 @@ import com.sca4d.auth.email.EmailCodeProof;
 import com.sca4d.auth.email.config.EmailCodeSettings;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountDirectory;
 import com.sca4d.core.api.identity.RealmKey;
-import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.notification.NotificationRecipient;
 import com.sca4d.core.api.notification.Notifications;
 import com.sca4d.core.api.security.SecretHasher;
-import com.sca4d.core.api.setting.Settings;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -54,7 +53,7 @@ public class EmailCodeChallengeService {
 
     private final @NotNull SecretHasher hasher;
 
-    private final @NotNull Settings settings;
+    private final @NotNull EmailCodeSettings settings;
 
     private final @NotNull Clock clock;
 
@@ -77,7 +76,7 @@ public class EmailCodeChallengeService {
             @NotNull Notifications notifications,
             @NotNull RedisEmailCodeChallengeStore store,
             @NotNull SecretHasher hasher,
-            @NotNull Settings settings,
+            @NotNull EmailCodeSettings settings,
             @NotNull Clock clock) {
         this(accounts, accountRealm, notifications, store, hasher, settings, clock, new SecureRandom());
     }
@@ -89,7 +88,7 @@ public class EmailCodeChallengeService {
             @NotNull Notifications notifications,
             @NotNull RedisEmailCodeChallengeStore store,
             @NotNull SecretHasher hasher,
-            @NotNull Settings settings,
+            @NotNull EmailCodeSettings settings,
             @NotNull Clock clock,
             @NotNull SecureRandom random) {
         this.accounts = Objects.requireNonNull(accounts, "AccountDirectory 不能为空");
@@ -169,7 +168,7 @@ public class EmailCodeChallengeService {
                 && state.accountId() > 0
                 && CODE.matcher(checkedProof.code()).matches()
                 && matches;
-        Version consumed = store.verify(state, valid, settings.get(EmailCodeSettings.MAXIMUM_ATTEMPTS));
+        Version consumed = store.verify(state, valid, settings.MAXIMUM_ATTEMPTS.get());
         if (!valid || consumed == null) {
             throw new BusinessException(EmailCodeErrorCode.CODE_REJECTED);
         }
@@ -209,8 +208,8 @@ public class EmailCodeChallengeService {
             @Nullable Account account,
             @NotNull String maskedRecipient,
             @NotNull String targetHash) {
-        Duration ttl = settings.get(EmailCodeSettings.CHALLENGE_TTL);
-        Duration resendInterval = settings.get(EmailCodeSettings.RESEND_INTERVAL);
+        Duration ttl = settings.CHALLENGE_TTL.get();
+        Duration resendInterval = settings.RESEND_INTERVAL.get();
         if (!store.reserveCooldown(targetHash, resendInterval)) {
             throw new BusinessException(EmailCodeErrorCode.RESEND_TOO_SOON);
         }

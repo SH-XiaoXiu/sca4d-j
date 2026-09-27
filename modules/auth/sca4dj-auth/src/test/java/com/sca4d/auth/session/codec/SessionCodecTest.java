@@ -215,14 +215,14 @@ class SessionCodecTest {
                 .hasMessage("Session 解码失败");
     }
 
-    private static final class AlternatePrincipal implements Principal {
+    private static class AlternatePrincipal implements Principal {
         @Override
         public long principalId() {
             return 99;
         }
     }
 
-    private static final class AlternatePrincipalCodec implements PrincipalCodec<AlternatePrincipal> {
+    private static class AlternatePrincipalCodec implements PrincipalCodec<AlternatePrincipal> {
         @Override
         public @NotNull TreeCode type() {
             return TreeCode.of("test.principal");

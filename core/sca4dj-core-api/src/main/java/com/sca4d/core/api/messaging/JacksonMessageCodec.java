@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 /** 使用项目统一 ObjectMapper 编解码一个具有固定 TreeCode 和版本的 Message 类型。 */
-public final class JacksonMessageCodec<M extends Message> implements MessageCodec<M> {
+public class JacksonMessageCodec<M extends Message> implements MessageCodec<M> {
 
     private final @NotNull TreeCode code;
 

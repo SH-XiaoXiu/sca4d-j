@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationContext;
 import java.util.Objects;
 
 /** 使用 Spring Bean 类型查找调用值解析器。 */
-public final class SpringCallValueResolverLookup implements CallValueResolverLookup {
+public class SpringCallValueResolverLookup implements CallValueResolverLookup {
 
     private final ApplicationContext applicationContext;
 

@@ -62,7 +62,7 @@ import java.util.UUID;
 /** 在 Controller 执行前校验外部 HTTP 输入的显式约束和按 Java 数据类型配置的默认规则。 */
 @Aspect
 @Order(Ordered.HIGHEST_PRECEDENCE + 50)
-public final class HttpInputValidationAspect {
+public class HttpInputValidationAspect {
 
     private static final Set<Class<? extends Annotation>> NUMERIC_RANGE_ANNOTATIONS = Set.of(
             DecimalMax.class,
@@ -455,7 +455,7 @@ public final class HttpInputValidationAspect {
     }
 
     /** 提供反射无法解析泛型元素时使用的无注解 Object 类型。 */
-    private static final class ObjectType implements AnnotatedType {
+    private static class ObjectType implements AnnotatedType {
 
         private static final ObjectType INSTANCE = new ObjectType();
 

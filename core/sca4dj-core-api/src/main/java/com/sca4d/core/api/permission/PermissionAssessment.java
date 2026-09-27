@@ -13,7 +13,7 @@ import java.util.Objects;
  *
  * <p>没有策略认领或多个策略同时认领都属于配置错误，不能默认允许，也不能按未定义的先后顺序选择策略。
  */
-public final class PermissionAssessment {
+public class PermissionAssessment {
 
     private static final Logger LOG = LoggerFactory.getLogger(PermissionAssessment.class);
 

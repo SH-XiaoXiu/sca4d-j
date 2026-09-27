@@ -3,7 +3,6 @@ package com.sca4d.core.spring.setting;
 import com.sca4d.core.api.concurrent.VersionConditions;
 import com.sca4d.core.api.security.SecretKeyring;
 import com.sca4d.core.api.setting.Setting;
-import com.sca4d.core.api.setting.Settings;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.ObjectProvider;
@@ -18,14 +17,14 @@ import org.springframework.core.env.Environment;
 
 import java.util.List;
 
-/** 自动装配数据库 Settings、设置目录和指定初始化节点。 */
+/** 自动装配设置目录、数据库读写、密钥保护和指定初始化节点。 */
 @AutoConfiguration(afterName = "org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration")
 @ConditionalOnClass(name = "org.mybatis.spring.SqlSessionFactoryBean")
 @MapperScan(basePackageClasses = SettingMapper.class)
 @EnableConfigurationProperties(SettingsBootstrapProperties.class)
 public class SettingsAutoConfiguration {
 
-    /** 创建 Settings 自动配置。 */
+    /** 创建设置自动配置。 */
     public SettingsAutoConfiguration() {
     }
 
@@ -41,15 +40,14 @@ public class SettingsAutoConfiguration {
         return new SettingRepository(mapper, sqlBatches);
     }
 
-    /** @return 每次读取数据库且不隐藏进程缓存的 Settings */
+    /** @return 每次从数据库读取、不在进程内缓存的设置读写器 */
     @Bean
-    @ConditionalOnMissingBean(Settings.class)
-    DatabaseSettings databaseSettings(
-            SettingCatalog catalog,
+    @ConditionalOnMissingBean(DatabaseSettingStore.class)
+    DatabaseSettingStore databaseSource(
             SettingRepository repository,
             ObjectProvider<SecretKeyring> keyring,
             VersionConditions versionConditions) {
-        return new DatabaseSettings(catalog, repository, keyring.getIfAvailable(), versionConditions);
+        return new DatabaseSettingStore(repository, keyring.getIfAvailable(), versionConditions);
     }
 
     /** @return 只在指定初始化节点启用的 ENV 初始化器 */

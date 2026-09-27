@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 把协议标准上行结果交给 IoT 的 reported、事件和回执业务事务。 */
-public final class StandardDeviceUplinkReceiver implements DeviceUplinkReceiver {
+public class StandardDeviceUplinkReceiver implements DeviceUplinkReceiver {
 
     private final @NotNull ReportedStateService reportedStates;
 

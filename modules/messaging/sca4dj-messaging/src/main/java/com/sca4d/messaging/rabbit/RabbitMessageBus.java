@@ -5,6 +5,7 @@ import static com.sca4d.core.api.messaging.DispatchReceipt.Status.AFTER_COMMIT_R
 import static com.sca4d.core.api.messaging.DispatchReceipt.Status.BROKER_ACCEPTED;
 import static com.sca4d.core.api.messaging.DispatchReceipt.Status.OUTBOX_ENLISTED;
 
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.isolation.AppName;
 import com.sca4d.core.api.message.BinaryContent;
@@ -12,7 +13,6 @@ import com.sca4d.core.api.message.Message;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.DispatchReceipt;
 import com.sca4d.core.api.messaging.MessageBus;
-import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.Name;
 import com.sca4d.core.spring.transaction.TransactionCallbacks;
 import com.sca4d.messaging.outbox.MessageOutboxRepository;
@@ -28,7 +28,7 @@ import java.util.Objects;
 
 /** 使用固定 RabbitMQ 基座实现立即、提交后和 Outbox 三种 Message 分发方式。 */
 @ApiStatus.Internal
-public final class RabbitMessageBus implements MessageBus {
+public class RabbitMessageBus implements MessageBus {
 
     private static final Logger LOG = LoggerFactory.getLogger(RabbitMessageBus.class);
 

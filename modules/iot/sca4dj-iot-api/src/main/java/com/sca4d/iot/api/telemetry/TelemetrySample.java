@@ -9,7 +9,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 保存一个物模型属性在明确采样时间产生的时序值。 */
-public final class TelemetrySample {
+public class TelemetrySample {
 
     private final @NotNull String propertyCode;
 

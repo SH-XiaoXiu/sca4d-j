@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.TreeMap;
 
 /** 编解码已经按物模型校验的标准数据，并显式展开专用 object 与 array 值。 */
-public final class ThingDataJsonCodec {
+public class ThingDataJsonCodec {
 
     private static final TypeReference<Map<String, Object>> MAP_TYPE = new TypeReference<>() {
     };

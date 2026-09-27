@@ -24,7 +24,7 @@ import java.util.Set;
 
 /** 校验 Message Handler 契约，并声明持久业务 exchange、Handler 队列、retry queue 和 DLQ。 */
 @ApiStatus.Internal
-public final class RabbitMessageTopology {
+public class RabbitMessageTopology {
 
     private final @NotNull Key exchangeName;
 

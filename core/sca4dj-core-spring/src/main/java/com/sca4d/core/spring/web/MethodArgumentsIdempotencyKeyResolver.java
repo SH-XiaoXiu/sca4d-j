@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 使用规范化方法参数摘要生成不暴露原始参数的幂等键。 */
-public final class MethodArgumentsIdempotencyKeyResolver implements CallValueResolver<IdempotencyKey> {
+public class MethodArgumentsIdempotencyKeyResolver implements CallValueResolver<IdempotencyKey> {
 
     private final IdempotencyFingerprints fingerprints;
 

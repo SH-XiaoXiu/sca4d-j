@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 返回一个物模型属性的高频时序样本。 */
 @SuppressWarnings("unused")
-public final class IotTelemetryView {
+public class IotTelemetryView {
 
     private final @NotNull String propertyCode;
 

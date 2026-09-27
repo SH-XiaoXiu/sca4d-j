@@ -17,7 +17,7 @@ import java.util.UUID;
 
 /** 多实例领取 Outbox 记录，在事务外发布，并用独立事务写回确认或失败结果。 */
 @ApiStatus.Internal
-public final class MessageOutboxDispatcher {
+public class MessageOutboxDispatcher {
 
     private static final Logger LOG = LoggerFactory.getLogger(MessageOutboxDispatcher.class);
 

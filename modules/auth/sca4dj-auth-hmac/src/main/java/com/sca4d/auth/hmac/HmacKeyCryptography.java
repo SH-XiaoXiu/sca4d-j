@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /** 使用 SecretKeyring 按 Account 和版本绑定 MAC Key 密文。 */
-public final class HmacKeyCryptography {
+public class HmacKeyCryptography {
 
     private final @NotNull SecretKeyring keyring;
 

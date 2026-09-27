@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 保存一个持续负责生成设备 command 下行的定时规则。 */
-public final class DeviceSchedule {
+public class DeviceSchedule {
 
     private final long scheduleId;
 

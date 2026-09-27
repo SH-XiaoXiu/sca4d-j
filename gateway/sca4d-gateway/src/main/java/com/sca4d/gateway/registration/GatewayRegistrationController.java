@@ -29,7 +29,7 @@ import java.security.MessageDigest;
 /** 提供 Server 实例注册、续租和带租约 ID 保护的注销控制 API。 */
 @RestController
 @RequestMapping(GatewayHttpPaths.REGISTRATIONS)
-public final class GatewayRegistrationController {
+public class GatewayRegistrationController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GatewayRegistrationController.class);
 

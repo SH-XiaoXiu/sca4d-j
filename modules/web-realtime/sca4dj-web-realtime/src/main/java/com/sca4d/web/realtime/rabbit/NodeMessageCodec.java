@@ -22,7 +22,7 @@ import java.util.Set;
 
 /** 编解码 RabbitMQ 节点队列使用的连接列表和浏览器事件信封。 */
 @ApiStatus.Internal
-public final class NodeMessageCodec {
+public class NodeMessageCodec {
 
     private static final int DELIVERY_VERSION = 1;
 
@@ -164,7 +164,7 @@ public final class NodeMessageCodec {
 
     /** 保存一个节点需要投递的连接列表和浏览器内容。 */
     @SuppressWarnings("ClassCanBeRecord")
-    static final class NodeDelivery {
+    static class NodeDelivery {
         private final @NotNull List<@NotNull ConnectionId> connections;
 
         private final @NotNull BrowserWrite delivery;

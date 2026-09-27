@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /** 保存 Product 下一个不可修改且已经发布的物模型版本。 */
-public final class ThingModel {
+public class ThingModel {
 
     /** 当前 JSON 格式版本。 */
     public static final int FORMAT_VERSION = 1;
@@ -81,7 +81,7 @@ public final class ThingModel {
     }
 
     /** 构造一个完整物模型版本。 */
-    public static final class Builder {
+    public static class Builder {
         private final @NotNull String productCode;
 
         private final int version;

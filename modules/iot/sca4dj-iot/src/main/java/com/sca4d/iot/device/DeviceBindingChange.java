@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存停用 Device 后一次物模型版本和协议实现的显式切换。 */
-public final class DeviceBindingChange {
+public class DeviceBindingChange {
 
     private final int thingModelVersion;
 

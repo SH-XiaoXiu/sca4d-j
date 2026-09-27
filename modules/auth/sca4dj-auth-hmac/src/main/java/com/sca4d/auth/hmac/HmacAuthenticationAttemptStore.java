@@ -11,7 +11,7 @@ import java.time.Duration;
 import java.util.Objects;
 
 /** 使用 Redis 保存 MAC nonce 一次性消费记录和账号失败窗口。 */
-public final class HmacAuthenticationAttemptStore {
+public class HmacAuthenticationAttemptStore {
     private final @NotNull RedisTemplate<Key, String> redis;
 
     private final @NotNull Key keyPrefix;

@@ -14,7 +14,7 @@ import java.util.Objects;
  * @param <P> 当前集合对应的 Principal 类型
  */
 @SuppressWarnings("ClassCanBeRecord") // 项目禁止使用 Java record，保留普通不可变类型。
-public final class PrincipalIdSet<P extends Principal> {
+public class PrincipalIdSet<P extends Principal> {
 
     private final @NotNull Class<P> principalType;
 

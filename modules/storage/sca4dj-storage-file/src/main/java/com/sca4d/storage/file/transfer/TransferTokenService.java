@@ -22,7 +22,7 @@ import java.util.Objects;
 
 /** 使用 SecretKeyring 加密本地 PUT 和 GET 的动作、文件标识及到期时间。 */
 @ApiStatus.Internal
-public final class TransferTokenService implements StorageTransferSigner {
+public class TransferTokenService implements StorageTransferSigner {
     private final @NotNull SecretKeyring keyring;
 
     private final @NotNull URI baseUrl;

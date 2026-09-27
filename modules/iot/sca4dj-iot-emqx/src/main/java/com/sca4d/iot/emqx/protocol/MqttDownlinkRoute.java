@@ -6,7 +6,7 @@ import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 
 /** 按 desired property 或 command code 选择下行 encoder 和 Topic 模板。 */
-public final class MqttDownlinkRoute {
+public class MqttDownlinkRoute {
 
     private final @NotNull DeviceDownlinkKind kind;
 

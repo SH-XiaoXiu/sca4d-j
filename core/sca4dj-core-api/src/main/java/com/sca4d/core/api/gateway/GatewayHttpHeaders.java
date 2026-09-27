@@ -1,7 +1,7 @@
 package com.sca4d.core.api.gateway;
 
 /** 定义 Gateway 控制请求和可信转发信息使用的 HTTP Header。 */
-public final class GatewayHttpHeaders {
+public class GatewayHttpHeaders {
 
     /** Gateway 控制 Header 共用的名称前缀。 */
     public static final String PREFIX = "X-Gateway-";

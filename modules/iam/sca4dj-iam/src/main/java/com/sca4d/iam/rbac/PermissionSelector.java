@@ -13,7 +13,7 @@ import java.util.Objects;
  * RBAC 表保存的具体 Operation 键或内部全量选择符。
  */
 @SuppressWarnings("ClassCanBeRecord")
-public final class PermissionSelector {
+public class PermissionSelector {
     /**
      * 表示 Operation Catalog 当前全部 ACTION 的内部选择符。
      */

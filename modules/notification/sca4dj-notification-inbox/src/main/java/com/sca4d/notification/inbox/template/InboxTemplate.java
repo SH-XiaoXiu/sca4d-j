@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * 保存一种站内信的完整多语言 Tiptap JSON 模板、状态和版本。
  */
-public final class InboxTemplate {
+public class InboxTemplate {
 
     private final long templateId;
 

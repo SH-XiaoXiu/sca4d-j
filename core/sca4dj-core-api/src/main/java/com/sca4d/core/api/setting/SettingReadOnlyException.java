@@ -3,7 +3,7 @@ package com.sca4d.core.api.setting;
 import org.jetbrains.annotations.NotNull;
 
 /** 表示管理端尝试修改仍由初始化节点 ENV 持续同步的设置。 */
-public final class SettingReadOnlyException extends IllegalStateException {
+public class SettingReadOnlyException extends IllegalStateException {
 
     private final String settingKey;
 

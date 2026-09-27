@@ -16,7 +16,7 @@ import java.util.Objects;
 /** 返回 Platform 角色当前得到的具体 ACTION。 */
 @Schema(name = "PlatformRolePermissions")
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
-public final class RolePermissionsView {
+public class RolePermissionsView {
 
     private final long roleId;
 

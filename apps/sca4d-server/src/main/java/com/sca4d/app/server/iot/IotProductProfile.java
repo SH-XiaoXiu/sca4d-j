@@ -6,7 +6,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 保存 Sca4d Server 为公共 IoT Product 增加的启停状态。 */
-public final class IotProductProfile {
+public class IotProductProfile {
 
     private final long productId;
 

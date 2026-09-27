@@ -18,7 +18,7 @@ import java.util.Objects;
 
 /** 返回 Sca4d Server 管理 Product 所需的公共定义和 App 启停状态。 */
 @SuppressWarnings("unused")
-public final class IotProductView extends BaseView {
+public class IotProductView extends BaseView {
 
     private final long id;
 

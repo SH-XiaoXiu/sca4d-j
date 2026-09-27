@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 表示 Principal 查询要求存在的可用 Account 关系。 */
-public final class LinkedAccountCondition {
+public class LinkedAccountCondition {
 
     private final @NotNull RealmKey realm;
 

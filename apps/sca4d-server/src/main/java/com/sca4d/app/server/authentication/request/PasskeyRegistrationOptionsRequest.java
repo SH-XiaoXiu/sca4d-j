@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 接收浏览器账号选择器显示的 Passkey 账号名称。 */
-public final class PasskeyRegistrationOptionsRequest {
+public class PasskeyRegistrationOptionsRequest {
 
     @NotBlank
     @Size(max = 100)

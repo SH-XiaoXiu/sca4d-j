@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 表示数据库写入的实际影响行数不符合 Repository 声明的范围。 */
-public final class AffectedRowsMismatchException extends IllegalStateException {
+public class AffectedRowsMismatchException extends IllegalStateException {
 
     private final @NotNull String target;
 

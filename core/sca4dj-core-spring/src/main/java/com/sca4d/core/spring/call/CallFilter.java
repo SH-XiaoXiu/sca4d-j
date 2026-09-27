@@ -17,7 +17,7 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 /** 为每次 HTTP 请求建立和清理 {@link Call}。 */
-public final class CallFilter extends OncePerRequestFilter {
+public class CallFilter extends OncePerRequestFilter {
 
     /** 请求和响应使用的调用标识 Header。 */
     public static final String CALL_ID_HEADER = "X-Call-Id";

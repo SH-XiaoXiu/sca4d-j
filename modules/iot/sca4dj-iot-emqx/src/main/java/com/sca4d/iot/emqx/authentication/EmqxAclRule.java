@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 表示 EMQX `5.8` HTTP Authenticator 响应中的一条新格式 ACL 规则。 */
-public final class EmqxAclRule {
+public class EmqxAclRule {
 
     private final @NotNull String permission;
 

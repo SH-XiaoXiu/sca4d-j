@@ -6,13 +6,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.job.DirectJob;
 import com.sca4d.core.api.job.Job;
 import com.sca4d.core.api.job.JobExecution;
 import com.sca4d.core.api.job.JobExecutor;
 import com.sca4d.core.api.job.JobKey;
 import com.sca4d.core.api.job.JobRetryPolicy;
-import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.job.JobRunStatus;
 import com.sca4d.core.api.scheduling.ClusterTask;
 import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
@@ -390,7 +390,7 @@ class QuartzSchedulingIntegrationTest {
     }
 
     /** 记录 Quartz 是否直接执行了集群任务。 */
-    static final class CountingClusterTask implements ClusterTask {
+    static class CountingClusterTask implements ClusterTask {
         private final CountDownLatch execution = new CountDownLatch(1);
 
         @Override
@@ -400,14 +400,14 @@ class QuartzSchedulingIntegrationTest {
     }
 
     /** 用于验证实现类更换不改变稳定调度契约。 */
-    static final class RenamedCountingClusterTask implements ClusterTask {
+    static class RenamedCountingClusterTask implements ClusterTask {
         @Override
         public void execute() {
         }
     }
 
     /** 用于验证 Job 实现类更换不改变稳定调度契约。 */
-    static final class RenamedDirectJob extends DirectJob<Void, Void> {
+    static class RenamedDirectJob extends DirectJob<Void, Void> {
         private final JobKey key = new JobKey("TEST/QUARTZ/DISPATCH");
 
         @Override
@@ -444,7 +444,7 @@ class QuartzSchedulingIntegrationTest {
     }
 
     /** 记录 Quartz 是否使用原定 fire 时间提交了计划。 */
-    static final class CountingJobExecutor implements JobExecutor {
+    static class CountingJobExecutor implements JobExecutor {
         private final CountDownLatch fire = new CountDownLatch(1);
 
         @Override

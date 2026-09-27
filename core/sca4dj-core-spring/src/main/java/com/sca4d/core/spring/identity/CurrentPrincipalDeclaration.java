@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
 /** 查找 Controller 声明的 {@link CurrentPrincipal}，并取得声明指定的选择器。 */
-final class CurrentPrincipalDeclaration {
+class CurrentPrincipalDeclaration {
 
     private CurrentPrincipalDeclaration() {
     }

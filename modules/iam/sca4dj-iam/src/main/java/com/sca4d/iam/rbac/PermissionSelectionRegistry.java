@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 /**
  * 根据各 Operation 模块的领域行为构建并查找 RBAC 权限选择规则。
  */
-public final class PermissionSelectionRegistry {
+public class PermissionSelectionRegistry {
 
     private static final Logger LOG = LoggerFactory.getLogger(PermissionSelectionRegistry.class);
 

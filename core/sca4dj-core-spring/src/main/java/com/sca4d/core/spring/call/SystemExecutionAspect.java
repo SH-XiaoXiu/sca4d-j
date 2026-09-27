@@ -19,7 +19,7 @@ import java.util.UUID;
 /** 在自主入口建立系统 Call，并在方法结束后清理当前线程；不覆盖用户或外部应用调用。 */
 @Aspect
 @Order(Ordered.HIGHEST_PRECEDENCE + 100)
-public final class SystemExecutionAspect {
+public class SystemExecutionAspect {
 
     private final @NotNull Clock clock;
 

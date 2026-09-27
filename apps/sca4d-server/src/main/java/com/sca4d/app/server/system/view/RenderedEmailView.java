@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 返回完成变量转义和 HTML 清洗后的 Email 模板预览。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
-public final class RenderedEmailView {
+public class RenderedEmailView {
 
     private final @NotNull String subject;
 

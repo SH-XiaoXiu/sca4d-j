@@ -13,7 +13,7 @@ import java.util.Set;
 /**
  * 声明 Platform 角色、Account 和 Principal 角色管理使用的 Operation 模块。
  */
-public final class PlatformOperations implements RbacOperationModule {
+public class PlatformOperations implements RbacOperationModule {
 
     private static final @NotNull TreeCode MODULE = TreeCode.ofSegment("PLATFORM");
 

@@ -48,7 +48,7 @@ class GatewayCallbackDispatcherTest {
     }
 
     /** 回调分发测试使用的稳定输入类型。 */
-    public static final class TestInput {
+    public static class TestInput {
 
         private String value;
 
@@ -64,7 +64,7 @@ class GatewayCallbackDispatcherTest {
     }
 
     /** 返回可核对 HTTP 结果的测试回调。 */
-    private static final class TestCallback implements GatewayCallback<TestInput, Map<String, String>> {
+    private static class TestCallback implements GatewayCallback<TestInput, Map<String, String>> {
 
         @Override
         public @NotNull GatewayCallbackCode code() {

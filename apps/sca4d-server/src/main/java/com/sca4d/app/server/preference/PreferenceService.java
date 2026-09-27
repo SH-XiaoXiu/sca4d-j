@@ -2,10 +2,9 @@ package com.sca4d.app.server.preference;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.sca4d.core.api.name.code.TreeCode;
-import com.sca4d.core.api.setting.PreferenceSetting;
-import com.sca4d.core.api.setting.PreferenceSettings;
-import com.sca4d.core.api.setting.SettingOwner;
-import com.sca4d.core.api.setting.SettingValue;
+import com.sca4d.core.api.setting.definition.PreferenceSetting;
+import com.sca4d.core.api.setting.value.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingValue;
 import com.sca4d.core.spring.setting.SettingCatalog;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -16,7 +15,7 @@ import java.util.Objects;
 
 /** 按当前 Platform Principal 读取、替换和恢复已注册的个人偏好。 */
 @Service
-public final class PreferenceService {
+public class PreferenceService {
 
     private static final Logger LOG = LoggerFactory.getLogger(PreferenceService.class);
 
@@ -24,66 +23,68 @@ public final class PreferenceService {
 
     private final SettingCatalog catalog;
 
-    private final PreferenceSettings settings;
-
     /** 创建个人偏好应用服务。 */
-    public PreferenceService(@NotNull SettingCatalog catalog, @NotNull PreferenceSettings settings) {
+    public PreferenceService(@NotNull SettingCatalog catalog) {
         this.catalog = Objects.requireNonNull(catalog, "设置目录不能为空");
-        this.settings = Objects.requireNonNull(settings, "PreferenceSettings 不能为空");
     }
 
     /** @return 当前 Principal 的已注册偏好值、来源和版本 */
-    public @NotNull SettingValue<?> inspect(long principalId, @NotNull String key) {
+    public @NotNull SettingValue<JsonNode> inspect(long principalId, @NotNull TreeCode key) {
         return inspectValue(settingByKey(key), owner(principalId));
     }
 
     /** 使用偏好定义的 Codec 校验并完整替换当前 Principal 的 JSON 值。 */
-    public @NotNull SettingValue<?> replace(
+    public @NotNull SettingValue<JsonNode> replace(
             long principalId,
-            @NotNull String key,
+            @NotNull TreeCode key,
             @NotNull JsonNode value) {
-        SettingValue<?> replaced = replaceValue(
+        SettingValue<JsonNode> replaced = replaceValue(
                 settingByKey(key),
                 owner(principalId),
                 Objects.requireNonNull(value, "偏好值不能为空"));
         LOG.debug(
                 "个人偏好已完整替换 | principalId={} settingKey={} version={}",
                 principalId,
-                replaced.setting().key(),
-                replaced.version().value());
+                replaced.code(),
+                replaced.revision().orElseThrow().value());
         return replaced;
     }
 
     /** 删除当前 Principal 的偏好覆盖值并保留递增版本。 */
-    public @NotNull SettingValue<?> reset(long principalId, @NotNull String key) {
-        SettingValue<?> reset = settings.reset(settingByKey(key), owner(principalId));
+    public @NotNull SettingValue<JsonNode> reset(long principalId, @NotNull TreeCode key) {
+        SettingValue<JsonNode> reset = resetValue(settingByKey(key), owner(principalId));
         LOG.debug(
                 "个人偏好已恢复默认值 | principalId={} settingKey={} version={}",
                 principalId,
-                reset.setting().key(),
-                reset.version().value());
+                reset.code(),
+                reset.revision().orElseThrow().value());
         return reset;
     }
 
     /** 返回必须存在的偏好设置定义。 */
-    private @NotNull PreferenceSetting<?> settingByKey(@NotNull String key) {
-        return catalog.findPreference(Objects.requireNonNull(key, "偏好键不能为空"))
+    private @NotNull PreferenceSetting<?> settingByKey(@NotNull TreeCode key) {
+        return catalog.findPreference(Objects.requireNonNull(key, "偏好编码不能为空"))
                 .orElseThrow(() -> new IllegalArgumentException("偏好设置不存在: " + key));
     }
 
     /** 捕获偏好定义泛型并读取当前值。 */
-    private <T> @NotNull SettingValue<T> inspectValue(
+    private <T> @NotNull SettingValue<JsonNode> inspectValue(
             @NotNull PreferenceSetting<T> setting,
             @NotNull SettingOwner owner) {
-        return settings.inspect(setting, owner);
+        return setting.inspect(owner).map(setting.codec()::encodeJson);
     }
 
     /** 捕获偏好定义泛型，使用 Codec 解码 JSON 后保存值。 */
-    private <T> @NotNull SettingValue<T> replaceValue(
+    private <T> @NotNull SettingValue<JsonNode> replaceValue(
             @NotNull PreferenceSetting<T> setting,
             @NotNull SettingOwner owner,
             @NotNull JsonNode value) {
-        return settings.replace(setting, owner, setting.codec().decodeJson(value));
+        return setting.replace(owner, setting.codec().decodeJson(value)).map(setting.codec()::encodeJson);
+    }
+
+    /** 恢复偏好后按该定义的 Codec 返回完整 JSON 值。 */
+    private <T> SettingValue<JsonNode> resetValue(PreferenceSetting<T> setting, SettingOwner owner) {
+        return setting.reset(owner).map(setting.codec()::encodeJson);
     }
 
     /** 返回当前 Platform Principal 对应的统一设置 owner。 */

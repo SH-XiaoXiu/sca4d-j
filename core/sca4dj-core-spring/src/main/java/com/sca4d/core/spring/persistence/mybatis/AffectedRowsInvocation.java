@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 保存当前线程正在执行的 `@AffectedRows` Repository 声明及其唯一一条 DML 结果。 */
-final class AffectedRowsInvocation {
+class AffectedRowsInvocation {
 
     private static final ThreadLocal<@Nullable AffectedRowsInvocation> CURRENT = new ThreadLocal<>();
 

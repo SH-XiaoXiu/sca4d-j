@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /** 保存一次消息消费批量写入 TimescaleDB 所需的单条 Telemetry 样本字段。 */
 @SuppressWarnings({"ClassCanBeRecord", "unused"}) // MyBatis XML 通过属性名读取写入参数。
-public final class TimescaleTelemetrySample {
+public class TimescaleTelemetrySample {
 
     private final long messageId;
 

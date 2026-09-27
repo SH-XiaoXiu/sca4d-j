@@ -18,7 +18,7 @@ import java.lang.reflect.Modifier;
 import java.util.Map;
 
 /** 把 Web 选择输入转换成选择器声明的参数类型并调用选择器。 */
-public final class PrincipalSelectionInvoker {
+public class PrincipalSelectionInvoker {
 
     private static final Logger LOG = LoggerFactory.getLogger(PrincipalSelectionInvoker.class);
 

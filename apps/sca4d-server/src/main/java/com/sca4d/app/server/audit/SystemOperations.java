@@ -14,7 +14,7 @@ import java.util.Set;
 
 /** 声明 Sca4d Server 系统管理接口使用的 Operation Catalog 节点。 */
 @Component
-public final class SystemOperations implements RbacOperationModule {
+public class SystemOperations implements RbacOperationModule {
     private static final @NotNull TreeCode MODULE = TreeCode.ofSegment("SYSTEM");
 
     private static final @NotNull TreeCode AUDIT_RESOURCE = TreeCode.ofSegment("AUDIT");

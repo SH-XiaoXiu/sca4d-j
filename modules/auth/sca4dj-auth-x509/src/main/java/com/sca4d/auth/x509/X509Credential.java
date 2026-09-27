@@ -9,7 +9,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 保存 Account 登记的 X.509 公钥证书身份、有效期、状态和乐观版本。 */
-public final class X509Credential {
+public class X509Credential {
 
     /** 公钥证书凭据的有限生命周期状态。 */
     public enum Status implements BaseEnum {

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 /** 表示一次从一开始计数的分页查询要求。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class PageRequest {
+public class PageRequest {
 
     private final int page;
 

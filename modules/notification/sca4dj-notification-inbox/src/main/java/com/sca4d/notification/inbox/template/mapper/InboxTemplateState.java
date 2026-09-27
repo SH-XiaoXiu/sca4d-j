@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * 保存 Inbox Template Mapper 从数据库读取的 JSON 文本状态。
  */
-public final class InboxTemplateState {
+public class InboxTemplateState {
 
     private final long templateId;
 

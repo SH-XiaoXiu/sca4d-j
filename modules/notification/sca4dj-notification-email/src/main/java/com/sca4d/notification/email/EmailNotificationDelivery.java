@@ -17,7 +17,7 @@ import java.util.Objects;
 /**
  * 把渠道无关通知解析为收件邮箱、Email 模板和 SMTP 配置并执行投递。
  */
-public final class EmailNotificationDelivery implements NotificationDelivery {
+public class EmailNotificationDelivery implements NotificationDelivery {
 
     private final @NotNull EmailRecipientResolver recipients;
 

@@ -15,7 +15,7 @@ import java.util.function.Predicate;
  * @param <T> 条件检查的输入类型
  */
 @SuppressWarnings({"ClassCanBeRecord", "unused"})
-public final class DnfClause<T> implements Predicate<T> {
+public class DnfClause<T> implements Predicate<T> {
 
     private final List<Predicate<? super T>> conditions;
 

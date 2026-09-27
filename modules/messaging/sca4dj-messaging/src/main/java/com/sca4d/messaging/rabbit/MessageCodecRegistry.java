@@ -20,7 +20,7 @@ import java.util.Objects;
  * 按 Message TreeCode 和协议版本索引应用安装的非 Event Codec。
  */
 @ApiStatus.Internal
-final class MessageCodecRegistry {
+class MessageCodecRegistry {
 
     private final @NotNull Map<@NotNull TreeCode, @NotNull VersionedCodecCatalog<Message, byte[]>> codecs;
 
@@ -37,7 +37,8 @@ final class MessageCodecRegistry {
         }
         Map<TreeCode, VersionedCodecCatalog<Message, byte[]>> registered = new LinkedHashMap<>();
         for (Map.Entry<TreeCode, List<MessageCodec<?>>> entry : grouped.entrySet()) {
-            List<MessageCodec<Message>> values = entry.getValue().stream()
+            List<MessageCodec<Message>> values = entry.getValue()
+                    .stream()
                     .map(MessageCodecRegistry::asMessageCodec)
                     .toList();
             MessageCodec<Message> current = values.stream()

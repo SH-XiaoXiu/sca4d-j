@@ -10,7 +10,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 保存一个 worker 已经持有租约的节点及其 Job 定义定位信息。 */
-public final class NodeClaim {
+public class NodeClaim {
 
     private final long nodeId;
 

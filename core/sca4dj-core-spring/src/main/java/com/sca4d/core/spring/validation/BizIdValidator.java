@@ -15,7 +15,7 @@ import java.math.BigInteger;
 import java.util.regex.Pattern;
 
 /** 执行 BizId 声明的业务标识格式检查。 */
-public final class BizIdValidator implements ConstraintValidator<BizId, Object> {
+public class BizIdValidator implements ConstraintValidator<BizId, Object> {
 
     private BizIdMode mode;
 

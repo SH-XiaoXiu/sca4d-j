@@ -1,7 +1,7 @@
 package com.sca4d.app.server.iot;
 
 /** 定义示例应用的 Device MAC 和 EMQX HTTP 请求使用的 Header。 */
-public final class IotHttpHeaders {
+public class IotHttpHeaders {
 
     /** 示例应用 IoT 请求 Header 共用的名称前缀。 */
     public static final String PREFIX = "X-Iot-";

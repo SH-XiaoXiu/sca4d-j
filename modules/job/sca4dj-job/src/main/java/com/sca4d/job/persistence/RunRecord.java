@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /** 保存 JobExecutor 查询状态和结果需要的根运行列值。 */
-public final class RunRecord {
+public class RunRecord {
 
     private final long id;
 

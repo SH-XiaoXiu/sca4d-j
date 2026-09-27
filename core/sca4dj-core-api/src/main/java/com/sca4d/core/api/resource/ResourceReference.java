@@ -10,7 +10,7 @@ import java.util.Objects;
  * 保存能够从数据库或消息中恢复的资源类型和资源标识。
  */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class ResourceReference implements Resource {
+public class ResourceReference implements Resource {
     private final @NotNull TreeCode type;
 
     private final @NotNull String id;

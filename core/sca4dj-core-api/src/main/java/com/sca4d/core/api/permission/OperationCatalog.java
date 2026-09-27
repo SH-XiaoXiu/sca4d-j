@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 /**
  * 收集业务模块的 Operation 聚合，并提供完整目录、ACTION 索引和子集投影。
  */
-public final class OperationCatalog {
+public class OperationCatalog {
 
     private static final @NotNull Comparator<OperationNode.Module> MODULE_ORDER = Comparator
             .comparingInt(OperationNode.Module::sortOrder)

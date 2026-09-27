@@ -94,7 +94,7 @@ class RedisAuthenticationAttemptStoreTest {
     /**
      * 立即执行任务并保留本次锁参数。
      */
-    private static final class ImmediateDistributedLock implements DistributedLock {
+    private static class ImmediateDistributedLock implements DistributedLock {
 
         private LockKey key;
 

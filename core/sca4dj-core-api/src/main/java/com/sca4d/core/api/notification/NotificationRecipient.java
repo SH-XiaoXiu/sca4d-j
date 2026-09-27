@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * 保存通知接收人的内部身份类型和稳定标识，不包含渠道地址。
  */
-public final class NotificationRecipient {
+public class NotificationRecipient {
 
     /**
      * Account 接收人使用的稳定类型。

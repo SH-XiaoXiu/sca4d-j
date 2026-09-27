@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 声明需要在 Redis Cluster 中共同参与 Lua 操作的一组逻辑 key。 */
-public final class RedisHashTag {
+public class RedisHashTag {
 
     private final @NotNull TreeCode root;
 

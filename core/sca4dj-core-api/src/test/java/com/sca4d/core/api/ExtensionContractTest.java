@@ -36,7 +36,7 @@ class ExtensionContractTest {
         assertTrue(resources.contains(readAccount));
     }
 
-    private static final class PlatformOperator implements Principal {
+    private static class PlatformOperator implements Principal {
 
         private final long id;
 

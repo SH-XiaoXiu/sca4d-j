@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Instant;
 
 /** 任一传输失败、业务失败或 ACK 超时发生后立即停止下行重试。 */
-public final class NoRetryPolicy implements RetryPolicy {
+public class NoRetryPolicy implements RetryPolicy {
 
     public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/RETRY/NONE");
 

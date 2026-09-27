@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /** 按 pipeline 命令数量限制分批执行已经确定的 Redis 操作。 */
-public final class RedisBatches {
+public class RedisBatches {
 
     private final int maxCommands;
 

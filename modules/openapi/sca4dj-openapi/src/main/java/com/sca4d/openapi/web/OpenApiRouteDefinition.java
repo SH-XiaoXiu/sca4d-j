@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 保存已经校验的 OpenAPI 路由标识和 Client Operation 约束。 */
-public final class OpenApiRouteDefinition {
+public class OpenApiRouteDefinition {
 
     private static final Set<String> JAVA_KEYWORDS = Set.of(
             "abstract",

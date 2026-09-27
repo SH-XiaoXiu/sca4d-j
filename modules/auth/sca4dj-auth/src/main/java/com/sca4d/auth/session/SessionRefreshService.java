@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 使用当前身份、Principal 和 Resource 重建已经失效的 Session，并保留原认证和有效期。 */
-public final class SessionRefreshService {
+public class SessionRefreshService {
 
     private final SessionIdentityLoadService identities;
 

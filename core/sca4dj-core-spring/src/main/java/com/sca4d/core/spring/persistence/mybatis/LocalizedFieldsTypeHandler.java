@@ -18,7 +18,7 @@ import java.util.Objects;
 /** 在 PostgreSQL JSONB 与 `LocalizedFields` 之间执行严格 JSON 转换。 */
 @MappedTypes(LocalizedFields.class)
 @MappedJdbcTypes(JdbcType.OTHER)
-public final class LocalizedFieldsTypeHandler extends BaseTypeHandler<LocalizedFields> {
+public class LocalizedFieldsTypeHandler extends BaseTypeHandler<LocalizedFields> {
 
     private final ObjectMapper objectMapper;
 

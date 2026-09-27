@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存一次 SMS 验证码通知需要投递的 Account、验证码和有效分钟数。 */
-public final class SmsCodeNotice {
+public class SmsCodeNotice {
 
     /** SMS Code 只能通过不可关闭的 SMS 渠道发送。 */
     public static final @NotNull NotificationType<SmsCodeNotice> TYPE = NotificationType.define(

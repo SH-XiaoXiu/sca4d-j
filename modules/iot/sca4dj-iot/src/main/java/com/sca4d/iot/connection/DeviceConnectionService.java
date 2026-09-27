@@ -1,9 +1,9 @@
 package com.sca4d.iot.connection;
 
 import com.sca4d.core.api.connection.ConnectionRegistry;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.MessageBus;
-import com.sca4d.core.api.id.Id;
 import com.sca4d.iot.api.connection.DeviceConnection;
 import com.sca4d.iot.api.connection.DeviceConnectionQueryService;
 import com.sca4d.iot.api.connection.DeviceDisconnectMessage;

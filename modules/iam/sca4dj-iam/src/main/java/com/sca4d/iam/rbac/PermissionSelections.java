@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 /**
  * 校验可由管理 API 保存的 ACTION 编码，并把内部全量选择符展开为具体 {@link Operation}。
  */
-public final class PermissionSelections {
+public class PermissionSelections {
 
     /**
      * 数据库内部表示 Catalog 当前全部 ACTION 的选择符。

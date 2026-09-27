@@ -6,7 +6,7 @@ import java.time.Duration;
 
 /** 配置 SMTP 建连、读取和写入超时，避免异步 Consumer 无限阻塞。 */
 @ConfigurationProperties("sca4dj.notification.email")
-public final class EmailNotificationProperties {
+public class EmailNotificationProperties {
 
     private Duration connectionTimeout = Duration.ofSeconds(5);
 

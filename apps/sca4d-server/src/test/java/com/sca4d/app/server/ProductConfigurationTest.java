@@ -6,40 +6,40 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.setting.SettingOwner;
-import com.sca4d.core.api.setting.SettingValue;
-import com.sca4d.core.api.setting.SettingValues;
-import com.sca4d.core.api.setting.Settings;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.setting.access.SettingReader;
+import com.sca4d.core.api.setting.access.SettingWriter;
+import com.sca4d.core.api.setting.value.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingValue;
 import io.swagger.v3.oas.models.OpenAPI;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 class ProductConfigurationTest {
 
     @Test
     @DisplayName("Uses App Product Metadata In OpenAPI")
     void usesAppProductMetadataInOpenApi() {
-        Settings settings = mock(Settings.class);
-        when(settings.get(List.of(ProductSettings.DISPLAY_NAME, ProductSettings.CONTACT_NAME)))
-                .thenReturn(
-                        new SettingValues(
-                                List.of(
-                                        new SettingValue<>(
-                                                ProductSettings.DISPLAY_NAME,
-                                                SettingOwner.system(),
-                                                "Example Product",
-                                                true,
-                                                false,
-                                                new Version(1)),
-                                        new SettingValue<>(
-                                                ProductSettings.CONTACT_NAME,
-                                                SettingOwner.system(),
-                                                "Example Team",
-                                                true,
-                                                false,
-                                                new Version(1)))));
+        TestAccess source = mock(TestAccess.class);
+        ProductSettings settings = new ProductSettings(source, source);
+        when(source.read(settings.DISPLAY_NAME.code(), SettingOwner.system())).thenReturn(
+                SettingValue.read(
+                        TreeCode.of("SETTING:TEST"),
+                        settings.DISPLAY_NAME.code(),
+                        SettingOwner.system(),
+                        "Example Product",
+                        1,
+                        new Version(1),
+                        false));
+        when(source.read(settings.CONTACT_NAME.code(), SettingOwner.system())).thenReturn(
+                SettingValue.read(
+                        TreeCode.of("SETTING:TEST"),
+                        settings.CONTACT_NAME.code(),
+                        SettingOwner.system(),
+                        "Example Team",
+                        1,
+                        new Version(1),
+                        false));
 
         OpenAPI openApi = new Sca4dOpenApiConfiguration().sca4dOpenApi("1.2.3", settings);
 
@@ -51,9 +51,15 @@ class ProductConfigurationTest {
     @Test
     @DisplayName("Rejects Invalid Product Metadata")
     void rejectsInvalidProductMetadata() {
-        assertThatThrownBy(() -> ProductSettings.DISPLAY_NAME.codec().decode(" "))
+        TestAccess source = mock(TestAccess.class);
+        ProductSettings settings = new ProductSettings(source, source);
+        assertThatThrownBy(() -> settings.DISPLAY_NAME.codec().decode(" "))
                 .isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(() -> ProductSettings.TOTP_ISSUER.codec().decode("x".repeat(65)))
+        assertThatThrownBy(() -> settings.TOTP_ISSUER.codec().decode("x".repeat(65)))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    /** 测试替身同时实现读取和写入契约，避免引入生产组合接口。 */
+    private interface TestAccess extends SettingReader<String>, SettingWriter<String> {
     }
 }

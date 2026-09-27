@@ -24,7 +24,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /** 使用 libphonenumber 和 PhoneNumberCondition Bean 执行 PhoneNumber 约束。 */
-public final class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, String> {
+public class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, String> {
 
     private final RegionCatalog regions;
 

@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 返回一条持久化审计记录及其原始或强类型 payload。 */
-public final class AuditEntry {
+public class AuditEntry {
     private final long id;
 
     private final @NotNull String requestId;

@@ -10,7 +10,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 /** 保存 Message 携带的媒体内容及使用方式。 */
-public final class MessageContent {
+public class MessageContent {
 
     private final @NotNull String mediaType;
 

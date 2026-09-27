@@ -7,7 +7,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 返回给浏览器的一次性 WebSocket 握手票据和到期时间。 */
-public final class WebRealtimeTicket {
+public class WebRealtimeTicket {
 
     private final @NotNull String value;
 

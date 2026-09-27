@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /** 保存当前派发批次已经租用的 Outbox 消息和条件更新依据。 */
-final class OutboxClaim {
+class OutboxClaim {
 
     private final @NotNull Id messageId;
 

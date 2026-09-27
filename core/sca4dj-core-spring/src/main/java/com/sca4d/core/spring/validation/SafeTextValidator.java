@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /** 执行 SafeText 声明的长度和控制字符检查。 */
-public final class SafeTextValidator implements ConstraintValidator<SafeText, String> {
+public class SafeTextValidator implements ConstraintValidator<SafeText, String> {
 
     private int max;
 

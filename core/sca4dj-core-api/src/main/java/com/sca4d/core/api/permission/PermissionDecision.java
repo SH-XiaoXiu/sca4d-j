@@ -14,7 +14,7 @@ import java.util.Optional;
  * <p>具体资源通常只需要允许或拒绝。集合资源被部分允许时，判定可以携带资源范围（Resource Scope，{@link ResourceScope}），由
  * 数据仓库（Repository）将范围落实为查询或原子写入条件。
  */
-public final class PermissionDecision {
+public class PermissionDecision {
 
     private static final PermissionDecision ALLOWED = new PermissionDecision(true, null, null);
 

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 定义固定归属 `Subject.SYSTEM`、可以由系统设置管理接口维护的设置。 */
-public final class SystemSetting<T> extends Setting<T> {
+public class SystemSetting<T> extends Setting<T> {
 
     private final SettingGroup group;
 

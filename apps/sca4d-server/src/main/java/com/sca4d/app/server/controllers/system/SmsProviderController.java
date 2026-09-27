@@ -36,7 +36,7 @@ import java.util.Objects;
 @RequestMapping("/system/sms/providers")
 @Tag(name = "SMS Notifications")
 @CurrentPrincipal(selection = PlatformPrincipalSelection.class)
-public final class SmsProviderController {
+public class SmsProviderController {
 
     private static final String PROVIDER_RESOURCE = "notification:sms:provider";
 

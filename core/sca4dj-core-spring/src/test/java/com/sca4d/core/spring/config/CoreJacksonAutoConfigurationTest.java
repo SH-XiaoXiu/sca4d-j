@@ -90,7 +90,7 @@ class CoreJacksonAutoConfigurationTest {
 
     /** 保存 primitive 和 boxed 64 位整数的 JSON 测试对象。 */
     @SuppressWarnings("unused") // Jackson 反射调用空构造器和 setter 完成反序列化。
-    public static final class LongPayload {
+    public static class LongPayload {
 
         private long primitiveValue;
 

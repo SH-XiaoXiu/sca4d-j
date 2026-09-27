@@ -16,7 +16,6 @@ import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageConsumer;
 import com.sca4d.core.api.messaging.MessageDelivery;
-import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.NameFormat;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
@@ -389,7 +388,7 @@ class MessagingInfrastructureIntegrationTest {
     }
 
     /** 消费 invoice.created 的主 Consumer。 */
-    private static final class PrimaryConsumer extends SuccessfulConsumer {
+    private static class PrimaryConsumer extends SuccessfulConsumer {
         @Override
         public @NotNull String consumerCode() {
             return "invoice-primary";
@@ -397,7 +396,7 @@ class MessagingInfrastructureIntegrationTest {
     }
 
     /** 独立消费同一事件并验证 RabbitMQ 为不同 Consumer 各保留一份消息。 */
-    private static final class CopyConsumer extends SuccessfulConsumer {
+    private static class CopyConsumer extends SuccessfulConsumer {
         @Override
         public @NotNull String consumerCode() {
             return "invoice-copy";
@@ -405,7 +404,7 @@ class MessagingInfrastructureIntegrationTest {
     }
 
     /** 每次都失败，用于验证消息直接进入当前 Consumer 的 DLQ。 */
-    private static final class FailureConsumer implements MessageConsumer<Map> {
+    private static class FailureConsumer implements MessageConsumer<Map> {
         private final BlockingQueue<Id> messages = new LinkedBlockingQueue<>();
 
         private final AtomicInteger attempts = new AtomicInteger();

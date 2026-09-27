@@ -186,7 +186,7 @@ public abstract class OperationNode {
     /**
      * MODULE 工厂使用的局部 RESOURCE 声明，不参与最终目录。
      */
-    public static final class ResourceDeclaration {
+    public static class ResourceDeclaration {
 
         private final @NotNull TreeCode segment;
 
@@ -211,7 +211,7 @@ public abstract class OperationNode {
     /**
      * RESOURCE 工厂使用的局部 ACTION 声明，不参与最终目录。
      */
-    public static final class ActionDeclaration {
+    public static class ActionDeclaration {
 
         private final @NotNull TreeCode segment;
 
@@ -229,7 +229,7 @@ public abstract class OperationNode {
     /**
      * 表示一个业务模块及完整 RESOURCE 目录。
      */
-    public static final class Module extends OperationNode {
+    public static class Module extends OperationNode {
 
         private final @NotNull @Unmodifiable List<@NotNull Resource> resources;
 
@@ -289,7 +289,7 @@ public abstract class OperationNode {
     /**
      * 表示一个 MODULE 内的业务资源分组及完整 ACTION 目录。
      */
-    public static final class Resource extends OperationNode {
+    public static class Resource extends OperationNode {
 
         private final @NotNull @Unmodifiable List<@NotNull OperationAction> actions;
 
@@ -356,7 +356,7 @@ public abstract class OperationNode {
     /**
      * 表示目录中可以直接授予 Principal 的固定 Operation。
      */
-    public static final class OperationAction extends OperationNode {
+    public static class OperationAction extends OperationNode {
 
         private final @NotNull Operation operation;
 

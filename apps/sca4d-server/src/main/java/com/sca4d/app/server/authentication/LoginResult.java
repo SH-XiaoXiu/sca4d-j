@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 返回登录认证进度，以及因素满足后建立的可选 Session。 */
-public final class LoginResult {
+public class LoginResult {
 
     private final AuthenticationProgress progress;
 

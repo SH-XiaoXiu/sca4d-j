@@ -9,7 +9,7 @@ import java.util.Optional;
 /**
  * 表示完成一个动作所需的独立认证因素数量，以及是否允许复用已有认证。
  */
-public final class AuthenticationRequirement {
+public class AuthenticationRequirement {
 
     private final int factorCount;
 

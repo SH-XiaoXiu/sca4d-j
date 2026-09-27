@@ -11,7 +11,7 @@ import java.util.Objects;
 
 /** 接收 Platform Account 角色的完整替换集合。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean setter 反序列化请求。
-public final class ReplaceAccountRolesRequest {
+public class ReplaceAccountRolesRequest {
 
     @Req.NotNull
     private @Nullable List<@Req.NotNull @NotNull Long> roleIds = new ArrayList<>();

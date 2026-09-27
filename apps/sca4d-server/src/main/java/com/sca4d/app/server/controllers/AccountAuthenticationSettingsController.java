@@ -14,7 +14,7 @@ import com.sca4d.core.api.annotation.AuditPayload;
 import com.sca4d.core.api.annotation.AuditTarget;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.name.code.TreeCode;
-import com.sca4d.core.api.setting.SettingValue;
+import com.sca4d.core.api.setting.value.SettingValue;
 import com.sca4d.core.spring.web.ApiResponse;
 import com.sca4d.core.spring.web.annotation.CurrentAccount;
 import com.sca4d.core.spring.web.annotation.CurrentPrincipal;

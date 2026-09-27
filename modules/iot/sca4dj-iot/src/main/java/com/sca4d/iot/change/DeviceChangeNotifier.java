@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 在事务提交后把 Device 数据失效通知交给具体应用安装的发布器。 */
-public final class DeviceChangeNotifier {
+public class DeviceChangeNotifier {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeviceChangeNotifier.class);
 

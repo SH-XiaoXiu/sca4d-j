@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 /** 保存 OpenAPI 请求体，使 MAC 校验读取后 Spring 仍能绑定同一份请求体。 */
-public final class OpenApiCachedBodyHttpServletRequest extends HttpServletRequestWrapper {
+public class OpenApiCachedBodyHttpServletRequest extends HttpServletRequestWrapper {
 
     private final byte @NotNull [] body;
 

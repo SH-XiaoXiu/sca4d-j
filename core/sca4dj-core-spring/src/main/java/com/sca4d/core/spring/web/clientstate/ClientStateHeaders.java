@@ -5,7 +5,7 @@ import org.springframework.http.HttpHeaders;
 import java.util.stream.Collectors;
 
 /** 将当前调用收集的 {@link ClientState} 写入 HTTP 响应头。 */
-public final class ClientStateHeaders {
+public class ClientStateHeaders {
 
     private ClientStateHeaders() {
     }

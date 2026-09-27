@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 选择唯一负责指定 Account 的 {@link SessionIdentityLoader} 并校验返回结果。 */
-public final class SessionIdentityLoadService {
+public class SessionIdentityLoadService {
 
     private final List<SessionIdentityLoader> loaders;
 

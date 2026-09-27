@@ -8,7 +8,7 @@ import java.util.Objects;
 
 /** 返回浏览器开始 discoverable Passkey registration 所需的数据。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class PasskeyRegistrationOptions {
+public class PasskeyRegistrationOptions {
 
     private final PasskeyCeremonyId ceremonyId;
 

@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 保存设备定时触发后需要提交的物模型 command 和输入。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class DeviceScheduledCommand {
+public class DeviceScheduledCommand {
 
     private final @NotNull String commandCode;
 

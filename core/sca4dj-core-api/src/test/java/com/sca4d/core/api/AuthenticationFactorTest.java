@@ -89,7 +89,7 @@ class AuthenticationFactorTest {
                         .assess(call, permission));
     }
 
-    private static final class DeviceResource implements Resource {
+    private static class DeviceResource implements Resource {
 
         private final String id;
 
@@ -108,7 +108,7 @@ class AuthenticationFactorTest {
         }
     }
 
-    private static final class DevicePolicy implements PermissionPolicy {
+    private static class DevicePolicy implements PermissionPolicy {
 
         @Override
         public boolean supports(Resource resource) {
@@ -121,7 +121,7 @@ class AuthenticationFactorTest {
         }
     }
 
-    private static final class TestIdentity {
+    private static class TestIdentity {
 
         private final Subject subject = new Subject(10, SubjectType.HUMAN);
 
@@ -147,7 +147,7 @@ class AuthenticationFactorTest {
         }
     }
 
-    private static final class TestPrincipal implements Principal {
+    private static class TestPrincipal implements Principal {
 
         @Override
         public long principalId() {

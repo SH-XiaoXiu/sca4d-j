@@ -23,7 +23,7 @@ import java.util.Objects;
 
 /** 消费 WebRealtimeMessage，并通过共享索引和 NodeRouter 写入目标浏览器连接缓冲。 */
 @ApiStatus.Internal
-public final class WebRealtimeMessageHandler implements MessageHandler<WebRealtimeMessage> {
+public class WebRealtimeMessageHandler implements MessageHandler<WebRealtimeMessage> {
 
     private static final Logger LOG = LoggerFactory.getLogger(WebRealtimeMessageHandler.class);
 

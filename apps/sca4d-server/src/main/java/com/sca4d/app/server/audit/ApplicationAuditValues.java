@@ -31,13 +31,13 @@ import java.util.Locale;
 import java.util.Map;
 
 /** 提供 Sca4d Server 审计声明使用的安全 payload 工厂。 */
-public final class ApplicationAuditValues {
+public class ApplicationAuditValues {
     private ApplicationAuditValues() {
     }
 
     /** 从已支持的 App 修改请求中选择允许保存的状态、标识集合和字段名。 */
     @Component
-    public static final class MutationDetails implements AuditPayloadFactory {
+    public static class MutationDetails implements AuditPayloadFactory {
         /** 创建无状态解析器。 */
         public MutationDetails() {
         }
@@ -140,7 +140,7 @@ public final class ApplicationAuditValues {
 
     /** 保存字典写操作的请求摘要和可展示的稳定错误码。 */
     @Component
-    public static final class DictionaryMutationDetails implements AuditPayloadFactory {
+    public static class DictionaryMutationDetails implements AuditPayloadFactory {
         /** 创建无状态解析器。 */
         public DictionaryMutationDetails() {
         }
@@ -197,7 +197,7 @@ public final class ApplicationAuditValues {
 
     /** 从文件上传请求中选择媒体类型和字节数，不读取原始文件名。 */
     @Component
-    public static final class FileUploadDetails implements AuditPayloadFactory {
+    public static class FileUploadDetails implements AuditPayloadFactory {
         /** 创建无状态解析器。 */
         public FileUploadDetails() {
         }

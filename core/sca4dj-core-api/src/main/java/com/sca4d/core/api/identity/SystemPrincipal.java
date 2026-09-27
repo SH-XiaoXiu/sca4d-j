@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 表示系统以某个稳定领域身份自主执行操作，不随实例启停改变。 */
-public final class SystemPrincipal implements Principal {
+public class SystemPrincipal implements Principal {
 
     private final long id;
 

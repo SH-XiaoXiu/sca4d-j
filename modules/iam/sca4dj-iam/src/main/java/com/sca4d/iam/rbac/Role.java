@@ -12,7 +12,7 @@ import java.util.Objects;
 /**
  * 保存一个 Repository 读取的角色标识、授权状态和生命周期时间。
  */
-public final class Role implements Resource {
+public class Role implements Resource {
 
     /**
      * Role 使用的稳定 Resource 类型。

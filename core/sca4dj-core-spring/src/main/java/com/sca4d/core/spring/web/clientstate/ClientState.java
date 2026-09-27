@@ -8,7 +8,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /** 收集当前 HTTP 调用对客户端本地状态产生的变化。 */
-public final class ClientState {
+public class ClientState {
 
     /** 客户端应重新读取的状态目标响应头。 */
     public static final String REFRESH_HEADER = "X-Client-State-Refresh";
@@ -51,7 +51,7 @@ public final class ClientState {
     }
 
     /** 当前调用收集到的客户端状态变化快照。 */
-    public static final class Change {
+    public static class Change {
 
         private final Set<ClientStateTarget> targets = new LinkedHashSet<>();
 

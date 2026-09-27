@@ -11,7 +11,7 @@ import java.util.Set;
 
 /** 接收停用 Device 的可选直接连接绑定、认证接入方式和可选 X.509 证书。 */
 @SuppressWarnings("unused")
-public final class IotDeviceConnectionRequest {
+public class IotDeviceConnectionRequest {
 
     @Size(max = 128)
     private @Nullable String connectionProtocol;

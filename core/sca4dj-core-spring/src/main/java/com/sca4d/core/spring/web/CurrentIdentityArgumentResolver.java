@@ -22,7 +22,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 /** 将当前请求已经确认的会话、主体、账号和业务身份注入 Controller 参数。 */
-public final class CurrentIdentityArgumentResolver implements HandlerMethodArgumentResolver {
+public class CurrentIdentityArgumentResolver implements HandlerMethodArgumentResolver {
 
     /** 创建当前身份 Controller 参数解析器。 */
     public CurrentIdentityArgumentResolver() {

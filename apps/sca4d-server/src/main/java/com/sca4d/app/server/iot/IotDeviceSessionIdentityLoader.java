@@ -18,7 +18,7 @@ import java.util.Objects;
 
 /** 重新读取 Sca4d Server 中 `iot-device` Realm Account 的 Device Subject。 */
 @Component
-public final class IotDeviceSessionIdentityLoader implements SessionIdentityLoader {
+public class IotDeviceSessionIdentityLoader implements SessionIdentityLoader {
 
     private final @NotNull IdentityService identities;
 

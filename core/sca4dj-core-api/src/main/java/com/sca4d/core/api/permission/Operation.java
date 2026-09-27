@@ -13,7 +13,7 @@ import java.util.Objects;
  * <p>操作本身就是一种资源（Resource，{@link Resource}），因此接口权限与具体业务对象权限都由 {@link Permission} 表示。
  */
 @SuppressWarnings("ClassCanBeRecord") // 项目禁止使用 Java record，保留普通 class。
-public final class Operation implements Resource {
+public class Operation implements Resource {
 
     /**
      * 操作资源使用的资源类型。

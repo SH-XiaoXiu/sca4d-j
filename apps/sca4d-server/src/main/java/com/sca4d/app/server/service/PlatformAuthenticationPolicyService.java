@@ -3,7 +3,10 @@ package com.sca4d.app.server.service;
 import com.sca4d.app.server.authentication.AccountAuthenticationSettingConfiguration;
 import com.sca4d.app.server.authentication.AccountAuthenticationSettings;
 import com.sca4d.app.server.authentication.AuthenticationMethodSettings;
+<<<<<<< HEAD
 import com.sca4d.app.server.authentication.AuthenticationActions;
+=======
+>>>>>>> dev
 import com.sca4d.app.server.plugin.mfa.MfaPolicy;
 import com.sca4d.app.server.plugin.mfa.MfaSettings;
 import com.sca4d.core.api.authentication.Authentication;
@@ -16,9 +19,14 @@ import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.plugin.PluginMount;
 import com.sca4d.core.api.plugin.PluginScope;
+<<<<<<< HEAD
 import com.sca4d.core.api.setting.SettingOwner;
 import com.sca4d.core.api.setting.SettingValue;
 import com.sca4d.core.api.setting.Settings;
+=======
+import com.sca4d.core.api.setting.value.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingValue;
+>>>>>>> dev
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,11 +42,22 @@ import java.util.Set;
 @Service
 public class PlatformAuthenticationPolicyService implements AuthenticationPolicy {
     private static final Logger LOG = LoggerFactory.getLogger(PlatformAuthenticationPolicyService.class);
+<<<<<<< HEAD
     private final Settings settings;
     private final MfaPolicy policy;
 
     /** 挂载生成客户端，设置持久化仍使用宿主事务。 */
     public PlatformAuthenticationPolicyService(@NotNull Settings settings,
+=======
+
+    private final AccountAuthenticationSettingConfiguration settings;
+
+    private final MfaPolicy policy;
+
+    /** 挂载生成客户端，设置持久化仍使用宿主事务。 */
+    public PlatformAuthenticationPolicyService(
+            @NotNull AccountAuthenticationSettingConfiguration settings,
+>>>>>>> dev
             @PluginMount("AUTH:MFA:POLICY") @NotNull MfaPolicy policy) {
         this.settings = Objects.requireNonNull(settings);
         this.policy = Objects.requireNonNull(policy);
@@ -53,7 +72,11 @@ public class PlatformAuthenticationPolicyService implements AuthenticationPolicy
     /** 返回账号认证设置值、来源及版本。 */
     @Transactional(readOnly = true)
     public @NotNull SettingValue<AccountAuthenticationSettings> inspect(long accountId) {
+<<<<<<< HEAD
         return settings.inspect(AccountAuthenticationSettingConfiguration.ACCOUNT_POLICY, accountOwner(accountId));
+=======
+        return settings.ACCOUNT_POLICY.inspect(accountOwner(accountId));
+>>>>>>> dev
     }
 
     /** 在同一事务中由插件校验完整候选配置，再保存账号设置。 */
@@ -66,6 +89,7 @@ public class PlatformAuthenticationPolicyService implements AuthenticationPolicy
         Account checked = Objects.requireNonNull(account, "认证设置账号不能为空");
         // 构造完整候选配置，先检查字段范围，再由当前作用域固定的插件判断可满足性。
         AccountAuthenticationSettings replacement = new AccountAuthenticationSettings(
+<<<<<<< HEAD
                 loginFactorCount, sensitiveActionFactorCount, reusableAuthenticationMaximumAge, methodSettings);
         policy.validate(checked.accountId(), new MfaSettings(replacement.loginFactorCount(),
                 replacement.sensitiveActionFactorCount(), replacement.reusableAuthenticationMaximumAge(),
@@ -75,6 +99,27 @@ public class PlatformAuthenticationPolicyService implements AuthenticationPolicy
                 AccountAuthenticationSettingConfiguration.ACCOUNT_POLICY, SettingOwner.account(checked), replacement);
         LOG.debug("账号认证设置已写入事务 | accountId={} loginFactorCount={} sensitiveActionFactorCount={} methodCount={}",
                 checked.accountId(), saved.value().loginFactorCount(), saved.value().sensitiveActionFactorCount(),
+=======
+                loginFactorCount,
+                sensitiveActionFactorCount,
+                reusableAuthenticationMaximumAge,
+                methodSettings);
+        policy.validate(
+                checked.accountId(),
+                new MfaSettings(
+                        replacement.loginFactorCount(),
+                        replacement.sensitiveActionFactorCount(),
+                        replacement.reusableAuthenticationMaximumAge(),
+                        List.copyOf(replacement.methods().values())));
+        // 插件校验通过后才写入宿主设置，校验失败不会修改账号配置。
+        SettingValue<AccountAuthenticationSettings> saved = settings.ACCOUNT_POLICY
+                .replace(SettingOwner.account(checked), replacement);
+        LOG.debug(
+                "账号认证设置已写入事务 | accountId={} loginFactorCount={} sensitiveActionFactorCount={} methodCount={}",
+                checked.accountId(),
+                saved.value().loginFactorCount(),
+                saved.value().sensitiveActionFactorCount(),
+>>>>>>> dev
                 saved.value().methods().size());
         return saved;
     }
@@ -82,7 +127,7 @@ public class PlatformAuthenticationPolicyService implements AuthenticationPolicy
     /** 幂等删除账号的应用认证设置。 */
     @Transactional
     public void erase(long accountId) {
-        settings.erase(AccountAuthenticationSettingConfiguration.ACCOUNT_POLICY, accountOwner(accountId));
+        settings.ACCOUNT_POLICY.erase(accountOwner(accountId));
         LOG.debug("账号认证设置删除已写入事务 | accountId={}", accountId);
     }
 
@@ -124,7 +169,12 @@ public class PlatformAuthenticationPolicyService implements AuthenticationPolicy
 
     /** 构造账号设置所有者并拒绝非法标识。 */
     private static @NotNull SettingOwner accountOwner(long accountId) {
+<<<<<<< HEAD
         if (accountId <= 0) throw new IllegalArgumentException("Account 标识必须为正数");
+=======
+        if (accountId <= 0)
+            throw new IllegalArgumentException("Account 标识必须为正数");
+>>>>>>> dev
         return new SettingOwner(Account.RESOURCE_TYPE, Long.toString(accountId));
     }
 }

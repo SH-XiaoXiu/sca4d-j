@@ -22,7 +22,7 @@ import java.util.Objects;
 
 /** 返回 ThingModel 技术定义和当前请求 Locale 对应的全部嵌套展示名称。 */
 @SuppressWarnings("unused")
-public final class IotThingModelView extends BaseView {
+public class IotThingModelView extends BaseView {
 
     private final int formatVersion;
 
@@ -128,7 +128,7 @@ public final class IotThingModelView extends BaseView {
     }
 
     /** 返回一个 ThingModel 属性及当前请求 Locale 的展示名称。 */
-    public static final class Property extends BaseView {
+    public static class Property extends BaseView {
 
         private final @NotNull String code;
 
@@ -207,7 +207,7 @@ public final class IotThingModelView extends BaseView {
     }
 
     /** 返回一个 ThingModel 事件及本地化输出字段。 */
-    public static final class Event extends BaseView {
+    public static class Event extends BaseView {
 
         private final @NotNull String code;
 
@@ -260,7 +260,7 @@ public final class IotThingModelView extends BaseView {
     }
 
     /** 返回一个 ThingModel 命令及本地化输入字段。 */
-    public static final class Command extends BaseView {
+    public static class Command extends BaseView {
 
         private final @NotNull String code;
 
@@ -321,7 +321,7 @@ public final class IotThingModelView extends BaseView {
     }
 
     /** 返回事件输出、命令输入或 object 成员的本地化字段定义。 */
-    public static final class Field extends BaseView {
+    public static class Field extends BaseView {
 
         private final @NotNull String code;
 
@@ -367,7 +367,7 @@ public final class IotThingModelView extends BaseView {
     }
 
     /** 返回 enum code 及当前请求 Locale 的展示名称。 */
-    public static final class EnumValue extends BaseView {
+    public static class EnumValue extends BaseView {
 
         private final @NotNull String code;
 
@@ -404,7 +404,7 @@ public final class IotThingModelView extends BaseView {
     }
 
     /** 返回 ThingModel 递归值类型及全部技术约束和本地化成员。 */
-    public static final class ValueType {
+    public static class ValueType {
 
         private final @NotNull String kind;
 

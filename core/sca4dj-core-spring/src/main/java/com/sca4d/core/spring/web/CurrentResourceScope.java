@@ -10,7 +10,7 @@ import com.sca4d.core.spring.call.CallHolder;
 import java.util.Optional;
 
 /** 为数据仓库读取当前调用已经批准的业务资源范围。 */
-public final class CurrentResourceScope {
+public class CurrentResourceScope {
 
     /** 创建供 Repository 读取当前资源范围的入口。 */
     public CurrentResourceScope() {

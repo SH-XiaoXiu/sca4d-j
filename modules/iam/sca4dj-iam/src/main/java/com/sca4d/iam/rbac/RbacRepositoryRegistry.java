@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 按 {@link RbacDomain} 查找应用中负责对应业务角色数据的 {@link RbacRepository}。 */
-public final class RbacRepositoryRegistry {
+public class RbacRepositoryRegistry {
 
     private static final Logger LOG = LoggerFactory.getLogger(RbacRepositoryRegistry.class);
 

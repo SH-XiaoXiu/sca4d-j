@@ -20,7 +20,7 @@ import java.util.Set;
 /**
  * 索引应用安装的 {@link AuthenticationMethod}，并集中执行 Proof 类型和方法声明检查。
  */
-public final class AuthenticationMethods {
+public class AuthenticationMethods {
 
     private final Map<TreeCode, AuthenticationMethod<?>> methods;
 

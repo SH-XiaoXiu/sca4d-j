@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存批量查询返回的 Product 标识和兼容协议编码。 */
-public final class ProductProtocolState {
+public class ProductProtocolState {
 
     private final long productId;
 

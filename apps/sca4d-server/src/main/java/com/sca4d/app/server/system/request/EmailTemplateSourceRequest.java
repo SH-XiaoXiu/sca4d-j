@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 接收一个 Locale 的 Email 主题、纯文本正文和 HTML 正文源码。 */
-public final class EmailTemplateSourceRequest {
+public class EmailTemplateSourceRequest {
 
     @Req.NotNull
     @Size(max = 998)

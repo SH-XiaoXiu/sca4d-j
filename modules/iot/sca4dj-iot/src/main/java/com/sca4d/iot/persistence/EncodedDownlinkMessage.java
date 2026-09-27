@@ -9,7 +9,7 @@ import java.time.Instant;
 
 /** 映射 desired 或 command 共用的下行消息持久化状态。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class EncodedDownlinkMessage {
+public class EncodedDownlinkMessage {
 
     private final long messageId;
 

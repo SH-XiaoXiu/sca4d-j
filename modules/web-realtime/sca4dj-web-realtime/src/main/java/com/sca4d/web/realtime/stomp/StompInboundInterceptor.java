@@ -29,7 +29,7 @@ import java.util.UUID;
 
 /** 校验 Spring STOMP 入站命令，并在 SUBSCRIBE、SEND 处理期间绑定独立 Call。 */
 @ApiStatus.Internal
-public final class StompInboundInterceptor implements ExecutorChannelInterceptor {
+public class StompInboundInterceptor implements ExecutorChannelInterceptor {
 
     private static final String CALL_HEADER = StompInboundInterceptor.class.getName() + ".call";
 

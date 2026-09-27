@@ -15,7 +15,7 @@ import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /** 使用 AES-256-GCM 和用途绑定加密秘密值。 */
-public final class AesGcmSecretCipher implements SecretCipher {
+public class AesGcmSecretCipher implements SecretCipher {
 
     private static final String TRANSFORMATION = "AES/GCM/NoPadding";
 

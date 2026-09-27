@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 
 /** 提供类型和方法之间的注解覆盖查找。 */
-public final class AnnotationUtils {
+public class AnnotationUtils {
 
     private AnnotationUtils() {
     }

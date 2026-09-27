@@ -11,7 +11,7 @@ import java.util.Objects;
 
 /** 保存 MyBatis 从联邦 Provider 表读取的持久化状态。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class ProviderState {
+public class ProviderState {
 
     private final long id;
 

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.concurrent.OptimisticLockException;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.isolation.AppName;
 import com.sca4d.core.api.job.DirectJob;
 import com.sca4d.core.api.job.Job;
@@ -14,7 +15,6 @@ import com.sca4d.core.api.job.JobExecution;
 import com.sca4d.core.api.job.JobKey;
 import com.sca4d.core.api.job.JobRetryPolicy;
 import com.sca4d.core.api.job.JobRunFailedException;
-import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.job.JobRunStatus;
 import com.sca4d.core.api.job.JobWaitTimeoutException;
 import com.sca4d.core.api.job.ParallelResults;
@@ -899,7 +899,7 @@ class JobRuntimeIntegrationTest {
 
     /** 保存一个测试用 Executor 和对应 worker。 */
     @SuppressWarnings("ClassCanBeRecord") // 测试类型遵守项目禁用 record 的规则。
-    private static final class Runtime {
+    private static class Runtime {
         private final DefaultJobExecutor executor;
 
         private final JobWorker worker;

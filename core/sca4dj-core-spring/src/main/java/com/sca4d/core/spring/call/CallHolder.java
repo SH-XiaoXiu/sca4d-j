@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 保存当前线程的 `Call` 以及正在执行的嵌套 `CallExecution`。 */
-public final class CallHolder {
+public class CallHolder {
 
     private static final ThreadLocal<@Nullable State> CURRENT = new ThreadLocal<>();
 
@@ -104,7 +104,7 @@ public final class CallHolder {
     }
 
     /** 保存一个调用及其嵌套方法执行栈。 */
-    private static final class State {
+    private static class State {
 
         private final Call call;
 

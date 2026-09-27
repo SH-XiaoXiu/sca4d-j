@@ -205,7 +205,7 @@ class PrincipalSelectionInterceptorTest {
     }
 
     /** 提供可在 MVC 参数绑定前执行的测试选择器。 */
-    private static final class EarlySelection implements PrincipalSelection<Map<String, @Nullable Object>> {
+    private static class EarlySelection implements PrincipalSelection<Map<String, @Nullable Object>> {
 
         private final Principal principal;
 
@@ -237,7 +237,7 @@ class PrincipalSelectionInterceptorTest {
     }
 
     /** 提供必须等待 request body 绑定完成的测试选择器。 */
-    private static final class LateSelection implements PrincipalSelection<Map<String, @Nullable Object>> {
+    private static class LateSelection implements PrincipalSelection<Map<String, @Nullable Object>> {
 
         private boolean called;
 
@@ -260,7 +260,7 @@ class PrincipalSelectionInterceptorTest {
     /** 提供包含 Principal 参数和 request body 的测试 Controller。 */
     @CurrentPrincipal(selection = EarlySelection.class)
     @SuppressWarnings("unused")
-    private static final class TestController {
+    private static class TestController {
 
         public void upload(@CurrentPrincipal TestPrincipal principal, @RequestBody UploadBody body) {
         }
@@ -278,19 +278,19 @@ class PrincipalSelectionInterceptorTest {
     /** 提供只能在参数绑定后选择业务身份的测试 Controller。 */
     @CurrentPrincipal(selection = LateSelection.class)
     @SuppressWarnings("unused")
-    private static final class LateController {
+    private static class LateController {
 
         public void update(@RequestBody UploadBody body) {
         }
     }
 
     /** 表示测试 Controller 接收的上传请求。 */
-    private static final class UploadBody {
+    private static class UploadBody {
     }
 
     /** 表示选择器实际返回的具体业务身份。 */
     @SuppressWarnings("ClassCanBeRecord")
-    private static final class TestPrincipal implements Principal {
+    private static class TestPrincipal implements Principal {
 
         private final long principalId;
 
@@ -305,7 +305,7 @@ class PrincipalSelectionInterceptorTest {
     }
 
     /** 表示 Controller 错误声明的另一种业务身份。 */
-    private static final class OtherPrincipal implements Principal {
+    private static class OtherPrincipal implements Principal {
 
         @Override
         public long principalId() {

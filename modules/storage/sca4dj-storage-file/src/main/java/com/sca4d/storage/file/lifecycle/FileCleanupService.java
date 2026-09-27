@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /** 抢占过期或已释放文件，在事务外幂等删除存储对象并写回结果。 */
-public final class FileCleanupService {
+public class FileCleanupService {
     private static final Logger LOG = LoggerFactory.getLogger(FileCleanupService.class);
 
     private final @NotNull FileRepository repository;

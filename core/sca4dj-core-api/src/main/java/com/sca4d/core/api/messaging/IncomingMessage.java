@@ -1,7 +1,7 @@
 package com.sca4d.core.api.messaging;
 
-import com.sca4d.core.api.message.Message;
 import com.sca4d.core.api.id.Id;
+import com.sca4d.core.api.message.Message;
 import com.sca4d.core.api.name.Name;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /** 保存 MessageHandler 收到的业务 Message 和 RabbitMQ 投递元数据。 */
 @SuppressWarnings("ClassCanBeRecord")
-public final class IncomingMessage<M extends Message> {
+public class IncomingMessage<M extends Message> {
 
     private final @NotNull Id messageId;
 

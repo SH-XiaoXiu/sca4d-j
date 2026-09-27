@@ -301,7 +301,7 @@ class IdentityLayeringExtensionIntegrationTest {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    private static final class Rider implements Principal {
+    private static class Rider implements Principal {
         private final long id;
 
         private Rider(long id) {
@@ -315,7 +315,7 @@ class IdentityLayeringExtensionIntegrationTest {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    private static final class Customer implements Principal {
+    private static class Customer implements Principal {
         private final long id;
 
         private Customer(long id) {
@@ -328,7 +328,7 @@ class IdentityLayeringExtensionIntegrationTest {
         }
     }
 
-    private static final class PhoneNormalizer implements AccountIdentifierNormalizer {
+    private static class PhoneNormalizer implements AccountIdentifierNormalizer {
         @Override
         public @NonNull AccountIdentifierType type() {
             return PHONE;
@@ -345,7 +345,7 @@ class IdentityLayeringExtensionIntegrationTest {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    private static final class PrincipalIdCodec<P extends Principal> implements PrincipalCodec<P> {
+    private static class PrincipalIdCodec<P extends Principal> implements PrincipalCodec<P> {
         private final String type;
 
         private final Class<P> valueType;
@@ -383,7 +383,7 @@ class IdentityLayeringExtensionIntegrationTest {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    private static final class DeliverySessionIdentityLoader implements SessionIdentityLoader {
+    private static class DeliverySessionIdentityLoader implements SessionIdentityLoader {
         private final IdentityService identities;
 
         private DeliverySessionIdentityLoader(IdentityService identities) {
@@ -404,7 +404,7 @@ class IdentityLayeringExtensionIntegrationTest {
     }
 
     @SuppressWarnings("ClassCanBeRecord") // 项目禁止使用 Java record，保留普通测试类型。
-    private static final class DeliveryPrincipalLoader implements PrincipalLoader {
+    private static class DeliveryPrincipalLoader implements PrincipalLoader {
         private final IdentityService identities;
 
         private DeliveryPrincipalLoader(IdentityService identities) {
@@ -431,7 +431,7 @@ class IdentityLayeringExtensionIntegrationTest {
         }
     }
 
-    private static final class DeliveryPrincipalSelection
+    private static class DeliveryPrincipalSelection
             implements
                 PrincipalSelection<Map<String, @Nullable Object>> {
         @Override
@@ -458,7 +458,7 @@ class IdentityLayeringExtensionIntegrationTest {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    private static final class SimpleResource implements Resource {
+    private static class SimpleResource implements Resource {
         private final TreeCode type;
 
         private final String id;
@@ -480,7 +480,7 @@ class IdentityLayeringExtensionIntegrationTest {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    private static final class StoreAttributePolicy implements PermissionPolicy {
+    private static class StoreAttributePolicy implements PermissionPolicy {
         private final Map<Long, String> stores;
 
         private StoreAttributePolicy(Map<Long, String> stores) {
@@ -507,7 +507,7 @@ class IdentityLayeringExtensionIntegrationTest {
         }
     }
 
-    private static final class NoOpDeliverySessionInvalidation implements RbacSessionInvalidation {
+    private static class NoOpDeliverySessionInvalidation implements RbacSessionInvalidation {
         @Override
         public @NotNull RbacDomain domain() {
             return DELIVERY_RBAC;
@@ -524,7 +524,7 @@ class IdentityLayeringExtensionIntegrationTest {
         }
     }
 
-    private static final class InMemoryDeliveryAclRepository implements AclRepository {
+    private static class InMemoryDeliveryAclRepository implements AclRepository {
         private final Set<AclEntry> entries = new LinkedHashSet<>();
 
         @Override
@@ -622,7 +622,7 @@ class IdentityLayeringExtensionIntegrationTest {
         }
     }
 
-    private static final class InMemoryDeliveryRbacRepository implements RbacRepository {
+    private static class InMemoryDeliveryRbacRepository implements RbacRepository {
         private final Map<Long, Role> roles = new LinkedHashMap<>();
 
         private final Map<Long, List<PermissionSelector>> permissions = new LinkedHashMap<>();

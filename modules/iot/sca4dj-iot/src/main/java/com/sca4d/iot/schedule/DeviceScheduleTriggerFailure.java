@@ -7,7 +7,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 标识一个到期规则生成 command 时发生的业务失败，供新事务保存 FAILED 结果。 */
-public final class DeviceScheduleTriggerFailure extends RuntimeException {
+public class DeviceScheduleTriggerFailure extends RuntimeException {
 
     private final long scheduleId;
 

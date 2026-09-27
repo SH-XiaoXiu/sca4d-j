@@ -3,8 +3,7 @@ package com.sca4d.app.server;
 import com.sca4d.core.api.annotation.AnonymousAccess;
 import com.sca4d.core.api.authentication.AuthTokenMode;
 import com.sca4d.core.api.authentication.RequireSessionToken;
-import com.sca4d.core.api.setting.SettingValues;
-import com.sca4d.core.api.setting.Settings;
+import com.sca4d.core.api.setting.value.SettingValues;
 import com.sca4d.openapi.oauth.OpenApiAuthenticationEndpoint;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -48,14 +47,15 @@ public class Sca4dOpenApiConfiguration {
     @Bean
     OpenAPI sca4dOpenApi(
             @Value("${build.version:0.0.1-alpha}") String version,
-            Settings settings) {
-        SettingValues product = settings.get(List.of(ProductSettings.DISPLAY_NAME, ProductSettings.CONTACT_NAME));
+            ProductSettings settings) {
+        SettingValues product = new SettingValues(
+                List.of(settings.DISPLAY_NAME.inspect(), settings.CONTACT_NAME.inspect()));
         return new OpenAPI()
                 .info(
                         new Info()
-                                .title(product.get(ProductSettings.DISPLAY_NAME) + " API")
+                                .title(product.get(settings.DISPLAY_NAME) + " API")
                                 .version(version)
-                                .contact(new Contact().name(product.get(ProductSettings.CONTACT_NAME))))
+                                .contact(new Contact().name(product.get(settings.CONTACT_NAME))))
                 .components(
                         new Components()
                                 .addSecuritySchemes(

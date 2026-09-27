@@ -3,7 +3,7 @@ package com.sca4d.notification.inbox;
 import org.jetbrains.annotations.Contract;
 
 /** 通知在线浏览器重新读取指定 Account 收件箱。 */
-public final class InboxChanged {
+public class InboxChanged {
 
     private final long accountId;
 

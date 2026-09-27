@@ -6,7 +6,7 @@ import com.sca4d.core.api.concurrent.Version;
  * 映射 Passkey 账号锚点保存的 user handle 和乐观版本。
  */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class PasskeyAccountState {
+public class PasskeyAccountState {
 
     private final long accountId;
 

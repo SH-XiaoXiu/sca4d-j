@@ -20,7 +20,7 @@ import java.util.Set;
 /**
  * 单次消费 SMS Challenge，并向认证引擎返回持有因素证据。
  */
-public final class SmsCodeAuthenticationMethod implements AuthenticationMethod<SmsCodeProof> {
+public class SmsCodeAuthenticationMethod implements AuthenticationMethod<SmsCodeProof> {
     public static final @NotNull TreeCode CODE = TreeCode.ofSlash("AUTHENTICATION/SMS_CODE");
 
     public static final @NotNull AccountIdentifierType PHONE_IDENTIFIER_TYPE = new AccountIdentifierType("PHONE");

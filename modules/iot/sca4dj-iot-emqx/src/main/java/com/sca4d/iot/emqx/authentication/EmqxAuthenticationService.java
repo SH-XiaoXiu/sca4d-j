@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 按 Device 明确接入方式验证 MQTT CONNECT，并生成 EMQX client_attrs、ACL 和失效时间。 */
-public final class EmqxAuthenticationService {
+public class EmqxAuthenticationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(EmqxAuthenticationService.class);
 

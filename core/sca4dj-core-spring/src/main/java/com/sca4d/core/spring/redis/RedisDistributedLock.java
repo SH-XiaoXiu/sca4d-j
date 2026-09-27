@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 /** 使用 Redisson watchdog 在多个应用实例之间互斥执行同一业务键的任务。 */
-public final class RedisDistributedLock implements DistributedLock {
+public class RedisDistributedLock implements DistributedLock {
 
     private final RedissonClient redisson;
 

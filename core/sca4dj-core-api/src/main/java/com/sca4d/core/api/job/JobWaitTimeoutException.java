@@ -8,7 +8,7 @@ import java.time.Duration;
 import java.util.Objects;
 
 /** 表明调用方等待时间结束，持久化 Job run 仍继续执行。 */
-public final class JobWaitTimeoutException extends RuntimeException {
+public class JobWaitTimeoutException extends RuntimeException {
 
     /** 等待结束时仍未完成的运行标识。 */
     private final @NotNull Id runId;

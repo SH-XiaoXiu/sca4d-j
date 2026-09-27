@@ -17,7 +17,7 @@ import java.util.Objects;
 /** 接收完整示例 App 创建 Platform 角色及初始 ACTION 的请求。 */
 @Schema(name = "CreatePlatformRoleRequest")
 @SuppressWarnings("unused") // Jackson 通过 JavaBean setter 反序列化请求。
-public final class CreateRoleRequest {
+public class CreateRoleRequest {
 
     @NotBlank
     @Size(max = 128)

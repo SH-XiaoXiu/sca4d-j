@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 接收匿名登录调用方已经知道的规范 E.164 手机号。 */
-public final class SmsCodeChallengeRequest {
+public class SmsCodeChallengeRequest {
     @NotBlank
     @Size(max = 32)
     @PhoneNumber

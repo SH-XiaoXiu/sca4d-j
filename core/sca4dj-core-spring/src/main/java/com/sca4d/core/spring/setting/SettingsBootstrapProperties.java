@@ -2,13 +2,13 @@ package com.sca4d.core.spring.setting;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/** 控制当前节点是否负责把 Settings ENV 初始化或同步到数据库。 */
+/** 控制当前节点是否负责把设置 ENV 初始化或同步到数据库。 */
 @ConfigurationProperties("sca4dj.bootstrap")
-public final class SettingsBootstrapProperties {
+public class SettingsBootstrapProperties {
 
     private boolean enabled;
 
-    /** 创建默认关闭 Settings 初始化的配置。 */
+    /** 创建默认关闭设置初始化的配置。 */
     public SettingsBootstrapProperties() {
     }
 

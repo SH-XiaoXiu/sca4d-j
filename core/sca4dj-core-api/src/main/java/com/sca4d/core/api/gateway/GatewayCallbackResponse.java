@@ -19,7 +19,7 @@ import java.util.TreeMap;
  *
  * @param <O> JSON 响应体类型
  */
-public final class GatewayCallbackResponse<O> {
+public class GatewayCallbackResponse<O> {
 
     private final int status;
 

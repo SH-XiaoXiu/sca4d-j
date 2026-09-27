@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 /** 保存跨业务固定复用的文本格式规则。 */
 @SuppressWarnings("unused")
-public final class ValidationPatterns {
+public class ValidationPatterns {
 
     /** 业务编码：字母或数字开头，后续允许字母、数字、下划线和中划线。 */
     public static final String BIZ_CODE = "^[A-Za-z0-9][A-Za-z0-9_-]*$";

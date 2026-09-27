@@ -13,7 +13,7 @@ import java.util.Set;
 
 /** 接收 Product 创建或完整技术定义修改所需的字段。 */
 @SuppressWarnings("unused")
-public final class IotProductRequest {
+public class IotProductRequest {
 
     @Size(max = 128)
     private @Nullable String code;

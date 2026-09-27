@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 @Intercepts({
         @Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class})
 })
-public final class AffectedRowsInterceptor implements Interceptor {
+public class AffectedRowsInterceptor implements Interceptor {
 
     /**
      * 记录当前 `@AffectedRows` Repository 方法执行的唯一一条 DML。

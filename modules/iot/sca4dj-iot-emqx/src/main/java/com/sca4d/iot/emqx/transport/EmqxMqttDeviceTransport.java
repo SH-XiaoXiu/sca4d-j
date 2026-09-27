@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 使用目标 Device 的 MQTT 协议和已登记 Client ID 编码下行，并等待 EMQX PUBACK。 */
-public final class EmqxMqttDeviceTransport implements DeviceTransport<MqttDeviceProtocol> {
+public class EmqxMqttDeviceTransport implements DeviceTransport<MqttDeviceProtocol> {
 
     private final @NotNull MqttTransport publisher;
 

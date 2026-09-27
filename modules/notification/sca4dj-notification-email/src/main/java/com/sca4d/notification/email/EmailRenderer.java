@@ -14,7 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /** 把 Email 源码模板渲染为主题、纯文本正文和安全 HTML 正文。 */
-public final class EmailRenderer implements Renderer<EmailTemplateSource, RenderedEmail> {
+public class EmailRenderer implements Renderer<EmailTemplateSource, RenderedEmail> {
 
     private static final Pattern VARIABLE = Pattern.compile("\\{\\{\\s*([a-z][a-zA-Z0-9_]{0,63})\\s*}}");
 

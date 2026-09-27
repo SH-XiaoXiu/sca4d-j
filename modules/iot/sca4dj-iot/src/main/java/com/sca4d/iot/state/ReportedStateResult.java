@@ -3,7 +3,7 @@ package com.sca4d.iot.state;
 import java.util.Objects;
 
 /** 返回 reported 更新是否改变 latest 投影以及当前 version。 */
-public final class ReportedStateResult {
+public class ReportedStateResult {
 
     /** reported 顺序和摘要比较结果。 */
     public enum Outcome {

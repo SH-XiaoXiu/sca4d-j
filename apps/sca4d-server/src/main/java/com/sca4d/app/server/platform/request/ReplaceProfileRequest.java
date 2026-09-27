@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 接收当前账号完整替换的 App 用户资料。 */
-public final class ReplaceProfileRequest {
+public class ReplaceProfileRequest {
 
     @NotBlank
     @DisplayName

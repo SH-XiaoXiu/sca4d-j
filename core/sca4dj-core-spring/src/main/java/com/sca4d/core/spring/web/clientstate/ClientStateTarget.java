@@ -3,7 +3,7 @@ package com.sca4d.core.spring.web.clientstate;
 import com.sca4d.core.api.utils.TextUtils;
 
 /** 当前 HTTP 调用完成后需要客户端重新读取的状态目标。 */
-public final class ClientStateTarget {
+public class ClientStateTarget {
 
     private final String value;
 

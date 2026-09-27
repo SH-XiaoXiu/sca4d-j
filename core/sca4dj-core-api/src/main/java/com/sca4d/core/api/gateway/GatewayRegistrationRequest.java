@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 /** 保存 Server 实例向 Gateway 提交的地址、readiness 路径和回调编码。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class GatewayRegistrationRequest {
+public class GatewayRegistrationRequest {
 
     private final @Nullable String instanceId;
 

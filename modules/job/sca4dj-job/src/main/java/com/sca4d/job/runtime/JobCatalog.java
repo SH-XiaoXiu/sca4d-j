@@ -13,7 +13,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /** 校验 Spring 登记的 Job，并按稳定 key 恢复当前定义版本。 */
-public final class JobCatalog {
+public class JobCatalog {
 
     private final @NotNull Map<@NotNull JobKey, @NotNull Job<?, ?>> jobs;
 

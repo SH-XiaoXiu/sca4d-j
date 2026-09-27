@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.OptionalLong;
 
 /** 保存一次设备定时计划时间对应的下行生成结果。 */
-public final class DeviceScheduleExecution {
+public class DeviceScheduleExecution {
 
     private final long executionId;
 

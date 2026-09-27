@@ -17,7 +17,7 @@ import java.util.Objects;
 
 /** 返回管理端可查看的代码字典、动态字典、代码项和数据库项。 */
 @SuppressWarnings("unused")
-public final class SystemDictionariesView {
+public class SystemDictionariesView {
 
     private final List<Entry> dictionaries;
 
@@ -42,7 +42,7 @@ public final class SystemDictionariesView {
     }
 
     /** 管理端中的一个代码字典或动态字典。 */
-    public static final class Entry {
+    public static class Entry {
         private final String key;
 
         private final String label;
@@ -112,7 +112,7 @@ public final class SystemDictionariesView {
     }
 
     /** 管理端中的一个代码字典项或数据库字典项。 */
-    public static final class Option extends BaseView {
+    public static class Option extends BaseView {
         private final String value;
 
         private final String labelKey;

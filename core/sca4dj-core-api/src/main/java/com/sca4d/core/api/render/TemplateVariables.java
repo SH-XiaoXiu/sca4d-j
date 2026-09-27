@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 在 Renderer 调用前执行真实发送和预览使用的模板变量策略。 */
-public final class TemplateVariables {
+public class TemplateVariables {
 
     private TemplateVariables() {
     }

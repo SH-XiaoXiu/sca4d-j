@@ -11,8 +11,7 @@ import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.ResourceReference;
-import com.sca4d.core.api.setting.SettingValues;
-import com.sca4d.core.api.setting.Settings;
+import com.sca4d.core.api.setting.value.SettingValues;
 import com.sca4d.core.api.storage.FileAccessUrl;
 import com.sca4d.core.api.storage.FileContent;
 import com.sca4d.core.api.storage.FileErrorCode;
@@ -89,7 +88,7 @@ public class DefaultFileService implements FileService {
 
     private final @NotNull FileProperties properties;
 
-    private final @NotNull Settings settings;
+    private final @NotNull FileSettings settings;
 
     private final @NotNull TransferTokenService transferTokens;
 
@@ -109,7 +108,7 @@ public class DefaultFileService implements FileService {
             @NotNull StorageRegistry storages,
             @NotNull IdGenerator ids,
             @NotNull FileProperties properties,
-            @NotNull Settings settings,
+            @NotNull FileSettings settings,
             @NotNull TransferTokenService transferTokens,
             @NotNull Clock clock,
             @NotNull DistributedLock distributedLock,
@@ -255,8 +254,9 @@ public class DefaultFileService implements FileService {
             throw new BusinessException(FileErrorCode.INVALID);
         }
         FileUploadIntent checked = Objects.requireNonNull(intent, "上传意图不能为空");
-        SettingValues fileLimits = settings.get(List.of(FileSettings.MAXIMUM_SIZE_BYTES, FileSettings.UPLOAD_TTL));
-        long maximumSizeBytes = fileLimits.get(FileSettings.MAXIMUM_SIZE_BYTES);
+        SettingValues fileLimits = new SettingValues(
+                List.of(settings.MAXIMUM_SIZE_BYTES.inspect(), settings.UPLOAD_TTL.inspect()));
+        long maximumSizeBytes = fileLimits.get(settings.MAXIMUM_SIZE_BYTES);
         if (checked.sizeBytes() > maximumSizeBytes) {
             LOG.debug(
                     "文件上传申请超过大小限制 | principalId={} scene={} targetType={} targetId={} sizeBytes={} maxSizeBytes={}",
@@ -282,7 +282,7 @@ public class DefaultFileService implements FileService {
         // 保存 PENDING 记录以及不可猜测的临时、正式对象键。
         long fileId = ids.nextId().value();
         Instant now = clock.instant();
-        Instant expiresAt = now.plus(fileLimits.get(FileSettings.UPLOAD_TTL));
+        Instant expiresAt = now.plus(fileLimits.get(settings.UPLOAD_TTL));
         String nonce = UUID.randomUUID().toString().replace("-", "");
         String objectKey = Key.of(TreeCode.of("STORAGE:OBJECTS"))
                 .part(OBJECT_MONTH.format(now))
@@ -446,7 +446,7 @@ public class DefaultFileService implements FileService {
         }
 
         // 转正成功后在新事务中把数据库状态从 PENDING 改为 READY，并设置未绑定文件的保留期限。
-        Instant readyExpiresAt = clock.instant().plus(settings.get(FileSettings.READY_RETENTION));
+        Instant readyExpiresAt = clock.instant().plus(settings.READY_RETENTION.get());
         FileRecord completed = record.completed(
                 metadata.contentType(),
                 metadata.sizeBytes(),
@@ -649,7 +649,7 @@ public class DefaultFileService implements FileService {
 
         // 按去重后的输入顺序核对状态并签发地址，READY 文件的地址不能超过其保留期限。
         Instant now = clock.instant();
-        Instant expiresAt = now.plus(settings.get(FileSettings.ACCESS_TTL));
+        Instant expiresAt = now.plus(settings.ACCESS_TTL.get());
         List<FileAccessUrl> result = new ArrayList<>(ids.size());
         for (Long id : ids) {
             FileRecord record = records.get(id);

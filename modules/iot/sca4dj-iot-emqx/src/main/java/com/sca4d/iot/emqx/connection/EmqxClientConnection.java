@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 保存 EMQX Management API 返回的一条当前 MQTT Client Connection。 */
-public final class EmqxClientConnection {
+public class EmqxClientConnection {
 
     private final @NotNull String clientId;
 

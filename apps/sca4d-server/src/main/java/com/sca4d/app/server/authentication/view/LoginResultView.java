@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 返回登录认证进度和满足要求后签发的 Session Token。 */
-public final class LoginResultView {
+public class LoginResultView {
 
     private final AuthenticationProgressView authentication;
 

@@ -13,7 +13,7 @@ import java.util.Objects;
 
 /** 在 Spring 已写出会话失效事件后关闭对应 WebSocket。 */
 @ApiStatus.Internal
-public final class StompOutboundInterceptor implements ExecutorChannelInterceptor {
+public class StompOutboundInterceptor implements ExecutorChannelInterceptor {
 
     private final @NotNull WebSocketSessions sockets;
 

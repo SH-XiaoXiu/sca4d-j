@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 返回 reported 更新是否改变 latest 投影以及更新后的版本。 */
-public final class ReportedStateWriteResult {
+public class ReportedStateWriteResult {
 
     /** reported 顺序和内容比较结果。 */
     public enum Outcome {

@@ -10,7 +10,7 @@ import java.util.Objects;
  * 标识文件准备绑定或已经绑定的业务对象。
  */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class FileUse {
+public class FileUse {
     private final @NotNull String scene;
 
     private final @NotNull Resource target;

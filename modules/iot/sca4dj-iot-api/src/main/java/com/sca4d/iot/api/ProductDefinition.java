@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 定义数据库或代码 Product 共同使用的只读技术能力。 */
-public final class ProductDefinition {
+public class ProductDefinition {
 
     private final @NotNull String code;
 

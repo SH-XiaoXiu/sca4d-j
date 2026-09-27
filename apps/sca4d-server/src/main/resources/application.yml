@@ -250,6 +250,7 @@ sca4dj:
       bucket: ${SCA4DJ_STORAGE_MINIO_BUCKET:sca4dj}
       create-bucket: ${SCA4DJ_STORAGE_MINIO_CREATE_BUCKET:true}
   iam:
+    system-subject-id: ${SCA4DJ_IAM_SYSTEM_SUBJECT_ID:1}
     system-principal-ids:
       MAIN: 1
       IOT: 2

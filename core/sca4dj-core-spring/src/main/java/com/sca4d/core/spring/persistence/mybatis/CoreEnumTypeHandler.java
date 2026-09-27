@@ -16,7 +16,7 @@ import java.util.Objects;
  *
  * @param <E> 需要映射的枚举类型
  */
-public final class CoreEnumTypeHandler<E extends Enum<E> & BaseEnum> extends BaseTypeHandler<E> {
+public class CoreEnumTypeHandler<E extends Enum<E> & BaseEnum> extends BaseTypeHandler<E> {
 
     private final Class<E> enumType;
 

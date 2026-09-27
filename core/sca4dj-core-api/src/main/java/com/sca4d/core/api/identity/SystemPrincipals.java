@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 /** 在数据库提交成功后一次性发布系统身份的不可变运行期常量。 */
-public final class SystemPrincipals {
+public class SystemPrincipals {
 
     /** 根协调和默认自主执行身份的稳定编码。 */
     public static final @NotNull TreeCode MAIN = TreeCode.ofSegment("MAIN");

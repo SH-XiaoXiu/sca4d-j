@@ -13,7 +13,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 使用固定 ObjectMapper 编解码一种 EventType 的业务键、发生时间和 payload。 */
-public final class EventMessageCodec<T> implements MessageCodec<Event<T>> {
+public class EventMessageCodec<T> implements MessageCodec<Event<T>> {
 
     private final @NotNull EventType<T> type;
 

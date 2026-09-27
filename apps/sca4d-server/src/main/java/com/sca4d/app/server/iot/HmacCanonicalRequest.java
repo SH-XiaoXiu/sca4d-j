@@ -12,7 +12,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 /** 按 Sca4d Server 的固定 HTTP 字段顺序生成 Device MAC canonical request。 */
-public final class HmacCanonicalRequest {
+public class HmacCanonicalRequest {
 
     private final long deviceId;
 

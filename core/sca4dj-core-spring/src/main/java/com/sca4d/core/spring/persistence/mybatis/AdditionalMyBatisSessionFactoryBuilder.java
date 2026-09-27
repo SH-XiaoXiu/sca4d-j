@@ -23,7 +23,7 @@ import java.util.Objects;
 import javax.sql.DataSource;
 
 /** 使用公共 MyBatis 配置为一个明确的数据源创建资源隔离的附加 `SqlSessionFactory`，不负责运行时数据源路由。 */
-public final class AdditionalMyBatisSessionFactoryBuilder {
+public class AdditionalMyBatisSessionFactoryBuilder {
 
     private final @NotNull MybatisProperties properties;
 

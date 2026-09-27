@@ -30,7 +30,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 定义 MQTT Topic 路由、Core Pipeline 和物模型字段映射。 */
-public final class MqttDeviceProtocol implements DeviceUplinkProtocol {
+public class MqttDeviceProtocol implements DeviceUplinkProtocol {
 
     private static final MqttTopicIdentityMapper DIRECT_TOPIC_IDENTITY = new MqttTopicIdentityMapper() {
         @Override
@@ -285,7 +285,7 @@ public final class MqttDeviceProtocol implements DeviceUplinkProtocol {
     }
 
     /** 构造 MQTT 路由、转换和物模型映射。 */
-    public static final class Builder {
+    public static class Builder {
 
         private final @NotNull String code;
 
@@ -405,7 +405,7 @@ public final class MqttDeviceProtocol implements DeviceUplinkProtocol {
 
     /** 保存一条下行路由、Core Pipeline 和输入字段。 */
     @SuppressWarnings("ClassCanBeRecord") // 协议内部类型遵守项目禁用 record 的规则。
-    private static final class DownlinkDefinition {
+    private static class DownlinkDefinition {
 
         private final MqttDownlinkRoute route;
 

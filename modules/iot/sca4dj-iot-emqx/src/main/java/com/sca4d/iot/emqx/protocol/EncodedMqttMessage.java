@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存协议 encoder 生成的最终 MQTT Topic 和 payload。 */
-public final class EncodedMqttMessage {
+public class EncodedMqttMessage {
 
     private final @NotNull String topic;
 

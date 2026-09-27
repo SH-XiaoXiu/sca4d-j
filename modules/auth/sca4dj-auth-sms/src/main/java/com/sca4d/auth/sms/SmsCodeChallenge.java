@@ -7,7 +7,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 返回调用方可以安全读取的 SMS Challenge 标识、脱敏提示和时间边界。 */
-public final class SmsCodeChallenge {
+public class SmsCodeChallenge {
     private final @NotNull SmsCodeChallengeId challengeId;
 
     private final @NotNull String maskedRecipient;

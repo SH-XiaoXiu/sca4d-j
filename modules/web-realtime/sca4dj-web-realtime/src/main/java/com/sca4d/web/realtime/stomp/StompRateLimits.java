@@ -14,7 +14,7 @@ import java.util.Objects;
 
 /** 声明 Web Realtime STOMP 各命令的限流额度和业务维度。 */
 @ApiStatus.Internal
-public final class StompRateLimits {
+public class StompRateLimits {
 
     private static final RateLimit CONNECT = new RateLimit(20, Duration.ofSeconds(10));
 

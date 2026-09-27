@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /** 返回给调用方的非秘密 TOTP enrollment 元数据。 */
 @SuppressWarnings("ClassCanBeRecord") // 保持与项目值对象一致的显式构造校验和访问器风格。
-public final class TotpEnrollment {
+public class TotpEnrollment {
 
     private final String enrollmentId;
 

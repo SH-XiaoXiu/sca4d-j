@@ -12,7 +12,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /** 校验并索引一个 App 登记的 ACK 与 retry 策略。 */
-public final class DevicePolicyCatalog {
+public class DevicePolicyCatalog {
 
     private final @NotNull Map<TreeCode, AcknowledgementPolicy> acknowledgements;
 

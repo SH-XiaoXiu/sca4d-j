@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 校验物模型动态翻译只引用现有展示路径并完整提供默认 Locale。 */
-public final class ThingModelI18nValidator {
+public class ThingModelI18nValidator {
 
     private static final int MAXIMUM_TEXT_LENGTH = 128;
 

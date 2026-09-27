@@ -12,7 +12,7 @@ import java.util.Objects;
 /**
  * 把统一通知变量绑定到一个 Provider 已审核模板，不保存业务模板正文。
  */
-public final class SmsProviderBinding {
+public class SmsProviderBinding {
 
     private final long bindingId;
 

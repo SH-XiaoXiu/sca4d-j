@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 接收客户端为目标 Platform Account 申请头像上传时提交的精确内容信息。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean setter 反序列化请求。
-public final class CreateFileUploadRequest {
+public class CreateFileUploadRequest {
 
     private long targetAccountId;
 

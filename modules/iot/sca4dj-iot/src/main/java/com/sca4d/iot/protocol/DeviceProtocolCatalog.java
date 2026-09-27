@@ -14,7 +14,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /** 按稳定 code 索引一个 App 安装的设备协议。 */
-public final class DeviceProtocolCatalog {
+public class DeviceProtocolCatalog {
 
     private final @NotNull Map<String, DeviceProtocol> protocols;
 

@@ -16,7 +16,7 @@ import org.springframework.web.method.HandlerMethod;
 import java.util.Objects;
 
 /** 在普通 Spring MVC Handler 与 Core 权限切面之间检查 OpenAPI Client 身份及开放 Operation。 */
-public final class OpenApiRequestInterceptor extends CallHandlerInterceptor {
+public class OpenApiRequestInterceptor extends CallHandlerInterceptor {
 
     private final @NotNull OpenApiClientOperationChecker checker;
 

@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /** 保存 DEVICE Subject 对应的公共 IoT Profile。 */
-public final class Device {
+public class Device {
 
     private final long id;
 

@@ -21,7 +21,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 统一解析数据库 Product 与应用提供的只读代码 Product。 */
-public final class ProductDefinitionCatalog {
+public class ProductDefinitionCatalog {
 
     private final @NotNull ProductRepository database;
 

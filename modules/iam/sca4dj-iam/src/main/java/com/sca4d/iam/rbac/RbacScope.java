@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.OptionalLong;
 
 /** 定位一个 RBAC 领域中的全局角色空间或一个带数字标识的业务角色空间。 */
-public final class RbacScope {
+public class RbacScope {
 
     private final @NotNull RbacDomain domain;
 

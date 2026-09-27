@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 保存已经校验并按稳定拓扑顺序排列的数据操作图。 */
-public final class DataGraph {
+public class DataGraph {
 
     private final List<DataKey<?>> inputs;
 
@@ -129,7 +129,7 @@ public final class DataGraph {
     }
 
     /** 按登记顺序声明 Graph 输入和数据操作。 */
-    public static final class Builder {
+    public static class Builder {
 
         private final List<DataKey<?>> inputs = new ArrayList<>();
 

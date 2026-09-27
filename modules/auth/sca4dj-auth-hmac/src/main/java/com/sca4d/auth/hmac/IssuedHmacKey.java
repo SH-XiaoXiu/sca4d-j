@@ -6,7 +6,7 @@ import java.util.Objects;
 
 /** 返回创建或轮换后的 MAC Credential 和仅本次可见的 Key。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class IssuedHmacKey {
+public class IssuedHmacKey {
 
     private final @NotNull HmacCredential credential;
 

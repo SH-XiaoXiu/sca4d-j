@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 /** 把 Platform 手机登录标识规范为已经校验的 E.164 文本。 */
 @Component
-public final class PlatformPhoneAccountIdentifierNormalizer implements AccountIdentifierNormalizer {
+public class PlatformPhoneAccountIdentifierNormalizer implements AccountIdentifierNormalizer {
 
     private final RegionCatalog regions = RegionCatalog.standard();
 

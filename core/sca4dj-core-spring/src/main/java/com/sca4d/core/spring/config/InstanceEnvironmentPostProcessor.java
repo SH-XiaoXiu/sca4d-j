@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /** 在配置加载后、日志和 Bean 创建前固定进程标识，避免 random.uuid 被多次解析成不同值。 */
-public final class InstanceEnvironmentPostProcessor implements EnvironmentPostProcessor, Ordered {
+public class InstanceEnvironmentPostProcessor implements EnvironmentPostProcessor, Ordered {
 
     private static final String SOURCE = "sca4djInstanceIdentity";
 

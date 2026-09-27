@@ -40,7 +40,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 使用 Redis 保存可由设备接入实现重建的当前连接信息。 */
-public final class DeviceConnectionRepository implements DeviceConnectionReceiver, DeviceConnectionQueryService {
+public class DeviceConnectionRepository implements DeviceConnectionReceiver, DeviceConnectionQueryService {
 
     private static final DefaultRedisScript<Long> CONNECT = script("connect.lua");
 

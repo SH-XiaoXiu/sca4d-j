@@ -12,7 +12,7 @@ import org.quartz.SchedulerException;
 
 /** 由 Quartz 集群直接执行基础设施任务，不创建持久化 Job run。 */
 @DisallowConcurrentExecution
-public final class QuartzClusterTaskJob implements Job {
+public class QuartzClusterTaskJob implements Job {
 
     /** Quartz SchedulerContext 中保存集群任务目录的键。 */
     public static final String REGISTRY_CONTEXT_KEY = "sca4djClusterTaskRegistry";

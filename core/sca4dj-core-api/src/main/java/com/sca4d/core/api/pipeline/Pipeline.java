@@ -18,7 +18,7 @@ import java.util.Set;
  * @param <I> 整条 Pipeline 的输入类型
  * @param <O> 整条 Pipeline 的输出类型
  */
-public final class Pipeline<I, O> {
+public class Pipeline<I, O> {
 
     private final @NotNull List<@NotNull PipelineStage<?, ?>> stages;
 

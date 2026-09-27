@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 保存以 `DataKey` 登记的不可变类型化值。 */
-public final class DataValues {
+public class DataValues {
 
     private final Map<DataKey<?>, Object> values;
 
@@ -75,7 +75,7 @@ public final class DataValues {
     }
 
     /** 按登记顺序创建非空类型化值。 */
-    public static final class Builder {
+    public static class Builder {
 
         private final Map<DataKey<?>, Object> values = new LinkedHashMap<>();
 

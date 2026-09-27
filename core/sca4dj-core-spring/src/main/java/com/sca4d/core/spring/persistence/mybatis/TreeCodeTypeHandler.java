@@ -55,7 +55,7 @@ public class TreeCodeTypeHandler extends BaseTypeHandler<TreeCode> {
     }
 
     /** 为系统身份编码等明确声明的数据库列输出冒号格式。 */
-    public static final class Colon extends TreeCodeTypeHandler {
+    public static class Colon extends TreeCodeTypeHandler {
 
         /** 创建冒号编码的 SQL 边界转换器。 */
         public Colon() {

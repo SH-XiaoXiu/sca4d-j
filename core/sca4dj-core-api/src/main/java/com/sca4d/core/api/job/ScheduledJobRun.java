@@ -16,7 +16,7 @@ import java.util.Objects;
  * @param <T> 查询选择的节点输出类型
  */
 @SuppressWarnings("ClassCanBeRecord") // 公共类型遵守项目禁用 record 的兼容规则。
-public final class ScheduledJobRun<T> {
+public class ScheduledJobRun<T> {
 
     private final @NotNull Id runId;
 

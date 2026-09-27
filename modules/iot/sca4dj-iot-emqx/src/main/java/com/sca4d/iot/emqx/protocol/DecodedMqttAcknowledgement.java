@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 保存厂商 ACK decoder 已解析、尚未分配平台标识的业务回执。 */
-public final class DecodedMqttAcknowledgement {
+public class DecodedMqttAcknowledgement {
 
     private final long messageId;
 

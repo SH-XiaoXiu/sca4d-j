@@ -15,7 +15,7 @@ import java.util.Objects;
 /**
  * 使用 Email 模板和当前 SMTP 配置同步发送带可选附件的邮件。
  */
-public final class EmailMessageService {
+public class EmailMessageService {
 
     private final @NotNull EmailSenderRepository senders;
 

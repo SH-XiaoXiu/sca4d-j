@@ -22,7 +22,7 @@ import java.time.Clock;
 import java.util.Objects;
 
 /** 把 `@Audit`、调用身份和 `CallOutcome` 转换成同步审计记录。 */
-public final class AuditCallRecorder {
+public class AuditCallRecorder {
 
     private final AuditRecorder auditRecorder;
 

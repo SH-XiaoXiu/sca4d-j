@@ -10,7 +10,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 保存 Redis 中的验证码摘要、可选 Account、状态、次数和时间边界。 */
-public final class EmailCodeChallengeState {
+public class EmailCodeChallengeState {
 
     private final @NotNull EmailCodeChallengeId challengeId;
 

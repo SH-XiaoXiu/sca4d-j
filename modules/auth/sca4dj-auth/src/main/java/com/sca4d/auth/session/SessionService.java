@@ -20,7 +20,6 @@ import com.sca4d.core.api.authentication.principalsession.PrincipalIdSet;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
-import com.sca4d.core.api.setting.Settings;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +35,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /** 使用已经成功的认证记录建立、恢复、刷新和终止 Session。 */
-public final class SessionService implements SessionLifecycle {
+public class SessionService implements SessionLifecycle {
 
     private static final Logger LOG = LoggerFactory.getLogger(SessionService.class);
 
@@ -57,7 +56,7 @@ public final class SessionService implements SessionLifecycle {
 
     private final JwtSessionProjection tokenProjection;
 
-    private final Settings settings;
+    private final AuthSettings settings;
 
     private final Clock clock;
 
@@ -82,7 +81,7 @@ public final class SessionService implements SessionLifecycle {
             @NotNull ResourceIdLoaders resourceIds,
             @NotNull SaTokenSessionManager sessions,
             @NotNull JwtSessionProjection tokenProjection,
-            @NotNull Settings settings,
+            @NotNull AuthSettings settings,
             @NotNull Clock clock) {
         this.identities = Objects.requireNonNull(identities, "Session 身份读取服务不能为空");
         this.principals = Objects.requireNonNull(principals, "Principal 读取服务不能为空");
@@ -119,7 +118,7 @@ public final class SessionService implements SessionLifecycle {
 
         // 装载账号当前有效的身份、Principal 和 Resource，再一次性建立权威 Session。
         Instant now = clock.instant();
-        Duration sessionTtl = settings.get(AuthSettings.SESSION_TTL);
+        Duration sessionTtl = settings.SESSION_TTL.get();
         long generation = sessions.currentGeneration(checkedAccount.accountId());
         SessionIdentity identity = identities.load(checkedAccount);
         List<Principal> loadedPrincipals = principals.load(identity);

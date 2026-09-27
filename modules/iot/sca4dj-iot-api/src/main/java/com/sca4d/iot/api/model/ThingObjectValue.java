@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 保存已经按 object 物模型定义校验的不可修改字段值。 */
-public final class ThingObjectValue {
+public class ThingObjectValue {
 
     private final @NotNull Map<String, Object> fields;
 

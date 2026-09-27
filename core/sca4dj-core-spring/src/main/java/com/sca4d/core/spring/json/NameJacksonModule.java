@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.function.Function;
 
 /** 在 JSON 字符串边界恢复名称类型；Code 保持业务编码，只有 Key 应用 App 隔离。 */
-public final class NameJacksonModule extends SimpleModule {
+public class NameJacksonModule extends SimpleModule {
 
     private static final long serialVersionUID = 1L;
 
@@ -53,7 +53,7 @@ public final class NameJacksonModule extends SimpleModule {
     }
 
     /** 将类型化名称输出为协议声明的 JSON 字符串。 */
-    private static final class NameSerializer<T extends Name> extends StdSerializer<T> {
+    private static class NameSerializer<T extends Name> extends StdSerializer<T> {
         private static final long serialVersionUID = 1L;
 
         private final NameFormat format;
@@ -70,7 +70,7 @@ public final class NameJacksonModule extends SimpleModule {
     }
 
     /** 校验 JSON 字符串并恢复已声明的名称类型。 */
-    private static final class NameDeserializer<T extends Name> extends StdDeserializer<T> {
+    private static class NameDeserializer<T extends Name> extends StdDeserializer<T> {
         private static final long serialVersionUID = 1L;
 
         private final Function<String, T> factory;

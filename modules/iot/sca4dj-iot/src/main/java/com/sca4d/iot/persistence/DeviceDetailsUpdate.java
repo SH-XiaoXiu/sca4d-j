@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 保存 Device 展示名称和备注交给 Mapper 执行的字段更新意图。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class DeviceDetailsUpdate {
+public class DeviceDetailsUpdate {
 
     private final @NotNull Patch<String> displayName;
 

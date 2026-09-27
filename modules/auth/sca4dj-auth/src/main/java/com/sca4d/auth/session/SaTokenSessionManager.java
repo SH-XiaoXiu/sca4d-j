@@ -23,7 +23,7 @@ import java.util.Optional;
 
 /** 使用 Sa-Token Token-Session 保存 Core Session，并在失效代次或 Operation 目录变化后延迟刷新。 */
 @SuppressWarnings("LoggingSimilarMessage")
-public final class SaTokenSessionManager {
+public class SaTokenSessionManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(SaTokenSessionManager.class);
 

@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.MDC;
 
 /** 在 Controller 执行期间把当前会话、主体和账号标识写入日志上下文。 */
-public final class IdentityMdcInterceptor extends CallHandlerInterceptor {
+public class IdentityMdcInterceptor extends CallHandlerInterceptor {
 
     /** 创建当前身份日志上下文拦截器。 */
     public IdentityMdcInterceptor() {

@@ -18,7 +18,7 @@ import java.util.function.ToLongFunction;
  *
  * @param <T> 需要读写的 Java 类型
  */
-public final class LongValueTypeHandler<T> extends BaseTypeHandler<T> {
+public class LongValueTypeHandler<T> extends BaseTypeHandler<T> {
 
     private final @NotNull LongFunction<T> factory;
 

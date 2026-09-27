@@ -31,7 +31,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /** 使用 Redis Lua 原子维护幂等处理所有权和成功结果。 */
-public final class RedisIdempotencyStore implements IdempotencyStore {
+public class RedisIdempotencyStore implements IdempotencyStore {
 
     private static final String ACQUIRED = "ACQUIRED";
 

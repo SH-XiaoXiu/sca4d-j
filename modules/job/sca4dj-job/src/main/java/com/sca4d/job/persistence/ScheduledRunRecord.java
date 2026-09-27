@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /** 保存定时 Job 历史查询从根运行和目标节点读取的数据库列。 */
 @SuppressWarnings("ClassCanBeRecord") // MyBatis 构造映射遵守项目禁用 record 的规则。
-public final class ScheduledRunRecord {
+public class ScheduledRunRecord {
 
     private final long runId;
 

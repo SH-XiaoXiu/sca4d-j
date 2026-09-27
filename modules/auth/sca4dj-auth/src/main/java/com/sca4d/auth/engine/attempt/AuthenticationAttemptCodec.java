@@ -34,7 +34,7 @@ import java.util.Set;
 /**
  * 以显式结构编解码不含秘密的动作认证尝试。
  */
-final class AuthenticationAttemptCodec {
+class AuthenticationAttemptCodec {
 
     private final @NotNull ObjectMapper objectMapper;
 

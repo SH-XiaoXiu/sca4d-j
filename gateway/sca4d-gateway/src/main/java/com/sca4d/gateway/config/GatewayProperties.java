@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 /** 保存 Gateway 注册控制、Server readiness 检查和注册后端标识。 */
 @ConfigurationProperties("sca4dj.gateway")
-public final class GatewayProperties {
+public class GatewayProperties {
 
     private static final Pattern SERVICE_ID = Pattern.compile("[A-Za-z0-9][A-Za-z0-9._-]{0,127}");
 

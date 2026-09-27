@@ -5,7 +5,7 @@ import com.sca4d.core.api.utils.DurationUtils;
 import java.time.Duration;
 
 /** 指定时间窗口内允许的最大调用次数。 */
-public final class RateLimit {
+public class RateLimit {
 
     private final long permits;
 

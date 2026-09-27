@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 保存设备连接完成识别或认证后允许接入的 Device、接入方式和有效期。 */
-public final class DeviceConnectionAccess {
+public class DeviceConnectionAccess {
 
     private final @NotNull Device device;
 

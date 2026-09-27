@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 执行 MQTT 上行转换，并把转换结果投影为 reported state 或业务 ACK。 */
-public final class MqttUplinkDefinition {
+public class MqttUplinkDefinition {
 
     private final @NotNull MqttUplinkKind kind;
 

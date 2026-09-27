@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 按 Device 当前绑定的具体协议类型选择唯一的下行 Publisher。 */
-public final class DeviceTransportRouter {
+public class DeviceTransportRouter {
 
     private final @NotNull DeviceRepository devices;
 

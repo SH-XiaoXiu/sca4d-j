@@ -8,7 +8,7 @@ import java.time.Duration;
 import java.util.Objects;
 
 /** 声明 Job 单个节点的最大尝试次数和固定重试间隔。 */
-public final class JobRetryPolicy {
+public class JobRetryPolicy {
 
     private final int maxAttempts;
 

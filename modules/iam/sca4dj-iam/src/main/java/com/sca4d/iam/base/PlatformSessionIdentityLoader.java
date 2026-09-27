@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 装载平台 Account 当前可取得的具体 IAM 身份。 */
-public final class PlatformSessionIdentityLoader implements SessionIdentityLoader {
+public class PlatformSessionIdentityLoader implements SessionIdentityLoader {
 
     private final @NotNull PlatformIdentityService identities;
 

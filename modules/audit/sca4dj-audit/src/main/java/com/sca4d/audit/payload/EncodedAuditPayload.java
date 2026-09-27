@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 /** 保存一份准备写入数据库的 payload 类型、版本和 JSON。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 @ApiStatus.Internal
-public final class EncodedAuditPayload {
+public class EncodedAuditPayload {
     private final @NotNull String type;
 
     private final int version;

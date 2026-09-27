@@ -19,7 +19,7 @@ import java.util.Objects;
 @Schema(name = "PlatformRole")
 @SuppressFBWarnings(value = "SS_SHOULD_BE_STATIC", justification = "@Localize requires an instance field for BaseViewSerializer metadata")
 @SuppressWarnings({"FieldCanBeLocal", "unused"}) // Jackson 调用 getter，BaseViewSerializer 读取 @Localize 字段。
-public final class RoleView extends BaseView {
+public class RoleView extends BaseView {
 
     private final long id;
 

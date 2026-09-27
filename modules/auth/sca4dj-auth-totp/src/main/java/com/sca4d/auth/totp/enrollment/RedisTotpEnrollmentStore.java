@@ -20,7 +20,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 使用 Redis TTL 保存加密 enrollment，并以 value CAS 完成一次性消费。 */
-public final class RedisTotpEnrollmentStore {
+public class RedisTotpEnrollmentStore {
 
     private static final DefaultRedisScript<Long> CONSUME = consumeScript();
 

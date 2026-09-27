@@ -322,7 +322,7 @@ public abstract class InitFlywayTask extends DefaultTask {
 
     /** 保存一个组件中唯一结构片段的名称和 SQL。 */
     @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-    private static final class SchemaFragment {
+    private static class SchemaFragment {
 
         private final String name;
         private final String content;

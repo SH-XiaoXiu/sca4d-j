@@ -8,7 +8,7 @@ import java.util.Objects;
 
 /** 保存一次 MAC 认证所需的时间、nonce、canonical bytes 和签名。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class HmacProof {
+public class HmacProof {
 
     private static final int MAX_NONCE_LENGTH = 128;
 

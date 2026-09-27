@@ -8,7 +8,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 /** 从当前 HTTP 请求的 `Idempotency-Key` Header 解析公共幂等键。 */
-public final class HttpIdempotencyKeyResolver implements CallValueResolver<IdempotencyKey> {
+public class HttpIdempotencyKeyResolver implements CallValueResolver<IdempotencyKey> {
 
     /** HTTP 调用方提交幂等键使用的固定 Header。 */
     public static final String HEADER = "Idempotency-Key";

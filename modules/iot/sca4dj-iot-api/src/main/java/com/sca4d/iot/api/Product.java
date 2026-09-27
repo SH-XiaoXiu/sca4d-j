@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 定义一类设备允许采用的接入方式和 Java 协议实现。 */
-public final class Product {
+public class Product {
 
     private final long id;
 

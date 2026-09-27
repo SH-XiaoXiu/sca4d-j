@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 表示 ACK 策略对当前下行消息给出的无副作用判断。 */
-public final class AcknowledgementDecision {
+public class AcknowledgementDecision {
 
     /** ACK 策略允许的固定结果。 */
     public enum Outcome {

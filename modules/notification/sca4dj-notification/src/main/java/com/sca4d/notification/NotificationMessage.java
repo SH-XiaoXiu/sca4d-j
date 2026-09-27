@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 请求已安装的通知渠道处理一项已经冻结接收人、变量、内容和渠道要求的通知。 */
-public final class NotificationMessage extends Message {
+public class NotificationMessage extends Message {
 
     public static final @NotNull TreeCode CODE = TreeCode.of("NOTIFICATION/DELIVERY");
 

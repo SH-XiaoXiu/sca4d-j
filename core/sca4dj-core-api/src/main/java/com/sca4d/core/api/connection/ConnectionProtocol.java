@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 表示 App 连接使用的稳定协议编码。 */
-public final class ConnectionProtocol {
+public class ConnectionProtocol {
 
     private final @NotNull String code;
 

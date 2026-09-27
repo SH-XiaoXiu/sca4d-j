@@ -12,7 +12,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 声明 Message 立即、事务提交后或通过 Outbox 发布到 RabbitMQ。 */
-public final class DispatchPolicy {
+public class DispatchPolicy {
 
     public enum Mode {
         IMMEDIATE,

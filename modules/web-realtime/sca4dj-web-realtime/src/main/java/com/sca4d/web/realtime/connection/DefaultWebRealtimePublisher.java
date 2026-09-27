@@ -22,7 +22,7 @@ import java.time.Clock;
 import java.util.Objects;
 
 /** 把应用实时事件转换成 WebRealtimeMessage 并交给固定 MessageBus。 */
-public final class DefaultWebRealtimePublisher implements WebRealtimePublisher, SessionInvalidationListener {
+public class DefaultWebRealtimePublisher implements WebRealtimePublisher, SessionInvalidationListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultWebRealtimePublisher.class);
 

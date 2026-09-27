@@ -18,7 +18,7 @@ import java.util.Optional;
 /**
  * 对 ACL 注册的资源类型执行直接授权判断。
  */
-public final class AclPermissionPolicy implements PermissionPolicy {
+public class AclPermissionPolicy implements PermissionPolicy {
     /**
      * 表示对一种资源类型进行集合权限判断的保留资源标识。
      */

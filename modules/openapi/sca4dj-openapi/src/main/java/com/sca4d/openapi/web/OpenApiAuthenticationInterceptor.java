@@ -29,7 +29,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 在通用认证拦截器前恢复 OpenAPI 独立 JWT 或验证 OpenAPI MAC 请求。 */
-public final class OpenApiAuthenticationInterceptor extends CallHandlerInterceptor {
+public class OpenApiAuthenticationInterceptor extends CallHandlerInterceptor {
 
     /** OpenAPI MAC Client 标识请求头。 */
     public static final String CLIENT_ID_HEADER = "X-OpenApi-Client-Id";

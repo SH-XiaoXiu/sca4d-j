@@ -7,7 +7,7 @@ import java.time.Duration;
 
 /** 配置 Redis 幂等处理中记录的租约和调用方重试时间。 */
 @ConfigurationProperties("sca4dj.redis.idempotency")
-public final class RedisIdempotencyProperties {
+public class RedisIdempotencyProperties {
 
     /** 节点中断后处理中记录允许阻止重复执行的时间。 */
     private Duration processingTtl = Duration.ofMinutes(5);

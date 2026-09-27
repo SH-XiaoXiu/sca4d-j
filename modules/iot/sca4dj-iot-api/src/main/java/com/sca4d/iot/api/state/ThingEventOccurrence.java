@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 保存协议 Pipeline 输出的一次离散 ThingEvent 事实。 */
-public final class ThingEventOccurrence {
+public class ThingEventOccurrence {
 
     private final @NotNull String eventCode;
 

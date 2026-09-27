@@ -6,7 +6,7 @@ import java.util.Objects;
 
 /** 使用容器名称和对象键定位存储中的一个对象。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class StorageObject {
+public class StorageObject {
     private final @NotNull String container;
 
     private final @NotNull String objectKey;

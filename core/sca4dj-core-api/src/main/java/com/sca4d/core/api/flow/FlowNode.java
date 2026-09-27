@@ -5,7 +5,7 @@ import com.sca4d.core.api.utils.TextUtils;
 import java.util.Objects;
 
 /** 表示 {@link FlowGraph} 中的一个节点。 */
-public final class FlowNode {
+public class FlowNode {
 
     private final String id;
 

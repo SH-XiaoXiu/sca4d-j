@@ -27,7 +27,7 @@ import java.util.Objects;
 
 /** 返回双来源 Product 目录和创建表单允许使用的技术选项。 */
 @SuppressWarnings("unused")
-public final class IotProductCatalogView {
+public class IotProductCatalogView {
 
     private final @NotNull List<ProductItem> products;
 
@@ -97,7 +97,7 @@ public final class IotProductCatalogView {
     }
 
     /** 返回一个数据库或代码 Product 的本地化管理投影。 */
-    public static final class ProductItem extends BaseView {
+    public static class ProductItem extends BaseView {
 
         @JsonInclude(JsonInclude.Include.ALWAYS)
         private final @Nullable Long id;

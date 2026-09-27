@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 /** 保存一次通过 EMQX Management API 发布的 MQTT Topic、原始 payload、QoS 和 Retain。 */
-public final class MqttPublication {
+public class MqttPublication {
 
     private static final int MAX_TOPIC_BYTES = 65_535;
 

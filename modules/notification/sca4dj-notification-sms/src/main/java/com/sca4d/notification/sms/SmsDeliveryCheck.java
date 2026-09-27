@@ -1,7 +1,7 @@
 package com.sca4d.notification.sms;
 
-import com.sca4d.core.api.message.Message;
 import com.sca4d.core.api.id.Id;
+import com.sca4d.core.api.message.Message;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.Notification;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 请求查询一次已经提交的 SMS 是否最终送达。 */
-public final class SmsDeliveryCheck extends Message {
+public class SmsDeliveryCheck extends Message {
     public static final @NotNull TreeCode CODE = TreeCode.of("NOTIFICATION/SMS/DELIVERY_CHECK");
 
     public static final int PROTOCOL_VERSION = 1;

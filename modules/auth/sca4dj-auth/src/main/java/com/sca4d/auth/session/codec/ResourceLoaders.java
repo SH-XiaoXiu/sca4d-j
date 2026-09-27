@@ -17,7 +17,7 @@ import java.util.concurrent.CompletionException;
 import java.util.concurrent.Executor;
 
 /** 并发合并所有 ResourceLoader 的静态资源贡献。 */
-public final class ResourceLoaders {
+public class ResourceLoaders {
 
     private final List<ResourceLoader> loaders;
 

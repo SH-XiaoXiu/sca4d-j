@@ -12,7 +12,7 @@ import java.util.Objects;
  * {@code new Action(TreeCode.ofSegment("RENAME"))}，设备控制使用 {@code new Action(TreeCode.ofSegment("CONTROL"))}。
  */
 @SuppressWarnings("ClassCanBeRecord") // 项目禁止使用 Java record，保留普通 class。
-public final class Action {
+public class Action {
 
     /** `INVOKE` 的稳定动作键，可用于注解参数。 */
     public static final @NotNull String INVOKE_VALUE = "INVOKE";

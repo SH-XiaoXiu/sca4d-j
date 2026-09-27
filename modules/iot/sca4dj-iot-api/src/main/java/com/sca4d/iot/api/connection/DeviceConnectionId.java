@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /** 标识一个设备接入实现观测到的明确连接代次。 */
-public final class DeviceConnectionId {
+public class DeviceConnectionId {
 
     private final @NotNull String value;
 

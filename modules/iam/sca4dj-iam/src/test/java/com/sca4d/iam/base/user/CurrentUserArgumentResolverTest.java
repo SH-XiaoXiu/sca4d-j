@@ -85,7 +85,7 @@ class CurrentUserArgumentResolverTest {
     /**
      * 提供参数解析测试使用的 Controller 方法签名。
      */
-    private static final class TestController {
+    private static class TestController {
 
         void current(@CurrentUser User user, @CurrentUser Long principalId) {
             Objects.requireNonNull(user);

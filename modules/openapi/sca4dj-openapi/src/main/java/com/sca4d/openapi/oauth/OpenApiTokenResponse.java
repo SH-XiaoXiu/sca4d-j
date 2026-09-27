@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /** 返回 OAuth Client Credentials 交换得到的 Bearer Token 和 scope。 */
 @Schema(name = "OpenApiToken", description = "OpenAPI Client Credentials 签发的短期 Bearer Token。")
-public final class OpenApiTokenResponse {
+public class OpenApiTokenResponse {
 
     private final @NotNull String accessToken;
 

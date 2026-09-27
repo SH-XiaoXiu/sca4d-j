@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.OptionalLong;
 
 /** 保存 Device 对已解析 Product 来源、稳定 code 和可选数据库标识的绑定。 */
-public final class ProductBinding {
+public class ProductBinding {
 
     private final @NotNull ProductSource source;
 

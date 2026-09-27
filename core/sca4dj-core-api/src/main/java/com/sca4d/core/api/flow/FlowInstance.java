@@ -14,7 +14,7 @@ import java.util.Objects;
  *
  * <p>实例保存当前节点、数据、过期时间和乐观版本。
  */
-public final class FlowInstance {
+public class FlowInstance {
 
     private final FlowId id;
 

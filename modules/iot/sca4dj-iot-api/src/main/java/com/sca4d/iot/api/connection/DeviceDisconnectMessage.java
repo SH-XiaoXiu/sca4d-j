@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 请求一种设备接入实现终止一个明确连接代次。 */
-public final class DeviceDisconnectMessage extends Message {
+public class DeviceDisconnectMessage extends Message {
 
     public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DEVICE/DISCONNECT");
 

@@ -11,8 +11,7 @@ import com.sca4d.core.api.notification.NotificationExecution;
 import com.sca4d.core.api.notification.NotificationRecipient;
 import com.sca4d.core.api.notification.NotificationType;
 import com.sca4d.core.api.region.Region;
-import com.sca4d.core.api.setting.SettingOwner;
-import com.sca4d.core.api.setting.Settings;
+import com.sca4d.core.api.setting.value.SettingOwner;
 import com.sca4d.notification.config.NotificationSettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,13 +30,13 @@ import java.util.stream.Collectors;
 /**
  * 执行一个通知类型的接收人回调，并把 Settings、语言和区域解析成标准通知。
  */
-final class DefaultNotificationExecution<T> implements NotificationExecution {
+class DefaultNotificationExecution<T> implements NotificationExecution {
 
     private final @NotNull NotificationType<T> type;
 
     private final @NotNull T value;
 
-    private final @NotNull Settings settings;
+    private final @NotNull NotificationSettings settings;
 
     private final @NotNull NotificationLocaleResolver locales;
 
@@ -59,7 +58,7 @@ final class DefaultNotificationExecution<T> implements NotificationExecution {
     DefaultNotificationExecution(
             @NotNull NotificationType<T> type,
             @NotNull T value,
-            @NotNull Settings settings,
+            @NotNull NotificationSettings settings,
             @NotNull NotificationLocaleResolver locales,
             @NotNull NotificationRegionResolver regions,
             @NotNull NotificationDeliveryRouter deliveries) {
@@ -114,10 +113,9 @@ final class DefaultNotificationExecution<T> implements NotificationExecution {
         Map<String, String> variables = variables(locale);
 
         // 框架内部读取系统默认值和接收人覆盖值，冻结本次通知真正需要的渠道。
-        JsonNode systemDefaults = settings.get(NotificationSettings.CHANNEL_DEFAULTS);
-        JsonNode preferences = settings.get(
-                NotificationSettings.CHANNEL_PREFERENCES,
-                new SettingOwner(checkedRecipient.type(), checkedRecipient.id()));
+        JsonNode systemDefaults = settings.CHANNEL_DEFAULTS.get();
+        JsonNode preferences = settings.CHANNEL_PREFERENCES
+                .get(new SettingOwner(checkedRecipient.type(), checkedRecipient.id()));
         Set<TreeCode> intended = intendedChannels(systemDefaults, preferences);
         if (intended.isEmpty()) {
             throw new IllegalStateException("通知没有选中任何渠道: " + type.code());

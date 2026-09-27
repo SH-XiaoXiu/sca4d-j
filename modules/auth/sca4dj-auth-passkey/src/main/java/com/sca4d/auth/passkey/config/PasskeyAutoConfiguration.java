@@ -9,8 +9,9 @@ import com.sca4d.auth.passkey.credential.mapper.PasskeyCredentialMapper;
 import com.sca4d.auth.passkey.registration.PasskeyRegistrationService;
 import com.sca4d.core.api.identity.AccountDirectory;
 import com.sca4d.core.api.name.Key;
-import com.sca4d.core.api.setting.Settings;
-import com.sca4d.core.api.setting.SystemSetting;
+import com.sca4d.core.api.setting.access.SettingReader;
+import com.sca4d.core.api.setting.access.SettingWriter;
+import com.sca4d.core.api.setting.definition.SystemSetting;
 import com.sca4d.core.spring.json.Sca4djJson;
 import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.core.spring.redis.Sca4djRedis;
@@ -36,6 +37,12 @@ import java.time.Duration;
 @EnableConfigurationProperties(PasskeyProperties.class)
 public class PasskeyAutoConfiguration {
 
+    /** 创建本应用上下文的模块设置，来源由 Spring 显式注入。 */
+    @Bean
+    PasskeySettings passkeySettings(SettingReader<String> reader, SettingWriter<String> writer) {
+        return new PasskeySettings(reader, writer);
+    }
+
     /**
      * 创建 Passkey 自动配置。
      */
@@ -44,14 +51,14 @@ public class PasskeyAutoConfiguration {
 
     /** @return Passkey ceremony 有效期设置 */
     @Bean
-    SystemSetting<Duration> passkeyCeremonyTtlSetting() {
-        return PasskeySettings.CEREMONY_TTL;
+    SystemSetting<Duration> passkeyCeremonyTtlSetting(PasskeySettings settings) {
+        return settings.CEREMONY_TTL;
     }
 
     /** @return 每个账号的 Passkey Credential 数量上限设置 */
     @Bean
-    SystemSetting<Integer> passkeyMaximumCredentialsSetting() {
-        return PasskeySettings.MAXIMUM_CREDENTIALS;
+    SystemSetting<Integer> passkeyMaximumCredentialsSetting(PasskeySettings settings) {
+        return settings.MAXIMUM_CREDENTIALS;
     }
 
     /**
@@ -102,7 +109,7 @@ public class PasskeyAutoConfiguration {
             @Sca4djRedis RedisTemplate<Key, String> redis,
             @Sca4djJson Sca4djMapper objectMapper,
             Clock clock,
-            Settings settings) {
+            PasskeySettings settings) {
         return new PasskeyCeremonyStore(
                 redis,
                 objectMapper,
@@ -130,7 +137,7 @@ public class PasskeyAutoConfiguration {
             RelyingParty relyingParty,
             PasskeyCeremonyStore ceremonies,
             PasskeyCredentialRepository credentials,
-            Settings settings,
+            PasskeySettings settings,
             Clock clock) {
         return new PasskeyRegistrationService(
                 relyingParty,

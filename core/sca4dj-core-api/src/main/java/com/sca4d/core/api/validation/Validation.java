@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 合并多个同类型校验器的确定性执行结果。 */
-public final class Validation {
+public class Validation {
 
     private Validation() {
     }

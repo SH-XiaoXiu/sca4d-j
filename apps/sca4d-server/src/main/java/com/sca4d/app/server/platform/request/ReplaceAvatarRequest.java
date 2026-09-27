@@ -2,7 +2,7 @@ package com.sca4d.app.server.platform.request;
 
 /** 接收需要绑定为 Platform 用户头像的文件标识。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean setter 反序列化请求。
-public final class ReplaceAvatarRequest {
+public class ReplaceAvatarRequest {
 
     private long fileId;
 

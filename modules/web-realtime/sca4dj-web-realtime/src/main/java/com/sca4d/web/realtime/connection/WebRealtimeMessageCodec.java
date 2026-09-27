@@ -19,7 +19,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 把 WebRealtimeMessage 编解码为 RabbitMQ 与 Outbox 使用的稳定 JSON payload。 */
-public final class WebRealtimeMessageCodec implements MessageCodec<WebRealtimeMessage> {
+public class WebRealtimeMessageCodec implements MessageCodec<WebRealtimeMessage> {
 
     private final @NotNull ObjectMapper json;
 

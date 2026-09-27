@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 解析 `@RateLimited` 的内置和自定义维度，并取得每个维度的限流额度。 */
-public final class RateLimitedCallAssessor {
+public class RateLimitedCallAssessor {
 
     private static final Logger LOG = LoggerFactory.getLogger(RateLimitedCallAssessor.class);
 

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 接收只在当前请求中使用的六位 TOTP 验证码。 */
-public final class TotpProofRequest {
+public class TotpProofRequest {
 
     @NotBlank
     @Pattern(regexp = "\\d{6}")

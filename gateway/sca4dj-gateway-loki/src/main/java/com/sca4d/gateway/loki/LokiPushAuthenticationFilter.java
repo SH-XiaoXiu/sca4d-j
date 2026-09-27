@@ -17,7 +17,7 @@ import java.util.Base64;
 import java.util.List;
 
 /** 验证 Alloy 的独立 Basic Auth 凭据，并在转发到 Loki 前删除认证 Header。 */
-public final class LokiPushAuthenticationFilter implements GatewayFilter {
+public class LokiPushAuthenticationFilter implements GatewayFilter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LokiPushAuthenticationFilter.class);
 

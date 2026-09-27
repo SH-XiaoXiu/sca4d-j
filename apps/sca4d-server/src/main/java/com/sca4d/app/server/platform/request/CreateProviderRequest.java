@@ -14,7 +14,7 @@ import java.util.Objects;
 
 /** 接收后台新建联邦 Provider 的编码、协议和登录页展示设置。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean setter 反序列化请求。
-public final class CreateProviderRequest {
+public class CreateProviderRequest {
     @NotBlank
     @Size(max = 64)
     private String code;

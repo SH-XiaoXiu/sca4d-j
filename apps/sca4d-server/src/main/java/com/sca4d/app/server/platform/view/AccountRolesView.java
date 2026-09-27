@@ -13,7 +13,7 @@ import java.util.Objects;
 
 /** 返回 Platform Account 当前角色标识。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
-public final class AccountRolesView {
+public class AccountRolesView {
 
     private final long accountId;
 

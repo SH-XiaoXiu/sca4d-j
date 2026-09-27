@@ -2,11 +2,11 @@ package com.sca4d.notification.sms;
 
 import cn.hutool.crypto.digest.DigestUtil;
 import com.sca4d.core.api.delivery.DeliveryOutcome;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.DispatchReceipt;
 import com.sca4d.core.api.messaging.HandlingPolicy;
 import com.sca4d.core.api.messaging.MessageBus;
-import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.Notification;
 import com.sca4d.core.api.notification.NotificationDelivery;
@@ -28,7 +28,7 @@ import java.util.Objects;
 /**
  * 解析手机号、线路、Provider 与平台绑定，并提交一个必发或可选 SMS 渠道请求。
  */
-public final class SmsNotificationDelivery implements NotificationDelivery {
+public class SmsNotificationDelivery implements NotificationDelivery {
 
     private static final Logger LOG = LoggerFactory.getLogger(SmsNotificationDelivery.class);
 

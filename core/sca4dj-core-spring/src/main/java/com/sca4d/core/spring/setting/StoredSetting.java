@@ -2,7 +2,7 @@ package com.sca4d.core.spring.setting;
 
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.name.code.TreeCode;
-import com.sca4d.core.api.setting.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingOwner;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * 保存 Repository 从 `sys_setting` 读取的 owner、结构版本、值和行版本。
  */
-public final class StoredSetting {
+public class StoredSetting {
 
     private final SettingOwner owner;
 

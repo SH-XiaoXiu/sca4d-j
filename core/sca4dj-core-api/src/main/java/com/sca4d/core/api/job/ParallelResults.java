@@ -12,7 +12,7 @@ import java.util.Objects;
  * @param <L> 左分支输出类型
  * @param <R> 右分支输出类型
  */
-public final class ParallelResults<L, R> {
+public class ParallelResults<L, R> {
 
     private final @NotNull L left;
 

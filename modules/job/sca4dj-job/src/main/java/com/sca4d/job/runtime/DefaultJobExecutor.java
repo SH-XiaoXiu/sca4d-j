@@ -2,10 +2,10 @@ package com.sca4d.job.runtime;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.job.Job;
 import com.sca4d.core.api.job.JobExecutor;
 import com.sca4d.core.api.job.JobRunFailedException;
-import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.job.JobRunStatus;
 import com.sca4d.core.api.job.JobWaitTimeoutException;
 import com.sca4d.core.api.scheduling.OverlapPolicy;
@@ -21,7 +21,7 @@ import java.util.Optional;
 import java.util.concurrent.locks.LockSupport;
 
 /** 使用 PostgreSQL Job runtime 实现提交、查询、等待和结果恢复。 */
-public final class DefaultJobExecutor implements JobExecutor {
+public class DefaultJobExecutor implements JobExecutor {
 
     private static final long RESULT_POLL_NANOS = Duration.ofMillis(50).toNanos();
 

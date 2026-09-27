@@ -16,7 +16,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import java.util.Objects;
 
 /** 解析并校验 {@code page} 和 {@code size} 查询参数。 */
-public final class PageRequestArgumentResolver implements HandlerMethodArgumentResolver {
+public class PageRequestArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final int defaultSize;
 

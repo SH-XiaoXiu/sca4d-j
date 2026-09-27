@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存批量查询返回的 Device 标识和接入方式编码。 */
-public final class DeviceAccessMethodState {
+public class DeviceAccessMethodState {
 
     private final long deviceId;
 

@@ -15,7 +15,7 @@ import java.util.function.Function;
  *
  * @param <T> 当前页记录类型
  */
-public final class Page<T> {
+public class Page<T> {
 
     private final @NotNull @Unmodifiable List<@NotNull T> items;
 

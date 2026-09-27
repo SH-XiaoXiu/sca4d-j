@@ -63,7 +63,7 @@ public class Name implements AppIsolation<Name> {
     }
 
     /** 保存已经应用隔离的名称字符串，重复隔离直接复用此不可变值。 */
-    private static final class IsolatedName extends Name {
+    private static class IsolatedName extends Name {
 
         private IsolatedName(@NotNull String value) {
             super(value);

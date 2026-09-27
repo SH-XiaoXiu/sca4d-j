@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.List;
 
 /** 保存 Controller 执行前发现的 HTTP 默认校验失败结果。 */
-public final class HttpInputValidationException extends RuntimeException {
+public class HttpInputValidationException extends RuntimeException {
 
     private final @NotNull List<@NotNull FieldViolation> violations;
 

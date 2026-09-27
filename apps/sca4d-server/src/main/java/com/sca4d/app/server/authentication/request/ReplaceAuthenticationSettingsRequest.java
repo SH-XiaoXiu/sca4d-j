@@ -11,7 +11,7 @@ import java.util.List;
 
 /** 完整替换当前账号的动作认证因素数量和认证方法开关。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean setter 反序列化请求。
-public final class ReplaceAuthenticationSettingsRequest {
+public class ReplaceAuthenticationSettingsRequest {
 
     @Min(1)
     @Max(3)

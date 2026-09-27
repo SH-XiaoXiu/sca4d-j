@@ -6,7 +6,7 @@ import java.util.Objects;
 
 /** 只在一次认证方法调用中存在的 Shared Secret 明文材料。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class SharedSecretProof {
+public class SharedSecretProof {
 
     private final @NotNull String secret;
 

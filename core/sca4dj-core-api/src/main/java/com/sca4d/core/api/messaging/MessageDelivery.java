@@ -11,7 +11,7 @@ import java.util.Objects;
 
 /** 保存 RabbitMQ 投递给 `MessageConsumer` 的事件和发布元数据。 */
 @SuppressWarnings({"ClassCanBeRecord", "unused"})
-public final class MessageDelivery<T> {
+public class MessageDelivery<T> {
 
     private final @NotNull Id messageId;
 

@@ -16,15 +16,13 @@ import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.job.JobExecutor;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.ResourceReference;
 import com.sca4d.core.api.scheduling.JobScheduler;
-import com.sca4d.core.api.setting.LogicSetting;
-import com.sca4d.core.api.setting.Setting;
-import com.sca4d.core.api.setting.SettingOwner;
-import com.sca4d.core.api.setting.SettingValue;
-import com.sca4d.core.api.setting.SettingValues;
-import com.sca4d.core.api.setting.Settings;
-import com.sca4d.core.api.setting.SystemSetting;
+import com.sca4d.core.api.setting.access.SettingReader;
+import com.sca4d.core.api.setting.access.SettingWriter;
+import com.sca4d.core.api.setting.value.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingValue;
 import com.sca4d.core.api.storage.FileErrorCode;
 import com.sca4d.core.api.storage.FileService;
 import com.sca4d.core.api.storage.FileStatus;
@@ -71,10 +69,7 @@ import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -295,8 +290,8 @@ class PlatformUserProfilePersistenceIntegrationTest {
         }
 
         @Bean
-        Settings settings() {
-            return new DefaultSettings();
+        DefaultSource settings() {
+            return new DefaultSource();
         }
 
         @Bean
@@ -322,80 +317,45 @@ class PlatformUserProfilePersistenceIntegrationTest {
     }
 
     /** 始终返回设置定义默认值，避免头像持久化测试依赖 Settings 表内容。 */
-    private static final class DefaultSettings implements Settings {
-
+    private static final class DefaultSource implements SettingReader<String>, SettingWriter<String> {
         @Override
-        public <T> @NotNull T get(@NotNull SystemSetting<T> setting) {
-            return setting.defaultValue();
+        public @NotNull TreeCode code() {
+            return TreeCode.of("SETTING:TEST");
         }
 
         @Override
-        public <T> @NotNull SettingValue<T> inspect(@NotNull SystemSetting<T> setting) {
-            return defaultValue(setting, SettingOwner.system());
+        public @NotNull SettingValue<String> read(@NotNull TreeCode setting, @NotNull SettingOwner owner) {
+            return SettingValue.read(code(), setting, owner, null, 0, new Version(0), false);
         }
 
         @Override
-        public @NotNull SettingValues get(
-                @NotNull Collection<? extends SystemSetting<?>> settings) {
-            List<SettingValue<?>> values = new ArrayList<>();
-            for (SystemSetting<?> setting : settings) {
-                values.add(defaultValue(setting, SettingOwner.system()));
-            }
-            return new SettingValues(values);
-        }
-
-        @Override
-        public <T> @NotNull T get(@NotNull LogicSetting<T> setting, @NotNull SettingOwner owner) {
-            return setting.defaultValue();
-        }
-
-        @Override
-        public <T> @NotNull SettingValue<T> inspect(
-                @NotNull LogicSetting<T> setting,
-                @NotNull SettingOwner owner) {
-            return defaultValue(setting, owner);
-        }
-
-        @Override
-        public <T> @NotNull SettingValue<T> replace(
-                @NotNull SystemSetting<T> setting,
-                @NotNull T value) {
-            throw new UnsupportedOperationException("头像持久化测试不修改 Settings");
-        }
-
-        @Override
-        public <T> @NotNull SettingValue<T> replace(
-                @NotNull LogicSetting<T> setting,
+        public void replace(
+                @NotNull TreeCode setting,
                 @NotNull SettingOwner owner,
-                @NotNull T value) {
-            throw new UnsupportedOperationException("头像持久化测试不修改 Settings");
+                @NotNull String value,
+                int codecVersion,
+                boolean secret,
+                @NotNull Version expected) {
+            throw new UnsupportedOperationException("持久化测试不修改设置");
         }
 
         @Override
-        public @NotNull SettingValue<?> reset(@NotNull SystemSetting<?> setting) {
-            throw new UnsupportedOperationException("头像持久化测试不修改 Settings");
+        public void reset(
+                @NotNull TreeCode setting,
+                @NotNull SettingOwner owner,
+                int codecVersion,
+                @NotNull Version expected) {
+            throw new UnsupportedOperationException("持久化测试不修改设置");
         }
 
         @Override
-        public @NotNull SettingValue<?> reset(
-                @NotNull LogicSetting<?> setting,
-                @NotNull SettingOwner owner) {
-            throw new UnsupportedOperationException("头像持久化测试不修改 Settings");
-        }
-
-        @Override
-        public void erase(@NotNull LogicSetting<?> setting, @NotNull SettingOwner owner) {
-            throw new UnsupportedOperationException("头像持久化测试不修改 Settings");
-        }
-
-        /** 把设置定义转换为使用 Java 默认值的快照项。 */
-        private static <T> SettingValue<T> defaultValue(Setting<T> setting, SettingOwner owner) {
-            return new SettingValue<>(setting, owner, setting.defaultValue(), false, false, new Version(0));
+        public void erase(@NotNull TreeCode setting, @NotNull SettingOwner owner) {
+            throw new UnsupportedOperationException("持久化测试不修改设置");
         }
     }
 
     /** 使用 JVM 锁实现测试进程内相同 LockKey 的限时互斥。 */
-    private static final class LocalDistributedLock implements DistributedLock {
+    private static class LocalDistributedLock implements DistributedLock {
         private final Map<LockKey, ReentrantLock> locks = new ConcurrentHashMap<>();
 
         @Override
@@ -420,7 +380,7 @@ class PlatformUserProfilePersistenceIntegrationTest {
     }
 
     /** 在内存中保存文件内容，同时让文件状态继续使用 PostgreSQL Repository。 */
-    static final class TestFileStorage implements FileStorage {
+    static class TestFileStorage implements FileStorage {
         private final Map<Long, StorageObject> preparedUploads = new ConcurrentHashMap<>();
 
         private final Map<String, byte[]> contents = new ConcurrentHashMap<>();

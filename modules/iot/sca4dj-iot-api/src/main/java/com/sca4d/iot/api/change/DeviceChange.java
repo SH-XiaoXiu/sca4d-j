@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 保存一次已经提交的 Device 数据变化及其发生时间。 */
-public final class DeviceChange {
+public class DeviceChange {
 
     private final long deviceId;
 

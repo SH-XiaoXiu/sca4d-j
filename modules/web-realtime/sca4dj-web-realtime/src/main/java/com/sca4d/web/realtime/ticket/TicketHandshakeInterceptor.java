@@ -20,7 +20,7 @@ import java.util.Objects;
 
 /** 在 HTTP Upgrade 前校验 Origin，并原子消费一次性票据绑定 Session。 */
 @ApiStatus.Internal
-public final class TicketHandshakeInterceptor implements HandshakeInterceptor {
+public class TicketHandshakeInterceptor implements HandshakeInterceptor {
 
     /** 握手完成后保存 `Session` 的属性键。 */
     public static final String SESSION_ATTRIBUTE = TicketHandshakeInterceptor.class.getName() + ".session";

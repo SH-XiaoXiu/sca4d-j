@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 使用 OpenAPI Client 表和 Operation 关系检查当前调用。 */
-public final class OpenApiClientOperationCheckerImpl implements OpenApiClientOperationChecker {
+public class OpenApiClientOperationCheckerImpl implements OpenApiClientOperationChecker {
 
     private final @NotNull OpenApiClientService clients;
 

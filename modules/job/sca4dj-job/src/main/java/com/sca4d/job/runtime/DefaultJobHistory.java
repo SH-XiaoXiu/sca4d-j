@@ -2,9 +2,9 @@ package com.sca4d.job.runtime;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.job.JobHistory;
 import com.sca4d.core.api.job.JobNodeOutput;
-import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.job.ScheduledJobRun;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 使用当前 App 隔离名称的 Job Repository 返回类型化调度历史。 */
-public final class DefaultJobHistory implements JobHistory {
+public class DefaultJobHistory implements JobHistory {
 
     private final @NotNull JobRepository repository;
 

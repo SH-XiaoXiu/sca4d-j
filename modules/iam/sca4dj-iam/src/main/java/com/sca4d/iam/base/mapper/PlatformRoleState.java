@@ -11,7 +11,7 @@ import java.util.Objects;
 
 /** 保存 {@code platform_role} 的角色状态和权限字段。 */
 @SuppressWarnings("ClassCanBeRecord")
-public final class PlatformRoleState {
+public class PlatformRoleState {
 
     private final @NotNull Long id;
 

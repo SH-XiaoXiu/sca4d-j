@@ -12,7 +12,7 @@ import java.util.Objects;
  * 一条直接授予业务主体的资源动作权限。
  */
 @SuppressWarnings("ClassCanBeRecord")
-public final class AclEntry {
+public class AclEntry {
     private final @NotNull Long principalId;
 
     private final @NotNull TreeCode resourceType;

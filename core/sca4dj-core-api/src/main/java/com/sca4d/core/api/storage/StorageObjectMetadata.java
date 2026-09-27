@@ -6,7 +6,7 @@ import java.util.Objects;
 
 /** 描述存储实现实际读取到的对象媒体类型和大小。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class StorageObjectMetadata {
+public class StorageObjectMetadata {
     private final @NotNull String contentType;
 
     private final long sizeBytes;

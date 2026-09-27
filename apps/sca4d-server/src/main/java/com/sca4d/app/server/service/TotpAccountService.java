@@ -10,7 +10,6 @@ import com.sca4d.auth.totp.enrollment.TotpEnrollment;
 import com.sca4d.auth.totp.enrollment.TotpEnrollmentService;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
-import com.sca4d.core.api.setting.Settings;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,7 @@ import java.util.Objects;
 
 /** 组合 TOTP 模块与示例应用认证规则，限定所有自助操作属于当前 Account。 */
 @Service
-public final class TotpAccountService {
+public class TotpAccountService {
 
     private final TotpEnrollmentService enrollments;
 
@@ -28,7 +27,7 @@ public final class TotpAccountService {
 
     private final TotpQrCodeGenerator qrCodes;
 
-    private final Settings settings;
+    private final ProductSettings settings;
 
     /**
      * 创建当前 Account TOTP 应用服务。
@@ -44,7 +43,7 @@ public final class TotpAccountService {
             @NotNull TotpCredentialRepository credentials,
             @NotNull PlatformAuthenticationPolicyService policies,
             @NotNull TotpQrCodeGenerator qrCodes,
-            @NotNull Settings settings) {
+            @NotNull ProductSettings settings) {
         this.enrollments = Objects.requireNonNull(enrollments, "TOTP enrollment 服务不能为空");
         this.credentials = Objects.requireNonNull(credentials, "TOTP 凭据 Repository 不能为空");
         this.policies = Objects.requireNonNull(policies, "应用认证策略服务不能为空");
@@ -74,7 +73,7 @@ public final class TotpAccountService {
         String uri = enrollments.provisioningUri(
                 checkedAccountId,
                 enrollmentId,
-                settings.get(ProductSettings.TOTP_ISSUER),
+                settings.TOTP_ISSUER.get(),
                 "account-" + checkedAccountId);
         return qrCodes.generate(uri);
     }

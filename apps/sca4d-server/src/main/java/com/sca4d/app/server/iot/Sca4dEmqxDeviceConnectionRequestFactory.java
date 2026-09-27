@@ -26,7 +26,7 @@ import java.util.Objects;
 
 /** 把 EMQX CONNECT 字段映射为 Sca4d Server 安装的匿名、Session、Shared Secret 或 X.509 输入。 */
 @Component
-public final class Sca4dEmqxDeviceConnectionRequestFactory implements EmqxDeviceConnectionRequestFactory {
+public class Sca4dEmqxDeviceConnectionRequestFactory implements EmqxDeviceConnectionRequestFactory {
 
     /**
      * 把示例 App 约定的 MQTT username 解析为接入方式，并且只创建一种连接输入。

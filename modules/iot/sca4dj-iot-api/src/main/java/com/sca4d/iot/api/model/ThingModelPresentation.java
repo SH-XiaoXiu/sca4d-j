@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 把不可变物模型技术定义与按稳定路径索引的展示文本组合成读取结果。 */
-public final class ThingModelPresentation {
+public class ThingModelPresentation {
 
     private final @NotNull ThingModel model;
 

@@ -16,9 +16,8 @@ import com.sca4d.core.api.enums.BaseEnum;
 import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.name.code.TreeCode;
-import com.sca4d.core.api.setting.SettingOwner;
-import com.sca4d.core.api.setting.SettingValue;
-import com.sca4d.core.api.setting.Settings;
+import com.sca4d.core.api.setting.value.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingValue;
 import com.sca4d.core.spring.dictionary.DatabaseDictionaryOption;
 import com.sca4d.core.spring.dictionary.DictionaryMapper;
 import com.sca4d.core.spring.setting.SettingMapper;
@@ -180,7 +179,7 @@ class Sca4dApplicationStartupIntegrationTest {
     private DictionaryMapper dictionaryMapper;
 
     @Autowired
-    private Settings settings;
+    private AccountAuthenticationSettingConfiguration settings;
 
     @Autowired
     private PasskeyCredentialMapper passkeyCredentialMapper;
@@ -284,8 +283,7 @@ class Sca4dApplicationStartupIntegrationTest {
         assertThat(credential.signatureCount()).isEqualTo(7);
 
         SettingOwner accountOwner = new SettingOwner(Account.RESOURCE_TYPE, Long.toString(accountId));
-        SettingValue<AccountAuthenticationSettings> savedAuthentication = settings.replace(
-                AccountAuthenticationSettingConfiguration.ACCOUNT_POLICY,
+        SettingValue<AccountAuthenticationSettings> savedAuthentication = settings.ACCOUNT_POLICY.replace(
                 accountOwner,
                 new AccountAuthenticationSettings(
                         2,

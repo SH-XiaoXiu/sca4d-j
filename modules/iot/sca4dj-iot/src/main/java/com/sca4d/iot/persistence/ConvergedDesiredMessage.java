@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存一次批量 desired 收敛 SQL 返回的属性编码和待确认下行消息标识。 */
-public final class ConvergedDesiredMessage {
+public class ConvergedDesiredMessage {
 
     private final @NotNull String propertyCode;
 

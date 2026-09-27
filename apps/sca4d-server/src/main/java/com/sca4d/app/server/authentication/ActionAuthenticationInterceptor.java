@@ -16,7 +16,7 @@ import org.springframework.web.method.HandlerMethod;
 import java.util.Objects;
 
 /** 在 Controller 参数绑定前单次消费 `@RequireAuthentication` 声明的动作认证结果。 */
-public final class ActionAuthenticationInterceptor extends CallHandlerInterceptor {
+public class ActionAuthenticationInterceptor extends CallHandlerInterceptor {
 
     private final ActionAuthenticationService authentications;
 

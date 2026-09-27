@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 按 Product code 把只读代码物模型和数据库物模型组合为唯一读写入口。 */
-public final class CompositeThingModelRepository implements ThingModelRepository {
+public class CompositeThingModelRepository implements ThingModelRepository {
 
     private final @NotNull ProductDefinitionCatalog products;
 

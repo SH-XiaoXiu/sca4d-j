@@ -5,7 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 /** 构造交给具体 App 生成二维码的标准 otpauth URI。 */
-final class TotpProvisioningUri {
+class TotpProvisioningUri {
 
     private TotpProvisioningUri() {
     }

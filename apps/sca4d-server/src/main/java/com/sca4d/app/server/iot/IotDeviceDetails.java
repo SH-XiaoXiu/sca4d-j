@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 把公共 Device 与 Sca4d Server 启停 Profile 组合成应用查询结果。 */
-public final class IotDeviceDetails {
+public class IotDeviceDetails {
 
     private final @NotNull Device device;
 

@@ -10,7 +10,7 @@ import java.nio.ByteOrder;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /** 模拟字段残缺、顺序不定且上下行格式不对称的旧冷柜固件。 */
-public final class LegacyFreezerDeviceSimulator extends MqttDeviceSimulator {
+public class LegacyFreezerDeviceSimulator extends MqttDeviceSimulator {
 
     private static final Logger LOG = LoggerFactory.getLogger(LegacyFreezerDeviceSimulator.class);
 

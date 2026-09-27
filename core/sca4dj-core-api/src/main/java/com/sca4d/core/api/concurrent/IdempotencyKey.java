@@ -3,7 +3,7 @@ package com.sca4d.core.api.concurrent;
 import com.sca4d.core.api.utils.TextUtils;
 
 /** 一次幂等操作的不透明键。 */
-public final class IdempotencyKey {
+public class IdempotencyKey {
 
     private final String value;
 

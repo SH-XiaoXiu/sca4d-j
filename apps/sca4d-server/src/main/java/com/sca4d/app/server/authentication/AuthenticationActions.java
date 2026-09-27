@@ -4,8 +4,12 @@ import com.sca4d.core.api.authentication.AuthenticationActionCode;
 import com.sca4d.core.api.plugin.PluginApiType;
 
 /** 定义示例应用要求认证的稳定动作编码。 */
+<<<<<<< HEAD
 @PluginApiType
 public final class AuthenticationActions {
+=======
+public class AuthenticationActions {
+>>>>>>> dev
 
     /** 建立 Session 前必须完成的登录认证动作编码。 */
     public static final String LOGIN_CODE = "ACCOUNT.LOGIN";

@@ -8,7 +8,7 @@ import java.time.Duration;
 import java.util.Objects;
 
 /** 保存一次幂等处理权竞争的状态以及对应状态允许读取的数据。 */
-public final class IdempotencyBeginResult<T> {
+public class IdempotencyBeginResult<T> {
 
     private final @NotNull IdempotencyBeginStatus status;
 

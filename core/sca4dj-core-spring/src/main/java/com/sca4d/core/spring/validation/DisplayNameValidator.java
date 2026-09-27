@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /** 执行 DisplayName 声明的长度和控制字符检查。 */
-public final class DisplayNameValidator implements ConstraintValidator<DisplayName, String> {
+public class DisplayNameValidator implements ConstraintValidator<DisplayName, String> {
 
     private int max;
 

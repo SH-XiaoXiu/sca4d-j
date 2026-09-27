@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /** 按 SQL 条目和绑定参数限制分批执行 Repository 已经确定的数据库操作。 */
-public final class SqlBatches {
+public class SqlBatches {
 
     private final int maxItems;
 

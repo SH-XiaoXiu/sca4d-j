@@ -11,7 +11,7 @@ import java.util.Objects;
 
 /** 返回 Platform Account 的用户名、状态和 App 资料。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
-public final class PlatformAccountView {
+public class PlatformAccountView {
 
     private final long id;
 

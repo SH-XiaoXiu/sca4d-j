@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.Set;
 
 /** 保存模板源完成语法检查后引用的变量名称。 */
-public final class TemplateInspection {
+public class TemplateInspection {
 
     private final @NotNull Set<@NotNull String> variables;
 

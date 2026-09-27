@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 
 /** 使用 Redis TTL 保存认证尝试，并以自动续租的分布式锁串行修改同一尝试。 */
 @ApiStatus.Internal
-public final class RedisAuthenticationAttemptStore {
+public class RedisAuthenticationAttemptStore {
 
     private static final Duration ACQUIRE_TIMEOUT = Duration.ofSeconds(2);
 

@@ -13,7 +13,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 /** 保留 `Accept-Language` 请求 Locale，让动态数据可以使用静态消息目录之外的语言。 */
-public final class RequestLocaleResolver implements LocaleResolver {
+public class RequestLocaleResolver implements LocaleResolver {
 
     private final @NotNull Locale defaultLocale;
 

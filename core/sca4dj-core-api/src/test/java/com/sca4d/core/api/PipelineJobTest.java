@@ -192,7 +192,7 @@ class PipelineJobTest {
     }
 
     /** 使用测试传入计划的 PipelineJob。 */
-    private static final class TestPipelineJob extends PipelineJob<Integer, String> {
+    private static class TestPipelineJob extends PipelineJob<Integer, String> {
 
         private final PipelineJobPlan<Integer, String> plan;
 

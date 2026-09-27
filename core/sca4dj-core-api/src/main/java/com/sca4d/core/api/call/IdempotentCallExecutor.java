@@ -19,7 +19,7 @@ import java.util.Objects;
 import java.util.concurrent.Callable;
 
 /** 执行 `@Idempotent` 的处理权取得、结果重放、成功保存和失败释放。 */
-public final class IdempotentCallExecutor {
+public class IdempotentCallExecutor {
 
     private static final Logger LOG = LoggerFactory.getLogger(IdempotentCallExecutor.class);
 

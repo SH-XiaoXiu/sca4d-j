@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 返回客户端可以原样执行的文件上传请求。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class FileUpload {
+public class FileUpload {
     private final long fileId;
 
     private final @NotNull String method;

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 保存一次 SMS Provider 尝试的状态和查询所需的外部标识。 */
-public final class SmsDeliveryAttempt {
+public class SmsDeliveryAttempt {
     private final @NotNull SmsDeliveryStatus status;
 
     private final @Nullable String requestId;

@@ -9,7 +9,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 请求 Web Realtime 把一个浏览器事件交给当前匹配目标的在线连接。 */
-public final class WebRealtimeMessage extends Message {
+public class WebRealtimeMessage extends Message {
 
     public static final @NotNull TreeCode CODE = TreeCode.of("WEB_REALTIME/PUBLISH");
 

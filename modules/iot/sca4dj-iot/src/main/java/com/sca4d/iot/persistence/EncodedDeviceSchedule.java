@@ -8,7 +8,7 @@ import java.time.Instant;
 
 /** 映射一条设备定时规则的持久化状态。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class EncodedDeviceSchedule {
+public class EncodedDeviceSchedule {
 
     private final long scheduleId;
 

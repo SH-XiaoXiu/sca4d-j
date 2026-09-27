@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 保存管理端展示一个代码字典或动态字典所需的数据、选项和乐观锁版本。 */
-public final class ManagedDictionary {
+public class ManagedDictionary {
 
     private final String key;
 

@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 import org.jetbrains.annotations.NotNull;
 
 /** 接收创建动态字典时提交的稳定键、名称、状态和顺序。 */
-public final class CreateDictionaryRequest {
+public class CreateDictionaryRequest {
 
     @NotBlank
     @Size(max = 160)

@@ -11,7 +11,7 @@ import java.util.Objects;
  * 表示审计记录使用的稳定业务操作，不参与权限判断。
  */
 @SuppressWarnings("ClassCanBeRecord") // 项目禁止使用 Java record，保留普通 class。
-public final class AuditOperation implements Resource {
+public class AuditOperation implements Resource {
 
     /**
      * 审计操作使用的资源类型。

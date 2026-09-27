@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /** 保存 EMQX HTTP Authenticator 转发的 MQTT CONNECT 和公开客户端证书字段。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class EmqxAuthenticationRequest {
+public class EmqxAuthenticationRequest {
 
     private final @NotNull String clientId;
 

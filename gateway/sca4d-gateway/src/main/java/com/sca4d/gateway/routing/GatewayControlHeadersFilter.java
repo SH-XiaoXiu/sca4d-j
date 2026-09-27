@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 /** 删除客户端提交的 Gateway 控制 Header，不向未声明信任的路由写入内部值。 */
 @Component
-public final class GatewayControlHeadersFilter implements GlobalFilter, Ordered {
+public class GatewayControlHeadersFilter implements GlobalFilter, Ordered {
 
     /** @return 在路由匹配和 Gateway 内置 ForwardedHeadersFilter 之前执行 */
     @Override

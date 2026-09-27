@@ -15,7 +15,7 @@ import java.util.Objects;
 /** 接收 Platform 角色 ACTION 的完整替换集合。 */
 @Schema(name = "ReplacePlatformRolePermissionsRequest")
 @SuppressWarnings("unused") // Jackson 通过 JavaBean setter 反序列化请求。
-public final class ReplaceRolePermissionsRequest {
+public class ReplaceRolePermissionsRequest {
 
     @Req.NotNull
     private @Nullable List<@NotBlank @NotNull String> permissionCodes = new ArrayList<>();

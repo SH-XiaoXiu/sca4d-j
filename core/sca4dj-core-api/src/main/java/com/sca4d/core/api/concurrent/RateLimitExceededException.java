@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Duration;
 
 /** 表示调用没有取得全部限流额度，并携带调用方再次尝试前的等待秒数。 */
-public final class RateLimitExceededException extends BusinessException {
+public class RateLimitExceededException extends BusinessException {
 
     private final long retryAfterSeconds;
 

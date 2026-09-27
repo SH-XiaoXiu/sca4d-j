@@ -8,7 +8,7 @@ import com.sca4d.core.api.error.CoreErrorCode;
  *
  * <p>持久化实现应在同一次原子写入中比较 {@link Version} 并更新数据；写入未命中预期版本时抛出本异常。
  */
-public final class OptimisticLockException extends BusinessException {
+public class OptimisticLockException extends BusinessException {
 
     /**
      * 创建乐观锁异常。

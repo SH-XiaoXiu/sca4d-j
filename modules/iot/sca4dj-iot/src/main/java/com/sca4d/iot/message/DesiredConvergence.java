@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 表示一个 desired 属性已与 reported 相等并需要确认当前下行消息。 */
-public final class DesiredConvergence {
+public class DesiredConvergence {
 
     private final @NotNull String propertyCode;
 

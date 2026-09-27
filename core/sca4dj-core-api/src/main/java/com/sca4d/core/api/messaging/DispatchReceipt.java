@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /** 返回 MessageBus 已完成的发布阶段和 Id。 */
 @SuppressWarnings("ClassCanBeRecord")
-public final class DispatchReceipt {
+public class DispatchReceipt {
 
     public enum Status {
         BROKER_ACCEPTED,

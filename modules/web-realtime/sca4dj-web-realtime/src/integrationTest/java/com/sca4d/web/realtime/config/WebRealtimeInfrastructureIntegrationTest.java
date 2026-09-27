@@ -14,6 +14,7 @@ import com.sca4d.core.api.authentication.SessionLifecycle;
 import com.sca4d.core.api.connection.ConnectionId;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.event.EventType;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
@@ -24,7 +25,6 @@ import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.DispatchReceipt;
 import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.MessageBus;
-import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.Name;
 import com.sca4d.core.api.name.code.TreeCode;
@@ -642,7 +642,7 @@ class WebRealtimeInfrastructureIntegrationTest {
     /**
      * 保存节点投递，供测试线程等待并检查。
      */
-    private static final class TestConnection implements LocalConnection {
+    private static class TestConnection implements LocalConnection {
         private final ConnectionId id;
 
         private final BlockingQueue<BrowserWrite> deliveries = new LinkedBlockingQueue<>();
@@ -683,7 +683,7 @@ class WebRealtimeInfrastructureIntegrationTest {
     /**
      * 允许测试推进 Redis 索引使用的逻辑时间。
      */
-    private static final class MutableClock extends Clock {
+    private static class MutableClock extends Clock {
         private Instant instant;
 
         private MutableClock(Instant instant) {

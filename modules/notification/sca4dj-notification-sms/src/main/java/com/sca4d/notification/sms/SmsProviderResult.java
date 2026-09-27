@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 保存 Provider API 接受、拒绝或结果未知及其非敏感标识。 */
-public final class SmsProviderResult {
+public class SmsProviderResult {
     private final @NotNull SmsDeliveryStatus status;
 
     private final @Nullable String requestId;

@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 向 DirectJob 明确提供当前持久化运行和尝试事实。 */
 @SuppressWarnings({"ClassCanBeRecord", "unused"})
-public final class JobExecution {
+public class JobExecution {
 
     private final @NotNull Id runId;
 

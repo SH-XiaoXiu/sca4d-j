@@ -18,7 +18,7 @@ import java.util.Objects;
 /** 把 Core 声明和 `@IfMatch` 方法交给固定 `CallLifecycle`。 */
 @Aspect
 @Order(Ordered.HIGHEST_PRECEDENCE + 200)
-public final class CallLifecycleAspect {
+public class CallLifecycleAspect {
 
     private static final String CALL_DECLARATIONS = "@annotation(com.sca4d.core.api.annotation.AnonymousAccess)"
             + " || @within(com.sca4d.core.api.annotation.AnonymousAccess)"
@@ -103,7 +103,7 @@ public final class CallLifecycleAspect {
     }
 
     /** 保存不能由 `Callable` 直接声明的非 `Exception` 失败。 */
-    private static final class WrappedThrowable extends RuntimeException {
+    private static class WrappedThrowable extends RuntimeException {
 
         /** @param cause 业务方法抛出的原始失败 */
         private WrappedThrowable(Throwable cause) {

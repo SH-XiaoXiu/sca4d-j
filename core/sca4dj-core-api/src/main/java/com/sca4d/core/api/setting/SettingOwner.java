@@ -15,7 +15,7 @@ import java.util.Objects;
  * 保存设置归属者使用的稳定类型和类型内唯一标识。
  */
 @SuppressWarnings("ClassCanBeRecord") // 项目禁止使用 Java record。
-public final class SettingOwner {
+public class SettingOwner {
 
     private static final SettingOwner SYSTEM = new SettingOwner(
             Subject.SYSTEM.type().code(),

@@ -16,7 +16,7 @@ import java.util.Objects;
  * @param <I> Job 输入类型
  * @param <O> Job 输出类型
  */
-public final class JobSchedule<I, O> {
+public class JobSchedule<I, O> {
 
     private final @NotNull ScheduleKey key;
 

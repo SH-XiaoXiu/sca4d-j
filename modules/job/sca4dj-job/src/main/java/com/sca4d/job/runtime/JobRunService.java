@@ -2,9 +2,9 @@ package com.sca4d.job.runtime;
 
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.job.Job;
 import com.sca4d.core.api.job.JobKey;
-import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.job.JobRunStatus;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.scheduling.OverlapPolicy;
@@ -26,7 +26,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 编排 Job 创建、租约和状态转换，并为每个完整动作设置事务边界。 */
-public final class JobRunService {
+public class JobRunService {
 
     private static final Duration LOCK_WAIT = Duration.ofSeconds(10);
 

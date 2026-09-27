@@ -23,7 +23,7 @@ import java.util.Optional;
 
 /** 把短期一次性 WebSocket 票据保存到 Redis，并在握手时原子读取和删除。 */
 @ApiStatus.Internal
-public final class RedisTicketService implements WebRealtimeTicketService {
+public class RedisTicketService implements WebRealtimeTicketService {
 
     private static final DefaultRedisScript<String> CONSUME = consumeScript();
 

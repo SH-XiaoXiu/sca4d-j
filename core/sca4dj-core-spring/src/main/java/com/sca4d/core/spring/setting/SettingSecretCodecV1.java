@@ -4,11 +4,11 @@ import com.sca4d.core.api.codec.SecretCodec;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.security.EncryptedSecret;
 import com.sca4d.core.api.security.SecretCipher;
-import com.sca4d.core.api.setting.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingOwner;
 import org.jetbrains.annotations.NotNull;
 
 /** 使用旧的 Setting key 上下文读取版本一敏感设置密文，供历史数据和显式迁移使用。 */
-public final class SettingSecretCodecV1 implements SecretCodec<byte[]> {
+public class SettingSecretCodecV1 implements SecretCodec<byte[]> {
 
     private static final @NotNull TreeCode CODE = TreeCode.of("SETTING/SECRET");
 

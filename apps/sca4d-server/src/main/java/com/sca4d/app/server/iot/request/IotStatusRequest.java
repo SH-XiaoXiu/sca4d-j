@@ -5,7 +5,7 @@ import com.sca4d.core.spring.validation.Req;
 
 /** 接收 Product 或 Device App Profile 的目标启停状态。 */
 @SuppressWarnings("unused")
-public final class IotStatusRequest {
+public class IotStatusRequest {
 
     @Req.NotNull
     private IotProfileStatus status;

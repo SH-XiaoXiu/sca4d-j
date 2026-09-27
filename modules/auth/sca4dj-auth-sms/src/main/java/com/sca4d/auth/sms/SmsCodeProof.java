@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存一次认证提交使用的 SMS Challenge 标识和原始六位验证码。 */
-public final class SmsCodeProof {
+public class SmsCodeProof {
     private final @NotNull SmsCodeChallengeId challengeId;
 
     private final @NotNull String code;

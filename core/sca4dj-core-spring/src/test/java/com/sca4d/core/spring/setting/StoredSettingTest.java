@@ -3,7 +3,7 @@ package com.sca4d.core.spring.setting;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.sca4d.core.api.name.code.TreeCode;
-import com.sca4d.core.api.setting.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingOwner;
 import org.junit.jupiter.api.Test;
 
 /** 验证数据库中的单段系统 owner 与层级资源 owner 均可读取。 */

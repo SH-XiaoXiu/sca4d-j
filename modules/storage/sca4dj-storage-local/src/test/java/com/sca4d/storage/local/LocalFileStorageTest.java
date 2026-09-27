@@ -124,7 +124,7 @@ class LocalFileStorageTest extends FileStorageContract {
     }
 
     /** 为本地存储契约测试返回固定的 App 传输地址。 */
-    private static final class FixedTransferSigner implements StorageTransferSigner {
+    private static class FixedTransferSigner implements StorageTransferSigner {
         @Override
         public @NotNull URI uploadUrl(long fileId, @NotNull Instant expiresAt) {
             return URI.create("http://localhost/files/transfers/uploads?token=" + fileId);

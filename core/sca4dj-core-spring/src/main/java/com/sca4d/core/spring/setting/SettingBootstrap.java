@@ -1,10 +1,11 @@
 package com.sca4d.core.spring.setting;
 
+import com.sca4d.core.api.name.NameFormat;
 import com.sca4d.core.api.security.EncryptedSecret;
 import com.sca4d.core.api.security.SecretCipher;
 import com.sca4d.core.api.security.SecretKeyring;
-import com.sca4d.core.api.setting.SettingOwner;
-import com.sca4d.core.api.setting.SystemSetting;
+import com.sca4d.core.api.setting.definition.SystemSetting;
+import com.sca4d.core.api.setting.value.SettingOwner;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -85,10 +86,10 @@ public class SettingBootstrap {
                 throw new IllegalStateException("设置 INIT 只接受 true；不初始化时应删除标记: " + variable);
             }
             if (initialize == BootstrapFlag.ENABLED) {
-                DatabaseSettings.EncodedSetting encoded = encoded(setting, requiredValue(variable, rawValue));
+                DatabaseSettingStore.EncodedSetting encoded = encoded(setting, requiredValue(variable, rawValue));
                 repository.initializeSystem(
-                        setting.key(),
-                        setting.schemaVersion(),
+                        setting.code().format(NameFormat.COLON),
+                        setting.codec().version(),
                         encoded.text(),
                         encoded.keyId(),
                         encoded.ciphertext(),
@@ -97,10 +98,10 @@ public class SettingBootstrap {
                 continue;
             }
             if (synchronize == BootstrapFlag.ENABLED) {
-                DatabaseSettings.EncodedSetting encoded = encoded(setting, requiredValue(variable, rawValue));
+                DatabaseSettingStore.EncodedSetting encoded = encoded(setting, requiredValue(variable, rawValue));
                 repository.synchronizeSystem(
-                        setting.key(),
-                        setting.schemaVersion(),
+                        setting.code().format(NameFormat.COLON),
+                        setting.codec().version(),
                         encoded.text(),
                         encoded.keyId(),
                         encoded.ciphertext(),
@@ -109,7 +110,7 @@ public class SettingBootstrap {
                 continue;
             }
             if (synchronize == BootstrapFlag.DISABLED) {
-                repository.releaseSystemSynchronization(setting.key());
+                repository.releaseSystemSynchronization(setting.code().format(NameFormat.COLON));
                 released++;
                 continue;
             }
@@ -152,7 +153,7 @@ public class SettingBootstrap {
     /**
      * 使用设置编解码器校验 ENV，并为敏感值生成 V2 持久化密文。
      */
-    private <T> DatabaseSettings.@NotNull EncodedSetting encoded(
+    private <T> DatabaseSettingStore.@NotNull EncodedSetting encoded(
             @NotNull SystemSetting<T> setting,
             @NotNull String rawValue) {
         T value;
@@ -161,20 +162,21 @@ public class SettingBootstrap {
         } catch (IllegalArgumentException exception) {
             throw new IllegalStateException("Settings ENV 值不合法: " + setting.environmentVariable(), exception);
         }
-        String text = setting.codec().encode(setting.pipeline().run(value));
+        String text = setting.codec().encode(setting.validate(value));
         if (!setting.secret()) {
-            return new DatabaseSettings.EncodedSetting(text, null, null, null);
+            return new DatabaseSettingStore.EncodedSetting(text, null, null, null);
         }
         if (keyring == null) {
-            throw new IllegalStateException("初始化节点声明了敏感设置但没有 SecretKeyring: " + setting.key());
+            throw new IllegalStateException(
+                    "初始化节点声明了敏感设置但没有 SecretKeyring: " + setting.code().format(NameFormat.COLON));
         }
         SecretCipher cipher = keyring.activeCipher();
         SettingSecretCodecCatalog codecs = new SettingSecretCodecCatalog(
                 cipher,
                 SettingOwner.system(),
-                setting.key());
+                setting.code().format(NameFormat.COLON));
         EncryptedSecret encrypted = codecs.current().encode(text.getBytes(StandardCharsets.UTF_8));
-        return new DatabaseSettings.EncodedSetting(
+        return new DatabaseSettingStore.EncodedSetting(
                 null,
                 encrypted.keyId(),
                 encrypted.ciphertext(),

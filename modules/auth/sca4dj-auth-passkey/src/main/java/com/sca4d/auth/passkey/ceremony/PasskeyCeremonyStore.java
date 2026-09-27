@@ -12,7 +12,6 @@ import com.sca4d.auth.passkey.config.PasskeySettings;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
-import com.sca4d.core.api.setting.Settings;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -25,7 +24,7 @@ import java.util.UUID;
 /**
  * 使用 Redis TTL 保存 WebAuthn ceremony，并在校验前通过 GETDEL 原子消费。
  */
-public final class PasskeyCeremonyStore {
+public class PasskeyCeremonyStore {
 
     private final RedisTemplate<Key, String> redis;
 
@@ -33,7 +32,7 @@ public final class PasskeyCeremonyStore {
 
     private final Clock clock;
 
-    private final Settings settings;
+    private final PasskeySettings settings;
 
     private static final TreeCode REGISTRATION = TreeCode.ofColon("PASSKEY:REGISTRATION");
 
@@ -51,7 +50,7 @@ public final class PasskeyCeremonyStore {
             @NotNull RedisTemplate<Key, String> redis,
             @NotNull ObjectMapper objectMapper,
             @NotNull Clock clock,
-            @NotNull Settings settings) {
+            @NotNull PasskeySettings settings) {
         this.redis = Objects.requireNonNull(redis, "Redis 操作不能为空");
         this.objectMapper = Objects.requireNonNull(objectMapper, "Passkey JSON 映射器不能为空");
         this.clock = Objects.requireNonNull(clock, "时钟不能为空");
@@ -105,7 +104,7 @@ public final class PasskeyCeremonyStore {
      * 使用随机标识和 TTL 保存 ceremony；连续冲突时拒绝创建。
      */
     private StoredCeremony store(TreeCode prefix, ObjectNode payload) {
-        Duration ttl = settings.get(PasskeySettings.CEREMONY_TTL);
+        Duration ttl = settings.CEREMONY_TTL.get();
         Instant expiresAt = clock.instant().plus(ttl);
         for (int attempt = 0; attempt < 3; attempt++) {
             PasskeyCeremonyId id = new PasskeyCeremonyId(UUID.randomUUID().toString());
@@ -160,7 +159,7 @@ public final class PasskeyCeremonyStore {
     /**
      * 保存 ceremony 后返回不透明标识和过期时间。
      */
-    public static final class StoredCeremony {
+    public static class StoredCeremony {
         private final PasskeyCeremonyId id;
 
         private final Instant expiresAt;
@@ -188,7 +187,7 @@ public final class PasskeyCeremonyStore {
     /**
      * 原子消费后恢复的 registration 账号和 Yubico request。
      */
-    public static final class RegistrationCeremony {
+    public static class RegistrationCeremony {
         private final long accountId;
 
         private final String requestJson;

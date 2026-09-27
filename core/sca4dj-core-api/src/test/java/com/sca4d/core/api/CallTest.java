@@ -156,7 +156,7 @@ class CallTest {
                 STARTED_AT.plusSeconds(3600));
     }
 
-    private static final class Identity {
+    private static class Identity {
         private final Subject subject;
 
         private final Account account;
@@ -170,7 +170,7 @@ class CallTest {
         }
     }
 
-    private static final class TestPrincipal implements Principal {
+    private static class TestPrincipal implements Principal {
         private final long id;
 
         private TestPrincipal(long id) {
@@ -183,7 +183,7 @@ class CallTest {
         }
     }
 
-    private static final class OtherPrincipal implements Principal {
+    private static class OtherPrincipal implements Principal {
         private final long id;
 
         private OtherPrincipal(long id) {

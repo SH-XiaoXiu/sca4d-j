@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 使用 Redis Hash TTL 和 Lua 原子消费 Email Code Challenge。 */
-public final class RedisEmailCodeChallengeStore {
+public class RedisEmailCodeChallengeStore {
 
     private static final DefaultRedisScript<Long> VERIFY = verifyScript();
 

@@ -14,7 +14,7 @@ import java.util.Objects;
 /**
  * 汇总 ACL 认领的资源类型并在启动时拒绝冲突。
  */
-public final class AclResourceTypes {
+public class AclResourceTypes {
     private final @NotNull @Unmodifiable Map<@NotNull TreeCode, @NotNull DomainScope> scopes;
 
     /**

@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 解析列表接口的 {@code page}、{@code size} 和重复 {@code sort} 查询参数。 */
-public final class ListParametersArgumentResolver implements HandlerMethodArgumentResolver {
+public class ListParametersArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final @NotNull PageRequestArgumentResolver pages;
 

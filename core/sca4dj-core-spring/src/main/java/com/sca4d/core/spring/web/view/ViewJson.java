@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 /** 使用当前 HTTP ObjectMapper 和 DataOps 定制 BaseView 的最终 JSON。 */
-public final class ViewJson {
+public class ViewJson {
 
     private final ObjectMapper objectMapper;
 

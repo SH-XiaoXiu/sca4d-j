@@ -9,7 +9,7 @@ import java.net.URI;
 import java.util.Map;
 
 /** 把租约注册表中的健康 Server 实例转换为 Spring Cloud LoadBalancer 实例。 */
-public final class GatewayServiceInstance implements ServiceInstance {
+public class GatewayServiceInstance implements ServiceInstance {
 
     private final @NotNull GatewayInstance instance;
 

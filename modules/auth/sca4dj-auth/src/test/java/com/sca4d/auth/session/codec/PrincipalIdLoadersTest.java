@@ -71,7 +71,7 @@ class PrincipalIdLoadersTest {
 
     /** 为测试返回固定 Principal 类型和标识。 */
     @SuppressWarnings("ClassCanBeRecord") // 项目禁止使用 Java record，保留普通测试类型。
-    private static final class FixedLoader<P extends Principal> implements PrincipalIdLoader<P> {
+    private static class FixedLoader<P extends Principal> implements PrincipalIdLoader<P> {
         private final Class<P> type;
 
         private final Collection<Long> ids;
@@ -98,7 +98,7 @@ class PrincipalIdLoadersTest {
     }
 
     /** 测试使用的第一种 Principal。 */
-    private static final class TestPrincipal implements Principal {
+    private static class TestPrincipal implements Principal {
         @Override
         public long principalId() {
             return 31;
@@ -106,7 +106,7 @@ class PrincipalIdLoadersTest {
     }
 
     /** 测试使用的第二种 Principal。 */
-    private static final class OtherPrincipal implements Principal {
+    private static class OtherPrincipal implements Principal {
         @Override
         public long principalId() {
             return 41;
@@ -114,7 +114,7 @@ class PrincipalIdLoadersTest {
     }
 
     /** 验证空标识集合不会进入 Session 的 Principal。 */
-    private static final class EmptyPrincipal implements Principal {
+    private static class EmptyPrincipal implements Principal {
         @Override
         public long principalId() {
             return 51;

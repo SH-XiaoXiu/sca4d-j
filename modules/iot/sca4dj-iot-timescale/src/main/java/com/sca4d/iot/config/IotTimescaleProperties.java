@@ -6,7 +6,7 @@ import java.time.Duration;
 
 /** 保存 IoT 历史功能和清理参数；数据库连接由动态数据源配置负责。 */
 @ConfigurationProperties("sca4dj.iot.timescale")
-public final class IotTimescaleProperties {
+public class IotTimescaleProperties {
 
     private boolean enabled;
 

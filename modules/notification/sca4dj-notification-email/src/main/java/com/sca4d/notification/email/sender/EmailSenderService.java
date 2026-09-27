@@ -225,7 +225,7 @@ public class EmailSenderService {
     }
 
     /** 保存已经规范化但尚未持久化的 SMTP 文本字段。 */
-    private static final class CheckedSender {
+    private static class CheckedSender {
         private final @NotNull String name;
 
         private final @NotNull String host;

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 在 Redis key 字节边界应用 App 隔离及模块声明的 Cluster 同槽分组。 */
-public final class KeyRedisSerializer implements RedisSerializer<Key> {
+public class KeyRedisSerializer implements RedisSerializer<Key> {
 
     private final @NotNull List<RedisHashTag> hashTags;
 

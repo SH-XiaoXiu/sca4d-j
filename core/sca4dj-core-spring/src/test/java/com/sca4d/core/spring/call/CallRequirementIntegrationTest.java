@@ -92,7 +92,7 @@ class CallRequirementIntegrationTest {
     /**
      * 提供普通、嵌套和版本保护方法声明。
      */
-    private static final class Fixture {
+    private static class Fixture {
 
         private void plain() {
         }
@@ -108,7 +108,7 @@ class CallRequirementIntegrationTest {
     /**
      * 表示测试中的设备集合资源。
      */
-    private static final class DeviceCollection implements Resource {
+    private static class DeviceCollection implements Resource {
 
         @Override
         public @NotNull TreeCode type() {
@@ -124,7 +124,7 @@ class CallRequirementIntegrationTest {
     /**
      * 表示测试中的设备数据范围。
      */
-    private static final class DeviceScope implements ResourceScope {
+    private static class DeviceScope implements ResourceScope {
 
         @Override
         public TreeCode resourceType() {

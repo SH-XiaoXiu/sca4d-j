@@ -1,5 +1,6 @@
 package com.sca4d.iam.config;
 
+import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SystemPrincipal;
 import com.sca4d.core.api.identity.SystemPrincipals;
 import com.sca4d.core.api.name.code.TreeCode;
@@ -18,7 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 在全部单例和数据库迁移完成后、SmartLifecycle 启动前发布系统身份。 */
-public final class SystemIdentityInitializer implements SmartInitializingSingleton {
+public class SystemIdentityInitializer implements SmartInitializingSingleton {
 
     private static final Logger LOG = LoggerFactory.getLogger(SystemIdentityInitializer.class);
 
@@ -54,8 +55,9 @@ public final class SystemIdentityInitializer implements SmartInitializingSinglet
      */
     @Override
     public void afterSingletonsInstantiated() {
+        Subject.configureSystemId(properties.getSystemSubjectId());
         Map<TreeCode, Long> configured = new LinkedHashMap<>();
-        configured.put(SystemPrincipals.MAIN, 1L);
+        configured.put(SystemPrincipals.MAIN, properties.getSystemPrincipalIds().getOrDefault("MAIN", 1L));
         properties.getSystemPrincipalIds().forEach((text, id) -> {
             TreeCode code = TreeCode.of(text);
             if (code.hasNode(TreeCode.ofSegment("*")) || id == null || id <= 0) {

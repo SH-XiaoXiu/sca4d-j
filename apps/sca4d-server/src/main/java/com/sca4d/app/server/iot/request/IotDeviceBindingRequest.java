@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 接收停用 Device 的目标物模型版本和设备协议 code。 */
 @SuppressWarnings("unused")
-public final class IotDeviceBindingRequest {
+public class IotDeviceBindingRequest {
 
     private int thingModelVersion;
 

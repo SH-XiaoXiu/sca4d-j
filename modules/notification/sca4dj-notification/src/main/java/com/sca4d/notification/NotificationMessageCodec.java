@@ -31,7 +31,7 @@ import java.util.stream.StreamSupport;
 /**
  * 把 NotificationMessage 编解码为 RabbitMQ 与 Outbox 使用的稳定 JSON payload。
  */
-public final class NotificationMessageCodec implements MessageCodec<NotificationMessage> {
+public class NotificationMessageCodec implements MessageCodec<NotificationMessage> {
 
     private final @NotNull ObjectMapper json;
 

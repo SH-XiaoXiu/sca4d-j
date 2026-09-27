@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 保存 Platform Account 目录返回的身份、用户名和状态。 */
 @SuppressWarnings("ClassCanBeRecord")
-public final class PlatformAccountEntry {
+public class PlatformAccountEntry {
 
     private final @NotNull Long accountId;
 

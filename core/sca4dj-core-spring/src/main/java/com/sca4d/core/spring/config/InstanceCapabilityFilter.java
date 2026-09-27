@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 在业务 API 入口检查本实例能力，不替代认证、权限或 Gateway 回调校验。 */
-public final class InstanceCapabilityFilter extends OncePerRequestFilter {
+public class InstanceCapabilityFilter extends OncePerRequestFilter {
 
     private final @NotNull InstanceCapabilities capabilities;
 

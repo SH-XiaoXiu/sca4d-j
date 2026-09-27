@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * 保存可安全返回给管理调用方的 SMTP 地址、发件资料、状态和版本。
  */
-public final class EmailSender {
+public class EmailSender {
 
     /**
      * Email Sender 审计使用的稳定资源类型。

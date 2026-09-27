@@ -8,7 +8,7 @@ import java.util.Objects;
 
 /** 返回不包含完整手机号和验证码的 SMS Challenge。 */
 @SuppressWarnings("unused")
-public final class SmsCodeChallengeView {
+public class SmsCodeChallengeView {
     private final String challengeId;
 
     private final String maskedRecipient;

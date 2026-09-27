@@ -10,7 +10,7 @@ import java.util.Base64;
 import java.util.Objects;
 
 /** 把 MessageContent 编解码为稳定 JSON 结构。 */
-public final class MessageContentCodec implements JsonCodec<MessageContent> {
+public class MessageContentCodec implements JsonCodec<MessageContent> {
 
     private static final String TEXT = "text";
 

@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 解释 Repository 从 Mapper 得到的影响行数，并拒绝超出声明范围的写入结果。 */
-public final class AffectedRowCounts {
+public class AffectedRowCounts {
 
     private AffectedRowCounts() {
     }

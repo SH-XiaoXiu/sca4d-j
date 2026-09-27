@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 /**
  * 保存一次渠道无关通知的编码、内部接收人、语言和模板变量。
  */
-public final class Notification {
+public class Notification {
 
     private static final int MAXIMUM_VARIABLES = 100;
 

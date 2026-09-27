@@ -14,7 +14,7 @@ import java.util.Objects;
 
 /** 返回当前 Account 的全局通知语言、区域和可选渠道覆盖值。 */
 @SuppressWarnings("unused")
-public final class NotificationSettingsView {
+public class NotificationSettingsView {
     private final String languageTag;
 
     private final String regionCode;

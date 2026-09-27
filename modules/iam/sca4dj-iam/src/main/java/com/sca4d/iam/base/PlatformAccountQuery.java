@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 /** 保存 Platform Account 目录的一页查询条件。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class PlatformAccountQuery {
+public class PlatformAccountQuery {
 
     private final @NotNull PageRequest page;
 

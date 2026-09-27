@@ -11,7 +11,7 @@ import java.util.Objects;
 
 /** 返回一条已经持久化的离散设备事件。 */
 @SuppressWarnings("unused")
-public final class IotDeviceEventView {
+public class IotDeviceEventView {
 
     private final long eventId;
 

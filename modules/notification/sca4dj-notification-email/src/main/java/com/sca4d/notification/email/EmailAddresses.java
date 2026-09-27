@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /** 校验并规范 Email 通知配置和解析结果使用的邮箱地址。 */
-public final class EmailAddresses {
+public class EmailAddresses {
 
     private EmailAddresses() {
     }

@@ -2,11 +2,11 @@ package com.sca4d.core.spring.setting;
 
 import com.sca4d.core.api.security.EncryptedSecret;
 import com.sca4d.core.api.security.SecretCipher;
-import com.sca4d.core.api.setting.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingOwner;
 import org.jetbrains.annotations.NotNull;
 
 /** 手工把一个 Setting 密文从指定版本转换到另一个版本，不读取或修改数据库。 */
-public final class SettingSecretEncryptionMigrator {
+public class SettingSecretEncryptionMigrator {
 
     /**
      * 把一条密文转换为目标版本，调用方负责保存返回结果。

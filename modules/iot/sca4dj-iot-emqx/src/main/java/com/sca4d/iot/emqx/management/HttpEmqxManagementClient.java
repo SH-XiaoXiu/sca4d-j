@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 使用 Basic API Key 和 HTTP/1.1 调用 EMQX `5.8.9` Management API。 */
-public final class HttpEmqxManagementClient implements EmqxManagementClient {
+public class HttpEmqxManagementClient implements EmqxManagementClient {
 
     private final @NotNull RestClient client;
 

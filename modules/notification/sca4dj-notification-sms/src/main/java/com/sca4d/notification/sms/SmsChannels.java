@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * SMS 模块声明的通知渠道。
  */
-public final class SmsChannels {
+public class SmsChannels {
 
     public static final @NotNull TreeCode SMS = TreeCode.of("NOTIFICATION/CHANNEL/SMS");
 

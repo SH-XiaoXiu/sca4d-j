@@ -381,7 +381,7 @@ public class SmsConfigurationService {
         }
     }
 
-    private static final class CheckedProvider {
+    private static class CheckedProvider {
         private final String code;
 
         private final String type;
@@ -395,7 +395,7 @@ public class SmsConfigurationService {
         }
     }
 
-    private static final class CheckedBinding {
+    private static class CheckedBinding {
         private final TreeCode code;
 
         private final SmsRoute route;

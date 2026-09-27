@@ -177,7 +177,7 @@ class AuditPersistenceIntegrationTest {
 
     /** 保存不需要 App Codec 的测试 Raw JSON。 */
     @SuppressWarnings({"ClassCanBeRecord", "unused"}) // Jackson 通过反射读取 getter，项目禁止使用 Java record。
-    private static final class RawPayload implements AuditPayload {
+    private static class RawPayload implements AuditPayload {
         private final Map<String, String> values;
 
         private RawPayload(Map<String, String> values) {

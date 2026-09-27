@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import org.jetbrains.annotations.NotNull;
 
 /** 接收修改动态字典时提交的名称、状态、顺序和乐观锁版本。 */
-public final class UpdateDictionaryRequest {
+public class UpdateDictionaryRequest {
 
     @NotBlank
     @Size(max = 160)

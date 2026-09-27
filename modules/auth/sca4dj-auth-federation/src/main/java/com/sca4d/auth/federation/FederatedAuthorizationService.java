@@ -36,7 +36,7 @@ import java.util.Base64;
 import java.util.Objects;
 
 /** 执行 OIDC/OAuth2 授权码、PKCE、Token 交换和用户资料标准化。 */
-public final class FederatedAuthorizationService {
+public class FederatedAuthorizationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(FederatedAuthorizationService.class);
 
@@ -378,7 +378,7 @@ public final class FederatedAuthorizationService {
 
     /** 已解析的 Discovery 端点。 */
     @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-    private static final class Discovery {
+    private static class Discovery {
         private final String authorizationEndpoint;
 
         private final String tokenEndpoint;

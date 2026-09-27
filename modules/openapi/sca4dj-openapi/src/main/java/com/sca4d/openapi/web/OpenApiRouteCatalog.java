@@ -23,7 +23,7 @@ import java.util.Objects;
 /**
  * 扫描、校验并保存具体应用通过 Spring MVC 声明的 OpenAPI 路由。
  */
-public final class OpenApiRouteCatalog implements SmartInitializingSingleton {
+public class OpenApiRouteCatalog implements SmartInitializingSingleton {
 
     private final @NotNull ApplicationContext context;
 

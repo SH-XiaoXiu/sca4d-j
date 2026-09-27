@@ -14,7 +14,7 @@ import java.util.Objects;
  */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 @ApiStatus.Internal
-public final class FileRecord {
+public class FileRecord {
     private final long id;
 
     private final long uploaderPrincipalId;

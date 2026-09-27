@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /** 保存一行业务数据中按 Locale 和字段键组织的不可变多语言文本。 */
-public final class LocalizedFields {
+public class LocalizedFields {
 
     private final Map<Locale, Map<String, String>> values;
 

@@ -26,7 +26,7 @@ import java.util.Set;
 /**
  * 保存 Principal、静态授权资源和认证记录的不可变 Session 快照。
  */
-public final class Session {
+public class Session {
 
     private final SessionId id;
 

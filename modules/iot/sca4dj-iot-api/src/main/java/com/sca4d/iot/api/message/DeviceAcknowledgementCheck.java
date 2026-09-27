@@ -7,7 +7,7 @@ import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 
 /** 请求检查一个标准 Device 下行消息的指定发送尝试是否等待 ACK 超时。 */
-public final class DeviceAcknowledgementCheck extends Message {
+public class DeviceAcknowledgementCheck extends Message {
 
     public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/ACK/CHECK");
 

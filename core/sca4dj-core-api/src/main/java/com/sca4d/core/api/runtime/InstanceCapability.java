@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 声明实例可启用的入口和工作线程能力、自主执行身份及 HTTP 路径前缀。 */
-public final class InstanceCapability {
+public class InstanceCapability {
 
     private final @NotNull TreeCode code;
 

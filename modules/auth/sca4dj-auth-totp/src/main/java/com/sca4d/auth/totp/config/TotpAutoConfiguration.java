@@ -9,8 +9,9 @@ import com.sca4d.auth.totp.enrollment.TotpEnrollmentService;
 import com.sca4d.core.api.authentication.SessionControl;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.security.SecretKeyring;
-import com.sca4d.core.api.setting.Settings;
-import com.sca4d.core.api.setting.SystemSetting;
+import com.sca4d.core.api.setting.access.SettingReader;
+import com.sca4d.core.api.setting.access.SettingWriter;
+import com.sca4d.core.api.setting.definition.SystemSetting;
 import com.sca4d.core.spring.json.Sca4djJson;
 import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.core.spring.redis.Sca4djRedis;
@@ -27,14 +28,20 @@ import java.time.Duration;
 @MapperScan(basePackageClasses = TotpCredentialMapper.class)
 public class TotpAutoConfiguration {
 
+    /** 创建本应用上下文的模块设置，来源由 Spring 显式注入。 */
+    @Bean
+    TotpSettings totpSettings(SettingReader<String> reader, SettingWriter<String> writer) {
+        return new TotpSettings(reader, writer);
+    }
+
     /** 创建 TOTP 自动配置。 */
     public TotpAutoConfiguration() {
     }
 
     /** @return TOTP enrollment 有效期设置 */
     @Bean
-    SystemSetting<Duration> totpEnrollmentTtlSetting() {
-        return TotpSettings.ENROLLMENT_TTL;
+    SystemSetting<Duration> totpEnrollmentTtlSetting(TotpSettings settings) {
+        return settings.ENROLLMENT_TTL;
     }
 
     /** @return Google Authenticator 兼容验证码实现 */
@@ -66,7 +73,7 @@ public class TotpAutoConfiguration {
             TotpCodeVerifier verifier,
             SecretKeyring keyring,
             SessionControl sessions,
-            Settings settings,
+            TotpSettings settings,
             Clock clock) {
         return new TotpEnrollmentService(
                 enrollments,

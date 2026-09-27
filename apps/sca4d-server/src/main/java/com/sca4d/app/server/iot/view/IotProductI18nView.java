@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 返回 Product 编辑界面需要读取的完整多语言字段。 */
 @SuppressWarnings("unused")
-public final class IotProductI18nView {
+public class IotProductI18nView {
 
     private final long productId;
 

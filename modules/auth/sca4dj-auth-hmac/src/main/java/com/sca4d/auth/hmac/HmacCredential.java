@@ -12,7 +12,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 保存 Account 当前 MAC Key 的加密值、状态和乐观版本。 */
-public final class HmacCredential {
+public class HmacCredential {
 
     /** MAC 凭据的有限生命周期状态。 */
     public enum Status implements BaseEnum {

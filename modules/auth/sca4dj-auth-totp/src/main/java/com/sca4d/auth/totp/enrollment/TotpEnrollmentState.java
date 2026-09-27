@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /** Redis 保存的 TOTP enrollment 加密状态。 */
 @SuppressWarnings("ClassCanBeRecord") // 状态对象沿用普通 class，便于显式表达状态转换。
-final class TotpEnrollmentState {
+class TotpEnrollmentState {
 
     private final String id;
 

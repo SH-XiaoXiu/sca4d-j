@@ -9,7 +9,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 /** 保存当前 Account 三项通知设置的领域化读取结果。 */
-public final class NotificationSettingsSnapshot {
+public class NotificationSettingsSnapshot {
     private final Locale language;
 
     private final Region region;

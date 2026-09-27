@@ -21,7 +21,7 @@ import java.util.Objects;
 
 /** 根据文件记录中的上传 Principal、scene 和目标 Resource 判断头像文件读写权限。 */
 @Component
-public final class PlatformFilePermissionPolicy implements PermissionPolicy {
+public class PlatformFilePermissionPolicy implements PermissionPolicy {
     private final @NotNull FileService files;
 
     /**

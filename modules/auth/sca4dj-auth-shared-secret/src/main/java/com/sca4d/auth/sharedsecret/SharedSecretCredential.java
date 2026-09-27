@@ -12,7 +12,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 保存一个 Account 当前 Shared Secret 的不可逆摘要、状态和乐观版本。 */
-public final class SharedSecretCredential {
+public class SharedSecretCredential {
 
     /** Shared Secret 凭据的有限生命周期状态。 */
     public enum Status implements BaseEnum {

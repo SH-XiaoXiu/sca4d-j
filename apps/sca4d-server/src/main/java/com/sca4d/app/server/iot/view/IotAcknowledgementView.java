@@ -12,7 +12,7 @@ import java.util.Objects;
 
 /** 返回一条设备显式 ACK 或 reported 推导 ACK。 */
 @SuppressWarnings("unused")
-public final class IotAcknowledgementView {
+public class IotAcknowledgementView {
 
     private final long messageId;
 

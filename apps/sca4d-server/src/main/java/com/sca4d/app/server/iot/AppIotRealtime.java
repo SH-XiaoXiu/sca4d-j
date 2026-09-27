@@ -24,7 +24,7 @@ import java.util.Objects;
 
 /** 把 IoT 模块失效通知发布到 App Web Realtime，并授权 Device Topic 订阅。 */
 @Component
-public final class AppIotRealtime implements DeviceChangePublisher, WebRealtimeSubscriptionPolicy {
+public class AppIotRealtime implements DeviceChangePublisher, WebRealtimeSubscriptionPolicy {
 
     private static final String TOPIC_PREFIX = "iot.device.";
 

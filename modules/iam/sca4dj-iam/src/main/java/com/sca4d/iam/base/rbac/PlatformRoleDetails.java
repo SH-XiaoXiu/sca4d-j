@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /** 组合 Platform 角色授权事实和完整多语言字段。 */
 @SuppressWarnings("ClassCanBeRecord")
-public final class PlatformRoleDetails {
+public class PlatformRoleDetails {
 
     private final @NotNull Role role;
 

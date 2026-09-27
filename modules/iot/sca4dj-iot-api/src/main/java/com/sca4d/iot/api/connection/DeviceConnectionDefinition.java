@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 定义一种 Device 连接协议及其公开身份类型，不包含具体 Device 的身份值。 */
-public final class DeviceConnectionDefinition {
+public class DeviceConnectionDefinition {
 
     private final @NotNull DeviceConnectionProtocol protocol;
 

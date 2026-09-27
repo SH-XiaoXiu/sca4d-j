@@ -11,7 +11,7 @@ import java.util.Objects;
 
 /** 在 TOTP 内部集中选择加密密钥并拒绝未知历史 key。 */
 @ApiStatus.Internal
-public final class TotpSecretCryptography {
+public class TotpSecretCryptography {
 
     private final @NotNull SecretKeyring keyring;
 

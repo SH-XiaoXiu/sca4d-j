@@ -31,7 +31,7 @@ import java.util.OptionalLong;
 /**
  * 使用应用基础设施 Redis 按权限目录指纹批量缓存 RBAC 权限选择符。
  */
-public final class RedisRbacPermissionCache implements RbacPermissionCache {
+public class RedisRbacPermissionCache implements RbacPermissionCache {
 
     private static final Logger LOG = LoggerFactory.getLogger(RedisRbacPermissionCache.class);
 

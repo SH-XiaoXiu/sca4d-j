@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存传输层完成证书链、有效期和客户端证书用途验证后的 X.509 公钥证书。 */
-public final class X509TransportProof {
+public class X509TransportProof {
 
     private final byte @NotNull [] certificateDer;
 

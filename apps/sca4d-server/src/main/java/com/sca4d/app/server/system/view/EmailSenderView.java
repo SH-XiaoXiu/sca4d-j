@@ -11,7 +11,7 @@ import java.util.Objects;
 
 /** 返回不包含 SMTP 密码或密文的 Email Sender 配置。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
-public final class EmailSenderView {
+public class EmailSenderView {
 
     private final long senderId;
 

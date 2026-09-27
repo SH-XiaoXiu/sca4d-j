@@ -9,7 +9,7 @@ import java.time.Instant;
 
 /** 保存审计记录分页查询使用的可选身份、操作、结果、目标和时间条件。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class AuditQuery {
+public class AuditQuery {
     private final @Nullable String requestId;
 
     private final @Nullable Long accountId;

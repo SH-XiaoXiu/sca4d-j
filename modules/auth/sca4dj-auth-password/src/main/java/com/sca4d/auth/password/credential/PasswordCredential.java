@@ -18,7 +18,7 @@ import java.util.Objects;
  * <p>当前类型不能用于 HTTP 响应或日志，避免不可逆摘要离开 Password 模块。
  */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class PasswordCredential {
+public class PasswordCredential {
 
     /** Password 凭据的有限生命周期状态。 */
     public enum Status implements BaseEnum {

@@ -14,7 +14,7 @@ import java.util.function.Function;
  *
  * @param <T> 节点写入输出键的值类型
  */
-public final class DataOperation<T> {
+public class DataOperation<T> {
 
     private final String name;
 

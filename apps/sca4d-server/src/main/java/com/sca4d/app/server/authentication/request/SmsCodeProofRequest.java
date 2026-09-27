@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 接收 SMS Challenge 标识和只在当前认证调用中使用的六位验证码。 */
-public final class SmsCodeProofRequest {
+public class SmsCodeProofRequest {
     @NotBlank
     @Size(max = 64)
     private @Nullable String challengeId;

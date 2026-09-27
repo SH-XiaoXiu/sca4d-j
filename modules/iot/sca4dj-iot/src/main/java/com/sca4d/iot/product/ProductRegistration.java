@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Set;
 
 /** 保存创建 Product 时总是一起校验和写入的数据。 */
-public final class ProductRegistration {
+public class ProductRegistration {
 
     private final @NotNull String code;
 

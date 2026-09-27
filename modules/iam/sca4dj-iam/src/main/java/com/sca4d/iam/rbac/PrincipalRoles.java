@@ -11,7 +11,7 @@ import java.util.Set;
 
 /** 保存 Principal 当前角色以及不能由普通替换移除的角色关系。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class PrincipalRoles {
+public class PrincipalRoles {
 
     private final @NotNull RbacScope scope;
 

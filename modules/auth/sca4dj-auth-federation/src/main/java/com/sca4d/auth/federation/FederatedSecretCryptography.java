@@ -8,7 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 /** 使用 SecretKeyring 保存和读取 Provider Client Secret。 */
-public final class FederatedSecretCryptography {
+public class FederatedSecretCryptography {
 
     private final @NotNull SecretKeyring keyring;
 

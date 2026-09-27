@@ -1,5 +1,6 @@
 package com.sca4d.app.server.plugin;
 
+<<<<<<< HEAD
 import com.sca4d.core.api.plugin.ApiBinding;
 import com.sca4d.core.api.plugin.ApiContract;
 import com.sca4d.core.api.plugin.ApiInvoker;
@@ -18,13 +19,39 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+=======
+>>>>>>> dev
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+<<<<<<< HEAD
 /** 用真实 javac 验证三种声明及非法契约诊断，不把生成源码手写到测试中。 */
 class PluginCodeGenerationTest {
     @TempDir Path temporary;
+=======
+import com.sca4d.core.api.plugin.ApiBinding;
+import com.sca4d.core.api.plugin.ApiContract;
+import com.sca4d.core.api.plugin.ApiInvoker;
+import com.sca4dj.gradle.plugin.processor.PluginApiProcessor;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+
+import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+
+import javax.tools.DiagnosticCollector;
+import javax.tools.JavaFileObject;
+import javax.tools.ToolProvider;
+
+/** 用真实 javac 验证三种声明及非法契约诊断，不把生成源码手写到测试中。 */
+class PluginCodeGenerationTest {
+    @TempDir
+    Path temporary;
+>>>>>>> dev
 
     @Test
     @DisplayName("已有类方法生成独立接口和宿主绑定，客户端能直接调用实际目标")
@@ -40,15 +67,31 @@ class PluginCodeGenerationTest {
                 }
                 """;
         assertTrue(compile("SourceService", source));
+<<<<<<< HEAD
         try (URLClassLoader loader = new URLClassLoader(new java.net.URL[]{temporary.toUri().toURL()},
+=======
+        try (URLClassLoader loader = new URLClassLoader(
+                new java.net.URL[] {temporary.toUri().toURL()},
+>>>>>>> dev
                 ApiContract.class.getClassLoader())) {
             Class<?> implementation = loader.loadClass("fixture.SourceService");
             Object host = implementation.getConstructor().newInstance();
             ApiBinding binding = (ApiBinding) loader.loadClass("fixture.SourceServiceApiBinding")
+<<<<<<< HEAD
                     .getMethod("bind", implementation).invoke(null, host);
             ApiContract contract = (ApiContract) loader.loadClass("fixture.SourceServiceApiContract")
                     .getField("INSTANCE").get(null);
             ApiInvoker invoker = (target, operation, arguments) -> binding.operations().get(operation).invoke(arguments);
+=======
+                    .getMethod("bind", implementation)
+                    .invoke(null, host);
+            ApiContract contract = (ApiContract) loader.loadClass("fixture.SourceServiceApiContract")
+                    .getField("INSTANCE")
+                    .get(null);
+            ApiInvoker invoker = (target, operation, arguments) -> binding.operations()
+                    .get(operation)
+                    .invoke(arguments);
+>>>>>>> dev
             Object client = contract.client(invoker, null);
             assertEquals("host:value", contract.type().getMethod("read", String.class).invoke(client, "value"));
             String exported = Files.readString(temporary.resolve("META-INF/sca4dj/api-classes.list"));
@@ -100,9 +143,26 @@ class PluginCodeGenerationTest {
         var compiler = ToolProvider.getSystemJavaCompiler();
         var diagnostics = new DiagnosticCollector<JavaFileObject>();
         try (var manager = compiler.getStandardFileManager(diagnostics, null, null)) {
+<<<<<<< HEAD
             String classpath = Path.of(ApiContract.class.getProtectionDomain().getCodeSource().getLocation().toURI()).toString();
             var task = compiler.getTask(null, manager, diagnostics, List.of("-classpath", classpath,
                     "-d", temporary.toString(), "-s", temporary.resolve("sources").toString()), null,
+=======
+            String classpath = Path.of(ApiContract.class.getProtectionDomain().getCodeSource().getLocation().toURI())
+                    .toString();
+            var task = compiler.getTask(
+                    null,
+                    manager,
+                    diagnostics,
+                    List.of(
+                            "-classpath",
+                            classpath,
+                            "-d",
+                            temporary.toString(),
+                            "-s",
+                            temporary.resolve("sources").toString()),
+                    null,
+>>>>>>> dev
                     manager.getJavaFileObjects(file.toFile()));
             task.setProcessors(List.of(new PluginApiProcessor()));
             return task.call();

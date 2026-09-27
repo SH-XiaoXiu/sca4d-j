@@ -15,7 +15,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /** 在旧实例停止写入后复制非过期 reported 状态到新 Key，保留原始数据供验证和恢复。 */
-public final class ReportedStateKeyMigration {
+public class ReportedStateKeyMigration {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReportedStateKeyMigration.class);
 

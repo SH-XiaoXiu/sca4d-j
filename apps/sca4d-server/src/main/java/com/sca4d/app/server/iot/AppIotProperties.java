@@ -10,7 +10,7 @@ import java.time.Duration;
 
 /** 保存 Sca4d Server 自有 IoT HTTP 行为的运行参数。 */
 @ConfigurationProperties("app.iot")
-public final class AppIotProperties {
+public class AppIotProperties {
 
     private @Nullable String emqxWebhookSecret;
 

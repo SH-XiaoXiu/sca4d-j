@@ -16,10 +16,14 @@ import com.sca4d.auth.totp.credential.TotpCredentialRepository;
 import com.sca4d.core.api.authentication.SessionControl;
 import com.sca4d.core.api.authentication.SessionTerminationReason;
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.security.EncryptedSecret;
 import com.sca4d.core.api.security.SecretCipher;
 import com.sca4d.core.api.security.SecretKeyring;
-import com.sca4d.core.api.setting.Settings;
+import com.sca4d.core.api.setting.access.SettingReader;
+import com.sca4d.core.api.setting.access.SettingWriter;
+import com.sca4d.core.api.setting.value.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingValue;
 import com.sca4d.core.spring.security.AesGcmSecretCipher;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -170,8 +174,17 @@ class TotpEnrollmentServiceTest {
         TotpCodeVerifier verifier = mock(TotpCodeVerifier.class);
         SessionControl sessions = mock(SessionControl.class);
         SecretKeyring keyring = keyring();
-        Settings settings = mock(Settings.class);
-        when(settings.get(TotpSettings.ENROLLMENT_TTL)).thenReturn(Duration.ofMinutes(10));
+        TestAccess source = mock(TestAccess.class);
+        TotpSettings settings = new TotpSettings(source, source);
+        when(source.read(settings.ENROLLMENT_TTL.code(), SettingOwner.system())).thenReturn(
+                SettingValue.read(
+                        TreeCode.of("SETTING:TEST"),
+                        settings.ENROLLMENT_TTL.code(),
+                        SettingOwner.system(),
+                        settings.ENROLLMENT_TTL.codec().encode(Duration.ofMinutes(10)),
+                        1,
+                        new Version(0),
+                        false));
         TotpEnrollmentService service = new TotpEnrollmentService(
                 enrollments,
                 credentials,
@@ -199,7 +212,7 @@ class TotpEnrollmentServiceTest {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    private static final class Fixture {
+    private static class Fixture {
         private final TotpEnrollmentService service;
 
         private final RedisTotpEnrollmentStore enrollments;
@@ -226,5 +239,9 @@ class TotpEnrollmentServiceTest {
             this.sessions = sessions;
             this.keyring = keyring;
         }
+    }
+
+    /** 测试替身同时实现读取和写入契约，避免引入生产组合接口。 */
+    private interface TestAccess extends SettingReader<String>, SettingWriter<String> {
     }
 }

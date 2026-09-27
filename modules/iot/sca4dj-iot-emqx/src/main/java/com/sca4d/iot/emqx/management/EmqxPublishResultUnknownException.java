@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 表示管理端发布请求发生传输中断，调用方无法确认 EMQX 是否已经接受请求。 */
-public final class EmqxPublishResultUnknownException extends RuntimeException {
+public class EmqxPublishResultUnknownException extends RuntimeException {
 
     /**
      * 保留底层传输异常，异常消息不包含请求载荷或 Management API 凭据。

@@ -11,7 +11,7 @@ import java.time.Duration;
 import java.time.Instant;
 
 /** 使用固定退避并在第五次发送仍失败后停止的默认命令重试策略。 */
-public final class DefaultCommandRetryPolicy implements RetryPolicy {
+public class DefaultCommandRetryPolicy implements RetryPolicy {
 
     public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/RETRY/COMMAND/DEFAULT");
 

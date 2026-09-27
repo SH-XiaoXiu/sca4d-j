@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 使用数据库优先级提供 SMS Provider 默认候选顺序。 */
-public final class PrioritySmsProviderSelector implements SmsProviderSelector {
+public class PrioritySmsProviderSelector implements SmsProviderSelector {
     private final SmsRepository repository;
 
     /** @param repository SMS Provider 配置持久化入口 */

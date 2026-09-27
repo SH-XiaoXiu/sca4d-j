@@ -14,7 +14,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 保存一次业务投递已经确认、等待查询、可以重试、拒绝或结果未知的状态。 */
-public final class DeliveryOutcome {
+public class DeliveryOutcome {
 
     public enum Status {
         CONFIRMED,

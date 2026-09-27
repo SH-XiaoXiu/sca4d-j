@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 只在一次认证方法调用中存在的 Email Code Challenge 标识和原始验证码。 */
-public final class EmailCodeProof {
+public class EmailCodeProof {
 
     private final @NotNull EmailCodeChallengeId challengeId;
 

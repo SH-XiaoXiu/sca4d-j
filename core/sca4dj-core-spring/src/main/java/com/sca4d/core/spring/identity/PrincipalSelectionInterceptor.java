@@ -18,7 +18,7 @@ import org.springframework.web.method.HandlerMethod;
 import java.util.Objects;
 
 /** 在 MVC 参数绑定前执行不依赖 request body 和方法参数的业务身份选择。 */
-public final class PrincipalSelectionInterceptor extends CallHandlerInterceptor {
+public class PrincipalSelectionInterceptor extends CallHandlerInterceptor {
 
     private static final Logger LOG = LoggerFactory.getLogger(PrincipalSelectionInterceptor.class);
 

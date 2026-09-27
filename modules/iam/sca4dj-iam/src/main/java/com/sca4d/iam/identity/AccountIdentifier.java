@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 保存账号的一种登录标识及其稳定查询值。 */
 @SuppressWarnings("ClassCanBeRecord")
-public final class AccountIdentifier {
+public class AccountIdentifier {
 
     private final long id;
 

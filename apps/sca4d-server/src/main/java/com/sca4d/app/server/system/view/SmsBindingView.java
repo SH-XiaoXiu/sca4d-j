@@ -12,7 +12,7 @@ import java.util.Objects;
 
 /** 返回统一通知到 SMS Provider 模板的传输绑定。 */
 @SuppressWarnings("unused")
-public final class SmsBindingView {
+public class SmsBindingView {
 
     private final long bindingId;
 

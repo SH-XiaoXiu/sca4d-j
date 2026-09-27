@@ -7,11 +7,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.event.EventMessageCodec;
 import com.sca4d.core.api.event.EventType;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.isolation.AppName;
 import com.sca4d.core.api.message.Message;
 import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.MessageCodec;
-import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.Name;
 import com.sca4d.core.api.name.NameFormat;
 import com.sca4d.core.api.name.code.TreeCode;
@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 
 /** 编码和严格校验 RabbitMQ 与 Outbox 共用的通用 Message 信封。 */
 @ApiStatus.Internal
-public final class RabbitMessageEnvelopeCodec {
+public class RabbitMessageEnvelopeCodec {
 
     private static final int ENVELOPE_VERSION = 1;
 
@@ -218,7 +218,7 @@ public final class RabbitMessageEnvelopeCodec {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    private static final class Envelope {
+    private static class Envelope {
         private final @NotNull Id messageId;
 
         private final @NotNull Instant publishedAt;
