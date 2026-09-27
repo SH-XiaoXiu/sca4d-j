@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存 Client 创建或轮换时只允许返回一次的明文凭据。 */
-public final class OpenApiClientCredentials {
+public class OpenApiClientCredentials {
 
     private final @NotNull OpenApiClient client;
 

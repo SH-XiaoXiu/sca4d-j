@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /** 为官方 Sa-Token DAO 的独立 Redis 模板安装服务器 key 序列化，不修改 Token 或客户端协议。 */
-public final class SaTokenRedisSerialization implements BeanPostProcessor {
+public class SaTokenRedisSerialization implements BeanPostProcessor {
 
     private static final Logger LOG = LoggerFactory.getLogger(SaTokenRedisSerialization.class);
 
@@ -44,7 +44,7 @@ public final class SaTokenRedisSerialization implements BeanPostProcessor {
     }
 
     /** 复用官方 DAO 的读写和 TTL 行为，搜索时按解码后的原始文本筛选再分页。 */
-    private static final class ResourceDao extends SaTokenDaoForRedisTemplate {
+    private static class ResourceDao extends SaTokenDaoForRedisTemplate {
 
         /** 保存官方 DAO 已初始化的模板，不创建第二套 Redis 连接。 */
         private ResourceDao(StringRedisTemplate template) {
@@ -65,7 +65,7 @@ public final class SaTokenRedisSerialization implements BeanPostProcessor {
     }
 
     /** 在字符串协议适配处转成 TreeCode，搜索模式保留官方 DAO 的星号匹配语义。 */
-    private static final class KeySerializer implements RedisSerializer<String> {
+    private static class KeySerializer implements RedisSerializer<String> {
         private static final TreeCode ROOT = TreeCode.ofColon("AUTH:SA_TOKEN");
 
         @Override

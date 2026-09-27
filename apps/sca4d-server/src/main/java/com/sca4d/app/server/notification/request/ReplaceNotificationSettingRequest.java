@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 接收一个通知设置的完整 JSON 值。 */
-public final class ReplaceNotificationSettingRequest {
+public class ReplaceNotificationSettingRequest {
     private @Nullable JsonNode value;
 
     public @NotNull JsonNode getValue() {

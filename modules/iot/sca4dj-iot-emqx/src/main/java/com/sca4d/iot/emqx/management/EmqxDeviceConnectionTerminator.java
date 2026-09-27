@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Objects;
 
 /** 根据通用 DeviceConnectionId 查找 EMQX Client ID，并通过 Management API 幂等终止连接。 */
-public final class EmqxDeviceConnectionTerminator implements DeviceConnectionTerminator {
+public class EmqxDeviceConnectionTerminator implements DeviceConnectionTerminator {
 
     private static final Logger LOG = LoggerFactory.getLogger(EmqxDeviceConnectionTerminator.class);
 

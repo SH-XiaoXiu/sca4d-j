@@ -15,7 +15,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 返回 Email 模板多语言源码、变量、状态和版本。 */
-public final class EmailTemplateView {
+public class EmailTemplateView {
 
     private final long templateId;
 

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 暂存 Controller 收到的分页和原始排序参数，直到列表声明完成安全字段转换。 */
-public final class ListParameters {
+public class ListParameters {
 
     private final @NotNull PageRequest page;
 

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存第三方 Client 与 IAM APPLICATION Account 的稳定绑定。 */
-public final class OpenApiClient {
+public class OpenApiClient {
 
     private final @NotNull String clientId;
 

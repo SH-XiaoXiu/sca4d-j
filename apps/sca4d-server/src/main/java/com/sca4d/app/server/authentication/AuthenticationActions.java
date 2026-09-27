@@ -3,7 +3,7 @@ package com.sca4d.app.server.authentication;
 import com.sca4d.core.api.authentication.AuthenticationActionCode;
 
 /** 定义示例应用要求认证的稳定动作编码。 */
-public final class AuthenticationActions {
+public class AuthenticationActions {
 
     /** 建立 Session 前必须完成的登录认证动作编码。 */
     public static final String LOGIN_CODE = "ACCOUNT.LOGIN";

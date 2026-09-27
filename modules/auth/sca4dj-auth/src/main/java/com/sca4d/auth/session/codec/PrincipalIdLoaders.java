@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 调用当前身份支持的 PrincipalIdLoader，并校验每种 Principal 类型只有一个标识来源。 */
-public final class PrincipalIdLoaders {
+public class PrincipalIdLoaders {
 
     private final @NotNull List<PrincipalIdLoader<?>> loaders;
 

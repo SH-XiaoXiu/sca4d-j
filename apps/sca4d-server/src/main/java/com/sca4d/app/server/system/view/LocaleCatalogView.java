@@ -13,7 +13,7 @@ import java.util.Objects;
 /** 返回完整示例 App 支持和默认使用的 BCP 47 Locale 标签。 */
 @Schema(name = "LocaleCatalog")
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
-public final class LocaleCatalogView {
+public class LocaleCatalogView {
 
     private final @NotNull List<@NotNull String> supportedLocales;
 

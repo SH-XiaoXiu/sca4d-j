@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 保存设备接入实现观测到的一条连接数据，不把它等同于 `Session` 或在线状态。 */
-public final class DeviceConnection {
+public class DeviceConnection {
 
     private final @NotNull DeviceConnectionId id;
 

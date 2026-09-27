@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 校验一种业务数据允许保存的国际化字段、必填项和最大长度。 */
-public final class LocalizedFieldsSchema {
+public class LocalizedFieldsSchema {
 
     private final Set<String> allowedKeys;
 

@@ -23,7 +23,7 @@ import java.util.concurrent.Executor;
 /**
  * 并发合并所有 ResourceIdLoader 为完整 Principal 贡献的数字 Resource 标识。
  */
-public final class ResourceIdLoaders {
+public class ResourceIdLoaders {
 
     private final @NotNull List<ResourceIdLoader> loaders;
 

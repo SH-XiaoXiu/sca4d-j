@@ -16,7 +16,7 @@ import java.util.Objects;
  * 返回当前账号的动作认证因素数量和认证方法开关。
  */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
-public final class AuthenticationSettingsView {
+public class AuthenticationSettingsView {
 
     private final int loginFactorCount;
 

@@ -7,7 +7,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 表示 Device 当前保存的一个 desired property 业务值。 */
-public final class DesiredPropertyState {
+public class DesiredPropertyState {
 
     private final @NotNull String propertyCode;
 

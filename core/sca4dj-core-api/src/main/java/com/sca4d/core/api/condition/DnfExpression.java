@@ -14,7 +14,7 @@ import java.util.function.Predicate;
  * @param <T> 各 Clause 检查的输入类型
  */
 @SuppressWarnings({"ClassCanBeRecord", "unused"})
-public final class DnfExpression<T> implements Predicate<T> {
+public class DnfExpression<T> implements Predicate<T> {
 
     private final List<DnfClause<T>> clauses;
 

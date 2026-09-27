@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 保存推动 {@link FlowInstance} 状态变化的已确认事件。 */
-public final class FlowEvent {
+public class FlowEvent {
 
     private final String type;
 

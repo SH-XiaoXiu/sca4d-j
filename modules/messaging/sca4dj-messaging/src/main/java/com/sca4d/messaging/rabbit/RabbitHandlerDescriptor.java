@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 统一 EventHandler 与普通 MessageHandler 的 RabbitMQ 拓扑字段。 */
-final class RabbitHandlerDescriptor {
+class RabbitHandlerDescriptor {
 
     private final @NotNull TreeCode code;
 

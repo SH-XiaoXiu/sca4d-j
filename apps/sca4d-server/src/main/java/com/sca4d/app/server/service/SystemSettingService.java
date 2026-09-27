@@ -22,7 +22,7 @@ import java.util.Objects;
 
 /** 管理当前应用注册的 SystemSetting，不允许请求创建未声明的任意键。 */
 @Service
-public final class SystemSettingService {
+public class SystemSettingService {
 
     private static final Logger LOG = LoggerFactory.getLogger(SystemSettingService.class);
 

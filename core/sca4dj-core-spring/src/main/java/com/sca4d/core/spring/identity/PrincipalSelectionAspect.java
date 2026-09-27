@@ -22,7 +22,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 /** 执行 {@link CurrentPrincipal} 声明的请求阶段 Principal 选择。 */
 @Aspect
 @Order(Ordered.HIGHEST_PRECEDENCE + 100)
-public final class PrincipalSelectionAspect {
+public class PrincipalSelectionAspect {
 
     private static final Logger LOG = LoggerFactory.getLogger(PrincipalSelectionAspect.class);
 

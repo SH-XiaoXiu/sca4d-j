@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * 保存一个 Platform 范围内可配置的外部登录 Provider。
  */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class FederatedProvider {
+public class FederatedProvider {
 
     /**
      * Provider 管理接口和审计记录使用的资源类型。

@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /** 保存一次 reported 报文中需要发布到消息代理的一批 Telemetry 样本。 */
 @SuppressWarnings("ClassCanBeRecord")
-public final class TelemetryBatch {
+public class TelemetryBatch {
 
     private final long deviceId;
 

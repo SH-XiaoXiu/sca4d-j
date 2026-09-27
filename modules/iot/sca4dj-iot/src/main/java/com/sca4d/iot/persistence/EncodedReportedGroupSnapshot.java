@@ -6,7 +6,7 @@ import java.time.Instant;
 
 /** 映射一个 Device 当前绑定下可直接展示的 reported 字段组。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class EncodedReportedGroupSnapshot {
+public class EncodedReportedGroupSnapshot {
 
     private final long deviceId;
 

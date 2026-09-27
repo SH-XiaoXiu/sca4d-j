@@ -21,7 +21,7 @@ import java.util.Optional;
 import java.util.concurrent.locks.LockSupport;
 
 /** 使用 PostgreSQL Job runtime 实现提交、查询、等待和结果恢复。 */
-public final class DefaultJobExecutor implements JobExecutor {
+public class DefaultJobExecutor implements JobExecutor {
 
     private static final long RESULT_POLL_NANOS = Duration.ofMillis(50).toNanos();
 

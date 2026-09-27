@@ -19,7 +19,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 把账号认证策略转换为不包含 Account 标识的稳定 JSON 文档。 */
-public final class AccountAuthenticationSettingsCodec implements SettingCodec<AccountAuthenticationSettings> {
+public class AccountAuthenticationSettingsCodec implements SettingCodec<AccountAuthenticationSettings> {
 
     @Override
     public @NotNull TreeCode code() {

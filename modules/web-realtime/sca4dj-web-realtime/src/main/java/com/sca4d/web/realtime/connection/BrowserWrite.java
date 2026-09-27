@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /** 保存发送给本机连接的浏览器信封以及发送后是否关闭连接。 */
 @ApiStatus.Internal
-public final class BrowserWrite {
+public class BrowserWrite {
 
     private final @NotNull BrowserEnvelope envelope;
 

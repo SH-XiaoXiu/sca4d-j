@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /** 使用 Redis 保存 EMQX 终止连接和故障对账所需的 Client ID 与 Broker 节点事实。 */
-public final class EmqxConnectionRepository {
+public class EmqxConnectionRepository {
 
     private static final DefaultRedisScript<Long> PROJECT = script("project.lua");
 

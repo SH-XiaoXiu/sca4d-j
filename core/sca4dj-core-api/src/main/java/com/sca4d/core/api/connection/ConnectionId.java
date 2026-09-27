@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 表示 App 对外持续网络连接的不可变标识。 */
-public final class ConnectionId {
+public class ConnectionId {
 
     private final @NotNull String value;
 

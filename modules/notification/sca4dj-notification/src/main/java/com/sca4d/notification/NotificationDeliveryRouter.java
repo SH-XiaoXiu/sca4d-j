@@ -18,7 +18,7 @@ import java.util.Objects;
 /**
  * 校验每个渠道只有一个投递实现，并按冻结渠道执行同步或独立消费。
  */
-public final class NotificationDeliveryRouter {
+public class NotificationDeliveryRouter {
 
     private final @NotNull Map<@NotNull TreeCode, @NotNull NotificationDelivery> deliveries;
 

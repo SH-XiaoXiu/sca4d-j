@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 表示具体应用定义并用于业务策略判断的稳定区域。 */
-public final class Region {
+public class Region {
 
     private final @NotNull String code;
 

@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 返回重置后的 Device Credential version 和只显示一次的 Secret 或 Key。 */
 @SuppressWarnings("unused")
-public final class IotSecretView {
+public class IotSecretView {
 
     private final long version;
 

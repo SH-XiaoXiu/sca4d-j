@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.charset.StandardCharsets;
 
 /** 登记系统 Principal 类型，并按数据库确认的稳定身份读取序列化引用。 */
-public final class SystemPrincipalCodec implements PrincipalCodec<SystemPrincipal> {
+public class SystemPrincipalCodec implements PrincipalCodec<SystemPrincipal> {
 
     /** IAM 系统 Principal 的固定类型，不表达实例或能力。 */
     public static final @NotNull TreeCode TYPE = TreeCode.ofColon("IAM:SYSTEM_PRINCIPAL");

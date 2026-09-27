@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 保存不影响 Device 身份、凭据、协议和连接的展示资料修改。 */
-public final class DeviceDetailsChange {
+public class DeviceDetailsChange {
 
     private final @NotNull String displayName;
 

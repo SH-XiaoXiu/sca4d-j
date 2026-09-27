@@ -12,7 +12,7 @@ import java.util.Optional;
 
 /** 保存一种认证方法成功验证的账号、认证记录以及完成动作前可以复核的非秘密引用。 */
 @SuppressWarnings("ClassCanBeRecord")
-public final class VerifiedAuthentication {
+public class VerifiedAuthentication {
 
     private final Account account;
 

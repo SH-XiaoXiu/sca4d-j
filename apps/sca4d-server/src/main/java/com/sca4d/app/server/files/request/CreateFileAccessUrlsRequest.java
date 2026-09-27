@@ -11,7 +11,7 @@ import java.util.Objects;
 
 /** 接收一次批量生成短期读取地址的文件标识。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean setter 反序列化请求。
-public final class CreateFileAccessUrlsRequest {
+public class CreateFileAccessUrlsRequest {
 
     @Req.NotNull
     @Size(min = 1, max = 100)

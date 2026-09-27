@@ -8,7 +8,7 @@ import java.util.UUID;
 
 /** 配置进程执行位置和入口能力选择，不影响调用者身份或行级数据范围。 */
 @ConfigurationProperties("sca4dj.instance")
-public final class InstanceProperties {
+public class InstanceProperties {
 
     /** 进程唯一标识；默认每次启动生成，不能被当作 IAM Principal ID。 */
     private String id = UUID.randomUUID().toString();

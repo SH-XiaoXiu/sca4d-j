@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 按 DataGraph 的稳定拓扑顺序执行类型化同步数据图。 */
-public final class DataGraphExecutor {
+public class DataGraphExecutor {
 
     /** 禁止创建无状态执行入口。 */
     private DataGraphExecutor() {

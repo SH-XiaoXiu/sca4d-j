@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存一次条件写入使用的预期版本，以及写入零行时的失败含义。 */
-public final class VersionCondition {
+public class VersionCondition {
 
     private final @NotNull Version expected;
 

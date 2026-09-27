@@ -3,7 +3,7 @@ package com.sca4d.core.api.audit;
 import java.util.Optional;
 
 /** 审计事件发生时的身份快照。 */
-public final class AuditActor {
+public class AuditActor {
 
     private final long subjectId;
 

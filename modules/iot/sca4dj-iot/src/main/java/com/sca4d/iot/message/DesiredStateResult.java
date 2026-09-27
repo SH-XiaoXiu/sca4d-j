@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 返回 desired 写入后的 Device desiredSequence 和实际生成的状态同步消息。 */
-public final class DesiredStateResult {
+public class DesiredStateResult {
 
     private final long desiredSequence;
 

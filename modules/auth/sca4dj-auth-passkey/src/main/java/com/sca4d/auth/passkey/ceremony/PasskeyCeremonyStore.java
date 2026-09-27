@@ -24,7 +24,7 @@ import java.util.UUID;
 /**
  * 使用 Redis TTL 保存 WebAuthn ceremony，并在校验前通过 GETDEL 原子消费。
  */
-public final class PasskeyCeremonyStore {
+public class PasskeyCeremonyStore {
 
     private final RedisTemplate<Key, String> redis;
 
@@ -159,7 +159,7 @@ public final class PasskeyCeremonyStore {
     /**
      * 保存 ceremony 后返回不透明标识和过期时间。
      */
-    public static final class StoredCeremony {
+    public static class StoredCeremony {
         private final PasskeyCeremonyId id;
 
         private final Instant expiresAt;
@@ -187,7 +187,7 @@ public final class PasskeyCeremonyStore {
     /**
      * 原子消费后恢复的 registration 账号和 Yubico request。
      */
-    public static final class RegistrationCeremony {
+    public static class RegistrationCeremony {
         private final long accountId;
 
         private final String requestJson;

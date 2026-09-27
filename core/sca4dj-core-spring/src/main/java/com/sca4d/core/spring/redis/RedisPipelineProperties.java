@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /** 配置一次 Redis pipeline 允许提交的最大命令数量。 */
 @ConfigurationProperties("sca4dj.redis.pipeline")
-public final class RedisPipelineProperties {
+public class RedisPipelineProperties {
 
     private int maxCommands = 1_000;
 

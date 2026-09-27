@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 保存动态数据已经存在的多语言文本及明确的业务回退值。 */
-public final class TranslatedText extends LocalizableText {
+public class TranslatedText extends LocalizableText {
 
     private final Map<Locale, String> translations;
 

@@ -7,7 +7,7 @@ import java.net.URI;
 
 /** 保存具体应用联邦登录的固定 callback 和前端完成地址。 */
 @ConfigurationProperties("app.authentication.federated-login")
-public final class FederatedLoginProperties {
+public class FederatedLoginProperties {
     private URI callbackUri = URI.create("http://localhost:8088/api/login/federated-authorizations/callback");
 
     private URI completionUri = URI.create("http://localhost:5666/#/login");

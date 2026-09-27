@@ -20,7 +20,7 @@ import java.util.Objects;
 @Component
 @ConditionalOnCapability(IotCapabilities.TRANSPORT)
 @ConditionalOnProperty(prefix = "sca4dj.iot.emqx", name = "enabled", havingValue = "true")
-public final class EmqxCallbackAuthenticator {
+public class EmqxCallbackAuthenticator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmqxCallbackAuthenticator.class);
 

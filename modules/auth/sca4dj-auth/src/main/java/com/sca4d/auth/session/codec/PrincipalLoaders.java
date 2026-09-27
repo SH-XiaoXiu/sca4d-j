@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 选择唯一负责当前身份的 {@link PrincipalLoader}，并校验建立 Session 所需的 Principal。 */
-public final class PrincipalLoaders {
+public class PrincipalLoaders {
 
     private final List<PrincipalLoader> loaders;
 

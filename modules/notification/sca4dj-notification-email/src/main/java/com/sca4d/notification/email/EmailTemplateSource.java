@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存 Email 模板的主题、纯文本正文和 HTML 正文源码。 */
-public final class EmailTemplateSource {
+public class EmailTemplateSource {
     private final @NotNull String subject;
 
     private final @NotNull String text;

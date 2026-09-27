@@ -19,7 +19,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/me/phone-identifier")
 @CurrentPrincipal(selection = PlatformPrincipalSelection.class)
-public final class PhoneVerificationController {
+public class PhoneVerificationController {
 
     private final PlatformAccountApplicationService accounts;
 

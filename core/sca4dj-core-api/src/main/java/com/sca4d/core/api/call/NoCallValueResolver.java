@@ -5,7 +5,7 @@ import com.sca4d.core.api.resource.Resource;
 import java.util.Collection;
 
 /** 注解用于表示未声明动态值解析器的占位类型，不应被实际调用。 */
-public final class NoCallValueResolver implements CallValueResolver<Collection<Resource>> {
+public class NoCallValueResolver implements CallValueResolver<Collection<Resource>> {
 
     /** 创建占位解析器。 */
     public NoCallValueResolver() {

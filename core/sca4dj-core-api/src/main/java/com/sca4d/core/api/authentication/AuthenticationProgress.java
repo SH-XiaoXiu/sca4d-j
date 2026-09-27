@@ -12,7 +12,7 @@ import java.util.Objects;
  * 认证尝试的公开进度，不包含账号、Proof 或认证证据。
  */
 @SuppressWarnings("ClassCanBeRecord")
-public final class AuthenticationProgress {
+public class AuthenticationProgress {
 
     private final AuthenticationAttemptId attemptId;
 

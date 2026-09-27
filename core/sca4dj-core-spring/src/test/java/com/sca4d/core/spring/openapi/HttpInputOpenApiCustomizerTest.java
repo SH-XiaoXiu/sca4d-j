@@ -232,7 +232,7 @@ class HttpInputOpenApiCustomizerTest {
 
     /** 保存 OpenAPI 定制器测试需要识别的字段类型和覆盖注解。 */
     @SuppressWarnings("unused") // 字段只用于反射构造带声明注解的 AnnotatedType。
-    private static final class RequestTypes {
+    private static class RequestTypes {
 
         private int count;
 
@@ -280,7 +280,7 @@ class HttpInputOpenApiCustomizerTest {
     }
 
     /** 提供 OpenAPI 响应头声明使用的版本化类型。 */
-    private static final class VersionedResponse {
+    private static class VersionedResponse {
 
         /** @return 固定测试版本 */
         @ETag

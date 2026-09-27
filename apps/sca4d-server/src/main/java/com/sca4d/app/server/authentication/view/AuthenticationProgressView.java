@@ -11,7 +11,7 @@ import java.util.Objects;
 
 /** 不包含 Account、Proof 或 Evidence 的动作认证进度。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
-public final class AuthenticationProgressView {
+public class AuthenticationProgressView {
 
     private final String attemptId;
 

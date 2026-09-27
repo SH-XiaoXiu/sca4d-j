@@ -157,7 +157,7 @@ class AuthRequestInterceptorTest {
     }
 
     @SuppressWarnings("unused") // 测试通过反射取得 Controller 方法。
-    private static final class TestController {
+    private static class TestController {
         public void ordinary() {
         }
 
@@ -172,7 +172,7 @@ class AuthRequestInterceptorTest {
 
     @RequireSessionToken
     @SuppressWarnings("unused") // 测试通过反射取得 Controller 方法。
-    private static final class AnnotatedTestController {
+    private static class AnnotatedTestController {
         public void ordinary() {
         }
     }

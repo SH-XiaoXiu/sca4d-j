@@ -4,7 +4,7 @@ import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 
 /** 声明 IoT 管理 API、设备接入能力及其共同系统身份。 */
-public final class IotCapabilities {
+public class IotCapabilities {
 
     /** 供注解声明的 IOT 系统身份编码。 */
     public static final String SYSTEM_IDENTITY_VALUE = "IOT";

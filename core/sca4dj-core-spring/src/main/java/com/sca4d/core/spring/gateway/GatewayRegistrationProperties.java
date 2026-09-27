@@ -9,7 +9,7 @@ import java.time.Duration;
 
 /** 保存应用实例向 Gateway 注册 HTTP 路由和回调所需的运行参数。 */
 @ConfigurationProperties("sca4dj.gateway.registration")
-public final class GatewayRegistrationProperties {
+public class GatewayRegistrationProperties {
 
     private boolean enabled;
 

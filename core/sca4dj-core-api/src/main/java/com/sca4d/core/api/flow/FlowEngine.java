@@ -15,7 +15,7 @@ import java.util.Objects;
  *
  * <p>根据 {@link FlowEvent} 选择唯一转换，并通过 {@link FlowStore} 乐观更新实例。
  */
-public final class FlowEngine {
+public class FlowEngine {
 
     private static final Logger LOG = LoggerFactory.getLogger(FlowEngine.class);
 

@@ -10,7 +10,7 @@ import java.util.Objects;
 /**
  * 表示 Subject 在某个认证域内使用的登录账号。
  */
-public final class Account implements Resource {
+public class Account implements Resource {
 
     /**
      * Account 使用的稳定 Resource 类型。

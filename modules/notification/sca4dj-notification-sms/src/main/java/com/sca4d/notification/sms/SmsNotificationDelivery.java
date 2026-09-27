@@ -28,7 +28,7 @@ import java.util.Objects;
 /**
  * 解析手机号、线路、Provider 与平台绑定，并提交一个必发或可选 SMS 渠道请求。
  */
-public final class SmsNotificationDelivery implements NotificationDelivery {
+public class SmsNotificationDelivery implements NotificationDelivery {
 
     private static final Logger LOG = LoggerFactory.getLogger(SmsNotificationDelivery.class);
 

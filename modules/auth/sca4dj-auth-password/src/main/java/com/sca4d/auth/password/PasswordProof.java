@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 只在一次认证方法调用中存在的 Password 认证材料。 */
-public final class PasswordProof {
+public class PasswordProof {
 
     private final String identifier;
 

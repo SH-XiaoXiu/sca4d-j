@@ -24,7 +24,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /** 原子维护 SYSTEM 的固定身份绑定，拒绝接管已有 ID 或改写历史映射。 */
-public final class SystemIdentityRepository {
+public class SystemIdentityRepository {
 
     private static final PrincipalType TYPE = new PrincipalType(SystemPrincipalCodec.TYPE);
 

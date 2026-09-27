@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /** 标识管理端中一起展示的一组设置。 */
-public final class SettingGroup {
+public class SettingGroup {
 
     private final TreeCode code;
 

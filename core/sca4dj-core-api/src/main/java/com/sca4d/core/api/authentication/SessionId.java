@@ -3,7 +3,7 @@ package com.sca4d.core.api.authentication;
 import com.sca4d.core.api.utils.TextUtils;
 
 /** 保存任意认证 Session 的不透明标识。 */
-public final class SessionId {
+public class SessionId {
 
     private final String value;
 

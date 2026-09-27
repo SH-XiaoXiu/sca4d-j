@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Instant;
 
 /** 在 MQTT publish 成功后直接完成下行消息，不等待设备业务回执。 */
-public final class NoAcknowledgementPolicy implements AcknowledgementPolicy {
+public class NoAcknowledgementPolicy implements AcknowledgementPolicy {
 
     public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/ACK/NONE");
 

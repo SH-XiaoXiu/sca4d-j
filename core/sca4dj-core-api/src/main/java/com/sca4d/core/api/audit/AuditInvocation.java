@@ -12,7 +12,7 @@ import java.util.Objects;
 
 /** 向 Audit 目标解析器和 payload 工厂暴露一次已经得到结果的方法执行。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class AuditInvocation {
+public class AuditInvocation {
 
     private final CallExecution execution;
 

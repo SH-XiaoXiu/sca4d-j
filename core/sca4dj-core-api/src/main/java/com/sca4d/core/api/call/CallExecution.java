@@ -25,7 +25,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 保存一次被声明式调用规则包围的方法执行及其成功要求。 */
-public final class CallExecution {
+public class CallExecution {
 
     private final Call call;
 
@@ -258,7 +258,7 @@ public final class CallExecution {
     }
 
     /** 保存一项权限范围及其是否被 Repository 消费。 */
-    private static final class ResourceScopeRequirement implements CallRequirement {
+    private static class ResourceScopeRequirement implements CallRequirement {
 
         private final Permission permission;
 

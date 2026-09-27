@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 接收修改数据库字典项时提交的标签、状态、顺序和乐观锁版本。 */
-public final class UpdateDictionaryOptionRequest {
+public class UpdateDictionaryOptionRequest {
 
     @NotBlank
     @Size(max = 160)

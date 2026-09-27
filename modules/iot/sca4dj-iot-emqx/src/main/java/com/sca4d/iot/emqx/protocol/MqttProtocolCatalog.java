@@ -11,7 +11,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /** 按 code 索引具体应用安装的 MQTT 协议并汇总共享订阅 Topic。 */
-public final class MqttProtocolCatalog {
+public class MqttProtocolCatalog {
 
     private final @NotNull Map<String, MqttDeviceProtocol> protocols;
 

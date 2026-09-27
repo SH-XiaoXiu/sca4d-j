@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 接收通知编码和完整多语言 Email 源码模板。 */
-public final class EmailTemplateRequest {
+public class EmailTemplateRequest {
 
     @NotBlank
     @Size(max = 128)

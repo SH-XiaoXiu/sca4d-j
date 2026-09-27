@@ -19,7 +19,7 @@ import java.net.ConnectException;
 /** 把连接 Server 实例失败转换为 502，不改变其他 HTTP 异常。 */
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public final class GatewayRoutingExceptionHandler implements WebExceptionHandler {
+public class GatewayRoutingExceptionHandler implements WebExceptionHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GatewayRoutingExceptionHandler.class);
 

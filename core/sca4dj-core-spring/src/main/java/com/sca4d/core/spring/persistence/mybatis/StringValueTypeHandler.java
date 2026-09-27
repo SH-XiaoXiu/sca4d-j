@@ -17,7 +17,7 @@ import java.util.function.Function;
  *
  * @param <T> 需要读写的 Java 类型
  */
-public final class StringValueTypeHandler<T> extends BaseTypeHandler<T> {
+public class StringValueTypeHandler<T> extends BaseTypeHandler<T> {
 
     private final @NotNull Function<String, T> factory;
 

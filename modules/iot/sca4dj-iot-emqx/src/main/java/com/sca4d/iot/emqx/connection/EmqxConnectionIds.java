@@ -13,7 +13,7 @@ import java.util.Base64;
 import java.util.Objects;
 
 /** 根据 EMQX Client ID 和连接建立时间生成稳定且不暴露公开身份的连接标识。 */
-final class EmqxConnectionIds {
+class EmqxConnectionIds {
 
     private EmqxConnectionIds() {
     }

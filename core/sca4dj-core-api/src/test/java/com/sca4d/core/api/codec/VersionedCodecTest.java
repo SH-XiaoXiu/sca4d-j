@@ -111,7 +111,7 @@ class VersionedCodecTest {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    private static final class GapMigration implements Migratable<String> {
+    private static class GapMigration implements Migratable<String> {
         private final int source;
 
         private final int target;

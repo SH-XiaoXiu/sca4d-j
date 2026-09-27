@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 使用单次绝对时间或带时区的六字段 Cron 表达设备下行触发时间。 */
-public final class DeviceScheduleTrigger {
+public class DeviceScheduleTrigger {
 
     private final @Nullable Instant executeAt;
 

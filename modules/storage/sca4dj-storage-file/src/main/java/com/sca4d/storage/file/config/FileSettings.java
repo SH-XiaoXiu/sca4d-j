@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Duration;
 
 /** 声明客户可以管理的文件传输有效期、待绑定保留期和大小上限。 */
-public final class FileSettings {
+public class FileSettings {
 
     private static final SettingGroup GROUP = new SettingGroup(
             TreeCode.of("STORAGE:FILE"),

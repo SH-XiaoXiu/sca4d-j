@@ -28,7 +28,7 @@ import java.util.Optional;
 /**
  * 隐藏 SMS Provider 和传输绑定的 Mapper 与 JSON 字段。
  */
-public final class SmsRepository {
+public class SmsRepository {
     private final SmsProviderMapper mapper;
 
     private final ObjectMapper objectMapper;

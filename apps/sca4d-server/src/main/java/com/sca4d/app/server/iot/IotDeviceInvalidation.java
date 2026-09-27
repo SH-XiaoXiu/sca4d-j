@@ -11,7 +11,7 @@ import java.util.Set;
 
 /** 返回需要浏览器重新读取的 Device 数据区域，不携带权威业务状态。 */
 @SuppressWarnings("unused")
-public final class IotDeviceInvalidation {
+public class IotDeviceInvalidation {
 
     private final long deviceId;
 

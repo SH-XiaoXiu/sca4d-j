@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 /** 判断当前 Platform Principal 能否为目标用户资料申请头像上传。 */
 @Component
-public final class PlatformUserProfilePermissionPolicy implements PermissionPolicy {
+public class PlatformUserProfilePermissionPolicy implements PermissionPolicy {
     /** 创建无状态的 Platform 用户资料权限策略。 */
     public PlatformUserProfilePermissionPolicy() {
     }

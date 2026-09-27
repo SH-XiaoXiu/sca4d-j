@@ -4,7 +4,7 @@ import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.Nullable;
 
 /** 表示普通数据操作或 DataGraph 值没有满足已声明的数据契约。 */
-public final class DataAssertionException extends RuntimeException {
+public class DataAssertionException extends RuntimeException {
 
     private static final int MAX_SAFE_SAMPLE_LENGTH = 256;
 

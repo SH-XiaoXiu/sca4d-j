@@ -12,7 +12,7 @@ import java.util.Set;
  * <p>认证方法成功后直接返回当前对象。多因素认证评估会话（Session，{@link Session}）中的认证列表。
  */
 @SuppressWarnings("ClassCanBeRecord")
-public final class Authentication {
+public class Authentication {
 
     private final long accountId;
 

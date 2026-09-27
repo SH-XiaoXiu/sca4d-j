@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
  * 保存数据库物模型的规范 JSON 和摘要。
  */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class EncodedThingModel {
+public class EncodedThingModel {
     private final int version;
 
     private final @NotNull String modelJson;

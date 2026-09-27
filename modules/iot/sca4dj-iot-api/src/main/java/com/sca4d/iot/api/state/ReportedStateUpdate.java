@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 保存协议 Pipeline 输出的一次 reported 字段组更新。 */
-public final class ReportedStateUpdate {
+public class ReportedStateUpdate {
 
     private final @NotNull String groupCode;
 

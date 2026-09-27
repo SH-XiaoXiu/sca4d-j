@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存站内信模板生成的纯文本标题、纯文本正文和安全 HTML 正文。 */
-public final class RenderedInboxMessage {
+public class RenderedInboxMessage {
 
     private final @NotNull String title;
 

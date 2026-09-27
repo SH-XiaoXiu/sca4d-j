@@ -41,7 +41,7 @@ import java.util.zip.CRC32C;
 import java.util.zip.Checksum;
 
 /** 提供不访问外部状态的文本、值、集合、字节、JSON 和标识数据处理。 */
-public final class DataOps {
+public class DataOps {
 
     private static final int DEFAULT_ID_LENGTH = 12;
 
@@ -337,7 +337,7 @@ public final class DataOps {
     }
 
     /** 不可变文本处理对象。 */
-    public static final class TextPipe {
+    public static class TextPipe {
 
         private final @Nullable String value;
 
@@ -451,7 +451,7 @@ public final class DataOps {
      *
      * @param <T> 当前值类型
      */
-    public static final class ValuePipe<T> {
+    public static class ValuePipe<T> {
 
         private final @Nullable T value;
 
@@ -652,7 +652,7 @@ public final class DataOps {
      *
      * @param <T> 当前元素类型
      */
-    public static final class SeqPipe<T> {
+    public static class SeqPipe<T> {
 
         private final List<T> values;
 
@@ -720,7 +720,7 @@ public final class DataOps {
     }
 
     /** 保存字节快照并按明确偏移读取数值、文本和校验值。 */
-    public static final class BytePipe {
+    public static class BytePipe {
 
         private final byte @NotNull [] values;
 
@@ -992,7 +992,7 @@ public final class DataOps {
     }
 
     /** 在固定长度数组中按明确偏移写入数值并生成防御性副本。 */
-    public static final class ByteBuilder {
+    public static class ByteBuilder {
 
         private final byte @NotNull [] values;
 
@@ -1152,7 +1152,7 @@ public final class DataOps {
     }
 
     /** 不可变 JSON 对象构建器。 */
-    public static final class JsonObjectPipe {
+    public static class JsonObjectPipe {
 
         private final ObjectNode value;
 
@@ -1239,7 +1239,7 @@ public final class DataOps {
     }
 
     /** 不可变短 ID 生成器。 */
-    public static final class IdPipe {
+    public static class IdPipe {
 
         private final @Nullable String prefix;
 
@@ -1277,7 +1277,7 @@ public final class DataOps {
     }
 
     /** 不可变 JSON 解析和结构编辑对象。 */
-    public static final class JsonPipe {
+    public static class JsonPipe {
 
         private final @Nullable JsonNode value;
 

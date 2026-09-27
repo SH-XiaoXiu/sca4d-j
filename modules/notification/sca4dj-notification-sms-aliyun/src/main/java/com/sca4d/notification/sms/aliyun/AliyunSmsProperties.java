@@ -8,7 +8,7 @@ import java.util.Map;
 
 /** 保存 Provider `credentialRef` 对应的阿里云 SMS 部署凭据和 Endpoint。 */
 @ConfigurationProperties("sca4dj.notification.sms.aliyun")
-public final class AliyunSmsProperties {
+public class AliyunSmsProperties {
 
     private @NotNull Map<String, Credential> credentials = new LinkedHashMap<>();
 
@@ -23,7 +23,7 @@ public final class AliyunSmsProperties {
     }
 
     /** 保存一个阿里云账号的 AccessKey 和服务 Endpoint。 */
-    public static final class Credential {
+    public static class Credential {
         private String accessKeyId;
 
         private String accessKeySecret;

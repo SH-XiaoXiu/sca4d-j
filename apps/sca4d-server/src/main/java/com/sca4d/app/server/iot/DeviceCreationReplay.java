@@ -3,7 +3,7 @@ package com.sca4d.app.server.iot;
 import org.jetbrains.annotations.Nullable;
 
 /** 保存 Device 创建幂等记录解密后恢复结果所需的稳定字段。 */
-public final class DeviceCreationReplay {
+public class DeviceCreationReplay {
 
     private final long deviceId;
 

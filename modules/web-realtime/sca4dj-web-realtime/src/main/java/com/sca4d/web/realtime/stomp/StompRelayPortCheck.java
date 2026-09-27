@@ -14,7 +14,7 @@ import java.util.Objects;
 
 /** 在 `BROKER_RELAY` 模式启动完成前确认 RabbitMQ STOMP plugin TCP 端口可连接。 */
 @ApiStatus.Internal
-public final class StompRelayPortCheck implements SmartInitializingSingleton {
+public class StompRelayPortCheck implements SmartInitializingSingleton {
 
     private static final Logger LOG = LoggerFactory.getLogger(StompRelayPortCheck.class);
 

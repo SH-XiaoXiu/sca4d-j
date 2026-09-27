@@ -10,7 +10,7 @@ import java.time.ZoneId;
 import java.util.Objects;
 
 /** 提供使用明确时钟和时区的通用时间换算。 */
-public final class TimeUtils {
+public class TimeUtils {
 
     private TimeUtils() {
     }

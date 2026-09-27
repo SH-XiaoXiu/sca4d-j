@@ -17,7 +17,7 @@ import java.time.Instant;
 import java.util.Optional;
 
 /** 把一次 Quartz fire 转换成同一原定时间的持久化 Job run 提交。 */
-public final class QuartzDispatchJob implements Job {
+public class QuartzDispatchJob implements Job {
 
     private static final Logger log = LoggerFactory.getLogger(QuartzDispatchJob.class);
 

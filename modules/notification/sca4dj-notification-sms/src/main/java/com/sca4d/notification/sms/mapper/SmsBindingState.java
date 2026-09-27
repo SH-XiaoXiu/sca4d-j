@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * 保存 SMS Provider Binding Mapper 返回的参数映射 JSON 文本。
  */
-public final class SmsBindingState {
+public class SmsBindingState {
     private final long bindingId;
 
     private final long providerId;

@@ -32,7 +32,7 @@ class PrincipalLoadersTest {
     }
 
     /** 为测试返回空 Principal 集合。 */
-    private static final class EmptyPrincipalLoader implements PrincipalLoader {
+    private static class EmptyPrincipalLoader implements PrincipalLoader {
 
         @Override
         public boolean supports(@NotNull SessionIdentity identity) {

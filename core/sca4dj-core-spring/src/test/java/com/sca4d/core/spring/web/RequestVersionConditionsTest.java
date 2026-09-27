@@ -51,7 +51,7 @@ class RequestVersionConditionsTest {
     }
 
     /** 提供普通方法和版本保护方法的反射声明。 */
-    private static final class Fixture {
+    private static class Fixture {
 
         private void plain() {
         }

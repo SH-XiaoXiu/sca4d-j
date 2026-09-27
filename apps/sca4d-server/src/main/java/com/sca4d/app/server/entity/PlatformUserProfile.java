@@ -11,7 +11,7 @@ import java.util.Objects;
 
 /** 保存示例 App 为 Platform 用户维护的展示名称和可选联系方式。 */
 @SuppressWarnings("ClassCanBeRecord")
-public final class PlatformUserProfile implements Resource {
+public class PlatformUserProfile implements Resource {
 
     /** Platform 用户资料使用的稳定 Resource 类型。 */
     public static final @NotNull String RESOURCE_TYPE_VALUE = "PLATFORM:USERS:PROFILES";

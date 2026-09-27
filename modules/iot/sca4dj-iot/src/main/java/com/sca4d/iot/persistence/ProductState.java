@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 /** 保存 Mapper 查询得到的 Product 标量字段。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class ProductState {
+public class ProductState {
     private final long id;
 
     private final @NotNull String code;

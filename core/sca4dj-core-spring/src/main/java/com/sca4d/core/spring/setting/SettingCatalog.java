@@ -20,7 +20,7 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 
 /** 校验并保存当前应用注册的全部 Setting 定义。 */
-public final class SettingCatalog {
+public class SettingCatalog {
 
     private static final Pattern ENV = Pattern.compile("[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)+");
 

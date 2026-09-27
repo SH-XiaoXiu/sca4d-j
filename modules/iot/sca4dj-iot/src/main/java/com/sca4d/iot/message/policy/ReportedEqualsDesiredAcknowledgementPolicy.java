@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Instant;
 
 /** 只在 reported state 已经与当前 desired sequence 相等时完成状态同步。 */
-public final class ReportedEqualsDesiredAcknowledgementPolicy implements AcknowledgementPolicy {
+public class ReportedEqualsDesiredAcknowledgementPolicy implements AcknowledgementPolicy {
 
     public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/ACK/REPORTED/EQUALS/DESIRED");
 

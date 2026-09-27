@@ -1,7 +1,7 @@
 package com.sca4d.core.api.concurrent;
 
 /** 用于乐观并发控制的非负版本。 */
-public final class Version {
+public class Version {
 
     private final long value;
 

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 保存一种由稳定编码标识、只携带 MessageContent 的普通消息。 */
-public final class ContentMessage extends Message {
+public class ContentMessage extends Message {
 
     private final @NotNull TreeCode code;
 

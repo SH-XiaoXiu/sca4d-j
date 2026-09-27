@@ -26,7 +26,7 @@ import java.util.Objects;
 import java.util.Properties;
 
 /** 使用 JavaMail 和 SecretKeyring 建立三种 TLS 模式的 SMTP 连接。 */
-public final class SmtpEmailGateway implements EmailGateway {
+public class SmtpEmailGateway implements EmailGateway {
 
     private static final Logger LOG = LoggerFactory.getLogger(SmtpEmailGateway.class);
 

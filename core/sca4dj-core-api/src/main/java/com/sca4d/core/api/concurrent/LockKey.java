@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 /** 使用稳定锁资源编码和动态标识组成跨实例互斥键，物理名称使用 App 隔离。 */
-public final class LockKey extends Key {
+public class LockKey extends Key {
 
     /** 构造固定锁键。 */
     public LockKey(@NotNull Code code) {

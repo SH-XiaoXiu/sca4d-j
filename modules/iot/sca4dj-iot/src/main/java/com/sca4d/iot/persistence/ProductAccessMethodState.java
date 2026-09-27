@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存批量查询返回的 Product 标识和允许接入方式编码。 */
-public final class ProductAccessMethodState {
+public class ProductAccessMethodState {
 
     private final long productId;
 

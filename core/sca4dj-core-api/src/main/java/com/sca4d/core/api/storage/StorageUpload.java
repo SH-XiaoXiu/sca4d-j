@@ -8,7 +8,7 @@ import java.util.Objects;
 
 /** 表示存储实现生成的统一 PUT 请求。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class StorageUpload {
+public class StorageUpload {
     private final @NotNull URI url;
 
     private final @NotNull Map<@NotNull String, @NotNull String> headers;

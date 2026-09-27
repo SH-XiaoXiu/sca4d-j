@@ -18,7 +18,7 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 /** 在 Redis 中保存每个 Account 的 Session 失效代次。 */
-public final class RedisSessionGeneration {
+public class RedisSessionGeneration {
 
     private static final Logger LOG = LoggerFactory.getLogger(RedisSessionGeneration.class);
 

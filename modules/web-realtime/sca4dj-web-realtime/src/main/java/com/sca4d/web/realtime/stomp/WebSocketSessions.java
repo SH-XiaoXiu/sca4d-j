@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /** 记录 Spring 已建立的 WebSocket 句柄，使失效事件能在写出后定向关闭连接。 */
 @ApiStatus.Internal
-public final class WebSocketSessions implements WebSocketHandlerDecoratorFactory {
+public class WebSocketSessions implements WebSocketHandlerDecoratorFactory {
 
     private static final Logger LOG = LoggerFactory.getLogger(WebSocketSessions.class);
 

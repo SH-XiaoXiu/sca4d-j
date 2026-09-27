@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * 保存 Repository 从 `sys_setting` 读取的 owner、结构版本、值和行版本。
  */
-public final class StoredSetting {
+public class StoredSetting {
 
     private final SettingOwner owner;
 

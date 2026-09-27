@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 /** 创建首批演示使用且可以由静态 ThingModel 直接引用的具名策略对象。 */
-public final class BuiltInDevicePolicies {
+public class BuiltInDevicePolicies {
 
     private BuiltInDevicePolicies() {
     }

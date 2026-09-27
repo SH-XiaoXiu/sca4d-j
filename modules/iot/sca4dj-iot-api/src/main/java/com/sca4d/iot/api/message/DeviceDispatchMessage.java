@@ -7,7 +7,7 @@ import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 
 /** 请求发送一个标准 Device 下行消息的指定尝试。 */
-public final class DeviceDispatchMessage extends Message {
+public class DeviceDispatchMessage extends Message {
 
     public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/DISPATCH");
 

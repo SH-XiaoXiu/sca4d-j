@@ -11,7 +11,7 @@ import java.net.URISyntaxException;
 import java.util.Objects;
 
 /** 把 Spring Boot Redis 连接信息转换成等价的 Redisson 连接配置。 */
-final class RedissonConfigFactory {
+class RedissonConfigFactory {
 
     private RedissonConfigFactory() {
     }

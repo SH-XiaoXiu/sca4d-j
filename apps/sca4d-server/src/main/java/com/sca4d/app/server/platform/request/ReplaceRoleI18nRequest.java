@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /** 接收 Platform 角色完整多语言字段替换请求。 */
 @Schema(name = "ReplacePlatformRoleI18nRequest")
-public final class ReplaceRoleI18nRequest {
+public class ReplaceRoleI18nRequest {
 
     @Req.NotNull
     private @Nullable LocalizedFields i18n;

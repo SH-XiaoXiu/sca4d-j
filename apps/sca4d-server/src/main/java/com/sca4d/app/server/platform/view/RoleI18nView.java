@@ -13,7 +13,7 @@ import java.util.Objects;
 /** 返回 Platform 角色编辑使用的完整多语言字段。 */
 @Schema(name = "PlatformRoleI18n")
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
-public final class RoleI18nView {
+public class RoleI18nView {
 
     private final long roleId;
 

@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 只包装 BaseView 子类已经创建好的 Jackson 默认 Bean 序列化器。 */
-public final class BaseViewSerializerModifier extends BeanSerializerModifier {
+public class BaseViewSerializerModifier extends BeanSerializerModifier {
 
     @Serial
     private static final long serialVersionUID = 1L;

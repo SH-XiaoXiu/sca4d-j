@@ -6,7 +6,7 @@ import java.time.Duration;
 
 /** 配置 RabbitMQ 发布确认以及 Outbox 派发、租约、退避和清理。 */
 @ConfigurationProperties("sca4dj.messaging")
-public final class MessagingProperties {
+public class MessagingProperties {
 
     private Duration confirmTimeout = Duration.ofSeconds(10);
 

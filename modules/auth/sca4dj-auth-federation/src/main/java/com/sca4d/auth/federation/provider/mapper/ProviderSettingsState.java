@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 /** 保存 MyBatis 从 Provider 与配置表连接结果读取的持久化状态。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class ProviderSettingsState {
+public class ProviderSettingsState {
 
     private final @NotNull FederatedProviderProtocol protocol;
 

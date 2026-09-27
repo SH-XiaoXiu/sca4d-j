@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /** 保存停用 Device 后一次直接连接绑定及认证接入方式的完整替换。 */
-public final class DeviceConnectionChange {
+public class DeviceConnectionChange {
 
     private final @Nullable DeviceConnectionBinding connection;
 

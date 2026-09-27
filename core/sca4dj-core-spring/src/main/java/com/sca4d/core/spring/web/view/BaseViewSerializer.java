@@ -37,7 +37,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 在 Jackson 默认 Bean 序列化后应用本地化和 ViewJson 定制。 */
-public final class BaseViewSerializer extends StdSerializer<BaseView> {
+public class BaseViewSerializer extends StdSerializer<BaseView> {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -302,7 +302,7 @@ public final class BaseViewSerializer extends StdSerializer<BaseView> {
 
     /** 一个经过校验的本地化目标与 source 方法。 */
     @SuppressWarnings("ClassCanBeRecord")
-    private static final class Localization {
+    private static class Localization {
 
         private final String target;
 

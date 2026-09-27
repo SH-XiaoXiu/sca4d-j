@@ -105,7 +105,7 @@ class SmsConfigurationServiceTest {
         return () -> Id.of(2L);
     }
 
-    private static final class TestNotice {
+    private static class TestNotice {
         private final long accountId;
 
         private final String code;

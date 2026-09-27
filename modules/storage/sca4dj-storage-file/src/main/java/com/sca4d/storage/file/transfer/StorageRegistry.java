@@ -15,7 +15,7 @@ import java.util.Objects;
 
 /** 按文件记录中的 backendId 查找存储实现，并拒绝两个实现使用相同标识。 */
 @ApiStatus.Internal
-public final class StorageRegistry {
+public class StorageRegistry {
     private static final Logger LOG = LoggerFactory.getLogger(StorageRegistry.class);
 
     private final @NotNull Map<String, FileStorage> storages;

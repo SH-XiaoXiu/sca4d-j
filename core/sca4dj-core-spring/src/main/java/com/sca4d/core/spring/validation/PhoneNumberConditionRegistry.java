@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 保存应用显式声明的 PhoneNumberCondition Bean，并拒绝重复实现类型。 */
-public final class PhoneNumberConditionRegistry {
+public class PhoneNumberConditionRegistry {
 
     private final List<PhoneNumberCondition> conditions;
 

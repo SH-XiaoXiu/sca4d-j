@@ -9,7 +9,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 保存 Redis 中的 SMS 验证码摘要、Account、状态、次数和时间边界。 */
-public final class SmsCodeChallengeState {
+public class SmsCodeChallengeState {
     private final @NotNull SmsCodeChallengeId challengeId;
 
     private final long accountId;

@@ -11,7 +11,7 @@ import java.util.Objects;
 
 /** 返回一个已注册个人偏好的结构版本、完整 JSON 值和维护状态。 */
 @SuppressWarnings("unused")
-public final class PreferenceView {
+public class PreferenceView {
 
     private final String key;
 

@@ -915,7 +915,7 @@ class CallLifecycleTest {
     /**
      * 声明内置、自定义和非法限流组合的测试服务。
      */
-    private static final class RateLimitedService {
+    private static class RateLimitedService {
 
         @RateLimited(dimensions = {
                 RateLimitDimension.GLOBAL,
@@ -975,7 +975,7 @@ class CallLifecycleTest {
         }
     }
 
-    private static final class SecuredService {
+    private static class SecuredService {
 
         @RequirePermission(operation = "platform:account:update")
         @RateLimited(keyResolver = RateKeyResolver.class, permits = 10, windowSeconds = 60)
@@ -987,7 +987,7 @@ class CallLifecycleTest {
         }
     }
 
-    private static final class IdempotentService {
+    private static class IdempotentService {
 
         @Idempotent(keyResolver = IdempotencyKeyResolver.class, retentionSeconds = 300)
         private String create() {
@@ -995,7 +995,7 @@ class CallLifecycleTest {
         }
     }
 
-    private static final class TargetedService {
+    private static class TargetedService {
 
         @Audit(operation = "platform/account/status/change")
         private String update(@AuditTarget(resourceType = Account.RESOURCE_TYPE_VALUE) long accountId) {
@@ -1003,7 +1003,7 @@ class CallLifecycleTest {
         }
     }
 
-    private static final class DeviceService {
+    private static class DeviceService {
 
         @RequirePermission(resourceResolver = DeviceCollectionResolver.class, action = "read")
         private String list() {
@@ -1014,7 +1014,7 @@ class CallLifecycleTest {
     /**
      * 声明一次读取一组动态资源的测试服务。
      */
-    private static final class BatchService {
+    private static class BatchService {
 
         @RequirePermission(resourceResolver = BatchResourcesResolver.class, action = Action.READ_VALUE)
         private String read(List<Long> ids) {
@@ -1025,7 +1025,7 @@ class CallLifecycleTest {
     /**
      * 声明返回空元素资源集合的测试服务。
      */
-    private static final class NullResourceService {
+    private static class NullResourceService {
 
         @RequirePermission(resourceResolver = NullResourceResolver.class, action = Action.READ_VALUE)
         @SuppressWarnings("unused") // 测试通过反射读取权限声明，不直接调用该方法。
@@ -1037,7 +1037,7 @@ class CallLifecycleTest {
     /**
      * 声明返回错误元素资源集合的测试服务。
      */
-    private static final class InvalidResourceService {
+    private static class InvalidResourceService {
 
         @RequirePermission(resourceResolver = InvalidResourceResolver.class, action = Action.READ_VALUE)
         @SuppressWarnings("unused") // 测试通过反射读取权限声明，不直接调用该方法。
@@ -1047,7 +1047,7 @@ class CallLifecycleTest {
     }
 
     @RequirePermission(operation = "duplicate:operation")
-    private static final class DuplicatePermissionService {
+    private static class DuplicatePermissionService {
 
         @RequirePermission(operation = "duplicate:operation")
         private String invoke() {
@@ -1062,7 +1062,7 @@ class CallLifecycleTest {
                 UTF_8);
     }
 
-    private static final class RateKeyResolver implements CallValueResolver<String> {
+    private static class RateKeyResolver implements CallValueResolver<String> {
 
         @Override
         public @NotNull String resolve(@NotNull CallExecution execution) {
@@ -1073,7 +1073,7 @@ class CallLifecycleTest {
     /**
      * 返回空白自定义限流键的测试解析器。
      */
-    private static final class BlankRateKeyResolver implements CallValueResolver<String> {
+    private static class BlankRateKeyResolver implements CallValueResolver<String> {
 
         @Override
         public @NotNull String resolve(@NotNull CallExecution execution) {
@@ -1081,7 +1081,7 @@ class CallLifecycleTest {
         }
     }
 
-    private static final class IdempotencyKeyResolver
+    private static class IdempotencyKeyResolver
             implements
                 CallValueResolver<IdempotencyKey> {
 
@@ -1091,7 +1091,7 @@ class CallLifecycleTest {
         }
     }
 
-    private static final class LockKeyResolver implements CallValueResolver<LockKey> {
+    private static class LockKeyResolver implements CallValueResolver<LockKey> {
 
         @Override
         public @NotNull LockKey resolve(@NotNull CallExecution execution) {
@@ -1099,7 +1099,7 @@ class CallLifecycleTest {
         }
     }
 
-    private static final class DeviceCollectionResolver
+    private static class DeviceCollectionResolver
             implements
                 CallValueResolver<Collection<Resource>> {
 
@@ -1112,7 +1112,7 @@ class CallLifecycleTest {
     /**
      * 把方法第一个参数中的标识转为批量测试资源。
      */
-    private static final class BatchResourcesResolver
+    private static class BatchResourcesResolver
             implements
                 CallValueResolver<Collection<Resource>> {
 
@@ -1131,7 +1131,7 @@ class CallLifecycleTest {
     /**
      * 返回包含空元素的集合，用于验证 Core 拒绝非法解析结果。
      */
-    private static final class NullResourceResolver
+    private static class NullResourceResolver
             implements
                 CallValueResolver<Collection<Resource>> {
 
@@ -1144,7 +1144,7 @@ class CallLifecycleTest {
     /**
      * 通过原始集合模拟编译期约束外的错误元素。
      */
-    private static final class InvalidResourceResolver
+    private static class InvalidResourceResolver
             implements
                 CallValueResolver<Collection<Resource>> {
 
@@ -1158,7 +1158,7 @@ class CallLifecycleTest {
     /**
      * 记录批量资源的判断顺序，并可拒绝指定资源。
      */
-    private static final class BatchPermissionPolicy
+    private static class BatchPermissionPolicy
             implements
                 PermissionPolicy {
 
@@ -1186,7 +1186,7 @@ class CallLifecycleTest {
         }
     }
 
-    private static final class DevicePolicy
+    private static class DevicePolicy
             implements
                 PermissionPolicy {
 
@@ -1207,7 +1207,7 @@ class CallLifecycleTest {
         }
     }
 
-    private static final class DeviceCollection implements Resource {
+    private static class DeviceCollection implements Resource {
 
         @Override
         public @NotNull TreeCode type() {
@@ -1220,7 +1220,7 @@ class CallLifecycleTest {
         }
     }
 
-    private static final class DeviceScope implements ResourceScope {
+    private static class DeviceScope implements ResourceScope {
 
         @Override
         public TreeCode resourceType() {
@@ -1228,7 +1228,7 @@ class CallLifecycleTest {
         }
     }
 
-    private static final class OperationPolicy
+    private static class OperationPolicy
             implements
                 PermissionPolicy {
 
@@ -1252,7 +1252,7 @@ class CallLifecycleTest {
         }
     }
 
-    private static final class MemoryIdempotencyStore implements IdempotencyStore {
+    private static class MemoryIdempotencyStore implements IdempotencyStore {
 
         private final List<String> events;
 
@@ -1306,7 +1306,7 @@ class CallLifecycleTest {
         }
     }
 
-    private static final class RecordingDistributedLock
+    private static class RecordingDistributedLock
             implements
                 DistributedLock {
 

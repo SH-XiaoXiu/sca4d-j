@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 隐藏站内信 Mapper、游标分页和幂等新增语义。 */
-public final class InboxRepository {
+public class InboxRepository {
 
     private final @NotNull InboxMessageMapper mapper;
 

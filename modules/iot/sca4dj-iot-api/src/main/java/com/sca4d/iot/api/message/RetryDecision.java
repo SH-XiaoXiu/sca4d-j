@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 表示 retry 策略要求停止或在明确时刻再次发送。 */
-public final class RetryDecision {
+public class RetryDecision {
 
     private final @Nullable Instant retryAt;
 

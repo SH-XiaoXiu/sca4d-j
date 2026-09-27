@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 使用短期 enrollment 激活或替换 TOTP Credential。 */
-public final class TotpCredentialRequest {
+public class TotpCredentialRequest {
 
     @NotBlank
     @Size(max = 64)

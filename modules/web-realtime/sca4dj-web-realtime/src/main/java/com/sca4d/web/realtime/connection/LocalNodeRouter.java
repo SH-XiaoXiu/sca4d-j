@@ -12,7 +12,7 @@ import java.util.UUID;
 
 /** 在单个 JVM 内把 Web Realtime 事件直接交给本机连接。 */
 @ApiStatus.Internal
-public final class LocalNodeRouter implements NodeRouter {
+public class LocalNodeRouter implements NodeRouter {
 
     private static final Logger LOG = LoggerFactory.getLogger(LocalNodeRouter.class);
 

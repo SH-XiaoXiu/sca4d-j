@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 接收联邦 Provider 状态修改请求。 */
-public final class ProviderStatusRequest {
+public class ProviderStatusRequest {
     @Req.NotNull
     private FederatedProviderStatus status;
 

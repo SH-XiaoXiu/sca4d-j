@@ -8,7 +8,7 @@ import java.util.Objects;
 
 /** 保存 Gateway 为 Server 实例注册分配的租约标识。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class GatewayRegistrationResponse {
+public class GatewayRegistrationResponse {
 
     private final @NotNull String leaseId;
 

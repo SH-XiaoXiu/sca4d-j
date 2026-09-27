@@ -3,7 +3,7 @@ package com.sca4d.core.api.codec;
 import org.jetbrains.annotations.NotNull;
 
 /** 使用源版本解码和目标版本编码完成一个相邻版本迁移步骤。 */
-public final class CodecMigrationStep<V, W> implements Migratable<W> {
+public class CodecMigrationStep<V, W> implements Migratable<W> {
 
     private final @NotNull VersionedCodec<V, W> source;
 

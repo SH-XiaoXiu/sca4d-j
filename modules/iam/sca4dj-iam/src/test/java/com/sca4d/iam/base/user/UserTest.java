@@ -145,7 +145,7 @@ class UserTest {
                 NOW.plusSeconds(3600));
     }
 
-    private static final class OtherPrincipal implements Principal {
+    private static class OtherPrincipal implements Principal {
 
         @Override
         public long principalId() {

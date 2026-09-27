@@ -11,7 +11,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /** 为运行时输入提供必填 Bean Validation 约束，避免与 JetBrains 空值注解混用。 */
-public final class Req {
+public class Req {
 
     /** 禁止创建校验注解容器实例。 */
     private Req() {

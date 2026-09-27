@@ -14,7 +14,7 @@ import java.util.UUID;
 
 /** 保存具体应用连接 EMQX MQTT 和 Management API 所选择的运行参数。 */
 @ConfigurationProperties("sca4dj.iot.emqx")
-public final class EmqxProperties {
+public class EmqxProperties {
 
     private boolean enabled;
 

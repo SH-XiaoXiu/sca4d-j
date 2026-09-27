@@ -192,7 +192,7 @@ class SessionServiceTest {
 
     /** 返回测试预先配置的 SessionIdentity。 */
     @SuppressWarnings("ClassCanBeRecord") // 项目禁止使用 Java record，保留普通测试类型。
-    private static final class FixedIdentityLoader implements SessionIdentityLoader {
+    private static class FixedIdentityLoader implements SessionIdentityLoader {
         private final Account supported;
 
         private final SessionIdentity identity;
@@ -214,7 +214,7 @@ class SessionServiceTest {
     }
 
     /** 为测试身份返回一个固定 Principal。 */
-    private static final class FixedPrincipalLoader
+    private static class FixedPrincipalLoader
             implements
                 PrincipalLoader {
 
@@ -230,7 +230,7 @@ class SessionServiceTest {
     }
 
     /** 为测试身份返回一个只在 Session 保存标识的 Principal。 */
-    private static final class FixedPrincipalIdLoader
+    private static class FixedPrincipalIdLoader
             implements
                 PrincipalIdLoader<SessionTestFixture.TestPrincipal> {
 

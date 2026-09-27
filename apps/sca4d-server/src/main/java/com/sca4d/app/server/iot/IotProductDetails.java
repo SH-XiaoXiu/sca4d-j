@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 把公共 Product 与 Sca4d Server 的启停 Profile 组合成一个应用查询结果。 */
-public final class IotProductDetails {
+public class IotProductDetails {
 
     private final @NotNull Product product;
 

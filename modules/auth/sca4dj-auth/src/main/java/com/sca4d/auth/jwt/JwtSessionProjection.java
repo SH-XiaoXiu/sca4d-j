@@ -27,7 +27,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 使用独立 HS256 密钥把完整 Core Session 编码为短效 JWS 投影，并在请求中离线恢复。 */
-public final class JwtSessionProjection {
+public class JwtSessionProjection {
 
     static final String TOKEN_TYPE = "Bearer";
 

@@ -8,7 +8,7 @@ import java.util.Objects;
 
 /** 读取应用支持的语言标签和默认语言标签。 */
 @ConfigurationProperties("sca4dj.i18n")
-public final class I18nProperties {
+public class I18nProperties {
 
     private List<String> supportedLocales = new ArrayList<>();
 

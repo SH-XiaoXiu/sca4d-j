@@ -9,7 +9,7 @@ import java.util.Map;
 
 /** 配置新密文使用的 active key 与仍可读取旧密文的 AES-256 key。 */
 @ConfigurationProperties("sca4dj.secret-keyring")
-public final class SecretKeyringProperties {
+public class SecretKeyringProperties {
 
     private String activeKeyId;
 

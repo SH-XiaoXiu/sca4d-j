@@ -6,7 +6,7 @@ import java.util.Objects;
 
 /** 返回创建或轮换后的 Shared Secret 凭据和仅本次可见的原始值。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class IssuedSharedSecret {
+public class IssuedSharedSecret {
 
     private final @NotNull SharedSecretCredential credential;
 

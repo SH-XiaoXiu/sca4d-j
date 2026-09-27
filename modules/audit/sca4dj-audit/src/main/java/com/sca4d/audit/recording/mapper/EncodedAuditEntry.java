@@ -8,7 +8,7 @@ import java.time.Instant;
 
 /** 保存 audit_record 查询和写入使用的数据库列值。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class EncodedAuditEntry {
+public class EncodedAuditEntry {
     private final long id;
 
     private final @NotNull String requestId;

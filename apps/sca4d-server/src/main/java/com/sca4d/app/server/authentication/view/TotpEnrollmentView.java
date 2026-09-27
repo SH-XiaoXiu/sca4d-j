@@ -7,7 +7,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 不包含 Secret、URI 或二维码内容的 TOTP enrollment。 */
-public final class TotpEnrollmentView {
+public class TotpEnrollmentView {
 
     private final String enrollmentId;
 

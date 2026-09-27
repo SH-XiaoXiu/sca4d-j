@@ -13,7 +13,7 @@ import java.lang.reflect.Method;
 
 /** 执行 Repository 的 `@AffectedRows` 声明，并在方法返回前解释其唯一一条 DML 结果。 */
 @Aspect
-public final class AffectedRowsAspect {
+public class AffectedRowsAspect {
 
     /**
      * 在 Repository 方法执行期间建立影响行数声明。

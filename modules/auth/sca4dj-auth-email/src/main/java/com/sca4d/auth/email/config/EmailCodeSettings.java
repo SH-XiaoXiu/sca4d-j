@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Duration;
 
 /** 声明 Email Code Challenge 有效期、重发间隔和错误次数上限。 */
-public final class EmailCodeSettings {
+public class EmailCodeSettings {
 
     private static final SettingGroup GROUP = new SettingGroup(
             TreeCode.of("AUTHENTICATION"),

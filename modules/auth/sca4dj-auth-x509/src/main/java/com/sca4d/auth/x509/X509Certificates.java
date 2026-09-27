@@ -12,7 +12,7 @@ import java.security.cert.X509Certificate;
 import java.util.Objects;
 
 /** 提供 X.509 模块内部统一的 DER 解析和 SHA-256 指纹计算。 */
-final class X509Certificates {
+class X509Certificates {
 
     static final int MAX_DER_BYTES = 64 * 1024;
 

@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 /** 查询 Audit 模块记录，并补充 Sca4d Server 拥有的 Principal 展示名称。 */
 @Service
-public final class OperationLogService {
+public class OperationLogService {
     private static final Logger LOG = LoggerFactory.getLogger(OperationLogService.class);
 
     private final @NotNull AuditQueryService audit;

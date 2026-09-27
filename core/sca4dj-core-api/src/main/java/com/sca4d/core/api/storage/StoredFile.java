@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * 返回文件标识、上传 Principal、业务用途、内容信息和当前状态。
  */
-public final class StoredFile implements Resource {
+public class StoredFile implements Resource {
     /**
      * 文件使用的稳定 Resource 类型。
      */

@@ -12,7 +12,7 @@ import java.util.Objects;
  * 保存一种 Resource 类型在 Session 中受信任的正数标识集合。
  */
 @SuppressWarnings("ClassCanBeRecord") // 项目禁止使用 Java record，保留普通不可变类型。
-public final class ResourceIdSet {
+public class ResourceIdSet {
 
     private final @NotNull TreeCode resourceType;
 

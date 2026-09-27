@@ -899,7 +899,7 @@ class JobRuntimeIntegrationTest {
 
     /** 保存一个测试用 Executor 和对应 worker。 */
     @SuppressWarnings("ClassCanBeRecord") // 测试类型遵守项目禁用 record 的规则。
-    private static final class Runtime {
+    private static class Runtime {
         private final DefaultJobExecutor executor;
 
         private final JobWorker worker;

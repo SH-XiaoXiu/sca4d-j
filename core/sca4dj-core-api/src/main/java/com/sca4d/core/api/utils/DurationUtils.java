@@ -6,7 +6,7 @@ import java.time.Duration;
 import java.util.Objects;
 
 /** 校验时间长度为正数。 */
-public final class DurationUtils {
+public class DurationUtils {
 
     private DurationUtils() {
     }

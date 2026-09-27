@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /** 把 Spring STOMP Session 生命周期接入 ConnectionId、Redis 路由和本机连接句柄。 */
 @ApiStatus.Internal
-public final class StompConnections {
+public class StompConnections {
 
     static final String CONNECTION_ATTRIBUTE = StompConnections.class.getName() + ".connection";
 
@@ -129,7 +129,7 @@ public final class StompConnections {
     }
 
     /** 按 Spring STOMP Session 发送浏览器信封，写出完成后可请求关闭实际连接。 */
-    private final class StompConnection implements LocalConnection {
+    private class StompConnection implements LocalConnection {
 
         private final @NotNull ConnectionId id;
 

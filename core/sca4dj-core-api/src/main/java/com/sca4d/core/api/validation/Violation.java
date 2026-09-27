@@ -4,7 +4,7 @@ import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.Contract;
 
 /** 表示一个输入位置没有满足规则的校验问题（Validation Violation）。 */
-public final class Violation {
+public class Violation {
 
     private final String path;
 

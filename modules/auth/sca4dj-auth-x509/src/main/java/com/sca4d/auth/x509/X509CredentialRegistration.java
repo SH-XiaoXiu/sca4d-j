@@ -6,7 +6,7 @@ import java.util.Objects;
 
 /** 保存管理流程准备登记的 X.509 公钥证书，不接受或保存私钥。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class X509CredentialRegistration {
+public class X509CredentialRegistration {
 
     private final byte @NotNull [] certificateDer;
 

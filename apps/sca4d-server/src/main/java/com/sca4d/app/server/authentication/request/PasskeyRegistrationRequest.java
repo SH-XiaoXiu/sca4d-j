@@ -12,7 +12,7 @@ import java.util.Objects;
  * 接收 Passkey registration ceremony、浏览器响应和 Credential 名称。
  */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean setter 反序列化请求。
-public final class PasskeyRegistrationRequest {
+public class PasskeyRegistrationRequest {
 
     @NotBlank
     @Size(max = 128)

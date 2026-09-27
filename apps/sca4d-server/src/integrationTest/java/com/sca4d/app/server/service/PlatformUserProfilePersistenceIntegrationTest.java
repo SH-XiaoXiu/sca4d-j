@@ -355,7 +355,7 @@ class PlatformUserProfilePersistenceIntegrationTest {
     }
 
     /** 使用 JVM 锁实现测试进程内相同 LockKey 的限时互斥。 */
-    private static final class LocalDistributedLock implements DistributedLock {
+    private static class LocalDistributedLock implements DistributedLock {
         private final Map<LockKey, ReentrantLock> locks = new ConcurrentHashMap<>();
 
         @Override
@@ -380,7 +380,7 @@ class PlatformUserProfilePersistenceIntegrationTest {
     }
 
     /** 在内存中保存文件内容，同时让文件状态继续使用 PostgreSQL Repository。 */
-    static final class TestFileStorage implements FileStorage {
+    static class TestFileStorage implements FileStorage {
         private final Map<Long, StorageObject> preparedUploads = new ConcurrentHashMap<>();
 
         private final Map<String, byte[]> contents = new ConcurrentHashMap<>();

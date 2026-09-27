@@ -188,7 +188,7 @@ public class OpenApiTokenEndpointHandler {
     }
 
     /** 保存已经从 HTTP Basic 请求头分离的 Client ID 和 Shared Secret。 */
-    private static final class BasicCredentials {
+    private static class BasicCredentials {
 
         private final @NotNull String clientId;
 

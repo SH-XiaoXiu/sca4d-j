@@ -53,7 +53,7 @@ import java.util.Objects;
  */
 @RestControllerAdvice
 @Hidden
-public final class GlobalExceptionHandler {
+public class GlobalExceptionHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 

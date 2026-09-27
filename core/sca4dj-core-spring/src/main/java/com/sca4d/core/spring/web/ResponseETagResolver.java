@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /** 从 HTTP 响应数据中读取显式声明的强 ETag 版本。 */
-final class ResponseETagResolver {
+class ResponseETagResolver {
 
     private final Map<Class<?>, Optional<Method>> methods = new ConcurrentHashMap<>();
 

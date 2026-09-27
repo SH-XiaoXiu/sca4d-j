@@ -14,7 +14,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 在当前事务中可靠发布标准下行发送和 ACK 超时检查消息。 */
-public final class DeviceDeliveryScheduler {
+public class DeviceDeliveryScheduler {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeviceDeliveryScheduler.class);
 

@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 保存 SessionId 到 Sa-Token 不透明 Token 的短期索引，使 JWT 恢复的 Session 可以注销权威状态。 */
-public final class RedisSessionTokenIndex {
+public class RedisSessionTokenIndex {
 
     private final RedisTemplate<Key, String> redis;
 

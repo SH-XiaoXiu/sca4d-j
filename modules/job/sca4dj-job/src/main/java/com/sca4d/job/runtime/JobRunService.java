@@ -26,7 +26,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 编排 Job 创建、租约和状态转换，并为每个完整动作设置事务边界。 */
-public final class JobRunService {
+public class JobRunService {
 
     private static final Duration LOCK_WAIT = Duration.ofSeconds(10);
 

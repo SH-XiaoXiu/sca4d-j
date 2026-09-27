@@ -15,7 +15,7 @@ import java.util.Objects;
  * 保存 Account 收件箱中一项不会随模板修改而变化的通知快照。
  */
 @SuppressWarnings("ClassCanBeRecord")
-public final class InboxMessage {
+public class InboxMessage {
 
     private final long inboxMessageId;
 

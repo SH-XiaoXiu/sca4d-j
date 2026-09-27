@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 使用 Sa-Token 和 Redis 失效代次控制指定 Account 的全部 Session。 */
-public final class SaTokenSessionControl implements SessionControl {
+public class SaTokenSessionControl implements SessionControl {
 
     private static final Logger LOG = LoggerFactory.getLogger(SaTokenSessionControl.class);
 

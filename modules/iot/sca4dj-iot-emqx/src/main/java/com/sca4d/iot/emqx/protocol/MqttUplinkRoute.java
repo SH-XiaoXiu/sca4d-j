@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 选择一个 MQTT Topic Filter 的上行协议 Pipeline。 */
-public final class MqttUplinkRoute {
+public class MqttUplinkRoute {
 
     private final @NotNull String topicFilter;
 

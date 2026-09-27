@@ -32,7 +32,7 @@ import java.util.Objects;
  *
  * @param <T> 响应数据类型
  */
-public final class ApiResponse<T> {
+public class ApiResponse<T> {
 
     /** 成功响应使用的固定响应码。 */
     public static final String SUCCESS_CODE = "0";

@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 按领域 scope 路由 ACL Repository。 */
-public final class AclRepositoryRegistry {
+public class AclRepositoryRegistry {
     private static final Logger LOG = LoggerFactory.getLogger(AclRepositoryRegistry.class);
 
     private final @NotNull @Unmodifiable Map<@NotNull DomainScope, @NotNull AclRepository> repositories;

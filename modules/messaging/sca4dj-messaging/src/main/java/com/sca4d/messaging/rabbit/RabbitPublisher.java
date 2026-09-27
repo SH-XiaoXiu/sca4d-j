@@ -25,7 +25,7 @@ import java.util.concurrent.TimeoutException;
 
 /** 使用 mandatory routing 和 publisher confirm 同步判断 RabbitMQ 发布是否成功。 */
 @ApiStatus.Internal
-public final class RabbitPublisher {
+public class RabbitPublisher {
 
     private static final Logger LOG = LoggerFactory.getLogger(RabbitPublisher.class);
 

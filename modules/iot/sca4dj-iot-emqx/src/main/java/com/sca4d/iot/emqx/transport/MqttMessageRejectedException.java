@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 表示 MQTT 上行存在确定的输入错误，记录后应确认消息且不再执行同一业务动作。 */
-public final class MqttMessageRejectedException extends RuntimeException {
+public class MqttMessageRejectedException extends RuntimeException {
 
     private final @NotNull MqttMessageRejectionReason reason;
 

@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 保存当前实例全部能力声明与启用选择；能力不参与业务权限判定。 */
-public final class InstanceCapabilities {
+public class InstanceCapabilities {
 
     private final @NotNull Map<TreeCode, InstanceCapability> definitions;
 

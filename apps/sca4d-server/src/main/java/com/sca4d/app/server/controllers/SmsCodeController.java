@@ -40,7 +40,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping
 @Tag(name = "Authentication")
-public final class SmsCodeController {
+public class SmsCodeController {
     private final SmsCodeChallengeService challenges;
 
     private final AuthenticationAttempts authentication;

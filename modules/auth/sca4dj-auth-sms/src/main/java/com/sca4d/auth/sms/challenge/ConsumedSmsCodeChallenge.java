@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存成功消费 SMS Challenge 后确认的 Account、引用和版本。 */
-public final class ConsumedSmsCodeChallenge {
+public class ConsumedSmsCodeChallenge {
     private final @NotNull SmsCodeChallengeId challengeId;
 
     private final @NotNull Account account;

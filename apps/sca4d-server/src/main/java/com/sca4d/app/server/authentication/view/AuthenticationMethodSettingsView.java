@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 返回一个认证方法在登录和敏感动作中的开关。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
-public final class AuthenticationMethodSettingsView {
+public class AuthenticationMethodSettingsView {
 
     private final String methodCode;
 

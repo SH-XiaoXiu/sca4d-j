@@ -6,7 +6,7 @@ import java.time.Instant;
 
 /** 映射一个 reported 字段组最后接受的顺序和状态。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class EncodedReportedGroup {
+public class EncodedReportedGroup {
 
     private final @NotNull String orderScope;
 

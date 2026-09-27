@@ -20,7 +20,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 解析 `@RequirePermission`，执行权限判断，并登记必须由 Repository 消费的资源范围。 */
-public final class PermissionCallAssessor {
+public class PermissionCallAssessor {
 
     private static final Logger LOG = LoggerFactory.getLogger(PermissionCallAssessor.class);
 

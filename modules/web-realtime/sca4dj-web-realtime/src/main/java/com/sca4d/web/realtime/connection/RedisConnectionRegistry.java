@@ -33,7 +33,7 @@ import java.util.Set;
 
 /** 使用 Redis Hash、Set 和按租约到期时间排序的 SET 保存所有 Web Realtime 共享索引。 */
 @ApiStatus.Internal
-public final class RedisConnectionRegistry implements ConnectionRegistry {
+public class RedisConnectionRegistry implements ConnectionRegistry {
 
     private static final ConnectionProtocol WEB_REALTIME = new ConnectionProtocol("web-realtime");
 

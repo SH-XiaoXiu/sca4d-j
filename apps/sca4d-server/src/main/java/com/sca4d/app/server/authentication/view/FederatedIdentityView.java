@@ -4,7 +4,7 @@ import com.sca4d.auth.federation.FederatedIdentity;
 import org.jetbrains.annotations.NotNull;
 
 /** 返回当前账号已绑定的外部身份和最近资料快照。 */
-public final class FederatedIdentityView {
+public class FederatedIdentityView {
     private final long id;
 
     private final long providerId;

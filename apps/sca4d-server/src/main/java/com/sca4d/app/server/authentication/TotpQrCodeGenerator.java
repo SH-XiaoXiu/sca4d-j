@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 使用 Hutool 把瞬时 otpauth URI 编码为不持久化的 PNG。 */
 @Component
-public final class TotpQrCodeGenerator {
+public class TotpQrCodeGenerator {
 
     private static final int SIZE = 320;
 

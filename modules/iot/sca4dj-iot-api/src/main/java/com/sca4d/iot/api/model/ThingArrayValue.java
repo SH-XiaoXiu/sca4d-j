@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 保存已经按 array 物模型定义校验的不可修改元素值。 */
-public final class ThingArrayValue {
+public class ThingArrayValue {
 
     private final @NotNull List<Object> elements;
 

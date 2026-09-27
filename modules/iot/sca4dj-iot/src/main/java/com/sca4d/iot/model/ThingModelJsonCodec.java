@@ -32,7 +32,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 严格解析物模型 JSON，并把 Builder 对象编码成相同的规范内容。 */
-public final class ThingModelJsonCodec implements VersionedCodec<ThingModel, String> {
+public class ThingModelJsonCodec implements VersionedCodec<ThingModel, String> {
 
     private static final @NotNull TreeCode CODE = TreeCode.of("IOT/THING_MODEL");
 

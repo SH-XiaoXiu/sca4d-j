@@ -1,7 +1,7 @@
 package com.sca4dj.build;
 
 /** 保存一条可以定位到源码或配置的审计结果。 */
-public final class AuditFinding {
+public class AuditFinding {
     private final String projectPath;
     private final String qualityLevel;
     private final String ruleId;

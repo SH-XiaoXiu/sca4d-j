@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 在全部单例和数据库迁移完成后、SmartLifecycle 启动前发布系统身份。 */
-public final class SystemIdentityInitializer implements SmartInitializingSingleton {
+public class SystemIdentityInitializer implements SmartInitializingSingleton {
 
     private static final Logger LOG = LoggerFactory.getLogger(SystemIdentityInitializer.class);
 

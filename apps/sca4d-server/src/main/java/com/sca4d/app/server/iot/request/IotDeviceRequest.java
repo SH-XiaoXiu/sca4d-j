@@ -11,7 +11,7 @@ import java.util.Set;
 
 /** 接收创建 Device、绑定物模型和可选 X.509 公钥证书所需的完整字段。 */
 @SuppressWarnings("unused")
-public final class IotDeviceRequest {
+public class IotDeviceRequest {
 
     private long productId;
 

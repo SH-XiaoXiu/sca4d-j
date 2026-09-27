@@ -22,7 +22,7 @@ import org.springframework.web.method.HandlerMethod;
 import java.util.Objects;
 
 /** 按 Controller 注解恢复 Session，并在参数绑定前拒绝未声明匿名访问的未认证请求。 */
-public final class AuthRequestInterceptor extends CallHandlerInterceptor {
+public class AuthRequestInterceptor extends CallHandlerInterceptor {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthRequestInterceptor.class);
 

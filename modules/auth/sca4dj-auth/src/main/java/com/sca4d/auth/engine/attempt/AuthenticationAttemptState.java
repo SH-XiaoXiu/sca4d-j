@@ -19,7 +19,7 @@ import java.util.Objects;
  * Redis 中动作认证尝试的内部状态；只保存认证记录和非秘密证据引用。
  */
 @ApiStatus.Internal
-public final class AuthenticationAttemptState {
+public class AuthenticationAttemptState {
 
     private final AuthenticationAttemptId id;
 

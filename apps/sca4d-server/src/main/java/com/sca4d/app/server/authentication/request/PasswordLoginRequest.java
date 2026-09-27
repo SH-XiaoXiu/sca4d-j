@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 接收 Sca4d Server 配置允许的账号标识和原始密码。 */
-public final class PasswordLoginRequest {
+public class PasswordLoginRequest {
 
     @NotBlank
     private @Nullable String identifier;

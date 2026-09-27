@@ -24,7 +24,7 @@ import java.util.Objects;
 /** 返回完整示例 App 的 Operation 目录树、扁平 ACTION 列表和总数。 */
 @Schema(name = "PermissionCatalog")
 @SuppressWarnings("unused") // Jackson 与 BaseView 通过 getter 和 @Localize source 读取响应字段。
-public final class OperationCatalogView {
+public class OperationCatalogView {
 
     private final @NotNull List<@NotNull Node> tree;
 
@@ -82,7 +82,7 @@ public final class OperationCatalogView {
     }
 
     /** Operation 目录中的树节点或扁平 ACTION。 */
-    public static final class Node extends BaseView {
+    public static class Node extends BaseView {
 
         private final @NotNull String code;
 

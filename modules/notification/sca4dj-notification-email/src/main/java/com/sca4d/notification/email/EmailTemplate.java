@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * Email 模板聚合；每个 Locale 保存 subject、text 和 html 源码。
  */
-public final class EmailTemplate {
+public class EmailTemplate {
 
     /**
      * Email Template 审计使用的稳定资源类型。

@@ -5,7 +5,7 @@ import com.sca4d.core.api.identity.Account;
 import java.util.Objects;
 
 /** 具体应用解析外部身份后返回的本地账号和绑定版本。 */
-public final class FederatedAccountResolution {
+public class FederatedAccountResolution {
     private final Account account;
 
     private final long identityId;

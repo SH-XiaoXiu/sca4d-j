@@ -8,7 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /** Web 适配层从当前 HTTP 请求和 Controller 参数收集的业务身份选择输入。 */
-public final class PrincipalSelectionInput {
+public class PrincipalSelectionInput {
 
     private final Map<String, @Nullable Object> values;
 

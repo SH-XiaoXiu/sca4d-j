@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Duration;
 
 /** 表示同一幂等请求仍由其他执行者处理。 */
-public final class IdempotencyInProgressException extends BusinessException {
+public class IdempotencyInProgressException extends BusinessException {
 
     private final long retryAfterSeconds;
 

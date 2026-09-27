@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Instant;
 
 /** 根据设备显式返回的 `success` 或 `failed` ackCode 判断下行结果。 */
-public final class DeviceResultAcknowledgementPolicy implements AcknowledgementPolicy {
+public class DeviceResultAcknowledgementPolicy implements AcknowledgementPolicy {
 
     public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/ACK/DEVICE/RESULT");
 

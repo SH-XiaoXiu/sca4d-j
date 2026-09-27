@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 /** 解析 HTTP `Authorization` 中严格的 Bearer Token，不接受空白或其他认证方案。 */
-public final class BearerToken {
+public class BearerToken {
 
     private static final String PREFIX = "Bearer ";
 

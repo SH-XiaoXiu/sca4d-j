@@ -17,7 +17,7 @@ import java.util.function.Supplier;
  *
  * @param <T> 字段写入值的 Java 类型
  */
-public final class Patch<T> {
+public class Patch<T> {
 
     private static final Patch<?> IGNORE = new Patch<>(State.IGNORE, null);
 
@@ -203,7 +203,7 @@ public final class Patch<T> {
      *
      * @param <T> 字段值类型
      */
-    public static final class Choice<T> {
+    public static class Choice<T> {
 
         private @Nullable Supplier<Patch<T>> selected;
 

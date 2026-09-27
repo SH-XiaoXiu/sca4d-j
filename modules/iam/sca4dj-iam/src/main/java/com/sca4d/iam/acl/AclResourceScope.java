@@ -13,7 +13,7 @@ import java.util.Objects;
  * ACL 对集合资源允许访问的资源标识范围。
  */
 @SuppressWarnings({"ClassCanBeRecord", "unused"})
-public final class AclResourceScope implements ResourceScope {
+public class AclResourceScope implements ResourceScope {
     private final @NotNull TreeCode resourceType;
 
     private final @NotNull @Unmodifiable List<@NotNull String> resourceIds;

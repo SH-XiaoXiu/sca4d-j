@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 接收 SMS Provider 的类型、凭据引用和选择优先级。 */
 @SuppressWarnings("unused")
-public final class SmsProviderRequest {
+public class SmsProviderRequest {
 
     @NotBlank
     @Size(max = 128)

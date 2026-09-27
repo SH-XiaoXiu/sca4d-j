@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 /**
  * 把一种领域通知的类型、渠道声明、模板变量和接收人回调组成稳定契约。
  */
-public final class NotificationType<T> {
+public class NotificationType<T> {
 
     private final @NotNull TreeCode code;
 

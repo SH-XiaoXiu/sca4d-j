@@ -94,7 +94,7 @@ class RabbitMessageTopologyTest {
     }
 
     /** 测试使用的稳定 EventHandler 契约。 */
-    private static final class TestHandler implements EventHandler<String> {
+    private static class TestHandler implements EventHandler<String> {
         private final TreeCode code;
 
         private final EventType<String> eventType;

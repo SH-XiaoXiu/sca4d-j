@@ -21,7 +21,7 @@ import java.util.Objects;
 
 /** 使用 Raw JSON 或可选 Codec 编码、脱敏、限制并读取审计 payload。 */
 @ApiStatus.Internal
-public final class AuditPayloadJson {
+public class AuditPayloadJson {
     private static final Logger LOG = LoggerFactory.getLogger(AuditPayloadJson.class);
 
     static final String RAW_TYPE = "raw";

@@ -114,7 +114,7 @@ public abstract class Code extends Name implements Comparable<Code> {
     }
 
     /** 保存一个稳定节点及其后继，不保存任何序列化分隔符。 */
-    private static final class Node {
+    private static class Node {
         private final @NotNull String value;
 
         private final @Nullable Node next;

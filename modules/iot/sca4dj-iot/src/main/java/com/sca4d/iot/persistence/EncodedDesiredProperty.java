@@ -7,7 +7,7 @@ import java.time.Instant;
 
 /** 保存当前 desired property 的规范 JSON 和 desired sequence。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class EncodedDesiredProperty {
+public class EncodedDesiredProperty {
 
     private final long deviceId;
 

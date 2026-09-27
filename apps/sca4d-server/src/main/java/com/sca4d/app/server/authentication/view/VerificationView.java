@@ -11,7 +11,7 @@ import java.util.Objects;
 
 /** 向 HTTP 暴露敏感 verification 的标识、状态、可用因素和过期时间。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
-public final class VerificationView {
+public class VerificationView {
 
     private final String verificationId;
 

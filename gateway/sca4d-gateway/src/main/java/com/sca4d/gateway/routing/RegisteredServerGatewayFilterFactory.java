@@ -23,7 +23,7 @@ import java.util.List;
 
 /** 为注册 Server 路由写入可信 Header，并可恢复外部路径前缀。 */
 @Component
-public final class RegisteredServerGatewayFilterFactory
+public class RegisteredServerGatewayFilterFactory
         extends
             AbstractGatewayFilterFactory<RegisteredServerGatewayFilterFactory.Config> {
 
@@ -191,7 +191,7 @@ public final class RegisteredServerGatewayFilterFactory
     }
 
     /** 保存 YAML 路由为注册 Server 配置的可选外部路径前缀。 */
-    public static final class Config {
+    public static class Config {
 
         private @Nullable String externalPrefix;
 

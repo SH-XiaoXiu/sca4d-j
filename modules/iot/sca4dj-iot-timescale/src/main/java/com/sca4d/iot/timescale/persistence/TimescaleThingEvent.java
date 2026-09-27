@@ -7,7 +7,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 保存 TimescaleDB 查询返回的一条已编码 ThingEvent。 */
-public final class TimescaleThingEvent {
+public class TimescaleThingEvent {
 
     private final long eventId;
 

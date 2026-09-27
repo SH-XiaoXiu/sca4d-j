@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 组合一条 Audit 记录与 Sca4d Server 用户资料中的 Principal 展示名称。 */
-public final class OperationLog {
+public class OperationLog {
     private final @NotNull AuditEntry entry;
 
     private final @Nullable String principalDisplayName;

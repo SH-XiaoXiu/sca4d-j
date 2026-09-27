@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.OptionalLong;
 
 /** 保存 desired 或 command 共用的标准下行消息快照。 */
-public final class DeviceDownlink {
+public class DeviceDownlink {
 
     private final long messageId;
 

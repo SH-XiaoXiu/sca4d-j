@@ -12,7 +12,7 @@ import java.security.MessageDigest;
 
 /** 保存可选 Loki 写入代理的入口、目标地址和独立凭据。 */
 @ConfigurationProperties("sca4dj.gateway.logging")
-public final class LokiGatewayProperties {
+public class LokiGatewayProperties {
 
     private boolean enabled;
 

@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /** 表示不包含验证码或邮箱的 Email Code Challenge 标识。 */
-public final class EmailCodeChallengeId {
+public class EmailCodeChallengeId {
 
     private final @NotNull String value;
 

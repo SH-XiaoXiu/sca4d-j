@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 保存一次 Product 技术定义修改中必须共同校验的接入方式和协议集合。 */
-public final class ProductChange {
+public class ProductChange {
 
     private final @NotNull Set<DeviceAccessMethod> accessMethods;
 

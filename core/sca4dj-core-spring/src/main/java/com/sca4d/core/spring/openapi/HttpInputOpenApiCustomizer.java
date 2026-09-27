@@ -59,7 +59,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 把外部 HTTP 输入的类型默认校验和显式覆盖规则写入最终 OpenAPI 请求定义。 */
-public final class HttpInputOpenApiCustomizer
+public class HttpInputOpenApiCustomizer
         implements
             ParameterCustomizer,
             PropertyCustomizer,

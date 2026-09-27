@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /** 返回 Device 快照、可选 Account 和只在当前响应中显示的设备认证凭据。 */
 @SuppressWarnings("unused")
-public final class IotDeviceCredentialView {
+public class IotDeviceCredentialView {
 
     private final @NotNull IotDeviceView device;
 

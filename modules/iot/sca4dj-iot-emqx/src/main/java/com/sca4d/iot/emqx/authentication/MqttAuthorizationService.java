@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 统一解析应用授权策略或协议 ACL，并为连接失效判断生成稳定指纹。 */
-public final class MqttAuthorizationService {
+public class MqttAuthorizationService {
 
     /** EMQX `client_attrs` 中保存的当前 MQTT ACL 指纹。 */
     public static final String FINGERPRINT_ATTRIBUTE = "authz_fingerprint";

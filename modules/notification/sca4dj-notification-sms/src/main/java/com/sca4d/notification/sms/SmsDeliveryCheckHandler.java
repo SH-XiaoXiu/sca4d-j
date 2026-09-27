@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 消费延迟 SMS 查询消息，并把最终送达状态交给 SMS 渠道实现。 */
-public final class SmsDeliveryCheckHandler implements MessageHandler<SmsDeliveryCheck> {
+public class SmsDeliveryCheckHandler implements MessageHandler<SmsDeliveryCheck> {
     private final @NotNull SmsNotificationDelivery delivery;
 
     private final @NotNull SmsDeliveryCheckCodec codec;

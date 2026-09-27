@@ -24,7 +24,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 从主库读取下行与最新 ACK，并优先从可选历史存储读取完整 ACK、事件和 Telemetry。 */
-public final class DefaultDeviceHistoryQueryService implements DeviceHistoryQueryService {
+public class DefaultDeviceHistoryQueryService implements DeviceHistoryQueryService {
 
     private final @NotNull DeviceRepository devices;
 

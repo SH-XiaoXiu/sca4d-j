@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 /** 保存对账成功的代码计划，供 Quartz fire 按 key 和定义版本恢复。 */
-public final class QuartzScheduleRegistry {
+public class QuartzScheduleRegistry {
 
     private final AtomicReference<Map<ScheduleKey, JobSchedule<?, ?>>> schedules = new AtomicReference<>(Map.of());
 

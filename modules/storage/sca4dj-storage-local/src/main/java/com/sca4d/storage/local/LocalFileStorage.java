@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /** 把对象限制在配置根目录内，并使用 App 签名 URL 接收和返回内容。 */
-public final class LocalFileStorage implements FileStorage {
+public class LocalFileStorage implements FileStorage {
     private final @NotNull LocalStorageProperties properties;
 
     private final @NotNull StorageTransferSigner signer;
@@ -268,7 +268,7 @@ public final class LocalFileStorage implements FileStorage {
     }
 
     /** 限制单次本地上传最多读取给定字节数。 */
-    private static final class BoundedInputStream extends InputStream {
+    private static class BoundedInputStream extends InputStream {
         private final InputStream delegate;
 
         private long remaining;

@@ -5,7 +5,7 @@ import com.sca4d.core.spring.validation.Req;
 import org.jetbrains.annotations.NotNull;
 
 /** 接收管理端提交的一个完整 JSON 设置值。 */
-public final class ReplaceSettingRequest {
+public class ReplaceSettingRequest {
 
     @Req.NotNull
     private JsonNode value;

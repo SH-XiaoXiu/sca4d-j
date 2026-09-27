@@ -24,7 +24,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /** 使用阿里云 V2 Java SDK 提交国内或账号已开通的国际 SMS 模板请求。 */
-public final class AliyunSmsProviderClient implements SmsProviderClient {
+public class AliyunSmsProviderClient implements SmsProviderClient {
 
     /** 数据库 Provider 使用的适配器类型。 */
     public static final String TYPE = "ALIYUN";

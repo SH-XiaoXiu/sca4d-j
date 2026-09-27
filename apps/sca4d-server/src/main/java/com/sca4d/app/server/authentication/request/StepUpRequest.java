@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 为当前 Session 创建绑定敏感操作的 STEP_UP 尝试。 */
-public final class StepUpRequest {
+public class StepUpRequest {
 
     @NotBlank
     @Size(max = 128)

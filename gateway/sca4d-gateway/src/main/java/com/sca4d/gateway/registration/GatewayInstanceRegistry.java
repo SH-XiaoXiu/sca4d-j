@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 /** 管理单个 Gateway 进程内的 Server 租约、readiness 状态和轮询选择。 */
 @Component
-public final class GatewayInstanceRegistry {
+public class GatewayInstanceRegistry {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GatewayInstanceRegistry.class);
 

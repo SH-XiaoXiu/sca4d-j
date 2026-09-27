@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 判断、校验和规范化普通文本输入。 */
-public final class TextUtils {
+public class TextUtils {
 
     private TextUtils() {
     }

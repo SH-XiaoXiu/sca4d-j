@@ -6,7 +6,7 @@ import java.util.Objects;
 
 /** 保存调用方在完成 WebAuthn ceremony 时必须原样回传的不透明标识。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class PasskeyCeremonyId {
+public class PasskeyCeremonyId {
 
     private final String value;
 

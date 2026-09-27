@@ -180,13 +180,13 @@ class PermissionScopeTest {
         }
     }
 
-    private static final class TestCall {
+    private static class TestCall {
 
         private void invoke() {
         }
     }
 
-    private static final class TestPrincipal implements Principal {
+    private static class TestPrincipal implements Principal {
         private final long id;
 
         private TestPrincipal(long id) {
@@ -199,7 +199,7 @@ class PermissionScopeTest {
         }
     }
 
-    private static final class DevicePermissionPolicy implements PermissionPolicy {
+    private static class DevicePermissionPolicy implements PermissionPolicy {
 
         @Override
         public boolean supports(Resource resource) {
@@ -212,7 +212,7 @@ class PermissionScopeTest {
         }
     }
 
-    private static final class DeviceResource implements Resource {
+    private static class DeviceResource implements Resource {
 
         private final String id;
 
@@ -231,7 +231,7 @@ class PermissionScopeTest {
         }
     }
 
-    private static final class AccountResource implements Resource {
+    private static class AccountResource implements Resource {
 
         private final String id;
 
@@ -250,7 +250,7 @@ class PermissionScopeTest {
         }
     }
 
-    private static final class DeviceScope implements ResourceScope {
+    private static class DeviceScope implements ResourceScope {
 
         private final String name;
 
@@ -264,7 +264,7 @@ class PermissionScopeTest {
         }
     }
 
-    private static final class AccountScope implements ResourceScope {
+    private static class AccountScope implements ResourceScope {
 
         @Override
         public TreeCode resourceType() {

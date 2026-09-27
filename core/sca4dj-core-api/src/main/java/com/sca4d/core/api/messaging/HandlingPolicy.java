@@ -7,7 +7,7 @@ import java.time.Duration;
 import java.util.Objects;
 
 /** 限制 MessageHandler 因技术失败再次处理同一 RabbitMQ 消息的次数和间隔。 */
-public final class HandlingPolicy {
+public class HandlingPolicy {
 
     private final int maximumAttempts;
 

@@ -9,7 +9,7 @@ import java.util.Optional;
 
 /** 保存审计记录需要的 HTTP 方法、请求路径、客户端地址和 User-Agent 快照。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class HttpCall {
+public class HttpCall {
     /** User-Agent 写入审计记录前允许保留的最大字符数。 */
     public static final int USER_AGENT_MAX_LENGTH = 512;
 

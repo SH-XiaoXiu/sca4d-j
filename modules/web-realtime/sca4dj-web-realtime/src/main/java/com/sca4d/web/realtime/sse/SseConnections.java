@@ -30,7 +30,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /** 建立 SSE 连接，并用有界队列串行写出浏览器信封和心跳。 */
 @ApiStatus.Internal
-public final class SseConnections implements WebRealtimeSseConnector {
+public class SseConnections implements WebRealtimeSseConnector {
 
     private static final Logger LOG = LoggerFactory.getLogger(SseConnections.class);
 
@@ -113,7 +113,7 @@ public final class SseConnections implements WebRealtimeSseConnector {
     }
 
     /** 保存一个 SseEmitter 和固定容量写出队列。 */
-    private final class SseConnection implements LocalConnection {
+    private class SseConnection implements LocalConnection {
 
         private final @NotNull ConnectionId id;
 

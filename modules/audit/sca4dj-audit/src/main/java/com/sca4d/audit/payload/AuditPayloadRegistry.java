@@ -13,7 +13,7 @@ import java.util.Objects;
 
 /** 校验并索引应用注册的审计 payload Codec。 */
 @ApiStatus.Internal
-public final class AuditPayloadRegistry {
+public class AuditPayloadRegistry {
     private final @NotNull Map<@NotNull String, @NotNull AuditPayloadCodec<?>> persisted = new LinkedHashMap<>();
 
     private final @NotNull Map<@NotNull Class<? extends AuditPayload>, @NotNull AuditPayloadCodec<?>> writable = new LinkedHashMap<>();

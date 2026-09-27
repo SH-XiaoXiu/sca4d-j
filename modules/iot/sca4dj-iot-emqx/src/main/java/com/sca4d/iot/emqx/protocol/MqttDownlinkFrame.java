@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 把标准下行消息元数据和已按 `DataKey` 整理的值交给协议 Pipeline。 */
-public final class MqttDownlinkFrame {
+public class MqttDownlinkFrame {
 
     private final @NotNull DeviceDownlink message;
 

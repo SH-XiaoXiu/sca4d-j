@@ -17,7 +17,7 @@ import java.util.Objects;
 
 /** 组合 TOTP 模块与示例应用认证规则，限定所有自助操作属于当前 Account。 */
 @Service
-public final class TotpAccountService {
+public class TotpAccountService {
 
     private final TotpEnrollmentService enrollments;
 

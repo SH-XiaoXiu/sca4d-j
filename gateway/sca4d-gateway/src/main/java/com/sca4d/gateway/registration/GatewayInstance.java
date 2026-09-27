@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 保存一个 Server 实例当前租约、地址、回调声明和 readiness 状态。 */
-public final class GatewayInstance {
+public class GatewayInstance {
 
     private final @NotNull String instanceId;
 

@@ -14,7 +14,7 @@ import java.util.concurrent.Callable;
  *
  * <p>`CallExecution` 在进入本类前已经完成声明解析。本类不会恢复 Session、选择 Principal 或读取业务资源。
  */
-public final class CallLifecycle {
+public class CallLifecycle {
 
     private static final Logger LOG = LoggerFactory.getLogger(CallLifecycle.class);
 

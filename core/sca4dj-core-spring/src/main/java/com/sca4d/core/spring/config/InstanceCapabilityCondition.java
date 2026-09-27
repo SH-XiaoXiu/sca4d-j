@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 在 Bean 定义阶段读取实例能力选择，防止停用功能启动消费者或监听器。 */
-public final class InstanceCapabilityCondition implements Condition {
+public class InstanceCapabilityCondition implements Condition {
     @Override
     public boolean matches(@NotNull ConditionContext context, @NotNull AnnotatedTypeMetadata metadata) {
         List<String> enabled = Binder.get(context.getEnvironment())

@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 使用 Redis Hash TTL 和 Lua 原子消费 SMS Code Challenge。 */
-public final class RedisSmsCodeChallengeStore {
+public class RedisSmsCodeChallengeStore {
     private static final DefaultRedisScript<Long> VERIFY = verifyScript();
 
     private final RedisTemplate<Key, String> redis;

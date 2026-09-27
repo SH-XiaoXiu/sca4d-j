@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 /** PlatformPrincipal 的 Session wire Codec。 */
-public final class PlatformPrincipalCodec implements PrincipalCodec<PlatformPrincipal> {
+public class PlatformPrincipalCodec implements PrincipalCodec<PlatformPrincipal> {
 
     /** Platform Principal 在 Session 和设置 owner 中使用的稳定类型。 */
     public static final @NotNull TreeCode TYPE = TreeCode.ofColon("IAM:PLATFORM_PRINCIPAL");
@@ -68,7 +68,7 @@ public final class PlatformPrincipalCodec implements PrincipalCodec<PlatformPrin
     }
 
     /** 保存 PlatformPrincipal 的 Session JSON 字段。 */
-    private static final class Payload {
+    private static class Payload {
         @JsonProperty("id")
         private long id;
 

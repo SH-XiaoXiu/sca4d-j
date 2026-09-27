@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 /** 校验并保存实现 `Dictionary` 的枚举类型及其不可变代码选项。 */
-public final class DictionaryRegistry {
+public class DictionaryRegistry {
 
     private static final Pattern KEY = Pattern.compile("[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+");
 

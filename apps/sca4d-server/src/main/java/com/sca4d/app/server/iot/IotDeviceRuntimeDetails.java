@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存模块运行态快照和具体应用选定的在线判断结果。 */
-public final class IotDeviceRuntimeDetails {
+public class IotDeviceRuntimeDetails {
 
     private final @NotNull DeviceRuntimeSnapshot snapshot;
 

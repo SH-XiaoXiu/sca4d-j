@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 接收 Product 或 ThingModel 的完整多语言字段替换请求。 */
-public final class IotI18nRequest {
+public class IotI18nRequest {
 
     @Req.NotNull
     private @Nullable LocalizedFields i18n;

@@ -15,7 +15,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 使用 App 隔离名称隔离的 Redis 一次性值保存外部授权状态和标准化资料。 */
-public final class RedisFederatedAuthorizationStore implements FederatedAuthorizationStore {
+public class RedisFederatedAuthorizationStore implements FederatedAuthorizationStore {
 
     private static final Logger LOG = LoggerFactory.getLogger(RedisFederatedAuthorizationStore.class);
 

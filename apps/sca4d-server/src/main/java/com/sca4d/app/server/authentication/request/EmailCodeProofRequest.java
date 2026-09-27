@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 接收 Email Code Challenge 标识和只在当前认证调用中使用的六位验证码。 */
-public final class EmailCodeProofRequest {
+public class EmailCodeProofRequest {
 
     @NotBlank
     @Size(max = 64)

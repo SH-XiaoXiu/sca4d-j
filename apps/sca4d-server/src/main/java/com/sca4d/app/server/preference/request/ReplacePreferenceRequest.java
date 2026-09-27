@@ -5,7 +5,7 @@ import com.sca4d.core.spring.validation.Req;
 import org.jetbrains.annotations.NotNull;
 
 /** 接收前端提交的完整个人偏好 JSON 值。 */
-public final class ReplacePreferenceRequest {
+public class ReplacePreferenceRequest {
 
     @Req.NotNull
     private JsonNode value;

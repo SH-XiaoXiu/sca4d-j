@@ -48,7 +48,7 @@ class PrincipalSelectionInputResolverTest {
     private void endpoint(Long deviceId, @RequestBody RequestBodyValue body) {
     }
 
-    private static final class CapturingSelection implements PrincipalSelection<SelectionParameters> {
+    private static class CapturingSelection implements PrincipalSelection<SelectionParameters> {
 
         private SelectionParameters parameters;
 
@@ -70,7 +70,7 @@ class PrincipalSelectionInputResolverTest {
 
     /** 保存 DataBinder 绑定后的类型化选择参数。 */
     @SuppressWarnings("unused")
-    public static final class SelectionParameters {
+    public static class SelectionParameters {
 
         private Map<String, Object> path;
 
@@ -128,7 +128,7 @@ class PrincipalSelectionInputResolverTest {
 
     /** 保存 MVC 已经解析的测试请求体。 */
     @SuppressWarnings("unused")
-    public static final class RequestBodyValue {
+    public static class RequestBodyValue {
 
         private String name;
 

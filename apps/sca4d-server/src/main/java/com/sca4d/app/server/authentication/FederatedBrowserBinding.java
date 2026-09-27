@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 从服务端 HttpSession 派生不可逆浏览器绑定，不向前端暴露 Session ID。 */
 @Component
-public final class FederatedBrowserBinding {
+public class FederatedBrowserBinding {
 
     /** 计算当前浏览器的稳定绑定摘要。 */
     public @NotNull String binding(@NotNull HttpServletRequest request) {

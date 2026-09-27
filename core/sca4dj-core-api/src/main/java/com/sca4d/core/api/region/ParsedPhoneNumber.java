@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 保存已经确认有效且使用规范 E.164 表示的电话号码及其地区元数据。 */
-public final class ParsedPhoneNumber {
+public class ParsedPhoneNumber {
 
     private final String value;
 

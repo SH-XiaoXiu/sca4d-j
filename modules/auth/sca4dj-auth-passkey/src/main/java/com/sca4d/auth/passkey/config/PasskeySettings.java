@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Duration;
 
 /** 声明 Passkey ceremony 有效期和账号 Credential 数量上限。 */
-public final class PasskeySettings {
+public class PasskeySettings {
 
     private static final SettingGroup GROUP = new SettingGroup(
             TreeCode.of("AUTHENTICATION"),

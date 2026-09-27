@@ -22,7 +22,7 @@ import java.util.Set;
  * @param <I> 根输入类型
  * @param <O> 当前终点输出类型
  */
-public final class PipelineJobPlan<I, O> {
+public class PipelineJobPlan<I, O> {
 
     private final @NotNull Class<I> inputType;
 
@@ -202,7 +202,7 @@ public final class PipelineJobPlan<I, O> {
     }
 
     /** 保存一个可独立重试的 Pipeline 节点及其直接依赖。 */
-    public static final class Node {
+    public static class Node {
 
         private final @NotNull String key;
 
@@ -285,7 +285,7 @@ public final class PipelineJobPlan<I, O> {
      * @param <L> 左分支输出类型
      * @param <R> 右分支输出类型
      */
-    public static final class Parallel<I, L, R> {
+    public static class Parallel<I, L, R> {
 
         private final @NotNull PipelineJobPlan<I, ?> plan;
 

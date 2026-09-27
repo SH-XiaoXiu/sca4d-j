@@ -19,7 +19,7 @@ import java.util.Objects;
 @Component
 @ConditionalOnCapability(IotCapabilities.TRANSPORT)
 @ConditionalOnProperty(prefix = "sca4dj.iot.emqx", name = "enabled", havingValue = "true")
-public final class EmqxAuthenticationCallback
+public class EmqxAuthenticationCallback
         implements
             GatewayCallback<EmqxAuthenticationRequest, EmqxAuthenticationResponse> {
 

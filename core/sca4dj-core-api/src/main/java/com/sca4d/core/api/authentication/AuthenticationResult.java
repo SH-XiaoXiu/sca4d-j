@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 认证引擎单次消费满足结果后返回的可信动作认证数据。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class AuthenticationResult {
+public class AuthenticationResult {
 
     private final Account account;
 

@@ -7,7 +7,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import org.jetbrains.annotations.Nullable;
 
 /** 执行 MacAddress 的冒号分隔格式检查。 */
-public final class MacAddressValidator implements ConstraintValidator<MacAddress, String> {
+public class MacAddressValidator implements ConstraintValidator<MacAddress, String> {
 
     /** 创建无配置参数的 MAC 地址校验器。 */
     public MacAddressValidator() {

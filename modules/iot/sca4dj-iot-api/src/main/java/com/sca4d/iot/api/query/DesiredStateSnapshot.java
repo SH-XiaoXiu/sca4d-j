@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 保存一个 desired 属性当前持续期望的值和收敛状态。 */
-public final class DesiredStateSnapshot {
+public class DesiredStateSnapshot {
 
     private final @NotNull String propertyCode;
 

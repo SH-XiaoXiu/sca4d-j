@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 保存 App 对外持续网络连接的公共生命周期事实，不保存协议句柄或消息内容。 */
-public final class Connection {
+public class Connection {
 
     private final @NotNull ConnectionId id;
 

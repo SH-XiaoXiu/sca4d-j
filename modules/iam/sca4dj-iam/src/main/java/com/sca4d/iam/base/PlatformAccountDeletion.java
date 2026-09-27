@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /** 描述一次 Platform Account 删除实际隔离的身份对象，供具体应用继续清理自己拥有的数据。 */
 @SuppressWarnings("ClassCanBeRecord")
-public final class PlatformAccountDeletion {
+public class PlatformAccountDeletion {
 
     private final @NotNull Long accountId;
 

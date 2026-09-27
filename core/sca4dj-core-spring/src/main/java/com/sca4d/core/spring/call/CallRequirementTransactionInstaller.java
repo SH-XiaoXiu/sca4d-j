@@ -9,7 +9,7 @@ import org.springframework.transaction.ConfigurableTransactionManager;
 import java.util.Objects;
 
 /** 把调用要求监听器安装到应用提供的每一个可配置 Spring 事务管理器。 */
-public final class CallRequirementTransactionInstaller implements BeanPostProcessor {
+public class CallRequirementTransactionInstaller implements BeanPostProcessor {
 
     private static final Logger LOG = LoggerFactory.getLogger(CallRequirementTransactionInstaller.class);
 

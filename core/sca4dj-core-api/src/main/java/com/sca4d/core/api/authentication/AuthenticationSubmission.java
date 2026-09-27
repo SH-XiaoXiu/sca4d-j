@@ -10,7 +10,7 @@ import java.util.Objects;
  * @param <P> Proof 类型
  */
 @SuppressWarnings("ClassCanBeRecord")
-public final class AuthenticationSubmission<P> {
+public class AuthenticationSubmission<P> {
 
     private final TreeCode methodCode;
 

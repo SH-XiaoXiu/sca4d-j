@@ -1,7 +1,7 @@
 package com.sca4d.core.api.gateway;
 
 /** 定义 Gateway 与应用实例共同使用且不能由单侧配置改变的内部 HTTP 路径。 */
-public final class GatewayHttpPaths {
+public class GatewayHttpPaths {
 
     /** Server 内部回调分发器的路径根。 */
     public static final String CALLBACKS = "/callbacks";

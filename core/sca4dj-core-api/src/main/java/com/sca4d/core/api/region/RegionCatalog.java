@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /** 查询 libphonenumber 地区代码、国际电话代码和洲别之间的对应关系。 */
-public final class RegionCatalog {
+public class RegionCatalog {
 
     private static final String NON_GEOGRAPHICAL_REGION = "001";
 

@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /** 保存一次 Passkey assertion ceremony 标识和浏览器返回的 WebAuthn JSON。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class PasskeyProof {
+public class PasskeyProof {
 
     private final PasskeyCeremonyId ceremonyId;
 

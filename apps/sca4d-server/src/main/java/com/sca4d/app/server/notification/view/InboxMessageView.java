@@ -11,7 +11,7 @@ import java.util.Objects;
 
 /** 返回当前 Account 一项站内信渲染快照。 */
 @SuppressWarnings("unused")
-public final class InboxMessageView {
+public class InboxMessageView {
     private final long id;
 
     private final String notificationType;

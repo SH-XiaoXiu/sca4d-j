@@ -6,7 +6,7 @@ import java.util.List;
 
 /** 返回当前 Account 的站内信游标页和未读数量。 */
 @SuppressWarnings("unused")
-public final class InboxPageView {
+public class InboxPageView {
     private final List<InboxMessageView> messages;
 
     private final long unreadCount;

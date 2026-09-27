@@ -15,7 +15,7 @@ import java.util.Objects;
 /**
  * 校验并保存当前应用安装的类型化通知定义。
  */
-public final class NotificationTypeCatalog {
+public class NotificationTypeCatalog {
 
     private final @NotNull Map<@NotNull TreeCode, @NotNull NotificationType<?>> types;
 

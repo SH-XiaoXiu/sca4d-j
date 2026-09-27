@@ -15,7 +15,7 @@ import java.util.Objects;
 /**
  * 描述一组 Principal 必须获得全部或任一 Operation 的授权筛选条件。
  */
-public final class PrincipalGrantQuery {
+public class PrincipalGrantQuery {
 
     private final @NotNull @Unmodifiable List<@NotNull Long> principalIds;
 
@@ -78,7 +78,7 @@ public final class PrincipalGrantQuery {
     /**
      * 逐项声明 Principal 授权筛选条件。
      */
-    public static final class Builder {
+    public static class Builder {
 
         private final @NotNull @Unmodifiable List<@NotNull Long> principalIds;
 

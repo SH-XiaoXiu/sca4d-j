@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 保存一次操作的行为主体、目标资源、结果和发生时间。 */
-public final class AuditRecord {
+public class AuditRecord {
 
     private final String requestId;
 

@@ -9,7 +9,7 @@ import java.util.Objects;
  *
  * <p>权限严格由资源（Resource，{@link Resource}）和动作（Action，{@link Action}）组成，不额外维护接口权限键。
  */
-public final class Permission {
+public class Permission {
 
     private final Resource resource;
 

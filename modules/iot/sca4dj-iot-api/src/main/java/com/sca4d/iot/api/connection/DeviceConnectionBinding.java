@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 保存一台 Device 可选的直接连接定义和唯一公开身份值。 */
-public final class DeviceConnectionBinding {
+public class DeviceConnectionBinding {
 
     private final @NotNull DeviceConnectionDefinition definition;
 

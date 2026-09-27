@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 /** 标识具体应用声明的一条 SMS Provider 路由，不预设国家、地区或分区规则。 */
-public final class SmsRoute {
+public class SmsRoute {
 
     private static final Pattern VALUE = Pattern.compile("[a-z][a-z0-9-]{0,63}");
 

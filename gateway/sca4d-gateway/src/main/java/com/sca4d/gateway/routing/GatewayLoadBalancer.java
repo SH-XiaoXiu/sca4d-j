@@ -18,7 +18,7 @@ import reactor.core.publisher.Mono;
 import java.util.Optional;
 
 /** 根据请求路径从内存注册表选择普通 API 或指定回调的健康 Server 实例。 */
-public final class GatewayLoadBalancer implements ReactorServiceInstanceLoadBalancer {
+public class GatewayLoadBalancer implements ReactorServiceInstanceLoadBalancer {
 
     private final @NotNull GatewayInstanceRegistry registry;
 

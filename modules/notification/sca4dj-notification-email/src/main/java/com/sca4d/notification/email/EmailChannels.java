@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Email 模块声明的通知渠道。
  */
-public final class EmailChannels {
+public class EmailChannels {
 
     public static final @NotNull TreeCode EMAIL = TreeCode.of("NOTIFICATION/CHANNEL/EMAIL");
 

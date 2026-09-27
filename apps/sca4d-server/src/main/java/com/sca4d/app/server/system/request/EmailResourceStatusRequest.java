@@ -1,7 +1,7 @@
 package com.sca4d.app.server.system.request;
 
 /** 接收 SMTP 配置或 Email 模板的新启用状态。 */
-public final class EmailResourceStatusRequest {
+public class EmailResourceStatusRequest {
 
     private boolean enabled;
 

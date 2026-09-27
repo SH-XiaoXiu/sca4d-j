@@ -29,7 +29,7 @@ import java.util.Set;
 /**
  * Email 模块拥有的模板持久化边界。
  */
-public final class EmailTemplateRepository {
+public class EmailTemplateRepository {
     private static final Sort NOTIFICATION_CODE = Sort.of("NOTIFICATION_CODE");
 
     private static final Set<Sort> SORT_FIELDS = Set.of(NOTIFICATION_CODE, Sort.SERIAL);

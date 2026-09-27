@@ -8,7 +8,7 @@ import java.util.Locale;
 import java.util.Map;
 
 /** 读取两个设备模拟器连接 EMQX 所需的进程环境变量。 */
-public final class SimulatorConfiguration {
+public class SimulatorConfiguration {
 
     private final @NotNull String host;
 

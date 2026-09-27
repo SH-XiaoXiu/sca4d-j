@@ -300,7 +300,7 @@ class RedisAuthenticationAttemptsTest {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    private static final class Fixture {
+    private static class Fixture {
         private final RedisAuthenticationAttempts engine;
 
         private Fixture(RedisAuthenticationAttempts engine) {
@@ -312,7 +312,7 @@ class RedisAuthenticationAttemptsTest {
      * 提供测试所需的固定认证方法行为。
      */
     @SuppressWarnings("ClassCanBeRecord") // 项目禁止使用 Java record，保留普通测试类型。
-    private static final class Method implements AuthenticationMethod<String> {
+    private static class Method implements AuthenticationMethod<String> {
         private final TreeCode code;
 
         private final AuthenticationFactorKind kind;
@@ -395,7 +395,7 @@ class RedisAuthenticationAttemptsTest {
     /**
      * 在每次读取后推进到下一个预设时间。
      */
-    private static final class AdvancingClock extends Clock {
+    private static class AdvancingClock extends Clock {
         private final Instant[] instants;
 
         private int index;

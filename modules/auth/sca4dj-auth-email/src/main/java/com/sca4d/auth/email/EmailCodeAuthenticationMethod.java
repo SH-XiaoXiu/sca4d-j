@@ -20,7 +20,7 @@ import java.util.Set;
 /**
  * 单次消费 Email Code Challenge，并向认证引擎返回持有因素证据。
  */
-public final class EmailCodeAuthenticationMethod implements AuthenticationMethod<EmailCodeProof> {
+public class EmailCodeAuthenticationMethod implements AuthenticationMethod<EmailCodeProof> {
 
     /**
      * Email Code 方法稳定编码。

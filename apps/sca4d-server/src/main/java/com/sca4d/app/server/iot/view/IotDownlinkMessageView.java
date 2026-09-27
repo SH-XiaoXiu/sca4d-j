@@ -17,7 +17,7 @@ import java.util.Objects;
 
 /** 返回 desired 或 command 生成的标准下行消息状态。 */
 @SuppressWarnings("unused")
-public final class IotDownlinkMessageView {
+public class IotDownlinkMessageView {
 
     private final long messageId;
 

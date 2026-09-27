@@ -625,7 +625,7 @@ class FileServiceIntegrationTest {
     }
 
     /** 保存测试上传对象，完整执行 `FileStorage` 的复制、打开和删除行为。 */
-    static final class InMemoryFileStorage implements FileStorage {
+    static class InMemoryFileStorage implements FileStorage {
         private final Map<String, StoredObject> objects = new ConcurrentHashMap<>();
 
         private volatile StorageObject preparedObject;
@@ -778,7 +778,7 @@ class FileServiceIntegrationTest {
 
     /** 保存内存对象的媒体类型和内容副本。 */
     @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-    private static final class StoredObject {
+    private static class StoredObject {
         private final String contentType;
 
         private final byte[] content;

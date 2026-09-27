@@ -121,7 +121,7 @@ class CallLifecycleAspectTest {
 
     /** 在具体目标类型上声明类级限流。 */
     @RateLimited(permits = 5, windowSeconds = 60)
-    private static final class ClassLimitedService implements LimitedService {
+    private static class ClassLimitedService implements LimitedService {
 
         @Override
         public String invoke(String value) {
@@ -130,7 +130,7 @@ class CallLifecycleAspectTest {
     }
 
     /** 在具体方法上声明两个权限要求。 */
-    private static final class MethodPermissionService implements PermissionService {
+    private static class MethodPermissionService implements PermissionService {
 
         @Override
         @RequirePermission(operation = "project:read")
@@ -143,7 +143,7 @@ class CallLifecycleAspectTest {
     /** 在具体目标类型上声明两个权限要求。 */
     @RequirePermission(operation = "project:manage")
     @RequirePermission(operation = "project:scope:manage")
-    private static final class ClassPermissionService implements PermissionService {
+    private static class ClassPermissionService implements PermissionService {
 
         @Override
         public String invoke(String value) {

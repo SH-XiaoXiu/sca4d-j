@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 把当前事务登记的进程内动作按顺序放到成功提交之后执行。 */
-public final class TransactionCallbacks {
+public class TransactionCallbacks {
 
     private static final Logger LOG = LoggerFactory.getLogger(TransactionCallbacks.class);
 
@@ -78,7 +78,7 @@ public final class TransactionCallbacks {
     }
 
     /** 保存一个事务的动作；事务挂起时解绑，以隔离 REQUIRES_NEW 的内层事务。 */
-    private static final class CallbackQueue implements TransactionSynchronization {
+    private static class CallbackQueue implements TransactionSynchronization {
 
         private final List<Runnable> actions = new ArrayList<>();
 

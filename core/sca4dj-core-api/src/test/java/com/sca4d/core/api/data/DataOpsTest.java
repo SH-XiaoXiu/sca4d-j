@@ -328,7 +328,7 @@ class DataOpsTest {
     }
 
     @SuppressWarnings("unused")
-    public static final class SamplePayload {
+    public static class SamplePayload {
 
         private String name;
 
@@ -345,7 +345,7 @@ class DataOpsTest {
     }
 
     @SuppressWarnings("unused")
-    public static final class StrictPayload {
+    public static class StrictPayload {
 
         private String name;
 

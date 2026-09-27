@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /** 读写 Passkey 凭据的 transport 集合；仅在对应列显式使用，不注册为通用 Set 映射。 */
-public final class PasskeyTransportsTypeHandler extends BaseTypeHandler<Set<String>> {
+public class PasskeyTransportsTypeHandler extends BaseTypeHandler<Set<String>> {
     @Override
     public void setNonNullParameter(
             @NotNull PreparedStatement statement,

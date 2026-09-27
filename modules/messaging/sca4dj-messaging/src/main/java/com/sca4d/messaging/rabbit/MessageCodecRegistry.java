@@ -20,7 +20,7 @@ import java.util.Objects;
  * 按 Message TreeCode 和协议版本索引应用安装的非 Event Codec。
  */
 @ApiStatus.Internal
-final class MessageCodecRegistry {
+class MessageCodecRegistry {
 
     private final @NotNull Map<@NotNull TreeCode, @NotNull VersionedCodecCatalog<Message, byte[]>> codecs;
 

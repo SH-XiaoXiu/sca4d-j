@@ -19,7 +19,7 @@ import java.util.Objects;
  * 从头像上传请求读取目标 Account，并解析其 Platform 用户资料资源。
  */
 @Component
-public final class PlatformUserProfileResourceResolver
+public class PlatformUserProfileResourceResolver
         implements
             CallValueResolver<Collection<Resource>>,
             AuditTargetResolver {

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Duration;
 
 /** 声明 TOTP enrollment 可以由客户管理的有效期。 */
-public final class TotpSettings {
+public class TotpSettings {
 
     /** TOTP enrollment 有效期。 */
     public final @NotNull SystemSetting<Duration> ENROLLMENT_TTL;

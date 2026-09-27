@@ -9,7 +9,7 @@ import java.util.Set;
 
 /** 配置 WebAuthn Relying Party 和允许完成 ceremony 的 Origin。 */
 @ConfigurationProperties("sca4dj.auth.passkey")
-public final class PasskeyProperties {
+public class PasskeyProperties {
 
     private String relyingPartyId = "localhost";
 

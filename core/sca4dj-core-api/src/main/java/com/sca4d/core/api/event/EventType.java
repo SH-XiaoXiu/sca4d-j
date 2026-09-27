@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 使用稳定编码、协议版本和 payload 类型声明一种业务事件。 */
-public final class EventType<T> {
+public class EventType<T> {
 
     private final @NotNull TreeCode code;
 

@@ -35,7 +35,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /** 使用已经成功的认证记录建立、恢复、刷新和终止 Session。 */
-public final class SessionService implements SessionLifecycle {
+public class SessionService implements SessionLifecycle {
 
     private static final Logger LOG = LoggerFactory.getLogger(SessionService.class);
 

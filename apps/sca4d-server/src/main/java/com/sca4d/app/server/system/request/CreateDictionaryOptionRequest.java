@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 接收创建数据库字典项时提交的稳定值、标签、状态和顺序。 */
-public final class CreateDictionaryOptionRequest {
+public class CreateDictionaryOptionRequest {
 
     @NotBlank
     @Size(max = 160)

@@ -12,7 +12,7 @@ import java.time.Duration;
 import java.time.Instant;
 
 /** 按固定退避持续发送当前 desired sequence，直到新 desired sequence 取代或 reported 收敛。 */
-public final class DefaultStateSyncRetryPolicy implements RetryPolicy {
+public class DefaultStateSyncRetryPolicy implements RetryPolicy {
 
     public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/RETRY/STATE/SYNC/DEFAULT");
 

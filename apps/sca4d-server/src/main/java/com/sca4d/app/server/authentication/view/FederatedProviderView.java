@@ -16,7 +16,7 @@ import java.util.Objects;
 @Schema(name = "FederatedProvider")
 @SuppressFBWarnings(value = "SS_SHOULD_BE_STATIC", justification = "@Localize requires instance fields for BaseViewSerializer metadata")
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
-public final class FederatedProviderView extends BaseView {
+public class FederatedProviderView extends BaseView {
     private final long id;
 
     private final String code;

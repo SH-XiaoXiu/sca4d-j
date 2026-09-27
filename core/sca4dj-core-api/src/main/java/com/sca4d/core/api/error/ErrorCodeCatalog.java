@@ -12,7 +12,7 @@ import java.util.Objects;
  *
  * <p>目录拒绝非枚举实现、缺少号段、编码非整数、编码越界、编码重复和号段重叠。
  */
-public final class ErrorCodeCatalog {
+public class ErrorCodeCatalog {
 
     private final Map<String, ErrorCode> errorCodes;
 

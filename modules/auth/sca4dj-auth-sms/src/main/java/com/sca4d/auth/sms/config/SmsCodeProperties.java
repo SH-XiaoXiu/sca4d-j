@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /** 配置 PHONE 登录标识使用的 Account 认证域。 */
 @ConfigurationProperties("sca4dj.auth.sms-code")
-public final class SmsCodeProperties {
+public class SmsCodeProperties {
     /** PHONE 登录标识所属的 Account 认证域，默认值为 `platform`。 */
     private String accountRealm = "platform";
 

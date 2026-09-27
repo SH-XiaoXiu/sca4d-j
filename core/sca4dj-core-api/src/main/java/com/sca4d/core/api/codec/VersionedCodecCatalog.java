@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /** 保存同一稳定类型的多个版本 Codec，并选择当前写入版本或指定读取版本。 */
-public final class VersionedCodecCatalog<V, W> {
+public class VersionedCodecCatalog<V, W> {
 
     private final @NotNull VersionedCodec<V, W> current;
 

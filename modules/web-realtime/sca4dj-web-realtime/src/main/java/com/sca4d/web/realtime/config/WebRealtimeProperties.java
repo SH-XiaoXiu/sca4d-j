@@ -11,7 +11,7 @@ import java.util.Objects;
 
 /** 配置 Web Realtime 节点传输、租约、SSE、WebSocket 票据、帧限制和 Origin。 */
 @ConfigurationProperties("sca4dj.web-realtime")
-public final class WebRealtimeProperties {
+public class WebRealtimeProperties {
 
     private Duration leaseRenewInterval = Duration.ofSeconds(30);
 
@@ -212,7 +212,7 @@ public final class WebRealtimeProperties {
     }
 
     /** 配置 Spring STOMP broker 模式、写出缓冲和 RabbitMQ STOMP relay。 */
-    public static final class Stomp {
+    public static class Stomp {
 
         private StompBrokerMode mode = StompBrokerMode.NODE_ROUTED;
 
@@ -260,7 +260,7 @@ public final class WebRealtimeProperties {
     }
 
     /** 配置 `BROKER_RELAY` 模式连接 RabbitMQ STOMP plugin 的地址与凭据。 */
-    public static final class Relay {
+    public static class Relay {
 
         private String host = "localhost";
 

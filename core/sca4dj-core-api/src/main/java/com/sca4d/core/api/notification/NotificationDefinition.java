@@ -16,7 +16,7 @@ import java.util.function.BiFunction;
 /**
  * 在应用启动时声明一种通知允许的渠道、Java 默认值和模板变量。
  */
-public final class NotificationDefinition<T> {
+public class NotificationDefinition<T> {
 
     private final @NotNull Set<@NotNull TreeCode> requiredChannels = new LinkedHashSet<>();
 

@@ -14,7 +14,7 @@ import java.time.Duration;
 
 /** 定期检查所有未过期 Server 租约的 readiness，并更新路由可用状态。 */
 @Component
-public final class GatewayReadinessMonitor {
+public class GatewayReadinessMonitor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GatewayReadinessMonitor.class);
 

@@ -37,7 +37,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /** 在应用 readiness 后向 Gateway 注册实例，并在进程存活期间续租。 */
-public final class GatewayRegistrationLifecycle {
+public class GatewayRegistrationLifecycle {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GatewayRegistrationLifecycle.class);
 

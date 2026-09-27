@@ -49,7 +49,7 @@ import java.util.function.Function;
 /**
  * 将完整 {@link Session} 编解码为 Sa-Token 和 JWT 共用的版本化 JSON wire。
  */
-public final class SessionCodec implements VersionedCodec<Session, String> {
+public class SessionCodec implements VersionedCodec<Session, String> {
 
     private static final @NotNull TreeCode CODE = TreeCode.of("AUTH/SESSION");
 
@@ -503,7 +503,7 @@ public final class SessionCodec implements VersionedCodec<Session, String> {
 
     /** 保存一个开放类型和一个 payload 版本的联合选择键。 */
     @SuppressWarnings("ClassCanBeRecord")
-    private static final class CodecKey {
+    private static class CodecKey {
         private final @NotNull TreeCode type;
 
         private final int version;
@@ -535,7 +535,7 @@ public final class SessionCodec implements VersionedCodec<Session, String> {
     /**
      * 保存完整 Session JSON wire 字段。
      */
-    private static final class SessionData {
+    private static class SessionData {
         @JsonProperty("formatVersion")
         private int formatVersion;
 
@@ -580,7 +580,7 @@ public final class SessionCodec implements VersionedCodec<Session, String> {
     /**
      * 保存一种 Principal Codec 类型和 Roaring64 标识集合。
      */
-    private static final class PrincipalIdSetData {
+    private static class PrincipalIdSetData {
         @JsonProperty("type")
         private String type;
 
@@ -614,7 +614,7 @@ public final class SessionCodec implements VersionedCodec<Session, String> {
     /**
      * 保存 Subject 的 Session JSON 字段。
      */
-    private static final class SubjectData {
+    private static class SubjectData {
         @JsonProperty("subjectId")
         private long subjectId;
 
@@ -637,7 +637,7 @@ public final class SessionCodec implements VersionedCodec<Session, String> {
     /**
      * 保存 Account 的 Session JSON 字段。
      */
-    private static final class AccountData {
+    private static class AccountData {
         @JsonProperty("accountId")
         private long accountId;
 
@@ -664,7 +664,7 @@ public final class SessionCodec implements VersionedCodec<Session, String> {
     /**
      * 保存 Codec 类型和 Base64 payload。
      */
-    private static final class TypedPayload {
+    private static class TypedPayload {
         @JsonProperty("type")
         private String type;
 
@@ -701,7 +701,7 @@ public final class SessionCodec implements VersionedCodec<Session, String> {
     /**
      * 保存一次成功认证的 Session JSON 字段。
      */
-    private static final class AuthenticationData {
+    private static class AuthenticationData {
         @JsonProperty("accountId")
         private long accountId;
 
@@ -732,7 +732,7 @@ public final class SessionCodec implements VersionedCodec<Session, String> {
     /**
      * 保存 Principal 与静态授权 Resource 的 Session JSON 关联。
      */
-    private static final class ResourceData {
+    private static class ResourceData {
         @JsonProperty("principalId")
         private long principalId;
 
@@ -755,7 +755,7 @@ public final class SessionCodec implements VersionedCodec<Session, String> {
     /**
      * 保存完整 Principal 与一种数字 Resource 标识集合的 Session JSON 关联。
      */
-    private static final class ResourceIdSetData {
+    private static class ResourceIdSetData {
         @JsonProperty("principalId")
         private long principalId;
 

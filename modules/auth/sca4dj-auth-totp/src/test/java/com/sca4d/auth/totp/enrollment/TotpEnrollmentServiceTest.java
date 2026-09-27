@@ -212,7 +212,7 @@ class TotpEnrollmentServiceTest {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    private static final class Fixture {
+    private static class Fixture {
         private final TotpEnrollmentService service;
 
         private final RedisTotpEnrollmentStore enrollments;

@@ -51,7 +51,7 @@ class CallHandlerInterceptorTest {
     }
 
     /** 记录基类传入的调用。 */
-    private static final class RecordingInterceptor extends CallHandlerInterceptor {
+    private static class RecordingInterceptor extends CallHandlerInterceptor {
 
         private Call call;
 

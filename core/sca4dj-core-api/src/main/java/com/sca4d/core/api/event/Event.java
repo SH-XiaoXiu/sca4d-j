@@ -11,7 +11,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 保存一种已经发生的业务事件及对应的强类型 payload 数据。 */
-public final class Event<T> extends Message {
+public class Event<T> extends Message {
 
     private final @NotNull EventType<T> type;
 

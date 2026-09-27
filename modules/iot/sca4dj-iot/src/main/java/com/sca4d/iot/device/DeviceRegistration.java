@@ -14,7 +14,7 @@ import java.util.Set;
 /**
  * 保存创建 Device 时总是一起校验和写入的公共 Profile 数据。
  */
-public final class DeviceRegistration {
+public class DeviceRegistration {
 
     private final @NotNull ProductSelector product;
 

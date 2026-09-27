@@ -8,7 +8,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 /** 脚手架持久化、Session 和内部消息使用的映射器；业务和客户端协议使用各自的 ObjectMapper。 */
 @ApiStatus.Internal
-public final class Sca4djMapper extends ObjectMapper {
+public class Sca4djMapper extends ObjectMapper {
 
     private static final long serialVersionUID = 1L;
 

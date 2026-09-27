@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /** 为 Session 中的 PlatformPrincipal 读取启用角色提供的具体 Operation。 */
-public final class PlatformRbacResourceLoader implements ResourceLoader {
+public class PlatformRbacResourceLoader implements ResourceLoader {
 
     private final @NotNull PlatformRbacService rbac;
 

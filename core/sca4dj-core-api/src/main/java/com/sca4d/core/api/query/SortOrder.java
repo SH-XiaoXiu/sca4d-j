@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存一个安全排序字段及其排序方向。 */
-public final class SortOrder {
+public class SortOrder {
 
     private final @NotNull Sort field;
 

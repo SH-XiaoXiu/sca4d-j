@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 接收一份未保存 Email 源码、目标 Locale 和预览变量。 */
-public final class PreviewEmailTemplateRequest {
+public class PreviewEmailTemplateRequest {
 
     @Valid
     @Req.NotNull

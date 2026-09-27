@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 将领域 Principal Java 类型映射为 Session Codec 的稳定判别值。 */
-public final class PrincipalTypes {
+public class PrincipalTypes {
     private static final Logger LOG = LoggerFactory.getLogger(PrincipalTypes.class);
 
     private final @NotNull @Unmodifiable Map<@NotNull Class<? extends Principal>, @NotNull PrincipalType> byValueType;

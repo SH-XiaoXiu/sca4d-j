@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 使用独立 HS256 密钥签发和恢复 OpenAPI access JWT，不改变浏览器 Session 的 Token 模式。 */
-public final class OpenApiJwtTokenService {
+public class OpenApiJwtTokenService {
 
     private static final String JWT_TYPE = "openapi+jwt";
 
@@ -191,7 +191,7 @@ public final class OpenApiJwtTokenService {
     }
 
     /** 保存一次性返回给 OAuth 调用方的 OpenAPI JWT 和过期时间。 */
-    public static final class IssuedOpenApiJwt {
+    public static class IssuedOpenApiJwt {
 
         private final @NotNull String token;
 

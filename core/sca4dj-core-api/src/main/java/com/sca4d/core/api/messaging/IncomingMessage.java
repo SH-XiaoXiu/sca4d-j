@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /** 保存 MessageHandler 收到的业务 Message 和 RabbitMQ 投递元数据。 */
 @SuppressWarnings("ClassCanBeRecord")
-public final class IncomingMessage<M extends Message> {
+public class IncomingMessage<M extends Message> {
 
     private final @NotNull Id messageId;
 

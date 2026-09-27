@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存 SMS Provider Mapper 返回的数据库状态。 */
-public final class SmsProviderState {
+public class SmsProviderState {
     private final long providerId;
 
     private final @NotNull String code;

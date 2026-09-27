@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 表示 EMQX `5.8.9` HTTP Authenticator 必须以 HTTP 200 返回的认证结果。 */
-public final class EmqxAuthenticationResponse {
+public class EmqxAuthenticationResponse {
 
     private final @NotNull String result;
 

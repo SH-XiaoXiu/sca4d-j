@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /** 保存启用 Platform 角色为一个 Principal 提供的 Operation 选择符。 */
 @SuppressWarnings("ClassCanBeRecord")
-public final class PlatformPrincipalPermission {
+public class PlatformPrincipalPermission {
 
     private final @NotNull Long principalId;
 

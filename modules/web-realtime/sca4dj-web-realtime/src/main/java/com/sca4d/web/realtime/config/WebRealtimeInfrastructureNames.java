@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 /** 为 Web Realtime 的 Redis 键和 RabbitMQ 对象生成无歧义运行时名称。 */
 @ApiStatus.Internal
-public final class WebRealtimeInfrastructureNames {
+public class WebRealtimeInfrastructureNames {
 
     /** 创建 Web Realtime 基础设施的逻辑名称目录。 */
     public WebRealtimeInfrastructureNames() {

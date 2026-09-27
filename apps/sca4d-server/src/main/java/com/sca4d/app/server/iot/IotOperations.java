@@ -14,7 +14,7 @@ import java.util.Set;
 
 /** 声明 Sca4d Server 的 IoT Product、Device 和设备操作权限。 */
 @Component
-public final class IotOperations implements RbacOperationModule {
+public class IotOperations implements RbacOperationModule {
 
     private static final @NotNull TreeCode MODULE = TreeCode.ofSegment("IOT");
 

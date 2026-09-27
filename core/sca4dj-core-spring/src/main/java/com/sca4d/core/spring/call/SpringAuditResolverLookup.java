@@ -9,7 +9,7 @@ import org.springframework.context.ApplicationContext;
 import java.util.Objects;
 
 /** 从 Spring 容器取得 `@Audit` 声明的目标解析器和 payload 工厂。 */
-public final class SpringAuditResolverLookup implements AuditResolverLookup {
+public class SpringAuditResolverLookup implements AuditResolverLookup {
 
     private final ApplicationContext applicationContext;
 

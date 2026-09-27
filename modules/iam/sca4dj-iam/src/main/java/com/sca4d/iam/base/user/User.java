@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 组合单一 Platform 用户的 Subject、Account，并作为对应 Principal 使用。 */
-public final class User implements Principal {
+public class User implements Principal {
 
     private final @NotNull Subject subject;
 

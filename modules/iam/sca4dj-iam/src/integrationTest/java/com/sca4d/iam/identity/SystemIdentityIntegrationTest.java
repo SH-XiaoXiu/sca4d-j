@@ -147,7 +147,7 @@ class SystemIdentityIntegrationTest {
     }
 
     /** 通过另一条实际数据库连接确认提交后才允许启动工作线程。 */
-    private static final class IdentityProbe implements SmartLifecycle {
+    private static class IdentityProbe implements SmartLifecycle {
         private final JdbcTemplate jdbc;
 
         private final AtomicBoolean started;

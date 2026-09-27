@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 创建并读取 MQTT Client ID 形式的 Device 直接连接绑定。 */
-public final class MqttDeviceConnection {
+public class MqttDeviceConnection {
 
     /** MQTT 直接连接使用的稳定身份类型。 */
     public static final @NotNull String IDENTIFIER_TYPE = "mqtt-client-id";

@@ -17,7 +17,7 @@ import java.util.Map;
 
 /** 为已认证平台账号选择明确关联的平台业务主体。 */
 @Component
-public final class PlatformPrincipalSelection implements PrincipalSelection<Map<String, @Nullable Object>> {
+public class PlatformPrincipalSelection implements PrincipalSelection<Map<String, @Nullable Object>> {
 
     /** 创建平台业务主体选择器。 */
     public PlatformPrincipalSelection() {

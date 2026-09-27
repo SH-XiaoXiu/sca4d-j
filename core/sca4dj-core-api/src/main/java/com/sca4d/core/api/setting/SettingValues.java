@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 保存一次批量查询得到的不可变设置快照。 */
-public final class SettingValues {
+public class SettingValues {
 
     private final Map<String, SettingValue<?>> values;
 

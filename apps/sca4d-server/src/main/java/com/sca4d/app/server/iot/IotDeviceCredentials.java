@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 保存 Sca4d Server 创建或修改 Device 时产生的 Account 和一次性认证凭据。 */
-public final class IotDeviceCredentials {
+public class IotDeviceCredentials {
 
     private final @NotNull Device device;
 

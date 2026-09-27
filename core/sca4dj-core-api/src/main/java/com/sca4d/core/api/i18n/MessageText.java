@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 保存需要由 MessageCatalog 解析的静态消息键和模板参数。 */
-public final class MessageText extends LocalizableText {
+public class MessageText extends LocalizableText {
 
     private final String key;
 

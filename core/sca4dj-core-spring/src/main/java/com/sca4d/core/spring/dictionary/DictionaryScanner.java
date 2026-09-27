@@ -19,7 +19,7 @@ import java.util.Set;
 /**
  * 在应用和 Sca4d-J 包中查找实现 `Dictionary` 的枚举，不读取注解或数据库。
  */
-public final class DictionaryScanner {
+public class DictionaryScanner {
 
     private final ClassLoader classLoader;
 

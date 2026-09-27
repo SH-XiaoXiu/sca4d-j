@@ -19,7 +19,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 /** 验证 Gateway 控制 Secret，采用可信转发信息并对后续处理隐藏控制 Header。 */
-public final class TrustedGatewayRequestFilter extends OncePerRequestFilter {
+public class TrustedGatewayRequestFilter extends OncePerRequestFilter {
 
     private final byte @NotNull [] expectedSecret;
 
@@ -92,7 +92,7 @@ public final class TrustedGatewayRequestFilter extends OncePerRequestFilter {
     }
 
     /** 对业务代码隐藏 Gateway 控制 Secret 和所有客户端不可声明的转发 Header。 */
-    private static final class HiddenGatewayHeadersRequest extends HttpServletRequestWrapper {
+    private static class HiddenGatewayHeadersRequest extends HttpServletRequestWrapper {
 
         HiddenGatewayHeadersRequest(@NotNull HttpServletRequest request) {
             super(request);

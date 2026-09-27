@@ -8,7 +8,7 @@ import java.util.Map;
 
 /** 保存 SYSTEM Subject ID、代码声明的系统身份与人工指定的全局 Principal ID。 */
 @ConfigurationProperties("sca4dj.iam")
-public final class SystemIdentityProperties {
+public class SystemIdentityProperties {
     /** 整个业务系统的 SYSTEM Subject ID；所有实例必须使用同一值。 */
     private long systemSubjectId = 1L;
 

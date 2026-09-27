@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 /** 保存互不重复的正数 {@code long} 标识，并提供不可变的精确包含判断。 */
-public final class LongIdSet {
+public class LongIdSet {
 
     private final long @NotNull [] ids;
 

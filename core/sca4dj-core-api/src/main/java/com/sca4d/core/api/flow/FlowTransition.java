@@ -5,7 +5,7 @@ import com.sca4d.core.api.utils.TextUtils;
 import java.util.Objects;
 
 /** 记录 {@link FlowGraph} 在事件满足条件时从一个节点转到另一个节点的规则。 */
-public final class FlowTransition {
+public class FlowTransition {
 
     private final String from;
 

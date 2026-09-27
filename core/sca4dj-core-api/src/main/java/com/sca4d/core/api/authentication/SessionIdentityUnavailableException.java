@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.Serial;
 
 /** 表示 Account 当前状态或身份关系已经不能恢复为有效 Session。 */
-public final class SessionIdentityUnavailableException extends RuntimeException {
+public class SessionIdentityUnavailableException extends RuntimeException {
 
     @Serial
     private static final long serialVersionUID = 1L;

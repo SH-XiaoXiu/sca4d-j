@@ -18,7 +18,7 @@ import java.util.Objects;
 
 /** 保存一个账号在示例应用中的动作认证要求和方法开关。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class AccountAuthenticationSettings {
+public class AccountAuthenticationSettings {
 
     private static final Duration DEFAULT_REUSABLE_MAXIMUM_AGE = Duration.ofMinutes(5);
 

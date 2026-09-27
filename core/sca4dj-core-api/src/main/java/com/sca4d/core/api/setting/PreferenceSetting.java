@@ -4,7 +4,7 @@ import com.sca4d.core.api.pipeline.Pipeline;
 import org.jetbrains.annotations.NotNull;
 
 /** 定义由前端完整读取和替换、后端不解释具体展示字段的个人偏好。 */
-public final class PreferenceSetting<T> extends PersonalSetting<T> {
+public class PreferenceSetting<T> extends PersonalSetting<T> {
 
     /**
      * 创建只能以明文 JSON 传输和保存的个人偏好定义。

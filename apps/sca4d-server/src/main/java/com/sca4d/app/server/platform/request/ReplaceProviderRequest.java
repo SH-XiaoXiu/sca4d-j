@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /** 接收后台替换联邦 Provider 展示和未绑定身份策略的请求。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 和 setter 绑定 HTTP 请求字段。
-public final class ReplaceProviderRequest {
+public class ReplaceProviderRequest {
     private boolean loginPageVisible = true;
 
     @PositiveOrZero

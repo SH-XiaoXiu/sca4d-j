@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /** 接收 Platform 角色状态修改请求。 */
 @Schema(name = "UpdatePlatformRoleStatusRequest")
-public final class UpdateRoleStatusRequest {
+public class UpdateRoleStatusRequest {
 
     @Req.NotNull
     private @Nullable RoleStatus status;

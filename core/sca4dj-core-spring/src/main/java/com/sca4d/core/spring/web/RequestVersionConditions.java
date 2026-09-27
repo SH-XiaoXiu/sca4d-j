@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 把当前 HTTP 请求提交的 `If-Match` 版本绑定为必须由根资源 Repository 消费的调用要求。 */
-public final class RequestVersionConditions implements VersionConditions {
+public class RequestVersionConditions implements VersionConditions {
 
     private final ThreadLocal<State> current = new ThreadLocal<>();
 
@@ -73,7 +73,7 @@ public final class RequestVersionConditions implements VersionConditions {
     }
 
     /** 保存一个 `If-Match` 版本及其附着和消费状态。 */
-    private static final class State implements CallRequirement {
+    private static class State implements CallRequirement {
 
         private final @NotNull Version expectedVersion;
 

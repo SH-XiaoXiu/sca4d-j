@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Duration;
 
 /** 声明认证模块可以由客户管理的会话、尝试和 JWT 有效期。 */
-public final class AuthSettings {
+public class AuthSettings {
 
     /** 认证设置分组。 */
     public static final @NotNull SettingGroup GROUP = new SettingGroup(

@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /** 保存 MyBatis 从 TOTP 凭据表读取的模块内部持久化状态。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class TotpCredentialState {
+public class TotpCredentialState {
 
     private final Long accountId;
 

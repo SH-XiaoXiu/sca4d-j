@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 指示 RabbitMQ 对当前 Handler 收到的消息执行确认、再次处理或拒绝。 */
-public final class HandlingDecision {
+public class HandlingDecision {
 
     public enum Status {
         ACKNOWLEDGE,

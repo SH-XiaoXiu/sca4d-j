@@ -12,7 +12,7 @@ import java.util.Objects;
 
 /** 接收一个 Platform 角色需要批量增加和移除的 Account 标识。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean setter 反序列化请求。
-public final class ChangeRoleAccountsRequest {
+public class ChangeRoleAccountsRequest {
 
     @Req.NotNull
     private @Nullable List<@Positive @NotNull Long> addAccountIds = new ArrayList<>();

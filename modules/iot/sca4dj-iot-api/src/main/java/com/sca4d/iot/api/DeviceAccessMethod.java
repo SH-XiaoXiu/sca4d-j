@@ -12,7 +12,7 @@ import java.util.Optional;
 /**
  * 表示 Device 允许使用的匿名、Session 或 Account 认证连接方式。
  */
-public final class DeviceAccessMethod {
+public class DeviceAccessMethod {
 
     /**
      * 不提交 Account 认证材料的匿名连接方式编码。

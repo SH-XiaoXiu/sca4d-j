@@ -12,7 +12,7 @@ import java.util.Objects;
 
 /** 保存 SSE 与 STOMP 共同发送给浏览器的事件编码、版本、发生时间和 payload。 */
 @ApiStatus.Internal
-public final class BrowserEnvelope {
+public class BrowserEnvelope {
 
     private final @NotNull TreeCode eventCode;
 

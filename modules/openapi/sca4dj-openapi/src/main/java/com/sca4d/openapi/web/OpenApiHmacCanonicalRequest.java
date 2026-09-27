@@ -10,7 +10,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 /** 按 OpenAPI Client 的固定字段顺序生成 MAC canonical request。 */
-public final class OpenApiHmacCanonicalRequest {
+public class OpenApiHmacCanonicalRequest {
 
     private final @NotNull String clientId;
 

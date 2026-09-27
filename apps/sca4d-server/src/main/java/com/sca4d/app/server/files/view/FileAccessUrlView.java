@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 返回一个已经由 App 授权文件的短期读取地址。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
-public final class FileAccessUrlView {
+public class FileAccessUrlView {
 
     private final long fileId;
 

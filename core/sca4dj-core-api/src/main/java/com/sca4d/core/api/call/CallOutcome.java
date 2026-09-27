@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 保存一次方法执行的实际路径、返回结果或失败。 */
-public final class CallOutcome {
+public class CallOutcome {
 
     /** 列出方法执行可以产生的最终结果。 */
     public enum Status {

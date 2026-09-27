@@ -10,7 +10,7 @@ import com.sca4d.core.api.setting.value.SettingOwner;
 import org.jetbrains.annotations.NotNull;
 
 /** 使用 owner、Setting key 和长度分隔上下文读写当前版本二敏感设置密文。 */
-public final class SettingSecretCodecV2 implements SecretCodec<byte[]> {
+public class SettingSecretCodecV2 implements SecretCodec<byte[]> {
 
     private static final @NotNull TreeCode CODE = TreeCode.of("SETTING/SECRET");
 

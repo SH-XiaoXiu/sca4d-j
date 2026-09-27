@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.Iterator;
 
 /** 声明需要日志后端执行特殊处理且不可修改的 SLF4J Marker。 */
-public final class LogMark {
+public class LogMark {
 
     /** 当前真实事务提交后才输出的 INFO 成功日志。 */
     public static final Marker AFTER_COMMIT = new ImmutableMarker("SCA4DJ_AFTER_COMMIT");
@@ -16,7 +16,7 @@ public final class LogMark {
     }
 
     /** 阻止调用方给公共 Marker 增加引用，从而改变其他日志的匹配结果。 */
-    private static final class ImmutableMarker implements Marker {
+    private static class ImmutableMarker implements Marker {
 
         @Serial
         private static final long serialVersionUID = 1L;

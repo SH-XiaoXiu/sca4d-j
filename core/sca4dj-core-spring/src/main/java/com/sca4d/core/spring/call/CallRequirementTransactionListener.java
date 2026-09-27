@@ -6,7 +6,7 @@ import org.springframework.transaction.TransactionExecution;
 import org.springframework.transaction.TransactionExecutionListener;
 
 /** 在 Spring 事务提交前检查当前方法执行登记的权限范围和版本条件等要求。 */
-public final class CallRequirementTransactionListener implements TransactionExecutionListener {
+public class CallRequirementTransactionListener implements TransactionExecutionListener {
 
     /** 创建事务提交前调用要求监听器。 */
     public CallRequirementTransactionListener() {

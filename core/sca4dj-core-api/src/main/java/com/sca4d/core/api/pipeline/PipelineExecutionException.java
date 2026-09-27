@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 标明 Pipeline 中实际失败的阶段，同时保留原始异常。 */
-public final class PipelineExecutionException extends RuntimeException {
+public class PipelineExecutionException extends RuntimeException {
 
     /** 抛出原始异常或产生非法输出的阶段名称。 */
     private final @NotNull String stageCode;

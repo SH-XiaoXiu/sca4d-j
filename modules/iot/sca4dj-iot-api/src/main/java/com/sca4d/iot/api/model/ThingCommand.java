@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 定义一个稳定 code 的设备命令、输入和业务确认策略。 */
-public final class ThingCommand {
+public class ThingCommand {
 
     private final @NotNull String code;
 
@@ -69,7 +69,7 @@ public final class ThingCommand {
     }
 
     /** 构造一个命令定义。 */
-    public static final class Builder {
+    public static class Builder {
         private final @NotNull String code;
 
         private final @NotNull Map<String, ThingValueType> inputs = new LinkedHashMap<>();

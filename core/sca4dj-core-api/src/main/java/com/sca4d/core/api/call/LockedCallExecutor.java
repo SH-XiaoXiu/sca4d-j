@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.concurrent.Callable;
 
 /** 解析 `@Locked` 的锁键，并在分布式锁内连续执行实际业务方法。 */
-public final class LockedCallExecutor {
+public class LockedCallExecutor {
 
     private static final Logger LOG = LoggerFactory.getLogger(LockedCallExecutor.class);
 
@@ -78,7 +78,7 @@ public final class LockedCallExecutor {
     }
 
     /** 保存需要穿过 `DistributedLock` 回调边界的受检异常。 */
-    private static final class InvocationFailure extends RuntimeException {
+    private static class InvocationFailure extends RuntimeException {
 
         private final Exception original;
 

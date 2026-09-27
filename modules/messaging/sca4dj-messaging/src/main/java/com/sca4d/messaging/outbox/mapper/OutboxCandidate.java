@@ -8,7 +8,7 @@ import java.util.Objects;
 
 /** 保存 Outbox 已写入领取租约后执行发布所需的列。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class OutboxCandidate {
+public class OutboxCandidate {
 
     private final long messageId;
 

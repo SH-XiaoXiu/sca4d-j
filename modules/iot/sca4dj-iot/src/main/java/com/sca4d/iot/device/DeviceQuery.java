@@ -19,7 +19,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 描述 Device 台账支持的有界标识查询或分页列表查询。 */
-public final class DeviceQuery {
+public class DeviceQuery {
 
     private static final @NotNull @Unmodifiable Set<@NotNull Sort> SORT_FIELDS = Set.of(
             Sort.CREATED_AT,
@@ -138,7 +138,7 @@ public final class DeviceQuery {
     }
 
     /** 逐项声明 Device 台账筛选条件。 */
-    public static final class Builder {
+    public static class Builder {
 
         private final @Nullable @Unmodifiable List<@NotNull Long> deviceIds;
 

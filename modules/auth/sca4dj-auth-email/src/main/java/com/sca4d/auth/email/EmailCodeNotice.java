@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存一次 Email Code 通知需要投递的 Account、验证码和有效分钟数。 */
-public final class EmailCodeNotice {
+public class EmailCodeNotice {
 
     /** Email Code 使用 Email 必发渠道的类型化通知定义。 */
     public static final @NotNull NotificationType<EmailCodeNotice> TYPE = NotificationType.define(

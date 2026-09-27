@@ -16,7 +16,7 @@ import java.util.Objects;
 
 /** 返回一个计划时间生成下行、过期或失败的结果。 */
 @SuppressWarnings("unused")
-public final class IotDeviceScheduleExecutionView {
+public class IotDeviceScheduleExecutionView {
 
     private final long executionId;
 
@@ -87,7 +87,7 @@ public final class IotDeviceScheduleExecutionView {
     }
 
     /** 返回调度执行的稳定失败 code 和本地化消息。 */
-    public static final class Failure extends BaseView {
+    public static class Failure extends BaseView {
 
         private final @NotNull String code;
 

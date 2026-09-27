@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 汇总自动生成的 MQTT DeviceProtocol 路由和具体应用登记的消息路由。 */
-public final class MqttMessageRouter {
+public class MqttMessageRouter {
 
     private final @NotNull List<MqttMessageRoute> routes;
 
@@ -157,7 +157,7 @@ public final class MqttMessageRouter {
 
     /** 把 MqttDeviceProtocol 的一条 Topic Filter 转换为传输无关 Device 消息。 */
     @SuppressWarnings("ClassCanBeRecord") // 路由适配类型遵守项目禁用 record 的规则。
-    private static final class MqttDeviceProtocolRoute implements MqttMessageRoute {
+    private static class MqttDeviceProtocolRoute implements MqttMessageRoute {
 
         private final MqttDeviceProtocol protocol;
 

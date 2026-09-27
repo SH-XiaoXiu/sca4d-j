@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 返回不包含 AccessKey 的 SMS Provider 配置。 */
 @SuppressWarnings("unused")
-public final class SmsProviderView {
+public class SmsProviderView {
 
     private final long providerId;
 

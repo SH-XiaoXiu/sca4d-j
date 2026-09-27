@@ -187,7 +187,7 @@ class SessionContractTest {
                         NOW));
     }
 
-    private static final class TestPrincipal implements Principal {
+    private static class TestPrincipal implements Principal {
         private final long id;
 
         private TestPrincipal(long id) {
@@ -200,7 +200,7 @@ class SessionContractTest {
         }
     }
 
-    private static final class OtherPrincipal implements Principal {
+    private static class OtherPrincipal implements Principal {
         private final long id;
 
         private OtherPrincipal(long id) {
@@ -213,7 +213,7 @@ class SessionContractTest {
         }
     }
 
-    private static final class TestResource implements Resource {
+    private static class TestResource implements Resource {
         private final TreeCode type;
 
         private final String id;

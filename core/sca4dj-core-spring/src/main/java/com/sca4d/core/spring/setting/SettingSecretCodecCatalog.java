@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 /** 为一个设置所属和稳定编码建立 V1/V2 密文 Codec 目录，并把 V2 作为当前写入版本。 */
-public final class SettingSecretCodecCatalog {
+public class SettingSecretCodecCatalog {
 
     private final @NotNull VersionedCodecCatalog<byte[], EncryptedSecret> codecs;
 

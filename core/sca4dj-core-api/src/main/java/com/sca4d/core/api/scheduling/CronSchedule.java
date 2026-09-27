@@ -8,7 +8,7 @@ import java.time.ZoneId;
 import java.util.Objects;
 
 /** 使用显式时区解释 Quartz Cron 表达式。 */
-public final class CronSchedule implements ScheduleTiming {
+public class CronSchedule implements ScheduleTiming {
 
     private final @NotNull String expression;
 

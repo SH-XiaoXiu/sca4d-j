@@ -15,7 +15,7 @@ import java.util.Objects;
 
 /** 按当前 Platform Principal 读取、替换和恢复已注册的个人偏好。 */
 @Service
-public final class PreferenceService {
+public class PreferenceService {
 
     private static final Logger LOG = LoggerFactory.getLogger(PreferenceService.class);
 

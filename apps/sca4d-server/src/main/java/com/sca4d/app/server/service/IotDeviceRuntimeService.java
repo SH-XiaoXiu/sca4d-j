@@ -12,7 +12,7 @@ import java.util.Objects;
 
 /** 读取 IoT 运行态并显式应用具体应用选择的在线策略。 */
 @Service
-public final class IotDeviceRuntimeService {
+public class IotDeviceRuntimeService {
 
     private final @NotNull DeviceRuntimeQueryService runtime;
 

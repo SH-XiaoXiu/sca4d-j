@@ -12,7 +12,7 @@ import java.util.Objects;
 
 /** 接收示例 App 创建 Platform Account 所需的身份、密码和资料字段。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean setter 反序列化请求。
-public final class CreatePlatformAccountRequest {
+public class CreatePlatformAccountRequest {
 
     @NotBlank
     @Size(max = 128)

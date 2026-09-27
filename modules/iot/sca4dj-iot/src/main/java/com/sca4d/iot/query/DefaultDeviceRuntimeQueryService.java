@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 从主库和 Redis 读取 Device 当前运行投影。 */
-public final class DefaultDeviceRuntimeQueryService implements DeviceRuntimeQueryService {
+public class DefaultDeviceRuntimeQueryService implements DeviceRuntimeQueryService {
 
     private final @NotNull DeviceRepository devices;
 

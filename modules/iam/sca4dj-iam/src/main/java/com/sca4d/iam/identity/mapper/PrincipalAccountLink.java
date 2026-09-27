@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /** 批量查询 Principal 与 Account 关系的内部行。 */
 @SuppressWarnings("ClassCanBeRecord")
-public final class PrincipalAccountLink {
+public class PrincipalAccountLink {
     private final @NotNull Long principalId;
 
     private final @NotNull Long accountId;

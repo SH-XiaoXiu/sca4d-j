@@ -81,7 +81,7 @@ class AclServiceTest {
         new AclResourceTypes(new AclRepositoryRegistry(List.of(repositories)));
     }
 
-    private static final class FakeRepository implements AclRepository {
+    private static class FakeRepository implements AclRepository {
         private final DomainScope scope;
 
         private final Set<TreeCode> types;

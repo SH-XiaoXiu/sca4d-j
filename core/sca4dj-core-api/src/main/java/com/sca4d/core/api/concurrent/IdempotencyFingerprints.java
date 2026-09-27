@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.TreeMap;
 
 /** 把方法参数转换成字段顺序稳定的 JSON，并生成不暴露原始参数的幂等摘要。 */
-public final class IdempotencyFingerprints {
+public class IdempotencyFingerprints {
 
     private final ObjectMapper objectMapper;
 

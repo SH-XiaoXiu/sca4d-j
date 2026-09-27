@@ -7,7 +7,7 @@ import org.springframework.beans.factory.ObjectProvider;
 import java.util.Objects;
 
 /** 延迟取得 `EmqxMqttRuntime`，使 MQTT 消息路由能够返回协议响应。 */
-public final class EmqxMqttTransport implements MqttTransport {
+public class EmqxMqttTransport implements MqttTransport {
 
     private final @NotNull ObjectProvider<EmqxMqttRuntime> runtimes;
 

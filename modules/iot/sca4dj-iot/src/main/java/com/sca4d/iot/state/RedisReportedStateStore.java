@@ -27,7 +27,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 使用 Redis Hash 和 Lua 原子维护每个 Device 字段组的 latest reported 投影。 */
-public final class RedisReportedStateStore implements ReportedStateStore {
+public class RedisReportedStateStore implements ReportedStateStore {
 
     private static final String VALUE_PREFIX = "value:";
 

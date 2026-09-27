@@ -15,7 +15,7 @@ import java.util.Objects;
 /**
  * 让一个 NotificationDelivery 独立消费 NotificationMessage 并拥有自己的队列和 DLQ。
  */
-public final class NotificationMessageHandler implements MessageHandler<NotificationMessage> {
+public class NotificationMessageHandler implements MessageHandler<NotificationMessage> {
 
     private final @NotNull TreeCode channel;
 

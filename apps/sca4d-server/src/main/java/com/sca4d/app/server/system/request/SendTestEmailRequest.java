@@ -14,7 +14,7 @@ import java.util.Objects;
 
 /** 接收已保存模板测试发送使用的 Locale、变量和单个收件地址。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean setter 反序列化请求。
-public final class SendTestEmailRequest {
+public class SendTestEmailRequest {
 
     @NotBlank
     @Size(max = 35)

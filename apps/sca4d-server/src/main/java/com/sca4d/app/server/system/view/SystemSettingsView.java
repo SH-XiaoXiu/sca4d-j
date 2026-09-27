@@ -22,7 +22,7 @@ import java.util.Objects;
 
 /** 按分组返回管理端可以查看和修改的全部 Settings。 */
 @SuppressWarnings("unused")
-public final class SystemSettingsView {
+public class SystemSettingsView {
 
     private final List<Group> groups;
 
@@ -51,7 +51,7 @@ public final class SystemSettingsView {
     }
 
     /** 管理端中的一个设置分组。 */
-    public static final class Group extends BaseView {
+    public static class Group extends BaseView {
         private final String key;
 
         private final String labelKey;
@@ -117,7 +117,7 @@ public final class SystemSettingsView {
     }
 
     /** 管理端中的一个类型化设置。 */
-    public static final class Item extends BaseView {
+    public static class Item extends BaseView {
         private final String key;
 
         private final String labelKey;

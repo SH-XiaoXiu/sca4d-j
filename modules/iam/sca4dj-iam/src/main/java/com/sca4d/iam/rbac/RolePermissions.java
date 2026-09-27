@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /** 保存角色以及已经展开为具体 ACTION 的 Operation。 */
 @SuppressWarnings("ClassCanBeRecord")
-public final class RolePermissions {
+public class RolePermissions {
 
     private final @NotNull Role role;
 

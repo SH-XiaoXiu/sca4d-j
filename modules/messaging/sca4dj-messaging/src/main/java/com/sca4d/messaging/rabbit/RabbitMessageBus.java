@@ -28,7 +28,7 @@ import java.util.Objects;
 
 /** 使用固定 RabbitMQ 基座实现立即、提交后和 Outbox 三种 Message 分发方式。 */
 @ApiStatus.Internal
-public final class RabbitMessageBus implements MessageBus {
+public class RabbitMessageBus implements MessageBus {
 
     private static final Logger LOG = LoggerFactory.getLogger(RabbitMessageBus.class);
 

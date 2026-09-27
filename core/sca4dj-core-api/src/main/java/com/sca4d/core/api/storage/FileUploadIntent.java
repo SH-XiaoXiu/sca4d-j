@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /** 保存申请上传时已经确认的用途、名称、媒体类型和字节数。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class FileUploadIntent {
+public class FileUploadIntent {
     private final @NotNull FileUse use;
 
     private final @NotNull String filename;

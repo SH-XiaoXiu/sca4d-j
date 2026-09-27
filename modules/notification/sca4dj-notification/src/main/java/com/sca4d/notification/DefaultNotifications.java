@@ -19,7 +19,7 @@ import java.util.Set;
 /**
  * 使用通知类型回调解析领域对象，并执行同步或 Outbox 发布。
  */
-public final class DefaultNotifications implements Notifications {
+public class DefaultNotifications implements Notifications {
 
     private final @NotNull NotificationTypeCatalog types;
 

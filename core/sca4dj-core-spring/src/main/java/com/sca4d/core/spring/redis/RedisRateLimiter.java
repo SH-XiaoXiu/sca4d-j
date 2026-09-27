@@ -15,7 +15,7 @@ import java.time.Duration;
 import java.util.Objects;
 
 /** 使用 Redis CAS 原子消耗多个应用实例共享的令牌桶额度。 */
-public final class RedisRateLimiter implements RateLimiter {
+public class RedisRateLimiter implements RateLimiter {
 
     private final ProxyManager<String> proxyManager;
 

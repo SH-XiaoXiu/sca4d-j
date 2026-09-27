@@ -33,7 +33,7 @@ import java.util.stream.LongStream;
  * 为 Auth 各功能包测试创建一致的 `Session` 和编解码器。
  */
 @SuppressWarnings({"ClassCanBeRecord", "unused"})
-public final class SessionTestFixture {
+public class SessionTestFixture {
 
     /**
      * 各 Session 测试共用的固定时间。
@@ -148,7 +148,7 @@ public final class SessionTestFixture {
     /**
      * 测试使用的 Principal。
      */
-    public static final class TestPrincipal implements Principal {
+    public static class TestPrincipal implements Principal {
         private final long id;
 
         private final String field;
@@ -177,7 +177,7 @@ public final class SessionTestFixture {
     /**
      * 测试使用的 Resource。
      */
-    public static final class TestResource implements Resource {
+    public static class TestResource implements Resource {
         private final TreeCode type;
 
         private final String id;
@@ -214,7 +214,7 @@ public final class SessionTestFixture {
     /**
      * 测试 Principal 的计数编解码器。
      */
-    public static final class TestPrincipalCodec implements PrincipalCodec<TestPrincipal> {
+    public static class TestPrincipalCodec implements PrincipalCodec<TestPrincipal> {
         private final AtomicInteger decodes;
 
         /**
@@ -250,7 +250,7 @@ public final class SessionTestFixture {
     /**
      * 测试 Resource 的计数编解码器。
      */
-    public static final class TestResourceCodec implements ResourceCodec<TestResource> {
+    public static class TestResourceCodec implements ResourceCodec<TestResource> {
         private final AtomicInteger decodes;
 
         /**
@@ -283,7 +283,7 @@ public final class SessionTestFixture {
         }
     }
 
-    static final class PrincipalPayload {
+    static class PrincipalPayload {
         public long id;
 
         public String field;
@@ -297,7 +297,7 @@ public final class SessionTestFixture {
         }
     }
 
-    static final class ResourcePayload {
+    static class ResourcePayload {
         public String type;
 
         public String id;

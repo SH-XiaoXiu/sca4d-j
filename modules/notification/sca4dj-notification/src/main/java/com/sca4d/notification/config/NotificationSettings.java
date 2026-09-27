@@ -13,7 +13,7 @@ import com.sca4d.core.api.setting.definition.SystemSetting;
 import org.jetbrains.annotations.NotNull;
 
 /** 声明 Notification 框架内部保存的系统渠道默认值和接收人覆盖值。 */
-public final class NotificationSettings {
+public class NotificationSettings {
 
     private static final SettingGroup GROUP = new SettingGroup(
             TreeCode.of("NOTIFICATION"),

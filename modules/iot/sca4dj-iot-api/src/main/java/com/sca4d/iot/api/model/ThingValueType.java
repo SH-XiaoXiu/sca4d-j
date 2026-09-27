@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /** 使用一个不可变递归对象表达物模型允许的值及其约束。 */
-public final class ThingValueType {
+public class ThingValueType {
 
     private final @NotNull ThingValueKind kind;
 
@@ -194,7 +194,7 @@ public final class ThingValueType {
     }
 
     /** 逐项构造一个递归物模型值类型。 */
-    public static final class Builder {
+    public static class Builder {
 
         private final @NotNull ThingValueKind kind;
 

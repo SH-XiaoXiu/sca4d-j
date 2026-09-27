@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 保存 OIDC 或 OAuth2 Provider 的协议端点、作用域和资料映射。 */
-public final class FederatedProviderConfiguration {
+public class FederatedProviderConfiguration {
 
     private final FederatedProviderProtocol protocol;
 

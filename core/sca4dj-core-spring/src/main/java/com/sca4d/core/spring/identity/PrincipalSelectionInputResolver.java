@@ -19,7 +19,7 @@ import java.util.Locale;
 import java.util.Map;
 
 /** 从当前 HTTP 请求和已经绑定的 Controller 参数收集业务身份选择输入。 */
-public final class PrincipalSelectionInputResolver {
+public class PrincipalSelectionInputResolver {
 
     private final ParameterNameDiscoverer parameterNames = new DefaultParameterNameDiscoverer();
 

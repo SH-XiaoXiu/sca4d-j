@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
  *
  * <p>字段名只保存协议标识符，不保存数据库列或 SQL。具体列表仍需在 {@code ListDefinition} 和 Mapper 中分别声明允许字段和列映射。
  */
-public final class Sort {
+public class Sort {
 
     /** 记录创建时间。 */
     public static final @NotNull Sort CREATED_AT = new Sort("CREATED_AT");

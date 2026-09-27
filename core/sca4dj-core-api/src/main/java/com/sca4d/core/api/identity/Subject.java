@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 表示完成认证或建立受控调用的具体接入者。 */
-public final class Subject {
+public class Subject {
 
     /** 整个业务系统唯一的 SYSTEM Subject；各实例和模块共享此身份，不对应用户 Session。启动时由 IAM 配置发布 ID。 */
     public static volatile @NotNull Subject SYSTEM = new Subject(1, SubjectType.SYSTEM);

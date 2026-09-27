@@ -18,7 +18,7 @@ import java.util.OptionalLong;
 
 /** 返回第三方程序读取 IoT Device 时需要的稳定字段，不复用管理端 HTTP 视图。 */
 @Schema(name = "IotDevice", description = "开放 API 返回的 IoT Device 资料、连接标识和启停状态。")
-public final class OpenApiIotDeviceResponse {
+public class OpenApiIotDeviceResponse {
 
     private final @NotNull String id;
 

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 表明调用方等待的 Job run 已失败，错误详情保存在对应运行记录中。 */
-public final class JobRunFailedException extends RuntimeException {
+public class JobRunFailedException extends RuntimeException {
 
     /** 进入 FAILED 状态的运行标识。 */
     private final @NotNull Id runId;

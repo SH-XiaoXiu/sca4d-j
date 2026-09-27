@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 /** 校验站内信 Tiptap 模板，并生成持久化所需的纯文本和安全 HTML。 */
-public final class InboxTemplateRenderer {
+public class InboxTemplateRenderer {
 
     private static final int MAXIMUM_NODES = 10_000;
 

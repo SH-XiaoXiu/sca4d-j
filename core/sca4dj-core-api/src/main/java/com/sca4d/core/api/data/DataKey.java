@@ -12,7 +12,7 @@ import java.util.Objects;
  * @param <T> 该键允许读写的值类型
  */
 @SuppressWarnings("ClassCanBeRecord")
-public final class DataKey<T> {
+public class DataKey<T> {
 
     private final String name;
 

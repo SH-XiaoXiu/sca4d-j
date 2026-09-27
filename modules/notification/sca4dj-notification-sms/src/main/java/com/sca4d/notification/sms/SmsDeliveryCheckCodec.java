@@ -16,7 +16,7 @@ import java.util.Base64;
 import java.util.Objects;
 
 /** 编解码延迟 SMS 送达查询消息。 */
-public final class SmsDeliveryCheckCodec implements MessageCodec<SmsDeliveryCheck> {
+public class SmsDeliveryCheckCodec implements MessageCodec<SmsDeliveryCheck> {
     private final @NotNull ObjectMapper json;
 
     private final @NotNull NotificationMessageCodec notifications;

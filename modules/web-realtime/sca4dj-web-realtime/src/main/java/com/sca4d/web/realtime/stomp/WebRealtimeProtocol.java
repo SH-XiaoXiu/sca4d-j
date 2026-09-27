@@ -1,7 +1,7 @@
 package com.sca4d.web.realtime.stomp;
 
 /** 集中声明浏览器、具体应用和 Web Realtime 模块共同遵守的固定协议值。 */
-public final class WebRealtimeProtocol {
+public class WebRealtimeProtocol {
 
     /** 原生 WebSocket 上的 Spring STOMP 入口。 */
     public static final String WEBSOCKET_ENDPOINT = "/events/ws";

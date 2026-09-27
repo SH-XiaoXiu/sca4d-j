@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 保存一次 desired HTTP 动作明确要求 set 和 clear 的属性集合。 */
-public final class DesiredStateChange {
+public class DesiredStateChange {
 
     private final @NotNull Map<String, Object> setValues;
 

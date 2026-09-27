@@ -22,7 +22,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/me/notification-settings")
 @CurrentPrincipal(selection = PlatformPrincipalSelection.class)
-public final class NotificationSettingsController {
+public class NotificationSettingsController {
     private final NotificationSettingsService settings;
 
     private final NotificationTypeCatalog notificationTypes;

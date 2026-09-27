@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 /**
  * 执行一个通知类型的接收人回调，并把 Settings、语言和区域解析成标准通知。
  */
-final class DefaultNotificationExecution<T> implements NotificationExecution {
+class DefaultNotificationExecution<T> implements NotificationExecution {
 
     private final @NotNull NotificationType<T> type;
 

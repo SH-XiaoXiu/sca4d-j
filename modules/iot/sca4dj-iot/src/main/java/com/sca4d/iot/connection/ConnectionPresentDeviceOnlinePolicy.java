@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 只要当前连接投影中存在一条连接信息，就把 Device 判定为在线。 */
-public final class ConnectionPresentDeviceOnlinePolicy implements DeviceOnlinePolicy {
+public class ConnectionPresentDeviceOnlinePolicy implements DeviceOnlinePolicy {
 
     /** @return 连接集合非空时为 {@code true} */
     @Override

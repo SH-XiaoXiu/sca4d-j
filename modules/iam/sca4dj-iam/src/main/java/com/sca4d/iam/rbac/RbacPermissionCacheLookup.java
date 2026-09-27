@@ -13,7 +13,7 @@ import java.util.OptionalLong;
 
 /** 保存一次 RBAC 权限缓存读取的命中结果和并发回填修订号。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class RbacPermissionCacheLookup {
+public class RbacPermissionCacheLookup {
 
     private final @NotNull @Unmodifiable Map<@NotNull RbacScope, @NotNull Map<@NotNull Long, @NotNull List<@NotNull PermissionSelector>>> cachedSelectors;
 

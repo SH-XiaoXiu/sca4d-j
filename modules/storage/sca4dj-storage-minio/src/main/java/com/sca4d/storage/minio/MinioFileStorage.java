@@ -35,7 +35,7 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /** 使用 MinIO 保存临时和正式对象，并生成浏览器直接使用的预签名地址。 */
-public final class MinioFileStorage implements FileStorage {
+public class MinioFileStorage implements FileStorage {
     private static final Logger LOG = LoggerFactory.getLogger(MinioFileStorage.class);
 
     private final @NotNull MinioStorageProperties properties;
@@ -305,7 +305,7 @@ public final class MinioFileStorage implements FileStorage {
     }
 
     /** 统计 MinIO SDK 实际从调用方内容流读取的字节数。 */
-    private static final class CountingInputStream extends InputStream {
+    private static class CountingInputStream extends InputStream {
         private final @NotNull InputStream delegate;
 
         private long bytesRead;

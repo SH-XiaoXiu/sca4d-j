@@ -253,7 +253,7 @@ class BaseViewSerializationTest {
                 (key, locale, arguments) -> Optional.of(locale.toLanguageTag() + ":" + key));
     }
 
-    private static final class PlainView extends BaseView {
+    private static class PlainView extends BaseView {
 
         private final String name;
 
@@ -273,7 +273,7 @@ class BaseViewSerializationTest {
         }
     }
 
-    private static final class OrderedView extends BaseView {
+    private static class OrderedView extends BaseView {
 
         private final String value = "bean";
 
@@ -292,7 +292,7 @@ class BaseViewSerializationTest {
         }
     }
 
-    private static final class StructuralView extends BaseView {
+    private static class StructuralView extends BaseView {
 
         private final String name = "alpha";
 
@@ -348,7 +348,7 @@ class BaseViewSerializationTest {
         }
     }
 
-    private static final class MapperAwareView extends BaseView {
+    private static class MapperAwareView extends BaseView {
 
         private final String ordinaryName = "ordinary";
 
@@ -362,7 +362,7 @@ class BaseViewSerializationTest {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    private static final class CustomValue {
+    private static class CustomValue {
 
         private final String value;
 
@@ -371,7 +371,7 @@ class BaseViewSerializationTest {
         }
     }
 
-    private static final class CustomValueSerializer extends StdSerializer<CustomValue> {
+    private static class CustomValueSerializer extends StdSerializer<CustomValue> {
 
         private CustomValueSerializer() {
             super(CustomValue.class);
@@ -387,7 +387,7 @@ class BaseViewSerializationTest {
         }
     }
 
-    private static final class RootView extends BaseView {
+    private static class RootView extends BaseView {
 
         private final String name = "root";
 
@@ -426,7 +426,7 @@ class BaseViewSerializationTest {
         }
     }
 
-    private static final class LocalizedOverrideView extends LocalizedView {
+    private static class LocalizedOverrideView extends LocalizedView {
 
         private LocalizedOverrideView(String key) {
             super(key);
@@ -439,7 +439,7 @@ class BaseViewSerializationTest {
         }
     }
 
-    private static final class LocalizedRemoveView extends LocalizedView {
+    private static class LocalizedRemoveView extends LocalizedView {
 
         private LocalizedRemoveView(String key) {
             super(key);
@@ -486,7 +486,7 @@ class BaseViewSerializationTest {
         }
     }
 
-    private static final class DynamicLocalizedView extends BaseView {
+    private static class DynamicLocalizedView extends BaseView {
 
         @Localize(key = "name")
         private final String name = "placeholder";
@@ -514,7 +514,7 @@ class BaseViewSerializationTest {
         }
     }
 
-    private static final class MissingDynamicFieldsView extends BaseView {
+    private static class MissingDynamicFieldsView extends BaseView {
 
         @Localize(key = "name")
         private final String name = "placeholder";
@@ -538,7 +538,7 @@ class BaseViewSerializationTest {
         }
     }
 
-    private static final class InvalidSourceView extends BaseView {
+    private static class InvalidSourceView extends BaseView {
 
         @Localize(source = "nameText")
         private final String name = "value";
@@ -607,7 +607,7 @@ class BaseViewSerializationTest {
         }
     }
 
-    private static final class InvalidJsonView extends BaseView {
+    private static class InvalidJsonView extends BaseView {
 
         private final String name = "value";
 
@@ -620,7 +620,7 @@ class BaseViewSerializationTest {
         }
     }
 
-    private static final class FailingActionView extends BaseView {
+    private static class FailingActionView extends BaseView {
 
         private final String name = "value";
 
@@ -636,9 +636,9 @@ class BaseViewSerializationTest {
         }
     }
 
-    private static final class SourceFailure extends RuntimeException {
+    private static class SourceFailure extends RuntimeException {
     }
 
-    private static final class ViewFailure extends RuntimeException {
+    private static class ViewFailure extends RuntimeException {
     }
 }

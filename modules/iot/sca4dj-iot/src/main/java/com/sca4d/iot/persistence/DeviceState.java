@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 /** 保存 Mapper 查询得到的 Device 公共 Profile 标量字段。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class DeviceState {
+public class DeviceState {
     private final long id;
 
     private final @NotNull ProductSource productSource;

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Duration;
 
 /** 保存一次限流额度判断是否允许以及拒绝后的等待时间。 */
-public final class RateLimitDecision {
+public class RateLimitDecision {
 
     private static final RateLimitDecision ALLOWED = new RateLimitDecision(true, Duration.ZERO);
 

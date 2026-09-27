@@ -15,7 +15,7 @@ import java.util.Objects;
 /**
  * 标识 Web Realtime 发布需要匹配的共享连接索引。
  */
-public final class WebRealtimeTarget {
+public class WebRealtimeTarget {
 
     /**
      * 表示 Web Realtime 支持的目标索引种类。

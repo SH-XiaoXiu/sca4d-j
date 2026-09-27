@@ -33,7 +33,7 @@ import java.util.UUID;
 /**
  * 使用认证方法目录、Redis 尝试和应用动作策略编排零到三因素认证。
  */
-public final class RedisAuthenticationAttempts implements AuthenticationAttempts {
+public class RedisAuthenticationAttempts implements AuthenticationAttempts {
 
     private static final Logger LOG = LoggerFactory.getLogger(RedisAuthenticationAttempts.class);
 

@@ -642,7 +642,7 @@ class WebRealtimeInfrastructureIntegrationTest {
     /**
      * 保存节点投递，供测试线程等待并检查。
      */
-    private static final class TestConnection implements LocalConnection {
+    private static class TestConnection implements LocalConnection {
         private final ConnectionId id;
 
         private final BlockingQueue<BrowserWrite> deliveries = new LinkedBlockingQueue<>();
@@ -683,7 +683,7 @@ class WebRealtimeInfrastructureIntegrationTest {
     /**
      * 允许测试推进 Redis 索引使用的逻辑时间。
      */
-    private static final class MutableClock extends Clock {
+    private static class MutableClock extends Clock {
         private Instant instant;
 
         private MutableClock(Instant instant) {

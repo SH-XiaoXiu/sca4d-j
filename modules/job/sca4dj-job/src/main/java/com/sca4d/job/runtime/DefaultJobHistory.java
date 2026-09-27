@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 使用当前 App 隔离名称的 Job Repository 返回类型化调度历史。 */
-public final class DefaultJobHistory implements JobHistory {
+public class DefaultJobHistory implements JobHistory {
 
     private final @NotNull JobRepository repository;
 

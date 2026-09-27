@@ -33,7 +33,7 @@ import java.util.Map;
  * 处理旧冷柜的二进制 TLV、缺字段 patch、位标志枚举和不对称寄存器下行帧。
  * 厂商字段在当前协议中转换为物模型属性和标准业务 ACK。
  */
-public final class LegacyFreezerDeviceProtocol {
+public class LegacyFreezerDeviceProtocol {
 
     /** 示例 Product code。 */
     public static final String PRODUCT_CODE = "legacy-freezer-controller";

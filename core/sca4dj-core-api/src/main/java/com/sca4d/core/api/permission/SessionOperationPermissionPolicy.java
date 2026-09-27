@@ -9,7 +9,7 @@ import com.sca4d.core.api.resource.Resource;
  * <p>本策略只认领操作资源（Operation，{@link Operation}）。业务资源由所属模块提供独立的 {@link PermissionPolicy}，以便结合业务授权
  * 数据返回允许、拒绝或资源范围（Resource Scope，{@link ResourceScope}）。
  */
-public final class SessionOperationPermissionPolicy implements PermissionPolicy {
+public class SessionOperationPermissionPolicy implements PermissionPolicy {
 
     /** 创建使用当前 Session 静态资源判断固定操作的权限策略。 */
     public SessionOperationPermissionPolicy() {

@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /** 返回 desired 当前 desiredSequence 和本次实际生成的状态同步消息。 */
 @SuppressWarnings("unused")
-public final class IotDesiredStateView {
+public class IotDesiredStateView {
 
     private final long desiredSequence;
 

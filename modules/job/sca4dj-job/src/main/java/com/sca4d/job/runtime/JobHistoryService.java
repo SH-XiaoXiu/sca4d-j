@@ -11,7 +11,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 按配置保留窗口分批删除已经成功的 Job run 历史。 */
-public final class JobHistoryService {
+public class JobHistoryService {
 
     private static final Logger log = LoggerFactory.getLogger(JobHistoryService.class);
 

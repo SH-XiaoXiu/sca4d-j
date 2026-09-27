@@ -20,7 +20,7 @@ import java.util.OptionalLong;
 
 /** 返回 Sca4d Server 管理 Device 所需的公共 Profile、连接身份和启停状态。 */
 @SuppressWarnings("unused")
-public final class IotDeviceView {
+public class IotDeviceView {
 
     private final long id;
 

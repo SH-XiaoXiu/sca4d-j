@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /** 配置单条 SQL 批量操作的条目数和绑定参数保护上限。 */
 @ConfigurationProperties("sca4dj.persistence.batch")
-public final class SqlBatchProperties {
+public class SqlBatchProperties {
 
     private int maxItems = 1_000;
 

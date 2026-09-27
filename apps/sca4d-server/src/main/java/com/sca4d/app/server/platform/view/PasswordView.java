@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 返回不包含摘要的密码凭据状态和更新时间。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
-public final class PasswordView {
+public class PasswordView {
 
     private final @NotNull String status;
 

@@ -11,7 +11,7 @@ import java.util.Base64;
 import java.util.Objects;
 
 /** 以显式结构编解码只含加密 Secret 的 enrollment 状态。 */
-final class TotpEnrollmentCodec {
+class TotpEnrollmentCodec {
 
     private final ObjectMapper objectMapper;
 

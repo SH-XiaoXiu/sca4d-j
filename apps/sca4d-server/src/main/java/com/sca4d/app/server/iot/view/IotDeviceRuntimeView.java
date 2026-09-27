@@ -20,7 +20,7 @@ import java.util.Objects;
 
 /** 返回 Device 当前连接、reported 和 desired 三类可重新读取的运行投影。 */
 @SuppressWarnings("unused")
-public final class IotDeviceRuntimeView {
+public class IotDeviceRuntimeView {
 
     private final @NotNull @Unmodifiable List<Connection> connections;
 
@@ -68,7 +68,7 @@ public final class IotDeviceRuntimeView {
     }
 
     /** 返回一条当前 Device 连接信息。 */
-    public static final class Connection {
+    public static class Connection {
 
         private final @NotNull String connectionId;
 
@@ -116,7 +116,7 @@ public final class IotDeviceRuntimeView {
     }
 
     /** 返回一个 reported 字段组当前快照。 */
-    public static final class Reported {
+    public static class Reported {
 
         private final @NotNull String groupCode;
 
@@ -164,7 +164,7 @@ public final class IotDeviceRuntimeView {
     }
 
     /** 返回一个 desired 属性当前快照。 */
-    public static final class Desired {
+    public static class Desired {
 
         private final @NotNull String propertyCode;
 

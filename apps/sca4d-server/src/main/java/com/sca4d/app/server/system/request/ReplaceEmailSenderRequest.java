@@ -13,7 +13,7 @@ import java.util.Objects;
 
 /** 接收完整 SMTP 配置，并明确本次是否替换或清除已保存密码。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean setter 反序列化请求。
-public final class ReplaceEmailSenderRequest {
+public class ReplaceEmailSenderRequest {
 
     @NotBlank
     @Size(max = 128)

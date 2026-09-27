@@ -11,7 +11,7 @@ import java.util.Objects;
 
 /** 返回登录或刷新后交付的 access Token、可选 Session Token 和各自有效期。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
-public final class SessionTokensView {
+public class SessionTokensView {
 
     private final @NotNull String tokenMode;
 

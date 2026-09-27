@@ -7,7 +7,7 @@ import java.time.Instant;
 
 /** 映射一条设备显式回执或 reported 推导回执。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class EncodedDeviceAcknowledgement {
+public class EncodedDeviceAcknowledgement {
 
     private final long messageId;
 

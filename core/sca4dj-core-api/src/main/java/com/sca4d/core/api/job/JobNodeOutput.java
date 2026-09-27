@@ -13,7 +13,7 @@ import java.util.Objects;
  *
  * @param <T> 节点输出类型
  */
-public final class JobNodeOutput<T> {
+public class JobNodeOutput<T> {
 
     private final @NotNull JobKey jobKey;
 

@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 /** 在配置加载后一次性发布整个进程使用的 App 隔离名称。 */
-public final class AppName {
+public class AppName {
 
     private static final AtomicReference<Name> VALUE = new AtomicReference<>();
 

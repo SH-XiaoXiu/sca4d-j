@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * Email 模板 Mapper 读取的数据库状态。
  */
-public final class EmailTemplateState {
+public class EmailTemplateState {
     private final long templateId;
 
     private final @NotNull TreeCode code;

@@ -93,7 +93,7 @@ class SettingSecretCodecTest {
         return "secret".getBytes(StandardCharsets.UTF_8);
     }
 
-    private static final class FakeCipher implements SecretCipher {
+    private static class FakeCipher implements SecretCipher {
         private String lastPurpose;
 
         @Override

@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 把带 {@link LogMark#AFTER_COMMIT} 的 INFO 交给当前事务，并在提交后按原 logger 输出。 */
-public final class TransactionLogTurboFilter extends TurboFilter {
+public class TransactionLogTurboFilter extends TurboFilter {
 
     @Override
     public FilterReply decide(

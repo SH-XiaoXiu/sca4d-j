@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 组合安全 SMTP 配置和仅供建立连接使用的可选密码密文。 */
-public final class EmailSenderConfiguration {
+public class EmailSenderConfiguration {
 
     private final @NotNull EmailSender sender;
 
