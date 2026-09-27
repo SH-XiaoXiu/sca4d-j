@@ -1,10 +1,7 @@
 package com.sca4d.app.server.plugin;
 
-<<<<<<< HEAD
-=======
 import static org.junit.jupiter.api.Assertions.*;
 
->>>>>>> dev
 import com.sca4d.app.server.authentication.AuthenticationActions;
 import com.sca4d.app.server.authentication.AuthenticationMethodSettings;
 import com.sca4d.app.server.plugin.api.Sca4dServerPlugin;
@@ -17,28 +14,16 @@ import com.sca4d.app.server.plugin.mfa.MfaSettings;
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationActionCode;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
-<<<<<<< HEAD
-=======
 import com.sca4d.core.api.name.code.TreeCode;
->>>>>>> dev
 import com.sca4d.core.api.plugin.ApiTarget;
 import com.sca4d.core.api.plugin.PluginLease;
 import com.sca4d.core.api.plugin.PluginStatus;
 import com.sca4d.core.api.plugin.PluginUnavailableException;
-<<<<<<< HEAD
-import com.sca4d.core.api.name.code.TreeCode;
-import com.sca4d.plugin.pf4j.Pf4jPluginLoader;
-import com.sca4d.plugin.runtime.DefaultPluginRuntime;
-import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.DisplayName;
-=======
 import com.sca4d.plugin.pf4j.Pf4jPluginLoader;
 import com.sca4d.plugin.runtime.DefaultPluginRuntime;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
->>>>>>> dev
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.InputStream;
@@ -47,41 +32,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Instant;
-<<<<<<< HEAD
-=======
 import java.util.HashSet;
->>>>>>> dev
 import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.Set;
-<<<<<<< HEAD
-import java.util.HashSet;
-import java.util.jar.JarFile;
-import java.util.jar.JarEntry;
-import java.util.jar.JarOutputStream;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.jupiter.api.Assertions.*;
-=======
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
->>>>>>> dev
 
 /** 使用实际独立 JAR 验证 App 生成契约、MFA 行为及代次替换。 */
 class MfaPluginRuntimeTest {
     private static final TreeCode PASSWORD = TreeCode.of("AUTHENTICATION:PASSWORD");
-<<<<<<< HEAD
-    private static final TreeCode TOTP = TreeCode.of("AUTHENTICATION:TOTP");
-    private static final TreeCode PASSKEY = TreeCode.of("AUTHENTICATION:PASSKEY");
-    @TempDir Path temporary;
-=======
 
     private static final TreeCode TOTP = TreeCode.of("AUTHENTICATION:TOTP");
 
@@ -89,7 +54,6 @@ class MfaPluginRuntimeTest {
 
     @TempDir
     Path temporary;
->>>>>>> dev
 
     @Test
     @DisplayName("实际 JAR 双向读取宿主事实并保留登录和独立因素规则")
@@ -100,22 +64,6 @@ class MfaPluginRuntimeTest {
             runtime.verifyRequired();
             MfaPolicy policy = MfaPolicyContract.INSTANCE.client(runtime, null);
             assertEquals(2, policy.requirementFor(42, AuthenticationActions.LOGIN_ACTION).factorCount());
-<<<<<<< HEAD
-            assertTrue(policy.requirementFor(42, AuthenticationActions.LOGIN_ACTION)
-                    .reusableAuthenticationMaximumAge().isEmpty());
-            assertEquals(Set.of(PASSWORD), policy.allowedMethods(42, AuthenticationActions.LOGIN_ACTION, List.of()));
-            Authentication password = new Authentication(42, PASSWORD, Set.of(AuthenticationFactorKind.KNOWLEDGE),
-                    Instant.parse("2026-09-01T00:00:00Z"));
-            assertEquals(Set.of(TOTP, PASSKEY),
-                    policy.allowedMethods(42, AuthenticationActions.LOGIN_ACTION, List.of(password)));
-            assertFalse(policy.allowsMethodUnavailable(42, PASSWORD));
-            assertTrue(policy.allowsMethodUnavailable(42, TOTP));
-            assertEquals(Duration.ofMinutes(5), policy.requirementFor(42,
-                    new AuthenticationActionCode(AuthenticationActions.PASSWORD_REPLACE_CODE))
-                    .reusableAuthenticationMaximumAge().orElseThrow());
-            assertThrows(IllegalArgumentException.class, () -> policy.validate(42, new MfaSettings(
-                    3, 2, Duration.ofMinutes(5), settings().methods())));
-=======
             assertTrue(
                     policy.requirementFor(42, AuthenticationActions.LOGIN_ACTION)
                             .reusableAuthenticationMaximumAge()
@@ -147,7 +95,6 @@ class MfaPluginRuntimeTest {
                                     2,
                                     Duration.ofMinutes(5),
                                     settings().methods())));
->>>>>>> dev
         }
     }
 
@@ -157,14 +104,6 @@ class MfaPluginRuntimeTest {
         try (DefaultPluginRuntime runtime = runtime()) {
             runtime.replace(artifact(), Duration.ZERO);
             ApiTarget target = new ApiTarget(TreeCode.of("AUTH:MFA:POLICY"), null);
-<<<<<<< HEAD
-            assertThrows(IllegalArgumentException.class,
-                    () -> runtime.invoke(target, TreeCode.of("REQUIREMENT"), new Object[]{"wrong", AuthenticationActions.LOGIN_ACTION}));
-            assertThrows(IllegalArgumentException.class,
-                    () -> runtime.invoke(target, TreeCode.of("PRIVATE"), new Object[]{}));
-            assertThrows(PluginUnavailableException.class,
-                    () -> runtime.invoke(new ApiTarget(TreeCode.of("NOT:EXPORTED"), null), TreeCode.of("READ"), new Object[]{}));
-=======
             assertThrows(
                     IllegalArgumentException.class,
                     () -> runtime.invoke(
@@ -180,7 +119,6 @@ class MfaPluginRuntimeTest {
                             new ApiTarget(TreeCode.of("NOT:EXPORTED"), null),
                             TreeCode.of("READ"),
                             new Object[] {}));
->>>>>>> dev
         }
     }
 
@@ -195,16 +133,11 @@ class MfaPluginRuntimeTest {
             assertThrows(IllegalStateException.class, () -> runtime.replace(incompatible, Duration.ZERO));
             assertEquals(1, runtime.statuses().size());
             assertEquals(PluginStatus.State.ACTIVE, runtime.statuses().getFirst().state());
-<<<<<<< HEAD
-            assertEquals(2, MfaPolicyContract.INSTANCE.client(runtime, null)
-                    .requirementFor(42, AuthenticationActions.LOGIN_ACTION).factorCount());
-=======
             assertEquals(
                     2,
                     MfaPolicyContract.INSTANCE.client(runtime, null)
                             .requirementFor(42, AuthenticationActions.LOGIN_ACTION)
                             .factorCount());
->>>>>>> dev
         }
     }
 
@@ -226,29 +159,20 @@ class MfaPluginRuntimeTest {
                 }
             });
             assertTrue(entered.await(10, TimeUnit.SECONDS));
-<<<<<<< HEAD
-            var update = runtime.replace(candidate("1.1.0", "com.sca4d.app.mfa.MfaPolicyPlugin",
-                    ">=1.0.0 & <2.0.0"), Duration.ZERO);
-=======
             var update = runtime.replace(
                     candidate(
                             "1.1.0",
                             "com.sca4d.app.mfa.MfaPolicyPlugin",
                             ">=1.0.0 & <2.0.0"),
                     Duration.ZERO);
->>>>>>> dev
             assertEquals(PluginStatus.State.DRAINING, update.previous().state());
             assertEquals("1.1.0", update.current().descriptor().version());
             assertEquals(2, policy.requirementFor(42, AuthenticationActions.LOGIN_ACTION).factorCount());
             release.countDown();
             assertEquals(2, oldCall.get(10, TimeUnit.SECONDS));
             assertEquals(PluginStatus.State.STOPPED, runtime.statuses().getFirst().state());
-<<<<<<< HEAD
-            assertThrows(IllegalStateException.class,
-=======
             assertThrows(
                     IllegalStateException.class,
->>>>>>> dev
                     () -> runtime.stop(TreeCode.of("SCA4D:SERVER:MFA"), Duration.ZERO));
         }
     }
@@ -277,14 +201,6 @@ class MfaPluginRuntimeTest {
         try (InputStream input = Sca4dServerPlugin.class.getClassLoader()
                 .getResourceAsStream(description.getProperty("api.shared-index"));
                 Scanner scanner = new Scanner(input, StandardCharsets.UTF_8)) {
-<<<<<<< HEAD
-            while (scanner.hasNextLine()) shared.add(scanner.nextLine());
-        } catch (Exception failure) {
-            throw new IllegalStateException(failure);
-        }
-        DefaultPluginRuntime runtime = new DefaultPluginRuntime(TreeCode.of("SCA4D:SERVER"), "1.0.0",
-                Sca4dServerPlugin.class, shared, new Pf4jPluginLoader(), temporary.resolve("cache"));
-=======
             while (scanner.hasNextLine())
                 shared.add(scanner.nextLine());
         } catch (Exception failure) {
@@ -297,7 +213,6 @@ class MfaPluginRuntimeTest {
                 shared,
                 new Pf4jPluginLoader(),
                 temporary.resolve("cache"));
->>>>>>> dev
         runtime.declare(MfaFactsContract.INSTANCE);
         runtime.declare(MfaPolicyContract.INSTANCE);
         runtime.bind(MfaFactsContract.INSTANCE.bind(new Facts(), null));
@@ -305,16 +220,6 @@ class MfaPluginRuntimeTest {
     }
 
     /** 读取构建任务明确提供的外部插件构件。 */
-<<<<<<< HEAD
-    private static Path artifact() { return Path.of(System.getProperty("sca4dj.plugin.artifacts[0]")); }
-
-    /** 使用共享设置表达密码加独立持有因素，不依赖测试运行顺序。 */
-    private static MfaSettings settings() {
-        return new MfaSettings(2, 2, Duration.ofMinutes(5), List.of(
-                new AuthenticationMethodSettings(PASSWORD, true, true, true),
-                new AuthenticationMethodSettings(TOTP, false, true, true),
-                new AuthenticationMethodSettings(PASSKEY, false, true, true)));
-=======
     private static Path artifact() {
         return Path.of(System.getProperty("sca4dj.plugin.artifacts[0]"));
     }
@@ -329,7 +234,6 @@ class MfaPluginRuntimeTest {
                         new AuthenticationMethodSettings(PASSWORD, true, true, true),
                         new AuthenticationMethodSettings(TOTP, false, true, true),
                         new AuthenticationMethodSettings(PASSKEY, false, true, true)));
->>>>>>> dev
     }
 
     /** 仅改变构件描述构造候选，实际类仍来自独立 JAR。 */
@@ -343,25 +247,17 @@ class MfaPluginRuntimeTest {
                 output.putNextEntry(new JarEntry(old.getName()));
                 if (old.getName().equals("META-INF/sca4dj/plugin.properties")) {
                     Properties properties = new Properties();
-<<<<<<< HEAD
-                    try (InputStream input = original.getInputStream(old)) { properties.load(input); }
-=======
                     try (InputStream input = original.getInputStream(old)) {
                         properties.load(input);
                     }
->>>>>>> dev
                     properties.setProperty("plugin.version", version);
                     properties.setProperty("plugin.entry", entry);
                     properties.setProperty("plugin.requires-api", range);
                     properties.store(output, "Test candidate");
                 } else if (!old.isDirectory()) {
-<<<<<<< HEAD
-                    try (InputStream input = original.getInputStream(old)) { input.transferTo(output); }
-=======
                     try (InputStream input = original.getInputStream(old)) {
                         input.transferTo(output);
                     }
->>>>>>> dev
                 }
                 output.closeEntry();
             }
@@ -371,15 +267,6 @@ class MfaPluginRuntimeTest {
 
     /** 提供不包含凭据的账号事实，测试插件反向调用宿主。 */
     private static final class Facts implements MfaFacts {
-<<<<<<< HEAD
-        @Override public @NotNull MfaSettings settings(long accountId) { return MfaPluginRuntimeTest.settings(); }
-        @Override public @NotNull List<MfaMethodFacts> methods() {
-            return List.of(new MfaMethodFacts(PASSWORD, Set.of(AuthenticationFactorKind.KNOWLEDGE), true),
-                    new MfaMethodFacts(TOTP, Set.of(AuthenticationFactorKind.POSSESSION), false),
-                    new MfaMethodFacts(PASSKEY, Set.of(AuthenticationFactorKind.POSSESSION), false));
-        }
-        @Override public @NotNull Set<TreeCode> availableMethods(long accountId) {
-=======
         @Override
         public @NotNull MfaSettings settings(long accountId) {
             return MfaPluginRuntimeTest.settings();
@@ -395,7 +282,6 @@ class MfaPluginRuntimeTest {
 
         @Override
         public @NotNull Set<TreeCode> availableMethods(long accountId) {
->>>>>>> dev
             return Set.of(PASSWORD, TOTP, PASSKEY);
         }
     }

@@ -10,7 +10,7 @@ import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.dictionary.DictionaryOption;
 import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.name.code.TreeCode;
-import com.sca4d.core.api.setting.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingOwner;
 import com.sca4d.core.spring.dictionary.DictionaryMapper;
 import com.sca4d.core.spring.dictionary.DictionaryRepository;
 import com.sca4d.core.spring.persistence.batch.SqlBatchProperties;

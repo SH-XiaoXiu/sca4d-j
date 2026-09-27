@@ -1,11 +1,8 @@
 package com.sca4d.app.server.plugin;
 
-<<<<<<< HEAD
-=======
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
->>>>>>> dev
 import com.sca4d.app.server.authentication.AuthenticationActions;
 import com.sca4d.app.server.authentication.AuthenticationMethodSettings;
 import com.sca4d.app.server.plugin.mfa.MfaFacts;
@@ -16,13 +13,8 @@ import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.plugin.PluginBinding;
 import com.sca4d.core.api.plugin.PluginMount;
-<<<<<<< HEAD
-import com.sca4d.core.api.plugin.PluginScope;
-import com.sca4d.core.api.plugin.PluginRuntime;
-=======
 import com.sca4d.core.api.plugin.PluginRuntime;
 import com.sca4d.core.api.plugin.PluginScope;
->>>>>>> dev
 import com.sca4d.plugin.spring.PluginAutoConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
@@ -40,19 +32,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-<<<<<<< HEAD
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-/** 验证真实生成契约的 Spring 挂载、Bean 方法绑定和必需插件启动检查。 */
-class MfaPluginSpringTest {
-    @TempDir Path temporary;
-=======
 /** 验证真实生成契约的 Spring 挂载、Bean 方法绑定和必需插件启动检查。 */
 class MfaPluginSpringTest {
     @TempDir
     Path temporary;
->>>>>>> dev
 
     @Test
     @DisplayName("Bean 方法绑定宿主事实，参数挂载插件客户端，作用域恢复正常")
@@ -77,12 +60,6 @@ class MfaPluginSpringTest {
     /** 使用独立上下文只装配插件机制，不启动 HTTP 或访问业务数据库。 */
     private AnnotationConfigApplicationContext context(String artifact) {
         var context = new AnnotationConfigApplicationContext();
-<<<<<<< HEAD
-        context.getEnvironment().getPropertySources().addFirst(new MapPropertySource("plugin-test", Map.of(
-                "sca4dj.plugin.enabled", "true", "sca4dj.plugin.api", "SCA4D:SERVER",
-                "sca4dj.plugin.artifacts[0]", artifact,
-                "sca4dj.plugin.cache-directory", temporary.resolve("cache").toString())));
-=======
         context.getEnvironment()
                 .getPropertySources()
                 .addFirst(
@@ -97,7 +74,6 @@ class MfaPluginSpringTest {
                                         artifact,
                                         "sca4dj.plugin.cache-directory",
                                         temporary.resolve("cache").toString())));
->>>>>>> dev
         context.register(PluginAutoConfiguration.class, Beans.class);
         return context;
     }
@@ -109,34 +85,21 @@ class MfaPluginSpringTest {
         /** 暴露无凭据的测试事实。 */
         @Bean
         @PluginBinding(MfaFacts.class)
-<<<<<<< HEAD
-        MfaFacts facts() { return new Facts(); }
-=======
         MfaFacts facts() {
             return new Facts();
         }
->>>>>>> dev
 
         /** 通过参数声明挂载必需策略客户端。 */
         @Bean
         @PluginScope
-<<<<<<< HEAD
-        Probe probe(@PluginMount("AUTH:MFA:POLICY") MfaPolicy policy) { return new Probe(policy); }
-=======
         Probe probe(@PluginMount("AUTH:MFA:POLICY") MfaPolicy policy) {
             return new Probe(policy);
         }
->>>>>>> dev
     }
 
     /** 保存普通业务对策略客户端的调用，不直接依赖加载实现。 */
     public static class Probe {
         private final MfaPolicy policy;
-<<<<<<< HEAD
-        public Probe(MfaPolicy policy) { this.policy = policy; }
-        /** 返回当前账号登录所需因素。 */
-        public int factors() { return policy.requirementFor(42, AuthenticationActions.LOGIN_ACTION).factorCount(); }
-=======
 
         public Probe(MfaPolicy policy) {
             this.policy = policy;
@@ -146,25 +109,11 @@ class MfaPluginSpringTest {
         public int factors() {
             return policy.requirementFor(42, AuthenticationActions.LOGIN_ACTION).factorCount();
         }
->>>>>>> dev
     }
 
     /** 提供最小密码与 TOTP 事实。 */
     static class Facts implements MfaFacts {
         private static final TreeCode PASSWORD = TreeCode.of("AUTHENTICATION:PASSWORD");
-<<<<<<< HEAD
-        private static final TreeCode TOTP = TreeCode.of("AUTHENTICATION:TOTP");
-        @Override public @NotNull MfaSettings settings(long accountId) {
-            return new MfaSettings(2, 2, Duration.ofMinutes(5), List.of(
-                    new AuthenticationMethodSettings(PASSWORD, true, true, true),
-                    new AuthenticationMethodSettings(TOTP, false, true, true)));
-        }
-        @Override public @NotNull List<MfaMethodFacts> methods() {
-            return List.of(new MfaMethodFacts(PASSWORD, Set.of(AuthenticationFactorKind.KNOWLEDGE), true),
-                    new MfaMethodFacts(TOTP, Set.of(AuthenticationFactorKind.POSSESSION), false));
-        }
-        @Override public @NotNull Set<TreeCode> availableMethods(long accountId) { return Set.of(PASSWORD, TOTP); }
-=======
 
         private static final TreeCode TOTP = TreeCode.of("AUTHENTICATION:TOTP");
 
@@ -190,6 +139,5 @@ class MfaPluginSpringTest {
         public @NotNull Set<TreeCode> availableMethods(long accountId) {
             return Set.of(PASSWORD, TOTP);
         }
->>>>>>> dev
     }
 }
