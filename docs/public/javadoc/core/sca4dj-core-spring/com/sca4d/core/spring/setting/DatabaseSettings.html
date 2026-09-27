@@ -96,7 +96,8 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">DatabaseSettings</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.core.api.setting.Settings, com.sca4d.core.api.setting.PreferenceSettings</span></div>
-<div class="block">每次调用都查询统一 `sys_setting`，并处理 owner、结构版本、Pipeline 和敏感值。</div>
+<div class="block">每次调用都查询统一 `sys_setting`，并处理 owner、结构版本、Pipeline 和敏感值。
+ 敏感值写入使用 V2 `SecretCodec`，读取根据行中的加密用途版本选择 V1 或 V2 `SecretCodec`。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">

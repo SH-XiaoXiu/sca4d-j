@@ -8,6 +8,7 @@ import com.sca4d.core.api.authentication.AuthenticationProgress;
 import com.sca4d.core.api.authentication.AuthenticationResult;
 import com.sca4d.core.api.authentication.AuthenticationSubmission;
 import com.sca4d.core.api.authentication.SessionLifecycle;
+import com.sca4d.core.api.plugin.PluginScope;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.Objects;
  * 把登录动作认证与 Session 建立组合成 Sca4d Server 登录流程。
  */
 @Service
+@PluginScope
 public class PlatformLoginService {
 
     private final AuthenticationAttempts authentication;

@@ -110,14 +110,14 @@ class Sca4dApplicationStartupIntegrationTest {
     /** 把完整应用的外部依赖绑定到本测试拥有的隔离容器。 */
     @DynamicPropertySource
     static void infrastructureProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
-        registry.add("spring.datasource.username", POSTGRES::getUsername);
-        registry.add("spring.datasource.password", POSTGRES::getPassword);
+        registry.add("spring.datasource.dynamic.datasource.main.url", POSTGRES::getJdbcUrl);
+        registry.add("spring.datasource.dynamic.datasource.main.username", POSTGRES::getUsername);
+        registry.add("spring.datasource.dynamic.datasource.main.password", POSTGRES::getPassword);
 
         registry.add("sca4dj.iot.timescale.enabled", () -> true);
-        registry.add("sca4dj.iot.timescale.url", TIMESCALE::getJdbcUrl);
-        registry.add("sca4dj.iot.timescale.username", TIMESCALE::getUsername);
-        registry.add("sca4dj.iot.timescale.password", TIMESCALE::getPassword);
+        registry.add("spring.datasource.dynamic.datasource.iot-history.url", TIMESCALE::getJdbcUrl);
+        registry.add("spring.datasource.dynamic.datasource.iot-history.username", TIMESCALE::getUsername);
+        registry.add("spring.datasource.dynamic.datasource.iot-history.password", TIMESCALE::getPassword);
 
         registry.add("spring.data.redis.host", REDIS::getHost);
         registry.add("spring.data.redis.port", () -> REDIS.getMappedPort(6379));

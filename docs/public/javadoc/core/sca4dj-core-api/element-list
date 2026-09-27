@@ -29,6 +29,7 @@ com.sca4d.core.api.notification
 com.sca4d.core.api.permission
 com.sca4d.core.api.persistence
 com.sca4d.core.api.pipeline
+com.sca4d.core.api.plugin
 com.sca4d.core.api.query
 com.sca4d.core.api.region
 com.sca4d.core.api.render

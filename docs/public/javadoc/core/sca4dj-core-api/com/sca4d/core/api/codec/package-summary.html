@@ -101,24 +101,28 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">表示一次只跨越相邻两个序列化版本的迁移步骤。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="TextCodec.html" title="interface in com.sca4d.core.api.codec">TextCodec</a>&lt;V&gt;</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="SecretCodec.html" title="interface in com.sca4d.core.api.codec">SecretCodec</a>&lt;V&gt;</div>
 <div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">把已经绑定加密密钥和用途的秘密值与密文互相转换，并声明密文结构版本。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="TextCodec.html" title="interface in com.sca4d.core.api.codec">TextCodec</a>&lt;V&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">把领域值与文本表示互相转换。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="VersionedCodec.html" title="interface in com.sca4d.core.api.codec">VersionedCodec</a>&lt;V,<wbr>W&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="VersionedCodec.html" title="interface in com.sca4d.core.api.codec">VersionedCodec</a>&lt;V,<wbr>W&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">为需要持久化或跨部署恢复的值声明稳定编码、版本和 Java 类型。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="VersionedCodecAdapter.html" title="class in com.sca4d.core.api.codec">VersionedCodecAdapter</a>&lt;V,<wbr>W&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="VersionedCodecAdapter.html" title="class in com.sca4d.core.api.codec">VersionedCodecAdapter</a>&lt;V,<wbr>W&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">把多个版本 Codec 适配为一个运行时 Codec，编码使用当前版本，解码按 wire 版本选择策略。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="VersionedCodecCatalog.html" title="class in com.sca4d.core.api.codec">VersionedCodecCatalog</a>&lt;V,<wbr>W&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="VersionedCodecCatalog.html" title="class in com.sca4d.core.api.codec">VersionedCodecCatalog</a>&lt;V,<wbr>W&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">保存同一稳定类型的多个版本 Codec，并选择当前写入版本或指定读取版本。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="VersionedCodecMigrator.html" title="class in com.sca4d.core.api.codec">VersionedCodecMigrator</a>&lt;W&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="VersionedCodecMigrator.html" title="class in com.sca4d.core.api.codec">VersionedCodecMigrator</a>&lt;W&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">按相邻版本步骤串联执行手工序列化迁移，不访问任何持久化介质。</div>
 </div>
 </div>

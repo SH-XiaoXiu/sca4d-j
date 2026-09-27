@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.sca4d.plugin.spring","l":"PluginAutoConfiguration"},{"p":"com.sca4d.plugin.spring","l":"PluginProperties"},{"p":"com.sca4d.plugin.spring","l":"PluginScopeAspect"}];updateSearchResults();

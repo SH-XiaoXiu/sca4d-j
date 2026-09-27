@@ -668,201 +668,225 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">接收站内信已读写入使用的当前版本。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/controllers/NotificationSettingsController.html" title="class in com.sca4d.app.server.controllers">NotificationSettingsController</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/app/server/plugin/mfa/MfaFacts.html" title="interface in com.sca4d.app.server.plugin.mfa">MfaFacts</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="block">向策略插件提供设置与方法事实，不暴露凭据、Proof 和内部 Repository。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/plugin/mfa/MfaFactsService.html" title="class in com.sca4d.app.server.plugin.mfa">MfaFactsService</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">从宿主设置和已安装方法读取策略事实，所有持久化仍由原模块完成。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/plugin/mfa/MfaMethodFacts.html" title="class in com.sca4d.app.server.plugin.mfa">MfaMethodFacts</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">保存认证方法的公开因素和账号识别声明，不持有认证方法对象。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/app/server/plugin/mfa/MfaPolicy.html" title="interface in com.sca4d.app.server.plugin.mfa">MfaPolicy</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="block">声明 Sca4d Server 必须安装的完整 MFA 策略扩展。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/plugin/mfa/MfaSettings.html" title="class in com.sca4d.app.server.plugin.mfa">MfaSettings</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">保存不依赖认证模块实现的账号 MFA 配置快照。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/controllers/NotificationSettingsController.html" title="class in com.sca4d.app.server.controllers">NotificationSettingsController</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">管理当前 Account 的领域化通知设置，不暴露通用 Settings key。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/notification/NotificationSettingsService.html" title="class in com.sca4d.app.server.notification">NotificationSettingsService</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/notification/NotificationSettingsService.html" title="class in com.sca4d.app.server.notification">NotificationSettingsService</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">用领域接口包装 Notification 的 Account 语言、区域和可选渠道 Settings。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/notification/NotificationSettingsSnapshot.html" title="class in com.sca4d.app.server.notification">NotificationSettingsSnapshot</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/notification/NotificationSettingsSnapshot.html" title="class in com.sca4d.app.server.notification">NotificationSettingsSnapshot</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存当前 Account 三项通知设置的领域化读取结果。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/notification/view/NotificationSettingsView.html" title="class in com.sca4d.app.server.notification.view">NotificationSettingsView</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/notification/view/NotificationSettingsView.html" title="class in com.sca4d.app.server.notification.view">NotificationSettingsView</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">返回当前 Account 的全局通知语言、区域和可选渠道覆盖值。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/openapi/iot/OpenApiIotDeviceResponse.html" title="class in com.sca4d.app.server.openapi.iot">OpenApiIotDeviceResponse</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/openapi/iot/OpenApiIotDeviceResponse.html" title="class in com.sca4d.app.server.openapi.iot">OpenApiIotDeviceResponse</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">返回第三方程序读取 IoT Device 时需要的稳定字段，不复用管理端 HTTP 视图。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/app/server/openapi/iot/OpenApiIotDeviceStatus.html" title="enum class in com.sca4d.app.server.openapi.iot">OpenApiIotDeviceStatus</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/app/server/openapi/iot/OpenApiIotDeviceStatus.html" title="enum class in com.sca4d.app.server.openapi.iot">OpenApiIotDeviceStatus</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
 <div class="block">表示开放 API 中 IoT Device 是否允许参与运行。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/app/server/openapi/iot/OpenApiIotProductSource.html" title="enum class in com.sca4d.app.server.openapi.iot">OpenApiIotProductSource</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/app/server/openapi/iot/OpenApiIotProductSource.html" title="enum class in com.sca4d.app.server.openapi.iot">OpenApiIotProductSource</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
 <div class="block">表示开放 API Device 所属 Product 定义的维护位置。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/system/view/OperationCatalogView.html" title="class in com.sca4d.app.server.system.view">OperationCatalogView</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/system/view/OperationCatalogView.html" title="class in com.sca4d.app.server.system.view">OperationCatalogView</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">返回完整示例 App 的 Operation 目录树、扁平 ACTION 列表和总数。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/system/view/OperationCatalogView.Node.html" title="class in com.sca4d.app.server.system.view">OperationCatalogView.Node</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/system/view/OperationCatalogView.Node.html" title="class in com.sca4d.app.server.system.view">OperationCatalogView.Node</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Operation 目录中的树节点或扁平 ACTION。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/controllers/OperationController.html" title="class in com.sca4d.app.server.controllers">OperationController</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/controllers/OperationController.html" title="class in com.sca4d.app.server.controllers">OperationController</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">返回完整示例 App 已安装的 Operation 目录。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/audit/OperationLog.html" title="class in com.sca4d.app.server.audit">OperationLog</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/audit/OperationLog.html" title="class in com.sca4d.app.server.audit">OperationLog</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">组合一条 Audit 记录与 Sca4d Server 用户资料中的 Principal 展示名称。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/service/OperationLogService.html" title="class in com.sca4d.app.server.service">OperationLogService</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/service/OperationLogService.html" title="class in com.sca4d.app.server.service">OperationLogService</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">查询 Audit 模块记录，并补充 Sca4d Server 拥有的 Principal 展示名称。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/system/view/OperationLogView.html" title="class in com.sca4d.app.server.system.view">OperationLogView</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/system/view/OperationLogView.html" title="class in com.sca4d.app.server.system.view">OperationLogView</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">返回管理端展示一条操作日志所需的身份、目标、结果、payload 和 HTTP 快照。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/controllers/PasskeyController.html" title="class in com.sca4d.app.server.controllers">PasskeyController</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/controllers/PasskeyController.html" title="class in com.sca4d.app.server.controllers">PasskeyController</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">开始 Passkey assertion，并管理当前账号的多个 Passkey Credential。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/authentication/view/PasskeyCredentialView.html" title="class in com.sca4d.app.server.authentication.view">PasskeyCredentialView</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/authentication/view/PasskeyCredentialView.html" title="class in com.sca4d.app.server.authentication.view">PasskeyCredentialView</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">返回不包含公钥和 user handle 的 Passkey Credential 管理信息。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/service/PasskeyDeletionService.html" title="class in com.sca4d.app.server.service">PasskeyDeletionService</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/service/PasskeyDeletionService.html" title="class in com.sca4d.app.server.service">PasskeyDeletionService</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">删除 Passkey 凭据，并保证删除后的账号仍满足应用认证要求。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/authentication/view/PasskeyOptionsView.html" title="class in com.sca4d.app.server.authentication.view">PasskeyOptionsView</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/authentication/view/PasskeyOptionsView.html" title="class in com.sca4d.app.server.authentication.view">PasskeyOptionsView</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">返回浏览器原生 WebAuthn JSON API 所需的 options 和 ceremony 标识。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/authentication/request/PasskeyProofRequest.html" title="class in com.sca4d.app.server.authentication.request">PasskeyProofRequest</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/authentication/request/PasskeyProofRequest.html" title="class in com.sca4d.app.server.authentication.request">PasskeyProofRequest</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">接收一次 Passkey assertion ceremony 标识和浏览器 WebAuthn JSON 响应。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/authentication/request/PasskeyRegistrationOptionsRequest.html" title="class in com.sca4d.app.server.authentication.request">PasskeyRegistrationOptionsRequest</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/authentication/request/PasskeyRegistrationOptionsRequest.html" title="class in com.sca4d.app.server.authentication.request">PasskeyRegistrationOptionsRequest</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">接收浏览器账号选择器显示的 Passkey 账号名称。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/authentication/request/PasskeyRegistrationRequest.html" title="class in com.sca4d.app.server.authentication.request">PasskeyRegistrationRequest</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/authentication/request/PasskeyRegistrationRequest.html" title="class in com.sca4d.app.server.authentication.request">PasskeyRegistrationRequest</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">接收 Passkey registration ceremony、浏览器响应和 Credential 名称。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/controllers/PasswordController.html" title="class in com.sca4d.app.server.controllers">PasswordController</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/controllers/PasswordController.html" title="class in com.sca4d.app.server.controllers">PasswordController</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">查询和修改当前账号的 Password Credential，不向 HTTP 暴露密码摘要。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/authentication/request/PasswordLoginRequest.html" title="class in com.sca4d.app.server.authentication.request">PasswordLoginRequest</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/authentication/request/PasswordLoginRequest.html" title="class in com.sca4d.app.server.authentication.request">PasswordLoginRequest</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">接收 Sca4d Server 配置允许的账号标识和原始密码。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/authentication/request/PasswordProofRequest.html" title="class in com.sca4d.app.server.authentication.request">PasswordProofRequest</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/authentication/request/PasswordProofRequest.html" title="class in com.sca4d.app.server.authentication.request">PasswordProofRequest</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">接收已知 Account 的 STEP_UP 密码证明。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/platform/view/PasswordView.html" title="class in com.sca4d.app.server.platform.view">PasswordView</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/platform/view/PasswordView.html" title="class in com.sca4d.app.server.platform.view">PasswordView</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">返回不包含摘要的密码凭据状态和更新时间。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/controllers/PhoneVerificationController.html" title="class in com.sca4d.app.server.controllers">PhoneVerificationController</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/controllers/PhoneVerificationController.html" title="class in com.sca4d.app.server.controllers">PhoneVerificationController</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在 SMS Code 动作认证完成后把当前 Profile 手机号绑定为 PHONE 登录标识。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/service/PlatformAccountApplicationService.html" title="class in com.sca4d.app.server.service">PlatformAccountApplicationService</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/service/PlatformAccountApplicationService.html" title="class in com.sca4d.app.server.service">PlatformAccountApplicationService</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">编排示例 App 的 Platform Account 创建、资料、状态和角色操作。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/controllers/platform/PlatformAccountController.html" title="class in com.sca4d.app.server.controllers.platform">PlatformAccountController</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/controllers/platform/PlatformAccountController.html" title="class in com.sca4d.app.server.controllers.platform">PlatformAccountController</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">管理示例 App 的 Platform Account、资料摘要和角色关系。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/platform/PlatformAccountRecord.html" title="class in com.sca4d.app.server.platform">PlatformAccountRecord</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/platform/PlatformAccountRecord.html" title="class in com.sca4d.app.server.platform">PlatformAccountRecord</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">组合 IAM Platform Account 目录项与示例 App 用户资料。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/platform/view/PlatformAccountView.html" title="class in com.sca4d.app.server.platform.view">PlatformAccountView</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/platform/view/PlatformAccountView.html" title="class in com.sca4d.app.server.platform.view">PlatformAccountView</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">返回 Platform Account 的用户名、状态和 App 资料。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">实现 Sca4d Server 的登录和敏感动作认证规则，并管理账号的方法开关。</div>
-</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/platform/PlatformEmailAccountIdentifierNormalizer.html" title="class in com.sca4d.app.server.platform">PlatformEmailAccountIdentifierNormalizer</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">保存 App 账号认证设置，并把完整策略判断桥接到必需的 MFA 插件。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/platform/PlatformEmailAccountIdentifierNormalizer.html" title="class in com.sca4d.app.server.platform">PlatformEmailAccountIdentifierNormalizer</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">把 Sca4d Server Profile 邮箱转换为 `EMAIL` 登录标识使用的稳定小写地址。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/platform/PlatformEmailIdentifierBootstrap.html" title="class in com.sca4d.app.server.platform">PlatformEmailIdentifierBootstrap</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/platform/PlatformEmailIdentifierBootstrap.html" title="class in com.sca4d.app.server.platform">PlatformEmailIdentifierBootstrap</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在 IAM 和 Profile 初始化后复核已有资料对应的 `EMAIL` 登录标识。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/notification/PlatformEmailRecipientResolver.html" title="class in com.sca4d.app.server.notification">PlatformEmailRecipientResolver</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/notification/PlatformEmailRecipientResolver.html" title="class in com.sca4d.app.server.notification">PlatformEmailRecipientResolver</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">从有效 Platform Account 的 App Profile 读取 Email 通知地址。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/service/PlatformFederatedAccountResolver.html" title="class in com.sca4d.app.server.service">PlatformFederatedAccountResolver</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/service/PlatformFederatedAccountResolver.html" title="class in com.sca4d.app.server.service">PlatformFederatedAccountResolver</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">把联邦资料解析为 Sca4d Server Platform Account，并按 Provider 策略执行 JIT。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/files/PlatformFilePermissionPolicy.html" title="class in com.sca4d.app.server.files">PlatformFilePermissionPolicy</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/files/PlatformFilePermissionPolicy.html" title="class in com.sca4d.app.server.files">PlatformFilePermissionPolicy</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">根据文件记录中的上传 Principal、scene 和目标 Resource 判断头像文件读写权限。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/files/PlatformFileService.html" title="class in com.sca4d.app.server.files">PlatformFileService</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/files/PlatformFileService.html" title="class in com.sca4d.app.server.files">PlatformFileService</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">执行示例 App 的头像文件申请、完成和读取流程。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/service/PlatformLoginService.html" title="class in com.sca4d.app.server.service">PlatformLoginService</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/service/PlatformLoginService.html" title="class in com.sca4d.app.server.service">PlatformLoginService</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">把登录动作认证与 Session 建立组合成 Sca4d Server 登录流程。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/notification/PlatformNotificationConfiguration.html" title="class in com.sca4d.app.server.notification">PlatformNotificationConfiguration</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/notification/PlatformNotificationConfiguration.html" title="class in com.sca4d.app.server.notification">PlatformNotificationConfiguration</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">用 Account LogicSetting 为 Notification 框架解析全局语言和业务区域。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/platform/PlatformPhoneAccountIdentifierNormalizer.html" title="class in com.sca4d.app.server.platform">PlatformPhoneAccountIdentifierNormalizer</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/platform/PlatformPhoneAccountIdentifierNormalizer.html" title="class in com.sca4d.app.server.platform">PlatformPhoneAccountIdentifierNormalizer</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">把 Platform 手机登录标识规范为已经校验的 E.164 文本。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/platform/PlatformPrincipalSelection.html" title="class in com.sca4d.app.server.platform">PlatformPrincipalSelection</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/platform/PlatformPrincipalSelection.html" title="class in com.sca4d.app.server.platform">PlatformPrincipalSelection</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">为已认证平台账号选择明确关联的平台业务主体。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/controllers/platform/PlatformRoleController.html" title="class in com.sca4d.app.server.controllers.platform">PlatformRoleController</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/controllers/platform/PlatformRoleController.html" title="class in com.sca4d.app.server.controllers.platform">PlatformRoleController</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">管理完整示例 App 的 Platform 角色、角色 ACTION 和角色 Account 关系。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/notification/PlatformSmsRecipientResolver.html" title="class in com.sca4d.app.server.notification">PlatformSmsRecipientResolver</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/notification/PlatformSmsRecipientResolver.html" title="class in com.sca4d.app.server.notification">PlatformSmsRecipientResolver</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">从有效 Platform Account 的 App Profile 读取当前 E.164 SMS 地址。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/entity/PlatformUserProfile.html" title="class in com.sca4d.app.server.entity">PlatformUserProfile</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/entity/PlatformUserProfile.html" title="class in com.sca4d.app.server.entity">PlatformUserProfile</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存示例 App 为 Platform 用户维护的展示名称和可选联系方式。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/platform/PlatformUserProfileBootstrap.html" title="class in com.sca4d.app.server.platform">PlatformUserProfileBootstrap</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/platform/PlatformUserProfileBootstrap.html" title="class in com.sca4d.app.server.platform">PlatformUserProfileBootstrap</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在 IAM bootstrap 完成后为默认 Platform Account 补齐示例 App 用户资料。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/app/server/mapper/PlatformUserProfileMapper.html" title="interface in com.sca4d.app.server.mapper">PlatformUserProfileMapper</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/app/server/mapper/PlatformUserProfileMapper.html" title="interface in com.sca4d.app.server.mapper">PlatformUserProfileMapper</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">定义示例 App 用户资料的最小查询和写入 SQL。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/files/PlatformUserProfilePermissionPolicy.html" title="class in com.sca4d.app.server.files">PlatformUserProfilePermissionPolicy</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/files/PlatformUserProfilePermissionPolicy.html" title="class in com.sca4d.app.server.files">PlatformUserProfilePermissionPolicy</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">判断当前 Platform Principal 能否为目标用户资料申请头像上传。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/repository/PlatformUserProfileRepository.html" title="class in com.sca4d.app.server.repository">PlatformUserProfileRepository</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/repository/PlatformUserProfileRepository.html" title="class in com.sca4d.app.server.repository">PlatformUserProfileRepository</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">隔离 App 用户资料服务对 MyBatis、空结果和影响行数的依赖。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/files/PlatformUserProfileResourceResolver.html" title="class in com.sca4d.app.server.files">PlatformUserProfileResourceResolver</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/files/PlatformUserProfileResourceResolver.html" title="class in com.sca4d.app.server.files">PlatformUserProfileResourceResolver</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">从头像上传请求读取目标 Account，并解析其 Platform 用户资料资源。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/service/PlatformUserProfileService.html" title="class in com.sca4d.app.server.service">PlatformUserProfileService</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/service/PlatformUserProfileService.html" title="class in com.sca4d.app.server.service">PlatformUserProfileService</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">管理示例 App 自己拥有的 Platform 用户资料。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/plugin/PluginAuthenticationConfiguration.html" title="class in com.sca4d.app.server.plugin">PluginAuthenticationConfiguration</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">为 App 装配普通认证入口，并声明一次操作固定 MFA 插件代次。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/controllers/PreferenceController.html" title="class in com.sca4d.app.server.controllers">PreferenceController</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">

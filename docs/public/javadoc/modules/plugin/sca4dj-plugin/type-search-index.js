@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.sca4d.plugin.runtime","l":"DefaultPluginRuntime"}];updateSearchResults();

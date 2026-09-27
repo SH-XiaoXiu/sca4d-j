@@ -388,6 +388,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">当前 HTTP 调用完成后需要客户端重新读取的状态目标。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV1</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV2</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/web/HttpErrorCode.html#code()" class="member-name-link">code()</a> - Method in enum class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpErrorCode.html" title="enum class in com.sca4d.core.spring.web">HttpErrorCode</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/validation/BizIdMode.html#CODE" class="member-name-link">CODE</a> - Enum constant in enum class com.sca4d.core.spring.validation.<a href="com/sca4d/core/spring/validation/BizIdMode.html" title="enum class in com.sca4d.core.spring.validation">BizIdMode</a></dt>
@@ -592,6 +596,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">取得当前调用。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecCatalog.html#current()" class="member-name-link">current()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecCatalog.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecCatalog</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/web/annotation/CurrentAccount.html" class="type-name-link" title="annotation interface in com.sca4d.core.spring.web.annotation">CurrentAccount</a> - Annotation Interface in <a href="com/sca4d/core/spring/web/annotation/package-summary.html">com.sca4d.core.spring.web.annotation</a></dt>
 <dd>
 <div class="block">将当前已认证 <code>Account</code> 注入 Controller 参数。</div>
@@ -669,7 +675,8 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/spring/setting/DatabaseSettings.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">DatabaseSettings</a> - Class in <a href="com/sca4d/core/spring/setting/package-summary.html">com.sca4d.core.spring.setting</a></dt>
 <dd>
-<div class="block">每次调用都查询统一 `sys_setting`，并处理 owner、结构版本、Pipeline 和敏感值。</div>
+<div class="block">每次调用都查询统一 `sys_setting`，并处理 owner、结构版本、Pipeline 和敏感值。
+ 敏感值写入使用 V2 `SecretCodec`，读取根据行中的加密用途版本选择 V1 或 V2 `SecretCodec`。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/setting/DatabaseSettings.html#%3Cinit%3E(com.sca4d.core.spring.setting.SettingCatalog,com.sca4d.core.spring.setting.SettingRepository,com.sca4d.core.api.security.SecretKeyring,com.sca4d.core.api.concurrent.VersionConditions)" class="member-name-link">DatabaseSettings(SettingCatalog, SettingRepository, SecretKeyring, VersionConditions)</a> - Constructor for class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/DatabaseSettings.html" title="class in com.sca4d.core.spring.setting">DatabaseSettings</a></dt>
 <dd>
@@ -678,6 +685,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/spring/logging/TransactionLogTurboFilter.html#decide(ch.qos.logback.classic.Logger,org.slf4j.event.LoggingEvent)" class="member-name-link">decide(Logger, LoggingEvent)</a> - Method in class com.sca4d.core.spring.logging.<a href="com/sca4d/core/spring/logging/TransactionLogTurboFilter.html" title="class in com.sca4d.core.spring.logging">TransactionLogTurboFilter</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/logging/TransactionLogTurboFilter.html#decide(org.slf4j.Marker,ch.qos.logback.classic.Logger,ch.qos.logback.classic.Level,java.lang.String,java.lang.Object%5B%5D,java.lang.Throwable)" class="member-name-link">decide(Marker, Logger, Level, String, Object[], Throwable)</a> - Method in class com.sca4d.core.spring.logging.<a href="com/sca4d/core/spring/logging/TransactionLogTurboFilter.html" title="class in com.sca4d.core.spring.logging">TransactionLogTurboFilter</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html#decode(com.sca4d.core.api.security.EncryptedSecret)" class="member-name-link">decode(EncryptedSecret)</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV1</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html#decode(com.sca4d.core.api.security.EncryptedSecret)" class="member-name-link">decode(EncryptedSecret)</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV2</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/security/AesGcmSecretCipher.html#decrypt(java.lang.String,com.sca4d.core.api.security.EncryptedSecret)" class="member-name-link">decrypt(String, EncryptedSecret)</a> - Method in class com.sca4d.core.spring.security.<a href="com/sca4d/core/spring/security/AesGcmSecretCipher.html" title="class in com.sca4d.core.spring.security">AesGcmSecretCipher</a></dt>
 <dd>&nbsp;</dd>
@@ -795,6 +806,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/spring/dictionary/DatabaseDictionaryOption.html#enabled()" class="member-name-link">enabled()</a> - Method in class com.sca4d.core.spring.dictionary.<a href="com/sca4d/core/spring/dictionary/DatabaseDictionaryOption.html" title="class in com.sca4d.core.spring.dictionary">DatabaseDictionaryOption</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/dictionary/DynamicDictionary.html#enabled()" class="member-name-link">enabled()</a> - Method in class com.sca4d.core.spring.dictionary.<a href="com/sca4d/core/spring/dictionary/DynamicDictionary.html" title="class in com.sca4d.core.spring.dictionary">DynamicDictionary</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html#encode(byte%5B%5D)" class="member-name-link">encode(byte[])</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV1</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html#encode(byte%5B%5D)" class="member-name-link">encode(byte[])</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV2</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/security/AesGcmSecretCipher.html#encrypt(java.lang.String,byte%5B%5D)" class="member-name-link">encrypt(String, byte[])</a> - Method in class com.sca4d.core.spring.security.<a href="com/sca4d/core/spring/security/AesGcmSecretCipher.html" title="class in com.sca4d.core.spring.security">AesGcmSecretCipher</a></dt>
 <dd>&nbsp;</dd>
@@ -1580,6 +1595,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">处理 Spring 方法校验失败。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/setting/SettingSecretEncryptionMigrator.html#migrate(com.sca4d.core.api.setting.SettingOwner,java.lang.String,int,com.sca4d.core.api.security.SecretCipher,com.sca4d.core.api.security.EncryptedSecret,int,com.sca4d.core.api.security.SecretCipher)" class="member-name-link">migrate(SettingOwner, String, int, SecretCipher, EncryptedSecret, int, SecretCipher)</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretEncryptionMigrator.html" title="class in com.sca4d.core.spring.setting">SettingSecretEncryptionMigrator</a></dt>
+<dd>
+<div class="block">把一条密文转换为目标版本，调用方负责保存返回结果。</div>
+</dd>
 <dt><a href="com/sca4d/core/spring/validation/BizId.html#min()" class="member-name-link">min()</a> - Element in annotation interface com.sca4d.core.spring.validation.<a href="com/sca4d/core/spring/validation/BizId.html" title="annotation interface in com.sca4d.core.spring.validation">BizId</a></dt>
 <dd>
 <div class="block">限制字符串形式包含的最少字符数。</div>
@@ -1699,6 +1718,8 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/spring/dictionary/DatabaseDictionaries.html#options(java.lang.String)" class="member-name-link">options(String)</a> - Method in class com.sca4d.core.spring.dictionary.<a href="com/sca4d/core/spring/dictionary/DatabaseDictionaries.html" title="class in com.sca4d.core.spring.dictionary">DatabaseDictionaries</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/dictionary/DictionaryRegistry.html#options(java.lang.String)" class="member-name-link">options(String)</a> - Method in class com.sca4d.core.spring.dictionary.<a href="com/sca4d/core/spring/dictionary/DictionaryRegistry.html" title="class in com.sca4d.core.spring.dictionary">DictionaryRegistry</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html#owner()" class="member-name-link">owner()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV1</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/setting/StoredSetting.html#owner()" class="member-name-link">owner()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/StoredSetting.html" title="class in com.sca4d.core.spring.setting">StoredSetting</a></dt>
 <dd>&nbsp;</dd>
@@ -2215,6 +2236,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建供配置绑定填充的空密钥环配置。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecCatalog.html#select(int)" class="member-name-link">select(int)</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecCatalog.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecCatalog</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/identity/PrincipalSelection.html#select(com.sca4d.core.api.authentication.Session,com.sca4d.core.api.identity.Subject,com.sca4d.core.api.identity.Account,P)" class="member-name-link">select(Session, Subject, Account, P)</a> - Method in interface com.sca4d.core.spring.identity.<a href="com/sca4d/core/spring/identity/PrincipalSelection.html" title="interface in com.sca4d.core.spring.identity">PrincipalSelection</a></dt>
 <dd>
 <div class="block">根据当前认证身份和类型化请求参数选择业务身份。</div>
@@ -2389,6 +2412,36 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建默认关闭 Settings 初始化的配置。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecCatalog.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">SettingSecretCodecCatalog</a> - Class in <a href="com/sca4d/core/spring/setting/package-summary.html">com.sca4d.core.spring.setting</a></dt>
+<dd>
+<div class="block">为一个 Setting owner 和 key 建立 V1/V2 Secret Codec 目录，并把 V2 作为当前写入版本。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecCatalog.html#%3Cinit%3E(com.sca4d.core.api.security.SecretCipher,com.sca4d.core.api.setting.SettingOwner,java.lang.String)" class="member-name-link">SettingSecretCodecCatalog(SecretCipher, SettingOwner, String)</a> - Constructor for class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecCatalog.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecCatalog</a></dt>
+<dd>
+<div class="block">创建使用同一密钥读取或写入一个 Setting 的 V1/V2 Codec 目录。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV1</a> - Class in <a href="com/sca4d/core/spring/setting/package-summary.html">com.sca4d.core.spring.setting</a></dt>
+<dd>
+<div class="block">使用旧的 Setting key 上下文读取版本一敏感设置密文，供历史数据和显式迁移使用。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html#%3Cinit%3E(com.sca4d.core.api.security.SecretCipher,com.sca4d.core.api.setting.SettingOwner,java.lang.String)" class="member-name-link">SettingSecretCodecV1(SecretCipher, SettingOwner, String)</a> - Constructor for class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV1</a></dt>
+<dd>
+<div class="block">创建绑定 owner、Setting key 和密钥的 V1 Secret Codec。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV2</a> - Class in <a href="com/sca4d/core/spring/setting/package-summary.html">com.sca4d.core.spring.setting</a></dt>
+<dd>
+<div class="block">使用 owner、Setting key 和长度分隔上下文读写当前版本二敏感设置密文。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html#%3Cinit%3E(com.sca4d.core.api.security.SecretCipher,com.sca4d.core.api.setting.SettingOwner,java.lang.String)" class="member-name-link">SettingSecretCodecV2(SecretCipher, SettingOwner, String)</a> - Constructor for class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV2</a></dt>
+<dd>
+<div class="block">创建绑定 owner、Setting key 和密钥的 V2 Secret Codec。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/setting/SettingSecretEncryptionMigrator.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">SettingSecretEncryptionMigrator</a> - Class in <a href="com/sca4d/core/spring/setting/package-summary.html">com.sca4d.core.spring.setting</a></dt>
+<dd>
+<div class="block">手工把一个 Setting 密文从指定版本转换到另一个版本，不读取或修改数据库。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/setting/SettingSecretEncryptionMigrator.html#%3Cinit%3E()" class="member-name-link">SettingSecretEncryptionMigrator()</a> - Constructor for class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretEncryptionMigrator.html" title="class in com.sca4d.core.spring.setting">SettingSecretEncryptionMigrator</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/id/SnowflakeIdGenerator.html" class="type-name-link" title="class in com.sca4d.core.spring.id">SnowflakeIdGenerator</a> - Class in <a href="com/sca4d/core/spring/id/package-summary.html">com.sca4d.core.spring.id</a></dt>
 <dd>
 <div class="block">使用 Hutool 雪花算法生成全局正整数标识（Snowflake ID Generator）。</div>
@@ -2638,9 +2691,17 @@ the order they are declared.</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/setting/StoredSetting.html#valueText()" class="member-name-link">valueText()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/StoredSetting.html" title="class in com.sca4d.core.spring.setting">StoredSetting</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html#valueType()" class="member-name-link">valueType()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV1</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html#valueType()" class="member-name-link">valueType()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV2</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/dictionary/DatabaseDictionaryOption.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.core.spring.dictionary.<a href="com/sca4d/core/spring/dictionary/DatabaseDictionaryOption.html" title="class in com.sca4d.core.spring.dictionary">DatabaseDictionaryOption</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/dictionary/DynamicDictionary.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.core.spring.dictionary.<a href="com/sca4d/core/spring/dictionary/DynamicDictionary.html" title="class in com.sca4d.core.spring.dictionary">DynamicDictionary</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV1</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV2</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/setting/StoredSetting.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/StoredSetting.html" title="class in com.sca4d.core.spring.setting">StoredSetting</a></dt>
 <dd>&nbsp;</dd>

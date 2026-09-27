@@ -126,6 +126,10 @@ const tutorialsSidebar: DefaultTheme.SidebarItem[] = [
     "link": "/tutorials/assemble-application"
   },
   {
+    "text": "为 App 开放插件 API",
+    "link": "/tutorials/app-plugins"
+  },
+  {
     "text": "开发后端业务接口",
     "link": "/tutorials/backend-feature"
   },

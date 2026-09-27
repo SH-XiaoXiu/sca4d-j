@@ -77,6 +77,8 @@ loadScripts(document, 'script');</script>
 <li><a href="com/sca4d/app/server/platform/package-tree.html">com.sca4d.app.server.platform</a>, </li>
 <li><a href="com/sca4d/app/server/platform/request/package-tree.html">com.sca4d.app.server.platform.request</a>, </li>
 <li><a href="com/sca4d/app/server/platform/view/package-tree.html">com.sca4d.app.server.platform.view</a>, </li>
+<li><a href="com/sca4d/app/server/plugin/package-tree.html">com.sca4d.app.server.plugin</a>, </li>
+<li><a href="com/sca4d/app/server/plugin/mfa/package-tree.html">com.sca4d.app.server.plugin.mfa</a>, </li>
 <li><a href="com/sca4d/app/server/preference/package-tree.html">com.sca4d.app.server.preference</a>, </li>
 <li><a href="com/sca4d/app/server/preference/request/package-tree.html">com.sca4d.app.server.preference.request</a>, </li>
 <li><a href="com/sca4d/app/server/preference/view/package-tree.html">com.sca4d.app.server.preference.view</a>, </li>
@@ -271,6 +273,9 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/ManagedDictionaryOption.html" class="type-name-link" title="class in com.sca4d.app.server.system">ManagedDictionaryOption</a></li>
 <li class="circle">com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/ManagedSetting.html" class="type-name-link" title="class in com.sca4d.app.server.system">ManagedSetting</a></li>
 <li class="circle">com.sca4d.app.server.notification.request.<a href="com/sca4d/app/server/notification/request/MarkInboxReadRequest.html" class="type-name-link" title="class in com.sca4d.app.server.notification.request">MarkInboxReadRequest</a></li>
+<li class="circle">com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaFactsService.html" class="type-name-link" title="class in com.sca4d.app.server.plugin.mfa">MfaFactsService</a> (implements com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaFacts.html" title="interface in com.sca4d.app.server.plugin.mfa">MfaFacts</a>)</li>
+<li class="circle">com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaMethodFacts.html" class="type-name-link" title="class in com.sca4d.app.server.plugin.mfa">MfaMethodFacts</a></li>
+<li class="circle">com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaSettings.html" class="type-name-link" title="class in com.sca4d.app.server.plugin.mfa">MfaSettings</a></li>
 <li class="circle">com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/NotificationSettingsController.html" class="type-name-link" title="class in com.sca4d.app.server.controllers">NotificationSettingsController</a></li>
 <li class="circle">com.sca4d.app.server.notification.<a href="com/sca4d/app/server/notification/NotificationSettingsService.html" class="type-name-link" title="class in com.sca4d.app.server.notification">NotificationSettingsService</a></li>
 <li class="circle">com.sca4d.app.server.notification.<a href="com/sca4d/app/server/notification/NotificationSettingsSnapshot.html" class="type-name-link" title="class in com.sca4d.app.server.notification">NotificationSettingsSnapshot</a></li>
@@ -316,6 +321,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.app.server.repository.<a href="com/sca4d/app/server/repository/PlatformUserProfileRepository.html" class="type-name-link" title="class in com.sca4d.app.server.repository">PlatformUserProfileRepository</a></li>
 <li class="circle">com.sca4d.app.server.files.<a href="com/sca4d/app/server/files/PlatformUserProfileResourceResolver.html" class="type-name-link" title="class in com.sca4d.app.server.files">PlatformUserProfileResourceResolver</a> (implements com.sca4d.core.api.audit.AuditTargetResolver, com.sca4d.core.api.call.CallValueResolver&lt;T&gt;)</li>
 <li class="circle">com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformUserProfileService.html" class="type-name-link" title="class in com.sca4d.app.server.service">PlatformUserProfileService</a></li>
+<li class="circle">com.sca4d.app.server.plugin.<a href="com/sca4d/app/server/plugin/PluginAuthenticationConfiguration.html" class="type-name-link" title="class in com.sca4d.app.server.plugin">PluginAuthenticationConfiguration</a></li>
 <li class="circle">com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/PreferenceController.html" class="type-name-link" title="class in com.sca4d.app.server.controllers">PreferenceController</a></li>
 <li class="circle">com.sca4d.app.server.preference.<a href="com/sca4d/app/server/preference/PreferenceService.html" class="type-name-link" title="class in com.sca4d.app.server.preference">PreferenceService</a></li>
 <li class="circle">com.sca4d.app.server.preference.view.<a href="com/sca4d/app/server/preference/view/PreferenceView.html" class="type-name-link" title="class in com.sca4d.app.server.preference.view">PreferenceView</a></li>
@@ -390,6 +396,8 @@ loadScripts(document, 'script');</script>
 <h2 title="Interface Hierarchy">Interface Hierarchy</h2>
 <ul>
 <li class="circle">com.sca4d.app.server.mapper.<a href="com/sca4d/app/server/mapper/IotApplicationMapper.html" class="type-name-link" title="interface in com.sca4d.app.server.mapper">IotApplicationMapper</a></li>
+<li class="circle">com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaFacts.html" class="type-name-link" title="interface in com.sca4d.app.server.plugin.mfa">MfaFacts</a></li>
+<li class="circle">com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaPolicy.html" class="type-name-link" title="interface in com.sca4d.app.server.plugin.mfa">MfaPolicy</a></li>
 <li class="circle">com.sca4d.app.server.mapper.<a href="com/sca4d/app/server/mapper/PlatformUserProfileMapper.html" class="type-name-link" title="interface in com.sca4d.app.server.mapper">PlatformUserProfileMapper</a></li>
 </ul>
 </section>

@@ -160,13 +160,19 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">检查 Device 声明的接入方式，并把 Account 认证统一交给 <code>AuthenticationMethods</code>。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#allowedMethods(com.sca4d.core.api.identity.Account,com.sca4d.core.api.authentication.AuthenticationActionCode,java.util.List)" class="member-name-link">allowedMethods(Account, AuthenticationActionCode, List&lt;Authentication&gt;)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaPolicy.html#allowedMethods(long,com.sca4d.core.api.authentication.AuthenticationActionCode,java.util.List)" class="member-name-link">allowedMethods(long, AuthenticationActionCode, List&lt;Authentication&gt;)</a> - Method in interface com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaPolicy.html" title="interface in com.sca4d.app.server.plugin.mfa">MfaPolicy</a></dt>
 <dd>
-<div class="block">根据登录阶段或敏感动作开关返回仍能贡献新因素的认证方法。</div>
+<div class="block">返回用途开关和已完成因素允许的认证方法。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#allowedMethods(com.sca4d.core.api.identity.Account,com.sca4d.core.api.authentication.AuthenticationActionCode,java.util.List)" class="member-name-link">allowedMethods(Account, AuthenticationActionCode, List&lt;Authentication&gt;)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaPolicy.html#allowsMethodUnavailable(long,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">allowsMethodUnavailable(long, TreeCode)</a> - Method in interface com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaPolicy.html" title="interface in com.sca4d.app.server.plugin.mfa">MfaPolicy</a></dt>
+<dd>
+<div class="block">返回删除指定方法最后一个凭据后是否仍满足全部认证要求。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#allowsMethodUnavailable(com.sca4d.core.api.identity.Account,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">allowsMethodUnavailable(Account, TreeCode)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
 <dd>
-<div class="block">返回指定认证方法完全不可用后，账号当前设置是否仍能满足全部认证要求。</div>
+<div class="block">判断移除方法后登录及敏感动作是否仍能满足。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/DeviceCredentialService.html#ANONYMOUS" class="member-name-link">ANONYMOUS</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/DeviceCredentialService.html" title="class in com.sca4d.app.server.iot">DeviceCredentialService</a></dt>
 <dd>
@@ -208,7 +214,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#assertMethodRemovalAllowed(com.sca4d.core.api.identity.Account,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">assertMethodRemovalAllowed(Account, TreeCode)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
 <dd>
-<div class="block">确认指定认证方法完全不可用后，账号当前设置仍能满足登录和敏感动作要求。</div>
+<div class="block">删除方法最后一个凭据会使策略无法满足时抛出冲突。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/audit/SystemOperations.html#AUDIT_READ" class="member-name-link">AUDIT_READ</a> - Static variable in class com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/SystemOperations.html" title="class in com.sca4d.app.server.audit">SystemOperations</a></dt>
 <dd>&nbsp;</dd>
@@ -292,6 +298,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">检查 `iot:devices:read` 后登记不包含 Spring broker 前缀的共享 Topic。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaFacts.html#availableMethods(long)" class="member-name-link">availableMethods(long)</a> - Method in interface com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaFacts.html" title="interface in com.sca4d.app.server.plugin.mfa">MfaFacts</a></dt>
+<dd>
+<div class="block">检查指定账号目前确实可用的方法；只在需要可满足性检查时调用。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaFactsService.html#availableMethods(long)" class="member-name-link">availableMethods(long)</a> - Method in class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaFactsService.html" title="class in com.sca4d.app.server.plugin.mfa">MfaFactsService</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/entity/PlatformUserProfile.html#avatarFileId()" class="member-name-link">avatarFileId()</a> - Method in class com.sca4d.app.server.entity.<a href="com/sca4d/app/server/entity/PlatformUserProfile.html" title="class in com.sca4d.app.server.entity">PlatformUserProfile</a></dt>
 <dd>
 <div class="block">返回可选头像文件标识。</div>
@@ -329,6 +341,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/app/server/service/TotpAccountService.html#cancelEnrollment(java.lang.Long,java.lang.String)" class="member-name-link">cancelEnrollment(Long, String)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/TotpAccountService.html" title="class in com.sca4d.app.server.service">TotpAccountService</a></dt>
 <dd>
 <div class="block">取消当前 Account 仍可使用的 enrollment。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaMethodFacts.html#canIdentifyAccount()" class="member-name-link">canIdentifyAccount()</a> - Method in class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaMethodFacts.html" title="class in com.sca4d.app.server.plugin.mfa">MfaMethodFacts</a></dt>
+<dd>
+<div class="block">返回是否允许作为首次账号发现方法。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/HmacCanonicalRequest.html#canonicalBytes()" class="member-name-link">canonicalBytes()</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/HmacCanonicalRequest.html" title="class in com.sca4d.app.server.iot">HmacCanonicalRequest</a></dt>
 <dd>&nbsp;</dd>
@@ -424,6 +440,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/EmqxAuthenticationCallback.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/EmqxAuthenticationCallback.html" title="class in com.sca4d.app.server.iot">EmqxAuthenticationCallback</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaMethodFacts.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaMethodFacts.html" title="class in com.sca4d.app.server.plugin.mfa">MfaMethodFacts</a></dt>
+<dd>
+<div class="block">返回稳定认证方法编码。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/system/SystemDictionaryErrorCode.html#code()" class="member-name-link">code()</a> - Method in enum class com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/SystemDictionaryErrorCode.html" title="enum class in com.sca4d.app.server.system">SystemDictionaryErrorCode</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/openapi/iot/OpenApiIotProductSource.html#CODE" class="member-name-link">CODE</a> - Enum constant in enum class com.sca4d.app.server.openapi.iot.<a href="com/sca4d/app/server/openapi/iot/OpenApiIotProductSource.html" title="enum class in com.sca4d.app.server.openapi.iot">OpenApiIotProductSource</a></dt>
@@ -485,6 +505,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/app/server/platform/request/package-summary.html">com.sca4d.app.server.platform.request</a> - package com.sca4d.app.server.platform.request</dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/platform/view/package-summary.html">com.sca4d.app.server.platform.view</a> - package com.sca4d.app.server.platform.view</dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/plugin/package-summary.html">com.sca4d.app.server.plugin</a> - package com.sca4d.app.server.plugin</dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/package-summary.html">com.sca4d.app.server.plugin.mfa</a> - package com.sca4d.app.server.plugin.mfa</dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/preference/package-summary.html">com.sca4d.app.server.preference</a> - package com.sca4d.app.server.preference</dt>
 <dd>&nbsp;</dd>
@@ -1153,7 +1177,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#erase(long)" class="member-name-link">erase(long)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
 <dd>
-<div class="block">幂等删除账号全部应用认证设置。</div>
+<div class="block">幂等删除账号的应用认证设置。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/DeviceSessionService.html#establish(com.sca4d.app.server.iot.HmacCanonicalRequest,java.lang.String)" class="member-name-link">establish(HmacCanonicalRequest, String)</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/DeviceSessionService.html" title="class in com.sca4d.app.server.iot">DeviceSessionService</a></dt>
 <dd>
@@ -1178,6 +1202,10 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:F">F</h2>
 <dl class="index">
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaMethodFacts.html#factorKinds()" class="member-name-link">factorKinds()</a> - Method in class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaMethodFacts.html" title="class in com.sca4d.app.server.plugin.mfa">MfaMethodFacts</a></dt>
+<dd>
+<div class="block">返回方法可能贡献的独立因素类别。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/authentication/AuthenticationActions.html#FEDERATED_LINK_CODE" class="member-name-link">FEDERATED_LINK_CODE</a> - Static variable in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AuthenticationActions.html" title="class in com.sca4d.app.server.authentication">AuthenticationActions</a></dt>
 <dd>
 <div class="block">绑定当前账号联邦身份的动作编码。</div>
@@ -3119,7 +3147,9 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/app/server/notification/NotificationSettingsService.html#inspect(long)" class="member-name-link">inspect(long)</a> - Method in class com.sca4d.app.server.notification.<a href="com/sca4d/app/server/notification/NotificationSettingsService.html" title="class in com.sca4d.app.server.notification">NotificationSettingsService</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#inspect(long)" class="member-name-link">inspect(long)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">返回账号认证设置值、来源及版本。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/preference/PreferenceService.html#inspect(long,java.lang.String)" class="member-name-link">inspect(long, String)</a> - Method in class com.sca4d.app.server.preference.<a href="com/sca4d/app/server/preference/PreferenceService.html" title="class in com.sca4d.app.server.preference">PreferenceService</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/controllers/NotificationSettingsController.html#inspect(java.lang.Long)" class="member-name-link">inspect(Long)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/NotificationSettingsController.html" title="class in com.sca4d.app.server.controllers">NotificationSettingsController</a></dt>
@@ -3757,6 +3787,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回登录所需不同因素数量。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaSettings.html#loginFactorCount()" class="member-name-link">loginFactorCount()</a> - Method in class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaSettings.html" title="class in com.sca4d.app.server.plugin.mfa">MfaSettings</a></dt>
+<dd>
+<div class="block">返回登录所需独立因素数。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/controllers/AuthenticationAttemptController.html#loginPasskey(java.lang.String,com.sca4d.app.server.authentication.request.PasskeyProofRequest)" class="member-name-link">loginPasskey(String, PasskeyProofRequest)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/AuthenticationAttemptController.html" title="class in com.sca4d.app.server.controllers">AuthenticationAttemptController</a></dt>
 <dd>
 <div class="block">向登录尝试提交 Passkey。</div>
@@ -3861,6 +3895,46 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/app/server/authentication/AccountAuthenticationSettings.html#methods()" class="member-name-link">methods()</a> - Method in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a></dt>
 <dd>
 <div class="block">返回按方法编码索引的不可修改认证方法设置。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaFacts.html#methods()" class="member-name-link">methods()</a> - Method in interface com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaFacts.html" title="interface in com.sca4d.app.server.plugin.mfa">MfaFacts</a></dt>
+<dd>
+<div class="block">返回当前 App 安装的方法元数据，不检查账号凭据。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaFactsService.html#methods()" class="member-name-link">methods()</a> - Method in class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaFactsService.html" title="class in com.sca4d.app.server.plugin.mfa">MfaFactsService</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaSettings.html#methods()" class="member-name-link">methods()</a> - Method in class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaSettings.html" title="class in com.sca4d.app.server.plugin.mfa">MfaSettings</a></dt>
+<dd>
+<div class="block">返回三个用途开关的不可变集合。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaFacts.html" class="type-name-link" title="interface in com.sca4d.app.server.plugin.mfa">MfaFacts</a> - Interface in <a href="com/sca4d/app/server/plugin/mfa/package-summary.html">com.sca4d.app.server.plugin.mfa</a></dt>
+<dd>
+<div class="block">向策略插件提供设置与方法事实，不暴露凭据、Proof 和内部 Repository。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaFactsService.html" class="type-name-link" title="class in com.sca4d.app.server.plugin.mfa">MfaFactsService</a> - Class in <a href="com/sca4d/app/server/plugin/mfa/package-summary.html">com.sca4d.app.server.plugin.mfa</a></dt>
+<dd>
+<div class="block">从宿主设置和已安装方法读取策略事实，所有持久化仍由原模块完成。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaFactsService.html#%3Cinit%3E(com.sca4d.core.api.setting.Settings,com.sca4d.core.api.identity.AccountDirectory,java.util.List)" class="member-name-link">MfaFactsService(Settings, AccountDirectory, List&lt;AuthenticationMethod&lt;?&gt;&gt;)</a> - Constructor for class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaFactsService.html" title="class in com.sca4d.app.server.plugin.mfa">MfaFactsService</a></dt>
+<dd>
+<div class="block">检查宿主方法编码唯一性，不把实际方法对象传入插件。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaMethodFacts.html" class="type-name-link" title="class in com.sca4d.app.server.plugin.mfa">MfaMethodFacts</a> - Class in <a href="com/sca4d/app/server/plugin/mfa/package-summary.html">com.sca4d.app.server.plugin.mfa</a></dt>
+<dd>
+<div class="block">保存认证方法的公开因素和账号识别声明，不持有认证方法对象。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaMethodFacts.html#%3Cinit%3E(com.sca4d.core.api.name.code.TreeCode,java.util.Set,boolean)" class="member-name-link">MfaMethodFacts(TreeCode, Set&lt;AuthenticationFactorKind&gt;, boolean)</a> - Constructor for class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaMethodFacts.html" title="class in com.sca4d.app.server.plugin.mfa">MfaMethodFacts</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaPolicy.html" class="type-name-link" title="interface in com.sca4d.app.server.plugin.mfa">MfaPolicy</a> - Interface in <a href="com/sca4d/app/server/plugin/mfa/package-summary.html">com.sca4d.app.server.plugin.mfa</a></dt>
+<dd>
+<div class="block">声明 Sca4d Server 必须安装的完整 MFA 策略扩展。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaSettings.html" class="type-name-link" title="class in com.sca4d.app.server.plugin.mfa">MfaSettings</a> - Class in <a href="com/sca4d/app/server/plugin/mfa/package-summary.html">com.sca4d.app.server.plugin.mfa</a></dt>
+<dd>
+<div class="block">保存不依赖认证模块实现的账号 MFA 配置快照。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaSettings.html#%3Cinit%3E(int,int,java.time.Duration,java.util.List)" class="member-name-link">MfaSettings(int, int, Duration, List&lt;AuthenticationMethodSettings&gt;)</a> - Constructor for class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaSettings.html" title="class in com.sca4d.app.server.plugin.mfa">MfaSettings</a></dt>
+<dd>
+<div class="block">校验并保存不可变配置快照，方法编码不得重复。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/audit/ApplicationAuditValues.MutationDetails.html#%3Cinit%3E()" class="member-name-link">MutationDetails()</a> - Constructor for class com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/ApplicationAuditValues.MutationDetails.html" title="class in com.sca4d.app.server.audit">ApplicationAuditValues.MutationDetails</a></dt>
 <dd>
@@ -4151,11 +4225,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" class="type-name-link" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a> - Class in <a href="com/sca4d/app/server/service/package-summary.html">com.sca4d.app.server.service</a></dt>
 <dd>
-<div class="block">实现 Sca4d Server 的登录和敏感动作认证规则，并管理账号的方法开关。</div>
+<div class="block">保存 App 账号认证设置，并把完整策略判断桥接到必需的 MFA 插件。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#%3Cinit%3E(com.sca4d.core.api.setting.Settings,java.util.List)" class="member-name-link">PlatformAuthenticationPolicyService(Settings, List&lt;AuthenticationMethod&lt;?&gt;&gt;)</a> - Constructor for class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
+<dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#%3Cinit%3E(com.sca4d.core.api.setting.Settings,com.sca4d.app.server.plugin.mfa.MfaPolicy)" class="member-name-link">PlatformAuthenticationPolicyService(Settings, MfaPolicy)</a> - Constructor for class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
 <dd>
-<div class="block">创建 Sca4d Server 动作认证策略。</div>
+<div class="block">挂载生成客户端，设置持久化仍使用宿主事务。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/platform/PlatformEmailAccountIdentifierNormalizer.html" class="type-name-link" title="class in com.sca4d.app.server.platform">PlatformEmailAccountIdentifierNormalizer</a> - Class in <a href="com/sca4d/app/server/platform/package-summary.html">com.sca4d.app.server.platform</a></dt>
 <dd>
@@ -4289,6 +4363,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">管理示例 App 自己拥有的 Platform 用户资料。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/plugin/PluginAuthenticationConfiguration.html" class="type-name-link" title="class in com.sca4d.app.server.plugin">PluginAuthenticationConfiguration</a> - Class in <a href="com/sca4d/app/server/plugin/package-summary.html">com.sca4d.app.server.plugin</a></dt>
+<dd>
+<div class="block">为 App 装配普通认证入口，并声明一次操作固定 MFA 插件代次。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/PluginAuthenticationConfiguration.html#%3Cinit%3E()" class="member-name-link">PluginAuthenticationConfiguration()</a> - Constructor for class com.sca4d.app.server.plugin.<a href="com/sca4d/app/server/plugin/PluginAuthenticationConfiguration.html" title="class in com.sca4d.app.server.plugin">PluginAuthenticationConfiguration</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/controllers/PreferenceController.html" class="type-name-link" title="class in com.sca4d.app.server.controllers">PreferenceController</a> - Class in <a href="com/sca4d/app/server/controllers/package-summary.html">com.sca4d.app.server.controllers</a></dt>
 <dd>
 <div class="block">管理当前 Platform Principal 的已注册个人偏好。</div>
@@ -4535,7 +4615,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#replace(com.sca4d.core.api.identity.Account,int,int,java.time.Duration,java.util.List)" class="member-name-link">replace(Account, int, int, Duration, List&lt;AuthenticationMethodSettings&gt;)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
 <dd>
-<div class="block">校验登录和敏感动作能够由当前安装方法满足后，完整替换账号设置。</div>
+<div class="block">在同一事务中由插件校验完整候选配置，再保存账号设置。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/AccountAuthenticationSettingsController.html#replace(com.sca4d.core.api.identity.Account,com.sca4d.app.server.authentication.request.ReplaceAuthenticationSettingsRequest)" class="member-name-link">replace(Account, ReplaceAuthenticationSettingsRequest)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/AccountAuthenticationSettingsController.html" title="class in com.sca4d.app.server.controllers">AccountAuthenticationSettingsController</a></dt>
 <dd>
@@ -4759,10 +4839,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">声明 Controller 接口执行前必须单次消费指定动作的认证结果。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#requirementFor(com.sca4d.core.api.identity.Account,com.sca4d.core.api.authentication.AuthenticationActionCode)" class="member-name-link">requirementFor(Account, AuthenticationActionCode)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaPolicy.html#requirementFor(long,com.sca4d.core.api.authentication.AuthenticationActionCode)" class="member-name-link">requirementFor(long, AuthenticationActionCode)</a> - Method in interface com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaPolicy.html" title="interface in com.sca4d.app.server.plugin.mfa">MfaPolicy</a></dt>
 <dd>
-<div class="block">登录至少要求一个新因素；敏感动作按账号设置决定是否复用 Session 认证。</div>
+<div class="block">返回当前动作要求的因素数及认证复用时间。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#requirementFor(com.sca4d.core.api.identity.Account,com.sca4d.core.api.authentication.AuthenticationActionCode)" class="member-name-link">requirementFor(Account, AuthenticationActionCode)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/DeviceCredentialService.html#requiresAccount(java.util.Set)" class="member-name-link">requiresAccount(Set&lt;DeviceAccessMethod&gt;)</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/DeviceCredentialService.html" title="class in com.sca4d.app.server.iot">DeviceCredentialService</a></dt>
 <dd>
 <div class="block">判断一组 Device 接入方式是否需要创建固定 Realm Account。</div>
@@ -4836,6 +4918,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/app/server/authentication/AccountAuthenticationSettings.html#reusableAuthenticationMaximumAge()" class="member-name-link">reusableAuthenticationMaximumAge()</a> - Method in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a></dt>
 <dd>
 <div class="block">返回敏感动作允许复用 Session 认证的最大年龄。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaSettings.html#reusableAuthenticationMaximumAge()" class="member-name-link">reusableAuthenticationMaximumAge()</a> - Method in class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaSettings.html" title="class in com.sca4d.app.server.plugin.mfa">MfaSettings</a></dt>
+<dd>
+<div class="block">返回已有认证的最大复用年龄。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/authentication/view/AuthenticationSettingsView.html#revision()" class="member-name-link">revision()</a> - Method in class com.sca4d.app.server.authentication.view.<a href="com/sca4d/app/server/authentication/view/AuthenticationSettingsView.html" title="class in com.sca4d.app.server.authentication.view">AuthenticationSettingsView</a></dt>
 <dd>&nbsp;</dd>
@@ -4956,6 +5042,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/app/server/authentication/AccountAuthenticationSettings.html#sensitiveActionFactorCount()" class="member-name-link">sensitiveActionFactorCount()</a> - Method in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a></dt>
 <dd>
 <div class="block">返回登录后敏感动作所需不同因素数量。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaSettings.html#sensitiveActionFactorCount()" class="member-name-link">sensitiveActionFactorCount()</a> - Method in class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaSettings.html" title="class in com.sca4d.app.server.plugin.mfa">MfaSettings</a></dt>
+<dd>
+<div class="block">返回敏感动作所需独立因素数。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/ServerRuntimeConfiguration.html" class="type-name-link" title="class in com.sca4d.app.server">ServerRuntimeConfiguration</a> - Class in <a href="com/sca4d/app/server/package-summary.html">com.sca4d.app.server</a></dt>
 <dd>
@@ -5396,6 +5486,12 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/app/server/iot/request/IotDeviceRequest.html#setThingModelVersion(int)" class="member-name-link">setThingModelVersion(int)</a> - Method in class com.sca4d.app.server.iot.request.<a href="com/sca4d/app/server/iot/request/IotDeviceRequest.html" title="class in com.sca4d.app.server.iot.request">IotDeviceRequest</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/system/ManagedSetting.html#setting()" class="member-name-link">setting()</a> - Method in class com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/ManagedSetting.html" title="class in com.sca4d.app.server.system">ManagedSetting</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaFacts.html#settings(long)" class="member-name-link">settings(long)</a> - Method in interface com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaFacts.html" title="interface in com.sca4d.app.server.plugin.mfa">MfaFacts</a></dt>
+<dd>
+<div class="block">返回当前账号保存或默认的 MFA 设置。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaFactsService.html#settings(long)" class="member-name-link">settings(long)</a> - Method in class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaFactsService.html" title="class in com.sca4d.app.server.plugin.mfa">MfaFactsService</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/controllers/AccountAuthenticationSettingsController.html#settings(com.sca4d.core.api.identity.Account)" class="member-name-link">settings(Account)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/AccountAuthenticationSettingsController.html" title="class in com.sca4d.app.server.controllers">AccountAuthenticationSettingsController</a></dt>
 <dd>
@@ -5952,6 +6048,10 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:V">V</h2>
 <dl class="index">
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaPolicy.html#validate(long,com.sca4d.app.server.plugin.mfa.MfaSettings)" class="member-name-link">validate(long, MfaSettings)</a> - Method in interface com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaPolicy.html" title="interface in com.sca4d.app.server.plugin.mfa">MfaPolicy</a></dt>
+<dd>
+<div class="block">检查候选设置是否能由已安装且可用的方法满足；非法时抛出异常。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/iot/DeviceCredentialService.html#validateActivation(com.sca4d.iot.api.Device,com.sca4d.core.api.identity.Account)" class="member-name-link">validateActivation(Device, Account)</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/DeviceCredentialService.html" title="class in com.sca4d.app.server.iot">DeviceCredentialService</a></dt>
 <dd>
 <div class="block">校验 Device 当前接入方式已经具备启用所需的 Account 和 Credential。</div>

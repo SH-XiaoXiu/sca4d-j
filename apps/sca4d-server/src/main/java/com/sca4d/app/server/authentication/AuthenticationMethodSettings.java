@@ -1,12 +1,14 @@
 package com.sca4d.app.server.authentication;
 
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.plugin.PluginApiType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 /** 保存一个认证方法在登录首个认证阶段、附加认证因素和敏感动作中的启用状态。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
+@PluginApiType
 public final class AuthenticationMethodSettings {
 
     private final TreeCode methodCode;
