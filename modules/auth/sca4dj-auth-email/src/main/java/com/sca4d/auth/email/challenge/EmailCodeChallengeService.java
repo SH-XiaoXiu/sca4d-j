@@ -16,7 +16,7 @@ import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountDirectory;
 import com.sca4d.core.api.identity.RealmKey;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.notification.NotificationRecipient;
 import com.sca4d.core.api.notification.Notifications;
 import com.sca4d.core.api.security.SecretHasher;
@@ -229,7 +229,7 @@ public class EmailCodeChallengeService {
         store.create(state);
 
         // 只有真实且当前可投递的 Account 才写入 Outbox；dummy Challenge 保持相同响应结构但不包含投递目标。
-        MessageId messageId = null;
+        Id messageId = null;
         if (account != null) {
             long minutes = Math.max(1, (ttl.toSeconds() + 59) / 60);
             messageId = notifications.enqueue(

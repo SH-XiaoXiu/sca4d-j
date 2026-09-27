@@ -35,11 +35,8 @@ public final class RedisEmailCodeChallengeStore {
     private final @NotNull Key cooldownPrefix;
 
     /**
-     * 创建 Email Code Challenge 存储。
-     *
-     * @param redis Redis 字符串操作
+     * @param redis Email Challenge 的 Redis 操作模板
      * @param clock 到期时间来源
-     * @param namespace 当前 App 隔离名称
      */
     public RedisEmailCodeChallengeStore(
             @NotNull RedisTemplate<Key, String> redis,

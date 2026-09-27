@@ -25,7 +25,7 @@ class HmacCanonicalRequestTest {
 
         assertThat(new String(request.canonicalBytes(), StandardCharsets.UTF_8))
                 .isEqualTo("""
-                        IOT-MAC-SHA256
+                        IOT-HMAC-SHA256
                         42
                         POST
                         /api/iot/device-sessions

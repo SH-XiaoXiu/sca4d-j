@@ -12,7 +12,7 @@ import com.sca4d.core.api.message.Message;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.DispatchReceipt;
 import com.sca4d.core.api.messaging.MessageBus;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.Name;
 import com.sca4d.core.spring.transaction.TransactionCallbacks;
 import com.sca4d.messaging.outbox.MessageOutboxRepository;
@@ -44,6 +44,13 @@ public final class RabbitMessageBus implements MessageBus {
 
     private final @NotNull Name sourceApplication;
 
+    /**
+     * @param ids 消息标识生成器
+     * @param codec 消息信封 Codec
+     * @param publisher RabbitMQ 发布器
+     * @param outbox 消息 Outbox Repository
+     * @param clock 消息发布时间来源
+     */
     public RabbitMessageBus(
             @NotNull IdGenerator ids,
             @NotNull RabbitMessageEnvelopeCodec codec,
@@ -75,7 +82,7 @@ public final class RabbitMessageBus implements MessageBus {
 
     private @NotNull DispatchReceipt dispatchNow(@NotNull Message message) {
         Instant now = clock.instant();
-        MessageId messageId = new MessageId(ids.nextId());
+        Id messageId = ids.nextId();
         publisher.send(messageId, message.code(), codec.encode(messageId, message, now, sourceApplication));
         return new DispatchReceipt(messageId, BROKER_ACCEPTED);
     }
@@ -83,7 +90,7 @@ public final class RabbitMessageBus implements MessageBus {
     private @NotNull DispatchReceipt dispatchAfterCommit(@NotNull Message message) {
         requireTransaction("事务提交后分发");
         Instant now = clock.instant();
-        MessageId messageId = new MessageId(ids.nextId());
+        Id messageId = ids.nextId();
         byte[] envelope = codec.encode(messageId, message, now, sourceApplication);
         TransactionCallbacks.afterCommit(() -> {
             try {
@@ -105,7 +112,7 @@ public final class RabbitMessageBus implements MessageBus {
         requireTransaction("Outbox 分发");
         Instant now = clock.instant();
         Instant availableAt = notBefore == null ? now : notBefore;
-        MessageId messageId = new MessageId(ids.nextId());
+        Id messageId = ids.nextId();
         outbox.add(
                 messageId,
                 message.code(),

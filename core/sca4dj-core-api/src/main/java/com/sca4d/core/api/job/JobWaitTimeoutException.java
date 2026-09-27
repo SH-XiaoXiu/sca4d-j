@@ -1,5 +1,6 @@
 package com.sca4d.core.api.job;
 
+import com.sca4d.core.api.id.Id;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +11,7 @@ import java.util.Objects;
 public final class JobWaitTimeoutException extends RuntimeException {
 
     /** 等待结束时仍未完成的运行标识。 */
-    private final @NotNull JobRunId runId;
+    private final @NotNull Id runId;
 
     /** 触发当前异常的等待上限。 */
     private final @NotNull Duration timeout;
@@ -22,7 +23,7 @@ public final class JobWaitTimeoutException extends RuntimeException {
      * @param timeout 本次调用使用的正数等待时长
      * @throws NullPointerException run 标识或等待时长为空时抛出
      */
-    public JobWaitTimeoutException(@NotNull JobRunId runId, @NotNull Duration timeout) {
+    public JobWaitTimeoutException(@NotNull Id runId, @NotNull Duration timeout) {
         super("等待 Job run 超时: runId=" + runId + ", timeout=" + timeout);
         this.runId = Objects.requireNonNull(runId, "Job run 标识不能为空");
         this.timeout = Objects.requireNonNull(timeout, "Job 等待时长不能为空");
@@ -34,7 +35,7 @@ public final class JobWaitTimeoutException extends RuntimeException {
      * @return 等待超时时仍可继续查询的运行标识
      */
     @Contract(pure = true)
-    public @NotNull JobRunId runId() {
+    public @NotNull Id runId() {
         return runId;
     }
 

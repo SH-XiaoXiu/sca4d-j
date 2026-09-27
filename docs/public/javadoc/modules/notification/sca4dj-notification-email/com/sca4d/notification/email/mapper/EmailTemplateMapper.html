@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">EmailTemplateMapper</span></div>
-<div class="block">读写 Email 模板及其启用状态和版本条件。</div>
+<div class="block">读写 Email 模板、启用状态和版本条件。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -155,6 +155,10 @@ loadScripts(document, 'script');</script>
  @Nullable com.sca4d.core.api.name.code.TreeCode&nbsp;notificationCode,
  @Param("enabled") @Nullable
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;enabled)</span></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>匹配条件的未删除 Email 模板状态</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -177,6 +181,10 @@ loadScripts(document, 'script');</script>
  int&nbsp;size,
  @Param("sort") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull com.sca4d.core.api.query.SortOrder&gt;&nbsp;sort)</span></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>按分页条件读取的 Email 模板状态</dd>
+</dl>
 </section>
 </li>
 <li>

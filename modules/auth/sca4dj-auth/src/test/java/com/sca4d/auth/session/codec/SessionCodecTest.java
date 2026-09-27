@@ -23,15 +23,15 @@ import java.util.function.Consumer;
 class SessionCodecTest {
 
     private static final String LEGACY_SESSION_WIRE = """
-            {"formatVersion":1,"id":"session-1","subject":{"subjectId":11,"type":"HUMAN"},"account":{"accountId":22,"subjectId":11,"realmKey":"test"},"principals":[{"type":"test.principal","payload":"eyJpZCI6MzMsImZpZWxkIjoicHJpbmNpcGFsLWZpZWxkIn0="}],"authentications":[{"accountId":22,"methodCode":"password","factorKinds":["KNOWLEDGE","POSSESSION"],"authenticatedAt":"2026-07-22T00:00:00Z"}],"resources":[{"principalId":33,"resource":{"type":"test.resource","payload":"eyJ0eXBlIjoib3BlcmF0aW9uIiwiaWQiOiJwbGF0Zm9ybS5hY2NvdW50LnJlYWQiLCJmaWVsZCI6InJlc291cmNlLWZpZWxkIn0="}}],"issuedAt":"2026-07-22T00:00:00Z","expiresAt":"2026-07-22T01:00:00Z"}
+            {"formatVersion":2,"id":"session-1","subject":{"subjectId":11,"type":"HUMAN"},"account":{"accountId":22,"subjectId":11,"realmKey":"test"},"principals":[{"type":"test.principal","payload":"eyJpZCI6MzMsImZpZWxkIjoicHJpbmNpcGFsLWZpZWxkIn0="}],"authentications":[{"accountId":22,"methodCode":"password","factorKinds":["KNOWLEDGE","POSSESSION"],"authenticatedAt":"2026-07-22T00:00:00Z"}],"resources":[{"principalId":33,"resource":{"type":"test.resource","payload":"eyJ0eXBlIjoib3BlcmF0aW9uIiwiaWQiOiJwbGF0Zm9ybS5hY2NvdW50LnJlYWQiLCJmaWVsZCI6InJlc291cmNlLWZpZWxkIn0="}}],"issuedAt":"2026-07-22T00:00:00Z","expiresAt":"2026-07-22T01:00:00Z"}
             """;
 
     @Test
-    @DisplayName("Rejects Old Session Wire After Name Migration")
-    void rejectsOldSessionWireAfterNameMigration() {
+    @DisplayName("Rejects Former Session Wire Version")
+    void rejectsFormerSessionWireVersion() {
         assertThatThrownBy(() -> SessionTestFixture.codec().decode(LEGACY_SESSION_WIRE))
                 .isInstanceOf(IllegalStateException.class)
-                .hasRootCauseMessage("未知 Session wire 版本: 1");
+                .hasRootCauseMessage("未知 Session wire 版本: 2");
     }
 
     @Test
@@ -47,6 +47,7 @@ class SessionCodecTest {
 
         ObjectNode wire = (ObjectNode) SessionTestFixture.OBJECT_MAPPER.readTree(encoded);
         assertThat(wire.get("subject").fieldNames()).toIterable().containsExactlyInAnyOrder("subjectId", "type");
+        assertThat(wire.withArray("principals").get(0).get("version").intValue()).isEqualTo(1);
         assertThat(wire.get("account").fieldNames()).toIterable()
                 .containsExactlyInAnyOrder("accountId", "subjectId", "realmKey");
         assertThat(restored.subject().subjectId()).isEqualTo(original.subject().subjectId());
@@ -88,6 +89,8 @@ class SessionCodecTest {
         ObjectNode wire = (ObjectNode) SessionTestFixture.OBJECT_MAPPER.readTree(encoded);
         assertThat(wire.withArray("principalIdSets")).hasSize(1);
         assertThat(wire.withArray("resourceIdSets")).hasSize(1);
+        assertThat(wire.withArray("principalIdSets").get(0).get("version").intValue()).isEqualTo(1);
+        assertThat(wire.withArray("resourceIdSets").get(0).get("version").intValue()).isEqualTo(1);
         assertThat(restored.principalIdSets()).singleElement().satisfies(principalIds -> {
             assertThat(principalIds.principalType()).isEqualTo(SessionTestFixture.TestPrincipal.class);
             assertThat(principalIds.ids().size()).isEqualTo(10_000);

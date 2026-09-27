@@ -1,6 +1,6 @@
 package com.sca4d.messaging.outbox;
 
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.persistence.AffectedRows;
 import com.sca4d.core.api.persistence.AffectedRowsMismatchException;
@@ -32,7 +32,7 @@ public class MessageOutboxRepository {
      */
     @AffectedRows(target = "新增 Outbox 消息")
     public void add(
-            @NotNull MessageId messageId,
+            @NotNull Id messageId,
             @NotNull TreeCode messageCode,
             byte @NotNull [] envelope,
             @NotNull Instant availableAt) {
@@ -59,7 +59,7 @@ public class MessageOutboxRepository {
                 .stream()
                 .map(
                         row -> new OutboxClaim(
-                                new MessageId(row.messageId()),
+                                Id.of(row.messageId()),
                                 row.messageCode(),
                                 row.envelope(),
                                 row.attemptCount(),

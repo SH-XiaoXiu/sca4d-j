@@ -16,6 +16,10 @@ public final class SmsDeliveryCheckHandler implements MessageHandler<SmsDelivery
 
     private final @NotNull SmsDeliveryCheckCodec codec;
 
+    /**
+     * @param delivery SMS 投递实现
+     * @param codec SMS 查询消息 Codec
+     */
     public SmsDeliveryCheckHandler(
             @NotNull SmsNotificationDelivery delivery,
             @NotNull SmsDeliveryCheckCodec codec) {

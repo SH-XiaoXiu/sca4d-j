@@ -128,13 +128,13 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addEvent(long,com.sca4d.iot.api.history.DeviceEventMessage)" class="member-name-link">addEvent</a><wbr>(long&nbsp;messageId,
  @NotNull com.sca4d.iot.api.history.DeviceEventMessage&nbsp;event)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">按发生时间和 MessageId 幂等写入一条 Device 事件。</div>
+<div class="block">按发生时间和 Id 幂等写入一条 Device 事件。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addTelemetry(long,com.sca4d.iot.api.telemetry.TelemetryBatch)" class="member-name-link">addTelemetry</a><wbr>(long&nbsp;messageId,
  @NotNull com.sca4d.iot.api.telemetry.TelemetryBatch&nbsp;batch)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">按 MessageId 和样本顺序幂等写入一批 Telemetry。</div>
+<div class="block">按 Id 和样本顺序幂等写入一批 Telemetry。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#dropChunks(java.time.Instant,java.time.Instant)" class="member-name-link">dropChunks</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;telemetryOlderThan,
@@ -226,7 +226,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addTelemetry</span><wbr><span class="parameters">(long&nbsp;messageId,
  @NotNull
  @NotNull com.sca4d.iot.api.telemetry.TelemetryBatch&nbsp;batch)</span></div>
-<div class="block">按 MessageId 和样本顺序幂等写入一批 Telemetry。</div>
+<div class="block">按 Id 和样本顺序幂等写入一批 Telemetry。</div>
 </section>
 </li>
 <li>
@@ -237,7 +237,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addEvent</span><wbr><span class="parameters">(long&nbsp;messageId,
  @NotNull
  @NotNull com.sca4d.iot.api.history.DeviceEventMessage&nbsp;event)</span></div>
-<div class="block">按发生时间和 MessageId 幂等写入一条 Device 事件。</div>
+<div class="block">按发生时间和 Id 幂等写入一条 Device 事件。</div>
 </section>
 </li>
 <li>

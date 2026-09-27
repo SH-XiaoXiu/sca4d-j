@@ -14,6 +14,7 @@ import java.util.List;
  * 读写 Email 模板、启用状态和版本条件。
  */
 public interface EmailTemplateMapper {
+    /** @return 匹配条件的未删除 Email 模板状态 */
     @NotNull
     List<@NotNull EmailTemplateState> select(
             @Param("templateId") @Nullable Long templateId,
@@ -25,6 +26,7 @@ public interface EmailTemplateMapper {
      */
     long count();
 
+    /** @return 按分页条件读取的 Email 模板状态 */
     @NotNull
     List<@NotNull EmailTemplateState> selectPage(
             @Param("offset") long offset,

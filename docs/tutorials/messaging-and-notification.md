@@ -1,6 +1,6 @@
 # 发布消息与通知
 
-业务模块之间传递消息用 `MessageBus`，向用户发邮件、站内信或短信用 `Notifications`。必须随业务事务可靠发布时选择 Outbox；收到 MessageId 只表示已经登记，是否送达还要检查消费者或渠道结果。
+业务模块之间传递消息用 `MessageBus`，向用户发邮件、站内信或短信用 `Notifications`。必须随业务事务可靠发布时选择 Outbox；收到消息标识只表示已经登记，是否送达还要检查消费者或渠道结果。
 
 Email 保存主题、纯文本和 HTML 源码，Inbox 保存 Tiptap JSON，SMS 使用供应商模板绑定。先声明通知类型，再配置要使用的渠道模板和接收人解析。
 
@@ -10,13 +10,13 @@ Email 保存主题、纯文本和 HTML 源码，Inbox 保存 Tiptap JSON，SMS �
 
 在业务 Service 的数据库事务中完成写入后，调用 `MessageBus.dispatch(message, DispatchPolicy.outbox())`。该方法要求活跃事务；返回的 `DispatchReceipt.messageId()` 对应同一事务中的 Outbox 记录。事务回滚时业务写入和 Outbox 一起回滚。
 
-消费者按 MessageId 或业务唯一键防止重复执行。验证时分别检查事务回滚没有留下 Outbox、正常发送进入消费者、同一消息重复投递没有重复修改业务数据。消费失败按 Handler 的 `HandlingPolicy` 重试或进入独立 DLQ；修复原因后再决定重新发布或删除死信。
+消费者按消息标识或业务唯一键防止重复执行。验证时分别检查事务回滚没有留下 Outbox、正常发送进入消费者、同一消息重复投递没有重复修改业务数据。消费失败按 Handler 的 `HandlingPolicy` 重试或进入独立 DLQ；修复原因后再决定重新发布或删除死信。
 
 ## 在本地发送一封通知邮件
 
 先启动 Mailpit，再通过 `/system/email/senders` 创建 `host=localhost`、`port=1025`、`security=NONE` 的发送方，测试连接并启用。应用注册 `NotificationType`，声明接收人、变量及 EMAIL 渠道，为该通知编码创建并启用 Email 模板。
 
-通过 `Notifications.enqueue(type, notice)` 在事务中登记发送请求，然后到 `http://localhost:8025` 查看收件结果。MessageId 表示请求已登记；收件箱中的邮件才能证明本地 SMTP 投递完成。接收地址由应用的 `EmailRecipientResolver` 提供。
+通过 `Notifications.enqueue(type, notice)` 在事务中登记发送请求，然后到 `http://localhost:8025` 查看收件结果。返回的消息标识表示请求已登记；收件箱中的邮件才能证明本地 SMTP 投递完成。接收地址由应用的 `EmailRecipientResolver` 提供。
 
 ## 业务消息与可靠发布
 
@@ -60,7 +60,7 @@ Outbox 只保证发布。它不是业务消息存储，不保存 Consumer 处理
 
 Outbox 使用 `PENDING -> SENDING -> SENT` 和 `FAILED -> SENDING`。多实例通过状态、version、可用时间和租约到期条件的 `UPDATE ... RETURNING` 领取记录，不使用显式行锁；实例退出后，其他实例可以接管过期的 `SENDING` 租约。发布失败采用有上限的指数退避并持续尝试，不设置最大次数，也没有发布侧 `DEAD` 状态。
 
-RabbitMQ 已确认而 Outbox 状态更新失败时，同一 `MessageId` 可能再次发布。Consumer 必须使用 `MessageId` 或稳定业务键实现幂等，不能把「通常只收到一次」当作接口保证。`SENT` 记录只用于短期审计和清理，不替代 RabbitMQ 的持久消息。
+RabbitMQ 已确认而 Outbox 状态更新失败时，同一消息标识可能再次发布。Consumer 必须使用消息标识或稳定业务键实现幂等，不能把「通常只收到一次」当作接口保证。`SENT` 记录只用于短期审计和清理，不替代 RabbitMQ 的持久消息。
 
 ### Consumer 与死信
 
@@ -106,7 +106,7 @@ flowchart LR
 
 [Notification](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/notification/Notification.html) 是框架内部标准结果，保存通知编码、内部接收人、Locale、Region、变量和已经冻结的渠道集合。各渠道解析地址、读取自己的模板或传输绑定，并执行对应投递。
 
-`sendNow` 同步执行已经选择的渠道。`enqueue` 把 `NotificationMessage` 写入 Messaging Outbox，返回 MessageId 只表示请求已经可靠登记。Inbox、Email 和 SMS 使用独立 Handler 身份和 DLQ；一个渠道失败不会让已经成功的其他渠道重复执行。各渠道能取得原始 MessageId；Inbox 用唯一约束去重，Email 的 SMTP 调用没有持久化去重记录，发生重复投递时可能再次发信。
+`sendNow` 同步执行已经选择的渠道。`enqueue` 把 `NotificationMessage` 写入 Messaging Outbox，返回消息标识只表示请求已经可靠登记。Inbox、Email 和 SMS 使用独立 Handler 身份和 DLQ；一个渠道失败不会让已经成功的其他渠道重复执行。各渠道能取得原始消息标识；Inbox 用唯一约束去重，Email 的 SMTP 调用没有持久化去重记录，发生重复投递时可能再次发信。
 
 ### 接入一种领域通知
 
@@ -219,7 +219,7 @@ public class AccountSecurityService {
 }
 ```
 
-`enqueue` 要求活跃事务，返回的 `MessageId` 只证明 Outbox 已登记。需要调用线程立即知道渠道成功或失败，且可以接受外部调用延长当前处理时间时，才使用 `sendNow`。`sendNow` 不经过 Outbox；调用失败直接返回给调用方。
+`enqueue` 要求活跃事务，返回的消息标识只证明 Outbox 已登记。需要调用线程立即知道渠道成功或失败，且可以接受外部调用延长当前处理时间时，才使用 `sendNow`。`sendNow` 不经过 Outbox；调用失败直接返回给调用方。
 
 ### 保存接收人的语言、区域和渠道偏好
 
@@ -298,9 +298,9 @@ SMTP 支持 `NONE`、`STARTTLS` 和 `TLS`。密码由 [SecretKeyring](/javadoc/c
 
 ## 站内信
 
-`modules/notification/sca4dj-notification-inbox` 为 Account 接收人保存 Inbox 模板的渲染快照。每条记录包含原始 MessageId、Account、通知编码、语言、标题、纯文本、安全 HTML、创建时间、已读时间和 Version。
+`modules/notification/sca4dj-notification-inbox` 为 Account 接收人保存 Inbox 模板的渲染快照。每条记录包含原始消息标识、Account、通知编码、语言、标题、纯文本、安全 HTML、创建时间、已读时间和 Version。
 
-`notification_inbox_message` 以原始 MessageId 和 Account 建立唯一约束，同一渠道消息重复投递不会生成第二条站内信。列表使用 `beforeId` 游标向前分页；单条已读使用 Version，全部已读只修改仍处于未读状态的记录。
+`notification_inbox_message` 以原始消息标识和 Account 建立唯一约束，同一渠道消息重复投递不会生成第二条站内信。列表使用 `beforeId` 游标向前分页；单条已读使用 Version，全部已读只修改仍处于未读状态的记录。
 
 新增站内信或已读状态变化后，模块在事务提交后发布 `NOTIFICATION/INBOX/CHANGED`（版本 1）。事件只提示 Account 的在线客户端重新读取列表和未读数，不携带正文，也不能替代持久化记录。
 

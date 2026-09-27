@@ -150,7 +150,7 @@ class IotI18nMigrationIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode migratedModel = objectMapper.readTree((String) modelRow.get("model_json"));
         JsonNode migratedI18n = objectMapper.readTree((String) modelRow.get("i18n")).path("zh-CN");
-        assertThat(migratedModel.path("formatVersion").intValue()).isEqualTo(2);
+        assertThat(migratedModel.path("formatVersion").intValue()).isEqualTo(1);
         assertThat(migratedModel.findValues("displayName")).isEmpty();
         assertThat(migratedI18n.path("/displayName").textValue()).isEqualTo("迁移温控器");
         assertThat(migratedI18n.path("/properties/power/displayName").textValue()).isEqualTo("电源");

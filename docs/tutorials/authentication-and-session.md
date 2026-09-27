@@ -115,7 +115,7 @@ public final class ProjectMemberPrincipalIdLoader
 }
 ```
 
-Loader 返回普通 ID 集合即可。PrincipalIdLoaders 校验每种 Principal 类型只有一个来源，Session 校验正数、重复值以及完整 Principal 和紧凑集合之间的冲突，SessionCodec 再把每种类型编码成一个 Roaring64 集合。业务模块不直接构造位图。
+Loader 返回普通 ID 集合即可。PrincipalIdLoaders 校验每种 Principal 类型只有一个来源，Session 校验正数、重复值以及完整 Principal 和紧凑集合之间的冲突，SessionCodec 再把每种类型编码成一个带 V1 Codec 版本的 Roaring64 集合。业务模块不直接构造位图；未来版本通过相邻版本迁移步骤转换。
 
 请求进入 `/projects/{projectId}/...` 后，PrincipalSelection 可以按 Account 和 `projectId` 查询当前 ProjectMemberPrincipal。它返回完整候选对象，`Call.selectPrincipal(...)` 再校验该对象的精确 Java 类型和 ID 是否存在于 Session。查询业务表不能把 Session 集合外的 Principal 变成可信对象。
 

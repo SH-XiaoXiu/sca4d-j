@@ -46,6 +46,15 @@ public final class RabbitHandlerContainers implements SmartLifecycle {
 
     private volatile boolean running;
 
+    /**
+     * @param connectionFactory RabbitMQ 连接工厂
+     * @param topology 消息拓扑
+     * @param codec 消息信封 Codec
+     * @param properties Messaging 配置
+     * @param publisher 重试消息发布器
+     * @param eventHandlers 已安装的 EventHandler
+     * @param messageHandlers 已安装的 MessageHandler
+     */
     public RabbitHandlerContainers(
             @NotNull ConnectionFactory connectionFactory,
             @NotNull RabbitMessageTopology topology,

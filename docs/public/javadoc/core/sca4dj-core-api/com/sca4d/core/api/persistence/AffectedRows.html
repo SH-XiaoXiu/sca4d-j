@@ -86,11 +86,11 @@ loadScripts(document, 'script');</script>
 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Target.html" title="class or interface in java.lang.annotation" class="external-link">@Target</a>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/ElementType.html#METHOD" title="class or interface in java.lang.annotation" class="external-link">METHOD</a>)
 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Retention.html" title="class or interface in java.lang.annotation" class="external-link">@Retention</a>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/RetentionPolicy.html#RUNTIME" title="class or interface in java.lang.annotation" class="external-link">RUNTIME</a>)
 </span><span class="modifiers">public @interface </span><span class="element-name type-name-label">AffectedRows</span></div>
-<div class="block">声明 Repository 方法怎样解释其唯一一条数据库写入的影响行数。
+<div class="block">声明 Repository 方法怎样解释唯一一条数据库写入的影响行数。
 
  <p>方法成功返回前必须执行且只能执行一条 INSERT、UPDATE 或 DELETE。影响一行表示成功，零行按照
  <a href="#whenZero()"><code>whenZero()</code></a> 解释，影响多行始终表示持久化结果异常。包含多条写入或动态预期行数的方法应直接使用
- <a href="AffectedRowCounts.html" title="class in com.sca4d.core.api.persistence"><code>AffectedRowCounts</code></a>。Mapper 可以继续返回影响行数；使用本注解的 Repository 不读取该返回值。</div>
+ <a href="AffectedRowCounts.html" title="class in com.sca4d.core.api.persistence"><code>AffectedRowCounts</code></a>。Mapper 可以继续返回影响行数；使用本注解的 Repository 不读取 Mapper 返回值。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">

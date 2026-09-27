@@ -41,6 +41,14 @@ public final class WebRealtimeMessageHandler implements MessageHandler<WebRealti
 
     private final @NotNull WebRealtimeMessageCodec codec;
 
+    /**
+     * @param registry Web Realtime 共享连接索引
+     * @param nodeRouter 节点间连接路由器
+     * @param properties Web Realtime 配置
+     * @param clock 消息到期时间来源
+     * @param json 浏览器 payload JSON 转换器
+     * @param codec Web Realtime 消息 Codec
+     */
     public WebRealtimeMessageHandler(
             @NotNull RedisConnectionRegistry registry,
             @NotNull NodeRouter nodeRouter,

@@ -4,7 +4,7 @@ import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.job.Job;
 import com.sca4d.core.api.job.JobKey;
-import com.sca4d.core.api.job.JobRunId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.job.JobRunStatus;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.scheduling.OverlapPolicy;
@@ -51,13 +51,13 @@ public final class JobRunService {
     }
 
     /** 创建普通 Job run，并在同一事务展开节点和依赖。 */
-    public @NotNull JobRunId create(@NotNull Job<?, ?> job, @Nullable String inputJson) {
+    public @NotNull Id create(@NotNull Job<?, ?> job, @Nullable String inputJson) {
         return Objects.requireNonNull(
                 transactions.execute(status -> repository.createRun(job, inputJson, null, null, clock.instant())));
     }
 
     /** 处理定时 fire 的去重和重叠策略，并创建或返回根运行。 */
-    public @NotNull Optional<JobRunId> createScheduled(
+    public @NotNull Optional<Id> createScheduled(
             @NotNull Job<?, ?> job,
             @Nullable String inputJson,
             @NotNull ScheduleKey scheduleKey,
@@ -72,7 +72,7 @@ public final class JobRunService {
                             key,
                             Objects.requireNonNull(scheduledAt, "原定时间不能为空"));
                     if (existing != null) {
-                        return Optional.of(new JobRunId(existing));
+                        return Optional.of(Id.of(existing));
                     }
                     if (Objects.requireNonNull(overlapPolicy, "重叠策略不能为空") == OverlapPolicy.SKIP_IF_RUNNING
                             && repository.findActiveScheduledRun(key) != null) {
@@ -83,7 +83,7 @@ public final class JobRunService {
     }
 
     /** 查询当前 App 隔离名称的根运行。 */
-    public @Nullable RunRecord findRun(@NotNull JobRunId runId) {
+    public @Nullable RunRecord findRun(@NotNull Id runId) {
         return transactions.execute(status -> repository.findRun(runId));
     }
 

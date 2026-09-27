@@ -3,7 +3,7 @@ package com.sca4d.iot.connection;
 import com.sca4d.core.api.connection.ConnectionRegistry;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.MessageBus;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.iot.api.connection.DeviceConnection;
 import com.sca4d.iot.api.connection.DeviceConnectionQueryService;
 import com.sca4d.iot.api.connection.DeviceDisconnectMessage;
@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Clock;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,8 +26,6 @@ public class DeviceConnectionService {
 
     private final @NotNull MessageBus messages;
 
-    private final @NotNull Clock clock;
-
     private final @Nullable ConnectionRegistry commonConnections;
 
     /** 创建设备连接操作服务。 */
@@ -36,11 +33,9 @@ public class DeviceConnectionService {
     public DeviceConnectionService(
             @NotNull DeviceConnectionQueryService connections,
             @NotNull MessageBus messages,
-            @NotNull Clock clock,
             @Nullable ConnectionRegistry commonConnections) {
         this.connections = Objects.requireNonNull(connections, "Device Connection Repository 不能为空");
         this.messages = Objects.requireNonNull(messages, "MessageBus 不能为空");
-        this.clock = Objects.requireNonNull(clock, "连接操作时钟不能为空");
         this.commonConnections = commonConnections;
     }
 
@@ -71,7 +66,7 @@ public class DeviceConnectionService {
                     connection.protocol(),
                     checkedReason,
                     1);
-            MessageId disconnectMessageId = messages.dispatch(
+            Id disconnectMessageId = messages.dispatch(
                     payload,
                     DispatchPolicy.outbox()).messageId();
             LOG.trace(

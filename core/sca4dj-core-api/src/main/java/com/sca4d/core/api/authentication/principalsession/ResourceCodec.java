@@ -18,6 +18,11 @@ public interface ResourceCodec<R extends Resource> {
     @NotNull
     TreeCode type();
 
+    /** @return 当前 Resource payload 的正数结构版本 */
+    default int version() {
+        return 1;
+    }
+
     /**
      * 读取编码前用于拒绝不匹配实现类的类型。
      *

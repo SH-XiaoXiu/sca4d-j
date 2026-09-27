@@ -3,7 +3,7 @@ package com.sca4d.core.api.notification;
 import com.sca4d.core.api.delivery.Delivery;
 import com.sca4d.core.api.delivery.DeliveryOutcome;
 import com.sca4d.core.api.messaging.HandlingPolicy;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,5 +43,5 @@ public interface NotificationDelivery extends Delivery<Notification> {
      */
     @Override
     @NotNull
-    DeliveryOutcome deliver(@NotNull MessageId messageId, @NotNull Notification notification);
+    DeliveryOutcome deliver(@NotNull Id messageId, @NotNull Notification notification);
 }

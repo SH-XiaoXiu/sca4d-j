@@ -24,7 +24,7 @@ import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.DispatchReceipt;
 import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.MessageBus;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.Name;
 import com.sca4d.core.api.name.code.TreeCode;
@@ -266,13 +266,13 @@ class WebRealtimeInfrastructureIntegrationTest {
             assertThat(policy.mode()).isEqualTo(DispatchPolicy.Mode.IMMEDIATE);
             handler.handle(
                     new IncomingMessage<>(
-                            new MessageId(1L),
+                            Id.of(1L),
                             (WebRealtimeMessage) message,
                             new Name("WEB_REALTIME_TEST"),
                             clock.instant(),
                             false,
                             1));
-            return new DispatchReceipt(new MessageId(1L), DispatchReceipt.Status.BROKER_ACCEPTED);
+            return new DispatchReceipt(Id.of(1L), DispatchReceipt.Status.BROKER_ACCEPTED);
         };
         WebRealtimePublisher publisher = new DefaultWebRealtimePublisher(messages, PROPERTIES, clock);
         ObjectNode payload = OBJECT_MAPPER.createObjectNode().put("invoiceId", 42);

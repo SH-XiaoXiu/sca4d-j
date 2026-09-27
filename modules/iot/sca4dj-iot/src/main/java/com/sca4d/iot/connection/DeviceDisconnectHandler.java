@@ -9,7 +9,7 @@ import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.api.messaging.MessageHandler;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iot.api.IotCapabilities;
 import com.sca4d.iot.api.connection.DeviceConnectionReceiver;
@@ -120,7 +120,7 @@ public class DeviceDisconnectHandler implements MessageHandler<DeviceDisconnectM
                     disconnect.protocol(),
                     disconnect.reason(),
                     nextAttempt);
-            MessageId retryMessageId = messages.dispatch(
+            Id retryMessageId = messages.dispatch(
                     retry,
                     DispatchPolicy.outboxNotBefore(retryAt)).messageId();
             LOG.warn(

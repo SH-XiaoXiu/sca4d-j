@@ -3,7 +3,7 @@ package com.sca4d.notification;
 import static com.sca4d.core.api.delivery.DeliveryOutcome.Status.CONFIRMED;
 
 import com.sca4d.core.api.delivery.DeliveryOutcome;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.Notification;
 import com.sca4d.core.api.notification.NotificationDelivery;
@@ -48,7 +48,7 @@ public final class NotificationDeliveryRouter {
     /**
      * 同步执行通知已经选中的全部渠道。
      */
-    public void deliver(@NotNull MessageId messageId, @NotNull Notification notification) {
+    public void deliver(@NotNull Id messageId, @NotNull Notification notification) {
         Notification checked = Objects.requireNonNull(notification, "通知不能为空");
         for (TreeCode channel : checked.channels()) {
             DeliveryOutcome outcome = deliver(channel, messageId, checked);
@@ -63,7 +63,7 @@ public final class NotificationDeliveryRouter {
      */
     public @NotNull DeliveryOutcome deliver(
             @NotNull TreeCode channel,
-            @NotNull MessageId messageId,
+            @NotNull Id messageId,
             @NotNull Notification notification) {
         TreeCode checkedChannel = Objects.requireNonNull(channel, "通知渠道不能为空");
         Notification checked = Objects.requireNonNull(notification, "通知不能为空");

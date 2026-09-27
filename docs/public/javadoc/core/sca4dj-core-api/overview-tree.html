@@ -122,6 +122,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.html" class="type-name-link" title="class in com.sca4d.core.api.call">CallLifecycle</a></li>
 <li class="circle">com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallOutcome.html" class="type-name-link" title="class in com.sca4d.core.api.call">CallOutcome</a></li>
 <li class="circle">com.sca4d.core.api.scheduling.<a href="com/sca4d/core/api/scheduling/ClusterTaskSchedule.html" class="type-name-link" title="class in com.sca4d.core.api.scheduling">ClusterTaskSchedule</a></li>
+<li class="circle">com.sca4d.core.api.codec.<a href="com/sca4d/core/api/codec/CodecMigrationStep.html" class="type-name-link" title="class in com.sca4d.core.api.codec">CodecMigrationStep</a>&lt;V,<wbr>W&gt; (implements com.sca4d.core.api.codec.<a href="com/sca4d/core/api/codec/Migratable.html" title="interface in com.sca4d.core.api.codec">Migratable</a>&lt;W&gt;)</li>
 <li class="circle">com.sca4d.core.api.connection.<a href="com/sca4d/core/api/connection/Connection.html" class="type-name-link" title="class in com.sca4d.core.api.connection">Connection</a></li>
 <li class="circle">com.sca4d.core.api.connection.<a href="com/sca4d/core/api/connection/ConnectionId.html" class="type-name-link" title="class in com.sca4d.core.api.connection">ConnectionId</a></li>
 <li class="circle">com.sca4d.core.api.connection.<a href="com/sca4d/core/api/connection/ConnectionProtocol.html" class="type-name-link" title="class in com.sca4d.core.api.connection">ConnectionProtocol</a></li>
@@ -210,7 +211,6 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.core.api.logging.<a href="com/sca4d/core/api/logging/LogMark.html" class="type-name-link" title="class in com.sca4d.core.api.logging">LogMark</a></li>
 <li class="circle">com.sca4d.core.api.logging.<a href="com/sca4d/core/api/logging/LogSourceFormatter.html" class="type-name-link" title="class in com.sca4d.core.api.logging">LogSourceFormatter</a></li>
 <li class="circle">com.sca4d.core.api.authentication.principalsession.<a href="com/sca4d/core/api/authentication/principalsession/LongIdSet.html" class="type-name-link" title="class in com.sca4d.core.api.authentication.principalsession">LongIdSet</a></li>
-<li class="circle">com.sca4d.core.api.message.<a href="com/sca4d/core/api/message/MediaTypes.html" class="type-name-link" title="class in com.sca4d.core.api.message">MediaTypes</a></li>
 <li class="circle">com.sca4d.core.api.message.<a href="com/sca4d/core/api/message/Message.html" class="type-name-link" title="class in com.sca4d.core.api.message">Message</a>
 <ul>
 <li class="circle">com.sca4d.core.api.message.<a href="com/sca4d/core/api/message/ContentMessage.html" class="type-name-link" title="class in com.sca4d.core.api.message">ContentMessage</a></li>
@@ -253,12 +253,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.core.api.notification.<a href="com/sca4d/core/api/notification/NotificationType.html" class="type-name-link" title="class in com.sca4d.core.api.notification">NotificationType</a>&lt;T&gt;</li>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Number.html" class="type-name-link external-link" title="class or interface in java.lang">Number</a> (implements java.io.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a>)
 <ul>
-<li class="circle">com.sca4d.core.api.id.<a href="com/sca4d/core/api/id/Id.html" class="type-name-link" title="class in com.sca4d.core.api.id">Id</a> (implements java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;T&gt;)
-<ul>
-<li class="circle">com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobRunId.html" class="type-name-link" title="class in com.sca4d.core.api.job">JobRunId</a></li>
-<li class="circle">com.sca4d.core.api.messaging.<a href="com/sca4d/core/api/messaging/MessageId.html" class="type-name-link" title="class in com.sca4d.core.api.messaging">MessageId</a></li>
-</ul>
-</li>
+<li class="circle">com.sca4d.core.api.id.<a href="com/sca4d/core/api/id/Id.html" class="type-name-link" title="class in com.sca4d.core.api.id">Id</a> (implements java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;T&gt;)</li>
 </ul>
 </li>
 <li class="circle">com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/Operation.html" class="type-name-link" title="class in com.sca4d.core.api.permission">Operation</a> (implements com.sca4d.core.api.resource.<a href="com/sca4d/core/api/resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>)</li>
@@ -373,6 +368,9 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.core.api.authentication.<a href="com/sca4d/core/api/authentication/VerifiedAuthentication.html" class="type-name-link" title="class in com.sca4d.core.api.authentication">VerifiedAuthentication</a></li>
 <li class="circle">com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/Version.html" class="type-name-link" title="class in com.sca4d.core.api.concurrent">Version</a></li>
 <li class="circle">com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/VersionCondition.html" class="type-name-link" title="class in com.sca4d.core.api.concurrent">VersionCondition</a></li>
+<li class="circle">com.sca4d.core.api.codec.<a href="com/sca4d/core/api/codec/VersionedCodecAdapter.html" class="type-name-link" title="class in com.sca4d.core.api.codec">VersionedCodecAdapter</a>&lt;V,<wbr>W&gt; (implements com.sca4d.core.api.codec.<a href="com/sca4d/core/api/codec/VersionedCodec.html" title="interface in com.sca4d.core.api.codec">VersionedCodec</a>&lt;V,<wbr>W&gt;)</li>
+<li class="circle">com.sca4d.core.api.codec.<a href="com/sca4d/core/api/codec/VersionedCodecCatalog.html" class="type-name-link" title="class in com.sca4d.core.api.codec">VersionedCodecCatalog</a>&lt;V,<wbr>W&gt;</li>
+<li class="circle">com.sca4d.core.api.codec.<a href="com/sca4d/core/api/codec/VersionedCodecMigrator.html" class="type-name-link" title="class in com.sca4d.core.api.codec">VersionedCodecMigrator</a>&lt;W&gt;</li>
 <li class="circle">com.sca4d.core.api.validation.<a href="com/sca4d/core/api/validation/Violation.html" class="type-name-link" title="class in com.sca4d.core.api.validation">Violation</a></li>
 <li class="circle">com.sca4d.core.api.webrealtime.<a href="com/sca4d/core/api/webrealtime/WebRealtimeTarget.html" class="type-name-link" title="class in com.sca4d.core.api.webrealtime">WebRealtimeTarget</a></li>
 </ul>
@@ -414,6 +412,7 @@ loadScripts(document, 'script');</script>
 </li>
 </ul>
 </li>
+<li class="circle">com.sca4d.core.api.codec.<a href="com/sca4d/core/api/codec/CodecVersionSelector.html" class="type-name-link" title="interface in com.sca4d.core.api.codec">CodecVersionSelector</a>&lt;W&gt;</li>
 <li class="circle">com.sca4d.core.api.connection.<a href="com/sca4d/core/api/connection/ConnectionRegistry.html" class="type-name-link" title="interface in com.sca4d.core.api.connection">ConnectionRegistry</a></li>
 <li class="circle">com.sca4d.core.api.message.<a href="com/sca4d/core/api/message/ContentBody.html" class="type-name-link" title="interface in com.sca4d.core.api.message">ContentBody</a></li>
 <li class="circle">com.sca4d.core.api.delivery.<a href="com/sca4d/core/api/delivery/Delivery.html" class="type-name-link" title="interface in com.sca4d.core.api.delivery">Delivery</a>&lt;R&gt;
@@ -445,6 +444,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.core.api.i18n.<a href="com/sca4d/core/api/i18n/MessageCatalog.html" class="type-name-link" title="interface in com.sca4d.core.api.i18n">MessageCatalog</a></li>
 <li class="circle">com.sca4d.core.api.messaging.<a href="com/sca4d/core/api/messaging/MessageConsumer.html" class="type-name-link" title="interface in com.sca4d.core.api.messaging">MessageConsumer</a>&lt;T&gt;</li>
 <li class="circle">com.sca4d.core.api.messaging.<a href="com/sca4d/core/api/messaging/MessageHandler.html" class="type-name-link" title="interface in com.sca4d.core.api.messaging">MessageHandler</a>&lt;M&gt;</li>
+<li class="circle">com.sca4d.core.api.codec.<a href="com/sca4d/core/api/codec/Migratable.html" class="type-name-link" title="interface in com.sca4d.core.api.codec">Migratable</a>&lt;W&gt;</li>
 <li class="circle">com.sca4d.core.api.notification.<a href="com/sca4d/core/api/notification/NotificationExecution.html" class="type-name-link" title="interface in com.sca4d.core.api.notification">NotificationExecution</a></li>
 <li class="circle">com.sca4d.core.api.notification.<a href="com/sca4d/core/api/notification/Notifications.html" class="type-name-link" title="interface in com.sca4d.core.api.notification">Notifications</a></li>
 <li class="circle">com.sca4d.core.api.notification.<a href="com/sca4d/core/api/notification/NotificationService.html" class="type-name-link" title="interface in com.sca4d.core.api.notification">NotificationService</a></li>

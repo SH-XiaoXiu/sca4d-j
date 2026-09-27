@@ -133,7 +133,9 @@ implements com.sca4d.core.api.messaging.MessageHandler&lt;com.sca4d.iot.api.mess
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.messaging.HandlingDecision</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#handle(com.sca4d.core.api.messaging.IncomingMessage)" class="member-name-link">handle</a><wbr>(@NotNull com.sca4d.core.api.messaging.IncomingMessage&lt;com.sca4d.iot.api.message.DeviceAcknowledgement&gt;&nbsp;incoming)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">应用 ACK 状态转换并确认消息；服务失败时向消息容器抛出异常以触发重试或拒绝。</div>
+</div>
 </div>
 </div>
 </div>
@@ -161,6 +163,11 @@ implements com.sca4d.core.api.messaging.MessageHandler&lt;com.sca4d.iot.api.mess
  @NotNull <a href="DeviceAcknowledgementService.html" title="class in com.sca4d.iot.message">DeviceAcknowledgementService</a>&nbsp;acknowledgements,
  @NotNull
  @NotNull com.sca4d.core.api.messaging.MessageCodec&lt;com.sca4d.iot.api.message.DeviceAcknowledgement&gt;&nbsp;codec)</span></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>acknowledgements</code> - 负责更新下行消息状态的服务</dd>
+<dd><code>codec</code> - 设备 ACK 消息 Codec</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -179,6 +186,8 @@ implements com.sca4d.core.api.messaging.MessageHandler&lt;com.sca4d.iot.api.mess
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>code</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.messaging.MessageHandler&lt;com.sca4d.iot.api.message.DeviceAcknowledgement&gt;</code></dd>
+<dt>Returns:</dt>
+<dd>设备 ACK Handler 的稳定编码</dd>
 </dl>
 </section>
 </li>
@@ -190,6 +199,8 @@ implements com.sca4d.core.api.messaging.MessageHandler&lt;com.sca4d.iot.api.mess
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>codec</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.messaging.MessageHandler&lt;com.sca4d.iot.api.message.DeviceAcknowledgement&gt;</code></dd>
+<dt>Returns:</dt>
+<dd>设备 ACK 消息 Codec</dd>
 </dl>
 </section>
 </li>
@@ -200,9 +211,14 @@ implements com.sca4d.core.api.messaging.MessageHandler&lt;com.sca4d.iot.api.mess
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.messaging.HandlingDecision</span>&nbsp;<span class="element-name">handle</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.messaging.IncomingMessage&lt;com.sca4d.iot.api.message.DeviceAcknowledgement&gt;&nbsp;incoming)</span></div>
+<div class="block">应用 ACK 状态转换并确认消息；服务失败时向消息容器抛出异常以触发重试或拒绝。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>handle</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.messaging.MessageHandler&lt;com.sca4d.iot.api.message.DeviceAcknowledgement&gt;</code></dd>
+<dt>Parameters:</dt>
+<dd><code>incoming</code> - 已解码的设备 ACK 消息</dd>
+<dt>Returns:</dt>
+<dd>确认消息处理结果</dd>
 </dl>
 </section>
 </li>

@@ -357,12 +357,10 @@ public class IotAutoConfiguration {
     DeviceConnectionService deviceConnectionService(
             DeviceConnectionQueryService connections,
             MessageBus messages,
-            Clock clock,
             ObjectProvider<ConnectionRegistry> commonConnections) {
         return new DeviceConnectionService(
                 connections,
                 messages,
-                clock,
                 commonConnections.getIfAvailable());
     }
 

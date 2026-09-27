@@ -97,7 +97,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public final class </span><span class="element-name type-name-label">RedisConnectionRegistry</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.core.api.connection.ConnectionRegistry</span></div>
-<div class="block">使用 Redis Hash、Set 和按租约到期时间排序的 ZSET 保存所有 Web Realtime 共享索引。</div>
+<div class="block">使用 Redis Hash、Set 和按租约到期时间排序的 SET 保存所有 Web Realtime 共享索引。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -115,7 +115,7 @@ implements com.sca4d.core.api.connection.ConnectionRegistry</span></div>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
  @NotNull com.sca4d.core.spring.redis.RedisBatches&nbsp;redisBatches)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建使用当前 App 命名空间的共享连接索引。</div>
+<div class="block">创建使用当前 App 隔离名称的共享连接索引。</div>
 </div>
 </div>
 </section>
@@ -134,12 +134,12 @@ implements com.sca4d.core.api.connection.ConnectionRegistry</span></div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;com.sca4d.core.api.connection.Connection&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findBySession(com.sca4d.core.api.authentication.SessionId)" class="member-name-link">findBySession</a><wbr>(@NotNull com.sca4d.core.api.authentication.SessionId&nbsp;sessionId)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取当前 Session 关联的公共连接事实。</div>
+<div class="block">读取当前 Session 关联的公共连接信息。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#register(com.sca4d.core.api.connection.Connection)" class="member-name-link">register</a><wbr>(@NotNull com.sca4d.core.api.connection.Connection&nbsp;connection)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">登记不包含身份展开信息的公共连接事实。</div>
+<div class="block">登记不包含身份展开信息的公共连接信息。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#register(com.sca4d.core.api.connection.ConnectionId,java.lang.String,com.sca4d.core.api.authentication.Session)" class="member-name-link">register</a><wbr>(@NotNull com.sca4d.core.api.connection.ConnectionId&nbsp;connectionId,
@@ -151,7 +151,7 @@ implements com.sca4d.core.api.connection.ConnectionRegistry</span></div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#remove(com.sca4d.core.api.connection.ConnectionId)" class="member-name-link">remove</a><wbr>(@NotNull com.sca4d.core.api.connection.ConnectionId&nbsp;connectionId)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">删除公共连接事实。</div>
+<div class="block">删除公共连接信息。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#renew(com.sca4d.core.api.connection.ConnectionId)" class="member-name-link">renew</a><wbr>(@NotNull com.sca4d.core.api.connection.ConnectionId&nbsp;connectionId)</code></div>
@@ -174,18 +174,18 @@ implements com.sca4d.core.api.connection.ConnectionRegistry</span></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#terminateBySession(com.sca4d.core.api.authentication.SessionId,java.lang.String)" class="member-name-link">terminateBySession</a><wbr>(@NotNull com.sca4d.core.api.authentication.SessionId&nbsp;sessionId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;reason)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">删除当前 Session 的全部共享连接事实。</div>
+<div class="block">删除当前 Session 的全部共享连接信息。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#touch(com.sca4d.core.api.connection.ConnectionId,java.time.Instant)" class="member-name-link">touch</a><wbr>(@NotNull com.sca4d.core.api.connection.ConnectionId&nbsp;connectionId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;lastActivityAt)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">更新公共连接事实的最近活动时间。</div>
+<div class="block">更新公共连接信息的最近活动时间。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unregister(com.sca4d.core.api.connection.ConnectionId)" class="member-name-link">unregister</a><wbr>(@NotNull com.sca4d.core.api.connection.ConnectionId&nbsp;connectionId)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">从全部目标 ZSET 和连接元数据中删除指定连接。</div>
+<div class="block">从全部目标 SET 和连接元数据中删除指定连接。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unsubscribe(com.sca4d.core.api.connection.ConnectionId,java.lang.String)" class="member-name-link">unsubscribe</a><wbr>(@NotNull com.sca4d.core.api.connection.ConnectionId&nbsp;connectionId,
@@ -223,7 +223,7 @@ implements com.sca4d.core.api.connection.ConnectionRegistry</span></div>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
  @NotNull
  @NotNull com.sca4d.core.spring.redis.RedisBatches&nbsp;redisBatches)</span></div>
-<div class="block">创建使用当前 App 命名空间的共享连接索引。</div>
+<div class="block">创建使用当前 App 隔离名称的共享连接索引。</div>
 </section>
 </li>
 </ul>
@@ -251,7 +251,7 @@ implements com.sca4d.core.api.connection.ConnectionRegistry</span></div>
 <h3>register</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">register</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.connection.Connection&nbsp;connection)</span></div>
-<div class="block">登记不包含身份展开信息的公共连接事实。</div>
+<div class="block">登记不包含身份展开信息的公共连接信息。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>register</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.connection.ConnectionRegistry</code></dd>
@@ -265,7 +265,7 @@ implements com.sca4d.core.api.connection.ConnectionRegistry</span></div>
  @NotNull com.sca4d.core.api.connection.ConnectionId&nbsp;connectionId,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;lastActivityAt)</span></div>
-<div class="block">更新公共连接事实的最近活动时间。</div>
+<div class="block">更新公共连接信息的最近活动时间。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>touch</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.connection.ConnectionRegistry</code></dd>
@@ -277,7 +277,7 @@ implements com.sca4d.core.api.connection.ConnectionRegistry</span></div>
 <h3>remove</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">remove</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.connection.ConnectionId&nbsp;connectionId)</span></div>
-<div class="block">删除公共连接事实。</div>
+<div class="block">删除公共连接信息。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>remove</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.connection.ConnectionRegistry</code></dd>
@@ -290,7 +290,7 @@ implements com.sca4d.core.api.connection.ConnectionRegistry</span></div>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.core.api.connection.Connection&gt;</span>&nbsp;<span class="element-name">findBySession</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.authentication.SessionId&nbsp;sessionId)</span></div>
-<div class="block">读取当前 Session 关联的公共连接事实。</div>
+<div class="block">读取当前 Session 关联的公共连接信息。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>findBySession</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.connection.ConnectionRegistry</code></dd>
@@ -304,7 +304,7 @@ implements com.sca4d.core.api.connection.ConnectionRegistry</span></div>
  @NotNull com.sca4d.core.api.authentication.SessionId&nbsp;sessionId,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;reason)</span></div>
-<div class="block">删除当前 Session 的全部共享连接事实。</div>
+<div class="block">删除当前 Session 的全部共享连接信息。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>terminateBySession</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.connection.ConnectionRegistry</code></dd>
@@ -324,7 +324,7 @@ implements com.sca4d.core.api.connection.ConnectionRegistry</span></div>
 <h3>unregister</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">unregister</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.connection.ConnectionId&nbsp;connectionId)</span></div>
-<div class="block">从全部目标 ZSET 和连接元数据中删除指定连接。</div>
+<div class="block">从全部目标 SET 和连接元数据中删除指定连接。</div>
 </section>
 </li>
 <li>

@@ -32,22 +32,26 @@ public final class RabbitMessageTopology {
 
     private final @NotNull Key deadLetterExchangeName;
 
+    /** 使用固定业务消息、重试和死信 exchange 名称建立拓扑定义。 */
     public RabbitMessageTopology() {
         this.exchangeName = Key.of(TreeCode.ofColon("MESSAGING:MESSAGE"));
         this.retryExchangeName = Key.of(TreeCode.ofColon("MESSAGING:RETRY"));
         this.deadLetterExchangeName = Key.of(TreeCode.ofColon("MESSAGING:DEAD_LETTER"));
     }
 
+    /** @return 持久业务消息 exchange 名称 */
     public @NotNull Key exchangeName() {
         return exchangeName;
     }
 
     /** 在实际 RabbitMQ 路由边界追加部署前缀，业务消息编码保持原值。 */
+    /** @param messageCode 业务消息编码 @return 业务消息路由键 */
     public @NotNull Key routingKey(@NotNull TreeCode messageCode) {
         return Key.of(TreeCode.ofColon("MESSAGING:ROUTE").append(messageCode));
     }
 
     /** 返回 Handler 重试路由使用的隔离名称。 */
+    /** @param handlerCode Handler 编码 @return Handler 重试路由键 */
     public @NotNull Key retryRoutingKey(@NotNull TreeCode handlerCode) {
         return Key.of(TreeCode.ofColon("MESSAGING:RETRY_ROUTE").append(handlerCode));
     }
@@ -73,6 +77,13 @@ public final class RabbitMessageTopology {
                 TreeCode.ofColon("MESSAGING:HANDLER").append(handler.code()).append(TreeCode.ofSegment("DEAD_LETTER")));
     }
 
+    /**
+     * 根据全部 Handler 声明 exchange、队列、重试队列和死信队列。
+     *
+     * @param eventHandlers 已安装的 EventHandler
+     * @param messageHandlers 已安装的 MessageHandler
+     * @return RabbitMQ 声明对象集合
+     */
     public @NotNull Declarables declarables(
             @NotNull List<? extends @NotNull EventHandler<?>> eventHandlers,
             @NotNull List<? extends @NotNull MessageHandler<?>> messageHandlers) {

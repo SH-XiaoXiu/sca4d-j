@@ -123,18 +123,18 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="SmsDeliveryAttempt.html" title="class in com.sca4d.notification.sms">SmsDeliveryAttempt</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#attempt(com.sca4d.core.api.messaging.MessageId,long)" class="member-name-link">attempt</a><wbr>(@NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#attempt(com.sca4d.core.api.id.Id,long)" class="member-name-link">attempt</a><wbr>(@NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  long&nbsp;providerId)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#begin(com.sca4d.core.api.messaging.MessageId,com.sca4d.notification.sms.SmsProvider,com.sca4d.notification.sms.SmsRoute,java.lang.String,java.lang.String)" class="member-name-link">begin</a><wbr>(@NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#begin(com.sca4d.core.api.id.Id,com.sca4d.notification.sms.SmsProvider,com.sca4d.notification.sms.SmsRoute,java.lang.String,java.lang.String)" class="member-name-link">begin</a><wbr>(@NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  @NotNull <a href="SmsProvider.html" title="class in com.sca4d.notification.sms">SmsProvider</a>&nbsp;provider,
  @NotNull <a href="SmsRoute.html" title="class in com.sca4d.notification.sms">SmsRoute</a>&nbsp;route,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;recipientHash,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;recipientMasked)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#finish(com.sca4d.core.api.messaging.MessageId,com.sca4d.notification.sms.SmsProvider,com.sca4d.notification.sms.SmsProviderResult)" class="member-name-link">finish</a><wbr>(@NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#finish(com.sca4d.core.api.id.Id,com.sca4d.notification.sms.SmsProvider,com.sca4d.notification.sms.SmsProviderResult)" class="member-name-link">finish</a><wbr>(@NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  @NotNull <a href="SmsProvider.html" title="class in com.sca4d.notification.sms">SmsProvider</a>&nbsp;provider,
  @NotNull <a href="SmsProviderResult.html" title="class in com.sca4d.notification.sms">SmsProviderResult</a>&nbsp;result)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -176,13 +176,13 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="attempt(com.sca4d.core.api.messaging.MessageId,long)">
+<section class="detail" id="attempt(com.sca4d.core.api.id.Id,long)">
 <h3>attempt</h3>
 <div class="member-signature"><span class="annotations">@Transactional(readOnly=true,
                propagation=REQUIRES_NEW)
 @Nullable
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="SmsDeliveryAttempt.html" title="class in com.sca4d.notification.sms">SmsDeliveryAttempt</a></span>&nbsp;<span class="element-name">attempt</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+ @NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  long&nbsp;providerId)</span></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -191,11 +191,11 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="begin(com.sca4d.core.api.messaging.MessageId,com.sca4d.notification.sms.SmsProvider,com.sca4d.notification.sms.SmsRoute,java.lang.String,java.lang.String)">
+<section class="detail" id="begin(com.sca4d.core.api.id.Id,com.sca4d.notification.sms.SmsProvider,com.sca4d.notification.sms.SmsRoute,java.lang.String,java.lang.String)">
 <h3>begin</h3>
 <div class="member-signature"><span class="annotations">@Transactional(propagation=REQUIRES_NEW)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">begin</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+ @NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  @NotNull
  @NotNull <a href="SmsProvider.html" title="class in com.sca4d.notification.sms">SmsProvider</a>&nbsp;provider,
  @NotNull
@@ -211,11 +211,11 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="finish(com.sca4d.core.api.messaging.MessageId,com.sca4d.notification.sms.SmsProvider,com.sca4d.notification.sms.SmsProviderResult)">
+<section class="detail" id="finish(com.sca4d.core.api.id.Id,com.sca4d.notification.sms.SmsProvider,com.sca4d.notification.sms.SmsProviderResult)">
 <h3>finish</h3>
 <div class="member-signature"><span class="annotations">@Transactional(propagation=REQUIRES_NEW)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">finish</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+ @NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  @NotNull
  @NotNull <a href="SmsProvider.html" title="class in com.sca4d.notification.sms">SmsProvider</a>&nbsp;provider,
  @NotNull

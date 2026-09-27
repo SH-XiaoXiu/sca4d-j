@@ -31,7 +31,16 @@ public final class SmsBindingState {
     private final @NotNull Version version;
 
     /**
-     * 创建供应商模板绑定数据库状态。
+     * @param bindingId 绑定数据库标识
+     * @param providerId Provider 标识
+     * @param code 通知编码
+     * @param route SMS 路由
+     * @param languageTag Locale 标签
+     * @param signName 短信签名
+     * @param providerTemplateCode Provider 模板编码
+     * @param parameterMappingJson 参数映射 JSON
+     * @param enabled 是否允许投递
+     * @param version 绑定版本
      */
     public SmsBindingState(
             long bindingId,
@@ -56,48 +65,52 @@ public final class SmsBindingState {
         this.version = Objects.requireNonNull(version, "绑定版本不能为空");
     }
 
+    /** @return 绑定数据库标识 */
     public long bindingId() {
         return bindingId;
     }
 
+    /** @return Provider 标识 */
     public long providerId() {
         return providerId;
     }
 
-    /**
-     * 返回 code 方法提供的结果。
-     */
+    /** @return 通知编码 */
     public @NotNull TreeCode code() {
         return code;
     }
 
+    /** @return SMS 路由 */
     public @NotNull String route() {
         return route;
     }
 
+    /** @return Locale 标签 */
     public @NotNull String languageTag() {
         return languageTag;
     }
 
+    /** @return 短信签名 */
     public @NotNull String signName() {
         return signName;
     }
 
+    /** @return Provider 模板编码 */
     public @NotNull String providerTemplateCode() {
         return providerTemplateCode;
     }
 
+    /** @return 参数映射 JSON */
     public @NotNull String parameterMappingJson() {
         return parameterMappingJson;
     }
 
+    /** @return 是否允许投递 */
     public boolean enabled() {
         return enabled;
     }
 
-    /**
-     * 返回 version 方法提供的结果。
-     */
+    /** @return 绑定版本 */
     public @NotNull Version version() {
         return version;
     }

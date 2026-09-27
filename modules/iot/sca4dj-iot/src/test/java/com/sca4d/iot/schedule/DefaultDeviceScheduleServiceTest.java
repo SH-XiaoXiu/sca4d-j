@@ -16,7 +16,7 @@ import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.DispatchReceipt;
 import com.sca4d.core.api.messaging.MessageBus;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.ProductBinding;
@@ -97,7 +97,7 @@ class DefaultDeviceScheduleServiceTest {
     @SuppressWarnings("unchecked")
     void executeLockAndTransactionCallbacks() {
         when(messages.dispatch(any(), any()))
-                .thenReturn(new DispatchReceipt(new MessageId(201L), DispatchReceipt.Status.OUTBOX_ENLISTED));
+                .thenReturn(new DispatchReceipt(Id.of(201L), DispatchReceipt.Status.OUTBOX_ENLISTED));
         when(distributedLock.execute(any(LockKey.class), any(Duration.class), any(Supplier.class)))
                 .thenAnswer(invocation -> ((Supplier<?>) invocation.getArgument(2)).get());
         when(transactions.execute(any()))

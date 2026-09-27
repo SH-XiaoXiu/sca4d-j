@@ -61,7 +61,7 @@ class AuditPayloadJsonTest {
         AuditPayloadData decoded = json.decode(encoded.type(), encoded.version(), encoded.json());
 
         assertThat(encoded.type()).isEqualTo("platform.profile");
-        assertThat(encoded.version()).isEqualTo(2);
+        assertThat(encoded.version()).isEqualTo(1);
         assertThat(decoded.decoded()).containsInstanceOf(TypedPayload.class);
         assertThat(((TypedPayload) decoded.decoded().orElseThrow()).value()).isEqualTo("changed");
     }
@@ -125,7 +125,7 @@ class AuditPayloadJsonTest {
         }
     }
 
-    /** 把 `TypedPayload` 编码为稳定的 platform.profile 版本 2 JSON。 */
+    /** 把 `TypedPayload` 编码为稳定的 platform.profile V1 JSON。 */
     private static final class TypedPayloadCodec implements AuditPayloadCodec<TypedPayload> {
         /** {@inheritDoc} */
         @Override
@@ -135,8 +135,8 @@ class AuditPayloadJsonTest {
 
         /** {@inheritDoc} */
         @Override
-        public int payloadVersion() {
-            return 2;
+        public int version() {
+            return 1;
         }
 
         /** {@inheritDoc} */

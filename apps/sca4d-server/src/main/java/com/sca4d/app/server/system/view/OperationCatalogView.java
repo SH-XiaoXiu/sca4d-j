@@ -135,9 +135,10 @@ public final class OperationCatalogView {
         }
 
         private static @NotNull Node from(@NotNull OperationNode.OperationAction item) {
+            TreeCode parentCode = item.parentCode();
             return new Node(
                     item.code().format(COLON),
-                    item.parentCode() == null ? null : item.parentCode().format(COLON),
+                    parentCode == null ? null : parentCode.format(COLON),
                     item.nameKey(),
                     OperationNodeType.ACTION,
                     item.sortOrder(),

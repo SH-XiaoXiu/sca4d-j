@@ -15,7 +15,11 @@ public final class ConsumedSmsCodeChallenge {
 
     private final @NotNull Version version;
 
-    /** 创建成功消费结果。 */
+    /**
+     * @param challengeId 已消费的 Challenge 标识
+     * @param account 由 Challenge 确认的 Account
+     * @param version 消费后用于并发校验的版本
+     */
     public ConsumedSmsCodeChallenge(
             @NotNull SmsCodeChallengeId challengeId,
             @NotNull Account account,
@@ -25,15 +29,17 @@ public final class ConsumedSmsCodeChallenge {
         this.version = Objects.requireNonNull(version, "Challenge 版本不能为空");
     }
 
+    /** @return 已消费的 Challenge 标识 */
     public @NotNull SmsCodeChallengeId challengeId() {
         return challengeId;
     }
 
+    /** @return 由 Challenge 确认的 Account */
     public @NotNull Account account() {
         return account;
     }
 
-    /** 返回 version 方法提供的结果。 */
+    /** @return 消费后用于并发校验的版本 */
     public @NotNull Version version() {
         return version;
     }

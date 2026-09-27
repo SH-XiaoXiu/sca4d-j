@@ -147,9 +147,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#code()" class="member-name-link">code</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回 code 方法提供的结果。</div>
-</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#enabled()" class="member-name-link">enabled</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -158,17 +156,13 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="EmailTemplateSource.html" title="class in com.sca4d.notification.email">EmailTemplateSource</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#source(java.util.Locale)" class="member-name-link">source</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;requested)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回 source 方法提供的结果。</div>
-</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#templateId()" class="member-name-link">templateId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.concurrent.Version</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#version()" class="member-name-link">version</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回 version 方法提供的结果。</div>
-</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -229,6 +223,14 @@ loadScripts(document, 'script');</script>
  boolean&nbsp;enabled,
  @NotNull
  @NotNull com.sca4d.core.api.concurrent.Version&nbsp;version)</span></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>templateId</code> - 模板数据库标识，必须为正数</dd>
+<dd><code>code</code> - 通知编码</dd>
+<dd><code>locales</code> - 各 Locale 的模板正文，不能为空</dd>
+<dd><code>enabled</code> - 是否允许投递</dd>
+<dd><code>version</code> - 模板版本</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -243,6 +245,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="templateId()">
 <h3>templateId</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">templateId</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>模板数据库标识</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -250,7 +256,10 @@ loadScripts(document, 'script');</script>
 <h3>code</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">code</span>()</div>
-<div class="block">返回 code 方法提供的结果。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>邮件模板编码</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -258,6 +267,10 @@ loadScripts(document, 'script');</script>
 <h3>locales</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>@NotNull <a href="EmailTemplateSource.html" title="class in com.sca4d.notification.email">EmailTemplateSource</a>&gt;</span>&nbsp;<span class="element-name">locales</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>各 Locale 的模板正文</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -266,13 +279,20 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="EmailTemplateSource.html" title="class in com.sca4d.notification.email">EmailTemplateSource</a></span>&nbsp;<span class="element-name">source</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;requested)</span></div>
-<div class="block">返回 source 方法提供的结果。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>按语言标签选择的模板正文来源</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="enabled()">
 <h3>enabled</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">enabled</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>是否允许投递</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -280,7 +300,10 @@ loadScripts(document, 'script');</script>
 <h3>version</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.concurrent.Version</span>&nbsp;<span class="element-name">version</span>()</div>
-<div class="block">返回 version 方法提供的结果。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>模板版本</dd>
+</dl>
 </section>
 </li>
 </ul>

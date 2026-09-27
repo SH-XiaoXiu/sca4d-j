@@ -3,7 +3,7 @@ package com.sca4d.messaging.rabbit;
 import static com.sca4d.core.api.name.NameFormat.COLON;
 import static com.sca4d.core.api.name.NameFormat.SLASH;
 
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.messaging.config.MessagingProperties;
@@ -59,10 +59,10 @@ public final class RabbitPublisher {
      * @throws IllegalStateException 消息没有路由、代理拒绝、确认超时或等待被中断时抛出
      */
     public void send(
-            @NotNull MessageId messageId,
+            @NotNull Id messageId,
             @NotNull TreeCode messageCode,
             byte @NotNull [] envelope) {
-        MessageId checkedId = Objects.requireNonNull(messageId, "MessageId 不能为空");
+        Id checkedId = Objects.requireNonNull(messageId, "Id 不能为空");
         TreeCode checkedCode = Objects.requireNonNull(messageCode, "消息编码不能为空");
         Message rabbitMessage = MessageBuilder
                 .withBody(Objects.requireNonNull(envelope, "消息信封不能为空"))

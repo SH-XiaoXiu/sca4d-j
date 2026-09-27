@@ -163,6 +163,14 @@ implements com.sca4d.core.api.messaging.MessageBus</span></div>
  @NotNull <a href="../outbox/MessageOutboxRepository.html" title="class in com.sca4d.messaging.outbox">MessageOutboxRepository</a>&nbsp;outbox,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</span></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>ids</code> - 消息标识生成器</dd>
+<dd><code>codec</code> - 消息信封 Codec</dd>
+<dd><code>publisher</code> - RabbitMQ 发布器</dd>
+<dd><code>outbox</code> - 消息 Outbox Repository</dd>
+<dd><code>clock</code> - 消息发布时间来源</dd>
+</dl>
 </section>
 </li>
 </ul>

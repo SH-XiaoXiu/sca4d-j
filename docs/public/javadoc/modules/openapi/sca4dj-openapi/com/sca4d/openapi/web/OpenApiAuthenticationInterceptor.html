@@ -97,7 +97,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">OpenApiAuthenticationInterceptor</span>
 <span class="extends-implements">extends com.sca4d.core.spring.call.CallHandlerInterceptor</span></div>
-<div class="block">在通用认证拦截器前恢复 OpenAPI 独立 JWT 或验证 OpenAPI HMAC 请求。</div>
+<div class="block">在通用认证拦截器前恢复 OpenAPI 独立 JWT 或验证 OpenAPI MAC 请求。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -113,22 +113,22 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><code><a href="#CLIENT_ID_HEADER" class="member-name-link">CLIENT_ID_HEADER</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">OpenAPI HMAC Client 标识请求头。</div>
+<div class="block">OpenAPI MAC Client 标识请求头。</div>
 </div>
 <div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#NONCE_HEADER" class="member-name-link">NONCE_HEADER</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">OpenAPI HMAC 一次性随机数请求头。</div>
+<div class="block">OpenAPI MAC 一次性随机数请求头。</div>
 </div>
 <div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><code><a href="#SIGNATURE_HEADER" class="member-name-link">SIGNATURE_HEADER</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">OpenAPI HMAC 无填充 Base64URL 签名请求头。</div>
+<div class="block">OpenAPI MAC 无填充 Base64URL 签名请求头。</div>
 </div>
 <div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#TIMESTAMP_HEADER" class="member-name-link">TIMESTAMP_HEADER</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">OpenAPI HMAC Unix 秒请求头。</div>
+<div class="block">OpenAPI MAC Unix 秒请求头。</div>
 </div>
 </div>
 </section>
@@ -168,7 +168,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;handler,
  @NotNull com.sca4d.core.api.call.Call&nbsp;call)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">恢复 OpenAPI JWT 或将 HMAC Proof 转换为当前调用的 Session。</div>
+<div class="block">恢复 OpenAPI JWT 或将 MAC Proof 转换为当前调用的 Session。</div>
 </div>
 </div>
 </div>
@@ -197,7 +197,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="CLIENT_ID_HEADER">
 <h3>CLIENT_ID_HEADER</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">CLIENT_ID_HEADER</span></div>
-<div class="block">OpenAPI HMAC Client 标识请求头。</div>
+<div class="block">OpenAPI MAC Client 标识请求头。</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -212,7 +212,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="TIMESTAMP_HEADER">
 <h3>TIMESTAMP_HEADER</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">TIMESTAMP_HEADER</span></div>
-<div class="block">OpenAPI HMAC Unix 秒请求头。</div>
+<div class="block">OpenAPI MAC Unix 秒请求头。</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -227,7 +227,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="NONCE_HEADER">
 <h3>NONCE_HEADER</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">NONCE_HEADER</span></div>
-<div class="block">OpenAPI HMAC 一次性随机数请求头。</div>
+<div class="block">OpenAPI MAC 一次性随机数请求头。</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -242,7 +242,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="SIGNATURE_HEADER">
 <h3>SIGNATURE_HEADER</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">SIGNATURE_HEADER</span></div>
-<div class="block">OpenAPI HMAC 无填充 Base64URL 签名请求头。</div>
+<div class="block">OpenAPI MAC 无填充 Base64URL 签名请求头。</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -294,7 +294,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;handler,
  @NotNull
  @NotNull com.sca4d.core.api.call.Call&nbsp;call)</span></div>
-<div class="block">恢复 OpenAPI JWT 或将 HMAC Proof 转换为当前调用的 Session。</div>
+<div class="block">恢复 OpenAPI JWT 或将 MAC Proof 转换为当前调用的 Session。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>preHandleWithCall</code>&nbsp;in class&nbsp;<code>com.sca4d.core.spring.call.CallHandlerInterceptor</code></dd>

@@ -9,7 +9,7 @@
 输入保存执行需要的业务标识和参数，不保存当前线程、Session 或数据库连接。`JobExecutor.submit(job, input)` 不继承调用方事务；需要与业务提交保持顺序时，先明确业务事务成功后如何可靠提交任务。
 
 ```java
-JobRunId runId = jobExecutor.submit(job, input);
+Id runId = jobExecutor.submit(job, input);
 JobRunStatus status = jobExecutor.status(runId);
 Optional<Output> output = jobExecutor.result(runId, job);
 ```

@@ -201,7 +201,9 @@ loadScripts(document, 'script');</script>
 <div class="block">为启用 Account 新增登录标识。</div>
 </dd>
 <dt><a href="com/sca4d/iam/config/SystemIdentityInitializer.html#afterSingletonsInstantiated()" class="member-name-link">afterSingletonsInstantiated()</a> - Method in class com.sca4d.iam.config.<a href="com/sca4d/iam/config/SystemIdentityInitializer.html" title="class in com.sca4d.iam.config">SystemIdentityInitializer</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">在 Spring 单例初始化完成后登记数据库身份并发布运行期身份表。</div>
+</dd>
 <dt><a href="com/sca4d/iam/rbac/PermissionSelections.html#ALL" class="member-name-link">ALL</a> - Static variable in class com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/PermissionSelections.html" title="class in com.sca4d.iam.rbac">PermissionSelections</a></dt>
 <dd>
 <div class="block">数据库内部表示 Catalog 当前全部 ACTION 的选择符。</div>
@@ -380,15 +382,15 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iam/config/package-summary.html">com.sca4d.iam.config</a> - package com.sca4d.iam.config</dt>
 <dd>
-<div class="block">装配 IAM 身份事实、基础管理功能和模块初始化。</div>
+<div class="block">装配 IAM 身份管理、基础管理功能和模块初始化。</div>
 </dd>
 <dt><a href="com/sca4d/iam/identity/package-summary.html">com.sca4d.iam.identity</a> - package com.sca4d.iam.identity</dt>
 <dd>
-<div class="block">管理 Subject、Account、Principal 和登录标识之间的身份事实。</div>
+<div class="block">管理 Subject、Account、Principal 和登录标识之间的身份关系。</div>
 </dd>
 <dt><a href="com/sca4d/iam/identity/mapper/package-summary.html">com.sca4d.iam.identity.mapper</a> - package com.sca4d.iam.identity.mapper</dt>
 <dd>
-<div class="block">提供 IAM 身份事实的 MyBatis SQL 接口和持久化查询结果。</div>
+<div class="block">提供 IAM 身份数据的 MyBatis SQL 接口和持久化查询结果。</div>
 </dd>
 <dt><a href="com/sca4d/iam/rbac/package-summary.html">com.sca4d.iam.rbac</a> - package com.sca4d.iam.rbac</dt>
 <dd>
@@ -396,7 +398,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iam/identity/IamErrorCode.html#CONCURRENT_CONFLICT" class="member-name-link">CONCURRENT_CONFLICT</a> - Enum constant in enum class com.sca4d.iam.identity.<a href="com/sca4d/iam/identity/IamErrorCode.html" title="enum class in com.sca4d.iam.identity">IamErrorCode</a></dt>
 <dd>
-<div class="block">身份事实已被其他调用方修改。</div>
+<div class="block">身份记录已被另一个调用方修改。</div>
 </dd>
 <dt><a href="com/sca4d/iam/acl/AclResourceTypes.html#contains(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">contains(TreeCode)</a> - Method in class com.sca4d.iam.acl.<a href="com/sca4d/iam/acl/AclResourceTypes.html" title="class in com.sca4d.iam.acl">AclResourceTypes</a></dt>
 <dd>
@@ -462,7 +464,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iam/base/user/CurrentUserArgumentResolver.html" class="type-name-link" title="class in com.sca4d.iam.base.user">CurrentUserArgumentResolver</a> - Class in <a href="com/sca4d/iam/base/user/package-summary.html">com.sca4d.iam.base.user</a></dt>
 <dd>
-<div class="block">从当前请求的 Session 注入 USER，并把其唯一 PlatformPrincipal 绑定到 `Call`。</div>
+<div class="block">从当前请求的 Session 注入 USER，并把 USER 唯一的 PlatformPrincipal 绑定到 `Call`。</div>
 </dd>
 <dt><a href="com/sca4d/iam/base/user/CurrentUserArgumentResolver.html#%3Cinit%3E()" class="member-name-link">CurrentUserArgumentResolver()</a> - Constructor for class com.sca4d.iam.base.user.<a href="com/sca4d/iam/base/user/CurrentUserArgumentResolver.html" title="class in com.sca4d.iam.base.user">CurrentUserArgumentResolver</a></dt>
 <dd>
@@ -578,7 +580,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iam/DomainScope.html" class="type-name-link" title="class in com.sca4d.iam">DomainScope</a> - Class in <a href="com/sca4d/iam/package-summary.html">com.sca4d.iam</a></dt>
 <dd>
-<div class="block">使用稳定 Code 选择ACL Repository，保留独立领域类型。</div>
+<div class="block">使用稳定 Code 选择 ACL Repository，并保留独立领域类型。</div>
 </dd>
 <dt><a href="com/sca4d/iam/DomainScope.html#%3Cinit%3E(java.lang.String)" class="member-name-link">DomainScope(String)</a> - Constructor for class com.sca4d.iam.<a href="com/sca4d/iam/DomainScope.html" title="class in com.sca4d.iam">DomainScope</a></dt>
 <dd>
@@ -868,13 +870,13 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iam/identity/IamAccountDirectory.html" class="type-name-link" title="class in com.sca4d.iam.identity">IamAccountDirectory</a> - Class in <a href="com/sca4d/iam/identity/package-summary.html">com.sca4d.iam.identity</a></dt>
 <dd>
-<div class="block">使用 IAM 的标识规范化和身份事实实现 `AccountDirectory`。</div>
+<div class="block">使用 IAM 的标识规范化和身份数据实现 `AccountDirectory`。</div>
 </dd>
 <dt><a href="com/sca4d/iam/identity/IamAccountDirectory.html#%3Cinit%3E(com.sca4d.iam.identity.IdentityService)" class="member-name-link">IamAccountDirectory(IdentityService)</a> - Constructor for class com.sca4d.iam.identity.<a href="com/sca4d/iam/identity/IamAccountDirectory.html" title="class in com.sca4d.iam.identity">IamAccountDirectory</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iam/config/IamAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.iam.config">IamAutoConfiguration</a> - Class in <a href="com/sca4d/iam/config/package-summary.html">com.sca4d.iam.config</a></dt>
 <dd>
-<div class="block">自动装配 IAM 身份事实、Platform 身份以及内置 RBAC 和 ACL 实现。</div>
+<div class="block">自动装配 IAM 身份管理、Platform 身份以及内置 RBAC 和 ACL 实现。</div>
 </dd>
 <dt><a href="com/sca4d/iam/config/IamAutoConfiguration.html#%3Cinit%3E()" class="member-name-link">IamAutoConfiguration()</a> - Constructor for class com.sca4d.iam.config.<a href="com/sca4d/iam/config/IamAutoConfiguration.html" title="class in com.sca4d.iam.config">IamAutoConfiguration</a></dt>
 <dd>&nbsp;</dd>
@@ -922,7 +924,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iam/identity/IamErrorCode.html#IDENTIFIER_EXISTS" class="member-name-link">IDENTIFIER_EXISTS</a> - Enum constant in enum class com.sca4d.iam.identity.<a href="com/sca4d/iam/identity/IamErrorCode.html" title="enum class in com.sca4d.iam.identity">IamErrorCode</a></dt>
 <dd>
-<div class="block">同一认证域已经存在该登录标识。</div>
+<div class="block">同一认证域已经存在当前登录标识。</div>
 </dd>
 <dt><a href="com/sca4d/iam/identity/IamErrorCode.html#IDENTIFIER_INVALID" class="member-name-link">IDENTIFIER_INVALID</a> - Enum constant in enum class com.sca4d.iam.identity.<a href="com/sca4d/iam/identity/IamErrorCode.html" title="enum class in com.sca4d.iam.identity">IamErrorCode</a></dt>
 <dd>
@@ -934,7 +936,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iam/identity/IamErrorCode.html#IDENTIFIER_TYPE_UNSUPPORTED" class="member-name-link">IDENTIFIER_TYPE_UNSUPPORTED</a> - Enum constant in enum class com.sca4d.iam.identity.<a href="com/sca4d/iam/identity/IamErrorCode.html" title="enum class in com.sca4d.iam.identity">IamErrorCode</a></dt>
 <dd>
-<div class="block">应用没有安装该登录标识类型的规范化器。</div>
+<div class="block">应用没有安装当前登录标识类型的规范化器。</div>
 </dd>
 <dt><a href="com/sca4d/iam/identity/mapper/IdentityMapper.html" class="type-name-link" title="interface in com.sca4d.iam.identity.mapper">IdentityMapper</a> - Interface in <a href="com/sca4d/iam/identity/mapper/package-summary.html">com.sca4d.iam.identity.mapper</a></dt>
 <dd>
@@ -954,7 +956,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iam/identity/IdentityService.html#%3Cinit%3E(com.sca4d.iam.identity.IdentityRepository,com.sca4d.core.api.id.IdGenerator,com.sca4d.iam.identity.PrincipalTypes,java.util.List)" class="member-name-link">IdentityService(IdentityRepository, IdGenerator, PrincipalTypes, List&lt;AccountIdentifierNormalizer&gt;)</a> - Constructor for class com.sca4d.iam.identity.<a href="com/sca4d/iam/identity/IdentityService.html" title="class in com.sca4d.iam.identity">IdentityService</a></dt>
 <dd>
-<div class="block">创建身份事实服务并建立登录标识规范化器索引。</div>
+<div class="block">创建身份服务并建立登录标识规范化器索引。</div>
 </dd>
 <dt><a href="com/sca4d/iam/identity/IdentityStatus.html" class="type-name-link" title="enum class in com.sca4d.iam.identity">IdentityStatus</a> - Enum Class in <a href="com/sca4d/iam/identity/package-summary.html">com.sca4d.iam.identity</a></dt>
 <dd>
@@ -1026,11 +1028,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iam/base/rbac/PlatformRbacSessionInvalidation.html#invalidate(com.sca4d.iam.rbac.RbacScope,java.util.Collection)" class="member-name-link">invalidate(RbacScope, Collection&lt;Long&gt;)</a> - Method in class com.sca4d.iam.base.rbac.<a href="com/sca4d/iam/base/rbac/PlatformRbacSessionInvalidation.html" title="class in com.sca4d.iam.base.rbac">PlatformRbacSessionInvalidation</a></dt>
 <dd>
-<div class="block">立即标记关联 Session，使后续请求重新读取权限。</div>
+<div class="block">立即标记关联 Session，使之后的请求重新读取权限。</div>
 </dd>
 <dt><a href="com/sca4d/iam/rbac/RbacSessionInvalidation.html#invalidate(com.sca4d.iam.rbac.RbacScope,java.util.Collection)" class="member-name-link">invalidate(RbacScope, Collection&lt;Long&gt;)</a> - Method in interface com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/RbacSessionInvalidation.html" title="interface in com.sca4d.iam.rbac">RbacSessionInvalidation</a></dt>
 <dd>
-<div class="block">立即标记关联 Session，使后续请求重新读取权限。</div>
+<div class="block">立即标记关联 Session，使之后的请求重新读取权限。</div>
 </dd>
 <dt><a href="com/sca4d/iam/rbac/RbacSessionInvalidationRegistry.html#invalidate(com.sca4d.iam.rbac.RbacScope,java.util.List)" class="member-name-link">invalidate(RbacScope, List&lt;Long&gt;)</a> - Method in class com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/RbacSessionInvalidationRegistry.html" title="class in com.sca4d.iam.rbac">RbacSessionInvalidationRegistry</a></dt>
 <dd>
@@ -1518,7 +1520,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iam/identity/PrincipalType.html" class="type-name-link" title="class in com.sca4d.iam.identity">PrincipalType</a> - Class in <a href="com/sca4d/iam/identity/package-summary.html">com.sca4d.iam.identity</a></dt>
 <dd>
-<div class="block">使用稳定 Code 标识Principal 的具体类型，保留独立领域身份。</div>
+<div class="block">使用稳定 Code 标识 Principal 的具体类型，并保留独立领域类型。</div>
 </dd>
 <dt><a href="com/sca4d/iam/identity/PrincipalType.html#%3Cinit%3E(com.sca4d.core.api.name.code.Code)" class="member-name-link">PrincipalType(Code)</a> - Constructor for class com.sca4d.iam.identity.<a href="com/sca4d/iam/identity/PrincipalType.html" title="class in com.sca4d.iam.identity">PrincipalType</a></dt>
 <dd>
@@ -1526,7 +1528,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iam/identity/PrincipalType.html#%3Cinit%3E(java.lang.String)" class="member-name-link">PrincipalType(String)</a> - Constructor for class com.sca4d.iam.identity.<a href="com/sca4d/iam/identity/PrincipalType.html" title="class in com.sca4d.iam.identity">PrincipalType</a></dt>
 <dd>
-<div class="block">从声明或实际序列化边界解析稳定类型编码。</div>
+<div class="block">从代码声明或序列化边界解析稳定类型编码。</div>
 </dd>
 <dt><a href="com/sca4d/iam/identity/PrincipalTypes.html" class="type-name-link" title="class in com.sca4d.iam.identity">PrincipalTypes</a> - Class in <a href="com/sca4d/iam/identity/package-summary.html">com.sca4d.iam.identity</a></dt>
 <dd>
@@ -1569,7 +1571,7 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/iam/rbac/RbacDomain.html" class="type-name-link" title="class in com.sca4d.iam.rbac">RbacDomain</a> - Class in <a href="com/sca4d/iam/rbac/package-summary.html">com.sca4d.iam.rbac</a></dt>
 <dd>
-<div class="block">使用稳定 Code 选择RBAC Repository，保留独立领域类型。</div>
+<div class="block">使用稳定 Code 选择 RBAC Repository，并保留独立领域类型。</div>
 </dd>
 <dt><a href="com/sca4d/iam/rbac/RbacDomain.html#%3Cinit%3E(java.lang.String)" class="member-name-link">RbacDomain(String)</a> - Constructor for class com.sca4d.iam.rbac.<a href="com/sca4d/iam/rbac/RbacDomain.html" title="class in com.sca4d.iam.rbac">RbacDomain</a></dt>
 <dd>
@@ -1649,7 +1651,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iam/identity/SystemIdentityRepository.html#register(java.util.Map)" class="member-name-link">register(Map&lt;TreeCode, Long&gt;)</a> - Method in class com.sca4d.iam.identity.<a href="com/sca4d/iam/identity/SystemIdentityRepository.html" title="class in com.sca4d.iam.identity">SystemIdentityRepository</a></dt>
 <dd>
-<div class="block">返回已持久化并匹配配置的完整身份表；必须在初始化事务内调用，失败时全部回滚。</div>
+<div class="block">登记并校验配置中的固定系统身份。</div>
 </dd>
 <dt><a href="com/sca4d/iam/identity/IamErrorCode.html#RELATION_NOT_FOUND" class="member-name-link">RELATION_NOT_FOUND</a> - Enum constant in enum class com.sca4d.iam.identity.<a href="com/sca4d/iam/identity/IamErrorCode.html" title="enum class in com.sca4d.iam.identity">IamErrorCode</a></dt>
 <dd>
@@ -1723,7 +1725,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iam/base/user/CurrentUserArgumentResolver.html#resolveArgument(org.springframework.core.MethodParameter,org.springframework.web.method.support.ModelAndViewContainer,org.springframework.web.context.request.NativeWebRequest,org.springframework.web.bind.support.WebDataBinderFactory)" class="member-name-link">resolveArgument(MethodParameter, ModelAndViewContainer, NativeWebRequest, WebDataBinderFactory)</a> - Method in class com.sca4d.iam.base.user.<a href="com/sca4d/iam/base/user/CurrentUserArgumentResolver.html" title="class in com.sca4d.iam.base.user">CurrentUserArgumentResolver</a></dt>
 <dd>
-<div class="block">注入当前 USER 或其 Long，并为本次调用绑定 USER 的 PlatformPrincipal。</div>
+<div class="block">注入当前 USER 或 USER 的 Long 标识，并为本次调用绑定 USER 的 PlatformPrincipal。</div>
 </dd>
 <dt><a href="com/sca4d/iam/base/PlatformIdentityService.html#resolvePlatformAccount(com.sca4d.core.api.identity.AccountIdentifierType,java.lang.String)" class="member-name-link">resolvePlatformAccount(AccountIdentifierType, String)</a> - Method in class com.sca4d.iam.base.<a href="com/sca4d/iam/base/PlatformIdentityService.html" title="class in com.sca4d.iam.base">PlatformIdentityService</a></dt>
 <dd>
@@ -1864,7 +1866,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iam/base/rbac/PlatformOperations.html#ROLES_MANAGE_VALUE" class="member-name-link">ROLES_MANAGE_VALUE</a> - Static variable in class com.sca4d.iam.base.rbac.<a href="com/sca4d/iam/base/rbac/PlatformOperations.html" title="class in com.sca4d.iam.base.rbac">PlatformOperations</a></dt>
 <dd>
-<div class="block">管理 Platform 角色及其 Operation。</div>
+<div class="block">管理 Platform 角色和 Operation。</div>
 </dd>
 <dt><a href="com/sca4d/iam/base/rbac/PlatformOperations.html#ROLES_READ" class="member-name-link">ROLES_READ</a> - Static variable in class com.sca4d.iam.base.rbac.<a href="com/sca4d/iam/base/rbac/PlatformOperations.html" title="class in com.sca4d.iam.base.rbac">PlatformOperations</a></dt>
 <dd>&nbsp;</dd>

@@ -61,7 +61,7 @@ public class TimescaleRepository {
         this.maxQueryResults = maxQueryResults;
     }
 
-    /** 按 MessageId 和样本顺序幂等写入一批 Telemetry。 */
+    /** 按 Id 和样本顺序幂等写入一批 Telemetry。 */
     public void addTelemetry(long messageId, @NotNull TelemetryBatch batch) {
         TelemetryBatch checked = Objects.requireNonNull(batch, "TelemetryBatch 不能为空");
         List<TimescaleTelemetrySample> samples = new ArrayList<>(checked.samples().size());
@@ -86,7 +86,7 @@ public class TimescaleRepository {
         });
     }
 
-    /** 按发生时间和 MessageId 幂等写入一条 Device 事件。 */
+    /** 按发生时间和 Id 幂等写入一条 Device 事件。 */
     @AffectedRows(target = "新增 Device 事件", whenZero = ZeroRowPolicy.ALLOW)
     public void addEvent(long messageId, @NotNull DeviceEventMessage event) {
         DeviceEventMessage checked = Objects.requireNonNull(event, "DeviceEventMessage 不能为空");

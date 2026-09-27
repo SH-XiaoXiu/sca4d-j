@@ -5,7 +5,9 @@ import static com.sca4d.core.api.name.NameFormat.COLON;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.core.api.codec.VersionedCodec;
 import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.message.AcknowledgementPolicy;
 import com.sca4d.iot.api.message.RetryPolicy;
@@ -30,7 +32,9 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 严格解析物模型 JSON，并把 Builder 对象编码成相同的规范内容。 */
-public final class ThingModelJsonCodec {
+public final class ThingModelJsonCodec implements VersionedCodec<ThingModel, String> {
+
+    private static final @NotNull TreeCode CODE = TreeCode.of("IOT/THING_MODEL");
 
     private static final Set<String> MODEL_FIELDS = Set.of(
             "formatVersion",
@@ -86,6 +90,24 @@ public final class ThingModelJsonCodec {
         this.policies = Objects.requireNonNull(policies, "设备策略目录不能为空");
     }
 
+    /** @return 物模型 JSON 的稳定类型编码 */
+    @Override
+    public @NotNull TreeCode code() {
+        return CODE;
+    }
+
+    /** @return 当前物模型 JSON 格式版本 */
+    @Override
+    public int version() {
+        return ThingModel.FORMAT_VERSION;
+    }
+
+    /** @return 当前 Codec 接受的物模型类型 */
+    @Override
+    public @NotNull Class<ThingModel> valueType() {
+        return ThingModel.class;
+    }
+
     /**
      * 解析严格物模型 JSON。
      *
@@ -94,6 +116,7 @@ public final class ThingModelJsonCodec {
      * @throws BusinessException JSON 语法、格式版本、字段类型或模型约束不合法时抛出
      */
     @CheckReturnValue
+    @Override
     public @NotNull ThingModel decode(@NotNull String json) {
         JsonNode root;
         try {
@@ -140,6 +163,7 @@ public final class ThingModelJsonCodec {
      * @return 规范 JSON
      */
     @CheckReturnValue
+    @Override
     public @NotNull String encode(@NotNull ThingModel model) {
         ThingModel checked = Objects.requireNonNull(model, "物模型不能为空");
         LinkedHashMap<String, Object> root = new LinkedHashMap<>();

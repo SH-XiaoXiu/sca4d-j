@@ -95,7 +95,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">HmacAuthenticationMethod</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.core.api.authentication.AuthenticationMethod&lt;<a href="HmacProof.html" title="class in com.sca4d.auth.hmac">HmacProof</a>&gt;</span></div>
-<div class="block">签发、轮换、撤销和验证 Account 的 HMAC-SHA256 Credential，并执行时间窗、防重放和失败限制。</div>
+<div class="block">签发、轮换、撤销和验证 Account 的 MAC-SHA256 Credential，并执行时间窗、防重放和失败限制。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -111,7 +111,7 @@ implements com.sca4d.core.api.authentication.AuthenticationMethod&lt;<a href="Hm
 <div class="col-first even-row-color"><code>static final com.sca4d.core.api.name.code.TreeCode</code></div>
 <div class="col-second even-row-color"><code><a href="#CODE" class="member-name-link">CODE</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">HMAC 方法稳定编码。</div>
+<div class="block">MAC 方法稳定编码。</div>
 </div>
 </div>
 </section>
@@ -132,7 +132,7 @@ implements com.sca4d.core.api.authentication.AuthenticationMethod&lt;<a href="Hm
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
  @NotNull <a href="HmacProperties.html" title="class in com.sca4d.auth.hmac">HmacProperties</a>&nbsp;properties)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建 Account 级 HMAC 认证方法。</div>
+<div class="block">创建 Account 级 MAC 认证方法。</div>
 </div>
 </div>
 </section>
@@ -151,7 +151,7 @@ implements com.sca4d.core.api.authentication.AuthenticationMethod&lt;<a href="Hm
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#active(long)" class="member-name-link">active</a><wbr>(long&nbsp;accountId)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">判断 Account 是否存在仍有效的 HMAC Credential。</div>
+<div class="block">判断 Account 是否存在仍有效的 MAC Credential。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.authentication.VerifiedAuthentication</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#authenticate(com.sca4d.core.api.identity.Account,com.sca4d.auth.hmac.HmacProof)" class="member-name-link">authenticate</a><wbr>(@Nullable com.sca4d.core.api.identity.Account&nbsp;account,
@@ -175,7 +175,7 @@ implements com.sca4d.core.api.authentication.AuthenticationMethod&lt;<a href="Hm
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="IssuedHmacKey.html" title="class in com.sca4d.auth.hmac">IssuedHmacKey</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#issue(com.sca4d.core.api.identity.Account)" class="member-name-link">issue</a><wbr>(@NotNull com.sca4d.core.api.identity.Account&nbsp;account)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">为 Account 创建、轮换或重新签发 HMAC Key。</div>
+<div class="block">为 Account 创建、轮换或重新签发 MAC Key。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a><wbr>&lt;<a href="HmacProof.html" title="class in com.sca4d.auth.hmac">HmacProof</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#proofType()" class="member-name-link">proofType</a>()</code></div>
@@ -184,7 +184,7 @@ implements com.sca4d.core.api.authentication.AuthenticationMethod&lt;<a href="Hm
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#revoke(long,java.time.Instant)" class="member-name-link">revoke</a><wbr>(long&nbsp;accountId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;revokedAt)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">撤销 Account 当前 HMAC Credential。</div>
+<div class="block">撤销 Account 当前 MAC Credential。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#verifyCurrent(com.sca4d.core.api.identity.Account,com.sca4d.core.api.authentication.VerifiedAuthentication)" class="member-name-link">verifyCurrent</a><wbr>(@NotNull com.sca4d.core.api.identity.Account&nbsp;account,
@@ -211,7 +211,7 @@ implements com.sca4d.core.api.authentication.AuthenticationMethod&lt;<a href="Hm
 <section class="detail" id="CODE">
 <h3>CODE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">CODE</span></div>
-<div class="block">HMAC 方法稳定编码。</div>
+<div class="block">MAC 方法稳定编码。</div>
 </section>
 </li>
 </ul>
@@ -239,7 +239,7 @@ implements com.sca4d.core.api.authentication.AuthenticationMethod&lt;<a href="Hm
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
  @NotNull
  @NotNull <a href="HmacProperties.html" title="class in com.sca4d.auth.hmac">HmacProperties</a>&nbsp;properties)</span></div>
-<div class="block">创建 Account 级 HMAC 认证方法。</div>
+<div class="block">创建 Account 级 MAC 认证方法。</div>
 </section>
 </li>
 </ul>
@@ -339,7 +339,7 @@ implements com.sca4d.core.api.authentication.AuthenticationMethod&lt;<a href="Hm
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="IssuedHmacKey.html" title="class in com.sca4d.auth.hmac">IssuedHmacKey</a></span>&nbsp;<span class="element-name">issue</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.identity.Account&nbsp;account)</span></div>
-<div class="block">为 Account 创建、轮换或重新签发 HMAC Key。</div>
+<div class="block">为 Account 创建、轮换或重新签发 MAC Key。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>account</code> - 已经由管理流程确认存在的 Account；Account 停用时仍允许预置或轮换 Credential</dd>
@@ -354,7 +354,7 @@ implements com.sca4d.core.api.authentication.AuthenticationMethod&lt;<a href="Hm
 <div class="member-signature"><span class="annotations">@Transactional(readOnly=true)
 @CheckReturnValue
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">active</span><wbr><span class="parameters">(long&nbsp;accountId)</span></div>
-<div class="block">判断 Account 是否存在仍有效的 HMAC Credential。</div>
+<div class="block">判断 Account 是否存在仍有效的 MAC Credential。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>accountId</code> - Account 标识</dd>
@@ -370,7 +370,7 @@ implements com.sca4d.core.api.authentication.AuthenticationMethod&lt;<a href="Hm
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">revoke</span><wbr><span class="parameters">(long&nbsp;accountId,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;revokedAt)</span></div>
-<div class="block">撤销 Account 当前 HMAC Credential。</div>
+<div class="block">撤销 Account 当前 MAC Credential。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>accountId</code> - Account 标识</dd>

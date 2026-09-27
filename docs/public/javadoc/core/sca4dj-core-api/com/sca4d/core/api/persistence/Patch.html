@@ -159,17 +159,17 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isClear()" class="member-name-link">isClear</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">判断该意图是否把数据库字段写为 <code>NULL</code>。</div>
+<div class="block">判断当前意图是否把数据库字段写为 <code>NULL</code>。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isIgnore()" class="member-name-link">isIgnore</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">判断该意图是否保留数据库原值。</div>
+<div class="block">判断当前意图是否保留数据库原值。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isSet()" class="member-name-link">isSet</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">判断该意图是否写入一个非空值。</div>
+<div class="block">判断当前意图是否写入一个非空值。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;S,<wbr>
 T&gt;&nbsp;@NotNull <a href="Patch.html" title="class in com.sca4d.core.api.persistence">Patch</a><wbr>&lt;T&gt;</code></div>
@@ -240,7 +240,7 @@ T&gt;&nbsp;@NotNull <a href="Patch.html" title="class in com.sca4d.core.api.pers
 <dt>Parameters:</dt>
 <dd><code>value</code> - 要写入的值；数值零、<code>false</code>、空字符串和空集合不会转成忽略或清除</dd>
 <dt>Returns:</dt>
-<dd>包含该值的写入意图</dd>
+<dd>包含指定值的写入意图</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - value 为 <code>null</code> 时抛出；写入数据库 <code>NULL</code> 应使用 <a href="#clear()"><code>clear()</code></a></dd>
 </dl>
@@ -274,7 +274,7 @@ T&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="Patch.html" title=
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;? super S,<wbr>? extends <a href="Patch.html" title="class in com.sca4d.core.api.persistence">Patch</a>&lt;T&gt;&gt;&nbsp;resolver)</span></div>
 <div class="block">使用回调把业务处理结果解析成字段写入意图。
 
- <p>source 可以为 <code>null</code>，回调必须明确决定此时返回忽略、写入还是清除。该方法不校验 HTTP
+ <p>source 可以为 <code>null</code>，回调必须明确决定此时返回忽略、写入还是清除。当前方法不校验 HTTP
  Request、实体字段或业务规则。</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -312,7 +312,7 @@ T&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="Patch.html" title=
 <h3>isIgnore</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isIgnore</span>()</div>
-<div class="block">判断该意图是否保留数据库原值。</div>
+<div class="block">判断当前意图是否保留数据库原值。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>保留数据库原值时为 <code>true</code></dd>
@@ -324,7 +324,7 @@ T&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="Patch.html" title=
 <h3>isSet</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isSet</span>()</div>
-<div class="block">判断该意图是否写入一个非空值。</div>
+<div class="block">判断当前意图是否写入一个非空值。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>写入非空值时为 <code>true</code></dd>
@@ -336,7 +336,7 @@ T&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="Patch.html" title=
 <h3>isClear</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isClear</span>()</div>
-<div class="block">判断该意图是否把数据库字段写为 <code>NULL</code>。</div>
+<div class="block">判断当前意图是否把数据库字段写为 <code>NULL</code>。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>写入数据库 <code>NULL</code> 时为 <code>true</code></dd>

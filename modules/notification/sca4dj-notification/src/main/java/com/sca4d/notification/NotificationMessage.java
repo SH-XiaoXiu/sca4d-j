@@ -16,6 +16,7 @@ public final class NotificationMessage extends Message {
 
     private final @NotNull Notification notification;
 
+    /** @param notification 已冻结接收人、变量、内容和渠道要求的通知 */
     public NotificationMessage(@NotNull Notification notification) {
         super(Objects.requireNonNull(notification, "通知不能为空").contents());
         this.notification = notification;
@@ -31,6 +32,7 @@ public final class NotificationMessage extends Message {
         return PROTOCOL_VERSION;
     }
 
+    /** @return 已冻结的通知内容 */
     public @NotNull Notification notification() {
         return notification;
     }

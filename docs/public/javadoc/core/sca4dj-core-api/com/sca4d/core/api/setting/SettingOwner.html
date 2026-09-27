@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">SettingOwner</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">保存设置归属者使用的稳定类型和该类型内唯一标识。</div>
+<div class="block">保存设置归属者使用的稳定类型和类型内唯一标识。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -174,7 +174,7 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>type</code> - 全局稳定的 owner 类型，不使用 Java 类名</dd>
-<dd><code>id</code> - 该类型内唯一的 owner 标识</dd>
+<dd><code>id</code> - 当前类型内唯一的 owner 标识</dd>
 </dl>
 </section>
 </li>
@@ -194,7 +194,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="SettingOwner.html" title="class in com.sca4d.core.api.setting">SettingOwner</a></span>&nbsp;<span class="element-name">system</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>固定属于 `Subject.SYSTEM` 的设置 owner</dd>
+<dd>固定归属 `Subject.SYSTEM` 的设置所有者</dd>
 </dl>
 </section>
 </li>

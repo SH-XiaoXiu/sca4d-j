@@ -56,7 +56,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/inbox/InboxMessage.html#accountId()" class="member-name-link">accountId()</a> - Method in class com.sca4d.notification.inbox.<a href="com/sca4d/notification/inbox/InboxMessage.html" title="class in com.sca4d.notification.inbox">InboxMessage</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/notification/inbox/InboxRepository.html#add(long,com.sca4d.core.api.messaging.MessageId,long,com.sca4d.core.api.notification.Notification,com.sca4d.notification.inbox.template.RenderedInboxMessage)" class="member-name-link">add(long, MessageId, long, Notification, RenderedInboxMessage)</a> - Method in class com.sca4d.notification.inbox.<a href="com/sca4d/notification/inbox/InboxRepository.html" title="class in com.sca4d.notification.inbox">InboxRepository</a></dt>
+<dt><a href="com/sca4d/notification/inbox/InboxRepository.html#add(long,com.sca4d.core.api.id.Id,long,com.sca4d.core.api.notification.Notification,com.sca4d.notification.inbox.template.RenderedInboxMessage)" class="member-name-link">add(long, Id, long, Notification, RenderedInboxMessage)</a> - Method in class com.sca4d.notification.inbox.<a href="com/sca4d/notification/inbox/InboxRepository.html" title="class in com.sca4d.notification.inbox">InboxRepository</a></dt>
 <dd>
 <div class="block">按原始 messageId 和 Account 幂等保存渲染快照。</div>
 </dd>
@@ -80,9 +80,7 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/notification/inbox/template/InboxTemplate.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.notification.inbox.template.<a href="com/sca4d/notification/inbox/template/InboxTemplate.html" title="class in com.sca4d.notification.inbox.template">InboxTemplate</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/inbox/template/mapper/InboxTemplateState.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.notification.inbox.template.mapper.<a href="com/sca4d/notification/inbox/template/mapper/InboxTemplateState.html" title="class in com.sca4d.notification.inbox.template.mapper">InboxTemplateState</a></dt>
-<dd>
-<div class="block">返回 code 方法提供的结果。</div>
-</dd>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/inbox/package-summary.html">com.sca4d.notification.inbox</a> - package com.sca4d.notification.inbox</dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/inbox/config/package-summary.html">com.sca4d.notification.inbox.config</a> - package com.sca4d.notification.inbox.config</dt>
@@ -110,7 +108,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">按当前请求版本条件删除停用模板。</div>
 </dd>
-<dt><a href="com/sca4d/notification/inbox/InboxNotificationDelivery.html#deliver(com.sca4d.core.api.messaging.MessageId,com.sca4d.core.api.notification.Notification)" class="member-name-link">deliver(MessageId, Notification)</a> - Method in class com.sca4d.notification.inbox.<a href="com/sca4d/notification/inbox/InboxNotificationDelivery.html" title="class in com.sca4d.notification.inbox">InboxNotificationDelivery</a></dt>
+<dt><a href="com/sca4d/notification/inbox/InboxNotificationDelivery.html#deliver(com.sca4d.core.api.id.Id,com.sca4d.core.api.notification.Notification)" class="member-name-link">deliver(Id, Notification)</a> - Method in class com.sca4d.notification.inbox.<a href="com/sca4d/notification/inbox/InboxNotificationDelivery.html" title="class in com.sca4d.notification.inbox">InboxNotificationDelivery</a></dt>
 <dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:E">E</h2>
@@ -152,7 +150,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">保存 Account 收件箱中一项不会随模板修改而变化的通知快照。</div>
 </dd>
-<dt><a href="com/sca4d/notification/inbox/InboxMessage.html#%3Cinit%3E(long,com.sca4d.core.api.messaging.MessageId,long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.time.Instant,java.time.Instant,com.sca4d.core.api.concurrent.Version)" class="member-name-link">InboxMessage(long, MessageId, long, TreeCode, String, String, String, String, Instant, Instant, Version)</a> - Constructor for class com.sca4d.notification.inbox.<a href="com/sca4d/notification/inbox/InboxMessage.html" title="class in com.sca4d.notification.inbox">InboxMessage</a></dt>
+<dt><a href="com/sca4d/notification/inbox/InboxMessage.html#%3Cinit%3E(long,com.sca4d.core.api.id.Id,long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.time.Instant,java.time.Instant,com.sca4d.core.api.concurrent.Version)" class="member-name-link">InboxMessage(long, Id, long, TreeCode, String, String, String, String, Instant, Instant, Version)</a> - Constructor for class com.sca4d.notification.inbox.<a href="com/sca4d/notification/inbox/InboxMessage.html" title="class in com.sca4d.notification.inbox">InboxMessage</a></dt>
 <dd>
 <div class="block">创建从数据库读取的站内信快照。</div>
 </dd>
@@ -225,10 +223,8 @@ loadScripts(document, 'script');</script>
 <div class="block">保存 Inbox Template Mapper 从数据库读取的 JSON 文本状态。</div>
 </dd>
 <dt><a href="com/sca4d/notification/inbox/template/mapper/InboxTemplateState.html#%3Cinit%3E(long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,boolean,com.sca4d.core.api.concurrent.Version)" class="member-name-link">InboxTemplateState(long, TreeCode, String, boolean, Version)</a> - Constructor for class com.sca4d.notification.inbox.template.mapper.<a href="com/sca4d/notification/inbox/template/mapper/InboxTemplateState.html" title="class in com.sca4d.notification.inbox.template.mapper">InboxTemplateState</a></dt>
-<dd>
-<div class="block">创建模板数据库状态。</div>
-</dd>
-<dt><a href="com/sca4d/notification/inbox/mapper/InboxMessageMapper.html#insert(long,com.sca4d.core.api.messaging.MessageId,long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">insert(long, MessageId, long, TreeCode, String, String, String, String)</a> - Method in interface com.sca4d.notification.inbox.mapper.<a href="com/sca4d/notification/inbox/mapper/InboxMessageMapper.html" title="interface in com.sca4d.notification.inbox.mapper">InboxMessageMapper</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/notification/inbox/mapper/InboxMessageMapper.html#insert(long,com.sca4d.core.api.id.Id,long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">insert(long, Id, long, TreeCode, String, String, String, String)</a> - Method in interface com.sca4d.notification.inbox.mapper.<a href="com/sca4d/notification/inbox/mapper/InboxMessageMapper.html" title="interface in com.sca4d.notification.inbox.mapper">InboxMessageMapper</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/inbox/template/mapper/InboxTemplateMapper.html#insert(long,com.sca4d.core.api.name.code.TreeCode,java.lang.String)" class="member-name-link">insert(long, TreeCode, String)</a> - Method in interface com.sca4d.notification.inbox.template.mapper.<a href="com/sca4d/notification/inbox/template/mapper/InboxTemplateMapper.html" title="interface in com.sca4d.notification.inbox.template.mapper">InboxTemplateMapper</a></dt>
 <dd>&nbsp;</dd>
@@ -345,9 +341,7 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/notification/inbox/template/InboxTemplate.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.notification.inbox.template.<a href="com/sca4d/notification/inbox/template/InboxTemplate.html" title="class in com.sca4d.notification.inbox.template">InboxTemplate</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/inbox/template/mapper/InboxTemplateState.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.notification.inbox.template.mapper.<a href="com/sca4d/notification/inbox/template/mapper/InboxTemplateState.html" title="class in com.sca4d.notification.inbox.template.mapper">InboxTemplateState</a></dt>
-<dd>
-<div class="block">返回 version 方法提供的结果。</div>
-</dd>
+<dd>&nbsp;</dd>
 </dl>
 <a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a></main>
 </div>

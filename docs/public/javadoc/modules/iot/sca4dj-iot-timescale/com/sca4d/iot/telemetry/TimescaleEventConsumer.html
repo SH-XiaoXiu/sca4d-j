@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">TimescaleEventConsumer</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.core.api.messaging.EventHandler&lt;com.sca4d.iot.api.history.DeviceEventMessage&gt;</span></div>
-<div class="block">消费物模型和 IoT 状态机事件，并按发生时间与 MessageId 幂等写入 TimescaleDB。</div>
+<div class="block">消费物模型和 IoT 状态机事件，并按发生时间与 Id 幂等写入 TimescaleDB。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -138,7 +138,7 @@ implements com.sca4d.core.api.messaging.EventHandler&lt;com.sca4d.iot.api.histor
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#handleEvent(com.sca4d.core.api.messaging.IncomingMessage)" class="member-name-link">handleEvent</a><wbr>(@NotNull com.sca4d.core.api.messaging.IncomingMessage&lt;com.sca4d.core.api.event.Event&lt;com.sca4d.iot.api.history.DeviceEventMessage&gt;&gt;&nbsp;delivery)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">同一发生时间和 MessageId 的重复投递不会产生重复事件。</div>
+<div class="block">同一发生时间和 Id 的重复投递不会产生重复事件。</div>
 </div>
 </div>
 </div>
@@ -209,7 +209,7 @@ implements com.sca4d.core.api.messaging.EventHandler&lt;com.sca4d.iot.api.histor
 @SystemExecution("IOT")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">handleEvent</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.messaging.IncomingMessage&lt;com.sca4d.core.api.event.Event&lt;com.sca4d.iot.api.history.DeviceEventMessage&gt;&gt;&nbsp;delivery)</span></div>
-<div class="block">同一发生时间和 MessageId 的重复投递不会产生重复事件。</div>
+<div class="block">同一发生时间和 Id 的重复投递不会产生重复事件。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>handleEvent</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.messaging.EventHandler&lt;com.sca4d.iot.api.history.DeviceEventMessage&gt;</code></dd>

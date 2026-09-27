@@ -58,11 +58,11 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/timescale/persistence/TimescaleRepository.html#addEvent(long,com.sca4d.iot.api.history.DeviceEventMessage)" class="member-name-link">addEvent(long, DeviceEventMessage)</a> - Method in class com.sca4d.iot.timescale.persistence.<a href="com/sca4d/iot/timescale/persistence/TimescaleRepository.html" title="class in com.sca4d.iot.timescale.persistence">TimescaleRepository</a></dt>
 <dd>
-<div class="block">按发生时间和 MessageId 幂等写入一条 Device 事件。</div>
+<div class="block">按发生时间和 Id 幂等写入一条 Device 事件。</div>
 </dd>
 <dt><a href="com/sca4d/iot/timescale/persistence/TimescaleRepository.html#addTelemetry(long,com.sca4d.iot.api.telemetry.TelemetryBatch)" class="member-name-link">addTelemetry(long, TelemetryBatch)</a> - Method in class com.sca4d.iot.timescale.persistence.<a href="com/sca4d/iot/timescale/persistence/TimescaleRepository.html" title="class in com.sca4d.iot.timescale.persistence">TimescaleRepository</a></dt>
 <dd>
-<div class="block">按 MessageId 和样本顺序幂等写入一批 Telemetry。</div>
+<div class="block">按 Id 和样本顺序幂等写入一批 Telemetry。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:B">B</h2>
@@ -185,18 +185,18 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/telemetry/TimescaleEventConsumer.html#handleEvent(com.sca4d.core.api.messaging.IncomingMessage)" class="member-name-link">handleEvent(IncomingMessage&lt;Event&lt;DeviceEventMessage&gt;&gt;)</a> - Method in class com.sca4d.iot.telemetry.<a href="com/sca4d/iot/telemetry/TimescaleEventConsumer.html" title="class in com.sca4d.iot.telemetry">TimescaleEventConsumer</a></dt>
 <dd>
-<div class="block">同一发生时间和 MessageId 的重复投递不会产生重复事件。</div>
+<div class="block">同一发生时间和 Id 的重复投递不会产生重复事件。</div>
 </dd>
 <dt><a href="com/sca4d/iot/telemetry/TimescaleTelemetryConsumer.html#handleEvent(com.sca4d.core.api.messaging.IncomingMessage)" class="member-name-link">handleEvent(IncomingMessage&lt;Event&lt;TelemetryBatch&gt;&gt;)</a> - Method in class com.sca4d.iot.telemetry.<a href="com/sca4d/iot/telemetry/TimescaleTelemetryConsumer.html" title="class in com.sca4d.iot.telemetry">TimescaleTelemetryConsumer</a></dt>
 <dd>
-<div class="block">同一 MessageId 的 RabbitMQ 重复投递不会产生重复样本。</div>
+<div class="block">同一 Id 的 RabbitMQ 重复投递不会产生重复样本。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:I">I</h2>
 <dl class="index">
 <dt><a href="com/sca4d/iot/timescale/persistence/TimescaleMapper.html#insertEvent(long,com.sca4d.iot.api.history.DeviceEventMessage,java.lang.String)" class="member-name-link">insertEvent(long, DeviceEventMessage, String)</a> - Method in interface com.sca4d.iot.timescale.persistence.<a href="com/sca4d/iot/timescale/persistence/TimescaleMapper.html" title="interface in com.sca4d.iot.timescale.persistence">TimescaleMapper</a></dt>
 <dd>
-<div class="block">按发生时间和 MessageId 写入事件；同一发生时间内也约束来源事实键唯一。</div>
+<div class="block">按发生时间和 Id 写入事件；同一发生时间内也约束来源事实键唯一。</div>
 </dd>
 <dt><a href="com/sca4d/iot/timescale/persistence/TimescaleMapper.html#insertTelemetrySamples(java.util.List)" class="member-name-link">insertTelemetrySamples(List&lt;TimescaleTelemetrySample&gt;)</a> - Method in interface com.sca4d.iot.timescale.persistence.<a href="com/sca4d/iot/timescale/persistence/TimescaleMapper.html" title="interface in com.sca4d.iot.timescale.persistence">TimescaleMapper</a></dt>
 <dd>
@@ -290,7 +290,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/telemetry/TimescaleEventConsumer.html" class="type-name-link" title="class in com.sca4d.iot.telemetry">TimescaleEventConsumer</a> - Class in <a href="com/sca4d/iot/telemetry/package-summary.html">com.sca4d.iot.telemetry</a></dt>
 <dd>
-<div class="block">消费物模型和 IoT 状态机事件，并按发生时间与 MessageId 幂等写入 TimescaleDB。</div>
+<div class="block">消费物模型和 IoT 状态机事件，并按发生时间与 Id 幂等写入 TimescaleDB。</div>
 </dd>
 <dt><a href="com/sca4d/iot/telemetry/TimescaleEventConsumer.html#%3Cinit%3E(com.sca4d.iot.timescale.persistence.TimescaleRepository)" class="member-name-link">TimescaleEventConsumer(TimescaleRepository)</a> - Constructor for class com.sca4d.iot.telemetry.<a href="com/sca4d/iot/telemetry/TimescaleEventConsumer.html" title="class in com.sca4d.iot.telemetry">TimescaleEventConsumer</a></dt>
 <dd>&nbsp;</dd>
@@ -322,7 +322,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/telemetry/TimescaleTelemetryConsumer.html" class="type-name-link" title="class in com.sca4d.iot.telemetry">TimescaleTelemetryConsumer</a> - Class in <a href="com/sca4d/iot/telemetry/package-summary.html">com.sca4d.iot.telemetry</a></dt>
 <dd>
-<div class="block">消费 reported Telemetry 消息并按 MessageId 幂等写入 TimescaleDB。</div>
+<div class="block">消费 reported Telemetry 消息并按 Id 幂等写入 TimescaleDB。</div>
 </dd>
 <dt><a href="com/sca4d/iot/telemetry/TimescaleTelemetryConsumer.html#%3Cinit%3E(com.sca4d.iot.timescale.persistence.TimescaleRepository)" class="member-name-link">TimescaleTelemetryConsumer(TimescaleRepository)</a> - Constructor for class com.sca4d.iot.telemetry.<a href="com/sca4d/iot/telemetry/TimescaleTelemetryConsumer.html" title="class in com.sca4d.iot.telemetry">TimescaleTelemetryConsumer</a></dt>
 <dd>&nbsp;</dd>

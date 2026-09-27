@@ -2,7 +2,7 @@ package com.sca4d.notification.inbox;
 
 import com.sca4d.core.api.delivery.DeliveryOutcome;
 import com.sca4d.core.api.id.IdGenerator;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.Notification;
 import com.sca4d.core.api.notification.NotificationDelivery;
@@ -59,7 +59,7 @@ public class InboxNotificationDelivery implements NotificationDelivery {
 
     @Override
     @Transactional
-    public @NotNull DeliveryOutcome deliver(@NotNull MessageId messageId, @NotNull Notification notification) {
+    public @NotNull DeliveryOutcome deliver(@NotNull Id messageId, @NotNull Notification notification) {
         Notification checked = Objects.requireNonNull(notification, "通知不能为空");
         long accountId = Long.parseLong(checked.recipient().id());
         var template = templates.findEnabled(checked.code())

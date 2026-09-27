@@ -103,9 +103,9 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.messaging.MessageId,M,com.sca4d.core.api.name.Name,java.time.Instant,boolean,int)" class="member-name-link">IncomingMessage</a><wbr>(@NotNull <a href="MessageId.html" title="class in com.sca4d.core.api.messaging">MessageId</a>&nbsp;messageId,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.id.Id,M,com.sca4d.core.api.name.Name,java.time.Instant,boolean,int)" class="member-name-link">IncomingMessage</a><wbr>(@NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a>&nbsp;messageId,
  <a href="IncomingMessage.html" title="type parameter in IncomingMessage">M</a>&nbsp;message,
- <a href="../name/Name.html" title="class in com.sca4d.core.api.name">Name</a>&nbsp;sourceApplication,
+ @NotNull <a href="../name/Name.html" title="class in com.sca4d.core.api.name">Name</a>&nbsp;sourceApplication,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;publishedAt,
  boolean&nbsp;redelivered,
  int&nbsp;attempt)</code></div>
@@ -132,7 +132,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="IncomingMessage.html" title="type parameter in IncomingMessage">M</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#message()" class="member-name-link">message</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="MessageId.html" title="class in com.sca4d.core.api.messaging">MessageId</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#messageId()" class="member-name-link">messageId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
@@ -141,7 +141,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#redelivered()" class="member-name-link">redelivered</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../name/Name.html" title="class in com.sca4d.core.api.name">Name</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../name/Name.html" title="class in com.sca4d.core.api.name">Name</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sourceApplication()" class="member-name-link">sourceApplication</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
@@ -162,14 +162,14 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.messaging.MessageId,M,com.sca4d.core.api.name.Name,java.time.Instant,boolean,int)">
-<h3 id="&lt;init&gt;(com.sca4d.core.api.messaging.MessageId,com.sca4d.core.api.message.Message,com.sca4d.core.api.name.Name,java.time.Instant,boolean,int)">IncomingMessage</h3>
+<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.id.Id,M,com.sca4d.core.api.name.Name,java.time.Instant,boolean,int)">
+<h3 id="&lt;init&gt;(com.sca4d.core.api.id.Id,com.sca4d.core.api.message.Message,com.sca4d.core.api.name.Name,java.time.Instant,boolean,int)">IncomingMessage</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">IncomingMessage</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="MessageId.html" title="class in com.sca4d.core.api.messaging">MessageId</a>&nbsp;messageId,
+ @NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a>&nbsp;messageId,
  @NotNull
  <a href="IncomingMessage.html" title="type parameter in IncomingMessage">M</a>&nbsp;message,
  @NotNull
- <a href="../name/Name.html" title="class in com.sca4d.core.api.name">Name</a>&nbsp;sourceApplication,
+ @NotNull <a href="../name/Name.html" title="class in com.sca4d.core.api.name">Name</a>&nbsp;sourceApplication,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;publishedAt,
  boolean&nbsp;redelivered,
@@ -189,7 +189,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="messageId()">
 <h3>messageId</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="MessageId.html" title="class in com.sca4d.core.api.messaging">MessageId</a></span>&nbsp;<span class="element-name">messageId</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a></span>&nbsp;<span class="element-name">messageId</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>发布端分配的消息标识</dd>
@@ -211,7 +211,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="sourceApplication()">
 <h3>sourceApplication</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../name/Name.html" title="class in com.sca4d.core.api.name">Name</a></span>&nbsp;<span class="element-name">sourceApplication</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../name/Name.html" title="class in com.sca4d.core.api.name">Name</a></span>&nbsp;<span class="element-name">sourceApplication</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>发布消息的应用标识</dd>

@@ -17,7 +17,7 @@ import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountDirectory;
 import com.sca4d.core.api.identity.RealmKey;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.notification.Notifications;
 import com.sca4d.core.api.security.SecretHasher;
 import com.sca4d.core.api.setting.Settings;
@@ -45,7 +45,7 @@ class SmsCodeChallengeServiceTest {
                 .thenReturn(Optional.of(account));
         Notifications notifications = mock(Notifications.class);
         when(notifications.isAvailable(any(), any())).thenReturn(true);
-        when(notifications.enqueue(any(), any())).thenReturn(new MessageId(1));
+        when(notifications.enqueue(any(), any())).thenReturn(Id.of(1));
         RedisSmsCodeChallengeStore store = mock(RedisSmsCodeChallengeStore.class);
         when(store.reserveCooldown(anyString(), any())).thenReturn(true);
         SecretHasher hasher = mock(SecretHasher.class);

@@ -11,7 +11,7 @@ import com.sca4d.core.api.connection.ConnectionId;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.event.EventType;
 import com.sca4d.core.api.messaging.IncomingMessage;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.resource.ResourceReference;
 import com.sca4d.core.api.webrealtime.WebRealtimeTarget;
 import org.junit.jupiter.api.DisplayName;
@@ -32,11 +32,11 @@ class MessageContractTest {
         @SuppressWarnings("unchecked")
         EventType<Map<String, String>> type = new EventType<>(
                 "ORDER/CREATED",
-                2,
+                1,
                 (Class<Map<String, String>>) (Class<?>) Map.class);
         Event<Map<String, String>> event = new Event<>(type, "order:42", NOW, payload);
         IncomingMessage<Event<Map<String, String>>> incoming = new IncomingMessage<>(
-                new MessageId(42),
+                Id.of(42),
                 event,
                 new com.sca4d.core.api.name.Name("EXAMPLE_APP"),
                 NOW.plusSeconds(1),
@@ -44,12 +44,12 @@ class MessageContractTest {
                 2);
 
         assertEquals(com.sca4d.core.api.name.code.TreeCode.of("ORDER/CREATED"), event.type().code());
-        assertEquals(2, event.type().protocolVersion());
+        assertEquals(1, event.type().protocolVersion());
         assertEquals(Map.class, event.type().payloadType());
         assertEquals("order:42", event.businessKey());
         assertEquals(NOW, event.occurredAt());
         assertSame(payload, event.payload());
-        assertEquals(new MessageId(42), incoming.messageId());
+        assertEquals(Id.of(42), incoming.messageId());
         assertSame(event, incoming.message());
         assertEquals(new com.sca4d.core.api.name.Name("EXAMPLE_APP"), incoming.sourceApplication());
         assertEquals(NOW.plusSeconds(1), incoming.publishedAt());

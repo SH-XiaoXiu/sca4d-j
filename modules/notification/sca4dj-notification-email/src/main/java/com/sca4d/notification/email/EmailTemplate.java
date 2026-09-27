@@ -33,6 +33,13 @@ public final class EmailTemplate {
 
     private final @NotNull Version version;
 
+    /**
+     * @param templateId 模板数据库标识，必须为正数
+     * @param code 通知编码
+     * @param locales 各 Locale 的模板正文，不能为空
+     * @param enabled 是否允许投递
+     * @param version 模板版本
+     */
     public EmailTemplate(
             long templateId,
             @NotNull TreeCode code,
@@ -52,24 +59,22 @@ public final class EmailTemplate {
         this.version = Objects.requireNonNull(version, "Email 模板版本不能为空");
     }
 
+    /** @return 模板数据库标识 */
     public long templateId() {
         return templateId;
     }
 
-    /**
-     * 返回 code 方法提供的结果。
-     */
+    /** @return 邮件模板编码 */
     public @NotNull TreeCode code() {
         return code;
     }
 
+    /** @return 各 Locale 的模板正文 */
     public @NotNull Map<@NotNull String, @NotNull EmailTemplateSource> locales() {
         return locales;
     }
 
-    /**
-     * 返回 source 方法提供的结果。
-     */
+    /** @return 按语言标签选择的模板正文来源 */
     public @NotNull EmailTemplateSource source(@NotNull Locale requested) {
         Locale checked = Objects.requireNonNull(requested, "Email 模板 Locale 不能为空");
         EmailTemplateSource exact = locales.get(checked.toLanguageTag());
@@ -84,13 +89,12 @@ public final class EmailTemplate {
         return locales.values().iterator().next();
     }
 
+    /** @return 是否允许投递 */
     public boolean enabled() {
         return enabled;
     }
 
-    /**
-     * 返回 version 方法提供的结果。
-     */
+    /** @return 模板版本 */
     public @NotNull Version version() {
         return version;
     }

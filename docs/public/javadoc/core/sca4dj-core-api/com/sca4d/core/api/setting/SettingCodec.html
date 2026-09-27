@@ -202,7 +202,7 @@ loadScripts(document, 'script');</script>
  <a href="SettingCodec.html" title="type parameter in SettingCodec">T</a>&nbsp;value)</span></div>
 <div class="block">把类型化值转换为 HTTP 使用的 JSON 节点。
 
- <p>标量 Codec 默认返回包含持久化文本的 JSON 字符串；文档 Codec 可以覆盖该方法返回对象或数组。</div>
+ <p>标量 Codec 默认返回包含持久化文本的 JSON 字符串；文档 Codec 可以覆盖当前方法返回对象或数组。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - 设置值</dd>
@@ -219,7 +219,7 @@ loadScripts(document, 'script');</script>
  @NotNull com.fasterxml.jackson.databind.JsonNode&nbsp;value)</span></div>
 <div class="block">把 HTTP JSON 节点转换为类型化值。
 
- <p>标量 Codec 默认只接受 JSON 字符串；文档 Codec 可以覆盖该方法读取对象或数组。</div>
+ <p>标量 Codec 默认只接受 JSON 字符串；文档 Codec 可以覆盖当前方法读取对象或数组。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - 请求中的 JSON 值</dd>

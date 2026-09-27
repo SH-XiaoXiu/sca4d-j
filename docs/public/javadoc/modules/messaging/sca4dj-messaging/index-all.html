@@ -52,7 +52,7 @@ loadScripts(document, 'script');</script>
 <a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
-<dt><a href="com/sca4d/messaging/outbox/MessageOutboxRepository.html#add(com.sca4d.core.api.messaging.MessageId,com.sca4d.core.api.name.code.TreeCode,byte%5B%5D,java.time.Instant)" class="member-name-link">add(MessageId, TreeCode, byte[], Instant)</a> - Method in class com.sca4d.messaging.outbox.<a href="com/sca4d/messaging/outbox/MessageOutboxRepository.html" title="class in com.sca4d.messaging.outbox">MessageOutboxRepository</a></dt>
+<dt><a href="com/sca4d/messaging/outbox/MessageOutboxRepository.html#add(com.sca4d.core.api.id.Id,com.sca4d.core.api.name.code.TreeCode,byte%5B%5D,java.time.Instant)" class="member-name-link">add(Id, TreeCode, byte[], Instant)</a> - Method in class com.sca4d.messaging.outbox.<a href="com/sca4d/messaging/outbox/MessageOutboxRepository.html" title="class in com.sca4d.messaging.outbox">MessageOutboxRepository</a></dt>
 <dd>
 <div class="block">在调用方事务内保存一条已经序列化的待发布消息。</div>
 </dd>
@@ -85,7 +85,9 @@ loadScripts(document, 'script');</script>
 <h2 class="title" id="I:D">D</h2>
 <dl class="index">
 <dt><a href="com/sca4d/messaging/rabbit/RabbitMessageTopology.html#declarables(java.util.List,java.util.List)" class="member-name-link">declarables(List&lt;? extends EventHandler&lt;?&gt;&gt;, List&lt;? extends MessageHandler&lt;?&gt;&gt;)</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitMessageTopology.html" title="class in com.sca4d.messaging.rabbit">RabbitMessageTopology</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">根据全部 Handler 声明 exchange、队列、重试队列和死信队列。</div>
+</dd>
 <dt><a href="com/sca4d/messaging/outbox/mapper/OutboxMapper.html#deleteSentBefore(java.time.Instant,int)" class="member-name-link">deleteSentBefore(Instant, int)</a> - Method in interface com.sca4d.messaging.outbox.mapper.<a href="com/sca4d/messaging/outbox/mapper/OutboxMapper.html" title="interface in com.sca4d.messaging.outbox.mapper">OutboxMapper</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/messaging/outbox/OutboxStatus.html#description()" class="member-name-link">description()</a> - Method in enum class com.sca4d.messaging.outbox.<a href="com/sca4d/messaging/outbox/OutboxStatus.html" title="enum class in com.sca4d.messaging.outbox">OutboxStatus</a></dt>
@@ -273,7 +275,9 @@ loadScripts(document, 'script');</script>
 <div class="block">校验 Message Handler 契约，并声明持久业务 exchange、Handler 队列、retry queue 和 DLQ。</div>
 </dd>
 <dt><a href="com/sca4d/messaging/rabbit/RabbitMessageTopology.html#%3Cinit%3E()" class="member-name-link">RabbitMessageTopology()</a> - Constructor for class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitMessageTopology.html" title="class in com.sca4d.messaging.rabbit">RabbitMessageTopology</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">使用固定业务消息、重试和死信 exchange 名称建立拓扑定义。</div>
+</dd>
 <dt><a href="com/sca4d/messaging/rabbit/RabbitPublisher.html" class="type-name-link" title="class in com.sca4d.messaging.rabbit">RabbitPublisher</a> - Class in <a href="com/sca4d/messaging/rabbit/package-summary.html">com.sca4d.messaging.rabbit</a></dt>
 <dd>
 <div class="block">使用 mandatory routing 和 publisher confirm 同步判断 RabbitMQ 发布是否成功。</div>
@@ -283,17 +287,13 @@ loadScripts(document, 'script');</script>
 <div class="block">创建向业务消息 exchange 和 Handler retry exchange 发布持久消息的操作。</div>
 </dd>
 <dt><a href="com/sca4d/messaging/rabbit/RabbitMessageTopology.html#retryRoutingKey(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">retryRoutingKey(TreeCode)</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitMessageTopology.html" title="class in com.sca4d.messaging.rabbit">RabbitMessageTopology</a></dt>
-<dd>
-<div class="block">返回 Handler 重试路由使用的隔离名称。</div>
-</dd>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/messaging/rabbit/RabbitMessageTopology.html#routingKey(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">routingKey(TreeCode)</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitMessageTopology.html" title="class in com.sca4d.messaging.rabbit">RabbitMessageTopology</a></dt>
-<dd>
-<div class="block">在实际 RabbitMQ 路由边界追加部署前缀，业务消息编码保持原值。</div>
-</dd>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:S">S</h2>
 <dl class="index">
-<dt><a href="com/sca4d/messaging/rabbit/RabbitPublisher.html#send(com.sca4d.core.api.messaging.MessageId,com.sca4d.core.api.name.code.TreeCode,byte%5B%5D)" class="member-name-link">send(MessageId, TreeCode, byte[])</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitPublisher.html" title="class in com.sca4d.messaging.rabbit">RabbitPublisher</a></dt>
+<dt><a href="com/sca4d/messaging/rabbit/RabbitPublisher.html#send(com.sca4d.core.api.id.Id,com.sca4d.core.api.name.code.TreeCode,byte%5B%5D)" class="member-name-link">send(Id, TreeCode, byte[])</a> - Method in class com.sca4d.messaging.rabbit.<a href="com/sca4d/messaging/rabbit/RabbitPublisher.html" title="class in com.sca4d.messaging.rabbit">RabbitPublisher</a></dt>
 <dd>
 <div class="block">发布持久业务消息，并等待 mandatory return 与 publisher confirm。</div>
 </dd>

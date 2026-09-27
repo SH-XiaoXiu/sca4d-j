@@ -77,6 +77,12 @@ Controller -> Service -> Repository -> Mapper
 
 数据库保存需要长期存在、需要并发保护或无法可靠重建的事实。页面临时状态、可以由稳定数据计算的数量和一次请求中的中间结果默认不写入数据库。需要保存派生结果时，同时设计唯一写入方、更新时机、失效、修复和验证方式。
 
+## 序列化版本与迁移
+
+需要持久化或跨实例恢复的结构，由一个当前版本 Codec 写入，并由版本 Codec 目录按外部版本选择读取策略。`VersionedCodec` 描述一个具体结构版本，`VersionedCodecAdapter` 对外提供统一 Codec；JSON 中的 `formatVersion`、消息信封中的 `envelopeVersion`、审计行的 `payload_version` 和设置行的 `schema_version` 分别选择自己的版本边界，不能混用。
+
+版本变化只在序列化边界提供兼容读取。每个 `Migratable` 只把一个版本转换为下一个版本，`VersionedCodecMigrator` 按完整链路执行多个相邻步骤。正常读取不会自动迁移或写回数据；具体应用、运维命令或一次性任务必须显式调用迁移器，并负责事务、并发条件和保存结果。当前结构统一从 V1 开始，未注册的版本直接失败。
+
 ## 跨实例成立性
 
 Session、任务租约、消息、连接索引、锁、限流额度和失败恢复不能依赖某一个 JVM 的本地状态。

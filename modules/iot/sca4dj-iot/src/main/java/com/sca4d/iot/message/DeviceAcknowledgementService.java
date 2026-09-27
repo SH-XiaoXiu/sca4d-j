@@ -6,7 +6,7 @@ import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.MessageBus;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.change.DeviceChangeArea;
@@ -197,7 +197,7 @@ public class DeviceAcknowledgementService {
                 "downlink-ack:" + message.messageId() + ':' + acknowledgementIdentity,
                 acknowledgement.acknowledgedAt(),
                 payload);
-        MessageId eventMessageId = messages.dispatch(event, DispatchPolicy.outbox()).messageId();
+        Id eventMessageId = messages.dispatch(event, DispatchPolicy.outbox()).messageId();
         LOG.trace(
                 "Device ACK 事件已登记 | messageId={} acknowledgementIdentity={} eventMessageId={}",
                 message.messageId(),

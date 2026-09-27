@@ -579,10 +579,6 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/auth/federation/FederatedAuthorization.html#nonce()" class="member-name-link">nonce()</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedAuthorization.html" title="class in com.sca4d.auth.federation">FederatedAuthorization</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/auth/federation/FederatedClientAuthentication.html#NONE" class="member-name-link">NONE</a> - Enum constant in enum class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedClientAuthentication.html" title="enum class in com.sca4d.auth.federation">FederatedClientAuthentication</a></dt>
-<dd>
-<div class="block">不发送 Client Secret，仅允许带 PKCE 的公开客户端。</div>
-</dd>
 </dl>
 <h2 class="title" id="I:O">O</h2>
 <dl class="index">
@@ -593,6 +589,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/auth/federation/FederatedProviderProtocol.html#OIDC" class="member-name-link">OIDC</a> - Enum constant in enum class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProviderProtocol.html" title="enum class in com.sca4d.auth.federation">FederatedProviderProtocol</a></dt>
 <dd>
 <div class="block">使用 OpenID Connect 身份断言。</div>
+</dd>
+<dt><a href="com/sca4d/auth/federation/FederatedClientAuthentication.html#ONE" class="member-name-link">ONE</a> - Enum constant in enum class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedClientAuthentication.html" title="enum class in com.sca4d.auth.federation">FederatedClientAuthentication</a></dt>
+<dd>
+<div class="block">不发送 Client Secret，仅允许带 PKCE 的公开客户端。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:P">P</h2>
@@ -664,7 +664,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/federation/RedisFederatedAuthorizationStore.html" class="type-name-link" title="class in com.sca4d.auth.federation">RedisFederatedAuthorizationStore</a> - Class in <a href="com/sca4d/auth/federation/package-summary.html">com.sca4d.auth.federation</a></dt>
 <dd>
-<div class="block">使用命名空间隔离的 Redis 一次性值保存外部授权状态和标准化资料。</div>
+<div class="block">使用 App 隔离名称隔离的 Redis 一次性值保存外部授权状态和标准化资料。</div>
 </dd>
 <dt><a href="com/sca4d/auth/federation/RedisFederatedAuthorizationStore.html#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate)" class="member-name-link">RedisFederatedAuthorizationStore(RedisTemplate&lt;Key, String&gt;)</a> - Constructor for class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/RedisFederatedAuthorizationStore.html" title="class in com.sca4d.auth.federation">RedisFederatedAuthorizationStore</a></dt>
 <dd>

@@ -34,6 +34,11 @@ public final class SystemIdentityRepository {
 
     private final @NotNull SqlBatches batches;
 
+    /**
+     * @param bindings 系统 Principal 绑定 Mapper
+     * @param identities Subject 和 Principal Mapper
+     * @param batches 批量查询与写入工具
+     */
     public SystemIdentityRepository(
             @NotNull SystemIdentityMapper bindings,
             @NotNull IdentityMapper identities,
@@ -43,7 +48,13 @@ public final class SystemIdentityRepository {
         this.batches = Objects.requireNonNull(batches);
     }
 
-    /** 返回已持久化并匹配配置的完整身份表；必须在初始化事务内调用，失败时全部回滚。 */
+    /**
+     * 登记并校验配置中的固定系统身份。
+     *
+     * @param configured 系统身份编码与固定 Principal ID
+     * @return 已从数据库确认的系统身份表
+     * @throws IllegalStateException 不在事务内、保留 Subject 冲突、绑定被改写或状态异常时抛出
+     */
     public @NotNull Map<TreeCode, SystemPrincipal> register(@NotNull Map<TreeCode, Long> configured) {
         if (!TransactionSynchronizationManager.isActualTransactionActive()) {
             throw new IllegalStateException("系统身份登记必须在事务内完成");

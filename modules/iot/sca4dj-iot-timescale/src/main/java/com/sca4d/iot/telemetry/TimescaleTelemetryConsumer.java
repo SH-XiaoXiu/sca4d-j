@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
-/** 消费 reported Telemetry 消息并按 MessageId 幂等写入 TimescaleDB。 */
+/** 消费 reported Telemetry 消息并按 Id 幂等写入 TimescaleDB。 */
 public class TimescaleTelemetryConsumer implements EventHandler<TelemetryBatch> {
 
     private final @NotNull TimescaleRepository repository;
@@ -39,7 +39,7 @@ public class TimescaleTelemetryConsumer implements EventHandler<TelemetryBatch> 
         return IotMessageTypes.TELEMETRY_REPORTED;
     }
 
-    /** 同一 MessageId 的 RabbitMQ 重复投递不会产生重复样本。 */
+    /** 同一 Id 的 RabbitMQ 重复投递不会产生重复样本。 */
     @Override
     @DS(IotTimescale.DATASOURCE)
     @Transactional(propagation = Propagation.REQUIRES_NEW)

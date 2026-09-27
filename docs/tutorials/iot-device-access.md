@@ -61,7 +61,7 @@ curl --fail-with-body --silent --show-error \
   "$BASE_URL/iot/products/$PRODUCT_ID/thing-models" <<'JSON'
 {
   "model": {
-    "formatVersion": 2,
+    "formatVersion": 1,
     "productCode": "standard-climate-controller",
     "version": 1,
     "properties": [

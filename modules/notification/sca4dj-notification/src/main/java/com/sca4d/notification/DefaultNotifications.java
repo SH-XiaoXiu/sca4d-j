@@ -3,7 +3,7 @@ package com.sca4d.notification;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.MessageBus;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.Notification;
 import com.sca4d.core.api.notification.NotificationRecipient;
@@ -76,11 +76,11 @@ public final class DefaultNotifications implements Notifications {
     @Override
     public <T> void sendNow(@NotNull NotificationType<T> type, @NotNull T value) {
         Notification notification = resolve(type, value);
-        deliveries.deliver(new MessageId(ids.nextId().value()), notification);
+        deliveries.deliver(ids.nextId(), notification);
     }
 
     @Override
-    public <T> @NotNull MessageId enqueue(@NotNull NotificationType<T> type, @NotNull T value) {
+    public <T> @NotNull Id enqueue(@NotNull NotificationType<T> type, @NotNull T value) {
         Notification notification = resolve(type, value);
         return messages.dispatch(new NotificationMessage(notification), DispatchPolicy.outbox()).messageId();
     }

@@ -36,7 +36,7 @@ public final class TimescaleTelemetrySample {
             @NotNull Instant observedAt,
             @NotNull Instant receivedAt) {
         if (messageId <= 0 || sampleIndex < 0 || deviceId <= 0 || bindingGeneration <= 0) {
-            throw new IllegalArgumentException("Telemetry MessageId、样本序号、Device 或绑定版本不合法");
+            throw new IllegalArgumentException("Telemetry Id、样本序号、Device 或绑定版本不合法");
         }
         this.messageId = messageId;
         this.sampleIndex = sampleIndex;

@@ -40,6 +40,11 @@ public final class EmailTemplateRepository {
 
     private final @NotNull ObjectMapper json;
 
+    /**
+     * @param mapper Email 模板 Mapper
+     * @param versions 版本条件解析器
+     * @param json 模板 JSON 编解码器
+     */
     public EmailTemplateRepository(
             @NotNull EmailTemplateMapper mapper,
             @NotNull VersionConditions versions,

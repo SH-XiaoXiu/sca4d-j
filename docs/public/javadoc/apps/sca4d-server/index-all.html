@@ -262,7 +262,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/authentication/AuthenticationMethodSettings.html" class="type-name-link" title="class in com.sca4d.app.server.authentication">AuthenticationMethodSettings</a> - Class in <a href="com/sca4d/app/server/authentication/package-summary.html">com.sca4d.app.server.authentication</a></dt>
 <dd>
-<div class="block">保存一个认证方法在登录首步、登录后续因素和敏感动作中的启用状态。</div>
+<div class="block">保存一个认证方法在登录首个认证阶段、附加认证因素和敏感动作中的启用状态。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/authentication/AuthenticationMethodSettings.html#%3Cinit%3E(com.sca4d.core.api.name.code.TreeCode,boolean,boolean,boolean)" class="member-name-link">AuthenticationMethodSettings(TreeCode, boolean, boolean, boolean)</a> - Constructor for class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AuthenticationMethodSettings.html" title="class in com.sca4d.app.server.authentication">AuthenticationMethodSettings</a></dt>
 <dd>
@@ -748,7 +748,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/files/PlatformUserProfilePermissionPolicy.html#decide(com.sca4d.core.api.call.Call,com.sca4d.core.api.permission.Permission)" class="member-name-link">decide(Call, Permission)</a> - Method in class com.sca4d.app.server.files.<a href="com/sca4d/app/server/files/PlatformUserProfilePermissionPolicy.html" title="class in com.sca4d.app.server.files">PlatformUserProfilePermissionPolicy</a></dt>
 <dd>
-<div class="block">允许本人写入自己的资料；具有账号维护操作权限的 Principal 可以写入其他资料。</div>
+<div class="block">允许资料所属 Principal 写入自己的资料；具有账号维护操作权限的 Principal 可以写入其他用户资料。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingsCodec.html#decode(java.lang.String)" class="member-name-link">decode(String)</a> - Method in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingsCodec.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettingsCodec</a></dt>
 <dt><a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingsCodec.html#decodeJson(com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">decodeJson(JsonNode)</a> - Method in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingsCodec.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettingsCodec</a></dt>
@@ -820,11 +820,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/system/SystemDictionaryController.html#deleteDictionary(java.lang.String,long)" class="member-name-link">deleteDictionary(String, long)</a> - Method in class com.sca4d.app.server.controllers.system.<a href="com/sca4d/app/server/controllers/system/SystemDictionaryController.html" title="class in com.sca4d.app.server.controllers.system">SystemDictionaryController</a></dt>
 <dd>
-<div class="block">按乐观版本删除一个数据库动态字典及其数据库选项。</div>
+<div class="block">按乐观版本删除一个数据库动态字典以及对应数据库选项。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/service/SystemDictionaryService.html#deleteDictionary(java.lang.String,long)" class="member-name-link">deleteDictionary(String, long)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/SystemDictionaryService.html" title="class in com.sca4d.app.server.service">SystemDictionaryService</a></dt>
 <dd>
-<div class="block">按版本删除数据库动态字典及其数据库选项，代码字典不可删除。</div>
+<div class="block">按版本删除数据库动态字典及对应数据库选项，代码字典不可删除。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/mapper/IotApplicationMapper.html#deleteExpiredDeviceCreation(java.lang.String,java.time.Instant)" class="member-name-link">deleteExpiredDeviceCreation(String, Instant)</a> - Method in interface com.sca4d.app.server.mapper.<a href="com/sca4d/app/server/mapper/IotApplicationMapper.html" title="interface in com.sca4d.app.server.mapper">IotApplicationMapper</a></dt>
 <dd>
@@ -872,7 +872,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/IotHttpHeaders.html#DEVICE_ID" class="member-name-link">DEVICE_ID</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotHttpHeaders.html" title="class in com.sca4d.app.server.iot">IotHttpHeaders</a></dt>
 <dd>
-<div class="block">Device HMAC 请求提交 Device 标识的 Header。</div>
+<div class="block">Device MAC 请求提交 Device 标识的 Header。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/DeviceCredentialService.html#DEVICE_REALM" class="member-name-link">DEVICE_REALM</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/DeviceCredentialService.html" title="class in com.sca4d.app.server.iot">DeviceCredentialService</a></dt>
 <dd>
@@ -898,7 +898,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/DeviceCredentialService.html" class="type-name-link" title="class in com.sca4d.app.server.iot">DeviceCredentialService</a> - Class in <a href="com/sca4d/app/server/iot/package-summary.html">com.sca4d.app.server.iot</a></dt>
 <dd>
-<div class="block">管理 Sca4d Server 的 Device Account 以及 Shared Secret、HMAC 和 X.509 Credential。</div>
+<div class="block">管理 Sca4d Server 的 Device Account 以及 Shared Secret、MAC 和 X.509 Credential。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/DeviceCredentialService.html#%3Cinit%3E(com.sca4d.iam.identity.IdentityService,com.sca4d.auth.engine.AuthenticationMethods)" class="member-name-link">DeviceCredentialService(IdentityService, AuthenticationMethods)</a> - Constructor for class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/DeviceCredentialService.html" title="class in com.sca4d.app.server.iot">DeviceCredentialService</a></dt>
 <dd>
@@ -932,11 +932,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/DeviceSessionService.html" class="type-name-link" title="class in com.sca4d.app.server.iot">DeviceSessionService</a> - Class in <a href="com/sca4d/app/server/iot/package-summary.html">com.sca4d.app.server.iot</a></dt>
 <dd>
-<div class="block">使用 Device HMAC 认证结果建立 Sca4d Server 的通用 Session。</div>
+<div class="block">使用 Device MAC 认证结果建立 Sca4d Server 的通用 Session。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/DeviceSessionService.html#%3Cinit%3E(com.sca4d.iot.device.DeviceService,com.sca4d.iam.identity.IdentityService,com.sca4d.auth.engine.AuthenticationMethods,com.sca4d.core.api.authentication.SessionLifecycle)" class="member-name-link">DeviceSessionService(DeviceService, IdentityService, AuthenticationMethods, SessionLifecycle)</a> - Constructor for class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/DeviceSessionService.html" title="class in com.sca4d.app.server.iot">DeviceSessionService</a></dt>
 <dd>
-<div class="block">创建 Device HMAC Session 服务。</div>
+<div class="block">创建 Device MAC Session 服务。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/audit/SystemOperations.html#DICTIONARIES_MANAGE" class="member-name-link">DICTIONARIES_MANAGE</a> - Static variable in class com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/SystemOperations.html" title="class in com.sca4d.app.server.audit">SystemOperations</a></dt>
 <dd>&nbsp;</dd>
@@ -1157,7 +1157,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/DeviceSessionService.html#establish(com.sca4d.app.server.iot.HmacCanonicalRequest,java.lang.String)" class="member-name-link">establish(HmacCanonicalRequest, String)</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/DeviceSessionService.html" title="class in com.sca4d.app.server.iot">DeviceSessionService</a></dt>
 <dd>
-<div class="block">验证 Device HTTP HMAC canonical request 并建立 Session。</div>
+<div class="block">验证 Device HTTP MAC canonical request 并建立 Session。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/iot/IotDeviceSessionController.html#establish(java.lang.String,java.lang.String,java.lang.String,java.lang.String,byte%5B%5D,jakarta.servlet.http.HttpServletRequest)" class="member-name-link">establish(String, String, String, String, byte[], HttpServletRequest)</a> - Method in class com.sca4d.app.server.controllers.iot.<a href="com/sca4d/app/server/controllers/iot/IotDeviceSessionController.html" title="class in com.sca4d.app.server.controllers.iot">IotDeviceSessionController</a></dt>
 <dd>&nbsp;</dd>
@@ -3044,7 +3044,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/HmacCanonicalRequest.html" class="type-name-link" title="class in com.sca4d.app.server.iot">HmacCanonicalRequest</a> - Class in <a href="com/sca4d/app/server/iot/package-summary.html">com.sca4d.app.server.iot</a></dt>
 <dd>
-<div class="block">按 Sca4d Server 的固定 HTTP 字段顺序生成 Device HMAC canonical request。</div>
+<div class="block">按 Sca4d Server 的固定 HTTP 字段顺序生成 Device MAC canonical request。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/HmacCanonicalRequest.html#%3Cinit%3E(long,java.lang.String,java.lang.String,java.lang.String,byte%5B%5D,java.time.Instant,java.lang.String)" class="member-name-link">HmacCanonicalRequest(long, String, String, String, byte[], Instant, String)</a> - Constructor for class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/HmacCanonicalRequest.html" title="class in com.sca4d.app.server.iot">HmacCanonicalRequest</a></dt>
 <dd>
@@ -3274,7 +3274,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotDeviceRuntimeView.Connection.html" class="type-name-link" title="class in com.sca4d.app.server.iot.view">IotDeviceRuntimeView.Connection</a> - Class in <a href="com/sca4d/app/server/iot/view/package-summary.html">com.sca4d.app.server.iot.view</a></dt>
 <dd>
-<div class="block">返回一条当前 Device 连接事实。</div>
+<div class="block">返回一条当前 Device 连接信息。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotDeviceRuntimeView.Desired.html" class="type-name-link" title="class in com.sca4d.app.server.iot.view">IotDeviceRuntimeView.Desired</a> - Class in <a href="com/sca4d/app/server/iot/view/package-summary.html">com.sca4d.app.server.iot.view</a></dt>
 <dd>
@@ -3318,7 +3318,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/iot/IotDeviceSessionController.html" class="type-name-link" title="class in com.sca4d.app.server.controllers.iot">IotDeviceSessionController</a> - Class in <a href="com/sca4d/app/server/controllers/iot/package-summary.html">com.sca4d.app.server.controllers.iot</a></dt>
 <dd>
-<div class="block">提供 Sca4d Server 示例应用真实 HTTP 请求的 Device HMAC Session 接口。</div>
+<div class="block">提供 Sca4d Server 示例应用真实 HTTP 请求的 Device MAC Session 接口。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/iot/IotDeviceSessionController.html#%3Cinit%3E(com.sca4d.app.server.iot.DeviceSessionService)" class="member-name-link">IotDeviceSessionController(DeviceSessionService)</a> - Constructor for class com.sca4d.app.server.controllers.iot.<a href="com/sca4d/app/server/controllers/iot/IotDeviceSessionController.html" title="class in com.sca4d.app.server.controllers.iot">IotDeviceSessionController</a></dt>
 <dd>
@@ -3354,7 +3354,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/IotHttpHeaders.html" class="type-name-link" title="class in com.sca4d.app.server.iot">IotHttpHeaders</a> - Class in <a href="com/sca4d/app/server/iot/package-summary.html">com.sca4d.app.server.iot</a></dt>
 <dd>
-<div class="block">定义示例应用的 Device HMAC 和 EMQX HTTP 请求使用的 Header。</div>
+<div class="block">定义示例应用的 Device MAC 和 EMQX HTTP 请求使用的 Header。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/request/IotI18nRequest.html" class="type-name-link" title="class in com.sca4d.app.server.iot.request">IotI18nRequest</a> - Class in <a href="com/sca4d/app/server/iot/request/package-summary.html">com.sca4d.app.server.iot.request</a></dt>
 <dd>
@@ -3486,15 +3486,15 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotThingModelView.Command.html" class="type-name-link" title="class in com.sca4d.app.server.iot.view">IotThingModelView.Command</a> - Class in <a href="com/sca4d/app/server/iot/view/package-summary.html">com.sca4d.app.server.iot.view</a></dt>
 <dd>
-<div class="block">返回一个 ThingModel 命令及其本地化输入字段。</div>
+<div class="block">返回一个 ThingModel 命令及本地化输入字段。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotThingModelView.EnumValue.html" class="type-name-link" title="class in com.sca4d.app.server.iot.view">IotThingModelView.EnumValue</a> - Class in <a href="com/sca4d/app/server/iot/view/package-summary.html">com.sca4d.app.server.iot.view</a></dt>
 <dd>
-<div class="block">返回 enum code 及其当前请求 Locale 展示名称。</div>
+<div class="block">返回 enum code 及当前请求 Locale 的展示名称。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotThingModelView.Event.html" class="type-name-link" title="class in com.sca4d.app.server.iot.view">IotThingModelView.Event</a> - Class in <a href="com/sca4d/app/server/iot/view/package-summary.html">com.sca4d.app.server.iot.view</a></dt>
 <dd>
-<div class="block">返回一个 ThingModel 事件及其本地化输出字段。</div>
+<div class="block">返回一个 ThingModel 事件及本地化输出字段。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotThingModelView.Field.html" class="type-name-link" title="class in com.sca4d.app.server.iot.view">IotThingModelView.Field</a> - Class in <a href="com/sca4d/app/server/iot/view/package-summary.html">com.sca4d.app.server.iot.view</a></dt>
 <dd>
@@ -3502,11 +3502,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotThingModelView.Property.html" class="type-name-link" title="class in com.sca4d.app.server.iot.view">IotThingModelView.Property</a> - Class in <a href="com/sca4d/app/server/iot/view/package-summary.html">com.sca4d.app.server.iot.view</a></dt>
 <dd>
-<div class="block">返回一个 ThingModel 属性及其当前请求 Locale 展示名称。</div>
+<div class="block">返回一个 ThingModel 属性及当前请求 Locale 的展示名称。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotThingModelView.ValueType.html" class="type-name-link" title="class in com.sca4d.app.server.iot.view">IotThingModelView.ValueType</a> - Class in <a href="com/sca4d/app/server/iot/view/package-summary.html">com.sca4d.app.server.iot.view</a></dt>
 <dd>
-<div class="block">返回 ThingModel 递归值类型及其全部技术约束和本地化成员。</div>
+<div class="block">返回 ThingModel 递归值类型及全部技术约束和本地化成员。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/platform/request/CreateProviderRequest.html#isAutoLinkVerifiedEmail()" class="member-name-link">isAutoLinkVerifiedEmail()</a> - Method in class com.sca4d.app.server.platform.request.<a href="com/sca4d/app/server/platform/request/CreateProviderRequest.html" title="class in com.sca4d.app.server.platform.request">CreateProviderRequest</a></dt>
 <dd>&nbsp;</dd>
@@ -3643,7 +3643,7 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/app/server/iot/protocol/LegacyFreezerDeviceProtocol.html" class="type-name-link" title="class in com.sca4d.app.server.iot.protocol">LegacyFreezerDeviceProtocol</a> - Class in <a href="com/sca4d/app/server/iot/protocol/package-summary.html">com.sca4d.app.server.iot.protocol</a></dt>
 <dd>
 <div class="block">处理旧冷柜的二进制 TLV、缺字段 patch、位标志枚举和不对称寄存器下行帧。
- 厂商字段在该类中转换为物模型属性和标准业务 ACK。</div>
+ 厂商字段在当前协议中转换为物模型属性和标准业务 ACK。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/FederatedAuthenticationController.html#link(com.sca4d.core.api.identity.Account,com.sca4d.app.server.authentication.request.FederatedProofRequest,jakarta.servlet.http.HttpServletRequest)" class="member-name-link">link(Account, FederatedProofRequest, HttpServletRequest)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/FederatedAuthenticationController.html" title="class in com.sca4d.app.server.controllers">FederatedAuthenticationController</a></dt>
 <dd>
@@ -3653,7 +3653,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/IotDeviceSessionIdentityLoader.html#load(com.sca4d.core.api.identity.Account)" class="member-name-link">load(Account)</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotDeviceSessionIdentityLoader.html" title="class in com.sca4d.app.server.iot">IotDeviceSessionIdentityLoader</a></dt>
 <dd>
-<div class="block">重新读取可用 Device Account 及其 Device Subject。</div>
+<div class="block">重新读取可用 Device Account 以及对应 Device Subject。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/service/PlatformAccountApplicationService.html#loadByAccountId(java.lang.Long)" class="member-name-link">loadByAccountId(Long)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAccountApplicationService.html" title="class in com.sca4d.app.server.service">PlatformAccountApplicationService</a></dt>
 <dd>
@@ -3727,7 +3727,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/authentication/AuthenticationMethodSettings.html#loginAdditionalEnabled()" class="member-name-link">loginAdditionalEnabled()</a> - Method in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AuthenticationMethodSettings.html" title="class in com.sca4d.app.server.authentication">AuthenticationMethodSettings</a></dt>
 <dd>
-<div class="block">返回该方法是否允许补充登录因素。</div>
+<div class="block">返回当前方法是否允许补充登录因素。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/EmailCodeController.html#loginAttempt(java.lang.String,com.sca4d.app.server.authentication.request.EmailCodeProofRequest)" class="member-name-link">loginAttempt(String, EmailCodeProofRequest)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/EmailCodeController.html" title="class in com.sca4d.app.server.controllers">EmailCodeController</a></dt>
 <dd>
@@ -3739,7 +3739,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/EmailCodeController.html#loginAttemptChallenge(java.lang.String)" class="member-name-link">loginAttemptChallenge(String)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/EmailCodeController.html" title="class in com.sca4d.app.server.controllers">EmailCodeController</a></dt>
 <dd>
-<div class="block">为已经确定 Account 的登录尝试签发后续 Email Code Challenge。</div>
+<div class="block">为已经确定 Account 的登录尝试签发附加 Email Code Challenge。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/SmsCodeController.html#loginAttemptChallenge(java.lang.String)" class="member-name-link">loginAttemptChallenge(String)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/SmsCodeController.html" title="class in com.sca4d.app.server.controllers">SmsCodeController</a></dt>
 <dd>
@@ -3783,7 +3783,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/authentication/AuthenticationMethodSettings.html#loginStartEnabled()" class="member-name-link">loginStartEnabled()</a> - Method in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AuthenticationMethodSettings.html" title="class in com.sca4d.app.server.authentication">AuthenticationMethodSettings</a></dt>
 <dd>
-<div class="block">返回该方法是否允许开始登录。</div>
+<div class="block">返回当前方法是否允许开始登录。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/AuthenticationAttemptController.html#loginTotp(java.lang.String,com.sca4d.app.server.authentication.request.TotpProofRequest)" class="member-name-link">loginTotp(String, TotpProofRequest)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/AuthenticationAttemptController.html" title="class in com.sca4d.app.server.controllers">AuthenticationAttemptController</a></dt>
 <dd>
@@ -3875,10 +3875,6 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/HmacCanonicalRequest.html#nonce()" class="member-name-link">nonce()</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/HmacCanonicalRequest.html" title="class in com.sca4d.app.server.iot">HmacCanonicalRequest</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/app/server/iot/IotHttpHeaders.html#NONCE" class="member-name-link">NONCE</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotHttpHeaders.html" title="class in com.sca4d.app.server.iot">IotHttpHeaders</a></dt>
-<dd>
-<div class="block">Device HMAC 请求提交一次性随机值的 Header。</div>
-</dd>
 <dt><a href="com/sca4d/app/server/platform/PlatformEmailAccountIdentifierNormalizer.html#normalize(java.lang.String)" class="member-name-link">normalize(String)</a> - Method in class com.sca4d.app.server.platform.<a href="com/sca4d/app/server/platform/PlatformEmailAccountIdentifierNormalizer.html" title="class in com.sca4d.app.server.platform">PlatformEmailAccountIdentifierNormalizer</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/platform/PlatformPhoneAccountIdentifierNormalizer.html#normalize(java.lang.String)" class="member-name-link">normalize(String)</a> - Method in class com.sca4d.app.server.platform.<a href="com/sca4d/app/server/platform/PlatformPhoneAccountIdentifierNormalizer.html" title="class in com.sca4d.app.server.platform">PlatformPhoneAccountIdentifierNormalizer</a></dt>
@@ -3914,6 +3910,10 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:O">O</h2>
 <dl class="index">
+<dt><a href="com/sca4d/app/server/iot/IotHttpHeaders.html#ONCE" class="member-name-link">ONCE</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotHttpHeaders.html" title="class in com.sca4d.app.server.iot">IotHttpHeaders</a></dt>
+<dd>
+<div class="block">Device MAC 请求提交一次性随机值的 Header。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/iot/IotDeviceRuntimeDetails.html#online()" class="member-name-link">online()</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotDeviceRuntimeDetails.html" title="class in com.sca4d.app.server.iot">IotDeviceRuntimeDetails</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/openapi/iot/OpenApiIotDeviceResponse.html" class="type-name-link" title="class in com.sca4d.app.server.openapi.iot">OpenApiIotDeviceResponse</a> - Class in <a href="com/sca4d/app/server/openapi/iot/package-summary.html">com.sca4d.app.server.openapi.iot</a></dt>
@@ -4223,7 +4223,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/platform/PlatformPrincipalSelection.html" class="type-name-link" title="class in com.sca4d.app.server.platform">PlatformPrincipalSelection</a> - Class in <a href="com/sca4d/app/server/platform/package-summary.html">com.sca4d.app.server.platform</a></dt>
 <dd>
-<div class="block">为已认证平台账号选择其明确关联的平台业务主体。</div>
+<div class="block">为已认证平台账号选择明确关联的平台业务主体。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/platform/PlatformPrincipalSelection.html#%3Cinit%3E()" class="member-name-link">PlatformPrincipalSelection()</a> - Constructor for class com.sca4d.app.server.platform.<a href="com/sca4d/app/server/platform/PlatformPrincipalSelection.html" title="class in com.sca4d.app.server.platform">PlatformPrincipalSelection</a></dt>
 <dd>
@@ -4311,7 +4311,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/EmqxGatewayCallbacks.html#PREFIX" class="member-name-link">PREFIX</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/EmqxGatewayCallbacks.html" title="class in com.sca4d.app.server.iot">EmqxGatewayCallbacks</a></dt>
 <dd>
-<div class="block">示例应用 EMQX 回调编码共用的命名空间。</div>
+<div class="block">示例应用 EMQX 回调编码共用的 App 隔离名称。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/IotHttpHeaders.html#PREFIX" class="member-name-link">PREFIX</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotHttpHeaders.html" title="class in com.sca4d.app.server.iot">IotHttpHeaders</a></dt>
 <dd>
@@ -4781,11 +4781,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/service/SystemSettingService.html#reset(java.lang.String)" class="member-name-link">reset(String)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/SystemSettingService.html" title="class in com.sca4d.app.server.service">SystemSettingService</a></dt>
 <dd>
-<div class="block">删除数据库值，使后续查询恢复 Java 默认值。</div>
+<div class="block">删除数据库值，使之后的查询恢复 Java 默认值。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/service/IotApplicationService.html#resetDeviceHmacKey(long)" class="member-name-link">resetDeviceHmacKey(long)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/IotApplicationService.html" title="class in com.sca4d.app.server.service">IotApplicationService</a></dt>
 <dd>
-<div class="block">重置 Device HMAC Key，并终止旧 Session 和连接。</div>
+<div class="block">重置 Device MAC Key，并终止旧 Session 和连接。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/service/IotApplicationService.html#resetDeviceSharedSecret(long)" class="member-name-link">resetDeviceSharedSecret(long)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/IotApplicationService.html" title="class in com.sca4d.app.server.service">IotApplicationService</a></dt>
 <dd>
@@ -4795,7 +4795,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/DeviceCredentialService.html#resetHmacKey(com.sca4d.iot.api.Device)" class="member-name-link">resetHmacKey(Device)</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/DeviceCredentialService.html" title="class in com.sca4d.app.server.iot">DeviceCredentialService</a></dt>
 <dd>
-<div class="block">重置 Device 建立 Session 使用的 HMAC Key。</div>
+<div class="block">重置 Device 建立 Session 使用的 MAC Key。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/iot/IotDeviceController.html#resetSharedSecret(long)" class="member-name-link">resetSharedSecret(long)</a> - Method in class com.sca4d.app.server.controllers.iot.<a href="com/sca4d/app/server/controllers/iot/IotDeviceController.html" title="class in com.sca4d.app.server.controllers.iot">IotDeviceController</a></dt>
 <dd>&nbsp;</dd>
@@ -4951,7 +4951,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/authentication/AuthenticationMethodSettings.html#sensitiveActionEnabled()" class="member-name-link">sensitiveActionEnabled()</a> - Method in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AuthenticationMethodSettings.html" title="class in com.sca4d.app.server.authentication">AuthenticationMethodSettings</a></dt>
 <dd>
-<div class="block">返回该方法是否允许认证登录后的敏感动作。</div>
+<div class="block">返回当前方法是否允许认证登录后的敏感动作。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/authentication/AccountAuthenticationSettings.html#sensitiveActionFactorCount()" class="member-name-link">sensitiveActionFactorCount()</a> - Method in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a></dt>
 <dd>
@@ -5475,7 +5475,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/IotHttpHeaders.html#SIGNATURE" class="member-name-link">SIGNATURE</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotHttpHeaders.html" title="class in com.sca4d.app.server.iot">IotHttpHeaders</a></dt>
 <dd>
-<div class="block">Device HMAC 请求提交签名的 Header。</div>
+<div class="block">Device MAC 请求提交签名的 Header。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/audit/SystemOperations.html#SMS_MANAGE" class="member-name-link">SMS_MANAGE</a> - Static variable in class com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/SystemOperations.html" title="class in com.sca4d.app.server.audit">SystemOperations</a></dt>
 <dd>&nbsp;</dd>
@@ -5554,7 +5554,7 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/app/server/iot/protocol/StandardClimateDeviceProtocol.html" class="type-name-link" title="class in com.sca4d.app.server.iot.protocol">StandardClimateDeviceProtocol</a> - Class in <a href="com/sca4d/app/server/iot/protocol/package-summary.html">com.sca4d.app.server.iot.protocol</a></dt>
 <dd>
 <div class="block">定义规范温控器的稳定 JSON 信封，并把 JSON 字段映射为标准物模型 code。
- 该类负责该设备的 Topic、字段名称和信封版本。</div>
+ 当前协议负责该设备的 Topic、字段名称和信封版本。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/service/PlatformLoginService.html#start(com.sca4d.core.api.authentication.AuthenticationSubmission)" class="member-name-link">start(AuthenticationSubmission&lt;?&gt;)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformLoginService.html" title="class in com.sca4d.app.server.service">PlatformLoginService</a></dt>
 <dd>
@@ -5596,7 +5596,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/service/PlatformLoginService.html#submit(com.sca4d.core.api.authentication.AuthenticationAttemptId,com.sca4d.core.api.authentication.AuthenticationSubmission)" class="member-name-link">submit(AuthenticationAttemptId, AuthenticationSubmission&lt;?&gt;)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformLoginService.html" title="class in com.sca4d.app.server.service">PlatformLoginService</a></dt>
 <dd>
-<div class="block">向已有登录尝试提交一个后续认证材料。</div>
+<div class="block">向已有登录尝试提交一个附加认证材料。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/iot/IotDeviceController.html#submitCommand(long,java.lang.String,java.util.Map)" class="member-name-link">submitCommand(long, String, Map&lt;String, Object&gt;)</a> - Method in class com.sca4d.app.server.controllers.iot.<a href="com/sca4d/app/server/controllers/iot/IotDeviceController.html" title="class in com.sca4d.app.server.controllers.iot">IotDeviceController</a></dt>
 <dd>&nbsp;</dd>
@@ -5733,7 +5733,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/IotHttpHeaders.html#TIMESTAMP" class="member-name-link">TIMESTAMP</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotHttpHeaders.html" title="class in com.sca4d.app.server.iot">IotHttpHeaders</a></dt>
 <dd>
-<div class="block">Device HMAC 请求提交 Unix 秒时间戳的 Header。</div>
+<div class="block">Device MAC 请求提交 Unix 秒时间戳的 Header。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/platform/request/ProviderSettingsRequest.html#toConfiguration(com.sca4d.auth.federation.FederatedProviderProtocol)" class="member-name-link">toConfiguration(FederatedProviderProtocol)</a> - Method in class com.sca4d.app.server.platform.request.<a href="com/sca4d/app/server/platform/request/ProviderSettingsRequest.html" title="class in com.sca4d.app.server.platform.request">ProviderSettingsRequest</a></dt>
 <dd>

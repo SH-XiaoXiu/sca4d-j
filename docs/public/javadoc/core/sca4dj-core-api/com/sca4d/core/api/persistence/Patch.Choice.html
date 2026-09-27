@@ -182,12 +182,12 @@ loadScripts(document, 'script');</script>
 <div class="block">条件命中时选择写入给定非空值。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>condition</code> - 是否选择该值</dd>
+<dd><code>condition</code> - 是否选择当前值</dd>
 <dd><code>value</code> - 条件唯一命中时写入的值</dd>
 <dt>Returns:</dt>
 <dd>当前构造器</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 已有其他条件命中时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 已有另一个条件命中时抛出</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - value 为 <code>null</code> 时抛出</dd>
 </dl>
 </section>
@@ -204,12 +204,12 @@ loadScripts(document, 'script');</script>
 <div class="block">条件命中时延迟计算并写入非空值。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>condition</code> - 是否选择该值</dd>
+<dd><code>condition</code> - 是否选择当前值</dd>
 <dd><code>value</code> - 条件唯一命中时才执行的值 Supplier</dd>
 <dt>Returns:</dt>
 <dd>当前构造器</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 已有其他条件命中时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 已有另一个条件命中时抛出</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - value 或 Supplier 结果为 <code>null</code> 时抛出</dd>
 </dl>
 </section>

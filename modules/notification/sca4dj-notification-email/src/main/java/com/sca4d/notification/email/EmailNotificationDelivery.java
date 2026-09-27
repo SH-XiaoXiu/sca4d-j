@@ -2,7 +2,7 @@ package com.sca4d.notification.email;
 
 import com.sca4d.core.api.delivery.DeliveryOutcome;
 import com.sca4d.core.api.error.BusinessException;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.Notification;
 import com.sca4d.core.api.notification.NotificationDelivery;
@@ -29,6 +29,13 @@ public final class EmailNotificationDelivery implements NotificationDelivery {
 
     private final @NotNull EmailGateway transport;
 
+    /**
+     * @param recipients 收件邮箱解析器
+     * @param senders SMTP 发送方配置 Repository
+     * @param templates Email 模板 Repository
+     * @param renderer 模板渲染器
+     * @param transport SMTP 传输入口
+     */
     public EmailNotificationDelivery(
             @NotNull EmailRecipientResolver recipients,
             @NotNull EmailSenderRepository senders,
@@ -58,7 +65,7 @@ public final class EmailNotificationDelivery implements NotificationDelivery {
 
     @Override
     public @NotNull DeliveryOutcome deliver(
-            @NotNull MessageId messageId,
+            @NotNull Id messageId,
             @NotNull Notification notification) {
         Objects.requireNonNull(messageId, "通知消息标识不能为空");
         Notification checked = Objects.requireNonNull(notification, "通知不能为空");

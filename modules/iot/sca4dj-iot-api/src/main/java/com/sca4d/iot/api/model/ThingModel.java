@@ -14,7 +14,7 @@ import java.util.Optional;
 public final class ThingModel {
 
     /** 当前 JSON 格式版本。 */
-    public static final int FORMAT_VERSION = 2;
+    public static final int FORMAT_VERSION = 1;
 
     private final @NotNull String productCode;
 

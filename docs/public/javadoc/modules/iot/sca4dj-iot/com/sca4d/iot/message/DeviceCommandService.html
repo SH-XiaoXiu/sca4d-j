@@ -132,7 +132,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#cancel(long)" class="member-name-link">cancel</a><wbr>(long&nbsp;messageId)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">取消仍未结束的 command，并阻止后续发送或重试。</div>
+<div class="block">取消仍未结束的 command，并阻止之后的发送或重试。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.message.DeviceDownlink</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#submit(long,com.sca4d.iot.api.model.ThingCommand,com.sca4d.core.api.data.DataValues,java.time.Instant,java.time.Duration)" class="member-name-link">submit</a><wbr>(long&nbsp;deviceId,
@@ -259,7 +259,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>deviceId</code> - Device 标识</dd>
 <dd><code>command</code> - 代码物模型声明并由调用方直接引用的命令</dd>
-<dd><code>inputs</code> - 使用该命令 `DataKey` 构造的完整输入</dd>
+<dd><code>inputs</code> - 使用当前命令 `DataKey` 构造的完整输入</dd>
 <dd><code>expiresAt</code> - 首次成功发布的最晚时间；普通即时命令为空</dd>
 <dd><code>acknowledgementTimeout</code> - 本条消息发送成功后等待 Device 业务 ACK 的时间</dd>
 <dt>Returns:</dt>
@@ -296,7 +296,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Transactional
 @CheckReturnValue
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">cancel</span><wbr><span class="parameters">(long&nbsp;messageId)</span></div>
-<div class="block">取消仍未结束的 command，并阻止后续发送或重试。
+<div class="block">取消仍未结束的 command，并阻止之后的发送或重试。
 
  <p>与调用方的业务写入使用同一事务；已经进入协议发布的命令可能送达，具体应用负责补偿。</div>
 <dl class="notes">

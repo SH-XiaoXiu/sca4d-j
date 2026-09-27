@@ -27,6 +27,13 @@ public final class EmailMessageService {
 
     private final long maxAttachmentBytes;
 
+    /**
+     * @param senders SMTP 发送方配置 Repository
+     * @param templates Email 模板 Repository
+     * @param renderer 模板渲染器
+     * @param transport SMTP 传输入口
+     * @param maxAttachmentBytes 单次邮件附件总字节上限
+     */
     public EmailMessageService(
             @NotNull EmailSenderRepository senders,
             @NotNull EmailTemplateRepository templates,

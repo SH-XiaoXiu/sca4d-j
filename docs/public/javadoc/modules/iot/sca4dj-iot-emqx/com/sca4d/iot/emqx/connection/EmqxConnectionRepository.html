@@ -212,10 +212,10 @@ loadScripts(document, 'script');</script>
 <div class="block">保存或刷新一条 EMQX 当前连接；较旧的对账快照不能覆盖较新的连接代次。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>connection</code> - EMQX 当前连接事实</dd>
-<dd><code>projectedAt</code> - 当前实例取得该事实的时间</dd>
+<dd><code>connection</code> - EMQX 当前连接信息</dd>
+<dd><code>projectedAt</code> - 当前实例取得连接信息的时间</dd>
 <dt>Returns:</dt>
-<dd>该观察结果是否成为 Client ID 当前投影</dd>
+<dd>当前观察结果是否成为 Client ID 的最新投影</dd>
 </dl>
 </section>
 </li>

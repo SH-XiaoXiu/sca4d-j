@@ -243,7 +243,7 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html#findBySession(com.sca4d.core.api.authentication.SessionId)" class="member-name-link">findBySession(SessionId)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a></dt>
 <dd>
-<div class="block">读取当前 Session 关联的公共连接事实。</div>
+<div class="block">读取当前 Session 关联的公共连接信息。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:G">G</h2>
@@ -439,11 +439,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html" class="type-name-link" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a> - Class in <a href="com/sca4d/web/realtime/connection/package-summary.html">com.sca4d.web.realtime.connection</a></dt>
 <dd>
-<div class="block">使用 Redis Hash、Set 和按租约到期时间排序的 ZSET 保存所有 Web Realtime 共享索引。</div>
+<div class="block">使用 Redis Hash、Set 和按租约到期时间排序的 SET 保存所有 Web Realtime 共享索引。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,com.sca4d.web.realtime.config.WebRealtimeInfrastructureNames,com.sca4d.web.realtime.config.WebRealtimeProperties,java.time.Clock,com.sca4d.core.spring.redis.RedisBatches)" class="member-name-link">RedisConnectionRegistry(RedisTemplate&lt;Key, String&gt;, WebRealtimeInfrastructureNames, WebRealtimeProperties, Clock, RedisBatches)</a> - Constructor for class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a></dt>
 <dd>
-<div class="block">创建使用当前 App 命名空间的共享连接索引。</div>
+<div class="block">创建使用当前 App 隔离名称的共享连接索引。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/ticket/RedisTicketService.html" class="type-name-link" title="class in com.sca4d.web.realtime.ticket">RedisTicketService</a> - Class in <a href="com/sca4d/web/realtime/ticket/package-summary.html">com.sca4d.web.realtime.ticket</a></dt>
 <dd>
@@ -455,7 +455,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html#register(com.sca4d.core.api.connection.Connection)" class="member-name-link">register(Connection)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a></dt>
 <dd>
-<div class="block">登记不包含身份展开信息的公共连接事实。</div>
+<div class="block">登记不包含身份展开信息的公共连接信息。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html#register(com.sca4d.core.api.connection.ConnectionId,java.lang.String,com.sca4d.core.api.authentication.Session)" class="member-name-link">register(ConnectionId, String, Session)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a></dt>
 <dd>
@@ -473,7 +473,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html#remove(com.sca4d.core.api.connection.ConnectionId)" class="member-name-link">remove(ConnectionId)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a></dt>
 <dd>
-<div class="block">删除公共连接事实。</div>
+<div class="block">删除公共连接信息。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/connection/LocalConnectionRegistry.html#renew()" class="member-name-link">renew()</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/LocalConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">LocalConnectionRegistry</a></dt>
 <dd>
@@ -492,7 +492,7 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/web/realtime/connection/LocalNodeRouter.html#send(java.lang.String,java.util.List,com.sca4d.web.realtime.connection.BrowserWrite)" class="member-name-link">send(String, List&lt;ConnectionId&gt;, BrowserWrite)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/LocalNodeRouter.html" title="class in com.sca4d.web.realtime.connection">LocalNodeRouter</a></dt>
 <dd>
-<div class="block">只投递当前 JVM 持有的连接；其他节点的租约等待 Redis 自动清理。</div>
+<div class="block">只投递当前 JVM 持有的连接；其他节点的连接由 Redis 按租约自动清理。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/connection/NodeRouter.html#send(java.lang.String,java.util.List,com.sca4d.web.realtime.connection.BrowserWrite)" class="member-name-link">send(String, List&lt;ConnectionId&gt;, BrowserWrite)</a> - Method in interface com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/NodeRouter.html" title="interface in com.sca4d.web.realtime.connection">NodeRouter</a></dt>
 <dd>
@@ -639,7 +639,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html#terminateBySession(com.sca4d.core.api.authentication.SessionId,java.lang.String)" class="member-name-link">terminateBySession(SessionId, String)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a></dt>
 <dd>
-<div class="block">删除当前 Session 的全部共享连接事实。</div>
+<div class="block">删除当前 Session 的全部共享连接信息。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html#ticket(java.lang.String)" class="member-name-link">ticket(String)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html" title="class in com.sca4d.web.realtime.config">WebRealtimeInfrastructureNames</a></dt>
 <dd>&nbsp;</dd>
@@ -657,14 +657,14 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html#touch(com.sca4d.core.api.connection.ConnectionId,java.time.Instant)" class="member-name-link">touch(ConnectionId, Instant)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a></dt>
 <dd>
-<div class="block">更新公共连接事实的最近活动时间。</div>
+<div class="block">更新公共连接信息的最近活动时间。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:U">U</h2>
 <dl class="index">
 <dt><a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html#unregister(com.sca4d.core.api.connection.ConnectionId)" class="member-name-link">unregister(ConnectionId)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a></dt>
 <dd>
-<div class="block">从全部目标 ZSET 和连接元数据中删除指定连接。</div>
+<div class="block">从全部目标 SET 和连接元数据中删除指定连接。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html#unsubscribe(com.sca4d.core.api.connection.ConnectionId,java.lang.String)" class="member-name-link">unsubscribe(ConnectionId, String)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a></dt>
 <dd>

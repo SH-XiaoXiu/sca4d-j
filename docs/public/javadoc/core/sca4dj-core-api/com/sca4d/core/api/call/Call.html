@@ -175,7 +175,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#selectPrincipal(com.sca4d.core.api.identity.Principal)" class="member-name-link">selectPrincipal</a><wbr>(<a href="../identity/Principal.html" title="interface in com.sca4d.core.api.identity">Principal</a>&nbsp;principal)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">选择本次调用使用的业务主体，并绑定 Session 中属于该主体的静态资源。</div>
+<div class="block">选择本次调用使用的业务主体，并绑定 Session 中属于所选主体的静态资源。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../authentication/Session.html" title="class in com.sca4d.core.api.authentication">Session</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#session()" class="member-name-link">session</a>()</code></div>
@@ -296,7 +296,7 @@ loadScripts(document, 'script');</script>
 <h3>selectPrincipal</h3>
 <div class="member-signature"><span class="annotations">@Contract(mutates="this")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">selectPrincipal</span><wbr><span class="parameters">(<a href="../identity/Principal.html" title="interface in com.sca4d.core.api.identity">Principal</a>&nbsp;principal)</span></div>
-<div class="block">选择本次调用使用的业务主体，并绑定 Session 中属于该主体的静态资源。</div>
+<div class="block">选择本次调用使用的业务主体，并绑定 Session 中属于所选主体的静态资源。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>principal</code> - 当前业务主体</dd>
@@ -328,7 +328,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;operationCode)</span></div>
 <div class="block">判断当前 Principal 的静态资源视图是否包含指定 Operation。
 
- <p>该重载供调用方直接传入注解和 Operation 模块使用的字符串常量，不需要重复创建 <a href="../permission/Operation.html" title="class in com.sca4d.core.api.permission"><code>Operation</code></a>。</div>
+ <p>此重载供调用方直接传入注解和 Operation 模块使用的字符串常量，不需要重复创建 <a href="../permission/Operation.html" title="class in com.sca4d.core.api.permission"><code>Operation</code></a>。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>operationCode</code> - 非空白 Operation 编码</dd>

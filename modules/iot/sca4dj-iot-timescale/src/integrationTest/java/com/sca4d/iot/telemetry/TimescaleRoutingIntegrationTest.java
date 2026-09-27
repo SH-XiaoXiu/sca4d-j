@@ -12,7 +12,7 @@ import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSour
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.messaging.IncomingMessage;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.Name;
 import com.sca4d.iot.api.message.IotMessageTypes;
 import com.sca4d.iot.api.telemetry.TelemetryBatch;
@@ -123,7 +123,7 @@ class TimescaleRoutingIntegrationTest {
         Instant time = Instant.parse("2026-09-26T00:00:00Z");
         TelemetryBatch batch = new TelemetryBatch(1, 1, List.of(new TelemetrySample("temperature", 20, time, time)));
         return new IncomingMessage<>(
-                new MessageId(id),
+                Id.of(id),
                 new Event<>(IotMessageTypes.TELEMETRY_REPORTED, null, time, batch),
                 new Name("TEST"),
                 time,

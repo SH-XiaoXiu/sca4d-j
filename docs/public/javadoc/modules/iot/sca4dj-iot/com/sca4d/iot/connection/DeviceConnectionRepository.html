@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">DeviceConnectionRepository</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.iot.api.connection.DeviceConnectionReceiver, com.sca4d.iot.api.connection.DeviceConnectionQueryService</span></div>
-<div class="block">使用 Redis 保存可由设备接入实现重建的当前连接事实。</div>
+<div class="block">使用 Redis 保存可由设备接入实现重建的当前连接信息。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -138,7 +138,7 @@ implements com.sca4d.iot.api.connection.DeviceConnectionReceiver, com.sca4d.iot.
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull com.sca4d.iot.api.connection.DeviceConnection&gt;&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#connections(java.util.Collection)" class="member-name-link">connections</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;deviceIds)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">使用分批 pipeline 读取连接事实，每个 Device 的 Lua 脚本同时清理失效索引。</div>
+<div class="block">使用分批 pipeline 读取连接信息，每个 Device 的 Lua 脚本同时清理失效索引。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#disconnected(com.sca4d.iot.api.connection.DeviceConnectionProtocol,com.sca4d.iot.api.connection.DeviceConnectionId)" class="member-name-link">disconnected</a><wbr>(@NotNull com.sca4d.iot.api.connection.DeviceConnectionProtocol&nbsp;protocol,
@@ -191,7 +191,7 @@ implements com.sca4d.iot.api.connection.DeviceConnectionReceiver, com.sca4d.iot.
 <dt>Parameters:</dt>
 <dd><code>redis</code> - IoT 共享 Redis</dd>
 <dd><code>clock</code> - 计算连接过期时间的时钟</dd>
-<dd><code>ttl</code> - 未续期连接事实的保留时间</dd>
+<dd><code>ttl</code> - 未续期连接信息的保留时间</dd>
 <dd><code>changes</code> - Device 运行区域变化通知器</dd>
 <dd><code>redisBatches</code> - Redis pipeline 批处理器</dd>
 </dl>
@@ -253,7 +253,7 @@ implements com.sca4d.iot.api.connection.DeviceConnectionReceiver, com.sca4d.iot.
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull com.sca4d.iot.api.connection.DeviceConnection&gt;&gt;</span>&nbsp;<span class="element-name">connections</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;deviceIds)</span></div>
-<div class="block">使用分批 pipeline 读取连接事实，每个 Device 的 Lua 脚本同时清理失效索引。</div>
+<div class="block">使用分批 pipeline 读取连接信息，每个 Device 的 Lua 脚本同时清理失效索引。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>connections</code>&nbsp;in interface&nbsp;<code>com.sca4d.iot.api.connection.DeviceConnectionQueryService</code></dd>

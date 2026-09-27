@@ -14,7 +14,7 @@ import com.sca4d.core.api.job.JobExecution;
 import com.sca4d.core.api.job.JobKey;
 import com.sca4d.core.api.job.JobRetryPolicy;
 import com.sca4d.core.api.job.JobRunFailedException;
-import com.sca4d.core.api.job.JobRunId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.job.JobRunStatus;
 import com.sca4d.core.api.job.JobWaitTimeoutException;
 import com.sca4d.core.api.job.ParallelResults;
@@ -207,7 +207,7 @@ class JobRuntimeIntegrationTest {
         Runtime runtime = runtime(List.of(job));
         runtime.worker.start();
         try {
-            JobRunId runId = runtime.executor.submit(job, "value");
+            Id runId = runtime.executor.submit(job, "value");
             assertThatThrownBy(() -> runtime.executor.await(runId, job, Duration.ofMillis(100)))
                     .isInstanceOf(JobWaitTimeoutException.class)
                     .satisfies(
@@ -293,7 +293,7 @@ class JobRuntimeIntegrationTest {
         Runtime runtime = runtime(List.of(job));
         runtime.worker.start();
         try {
-            JobRunId runId = runtime.executor.submit(job, "value");
+            Id runId = runtime.executor.submit(job, "value");
             assertThatThrownBy(() -> runtime.executor.await(runId, job, Duration.ofSeconds(10)))
                     .isInstanceOf(JobRunFailedException.class);
             assertThat(runtime.executor.status(runId)).isEqualTo(JobRunStatus.FAILED);
@@ -494,7 +494,7 @@ class JobRuntimeIntegrationTest {
         Runtime runtime = runtime(List.of(job));
         ScheduleKey scheduleKey = new ScheduleKey("TEST/SCHEDULED");
         Instant first = Instant.parse("2026-07-30T00:00:00Z");
-        JobRunId firstRun = runtime.executor.submitScheduled(
+        Id firstRun = runtime.executor.submitScheduled(
                 job,
                 null,
                 scheduleKey,
@@ -506,19 +506,19 @@ class JobRuntimeIntegrationTest {
                         String.class,
                         firstRun.value()))
                 .isEqualTo(APPLICATION_NAME);
-        Optional<JobRunId> duplicate = runtime.executor.submitScheduled(
+        Optional<Id> duplicate = runtime.executor.submitScheduled(
                 job,
                 null,
                 scheduleKey,
                 first,
                 OverlapPolicy.SKIP_IF_RUNNING);
-        Optional<JobRunId> skipped = runtime.executor.submitScheduled(
+        Optional<Id> skipped = runtime.executor.submitScheduled(
                 job,
                 null,
                 scheduleKey,
                 first.plusSeconds(1),
                 OverlapPolicy.SKIP_IF_RUNNING);
-        Optional<JobRunId> allowed = runtime.executor.submitScheduled(
+        Optional<Id> allowed = runtime.executor.submitScheduled(
                 job,
                 null,
                 scheduleKey,
@@ -695,12 +695,12 @@ class JobRuntimeIntegrationTest {
 
         assertThat(firstPage.getTotal()).isEqualTo(2);
         assertThat(firstPage.getItems()).singleElement().satisfies(run -> {
-            assertThat(run.runId()).isEqualTo(new JobRunId(succeeded));
+            assertThat(run.runId()).isEqualTo(Id.of(succeeded));
             assertThat(run.status()).isEqualTo(JobRunStatus.SUCCEEDED);
             assertThat(run.output()).isEqualTo("created");
         });
         assertThat(secondPage.getItems()).singleElement().satisfies(run -> {
-            assertThat(run.runId()).isEqualTo(new JobRunId(failed));
+            assertThat(run.runId()).isEqualTo(Id.of(failed));
             assertThat(run.status()).isEqualTo(JobRunStatus.FAILED);
             assertThat(run.output()).isEqualTo("business-rejected");
         });

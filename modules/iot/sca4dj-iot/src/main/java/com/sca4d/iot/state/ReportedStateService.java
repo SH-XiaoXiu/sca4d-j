@@ -8,7 +8,7 @@ import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.MessageBus;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.ProductDefinition;
@@ -244,7 +244,7 @@ public class ReportedStateService {
                     sourceAcknowledgementId,
                     input.observedAt(),
                     receivedAt);
-            MessageId messageId = messages.dispatch(
+            Id messageId = messages.dispatch(
                     acknowledgement,
                     DispatchPolicy.outbox()).messageId();
             LOG.trace(
@@ -271,7 +271,7 @@ public class ReportedStateService {
             return;
         }
         TelemetryBatch batch = new TelemetryBatch(device.id(), device.bindingGeneration(), samples);
-        MessageId telemetryMessageId = messages.dispatch(
+        Id telemetryMessageId = messages.dispatch(
                 new Event<>(
                         IotMessageTypes.TELEMETRY_REPORTED,
                         null,
@@ -335,7 +335,7 @@ public class ReportedStateService {
             DispatchPolicy policy = event.delivery() == ThingEventDelivery.RELIABLE
                     ? DispatchPolicy.outbox()
                     : DispatchPolicy.afterCommit();
-            MessageId eventMessageId = messages.dispatch(message, policy).messageId();
+            Id eventMessageId = messages.dispatch(message, policy).messageId();
             LOG.trace(
                     "Device 事件消息已登记 | deviceId={} eventCode={} delivery={} eventMessageId={}",
                     device.id(),

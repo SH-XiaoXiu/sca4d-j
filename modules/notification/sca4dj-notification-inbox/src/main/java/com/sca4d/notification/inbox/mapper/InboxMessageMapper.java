@@ -1,7 +1,7 @@
 package com.sca4d.notification.inbox.mapper;
 
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.notification.inbox.InboxMessage;
 import org.apache.ibatis.annotations.Param;
@@ -37,7 +37,7 @@ public interface InboxMessageMapper {
      */
     int insert(
             @Param("inboxMessageId") long inboxMessageId,
-            @Param("messageId") @NotNull MessageId messageId,
+            @Param("messageId") @NotNull Id messageId,
             @Param("accountId") long accountId,
             @Param("notificationCode") @NotNull TreeCode notificationCode,
             @Param("languageTag") @NotNull String languageTag,

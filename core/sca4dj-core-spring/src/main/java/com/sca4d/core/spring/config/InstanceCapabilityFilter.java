@@ -22,11 +22,21 @@ public final class InstanceCapabilityFilter extends OncePerRequestFilter {
 
     private final @NotNull Map<String, Set<TreeCode>> requirements;
 
+    /** @param capabilities 当前实例启用的能力和 API 前缀要求 */
     public InstanceCapabilityFilter(@NotNull InstanceCapabilities capabilities) {
         this.capabilities = Objects.requireNonNull(capabilities);
         this.requirements = capabilities.apiRequirements();
     }
 
+    /**
+     * 根据最长 API 前缀检查实例能力；能力缺失时返回 503，不进入 Controller。
+     *
+     * @param request 当前 HTTP 请求
+     * @param response 当前 HTTP 响应
+     * @param chain 后续 Servlet 过滤器链
+     * @throws ServletException 后续过滤器或请求处理失败时抛出
+     * @throws IOException 读取或写入请求响应失败时抛出
+     */
     @Override
     protected void doFilterInternal(
             @NotNull HttpServletRequest request,

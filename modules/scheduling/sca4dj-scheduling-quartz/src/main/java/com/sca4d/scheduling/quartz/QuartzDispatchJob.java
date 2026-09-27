@@ -1,7 +1,7 @@
 package com.sca4d.scheduling.quartz;
 
 import com.sca4d.core.api.job.JobExecutor;
-import com.sca4d.core.api.job.JobRunId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.scheduling.JobSchedule;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import org.jetbrains.annotations.NotNull;
@@ -51,7 +51,7 @@ public final class QuartzDispatchJob implements Job {
             JobSchedule<?, ?> schedule = registry.loadByKeyAndVersion(key, definitionVersion);
             Instant scheduledAt = context.getScheduledFireTime().toInstant();
             // 使用 Quartz 原定触发时间去重；禁止重叠时空结果表示本次触发按计划跳过。
-            Optional<JobRunId> runId = submit(executor, schedule, scheduledAt);
+            Optional<Id> runId = submit(executor, schedule, scheduledAt);
             if (runId.isPresent()) {
                 log.trace(
                         "Quartz fire 已提交 Job run | schedulerName={} scheduleKey={} definitionVersion={} scheduledAt={} runId={}",
@@ -74,7 +74,7 @@ public final class QuartzDispatchJob implements Job {
     }
 
     /** 保留计划泛型关系地调用 JobExecutor。 */
-    private static <I, O> @NotNull Optional<JobRunId> submit(
+    private static <I, O> @NotNull Optional<Id> submit(
             @NotNull JobExecutor executor,
             @NotNull JobSchedule<I, O> schedule,
             @NotNull Instant scheduledAt) {

@@ -102,7 +102,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="../messaging/MessageId.html" title="class in com.sca4d.core.api.messaging">MessageId</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#enqueue(com.sca4d.core.api.notification.Notification)" class="member-name-link">enqueue</a><wbr>(@NotNull <a href="Notification.html" title="class in com.sca4d.core.api.notification">Notification</a>&nbsp;notification)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">在当前事务中或新事务中把通知可靠写入 Messaging Outbox。</div>
@@ -169,14 +169,14 @@ loadScripts(document, 'script');</script>
 <h3>enqueue</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
-</span><span class="return-type">@NotNull <a href="../messaging/MessageId.html" title="class in com.sca4d.core.api.messaging">MessageId</a></span>&nbsp;<span class="element-name">enqueue</span><wbr><span class="parameters">(@NotNull
+</span><span class="return-type">@NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a></span>&nbsp;<span class="element-name">enqueue</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="Notification.html" title="class in com.sca4d.core.api.notification">Notification</a>&nbsp;notification)</span></div>
 <div class="block">在当前事务中或新事务中把通知可靠写入 Messaging Outbox。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>notification</code> - 完整通知</dd>
 <dt>Returns:</dt>
-<dd>Outbox 记录和最终代理消息共用的 MessageId；不表示通知已经投递</dd>
+<dd>Outbox 记录和最终代理消息共用的 Id；不表示通知已经投递</dd>
 </dl>
 </section>
 </li>

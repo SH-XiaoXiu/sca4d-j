@@ -20,7 +20,7 @@ import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountDirectory;
 import com.sca4d.core.api.identity.RealmKey;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.notification.Notifications;
 import com.sca4d.core.api.security.SecretHasher;
 import com.sca4d.core.api.setting.Settings;
@@ -50,7 +50,7 @@ class EmailCodeChallengeServiceTest {
                 .thenReturn(Optional.of(account));
         Notifications notifications = mock(Notifications.class);
         when(notifications.isAvailable(any(), any())).thenReturn(true);
-        when(notifications.enqueue(any(), any())).thenReturn(new MessageId(1L));
+        when(notifications.enqueue(any(), any())).thenReturn(Id.of(1L));
         RedisEmailCodeChallengeStore store = mock(RedisEmailCodeChallengeStore.class);
         when(store.reserveCooldown(anyString(), any())).thenReturn(true, false);
         SecretHasher hasher = mock(SecretHasher.class);

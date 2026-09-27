@@ -1,7 +1,7 @@
 package com.sca4d.notification.sms;
 
 import com.sca4d.core.api.message.Message;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.Notification;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +17,7 @@ public final class SmsDeliveryCheck extends Message {
 
     private final @NotNull Notification notification;
 
-    private final @NotNull MessageId messageId;
+    private final @NotNull Id messageId;
 
     private final long providerId;
 
@@ -27,9 +27,17 @@ public final class SmsDeliveryCheck extends Message {
 
     private final int attempt;
 
+    /**
+     * @param notification 已冻结的通知
+     * @param messageId 原始通知消息标识
+     * @param providerId 待查询的 Provider 标识
+     * @param requestId Provider 请求标识，未知时为空
+     * @param bizId Provider 业务标识，未知时为空
+     * @param attempt 当前查询次数，从 1 开始
+     */
     public SmsDeliveryCheck(
             @NotNull Notification notification,
-            @NotNull MessageId messageId,
+            @NotNull Id messageId,
             long providerId,
             @Nullable String requestId,
             @Nullable String bizId,
@@ -45,28 +53,32 @@ public final class SmsDeliveryCheck extends Message {
         this.attempt = attempt;
     }
 
+    /** @return 已冻结的通知 */
     public @NotNull Notification notification() {
         return notification;
     }
 
-    /** 返回 messageId 方法提供的结果。 */
-    public @NotNull MessageId messageId() {
+    /** @return 原始通知消息标识 */
+    public @NotNull Id messageId() {
         return messageId;
     }
 
+    /** @return 待查询的 Provider 标识 */
     public long providerId() {
         return providerId;
     }
 
+    /** @return Provider 请求标识，未知时为空 */
     public @Nullable String requestId() {
         return requestId;
     }
 
+    /** @return Provider 业务标识，未知时为空 */
     public @Nullable String bizId() {
         return bizId;
     }
 
-    /** 返回 attempt 方法提供的结果。 */
+    /** @return 当前查询次数，从 1 开始 */
     public int attempt() {
         return attempt;
     }

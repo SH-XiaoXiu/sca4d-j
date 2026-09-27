@@ -362,7 +362,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;roleId)</span></div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>角色及其当前得到的具体 Operation</dd>
+<dd>角色及角色当前得到的具体 Operation</dd>
 </dl>
 </section>
 </li>
@@ -483,7 +483,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="PrincipalGrantQuery.html" title="class in com.sca4d.iam.rbac">PrincipalGrantQuery</a>&nbsp;query)</span></div>
 <div class="block">筛选在同一角色空间中获得全部或任一指定 Operation 的 Principal。
 
- <p>该方法复用 <a href="#findGrantedOperations(com.sca4d.iam.rbac.RbacScope,java.util.Collection)"><code>findGrantedOperations(RbacScope, Collection)</code></a> 的缓存和按领域回源流程。查询中的
+ <p>当前方法复用 <a href="#findGrantedOperations(com.sca4d.iam.rbac.RbacScope,java.util.Collection)"><code>findGrantedOperations(RbacScope, Collection)</code></a> 的缓存和按领域回源流程。查询中的
  Operation 必须属于当前 RBAC 领域允许分配的目录。</div>
 <dl class="notes">
 <dt>Parameters:</dt>

@@ -16,7 +16,7 @@ import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountDirectory;
 import com.sca4d.core.api.identity.RealmKey;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.notification.NotificationRecipient;
 import com.sca4d.core.api.notification.Notifications;
 import com.sca4d.core.api.security.SecretHasher;
@@ -185,7 +185,7 @@ public class SmsCodeChallengeService {
                 PENDING,
                 new Version(0));
         store.create(state);
-        MessageId messageId = null;
+        Id messageId = null;
         if (account != null) {
             long minutes = Math.max(1, (ttl.toSeconds() + 59) / 60);
             messageId = notifications.enqueue(

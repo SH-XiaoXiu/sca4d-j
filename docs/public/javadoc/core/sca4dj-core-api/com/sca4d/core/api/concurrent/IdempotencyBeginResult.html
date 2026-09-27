@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">IdempotencyBeginResult&lt;T&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">保存一次幂等处理权竞争的状态以及该状态允许读取的数据。</div>
+<div class="block">保存一次幂等处理权竞争的状态以及对应状态允许读取的数据。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -249,7 +249,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name">retryAfter</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>仅 <a href="IdempotencyBeginStatus.html#IN_PROGRESS"><code>IdempotencyBeginStatus.IN_PROGRESS</code></a> 状态返回正数时间，其他状态返回零</dd>
+<dd>仅 <a href="IdempotencyBeginStatus.html#IN_PROGRESS"><code>IdempotencyBeginStatus.IN_PROGRESS</code></a> 状态返回正数时间；其他状态返回零</dd>
 </dl>
 </section>
 </li>

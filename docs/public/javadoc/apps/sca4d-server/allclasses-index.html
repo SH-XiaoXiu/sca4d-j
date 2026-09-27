@@ -137,7 +137,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/authentication/AuthenticationMethodSettings.html" title="class in com.sca4d.app.server.authentication">AuthenticationMethodSettings</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">保存一个认证方法在登录首步、登录后续因素和敏感动作中的启用状态。</div>
+<div class="block">保存一个认证方法在登录首个认证阶段、附加认证因素和敏感动作中的启用状态。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/authentication/request/AuthenticationMethodSettingsRequest.html" title="class in com.sca4d.app.server.authentication.request">AuthenticationMethodSettingsRequest</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
@@ -217,11 +217,11 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/iot/DeviceCredentialService.html" title="class in com.sca4d.app.server.iot">DeviceCredentialService</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">管理 Sca4d Server 的 Device Account 以及 Shared Secret、HMAC 和 X.509 Credential。</div>
+<div class="block">管理 Sca4d Server 的 Device Account 以及 Shared Secret、MAC 和 X.509 Credential。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/iot/DeviceSessionService.html" title="class in com.sca4d.app.server.iot">DeviceSessionService</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">使用 Device HMAC 认证结果建立 Sca4d Server 的通用 Session。</div>
+<div class="block">使用 Device MAC 认证结果建立 Sca4d Server 的通用 Session。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/system/view/DictionarySelectionView.html" title="class in com.sca4d.app.server.system.view">DictionarySelectionView</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
@@ -349,7 +349,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/iot/HmacCanonicalRequest.html" title="class in com.sca4d.app.server.iot">HmacCanonicalRequest</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">按 Sca4d Server 的固定 HTTP 字段顺序生成 Device HMAC canonical request。</div>
+<div class="block">按 Sca4d Server 的固定 HTTP 字段顺序生成 Device MAC canonical request。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/controllers/InboxController.html" title="class in com.sca4d.app.server.controllers">InboxController</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
@@ -449,7 +449,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/iot/view/IotDeviceRuntimeView.Connection.html" title="class in com.sca4d.app.server.iot.view">IotDeviceRuntimeView.Connection</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">返回一条当前 Device 连接事实。</div>
+<div class="block">返回一条当前 Device 连接信息。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/iot/view/IotDeviceRuntimeView.Desired.html" title="class in com.sca4d.app.server.iot.view">IotDeviceRuntimeView.Desired</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
@@ -485,7 +485,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/controllers/iot/IotDeviceSessionController.html" title="class in com.sca4d.app.server.controllers.iot">IotDeviceSessionController</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">提供 Sca4d Server 示例应用真实 HTTP 请求的 Device HMAC Session 接口。</div>
+<div class="block">提供 Sca4d Server 示例应用真实 HTTP 请求的 Device MAC Session 接口。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/iot/IotDeviceSessionIdentityLoader.html" title="class in com.sca4d.app.server.iot">IotDeviceSessionIdentityLoader</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
@@ -509,7 +509,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/iot/IotHttpHeaders.html" title="class in com.sca4d.app.server.iot">IotHttpHeaders</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">定义示例应用的 Device HMAC 和 EMQX HTTP 请求使用的 Header。</div>
+<div class="block">定义示例应用的 Device MAC 和 EMQX HTTP 请求使用的 Header。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/iot/request/IotI18nRequest.html" title="class in com.sca4d.app.server.iot.request">IotI18nRequest</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
@@ -597,15 +597,15 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/iot/view/IotThingModelView.Command.html" title="class in com.sca4d.app.server.iot.view">IotThingModelView.Command</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">返回一个 ThingModel 命令及其本地化输入字段。</div>
+<div class="block">返回一个 ThingModel 命令及本地化输入字段。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/iot/view/IotThingModelView.EnumValue.html" title="class in com.sca4d.app.server.iot.view">IotThingModelView.EnumValue</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">返回 enum code 及其当前请求 Locale 展示名称。</div>
+<div class="block">返回 enum code 及当前请求 Locale 的展示名称。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/iot/view/IotThingModelView.Event.html" title="class in com.sca4d.app.server.iot.view">IotThingModelView.Event</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">返回一个 ThingModel 事件及其本地化输出字段。</div>
+<div class="block">返回一个 ThingModel 事件及本地化输出字段。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/iot/view/IotThingModelView.Field.html" title="class in com.sca4d.app.server.iot.view">IotThingModelView.Field</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
@@ -613,16 +613,16 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/iot/view/IotThingModelView.Property.html" title="class in com.sca4d.app.server.iot.view">IotThingModelView.Property</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">返回一个 ThingModel 属性及其当前请求 Locale 展示名称。</div>
+<div class="block">返回一个 ThingModel 属性及当前请求 Locale 的展示名称。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/iot/view/IotThingModelView.ValueType.html" title="class in com.sca4d.app.server.iot.view">IotThingModelView.ValueType</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">返回 ThingModel 递归值类型及其全部技术约束和本地化成员。</div>
+<div class="block">返回 ThingModel 递归值类型及全部技术约束和本地化成员。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/iot/protocol/LegacyFreezerDeviceProtocol.html" title="class in com.sca4d.app.server.iot.protocol">LegacyFreezerDeviceProtocol</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">处理旧冷柜的二进制 TLV、缺字段 patch、位标志枚举和不对称寄存器下行帧。
- 厂商字段在该类中转换为物模型属性和标准业务 ACK。</div>
+ 厂商字段在当前协议中转换为物模型属性和标准业务 ACK。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/system/view/LocaleCatalogView.html" title="class in com.sca4d.app.server.system.view">LocaleCatalogView</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
@@ -826,7 +826,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/platform/PlatformPrincipalSelection.html" title="class in com.sca4d.app.server.platform">PlatformPrincipalSelection</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">为已认证平台账号选择其明确关联的平台业务主体。</div>
+<div class="block">为已认证平台账号选择明确关联的平台业务主体。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/controllers/platform/PlatformRoleController.html" title="class in com.sca4d.app.server.controllers.platform">PlatformRoleController</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
@@ -1043,7 +1043,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/iot/protocol/StandardClimateDeviceProtocol.html" title="class in com.sca4d.app.server.iot.protocol">StandardClimateDeviceProtocol</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">定义规范温控器的稳定 JSON 信封，并把 JSON 字段映射为标准物模型 code。
- 该类负责该设备的 Topic、字段名称和信封版本。</div>
+ 当前协议负责该设备的 Topic、字段名称和信封版本。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/app/server/authentication/request/StepUpRequest.html" title="class in com.sca4d.app.server.authentication.request">StepUpRequest</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">

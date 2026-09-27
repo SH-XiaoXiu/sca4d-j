@@ -16,7 +16,7 @@ import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageConsumer;
 import com.sca4d.core.api.messaging.MessageDelivery;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.NameFormat;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
@@ -188,7 +188,7 @@ class MessagingInfrastructureIntegrationTest {
     void publisherConfirmRequiresRouteAndEachConsumerReceivesCopy() throws InterruptedException {
         assertThat(rabbit.isMandatoryFor(MessageBuilder.withBody(new byte[0]).build())).isFalse();
 
-        MessageId messageId = publisher.dispatch(message(), DispatchPolicy.immediate()).messageId();
+        Id messageId = publisher.dispatch(message(), DispatchPolicy.immediate()).messageId();
 
         assertThat(primaryConsumer.receivedMessage()).isEqualTo(messageId);
         assertThat(copyConsumer.receivedMessage()).isEqualTo(messageId);
@@ -204,7 +204,7 @@ class MessagingInfrastructureIntegrationTest {
         assertThat(failureConsumer.attempts).hasValue(1);
 
         assertThatThrownBy(() -> {
-            MessageId unexpected = publisher.dispatch(
+            Id unexpected = publisher.dispatch(
                     new Event<>(
                             new EventType<>(TreeCode.of("INVOICE/UNROUTED"), 1, Map.class),
                             "invoice:42",
@@ -220,7 +220,7 @@ class MessagingInfrastructureIntegrationTest {
     @Test
     @DisplayName("AMQP Message Id Must Match The Envelope")
     void amqpMessageIdMustMatchEnvelope() throws InterruptedException {
-        MessageId envelopeMessageId = Objects.requireNonNull(
+        Id envelopeMessageId = Objects.requireNonNull(
                 transactions.execute(
                         status -> publisher.dispatch(message(), DispatchPolicy.outbox()).messageId()));
         byte[] envelope = jdbc.queryForObject(
@@ -245,13 +245,13 @@ class MessagingInfrastructureIntegrationTest {
     @Test
     @DisplayName("Outbox Follows Transaction Delay Lease And Retention Rules")
     void outboxFollowsTransactionDelayLeaseAndRetentionRules() {
-        MessageId committed = transactions.execute(
+        Id committed = transactions.execute(
                 status -> publisher.dispatch(message(), DispatchPolicy.outbox()).messageId());
         assertThat(committed).isNotNull();
         assertThat(status(committed)).isEqualTo(OutboxStatus.PENDING);
 
         assertThatThrownBy(() -> transactions.executeWithoutResult(status -> {
-            MessageId rolledBack = publisher.dispatch(message(), DispatchPolicy.outbox()).messageId();
+            Id rolledBack = publisher.dispatch(message(), DispatchPolicy.outbox()).messageId();
             assertThat(rolledBack).isNotNull();
             throw new IllegalStateException("rollback");
         }))
@@ -264,13 +264,13 @@ class MessagingInfrastructureIntegrationTest {
         assertThat(status(committed)).isEqualTo(OutboxStatus.SENT);
 
         Instant delayedUntil = Instant.now().plus(Duration.ofHours(1));
-        MessageId delayed = transactions.execute(
+        Id delayed = transactions.execute(
                 status -> publisher.dispatch(message(), DispatchPolicy.outboxNotBefore(delayedUntil)).messageId());
         assertThat(delayed).isNotNull();
         dispatcher.dispatch();
         assertThat(status(delayed)).isEqualTo(OutboxStatus.PENDING);
 
-        MessageId takeover = transactions.execute(
+        Id takeover = transactions.execute(
                 status -> publisher.dispatch(message(), DispatchPolicy.outbox()).messageId());
         assertThat(takeover).isNotNull();
         transactions.executeWithoutResult(
@@ -315,7 +315,7 @@ class MessagingInfrastructureIntegrationTest {
     @DisplayName("Repository Affected Rows Uses The MyBatis Update Count")
     void repositoryAffectedRowsUsesTheMyBatisUpdateCount() {
         OutboxClaim missing = new OutboxClaim(
-                new MessageId(Long.MAX_VALUE),
+                Id.of(Long.MAX_VALUE),
                 EVENT_CODE,
                 new byte[0],
                 1,
@@ -328,7 +328,7 @@ class MessagingInfrastructureIntegrationTest {
                     assertThat(exception.messageArguments()).containsExactly("Outbox 消息派发结果");
                 });
 
-        MessageId id = transactions.execute(
+        Id id = transactions.execute(
                 status -> publisher.dispatch(message(), DispatchPolicy.outbox()).messageId());
         Instant now = Instant.now().plusSeconds(1);
         OutboxClaim first = transactions
@@ -349,7 +349,7 @@ class MessagingInfrastructureIntegrationTest {
     }
 
     /** 读取并校验数据库中的 Outbox 状态名称。 */
-    private OutboxStatus status(MessageId messageId) {
+    private OutboxStatus status(Id messageId) {
         return OutboxStatus.valueOf(
                 jdbc.queryForObject(
                         "SELECT status FROM messaging_outbox WHERE message_id = ?",
@@ -365,9 +365,9 @@ class MessagingInfrastructureIntegrationTest {
                 Map.of("invoiceId", 42));
     }
 
-    /** 保存成功 Consumer 收到的 MessageId。 */
+    /** 保存成功 Consumer 收到的 Id。 */
     private abstract static class SuccessfulConsumer implements MessageConsumer<Map> {
-        private final BlockingQueue<MessageId> messages = new LinkedBlockingQueue<>();
+        private final BlockingQueue<Id> messages = new LinkedBlockingQueue<>();
 
         @Override
         public @NotNull EventType<Map> eventType() {
@@ -379,7 +379,7 @@ class MessagingInfrastructureIntegrationTest {
             messages.add(delivery.messageId());
         }
 
-        MessageId receivedMessage() throws InterruptedException {
+        Id receivedMessage() throws InterruptedException {
             return messages.poll(5, TimeUnit.SECONDS);
         }
 
@@ -406,7 +406,7 @@ class MessagingInfrastructureIntegrationTest {
 
     /** 每次都失败，用于验证消息直接进入当前 Consumer 的 DLQ。 */
     private static final class FailureConsumer implements MessageConsumer<Map> {
-        private final BlockingQueue<MessageId> messages = new LinkedBlockingQueue<>();
+        private final BlockingQueue<Id> messages = new LinkedBlockingQueue<>();
 
         private final AtomicInteger attempts = new AtomicInteger();
 
@@ -427,7 +427,7 @@ class MessagingInfrastructureIntegrationTest {
             throw new IllegalStateException("consumer failure");
         }
 
-        private MessageId receivedMessage() throws InterruptedException {
+        private Id receivedMessage() throws InterruptedException {
             return messages.poll(5, TimeUnit.SECONDS);
         }
 

@@ -3,9 +3,6 @@ package com.sca4d.core.spring.validation;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import jakarta.validation.ReportAsSingleViolation;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -22,7 +19,7 @@ public final class Req {
 
     /** 要求输入值存在，允许空字符串和空集合。 */
     @Documented
-    @NotNull
+    @jakarta.validation.constraints.NotNull
     @ReportAsSingleViolation
     @Constraint(validatedBy = {})
     @Target({
@@ -59,7 +56,7 @@ public final class Req {
 
     /** 要求输入文本存在且至少包含一个非空白字符。 */
     @Documented
-    @NotBlank
+    @jakarta.validation.constraints.NotBlank
     @ReportAsSingleViolation
     @Constraint(validatedBy = {})
     @Target({
@@ -96,7 +93,7 @@ public final class Req {
 
     /** 要求输入值存在且文本、集合、Map 或数组长度大于零。 */
     @Documented
-    @NotEmpty
+    @jakarta.validation.constraints.NotEmpty
     @ReportAsSingleViolation
     @Constraint(validatedBy = {})
     @Target({

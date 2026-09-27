@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
-/** 消费物模型和 IoT 状态机事件，并按发生时间与 MessageId 幂等写入 TimescaleDB。 */
+/** 消费物模型和 IoT 状态机事件，并按发生时间与 Id 幂等写入 TimescaleDB。 */
 public class TimescaleEventConsumer implements EventHandler<DeviceEventMessage> {
 
     private final @NotNull TimescaleRepository repository;
@@ -37,9 +37,10 @@ public class TimescaleEventConsumer implements EventHandler<DeviceEventMessage> 
     @Override
     public @NotNull EventType<DeviceEventMessage> eventType() {
         return IotMessageTypes.DEVICE_EVENT_OCCURRED;
+
     }
 
-    /** 同一发生时间和 MessageId 的重复投递不会产生重复事件。 */
+    /** 同一发生时间和 Id 的重复投递不会产生重复事件。 */
     @Override
     @DS(IotTimescale.DATASOURCE)
     @Transactional(propagation = Propagation.REQUIRES_NEW)

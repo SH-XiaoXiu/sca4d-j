@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.messaging.HandlingDecision;
 import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.JacksonMessageCodec;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.Name;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iot.api.message.DeviceAcknowledgement;
@@ -43,7 +43,7 @@ class DeviceAcknowledgementHandlerTest {
                 NOW,
                 NOW);
         IncomingMessage<DeviceAcknowledgement> delivery = new IncomingMessage<>(
-                new MessageId(20),
+                Id.of(20),
                 acknowledgement,
                 new Name("TEST_APP"),
                 NOW,

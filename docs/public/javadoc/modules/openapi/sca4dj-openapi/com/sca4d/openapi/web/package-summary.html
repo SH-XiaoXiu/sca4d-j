@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpenApiAuthenticationInterceptor.html" title="class in com.sca4d.openapi.web">OpenApiAuthenticationInterceptor</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">在通用认证拦截器前恢复 OpenAPI 独立 JWT 或验证 OpenAPI HMAC 请求。</div>
+<div class="block">在通用认证拦截器前恢复 OpenAPI 独立 JWT 或验证 OpenAPI MAC 请求。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpenApiAutoConfiguration.html" title="class in com.sca4d.openapi.web">OpenApiAutoConfiguration</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
@@ -104,7 +104,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpenApiCachedBodyHttpServletRequest.html" title="class in com.sca4d.openapi.web">OpenApiCachedBodyHttpServletRequest</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">保存 OpenAPI 请求体，使 HMAC 校验读取后 Spring 仍能绑定同一份请求体。</div>
+<div class="block">保存 OpenAPI 请求体，使 MAC 校验读取后 Spring 仍能绑定同一份请求体。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab1"><a href="OpenApiClientOperationChecker.html" title="interface in com.sca4d.openapi.web">OpenApiClientOperationChecker</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab1">
@@ -112,11 +112,11 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpenApiHmacCanonicalRequest.html" title="class in com.sca4d.openapi.web">OpenApiHmacCanonicalRequest</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">按 OpenAPI Client 的固定字段顺序生成 HMAC canonical request。</div>
+<div class="block">按 OpenAPI Client 的固定字段顺序生成 MAC canonical request。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpenApiRequestBodyFilter.html" title="class in com.sca4d.openapi.web">OpenApiRequestBodyFilter</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">只为 OpenAPI 路由缓存请求体，供 HMAC 校验和 Controller 参数绑定共同读取。</div>
+<div class="block">只为 OpenAPI 路由缓存请求体，供 MAC 校验和 Controller 参数绑定共同读取。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpenApiRequestInterceptor.html" title="class in com.sca4d.openapi.web">OpenApiRequestInterceptor</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
@@ -128,7 +128,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpenApiRouteDefinition.html" title="class in com.sca4d.openapi.web">OpenApiRouteDefinition</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">保存已经校验的 OpenAPI 路由标识及其 Client Operation 约束。</div>
+<div class="block">保存已经校验的 OpenAPI 路由标识和 Client Operation 约束。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpenApiSpringdocAutoConfiguration.html" title="class in com.sca4d.openapi.web">OpenApiSpringdocAutoConfiguration</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">

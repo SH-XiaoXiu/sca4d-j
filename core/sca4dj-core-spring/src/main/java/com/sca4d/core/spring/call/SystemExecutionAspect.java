@@ -23,11 +23,19 @@ public final class SystemExecutionAspect {
 
     private final @NotNull Clock clock;
 
+    /** @param clock 生成系统 Call 开始时间的时钟 */
     public SystemExecutionAspect(@NotNull Clock clock) {
         this.clock = Objects.requireNonNull(clock);
     }
 
-    /** 使用已发布的系统身份执行入口；身份未登记时立即失败，不使用临时 ID。 */
+    /**
+     * 使用已发布的系统身份执行入口；已有 Call 时沿用调用方身份，身份未登记时立即失败。
+     *
+     * @param point 被 `@SystemExecution` 标记的方法调用
+     * @param systemExecution 方法声明的系统身份编码
+     * @return 被代理方法的返回值；被代理方法抛出的异常原样向上抛出
+     * @throws Throwable 被代理方法抛出的异常
+     */
     @Around("@annotation(systemExecution)")
     public @Nullable Object invoke(@NotNull ProceedingJoinPoint point, @NotNull SystemExecution systemExecution)
             throws Throwable {

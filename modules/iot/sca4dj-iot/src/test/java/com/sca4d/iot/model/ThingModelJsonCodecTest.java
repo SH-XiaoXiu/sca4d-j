@@ -75,11 +75,11 @@ class ThingModelJsonCodecTest {
         String encoded = codec.encode(model);
 
         assertThat(encoded).isEqualTo(
-                "{\"formatVersion\":2,\"productCode\":\"air-conditioner\",\"version\":1,"
+                "{\"formatVersion\":1,\"productCode\":\"air-conditioner\",\"version\":1,"
                         + "\"properties\":["
                         + "{\"code\":\"power\",\"valueType\":{\"kind\":\"BOOLEAN\"},"
                         + "\"access\":\"READ_WRITE\",\"telemetry\":false,"
-                        + "\"acknowledgementPolicy\":\"IOT/DOWNLINK/ACK/REPORTED/EQUALS/DESIRED\",\"retryPolicy\":\"IOT/DOWNLINK/RETRY/STATE/SYNC/DEFAULT\"},"
+                        + "\"acknowledgementPolicy\":\"IOT:DOWNLINK:ACK:REPORTED:EQUALS:DESIRED\",\"retryPolicy\":\"IOT:DOWNLINK:RETRY:STATE:SYNC:DEFAULT\"},"
                         + "{\"code\":\"temperature\",\"valueType\":{\"kind\":\"DECIMAL\","
                         + "\"minimum\":\"-40\",\"maximum\":\"100\",\"scale\":1,\"unit\":\"celsius\"},"
                         + "\"access\":\"READ_ONLY\",\"telemetry\":true}],"
@@ -87,9 +87,9 @@ class ThingModelJsonCodecTest {
                         + "{\"code\":\"code\",\"valueType\":{\"kind\":\"STRING\",\"maximumLength\":32}},"
                         + "{\"code\":\"occurredAt\",\"valueType\":{\"kind\":\"TIMESTAMP\"}}]}],"
                         + "\"commands\":[{\"code\":\"set-mode\",\"inputs\":[{\"code\":\"mode\",\"valueType\":{"
-                        + "\"kind\":\"ENUM\",\"enumValues\":[{\"code\":\"cool\"},"
+                        + "\"kind\":\"NUM\",\"enumValues\":[{\"code\":\"cool\"},"
                         + "{\"code\":\"heat\"}]}}],"
-                        + "\"acknowledgementPolicy\":\"IOT/DOWNLINK/ACK/DEVICE/RESULT\",\"retryPolicy\":\"IOT/DOWNLINK/RETRY/COMMAND/DEFAULT\"}]}");
+                        + "\"acknowledgementPolicy\":\"IOT:DOWNLINK:ACK:DEVICE:RESULT\",\"retryPolicy\":\"IOT:DOWNLINK:RETRY:COMMAND:DEFAULT\"}]}");
         assertThat(codec.encode(codec.decode(encoded))).isEqualTo(encoded);
     }
 
@@ -119,7 +119,7 @@ class ThingModelJsonCodecTest {
     @Test
     @DisplayName("拒绝未知字段和显式 null")
     void rejectsUnknownFieldsAndExplicitNulls() {
-        String minimum = "{\"formatVersion\":2,\"productCode\":\"demo\",\"version\":1,"
+        String minimum = "{\"formatVersion\":1,\"productCode\":\"demo\",\"version\":1,"
                 + "\"properties\":[],\"events\":[],\"commands\":[]";
 
         assertThatThrownBy(() -> codec.decode(minimum + ",\"extra\":true}"))
@@ -148,14 +148,14 @@ class ThingModelJsonCodecTest {
                                 .isEqualTo(IotErrorCode.THING_MODEL_JSON_INVALID));
         assertThatThrownBy(
                 () -> codec.decode(
-                        "{\"formatVersion\":1,\"productCode\":\"demo\",\"version\":1,"
+                        "{\"formatVersion\":2,\"productCode\":\"demo\",\"version\":1,"
                                 + "\"properties\":[],\"events\":[],\"commands\":[]}"))
                 .isInstanceOfSatisfying(
                         BusinessException.class,
                         exception -> {
                             assertThat(exception.errorCode())
                                     .isEqualTo(IotErrorCode.THING_MODEL_FORMAT_UNSUPPORTED);
-                            assertThat(exception.messageArguments()).containsExactly(1);
+                            assertThat(exception.messageArguments()).containsExactly(2);
                         });
     }
 }

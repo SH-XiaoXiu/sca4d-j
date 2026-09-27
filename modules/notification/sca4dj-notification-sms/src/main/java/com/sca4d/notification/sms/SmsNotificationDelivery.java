@@ -6,7 +6,7 @@ import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.DispatchReceipt;
 import com.sca4d.core.api.messaging.HandlingPolicy;
 import com.sca4d.core.api.messaging.MessageBus;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.Notification;
 import com.sca4d.core.api.notification.NotificationDelivery;
@@ -119,7 +119,7 @@ public final class SmsNotificationDelivery implements NotificationDelivery {
     }
 
     @Override
-    public @NotNull DeliveryOutcome deliver(@NotNull MessageId messageId, @NotNull Notification notification) {
+    public @NotNull DeliveryOutcome deliver(@NotNull Id messageId, @NotNull Notification notification) {
         Notification checked = Objects.requireNonNull(notification, "通知不能为空");
         String phone = recipients.resolve(checked.recipient())
                 .orElseThrow(() -> new IllegalStateException("SMS 接收人没有已验证手机号"));
@@ -248,8 +248,8 @@ public final class SmsNotificationDelivery implements NotificationDelivery {
                             checked.attempt() + 1));
             return DeliveryOutcome.pending(clock.instant().plus(CHECK_DELAY), result.requestId());
         }
-        return DeliveryOutcome.rejected(
-                result.failureCode() == null ? "SMS_DELIVERY_FAILED" : result.failureCode());
+        String failureCode = result.failureCode();
+        return DeliveryOutcome.rejected(failureCode == null ? "SMS_DELIVERY_FAILED" : failureCode);
     }
 
     private void scheduleCheck(@NotNull SmsDeliveryCheck check) {

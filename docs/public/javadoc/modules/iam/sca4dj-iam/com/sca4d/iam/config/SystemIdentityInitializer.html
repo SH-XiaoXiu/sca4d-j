@@ -129,7 +129,9 @@ implements org.springframework.beans.factory.SmartInitializingSingleton</span></
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#afterSingletonsInstantiated()" class="member-name-link">afterSingletonsInstantiated</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">在 Spring 单例初始化完成后登记数据库身份并发布运行期身份表。</div>
+</div>
 </div>
 </div>
 </div>
@@ -158,6 +160,13 @@ implements org.springframework.beans.factory.SmartInitializingSingleton</span></
  @NotNull <a href="SystemIdentityProperties.html" title="class in com.sca4d.iam.config">SystemIdentityProperties</a>&nbsp;properties,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.core.api.runtime.InstanceCapability&gt;&nbsp;capabilities)</span></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>repository</code> - 系统身份持久化入口</dd>
+<dd><code>transaction</code> - 执行初始化事务的模板</dd>
+<dd><code>properties</code> - 系统身份配置</dd>
+<dd><code>capabilities</code> - 应用声明的实例能力</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -172,9 +181,12 @@ implements org.springframework.beans.factory.SmartInitializingSingleton</span></
 <section class="detail" id="afterSingletonsInstantiated()">
 <h3>afterSingletonsInstantiated</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">afterSingletonsInstantiated</span>()</div>
+<div class="block">在 Spring 单例初始化完成后登记数据库身份并发布运行期身份表。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>afterSingletonsInstantiated</code>&nbsp;in interface&nbsp;<code>org.springframework.beans.factory.SmartInitializingSingleton</code></dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 配置冲突、固定 ID 被占用或数据库身份不一致时抛出</dd>
 </dl>
 </section>
 </li>

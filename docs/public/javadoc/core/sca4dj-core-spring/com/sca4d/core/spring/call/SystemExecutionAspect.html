@@ -124,7 +124,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invoke(org.aspectj.lang.ProceedingJoinPoint,com.sca4d.core.api.annotation.SystemExecution)" class="member-name-link">invoke</a><wbr>(@NotNull org.aspectj.lang.ProceedingJoinPoint&nbsp;point,
  @NotNull com.sca4d.core.api.annotation.SystemExecution&nbsp;systemExecution)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">使用已发布的系统身份执行入口；身份未登记时立即失败，不使用临时 ID。</div>
+<div class="block">使用已发布的系统身份执行入口；已有 Call 时沿用调用方身份，身份未登记时立即失败。</div>
 </div>
 </div>
 </div>
@@ -148,6 +148,10 @@ loadScripts(document, 'script');</script>
 <h3>SystemExecutionAspect</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">SystemExecutionAspect</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</span></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>clock</code> - 生成系统 Call 开始时间的时钟</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -167,10 +171,15 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull com.sca4d.core.api.annotation.SystemExecution&nbsp;systemExecution)</span>
                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a></span></div>
-<div class="block">使用已发布的系统身份执行入口；身份未登记时立即失败，不使用临时 ID。</div>
+<div class="block">使用已发布的系统身份执行入口；已有 Call 时沿用调用方身份，身份未登记时立即失败。</div>
 <dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>point</code> - 被 `@SystemExecution` 标记的方法调用</dd>
+<dd><code>systemExecution</code> - 方法声明的系统身份编码</dd>
+<dt>Returns:</dt>
+<dd>被代理方法的返回值；被代理方法抛出的异常原样向上抛出</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a></code> - 被代理方法抛出的异常</dd>
 </dl>
 </section>
 </li>

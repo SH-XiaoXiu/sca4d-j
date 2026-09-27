@@ -683,7 +683,7 @@ Product `i18n` 第一层是 BCP 47 Locale，第二层只允许 `displayName`。�
 
 Product、双来源 Product Catalog 和 Device 列表都使用从 1 开始的 `page` 与 `size`，默认分别为 1 和 20，`size` 最大 100。响应包含 `items`、`page`、`size` 和 `total`；超过末页返回空 `items` 和不变的总数。Catalog 以稳定 Product code 统一排序数据库与代码定义，不要求服务端全量读取数据库 Product。
 
-新 Product 为 `DISABLED`。只有停用 Product 能通过 `PUT /{productId}` 完整替换接入方式和协议，或向 `/{productId}/thing-models` 发布最大 1 MiB 的完整请求。发布正文由 `model` 和 `i18n` 组成：`model.formatVersion` 必须为 `2`，只包含技术定义，不包含模型、属性、字段或枚举的 `displayName`；`model.productCode` 必须等于 Product code。
+新 Product 为 `DISABLED`。只有停用 Product 能通过 `PUT /{productId}` 完整替换接入方式和协议，或向 `/{productId}/thing-models` 发布最大 1 MiB 的完整请求。发布正文由 `model` 和 `i18n` 组成：`model.formatVersion` 必须为 `1`，只包含技术定义，不包含模型、属性、字段或枚举的 `displayName`；`model.productCode` 必须等于 Product code。
 
 ThingModel `i18n` 的字段键是服务端返回结构使用的稳定 JSON Pointer 路径，例如 `/displayName`、`/properties/power/displayName` 和 `/commands/set-mode/inputs/mode/displayName`。默认 `zh-CN` 必须完整且仅覆盖模型要求的全部路径，其他 Locale 可以只提供覆盖项；未知路径和超过 128 字符的文本使整个请求失败。列表和详情返回技术定义与按请求 Locale 生成的嵌套 `displayName`，`GET /{productId}/thing-models/{version}/i18n` 返回完整原值。翻译使用对应 `PUT .../i18n` 完整替换，采用后写覆盖，不改变 ThingModel 版本或技术内容摘要，也不要求停用 Product。
 

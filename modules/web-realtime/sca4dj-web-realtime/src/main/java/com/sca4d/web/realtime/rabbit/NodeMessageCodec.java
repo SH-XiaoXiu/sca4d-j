@@ -42,7 +42,7 @@ public final class NodeMessageCodec {
         this.objectMapper = Objects.requireNonNull(objectMapper, "ObjectMapper 不能为空");
     }
 
-    /** 编码不包含内部目标、业务键、`MessageId` 和 RabbitMQ 元数据的临时节点消息。 */
+    /** 编码不包含内部目标、业务键、`Id` 和 RabbitMQ 元数据的临时节点消息。 */
     byte @NotNull [] encode(
             @NotNull List<@NotNull ConnectionId> connectionIds,
             @NotNull BrowserWrite delivery) {
@@ -163,6 +163,7 @@ public final class NodeMessageCodec {
     }
 
     /** 保存一个节点需要投递的连接列表和浏览器内容。 */
+    @SuppressWarnings("ClassCanBeRecord")
     static final class NodeDelivery {
         private final @NotNull List<@NotNull ConnectionId> connections;
 

@@ -9,7 +9,7 @@ import static org.mockito.Mockito.when;
 
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.messaging.MessageBus;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.Notification;
 import com.sca4d.core.api.notification.NotificationRecipient;
@@ -85,7 +85,7 @@ class SmsNotificationDeliveryTest {
                 Clock.systemUTC(),
                 messages,
                 mock(PlatformTransactionManager.class));
-        delivery.deliver(new MessageId(21), notification);
+        delivery.deliver(Id.of(21), notification);
 
         ArgumentCaptor<ParsedPhoneNumber> routeDestination = ArgumentCaptor.forClass(ParsedPhoneNumber.class);
         verify(routes).resolve(

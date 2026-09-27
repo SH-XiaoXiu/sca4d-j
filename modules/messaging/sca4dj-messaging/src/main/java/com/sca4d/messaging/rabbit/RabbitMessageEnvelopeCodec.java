@@ -11,7 +11,7 @@ import com.sca4d.core.api.isolation.AppName;
 import com.sca4d.core.api.message.Message;
 import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.MessageCodec;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.Name;
 import com.sca4d.core.api.name.NameFormat;
 import com.sca4d.core.api.name.code.TreeCode;
@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
 @ApiStatus.Internal
 public final class RabbitMessageEnvelopeCodec {
 
-    private static final int ENVELOPE_VERSION = 2;
+    private static final int ENVELOPE_VERSION = 1;
 
     private static final Pattern MESSAGE_ID = Pattern.compile("[1-9][0-9]*");
 
@@ -48,6 +48,10 @@ public final class RabbitMessageEnvelopeCodec {
 
     private final @NotNull MessageCodecRegistry codecs;
 
+    /**
+     * @param json 用于读取和写入消息信封的 ObjectMapper
+     * @param codecs 已安装的业务消息 Codec
+     */
     public RabbitMessageEnvelopeCodec(
             @NotNull ObjectMapper json,
             @NotNull List<? extends @NotNull MessageCodec<?>> codecs) {
@@ -56,7 +60,7 @@ public final class RabbitMessageEnvelopeCodec {
     }
 
     byte @NotNull [] encode(
-            @NotNull MessageId messageId,
+            @NotNull Id messageId,
             @NotNull Message message,
             @NotNull Instant publishedAt,
             @NotNull Name sourceApplication) {
@@ -64,7 +68,7 @@ public final class RabbitMessageEnvelopeCodec {
         MessageCodec<Message> codec = codecs.codec(checked);
         ObjectNode envelope = json.createObjectNode();
         envelope.put("envelopeVersion", ENVELOPE_VERSION);
-        envelope.put("messageId", Objects.requireNonNull(messageId, "MessageId 不能为空").toString());
+        envelope.put("messageId", Objects.requireNonNull(messageId, "Id 不能为空").toString());
         envelope.put("messageCode", checked.code().format(NameFormat.SLASH));
         envelope.put("protocolVersion", checked.protocolVersion());
         envelope.put("publishedAt", Objects.requireNonNull(publishedAt, "消息发布时间不能为空").toString());
@@ -99,17 +103,34 @@ public final class RabbitMessageEnvelopeCodec {
             boolean redelivered,
             int attempt) {
         MessageCodec<M> checkedCodec = Objects.requireNonNull(codec, "MessageCodec 不能为空");
-        Envelope envelope = envelope(body, checkedCodec.code(), checkedCodec.version());
+        Envelope envelope = envelope(body, checkedCodec.code());
+        MessageCodec<?> selected = codecs.codec(checkedCodec.code(), envelope.protocolVersion);
+        if (!checkedCodec.valueType().equals(selected.valueType())) {
+            throw new IllegalArgumentException("业务消息与 Handler Codec Java 类型不一致");
+        }
+        @SuppressWarnings("unchecked")
+        MessageCodec<M> selectedCodec = (MessageCodec<M>) selected;
         return new IncomingMessage<>(
                 envelope.messageId,
-                checkedCodec.decode(envelope.payload),
+                selectedCodec.decode(envelope.payload),
                 envelope.sourceApplication,
                 envelope.publishedAt,
                 redelivered,
                 attempt);
     }
 
-    private @NotNull Envelope envelope(byte @NotNull [] body, @NotNull TreeCode code, int version) {
+    private @NotNull Envelope envelope(
+            byte @NotNull [] body,
+            @NotNull TreeCode code,
+            int version) {
+        Envelope envelope = envelope(body, code);
+        if (envelope.protocolVersion != version) {
+            throw new IllegalArgumentException("业务消息与 Handler Codec 不一致");
+        }
+        return envelope;
+    }
+
+    private @NotNull Envelope envelope(byte @NotNull [] body, @NotNull TreeCode code) {
         try {
             JsonNode root = json.readTree(Objects.requireNonNull(body, "消息 body 不能为空"));
             if (root == null || !root.isObject()) {
@@ -122,7 +143,7 @@ public final class RabbitMessageEnvelopeCodec {
             }
             String messageCode = requiredText(root, "messageCode");
             int protocolVersion = requiredInt(root, "protocolVersion");
-            if (!code.equals(TreeCode.of(messageCode)) || version != protocolVersion) {
+            if (!code.equals(TreeCode.of(messageCode))) {
                 throw new IllegalArgumentException("业务消息与 Handler Codec 不一致");
             }
             byte[] payload;
@@ -133,6 +154,7 @@ public final class RabbitMessageEnvelopeCodec {
             }
             return new Envelope(
                     requiredMessageId(root),
+                    protocolVersion,
                     Instant.parse(requiredText(root, "publishedAt")),
                     AppName.normalize(requiredText(root, "sourceApplication")),
                     payload);
@@ -183,33 +205,38 @@ public final class RabbitMessageEnvelopeCodec {
         return value.intValue();
     }
 
-    private static @NotNull MessageId requiredMessageId(@NotNull JsonNode root) {
+    private static @NotNull Id requiredMessageId(@NotNull JsonNode root) {
         String value = requiredText(root, "messageId");
         if (!MESSAGE_ID.matcher(value).matches()) {
-            throw new IllegalArgumentException("业务消息信封 MessageId 必须是正数十进制文本");
+            throw new IllegalArgumentException("业务消息信封 Id 必须是正数十进制文本");
         }
         try {
-            return new MessageId(Long.parseLong(value));
+            return Id.of(Long.parseLong(value));
         } catch (NumberFormatException exception) {
-            throw new IllegalArgumentException("业务消息信封 MessageId 超过 long 范围", exception);
+            throw new IllegalArgumentException("业务消息信封 Id 超过 long 范围", exception);
         }
     }
 
+    @SuppressWarnings("ClassCanBeRecord")
     private static final class Envelope {
-        private final @NotNull MessageId messageId;
+        private final @NotNull Id messageId;
 
         private final @NotNull Instant publishedAt;
+
+        private final int protocolVersion;
 
         private final @NotNull Name sourceApplication;
 
         private final byte @NotNull [] payload;
 
         private Envelope(
-                @NotNull MessageId messageId,
+                @NotNull Id messageId,
+                int protocolVersion,
                 @NotNull Instant publishedAt,
                 @NotNull Name sourceApplication,
                 byte @NotNull [] payload) {
             this.messageId = messageId;
+            this.protocolVersion = protocolVersion;
             this.publishedAt = publishedAt;
             this.sourceApplication = sourceApplication;
             this.payload = payload;

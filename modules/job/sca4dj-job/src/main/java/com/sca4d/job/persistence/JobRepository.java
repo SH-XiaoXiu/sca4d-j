@@ -4,7 +4,7 @@ import com.sca4d.core.api.isolation.AppName;
 import com.sca4d.core.api.job.DirectJob;
 import com.sca4d.core.api.job.Job;
 import com.sca4d.core.api.job.JobKey;
-import com.sca4d.core.api.job.JobRunId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.job.JobRunStatus;
 import com.sca4d.core.api.job.PipelineJob;
 import com.sca4d.core.api.job.PipelineJobPlan;
@@ -92,8 +92,8 @@ public class JobRepository {
     }
 
     /** 查询当前 App 隔离名称的根运行。 */
-    public @Nullable RunRecord findRun(@NotNull JobRunId runId) {
-        JobRunId checked = Objects.requireNonNull(runId, "JobRunId 不能为空");
+    public @Nullable RunRecord findRun(@NotNull Id runId) {
+        Id checked = Objects.requireNonNull(runId, "Id 不能为空");
         return mapper.selectRun(appName, checked.value());
     }
 
@@ -217,7 +217,7 @@ public class JobRepository {
 
     /** 原子保存 Job 根运行、声明节点与有序依赖；任一写入失败整体回滚。 */
     @Transactional
-    public @NotNull JobRunId createRun(
+    public @NotNull Id createRun(
             @NotNull Job<?, ?> job,
             @Nullable String inputJson,
             @Nullable ScheduleKey scheduleKey,
@@ -251,7 +251,7 @@ public class JobRepository {
                     directJob.retryPolicy().maxAttempts(),
                     directJob.retryPolicy().delay().toMillis(),
                     now);
-            return new JobRunId(runId);
+            return Id.of(runId);
         }
         PipelineJobPlan<?, ?> plan = ((PipelineJob<?, ?>) checked).definition();
         Map<String, Long> nodeIds = new HashMap<>();
@@ -288,7 +288,7 @@ public class JobRepository {
         if (edgeCount > 0) {
             AffectedRowCounts.requireExactly(mapper.insertDependencies(runId, dependencies), edgeCount, "Job 节点依赖");
         }
-        return new JobRunId(runId);
+        return Id.of(runId);
     }
 
     /** 从本次创建的节点中解析依赖，缺失时使整个运行创建失败。 */

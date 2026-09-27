@@ -25,6 +25,11 @@ public final class NotificationMessageHandler implements MessageHandler<Notifica
 
     private final @NotNull NotificationMessageCodec codec;
 
+    /**
+     * @param delivery 当前 Handler 负责的通知渠道
+     * @param deliveries 通知渠道路由器
+     * @param codec 通知消息 Codec
+     */
     public NotificationMessageHandler(
             @NotNull NotificationDelivery delivery,
             @NotNull NotificationDeliveryRouter deliveries,

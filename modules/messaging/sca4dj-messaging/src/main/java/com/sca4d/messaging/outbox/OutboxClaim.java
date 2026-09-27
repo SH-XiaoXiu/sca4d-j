@@ -1,6 +1,6 @@
 package com.sca4d.messaging.outbox;
 
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,7 +12,7 @@ import java.util.Objects;
 /** 保存当前派发批次已经租用的 Outbox 消息和条件更新依据。 */
 final class OutboxClaim {
 
-    private final @NotNull MessageId messageId;
+    private final @NotNull Id messageId;
 
     private final @NotNull TreeCode messageCode;
 
@@ -34,13 +34,13 @@ final class OutboxClaim {
 
     /** 创建已被当前派发批次改为 {@link OutboxStatus#SENDING} 的领取结果。 */
     OutboxClaim(
-            @NotNull MessageId messageId,
+            @NotNull Id messageId,
             @NotNull TreeCode messageCode,
             byte @NotNull [] envelope,
             int attemptCount,
             @NotNull String leaseId,
             long version) {
-        this.messageId = Objects.requireNonNull(messageId, "MessageId 不能为空");
+        this.messageId = Objects.requireNonNull(messageId, "Id 不能为空");
         this.messageCode = Objects.requireNonNull(messageCode, "消息编码不能为空");
         this.envelope = Arrays.copyOf(Objects.requireNonNull(envelope, "消息信封不能为空"), envelope.length);
         this.attemptCount = attemptCount;
@@ -50,7 +50,7 @@ final class OutboxClaim {
 
     /** @return 消息标识 */
     @NotNull
-    MessageId messageId() {
+    Id messageId() {
         return messageId;
     }
 

@@ -2,7 +2,7 @@ package com.sca4d.iot.message;
 
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.MessageBus;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.iot.api.message.DeviceAcknowledgementCheck;
 import com.sca4d.iot.api.message.DeviceDispatchMessage;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +33,7 @@ public final class DeviceDeliveryScheduler {
         DispatchPolicy policy = earliestPublishAt == null
                 ? DispatchPolicy.outbox()
                 : DispatchPolicy.outboxNotBefore(earliestPublishAt);
-        MessageId dispatchMessageId = messages.dispatch(message, policy).messageId();
+        Id dispatchMessageId = messages.dispatch(message, policy).messageId();
         LOG.trace(
                 "Device 下行发送消息已登记 | messageId={} attempt={} dispatchMessageId={} earliestPublishAt={}",
                 messageId,
@@ -45,7 +45,7 @@ public final class DeviceDeliveryScheduler {
     /** 在 ACK 截止时间发布指定发送尝试的超时检查。 */
     public void publishAcknowledgementTimeout(long messageId, int attempt, @NotNull Instant deadline) {
         Instant checkedDeadline = Objects.requireNonNull(deadline, "ACK 截止时间不能为空");
-        MessageId timeoutMessageId = messages.dispatch(
+        Id timeoutMessageId = messages.dispatch(
                 new DeviceAcknowledgementCheck(messageId, attempt),
                 DispatchPolicy.outboxNotBefore(checkedDeadline)).messageId();
         LOG.trace(

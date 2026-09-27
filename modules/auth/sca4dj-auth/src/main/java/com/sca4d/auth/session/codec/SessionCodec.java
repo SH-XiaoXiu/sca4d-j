@@ -16,6 +16,7 @@ import com.sca4d.core.api.authentication.principalsession.PrincipalCodec;
 import com.sca4d.core.api.authentication.principalsession.PrincipalIdSet;
 import com.sca4d.core.api.authentication.principalsession.ResourceCodec;
 import com.sca4d.core.api.authentication.principalsession.ResourceIdSet;
+import com.sca4d.core.api.codec.VersionedCodec;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
@@ -48,21 +49,25 @@ import java.util.function.Function;
 /**
  * 将完整 {@link Session} 编解码为 Sa-Token 和 JWT 共用的版本化 JSON wire。
  */
-public final class SessionCodec {
+public final class SessionCodec implements VersionedCodec<Session, String> {
 
-    private static final int FORMAT_VERSION = 2;
+    private static final @NotNull TreeCode CODE = TreeCode.of("AUTH/SESSION");
+
+    private static final int FORMAT_VERSION = 1;
 
     private static final String ID_SET_ENCODING = "roaring64-portable";
+
+    private static final int ID_SET_VERSION = 1;
 
     private final @NotNull ObjectMapper objectMapper;
 
     private final @NotNull Map<Class<?>, PrincipalCodec<?>> principalCodecs;
 
-    private final @NotNull Map<TreeCode, PrincipalCodec<?>> principalCodecsByType;
+    private final @NotNull Map<CodecKey, PrincipalCodec<?>> principalCodecsByType;
 
     private final @NotNull Map<Class<?>, ResourceCodec<?>> resourceCodecs;
 
-    private final @NotNull Map<TreeCode, ResourceCodec<?>> resourceCodecsByType;
+    private final @NotNull Map<CodecKey, ResourceCodec<?>> resourceCodecsByType;
 
     /**
      * 创建 Session wire Codec，并按 Java 类型和 wire 类型登记 payload Codec。
@@ -80,19 +85,41 @@ public final class SessionCodec {
         this.principalCodecs = codecsByValueType(
                 principalCodecs,
                 PrincipalCodec::valueType,
+                PrincipalCodec::version,
                 "Principal Codec 值类型");
-        this.principalCodecsByType = codecsByType(
+        this.principalCodecsByType = codecsByTypeAndVersion(
                 principalCodecs,
                 PrincipalCodec::type,
+                PrincipalCodec::version,
                 "Principal Codec 类型");
         this.resourceCodecs = codecsByValueType(
                 resourceCodecs,
                 ResourceCodec::valueType,
+                ResourceCodec::version,
                 "Resource Codec 值类型");
-        this.resourceCodecsByType = codecsByType(
+        this.resourceCodecsByType = codecsByTypeAndVersion(
                 resourceCodecs,
                 ResourceCodec::type,
+                ResourceCodec::version,
                 "Resource Codec 类型");
+    }
+
+    /** @return Session wire 的稳定类型编码 */
+    @Override
+    public @NotNull TreeCode code() {
+        return CODE;
+    }
+
+    /** @return 当前 Session wire 结构版本 */
+    @Override
+    public int version() {
+        return FORMAT_VERSION;
+    }
+
+    /** @return 当前 Codec 接受的 Session 类型 */
+    @Override
+    public @NotNull Class<Session> valueType() {
+        return Session.class;
     }
 
     /**
@@ -102,6 +129,7 @@ public final class SessionCodec {
      * @return 包含身份、成功认证记录、资源和有效期的 JSON wire
      * @throws IllegalStateException 缺少具体类型的 Codec 或 JSON 编码失败时抛出
      */
+    @Override
     public @NotNull String encode(@NotNull Session session) {
         Session checked = Objects.requireNonNull(session, "Session 不能为空");
         SessionData data = new SessionData();
@@ -123,6 +151,7 @@ public final class SessionCodec {
                         new ResourceIdSetData(
                                 principal.principalId(),
                                 resourceIdSet.resourceType().format(SLASH),
+                                ID_SET_VERSION,
                                 encodeIds(resourceIdSet.ids())));
             }
         }
@@ -144,6 +173,7 @@ public final class SessionCodec {
      * @return 恢复的 Session
      * @throws IllegalStateException wire 损坏、版本未知、缺少 Codec 或 payload 无法解码时抛出
      */
+    @Override
     public @NotNull Session decode(@NotNull String encoded) {
         try {
             SessionData data = objectMapper.readValue(
@@ -202,7 +232,7 @@ public final class SessionCodec {
                             .add(
                                     new ResourceIdSet(
                                             TreeCode.of(TextUtils.requireText(checkedSet.type, "Resource 类型")),
-                                            decodeIds(checkedSet.encoding, checkedSet.payload)));
+                                            decodeIds(checkedSet.version, checkedSet.encoding, checkedSet.payload)));
                 }
             }
             return new Session(
@@ -230,7 +260,7 @@ public final class SessionCodec {
         if (codec == null) {
             throw new IllegalStateException("缺少 Session Codec: " + checked.getClass().getName());
         }
-        return new TypedPayload(codec.type().format(DOT), encode(codec, checked));
+        return new TypedPayload(codec.type().format(DOT), codec.version(), encode(codec, checked));
     }
 
     /**
@@ -242,7 +272,7 @@ public final class SessionCodec {
         if (codec == null) {
             throw new IllegalStateException("缺少 Session Codec: " + checked.getClass().getName());
         }
-        return new TypedPayload(codec.type().format(DOT), encode(codec, checked));
+        return new TypedPayload(codec.type().format(DOT), codec.version(), encode(codec, checked));
     }
 
     /**
@@ -270,7 +300,8 @@ public final class SessionCodec {
      */
     private @NotNull Principal decodePrincipal(@NotNull TypedPayload value) {
         TypedPayload checked = Objects.requireNonNull(value, "Principal payload 不能为空");
-        PrincipalCodec<?> codec = principalCodecsByType.get(TreeCode.of(checked.type));
+        PrincipalCodec<?> codec = principalCodecsByType.get(
+                new CodecKey(TreeCode.of(checked.type), checked.version));
         if (codec == null) {
             throw new IllegalArgumentException("未知 Session Codec 类型: " + checked.type);
         }
@@ -292,7 +323,10 @@ public final class SessionCodec {
         if (codec == null) {
             throw new IllegalStateException("缺少 Session Codec: " + checked.principalType().getName());
         }
-        return new PrincipalIdSetData(codec.type().format(DOT), encodeIds(checked.ids()));
+        return new PrincipalIdSetData(
+                codec.type().format(DOT),
+                codec.version(),
+                encodeIds(checked.ids()));
     }
 
     /**
@@ -300,12 +334,14 @@ public final class SessionCodec {
      */
     private @NotNull PrincipalIdSet<?> decodePrincipalIds(@NotNull PrincipalIdSetData value) {
         PrincipalIdSetData checked = Objects.requireNonNull(value, "Principal 标识集合 wire 不能为空");
-        PrincipalCodec<?> codec = principalCodecsByType
-                .get(TreeCode.of(TextUtils.requireText(checked.type, "Principal Codec 类型")));
+        PrincipalCodec<?> codec = principalCodecsByType.get(
+                new CodecKey(
+                        TreeCode.of(TextUtils.requireText(checked.type, "Principal Codec 类型")),
+                        checked.version));
         if (codec == null) {
             throw new IllegalArgumentException("未知 Session Codec 类型: " + checked.type);
         }
-        return createPrincipalIdSet(codec, decodeIds(checked.encoding, checked.payload));
+        return createPrincipalIdSet(codec, decodeIds(checked.version, checked.encoding, checked.payload));
     }
 
     /**
@@ -342,8 +378,12 @@ public final class SessionCodec {
      */
     @SuppressWarnings("ExtractMethodRecommender") // payload、数量和正数校验属于一次完整解码，不拆成步骤方法。
     private static @NotNull List<@NotNull Long> decodeIds(
+            int version,
             @NotNull String encoding,
             @NotNull String payload) {
+        if (version != ID_SET_VERSION) {
+            throw new IllegalArgumentException("未知 Session 标识集合版本: " + version);
+        }
         String checkedEncoding = TextUtils.requireText(encoding, "标识集合编码");
         if (!ID_SET_ENCODING.equals(checkedEncoding)) {
             throw new IllegalArgumentException("未知 Session 标识集合编码: " + checkedEncoding);
@@ -380,7 +420,8 @@ public final class SessionCodec {
      */
     private @NotNull Resource decodeResource(@NotNull TypedPayload value) {
         TypedPayload checked = Objects.requireNonNull(value, "Resource payload 不能为空");
-        ResourceCodec<?> codec = resourceCodecsByType.get(TreeCode.of(checked.type));
+        ResourceCodec<?> codec = resourceCodecsByType.get(
+                new CodecKey(TreeCode.of(checked.type), checked.version));
         if (codec == null) {
             throw new IllegalArgumentException("未知 Session Codec 类型: " + checked.type);
         }
@@ -415,13 +456,22 @@ public final class SessionCodec {
     private static <C> @NotNull Map<Class<?>, C> codecsByValueType(
             @NotNull List<@NotNull C> codecs,
             @NotNull Function<C, Class<?>> key,
+            @NotNull Function<C, Integer> version,
             @NotNull String description) {
         LinkedHashMap<Class<?>, C> result = new LinkedHashMap<>();
         for (C codec : List.copyOf(Objects.requireNonNull(codecs, description + "列表不能为空"))) {
             C checkedCodec = Objects.requireNonNull(codec, description + " Codec 不能为空");
             Class<?> checkedKey = Objects.requireNonNull(key.apply(checkedCodec), description + "不能为空");
-            if (result.putIfAbsent(checkedKey, checkedCodec) != null) {
-                throw new IllegalArgumentException("重复 " + description + ": " + checkedKey);
+            C previous = result.putIfAbsent(checkedKey, checkedCodec);
+            if (previous != null) {
+                int previousVersion = version.apply(previous);
+                int checkedVersion = version.apply(checkedCodec);
+                if (previousVersion == checkedVersion) {
+                    throw new IllegalArgumentException("重复 " + description + ": " + checkedKey);
+                }
+                if (checkedVersion > previousVersion) {
+                    result.put(checkedKey, checkedCodec);
+                }
             }
         }
         return Map.copyOf(result);
@@ -430,19 +480,56 @@ public final class SessionCodec {
     /**
      * 按 Codec 声明的 wire type 建立唯一索引。
      */
-    private static <C> @NotNull Map<TreeCode, C> codecsByType(
+    private static <C> @NotNull Map<CodecKey, C> codecsByTypeAndVersion(
             @NotNull List<@NotNull C> codecs,
             @NotNull Function<C, TreeCode> key,
+            @NotNull Function<C, Integer> version,
             @NotNull String description) {
-        LinkedHashMap<TreeCode, C> result = new LinkedHashMap<>();
+        LinkedHashMap<CodecKey, C> result = new LinkedHashMap<>();
         for (C codec : List.copyOf(Objects.requireNonNull(codecs, description + "列表不能为空"))) {
             C checkedCodec = Objects.requireNonNull(codec, description + " Codec 不能为空");
-            TreeCode checkedKey = Objects.requireNonNull(key.apply(checkedCodec), description);
+            TreeCode checkedType = Objects.requireNonNull(key.apply(checkedCodec), description);
+            int checkedVersion = Objects.requireNonNull(version.apply(checkedCodec), description + "版本");
+            if (checkedVersion <= 0) {
+                throw new IllegalArgumentException(description + "版本必须为正数");
+            }
+            CodecKey checkedKey = new CodecKey(checkedType, checkedVersion);
             if (result.putIfAbsent(checkedKey, checkedCodec) != null) {
                 throw new IllegalArgumentException("重复 " + description + ": " + checkedKey);
             }
         }
         return Map.copyOf(result);
+    }
+
+    /** 保存一个开放类型和一个 payload 版本的联合选择键。 */
+    @SuppressWarnings("ClassCanBeRecord")
+    private static final class CodecKey {
+        private final @NotNull TreeCode type;
+
+        private final int version;
+
+        private CodecKey(@NotNull TreeCode type, int version) {
+            this.type = Objects.requireNonNull(type, "Codec 类型不能为空");
+            this.version = version;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            return this == other
+                    || other instanceof CodecKey key
+                            && version == key.version
+                            && type.equals(key.type);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(type, version);
+        }
+
+        @Override
+        public String toString() {
+            return type + "@" + version;
+        }
     }
 
     /**
@@ -497,6 +584,9 @@ public final class SessionCodec {
         @JsonProperty("type")
         private String type;
 
+        @JsonProperty("version")
+        private int version;
+
         @JsonProperty("encoding")
         private String encoding;
 
@@ -510,8 +600,12 @@ public final class SessionCodec {
         private PrincipalIdSetData() {
         }
 
-        private PrincipalIdSetData(@NotNull String type, byte @NotNull [] payload) {
+        private PrincipalIdSetData(
+                @NotNull String type,
+                int version,
+                byte @NotNull [] payload) {
             this.type = TextUtils.requireText(type, "Principal Codec 类型");
+            this.version = version;
             this.encoding = ID_SET_ENCODING;
             this.payload = Base64.getEncoder().encodeToString(payload);
         }
@@ -574,6 +668,9 @@ public final class SessionCodec {
         @JsonProperty("type")
         private String type;
 
+        @JsonProperty("version")
+        private int version;
+
         @JsonProperty("payload")
         private String payload;
 
@@ -584,8 +681,12 @@ public final class SessionCodec {
         private TypedPayload() {
         }
 
-        private TypedPayload(@NotNull String type, byte @NotNull [] payload) {
+        private TypedPayload(
+                @NotNull String type,
+                int version,
+                byte @NotNull [] payload) {
             this.type = TextUtils.requireText(type, "Session Codec 类型");
+            this.version = version;
             this.payload = Base64.getEncoder().encodeToString(payload);
         }
 
@@ -661,6 +762,9 @@ public final class SessionCodec {
         @JsonProperty("type")
         private String type;
 
+        @JsonProperty("version")
+        private int version;
+
         @JsonProperty("encoding")
         private String encoding;
 
@@ -677,9 +781,11 @@ public final class SessionCodec {
         private ResourceIdSetData(
                 long principalId,
                 @NotNull String type,
+                int version,
                 byte @NotNull [] payload) {
             this.principalId = principalId;
             this.type = TextUtils.requireText(type, "Resource 类型");
+            this.version = version;
             this.encoding = ID_SET_ENCODING;
             this.payload = Base64.getEncoder().encodeToString(payload);
         }

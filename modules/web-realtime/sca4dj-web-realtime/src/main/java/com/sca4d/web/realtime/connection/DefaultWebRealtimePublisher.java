@@ -32,6 +32,11 @@ public final class DefaultWebRealtimePublisher implements WebRealtimePublisher, 
 
     private final @NotNull Clock clock;
 
+    /**
+     * @param messages Web Realtime 消息总线
+     * @param properties Web Realtime 配置
+     * @param clock Session 变化事件的时间来源
+     */
     public DefaultWebRealtimePublisher(
             @NotNull MessageBus messages,
             @NotNull WebRealtimeProperties properties,

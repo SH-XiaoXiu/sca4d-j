@@ -82,9 +82,9 @@ Setting 保存一个 owner 的完整类型化值，例如系统范围的文件�
 
 `sys_setting` 使用 `owner_type + owner_id + setting_key` 作为主键。`sys_` 是公共基础表前缀，不限制 owner 类型；Account、Principal 和 Resource 仍使用各自稳定类型和标识，不增加每种 owner 的专用设置表。`has_value=false` 的行是恢复默认值后的 tombstone，它保留递增的行版本，避免旧客户端用过期 ETag 覆盖新状态。owner 已删除时，负责该 owner 生命周期的 Service 使用 `erase` 物理清理对应设置。
 
-每个定义的 `schemaVersion` 是值结构版本。读取到不同结构版本时抛出 SettingSchemaVersionException，调用方必须先部署能够读取该结构的代码或执行明确的数据迁移。每行 `version` 是乐观并发版本；不存在行时为零，每次替换或恢复默认值后递增。HTTP 接口把它发布为强 ETag，写入使用 `If-Match`，版本不一致返回 412。
+每个定义的 `schemaVersion` 是值结构版本。当前定义以 V1 为基线；版本 Codec 目录按行中的 `schema_version` 选择读取策略，未注册的结构版本直接失败。`Migratable` 每次只转换一个相邻结构版本，`VersionedCodecMigrator` 可以沿完整链路执行手工迁移，但 Settings 正常读取不会自动改写数据库。每行 `version` 是乐观并发版本；不存在行时为零，每次替换或恢复默认值后递增。HTTP 接口把它发布为强 ETag，写入使用 `If-Match`，版本不一致返回 412。
 
-Settings 的 SystemSetting 批量读取返回一次查询得到的 SettingValues 快照；跨多次 `get` 调用不承诺相同数据库时刻。同一数据库中的多个 JVM 读取同一个 System owner，不按实例复制设置。不同发布版本通过 schemaVersion 检测不兼容值；需要兼容多版本并行运行时，必须先设计 Codec 兼容范围和数据迁移顺序。
+Settings 的 SystemSetting 批量读取返回一次查询得到的 SettingValues 快照；跨多次 `get` 调用不承诺相同数据库时刻。同一数据库中的多个 JVM 读取同一个 System owner，不按实例复制设置。不同发布版本通过 `schemaVersion` 和版本 Codec 选择读取策略；需要兼容多版本并行运行时，必须先登记旧版本 Codec，并由独立迁移任务按相邻版本转换。
 
 ## 应用与管理端
 
@@ -102,7 +102,7 @@ SystemSetting 还要声明 SettingGroup、标签和说明消息键、初始化 E
 
 把定义作为 Spring Bean 注册。SettingCatalog 会拒绝重复 key、重复 SystemSetting ENV、冲突分组以及不符合格式的元数据。调用 Settings 或 PreferenceSettings 时必须传入容器注册的同一个定义对象，不能临时构造同 key 的替代实例。
 
-修改现有值结构时先决定兼容方式：Codec 可以继续读取旧结构时保持 schemaVersion；不能读取时递增 schemaVersion，并在部署新代码前准备数据库迁移。直接递增版本而不迁移会使读取明确失败。
+修改现有值结构时新增版本 Codec，并为每个相邻版本登记 `Migratable`。当前版本 Codec 写入新结构，旧版本 Codec 只负责读取或迁移；不要在普通请求中隐式写回。没有登记迁移步骤时，迁移命令在缺少中间版本处失败。
 
 完整构造参数和异常见 [Setting API](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/setting/package-summary.html)，定义示例位于 `apps/sca4d-server/src/main/java/com/sca4d/app/server/ProductSettings.java`。
 

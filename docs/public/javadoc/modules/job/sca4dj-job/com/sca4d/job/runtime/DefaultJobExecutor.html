@@ -129,12 +129,12 @@ implements com.sca4d.core.api.job.JobExecutor</span></div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;O&gt;&nbsp;O</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#await(com.sca4d.core.api.job.JobRunId,com.sca4d.core.api.job.Job,java.time.Duration)" class="member-name-link">await</a><wbr>(@NotNull com.sca4d.core.api.job.JobRunId&nbsp;runId,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#await(com.sca4d.core.api.id.Id,com.sca4d.core.api.job.Job,java.time.Duration)" class="member-name-link">await</a><wbr>(@NotNull com.sca4d.core.api.id.Id&nbsp;runId,
  @NotNull com.sca4d.core.api.job.Job&lt;?,<wbr>O&gt;&nbsp;job,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;timeout)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;O&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;O&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#result(com.sca4d.core.api.job.JobRunId,com.sca4d.core.api.job.Job)" class="member-name-link">result</a><wbr>(@NotNull com.sca4d.core.api.job.JobRunId&nbsp;runId,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#result(com.sca4d.core.api.id.Id,com.sca4d.core.api.job.Job)" class="member-name-link">result</a><wbr>(@NotNull com.sca4d.core.api.id.Id&nbsp;runId,
  @NotNull com.sca4d.core.api.job.Job&lt;?,<wbr>O&gt;&nbsp;job)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;I,<wbr>
@@ -144,15 +144,15 @@ O&gt;&nbsp;O</code></div>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;timeout)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.job.JobRunStatus</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#status(com.sca4d.core.api.job.JobRunId)" class="member-name-link">status</a><wbr>(@NotNull com.sca4d.core.api.job.JobRunId&nbsp;runId)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#status(com.sca4d.core.api.id.Id)" class="member-name-link">status</a><wbr>(@NotNull com.sca4d.core.api.id.Id&nbsp;runId)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;I,<wbr>
-O&gt;&nbsp;@NotNull com.sca4d.core.api.job.JobRunId</code></div>
+O&gt;&nbsp;@NotNull com.sca4d.core.api.id.Id</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#submit(com.sca4d.core.api.job.Job,I)" class="member-name-link">submit</a><wbr>(@NotNull com.sca4d.core.api.job.Job&lt;I,<wbr>O&gt;&nbsp;job,
  I&nbsp;input)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;I,<wbr>
-O&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;com.sca4d.core.api.job.JobRunId&gt;</code></div>
+O&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;com.sca4d.core.api.id.Id&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#submitScheduled(com.sca4d.core.api.job.Job,I,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant,com.sca4d.core.api.scheduling.OverlapPolicy)" class="member-name-link">submitScheduled</a><wbr>(@NotNull com.sca4d.core.api.job.Job&lt;I,<wbr>O&gt;&nbsp;job,
  I&nbsp;input,
  @NotNull com.sca4d.core.api.scheduling.ScheduleKey&nbsp;scheduleKey,
@@ -207,8 +207,7 @@ O&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/
 <h3 id="submit(com.sca4d.core.api.job.Job,java.lang.Object)">submit</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;I,<wbr>
-O&gt;</span>
-<span class="return-type">@NotNull com.sca4d.core.api.job.JobRunId</span>&nbsp;<span class="element-name">submit</span><wbr><span class="parameters">(@NotNull
+O&gt;</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.id.Id</span>&nbsp;<span class="element-name">submit</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.job.Job&lt;I,<wbr>O&gt;&nbsp;job,
  @Nullable
  I&nbsp;input)</span></div>
@@ -224,7 +223,7 @@ O&gt;</span>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;I,<wbr>
 O&gt;</span>
-<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;com.sca4d.core.api.job.JobRunId&gt;</span>&nbsp;<span class="element-name">submitScheduled</span><wbr><span class="parameters">(@NotNull
+<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;com.sca4d.core.api.id.Id&gt;</span>&nbsp;<span class="element-name">submitScheduled</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.job.Job&lt;I,<wbr>O&gt;&nbsp;job,
  @Nullable
  I&nbsp;input,
@@ -258,11 +257,11 @@ O&gt;</span>&nbsp;<span class="return-type">O</span>&nbsp;<span class="element-n
 </section>
 </li>
 <li>
-<section class="detail" id="status(com.sca4d.core.api.job.JobRunId)">
+<section class="detail" id="status(com.sca4d.core.api.id.Id)">
 <h3>status</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.job.JobRunStatus</span>&nbsp;<span class="element-name">status</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.job.JobRunId&nbsp;runId)</span></div>
+ @NotNull com.sca4d.core.api.id.Id&nbsp;runId)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>status</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.job.JobExecutor</code></dd>
@@ -270,11 +269,11 @@ O&gt;</span>&nbsp;<span class="return-type">O</span>&nbsp;<span class="element-n
 </section>
 </li>
 <li>
-<section class="detail" id="result(com.sca4d.core.api.job.JobRunId,com.sca4d.core.api.job.Job)">
+<section class="detail" id="result(com.sca4d.core.api.id.Id,com.sca4d.core.api.job.Job)">
 <h3>result</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;O&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;O&gt;</span>&nbsp;<span class="element-name">result</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.job.JobRunId&nbsp;runId,
+ @NotNull com.sca4d.core.api.id.Id&nbsp;runId,
  @NotNull
  @NotNull com.sca4d.core.api.job.Job&lt;?,<wbr>O&gt;&nbsp;job)</span></div>
 <dl class="notes">
@@ -284,11 +283,11 @@ O&gt;</span>&nbsp;<span class="return-type">O</span>&nbsp;<span class="element-n
 </section>
 </li>
 <li>
-<section class="detail" id="await(com.sca4d.core.api.job.JobRunId,com.sca4d.core.api.job.Job,java.time.Duration)">
+<section class="detail" id="await(com.sca4d.core.api.id.Id,com.sca4d.core.api.job.Job,java.time.Duration)">
 <h3>await</h3>
 <div class="member-signature"><span class="annotations">@Nullable
 </span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;O&gt;</span>&nbsp;<span class="return-type">O</span>&nbsp;<span class="element-name">await</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.job.JobRunId&nbsp;runId,
+ @NotNull com.sca4d.core.api.id.Id&nbsp;runId,
  @NotNull
  @NotNull com.sca4d.core.api.job.Job&lt;?,<wbr>O&gt;&nbsp;job,
  @NotNull

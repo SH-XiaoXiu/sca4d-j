@@ -7,7 +7,7 @@ import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.MessageBus;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
@@ -244,14 +244,18 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
         if (candidate == null) {
             return false;
         }
-        return distributedLock.execute(
+        distributedLock.execute(
                 scheduleLock(candidate.scheduleId()),
                 LOCK_WAIT,
-                () -> Boolean.TRUE.equals(transactions.execute(status -> triggerDueCandidate(candidate))));
+                () -> {
+                    transactions.executeWithoutResult(status -> triggerDueCandidate(candidate));
+                    return null;
+                });
+        return true;
     }
 
     /** 在规则锁内重新确认候选版本和计划时间，并推进一次到期执行。 */
-    private boolean triggerDueCandidate(@NotNull DeviceSchedule candidate) {
+    private void triggerDueCandidate(@NotNull DeviceSchedule candidate) {
         // 锁内重新读取规则，只有版本、状态和计划时间都未变化时才继续执行，避免重复触发旧候选。
         DeviceSchedule schedule = schedules.find(candidate.scheduleId()).orElse(null);
         Instant now = clock.instant();
@@ -260,7 +264,7 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
                 || schedule.status() != DeviceScheduleStatus.ACTIVE
                 || !schedule.nextFireAt().equals(candidate.nextFireAt())
                 || schedule.nextFireAt().filter(fireAt -> !fireAt.isAfter(now)).isEmpty()) {
-            return true;
+            return;
         }
         Instant plannedAt = schedule.nextFireAt().orElseThrow();
         Instant expiresAt = addValidFor(plannedAt, schedule.validFor());
@@ -306,7 +310,6 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
                 null,
                 nextStatus,
                 nextFireAt);
-        return true;
     }
 
     /** 在触发事务回滚后，取得同一规则的 Redis 锁，并在新事务中保存同版本 FAILED 结果。 */
@@ -391,7 +394,7 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
                 plannedAt,
                 true,
                 triggeredAt);
-        MessageId eventMessageId = messages.dispatch(
+        Id eventMessageId = messages.dispatch(
                 new Event<>(
                         IotMessageTypes.DEVICE_EVENT_OCCURRED,
                         "schedule-execution:" + sourceEventId,

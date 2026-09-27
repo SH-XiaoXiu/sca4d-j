@@ -30,6 +30,12 @@ public final class SystemIdentityInitializer implements SmartInitializingSinglet
 
     private final @NotNull List<InstanceCapability> capabilities;
 
+    /**
+     * @param repository 系统身份持久化入口
+     * @param transaction 执行初始化事务的模板
+     * @param properties 系统身份配置
+     * @param capabilities 应用声明的实例能力
+     */
     public SystemIdentityInitializer(
             @NotNull SystemIdentityRepository repository,
             @NotNull TransactionTemplate transaction,
@@ -41,6 +47,11 @@ public final class SystemIdentityInitializer implements SmartInitializingSinglet
         this.capabilities = List.copyOf(capabilities);
     }
 
+    /**
+     * 在 Spring 单例初始化完成后登记数据库身份并发布运行期身份表。
+     *
+     * @throws IllegalStateException 配置冲突、固定 ID 被占用或数据库身份不一致时抛出
+     */
     @Override
     public void afterSingletonsInstantiated() {
         Map<TreeCode, Long> configured = new LinkedHashMap<>();

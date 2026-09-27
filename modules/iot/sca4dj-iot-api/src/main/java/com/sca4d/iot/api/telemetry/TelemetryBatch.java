@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 保存一次 reported 报文中需要发布到消息代理的一批 Telemetry 样本。 */
+@SuppressWarnings("ClassCanBeRecord")
 public final class TelemetryBatch {
 
     private final long deviceId;
@@ -20,7 +21,7 @@ public final class TelemetryBatch {
     /**
      * @param deviceId Device 标识
      * @param bindingGeneration 物模型绑定代数
-     * @param samples 非空样本；消费端使用 MessageId 和样本顺序幂等写入
+     * @param samples 非空样本；消费端使用 Id 和样本顺序幂等写入
      */
     @JsonCreator
     public TelemetryBatch(

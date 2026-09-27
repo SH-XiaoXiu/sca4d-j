@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public @interface </span><span class="element-name type-name-label">OpenApiRoute</span></div>
 <div class="block">声明一条由具体应用明确公开的 OpenAPI Tool 路由。
 
- <p>该注解组合 Spring MVC <code>RequestMapping</code>。具体应用只声明一次 HTTP 方法和路径，Spring MVC 负责注册路由，OpenAPI
+ <p>`OpenApiRoute` 组合 Spring MVC <code>RequestMapping</code>。具体应用只声明一次 HTTP 方法和路径，Spring MVC 负责注册路由，OpenAPI
  模块负责校验 Operation、执行 Client 认证和生成独立的运行时文档分组。</div>
 </section>
 <section class="summary">
@@ -156,7 +156,7 @@ loadScripts(document, 'script');</script>
 </span><span class="return-type">org.springframework.web.bind.annotation.RequestMethod[]</span>&nbsp;<span class="element-name">method</span></div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>该路由接受的唯一 HTTP 方法</dd>
+<dd>当前路由接受的唯一 HTTP 方法</dd>
 </dl>
 </section>
 </li>

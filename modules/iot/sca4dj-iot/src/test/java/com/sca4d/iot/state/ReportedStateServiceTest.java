@@ -15,7 +15,7 @@ import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.DispatchReceipt;
 import com.sca4d.core.api.messaging.MessageBus;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.ProductBinding;
@@ -89,7 +89,6 @@ class ReportedStateServiceTest {
 
     @Test
     @DisplayName("reported 收敛通过可靠事件请求 ACK 状态转换")
-    @SuppressWarnings("unchecked")
     void publishesReliableAcknowledgementRequestForConvergence() {
         Device device = device();
         DeviceRepository devices = mock(DeviceRepository.class);
@@ -118,7 +117,7 @@ class ReportedStateServiceTest {
                 .thenReturn(List.of(new DesiredConvergence("power", 99)));
         MessageBus messages = mock(MessageBus.class);
         when(messages.dispatch(any(), any()))
-                .thenReturn(new DispatchReceipt(new MessageId(1000), DispatchReceipt.Status.OUTBOX_ENLISTED));
+                .thenReturn(new DispatchReceipt(Id.of(1000), DispatchReceipt.Status.OUTBOX_ENLISTED));
         DeviceChangeNotifier changes = mock(DeviceChangeNotifier.class);
         ReportedStateService service = service(
                 devices,

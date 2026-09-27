@@ -21,6 +21,10 @@ public class DeviceAcknowledgementHandler implements MessageHandler<DeviceAcknow
 
     private final @NotNull MessageCodec<DeviceAcknowledgement> codec;
 
+    /**
+     * @param acknowledgements 负责更新下行消息状态的服务
+     * @param codec 设备 ACK 消息 Codec
+     */
     public DeviceAcknowledgementHandler(
             @NotNull DeviceAcknowledgementService acknowledgements,
             @NotNull MessageCodec<DeviceAcknowledgement> codec) {
@@ -28,16 +32,24 @@ public class DeviceAcknowledgementHandler implements MessageHandler<DeviceAcknow
         this.codec = Objects.requireNonNull(codec, "Device ACK Codec 不能为空");
     }
 
+    /** @return 设备 ACK Handler 的稳定编码 */
     @Override
     public @NotNull TreeCode code() {
         return CODE;
     }
 
+    /** @return 设备 ACK 消息 Codec */
     @Override
     public @NotNull MessageCodec<DeviceAcknowledgement> codec() {
         return codec;
     }
 
+    /**
+     * 应用 ACK 状态转换并确认消息；服务失败时向消息容器抛出异常以触发重试或拒绝。
+     *
+     * @param incoming 已解码的设备 ACK 消息
+     * @return 确认消息处理结果
+     */
     @Override
     @SystemExecution(IotCapabilities.SYSTEM_IDENTITY_VALUE)
     public @NotNull HandlingDecision handle(@NotNull IncomingMessage<DeviceAcknowledgement> incoming) {

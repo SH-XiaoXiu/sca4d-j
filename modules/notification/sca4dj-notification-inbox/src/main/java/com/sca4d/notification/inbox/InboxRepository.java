@@ -1,7 +1,7 @@
 package com.sca4d.notification.inbox;
 
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.notification.Notification;
 import com.sca4d.notification.inbox.mapper.InboxMessageMapper;
 import com.sca4d.notification.inbox.template.RenderedInboxMessage;
@@ -41,7 +41,7 @@ public final class InboxRepository {
     /** 按原始 messageId 和 Account 幂等保存渲染快照。 */
     public boolean add(
             long inboxMessageId,
-            @NotNull MessageId messageId,
+            @NotNull Id messageId,
             long accountId,
             @NotNull Notification notification,
             @NotNull RenderedInboxMessage rendered) {

@@ -15,7 +15,7 @@ import com.sca4d.core.api.messaging.DispatchReceipt;
 import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.JacksonMessageCodec;
 import com.sca4d.core.api.messaging.MessageBus;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.Name;
 import com.sca4d.iot.api.connection.DeviceConnectionId;
 import com.sca4d.iot.api.connection.DeviceConnectionProtocol;
@@ -99,7 +99,7 @@ class DeviceDisconnectHandlerTest {
                         ArgumentMatchers.argThat(
                                 policy -> policy.mode() == DispatchPolicy.Mode.OUTBOX
                                         && NOW.plusSeconds(1).equals(policy.notBefore()))))
-                .thenReturn(new DispatchReceipt(new MessageId(90L), DispatchReceipt.Status.OUTBOX_ENLISTED));
+                .thenReturn(new DispatchReceipt(Id.of(90L), DispatchReceipt.Status.OUTBOX_ENLISTED));
 
         consumer.handle(delivery());
 
@@ -123,7 +123,7 @@ class DeviceDisconnectHandlerTest {
                         ArgumentMatchers.argThat(
                                 policy -> policy.mode() == DispatchPolicy.Mode.OUTBOX
                                         && NOW.plusSeconds(1).equals(policy.notBefore()))))
-                .thenReturn(new DispatchReceipt(new MessageId(91L), DispatchReceipt.Status.OUTBOX_ENLISTED));
+                .thenReturn(new DispatchReceipt(Id.of(91L), DispatchReceipt.Status.OUTBOX_ENLISTED));
 
         consumer.handle(delivery());
 
@@ -145,7 +145,7 @@ class DeviceDisconnectHandlerTest {
                 "identity-unavailable",
                 1);
         return new IncomingMessage<>(
-                new MessageId(80L),
+                Id.of(80L),
                 payload,
                 new Name("TEST_APP"),
                 NOW,

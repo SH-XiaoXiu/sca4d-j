@@ -116,7 +116,7 @@ extends <a href="../delivery/Delivery.html" title="interface in com.sca4d.core.a
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#channel()" class="member-name-link">channel</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="../delivery/DeliveryOutcome.html" title="class in com.sca4d.core.api.delivery">DeliveryOutcome</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#deliver(com.sca4d.core.api.messaging.MessageId,com.sca4d.core.api.notification.Notification)" class="member-name-link">deliver</a><wbr>(@NotNull <a href="../messaging/MessageId.html" title="class in com.sca4d.core.api.messaging">MessageId</a>&nbsp;messageId,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#deliver(com.sca4d.core.api.id.Id,com.sca4d.core.api.notification.Notification)" class="member-name-link">deliver</a><wbr>(@NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a>&nbsp;messageId,
  @NotNull <a href="Notification.html" title="class in com.sca4d.core.api.notification">Notification</a>&nbsp;notification)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">同步投递通知，正常返回表示具体提供方已经接受。</div>
@@ -175,17 +175,17 @@ extends <a href="../delivery/Delivery.html" title="interface in com.sca4d.core.a
 </section>
 </li>
 <li>
-<section class="detail" id="deliver(com.sca4d.core.api.messaging.MessageId,com.sca4d.core.api.notification.Notification)">
+<section class="detail" id="deliver(com.sca4d.core.api.id.Id,com.sca4d.core.api.notification.Notification)">
 <h3>deliver</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="return-type">@NotNull <a href="../delivery/DeliveryOutcome.html" title="class in com.sca4d.core.api.delivery">DeliveryOutcome</a></span>&nbsp;<span class="element-name">deliver</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../messaging/MessageId.html" title="class in com.sca4d.core.api.messaging">MessageId</a>&nbsp;messageId,
+ @NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a>&nbsp;messageId,
  @NotNull
  @NotNull <a href="Notification.html" title="class in com.sca4d.core.api.notification">Notification</a>&nbsp;notification)</span></div>
 <div class="block">同步投递通知，正常返回表示具体提供方已经接受。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../delivery/Delivery.html#deliver(com.sca4d.core.api.messaging.MessageId,R)">deliver</a></code>&nbsp;in interface&nbsp;<code><a href="../delivery/Delivery.html" title="interface in com.sca4d.core.api.delivery">Delivery</a>&lt;<a href="Notification.html" title="class in com.sca4d.core.api.notification">Notification</a>&gt;</code></dd>
+<dd><code><a href="../delivery/Delivery.html#deliver(com.sca4d.core.api.id.Id,R)">deliver</a></code>&nbsp;in interface&nbsp;<code><a href="../delivery/Delivery.html" title="interface in com.sca4d.core.api.delivery">Delivery</a>&lt;<a href="Notification.html" title="class in com.sca4d.core.api.notification">Notification</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>messageId</code> - 原始通知消息标识，渠道可以用它防止重复副作用</dd>
 <dd><code>notification</code> - 已冻结接收人、Locale、区域、变量和渠道的通知</dd>

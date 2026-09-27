@@ -52,7 +52,7 @@ public final class AuditPayloadJson {
         }
         AuditPayloadCodec<?> codec = registry.find(payload);
         String type = codec == null ? RAW_TYPE : codec.payloadType();
-        int version = codec == null ? RAW_VERSION : codec.payloadVersion();
+        int version = codec == null ? RAW_VERSION : codec.version();
         LOG.trace(
                 "审计载荷编码方式已选择 | payloadType={} payloadVersion={} codecRegistered={}",
                 type,

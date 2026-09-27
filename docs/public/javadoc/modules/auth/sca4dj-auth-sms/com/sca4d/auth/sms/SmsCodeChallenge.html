@@ -107,9 +107,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;maskedRecipient,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;expiresAt,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;resendAt)</code></div>
-<div class="col-last even-row-color">
-<div class="block">创建安全 Challenge 响应。</div>
-</div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -164,7 +162,13 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;expiresAt,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;resendAt)</span></div>
-<div class="block">创建安全 Challenge 响应。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>challengeId</code> - 短期 Challenge 标识</dd>
+<dd><code>maskedRecipient</code> - 脱敏后的接收目标</dd>
+<dd><code>expiresAt</code> - Challenge 到期时间</dd>
+<dd><code>resendAt</code> - 允许再次发送验证码的时间</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -181,6 +185,10 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="SmsCodeChallengeId.html" title="class in com.sca4d.auth.sms">SmsCodeChallengeId</a></span>&nbsp;<span class="element-name">challengeId</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>短期 Challenge 标识</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -189,6 +197,10 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">maskedRecipient</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>脱敏后的接收目标</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -197,6 +209,10 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name">expiresAt</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>Challenge 到期时间</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -205,6 +221,10 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name">resendAt</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>允许再次发送验证码的时间</dd>
+</dl>
 </section>
 </li>
 </ul>

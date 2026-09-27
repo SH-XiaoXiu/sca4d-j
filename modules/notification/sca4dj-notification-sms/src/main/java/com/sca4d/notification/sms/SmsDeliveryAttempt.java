@@ -13,6 +13,11 @@ public final class SmsDeliveryAttempt {
 
     private final @Nullable String bizId;
 
+    /**
+     * @param status Provider 投递状态
+     * @param requestId Provider 请求标识，未知时为空
+     * @param bizId Provider 业务标识，未知时为空
+     */
     public SmsDeliveryAttempt(
             @NotNull SmsDeliveryStatus status,
             @Nullable String requestId,
@@ -22,15 +27,17 @@ public final class SmsDeliveryAttempt {
         this.bizId = bizId;
     }
 
-    /** 返回 status 方法提供的结果。 */
+    /** @return Provider 投递状态 */
     public @NotNull SmsDeliveryStatus status() {
         return status;
     }
 
+    /** @return Provider 请求标识，未知时为空 */
     public @Nullable String requestId() {
         return requestId;
     }
 
+    /** @return Provider 业务标识，未知时为空 */
     public @Nullable String bizId() {
         return bizId;
     }

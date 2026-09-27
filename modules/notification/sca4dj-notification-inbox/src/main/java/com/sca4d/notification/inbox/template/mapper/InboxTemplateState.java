@@ -22,7 +22,11 @@ public final class InboxTemplateState {
     private final @NotNull Version version;
 
     /**
-     * 创建模板数据库状态。
+     * @param templateId 模板数据库标识
+     * @param code 通知编码
+     * @param contentJson 模板内容 JSON
+     * @param enabled 是否允许投递
+     * @param version 模板版本
      */
     public InboxTemplateState(
             long templateId,
@@ -37,28 +41,27 @@ public final class InboxTemplateState {
         this.version = Objects.requireNonNull(version, "站内信模板版本不能为空");
     }
 
+    /** @return 模板数据库标识 */
     public long templateId() {
         return templateId;
     }
 
-    /**
-     * 返回 code 方法提供的结果。
-     */
+    /** @return 站内信模板编码 */
     public @NotNull TreeCode code() {
         return code;
     }
 
+    /** @return 模板内容 JSON */
     public @NotNull String contentJson() {
         return contentJson;
     }
 
+    /** @return 是否允许投递 */
     public boolean enabled() {
         return enabled;
     }
 
-    /**
-     * 返回 version 方法提供的结果。
-     */
+    /** @return 模板版本 */
     public @NotNull Version version() {
         return version;
     }

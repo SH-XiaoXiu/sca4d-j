@@ -135,7 +135,7 @@ implements <a href="NodeRouter.html" title="interface in com.sca4d.web.realtime.
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull com.sca4d.core.api.connection.ConnectionId&gt;&nbsp;connectionIds,
  @NotNull <a href="BrowserWrite.html" title="class in com.sca4d.web.realtime.connection">BrowserWrite</a>&nbsp;delivery)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">只投递当前 JVM 持有的连接；其他节点的租约等待 Redis 自动清理。</div>
+<div class="block">只投递当前 JVM 持有的连接；其他节点的连接由 Redis 按租约自动清理。</div>
 </div>
 </div>
 </div>
@@ -192,7 +192,7 @@ implements <a href="NodeRouter.html" title="interface in com.sca4d.web.realtime.
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull com.sca4d.core.api.connection.ConnectionId&gt;&nbsp;connectionIds,
  @NotNull
  @NotNull <a href="BrowserWrite.html" title="class in com.sca4d.web.realtime.connection">BrowserWrite</a>&nbsp;delivery)</span></div>
-<div class="block">只投递当前 JVM 持有的连接；其他节点的租约等待 Redis 自动清理。</div>
+<div class="block">只投递当前 JVM 持有的连接；其他节点的连接由 Redis 按租约自动清理。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="NodeRouter.html#send(java.lang.String,java.util.List,com.sca4d.web.realtime.connection.BrowserWrite)">send</a></code>&nbsp;in interface&nbsp;<code><a href="NodeRouter.html" title="interface in com.sca4d.web.realtime.connection">NodeRouter</a></code></dd>

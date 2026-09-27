@@ -192,6 +192,16 @@ implements org.springframework.context.SmartLifecycle</span></div>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends @NotNull com.sca4d.core.api.messaging.EventHandler&lt;?&gt;&gt;&nbsp;eventHandlers,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends @NotNull com.sca4d.core.api.messaging.MessageHandler&lt;?&gt;&gt;&nbsp;messageHandlers)</span></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>connectionFactory</code> - RabbitMQ 连接工厂</dd>
+<dd><code>topology</code> - 消息拓扑</dd>
+<dd><code>codec</code> - 消息信封 Codec</dd>
+<dd><code>properties</code> - Messaging 配置</dd>
+<dd><code>publisher</code> - 重试消息发布器</dd>
+<dd><code>eventHandlers</code> - 已安装的 EventHandler</dd>
+<dd><code>messageHandlers</code> - 已安装的 MessageHandler</dd>
+</dl>
 </section>
 </li>
 </ul>

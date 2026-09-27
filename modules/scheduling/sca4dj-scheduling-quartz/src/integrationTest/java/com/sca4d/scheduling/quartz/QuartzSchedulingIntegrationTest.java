@@ -12,7 +12,7 @@ import com.sca4d.core.api.job.JobExecution;
 import com.sca4d.core.api.job.JobExecutor;
 import com.sca4d.core.api.job.JobKey;
 import com.sca4d.core.api.job.JobRetryPolicy;
-import com.sca4d.core.api.job.JobRunId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.job.JobRunStatus;
 import com.sca4d.core.api.scheduling.ClusterTask;
 import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
@@ -448,19 +448,19 @@ class QuartzSchedulingIntegrationTest {
         private final CountDownLatch fire = new CountDownLatch(1);
 
         @Override
-        public <I, O> @NotNull JobRunId submit(@NotNull Job<I, O> job, @Nullable I input) {
+        public <I, O> @NotNull Id submit(@NotNull Job<I, O> job, @Nullable I input) {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public <I, O> @NotNull Optional<JobRunId> submitScheduled(
+        public <I, O> @NotNull Optional<Id> submitScheduled(
                 @NotNull Job<I, O> job,
                 @Nullable I input,
                 @NotNull ScheduleKey scheduleKey,
                 @NotNull Instant scheduledAt,
                 @NotNull OverlapPolicy overlapPolicy) {
             fire.countDown();
-            return Optional.of(new JobRunId(1));
+            return Optional.of(Id.of(1));
         }
 
         @Override
@@ -472,20 +472,20 @@ class QuartzSchedulingIntegrationTest {
         }
 
         @Override
-        public @NotNull JobRunStatus status(@NotNull JobRunId runId) {
+        public @NotNull JobRunStatus status(@NotNull Id runId) {
             throw new UnsupportedOperationException();
         }
 
         @Override
         public <O> @NotNull Optional<O> result(
-                @NotNull JobRunId runId,
+                @NotNull Id runId,
                 @NotNull Job<?, O> job) {
             throw new UnsupportedOperationException();
         }
 
         @Override
         public <O> @Nullable O await(
-                @NotNull JobRunId runId,
+                @NotNull Id runId,
                 @NotNull Job<?, O> job,
                 @NotNull Duration timeout) {
             throw new UnsupportedOperationException();

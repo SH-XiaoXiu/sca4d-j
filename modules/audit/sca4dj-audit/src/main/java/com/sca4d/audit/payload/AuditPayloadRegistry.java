@@ -27,13 +27,13 @@ public final class AuditPayloadRegistry {
             if (type.isEmpty() || type.length() > 128 || !type.equals(declaredType) || "raw".equals(type)) {
                 throw new IllegalStateException("审计 Codec 类型长度必须在 1 到 128 之间、不能包含首尾空白或使用保留值 raw");
             }
-            if (checked.payloadVersion() <= 0) {
+            if (checked.version() <= 0) {
                 throw new IllegalStateException("审计 Codec 版本必须为正数: " + type);
             }
             Class<? extends AuditPayload> payloadClass = Objects.requireNonNull(
                     checked.payloadClass(),
                     "审计 Codec 载荷类不能为空");
-            String key = key(type, checked.payloadVersion());
+            String key = key(type, checked.version());
             if (persisted.putIfAbsent(key, checked) != null) {
                 throw new IllegalStateException("重复的审计 Codec: " + key);
             }

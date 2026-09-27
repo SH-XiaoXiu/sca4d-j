@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sca4d.core.api.messaging.MessageCodec;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.notification.NotificationMessage;
 import com.sca4d.notification.NotificationMessageCodec;
@@ -21,6 +21,7 @@ public final class SmsDeliveryCheckCodec implements MessageCodec<SmsDeliveryChec
 
     private final @NotNull NotificationMessageCodec notifications;
 
+    /** @param json 用于读取和写入 SMS 查询 payload 的 ObjectMapper */
     public SmsDeliveryCheckCodec(@NotNull ObjectMapper json) {
         this.json = Objects.requireNonNull(json, "ObjectMapper 不能为空");
         this.notifications = new NotificationMessageCodec(json);
@@ -78,7 +79,7 @@ public final class SmsDeliveryCheckCodec implements MessageCodec<SmsDeliveryChec
             JsonNode bizId = root.get("bizId");
             return new SmsDeliveryCheck(
                     message.notification(),
-                    new MessageId(root.required("messageId").longValue()),
+                    Id.of(root.required("messageId").longValue()),
                     root.required("providerId").longValue(),
                     requestId == null || requestId.isNull() ? null : requestId.textValue(),
                     bizId == null || bizId.isNull() ? null : bizId.textValue(),

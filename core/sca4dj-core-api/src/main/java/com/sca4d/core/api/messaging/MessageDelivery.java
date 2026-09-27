@@ -1,6 +1,7 @@
 package com.sca4d.core.api.messaging;
 
 import com.sca4d.core.api.event.Event;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -9,9 +10,10 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 保存 RabbitMQ 投递给 `MessageConsumer` 的事件和发布元数据。 */
+@SuppressWarnings({"ClassCanBeRecord", "unused"})
 public final class MessageDelivery<T> {
 
-    private final @NotNull MessageId messageId;
+    private final @NotNull Id messageId;
 
     private final @NotNull Event<T> event;
 
@@ -31,12 +33,12 @@ public final class MessageDelivery<T> {
      * @param redelivered RabbitMQ 是否将当前消息标记为重新投递
      */
     public MessageDelivery(
-            @NotNull MessageId messageId,
+            @NotNull Id messageId,
             @NotNull Event<T> event,
             @NotNull String sourceApplication,
             @NotNull Instant publishedAt,
             boolean redelivered) {
-        this.messageId = Objects.requireNonNull(messageId, "MessageId 不能为空");
+        this.messageId = Objects.requireNonNull(messageId, "Id 不能为空");
         this.event = Objects.requireNonNull(event, "投递事件不能为空");
         this.sourceApplication = TextUtils.requireText(sourceApplication, "消息来源应用");
         this.publishedAt = Objects.requireNonNull(publishedAt, "消息发布时间不能为空");
@@ -45,7 +47,7 @@ public final class MessageDelivery<T> {
 
     /** @return 发布端分配的消息标识，可用于消费幂等检查 */
     @Contract(pure = true)
-    public @NotNull MessageId messageId() {
+    public @NotNull Id messageId() {
         return messageId;
     }
 

@@ -146,7 +146,7 @@ implements com.sca4d.core.api.scheduling.ClusterTask</span></div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#runOnce()" class="member-name-link">runOnce</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">取得租约时对账一次，其他实例同时调用直接返回 false。</div>
+<div class="block">取得租约时对账一次，其他实例同时调用直接返回 <code>false</code>。</div>
 </div>
 </div>
 </div>
@@ -199,7 +199,7 @@ implements com.sca4d.core.api.scheduling.ClusterTask</span></div>
 <section class="detail" id="runOnce()">
 <h3>runOnce</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">runOnce</span>()</div>
-<div class="block">取得租约时对账一次，其他实例同时调用直接返回 false。</div>
+<div class="block">取得租约时对账一次，其他实例同时调用直接返回 <code>false</code>。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>当前实例是否取得并执行对账</dd>
@@ -225,7 +225,7 @@ implements com.sca4d.core.api.scheduling.ClusterTask</span></div>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;clientId)</span></div>
 <div class="block">查询一个 MQTT Client 的 Broker 当前状态并立即刷新连接投影。
 
- <p>方法只处理已登记 Device 或已有 EMQX 投影的 Client ID。查询时间早于后续连接事件时，
+ <p>方法只处理已登记 Device 或已有 EMQX 投影的 Client ID。查询时间早于之后的连接事件时，
  Redis 观察时间会阻止旧结果覆盖新连接代次。</p></div>
 <dl class="notes">
 <dt>Parameters:</dt>

@@ -464,7 +464,7 @@ workerCount 是单个实例的容量；三个使用相同 App 隔离名称的实
 
 leaseDuration 应覆盖正常的短暂停顿和数据库延迟，leaseRenewInterval 应留出多次续租机会。租约过短会使仍在执行的节点被其他实例重复领取；租约过长会延迟失联恢复。无论怎样配置，运行语义仍是至少一次，不能依靠租约参数获得仅一次外部操作。
 
-历史清理只选择当前 App 隔离名称中、`completed_at` 早于 succeededRetention 的 SUCCEEDED 根运行。清理 SQL 明确删除这些运行的 attempt、依赖、节点和根记录。FAILED、QUEUED 和 RUNNING 不按该窗口自动删除；删除后的 JobRunId 按不存在处理。
+历史清理只选择当前 App 隔离名称中、`completed_at` 早于 succeededRetention 的 SUCCEEDED 根运行。清理 SQL 明确删除这些运行的 attempt、依赖、节点和根记录。FAILED、QUEUED 和 RUNNING 不按该窗口自动删除；删除后的运行标识按不存在处理。
 
 配置在 JobWorker Bean 创建前校验。数量、间隔、保留时间无效或续租间隔不小于租约时长时，应用启动失败。运行和表状态见[任务与调度](/tutorials/jobs-and-scheduling)。
 

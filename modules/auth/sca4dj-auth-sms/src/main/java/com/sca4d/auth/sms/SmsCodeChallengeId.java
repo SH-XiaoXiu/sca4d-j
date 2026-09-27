@@ -19,6 +19,7 @@ public final class SmsCodeChallengeId {
         this.value = checked;
     }
 
+    /** @return Challenge 的稳定文本标识 */
     @Contract(pure = true)
     public @NotNull String value() {
         return value;

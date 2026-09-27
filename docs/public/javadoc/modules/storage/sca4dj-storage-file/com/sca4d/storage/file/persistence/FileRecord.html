@@ -107,7 +107,7 @@ loadScripts(document, 'script');</script>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(long,long,java.lang.String,com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,long,java.lang.String,java.lang.Long,com.sca4d.core.api.storage.FileStatus,java.time.Instant,java.time.Instant,boolean)" class="member-name-link">FileRecord</a><wbr>(long&nbsp;id,
  long&nbsp;uploaderPrincipalId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;scene,
- com.sca4d.core.api.name.code.TreeCode&nbsp;targetResourceType,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;targetResourceType,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetResourceId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;backendId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;containerName,
@@ -186,7 +186,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#targetResourceId()" class="member-name-link">targetResourceId</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>com.sca4d.core.api.name.code.TreeCode</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#targetResourceType()" class="member-name-link">targetResourceType</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
@@ -231,7 +231,7 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;scene,
  @NotNull
- com.sca4d.core.api.name.code.TreeCode&nbsp;targetResourceType,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;targetResourceType,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetResourceId,
  @NotNull
@@ -304,7 +304,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="targetResourceType()">
 <h3>targetResourceType</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">targetResourceType</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">targetResourceType</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>文件关联的目标 Resource 类型</dd>

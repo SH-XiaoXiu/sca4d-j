@@ -1,5 +1,6 @@
 package com.sca4d.core.api.job;
 
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.scheduling.OverlapPolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import org.jetbrains.annotations.CheckReturnValue;
@@ -29,7 +30,7 @@ public interface JobExecutor {
      * @throws IllegalArgumentException Job 未登记、定义不一致、输入类型错误或输入无法序列化时抛出
      */
     @CheckReturnValue
-    <I, O> @NotNull JobRunId submit(@NotNull Job<I, O> job, @Nullable I input);
+    <I, O> @NotNull Id submit(@NotNull Job<I, O> job, @Nullable I input);
 
     /**
      * 保存定时 fire 对应的 run，并按计划 key 和原定时间去重。
@@ -45,7 +46,7 @@ public interface JobExecutor {
      * @throws IllegalArgumentException Job 未登记、定义不一致、输入无效或计划参数无效时抛出
      */
     @CheckReturnValue
-    <I, O> @NotNull Optional<JobRunId> submitScheduled(
+    <I, O> @NotNull Optional<Id> submitScheduled(
             @NotNull Job<I, O> job,
             @Nullable I input,
             @NotNull ScheduleKey scheduleKey,
@@ -80,7 +81,7 @@ public interface JobExecutor {
      */
     @CheckReturnValue
     @NotNull
-    JobRunStatus status(@NotNull JobRunId runId);
+    JobRunStatus status(@NotNull Id runId);
 
     /**
      * 读取已经成功的结果，不等待仍在执行的 run。
@@ -94,7 +95,7 @@ public interface JobExecutor {
      */
     @CheckReturnValue
     <O> @NotNull Optional<O> result(
-            @NotNull JobRunId runId,
+            @NotNull Id runId,
             @NotNull Job<?, O> job);
 
     /**
@@ -111,7 +112,7 @@ public interface JobExecutor {
      */
     @CheckReturnValue
     <O> @Nullable O await(
-            @NotNull JobRunId runId,
+            @NotNull Id runId,
             @NotNull Job<?, O> job,
             @NotNull Duration timeout);
 }

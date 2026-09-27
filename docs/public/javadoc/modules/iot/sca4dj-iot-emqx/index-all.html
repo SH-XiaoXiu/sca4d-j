@@ -266,7 +266,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/emqx/connection/EmqxClientConnection.html#%3Cinit%3E(java.lang.String,java.lang.String,java.time.Instant,java.util.Map)" class="member-name-link">EmqxClientConnection(String, String, Instant, Map&lt;String, String&gt;)</a> - Constructor for class com.sca4d.iot.emqx.connection.<a href="com/sca4d/iot/emqx/connection/EmqxClientConnection.html" title="class in com.sca4d.iot.emqx.connection">EmqxClientConnection</a></dt>
 <dd>
-<div class="block">创建用于连接对账的 Broker 当前连接事实。</div>
+<div class="block">创建用于连接对账的 Broker 当前连接信息。</div>
 </dd>
 <dt><a href="com/sca4d/iot/emqx/connection/EmqxConnectionReconciler.html" class="type-name-link" title="class in com.sca4d.iot.emqx.connection">EmqxConnectionReconciler</a> - Class in <a href="com/sca4d/iot/emqx/connection/package-summary.html">com.sca4d.iot.emqx.connection</a></dt>
 <dd>
@@ -531,7 +531,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/emqx/authentication/MqttAuthorizationService.html#%3Cinit%3E(com.sca4d.iot.emqx.protocol.MqttProtocolCatalog,java.util.Collection)" class="member-name-link">MqttAuthorizationService(MqttProtocolCatalog, Collection&lt;MqttAuthorizationPolicy&gt;)</a> - Constructor for class com.sca4d.iot.emqx.authentication.<a href="com/sca4d/iot/emqx/authentication/MqttAuthorizationService.html" title="class in com.sca4d.iot.emqx.authentication">MqttAuthorizationService</a></dt>
 <dd>
-<div class="block">创建应用策略优先、协议 ACL 兜底且使用当前应用命名空间的 MQTT 授权服务。</div>
+<div class="block">创建应用策略优先、协议 ACL 作为默认规则且使用当前 App 隔离名称的 MQTT 授权服务。</div>
 </dd>
 <dt><a href="com/sca4d/iot/emqx/connection/MqttDeviceConnection.html" class="type-name-link" title="class in com.sca4d.iot.emqx.connection">MqttDeviceConnection</a> - Class in <a href="com/sca4d/iot/emqx/connection/package-summary.html">com.sca4d.iot.emqx.connection</a></dt>
 <dd>
@@ -775,7 +775,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/emqx/connection/EmqxConnectionReconciler.html#runOnce()" class="member-name-link">runOnce()</a> - Method in class com.sca4d.iot.emqx.connection.<a href="com/sca4d/iot/emqx/connection/EmqxConnectionReconciler.html" title="class in com.sca4d.iot.emqx.connection">EmqxConnectionReconciler</a></dt>
 <dd>
-<div class="block">取得租约时对账一次，其他实例同时调用直接返回 false。</div>
+<div class="block">取得租约时对账一次，其他实例同时调用直接返回 <code>false</code>。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:S">S</h2>

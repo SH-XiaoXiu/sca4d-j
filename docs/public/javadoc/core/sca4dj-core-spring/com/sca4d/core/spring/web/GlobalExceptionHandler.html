@@ -164,7 +164,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#idempotencyInProgress(com.sca4d.core.api.concurrent.IdempotencyInProgressException,jakarta.servlet.http.HttpServletRequest)" class="member-name-link">idempotencyInProgress</a><wbr>(com.sca4d.core.api.concurrent.IdempotencyInProgressException&nbsp;exception,
  jakarta.servlet.http.HttpServletRequest&nbsp;request)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">处理仍由其他执行者处理的幂等请求。</div>
+<div class="block">处理仍由其他执行者负责的幂等请求。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;<a href="ApiResponse.html" title="class in com.sca4d.core.spring.web">ApiResponse</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#illegalArgument(java.lang.IllegalArgumentException,jakarta.servlet.http.HttpServletRequest)" class="member-name-link">illegalArgument</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a>&nbsp;exception,
@@ -343,7 +343,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@ExceptionHandler(com.sca4d.core.api.concurrent.IdempotencyInProgressException.class)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="ApiResponse.html" title="class in com.sca4d.core.spring.web">ApiResponse</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</span>&nbsp;<span class="element-name">idempotencyInProgress</span><wbr><span class="parameters">(com.sca4d.core.api.concurrent.IdempotencyInProgressException&nbsp;exception,
  jakarta.servlet.http.HttpServletRequest&nbsp;request)</span></div>
-<div class="block">处理仍由其他执行者处理的幂等请求。</div>
+<div class="block">处理仍由其他执行者负责的幂等请求。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>exception</code> - 携带建议等待秒数的幂等处理中异常</dd>

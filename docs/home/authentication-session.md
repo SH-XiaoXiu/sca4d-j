@@ -71,7 +71,7 @@ Session 变化后，Auth 调用 [SessionInvalidationListener](/javadoc/core/sca4
 
 ## Session JSON
 
-[SessionCodec](/javadoc/modules/auth/sca4dj-auth/com/sca4d/auth/session/codec/SessionCodec.html) 保存格式版本、Session 标识、Subject、Account、Authentication、时间和每个完整 Principal/Resource 的 type/Base64 payload。紧凑 Principal ID 按 Principal Codec type 保存，数字 Resource ID 按 Resource type 保存；两者都使用 Base64 包装的 Roaring64 portable payload。开放类型字段由各模块 Codec 或业务 Resource 类型负责，Auth 不依赖 IAM 或 IoT 实现类。
+[SessionCodec](/javadoc/modules/auth/sca4dj-auth/com/sca4d/auth/session/codec/SessionCodec.html) 保存 V1 格式版本、Session 标识、Subject、Account、Authentication、时间和每个完整 Principal/Resource 的 type、payload version 与 Base64 payload。紧凑 Principal ID 按 Principal Codec type 和 version 保存，数字 Resource ID 按 Resource type 和 version 保存；两者都使用 V1 的 Base64 包装 Roaring64 portable payload。未来结构变化由版本 Codec 和手工迁移链处理，正常读取不会改写旧数据。开放类型字段由各模块 Codec 或业务 Resource 类型负责，Auth 不依赖 IAM 或 IoT 实现类。
 
 解码失败时不返回部分 Session。HTTP View、前端字段或本地化不能直接改变 Session wire。
 

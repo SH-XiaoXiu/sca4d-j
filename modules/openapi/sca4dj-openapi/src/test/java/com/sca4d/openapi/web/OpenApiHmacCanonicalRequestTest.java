@@ -27,7 +27,7 @@ class OpenApiHmacCanonicalRequestTest {
         assertThat(new String(request.canonicalBytes(), StandardCharsets.UTF_8))
                 .isEqualTo(
                         """
-                                OPENAPI-MAC-SHA256
+                                OPENAPI-HMAC-SHA256
                                 client-1
                                 POST
                                 /openapi/devices

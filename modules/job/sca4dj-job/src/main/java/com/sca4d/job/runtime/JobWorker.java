@@ -6,7 +6,7 @@ import com.sca4d.core.api.isolation.AppName;
 import com.sca4d.core.api.job.DirectJob;
 import com.sca4d.core.api.job.Job;
 import com.sca4d.core.api.job.JobExecution;
-import com.sca4d.core.api.job.JobRunId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.job.ParallelResults;
 import com.sca4d.core.api.job.PipelineJob;
 import com.sca4d.core.api.job.PipelineJobPlan;
@@ -249,7 +249,7 @@ public final class JobWorker implements SmartLifecycle {
             Object output = runDirect(
                     directJob,
                     new JobExecution(
-                            new JobRunId(claim.runId()),
+                            Id.of(claim.runId()),
                             claim.attempt(),
                             startedAt),
                     input);

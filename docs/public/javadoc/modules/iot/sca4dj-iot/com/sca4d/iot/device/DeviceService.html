@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">DeviceService</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">保存和修改 Device、Product、物模型、协议及接入方式等 IoT 技术事实。</div>
+<div class="block">保存和修改 Device、Product、物模型、协议及接入方式等 IoT 技术状态。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -231,7 +231,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="DeviceRegistration.html" title="class in com.sca4d.iot.device">DeviceRegistration</a>&nbsp;registration)</span></div>
 <div class="block">使用调用方已经分配的稳定标识创建 Device。
 
- <p>该方法不创建 Subject、Account、Credential 或 Session。具体应用应在同一业务事务中先分配
+ <p>当前方法不创建 Subject、Account、Credential 或 Session。具体应用应在同一业务事务中先分配
  Device 主体标识，再调用本方法保存 IoT 台账。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -295,7 +295,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">validateTechnicalActivation</span><wbr><span class="parameters">(long&nbsp;deviceId)</span></div>
 <div class="block">校验 Device 当前 Product、物模型、协议、连接身份和接入方式已经具备启用条件。
 
- <p>该方法只检查 IoT 模块负责的技术事实，不读取 Account 或 Credential。具体应用应另外检查
+ <p>当前方法只检查 IoT 模块负责的技术状态，不读取 Account 或 Credential。具体应用应另外检查
  自己安装的认证方法是否已经准备完成。</div>
 <dl class="notes">
 <dt>Parameters:</dt>

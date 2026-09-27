@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.Notification;
 import com.sca4d.core.api.notification.NotificationRecipient;
@@ -28,7 +28,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * 验证站内信按原始 MessageId 幂等保存，并只在首次新增后发布刷新事件。
+ * 验证站内信按原始 Id 幂等保存，并只在首次新增后发布刷新事件。
  */
 class InboxNotificationDeliveryTest {
 
@@ -58,7 +58,7 @@ class InboxNotificationDeliveryTest {
         when(renderers.render(template.content(), notification.locale(), notification.variables()))
                 .thenReturn(rendered);
         when(ids.nextId()).thenReturn(Id.of(11), Id.of(12));
-        when(repository.add(any(Long.class), eq(new MessageId(20)), eq(7L), eq(notification), eq(rendered)))
+        when(repository.add(any(Long.class), eq(Id.of(20)), eq(7L), eq(notification), eq(rendered)))
                 .thenReturn(true, false);
         InboxNotificationDelivery delivery = new InboxNotificationDelivery(
                 templates,
@@ -67,8 +67,8 @@ class InboxNotificationDeliveryTest {
                 service,
                 ids);
 
-        delivery.deliver(new MessageId(20), notification);
-        delivery.deliver(new MessageId(20), notification);
+        delivery.deliver(Id.of(20), notification);
+        delivery.deliver(Id.of(20), notification);
 
         verify(service, times(1)).publish(7L);
     }

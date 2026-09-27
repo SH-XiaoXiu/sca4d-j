@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.job.JobHistory;
 import com.sca4d.core.api.job.JobNodeOutput;
-import com.sca4d.core.api.job.JobRunId;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.job.ScheduledJobRun;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
@@ -45,7 +45,7 @@ public final class DefaultJobHistory implements JobHistory {
                 Objects.requireNonNull(page, "Job 历史分页要求不能为空"))
                 .map(
                         record -> new ScheduledJobRun<>(
-                                new JobRunId(record.runId()),
+                                Id.of(record.runId()),
                                 record.scheduledAt(),
                                 record.status(),
                                 record.completedAt(),

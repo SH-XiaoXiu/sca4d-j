@@ -103,7 +103,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#finish(com.sca4d.core.api.messaging.MessageId,long,com.sca4d.notification.sms.SmsDeliveryStatus,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">finish</a><wbr>(@NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#finish(com.sca4d.core.api.id.Id,long,com.sca4d.notification.sms.SmsDeliveryStatus,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">finish</a><wbr>(@NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  long&nbsp;providerId,
  @NotNull <a href="../SmsDeliveryStatus.html" title="enum class in com.sca4d.notification.sms">SmsDeliveryStatus</a>&nbsp;status,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;requestId,
@@ -111,15 +111,15 @@ loadScripts(document, 'script');</script>
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;failureCode)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insertAttempt(long,com.sca4d.core.api.messaging.MessageId,long,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">insertAttempt</a><wbr>(long&nbsp;deliveryId,
- @NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insertAttempt(long,com.sca4d.core.api.id.Id,long,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">insertAttempt</a><wbr>(long&nbsp;deliveryId,
+ @NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  long&nbsp;providerId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;route,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;recipientHash,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;recipientMasked)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="../SmsDeliveryAttempt.html" title="class in com.sca4d.notification.sms">SmsDeliveryAttempt</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectAttempt(com.sca4d.core.api.messaging.MessageId,long)" class="member-name-link">selectAttempt</a><wbr>(@NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectAttempt(com.sca4d.core.api.id.Id,long)" class="member-name-link">selectAttempt</a><wbr>(@NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  long&nbsp;providerId)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 </div>
@@ -137,11 +137,11 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="selectAttempt(com.sca4d.core.api.messaging.MessageId,long)">
+<section class="detail" id="selectAttempt(com.sca4d.core.api.id.Id,long)">
 <h3>selectAttempt</h3>
 <div class="member-signature"><span class="annotations">@Nullable
 </span><span class="return-type">@Nullable <a href="../SmsDeliveryAttempt.html" title="class in com.sca4d.notification.sms">SmsDeliveryAttempt</a></span>&nbsp;<span class="element-name">selectAttempt</span><wbr><span class="parameters">(@Param("messageId") @NotNull
- @NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+ @NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  @Param("providerId")
  long&nbsp;providerId)</span></div>
 <dl class="notes">
@@ -151,12 +151,12 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="insertAttempt(long,com.sca4d.core.api.messaging.MessageId,long,java.lang.String,java.lang.String,java.lang.String)">
+<section class="detail" id="insertAttempt(long,com.sca4d.core.api.id.Id,long,java.lang.String,java.lang.String,java.lang.String)">
 <h3>insertAttempt</h3>
 <div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">insertAttempt</span><wbr><span class="parameters">(@Param("deliveryId")
  long&nbsp;deliveryId,
  @Param("messageId") @NotNull
- @NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+ @NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  @Param("providerId")
  long&nbsp;providerId,
  @Param("route") @NotNull
@@ -172,10 +172,10 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="finish(com.sca4d.core.api.messaging.MessageId,long,com.sca4d.notification.sms.SmsDeliveryStatus,java.lang.String,java.lang.String,java.lang.String)">
+<section class="detail" id="finish(com.sca4d.core.api.id.Id,long,com.sca4d.notification.sms.SmsDeliveryStatus,java.lang.String,java.lang.String,java.lang.String)">
 <h3>finish</h3>
 <div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">finish</span><wbr><span class="parameters">(@Param("messageId") @NotNull
- @NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+ @NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  @Param("providerId")
  long&nbsp;providerId,
  @Param("status") @NotNull
