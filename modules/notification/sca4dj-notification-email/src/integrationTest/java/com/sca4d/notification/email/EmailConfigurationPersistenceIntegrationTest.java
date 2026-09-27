@@ -113,7 +113,7 @@ class EmailConfigurationPersistenceIntegrationTest {
                 "first",
                 "smtp.example",
                 25,
-                SmtpSecurity.ONE,
+                SmtpSecurity.NONE,
                 "user",
                 password,
                 "from@example.test",
@@ -125,7 +125,7 @@ class EmailConfigurationPersistenceIntegrationTest {
                 "first",
                 "smtp.example",
                 25,
-                SmtpSecurity.ONE,
+                SmtpSecurity.NONE,
                 "user",
                 false,
                 null,
@@ -139,7 +139,7 @@ class EmailConfigurationPersistenceIntegrationTest {
                 "first",
                 "smtp.example",
                 25,
-                SmtpSecurity.ONE,
+                SmtpSecurity.NONE,
                 "user",
                 true,
                 replacement,
@@ -156,7 +156,7 @@ class EmailConfigurationPersistenceIntegrationTest {
                 "first",
                 "smtp.example",
                 25,
-                SmtpSecurity.ONE,
+                SmtpSecurity.NONE,
                 null,
                 true,
                 null,
@@ -166,7 +166,7 @@ class EmailConfigurationPersistenceIntegrationTest {
         assertThat(senders.findConfiguration(1).orElseThrow().password()).isNull();
         assertThat(senders.find(1).orElseThrow().username()).isNull();
         senders.setEnabled(1, true);
-        senders.add(2, "second", "smtp.example", 25, SmtpSecurity.ONE, null, null, "from@example.test", null, null);
+        senders.add(2, "second", "smtp.example", 25, SmtpSecurity.NONE, null, null, "from@example.test", null, null);
         assertThatThrownBy(() -> senders.setEnabled(2, true))
                 .isInstanceOf(BusinessException.class);
         assertThat(senders.findEnabledConfiguration().orElseThrow().sender().senderId()).isEqualTo(1);

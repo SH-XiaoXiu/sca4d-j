@@ -1095,7 +1095,7 @@ class CallLifecycleTest {
 
         @Override
         public @NotNull LockKey resolve(@NotNull CallExecution execution) {
-            return new LockKey(TreeCode.of("ACCOUNT-SYSTEM"));
+            return new LockKey(TreeCode.of("ACCOUNT_SYSTEM"));
         }
     }
 

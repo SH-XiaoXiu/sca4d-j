@@ -469,7 +469,7 @@ public class PlatformRbacService {
      * 返回同一角色编码创建请求共用的分布式锁键，不在 Redis 键中暴露原始编码。
      */
     private static @NotNull LockKey roleCodeLock(@NotNull String code) {
-        return new LockKey(TreeCode.of("IAM:RBAC:ROLE-CODE"), DigestUtil.sha256Hex(code));
+        return new LockKey(TreeCode.of("IAM:RBAC:ROLE_CODE"), DigestUtil.sha256Hex(code));
     }
 
     /**

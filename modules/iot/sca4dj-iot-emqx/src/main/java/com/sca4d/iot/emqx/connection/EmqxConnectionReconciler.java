@@ -44,7 +44,7 @@ public class EmqxConnectionReconciler implements ClusterTask {
 
     private static final Logger LOG = LoggerFactory.getLogger(EmqxConnectionReconciler.class);
 
-    private static final LockKey RECONCILIATION_LOCK = new LockKey(TreeCode.of("IOT:EMQX-RECONCILIATION"));
+    private static final LockKey RECONCILIATION_LOCK = new LockKey(TreeCode.of("IOT:EMQX_RECONCILIATION"));
 
     private static final Duration LOCK_WAIT = Duration.ZERO;
 

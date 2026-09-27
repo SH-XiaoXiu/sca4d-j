@@ -846,7 +846,7 @@ public class IotApplicationService {
                 new LockKey(TreeCode.of("IOT:PRODUCT"), productCode),
                 LOCK_WAIT,
                 () -> distributedLock.execute(
-                        new LockKey(TreeCode.of("APP:IOT:DEVICE-CREATE"), DigestUtil.sha256Hex(idempotencyKey)),
+                        new LockKey(TreeCode.of("APP:IOT:DEVICE_CREATE"), DigestUtil.sha256Hex(idempotencyKey)),
                         LOCK_WAIT,
                         () -> Objects.requireNonNull(
                                 transactions.execute(status -> operation.get()),

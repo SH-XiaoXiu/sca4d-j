@@ -30,6 +30,11 @@ class TreeCodeValueTest {
         assertThrows(IllegalArgumentException.class, () -> TreeCode.of("PLATFORM//PROFILES"));
         assertThrows(IllegalArgumentException.class, () -> TreeCode.of(" PLATFORM"));
         assertThrows(IllegalArgumentException.class, () -> TreeCode.of(""));
+        assertThrows(IllegalArgumentException.class, () -> TreeCode.of("IAM.PLATFORM-PRINCIPAL"));
+        assertThrows(IllegalArgumentException.class, () -> TreeCode.of("IAM/PLATFORM-PRINCIPAL"));
+        assertThrows(IllegalArgumentException.class, () -> TreeCode.of("IAM:PLATFORM-PRINCIPAL"));
+        assertThrows(IllegalArgumentException.class, () -> TreeCode.ofSegment("PLATFORM-PRINCIPAL"));
+        assertEquals(TreeCode.of("IAM.PLATFORM_PRINCIPAL"), TreeCode.of("iam.platform_principal"));
         assertEquals(TreeCode.of("PLATFORM"), TreeCode.ofSegment("platform"));
     }
 

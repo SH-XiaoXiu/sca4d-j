@@ -200,7 +200,7 @@ public class PlatformFederatedAccountResolver implements FederatedAccountResolve
             @NotNull FederatedProfile profile) {
         FederatedProvider checkedProvider = Objects.requireNonNull(provider, "联邦 Provider 不能为空");
         FederatedProfile checkedProfile = Objects.requireNonNull(profile, "联邦 Profile 不能为空");
-        return new LockKey(TreeCode.of("FEDERATED-IDENTITY"), checkedProvider.code(), subjectKey(checkedProfile));
+        return new LockKey(TreeCode.of("FEDERATED_IDENTITY"), checkedProvider.code(), subjectKey(checkedProfile));
     }
 
     /**
