@@ -1,7 +1,5 @@
 package com.sca4d.core.spring.setting;
 
-import static com.sca4d.core.api.name.NameFormat.SLASH;
-
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.concurrent.VersionConditions;
@@ -33,12 +31,9 @@ import java.util.Objects;
 
 /**
  * 每次调用都查询统一 `sys_setting`，并处理 owner、结构版本、Pipeline 和敏感值。
+ * 敏感值写入使用 V2 `SecretCodec`，读取根据行中的加密用途版本选择 V1 或 V2 `SecretCodec`。
  */
 public class DatabaseSettings implements Settings, PreferenceSettings {
-
-    private static final int LEGACY_ENCRYPTION_CONTEXT_VERSION = 1;
-
-    private static final int OWNER_ENCRYPTION_CONTEXT_VERSION = 2;
 
     private static final Version EMPTY_VERSION = new Version(0);
 
@@ -185,7 +180,7 @@ public class DatabaseSettings implements Settings, PreferenceSettings {
     }
 
     /**
-     * 把规范化后的设置值编码为数据库文本或绑定 owner 的密文。
+     * 把规范化后的设置值编码为数据库文本或绑定 owner 的 V2 密文。
      */
     EncodedSetting encode(@NotNull Setting<?> setting, @NotNull SettingOwner owner, @NotNull Object value) {
         String text = encodeValue(setting, value);
@@ -193,14 +188,13 @@ public class DatabaseSettings implements Settings, PreferenceSettings {
             return new EncodedSetting(text, null, null, null);
         }
         SecretCipher cipher = keyring(setting.key()).activeCipher();
-        EncryptedSecret encrypted = cipher.encrypt(
-                ownerSecretPurpose(owner, setting.key()),
-                text.getBytes(StandardCharsets.UTF_8));
+        SettingSecretCodecCatalog codecs = new SettingSecretCodecCatalog(cipher, owner, setting.key());
+        EncryptedSecret encrypted = codecs.current().encode(text.getBytes(StandardCharsets.UTF_8));
         return new EncodedSetting(
                 null,
                 encrypted.keyId(),
                 encrypted.ciphertext(),
-                OWNER_ENCRYPTION_CONTEXT_VERSION);
+                codecs.current().version());
     }
 
     /**
@@ -307,7 +301,7 @@ public class DatabaseSettings implements Settings, PreferenceSettings {
     }
 
     /**
-     * 解密敏感设置并兼容没有 owner 的旧加密用途。
+     * 按数据库保存的加密用途版本解密敏感设置；V1 只用于读取历史密文。
      */
     private <T> @NotNull String decrypt(
             @NotNull Setting<T> setting,
@@ -321,13 +315,9 @@ public class DatabaseSettings implements Settings, PreferenceSettings {
         }
         SecretCipher cipher = keyring(setting.key()).findCipher(keyId)
                 .orElseThrow(() -> new IllegalStateException("敏感设置引用未知密钥: " + setting.key() + "." + keyId));
-        String purpose = switch (contextVersion) {
-            case LEGACY_ENCRYPTION_CONTEXT_VERSION -> "setting:" + setting.key();
-            case OWNER_ENCRYPTION_CONTEXT_VERSION -> ownerSecretPurpose(owner, setting.key());
-            default -> throw new IllegalStateException("敏感设置加密用途版本不受支持: " + setting.key());
-        };
+        SettingSecretCodecCatalog codecs = new SettingSecretCodecCatalog(cipher, owner, setting.key());
         return new String(
-                cipher.decrypt(purpose, new EncryptedSecret(keyId, ciphertext)),
+                codecs.select(contextVersion).decode(new EncryptedSecret(keyId, ciphertext)),
                 StandardCharsets.UTF_8);
     }
 
@@ -370,17 +360,6 @@ public class DatabaseSettings implements Settings, PreferenceSettings {
             throw new IllegalStateException("应用注册了敏感设置但没有 SecretKeyring: " + key);
         }
         return keyring;
-    }
-
-    /**
-     * 创建长度分隔且绑定 owner 的版本二加密用途。
-     */
-    private static @NotNull String ownerSecretPurpose(
-            @NotNull SettingOwner owner,
-            @NotNull String key) {
-        String type = owner.type().format(SLASH);
-        String id = owner.id();
-        return "setting:v2:" + type.length() + ":" + type + ":" + id.length() + ":" + id + ":" + key;
     }
 
     /**

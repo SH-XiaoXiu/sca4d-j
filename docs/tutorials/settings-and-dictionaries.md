@@ -62,6 +62,8 @@ flowchart LR
 
 应用将每个 Setting 作为 Spring Bean 注册到 SettingCatalog。SettingCatalog 拒绝全局重复 key，并按 SystemSetting、LogicSetting 和 PreferenceSetting 限制不同调用入口。DatabaseSettings 每次读取 `sys_setting`，没有显式覆盖值时使用 Setting 声明的 Java 默认值。敏感 Setting 只保存密文。SettingBootstrap 只处理 SystemSetting，并且仅在指定初始化节点启动时写入或同步 System owner；节点启动失败时该节点不会就绪。
 
+敏感 Setting 的密文由 `SecretCodec<byte[]>` 处理。当前写入使用 `SettingSecretCodecV2`，用途绑定 Setting owner、Setting key 和加密上下文版本；`SettingSecretCodecV1` 只用于读取历史密文。`SecretKeyring` 根据 active key 或密文保存的 key ID 选择 `SecretCipher`，`encryption_context_version` 选择 V1 或 V2 Codec。正常读取不会把 V1 密文自动改写为 V2；显式迁移由 `SettingSecretEncryptionMigrator` 转换单条密文，调用方负责事务和保存结果。
+
 ## 字典保存哪些数据
 
 Dictionary 的 `dictionaryKey()` 必须由同一枚举的所有常量一致返回。代码字典默认封闭，`allowsDatabaseOptions()` 返回 `true` 时才允许 `sys_dictionary_option` 增加枚举之外的值。动态字典不需要 Java 枚举，但必须先存在 `sys_dictionary` 行才能写入选项。

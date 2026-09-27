@@ -1,7 +1,5 @@
 package com.sca4d.core.spring.setting;
 
-import static com.sca4d.core.api.name.NameFormat.SLASH;
-
 import com.sca4d.core.api.security.EncryptedSecret;
 import com.sca4d.core.api.security.SecretCipher;
 import com.sca4d.core.api.security.SecretKeyring;
@@ -24,8 +22,6 @@ import java.util.Objects;
 public class SettingBootstrap {
 
     private static final Logger LOG = LoggerFactory.getLogger(SettingBootstrap.class);
-
-    private static final int OWNER_ENCRYPTION_CONTEXT_VERSION = 2;
 
     /**
      * 区分设置初始化标记未声明、启用和明确禁用三种状态。
@@ -122,7 +118,7 @@ public class SettingBootstrap {
             }
         }
         LOG.info(
-                "Settings 初始化完成 | initialized={} synchronized={} released={}",
+                "设置初始化完成 | initialized={} synchronized={} released={}",
                 initialized,
                 synchronizedCount,
                 released);
@@ -154,7 +150,7 @@ public class SettingBootstrap {
     }
 
     /**
-     * 使用设置编解码器校验 ENV 后生成持久化字段。
+     * 使用设置编解码器校验 ENV，并为敏感值生成 V2 持久化密文。
      */
     private <T> DatabaseSettings.@NotNull EncodedSetting encoded(
             @NotNull SystemSetting<T> setting,
@@ -173,30 +169,15 @@ public class SettingBootstrap {
             throw new IllegalStateException("初始化节点声明了敏感设置但没有 SecretKeyring: " + setting.key());
         }
         SecretCipher cipher = keyring.activeCipher();
-        EncryptedSecret encrypted = cipher.encrypt(
-                ownerSecretPurpose(setting.key()),
-                text.getBytes(StandardCharsets.UTF_8));
+        SettingSecretCodecCatalog codecs = new SettingSecretCodecCatalog(
+                cipher,
+                SettingOwner.system(),
+                setting.key());
+        EncryptedSecret encrypted = codecs.current().encode(text.getBytes(StandardCharsets.UTF_8));
         return new DatabaseSettings.EncodedSetting(
                 null,
                 encrypted.keyId(),
                 encrypted.ciphertext(),
-                OWNER_ENCRYPTION_CONTEXT_VERSION);
-    }
-
-    /**
-     * 创建绑定 System owner 的版本二敏感设置加密用途。
-     */
-    private static @NotNull String ownerSecretPurpose(@NotNull String key) {
-        SettingOwner owner = SettingOwner.system();
-        return "setting:v2:"
-                + owner.type().format(SLASH).length()
-                + ":"
-                + owner.type()
-                + ":"
-                + owner.id().length()
-                + ":"
-                + owner.id()
-                + ":"
-                + key;
+                codecs.current().version());
     }
 }

@@ -83,6 +83,8 @@ Controller -> Service -> Repository -> Mapper
 
 版本变化只在序列化边界提供兼容读取。每个 `Migratable` 只把一个版本转换为下一个版本，`VersionedCodecMigrator` 按完整链路执行多个相邻步骤。正常读取不会自动迁移或写回数据；具体应用、运维命令或一次性任务必须显式调用迁移器，并负责事务、并发条件和保存结果。当前结构统一从 V1 开始，未注册的版本直接失败。
 
+敏感值加密也使用 `SecretCodec`。`SecretCipher` 只负责具体密钥和加密算法，`SettingSecretCodecV1`、`SettingSecretCodecV2` 负责加密用途和密文版本。V1 保留历史读取，V2 负责当前写入；`encryption_context_version` 选择读取 Codec。加密迁移只转换调用方指定的单条密文，不在普通读取、启动同步或数据库扫描中自动执行。
+
 ## 跨实例成立性
 
 Session、任务租约、消息、连接索引、锁、限流额度和失败恢复不能依赖某一个 JVM 的本地状态。
