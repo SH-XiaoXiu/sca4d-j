@@ -137,7 +137,7 @@ return Map.of(
 
 ## Token 模式
 
-`sca4dj.auth.token-mode` 支持 `SESSION` 和 `JWT`。两种模式使用同一份 Session wire，Sa-Token Redis Token-Session 始终保存权威 Session；JWT 只是该 wire 的短效签名投影。
+`sca4dj.auth.token.mode` 支持 `SESSION` 和 `JWT`。两种模式使用同一份 Session wire，Sa-Token Redis Token-Session 始终保存权威 Session；JWT 只是该 wire 的短效签名投影。
 
 SESSION 模式只向客户端发送不透明 Token，完整 Session 保存在 Redis。每次在线读取都会比较 Token-Session 保存的 Operation 目录指纹；具体 Operation 编码变化后，旧 Session 在下一次请求重新装载身份和静态 Resource，不需要部署时清空 Redis。
 

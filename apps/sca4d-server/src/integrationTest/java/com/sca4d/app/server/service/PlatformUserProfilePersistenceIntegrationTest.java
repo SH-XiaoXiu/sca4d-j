@@ -91,7 +91,7 @@ import java.util.function.Supplier;
                 + "classpath:/mapper/storage/FileMapper.xml",
         "mybatis.configuration.map-underscore-to-camel-case=true",
         "mybatis.configuration.arg-name-based-constructor-auto-mapping=true",
-        "sca4dj.storage.default-backend=test",
+        "sca4dj.storage.backend.default=test",
         "sca4dj.storage.transfer-base-url=https://files.example.test"
 })
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)

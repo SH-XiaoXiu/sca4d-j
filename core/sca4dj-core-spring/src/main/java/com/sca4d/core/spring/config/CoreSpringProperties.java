@@ -6,14 +6,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("sca4dj.core")
 public class CoreSpringProperties {
 
-    private int pageDefaultSize = 20;
-
-    private int pageMaxSize = 200;
+    private final Pagination pagination = new Pagination();
 
     /** 单次列表请求允许的排序字段数量上限。 */
     private int sortMaxFields = 5;
 
-    private boolean openApiEnabled = true;
+    private final OpenApi openapi = new OpenApi();
 
     /** 创建使用默认分页和 OpenAPI 设置的配置。 */
     public CoreSpringProperties() {
@@ -25,7 +23,7 @@ public class CoreSpringProperties {
      * @return 分页查询未指定数量时使用的默认值
      */
     public int getPageDefaultSize() {
-        return pageDefaultSize;
+        return pagination.defaultSize;
     }
 
     /**
@@ -34,10 +32,7 @@ public class CoreSpringProperties {
      * @param pageDefaultSize 正数默认分页数量
      */
     public void setPageDefaultSize(int pageDefaultSize) {
-        if (pageDefaultSize < 1) {
-            throw new IllegalArgumentException("默认分页数量必须为正数");
-        }
-        this.pageDefaultSize = pageDefaultSize;
+        pagination.setDefaultSize(pageDefaultSize);
     }
 
     /**
@@ -46,7 +41,7 @@ public class CoreSpringProperties {
      * @return 单次分页查询允许的最大数量
      */
     public int getPageMaxSize() {
-        return pageMaxSize;
+        return pagination.maxSize;
     }
 
     /**
@@ -55,10 +50,7 @@ public class CoreSpringProperties {
      * @param pageMaxSize 不小于默认值的最大分页数量
      */
     public void setPageMaxSize(int pageMaxSize) {
-        if (pageMaxSize < pageDefaultSize) {
-            throw new IllegalArgumentException("最大分页数量不能小于默认分页数量");
-        }
-        this.pageMaxSize = pageMaxSize;
+        pagination.setMaxSize(pageMaxSize);
     }
 
     /**
@@ -88,7 +80,7 @@ public class CoreSpringProperties {
      * @return 注册 OpenAPI 基础配置时返回 {@code true}
      */
     public boolean isOpenApiEnabled() {
-        return openApiEnabled;
+        return openapi.enabled;
     }
 
     /**
@@ -97,6 +89,69 @@ public class CoreSpringProperties {
      * @param openApiEnabled 是否注册 OpenAPI 基础配置
      */
     public void setOpenApiEnabled(boolean openApiEnabled) {
-        this.openApiEnabled = openApiEnabled;
+        openapi.setEnabled(openApiEnabled);
+    }
+
+    /** @return 分页资源配置 */
+    public Pagination getPagination() {
+        return pagination;
+    }
+
+    /** @return OpenAPI 基础资源配置 */
+    public OpenApi getOpenapi() {
+        return openapi;
+    }
+
+    /** 配置分页默认值和上限。 */
+    public static class Pagination {
+
+        private int defaultSize = 20;
+
+        private int maxSize = 200;
+
+        /** @return 未指定分页数量时使用的默认值 */
+        public int getDefaultSize() {
+            return defaultSize;
+        }
+
+        /** @param defaultSize 正数默认分页数量 */
+        public void setDefaultSize(int defaultSize) {
+            if (defaultSize < 1) {
+                throw new IllegalArgumentException("默认分页数量必须为正数");
+            }
+            if (defaultSize > maxSize) {
+                throw new IllegalArgumentException("默认分页数量不能大于最大分页数量");
+            }
+            this.defaultSize = defaultSize;
+        }
+
+        /** @return 单次分页允许的最大数量 */
+        public int getMaxSize() {
+            return maxSize;
+        }
+
+        /** @param maxSize 不小于默认分页数量的上限 */
+        public void setMaxSize(int maxSize) {
+            if (maxSize < defaultSize) {
+                throw new IllegalArgumentException("最大分页数量不能小于默认分页数量");
+            }
+            this.maxSize = maxSize;
+        }
+    }
+
+    /** 配置 Core OpenAPI 基础资源。 */
+    public static class OpenApi {
+
+        private boolean enabled = true;
+
+        /** @return 是否注册 Core OpenAPI 基础配置 */
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        /** @param enabled 是否注册 Core OpenAPI 基础配置 */
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+        }
     }
 }

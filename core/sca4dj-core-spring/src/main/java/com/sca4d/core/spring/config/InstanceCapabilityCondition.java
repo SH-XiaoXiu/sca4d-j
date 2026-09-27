@@ -16,7 +16,7 @@ public class InstanceCapabilityCondition implements Condition {
     @Override
     public boolean matches(@NotNull ConditionContext context, @NotNull AnnotatedTypeMetadata metadata) {
         List<String> enabled = Binder.get(context.getEnvironment())
-                .bind("sca4dj.instance.enabled-capabilities", Bindable.listOf(String.class))
+                .bind("sca4dj.instance.capabilities", Bindable.listOf(String.class))
                 .orElse(null);
         String code = (String) Objects
                 .requireNonNull(metadata.getAnnotationAttributes(ConditionalOnCapability.class.getName()))

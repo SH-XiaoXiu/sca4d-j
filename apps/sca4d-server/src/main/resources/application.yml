@@ -3,13 +3,13 @@ spring:
     ansi:
       enabled: DETECT
   application:
-    name: ${SCA4DJ_APPLICATION_NAME:sca4d-server}
+    name: ${SCA4D_APPLICATION_NAME:sca4d-server}
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:local}
   datasource:
-    url: ${SCA4DJ_DB_URL:jdbc:postgresql://localhost:5432/sca4dj?options=-c%20TimeZone%3DUTC}
-    username: ${SCA4DJ_DB_USERNAME:sca4dj}
-    password: ${SCA4DJ_DB_PASSWORD:sca4dj}
+    url: ${SCA4D_DB_URL:jdbc:postgresql://localhost:5432/sca4dj?options=-c%20TimeZone%3DUTC}
+    username: ${SCA4D_DB_USERNAME:sca4dj}
+    password: ${SCA4D_DB_PASSWORD:sca4dj}
     driver-class-name: org.postgresql.Driver
     dynamic:
       primary: main
@@ -22,19 +22,19 @@ spring:
           driver-class-name: ${spring.datasource.driver-class-name}
         iot-history:
           lazy: true
-          url: ${SCA4DJ_IOT_TIMESCALE_URL:jdbc:postgresql://localhost:5433/sca4dj_iot?options=-c%20TimeZone%3DUTC}
-          username: ${SCA4DJ_IOT_TIMESCALE_USERNAME:sca4dj}
-          password: ${SCA4DJ_IOT_TIMESCALE_PASSWORD:sca4dj}
+          url: ${SCA4D_IOT_TIMESCALE_URL:jdbc:postgresql://localhost:5433/sca4dj_iot?options=-c%20TimeZone%3DUTC}
+          username: ${SCA4D_IOT_TIMESCALE_USERNAME:sca4dj}
+          password: ${SCA4D_IOT_TIMESCALE_PASSWORD:sca4dj}
           driver-class-name: org.postgresql.Driver
   data:
     redis:
-      host: ${SCA4DJ_REDIS_HOST:localhost}
-      port: ${SCA4DJ_REDIS_PORT:6379}
+      host: ${SCA4D_REDIS_HOST:localhost}
+      port: ${SCA4D_REDIS_PORT:6379}
   rabbitmq:
-    host: ${SCA4DJ_RABBITMQ_HOST:localhost}
-    port: ${SCA4DJ_RABBITMQ_PORT:5672}
-    username: ${SCA4DJ_RABBITMQ_USERNAME:sca4dj}
-    password: ${SCA4DJ_RABBITMQ_PASSWORD:sca4dj}
+    host: ${SCA4D_RABBITMQ_HOST:localhost}
+    port: ${SCA4D_RABBITMQ_PORT:5672}
+    username: ${SCA4D_RABBITMQ_USERNAME:sca4dj}
+    password: ${SCA4D_RABBITMQ_PASSWORD:sca4dj}
     publisher-confirm-type: correlated
     publisher-returns: true
   flyway:
@@ -46,17 +46,17 @@ spring:
 
 logging:
   file:
-    path: ${SCA4DJ_LOG_PATH:${SCA4DJ_LOG_ROOT:logs}/${spring.application.name}/${sca4dj.instance.id}}
+    path: ${SCA4D_LOG_PATH:${SCA4D_LOG_ROOT:logs}/${spring.application.name}/${sca4dj.instance.id}}
   structured:
     json:
       exclude: sessionId
     ecs:
       service:
-        environment: ${SCA4DJ_ENVIRONMENT:${SPRING_PROFILES_ACTIVE:default}}
+        environment: ${SCA4D_ENVIRONMENT:${SPRING_PROFILES_ACTIVE:default}}
         node-name: ${sca4dj.instance.id}
 
 server:
-  port: ${SCA4DJ_SERVER_PORT:8080}
+  port: ${SCA4D_SERVER_PORT:8080}
 
 management:
   endpoint:
@@ -70,229 +70,241 @@ management:
 
 springdoc:
   api-docs:
-    enabled: ${SCA4DJ_OPENAPI_ENABLED:false}
+    enabled: ${sca4dj.core.openapi.enabled:false}
   swagger-ui:
-    enabled: ${SCA4DJ_OPENAPI_ENABLED:false}
+    enabled: ${sca4dj.core.openapi.enabled:false}
 
 app:
   authentication:
     federated-login:
-      callback-uri: ${SCA4DJ_AUTH_FEDERATION_CALLBACK_URI:${SCA4DJ_GATEWAY_ORIGIN:http://localhost:8088}/api/login/federated-authorizations/callback}
-      completion-uri: ${SCA4DJ_AUTH_FEDERATION_COMPLETION_URI:http://localhost:5666/#/login}
+      callback-uri: ${SCA4D_AUTH_FEDERATION_CALLBACK_URI:${SCA4D_GATEWAY_ORIGIN:http://localhost:8088}/api/login/federated-authorizations/callback}
+      completion-uri: ${SCA4D_AUTH_FEDERATION_COMPLETION_URI:http://localhost:5666/#/login}
   iot:
-    emqx-webhook-secret: ${SCA4DJ_IOT_EMQX_WEBHOOK_SECRET:}
-    device-creation-cleanup-interval: ${SCA4DJ_IOT_DEVICE_CREATION_CLEANUP_INTERVAL:PT10M}
+    emqx:
+      webhook-secret: ${SCA4D_IOT_EMQX_WEBHOOK_SECRET:}
+    device-creation-cleanup-interval: ${SCA4D_IOT_DEVICE_CREATION_CLEANUP_INTERVAL:PT10M}
 
 sca4dj:
+  environment:
+    prefix: SCA4D
   plugin:
     enabled: true
     api: SCA4D:SERVER
     artifacts:
-      - ${SCA4DJ_MFA_PLUGIN:plugins/sca4d-server-mfa.jar}
-    cache-directory: ${SCA4DJ_PLUGIN_CACHE:build/plugin-cache}
+      - ${SCA4D_MFA_PLUGIN:plugins/sca4d-server-mfa.jar}
+    cache-directory: ${SCA4D_PLUGIN_CACHE:build/plugin-cache}
     drain-timeout: PT30S
   instance:
-    id: ${SCA4DJ_INSTANCE_ID:${random.uuid}}
-    enabled-capabilities: ${SCA4DJ_INSTANCE_CAPABILITIES:MAIN:API,IOT:API,IOT:TRANSPORT,JOB:WORKER,SCHEDULING:WORKER}
+    id: ${SCA4D_INSTANCE_ID:${random.uuid}}
+    capabilities: ${SCA4D_INSTANCE_CAPABILITIES:MAIN:API,IOT:API,IOT:TRANSPORT,JOB:WORKER,SCHEDULING:WORKER}
   gateway:
     registration:
-      enabled: ${SCA4DJ_GATEWAY_REGISTRATION_ENABLED:false}
-      gateway-base-url: ${SCA4DJ_GATEWAY_BASE_URL:http://localhost:8088}
-      server-base-url: ${SCA4DJ_SERVER_BASE_URL:http://localhost:${SCA4DJ_SERVER_PORT:8080}}
+      enabled: ${SCA4D_GATEWAY_REGISTRATION_ENABLED:false}
+      gateway-base-url: ${SCA4D_GATEWAY_BASE_URL:http://localhost:8088}
+      server-base-url: ${SCA4D_SERVER_BASE_URL:http://localhost:${SCA4D_SERVER_PORT:8080}}
       readiness-path: /actuator/health/readiness
-      secret: ${SCA4DJ_GATEWAY_SECRET:}
-      renew-interval: ${SCA4DJ_GATEWAY_RENEW_INTERVAL:PT10S}
-      request-timeout: ${SCA4DJ_GATEWAY_REQUEST_TIMEOUT:PT3S}
+      secret: ${SCA4D_GATEWAY_SECRET:}
+      renew-interval: ${SCA4D_GATEWAY_RENEW_INTERVAL:PT10S}
+      request-timeout: ${SCA4D_GATEWAY_REQUEST_TIMEOUT:PT3S}
   bootstrap:
-    enabled: ${SCA4DJ_BOOTSTRAP_ENABLED:false}
+    enabled: ${SCA4D_BOOTSTRAP_ENABLED:false}
   secret-keyring:
-    active-key-id: ${SCA4DJ_SECRET_KEYRING_ACTIVE_KEY_ID:local-dev}
+    active-key-id: ${SCA4D_SECRET_KEYRING_ACTIVE_KEY_ID:local-dev}
     keys:
-      local-dev: ${SCA4DJ_SECRET_KEYRING_LOCAL_DEV_KEY:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=}
+      local-dev: ${SCA4D_SECRET_KEYRING_LOCAL_DEV_KEY:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=}
   i18n:
     supported-locales:
       - zh-CN
       - en-US
     default-locale: zh-CN
   core:
-    page-default-size: ${SCA4DJ_PAGE_DEFAULT_SIZE:20}
-    page-max-size: ${SCA4DJ_PAGE_MAX_SIZE:200}
-    open-api-enabled: ${SCA4DJ_OPENAPI_ENABLED:false}
-    http-input-validation:
-      positive-integer-enabled: ${SCA4DJ_HTTP_INPUT_POSITIVE_INTEGER_ENABLED:true}
-      request-body-validation-enabled: ${SCA4DJ_HTTP_INPUT_REQUEST_BODY_VALIDATION_ENABLED:true}
-      string-size-enabled: ${SCA4DJ_HTTP_INPUT_STRING_SIZE_ENABLED:true}
-      max-string-length: ${SCA4DJ_HTTP_INPUT_MAX_STRING_LENGTH:4096}
-      container-size-enabled: ${SCA4DJ_HTTP_INPUT_CONTAINER_SIZE_ENABLED:true}
-      max-container-size: ${SCA4DJ_HTTP_INPUT_MAX_CONTAINER_SIZE:1000}
+    pagination:
+      default-size: ${SCA4D_CORE_PAGINATION_DEFAULT_SIZE:20}
+      max-size: ${SCA4D_CORE_PAGINATION_MAX_SIZE:200}
+    openapi:
+      enabled: ${SCA4D_CORE_OPENAPI_ENABLED:false}
+    http:
+      input:
+        validation:
+          positive-integer-enabled: ${SCA4D_CORE_HTTP_INPUT_VALIDATION_POSITIVE_INTEGER_ENABLED:true}
+          request-body-validation-enabled: ${SCA4D_CORE_HTTP_INPUT_VALIDATION_REQUEST_BODY_VALIDATION_ENABLED:true}
+          string-size-enabled: ${SCA4D_CORE_HTTP_INPUT_VALIDATION_STRING_SIZE_ENABLED:true}
+          max-string-length: ${SCA4D_CORE_HTTP_INPUT_VALIDATION_MAX_STRING_LENGTH:4096}
+          container-size-enabled: ${SCA4D_CORE_HTTP_INPUT_VALIDATION_CONTAINER_SIZE_ENABLED:true}
+          max-container-size: ${SCA4D_CORE_HTTP_INPUT_VALIDATION_MAX_CONTAINER_SIZE:1000}
   persistence:
     batch:
-      max-items: ${SCA4DJ_PERSISTENCE_BATCH_MAX_ITEMS:1000}
-      max-bind-parameters: ${SCA4DJ_PERSISTENCE_BATCH_MAX_BIND_PARAMETERS:30000}
+      max-items: ${SCA4D_PERSISTENCE_BATCH_MAX_ITEMS:1000}
+      max-bind-parameters: ${SCA4D_PERSISTENCE_BATCH_MAX_BIND_PARAMETERS:30000}
   redis:
     pipeline:
-      max-commands: ${SCA4DJ_REDIS_PIPELINE_MAX_COMMANDS:1000}
+      max-commands: ${SCA4D_REDIS_PIPELINE_MAX_COMMANDS:1000}
   id:
-    node-id: ${SCA4DJ_ID_NODE_ID:0}
+    node-id: ${SCA4D_ID_NODE_ID:0}
   messaging:
-    confirm-timeout: ${SCA4DJ_MESSAGING_CONFIRM_TIMEOUT:PT10S}
-    dispatch-interval: ${SCA4DJ_MESSAGING_DISPATCH_INTERVAL:PT1S}
-    dispatch-batch-size: ${SCA4DJ_MESSAGING_DISPATCH_BATCH_SIZE:100}
-    lease-duration: ${SCA4DJ_MESSAGING_LEASE_DURATION:PT1M}
-    initial-backoff: ${SCA4DJ_MESSAGING_INITIAL_BACKOFF:PT1S}
-    maximum-backoff: ${SCA4DJ_MESSAGING_MAXIMUM_BACKOFF:PT5M}
-    sent-retention: ${SCA4DJ_MESSAGING_SENT_RETENTION:P7D}
-    cleanup-interval: ${SCA4DJ_MESSAGING_CLEANUP_INTERVAL:PT1H}
-    cleanup-batch-size: ${SCA4DJ_MESSAGING_CLEANUP_BATCH_SIZE:500}
+    confirm-timeout: ${SCA4D_MESSAGING_CONFIRM_TIMEOUT:PT10S}
+    dispatch-interval: ${SCA4D_MESSAGING_DISPATCH_INTERVAL:PT1S}
+    dispatch-batch-size: ${SCA4D_MESSAGING_DISPATCH_BATCH_SIZE:100}
+    lease-duration: ${SCA4D_MESSAGING_LEASE_DURATION:PT1M}
+    initial-backoff: ${SCA4D_MESSAGING_INITIAL_BACKOFF:PT1S}
+    maximum-backoff: ${SCA4D_MESSAGING_MAXIMUM_BACKOFF:PT5M}
+    sent-retention: ${SCA4D_MESSAGING_SENT_RETENTION:P7D}
+    cleanup-interval: ${SCA4D_MESSAGING_CLEANUP_INTERVAL:PT1H}
+    cleanup-batch-size: ${SCA4D_MESSAGING_CLEANUP_BATCH_SIZE:500}
   notification:
     email:
-      connection-timeout: ${SCA4DJ_NOTIFICATION_EMAIL_CONNECTION_TIMEOUT:PT5S}
-      read-timeout: ${SCA4DJ_NOTIFICATION_EMAIL_READ_TIMEOUT:PT10S}
-      write-timeout: ${SCA4DJ_NOTIFICATION_EMAIL_WRITE_TIMEOUT:PT10S}
-      max-attachment-bytes: ${SCA4DJ_NOTIFICATION_EMAIL_MAX_ATTACHMENT_BYTES:20971520}
+      connection-timeout: ${SCA4D_NOTIFICATION_EMAIL_CONNECTION_TIMEOUT:PT5S}
+      read-timeout: ${SCA4D_NOTIFICATION_EMAIL_READ_TIMEOUT:PT10S}
+      write-timeout: ${SCA4D_NOTIFICATION_EMAIL_WRITE_TIMEOUT:PT10S}
+      max-attachment-bytes: ${SCA4D_NOTIFICATION_EMAIL_MAX_ATTACHMENT_BYTES:20971520}
   job:
-    worker-count: ${SCA4DJ_JOB_WORKER_COUNT:4}
-    claim-batch-size: ${SCA4DJ_JOB_CLAIM_BATCH_SIZE:10}
-    poll-interval: ${SCA4DJ_JOB_POLL_INTERVAL:PT0.5S}
-    lease-duration: ${SCA4DJ_JOB_LEASE_DURATION:PT1M}
-    lease-renew-interval: ${SCA4DJ_JOB_LEASE_RENEW_INTERVAL:PT20S}
-    succeeded-retention: ${SCA4DJ_JOB_SUCCEEDED_RETENTION:P30D}
-    history-cleanup-interval: ${SCA4DJ_JOB_HISTORY_CLEANUP_INTERVAL:PT1H}
-    history-cleanup-batch-size: ${SCA4DJ_JOB_HISTORY_CLEANUP_BATCH_SIZE:500}
+    worker-count: ${SCA4D_JOB_WORKER_COUNT:4}
+    claim-batch-size: ${SCA4D_JOB_CLAIM_BATCH_SIZE:10}
+    poll-interval: ${SCA4D_JOB_POLL_INTERVAL:PT0.5S}
+    lease-duration: ${SCA4D_JOB_LEASE_DURATION:PT1M}
+    lease-renew-interval: ${SCA4D_JOB_LEASE_RENEW_INTERVAL:PT20S}
+    succeeded-retention: ${SCA4D_JOB_SUCCEEDED_RETENTION:P30D}
+    history-cleanup-interval: ${SCA4D_JOB_HISTORY_CLEANUP_INTERVAL:PT1H}
+    history-cleanup-batch-size: ${SCA4D_JOB_HISTORY_CLEANUP_BATCH_SIZE:500}
   scheduling:
     quartz:
-      thread-count: ${SCA4DJ_QUARTZ_THREAD_COUNT:4}
-      cluster-checkin-interval: ${SCA4DJ_QUARTZ_CLUSTER_CHECKIN_INTERVAL:PT15S}
+      thread-count: ${SCA4D_QUARTZ_THREAD_COUNT:4}
+      cluster-checkin-interval: ${SCA4D_QUARTZ_CLUSTER_CHECKIN_INTERVAL:PT15S}
   web-realtime:
-    node-transport: ${SCA4DJ_WEB_REALTIME_NODE_TRANSPORT:LOCAL}
-    lease-renew-interval: ${SCA4DJ_WEB_REALTIME_LEASE_RENEW_INTERVAL:PT30S}
-    lease-duration: ${SCA4DJ_WEB_REALTIME_LEASE_DURATION:PT90S}
-    routing-batch-size: ${SCA4DJ_WEB_REALTIME_ROUTING_BATCH_SIZE:500}
-    node-message-ttl: ${SCA4DJ_WEB_REALTIME_NODE_MESSAGE_TTL:PT30S}
-    heartbeat-interval: ${SCA4DJ_WEB_REALTIME_HEARTBEAT_INTERVAL:PT25S}
-    sse-connection-timeout: ${SCA4DJ_WEB_REALTIME_SSE_CONNECTION_TIMEOUT:PT30M}
-    connection-queue-capacity: ${SCA4DJ_WEB_REALTIME_CONNECTION_QUEUE_CAPACITY:64}
-    ticket-ttl: ${SCA4DJ_WEB_REALTIME_TICKET_TTL:PT10S}
-    stomp-connect-timeout: ${SCA4DJ_WEB_REALTIME_STOMP_CONNECT_TIMEOUT:PT10S}
-    inbound-frame-max-bytes: ${SCA4DJ_WEB_REALTIME_INBOUND_FRAME_MAX_BYTES:65536}
-    allowed-origins: ${SCA4DJ_WEB_REALTIME_ALLOWED_ORIGINS:${SCA4DJ_FRONTEND_ORIGIN:http://localhost:5666}}
+    node:
+      transport: ${SCA4D_WEB_REALTIME_NODE_TRANSPORT:LOCAL}
+    lease-renew-interval: ${SCA4D_WEB_REALTIME_LEASE_RENEW_INTERVAL:PT30S}
+    lease-duration: ${SCA4D_WEB_REALTIME_LEASE_DURATION:PT90S}
+    routing-batch-size: ${SCA4D_WEB_REALTIME_ROUTING_BATCH_SIZE:500}
+    node-message-ttl: ${SCA4D_WEB_REALTIME_NODE_MESSAGE_TTL:PT30S}
+    heartbeat-interval: ${SCA4D_WEB_REALTIME_HEARTBEAT_INTERVAL:PT25S}
+    sse-connection-timeout: ${SCA4D_WEB_REALTIME_SSE_CONNECTION_TIMEOUT:PT30M}
+    connection-queue-capacity: ${SCA4D_WEB_REALTIME_CONNECTION_QUEUE_CAPACITY:64}
+    ticket-ttl: ${SCA4D_WEB_REALTIME_TICKET_TTL:PT10S}
+    stomp-connect-timeout: ${SCA4D_WEB_REALTIME_STOMP_CONNECT_TIMEOUT:PT10S}
+    inbound-frame-max-bytes: ${SCA4D_WEB_REALTIME_INBOUND_FRAME_MAX_BYTES:65536}
+    allowed-origins: ${SCA4D_WEB_REALTIME_ALLOWED_ORIGINS:${SCA4D_FRONTEND_ORIGIN:http://localhost:5666}}
     stomp:
-      mode: ${SCA4DJ_WEB_REALTIME_STOMP_MODE:NODE_ROUTED}
-      send-buffer-max-bytes: ${SCA4DJ_WEB_REALTIME_STOMP_SEND_BUFFER_MAX_BYTES:262144}
-      send-time-limit: ${SCA4DJ_WEB_REALTIME_STOMP_SEND_TIME_LIMIT:PT10S}
+      mode: ${SCA4D_WEB_REALTIME_STOMP_MODE:NODE_ROUTED}
+      send-buffer-max-bytes: ${SCA4D_WEB_REALTIME_STOMP_SEND_BUFFER_MAX_BYTES:262144}
+      send-time-limit: ${SCA4D_WEB_REALTIME_STOMP_SEND_TIME_LIMIT:PT10S}
       relay:
-        host: ${SCA4DJ_WEB_REALTIME_STOMP_RELAY_HOST:localhost}
-        port: ${SCA4DJ_WEB_REALTIME_STOMP_RELAY_PORT:61613}
-        client-login: ${SCA4DJ_WEB_REALTIME_STOMP_RELAY_CLIENT_LOGIN:${SCA4DJ_RABBITMQ_USERNAME:sca4dj}}
-        client-passcode: ${SCA4DJ_WEB_REALTIME_STOMP_RELAY_CLIENT_PASSCODE:${SCA4DJ_RABBITMQ_PASSWORD:sca4dj}}
-        system-login: ${SCA4DJ_WEB_REALTIME_STOMP_RELAY_SYSTEM_LOGIN:${SCA4DJ_RABBITMQ_USERNAME:sca4dj}}
-        system-passcode: ${SCA4DJ_WEB_REALTIME_STOMP_RELAY_SYSTEM_PASSCODE:${SCA4DJ_RABBITMQ_PASSWORD:sca4dj}}
-        virtual-host: ${SCA4DJ_WEB_REALTIME_STOMP_RELAY_VIRTUAL_HOST:/}
-        startup-connect-timeout: ${SCA4DJ_WEB_REALTIME_STOMP_RELAY_STARTUP_CONNECT_TIMEOUT:PT3S}
+        host: ${SCA4D_WEB_REALTIME_STOMP_RELAY_HOST:localhost}
+        port: ${SCA4D_WEB_REALTIME_STOMP_RELAY_PORT:61613}
+        client-login: ${SCA4D_WEB_REALTIME_STOMP_RELAY_CLIENT_LOGIN:${SCA4D_RABBITMQ_USERNAME:sca4dj}}
+        client-passcode: ${SCA4D_WEB_REALTIME_STOMP_RELAY_CLIENT_PASSCODE:${SCA4D_RABBITMQ_PASSWORD:sca4dj}}
+        system-login: ${SCA4D_WEB_REALTIME_STOMP_RELAY_SYSTEM_LOGIN:${SCA4D_RABBITMQ_USERNAME:sca4dj}}
+        system-passcode: ${SCA4D_WEB_REALTIME_STOMP_RELAY_SYSTEM_PASSCODE:${SCA4D_RABBITMQ_PASSWORD:sca4dj}}
+        virtual-host: ${SCA4D_WEB_REALTIME_STOMP_RELAY_VIRTUAL_HOST:/}
+        startup-connect-timeout: ${SCA4D_WEB_REALTIME_STOMP_RELAY_STARTUP_CONNECT_TIMEOUT:PT3S}
   iot:
-    connection-ttl: ${SCA4DJ_IOT_CONNECTION_TTL:PT30M}
-    acknowledgement-timeout: ${SCA4DJ_IOT_ACKNOWLEDGEMENT_TIMEOUT:PT30S}
-    downlink-retention: ${SCA4DJ_IOT_DOWNLINK_RETENTION:P7D}
-    downlink-cleanup-interval: ${SCA4DJ_IOT_DOWNLINK_CLEANUP_INTERVAL:PT1H}
-    reported-store: ${SCA4DJ_IOT_REPORTED_STORE:postgresql}
-    schedule-tick: ${SCA4DJ_IOT_SCHEDULE_TICK:PT0.2S}
-    max-reported-properties: ${SCA4DJ_IOT_MAX_REPORTED_PROPERTIES:100}
-    max-desired-properties: ${SCA4DJ_IOT_MAX_DESIRED_PROPERTIES:100}
-    max-events-per-message: ${SCA4DJ_IOT_MAX_EVENTS_PER_MESSAGE:100}
-    product-catalog-scan-batch-size: ${SCA4DJ_IOT_PRODUCT_CATALOG_SCAN_BATCH_SIZE:1000}
-    device-schedule-batch-size: ${SCA4DJ_IOT_DEVICE_SCHEDULE_BATCH_SIZE:1000}
-    downlink-cleanup-batch-size: ${SCA4DJ_IOT_DOWNLINK_CLEANUP_BATCH_SIZE:10000}
+    connection-ttl: ${SCA4D_IOT_CONNECTION_TTL:PT30M}
+    acknowledgement-timeout: ${SCA4D_IOT_ACKNOWLEDGEMENT_TIMEOUT:PT30S}
+    downlink-retention: ${SCA4D_IOT_DOWNLINK_RETENTION:P7D}
+    downlink-cleanup-interval: ${SCA4D_IOT_DOWNLINK_CLEANUP_INTERVAL:PT1H}
+    reported:
+      store: ${SCA4D_IOT_REPORTED_STORE:POSTGRESQL}
+    schedule-tick: ${SCA4D_IOT_SCHEDULE_TICK:PT0.2S}
+    max-reported-properties: ${SCA4D_IOT_MAX_REPORTED_PROPERTIES:100}
+    max-desired-properties: ${SCA4D_IOT_MAX_DESIRED_PROPERTIES:100}
+    max-events-per-message: ${SCA4D_IOT_MAX_EVENTS_PER_MESSAGE:100}
+    product-catalog-scan-batch-size: ${SCA4D_IOT_PRODUCT_CATALOG_SCAN_BATCH_SIZE:1000}
+    device-schedule-batch-size: ${SCA4D_IOT_DEVICE_SCHEDULE_BATCH_SIZE:1000}
+    downlink-cleanup-batch-size: ${SCA4D_IOT_DOWNLINK_CLEANUP_BATCH_SIZE:10000}
     emqx:
-      enabled: ${SCA4DJ_IOT_EMQX_ENABLED:false}
-      host: ${SCA4DJ_IOT_EMQX_HOST:localhost}
-      port: ${SCA4DJ_IOT_EMQX_INTERNAL_MQTT_PORT:1884}
-      tls: ${SCA4DJ_IOT_EMQX_INTERNAL_MQTT_TLS:false}
+      enabled: ${SCA4D_IOT_EMQX_ENABLED:false}
+      host: ${SCA4D_IOT_EMQX_HOST:localhost}
+      port: ${SCA4D_IOT_EMQX_INTERNAL_MQTT_PORT:1884}
+      tls: ${SCA4D_IOT_EMQX_INTERNAL_MQTT_TLS:false}
       # 未配置时按服务器资源前缀生成当前进程独立的 Client ID。
-      client-id: ${SCA4DJ_IOT_EMQX_CLIENT_ID:}
+      client-id: ${SCA4D_IOT_EMQX_CLIENT_ID:}
       # 内部 listener 不认证；固定 username 仅供 docker/emqx/acl.conf 识别 Runtime 的系统 Topic 订阅。
       username: sca4dj-iot-runtime
-      shared-subscription-group: ${SCA4DJ_IOT_EMQX_SHARED_SUBSCRIPTION_GROUP:sca4dj-iot}
-      operation-timeout: ${SCA4DJ_IOT_EMQX_OPERATION_TIMEOUT:PT10S}
-      inbound-worker-count: ${SCA4DJ_IOT_EMQX_INBOUND_WORKER_COUNT:4}
-      inbound-queue-capacity: ${SCA4DJ_IOT_EMQX_INBOUND_QUEUE_CAPACITY:64}
-      inbound-maximum-attempts: ${SCA4DJ_IOT_EMQX_INBOUND_MAXIMUM_ATTEMPTS:3}
-      inbound-retry-delay: ${SCA4DJ_IOT_EMQX_INBOUND_RETRY_DELAY:PT5S}
-      management-base-url: ${SCA4DJ_IOT_EMQX_MANAGEMENT_BASE_URL:http://localhost:18083}
-      management-api-key: ${SCA4DJ_IOT_EMQX_MANAGEMENT_API_KEY:}
-      management-secret: ${SCA4DJ_IOT_EMQX_MANAGEMENT_SECRET:}
-      reconciliation-interval: ${SCA4DJ_IOT_EMQX_RECONCILIATION_INTERVAL:PT10M}
-      management-page-size: ${SCA4DJ_IOT_EMQX_MANAGEMENT_PAGE_SIZE:100}
+      shared-subscription-group: ${SCA4D_IOT_EMQX_SHARED_SUBSCRIPTION_GROUP:sca4dj-iot}
+      operation-timeout: ${SCA4D_IOT_EMQX_OPERATION_TIMEOUT:PT10S}
+      inbound-worker-count: ${SCA4D_IOT_EMQX_INBOUND_WORKER_COUNT:4}
+      inbound-queue-capacity: ${SCA4D_IOT_EMQX_INBOUND_QUEUE_CAPACITY:64}
+      inbound-maximum-attempts: ${SCA4D_IOT_EMQX_INBOUND_MAXIMUM_ATTEMPTS:3}
+      inbound-retry-delay: ${SCA4D_IOT_EMQX_INBOUND_RETRY_DELAY:PT5S}
+      management-base-url: ${SCA4D_IOT_EMQX_MANAGEMENT_BASE_URL:http://localhost:18083}
+      management-api-key: ${SCA4D_IOT_EMQX_MANAGEMENT_API_KEY:}
+      management-secret: ${SCA4D_IOT_EMQX_MANAGEMENT_SECRET:}
+      reconciliation-interval: ${SCA4D_IOT_EMQX_RECONCILIATION_INTERVAL:PT10M}
+      management-page-size: ${SCA4D_IOT_EMQX_MANAGEMENT_PAGE_SIZE:100}
     timescale:
-      enabled: ${SCA4DJ_IOT_TIMESCALE_ENABLED:false}
-      cleanup-interval: ${SCA4DJ_IOT_TIMESCALE_CLEANUP_INTERVAL:PT1H}
-      telemetry-retention: ${SCA4DJ_IOT_TELEMETRY_RETENTION:P90D}
-      event-retention: ${SCA4DJ_IOT_EVENT_RETENTION:P90D}
-      max-query-results: ${SCA4DJ_IOT_TIMESCALE_MAX_QUERY_RESULTS:1000}
+      enabled: ${SCA4D_IOT_TIMESCALE_ENABLED:false}
+      cleanup-interval: ${SCA4D_IOT_TIMESCALE_CLEANUP_INTERVAL:PT1H}
+      telemetry-retention: ${SCA4D_IOT_TELEMETRY_RETENTION:P90D}
+      event-retention: ${SCA4D_IOT_EVENT_RETENTION:P90D}
+      max-query-results: ${SCA4D_IOT_TIMESCALE_MAX_QUERY_RESULTS:1000}
   storage:
-    default-backend: ${SCA4DJ_STORAGE_DEFAULT_BACKEND:minio}
-    transfer-base-url: ${SCA4DJ_STORAGE_TRANSFER_BASE_URL:${SCA4DJ_GATEWAY_ORIGIN:http://localhost:8088}/api}
-    cleanup-interval: ${SCA4DJ_STORAGE_CLEANUP_INTERVAL:PT10M}
-    delete-lease: ${SCA4DJ_STORAGE_DELETE_LEASE:PT2M}
-    delete-retry-delay: ${SCA4DJ_STORAGE_DELETE_RETRY_DELAY:PT10M}
+    backend:
+      default: ${SCA4D_STORAGE_BACKEND_DEFAULT:minio}
+    transfer-base-url: ${SCA4D_STORAGE_TRANSFER_BASE_URL:${SCA4D_GATEWAY_ORIGIN:http://localhost:8088}/api}
+    cleanup-interval: ${SCA4D_STORAGE_CLEANUP_INTERVAL:PT10M}
+    delete-lease: ${SCA4D_STORAGE_DELETE_LEASE:PT2M}
+    delete-retry-delay: ${SCA4D_STORAGE_DELETE_RETRY_DELAY:PT10M}
     local:
-      enabled: ${SCA4DJ_STORAGE_LOCAL_ENABLED:false}
-      backend-id: ${SCA4DJ_STORAGE_LOCAL_BACKEND_ID:local}
-      container: ${SCA4DJ_STORAGE_LOCAL_CONTAINER:files}
-      root: ${SCA4DJ_STORAGE_LOCAL_ROOT:docker-data/files}
+      enabled: ${SCA4D_STORAGE_LOCAL_ENABLED:false}
+      backend-id: ${SCA4D_STORAGE_LOCAL_BACKEND_ID:local}
+      container: ${SCA4D_STORAGE_LOCAL_CONTAINER:files}
+      root: ${SCA4D_STORAGE_LOCAL_ROOT:docker-data/files}
     minio:
-      enabled: ${SCA4DJ_STORAGE_MINIO_ENABLED:true}
-      backend-id: ${SCA4DJ_STORAGE_MINIO_BACKEND_ID:minio}
-      endpoint: ${SCA4DJ_STORAGE_MINIO_ENDPOINT:http://localhost:9000}
-      public-endpoint: ${SCA4DJ_STORAGE_MINIO_PUBLIC_ENDPOINT:http://localhost:9000}
-      region: ${SCA4DJ_STORAGE_MINIO_REGION:us-east-1}
-      access-key: ${SCA4DJ_MINIO_ACCESS_KEY:minioadmin}
-      secret-key: ${SCA4DJ_MINIO_SECRET_KEY:minioadmin}
-      bucket: ${SCA4DJ_STORAGE_MINIO_BUCKET:sca4dj}
-      create-bucket: ${SCA4DJ_STORAGE_MINIO_CREATE_BUCKET:true}
+      enabled: ${SCA4D_STORAGE_MINIO_ENABLED:true}
+      backend-id: ${SCA4D_STORAGE_MINIO_BACKEND_ID:minio}
+      endpoint: ${SCA4D_STORAGE_MINIO_ENDPOINT:http://localhost:9000}
+      public-endpoint: ${SCA4D_STORAGE_MINIO_PUBLIC_ENDPOINT:http://localhost:9000}
+      region: ${SCA4D_STORAGE_MINIO_REGION:us-east-1}
+      access-key: ${SCA4D_MINIO_ACCESS_KEY:minioadmin}
+      secret-key: ${SCA4D_MINIO_SECRET_KEY:minioadmin}
+      bucket: ${SCA4D_STORAGE_MINIO_BUCKET:sca4dj}
+      create-bucket: ${SCA4D_STORAGE_MINIO_CREATE_BUCKET:true}
   iam:
-    system-subject-id: ${SCA4DJ_IAM_SYSTEM_SUBJECT_ID:1}
+    system-subject-id: ${SCA4D_IAM_SYSTEM_SUBJECT_ID:1}
     system-principal-ids:
       MAIN: 1
       IOT: 2
     bootstrap:
-      enabled: ${SCA4DJ_IAM_BOOTSTRAP_ENABLED:true}
-      username: ${SCA4DJ_IAM_BOOTSTRAP_USERNAME:admin}
+      enabled: ${SCA4D_IAM_BOOTSTRAP_ENABLED:true}
+      username: ${SCA4D_IAM_BOOTSTRAP_USERNAME:admin}
   auth:
-    token-mode: ${SCA4DJ_AUTH_TOKEN_MODE:SESSION}
+    token:
+      mode: ${SCA4D_AUTH_TOKEN_MODE:SESSION}
     hmac:
-      clock-skew: ${SCA4DJ_AUTH_HMAC_CLOCK_SKEW:PT5M}
-      nonce-ttl: ${SCA4DJ_AUTH_HMAC_NONCE_TTL:PT10M}
-      failure-window: ${SCA4DJ_AUTH_HMAC_FAILURE_WINDOW:PT1M}
-      failure-limit: ${SCA4DJ_AUTH_HMAC_FAILURE_LIMIT:10}
+      clock-skew: ${SCA4D_AUTH_HMAC_CLOCK_SKEW:PT5M}
+      nonce-ttl: ${SCA4D_AUTH_HMAC_NONCE_TTL:PT10M}
+      failure-window: ${SCA4D_AUTH_HMAC_FAILURE_WINDOW:PT1M}
+      failure-limit: ${SCA4D_AUTH_HMAC_FAILURE_LIMIT:10}
     email-code:
-      account-realm: ${SCA4DJ_AUTH_EMAIL_CODE_ACCOUNT_REALM:platform}
+      account-realm: ${SCA4D_AUTH_EMAIL_CODE_ACCOUNT_REALM:platform}
     password:
-      bootstrap-enabled: ${SCA4DJ_AUTH_PASSWORD_BOOTSTRAP_ENABLED:true}
-      login-identifier-types: ${SCA4DJ_AUTH_PASSWORD_LOGIN_IDENTIFIER_TYPES:USERNAME,EMAIL}
-      bootstrap-username: ${SCA4DJ_IAM_BOOTSTRAP_USERNAME:admin}
-      bootstrap-password: ${SCA4DJ_AUTH_PASSWORD_BOOTSTRAP_PASSWORD:}
+      bootstrap:
+        enabled: ${SCA4D_AUTH_PASSWORD_BOOTSTRAP_ENABLED:true}
+        username: ${SCA4D_IAM_BOOTSTRAP_USERNAME:admin}
+        password: ${SCA4D_AUTH_PASSWORD_BOOTSTRAP_PASSWORD:}
+      login-identifier-types: ${SCA4D_AUTH_PASSWORD_LOGIN_IDENTIFIER_TYPES:USERNAME,EMAIL}
     passkey:
-      relying-party-id: ${SCA4DJ_AUTH_PASSKEY_RELYING_PARTY_ID:localhost}
-      relying-party-name: ${SCA4DJ_AUTH_PASSKEY_RELYING_PARTY_NAME:Sca4d-J}
-      origins: ${SCA4DJ_AUTH_PASSKEY_ORIGINS:${SCA4DJ_FRONTEND_ORIGIN:http://localhost:5666}}
+      relying-party-id: ${SCA4D_AUTH_PASSKEY_RELYING_PARTY_ID:localhost}
+      relying-party-name: ${SCA4D_AUTH_PASSKEY_RELYING_PARTY_NAME:Sca4d-J}
+      origins: ${SCA4D_AUTH_PASSKEY_ORIGINS:${SCA4D_FRONTEND_ORIGIN:http://localhost:5666}}
     jwt:
-      active-key-id: ${SCA4DJ_AUTH_JWT_ACTIVE_KEY_ID:primary}
+      active-key-id: ${SCA4D_AUTH_JWT_ACTIVE_KEY_ID:primary}
       keys:
-        primary: ${SCA4DJ_AUTH_JWT_PRIMARY_KEY:}
-      issuer: ${SCA4DJ_AUTH_JWT_ISSUER:${spring.application.name}}
-      audience: ${SCA4DJ_AUTH_JWT_AUDIENCE:${spring.application.name}}
-      max-token-length: ${SCA4DJ_AUTH_JWT_MAX_TOKEN_LENGTH:6144}
+        primary: ${SCA4D_AUTH_JWT_PRIMARY_KEY:}
+      issuer: ${SCA4D_AUTH_JWT_ISSUER:${spring.application.name}}
+      audience: ${SCA4D_AUTH_JWT_AUDIENCE:${spring.application.name}}
+      max-token-length: ${SCA4D_AUTH_JWT_MAX_TOKEN_LENGTH:6144}
   openapi:
     jwt:
-      enabled: ${SCA4DJ_OPENAPI_JWT_ENABLED:false}
-      active-key-id: ${SCA4DJ_OPENAPI_JWT_ACTIVE_KEY_ID:primary}
+      enabled: ${SCA4D_OPENAPI_JWT_ENABLED:false}
+      active-key-id: ${SCA4D_OPENAPI_JWT_ACTIVE_KEY_ID:primary}
       keys:
-        primary: ${SCA4DJ_OPENAPI_JWT_PRIMARY_KEY:}
-      issuer: ${SCA4DJ_OPENAPI_JWT_ISSUER:${spring.application.name}-openapi}
-      audience: ${SCA4DJ_OPENAPI_JWT_AUDIENCE:${spring.application.name}-openapi}
-      access-ttl: ${SCA4DJ_OPENAPI_JWT_ACCESS_TTL:PT5M}
-      max-token-length: ${SCA4DJ_OPENAPI_JWT_MAX_TOKEN_LENGTH:6144}
+        primary: ${SCA4D_OPENAPI_JWT_PRIMARY_KEY:}
+      issuer: ${SCA4D_OPENAPI_JWT_ISSUER:${spring.application.name}-openapi}
+      audience: ${SCA4D_OPENAPI_JWT_AUDIENCE:${spring.application.name}-openapi}
+      access-ttl: ${SCA4D_OPENAPI_JWT_ACCESS_TTL:PT5M}
+      max-token-length: ${SCA4D_OPENAPI_JWT_MAX_TOKEN_LENGTH:6144}
 sa-token:
-  token-name: ${SCA4DJ_AUTH_TOKEN_NAME:Authorization}
-  timeout: ${SCA4DJ_SA_TOKEN_TIMEOUT:2592000}
+  token-name: ${SCA4D_AUTH_TOKEN_NAME:Authorization}
+  timeout: ${SCA4D_SA_TOKEN_TIMEOUT:2592000}
   is-read-header: true

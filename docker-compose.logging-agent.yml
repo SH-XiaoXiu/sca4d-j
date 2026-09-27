@@ -4,18 +4,18 @@ services:
     user: "0:0"
     command:
       - run
-      - --server.http.listen-addr=${SCA4DJ_ALLOY_HTTP_LISTEN_ADDR:-127.0.0.1:12345}
+      - --server.http.listen-addr=${SCA4D_ALLOY_HTTP_LISTEN_ADDR:-127.0.0.1:12345}
       - --storage.path=/var/lib/alloy/data
       - /etc/alloy/config.alloy
     network_mode: host
     environment:
-      SCA4DJ_ENVIRONMENT: ${SCA4DJ_ENVIRONMENT:-local}
-      SCA4DJ_LOG_HOST: ${SCA4DJ_LOG_HOST:?set SCA4DJ_LOG_HOST}
-      SCA4DJ_LOKI_PUSH_URL: ${SCA4DJ_LOKI_PUSH_URL:-http://127.0.0.1:8088/internal/logging/push}
-      SCA4DJ_LOKI_PUSH_USERNAME: ${SCA4DJ_LOKI_PUSH_USERNAME:-alloy}
-      SCA4DJ_LOKI_PUSH_PASSWORD: ${SCA4DJ_LOKI_PUSH_PASSWORD:?set SCA4DJ_LOKI_PUSH_PASSWORD}
+      SCA4D_ENVIRONMENT: ${SCA4D_ENVIRONMENT:-local}
+      SCA4D_LOG_HOST: ${SCA4D_LOG_HOST:?set SCA4D_LOG_HOST}
+      SCA4D_LOKI_PUSH_URL: ${SCA4D_LOKI_PUSH_URL:-http://127.0.0.1:8088/internal/logging/push}
+      SCA4D_LOKI_PUSH_USERNAME: ${SCA4D_LOKI_PUSH_USERNAME:-alloy}
+      SCA4D_LOKI_PUSH_PASSWORD: ${SCA4D_LOKI_PUSH_PASSWORD:?set SCA4D_LOKI_PUSH_PASSWORD}
     volumes:
-      - ${SCA4DJ_LOG_ROOT:-./logs}:/var/log/applications:ro
+      - ${SCA4D_LOG_ROOT:-./logs}:/var/log/applications:ro
       - ./docker/logging/alloy/config.alloy:/etc/alloy/config.alloy:ro
       - ./docker-data/logging-agent/alloy:/var/lib/alloy/data
     restart: unless-stopped

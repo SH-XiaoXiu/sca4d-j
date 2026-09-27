@@ -14,7 +14,7 @@ import java.util.Map;
 @ConfigurationProperties("sca4dj.auth")
 public class AuthProperties {
 
-    private AuthTokenMode tokenMode = AuthTokenMode.SESSION;
+    private final Token token = new Token();
 
     private List<String> excludedPaths = List.of();
 
@@ -30,7 +30,7 @@ public class AuthProperties {
      * @return 默认 SESSION 模式
      */
     public AuthTokenMode getTokenMode() {
-        return tokenMode;
+        return token.mode;
     }
 
     /**
@@ -39,10 +39,12 @@ public class AuthProperties {
      * @param tokenMode SESSION 或 JWT
      */
     public void setTokenMode(AuthTokenMode tokenMode) {
-        if (tokenMode == null) {
-            throw new IllegalArgumentException("Token 模式不能为空");
-        }
-        this.tokenMode = tokenMode;
+        token.setMode(tokenMode);
+    }
+
+    /** @return Token 资源配置 */
+    public Token getToken() {
+        return token;
     }
 
     /**
@@ -75,6 +77,23 @@ public class AuthProperties {
     @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "Spring Boot must bind nested properties through this live final configuration object")
     public Jwt getJwt() {
         return jwt;
+    }
+
+    /** 配置普通请求使用的认证 Token 模式。 */
+    public static class Token {
+
+        private AuthTokenMode mode = AuthTokenMode.SESSION;
+
+        public AuthTokenMode getMode() {
+            return mode;
+        }
+
+        public void setMode(AuthTokenMode mode) {
+            if (mode == null) {
+                throw new IllegalArgumentException("Token 模式不能为空");
+            }
+            this.mode = mode;
+        }
     }
 
     /** 配置 HS256 JWT 的密钥轮换、受众、有效期和长度限制。 */

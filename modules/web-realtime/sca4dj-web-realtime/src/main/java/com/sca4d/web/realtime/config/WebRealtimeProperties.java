@@ -17,7 +17,7 @@ public class WebRealtimeProperties {
 
     private Duration leaseDuration = Duration.ofSeconds(90);
 
-    private NodeRouterMode nodeTransport = NodeRouterMode.LOCAL;
+    private final Node node = new Node();
 
     private int routingBatchSize = 500;
 
@@ -65,12 +65,17 @@ public class WebRealtimeProperties {
 
     /** @return 单实例本地投递或 RabbitMQ 跨节点投递 */
     public NodeRouterMode getNodeTransport() {
-        return nodeTransport;
+        return node.transport;
     }
 
     /** @param value `LOCAL` 或 `RABBIT` */
     public void setNodeTransport(NodeRouterMode value) {
-        nodeTransport = Objects.requireNonNull(value, "节点传输模式不能为空");
+        node.setTransport(value);
+    }
+
+    /** @return 节点投递资源配置 */
+    public Node getNode() {
+        return node;
     }
 
     /** @return 每条节点消息最多包含的 Connection 数 */
@@ -256,6 +261,22 @@ public class WebRealtimeProperties {
         @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "Spring Boot must bind nested properties through this live final configuration object")
         public Relay getRelay() {
             return relay;
+        }
+    }
+
+    /** 配置单实例或 RabbitMQ 节点投递方式。 */
+    public static class Node {
+
+        private NodeRouterMode transport = NodeRouterMode.LOCAL;
+
+        /** @return 节点使用的本地或 RabbitMQ 投递模式 */
+        public NodeRouterMode getTransport() {
+            return transport;
+        }
+
+        /** @param transport 节点投递模式 */
+        public void setTransport(NodeRouterMode transport) {
+            this.transport = Objects.requireNonNull(transport, "节点传输模式不能为空");
         }
     }
 

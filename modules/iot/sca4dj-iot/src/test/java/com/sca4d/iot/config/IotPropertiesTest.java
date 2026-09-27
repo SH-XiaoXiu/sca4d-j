@@ -16,6 +16,7 @@ class IotPropertiesTest {
         IotProperties properties = new IotProperties();
 
         assertThat(properties.getConnectionTtl()).isEqualTo(Duration.ofMinutes(30));
+        assertThat(properties.getReportedStore()).isEqualTo(ReportedStore.POSTGRESQL);
         assertThat(properties.getScheduleTick()).isEqualTo(Duration.ofMillis(200));
         assertThat(properties.getMaxReportedProperties()).isEqualTo(100);
         assertThat(properties.getMaxDesiredProperties()).isEqualTo(100);

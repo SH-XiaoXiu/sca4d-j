@@ -2,8 +2,8 @@ services:
   iot-emqx-api-key:
     image: alpine:3.22
     environment:
-      API_KEY: ${SCA4DJ_IOT_EMQX_MANAGEMENT_API_KEY:-sca4dj-iot-local}
-      API_SECRET: ${SCA4DJ_IOT_EMQX_MANAGEMENT_SECRET:-local-emqx-api-secret-change-me}
+      API_KEY: ${SCA4D_IOT_EMQX_MANAGEMENT_API_KEY:-sca4dj-iot-local}
+      API_SECRET: ${SCA4D_IOT_EMQX_MANAGEMENT_SECRET:-local-emqx-api-secret-change-me}
     volumes:
       - ./docker-data/iot/emqx/bootstrap:/bootstrap
       - ./docker-data/iot/emqx/data:/emqx-data
@@ -25,13 +25,13 @@ services:
         condition: service_completed_successfully
     environment:
       EMQX_API_KEY__BOOTSTRAP_FILE: /opt/emqx/etc/sca4dj/default_api_key.conf
-      EMQX_DASHBOARD__DEFAULT_PASSWORD: ${SCA4DJ_IOT_EMQX_DASHBOARD_PASSWORD:-local-emqx-dashboard-change-me}
+      EMQX_DASHBOARD__DEFAULT_PASSWORD: ${SCA4D_IOT_EMQX_DASHBOARD_PASSWORD:-local-emqx-dashboard-change-me}
       EMQX_AUTHENTICATION: >-
-        [{"mechanism":"password_based","backend":"http","method":"post","url":"http://host.docker.internal:${SCA4DJ_GATEWAY_PORT:-8088}/callbacks/iot.emqx.authenticate","headers":{"content-type":"application/json","x-iot-emqx-secret":"${SCA4DJ_IOT_EMQX_WEBHOOK_SECRET:-local-emqx-webhook-secret-change-me}"},"body":{"clientid":"$${clientid}","username":"$${username}","password":"$${password}","cert_pem":"$${cert_pem}"},"connect_timeout":"5s","request_timeout":"5s","pool_size":8,"enable_pipelining":100,"ssl":{"enable":false},"enable":true}]
+        [{"mechanism":"password_based","backend":"http","method":"post","url":"http://host.docker.internal:${SCA4D_GATEWAY_PORT:-8088}/callbacks/iot.emqx.authenticate","headers":{"content-type":"application/json","x-iot-emqx-secret":"${SCA4D_IOT_EMQX_WEBHOOK_SECRET:-local-emqx-webhook-secret-change-me}"},"body":{"clientid":"$${clientid}","username":"$${username}","password":"$${password}","cert_pem":"$${cert_pem}"},"connect_timeout":"5s","request_timeout":"5s","pool_size":8,"enable_pipelining":100,"ssl":{"enable":false},"enable":true}]
     ports:
-      - "${SCA4DJ_IOT_EMQX_DEVICE_MQTT_BIND:-127.0.0.1:1883}:1883"
-      - "${SCA4DJ_IOT_EMQX_INTERNAL_MQTT_BIND:-127.0.0.1:1884}:1884"
-      - "${SCA4DJ_IOT_EMQX_DASHBOARD_BIND:-127.0.0.1:18083}:18083"
+      - "${SCA4D_IOT_EMQX_DEVICE_MQTT_BIND:-127.0.0.1:1883}:1883"
+      - "${SCA4D_IOT_EMQX_INTERNAL_MQTT_BIND:-127.0.0.1:1884}:1884"
+      - "${SCA4D_IOT_EMQX_DASHBOARD_BIND:-127.0.0.1:18083}:18083"
     volumes:
       - ./docker/emqx/base.hocon:/opt/emqx/etc/base.hocon:ro
       - ./docker/emqx/acl.conf:/opt/emqx/etc/acl.conf:ro
@@ -48,19 +48,19 @@ services:
   iot-timescaledb:
     image: timescale/timescaledb:2.29.0-pg17-oss
     environment:
-      POSTGRES_DB: ${SCA4DJ_IOT_TIMESCALE_DB_NAME:-sca4dj_iot}
-      POSTGRES_USER: ${SCA4DJ_IOT_TIMESCALE_USERNAME:-sca4dj}
-      POSTGRES_PASSWORD: ${SCA4DJ_IOT_TIMESCALE_PASSWORD:-sca4dj}
-      TZ: ${SCA4DJ_IOT_TIMESCALE_TIMEZONE:-Asia/Shanghai}
-      PGTZ: ${SCA4DJ_IOT_TIMESCALE_TIMEZONE:-Asia/Shanghai}
+      POSTGRES_DB: ${SCA4D_IOT_TIMESCALE_DB_NAME:-sca4dj_iot}
+      POSTGRES_USER: ${SCA4D_IOT_TIMESCALE_USERNAME:-sca4dj}
+      POSTGRES_PASSWORD: ${SCA4D_IOT_TIMESCALE_PASSWORD:-sca4dj}
+      TZ: ${SCA4D_IOT_TIMESCALE_TIMEZONE:-Asia/Shanghai}
+      PGTZ: ${SCA4D_IOT_TIMESCALE_TIMEZONE:-Asia/Shanghai}
     ports:
-      - "${SCA4DJ_IOT_TIMESCALE_BIND:-127.0.0.1:5433}:5432"
+      - "${SCA4D_IOT_TIMESCALE_BIND:-127.0.0.1:5433}:5432"
     volumes:
       - ./docker-data/iot/timescaledb:/var/lib/postgresql/data
     command:
       - postgres
       - -c
-      - timezone=${SCA4DJ_IOT_TIMESCALE_TIMEZONE:-Asia/Shanghai}
+      - timezone=${SCA4D_IOT_TIMESCALE_TIMEZONE:-Asia/Shanghai}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s

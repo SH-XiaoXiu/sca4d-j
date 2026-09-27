@@ -75,9 +75,9 @@ import javax.imageio.ImageIO;
 @SpringBootTest(classes = Sca4dApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
         "sca4dj.iam.bootstrap.enabled=true",
         "sca4dj.iam.bootstrap.username=admin",
-        "sca4dj.auth.password.bootstrap-enabled=true",
-        "sca4dj.auth.password.bootstrap-username=admin",
-        "sca4dj.auth.password.bootstrap-password=admin@123",
+        "sca4dj.auth.password.bootstrap.enabled=true",
+        "sca4dj.auth.password.bootstrap.username=admin",
+        "sca4dj.auth.password.bootstrap.password=admin@123",
         "sca4dj.auth.session-ttl=PT1H"
 })
 @SuppressWarnings({

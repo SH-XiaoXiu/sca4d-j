@@ -39,7 +39,7 @@ public class InstanceAutoConfiguration {
         if (properties.getId() == null || !properties.getId().matches("[A-Za-z0-9._-]{1,128}")) {
             throw new IllegalStateException("sca4dj.instance.id 必须是 1 到 128 位字母、数字、点、下划线或连字符");
         }
-        List<String> selected = properties.getEnabledCapabilities();
+        List<String> selected = properties.getCapabilities();
         return new InstanceCapabilities(
                 definitions,
                 selected == null

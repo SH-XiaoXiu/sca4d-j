@@ -80,7 +80,7 @@ public class Sca4dOpenApiConfiguration {
      */
     @Bean
     OperationCustomizer authTokenOperationCustomizer(
-            @Value("${sca4dj.auth.token-mode:SESSION}") AuthTokenMode tokenMode) {
+            @Value("${sca4dj.auth.token.mode:SESSION}") AuthTokenMode tokenMode) {
         return (operation, handlerMethod) -> {
             boolean anonymous = AnnotatedElementUtils.hasAnnotation(
                     handlerMethod.getMethod(),

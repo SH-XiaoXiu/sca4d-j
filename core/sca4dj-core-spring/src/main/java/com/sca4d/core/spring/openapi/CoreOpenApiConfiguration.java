@@ -20,7 +20,7 @@ import org.springframework.core.env.Environment;
 /** 注册脚手架的 OpenAPI 基础信息和 Bearer 认证方案。 */
 @AutoConfiguration
 @ConditionalOnClass({OpenAPI.class, SpringDocUtils.class})
-@ConditionalOnProperty(prefix = "sca4dj.core", name = "open-api-enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "sca4dj.core.openapi", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class CoreOpenApiConfiguration {
 
     static {

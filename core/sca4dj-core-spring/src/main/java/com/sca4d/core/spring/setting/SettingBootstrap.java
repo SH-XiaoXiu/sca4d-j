@@ -50,6 +50,8 @@ public class SettingBootstrap {
 
     private final Environment environment;
 
+    private final EnvironmentVariableResolver variables;
+
     /**
      * 创建 Settings ENV 初始化器。
      */
@@ -57,11 +59,13 @@ public class SettingBootstrap {
             @NotNull SettingCatalog catalog,
             @NotNull SettingRepository repository,
             @Nullable SecretKeyring keyring,
-            @NotNull Environment environment) {
+            @NotNull Environment environment,
+            @NotNull EnvironmentVariableResolver variables) {
         this.catalog = Objects.requireNonNull(catalog, "设置目录不能为空");
         this.repository = Objects.requireNonNull(repository, "设置 Repository 不能为空");
         this.keyring = keyring;
         this.environment = Objects.requireNonNull(environment, "Spring Environment 不能为空");
+        this.variables = Objects.requireNonNull(variables, "ENV 解析器不能为空");
     }
 
     /**
@@ -74,7 +78,7 @@ public class SettingBootstrap {
         int synchronizedCount = 0;
         int released = 0;
         for (SystemSetting<?> setting : catalog.systemSettings()) {
-            String variable = setting.environmentVariable();
+            String variable = variables.resolve(setting.environmentVariableSuffix());
             String rawValue = environment.getProperty(variable);
             BootstrapFlag initialize = flag(variable + "_INIT");
             BootstrapFlag synchronize = flag(variable + "_SYNC");
@@ -160,7 +164,9 @@ public class SettingBootstrap {
         try {
             value = setting.codec().decode(rawValue);
         } catch (IllegalArgumentException exception) {
-            throw new IllegalStateException("Settings ENV 值不合法: " + setting.environmentVariable(), exception);
+            throw new IllegalStateException(
+                    "Settings ENV 值不合法: " + variables.resolve(setting.environmentVariableSuffix()),
+                    exception);
         }
         String text = setting.codec().encode(setting.validate(value));
         if (!setting.secret()) {

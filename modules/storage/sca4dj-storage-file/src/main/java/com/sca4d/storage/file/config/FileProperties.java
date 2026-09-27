@@ -12,7 +12,7 @@ import java.util.Objects;
  */
 @ConfigurationProperties("sca4dj.storage")
 public class FileProperties {
-    private @NotNull String defaultBackend = "minio";
+    private final Backend backend = new Backend();
 
     private @NotNull URI transferBaseUrl = URI.create("http://localhost:8080");
 
@@ -31,7 +31,7 @@ public class FileProperties {
      * @return 默认存储实现标识
      */
     public @NotNull String getDefaultBackend() {
-        return defaultBackend;
+        return backend.defaultId;
     }
 
     /**
@@ -39,11 +39,12 @@ public class FileProperties {
      * @param defaultBackend 已注册的存储实现标识
      */
     public void setDefaultBackend(@NotNull String defaultBackend) {
-        String checked = Objects.requireNonNull(defaultBackend, "默认存储实现标识不能为空").trim();
-        if (checked.isEmpty()) {
-            throw new IllegalArgumentException("默认存储实现标识不能为空");
-        }
-        this.defaultBackend = checked;
+        backend.setDefaultId(defaultBackend);
+    }
+
+    /** @return 存储 backend 资源配置 */
+    public @NotNull Backend getBackend() {
+        return backend;
     }
 
     /**
@@ -126,5 +127,35 @@ public class FileProperties {
             throw new IllegalArgumentException(name + "必须为正数");
         }
         return checked;
+    }
+
+    /** 配置新文件使用的默认 backend。 */
+    public static class Backend {
+
+        private @NotNull String defaultId = "minio";
+
+        /** @return 新文件使用的默认 backend ID */
+        public @NotNull String getDefault() {
+            return defaultId;
+        }
+
+        /** @param value 已注册的默认 backend ID */
+        public void setDefault(@NotNull String value) {
+            setDefaultId(value);
+        }
+
+        /** @return 新文件使用的默认 backend ID */
+        public @NotNull String getDefaultId() {
+            return defaultId;
+        }
+
+        /** @param value 已注册的默认 backend ID */
+        public void setDefaultId(@NotNull String value) {
+            String checked = Objects.requireNonNull(value, "默认存储实现标识不能为空").trim();
+            if (checked.isEmpty()) {
+                throw new IllegalArgumentException("默认存储实现标识不能为空");
+            }
+            defaultId = checked;
+        }
     }
 }

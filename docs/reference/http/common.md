@@ -162,7 +162,7 @@ Controller 参数使用 PageRequest 时，Core Spring 读取查询参数 `page` 
 | 参数 | 默认值 | 限制 |
 |---|---:|---|
 | `page` | `1` | 必须是不小于 1 的整数 |
-| `size` | `sca4dj.core.page-default-size`，默认 20 | 必须是不小于 1 且不大于 `sca4dj.core.page-max-size` 的整数；最大值默认 200 |
+| `size` | `sca4dj.core.pagination.default-size`，默认 20 | 必须是不小于 1 且不大于 `sca4dj.core.pagination.max-size` 的整数；最大值默认 200 |
 
 接口可以使用 `@PageOptions` 声明更小的 `size` 上限。非法数字、非正数或超过上限时返回 Core 的 `VALIDATION_FAILED`，HTTP 状态为 400。PageRequest 的 `offset()` 使用 `long` 计算 `(page - 1) * size`，因此页码从 1 开始。
 
@@ -245,7 +245,7 @@ SSE 连接建立后的事件、心跳、超时和断开方式由具体 SSE 路�
 
 存在 springdoc 时，[CoreOpenApiConfiguration](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/openapi/CoreOpenApiConfiguration.html) 默认创建标题为 `${spring.application.name} API`、版本为 `0.0.1-alpha` 的 OpenAPI 定义，并注册名为 `bearerAuth` 的 HTTP Bearer 安全方案，`bearerFormat` 为 `Opaque`。应用名称没有公共回退值；`spring.application.name` 缺失时 AppIsolation 自动配置会使应用启动失败。该配置还把 Java `long` 和 `Long` schema 声明为十进制字符串，与运行时 Jackson 输出保持一致。[HttpInputOpenApiCustomizer](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/openapi/HttpInputOpenApiCustomizer.html) 只向参数和请求体 Schema 添加当前启用的类型默认限制，并遵守显式约束和 `@NoDefaultValidation` 的替代规则。
 
-`sca4dj.core.open-api-enabled=false` 会关闭这项 Core 基础配置。应用还需要同时配置 springdoc 是否开放 `/v3/api-docs` 和 Swagger UI。注册安全方案不等于自动标记每条路由的认证要求；具体路由仍以应用 HTTP API 规格和 Controller 声明为准。
+`sca4dj.core.openapi.enabled=false` 会关闭这项 Core 基础配置。应用还需要同时配置 springdoc 是否开放 `/v3/api-docs` 和 Swagger UI。注册安全方案不等于自动标记每条路由的认证要求；具体路由仍以应用 HTTP API 规格和 Controller 声明为准。
 
 模块依赖和自动配置不会开放业务 Controller。具体应用必须在自己的源码中定义 Controller、HTTP Request/View 和 OpenAPI 声明，路由才会出现在 Spring MVC 和 OpenAPI 中。
 

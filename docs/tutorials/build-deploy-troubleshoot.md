@@ -60,12 +60,12 @@ if [ ! -e .env/logging.env ]; then
 fi
 ```
 
-替换 Grafana 管理员密码和 Loki 写入密码。中心 Gateway 与所有 Alloy 必须使用相同的写入账号密码；该密码不能等于 `SCA4DJ_GATEWAY_SECRET`。每台 Java 主机把 `SCA4DJ_LOG_HOST` 改成唯一且稳定的地域或主机名，并设置正确的 `SCA4DJ_ENVIRONMENT`。
+替换 Grafana 管理员密码和 Loki 写入密码。中心 Gateway 与所有 Alloy 必须使用相同的写入账号密码；该密码不能等于 `SCA4D_GATEWAY_SECRET`。每台 Java 主机把 `SCA4D_LOG_HOST` 改成唯一且稳定的地域或主机名，并设置正确的 `SCA4D_ENVIRONMENT`。
 
-各地 Alloy 把 `SCA4DJ_LOKI_PUSH_URL` 设置为中心 Gateway 的 `/internal/logging/push` 地址。跨公网时必须使用 HTTPS，例如：
+各地 Alloy 把 `SCA4D_LOKI_PUSH_URL` 设置为中心 Gateway 的 `/internal/logging/push` 地址。跨公网时必须使用 HTTPS，例如：
 
 ```properties
-SCA4DJ_LOKI_PUSH_URL=https://gateway.example.com/internal/logging/push
+SCA4D_LOKI_PUSH_URL=https://gateway.example.com/internal/logging/push
 ```
 
 ### 启动中心端
@@ -87,15 +87,15 @@ docker compose \
 本地运行的 Gateway 通过 `application-local.yml` 自动读取 `.env/application.env` 和 `.env/logging.env`。部署 JAR 时只向 Gateway 进程注入下面这些变量，不要让 Gateway 读取 Grafana 和对象存储密码：
 
 ```properties
-SCA4DJ_GATEWAY_LOGGING_ENABLED=true
-SCA4DJ_GATEWAY_LOKI_ORIGIN=http://127.0.0.1:3100
-SCA4DJ_GATEWAY_LOGGING_PUSH_PATH=/internal/logging/push
-SCA4DJ_GATEWAY_LOKI_PATH=/loki/api/v1/push
-SCA4DJ_LOKI_PUSH_USERNAME=alloy
-SCA4DJ_LOKI_PUSH_PASSWORD=replace-me
+SCA4D_GATEWAY_LOGGING_ENABLED=true
+SCA4D_GATEWAY_LOKI_ORIGIN=http://127.0.0.1:3100
+SCA4D_GATEWAY_LOGGING_PUSH_PATH=/internal/logging/push
+SCA4D_GATEWAY_LOKI_PATH=/loki/api/v1/push
+SCA4D_LOKI_PUSH_USERNAME=alloy
+SCA4D_LOKI_PUSH_PASSWORD=replace-me
 ```
 
-默认 `sca4d-gateway` BootJar 通过 `runtimeOnly` 包含 `sca4dj-gateway-loki`。自定义 Gateway 组装工程必须显式添加该 addon 依赖；未添加依赖时，设置 `SCA4DJ_GATEWAY_LOGGING_ENABLED=true` 不会创建日志写入路由。
+默认 `sca4d-gateway` BootJar 通过 `runtimeOnly` 包含 `sca4dj-gateway-loki`。自定义 Gateway 组装工程必须显式添加该 addon 依赖；未添加依赖时，设置 `SCA4D_GATEWAY_LOGGING_ENABLED=true` 不会创建日志写入路由。
 
 启动 Gateway 后，未带凭据的写入请求应返回 401，而不是进入 Loki：
 
@@ -103,44 +103,44 @@ SCA4DJ_LOKI_PUSH_PASSWORD=replace-me
 curl -i -X POST http://127.0.0.1:8088/internal/logging/push
 ```
 
-打开 `SCA4DJ_GRAFANA_BIND` 对应的地址，使用 Grafana 管理员账号登录。数据源页面中的「Loki」应显示连接成功，并可在 Explore 中选择该数据源。
+打开 `SCA4D_GRAFANA_BIND` 对应的地址，使用 Grafana 管理员账号登录。数据源页面中的「Loki」应显示连接成功，并可在 Explore 中选择该数据源。
 
 使用 S3 或 MinIO 时，先创建独立 Bucket 和最小权限凭据，再设置：
 
 ```properties
-SCA4DJ_LOKI_STORAGE_MODE=s3
-SCA4DJ_LOKI_S3_ENDPOINT=https://minio.example.com
-SCA4DJ_LOKI_S3_REGION=us-east-1
-SCA4DJ_LOKI_S3_BUCKET=loki-logs
-SCA4DJ_LOKI_S3_ACCESS_KEY=replace-me
-SCA4DJ_LOKI_S3_SECRET_KEY=replace-me
-SCA4DJ_LOKI_S3_INSECURE=false
+SCA4D_LOKI_STORAGE_MODE=s3
+SCA4D_LOKI_S3_ENDPOINT=https://minio.example.com
+SCA4D_LOKI_S3_REGION=us-east-1
+SCA4D_LOKI_S3_BUCKET=loki-logs
+SCA4D_LOKI_S3_ACCESS_KEY=replace-me
+SCA4D_LOKI_S3_SECRET_KEY=replace-me
+SCA4D_LOKI_S3_INSECURE=false
 ```
 
 这里的 MinIO/S3 地址只供 Loki 保存数据。Alloy 仍然连接 Gateway，不连接 MinIO。切换存储后必须重启 Loki；文件系统和 S3 中的日志不会自动迁移或合并。
 
 ### 配置应用日志目录
 
-Java 进程按服务和实例写入 `SCA4DJ_LOG_ROOT`。不要在这些进程共用的 `.env/logging.env` 中设置 `SCA4DJ_INSTANCE_ID`；同一主机并行启动多个实例时，为每个进程单独指定不同实例 ID：
+Java 进程按服务和实例写入 `SCA4D_LOG_ROOT`。不要在这些进程共用的 `.env/logging.env` 中设置 `SCA4D_INSTANCE_ID`；同一主机并行启动多个实例时，为每个进程单独指定不同实例 ID：
 
 ```bash
-SCA4DJ_INSTANCE_ID=server-1 ./gradlew :apps:sca4d-server:bootRun
+SCA4D_INSTANCE_ID=server-1 ./gradlew :apps:sca4d-server:bootRun
 ```
 
 容器中的 Java 应用使用同一目录规则。把宿主机根目录挂载到容器，并让容器内外使用一致的相对结构：
 
 ```yaml
 environment:
-  SCA4DJ_LOG_ROOT: /var/log/applications
-  SCA4DJ_INSTANCE_ID: server-1
+  SCA4D_LOG_ROOT: /var/log/applications
+  SCA4D_INSTANCE_ID: server-1
 volumes:
-  - ${SCA4DJ_LOG_ROOT:-./logs}:/var/log/applications
+  - ${SCA4D_LOG_ROOT:-./logs}:/var/log/applications
 ```
 
 检查活动文件是一行一个 JSON 对象，且路径包含服务和实例：
 
 ```bash
-find "${SCA4DJ_LOG_ROOT:-./logs}" -name application.json -type f -print
+find "${SCA4D_LOG_ROOT:-./logs}" -name application.json -type f -print
 ```
 
 ### 启动每台主机的 Alloy
@@ -177,10 +177,10 @@ Alloy 管理端点默认只监听 `127.0.0.1:12345`。它只读取 `<service>/<i
 
 ### 失败入口
 
-- Alloy 出现 401 时，核对 Gateway 与该主机的写入用户名、密码和精确路径；不要改用 `SCA4DJ_GATEWAY_SECRET`。
-- Alloy 出现 404 时，确认中心 Gateway 包含 `sca4dj-gateway-loki`、已设置 `SCA4DJ_GATEWAY_LOGGING_ENABLED=true`，并且 `SCA4DJ_LOKI_PUSH_URL` 与 `SCA4DJ_GATEWAY_LOGGING_PUSH_PATH` 一致。
-- Alloy 出现 502 时，确认中心 Gateway 能访问 `SCA4DJ_GATEWAY_LOKI_ORIGIN`，并检查 Loki 是否就绪。
-- Java 文件不存在时，核对进程实际读取的 `SCA4DJ_LOG_ROOT` 和 `SCA4DJ_INSTANCE_ID`，再检查目录写权限。
+- Alloy 出现 401 时，核对 Gateway 与该主机的写入用户名、密码和精确路径；不要改用 `SCA4D_GATEWAY_SECRET`。
+- Alloy 出现 404 时，确认中心 Gateway 包含 `sca4dj-gateway-loki`、已设置 `SCA4D_GATEWAY_LOGGING_ENABLED=true`，并且 `SCA4D_LOKI_PUSH_URL` 与 `SCA4D_GATEWAY_LOGGING_PUSH_PATH` 一致。
+- Alloy 出现 502 时，确认中心 Gateway 能访问 `SCA4D_GATEWAY_LOKI_ORIGIN`，并检查 Loki 是否就绪。
+- Java 文件不存在时，核对进程实际读取的 `SCA4D_LOG_ROOT` 和 `SCA4D_INSTANCE_ID`，再检查目录写权限。
 - Loki 因 S3 启动失败时，核对 Bucket 已存在、endpoint、region 和 path-style 是否匹配，以及凭据是否能读写并删除 Loki 自己的对象。
 
 准确变量、认证和保留行为见[集中日志运行规格](/reference/runtime/sca4d-server)。

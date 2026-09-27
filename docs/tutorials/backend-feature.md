@@ -68,7 +68,7 @@ Sca4d-J 使用同一组公共类型处理列表分页和动态排序。业务筛
 | 参数 | 默认值 | 限制 |
 |---|---:|---|
 | `page` | 1 | 不小于 1 |
-| `size` | `sca4dj.core.page-default-size`，默认 20 | 不大于全局或当前接口声明的上限 |
+| `size` | `sca4dj.core.pagination.default-size`，默认 20 | 不大于全局或当前接口声明的上限 |
 
 支持动态排序的接口另外接受可以重复的 `sort`：
 
