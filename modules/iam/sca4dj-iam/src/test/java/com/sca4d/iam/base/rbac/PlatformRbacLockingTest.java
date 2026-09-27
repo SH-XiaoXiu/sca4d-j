@@ -58,12 +58,12 @@ class PlatformRbacLockingTest {
         service.bindDefaultRole(20L);
 
         assertThat(keys)
-                .extracting(LockKey::value)
+                .extracting(LockKey::toString)
                 .containsExactly(
-                        "iam:rbac:role:10",
-                        "iam:rbac:role:11",
-                        "iam:rbac:principal:20",
-                        "iam:rbac:principal:20");
+                        "LOCK:IAM:RBAC:ROLE:10",
+                        "LOCK:IAM:RBAC:ROLE:11",
+                        "LOCK:IAM:RBAC:PRINCIPAL:20",
+                        "LOCK:IAM:RBAC:PRINCIPAL:20");
     }
 
     @Test

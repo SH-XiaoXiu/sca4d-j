@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -90,10 +91,10 @@ public final class ThingValueType {
     /** @return 可继续声明允许值的 enum 类型 Builder */
     @CheckReturnValue
     public static @NotNull Builder enumType() {
-        return new Builder(ThingValueKind.ENUM);
+        return new Builder(ThingValueKind.NUM);
     }
 
-    /** @return 使用 {@link java.time.Instant} 的 timestamp 类型 */
+    /** @return 使用 {@link Instant} 的 {@code timestamp} 类型 */
     @CheckReturnValue
     public static @NotNull ThingValueType timestampType() {
         return new Builder(ThingValueKind.TIMESTAMP).build();
@@ -297,7 +298,7 @@ public final class ThingValueType {
 
         /** @param code enum 稳定 code @return 当前 Builder */
         public @NotNull Builder value(@NotNull String code) {
-            if (kind != ThingValueKind.ENUM) {
+            if (kind != ThingValueKind.NUM) {
                 throw new IllegalStateException("value 只适用于 enum");
             }
             String checkedCode = TextUtils.requireText(code, "enum code");
@@ -332,7 +333,7 @@ public final class ThingValueType {
                     && new BigDecimal(minimum).compareTo(new BigDecimal(maximum)) > 0) {
                 throw new IllegalArgumentException("最小值不能大于最大值");
             }
-            if (kind == ThingValueKind.ENUM && enumValues.isEmpty()) {
+            if (kind == ThingValueKind.NUM && enumValues.isEmpty()) {
                 throw new IllegalArgumentException("enum 必须至少包含一个值");
             }
             if (kind == ThingValueKind.OBJECT) {

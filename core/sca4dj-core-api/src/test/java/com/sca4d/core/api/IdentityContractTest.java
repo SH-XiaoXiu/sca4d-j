@@ -8,6 +8,7 @@ import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
 import com.sca4d.core.api.identity.SystemPrincipal;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +30,7 @@ class IdentityContractTest {
     @DisplayName("Uses Singleton System Identity With Fixed IDs")
     void usesSingletonSystemIdentityWithFixedIds() {
         assertEquals(1, Subject.SYSTEM.subjectId());
-        assertEquals(1, SystemPrincipal.INSTANCE.principalId());
+        assertEquals(1, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")).principalId());
     }
 
 }

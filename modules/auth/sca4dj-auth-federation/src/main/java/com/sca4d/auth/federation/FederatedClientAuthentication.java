@@ -9,7 +9,7 @@ public enum FederatedClientAuthentication implements BaseEnum {
     /** 表单正文中发送 client_id 和 client_secret。 */
     CLIENT_SECRET_POST,
     /** 不发送 Client Secret，仅允许带 PKCE 的公开客户端。 */
-    NONE;
+    ONE;
 
     /** @return 用于传输和持久化的认证方式值 */
     @Override
@@ -23,7 +23,7 @@ public enum FederatedClientAuthentication implements BaseEnum {
         return switch (this) {
             case CLIENT_SECRET_BASIC -> "HTTP Basic";
             case CLIENT_SECRET_POST -> "请求正文";
-            case NONE -> "不发送 Client Secret";
+            case ONE -> "不发送 Client Secret";
         };
     }
 }

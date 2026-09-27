@@ -1,5 +1,7 @@
 package com.sca4d.core.spring.web;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -177,10 +179,10 @@ public final class ApiResponse<T> {
     }
 
     /**
-     * 创建携带后续查询地址的 202 成功响应。
+     * 创建携带状态查询地址的 202 成功响应。
      *
      * @param data 已接受处理的资源
-     * @param location 后续查询地址
+     * @param location 状态查询地址
      * @param <T> 响应数据类型
      * @return 携带 Location 的 202 成功响应
      */
@@ -348,7 +350,7 @@ public final class ApiResponse<T> {
      *
      * @return 当前请求编号；请求外创建或响应发布强 ETag 时为空
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonInclude(NON_NULL)
     public @Nullable String getCallId() {
         return dynamicMetadataVisible ? callId : null;
     }
@@ -359,7 +361,7 @@ public final class ApiResponse<T> {
      * @return 响应创建时间；响应发布强 ETag 时为空
      */
     @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化固定响应字段。
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonInclude(NON_NULL)
     public @Nullable Instant getTimestamp() {
         return dynamicMetadataVisible ? timestamp : null;
     }

@@ -1,6 +1,6 @@
 package com.sca4d.core.api.storage;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 

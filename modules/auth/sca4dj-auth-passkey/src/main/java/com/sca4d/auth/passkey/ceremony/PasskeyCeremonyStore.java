@@ -1,5 +1,7 @@
 package com.sca4d.auth.passkey.ceremony;
 
+import static java.lang.Boolean.TRUE;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,10 +10,11 @@ import com.sca4d.auth.passkey.PasskeyCeremonyId;
 import com.sca4d.auth.passkey.PasskeyErrorCode;
 import com.sca4d.auth.passkey.config.PasskeySettings;
 import com.sca4d.core.api.error.BusinessException;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.setting.Settings;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.time.Clock;
 import java.time.Duration;
@@ -24,7 +27,7 @@ import java.util.UUID;
  */
 public final class PasskeyCeremonyStore {
 
-    private final StringRedisTemplate redis;
+    private final RedisTemplate<Key, String> redis;
 
     private final ObjectMapper objectMapper;
 
@@ -32,9 +35,9 @@ public final class PasskeyCeremonyStore {
 
     private final Settings settings;
 
-    private final String registrationPrefix;
+    private static final TreeCode REGISTRATION = TreeCode.ofColon("PASSKEY:REGISTRATION");
 
-    private final String assertionPrefix;
+    private static final TreeCode ASSERTION = TreeCode.ofColon("PASSKEY:ASSERTION");
 
     /**
      * 创建 Passkey ceremony 存储。
@@ -43,21 +46,16 @@ public final class PasskeyCeremonyStore {
      * @param objectMapper     固定 ceremony 结构使用的 JSON 映射器
      * @param clock            过期时间来源
      * @param settings         每次保存 ceremony 时读取有效期的 Settings
-     * @param runtimeNamespace 当前应用运行时命名空间
      */
     public PasskeyCeremonyStore(
-            @NotNull StringRedisTemplate redis,
+            @NotNull RedisTemplate<Key, String> redis,
             @NotNull ObjectMapper objectMapper,
             @NotNull Clock clock,
-            @NotNull Settings settings,
-            @NotNull RuntimeNamespace runtimeNamespace) {
+            @NotNull Settings settings) {
         this.redis = Objects.requireNonNull(redis, "Redis 操作不能为空");
         this.objectMapper = Objects.requireNonNull(objectMapper, "Passkey JSON 映射器不能为空");
         this.clock = Objects.requireNonNull(clock, "时钟不能为空");
         this.settings = Objects.requireNonNull(settings, "Settings 不能为空");
-        RuntimeNamespace namespace = Objects.requireNonNull(runtimeNamespace, "运行时命名空间不能为空");
-        this.registrationPrefix = namespace.sca4dj("passkey", "registration") + ':';
-        this.assertionPrefix = namespace.sca4dj("passkey", "assertion") + ':';
     }
 
     /**
@@ -71,7 +69,7 @@ public final class PasskeyCeremonyStore {
         payload.put("version", 1);
         payload.put("accountId", accountId);
         payload.put("request", Objects.requireNonNull(requestJson, "Passkey registration request 不能为空"));
-        return store(registrationPrefix, payload);
+        return store(REGISTRATION, payload);
     }
 
     /**
@@ -81,14 +79,14 @@ public final class PasskeyCeremonyStore {
         ObjectNode payload = objectMapper.createObjectNode();
         payload.put("version", 1);
         payload.put("request", Objects.requireNonNull(requestJson, "Passkey assertion request 不能为空"));
-        return store(assertionPrefix, payload);
+        return store(ASSERTION, payload);
     }
 
     /**
      * 在验证响应前原子消费 registration request。
      */
     public @NotNull RegistrationCeremony consumeRegistration(@NotNull PasskeyCeremonyId id) {
-        JsonNode payload = consume(registrationPrefix, id);
+        JsonNode payload = consume(REGISTRATION, id);
         long accountId = payload.path("accountId").asLong();
         if (accountId <= 0) {
             throw new BusinessException(PasskeyErrorCode.CEREMONY_UNAVAILABLE);
@@ -100,13 +98,13 @@ public final class PasskeyCeremonyStore {
      * 在验证响应前原子消费 assertion request。
      */
     public @NotNull String consumeAssertion(@NotNull PasskeyCeremonyId id) {
-        return requiredRequest(consume(assertionPrefix, id));
+        return requiredRequest(consume(ASSERTION, id));
     }
 
     /**
      * 使用随机标识和 TTL 保存 ceremony；连续冲突时拒绝创建。
      */
-    private StoredCeremony store(String prefix, ObjectNode payload) {
+    private StoredCeremony store(TreeCode prefix, ObjectNode payload) {
         Duration ttl = settings.get(PasskeySettings.CEREMONY_TTL);
         Instant expiresAt = clock.instant().plus(ttl);
         for (int attempt = 0; attempt < 3; attempt++) {
@@ -114,10 +112,10 @@ public final class PasskeyCeremonyStore {
             try {
                 Boolean created = redis.opsForValue()
                         .setIfAbsent(
-                                prefix + id.value(),
+                                Key.of(prefix).part(id.value()),
                                 objectMapper.writeValueAsString(payload),
                                 ttl);
-                if (Boolean.TRUE.equals(created)) {
+                if (TRUE.equals(created)) {
                     return new StoredCeremony(id, expiresAt);
                 }
             } catch (JsonProcessingException exception) {
@@ -130,10 +128,10 @@ public final class PasskeyCeremonyStore {
     /**
      * 原子读取并删除 ceremony，拒绝不存在、过期或版本不兼容的数据。
      */
-    private JsonNode consume(String prefix, PasskeyCeremonyId id) {
+    private JsonNode consume(TreeCode prefix, PasskeyCeremonyId id) {
         String encoded = redis.opsForValue()
                 .getAndDelete(
-                        prefix + Objects.requireNonNull(id, "Passkey ceremony 标识不能为空").value());
+                        Key.of(prefix).part(Objects.requireNonNull(id, "Passkey ceremony 标识不能为空").value()));
         if (encoded == null) {
             throw new BusinessException(PasskeyErrorCode.CEREMONY_UNAVAILABLE);
         }

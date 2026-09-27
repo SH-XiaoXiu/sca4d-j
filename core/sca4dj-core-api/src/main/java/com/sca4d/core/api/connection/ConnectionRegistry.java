@@ -11,9 +11,9 @@ import java.util.List;
 public interface ConnectionRegistry {
 
     /**
-     * 登记一条新的连接事实；相同连接标识再次登记时由实现刷新当前事实。
+     * 登记一条新的连接信息；相同连接标识再次登记时由实现刷新当前信息。
      *
-     * @param connection 已建立的连接事实
+     * @param connection 已建立的连接信息
      */
     void register(@NotNull Connection connection);
 
@@ -26,7 +26,7 @@ public interface ConnectionRegistry {
     void touch(@NotNull ConnectionId connectionId, @NotNull Instant lastActivityAt);
 
     /**
-     * 删除连接事实；连接不存在和重复删除都必须幂等。
+     * 删除连接信息；连接不存在和重复删除都必须幂等。
      *
      * @param connectionId 待删除的连接标识
      */
@@ -45,7 +45,7 @@ public interface ConnectionRegistry {
     /**
      * 终止当前 Session 关联的全部连接。
      *
-     * <p>实现至少删除共享连接事实；如果实现能够定位协议句柄，还必须把稳定原因传给持有句柄的节点并请求断开。
+     * <p>实现至少删除共享连接信息；如果实现能够定位协议句柄，还必须把稳定原因传给持有句柄的节点并请求断开。
      * 调用应幂等，已不存在的连接不构成失败。</p>
      *
      * @param sessionId Session 标识

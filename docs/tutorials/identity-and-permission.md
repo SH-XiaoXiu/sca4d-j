@@ -1,6 +1,6 @@
 # 接入身份与权限
 
-给新的业务接口增加权限时，先定义入口 Operation，再决定是否还要按具体业务对象检查。Sca4d Server 的 `PlatformFilePermissionPolicy` 和 `PlatformUserProfilePermissionPolicy` 展示了文件与资料的对象授权。
+给接口接入权限，先选择当前 Principal，再声明固定入口 Operation；需要限制具体数据时，再定义 Resource 和 PermissionPolicy，并让 Repository 使用批准的数据范围。下面先列接入顺序，再说明各层何时使用 Subject、Account 或 Principal。
 
 ## 接入一个业务入口
 
@@ -30,7 +30,7 @@ flowchart LR
 
 ### Subject
 
-Subject 表示实际接入者，回答“谁完成了认证或建立了系统调用”。
+Subject 表示实际接入者，回答「谁完成了认证或建立了系统调用」。
 
 ```text
 HUMAN       -> 自然人
@@ -43,7 +43,7 @@ Subject 主要用于接入限制、认证安全、已验证 Contact、Session �
 
 ### Account
 
-Account 表示一组可以完成认证的账号数据，回答“当前 Subject 使用哪个账号和认证材料建立 Session”。
+Account 表示一组可以完成认证的账号数据，回答「当前 Subject 使用哪个账号和认证材料建立 Session」。
 
 Account 关联 RealmKey、AccountIdentifier、Credential、MFA 策略和 Session。密码、Passkey、TOTP、外部身份和 Account 自身状态都按 Account 处理。
 
@@ -51,7 +51,7 @@ Account 不表示管理员、客户、骑手或租户成员，也不能作为业
 
 ### Principal
 
-Principal 表示业务执行身份，回答“当前业务操作以谁的身份执行”。
+Principal 表示业务执行身份，回答「当前业务操作以谁的身份执行」。
 
 业务资料、Role、Operation、Owner、Member、Grant、消息发送者、文件使用者和数据创建者都使用 Principal。Principal 独立存在，不属于 Subject 或 Account；Account 通过多条 AccountPrincipal 记录取得 Principal 集合。
 
@@ -139,7 +139,7 @@ updateProfile(principalId, accountId, principalId, command);
 createOrder(principalId, accountId, customerPrincipalId, command);
 ```
 
-如果业务方法确实需要修改 Account、Credential 或 Subject Contact，它已经在处理 IAM 或认证资源，不属于“普通业务只使用 Principal”的情况。
+如果业务方法确实需要修改 Account、Credential 或 Subject Contact，它已经在处理 IAM 或认证资源，不属于「普通业务只使用 Principal」的情况。
 
 ## Repository 与 SQL
 
@@ -177,7 +177,7 @@ Call 记录本次调用的 Subject、Account、当前 Principal、该 Principal 
 
 审计必须记录实际 Subject、认证 Account 和执行 Principal。审计组件直接从 Call 取得这些数据，不能要求每个业务方法为了审计增加 Subject 和 Account 参数。
 
-SYSTEM 请求使用 `Subject(id=1)` 和 `Principal(id=1)`，Account 为空。SYSTEM 仍然需要明确的 Operation 和 Resource Policy。
+SYSTEM 请求使用唯一 `Subject(id=1)`，Account 为空；Principal 使用启动时经数据库确认的领域身份，例如 MAIN 或 IOT。各实例共享同一身份的 Principal ID，实例 ID 单独记录执行位置。Spring 自主入口使用 `@SystemExecution("IOT")`，已有 Call 保持原身份。SYSTEM 仍然需要明确的 Operation 和 Resource Policy，见[系统、领域身份和实例](/home/identity#系统、领域身份和实例)。
 
 ## 验收要求
 

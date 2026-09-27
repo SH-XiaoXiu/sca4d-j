@@ -1,7 +1,8 @@
 package com.sca4d.iot.state;
 
 import com.sca4d.core.api.error.BusinessException;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.spring.redis.RedisBatches;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.query.ReportedStateSnapshot;
@@ -12,8 +13,8 @@ import com.sca4d.iot.model.ThingDataJsonCodec;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SessionCallback;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 
 import java.time.Instant;
@@ -32,13 +33,13 @@ public final class RedisReportedStateStore implements ReportedStateStore {
 
     private static final DefaultRedisScript<String> UPDATE = updateScript();
 
-    private final @NotNull StringRedisTemplate redis;
+    private final @NotNull RedisTemplate<Key, String> redis;
 
     private final @NotNull ThingDataJsonCodec json;
 
-    private final @NotNull String groupPrefix;
+    private final @NotNull Key groupPrefix;
 
-    private final @NotNull String indexPrefix;
+    private final @NotNull Key indexPrefix;
 
     private final @NotNull RedisBatches redisBatches;
 
@@ -47,19 +48,17 @@ public final class RedisReportedStateStore implements ReportedStateStore {
      *
      * @param redis IoT 共享 Redis
      * @param json 物模型数据 JSON 编解码器
-     * @param namespace 共享资源命名空间
      * @param redisBatches Redis pipeline 批处理器
      */
     public RedisReportedStateStore(
-            @NotNull StringRedisTemplate redis,
+            @NotNull RedisTemplate<Key, String> redis,
             @NotNull ThingDataJsonCodec json,
-            @NotNull RuntimeNamespace namespace,
             @NotNull RedisBatches redisBatches) {
         this.redis = Objects.requireNonNull(redis, "Reported Redis 不能为空");
         this.json = Objects.requireNonNull(json, "Thing data JSON Codec 不能为空");
-        RuntimeNamespace checked = Objects.requireNonNull(namespace, "运行时命名空间不能为空");
-        this.groupPrefix = checked.sca4dj("iot", "reported-group") + ":";
-        this.indexPrefix = checked.sca4dj("iot", "reported-groups") + ":";
+
+        this.groupPrefix = Key.of(TreeCode.ofColon("IOT:REPORTED_GROUP"));
+        this.indexPrefix = Key.of(TreeCode.ofColon("IOT:REPORTED_GROUPS"));
         this.redisBatches = Objects.requireNonNull(redisBatches, "Redis 批处理器不能为空");
     }
 
@@ -208,9 +207,9 @@ public final class RedisReportedStateStore implements ReportedStateStore {
     /** 删除 Device 指定旧绑定的字段组和索引。 */
     @Override
     public void delete(long deviceId, long bindingGeneration) {
-        String indexKey = indexKey(deviceId, bindingGeneration);
+        Key indexKey = indexKey(deviceId, bindingGeneration);
         Set<String> groups = redis.opsForSet().members(indexKey);
-        List<String> keys = new ArrayList<>();
+        List<Key> keys = new ArrayList<>();
         keys.add(indexKey);
         if (groups != null) {
             for (String group : groups) {
@@ -221,12 +220,12 @@ public final class RedisReportedStateStore implements ReportedStateStore {
     }
 
     /** 使用一次 Redis pipeline 读取当前批次全部 Hash。 */
-    private @NotNull List<Object> pipelineHashes(@NotNull List<String> keys) {
+    private @NotNull List<Object> pipelineHashes(@NotNull List<Key> keys) {
         return redisBatches.query(keys, 1, batch -> redis.executePipelined(new SessionCallback<>() {
             @Override
             @SuppressWarnings("unchecked")
             public <K, V> Object execute(@NotNull RedisOperations<K, V> operations) {
-                for (String key : batch) {
+                for (Key key : batch) {
                     operations.opsForHash().entries((K) key);
                 }
                 return null;
@@ -235,7 +234,7 @@ public final class RedisReportedStateStore implements ReportedStateStore {
     }
 
     /** 使用一次 Redis pipeline 清理已经没有对应 Hash 的字段组索引成员。 */
-    private void pipelineRemoveSetMembers(@NotNull String key, @NotNull List<String> members) {
+    private void pipelineRemoveSetMembers(@NotNull Key key, @NotNull List<String> members) {
         redisBatches.forEach(members, 1, batch -> redis.executePipelined(new SessionCallback<>() {
             @Override
             @SuppressWarnings("unchecked")
@@ -247,7 +246,7 @@ public final class RedisReportedStateStore implements ReportedStateStore {
     }
 
     /** 使用一次 Redis pipeline 删除旧绑定索引和全部字段组 Hash。 */
-    private void pipelineDelete(@NotNull List<String> keys) {
+    private void pipelineDelete(@NotNull List<Key> keys) {
         redisBatches.forEach(keys, 1, batch -> redis.executePipelined(new SessionCallback<>() {
             @Override
             @SuppressWarnings("unchecked")
@@ -277,13 +276,13 @@ public final class RedisReportedStateStore implements ReportedStateStore {
     }
 
     /** 返回一个字段组的 Redis Hash key。 */
-    private @NotNull String groupKey(long deviceId, long bindingGeneration, @NotNull String groupCode) {
-        return groupPrefix + deviceId + ':' + bindingGeneration + ':' + groupCode;
+    private @NotNull Key groupKey(long deviceId, long bindingGeneration, @NotNull String groupCode) {
+        return groupPrefix.part(deviceId).part(bindingGeneration).part(groupCode);
     }
 
     /** 返回一个 Device 绑定下的字段组索引 key。 */
-    private @NotNull String indexKey(long deviceId, long bindingGeneration) {
-        return indexPrefix + deviceId + ':' + bindingGeneration;
+    private @NotNull Key indexKey(long deviceId, long bindingGeneration) {
+        return indexPrefix.part(deviceId).part(bindingGeneration);
     }
 
     /** 从 classpath 加载原子更新 latest reported 的 Lua 脚本。 */

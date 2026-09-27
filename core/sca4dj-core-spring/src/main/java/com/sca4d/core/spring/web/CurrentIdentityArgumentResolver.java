@@ -98,7 +98,7 @@ public final class CurrentIdentityArgumentResolver implements HandlerMethodArgum
     }
 
     /**
-     * 解析当前 Subject 或其数值标识参数。
+     * 解析当前 Subject 或 Subject 的数值标识参数。
      *
      * @param parameter Controller 方法参数
      * @param call 当前调用
@@ -126,7 +126,7 @@ public final class CurrentIdentityArgumentResolver implements HandlerMethodArgum
     }
 
     /**
-     * 解析当前 Account 或其数值标识参数。
+     * 解析当前 Account 或 Account 的数值标识参数。
      *
      * @param parameter Controller 方法参数
      * @param call 当前调用
@@ -154,7 +154,7 @@ public final class CurrentIdentityArgumentResolver implements HandlerMethodArgum
     }
 
     /**
-     * 解析当前 Principal、具体 Principal 实现或其数值标识参数。
+     * 解析当前 Principal、具体 Principal 实现或 Principal 的数值标识参数。
      *
      * @param parameter Controller 方法参数
      * @param call 当前调用

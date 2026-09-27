@@ -1,8 +1,10 @@
 package com.sca4d.notification;
 
-import com.sca4d.core.api.code.TreeCode;
+import static com.sca4d.core.api.delivery.DeliveryOutcome.Status.CONFIRMED;
+
 import com.sca4d.core.api.delivery.DeliveryOutcome;
 import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.Notification;
 import com.sca4d.core.api.notification.NotificationDelivery;
 import org.jetbrains.annotations.CheckReturnValue;
@@ -50,7 +52,7 @@ public final class NotificationDeliveryRouter {
         Notification checked = Objects.requireNonNull(notification, "通知不能为空");
         for (TreeCode channel : checked.channels()) {
             DeliveryOutcome outcome = deliver(channel, messageId, checked);
-            if (outcome.status() != DeliveryOutcome.Status.CONFIRMED) {
+            if (outcome.status() != CONFIRMED) {
                 throw new IllegalStateException("同步通知渠道没有确认投递: " + channel + '/' + outcome.status());
             }
         }

@@ -1,9 +1,9 @@
 package com.sca4d.app.server.system;
 
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.i18n.LocaleCatalog;
 import com.sca4d.core.api.id.IdGenerator;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.NotificationType;
 import com.sca4d.core.api.query.ListRequest;
 import com.sca4d.core.api.query.Page;
@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -106,7 +107,7 @@ public class EmailTemplateManagementService {
 
     /** @param sources 多语言模板源码 @return 源码中声明的变量名 */
     public @NotNull Set<String> variables(@NotNull Map<String, EmailTemplateSource> sources) {
-        Set<String> result = new java.util.LinkedHashSet<>();
+        Set<String> result = new LinkedHashSet<>();
         sources.values().forEach(source -> result.addAll(renderer.inspect(source).variables()));
         return Set.copyOf(result);
     }

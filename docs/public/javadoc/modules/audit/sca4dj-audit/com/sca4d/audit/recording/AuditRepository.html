@@ -104,9 +104,10 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.audit.recording.mapper.AuditMapper,com.sca4d.core.api.id.IdGenerator,com.sca4d.audit.payload.AuditPayloadJson)" class="member-name-link">AuditRepository</a><wbr>(@NotNull <a href="mapper/AuditMapper.html" title="interface in com.sca4d.audit.recording.mapper">AuditMapper</a>&nbsp;mapper,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.audit.recording.mapper.AuditMapper,com.sca4d.core.api.id.IdGenerator,com.sca4d.audit.payload.AuditPayloadJson,java.lang.String)" class="member-name-link">AuditRepository</a><wbr>(@NotNull <a href="mapper/AuditMapper.html" title="interface in com.sca4d.audit.recording.mapper">AuditMapper</a>&nbsp;mapper,
  @NotNull com.sca4d.core.api.id.IdGenerator&nbsp;ids,
- @NotNull <a href="../payload/AuditPayloadJson.html" title="class in com.sca4d.audit.payload">AuditPayloadJson</a>&nbsp;payloadJson)</code></div>
+ @NotNull <a href="../payload/AuditPayloadJson.html" title="class in com.sca4d.audit.payload">AuditPayloadJson</a>&nbsp;payloadJson,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;instanceId)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建负责审计领域对象和数据库列值转换的 Repository。</div>
 </div>
@@ -155,14 +156,16 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.audit.recording.mapper.AuditMapper,com.sca4d.core.api.id.IdGenerator,com.sca4d.audit.payload.AuditPayloadJson)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.audit.recording.mapper.AuditMapper,com.sca4d.core.api.id.IdGenerator,com.sca4d.audit.payload.AuditPayloadJson,java.lang.String)">
 <h3>AuditRepository</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AuditRepository</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="mapper/AuditMapper.html" title="interface in com.sca4d.audit.recording.mapper">AuditMapper</a>&nbsp;mapper,
  @NotNull
  @NotNull com.sca4d.core.api.id.IdGenerator&nbsp;ids,
  @NotNull
- @NotNull <a href="../payload/AuditPayloadJson.html" title="class in com.sca4d.audit.payload">AuditPayloadJson</a>&nbsp;payloadJson)</span></div>
+ @NotNull <a href="../payload/AuditPayloadJson.html" title="class in com.sca4d.audit.payload">AuditPayloadJson</a>&nbsp;payloadJson,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;instanceId)</span></div>
 <div class="block">创建负责审计领域对象和数据库列值转换的 Repository。</div>
 </section>
 </li>

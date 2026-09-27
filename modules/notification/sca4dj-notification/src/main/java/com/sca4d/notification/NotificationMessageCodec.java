@@ -1,14 +1,17 @@
 package com.sca4d.notification;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.message.MessageContent;
 import com.sca4d.core.api.message.MessageContentCodec;
 import com.sca4d.core.api.messaging.MessageCodec;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.Notification;
 import com.sca4d.core.api.notification.NotificationRecipient;
 import com.sca4d.core.api.region.Region;
@@ -57,8 +60,8 @@ public final class NotificationMessageCodec implements MessageCodec<Notification
     public byte @NotNull [] encode(@NotNull NotificationMessage value) {
         Notification notification = Objects.requireNonNull(value, "NotificationMessage 不能为空").notification();
         ObjectNode root = json.createObjectNode();
-        root.put("notificationCode", notification.code().value());
-        root.put("recipientType", notification.recipient().type().value());
+        root.put("notificationCode", notification.code().format(SLASH));
+        root.put("recipientType", notification.recipient().type().format(COLON));
         root.put("recipientId", notification.recipient().id());
         root.put("languageTag", notification.locale().toLanguageTag());
         Region region = notification.region();
@@ -71,10 +74,10 @@ public final class NotificationMessageCodec implements MessageCodec<Notification
         ArrayNode channelValues = root.putArray("channels");
         notification.channels()
                 .stream()
-                .sorted(Comparator.comparing(TreeCode::value))
+                .sorted(Comparator.naturalOrder())
                 .forEach(
                         channel -> channelValues.addObject()
-                                .put("code", channel.value())
+                                .put("code", channel.format(SLASH))
                                 .put("required", notification.requiredChannels().contains(channel)));
         ArrayNode contentValues = root.putArray("contents");
         notification.contents().forEach(content -> contentValues.add(contents.encode(content)));

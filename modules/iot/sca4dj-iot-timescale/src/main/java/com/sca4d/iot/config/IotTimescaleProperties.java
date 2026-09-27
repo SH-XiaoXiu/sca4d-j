@@ -4,19 +4,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.time.Duration;
 
-/** 保存 IoT TimescaleDB 连接和高频历史清理参数。 */
+/** 保存 IoT 历史功能和清理参数；数据库连接由动态数据源配置负责。 */
 @ConfigurationProperties("sca4dj.iot.timescale")
 public final class IotTimescaleProperties {
 
     private boolean enabled;
-
-    private String url;
-
-    private String username;
-
-    private String password;
-
-    private String driverClassName;
 
     private Duration cleanupInterval = Duration.ofHours(1);
 
@@ -34,46 +26,6 @@ public final class IotTimescaleProperties {
     /** @param enabled 是否创建独立 TimescaleDB 数据源、迁移和高频历史实现 */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-    }
-
-    /** @return TimescaleDB JDBC 地址 */
-    public String getUrl() {
-        return url;
-    }
-
-    /** @param url TimescaleDB JDBC 地址 */
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    /** @return TimescaleDB 登录用户名 */
-    public String getUsername() {
-        return username;
-    }
-
-    /** @param username TimescaleDB 登录用户名 */
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    /** @return TimescaleDB 登录密码；允许空值以支持数据库认证策略 */
-    public String getPassword() {
-        return password;
-    }
-
-    /** @param password TimescaleDB 登录密码；允许空值以支持数据库认证策略 */
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    /** @return 可选 JDBC 驱动类名 */
-    public String getDriverClassName() {
-        return driverClassName;
-    }
-
-    /** @param driverClassName 可选 JDBC 驱动类名 */
-    public void setDriverClassName(String driverClassName) {
-        this.driverClassName = driverClassName;
     }
 
     /** @return 清理完整 hypertable chunk 的调度间隔 */
@@ -121,20 +73,11 @@ public final class IotTimescaleProperties {
         if (!enabled) {
             return;
         }
-        requireText(getUrl(), "sca4dj.iot.timescale.url");
-        requireText(getUsername(), "sca4dj.iot.timescale.username");
         requirePositive(cleanupInterval, "sca4dj.iot.timescale.cleanup-interval");
         requirePositive(telemetryRetention, "sca4dj.iot.timescale.telemetry-retention");
         requirePositive(eventRetention, "sca4dj.iot.timescale.event-retention");
         if (maxQueryResults < 1 || maxQueryResults > 10_000) {
             throw new IllegalStateException("sca4dj.iot.timescale.max-query-results 必须在 1 到 10000 之间");
-        }
-    }
-
-    /** 要求连接配置文本存在且不为空。 */
-    private static void requireText(String value, String property) {
-        if (value == null || value.isBlank()) {
-            throw new IllegalStateException(property + " 必须显式配置");
         }
     }
 

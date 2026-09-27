@@ -241,7 +241,7 @@ loadScripts(document, 'script');</script>
 <h3>create</h3>
 <div class="member-signature"><span class="annotations">@PostMapping
 @RequirePermission(operation="PLATFORM:ACCOUNTS:MANAGE")
-@Audit(operation="platform/account/create",
+@Audit(operation="PLATFORM/ACCOUNT/CREATE",
        payloadFactory=<a href="../../audit/ApplicationAuditValues.MutationDetails.html" title="class in com.sca4d.app.server.audit">MutationDetails.class</a>)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../platform/view/PlatformAccountView.html" title="class in com.sca4d.app.server.platform.view">PlatformAccountView</a>&gt;</span>&nbsp;<span class="element-name">create</span><wbr><span class="parameters">(@RequestBody @NotNull @AuditPayload
@@ -277,7 +277,7 @@ loadScripts(document, 'script');</script>
 <h3>update</h3>
 <div class="member-signature"><span class="annotations">@PatchMapping("/{accountId}")
 @RequirePermission(operation="PLATFORM:ACCOUNTS:MANAGE")
-@Audit(operation="platform/account/status/change",
+@Audit(operation="PLATFORM/ACCOUNT/STATUS/CHANGE",
        payloadFactory=<a href="../../audit/ApplicationAuditValues.MutationDetails.html" title="class in com.sca4d.app.server.audit">MutationDetails.class</a>)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../platform/view/PlatformAccountView.html" title="class in com.sca4d.app.server.platform.view">PlatformAccountView</a>&gt;</span>&nbsp;<span class="element-name">update</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="IAM/ACCOUNT")
@@ -319,7 +319,7 @@ loadScripts(document, 'script');</script>
 <h3>replaceRoles</h3>
 <div class="member-signature"><span class="annotations">@PutMapping("/{accountId}/roles")
 @RequirePermission(operation="PLATFORM:ACCOUNTS:MANAGE")
-@Audit(operation="platform/account/roles/replace",
+@Audit(operation="PLATFORM/ACCOUNT/ROLES/REPLACE",
        payloadFactory=<a href="../../audit/ApplicationAuditValues.MutationDetails.html" title="class in com.sca4d.app.server.audit">MutationDetails.class</a>)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../platform/view/AccountRolesView.html" title="class in com.sca4d.app.server.platform.view">AccountRolesView</a>&gt;</span>&nbsp;<span class="element-name">replaceRoles</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="IAM/ACCOUNT")
@@ -341,7 +341,7 @@ loadScripts(document, 'script');</script>
 <h3>replaceAvatar</h3>
 <div class="member-signature"><span class="annotations">@PutMapping("/{accountId}/profile/avatar")
 @RequirePermission(operation="PLATFORM:ACCOUNTS:MANAGE")
-@Audit(operation="platform/account/avatar/replace",
+@Audit(operation="PLATFORM/ACCOUNT/AVATAR/REPLACE",
        payloadFactory=<a href="../../audit/ApplicationAuditValues.MutationDetails.html" title="class in com.sca4d.app.server.audit">MutationDetails.class</a>)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../platform/view/PlatformAccountView.html" title="class in com.sca4d.app.server.platform.view">PlatformAccountView</a>&gt;</span>&nbsp;<span class="element-name">replaceAvatar</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="IAM/ACCOUNT")
@@ -366,7 +366,7 @@ loadScripts(document, 'script');</script>
 <h3>deleteAvatar</h3>
 <div class="member-signature"><span class="annotations">@DeleteMapping("/{accountId}/profile/avatar")
 @RequirePermission(operation="PLATFORM:ACCOUNTS:MANAGE")
-@Audit(operation="platform/account/avatar/delete")
+@Audit(operation="PLATFORM/ACCOUNT/AVATAR/DELETE")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../platform/view/PlatformAccountView.html" title="class in com.sca4d.app.server.platform.view">PlatformAccountView</a>&gt;</span>&nbsp;<span class="element-name">deleteAvatar</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="IAM/ACCOUNT")
  long&nbsp;accountId)</span></div>
@@ -384,7 +384,7 @@ loadScripts(document, 'script');</script>
 <h3>delete</h3>
 <div class="member-signature"><span class="annotations">@DeleteMapping("/{accountId}")
 @RequirePermission(operation="PLATFORM:ACCOUNTS:MANAGE")
-@Audit(operation="platform/account/delete")
+@Audit(operation="PLATFORM/ACCOUNT/DELETE")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">delete</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="IAM/ACCOUNT")
  long&nbsp;accountId,

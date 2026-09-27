@@ -28,7 +28,7 @@ public final class PlatformRbacSessionInvalidation implements RbacSessionInvalid
     /**
      * 创建 Platform Session 失效实现。
      *
-     * @param identities IAM 身份事实服务
+     * @param identities IAM 身份管理服务
      * @param sessions Auth 安装的 Session 生命周期；应用未安装 Auth 时为空
      */
     public PlatformRbacSessionInvalidation(

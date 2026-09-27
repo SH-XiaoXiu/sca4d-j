@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="annotations">@AutoConfiguration(before=org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration.class)
 @MapperScan(basePackageClasses={<a href="../identity/mapper/IdentityMapper.html" title="interface in com.sca4d.iam.identity.mapper">IdentityMapper.class</a>,<a href="../base/mapper/PlatformRbacMapper.html" title="interface in com.sca4d.iam.base.mapper">PlatformRbacMapper.class</a>})
 @EnableTransactionManagement
-@EnableConfigurationProperties(<a href="IamProperties.html" title="class in com.sca4d.iam.config">IamProperties.class</a>)
+@EnableConfigurationProperties({<a href="IamProperties.html" title="class in com.sca4d.iam.config">IamProperties.class</a>,<a href="SystemIdentityProperties.html" title="class in com.sca4d.iam.config">SystemIdentityProperties.class</a>})
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">IamAutoConfiguration</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">自动装配 IAM 身份事实、Platform 身份以及内置 RBAC 和 ACL 实现。</div>

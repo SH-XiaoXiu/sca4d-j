@@ -1,11 +1,12 @@
 package com.sca4d.notification.inbox.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.VersionConditions;
 import com.sca4d.core.api.i18n.LocaleCatalog;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.notification.NotificationDelivery;
 import com.sca4d.core.api.webrealtime.WebRealtimePublisher;
+import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.notification.NotificationDeliveryRouter;
 import com.sca4d.notification.NotificationMessageCodec;
 import com.sca4d.notification.NotificationMessageHandler;
@@ -44,7 +45,7 @@ public class InboxNotificationAutoConfiguration {
     InboxTemplateRepository inboxTemplateRepository(
             @NotNull InboxTemplateMapper mapper,
             @NotNull VersionConditions versionConditions,
-            @NotNull ObjectMapper objectMapper) {
+            @Sca4djJson @NotNull Sca4djMapper objectMapper) {
         return new InboxTemplateRepository(mapper, versionConditions, objectMapper);
     }
 

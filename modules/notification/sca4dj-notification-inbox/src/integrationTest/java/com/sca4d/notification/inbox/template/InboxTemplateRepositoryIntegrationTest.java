@@ -3,10 +3,11 @@ package com.sca4d.notification.inbox.template;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.concurrent.VersionConditions;
+import com.sca4d.core.api.name.NameFormat;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.query.ListRequest;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
@@ -16,6 +17,7 @@ import com.sca4d.core.spring.persistence.mybatis.AffectedRowsInterceptor;
 import com.sca4d.core.spring.persistence.mybatis.LongValueTypeHandler;
 import com.sca4d.core.spring.persistence.mybatis.StringValueTypeHandler;
 import com.sca4d.notification.inbox.template.mapper.InboxTemplateMapper;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.type.JdbcType;
 import org.junit.jupiter.api.AfterAll;
@@ -26,7 +28,6 @@ import org.junit.jupiter.api.Test;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -57,7 +58,7 @@ class InboxTemplateRepositoryIntegrationTest {
     /**
      * 装配 Mapper 和实际影响行数检查。
      */
-    @Configuration(proxyBeanMethods = false)
+    @org.springframework.context.annotation.Configuration(proxyBeanMethods = false)
     @EnableAspectJAutoProxy
     @MapperScan(basePackageClasses = InboxTemplateMapper.class)
     static class PersistenceConfiguration {
@@ -79,7 +80,7 @@ class InboxTemplateRepositoryIntegrationTest {
         schema.execute(source);
         jdbc = new JdbcTemplate(source);
 
-        org.apache.ibatis.session.Configuration mybatis = new org.apache.ibatis.session.Configuration();
+        Configuration mybatis = new Configuration();
         mybatis.setMapUnderscoreToCamelCase(true);
         mybatis.getTypeHandlerRegistry()
                 .register(Version.class, JdbcType.BIGINT, new LongValueTypeHandler<>(Version::new, Version::value));
@@ -87,7 +88,7 @@ class InboxTemplateRepositoryIntegrationTest {
                 .register(
                         TreeCode.class,
                         JdbcType.VARCHAR,
-                        new StringValueTypeHandler<>(TreeCode::of, TreeCode::value));
+                        new StringValueTypeHandler<>(TreeCode::of, value -> value.format(NameFormat.SLASH)));
         SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
         factory.setDataSource(source);
         factory.setConfiguration(mybatis);
@@ -132,9 +133,9 @@ class InboxTemplateRepositoryIntegrationTest {
                         List.of(Sort.of("NOTIFICATION_CODE").desc())));
 
         assertThat(page.getTotal()).isEqualTo(3);
-        assertThat(page.getItems()).extracting(value -> value.code().value())
+        assertThat(page.getItems()).extracting(value -> value.code().format(NameFormat.SLASH))
                 .containsExactly("GAMMA/NOTICE", "BETA/NOTICE");
-        assertThat(templates.find(1).orElseThrow().code().value()).isEqualTo("ALPHA/NOTICE");
+        assertThat(templates.find(1).orElseThrow().code().format(NameFormat.SLASH)).isEqualTo("ALPHA/NOTICE");
 
         templates.replace(1, TreeCode.of("ALPHA/CHANGED"), json.readTree("{\"en-US\":{}}"));
         templates.setEnabled(1, true);

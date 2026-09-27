@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;
 
-/** 为已认证平台账号选择其明确关联的平台业务主体。 */
+/** 为已认证平台账号选择明确关联的平台业务主体。 */
 @Component
 public final class PlatformPrincipalSelection implements PrincipalSelection<Map<String, @Nullable Object>> {
 

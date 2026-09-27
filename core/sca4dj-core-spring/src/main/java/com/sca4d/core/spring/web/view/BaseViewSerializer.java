@@ -90,7 +90,7 @@ public final class BaseViewSerializer extends StdSerializer<BaseView> {
             @NotNull JsonGenerator generator,
             @NotNull SerializerProvider provider)
             throws IOException {
-        // 先让 Jackson 默认序列化器生成完整对象，后续定制只修改这份缓冲结果。
+        // 先让 Jackson 默认序列化器生成完整对象，之后的定制只修改这份缓冲结果。
         TokenBuffer buffer = new TokenBuffer(generator.getCodec(), false);
         delegate.serialize(value, buffer, provider);
         JsonNode node = generator.getCodec().readTree(buffer.asParser());

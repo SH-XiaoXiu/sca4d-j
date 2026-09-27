@@ -1,13 +1,16 @@
 package com.sca4d.auth.email.challenge;
 
+import static java.lang.Boolean.TRUE;
+
 import com.sca4d.auth.email.EmailCodeChallengeId;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 
 import java.time.Clock;
@@ -23,24 +26,29 @@ public final class RedisEmailCodeChallengeStore {
 
     private static final DefaultRedisScript<Long> VERIFY = verifyScript();
 
-    private final @NotNull StringRedisTemplate redis;
+    private final @NotNull RedisTemplate<Key, String> redis;
 
     private final @NotNull Clock clock;
 
-    private final @NotNull String challengePrefix;
+    private final @NotNull Key challengePrefix;
 
-    private final @NotNull String cooldownPrefix;
+    private final @NotNull Key cooldownPrefix;
 
-    /** @param redis Redis 字符串操作 @param clock 到期时间来源 @param namespace 当前运行时命名空间 */
+    /**
+     * 创建 Email Code Challenge 存储。
+     *
+     * @param redis Redis 字符串操作
+     * @param clock 到期时间来源
+     * @param namespace 当前 App 隔离名称
+     */
     public RedisEmailCodeChallengeStore(
-            @NotNull StringRedisTemplate redis,
-            @NotNull Clock clock,
-            @NotNull RuntimeNamespace namespace) {
+            @NotNull RedisTemplate<Key, String> redis,
+            @NotNull Clock clock) {
         this.redis = Objects.requireNonNull(redis, "Redis 操作不能为空");
         this.clock = Objects.requireNonNull(clock, "Clock 不能为空");
-        RuntimeNamespace checked = Objects.requireNonNull(namespace, "RuntimeNamespace 不能为空");
-        this.challengePrefix = checked.sca4dj("authentication", "email-code", "challenge") + ':';
-        this.cooldownPrefix = checked.sca4dj("authentication", "email-code", "cooldown") + ':';
+
+        this.challengePrefix = Key.of(TreeCode.ofColon("AUTHENTICATION:EMAIL_CODE:CHALLENGE"));
+        this.cooldownPrefix = Key.of(TreeCode.ofColon("AUTHENTICATION:EMAIL_CODE:COOLDOWN"));
     }
 
     /**
@@ -50,10 +58,10 @@ public final class RedisEmailCodeChallengeStore {
      */
     @CheckReturnValue
     public boolean reserveCooldown(@NotNull String targetHash, @NotNull Duration interval) {
-        return Boolean.TRUE.equals(
+        return TRUE.equals(
                 redis.opsForValue()
                         .setIfAbsent(
-                                cooldownPrefix + Objects.requireNonNull(targetHash, "冷却目标不能为空"),
+                                cooldownPrefix.part(Objects.requireNonNull(targetHash, "冷却目标不能为空")),
                                 "1",
                                 Objects.requireNonNull(interval, "重发间隔不能为空")));
     }
@@ -61,8 +69,8 @@ public final class RedisEmailCodeChallengeStore {
     /** 使用 Challenge 剩余有效时间新增状态，标识冲突时拒绝覆盖。 */
     public void create(@NotNull EmailCodeChallengeState state) {
         EmailCodeChallengeState checked = Objects.requireNonNull(state, "Challenge 状态不能为空");
-        String key = key(checked.challengeId());
-        if (Boolean.TRUE.equals(redis.hasKey(key))) {
+        Key key = key(checked.challengeId());
+        if (TRUE.equals(redis.hasKey(key))) {
             throw new IllegalStateException("Email Code Challenge 标识冲突");
         }
         Map<String, String> fields = new LinkedHashMap<>();
@@ -135,9 +143,9 @@ public final class RedisEmailCodeChallengeStore {
         return text;
     }
 
-    /** @return 当前应用命名空间内的 Challenge key */
-    private @NotNull String key(@NotNull EmailCodeChallengeId challengeId) {
-        return challengePrefix + Objects.requireNonNull(challengeId, "Challenge 标识不能为空").value();
+    /** @return 当前 App 隔离名称下的 Challenge key */
+    private @NotNull Key key(@NotNull EmailCodeChallengeId challengeId) {
+        return challengePrefix.part(Objects.requireNonNull(challengeId, "Challenge 标识不能为空").value());
     }
 
     /** 加载按版本、状态和到期时间原子消费或累计错误次数的 Lua。 */

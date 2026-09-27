@@ -11,7 +11,6 @@ import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.core.api.authentication.SessionLifecycle;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.connection.ConnectionId;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.event.EventType;
@@ -20,16 +19,21 @@ import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
+import com.sca4d.core.api.isolation.AppName;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.DispatchReceipt;
 import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageId;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.Name;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.webrealtime.WebRealtimeMessage;
 import com.sca4d.core.api.webrealtime.WebRealtimePublisher;
 import com.sca4d.core.api.webrealtime.WebRealtimeTarget;
+import com.sca4d.core.spring.redis.KeyRedisSerializer;
 import com.sca4d.core.spring.redis.RedisBatches;
+import com.sca4d.core.spring.redis.RedisHashTag;
 import com.sca4d.core.spring.redis.RedisPipelineProperties;
 import com.sca4d.core.spring.redis.RedisRateLimiter;
 import com.sca4d.web.realtime.connection.BrowserWrite;
@@ -71,7 +75,8 @@ import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.http.server.ServletServerHttpResponse;
@@ -112,7 +117,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @SuppressWarnings("resource")
 class WebRealtimeInfrastructureIntegrationTest {
 
-    private static final RuntimeNamespace NAMESPACE = new RuntimeNamespace("web-realtime-test");
+    static {
+        AppName.publish("WEB_REALTIME_TEST");
+    }
 
     private static final WebRealtimeProperties PROPERTIES = new WebRealtimeProperties();
 
@@ -127,7 +134,7 @@ class WebRealtimeInfrastructureIntegrationTest {
             .withAdminUser("sca4dj")
             .withAdminPassword("sca4dj");
 
-    private static StringRedisTemplate redis;
+    private static RedisTemplate<Key, String> redis;
 
     private static CachingConnectionFactory rabbitConnectionFactory;
 
@@ -163,7 +170,12 @@ class WebRealtimeInfrastructureIntegrationTest {
                 REDIS.getMappedPort(6379));
         LettuceConnectionFactory redisConnectionFactory = new LettuceConnectionFactory(redisConfiguration);
         redisConnectionFactory.afterPropertiesSet();
-        redis = new StringRedisTemplate(redisConnectionFactory);
+        redis = new RedisTemplate<>();
+        redis.setConnectionFactory(redisConnectionFactory);
+        redis.setKeySerializer(new KeyRedisSerializer(List.of(new RedisHashTag(TreeCode.ofSegment("WEB_REALTIME")))));
+        redis.setValueSerializer(new StringRedisSerializer());
+        redis.setHashKeySerializer(new StringRedisSerializer());
+        redis.setHashValueSerializer(new StringRedisSerializer());
         redis.afterPropertiesSet();
 
         Config redissonConfig = new Config();
@@ -198,7 +210,7 @@ class WebRealtimeInfrastructureIntegrationTest {
     void createNodes() {
         Objects.requireNonNull(redis.getConnectionFactory()).getConnection().serverCommands().flushAll();
         clock = new MutableClock(Instant.parse("2026-07-28T00:00:00Z"));
-        WebRealtimeInfrastructureNames names = new WebRealtimeInfrastructureNames(NAMESPACE);
+        WebRealtimeInfrastructureNames names = new WebRealtimeInfrastructureNames();
         firstRegistry = new RedisConnectionRegistry(redis, names, PROPERTIES, clock, redisBatches());
         secondRegistry = new RedisConnectionRegistry(redis, names, PROPERTIES, clock, redisBatches());
         firstLocal = new LocalConnectionRegistry(firstRegistry);
@@ -256,7 +268,7 @@ class WebRealtimeInfrastructureIntegrationTest {
                     new IncomingMessage<>(
                             new MessageId(1L),
                             (WebRealtimeMessage) message,
-                            "web-realtime-test",
+                            new Name("WEB_REALTIME_TEST"),
                             clock.instant(),
                             false,
                             1));
@@ -313,7 +325,7 @@ class WebRealtimeInfrastructureIntegrationTest {
     void resolvesConnectionsAcrossBatchBoundaries() {
         WebRealtimeProperties properties = new WebRealtimeProperties();
         properties.setLeaseDuration(Duration.ofMinutes(5));
-        WebRealtimeInfrastructureNames names = new WebRealtimeInfrastructureNames(NAMESPACE);
+        WebRealtimeInfrastructureNames names = new WebRealtimeInfrastructureNames();
         RedisConnectionRegistry registry = new RedisConnectionRegistry(redis, names, properties, clock, redisBatches());
         Session session = session();
         for (int index = 0; index < 1001; index++) {
@@ -345,7 +357,7 @@ class WebRealtimeInfrastructureIntegrationTest {
         RedisTicketService tickets = new RedisTicketService(
                 redis,
                 sessions,
-                new WebRealtimeInfrastructureNames(NAMESPACE),
+                new WebRealtimeInfrastructureNames(),
                 PROPERTIES,
                 clock);
         TicketHandshakeInterceptor handshake = new TicketHandshakeInterceptor(tickets, PROPERTIES);
@@ -404,7 +416,7 @@ class WebRealtimeInfrastructureIntegrationTest {
         RedisTicketService tickets = new RedisTicketService(
                 redis,
                 sessions,
-                new WebRealtimeInfrastructureNames(NAMESPACE),
+                new WebRealtimeInfrastructureNames(),
                 PROPERTIES,
                 clock);
         TicketHandshakeInterceptor handshake = new TicketHandshakeInterceptor(tickets, PROPERTIES);
@@ -444,7 +456,7 @@ class WebRealtimeInfrastructureIntegrationTest {
     @DisplayName("Enforces Shared Redis Token Bucket Burst Capacity And Continuous Refill")
     void enforcesSharedRedisTokenBucketBurstCapacityAndContinuousRefill() {
         StompInboundInterceptor inbound = new StompInboundInterceptor(
-                new StompRateLimits(new RedisRateLimiter(rateLimitBuckets, NAMESPACE)),
+                new StompRateLimits(new RedisRateLimiter(rateLimitBuckets)),
                 firstRegistry,
                 List.of(),
                 clock);

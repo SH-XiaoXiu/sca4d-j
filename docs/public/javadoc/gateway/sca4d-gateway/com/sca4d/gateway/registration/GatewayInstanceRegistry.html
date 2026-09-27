@@ -151,10 +151,10 @@ loadScripts(document, 'script');</script>
 <div class="block">仅在实例 ID 和租约 ID 同时匹配时续租。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="GatewayInstance.html" title="class in com.sca4d.gateway.registration">GatewayInstance</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#selectApi()" class="member-name-link">selectApi</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#selectApi(java.lang.String)" class="member-name-link">selectApi</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="GatewayInstance.html" title="class in com.sca4d.gateway.registration">GatewayInstance</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#selectCallback(java.lang.String)" class="member-name-link">selectCallback</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callbackCode)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#selectCallback(com.sca4d.core.api.gateway.GatewayCallbackCode)" class="member-name-link">selectCallback</a><wbr>(@NotNull com.sca4d.core.api.gateway.GatewayCallbackCode&nbsp;callbackCode)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">选择能够处理指定回调的实例。</div>
 </div>
@@ -259,11 +259,12 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="selectApi()">
+<section class="detail" id="selectApi(java.lang.String)">
 <h3>selectApi</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @Nullable
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="GatewayInstance.html" title="class in com.sca4d.gateway.registration">GatewayInstance</a></span>&nbsp;<span class="element-name">selectApi</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="GatewayInstance.html" title="class in com.sca4d.gateway.registration">GatewayInstance</a></span>&nbsp;<span class="element-name">selectApi</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>轮询选择一个可处理普通 `/api/**` 请求的健康实例</dd>
@@ -271,12 +272,12 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="selectCallback(java.lang.String)">
+<section class="detail" id="selectCallback(com.sca4d.core.api.gateway.GatewayCallbackCode)">
 <h3>selectCallback</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @Nullable
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="GatewayInstance.html" title="class in com.sca4d.gateway.registration">GatewayInstance</a></span>&nbsp;<span class="element-name">selectCallback</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callbackCode)</span></div>
+ @NotNull com.sca4d.core.api.gateway.GatewayCallbackCode&nbsp;callbackCode)</span></div>
 <div class="block">选择能够处理指定回调的实例。</div>
 <dl class="notes">
 <dt>Parameters:</dt>

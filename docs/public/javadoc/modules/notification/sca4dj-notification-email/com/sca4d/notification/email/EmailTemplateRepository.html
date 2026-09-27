@@ -122,8 +122,8 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(long,com.sca4d.core.api.code.TreeCode,java.util.Map)" class="member-name-link">add</a><wbr>(long&nbsp;templateId,
- @NotNull com.sca4d.core.api.code.TreeCode&nbsp;code,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(long,com.sca4d.core.api.name.code.TreeCode,java.util.Map)" class="member-name-link">add</a><wbr>(long&nbsp;templateId,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;code,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="EmailTemplateSource.html" title="class in com.sca4d.notification.email">EmailTemplateSource</a>&gt;&nbsp;locales)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">新增 Email 模板；通知编码冲突时抛出模板冲突异常。</div>
@@ -139,12 +139,12 @@ loadScripts(document, 'script');</script>
 <div class="block">按模板标识读取 Email 模板；模板不存在或已经逻辑删除时返回空。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="EmailTemplate.html" title="class in com.sca4d.notification.email">EmailTemplate</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findByCode(com.sca4d.core.api.code.TreeCode)" class="member-name-link">findByCode</a><wbr>(@NotNull com.sca4d.core.api.code.TreeCode&nbsp;code)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findByCode(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">findByCode</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;code)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">按通知编码读取未删除模板，无论模板当前是否启用。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="EmailTemplate.html" title="class in com.sca4d.notification.email">EmailTemplate</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findEnabled(com.sca4d.core.api.code.TreeCode)" class="member-name-link">findEnabled</a><wbr>(@NotNull com.sca4d.core.api.code.TreeCode&nbsp;code)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findEnabled(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">findEnabled</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;code)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">读取指定通知编码当前启用的第一份 Email 模板；没有启用模板时返回空。</div>
 </div>
@@ -154,8 +154,8 @@ loadScripts(document, 'script');</script>
 <div class="block">分页读取未删除 Email 模板，并验证排序字段和最大页大小。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#replace(long,com.sca4d.core.api.code.TreeCode,java.util.Map)" class="member-name-link">replace</a><wbr>(long&nbsp;templateId,
- @NotNull com.sca4d.core.api.code.TreeCode&nbsp;code,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#replace(long,com.sca4d.core.api.name.code.TreeCode,java.util.Map)" class="member-name-link">replace</a><wbr>(long&nbsp;templateId,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;code,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="EmailTemplateSource.html" title="class in com.sca4d.notification.email">EmailTemplateSource</a>&gt;&nbsp;locales)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">按当前版本替换 Email 模板内容；版本冲突或通知编码冲突时失败。</div>
@@ -203,22 +203,22 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="findEnabled(com.sca4d.core.api.code.TreeCode)">
+<section class="detail" id="findEnabled(com.sca4d.core.api.name.code.TreeCode)">
 <h3>findEnabled</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="EmailTemplate.html" title="class in com.sca4d.notification.email">EmailTemplate</a>&gt;</span>&nbsp;<span class="element-name">findEnabled</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.code.TreeCode&nbsp;code)</span></div>
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;code)</span></div>
 <div class="block">读取指定通知编码当前启用的第一份 Email 模板；没有启用模板时返回空。</div>
 </section>
 </li>
 <li>
-<section class="detail" id="findByCode(com.sca4d.core.api.code.TreeCode)">
+<section class="detail" id="findByCode(com.sca4d.core.api.name.code.TreeCode)">
 <h3>findByCode</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="EmailTemplate.html" title="class in com.sca4d.notification.email">EmailTemplate</a>&gt;</span>&nbsp;<span class="element-name">findByCode</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.code.TreeCode&nbsp;code)</span></div>
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;code)</span></div>
 <div class="block">按通知编码读取未删除模板，无论模板当前是否启用。</div>
 </section>
 </li>
@@ -242,22 +242,22 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="add(long,com.sca4d.core.api.code.TreeCode,java.util.Map)">
+<section class="detail" id="add(long,com.sca4d.core.api.name.code.TreeCode,java.util.Map)">
 <h3>add</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(long&nbsp;templateId,
  @NotNull
- @NotNull com.sca4d.core.api.code.TreeCode&nbsp;code,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;code,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="EmailTemplateSource.html" title="class in com.sca4d.notification.email">EmailTemplateSource</a>&gt;&nbsp;locales)</span></div>
 <div class="block">新增 Email 模板；通知编码冲突时抛出模板冲突异常。</div>
 </section>
 </li>
 <li>
-<section class="detail" id="replace(long,com.sca4d.core.api.code.TreeCode,java.util.Map)">
+<section class="detail" id="replace(long,com.sca4d.core.api.name.code.TreeCode,java.util.Map)">
 <h3>replace</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">replace</span><wbr><span class="parameters">(long&nbsp;templateId,
  @NotNull
- @NotNull com.sca4d.core.api.code.TreeCode&nbsp;code,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;code,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="EmailTemplateSource.html" title="class in com.sca4d.notification.email">EmailTemplateSource</a>&gt;&nbsp;locales)</span></div>
 <div class="block">按当前版本替换 Email 模板内容；版本冲突或通知编码冲突时失败。</div>

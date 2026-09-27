@@ -26,10 +26,10 @@
         <if test="forUpdate">FOR UPDATE</if>
     </select>
 
-    <select id="selectOperations" resultType="String">
+    <select id="selectOperations" resultType="com.sca4d.core.api.name.code.TreeCode">
         SELECT operation FROM openapi_client_operation
         WHERE client_id = #{clientId}
-        <if test="operation != null">AND operation = #{operation}</if>
+        <if test="operation != null">AND operation = #{operation,typeHandler=com.sca4d.core.spring.persistence.mybatis.TreeCodeTypeHandler$Colon}</if>
         ORDER BY operation
     </select>
 
@@ -41,7 +41,7 @@
         INSERT INTO openapi_client_operation (client_id, operation)
         VALUES
         <foreach collection="operations" item="operation" separator=",">
-            (#{clientId}, #{operation})
+            (#{clientId}, #{operation,typeHandler=com.sca4d.core.spring.persistence.mybatis.TreeCodeTypeHandler$Colon})
         </foreach>
     </insert>
 

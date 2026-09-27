@@ -1,5 +1,6 @@
 package com.sca4d.messaging.outbox.mapper;
 
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.messaging.outbox.OutboxStatus;
 import org.apache.ibatis.annotations.Param;
@@ -23,7 +24,7 @@ public interface OutboxMapper {
      */
     int insert(
             @Param("messageId") long messageId,
-            @Param("messageCode") @NotNull String messageCode,
+            @Param("messageCode") @NotNull TreeCode messageCode,
             @Param("envelope") byte @NotNull [] envelope,
             @Param("status") @NotNull OutboxStatus status,
             @Param("availableAt") @NotNull Instant availableAt);

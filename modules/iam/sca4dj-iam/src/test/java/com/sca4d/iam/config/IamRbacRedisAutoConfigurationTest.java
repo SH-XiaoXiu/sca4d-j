@@ -4,10 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.permission.Operation;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.core.spring.redis.Sca4djRedis;
 import com.sca4d.iam.rbac.PermissionSelectionRegistry;
 import com.sca4d.iam.rbac.PermissionSelections;
@@ -20,12 +20,12 @@ import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.List;
 import java.util.Set;
 
-/** 验证 Redis RBAC 缓存自动配置取得运行命名空间、JSON 规则和权限目录。 */
+/** 验证 Redis RBAC 缓存自动配置取得 App 隔离名称、JSON 规则和权限目录。 */
 class IamRbacRedisAutoConfigurationTest {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
@@ -50,21 +50,16 @@ class IamRbacRedisAutoConfigurationTest {
         /** @return 测试使用的脚手架 Redis 模板 */
         @Bean
         @Sca4djRedis
-        StringRedisTemplate redis() {
-            return mock(StringRedisTemplate.class);
-        }
-
-        /** @return 测试应用运行命名空间 */
-        @Bean
-        RuntimeNamespace runtimeNamespace() {
-            return new RuntimeNamespace("example-app");
+        @SuppressWarnings("unchecked") // Mockito 的 Class 参数不能表达 RedisTemplate 泛型。
+        RedisTemplate<Key, String> redis() {
+            return mock(RedisTemplate.class);
         }
 
         /** @return 测试使用的脚手架 JSON 映射器 */
         @Bean
         @Sca4djJson
-        ObjectMapper objectMapper() {
-            return new ObjectMapper();
+        Sca4djMapper objectMapper() {
+            return new Sca4djMapper();
         }
 
         /** @return 包含一个 Platform Operation 的权限选择规则 */

@@ -64,7 +64,7 @@ public final class SystemSettingService {
     }
 
     /**
-     * 删除数据库值，使后续查询恢复 Java 默认值。
+     * 删除数据库值，使之后的查询恢复 Java 默认值。
      *
      * @param key 已注册设置键
      */

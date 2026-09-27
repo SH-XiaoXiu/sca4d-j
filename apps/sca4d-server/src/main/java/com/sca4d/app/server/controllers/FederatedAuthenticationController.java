@@ -9,6 +9,7 @@ import com.sca4d.app.server.authentication.view.*;
 import com.sca4d.app.server.service.ActionAuthenticationService;
 import com.sca4d.app.server.service.PlatformLoginService;
 import com.sca4d.auth.federation.*;
+import com.sca4d.auth.federation.FederatedAuthenticationMethod;
 import com.sca4d.auth.federation.identity.FederatedIdentityService;
 import com.sca4d.core.api.annotation.AnonymousAccess;
 import com.sca4d.core.api.annotation.Audit;

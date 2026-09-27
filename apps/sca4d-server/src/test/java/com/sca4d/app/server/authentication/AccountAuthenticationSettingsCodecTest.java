@@ -62,7 +62,7 @@ class AccountAuthenticationSettingsCodecTest {
                 }
                 """))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("TreeCode");
+                .hasMessageContaining("AUTHENTICATION");
     }
 
     @Test

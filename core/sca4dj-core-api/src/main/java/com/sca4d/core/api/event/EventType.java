@@ -1,6 +1,7 @@
 package com.sca4d.core.api.event;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.NameFormat;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,8 +32,8 @@ public final class EventType<T> {
     /** 创建已经规范化的事件类型。 */
     public EventType(@NotNull TreeCode code, int protocolVersion, @NotNull Class<T> payloadType) {
         TreeCode checkedCode = Objects.requireNonNull(code, "事件编码不能为空");
-        if (checkedCode.separator() != '/' || checkedCode.value().length() > 128) {
-            throw new IllegalArgumentException("事件编码必须使用斜杠分层且不能超过 128 个字符");
+        if (checkedCode.hasNode(TreeCode.ofSegment("*")) || checkedCode.format(NameFormat.SLASH).length() > 128) {
+            throw new IllegalArgumentException("事件编码不能含通配符或超过 128 个字符");
         }
         if (protocolVersion <= 0) {
             throw new IllegalArgumentException("事件协议版本必须为正数");
@@ -44,13 +45,7 @@ public final class EventType<T> {
 
     /** @return 跨发布端和消费端保持稳定的事件编码 */
     @Contract(pure = true)
-    public @NotNull String code() {
-        return code.value();
-    }
-
-    /** @return 已规范化的事件 TreeCode */
-    @Contract(pure = true)
-    public @NotNull TreeCode treeCode() {
+    public @NotNull TreeCode code() {
         return code;
     }
 
@@ -88,6 +83,6 @@ public final class EventType<T> {
     @Override
     @Contract(pure = true)
     public @NotNull String toString() {
-        return code.value() + '@' + protocolVersion;
+        return code + "@" + protocolVersion;
     }
 }

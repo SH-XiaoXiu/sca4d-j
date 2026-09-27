@@ -1,12 +1,16 @@
 package com.sca4d.storage.file.lifecycle;
 
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+import static java.lang.Boolean.TRUE;
+
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.identity.Principal;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.ResourceReference;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
 import com.sca4d.core.api.setting.SettingValues;
 import com.sca4d.core.api.setting.Settings;
 import com.sca4d.core.api.storage.FileAccessUrl;
@@ -91,8 +95,6 @@ public class DefaultFileService implements FileService {
 
     private final @NotNull Clock clock;
 
-    private final @NotNull String objectKeyPrefix;
-
     private final @NotNull DistributedLock distributedLock;
 
     private final @NotNull TransactionTemplate transactions;
@@ -110,7 +112,6 @@ public class DefaultFileService implements FileService {
             @NotNull Settings settings,
             @NotNull TransferTokenService transferTokens,
             @NotNull Clock clock,
-            @NotNull RuntimeNamespace runtimeNamespace,
             @NotNull DistributedLock distributedLock,
             @NotNull PlatformTransactionManager transactionManager) {
         this.repository = Objects.requireNonNull(repository, "文件 Repository 不能为空");
@@ -120,8 +121,6 @@ public class DefaultFileService implements FileService {
         this.settings = Objects.requireNonNull(settings, "Settings 不能为空");
         this.transferTokens = Objects.requireNonNull(transferTokens, "文件传输签名器不能为空");
         this.clock = Objects.requireNonNull(clock, "时钟不能为空");
-        RuntimeNamespace namespace = Objects.requireNonNull(runtimeNamespace, "运行时命名空间不能为空");
-        this.objectKeyPrefix = namespace.sca4dj("storage");
         this.distributedLock = Objects.requireNonNull(distributedLock, "分布式锁不能为空");
         this.transactions = new TransactionTemplate(Objects.requireNonNull(transactionManager, "事务管理器不能为空"));
     }
@@ -203,7 +202,7 @@ public class DefaultFileService implements FileService {
                     throw new BusinessException(FileErrorCode.UPLOAD_EXPIRED);
                 }
 
-                // 把服务端持有的流写入临时对象，完成核验前不把该对象作为正式文件读取来源。
+                // 把服务端持有的流写入临时对象，完成核验前不把临时对象作为正式文件读取来源。
                 try {
                     storages.storage(record.backendId())
                             .write(
@@ -276,7 +275,7 @@ public class DefaultFileService implements FileService {
                 "文件上传存储实现已选择 | backendId={} scene={} targetType={} targetId={} sizeBytes={}",
                 storage.backendId(),
                 checked.use().scene(),
-                checked.use().target().type().value(),
+                checked.use().target().type(),
                 checked.use().target().id(),
                 checked.sizeBytes());
 
@@ -285,17 +284,20 @@ public class DefaultFileService implements FileService {
         Instant now = clock.instant();
         Instant expiresAt = now.plus(fileLimits.get(FileSettings.UPLOAD_TTL));
         String nonce = UUID.randomUUID().toString().replace("-", "");
-        String objectKey = objectKeyPrefix + "/objects/" + OBJECT_MONTH.format(now) + "/" + fileId + "-"
-                + UUID.randomUUID().toString().replace("-", "");
+        String objectKey = Key.of(TreeCode.of("STORAGE:OBJECTS"))
+                .part(OBJECT_MONTH.format(now))
+                .part(fileId)
+                .part(UUID.randomUUID().toString())
+                .format(SLASH);
         FileRecord record = new FileRecord(
                 fileId,
                 uploaderPrincipalId,
                 checked.use().scene(),
-                checked.use().target().type().value(),
+                checked.use().target().type(),
                 checked.use().target().id(),
                 storage.backendId(),
                 storage.defaultContainer(),
-                objectKeyPrefix + "/uploads/" + fileId + "/" + nonce,
+                Key.of(TreeCode.of("STORAGE:UPLOADS")).part(fileId).part(nonce).format(SLASH),
                 objectKey,
                 checked.filename(),
                 checked.contentType(),
@@ -337,7 +339,7 @@ public class DefaultFileService implements FileService {
                 fileId,
                 uploaderPrincipalId);
         return distributedLock.execute(fileOperationLock(fileId), FILE_OPERATION_LOCK_WAIT, () -> {
-            // 在短事务中读取状态；等待锁和后续对象存储操作都不占用数据库事务。
+            // 在短事务中读取状态；等待锁和之后的对象存储操作都不占用数据库事务。
             FileRecord record = Objects.requireNonNull(
                     transactions.execute(status -> find(fileId)),
                     "文件读取事务没有返回结果");
@@ -363,7 +365,7 @@ public class DefaultFileService implements FileService {
                 record.backendId(),
                 record.status());
 
-        // 只允许创建文件的 Principal 完成上传；对其他 Principal 隐藏文件是否存在。
+        // 只允许创建文件的 Principal 完成上传；对其他 Principal 隐藏文件是否存在这一事实。
         if (record.uploaderPrincipalId() != uploaderPrincipalId) {
             LOG.trace(
                     "文件上传完成确认 Principal 不匹配 | fileId={} principalId={} status={}",
@@ -450,7 +452,7 @@ public class DefaultFileService implements FileService {
                 metadata.sizeBytes(),
                 storedObject.objectKey(),
                 readyExpiresAt);
-        boolean saved = Boolean.TRUE.equals(
+        boolean saved = TRUE.equals(
                 transactions.execute(status -> repository.saveCompleted(completed)));
         if (!saved) {
             LOG.trace("文件上传完成状态保存冲突 | fileId={} expectedStatus={}", fileId, FileStatus.PENDING);
@@ -853,7 +855,7 @@ public class DefaultFileService implements FileService {
      */
     private static void validateUse(@NotNull FileRecord record, @NotNull FileUse use) {
         if (!record.scene().equals(use.scene())
-                || !record.targetResourceType().equals(use.target().type().value())
+                || !record.targetResourceType().equals(use.target().type())
                 || !record.targetResourceId().equals(use.target().id())) {
             LOG.trace(
                     "文件用途与上传申请不一致 | fileId={} actualScene={} expectedScene={} actualTargetType={} expectedTargetType={} actualTargetId={} expectedTargetId={}",
@@ -882,7 +884,7 @@ public class DefaultFileService implements FileService {
      * 返回上传写入和完成确认共同使用的文件锁键。
      */
     private static @NotNull LockKey fileOperationLock(long fileId) {
-        return new LockKey("storage", "file", Long.toString(fileId));
+        return new LockKey(TreeCode.of("STORAGE:FILE"), fileId);
     }
 
     /**

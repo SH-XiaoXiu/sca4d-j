@@ -1,7 +1,7 @@
 package com.sca4d.notification.email.mapper;
 
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.core.api.query.SortOrder;
 import org.apache.ibatis.annotations.Param;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
- * 读写 Email 模板及其启用状态和版本条件。
+ * 读写 Email 模板、启用状态和版本条件。
  */
 public interface EmailTemplateMapper {
     @NotNull

@@ -6,9 +6,11 @@ import static org.mockito.Mockito.when;
 
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.notification.NotificationType;
 import com.sca4d.notification.NotificationTypeCatalog;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -35,12 +37,12 @@ class SmsConfigurationServiceTest {
                 mock(SmsRepository.class),
                 new NotificationTypeCatalog(List.of(TYPE)),
                 List.of(transport("ALIYUN")),
-                () -> com.sca4d.core.api.id.Id.of(1L));
+                () -> Id.of(1L));
 
         assertThatThrownBy(() -> service.createProvider("primary", "UNKNOWN", "primary", 10))
                 .isInstanceOfSatisfying(
                         BusinessException.class,
-                        exception -> org.assertj.core.api.Assertions.assertThat(exception.errorCode())
+                        exception -> Assertions.assertThat(exception.errorCode())
                                 .isEqualTo(SmsNotificationErrorCode.PROVIDER_INVALID));
     }
 
@@ -66,7 +68,7 @@ class SmsConfigurationServiceTest {
                         Map.of("value", "missing")))
                 .isInstanceOfSatisfying(
                         BusinessException.class,
-                        exception -> org.assertj.core.api.Assertions.assertThat(exception.errorCode())
+                        exception -> Assertions.assertThat(exception.errorCode())
                                 .isEqualTo(SmsNotificationErrorCode.BINDING_INVALID));
     }
 
@@ -85,7 +87,7 @@ class SmsConfigurationServiceTest {
         assertThatThrownBy(() -> service.setProviderEnabled(1L, true))
                 .isInstanceOfSatisfying(
                         BusinessException.class,
-                        exception -> org.assertj.core.api.Assertions.assertThat(exception.errorCode())
+                        exception -> Assertions.assertThat(exception.errorCode())
                                 .isEqualTo(SmsNotificationErrorCode.PROVIDER_CONFLICT));
     }
 
@@ -100,7 +102,7 @@ class SmsConfigurationServiceTest {
     }
 
     private static IdGenerator idGenerator() {
-        return () -> com.sca4d.core.api.id.Id.of(2L);
+        return () -> Id.of(2L);
     }
 
     private static final class TestNotice {

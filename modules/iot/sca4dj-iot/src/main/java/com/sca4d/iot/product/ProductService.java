@@ -7,6 +7,7 @@ import com.sca4d.core.api.i18n.LocaleCatalog;
 import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.i18n.LocalizedFieldsSchema;
 import com.sca4d.core.api.id.IdGenerator;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.iot.IotErrorCode;
@@ -192,7 +193,7 @@ public class ProductService {
     /** 取得 Product 聚合锁后，在事务内执行有返回值的写操作。 */
     private <T> @NotNull T write(@NotNull String productCode, @NotNull Supplier<@NotNull T> operation) {
         return distributedLock.execute(
-                new LockKey("iot", "product", productCode),
+                new LockKey(TreeCode.of("IOT:PRODUCT"), productCode),
                 LOCK_WAIT,
                 () -> Objects.requireNonNull(
                         transactions.execute(status -> operation.get()),
@@ -202,7 +203,7 @@ public class ProductService {
     /** 取得 Product 聚合锁后，在事务内执行无返回值的写操作。 */
     private void write(@NotNull String productCode, @NotNull Runnable operation) {
         distributedLock.execute(
-                new LockKey("iot", "product", productCode),
+                new LockKey(TreeCode.of("IOT:PRODUCT"), productCode),
                 LOCK_WAIT,
                 () -> {
                     transactions.executeWithoutResult(status -> operation.run());

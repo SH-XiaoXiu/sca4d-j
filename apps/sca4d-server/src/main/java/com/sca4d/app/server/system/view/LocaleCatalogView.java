@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 /** 返回完整示例 App 支持和默认使用的 BCP 47 Locale 标签。 */
@@ -35,7 +36,7 @@ public final class LocaleCatalogView {
     public static @NotNull LocaleCatalogView from(@NotNull LocaleCatalog locales) {
         LocaleCatalog checked = Objects.requireNonNull(locales, "LocaleCatalog 不能为空");
         return new LocaleCatalogView(
-                checked.supportedLocales().stream().map(java.util.Locale::toLanguageTag).toList(),
+                checked.supportedLocales().stream().map(Locale::toLanguageTag).toList(),
                 checked.defaultLocale().toLanguageTag());
     }
 

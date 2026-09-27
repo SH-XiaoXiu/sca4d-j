@@ -11,16 +11,16 @@ public interface DeviceConnectionReceiver {
     /**
      * 登记或刷新一个明确的连接代次。
      *
-     * @param connection 已经解析到 Device 的连接事实
+     * @param connection 已经解析到 Device 的连接信息
      */
     void connected(@NotNull DeviceConnection connection);
 
     /**
-     * 删除仍与指定协议和连接代次一致的当前连接事实。
+     * 删除仍与指定协议和连接代次一致的当前连接信息。
      *
      * @param protocol 产生断线事实的连接协议
      * @param connectionId 已经结束的连接代次
-     * @return 当前连接事实是否被删除
+     * @return 当前连接信息是否被删除
      */
     boolean disconnected(@NotNull DeviceConnectionProtocol protocol, @NotNull DeviceConnectionId connectionId);
 

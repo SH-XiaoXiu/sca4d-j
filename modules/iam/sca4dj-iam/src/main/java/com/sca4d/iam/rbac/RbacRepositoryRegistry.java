@@ -52,7 +52,7 @@ public final class RbacRepositoryRegistry {
         }
         LOG.trace(
                 "RBAC Repository 路由完成 | domain={} repositoryType={}",
-                checked.value(),
+                checked,
                 repository.getClass().getName());
         return repository;
     }

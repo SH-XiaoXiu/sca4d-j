@@ -1,6 +1,6 @@
 package com.sca4d.notification;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.NotificationType;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;

@@ -56,13 +56,13 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/notification/inbox/InboxMessage.html#accountId()" class="member-name-link">accountId()</a> - Method in class com.sca4d.notification.inbox.<a href="com/sca4d/notification/inbox/InboxMessage.html" title="class in com.sca4d.notification.inbox">InboxMessage</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/notification/inbox/template/InboxTemplateRepository.html#add(long,com.sca4d.core.api.code.TreeCode,com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">add(long, TreeCode, JsonNode)</a> - Method in class com.sca4d.notification.inbox.template.<a href="com/sca4d/notification/inbox/template/InboxTemplateRepository.html" title="class in com.sca4d.notification.inbox.template">InboxTemplateRepository</a></dt>
-<dd>
-<div class="block">新增默认停用模板。</div>
-</dd>
 <dt><a href="com/sca4d/notification/inbox/InboxRepository.html#add(long,com.sca4d.core.api.messaging.MessageId,long,com.sca4d.core.api.notification.Notification,com.sca4d.notification.inbox.template.RenderedInboxMessage)" class="member-name-link">add(long, MessageId, long, Notification, RenderedInboxMessage)</a> - Method in class com.sca4d.notification.inbox.<a href="com/sca4d/notification/inbox/InboxRepository.html" title="class in com.sca4d.notification.inbox">InboxRepository</a></dt>
 <dd>
 <div class="block">按原始 messageId 和 Account 幂等保存渲染快照。</div>
+</dd>
+<dt><a href="com/sca4d/notification/inbox/template/InboxTemplateRepository.html#add(long,com.sca4d.core.api.name.code.TreeCode,com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">add(long, TreeCode, JsonNode)</a> - Method in class com.sca4d.notification.inbox.template.<a href="com/sca4d/notification/inbox/template/InboxTemplateRepository.html" title="class in com.sca4d.notification.inbox.template">InboxTemplateRepository</a></dt>
+<dd>
+<div class="block">新增默认停用模板。</div>
 </dd>
 <dt><a href="com/sca4d/notification/inbox/InboxNotificationDelivery.html#available(com.sca4d.core.api.notification.Notification)" class="member-name-link">available(Notification)</a> - Method in class com.sca4d.notification.inbox.<a href="com/sca4d/notification/inbox/InboxNotificationDelivery.html" title="class in com.sca4d.notification.inbox">InboxNotificationDelivery</a></dt>
 <dd>&nbsp;</dd>
@@ -124,7 +124,7 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/notification/inbox/template/InboxTemplateRepository.html#find(long)" class="member-name-link">find(long)</a> - Method in class com.sca4d.notification.inbox.template.<a href="com/sca4d/notification/inbox/template/InboxTemplateRepository.html" title="class in com.sca4d.notification.inbox.template">InboxTemplateRepository</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/notification/inbox/template/InboxTemplateRepository.html#findEnabled(com.sca4d.core.api.code.TreeCode)" class="member-name-link">findEnabled(TreeCode)</a> - Method in class com.sca4d.notification.inbox.template.<a href="com/sca4d/notification/inbox/template/InboxTemplateRepository.html" title="class in com.sca4d.notification.inbox.template">InboxTemplateRepository</a></dt>
+<dt><a href="com/sca4d/notification/inbox/template/InboxTemplateRepository.html#findEnabled(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">findEnabled(TreeCode)</a> - Method in class com.sca4d.notification.inbox.template.<a href="com/sca4d/notification/inbox/template/InboxTemplateRepository.html" title="class in com.sca4d.notification.inbox.template">InboxTemplateRepository</a></dt>
 <dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:H">H</h2>
@@ -152,7 +152,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">保存 Account 收件箱中一项不会随模板修改而变化的通知快照。</div>
 </dd>
-<dt><a href="com/sca4d/notification/inbox/InboxMessage.html#%3Cinit%3E(long,com.sca4d.core.api.messaging.MessageId,long,com.sca4d.core.api.code.TreeCode,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.time.Instant,java.time.Instant,com.sca4d.core.api.concurrent.Version)" class="member-name-link">InboxMessage(long, MessageId, long, TreeCode, String, String, String, String, Instant, Instant, Version)</a> - Constructor for class com.sca4d.notification.inbox.<a href="com/sca4d/notification/inbox/InboxMessage.html" title="class in com.sca4d.notification.inbox">InboxMessage</a></dt>
+<dt><a href="com/sca4d/notification/inbox/InboxMessage.html#%3Cinit%3E(long,com.sca4d.core.api.messaging.MessageId,long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.time.Instant,java.time.Instant,com.sca4d.core.api.concurrent.Version)" class="member-name-link">InboxMessage(long, MessageId, long, TreeCode, String, String, String, String, Instant, Instant, Version)</a> - Constructor for class com.sca4d.notification.inbox.<a href="com/sca4d/notification/inbox/InboxMessage.html" title="class in com.sca4d.notification.inbox">InboxMessage</a></dt>
 <dd>
 <div class="block">创建从数据库读取的站内信快照。</div>
 </dd>
@@ -196,7 +196,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">保存一种站内信的完整多语言 Tiptap JSON 模板、状态和版本。</div>
 </dd>
-<dt><a href="com/sca4d/notification/inbox/template/InboxTemplate.html#%3Cinit%3E(long,com.sca4d.core.api.code.TreeCode,com.fasterxml.jackson.databind.JsonNode,boolean,com.sca4d.core.api.concurrent.Version)" class="member-name-link">InboxTemplate(long, TreeCode, JsonNode, boolean, Version)</a> - Constructor for class com.sca4d.notification.inbox.template.<a href="com/sca4d/notification/inbox/template/InboxTemplate.html" title="class in com.sca4d.notification.inbox.template">InboxTemplate</a></dt>
+<dt><a href="com/sca4d/notification/inbox/template/InboxTemplate.html#%3Cinit%3E(long,com.sca4d.core.api.name.code.TreeCode,com.fasterxml.jackson.databind.JsonNode,boolean,com.sca4d.core.api.concurrent.Version)" class="member-name-link">InboxTemplate(long, TreeCode, JsonNode, boolean, Version)</a> - Constructor for class com.sca4d.notification.inbox.template.<a href="com/sca4d/notification/inbox/template/InboxTemplate.html" title="class in com.sca4d.notification.inbox.template">InboxTemplate</a></dt>
 <dd>
 <div class="block">创建一项已从数据库恢复的站内信模板。</div>
 </dd>
@@ -224,13 +224,13 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">保存 Inbox Template Mapper 从数据库读取的 JSON 文本状态。</div>
 </dd>
-<dt><a href="com/sca4d/notification/inbox/template/mapper/InboxTemplateState.html#%3Cinit%3E(long,com.sca4d.core.api.code.TreeCode,java.lang.String,boolean,com.sca4d.core.api.concurrent.Version)" class="member-name-link">InboxTemplateState(long, TreeCode, String, boolean, Version)</a> - Constructor for class com.sca4d.notification.inbox.template.mapper.<a href="com/sca4d/notification/inbox/template/mapper/InboxTemplateState.html" title="class in com.sca4d.notification.inbox.template.mapper">InboxTemplateState</a></dt>
+<dt><a href="com/sca4d/notification/inbox/template/mapper/InboxTemplateState.html#%3Cinit%3E(long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,boolean,com.sca4d.core.api.concurrent.Version)" class="member-name-link">InboxTemplateState(long, TreeCode, String, boolean, Version)</a> - Constructor for class com.sca4d.notification.inbox.template.mapper.<a href="com/sca4d/notification/inbox/template/mapper/InboxTemplateState.html" title="class in com.sca4d.notification.inbox.template.mapper">InboxTemplateState</a></dt>
 <dd>
 <div class="block">创建模板数据库状态。</div>
 </dd>
-<dt><a href="com/sca4d/notification/inbox/template/mapper/InboxTemplateMapper.html#insert(long,com.sca4d.core.api.code.TreeCode,java.lang.String)" class="member-name-link">insert(long, TreeCode, String)</a> - Method in interface com.sca4d.notification.inbox.template.mapper.<a href="com/sca4d/notification/inbox/template/mapper/InboxTemplateMapper.html" title="interface in com.sca4d.notification.inbox.template.mapper">InboxTemplateMapper</a></dt>
+<dt><a href="com/sca4d/notification/inbox/mapper/InboxMessageMapper.html#insert(long,com.sca4d.core.api.messaging.MessageId,long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">insert(long, MessageId, long, TreeCode, String, String, String, String)</a> - Method in interface com.sca4d.notification.inbox.mapper.<a href="com/sca4d/notification/inbox/mapper/InboxMessageMapper.html" title="interface in com.sca4d.notification.inbox.mapper">InboxMessageMapper</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/notification/inbox/mapper/InboxMessageMapper.html#insert(long,com.sca4d.core.api.messaging.MessageId,long,com.sca4d.core.api.code.TreeCode,java.lang.String,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">insert(long, MessageId, long, TreeCode, String, String, String, String)</a> - Method in interface com.sca4d.notification.inbox.mapper.<a href="com/sca4d/notification/inbox/mapper/InboxMessageMapper.html" title="interface in com.sca4d.notification.inbox.mapper">InboxMessageMapper</a></dt>
+<dt><a href="com/sca4d/notification/inbox/template/mapper/InboxTemplateMapper.html#insert(long,com.sca4d.core.api.name.code.TreeCode,java.lang.String)" class="member-name-link">insert(long, TreeCode, String)</a> - Method in interface com.sca4d.notification.inbox.template.mapper.<a href="com/sca4d/notification/inbox/template/mapper/InboxTemplateMapper.html" title="interface in com.sca4d.notification.inbox.template.mapper">InboxTemplateMapper</a></dt>
 <dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:L">L</h2>
@@ -288,14 +288,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建已经完成变量替换与 HTML 转义的渲染结果。</div>
 </dd>
-<dt><a href="com/sca4d/notification/inbox/template/InboxTemplateRepository.html#replace(long,com.sca4d.core.api.code.TreeCode,com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">replace(long, TreeCode, JsonNode)</a> - Method in class com.sca4d.notification.inbox.template.<a href="com/sca4d/notification/inbox/template/InboxTemplateRepository.html" title="class in com.sca4d.notification.inbox.template">InboxTemplateRepository</a></dt>
+<dt><a href="com/sca4d/notification/inbox/template/InboxTemplateRepository.html#replace(long,com.sca4d.core.api.name.code.TreeCode,com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">replace(long, TreeCode, JsonNode)</a> - Method in class com.sca4d.notification.inbox.template.<a href="com/sca4d/notification/inbox/template/InboxTemplateRepository.html" title="class in com.sca4d.notification.inbox.template">InboxTemplateRepository</a></dt>
 <dd>
 <div class="block">按当前请求版本条件完整替换编码和模板内容。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:S">S</h2>
 <dl class="index">
-<dt><a href="com/sca4d/notification/inbox/template/mapper/InboxTemplateMapper.html#select(java.lang.Long,com.sca4d.core.api.code.TreeCode,java.lang.Boolean)" class="member-name-link">select(Long, TreeCode, Boolean)</a> - Method in interface com.sca4d.notification.inbox.template.mapper.<a href="com/sca4d/notification/inbox/template/mapper/InboxTemplateMapper.html" title="interface in com.sca4d.notification.inbox.template.mapper">InboxTemplateMapper</a></dt>
+<dt><a href="com/sca4d/notification/inbox/template/mapper/InboxTemplateMapper.html#select(java.lang.Long,com.sca4d.core.api.name.code.TreeCode,java.lang.Boolean)" class="member-name-link">select(Long, TreeCode, Boolean)</a> - Method in interface com.sca4d.notification.inbox.template.mapper.<a href="com/sca4d/notification/inbox/template/mapper/InboxTemplateMapper.html" title="interface in com.sca4d.notification.inbox.template.mapper">InboxTemplateMapper</a></dt>
 <dd>
 <div class="block">按可选标识、通知编码和启用状态读取未删除模板。</div>
 </dd>

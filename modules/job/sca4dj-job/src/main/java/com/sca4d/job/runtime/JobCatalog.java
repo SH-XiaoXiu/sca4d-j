@@ -56,6 +56,11 @@ public final class JobCatalog {
         return job;
     }
 
+    /** 返回本实例能够执行的 Job key 和精确版本，供数据库领取时筛选。 */
+    public @NotNull Map<JobKey, Integer> definitionVersions() {
+        return jobs.values().stream().collect(Collectors.toUnmodifiableMap(Job::key, Job::definitionVersion));
+    }
+
     /** 校验一个 Job 的公共定义。 */
     private static void validate(@NotNull Job<?, ?> job) {
         Job<?, ?> checked = Objects.requireNonNull(job, "Job Bean 不能为空");

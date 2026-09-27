@@ -2,6 +2,8 @@ package com.sca4d.core.spring.gateway;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.gateway.GatewayCallback;
+import com.sca4d.core.api.runtime.InstanceCapabilities;
+import com.sca4d.core.spring.config.InstanceProperties;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -68,7 +70,9 @@ public class GatewaySpringAutoConfiguration {
     @NotNull
     GatewayRegistrationLifecycle gatewayRegistrationLifecycle(
             @NotNull GatewayRegistrationProperties properties,
-            @NotNull List<@NotNull GatewayCallback<?, ?>> callbacks) {
-        return new GatewayRegistrationLifecycle(properties, callbacks);
+            @NotNull List<@NotNull GatewayCallback<?, ?>> callbacks,
+            @NotNull InstanceProperties instanceProperties,
+            @NotNull InstanceCapabilities capabilities) {
+        return new GatewayRegistrationLifecycle(properties, callbacks, instanceProperties, capabilities);
     }
 }

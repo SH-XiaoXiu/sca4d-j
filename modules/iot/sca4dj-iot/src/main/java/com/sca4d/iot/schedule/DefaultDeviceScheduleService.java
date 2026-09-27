@@ -8,6 +8,7 @@ import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.iot.IotErrorCode;
@@ -233,9 +234,9 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
     }
 
     /**
-     * 读取一条到期候选，取得该规则的 Redis 锁后在事务内重新确认并生成 command；没有到期候选时返回 `false`。
+     * 读取一条到期候选，取得候选规则的 Redis 锁后在事务内重新确认并生成 command；没有到期候选时返回 `false`。
      *
-     * @throws DeviceScheduleTriggerFailure command 业务校验失败时抛出，调用方必须在新事务中暂停该规则
+     * @throws DeviceScheduleTriggerFailure command 业务校验失败时抛出，调用方必须在新事务中暂停候选规则
      */
     public boolean triggerNextDueSchedule() {
         Instant scannedAt = clock.instant();
@@ -251,6 +252,7 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
 
     /** 在规则锁内重新确认候选版本和计划时间，并推进一次到期执行。 */
     private boolean triggerDueCandidate(@NotNull DeviceSchedule candidate) {
+        // 锁内重新读取规则，只有版本、状态和计划时间都未变化时才继续执行，避免重复触发旧候选。
         DeviceSchedule schedule = schedules.find(candidate.scheduleId()).orElse(null);
         Instant now = clock.instant();
         if (schedule == null
@@ -264,6 +266,8 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
         Instant expiresAt = addValidFor(plannedAt, schedule.validFor());
         DeviceScheduleExecutionStatus executionStatus;
         Long messageId = null;
+
+        // 过期规则只记录 EXPIRED；仍在有效期内的规则提交下行消息，业务校验失败交由外层暂停规则。
         if (!now.isBefore(expiresAt)) {
             executionStatus = DeviceScheduleExecutionStatus.EXPIRED;
         } else {
@@ -291,6 +295,8 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
                 ? DeviceScheduleStatus.COMPLETED
                 : DeviceScheduleStatus.ACTIVE;
         Instant nextFireAt = schedule.trigger().once() ? null : nextCronFire(schedule.trigger(), now);
+
+        // 执行结果、下一状态和下一次触发时间必须在同一事务中写入，保证规则不会重复领取。
         recordExecution(
                 schedule,
                 plannedAt,
@@ -337,7 +343,7 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
 
     /** @return 指定设备定时规则在全部应用实例间共用的锁键 */
     private static @NotNull LockKey scheduleLock(long scheduleId) {
-        return new LockKey("iot", "schedule", Long.toString(scheduleId));
+        return new LockKey(TreeCode.of("IOT:SCHEDULE"), scheduleId);
     }
 
     /** 原子保存最新结果、推进规则，并可靠发布完整执行历史事件。 */

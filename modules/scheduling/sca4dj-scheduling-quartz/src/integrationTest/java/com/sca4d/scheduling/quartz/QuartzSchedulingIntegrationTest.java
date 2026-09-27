@@ -14,7 +14,6 @@ import com.sca4d.core.api.job.JobKey;
 import com.sca4d.core.api.job.JobRetryPolicy;
 import com.sca4d.core.api.job.JobRunId;
 import com.sca4d.core.api.job.JobRunStatus;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
 import com.sca4d.core.api.scheduling.ClusterTask;
 import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
 import com.sca4d.core.api.scheduling.ClusterTaskScheduler;
@@ -93,6 +92,7 @@ class QuartzSchedulingIntegrationTest {
                                 QuartzAutoConfiguration.class))
                 .withUserConfiguration(TestConfiguration.class)
                 .withPropertyValues(
+                        "spring.application.name=quartz-test",
                         "sca4dj.scheduling.quartz.thread-count=2",
                         "sca4dj.scheduling.quartz.cluster-checkin-interval=PT1S");
 
@@ -110,19 +110,19 @@ class QuartzSchedulingIntegrationTest {
             assertThat(
                     jdbc.queryForObject(
                             "SELECT count(*) FROM quartz.qrtz_job_details "
-                                    + "WHERE sched_name = 'quartz-test:sca4dj:scheduling:quartz'",
+                                    + "WHERE sched_name = 'QUARTZ_TEST:SCHEDULING:QUARTZ'",
                             Integer.class))
                     .isEqualTo(2);
             assertThat(
                     jdbc.queryForObject(
                             "SELECT count(*) FROM quartz.qrtz_triggers "
-                                    + "WHERE sched_name = 'quartz-test:sca4dj:scheduling:quartz'",
+                                    + "WHERE sched_name = 'QUARTZ_TEST:SCHEDULING:QUARTZ'",
                             Integer.class))
                     .isEqualTo(2);
             assertThat(
                     jdbc.queryForObject(
                             "SELECT is_nonconcurrent FROM quartz.qrtz_job_details "
-                                    + "WHERE sched_name = 'quartz-test:sca4dj:scheduling:quartz' "
+                                    + "WHERE sched_name = 'QUARTZ_TEST:SCHEDULING:QUARTZ' "
                                     + "AND job_name = 'TEST/QUARTZ/CLUSTER_TASK' "
                                     + "AND job_group = 'sca4dj-cluster-task'",
                             Boolean.class))
@@ -219,13 +219,13 @@ class QuartzSchedulingIntegrationTest {
             scheduler.standby();
             jdbc.update(
                     "UPDATE quartz.qrtz_triggers SET trigger_state = 'ERROR' "
-                            + "WHERE sched_name = 'quartz-test:sca4dj:scheduling:quartz' "
+                            + "WHERE sched_name = 'QUARTZ_TEST:SCHEDULING:QUARTZ' "
                             + "AND trigger_name = 'TEST/QUARTZ/DISPATCH'");
             jobScheduler.reconcile(List.of(schedule));
             assertThat(
                     jdbc.queryForObject(
                             "SELECT trigger_state FROM quartz.qrtz_triggers "
-                                    + "WHERE sched_name = 'quartz-test:sca4dj:scheduling:quartz' "
+                                    + "WHERE sched_name = 'QUARTZ_TEST:SCHEDULING:QUARTZ' "
                                     + "AND trigger_name = 'TEST/QUARTZ/DISPATCH'",
                             String.class))
                     .isEqualTo("WAITING");
@@ -245,6 +245,7 @@ class QuartzSchedulingIntegrationTest {
                                 QuartzAutoConfiguration.class))
                 .withUserConfiguration(TestConfiguration.class)
                 .withPropertyValues(
+                        "spring.application.name=quartz-test",
                         "test.job-schedule.enabled=false",
                         "sca4dj.scheduling.quartz.thread-count=2",
                         "sca4dj.scheduling.quartz.cluster-checkin-interval=PT1S");
@@ -294,11 +295,6 @@ class QuartzSchedulingIntegrationTest {
         @Bean
         Clock clock() {
             return Clock.systemUTC();
-        }
-
-        @Bean
-        RuntimeNamespace runtimeNamespace() {
-            return new RuntimeNamespace("quartz-test");
         }
 
         /** @return 立即执行任务的单进程测试锁 */

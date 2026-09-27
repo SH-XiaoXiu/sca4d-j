@@ -1,5 +1,6 @@
 package com.sca4d.iot.api.state;
 
+import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.iot.api.query.ReportedStateSnapshot;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -15,7 +16,7 @@ public interface ReportedStateStore {
      * 比较顺序、合并字段并保存当前投影。
      *
      * @return 接受、重复或较旧以及当前投影版本
-     * @throws com.sca4d.core.api.error.BusinessException 相同顺序对应不同内容或顺序范围变化时抛出
+     * @throws BusinessException 相同顺序对应不同内容或顺序范围变化时抛出
      */
     @NotNull
     ReportedStateWriteResult update(

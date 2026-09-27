@@ -1,7 +1,7 @@
 package com.sca4d.core.api.authentication;
 
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Account;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.Set;
 
 /**
- * 认证引擎可以发现并调用的一种认证方法；该方法不判断登录、动作或因素组合策略。
+ * 认证引擎可以发现并调用的一种认证方法；认证方法不判断登录、动作或因素组合策略。
  *
  * @param <P> 本方法接受的 Proof 类型
  */
@@ -41,7 +41,7 @@ public interface AuthenticationMethod<P> {
     Set<AuthenticationFactorKind> factorKinds();
 
     /**
-     * 判断该方法是否可以从 Proof 中确定账号。
+     * 判断当前认证方法是否可以从 Proof 中确定账号。
      *
      * @return 可以在尚未确定 Account 时执行认证则为 {@code true}
      */
@@ -76,7 +76,7 @@ public interface AuthenticationMethod<P> {
     /**
      * 永久删除指定 Account 由本方法负责的 Credential 和认证状态。
      *
-     * <p>Account 删除流程可以重复调用该方法；目标数据已经不存在时必须直接返回。实现不得删除其他认证方法或身份模块负责的数据。
+     * <p>Account 删除流程可以重复调用当前方法；目标数据已经不存在时必须直接返回。实现不得删除其他认证方法或身份模块负责的数据。
      *
      * @param accountId 要清理的 Account 标识
      * @throws IllegalArgumentException Account 标识不是正数时抛出

@@ -3,26 +3,28 @@ package com.sca4d.iot.emqx.config;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.isolation.AppName;
 import org.junit.jupiter.api.Test;
 
 /** 验证 EMQX Server Client ID 的自动生成和显式覆盖。 */
 class EmqxPropertiesTest {
 
+    static {
+        AppName.publish("SCA4D_TEST");
+    }
+
     @Test
     void generatesDifferentClientIdsForIndependentInstances() {
         EmqxProperties first = new EmqxProperties();
         EmqxProperties second = new EmqxProperties();
-        RuntimeNamespace namespace = new RuntimeNamespace("example-app");
-
-        first.initializeClientId(namespace);
-        second.initializeClientId(namespace);
+        first.initializeClientId();
+        second.initializeClientId();
         String firstClientId = first.getClientId();
-        first.initializeClientId(namespace);
+        first.initializeClientId();
 
-        assertThat(firstClientId).startsWith("example-app:sca4dj:iot:emqx:client:");
+        assertThat(firstClientId).startsWith("SCA4D_TEST:IOT:EMQX:CLIENT:V_");
         assertThat(first.getClientId()).isEqualTo(firstClientId);
-        assertThat(second.getClientId()).startsWith("example-app:sca4dj:iot:emqx:client:");
+        assertThat(second.getClientId()).startsWith("SCA4D_TEST:IOT:EMQX:CLIENT:V_");
         assertThat(first.getClientId()).isNotEqualTo(second.getClientId());
     }
 
@@ -31,12 +33,12 @@ class EmqxPropertiesTest {
         EmqxProperties properties = new EmqxProperties();
 
         properties.setClientId("sca4dj-server-1");
-        properties.initializeClientId(new RuntimeNamespace("example-app"));
+        properties.initializeClientId();
         assertThat(properties.getClientId()).isEqualTo("sca4dj-server-1");
 
         properties.setClientId(" ");
-        properties.initializeClientId(new RuntimeNamespace("example-app"));
-        assertThat(properties.getClientId()).startsWith("example-app:sca4dj:iot:emqx:client:");
+        properties.initializeClientId();
+        assertThat(properties.getClientId()).startsWith("SCA4D_TEST:IOT:EMQX:CLIENT:V_");
     }
 
     @Test

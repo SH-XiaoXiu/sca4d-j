@@ -1,5 +1,6 @@
 package com.sca4d.gateway.routing;
 
+import com.sca4d.core.api.gateway.GatewayCallbackCode;
 import com.sca4d.core.api.gateway.GatewayHttpPaths;
 import com.sca4d.gateway.registration.GatewayInstance;
 import com.sca4d.gateway.registration.GatewayInstanceRegistry;
@@ -41,10 +42,10 @@ public final class GatewayLoadBalancer implements ReactorServiceInstanceLoadBala
      */
     @Override
     public @NotNull Mono<Response<ServiceInstance>> choose(@NotNull Request request) {
-        Optional<String> callbackCode = callbackCode(request);
+        Optional<GatewayCallbackCode> callbackCode = callbackCode(request);
         GatewayInstance selected = callbackCode.isPresent()
                 ? registry.selectCallback(callbackCode.orElseThrow())
-                : registry.selectApi();
+                : registry.selectApi(requestPath(request));
         Response<ServiceInstance> response = selected == null
                 ? new EmptyResponse()
                 : new DefaultResponse(new GatewayServiceInstance(selected, serviceId));
@@ -52,7 +53,7 @@ public final class GatewayLoadBalancer implements ReactorServiceInstanceLoadBala
     }
 
     /** 从负载均衡请求上下文中读取回调路径的最后一段编码。 */
-    private static @NotNull Optional<String> callbackCode(@NotNull Request<?> request) {
+    private static @NotNull Optional<GatewayCallbackCode> callbackCode(@NotNull Request<?> request) {
         Object context = request.getContext();
         if (!(context instanceof RequestDataContext requestContext)) {
             return Optional.empty();
@@ -63,6 +64,14 @@ public final class GatewayLoadBalancer implements ReactorServiceInstanceLoadBala
             return Optional.empty();
         }
         String code = path.substring(prefix.length());
-        return code.indexOf('/') < 0 ? Optional.of(code) : Optional.empty();
+        return code.indexOf('/') < 0 ? Optional.of(new GatewayCallbackCode(code)) : Optional.empty();
+    }
+
+    /** 从负载均衡上下文读取服务器路径，供入口能力筛选使用。 */
+    private static @NotNull String requestPath(@NotNull Request<?> request) {
+        Object context = request.getContext();
+        return context instanceof RequestDataContext requestContext
+                ? requestContext.getClientRequest().getUrl().getPath()
+                : "/";
     }
 }

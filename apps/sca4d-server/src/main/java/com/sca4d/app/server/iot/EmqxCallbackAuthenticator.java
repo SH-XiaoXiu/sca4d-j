@@ -2,6 +2,8 @@ package com.sca4d.app.server.iot;
 
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
+import com.sca4d.core.spring.config.ConditionalOnCapability;
+import com.sca4d.iot.api.IotCapabilities;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -16,7 +18,7 @@ import java.util.Objects;
 
 /** 验证 EMQX 回调提交的共享 Secret，不处理具体回调内容。 */
 @Component
-@ConditionalOnProperty(prefix = "app.iot.capabilities", name = "transport", havingValue = "true", matchIfMissing = true)
+@ConditionalOnCapability(IotCapabilities.TRANSPORT)
 @ConditionalOnProperty(prefix = "sca4dj.iot.emqx", name = "enabled", havingValue = "true")
 public final class EmqxCallbackAuthenticator {
 

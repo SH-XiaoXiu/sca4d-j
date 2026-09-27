@@ -103,8 +103,7 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,com.sca4d.core.api.runtime.RuntimeNamespace)" class="member-name-link">RedisSessionTokenIndex</a><wbr>(@NotNull org.springframework.data.redis.core.StringRedisTemplate&nbsp;redis,
- @NotNull com.sca4d.core.api.runtime.RuntimeNamespace&nbsp;runtimeNamespace)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate)" class="member-name-link">RedisSessionTokenIndex</a><wbr>(@NotNull org.springframework.data.redis.core.RedisTemplate&lt;com.sca4d.core.api.name.Key,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;redis)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建 Redis Session Token 索引。</div>
 </div>
@@ -157,17 +156,14 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(org.springframework.data.redis.core.StringRedisTemplate,com.sca4d.core.api.runtime.RuntimeNamespace)">
+<section class="detail" id="&lt;init&gt;(org.springframework.data.redis.core.RedisTemplate)">
 <h3>RedisSessionTokenIndex</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RedisSessionTokenIndex</span><wbr><span class="parameters">(@NotNull
- @NotNull org.springframework.data.redis.core.StringRedisTemplate&nbsp;redis,
- @NotNull
- @NotNull com.sca4d.core.api.runtime.RuntimeNamespace&nbsp;runtimeNamespace)</span></div>
+ @NotNull org.springframework.data.redis.core.RedisTemplate&lt;com.sca4d.core.api.name.Key,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;redis)</span></div>
 <div class="block">创建 Redis Session Token 索引。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>redis</code> - Redis 字符串操作</dd>
-<dd><code>runtimeNamespace</code> - 当前应用的运行时命名空间</dd>
 </dl>
 </section>
 </li>

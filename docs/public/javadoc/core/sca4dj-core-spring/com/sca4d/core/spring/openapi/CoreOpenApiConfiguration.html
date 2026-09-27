@@ -128,7 +128,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>io.swagger.v3.oas.models.OpenAPI</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sca4djOpenApi(com.sca4d.core.api.runtime.RuntimeNamespace)" class="member-name-link">sca4djOpenApi</a><wbr>(com.sca4d.core.api.runtime.RuntimeNamespace&nbsp;runtimeNamespace)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sca4djOpenApi(org.springframework.core.env.Environment)" class="member-name-link">sca4djOpenApi</a><wbr>(org.springframework.core.env.Environment&nbsp;environment)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">创建应用的 OpenAPI 基础定义。</div>
 </div>
@@ -165,15 +165,15 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="sca4djOpenApi(com.sca4d.core.api.runtime.RuntimeNamespace)">
+<section class="detail" id="sca4djOpenApi(org.springframework.core.env.Environment)">
 <h3>sca4djOpenApi</h3>
 <div class="member-signature"><span class="annotations">@Bean
 @ConditionalOnMissingBean
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">io.swagger.v3.oas.models.OpenAPI</span>&nbsp;<span class="element-name">sca4djOpenApi</span><wbr><span class="parameters">(com.sca4d.core.api.runtime.RuntimeNamespace&nbsp;runtimeNamespace)</span></div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">io.swagger.v3.oas.models.OpenAPI</span>&nbsp;<span class="element-name">sca4djOpenApi</span><wbr><span class="parameters">(org.springframework.core.env.Environment&nbsp;environment)</span></div>
 <div class="block">创建应用的 OpenAPI 基础定义。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>runtimeNamespace</code> - 当前应用的运行时命名空间</dd>
+<dd><code>environment</code> - 应用名称配置；不使用中间件隔离前缀作为对外名称</dd>
 <dt>Returns:</dt>
 <dd>包含 Bearer 认证方案的 OpenAPI 定义</dd>
 </dl>

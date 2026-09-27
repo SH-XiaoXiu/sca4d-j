@@ -1,12 +1,12 @@
 package com.sca4d.notification;
 
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.delivery.DeliveryOutcome;
 import com.sca4d.core.api.messaging.HandlingDecision;
 import com.sca4d.core.api.messaging.HandlingPolicy;
 import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.api.messaging.MessageHandler;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.NotificationDelivery;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,7 +37,7 @@ public final class NotificationMessageHandler implements MessageHandler<Notifica
 
     @Override
     public @NotNull TreeCode code() {
-        return TreeCode.of(channel.value() + "/DELIVERY");
+        return channel.child("DELIVERY");
     }
 
     @Override

@@ -13,12 +13,12 @@ import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.web.realtime.connection.BrowserEnvelope;
 import com.sca4d.web.realtime.connection.BrowserWrite;
 import com.sca4d.web.realtime.connection.LocalConnection;
@@ -75,7 +75,7 @@ class StompConnectionsTest {
         assertThat(attributes.get(StompConnections.CONNECTION_ATTRIBUTE)).isEqualTo(connection.id());
 
         BrowserEnvelope envelope = new BrowserEnvelope(
-                "invoice.changed",
+                TreeCode.of("invoice.changed"),
                 1,
                 Instant.parse("2026-07-30T00:00:00Z"),
                 JsonNodeFactory.instance.objectNode());

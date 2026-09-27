@@ -1,6 +1,32 @@
 # 查询设备状态与下发命令
 
-先按[接入第一台设备](/tutorials/iot-device-access)创建并连接设备，再使用应用接口查询当前状态和提交下行。设备已经连接不代表命令已经执行，提交后应继续检查下行记录及业务 ACK。
+读取 reported 查看设备实际上报值，修改 desired 设置持续期望值，提交 command 执行一次性动作。先按[设备接入教程](/tutorials/iot-device-access)登记并连接设备，再保存下行 `messageId` 查询状态和业务 ACK；连接成功或消息发出都不能证明设备已执行。
+
+## 操作教程中的温控器
+
+使用上一教程的已启用设备，携带具有 `iot:devices:operate` 权限的 Bearer Token，通过 Gateway 发送以下请求。先设置持续期望的电源值：
+
+```http
+PUT /api/iot/devices/{deviceId}/desired
+Authorization: Bearer <accessToken>
+Content-Type: application/json
+
+{"set":{"power":false},"clear":[]}
+```
+
+再提交一次模式切换命令：
+
+```http
+POST /api/iot/devices/{deviceId}/commands/set-mode
+Authorization: Bearer <accessToken>
+Content-Type: application/json
+
+{"mode":"fan"}
+```
+
+保存返回的下行消息标识，用具有 `iot:devices:read` 权限的 Token 查询 `/api/iot/devices/{deviceId}/downlinks` 和 `/api/iot/devices/{deviceId}/runtime`。模拟器执行后应上报 `power=false`、`mode=fan`，下行按各自确认策略进入成功状态；重复设置相同 desired 时可能不生成新消息。
+
+停用设备会拒绝上述写入。下行超时或失败时先查看消息失败 code 与模拟器日志，不用重复创建 command 代替查询结果；两条 command 是两个独立动作。
 
 ## 从查询到业务确认
 
@@ -18,7 +44,7 @@
 
 - Product、Device、ThingModel 与 DeviceProtocol 分别描述产品约束、设备实例、业务能力和设备消息语义；Product 的动态展示字段与 ThingModel 的路径翻译和技术定义分开保存；
 - DeviceConnectionBinding 保存 Device 可选的直接连接协议、身份类型和值。网关中继等间接 Device 不登记直接连接，也不登记认证接入方式；
-- [DeviceConnectionAdmission](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/connection/DeviceConnectionAdmission.html)、DeviceConnectionReceiver 与 DeviceConnectionTerminator 分别处理连接准入、当前连接事实和协议断连；
+- [DeviceConnectionAdmission](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/connection/DeviceConnectionAdmission.html)、DeviceConnectionReceiver 与 DeviceConnectionTerminator 分别处理连接准入、当前连接信息和协议断连；
 - DeviceUplinkDispatcher 按 Device 当前的 `protocolCode` 选择 DeviceUplinkProtocol，解码 DeviceProtocolMessage 后交给 DeviceUplinkReceiver；具体应用可以替换 Receiver，在同一业务事务中更新 IoT 当前事实和应用业务表；
 - DeviceTransport 接收完整 Device，由设备协议适配器选择直接连接或应用业务路由并发送标准下行；
 - [ReportedStateStore](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/state/ReportedStateStore.html) 保存 latest reported，可以由 PostgreSQL、Redis 或具体应用的其他实现提供；
@@ -32,7 +58,7 @@
 
 `DeviceHistoryQueryService.downlinks(Collection<Long>)` 批量读取主库仍保留的下行消息。实现先去重，再按公共 SQL 批次条目和绑定参数限制执行查询；空集合不访问数据库，不存在或已经按保留策略删除的标识不出现在结果中。应用在列表中组合下行状态时应使用这个入口，不按记录逐条查询。
 
-DeviceService 只保存 Product、物模型、设备协议、可选 DeviceConnectionBinding 和 [DeviceAccessMethod](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/DeviceAccessMethod.html)。DeviceProtocol 不声明 MQTT、TCP 或连接身份；同一种设备消息协议可以由不同传输带入。DeviceService 不依赖 IAM 或 Auth，不创建 Subject、Account、Credential 或 Session。匿名使用 `anonymous`，通用 Session 使用 `session`，直接 Account 认证使用 `account:<AuthenticationMethod.code()>`。具体应用实现 DeviceConnectionAdmission，把协议输入转换为 AuthenticationSubmission 或 Session Token，再组合 Device、Account、Auth 和 Session。
+DeviceService 只保存 Product、物模型、设备协议、可选 DeviceConnectionBinding 和 [DeviceAccessMethod](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/DeviceAccessMethod.html)。DeviceProtocol 不声明 MQTT、TCP 或连接身份；同一种设备消息协议可以由不同传输带入。DeviceService 不依赖 IAM 或 Auth，不创建 Subject、Account、Credential 或 Session。匿名使用 `ANONYMOUS`，通用 Session 使用 `SESSION`，直接 Account 认证使用 `ACCOUNT:<AuthenticationMethod.code()>`。具体应用实现 DeviceConnectionAdmission，把协议输入转换为 AuthenticationSubmission 或 Session Token，再组合 Device、Account、Auth 和 Session。
 
 ## 模块拥有的数据
 
@@ -57,7 +83,7 @@ Device 的 Credential 由通用 Auth 方法模块按 `account_id` 保存。Share
 
 IoT 使用通用 `MessageBus`，不创建 IoT 专用 Outbox：
 
-- Telemetry 在 reported 主事务提交后使用 `publishAfterCommit(...)`。它不写 Outbox；代理发布失败可能丢失这一批历史样本，但不会回滚 latest reported。
+- Telemetry 在 reported 主事务中调用 `MessageBus.dispatch(message, DispatchPolicy.afterCommit())`，登记提交后发布。它不写 Outbox；代理发布失败可能丢失这一批历史样本，但不会回滚 latest reported。
 - 物模型事件按 ThingEvent 的 delivery 声明发布。`RELIABLE` 在主事务写通用 `messaging_outbox`，其他事件在提交后直接发布。
 - 下行发送、ACK 超时、断连、每个首次接受的 ACK 阶段和设备定时执行结果必须可靠发布，统一使用 `messaging_outbox`。
 
@@ -106,7 +132,7 @@ EMQX 接入见[设备教程](/tutorials/iot-device-access)，历史数据库的�
 
 ## 设备连接
 
-`DeviceConnectionQueryService` 批量读取 Device 当前连接事实，并为没有连接的 Device 返回空列表。该接口不判断业务在线状态；具体应用把连接集合交给自己选择的 `DeviceOnlinePolicy`。
+`DeviceConnectionQueryService` 批量读取 Device 当前连接信息，并为没有连接的 Device 返回空列表。该接口不判断业务在线状态；具体应用把连接集合交给自己选择的 `DeviceOnlinePolicy`。
 
 单个 Device 查询也使用同一个批量入口。默认 Redis 实现把较大的输入分成内部 pipeline 批次，每个 Device 的 Lua 查询同时删除过期索引和已经失去主记录的索引；内部批次大小不限制调用方可以查询的 Device 数量。
 
@@ -155,7 +181,7 @@ DeviceRuntimeQueryService 一次读取指定 Device 的当前运行态，供具�
 
 ### 查询行为
 
-`runtime(deviceId)` 先确认 Device 存在并读取当前 `bindingGeneration`，随后读取属于这一代绑定的连接事实、reported 字段组和 desired 属性，返回 [DeviceRuntimeSnapshot](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/query/DeviceRuntimeSnapshot.html)。Device 不存在时抛出 IoT 的 Device 不存在错误。
+`runtime(deviceId)` 先确认 Device 存在并读取当前 `bindingGeneration`，随后读取属于这一代绑定的连接信息、reported 字段组和 desired 属性，返回 [DeviceRuntimeSnapshot](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/query/DeviceRuntimeSnapshot.html)。Device 不存在时抛出 IoT 的 Device 不存在错误。
 
 ```mermaid
 sequenceDiagram
@@ -166,12 +192,12 @@ sequenceDiagram
 
     App->>Query: runtime(deviceId)
     Query->>PostgreSQL: 读取 Device 与 bindingGeneration
-    Query->>Redis: 读取当前连接事实
+    Query->>Redis: 读取当前连接信息
     Query->>PostgreSQL: 读取 reported 与 desired
     Query-->>App: DeviceRuntimeSnapshot
 ```
 
-连接事实来自可恢复的 Redis 投影，reported 和 desired 来自主 PostgreSQL。该方法只保证三类数据属于同一个 Device 和当前读取到的 `bindingGeneration`，不把 Redis 与 PostgreSQL 组成跨存储事务快照；并发连接或状态上报可能在查询期间发生。
+连接信息来自可恢复的 Redis 投影，reported 和 desired 来自主 PostgreSQL。该方法只保证三类数据属于同一个 Device 和当前读取到的 `bindingGeneration`，不把 Redis 与 PostgreSQL 组成跨存储事务快照；并发连接或状态上报可能在查询期间发生。
 
 IoT 模块的数据归属与相邻接口见 [IoT 基础模块](/tutorials/iot-state-and-commands)。
 

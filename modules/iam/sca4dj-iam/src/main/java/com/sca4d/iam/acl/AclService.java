@@ -1,7 +1,7 @@
 package com.sca4d.iam.acl;
 
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.utils.TextUtils;
 import com.sca4d.iam.DomainScope;
@@ -35,7 +35,7 @@ public class AclService {
      *
      * @param repositories  领域 Repository 注册表
      * @param resourceTypes 资源类型归属表
-     * @param identities    身份事实服务
+     * @param identities    身份管理服务
      */
     public AclService(
             @NotNull AclRepositoryRegistry repositories,
@@ -66,7 +66,7 @@ public class AclService {
         repositories.repository(scope).grant(principalId, type, id, action);
         LOG.trace(
                 "ACL 授权写入已执行 | scope={} principalId={} resourceType={} resourceId={} action={}",
-                scope.value(),
+                scope,
                 principalId,
                 type,
                 id,
@@ -93,7 +93,7 @@ public class AclService {
         repositories.repository(scope).revoke(principalId, type, id, action);
         LOG.trace(
                 "ACL 撤销写入已执行 | scope={} principalId={} resourceType={} resourceId={} action={}",
-                scope.value(),
+                scope,
                 principalId,
                 type,
                 id,
@@ -122,7 +122,7 @@ public class AclService {
         boolean allowed = repositories.repository(scope).allows(principalId, type, id, action);
         LOG.trace(
                 "ACL 权限已判断 | scope={} principalId={} resourceType={} resourceId={} action={} allowed={}",
-                scope.value(),
+                scope,
                 principalId,
                 type,
                 id,
@@ -152,7 +152,7 @@ public class AclService {
                 repositories.repository(scope).findAllowedResourceIds(principalId, type, action));
         LOG.debug(
                 "ACL 资源范围已读取 | scope={} principalId={} resourceType={} action={} resourceCount={}",
-                scope.value(),
+                scope,
                 principalId,
                 type,
                 action.code(),
@@ -178,7 +178,7 @@ public class AclService {
         List<AclEntry> entries = List.copyOf(repositories.repository(scope).findEntries(principalId, type));
         LOG.debug(
                 "ACL 条目已读取 | scope={} principalId={} resourceType={} entryCount={}",
-                scope.value(),
+                scope,
                 principalId,
                 type,
                 entries.size());
@@ -200,7 +200,7 @@ public class AclService {
         repositories.repository(scope).revokeByPrincipal(checkedPrincipalId);
         LOG.trace(
                 "Principal ACL 清理写入已执行 | scope={} principalId={}",
-                scope.value(),
+                scope,
                 checkedPrincipalId);
     }
 
@@ -221,7 +221,7 @@ public class AclService {
         repositories.repository(scope).revokeByResource(type, id);
         LOG.trace(
                 "Resource ACL 清理写入已执行 | scope={} resourceType={} resourceId={}",
-                scope.value(),
+                scope,
                 type,
                 id);
     }

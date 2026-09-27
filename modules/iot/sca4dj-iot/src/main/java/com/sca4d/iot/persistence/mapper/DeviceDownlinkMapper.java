@@ -1,5 +1,6 @@
 package com.sca4d.iot.persistence.mapper;
 
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.iot.api.message.DeviceDownlinkKind;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
@@ -56,9 +57,9 @@ public interface DeviceDownlinkMapper {
             @Param("scheduleId") @Nullable Long scheduleId,
             @Param("scheduledAt") @Nullable Instant scheduledAt,
             @Param("dataJson") @NotNull String dataJson,
-            @Param("acknowledgementPolicy") @NotNull String acknowledgementPolicy,
+            @Param("acknowledgementPolicy") @NotNull TreeCode acknowledgementPolicy,
             @Param("acknowledgementTimeoutMillis") long acknowledgementTimeoutMillis,
-            @Param("retryPolicy") @NotNull String retryPolicy,
+            @Param("retryPolicy") @NotNull TreeCode retryPolicy,
             @Param("expiresAt") @Nullable Instant expiresAt);
 
     /**

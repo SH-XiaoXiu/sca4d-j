@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 
-/** 使用 Device HMAC 认证结果建立 Sca4d Server 的通用 Session。 */
+/** 使用 Device MAC 认证结果建立 Sca4d Server 的通用 Session。 */
 @Service
 public class DeviceSessionService {
 
@@ -38,7 +38,7 @@ public class DeviceSessionService {
 
     private final @NotNull SessionLifecycle sessions;
 
-    /** 创建 Device HMAC Session 服务。 */
+    /** 创建 Device MAC Session 服务。 */
     public DeviceSessionService(
             @NotNull DeviceService devices,
             @NotNull IdentityService identities,
@@ -51,10 +51,10 @@ public class DeviceSessionService {
     }
 
     /**
-     * 验证 Device HTTP HMAC canonical request 并建立 Session。
+     * 验证 Device HTTP MAC canonical request 并建立 Session。
      *
      * @param request 已按 Sca4d Server HTTP 规则规范化的请求
-     * @param signature 无填充 Base64URL HMAC-SHA256
+     * @param signature 无填充 Base64URL MAC-SHA256
      * @return 新建 Session 和仅返回一次的 Token
      */
     @CheckReturnValue

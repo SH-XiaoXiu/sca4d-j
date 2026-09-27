@@ -1,46 +1,45 @@
 package com.sca4d.core.api.authentication;
 
-import com.sca4d.core.api.utils.TextUtils;
+import com.sca4d.core.api.name.NameFormat;
+import com.sca4d.core.api.name.code.Code;
+import com.sca4d.core.api.name.code.TreeCode;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
+import java.util.List;
 
-/** 标识需要评估认证要求的应用动作。 */
-@SuppressWarnings("ClassCanBeRecord")
-public final class AuthenticationActionCode {
+/** 使用稳定节点链标识需要认证的业务动作，并保留独立领域类型。 */
+public final class AuthenticationActionCode extends TreeCode {
 
-    private final String value;
-
-    /**
-     * 创建用于查询策略并约束完成结果的动作编码。
-     *
-     * @param value 去除首尾空白后仍非空的操作编码
-     * @throws IllegalArgumentException 编码为空白时抛出
-     */
-    public AuthenticationActionCode(String value) {
-        this.value = TextUtils.requireText(value, "认证动作编码");
+    /** 从代码声明或序列化边界解析编码，拒绝通配符和超过 128 字符的名称。 */
+    public AuthenticationActionCode(@NotNull String text) {
+        this(TreeCode.of(text));
     }
 
-    /**
-     * 读取认证尝试和完成结果绑定的动作。
-     *
-     * @return 构造时保存的操作编码
-     */
-    public String value() {
-        return value;
+    /** 从已经校验的稳定编码构造领域名称。 */
+    public AuthenticationActionCode(@NotNull Code code) {
+        super(code);
+        if (hasNode(TreeCode.ofSegment("*")) || format(NameFormat.COLON).length() > 128) {
+            throw new IllegalArgumentException("AuthenticationActionCode 必须是最多 128 字符的固定编码");
+        }
     }
 
     @Override
-    public boolean equals(Object other) {
-        return this == other || other instanceof AuthenticationActionCode code && value.equals(code.value);
+    protected @NotNull AuthenticationActionCode withNodes(@NotNull List<String> nodes) {
+        return new AuthenticationActionCode(super.withNodes(nodes));
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(value);
+    public @NotNull AuthenticationActionCode child(@NotNull String node) {
+        return (AuthenticationActionCode) super.child(node);
     }
 
     @Override
-    public String toString() {
-        return value;
+    public @NotNull AuthenticationActionCode child(@NotNull TreeCode node) {
+        return (AuthenticationActionCode) super.child(node);
+    }
+
+    @Override
+    public @NotNull AuthenticationActionCode append(@NotNull Code code) {
+        return (AuthenticationActionCode) super.append(code);
     }
 }

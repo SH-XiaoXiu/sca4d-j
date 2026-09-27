@@ -37,7 +37,7 @@ import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 
-/** 验证 OpenAPI HMAC 请求头的缺失、签名失败和 nonce 委托行为。 */
+/** 验证 OpenAPI MAC 请求头的缺失、签名失败和 nonce 委托行为。 */
 class OpenApiAuthenticationInterceptorTest {
 
     private final HmacAuthenticationMethod hmac = mock(HmacAuthenticationMethod.class);

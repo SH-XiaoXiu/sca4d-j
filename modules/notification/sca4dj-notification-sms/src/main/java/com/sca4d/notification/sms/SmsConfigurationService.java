@@ -1,8 +1,16 @@
 package com.sca4d.notification.sms;
 
-import com.sca4d.core.api.code.TreeCode;
+import static com.sca4d.notification.sms.SmsNotificationErrorCode.BINDING_CONFLICT;
+import static com.sca4d.notification.sms.SmsNotificationErrorCode.BINDING_INVALID;
+import static com.sca4d.notification.sms.SmsNotificationErrorCode.BINDING_NOT_FOUND;
+import static com.sca4d.notification.sms.SmsNotificationErrorCode.PROVIDER_CONFLICT;
+import static com.sca4d.notification.sms.SmsNotificationErrorCode.PROVIDER_INVALID;
+import static com.sca4d.notification.sms.SmsNotificationErrorCode.PROVIDER_NOT_FOUND;
+
+import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.id.IdGenerator;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.utils.TextUtils;
 import com.sca4d.notification.NotificationTypeCatalog;
 import org.jetbrains.annotations.CheckReturnValue;
@@ -65,7 +73,7 @@ public class SmsConfigurationService {
     @Transactional(readOnly = true)
     public @NotNull SmsProvider provider(long providerId) {
         return repository.provider(providerId)
-                .orElseThrow(() -> new BusinessException(SmsNotificationErrorCode.PROVIDER_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(PROVIDER_NOT_FOUND));
     }
 
     /**
@@ -83,9 +91,9 @@ public class SmsConfigurationService {
     @Transactional(readOnly = true)
     public @NotNull SmsProviderBinding binding(long providerId, long bindingId) {
         SmsProviderBinding value = repository.binding(bindingId)
-                .orElseThrow(() -> new BusinessException(SmsNotificationErrorCode.BINDING_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(BINDING_NOT_FOUND));
         if (value.providerId() != providerId) {
-            throw new BusinessException(SmsNotificationErrorCode.BINDING_NOT_FOUND);
+            throw new BusinessException(BINDING_NOT_FOUND);
         }
         return value;
     }
@@ -123,7 +131,7 @@ public class SmsConfigurationService {
             @NotNull String credentialRef,
             int priority) {
         if (provider(providerId).enabled()) {
-            throw new BusinessException(SmsNotificationErrorCode.PROVIDER_CONFLICT);
+            throw new BusinessException(PROVIDER_CONFLICT);
         }
         CheckedProvider checked = checkedProvider(code, type, credentialRef, priority);
         repository.replaceProvider(providerId, checked.code, checked.type, checked.credentialRef, priority);
@@ -139,7 +147,7 @@ public class SmsConfigurationService {
     public @NotNull SmsProvider setProviderEnabled(long providerId, boolean enabled) {
         SmsProvider current = provider(providerId);
         if (enabled && bindings(providerId).stream().noneMatch(SmsProviderBinding::enabled)) {
-            throw new BusinessException(SmsNotificationErrorCode.PROVIDER_CONFLICT);
+            throw new BusinessException(PROVIDER_CONFLICT);
         }
         repository.setProviderEnabled(providerId, enabled);
         LOG.info(
@@ -157,7 +165,7 @@ public class SmsConfigurationService {
     public void deleteProvider(long providerId) {
         SmsProvider current = provider(providerId);
         if (current.enabled() || !bindings(providerId).isEmpty()) {
-            throw new BusinessException(SmsNotificationErrorCode.PROVIDER_CONFLICT);
+            throw new BusinessException(PROVIDER_CONFLICT);
         }
         repository.deleteProvider(providerId);
         LOG.info("SMS Provider 已删除 | providerId={}", providerId);
@@ -219,7 +227,7 @@ public class SmsConfigurationService {
             @NotNull String providerTemplateCode,
             @NotNull Map<String, String> parameterMapping) {
         if (binding(providerId, bindingId).enabled()) {
-            throw new BusinessException(SmsNotificationErrorCode.BINDING_CONFLICT);
+            throw new BusinessException(BINDING_CONFLICT);
         }
         CheckedBinding checked = checkedBinding(
                 notificationCode,
@@ -278,7 +286,7 @@ public class SmsConfigurationService {
     @Transactional
     public void deleteBinding(long providerId, long bindingId) {
         if (binding(providerId, bindingId).enabled()) {
-            throw new BusinessException(SmsNotificationErrorCode.BINDING_CONFLICT);
+            throw new BusinessException(BINDING_CONFLICT);
         }
         repository.deleteBinding(bindingId);
         LOG.info("SMS Provider 绑定已删除 | providerId={} bindingId={}", providerId, bindingId);
@@ -296,13 +304,13 @@ public class SmsConfigurationService {
                     credentialRef,
                     priority,
                     false,
-                    new com.sca4d.core.api.concurrent.Version(0));
+                    new Version(0));
             if (!transportTypes.contains(checked.type())) {
                 throw new IllegalArgumentException("SMS Provider 类型没有安装 Transport: " + checked.type());
             }
             return new CheckedProvider(checked.code(), checked.type(), checked.credentialRef());
         } catch (IllegalArgumentException exception) {
-            throw new BusinessException(SmsNotificationErrorCode.PROVIDER_INVALID, exception);
+            throw new BusinessException(PROVIDER_INVALID, exception);
         }
     }
 
@@ -325,7 +333,7 @@ public class SmsConfigurationService {
                     providerTemplateCode,
                     parameterMapping);
         } catch (IllegalArgumentException exception) {
-            throw new BusinessException(SmsNotificationErrorCode.BINDING_INVALID, exception);
+            throw new BusinessException(BINDING_INVALID, exception);
         }
     }
 
@@ -369,7 +377,7 @@ public class SmsConfigurationService {
                     TextUtils.requireText(providerTemplateCode, "Provider 模板编码", 128),
                     Map.copyOf(mapping));
         } catch (IllegalArgumentException exception) {
-            throw new BusinessException(SmsNotificationErrorCode.BINDING_INVALID, exception);
+            throw new BusinessException(BINDING_INVALID, exception);
         }
     }
 

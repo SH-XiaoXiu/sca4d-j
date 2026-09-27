@@ -1,5 +1,6 @@
 package com.sca4d.storage.file.persistence;
 
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.storage.FileStatus;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +21,7 @@ public final class FileRecord {
 
     private final @NotNull String scene;
 
-    private final @NotNull String targetResourceType;
+    private final @NotNull TreeCode targetResourceType;
 
     private final @NotNull String targetResourceId;
 
@@ -57,7 +58,7 @@ public final class FileRecord {
             long id,
             long uploaderPrincipalId,
             @NotNull String scene,
-            @NotNull String targetResourceType,
+            @NotNull TreeCode targetResourceType,
             @NotNull String targetResourceId,
             @NotNull String backendId,
             @NotNull String containerName,
@@ -110,7 +111,7 @@ public final class FileRecord {
 
     /** @return 文件关联的目标 Resource 类型 */
     @NotNull
-    public String targetResourceType() {
+    public TreeCode targetResourceType() {
         return targetResourceType;
     }
 

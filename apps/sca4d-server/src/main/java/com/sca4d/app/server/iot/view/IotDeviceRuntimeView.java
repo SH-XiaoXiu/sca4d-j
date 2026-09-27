@@ -1,5 +1,7 @@
 package com.sca4d.app.server.iot.view;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import com.sca4d.app.server.iot.IotDeviceRuntimeDetails;
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.iot.api.connection.DeviceConnection;
@@ -45,7 +47,7 @@ public final class IotDeviceRuntimeView {
         return new IotDeviceRuntimeView(details);
     }
 
-    /** @return 当前仍有效的连接事实 */
+    /** @return 当前仍有效的连接信息 */
     public @NotNull @Unmodifiable List<Connection> getConnections() {
         return List.copyOf(connections);
     }
@@ -65,7 +67,7 @@ public final class IotDeviceRuntimeView {
         return List.copyOf(desired);
     }
 
-    /** 返回一条当前 Device 连接事实。 */
+    /** 返回一条当前 Device 连接信息。 */
     public static final class Connection {
 
         private final @NotNull String connectionId;
@@ -78,12 +80,12 @@ public final class IotDeviceRuntimeView {
 
         private final @NotNull Instant connectedAt;
 
-        /** 从协议无关连接事实创建 HTTP 视图。 */
+        /** 从协议无关的连接信息创建 HTTP 视图。 */
         private Connection(@NotNull DeviceConnection connection) {
             this.connectionId = connection.id().value();
             this.protocol = connection.protocol().code();
             this.sessionId = connection.sessionId().map(SessionId::value).orElse(null);
-            this.accessMethodCode = connection.accessMethod().code();
+            this.accessMethodCode = connection.accessMethod().code().format(COLON);
             this.connectedAt = connection.connectedAt();
         }
 

@@ -1,5 +1,6 @@
 package com.sca4d.core.api.storage;
 
+import com.sca4d.core.api.name.NameFormat;
 import com.sca4d.core.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +25,7 @@ public final class FileUse {
     public FileUse(@NotNull String scene, @NotNull Resource target) {
         this.scene = required(scene, 64, "文件场景");
         Resource checked = Objects.requireNonNull(target, "文件目标资源不能为空");
-        if (checked.type().length() > 128) {
+        if (checked.type().format(NameFormat.SLASH).length() > 128) {
             throw new IllegalArgumentException("目标资源类型长度必须在 1 到 128 之间");
         }
         required(checked.id(), 128, "目标资源标识");

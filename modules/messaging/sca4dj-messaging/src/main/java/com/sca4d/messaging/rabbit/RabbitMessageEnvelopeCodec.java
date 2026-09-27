@@ -4,15 +4,17 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.event.EventMessageCodec;
 import com.sca4d.core.api.event.EventType;
+import com.sca4d.core.api.isolation.AppName;
 import com.sca4d.core.api.message.Message;
 import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.api.messaging.MessageId;
-import com.sca4d.core.api.utils.TextUtils;
+import com.sca4d.core.api.name.Name;
+import com.sca4d.core.api.name.NameFormat;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -57,16 +59,16 @@ public final class RabbitMessageEnvelopeCodec {
             @NotNull MessageId messageId,
             @NotNull Message message,
             @NotNull Instant publishedAt,
-            @NotNull String sourceApplication) {
+            @NotNull Name sourceApplication) {
         Message checked = Objects.requireNonNull(message, "消息不能为空");
         MessageCodec<Message> codec = codecs.codec(checked);
         ObjectNode envelope = json.createObjectNode();
         envelope.put("envelopeVersion", ENVELOPE_VERSION);
         envelope.put("messageId", Objects.requireNonNull(messageId, "MessageId 不能为空").toString());
-        envelope.put("messageCode", checked.code().value());
+        envelope.put("messageCode", checked.code().format(NameFormat.SLASH));
         envelope.put("protocolVersion", checked.protocolVersion());
         envelope.put("publishedAt", Objects.requireNonNull(publishedAt, "消息发布时间不能为空").toString());
-        envelope.put("sourceApplication", TextUtils.requireText(sourceApplication, "消息来源应用"));
+        envelope.put("sourceApplication", sourceApplication.format(NameFormat.COLON));
         envelope.put("payload", Base64.getEncoder().encodeToString(codec.encode(checked)));
         try {
             return json.writeValueAsBytes(envelope);
@@ -81,7 +83,7 @@ public final class RabbitMessageEnvelopeCodec {
             boolean redelivered,
             int attempt) {
         EventMessageCodec<T> codec = new EventMessageCodec<>(expectedType, json);
-        Envelope envelope = envelope(body, expectedType.treeCode(), expectedType.protocolVersion());
+        Envelope envelope = envelope(body, expectedType.code(), expectedType.protocolVersion());
         return new IncomingMessage<>(
                 envelope.messageId,
                 codec.decode(envelope.payload),
@@ -120,7 +122,7 @@ public final class RabbitMessageEnvelopeCodec {
             }
             String messageCode = requiredText(root, "messageCode");
             int protocolVersion = requiredInt(root, "protocolVersion");
-            if (!code.value().equals(messageCode) || version != protocolVersion) {
+            if (!code.equals(TreeCode.of(messageCode)) || version != protocolVersion) {
                 throw new IllegalArgumentException("业务消息与 Handler Codec 不一致");
             }
             byte[] payload;
@@ -132,7 +134,7 @@ public final class RabbitMessageEnvelopeCodec {
             return new Envelope(
                     requiredMessageId(root),
                     Instant.parse(requiredText(root, "publishedAt")),
-                    requiredText(root, "sourceApplication"),
+                    AppName.normalize(requiredText(root, "sourceApplication")),
                     payload);
         } catch (IOException | RuntimeException exception) {
             if (exception instanceof IllegalArgumentException illegalArgumentException) {
@@ -198,14 +200,14 @@ public final class RabbitMessageEnvelopeCodec {
 
         private final @NotNull Instant publishedAt;
 
-        private final @NotNull String sourceApplication;
+        private final @NotNull Name sourceApplication;
 
         private final byte @NotNull [] payload;
 
         private Envelope(
                 @NotNull MessageId messageId,
                 @NotNull Instant publishedAt,
-                @NotNull String sourceApplication,
+                @NotNull Name sourceApplication,
                 byte @NotNull [] payload) {
             this.messageId = messageId;
             this.publishedAt = publishedAt;

@@ -108,8 +108,7 @@ implements com.sca4d.core.api.concurrent.IdempotencyStore</span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,com.sca4d.core.api.runtime.RuntimeNamespace,com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">RedisIdempotencyStore</a><wbr>(@NotNull org.springframework.data.redis.core.StringRedisTemplate&nbsp;redis,
- @NotNull com.sca4d.core.api.runtime.RuntimeNamespace&nbsp;runtimeNamespace,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">RedisIdempotencyStore</a><wbr>(@NotNull org.springframework.data.redis.core.RedisTemplate&lt;com.sca4d.core.api.name.Key,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;redis,
  @NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;objectMapper)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建使用脚手架 Redis 模板和内部稳定 JSON 契约的幂等存储。</div>
@@ -165,19 +164,16 @@ implements com.sca4d.core.api.concurrent.IdempotencyStore</span></div>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(org.springframework.data.redis.core.StringRedisTemplate,com.sca4d.core.api.runtime.RuntimeNamespace,com.fasterxml.jackson.databind.ObjectMapper)">
+<section class="detail" id="&lt;init&gt;(org.springframework.data.redis.core.RedisTemplate,com.fasterxml.jackson.databind.ObjectMapper)">
 <h3>RedisIdempotencyStore</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RedisIdempotencyStore</span><wbr><span class="parameters">(@NotNull
- @NotNull org.springframework.data.redis.core.StringRedisTemplate&nbsp;redis,
- @NotNull
- @NotNull com.sca4d.core.api.runtime.RuntimeNamespace&nbsp;runtimeNamespace,
+ @NotNull org.springframework.data.redis.core.RedisTemplate&lt;com.sca4d.core.api.name.Key,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;redis,
  @NotNull
  @NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;objectMapper)</span></div>
 <div class="block">创建使用脚手架 Redis 模板和内部稳定 JSON 契约的幂等存储。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>redis</code> - 脚手架内部字符串 Redis 模板</dd>
-<dd><code>runtimeNamespace</code> - 当前应用的运行时命名空间</dd>
 <dd><code>objectMapper</code> - 脚手架内部 JSON 映射器</dd>
 </dl>
 </section>

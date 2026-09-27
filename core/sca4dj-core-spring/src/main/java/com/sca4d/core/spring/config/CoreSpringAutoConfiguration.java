@@ -1,6 +1,5 @@
 package com.sca4d.core.spring.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.audit.AuditRecorder;
 import com.sca4d.core.api.audit.AuditResolverLookup;
 import com.sca4d.core.api.call.AuditCallRecorder;
@@ -31,6 +30,7 @@ import com.sca4d.core.spring.call.CallRequirementTransactionInstaller;
 import com.sca4d.core.spring.call.CallRequirementTransactionListener;
 import com.sca4d.core.spring.call.SpringAuditResolverLookup;
 import com.sca4d.core.spring.call.SpringCallValueResolverLookup;
+import com.sca4d.core.spring.call.SystemExecutionAspect;
 import com.sca4d.core.spring.i18n.CatalogMessageSource;
 import com.sca4d.core.spring.i18n.ClasspathMessageCatalog;
 import com.sca4d.core.spring.i18n.I18nProperties;
@@ -41,6 +41,7 @@ import com.sca4d.core.spring.identity.PrincipalSelectionInputResolver;
 import com.sca4d.core.spring.identity.PrincipalSelectionInterceptor;
 import com.sca4d.core.spring.identity.PrincipalSelectionInvoker;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.core.spring.persistence.batch.SqlBatchProperties;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.core.spring.redis.RedisBatches;
@@ -110,6 +111,12 @@ import java.util.Locale;
         SqlBatchProperties.class
 })
 public class CoreSpringAutoConfiguration {
+
+    /** 为显式声明的系统自主入口安装身份上下文，不参与 HTTP 用户身份选择。 */
+    @Bean
+    SystemExecutionAspect systemExecutionAspect(Clock clock) {
+        return new SystemExecutionAspect(clock);
+    }
 
     /** 创建 Core Spring 自动配置。 */
     public CoreSpringAutoConfiguration() {
@@ -310,7 +317,7 @@ public class CoreSpringAutoConfiguration {
     /** @param objectMapper 脚手架内部 JSON 映射器 @return 幂等参数规范化和摘要入口 */
     @Bean
     @ConditionalOnMissingBean
-    IdempotencyFingerprints idempotencyFingerprints(@Sca4djJson ObjectMapper objectMapper) {
+    IdempotencyFingerprints idempotencyFingerprints(@Sca4djJson Sca4djMapper objectMapper) {
         return new IdempotencyFingerprints(objectMapper);
     }
 

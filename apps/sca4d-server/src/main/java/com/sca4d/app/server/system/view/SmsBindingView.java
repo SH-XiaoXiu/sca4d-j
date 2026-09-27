@@ -1,5 +1,7 @@
 package com.sca4d.app.server.system.view;
 
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.spring.web.annotation.ETag;
 import com.sca4d.notification.sms.SmsProviderBinding;
@@ -35,7 +37,7 @@ public final class SmsBindingView {
     private SmsBindingView(SmsProviderBinding binding) {
         this.bindingId = binding.bindingId();
         this.providerId = binding.providerId();
-        this.notificationCode = binding.code().value();
+        this.notificationCode = binding.code().format(SLASH);
         this.route = binding.route().value();
         this.languageTag = binding.locale().toLanguageTag();
         this.signName = binding.signName();

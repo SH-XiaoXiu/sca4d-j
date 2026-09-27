@@ -45,7 +45,7 @@ public final class IotDeviceCredentials {
         return Optional.ofNullable(sharedSecret);
     }
 
-    /** @return 本次新签发的 HMAC Key；没有签发时为空 */
+    /** @return 本次新签发的 MAC Key；没有签发时为空 */
     public @NotNull Optional<String> hmacKey() {
         return Optional.ofNullable(hmacKey);
     }

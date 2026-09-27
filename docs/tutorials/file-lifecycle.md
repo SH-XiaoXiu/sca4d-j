@@ -1,6 +1,6 @@
 # 上传和引用文件
 
-文件上传分为申请、传输字节、确认完成和绑定业务对象。业务表保存 fileId，读取时向文件服务申请短期地址。以下用 Sca4d Server 的头像替换完成一次上传。
+上传文件依次完成申请、传输字节、确认上传和绑定业务对象；只有绑定完成，文件才成为业务引用。业务表保存 `fileId`，显示时申请短期读取地址；下面用替换头像走完这条流程，并说明失败后的状态。
 
 ## 替换当前账号头像
 
@@ -16,7 +16,7 @@
 
 ## 文件记录保存什么
 
-[StoredFile](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/storage/StoredFile.html) 包含文件 ID、创建文件的 Principal、业务用途、原文件名、媒体类型、字节数和 [FileStatus](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/storage/FileStatus.html)。业务代码使用文件 ID 建立引用，不保存临时上传地址或对象存储地址。系统任务创建文件时使用 `SystemPrincipal.INSTANCE`。
+[StoredFile](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/storage/StoredFile.html) 包含文件 ID、创建文件的 Principal、业务用途、原文件名、媒体类型、字节数和 [FileStatus](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/storage/FileStatus.html)。业务代码使用文件 ID 建立引用，不保存临时上传地址或对象存储地址。系统任务使用启动时已经确认的系统 Principal，例如 `SystemPrincipals.mainPrincipal()`；初始化完成前不能读取该身份。
 
 数据库中的文件记录还保存创建时选中的存储实现、临时对象键和正式对象键。这些字段只供文件服务定位字节，StoredFile 不向业务代码返回它们。
 
@@ -47,14 +47,14 @@ stateDiagram-v2
 
 ## 谁检查权限
 
-文件服务只检查上传 Principal、文件用途、状态和期限。它不知道“头像管理员”“合同查看者”等产品规则。应用负责决定：
+文件服务只检查上传 Principal、文件用途、状态和期限。它不知道「头像管理员」「合同查看者」等产品规则。应用负责决定：
 
 - 谁可以为目标业务对象申请上传；
 - 一个场景允许哪些媒体类型和大小；
 - 谁可以创建、完成、绑定或读取文件；
 - 哪个业务字段保存文件 ID；
 - 替换或删除引用时何时释放旧文件；
-- 无权读取时是否隐藏为“文件不存在”。
+- 无权读取时是否隐藏为「文件不存在」。
 
 Sca4d Server 的头像流程允许资料本人申请和读取头像，拥有账号管理权限的管理员也可以维护目标账号头像。批量申请读取地址时，只要有一个文件不存在、用途不符或无权读取，整个请求都返回文件不存在，不指出具体失败项。
 

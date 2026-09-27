@@ -1,6 +1,8 @@
 package com.sca4d.iot.message;
 
+import com.sca4d.core.api.annotation.SystemExecution;
 import com.sca4d.core.api.scheduling.ClusterTask;
+import com.sca4d.iot.api.IotCapabilities;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +57,7 @@ public class DownlinkRetentionTask implements ClusterTask {
     /** 删除一批早于保留截止时间且已经进入最终状态的下行消息。 */
     @Override
     @Transactional
+    @SystemExecution(IotCapabilities.SYSTEM_IDENTITY_VALUE)
     public void execute() {
         Instant completedBefore = clock.instant().minus(retention);
         int deleted = downlinks.deleteCompletedBefore(completedBefore, batchSize);

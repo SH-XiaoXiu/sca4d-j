@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.isolation.AppName;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.DeviceAccessMethod;
 import com.sca4d.iot.api.ProductBinding;
@@ -22,6 +22,10 @@ import java.util.Set;
 
 /** 验证应用授权策略能替代普通 Device 的协议精确 ACL。 */
 class EmqxAuthenticationServiceTest {
+
+    static {
+        AppName.publish("SCA4D_TEST");
+    }
 
     @Test
     @DisplayName("匹配的扩展策略生成完整 ACL 且认证结果始终不是 superuser")
@@ -66,8 +70,7 @@ class EmqxAuthenticationServiceTest {
         };
         MqttAuthorizationService authorization = new MqttAuthorizationService(
                 new MqttProtocolCatalog(List.of()),
-                List.of(policy),
-                new RuntimeNamespace("emergency-light-test"));
+                List.of(policy));
         EmqxAuthenticationService service = new EmqxAuthenticationService(requests, admission, authorization);
 
         EmqxAuthenticationResponse response = service.authenticate(
@@ -78,7 +81,7 @@ class EmqxAuthenticationServiceTest {
         assertThat(response.clientAttributes())
                 .containsEntry("product_code", "mqtt-debug")
                 .containsEntry("product_source", "CODE")
-                .containsEntry("access_method", "ACCOUNT:AUTHENTICATION/SHARED_SECRET")
+                .containsEntry("access_method", "ACCOUNT:AUTHENTICATION:SHARED_SECRET")
                 .containsKey(MqttAuthorizationService.FINGERPRINT_ATTRIBUTE);
         assertThat(response.acl()).extracting(EmqxAclRule::topic)
                 .containsExactly("$SYS/#", "#", "#");

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Instant;
 import java.util.Objects;
 
-/** 保存一次 HMAC 认证所需的时间、nonce、canonical bytes 和签名。 */
+/** 保存一次 MAC 认证所需的时间、nonce、canonical bytes 和签名。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public final class HmacProof {
 
@@ -24,7 +24,7 @@ public final class HmacProof {
 
     private final @NotNull String signature;
 
-    /** 创建具体协议已经规范化的 HMAC Proof。 */
+    /** 创建具体协议已经规范化的 MAC Proof。 */
     public HmacProof(
             @NotNull Instant timestamp,
             @NotNull String nonce,
@@ -60,7 +60,7 @@ public final class HmacProof {
         return canonicalBytes.clone();
     }
 
-    /** @return 无填充 Base64URL HMAC-SHA256 */
+    /** @return 无填充 Base64URL MAC-SHA256 */
     public @NotNull String signature() {
         return signature;
     }

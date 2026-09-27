@@ -5,6 +5,7 @@ import com.sca4d.app.server.repository.PlatformUserProfileRepository;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.ResourceReference;
 import com.sca4d.core.api.storage.FileErrorCode;
 import com.sca4d.core.api.storage.FileService;
@@ -308,8 +309,7 @@ public class PlatformUserProfileService {
     /** 返回指定 Principal 的资料变更分布式锁键。 */
     static @NotNull LockKey profileLock(@NotNull Long principalId) {
         return new LockKey(
-                "platform",
-                "profile",
+                TreeCode.of("PLATFORM:PROFILE"),
                 Objects.requireNonNull(principalId, "Principal 标识不能为空").toString());
     }
 

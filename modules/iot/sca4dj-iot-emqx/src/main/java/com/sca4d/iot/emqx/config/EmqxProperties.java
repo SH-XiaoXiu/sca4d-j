@@ -1,14 +1,15 @@
 package com.sca4d.iot.emqx.config;
 
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.time.Duration;
-import java.util.Objects;
 import java.util.UUID;
 
 /** 保存具体应用连接 EMQX MQTT 和 Management API 所选择的运行参数。 */
@@ -102,14 +103,12 @@ public final class EmqxProperties {
     }
 
     /**
-     * 为未显式配置 Client ID 的当前应用实例生成带运行时命名空间的值。
+     * 为未显式配置 Client ID 的当前应用实例生成带 App 隔离名称的值。
      *
-     * @param namespace 当前应用的运行时命名空间
      */
-    void initializeClientId(@NotNull RuntimeNamespace namespace) {
-        Objects.requireNonNull(namespace, "运行时命名空间不能为空");
+    void initializeClientId() {
         if (clientId == null || clientId.isBlank()) {
-            clientId = namespace.sca4dj("iot", "emqx", "client", UUID.randomUUID().toString());
+            clientId = Key.of(TreeCode.ofColon("IOT:EMQX:CLIENT"), UUID.randomUUID().toString()).format(COLON);
         }
     }
 
@@ -196,7 +195,7 @@ public final class EmqxProperties {
     /**
      * 返回 CONNECT 声明的 MQTT 5 Receive Maximum。
      *
-     * <p>全部未确认消息可能属于同一个 Topic。每个分片除等待队列外还会处理一条消息，因此该值等于
+     * <p>全部未确认消息可能属于同一个 Topic。每个分片除等待队列外还会处理一条消息，因此当前值等于
      * 等待容量时，ACK 后立即补发的消息仍有一个队列位置。
      *
      * @return 当前 worker 和每分片队列共同允许的未确认消息数

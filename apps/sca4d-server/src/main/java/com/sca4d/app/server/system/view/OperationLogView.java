@@ -1,5 +1,7 @@
 package com.sca4d.app.server.system.view;
 
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+
 import com.sca4d.app.server.audit.OperationLog;
 import com.sca4d.audit.payload.AuditPayloadData;
 import com.sca4d.audit.query.AuditEntry;
@@ -111,7 +113,7 @@ public final class OperationLogView {
                 entry.actor().principalId(),
                 checked.principalDisplayName(),
                 entry.operation().id(),
-                target == null ? null : target.type().value(),
+                target == null ? null : target.type().format(SLASH),
                 target == null ? null : target.id(),
                 entry.result().name(),
                 payload == null ? null : payload.type(),

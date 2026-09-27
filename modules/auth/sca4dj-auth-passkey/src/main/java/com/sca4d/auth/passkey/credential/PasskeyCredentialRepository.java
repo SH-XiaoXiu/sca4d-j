@@ -1,5 +1,10 @@
 package com.sca4d.auth.passkey.credential;
 
+import static com.sca4d.auth.passkey.credential.PasskeyCredentialRepository.CredentialSlotReservation.ACCOUNT_MISSING;
+import static com.sca4d.auth.passkey.credential.PasskeyCredentialRepository.CredentialSlotReservation.CONCURRENT_CHANGE;
+import static com.sca4d.auth.passkey.credential.PasskeyCredentialRepository.CredentialSlotReservation.LIMIT_REACHED;
+import static com.sca4d.auth.passkey.credential.PasskeyCredentialRepository.CredentialSlotReservation.RESERVED;
+
 import com.sca4d.auth.passkey.credential.mapper.PasskeyAccountState;
 import com.sca4d.auth.passkey.credential.mapper.PasskeyCredentialMapper;
 import com.sca4d.core.api.concurrent.OptimisticLockException;
@@ -115,7 +120,7 @@ public class PasskeyCredentialRepository {
 
         PasskeyAccountState account = mapper.selectAccount(accountId, null);
         if (account == null) {
-            return CredentialSlotReservation.ACCOUNT_MISSING;
+            return ACCOUNT_MISSING;
         }
         boolean updated = AffectedRowCounts.changed(
                 mapper.updateAccountVersionIfBelowCredentialLimit(
@@ -124,11 +129,11 @@ public class PasskeyCredentialRepository {
                         maximumCredentials),
                 "抢占 Passkey Credential 名额");
         if (updated) {
-            return CredentialSlotReservation.RESERVED;
+            return RESERVED;
         }
         return mapper.countByAccountId(accountId) >= maximumCredentials
-                ? CredentialSlotReservation.LIMIT_REACHED
-                : CredentialSlotReservation.CONCURRENT_CHANGE;
+                ? LIMIT_REACHED
+                : CONCURRENT_CHANGE;
     }
 
     /**

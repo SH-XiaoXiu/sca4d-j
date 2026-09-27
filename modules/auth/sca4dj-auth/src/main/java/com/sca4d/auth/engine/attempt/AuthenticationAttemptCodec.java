@@ -1,5 +1,8 @@
 package com.sca4d.auth.engine.attempt;
 
+import static com.sca4d.core.api.name.NameFormat.DOT;
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,12 +13,12 @@ import com.sca4d.core.api.authentication.AuthenticationActionCode;
 import com.sca4d.core.api.authentication.AuthenticationAttemptId;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.data.DataAssertionException;
 import com.sca4d.core.api.data.DataOps;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.RealmKey;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -53,7 +56,7 @@ final class AuthenticationAttemptCodec {
         root.put("accountId", state.account().accountId());
         root.put("subjectId", state.account().subjectId());
         root.put("realmKey", state.account().realmKey().value());
-        root.put("actionCode", state.actionCode().value());
+        root.put("actionCode", state.actionCode().format(DOT));
         root.put("expiresAt", state.expiresAt().toString());
         root.put("satisfied", state.satisfied());
 
@@ -136,7 +139,7 @@ final class AuthenticationAttemptCodec {
     private static void encodeAuthentication(
             @NotNull ObjectNode target,
             @NotNull Authentication authentication) {
-        target.put("methodCode", authentication.methodCode().value());
+        target.put("methodCode", authentication.methodCode().format(SLASH));
         ArrayNode kinds = target.putArray("factorKinds");
         authentication.factorKinds().stream().map(Enum::name).sorted().forEach(kinds::add);
         target.put("authenticatedAt", authentication.authenticatedAt().toString());

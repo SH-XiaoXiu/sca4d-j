@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.sca4d.core.api.audit.AuditOperation;
+import com.sca4d.core.api.name.NameFormat;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -17,21 +19,23 @@ class AuditOperationTest {
     void acceptsHierarchicalOperation() {
         AuditOperation operation = AuditOperation.declared("PLATFORM/ACCOUNT/STATUS/CHANGE");
 
-        assertEquals("AUDIT/OPERATIONS", operation.type());
-        assertEquals("PLATFORM/ACCOUNT/STATUS/CHANGE", operation.code().value());
-        assertEquals(operation.code().value(), operation.id());
-        assertEquals("LEGACY:OPERATION", new AuditOperation("legacy:operation").id());
+        assertEquals(TreeCode.of("AUDIT/OPERATIONS"), operation.type());
+        assertEquals("PLATFORM/ACCOUNT/STATUS/CHANGE", operation.code().format(NameFormat.SLASH));
+        assertEquals(operation.code().format(NameFormat.SLASH), operation.id());
+        assertEquals("LEGACY/OPERATION", new AuditOperation("legacy:operation").id());
     }
 
     @Test
-    @DisplayName("Audit 操作拒绝点号分隔和空层级键")
+    @DisplayName("Audit 操作接受点式声明并拒绝空节点")
     void rejectsNonHierarchicalOperation() {
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> AuditOperation.declared("PLATFORM.ACCOUNT.UPDATE"));
+        assertEquals(
+                AuditOperation.declared("PLATFORM/ACCOUNT/UPDATE"),
+                AuditOperation.declared("PLATFORM.ACCOUNT.UPDATE"));
         assertThrows(
                 IllegalArgumentException.class,
                 () -> AuditOperation.declared("platform//update"));
-        assertEquals("PLATFORM/ACCOUNT/UPDATE", AuditOperation.declared("Platform/ACCOUNT/UPDATE").code().value());
+        assertEquals(
+                "PLATFORM/ACCOUNT/UPDATE",
+                AuditOperation.declared("Platform/ACCOUNT/UPDATE").code().format(NameFormat.SLASH));
     }
 }

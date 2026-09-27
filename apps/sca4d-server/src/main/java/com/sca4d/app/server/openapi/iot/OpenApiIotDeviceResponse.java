@@ -1,8 +1,9 @@
 package com.sca4d.app.server.openapi.iot;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import com.sca4d.app.server.iot.IotDeviceDetails;
 import com.sca4d.iot.api.Device;
-import com.sca4d.iot.api.DeviceAccessMethod;
 import com.sca4d.iot.api.connection.DeviceConnectionBinding;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.jetbrains.annotations.CheckReturnValue;
@@ -76,7 +77,7 @@ public final class OpenApiIotDeviceResponse {
         this.connectionIdentity = connection == null ? null : connection.identifierValue();
         this.accessMethods = device.accessMethods()
                 .stream()
-                .map(DeviceAccessMethod::code)
+                .map(method -> method.code().format(COLON))
                 .sorted()
                 .toList();
         this.status = OpenApiIotDeviceStatus.from(details.profile().status());

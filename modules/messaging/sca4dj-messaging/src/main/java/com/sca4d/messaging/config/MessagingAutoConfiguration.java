@@ -1,17 +1,16 @@
 package com.sca4d.messaging.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.messaging.EventHandler;
 import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.api.messaging.MessageHandler;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
 import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
 import com.sca4d.core.api.scheduling.IntervalSchedule;
 import com.sca4d.core.api.scheduling.MisfirePolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.messaging.outbox.MessageOutboxDispatcher;
 import com.sca4d.messaging.outbox.MessageOutboxRepository;
 import com.sca4d.messaging.outbox.OutboxCleanupTask;
@@ -52,8 +51,8 @@ public class MessagingAutoConfiguration {
 
     /** @return 确定当前应用 RabbitMQ exchange 和 Consumer 队列名称的拓扑 */
     @Bean
-    RabbitMessageTopology messagingTopology(@NotNull RuntimeNamespace runtimeNamespace) {
-        return new RabbitMessageTopology(runtimeNamespace);
+    RabbitMessageTopology messagingTopology() {
+        return new RabbitMessageTopology();
     }
 
     /** @return 业务 exchange、Consumer 队列和各自 DLQ 的持久声明 */
@@ -68,7 +67,7 @@ public class MessagingAutoConfiguration {
     /** @return 与应用 JSON 配置隔离的业务消息信封编解码器 */
     @Bean
     RabbitMessageEnvelopeCodec messagingEnvelopeCodec(
-            @Sca4djJson @NotNull ObjectMapper objectMapper,
+            @Sca4djJson @NotNull Sca4djMapper objectMapper,
             @NotNull List<@NotNull MessageCodec<?>> messageCodecs) {
         return new RabbitMessageEnvelopeCodec(objectMapper, messageCodecs);
     }
@@ -105,9 +104,8 @@ public class MessagingAutoConfiguration {
             @NotNull RabbitMessageEnvelopeCodec codec,
             @NotNull RabbitPublisher sender,
             @NotNull MessageOutboxRepository outbox,
-            @NotNull Clock clock,
-            @NotNull RuntimeNamespace runtimeNamespace) {
-        return new RabbitMessageBus(ids, codec, sender, outbox, clock, runtimeNamespace);
+            @NotNull Clock clock) {
+        return new RabbitMessageBus(ids, codec, sender, outbox, clock);
     }
 
     /** @return 每个 EventHandler 和 MessageHandler 对应的竞争消费容器 */

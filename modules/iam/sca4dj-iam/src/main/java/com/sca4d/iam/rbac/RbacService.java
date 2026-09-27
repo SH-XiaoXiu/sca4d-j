@@ -1,8 +1,8 @@
 package com.sca4d.iam.rbac;
 
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.id.IdGenerator;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.utils.TextUtils;
 import com.sca4d.core.spring.transaction.TransactionCallbacks;
@@ -165,7 +165,7 @@ public class RbacService {
     }
 
     /**
-     * @return 角色及其当前得到的具体 Operation
+     * @return 角色及角色当前得到的具体 Operation
      */
     @CheckReturnValue
     @Transactional(readOnly = true)
@@ -341,7 +341,7 @@ public class RbacService {
     /**
      * 筛选在同一角色空间中获得全部或任一指定 Operation 的 Principal。
      *
-     * <p>该方法复用 {@link #findGrantedOperations(RbacScope, Collection)} 的缓存和按领域回源流程。查询中的
+     * <p>当前方法复用 {@link #findGrantedOperations(RbacScope, Collection)} 的缓存和按领域回源流程。查询中的
      * Operation 必须属于当前 RBAC 领域允许分配的目录。
      *
      * @param scope 角色空间

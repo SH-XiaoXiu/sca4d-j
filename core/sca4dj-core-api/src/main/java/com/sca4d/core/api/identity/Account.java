@@ -1,6 +1,6 @@
 package com.sca4d.core.api.identity;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.Resource;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -76,7 +76,7 @@ public final class Account implements Resource {
     }
 
     /**
-     * 读取拥有该登录账号的接入者标识。
+     * 读取拥有当前登录账号的接入者标识。
      *
      * @return 所属 Subject 标识
      */

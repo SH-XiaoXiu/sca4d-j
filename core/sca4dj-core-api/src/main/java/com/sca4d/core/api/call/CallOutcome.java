@@ -1,5 +1,10 @@
 package com.sca4d.core.api.call;
 
+import static com.sca4d.core.api.call.CallOutcome.Status.DENIED;
+import static com.sca4d.core.api.call.CallOutcome.Status.FAILED;
+import static com.sca4d.core.api.call.CallOutcome.Status.REPLAYED;
+import static com.sca4d.core.api.call.CallOutcome.Status.SUCCESS;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
@@ -35,22 +40,22 @@ public final class CallOutcome {
 
     /** @param result 业务方法结果 @return 实际执行成功的结果 */
     public static CallOutcome success(@Nullable Object result) {
-        return new CallOutcome(Status.SUCCESS, result, null);
+        return new CallOutcome(SUCCESS, result, null);
     }
 
     /** @param result 已保存的业务结果 @return 幂等重放结果 */
     public static CallOutcome replayed(@Nullable Object result) {
-        return new CallOutcome(Status.REPLAYED, result, null);
+        return new CallOutcome(REPLAYED, result, null);
     }
 
     /** @param error 拒绝调用的业务异常 @return 被拒绝的结果 */
     public static CallOutcome denied(Throwable error) {
-        return new CallOutcome(Status.DENIED, null, Objects.requireNonNull(error, "拒绝异常不能为空"));
+        return new CallOutcome(DENIED, null, Objects.requireNonNull(error, "拒绝异常不能为空"));
     }
 
     /** @param error 导致调用失败的异常 @return 失败结果 */
     public static CallOutcome failed(Throwable error) {
-        return new CallOutcome(Status.FAILED, null, Objects.requireNonNull(error, "失败异常不能为空"));
+        return new CallOutcome(FAILED, null, Objects.requireNonNull(error, "失败异常不能为空"));
     }
 
     /** @return 当前结果状态 */
@@ -59,7 +64,7 @@ public final class CallOutcome {
         return status;
     }
 
-    /** @return 成功或重放结果；其他状态为空 */
+    /** @return 成功或重放状态的结果；拒绝和失败状态不包含结果 */
     @Contract(pure = true)
     public @Nullable Object result() {
         return result;

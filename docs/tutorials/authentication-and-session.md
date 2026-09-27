@@ -1,6 +1,13 @@
 # 接入认证与 Session
 
-Sca4d Server 通过登录 attempt 收集认证结果，满足账号的认证要求后返回 Session Token。新增登录入口时复用 `AuthenticationAttempts` 和 `SessionLifecycle`；业务接口通过已恢复的 Session 选择 Principal。
+登录先创建认证尝试（attempt），再提交密码、验证码或 Passkey 等认证材料（proof）；要求满足后，Sca4d Server 才返回 Session Token。普通请求携带 Token，改密等敏感操作另外完成一次性验证（verification）；新增登录入口复用 `AuthenticationAttempts` 和 `SessionLifecycle`。
+
+| 需要完成的任务 | 入口 | 完成标志 |
+|---|---|---|
+| 登录管理端账号 | 下方密码登录或 SMS Code 登录 | `data.session` 非空 |
+| 修改密码等敏感操作 | 创建 verification，再调用目标业务接口 | 目标业务请求成功，不能只看 proof 成功 |
+| 增加自己的身份类型 | 身份 Loader 与 PrincipalSelection | Session 包含允许选择的身份，请求只能选择其中之一 |
+| 决定请求是否在线读取 Session | Token 模式 | 明确接受 JWT 延迟失效，或使用在线 Session Token |
 
 ## 完成一次密码登录
 
@@ -29,7 +36,7 @@ verification 绑定当前 Session、Account 和动作编码，只能消费一次
 
 ## 使用 SMS Code 登录或完成 verification
 
-SMS Code 依赖三个条件：Account 已绑定规范 E.164 `PHONE` Identifier，`authentication.sms-code` 存在启用的 SMS Provider 绑定，Account 的手机号可以由 `SmsRecipientResolver` 解析。Provider 和绑定配置见[发布消息与通知](/tutorials/messaging-and-notification#配置一个阿里云-sms-provider)。
+SMS Code 依赖三个条件：Account 已绑定规范 E.164 `PHONE` Identifier，`AUTHENTICATION/SMS_CODE` 存在启用的 SMS Provider 绑定，Account 的手机号可以由 `SmsRecipientResolver` 解析。Provider 和绑定配置见[发布消息与通知](/tutorials/messaging-and-notification#配置一个阿里云-sms-provider)。
 
 手机号登录先签发 Challenge：
 
@@ -60,13 +67,9 @@ Content-Type: application/json
 
 敏感操作的调用顺序相同。先创建 `POST /api/verifications`，再调用 `POST /api/verifications/{verificationId}/sms-code/challenges` 和 `POST /api/verifications/{verificationId}/sms-code/proofs`。这两个接口要求当前 Session；服务端还会确认 verification 对应的 Account 与当前 Session Account 相同。proof 完成后，把 verification 放入目标业务请求的 `X-Verification` 头。
 
-当前 Profile 手机号还没有绑定为登录 Identifier 时，先以动作 `authentication.phone.verify` 完成 verification，再使用强制 Session Token 调用 `PUT /api/me/phone-identifier`。该接口读取当前 Profile 手机号，不接受客户端另传手机号；成功后才可使用这个号码从匿名 SMS Code 登录入口查找 Account。
+当前 Profile 手机号还没有绑定为登录 Identifier 时，先以动作 `AUTHENTICATION.PHONE.VERIFY` 完成 verification，再使用强制 Session Token 调用 `PUT /api/me/phone-identifier`。该接口读取当前 Profile 手机号，不接受客户端另传手机号；成功后才可使用这个号码从匿名 SMS Code 登录入口查找 Account。
 
 Challenge 有效期、重发间隔和最大错误次数由 `auth.sms-code.challenge-ttl`、`auth.sms-code.resend-interval` 和 `auth.sms-code.maximum-attempts` 管理。修改这些 SystemSetting 只影响之后签发或校验的 Challenge，不应把验证码、手机号或 AccessKey 写入日志。
-
-## 在应用中装载身份
-
-登录确认 Account 后，`SessionLifecycle` 重新读取 Subject 与 Account，并调用应用注册的 Loader 建立 Session。业务入口使用 `PrincipalSelection` 从这份 Session 中选择身份，不能接受任意客户端 `principalId`。
 
 ## 会话建立与身份装载
 

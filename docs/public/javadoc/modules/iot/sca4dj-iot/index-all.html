@@ -80,7 +80,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/persistence/EncodedDeviceAcknowledgement.html#acknowledgedAt()" class="member-name-link">acknowledgedAt()</a> - Method in class com.sca4d.iot.persistence.<a href="com/sca4d/iot/persistence/EncodedDeviceAcknowledgement.html" title="class in com.sca4d.iot.persistence">EncodedDeviceAcknowledgement</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/message/DevicePolicyCatalog.html#acknowledgement(com.sca4d.core.api.code.TreeCode)" class="member-name-link">acknowledgement(TreeCode)</a> - Method in class com.sca4d.iot.message.<a href="com/sca4d/iot/message/DevicePolicyCatalog.html" title="class in com.sca4d.iot.message">DevicePolicyCatalog</a></dt>
+<dt><a href="com/sca4d/iot/message/DevicePolicyCatalog.html#acknowledgement(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">acknowledgement(TreeCode)</a> - Method in class com.sca4d.iot.message.<a href="com/sca4d/iot/message/DevicePolicyCatalog.html" title="class in com.sca4d.iot.message">DevicePolicyCatalog</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/message/DevicePolicyCatalog.html#acknowledgement(java.lang.String)" class="member-name-link">acknowledgement(String)</a> - Method in class com.sca4d.iot.message.<a href="com/sca4d/iot/message/DevicePolicyCatalog.html" title="class in com.sca4d.iot.message">DevicePolicyCatalog</a></dt>
 <dd>&nbsp;</dd>
@@ -89,6 +89,8 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/iot/message/BuiltInDevicePolicies.html#acknowledgements()" class="member-name-link">acknowledgements()</a> - Static method in class com.sca4d.iot.message.<a href="com/sca4d/iot/message/BuiltInDevicePolicies.html" title="class in com.sca4d.iot.message">BuiltInDevicePolicies</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/query/DefaultDeviceHistoryQueryService.html#acknowledgements(long,com.sca4d.core.api.query.PageRequest)" class="member-name-link">acknowledgements(long, PageRequest)</a> - Method in class com.sca4d.iot.query.<a href="com/sca4d/iot/query/DefaultDeviceHistoryQueryService.html" title="class in com.sca4d.iot.query">DefaultDeviceHistoryQueryService</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/query/DefaultDeviceHistoryQueryService.html#acknowledgementsByMessageId(long,com.sca4d.core.api.query.PageRequest)" class="member-name-link">acknowledgementsByMessageId(long, PageRequest)</a> - Method in class com.sca4d.iot.query.<a href="com/sca4d/iot/query/DefaultDeviceHistoryQueryService.html" title="class in com.sca4d.iot.query">DefaultDeviceHistoryQueryService</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/persistence/EncodedDownlinkMessage.html#acknowledgementTimeoutMillis()" class="member-name-link">acknowledgementTimeoutMillis()</a> - Method in class com.sca4d.iot.persistence.<a href="com/sca4d/iot/persistence/EncodedDownlinkMessage.html" title="class in com.sca4d.iot.persistence">EncodedDownlinkMessage</a></dt>
 <dd>&nbsp;</dd>
@@ -308,6 +310,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">批量标记与 reported 值相等的 desired 属性，并返回需要推导 ACK 的当前消息。</div>
 </dd>
+<dt><a href="com/sca4d/iot/state/ReportedStateKeyMigration.html#copy(java.lang.String)" class="member-name-link">copy(String)</a> - Method in class com.sca4d.iot.state.<a href="com/sca4d/iot/state/ReportedStateKeyMigration.html" title="class in com.sca4d.iot.state">ReportedStateKeyMigration</a></dt>
+<dd>
+<div class="block">复制完整 Hash 与 Set，保留源键；重复执行只接受已经一致的目标，禁止覆盖不同数据。</div>
+</dd>
 <dt><a href="com/sca4d/iot/persistence/mapper/DeviceDownlinkMapper.html#countActiveDownlinkMessages(long,long)" class="member-name-link">countActiveDownlinkMessages(long, long)</a> - Method in interface com.sca4d.iot.persistence.mapper.<a href="com/sca4d/iot/persistence/mapper/DeviceDownlinkMapper.html" title="interface in com.sca4d.iot.persistence.mapper">DeviceDownlinkMapper</a></dt>
 <dd>
 <div class="block">查询当前物模型绑定仍未完成的下行消息数量。</div>
@@ -523,7 +529,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">消费延迟 ACK 超时检查，并按下行消息的 retry policy 登记下一次发送。</div>
 </dd>
-<dt><a href="com/sca4d/iot/message/DeviceAcknowledgementCheckHandler.html#%3Cinit%3E(com.sca4d.iot.message.DownlinkRepository,com.sca4d.iot.message.DeviceDeliveryScheduler,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.core.api.concurrent.DistributedLock,org.springframework.transaction.support.TransactionTemplate,com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">DeviceAcknowledgementCheckHandler(DownlinkRepository, DeviceDeliveryScheduler, Clock, DeviceChangeNotifier, DistributedLock, TransactionTemplate, ObjectMapper)</a> - Constructor for class com.sca4d.iot.message.<a href="com/sca4d/iot/message/DeviceAcknowledgementCheckHandler.html" title="class in com.sca4d.iot.message">DeviceAcknowledgementCheckHandler</a></dt>
+<dt><a href="com/sca4d/iot/message/DeviceAcknowledgementCheckHandler.html#%3Cinit%3E(com.sca4d.iot.message.DownlinkRepository,com.sca4d.iot.message.DeviceDeliveryScheduler,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.core.api.concurrent.DistributedLock,org.springframework.transaction.support.TransactionTemplate,com.sca4d.core.api.messaging.MessageCodec)" class="member-name-link">DeviceAcknowledgementCheckHandler(DownlinkRepository, DeviceDeliveryScheduler, Clock, DeviceChangeNotifier, DistributedLock, TransactionTemplate, MessageCodec&lt;DeviceAcknowledgementCheck&gt;)</a> - Constructor for class com.sca4d.iot.message.<a href="com/sca4d/iot/message/DeviceAcknowledgementCheckHandler.html" title="class in com.sca4d.iot.message">DeviceAcknowledgementCheckHandler</a></dt>
 <dd>
 <div class="block">创建按 messageId 加锁，并在短事务中处理 ACK 超时的 Consumer。</div>
 </dd>
@@ -531,7 +537,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">消费设备 ACK 处理消息，并执行现有消息级状态转换。</div>
 </dd>
-<dt><a href="com/sca4d/iot/message/DeviceAcknowledgementHandler.html#%3Cinit%3E(com.sca4d.iot.message.DeviceAcknowledgementService,com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">DeviceAcknowledgementHandler(DeviceAcknowledgementService, ObjectMapper)</a> - Constructor for class com.sca4d.iot.message.<a href="com/sca4d/iot/message/DeviceAcknowledgementHandler.html" title="class in com.sca4d.iot.message">DeviceAcknowledgementHandler</a></dt>
+<dt><a href="com/sca4d/iot/message/DeviceAcknowledgementHandler.html#%3Cinit%3E(com.sca4d.iot.message.DeviceAcknowledgementService,com.sca4d.core.api.messaging.MessageCodec)" class="member-name-link">DeviceAcknowledgementHandler(DeviceAcknowledgementService, MessageCodec&lt;DeviceAcknowledgement&gt;)</a> - Constructor for class com.sca4d.iot.message.<a href="com/sca4d/iot/message/DeviceAcknowledgementHandler.html" title="class in com.sca4d.iot.message">DeviceAcknowledgementHandler</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/message/DeviceAcknowledgementService.html" class="type-name-link" title="class in com.sca4d.iot.message">DeviceAcknowledgementService</a> - Class in <a href="com/sca4d/iot/message/package-summary.html">com.sca4d.iot.message</a></dt>
 <dd>
@@ -573,7 +579,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用 Redis 保存可由设备接入实现重建的当前连接事实。</div>
 </dd>
-<dt><a href="com/sca4d/iot/connection/DeviceConnectionRepository.html#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,java.time.Clock,java.time.Duration,com.sca4d.core.api.runtime.RuntimeNamespace,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.core.spring.redis.RedisBatches)" class="member-name-link">DeviceConnectionRepository(StringRedisTemplate, Clock, Duration, RuntimeNamespace, DeviceChangeNotifier, RedisBatches)</a> - Constructor for class com.sca4d.iot.connection.<a href="com/sca4d/iot/connection/DeviceConnectionRepository.html" title="class in com.sca4d.iot.connection">DeviceConnectionRepository</a></dt>
+<dt><a href="com/sca4d/iot/connection/DeviceConnectionRepository.html#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,java.time.Clock,java.time.Duration,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.core.spring.redis.RedisBatches)" class="member-name-link">DeviceConnectionRepository(RedisTemplate&lt;Key, String&gt;, Clock, Duration, DeviceChangeNotifier, RedisBatches)</a> - Constructor for class com.sca4d.iot.connection.<a href="com/sca4d/iot/connection/DeviceConnectionRepository.html" title="class in com.sca4d.iot.connection">DeviceConnectionRepository</a></dt>
 <dd>
 <div class="block">创建只保存共享运行事实的 Redis Repository。</div>
 </dd>
@@ -615,7 +621,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">消费可靠断连消息，并在协议实现暂时不可用时登记延迟重试。</div>
 </dd>
-<dt><a href="com/sca4d/iot/connection/DeviceDisconnectHandler.html#%3Cinit%3E(com.sca4d.iot.connection.DeviceConnectionTerminatorRouter,com.sca4d.iot.api.connection.DeviceConnectionReceiver,com.sca4d.core.api.messaging.MessageBus,java.time.Clock,com.sca4d.core.api.connection.ConnectionRegistry,com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">DeviceDisconnectHandler(DeviceConnectionTerminatorRouter, DeviceConnectionReceiver, MessageBus, Clock, ConnectionRegistry, ObjectMapper)</a> - Constructor for class com.sca4d.iot.connection.<a href="com/sca4d/iot/connection/DeviceDisconnectHandler.html" title="class in com.sca4d.iot.connection">DeviceDisconnectHandler</a></dt>
+<dt><a href="com/sca4d/iot/connection/DeviceDisconnectHandler.html#%3Cinit%3E(com.sca4d.iot.connection.DeviceConnectionTerminatorRouter,com.sca4d.iot.api.connection.DeviceConnectionReceiver,com.sca4d.core.api.messaging.MessageBus,java.time.Clock,com.sca4d.core.api.connection.ConnectionRegistry,com.sca4d.core.api.messaging.MessageCodec)" class="member-name-link">DeviceDisconnectHandler(DeviceConnectionTerminatorRouter, DeviceConnectionReceiver, MessageBus, Clock, ConnectionRegistry, MessageCodec&lt;DeviceDisconnectMessage&gt;)</a> - Constructor for class com.sca4d.iot.connection.<a href="com/sca4d/iot/connection/DeviceDisconnectHandler.html" title="class in com.sca4d.iot.connection">DeviceDisconnectHandler</a></dt>
 <dd>
 <div class="block">创建使用通用 Messaging 重试、不保存 IoT 断连任务表的 Consumer。</div>
 </dd>
@@ -623,7 +629,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">消费可靠下行发送消息，并把协议发布结果写回业务状态。</div>
 </dd>
-<dt><a href="com/sca4d/iot/message/DeviceDispatchHandler.html#%3Cinit%3E(com.sca4d.iot.message.DownlinkRepository,com.sca4d.iot.message.DeviceTransportRouter,com.sca4d.iot.message.DeviceDeliveryScheduler,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.core.api.concurrent.DistributedLock,org.springframework.transaction.support.TransactionTemplate,com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">DeviceDispatchHandler(DownlinkRepository, DeviceTransportRouter, DeviceDeliveryScheduler, Clock, DeviceChangeNotifier, DistributedLock, TransactionTemplate, ObjectMapper)</a> - Constructor for class com.sca4d.iot.message.<a href="com/sca4d/iot/message/DeviceDispatchHandler.html" title="class in com.sca4d.iot.message">DeviceDispatchHandler</a></dt>
+<dt><a href="com/sca4d/iot/message/DeviceDispatchHandler.html#%3Cinit%3E(com.sca4d.iot.message.DownlinkRepository,com.sca4d.iot.message.DeviceTransportRouter,com.sca4d.iot.message.DeviceDeliveryScheduler,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.core.api.concurrent.DistributedLock,org.springframework.transaction.support.TransactionTemplate,com.sca4d.core.api.messaging.MessageCodec)" class="member-name-link">DeviceDispatchHandler(DownlinkRepository, DeviceTransportRouter, DeviceDeliveryScheduler, Clock, DeviceChangeNotifier, DistributedLock, TransactionTemplate, MessageCodec&lt;DeviceDispatchMessage&gt;)</a> - Constructor for class com.sca4d.iot.message.<a href="com/sca4d/iot/message/DeviceDispatchHandler.html" title="class in com.sca4d.iot.message">DeviceDispatchHandler</a></dt>
 <dd>
 <div class="block">创建按 messageId 加锁、使用短事务转换下行状态的消息 Consumer。</div>
 </dd>
@@ -882,7 +888,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/persistence/mapper/DeviceMapper.html#existsCurrentBinding(long,long)" class="member-name-link">existsCurrentBinding(long, long)</a> - Method in interface com.sca4d.iot.persistence.mapper.<a href="com/sca4d/iot/persistence/mapper/DeviceMapper.html" title="interface in com.sca4d.iot.persistence.mapper">DeviceMapper</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/persistence/mapper/DeviceMapper.html#existsDeviceIncompatibleWithProduct(long,java.util.Collection,java.util.Collection)" class="member-name-link">existsDeviceIncompatibleWithProduct(long, Collection&lt;String&gt;, Collection&lt;String&gt;)</a> - Method in interface com.sca4d.iot.persistence.mapper.<a href="com/sca4d/iot/persistence/mapper/DeviceMapper.html" title="interface in com.sca4d.iot.persistence.mapper">DeviceMapper</a></dt>
+<dt><a href="com/sca4d/iot/persistence/mapper/DeviceMapper.html#existsDeviceIncompatibleWithProduct(long,java.util.Collection,java.util.Collection)" class="member-name-link">existsDeviceIncompatibleWithProduct(long, Collection&lt;TreeCode&gt;, Collection&lt;String&gt;)</a> - Method in interface com.sca4d.iot.persistence.mapper.<a href="com/sca4d/iot/persistence/mapper/DeviceMapper.html" title="interface in com.sca4d.iot.persistence.mapper">DeviceMapper</a></dt>
 <dd>
 <div class="block">检查 Product 技术定义变更是否与任一已登记 Device 冲突。</div>
 </dd>
@@ -952,6 +958,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/iot/message/DownlinkRepository.html#findAcknowledgements(long,com.sca4d.core.api.query.PageRequest)" class="member-name-link">findAcknowledgements(long, PageRequest)</a> - Method in class com.sca4d.iot.message.<a href="com/sca4d/iot/message/DownlinkRepository.html" title="class in com.sca4d.iot.message">DownlinkRepository</a></dt>
 <dd>
 <div class="block">分页读取 Device 下行消息收到的业务回执。</div>
+</dd>
+<dt><a href="com/sca4d/iot/message/DownlinkRepository.html#findAcknowledgementsByMessageId(long,com.sca4d.core.api.query.PageRequest)" class="member-name-link">findAcknowledgementsByMessageId(long, PageRequest)</a> - Method in class com.sca4d.iot.message.<a href="com/sca4d/iot/message/DownlinkRepository.html" title="class in com.sca4d.iot.message">DownlinkRepository</a></dt>
+<dd>
+<div class="block">分页读取主库保存的指定下行 ACK 投影；主库最多返回一条。</div>
 </dd>
 <dt><a href="com/sca4d/iot/product/ProductDefinitionCatalog.html#findAll()" class="member-name-link">findAll()</a> - Method in class com.sca4d.iot.product.<a href="com/sca4d/iot/product/ProductDefinitionCatalog.html" title="class in com.sca4d.iot.product">ProductDefinitionCatalog</a></dt>
 <dd>
@@ -1106,11 +1116,11 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">新增 Device 标量字段。</div>
 </dd>
-<dt><a href="com/sca4d/iot/persistence/mapper/DeviceMapper.html#insertDeviceAccessMethods(long,java.util.Collection)" class="member-name-link">insertDeviceAccessMethods(long, Collection&lt;String&gt;)</a> - Method in interface com.sca4d.iot.persistence.mapper.<a href="com/sca4d/iot/persistence/mapper/DeviceMapper.html" title="interface in com.sca4d.iot.persistence.mapper">DeviceMapper</a></dt>
+<dt><a href="com/sca4d/iot/persistence/mapper/DeviceMapper.html#insertDeviceAccessMethods(long,java.util.Collection)" class="member-name-link">insertDeviceAccessMethods(long, Collection&lt;TreeCode&gt;)</a> - Method in interface com.sca4d.iot.persistence.mapper.<a href="com/sca4d/iot/persistence/mapper/DeviceMapper.html" title="interface in com.sca4d.iot.persistence.mapper">DeviceMapper</a></dt>
 <dd>
 <div class="block">新增 Device 接入方式。</div>
 </dd>
-<dt><a href="com/sca4d/iot/persistence/mapper/DeviceDownlinkMapper.html#insertDownlinkMessage(long,long,long,com.sca4d.iot.api.message.DeviceDownlinkKind,java.lang.String,java.lang.Long,java.lang.Long,java.time.Instant,java.lang.String,java.lang.String,long,java.lang.String,java.time.Instant)" class="member-name-link">insertDownlinkMessage(long, long, long, DeviceDownlinkKind, String, Long, Long, Instant, String, String, long, String, Instant)</a> - Method in interface com.sca4d.iot.persistence.mapper.<a href="com/sca4d/iot/persistence/mapper/DeviceDownlinkMapper.html" title="interface in com.sca4d.iot.persistence.mapper">DeviceDownlinkMapper</a></dt>
+<dt><a href="com/sca4d/iot/persistence/mapper/DeviceDownlinkMapper.html#insertDownlinkMessage(long,long,long,com.sca4d.iot.api.message.DeviceDownlinkKind,java.lang.String,java.lang.Long,java.lang.Long,java.time.Instant,java.lang.String,com.sca4d.core.api.name.code.TreeCode,long,com.sca4d.core.api.name.code.TreeCode,java.time.Instant)" class="member-name-link">insertDownlinkMessage(long, long, long, DeviceDownlinkKind, String, Long, Long, Instant, String, TreeCode, long, TreeCode, Instant)</a> - Method in interface com.sca4d.iot.persistence.mapper.<a href="com/sca4d/iot/persistence/mapper/DeviceDownlinkMapper.html" title="interface in com.sca4d.iot.persistence.mapper">DeviceDownlinkMapper</a></dt>
 <dd>
 <div class="block">新增标准下行业务状态。</div>
 </dd>
@@ -1118,7 +1128,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">新增 Product 标量字段。</div>
 </dd>
-<dt><a href="com/sca4d/iot/persistence/mapper/ProductMapper.html#insertProductAccessMethods(long,java.util.Collection)" class="member-name-link">insertProductAccessMethods(long, Collection&lt;String&gt;)</a> - Method in interface com.sca4d.iot.persistence.mapper.<a href="com/sca4d/iot/persistence/mapper/ProductMapper.html" title="interface in com.sca4d.iot.persistence.mapper">ProductMapper</a></dt>
+<dt><a href="com/sca4d/iot/persistence/mapper/ProductMapper.html#insertProductAccessMethods(long,java.util.Collection)" class="member-name-link">insertProductAccessMethods(long, Collection&lt;TreeCode&gt;)</a> - Method in interface com.sca4d.iot.persistence.mapper.<a href="com/sca4d/iot/persistence/mapper/ProductMapper.html" title="interface in com.sca4d.iot.persistence.mapper">ProductMapper</a></dt>
 <dd>
 <div class="block">新增 Product 允许的设备接入方式。</div>
 </dd>
@@ -1429,7 +1439,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用 Redis Hash 和 Lua 原子维护每个 Device 字段组的 latest reported 投影。</div>
 </dd>
-<dt><a href="com/sca4d/iot/state/RedisReportedStateStore.html#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,com.sca4d.iot.model.ThingDataJsonCodec,com.sca4d.core.api.runtime.RuntimeNamespace,com.sca4d.core.spring.redis.RedisBatches)" class="member-name-link">RedisReportedStateStore(StringRedisTemplate, ThingDataJsonCodec, RuntimeNamespace, RedisBatches)</a> - Constructor for class com.sca4d.iot.state.<a href="com/sca4d/iot/state/RedisReportedStateStore.html" title="class in com.sca4d.iot.state">RedisReportedStateStore</a></dt>
+<dt><a href="com/sca4d/iot/state/RedisReportedStateStore.html#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,com.sca4d.iot.model.ThingDataJsonCodec,com.sca4d.core.spring.redis.RedisBatches)" class="member-name-link">RedisReportedStateStore(RedisTemplate&lt;Key, String&gt;, ThingDataJsonCodec, RedisBatches)</a> - Constructor for class com.sca4d.iot.state.<a href="com/sca4d/iot/state/RedisReportedStateStore.html" title="class in com.sca4d.iot.state">RedisReportedStateStore</a></dt>
 <dd>
 <div class="block">创建不设置有效期的 Redis latest reported 存储。</div>
 </dd>
@@ -1503,6 +1513,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建完整 current projection。</div>
 </dd>
+<dt><a href="com/sca4d/iot/state/ReportedStateKeyMigration.html" class="type-name-link" title="class in com.sca4d.iot.state">ReportedStateKeyMigration</a> - Class in <a href="com/sca4d/iot/state/package-summary.html">com.sca4d.iot.state</a></dt>
+<dd>
+<div class="block">在旧实例停止写入后复制非过期 reported 状态到新 Key，保留原始数据供验证和恢复。</div>
+</dd>
+<dt><a href="com/sca4d/iot/state/ReportedStateKeyMigration.html#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,org.springframework.data.redis.core.RedisTemplate)" class="member-name-link">ReportedStateKeyMigration(StringRedisTemplate, RedisTemplate&lt;Key, String&gt;)</a> - Constructor for class com.sca4d.iot.state.<a href="com/sca4d/iot/state/ReportedStateKeyMigration.html" title="class in com.sca4d.iot.state">ReportedStateKeyMigration</a></dt>
+<dd>
+<div class="block">使用同一基础设施的旧字符串模板和实际安装 Key 序列化器的新模板。</div>
+</dd>
 <dt><a href="com/sca4d/iot/persistence/mapper/ReportedStateMapper.html" class="type-name-link" title="interface in com.sca4d.iot.persistence.mapper">ReportedStateMapper</a> - Interface in <a href="com/sca4d/iot/persistence/mapper/package-summary.html">com.sca4d.iot.persistence.mapper</a></dt>
 <dd>
 <div class="block">读写 latest reported state 投影。</div>
@@ -1545,7 +1563,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/message/BuiltInDevicePolicies.html#retries()" class="member-name-link">retries()</a> - Static method in class com.sca4d.iot.message.<a href="com/sca4d/iot/message/BuiltInDevicePolicies.html" title="class in com.sca4d.iot.message">BuiltInDevicePolicies</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/message/DevicePolicyCatalog.html#retry(com.sca4d.core.api.code.TreeCode)" class="member-name-link">retry(TreeCode)</a> - Method in class com.sca4d.iot.message.<a href="com/sca4d/iot/message/DevicePolicyCatalog.html" title="class in com.sca4d.iot.message">DevicePolicyCatalog</a></dt>
+<dt><a href="com/sca4d/iot/message/DevicePolicyCatalog.html#retry(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">retry(TreeCode)</a> - Method in class com.sca4d.iot.message.<a href="com/sca4d/iot/message/DevicePolicyCatalog.html" title="class in com.sca4d.iot.message">DevicePolicyCatalog</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/message/DevicePolicyCatalog.html#retry(java.lang.String)" class="member-name-link">retry(String)</a> - Method in class com.sca4d.iot.message.<a href="com/sca4d/iot/message/DevicePolicyCatalog.html" title="class in com.sca4d.iot.message">DevicePolicyCatalog</a></dt>
 <dd>&nbsp;</dd>
@@ -1581,6 +1599,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/iot/persistence/mapper/DesiredPropertyMapper.html#select(long,long,java.util.Collection)" class="member-name-link">select(long, long, Collection&lt;String&gt;)</a> - Method in interface com.sca4d.iot.persistence.mapper.<a href="com/sca4d/iot/persistence/mapper/DesiredPropertyMapper.html" title="interface in com.sca4d.iot.persistence.mapper">DesiredPropertyMapper</a></dt>
 <dd>
 <div class="block">读取 Device 当前绑定的全部或指定编码的 desired 属性。</div>
+</dd>
+<dt><a href="com/sca4d/iot/persistence/mapper/DeviceDownlinkMapper.html#selectAcknowledgementByMessageId(long)" class="member-name-link">selectAcknowledgementByMessageId(long)</a> - Method in interface com.sca4d.iot.persistence.mapper.<a href="com/sca4d/iot/persistence/mapper/DeviceDownlinkMapper.html" title="interface in com.sca4d.iot.persistence.mapper">DeviceDownlinkMapper</a></dt>
+<dd>
+<div class="block">按下行消息标识读取主库保存的最近 ACK 投影。</div>
 </dd>
 <dt><a href="com/sca4d/iot/persistence/mapper/DeviceMapper.html#selectDeviceAccessMethodsBatch(java.util.Collection)" class="member-name-link">selectDeviceAccessMethodsBatch(Collection&lt;Long&gt;)</a> - Method in interface com.sca4d.iot.persistence.mapper.<a href="com/sca4d/iot/persistence/mapper/DeviceMapper.html" title="interface in com.sca4d.iot.persistence.mapper">DeviceMapper</a></dt>
 <dd>&nbsp;</dd>
@@ -1924,6 +1946,10 @@ the order they are declared.</div>
 <dd>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
+</dd>
+<dt><a href="com/sca4d/iot/state/ReportedStateKeyMigration.html#verify(java.lang.String)" class="member-name-link">verify(String)</a> - Method in class com.sca4d.iot.state.<a href="com/sca4d/iot/state/ReportedStateKeyMigration.html" title="class in com.sca4d.iot.state">ReportedStateKeyMigration</a></dt>
+<dd>
+<div class="block">校验全部源键和目标键，返回需要复制或已经一致的键数，不修改 Redis。</div>
 </dd>
 <dt><a href="com/sca4d/iot/persistence/EncodedDeviceSchedule.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.iot.persistence.<a href="com/sca4d/iot/persistence/EncodedDeviceSchedule.html" title="class in com.sca4d.iot.persistence">EncodedDeviceSchedule</a></dt>
 <dd>&nbsp;</dd>

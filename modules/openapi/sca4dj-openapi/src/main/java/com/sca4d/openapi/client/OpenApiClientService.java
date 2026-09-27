@@ -5,11 +5,11 @@ import com.sca4d.auth.hmac.IssuedHmacKey;
 import com.sca4d.auth.sharedsecret.IssuedSharedSecret;
 import com.sca4d.auth.sharedsecret.SharedSecretAuthenticationMethod;
 import com.sca4d.core.api.authentication.Session;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.OperationCatalog;
 import com.sca4d.core.api.utils.TextUtils;
@@ -119,7 +119,7 @@ public class OpenApiClientService {
     }
 
     /**
-     * 读取仍然启用的 Client Account，供 HMAC 认证提交给认证方法。
+     * 读取仍然启用的 Client Account，供 MAC 认证提交给认证方法。
      */
     @Transactional(readOnly = true)
     public @NotNull Account account(long accountId) {

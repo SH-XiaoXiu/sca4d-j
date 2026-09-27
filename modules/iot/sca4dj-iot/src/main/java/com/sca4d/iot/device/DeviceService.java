@@ -3,6 +3,7 @@ package com.sca4d.iot.device;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.Device;
@@ -35,7 +36,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-/** 保存和修改 Device、Product、物模型、协议及接入方式等 IoT 技术事实。 */
+/** 保存和修改 Device、Product、物模型、协议及接入方式等 IoT 技术状态。 */
 public class DeviceService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeviceService.class);
@@ -89,7 +90,7 @@ public class DeviceService {
     /**
      * 使用调用方已经分配的稳定标识创建 Device。
      *
-     * <p>该方法不创建 Subject、Account、Credential 或 Session。具体应用应在同一业务事务中先分配
+     * <p>当前方法不创建 Subject、Account、Credential 或 Session。具体应用应在同一业务事务中先分配
      * Device 主体标识，再调用本方法保存 IoT 台账。
      *
      * @param deviceId 具体应用分配的 Device 标识
@@ -178,7 +179,7 @@ public class DeviceService {
     /**
      * 校验 Device 当前 Product、物模型、协议、连接身份和接入方式已经具备启用条件。
      *
-     * <p>该方法只检查 IoT 模块负责的技术事实，不读取 Account 或 Credential。具体应用应另外检查
+     * <p>当前方法只检查 IoT 模块负责的技术状态，不读取 Account 或 Credential。具体应用应另外检查
      * 自己安装的认证方法是否已经准备完成。
      *
      * @param deviceId 待启用 Device 标识
@@ -356,7 +357,7 @@ public class DeviceService {
     /** 取得 Device 聚合锁后，在事务内执行无返回值的写操作。 */
     private void writeDevice(long deviceId, @NotNull Runnable operation) {
         distributedLock.execute(
-                new LockKey("iot", "device", Long.toString(deviceId)),
+                new LockKey(TreeCode.of("IOT:DEVICE"), deviceId),
                 LOCK_WAIT,
                 () -> {
                     transactions.executeWithoutResult(status -> operation.run());
@@ -370,10 +371,10 @@ public class DeviceService {
             long deviceId,
             @NotNull Supplier<@NotNull T> operation) {
         return distributedLock.execute(
-                new LockKey("iot", "product", productCode),
+                new LockKey(TreeCode.of("IOT:PRODUCT"), productCode),
                 LOCK_WAIT,
                 () -> distributedLock.execute(
-                        new LockKey("iot", "device", Long.toString(deviceId)),
+                        new LockKey(TreeCode.of("IOT:DEVICE"), deviceId),
                         LOCK_WAIT,
                         () -> Objects.requireNonNull(
                                 transactions.execute(status -> operation.get()),
@@ -386,10 +387,10 @@ public class DeviceService {
             long deviceId,
             @NotNull Runnable operation) {
         distributedLock.execute(
-                new LockKey("iot", "product", productCode),
+                new LockKey(TreeCode.of("IOT:PRODUCT"), productCode),
                 LOCK_WAIT,
                 () -> distributedLock.execute(
-                        new LockKey("iot", "device", Long.toString(deviceId)),
+                        new LockKey(TreeCode.of("IOT:DEVICE"), deviceId),
                         LOCK_WAIT,
                         () -> {
                             transactions.executeWithoutResult(status -> operation.run());

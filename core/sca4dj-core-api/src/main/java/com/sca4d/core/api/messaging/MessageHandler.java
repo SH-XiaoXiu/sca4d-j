@@ -1,7 +1,7 @@
 package com.sca4d.core.api.messaging;
 
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.message.Message;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 
 /** 声明一种 Message 的稳定 RabbitMQ 消费入口和技术失败处理策略。 */

@@ -1,5 +1,6 @@
 package com.sca4d.iot.api.schedule;
 
+import com.sca4d.core.api.error.BusinessException;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +17,7 @@ public interface DeviceScheduleService {
      * @param trigger 未来的单次时间或带时区六字段 Cron
      * @param validFor 从计划时间开始计算的正数下行有效期
      * @return PostgreSQL 已保存的 ACTIVE 规则
-     * @throws com.sca4d.core.api.error.BusinessException Device 不存在或触发规则非法时抛出
+     * @throws BusinessException Device 不存在或触发规则非法时抛出
      * @throws IllegalArgumentException command 或有效期为空、有效期不是正数或毫秒数溢出时抛出
      */
     @CheckReturnValue
@@ -36,7 +37,7 @@ public interface DeviceScheduleService {
      * @param trigger 替换后的未来单次时间或带时区六字段 Cron
      * @param validFor 从每次计划时间开始计算的正数下行有效期
      * @return 版本已经推进的 ACTIVE 规则
-     * @throws com.sca4d.core.api.error.BusinessException 触发规则非法、规则不存在或版本变化时抛出
+     * @throws BusinessException 触发规则非法、规则不存在或版本变化时抛出
      * @throws IllegalArgumentException command 或有效期为空、有效期不是正数或毫秒数溢出时抛出
      */
     @CheckReturnValue
@@ -55,7 +56,7 @@ public interface DeviceScheduleService {
      * @param expectedVersion 调用方最后读取到的非负版本，新建规则初始为 0
      * @param status 只允许 `ACTIVE` 或 `PAUSED`
      * @return 状态已经修改的规则；目标状态与当前状态相同时返回当前规则
-     * @throws com.sca4d.core.api.error.BusinessException 状态非法、规则不存在、版本变化或规则已经结束时抛出
+     * @throws BusinessException 状态非法、规则不存在、版本变化或规则已经结束时抛出
      */
     @CheckReturnValue
     @NotNull
@@ -69,7 +70,7 @@ public interface DeviceScheduleService {
      *
      * @param scheduleId 规则标识
      * @param expectedVersion 调用方最后读取到的非负版本，新建规则初始为 0
-     * @throws com.sca4d.core.api.error.BusinessException 规则不存在、版本变化或规则已经取消时抛出
+     * @throws BusinessException 规则不存在、版本变化或规则已经取消时抛出
      */
     void cancel(long scheduleId, long expectedVersion);
 }

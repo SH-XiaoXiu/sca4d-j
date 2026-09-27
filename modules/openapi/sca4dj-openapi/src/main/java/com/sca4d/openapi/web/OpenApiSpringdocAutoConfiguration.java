@@ -1,5 +1,8 @@
 package com.sca4d.openapi.web;
 
+import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 import com.sca4d.openapi.oauth.OpenApiAuthenticationEndpoint;
 import com.sca4d.openapi.oauth.OpenApiTokenEndpointHandler;
 import com.sca4d.openapi.web.annotation.OpenApiRoute;
@@ -178,7 +181,7 @@ public class OpenApiSpringdocAutoConfiguration {
                                 .required(true)
                                 .content(
                                         new Content().addMediaType(
-                                                org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+                                                APPLICATION_FORM_URLENCODED_VALUE,
                                                 new MediaType().schema(form))))
                 .responses(
                         new ApiResponses()
@@ -188,7 +191,7 @@ public class OpenApiSpringdocAutoConfiguration {
                                                 .description("认证成功并签发 Access Token")
                                                 .content(
                                                         new Content().addMediaType(
-                                                                org.springframework.http.MediaType.APPLICATION_JSON_VALUE,
+                                                                APPLICATION_JSON_VALUE,
                                                                 new MediaType()
                                                                         .schema(
                                                                                 new Schema<>().$ref(
@@ -293,7 +296,7 @@ public class OpenApiSpringdocAutoConfiguration {
                 .description(description)
                 .content(
                         new Content().addMediaType(
-                                org.springframework.http.MediaType.APPLICATION_JSON_VALUE,
+                                APPLICATION_JSON_VALUE,
                                 new MediaType()
                                         .schema(new Schema<>().$ref(ERROR_SCHEMA))
                                         .addExamples("error", new Example().value(errorExample(code, message)))));

@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.OptimisticLockException;
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.concurrent.VersionConditions;
@@ -18,6 +17,8 @@ import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageConsumer;
 import com.sca4d.core.api.messaging.MessageDelivery;
 import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.name.NameFormat;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
 import com.sca4d.core.api.scheduling.JobSchedule;
 import com.sca4d.core.spring.config.CoreJacksonAutoConfiguration;
@@ -177,8 +178,8 @@ class MessagingInfrastructureIntegrationTest {
     @Test
     void registersOutboxClusterTasksWithoutJobRuntime() {
         assertThat(applicationContext.getBeansOfType(ClusterTaskSchedule.class).values())
-                .extracting(schedule -> schedule.key().value())
-                .containsExactlyInAnyOrder("messaging.outbox.dispatch", "messaging.outbox.cleanup");
+                .extracting(schedule -> schedule.key().format(NameFormat.SLASH))
+                .containsExactlyInAnyOrder("MESSAGING/OUTBOX/DISPATCH", "MESSAGING/OUTBOX/CLEANUP");
         assertThat(applicationContext.getBeansOfType(JobSchedule.class)).isEmpty();
     }
 

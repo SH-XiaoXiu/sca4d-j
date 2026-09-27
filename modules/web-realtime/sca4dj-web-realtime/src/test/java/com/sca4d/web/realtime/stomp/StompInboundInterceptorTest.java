@@ -13,7 +13,6 @@ import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.core.api.call.Call;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.RateLimitDecision;
 import com.sca4d.core.api.concurrent.RateLimiter;
 import com.sca4d.core.api.connection.ConnectionId;
@@ -22,6 +21,7 @@ import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.webrealtime.WebRealtimeTarget;
 import com.sca4d.core.spring.call.CallHolder;
 import com.sca4d.web.realtime.connection.RedisConnectionRegistry;
@@ -53,7 +53,7 @@ class StompInboundInterceptorTest {
 
     private static final Instant NOW = Instant.parse("2026-07-29T00:00:00Z");
 
-    private static final Clock CLOCK = Clock.fixed(NOW, ZoneOffset.UTC);
+    private static final Clock LOCK = Clock.fixed(NOW, ZoneOffset.UTC);
 
     /**
      * 清理失败断言可能留下的 Call，避免影响后续测试。
@@ -237,7 +237,7 @@ class StompInboundInterceptorTest {
                 new StompRateLimits(limiter),
                 shared,
                 policies,
-                CLOCK);
+                LOCK);
     }
 
     /**

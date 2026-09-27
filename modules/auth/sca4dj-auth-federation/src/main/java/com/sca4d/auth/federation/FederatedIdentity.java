@@ -1,6 +1,6 @@
 package com.sca4d.auth.federation;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 
 import java.time.Instant;
 import java.util.Objects;

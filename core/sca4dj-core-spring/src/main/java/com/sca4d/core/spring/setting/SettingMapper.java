@@ -1,5 +1,6 @@
 package com.sca4d.core.spring.setting;
 
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.persistence.Patch;
 import org.apache.ibatis.annotations.Param;
 import org.jetbrains.annotations.CheckReturnValue;
@@ -16,7 +17,7 @@ public interface SettingMapper {
     @CheckReturnValue
     @NotNull
     List<@NotNull StoredSetting> select(
-            @Param("ownerType") @NotNull String ownerType,
+            @Param("ownerType") @NotNull TreeCode ownerType,
             @Param("ownerId") @NotNull String ownerId,
             @Param("keys") @NotNull Collection<@NotNull String> keys);
 
@@ -41,7 +42,7 @@ public interface SettingMapper {
     /** @return 预期版本为零且 owner 设置行不存在时新增的行数 */
     @CheckReturnValue
     int insertManaged(
-            @Param("ownerType") @NotNull String ownerType,
+            @Param("ownerType") @NotNull TreeCode ownerType,
             @Param("ownerId") @NotNull String ownerId,
             @Param("key") @NotNull String key,
             @Param("schemaVersion") int schemaVersion,
@@ -53,7 +54,7 @@ public interface SettingMapper {
     /** @return owner 行版本匹配且不受 ENV 同步时修改的行数 */
     @CheckReturnValue
     int updateManaged(
-            @Param("ownerType") @NotNull String ownerType,
+            @Param("ownerType") @NotNull TreeCode ownerType,
             @Param("ownerId") @NotNull String ownerId,
             @Param("key") @NotNull String key,
             @Param("schemaVersion") @NotNull Patch<Integer> schemaVersion,
@@ -66,7 +67,7 @@ public interface SettingMapper {
 
     /** @return owner 生命周期结束时物理删除的指定设置行数 */
     int erase(
-            @Param("ownerType") @NotNull String ownerType,
+            @Param("ownerType") @NotNull TreeCode ownerType,
             @Param("ownerId") @NotNull String ownerId,
             @Param("key") @NotNull String key);
 

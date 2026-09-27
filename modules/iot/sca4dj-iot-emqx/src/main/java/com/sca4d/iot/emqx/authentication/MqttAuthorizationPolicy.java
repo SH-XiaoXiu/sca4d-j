@@ -12,14 +12,14 @@ public interface MqttAuthorizationPolicy {
      * 判断当前策略是否负责指定 Device。
      *
      * @param device 已经完成连接认证的 Device
-     * @return 当前策略负责该 Device 时为 {@code true}
+     * @return 当前策略负责指定 Device 时为 {@code true}
      */
     boolean supports(@NotNull Device device);
 
     /**
      * 返回当前连接使用的完整 ACL。
      *
-     * <p>规则必须按拒绝优先顺序排列，并以拒绝全部 Topic 结束。服务会拒绝空规则或没有兜底拒绝的结果。
+     * <p>规则必须按拒绝优先顺序排列，并以拒绝全部 Topic 的最终规则结束。服务会拒绝空规则或没有最终拒绝规则的结果。
      *
      * @param device 已经完成连接认证的 Device
      * @param clientId MQTT CONNECT Client ID

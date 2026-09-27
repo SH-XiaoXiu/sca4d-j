@@ -17,7 +17,7 @@ public final class FileUploadIntent {
     private final long sizeBytes;
 
     /**
-     * 创建上传申请中由调用方声明且后续不能修改的内容信息。
+     * 创建上传申请中由调用方声明且完成后不能修改的内容信息。
      *
      * @param use 文件准备绑定的业务用途
      * @param filename 调用方提供的原始文件名；只保存为元数据

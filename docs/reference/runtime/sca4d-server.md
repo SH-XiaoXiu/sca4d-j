@@ -1,6 +1,6 @@
 # Sca4d Server 运行配置
 
-本页用于核对 Sca4d Server 的基础设施、环境变量、配置默认值和启动条件。首次运行按[本地启动](/tutorials/local-start)操作；部署时按[构建、部署与排障](/tutorials/build-deploy-troubleshoot)准备环境。
+部署前先配好必需的 PostgreSQL、Redis、RabbitMQ 和对外地址，再按启用功能补充存储、认证与 IoT 配置。模块默认值、Sca4d Server 覆盖值和数据库 Setting 分别按本页说明设置。首次运行按[本地启动](/tutorials/local-start)操作；部署时按[构建、部署与排障](/tutorials/build-deploy-troubleshoot)准备环境。
 
 | 配置目标 | 查阅位置 |
 |---|---|
@@ -30,17 +30,49 @@
 
 PostgreSQL、Redis 和 RabbitMQ 的连接配置需在启动前准备好。MinIO、EMQX 和 TimescaleDB 按表中的启用条件配置。
 
+
+## 名称、App 隔离与实例身份
+
+配置名称时先区分应用、实例与系统身份：
+
+| 要确定什么 | 使用什么 | 配置原则 |
+|---|---|---|
+| 哪些进程属于同一业务集群 | `spring.application.name` | 同集群相同，不同应用归一化后仍须不同 |
+| 本次由哪个进程执行 | `sca4dj.instance.id` | 同时运行的实例各不相同 |
+| 系统自主操作以哪个身份执行 | `sca4dj.iam.system-principal-ids` | 同一系统各实例共享稳定编码和 ID |
+| 实例开放哪些入口、运行哪些工作线程 | `sca4dj.instance.enabled-capabilities` | 按部署职责选择，不能代替业务权限 |
+
+Name 是不可变字符串值对象。Code 表达代码中声明的稳定编码，TreeCode 保存稳定节点链并提供层级操作；点、斜杠、冒号只属于输入或输出格式，同一节点链按相同领域类型比较时相等。Key 用稳定 Code 与动态值定位内部序列化资源；Redis key、MQ exchange、queue 和 routing key 使用 Key。动态文本保留大小写和字符区别，使用 `V_` 加 UTF-8 大写十六进制；动态数字使用十进制。固定节点中的保留标记和数字会转义，不能与动态值冲突。
+
+`AppIsolation` 从启动时发布的全局 App 名获取隔离依据。Code 默认输出逻辑编码；Key 在序列化边界自动输出 App 前缀。逻辑业务资源类型、IAM 身份和能力编码不自动加前缀。Redis Cluster 同槽标记由模块声明，pipeline 与 Lua 使用模板实际安装的 KeyRedisSerializer，不自行拼接物理前缀。
+
+`spring.application.name` 必须是 ASCII 字母、数字、下划线或连字符组成的固定名称；启动后转大写并将连字符替换为下划线，不能运行中改变。同一进程只发布一个 App 名。不存在独立 `key-prefix` 配置。
+
+`sca4dj.instance.id` 是执行实例标识，默认启动时固定 UUID；`sca4dj.instance.enabled-capabilities` 未配置时启用全部声明，空集合启用零项，未知编码拒绝启动。能力影响 API、监听器和工作线程，不改变权限或行级数据范围。Gateway 根据完整路径要求筛选健康实例，没有候选返回 503。
+
+`sca4dj.iam.system-principal-ids` 保存稳定系统身份的人工 ID，MAIN 默认 1，IOT 配置 2。数据库确认并提交后才能发布身份常量并启动后台任务；占用 ID 提示换 ID，历史绑定不同或状态异常要求人工迁移。所有实例共享同一 SYSTEM Subject 和领域 Principal ID，审计另外记录执行实例 ID。
+
+`Sca4djMapper` 通过 `@Sca4djJson` 供脚手架持久化、Session 与内部消息使用；业务和 HTTP 使用自己的 `ObjectMapper`。`NameJacksonModule` 只注册名称值类型，不猜测 JSON 字符串是否需要隔离。
+
+### 名称升级
+
+升级前备份主库、Redis、MQ 与文件记录，停止旧实例，发送完 Outbox 并排空旧队列。V11 向前迁移 Principal 类型、Job 的 App 名和 Quartz scheduler 名称，归一化冲突立即失败；迁移失败回滚数据库事务。已持久化文件地址保持原值，旧对象不能删除。
+
+IoT latest reported 是非过期数据，不能当缓存丢弃。在新旧实例均停止写入时，使用 `ReportedStateKeyMigration.verify(oldAppName)` 检查，再执行 `copy(oldAppName)`；它复制 Hash 与 Set，保留旧键，不覆盖不同内容，复制后可以再次 verify。恢复时使用备份及保留的旧键。
+
+Session wire 使用版本 2，旧版本 1 的 Session 与 JWT 快照拒绝恢复，客户端必须重新登录。旧 Challenge、票据和短期缓存不双读；旧 key 在确认恢复窗口结束前保留。改变 App 名同样需要检查资源归属，不能依靠改配置自动迁移。
+
 ## 默认数据库与附加数据库
 
-`spring.datasource` 是 Sca4d Server 的默认数据库配置。Spring Boot 为它创建未带限定注解的 DataSource、Flyway、SqlSessionFactory、SqlSessionTemplate 和 PlatformTransactionManager；IAM、Auth、App 与其他普通模块直接注入这些默认 Bean，不需要添加数据库注解。
+`spring.datasource.dynamic` 使用 dynamic-datasource Boot 3 starter 4.5.0。`primary: main` 指定主库，`strict: true` 禁止未知数据源退回主库；`datasource.main` 与 `datasource.iot-history` 分别保存主库和 IoT 历史库连接。默认 `DataSource` 是路由器，普通模块使用主库，历史入口通过 `@DS(IotTimescale.DATASOURCE)` 选择 `iot-history`。
 
 公共 Repository 的集合 SQL 默认每批最多 1000 项和 30000 个绑定参数，分别由 `SCA4DJ_PERSISTENCE_BATCH_MAX_ITEMS` 与 `SCA4DJ_PERSISTENCE_BATCH_MAX_BIND_PARAMETERS` 调整。Redis pipeline 默认每批最多 1000 条命令，由 `SCA4DJ_REDIS_PIPELINE_MAX_COMMANDS` 调整。这些配置只改变内部批次，不截断公共查询结果。
 
-IoT 高频历史库是一套附加数据库 Bean。`sca4dj-iot-timescale` 的 `TimescaleIotAutoConfiguration` 在启用后用 `@IotTimescale` 同时限定它的 DataSource、Flyway、SqlSessionFactory、SqlSessionTemplate、PlatformTransactionManager 和 TimescaleMapper，并把这些基础 Bean 声明为非默认候选。应用不需要声明 Timescale 配置类；Timescale Consumer 与保留期服务通过 `IotTimescale.TRANSACTION_MANAGER` 选择独立事务管理器，不手写 Bean 名称字符串。
+TimescaleIotAutoConfiguration 使用 `@IotTimescale` 限定历史库的 Flyway、SqlSessionFactory、SqlSessionTemplate 和 Mapper。Flyway 直接使用物理 `iot-history` 数据源；MyBatis 使用共享路由器。历史入口先选择数据源，再通过 `@Transactional(propagation = REQUIRES_NEW)` 开启独立事务。已有事务的连接不能靠切换路由改变；历史库事务内不能把 IAM、Audit 或 Outbox 当作同库读写，不承诺跨库原子提交。
 
 ```mermaid
 flowchart LR
-    DefaultConfig[spring.datasource] --> DefaultDataSource[默认 DataSource]
+    DefaultConfig[spring.datasource.dynamic.datasource.main] --> DefaultDataSource[默认 DataSource]
     DefaultDataSource --> DefaultFlyway[默认 Flyway]
     DefaultDataSource --> DefaultFactory[默认 SqlSessionFactory]
     DefaultFactory --> DefaultMappers[classpath mapper]
@@ -66,7 +98,7 @@ SCA4DJ_GATEWAY_ORIGIN=http://localhost:8088
 
 Passkey、Web Realtime 和 MinIO CORS 默认引用 `SCA4DJ_FRONTEND_ORIGIN`，Storage 文件传输地址与联邦登录回调默认引用 `SCA4DJ_GATEWAY_ORIGIN` 的 `/api` 入口。部署地址变化时通常只修改这两个值；只有某个入口确实使用不同地址时，才分别覆盖 `SCA4DJ_AUTH_PASSKEY_ORIGINS`、`SCA4DJ_WEB_REALTIME_ALLOWED_ORIGINS`、`SCA4DJ_MINIO_CORS_ALLOW_ORIGIN`、`SCA4DJ_STORAGE_TRANSFER_BASE_URL` 或 `SCA4DJ_AUTH_FEDERATION_CALLBACK_URI`。
 
-Server 通过 `sca4dj.gateway.registration` 接入 Gateway。`SCA4DJ_GATEWAY_REGISTRATION_ENABLED` 控制是否注册，`SCA4DJ_GATEWAY_BASE_URL` 是控制 API 地址，`SCA4DJ_SERVER_BASE_URL` 是 Gateway 可以访问的当前实例地址，`SCA4DJ_SERVER_INSTANCE_ID` 在同时运行的实例之间必须唯一，`SCA4DJ_GATEWAY_SECRET` 必须与 Gateway 完全相同。续租和请求超时分别由 `SCA4DJ_GATEWAY_RENEW_INTERVAL` 与 `SCA4DJ_GATEWAY_REQUEST_TIMEOUT` 配置。准确默认值和失败行为见 [GatewayRegistrationProperties](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/gateway/GatewayRegistrationProperties.html)。
+Server 通过 `sca4dj.gateway.registration` 接入 Gateway。`SCA4DJ_GATEWAY_REGISTRATION_ENABLED` 控制是否注册，`SCA4DJ_GATEWAY_BASE_URL` 是控制 API 地址，`SCA4DJ_SERVER_BASE_URL` 是 Gateway 可以访问的当前实例地址，`SCA4DJ_INSTANCE_ID` 在同时运行的 Server 实例之间必须唯一，`SCA4DJ_GATEWAY_SECRET` 必须与 Gateway 完全相同。续租和请求超时分别由 `SCA4DJ_GATEWAY_RENEW_INTERVAL` 与 `SCA4DJ_GATEWAY_REQUEST_TIMEOUT` 配置。准确默认值和失败行为见 [GatewayRegistrationProperties](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/gateway/GatewayRegistrationProperties.html)。
 
 ## Setting 初始化节点
 
@@ -87,7 +119,7 @@ RabbitMQ 连接默认值来自 `application.yml`：主机 `localhost`、端口 `
 
 `sca4dj.messaging` 通过 `SCA4DJ_MESSAGING_*` 配置 confirm timeout、派发间隔、批量、租约、初始/最大退避、已发送保留期和清理批量。完整变量示例在 `.env/rabbitmq.env.example`。
 
-业务事务把消息先写入主 PostgreSQL Outbox。派发失败会按退避持续重试，没有发布侧最大次数或 `DEAD` 状态；发布成功后由 RabbitMQ 持久保存。Consumer 失败直接进入该 Consumer 的独立 DLQ，需要运维明确重发或删除。
+业务事务把消息先写入主 PostgreSQL Outbox。派发失败会按退避持续重试，没有发布侧最大次数或 `DEAD` 状态；发布成功后由 RabbitMQ 持久保存。Consumer 默认不重试，失败进入独立 DLQ；声明 HandlingPolicy 后按该策略重试，耗尽或明确拒绝才进入 DLQ。死信由运维明确重发或删除。
 
 ## Job 与 Quartz
 
@@ -95,7 +127,7 @@ Job 和 Quartz 使用主 PostgreSQL DataSource。Flyway V7 建立 `job.*` 和 `q
 
 `SCA4DJ_JOB_*` 配置 worker 数量、领取批量、轮询间隔、租约、续租间隔以及成功历史的保留时间、清理间隔和批量；`SCA4DJ_QUARTZ_*` 配置线程数与集群 check-in。SUCCEEDED run 默认保留 30 天，FAILED、QUEUED 和 RUNNING 不按该窗口自动删除。参数限制见 [JobProperties](#jobproperties) 与 [QuartzSchedulingProperties](#quartzschedulingproperties)。
 
-Quartz scheduler name 固定由 `spring.application.name` 派生为 `<app-id>:sca4dj:scheduling:quartz`；Job run 把同一应用技术 ID 写入 `runtime_namespace`。同一 App 的多个实例必须使用相同 `SCA4DJ_APPLICATION_NAME`，共享数据库的不同 App 必须使用不同名称。修改已经运行的名称会形成新命名空间，旧 run 和 trigger 不自动迁移。
+Quartz scheduler name 通过 Key 输出为 `<APP_NAME>:SCHEDULING:QUARTZ`；Job run 将同一 App 隔离名称写入 `app_name`。同一 App 的多个实例必须使用相同 `SCA4DJ_APPLICATION_NAME`。App 名转大写并将连字符替换为下划线；共享中间件的 App 必须避免归一化后重名。修改已运行名称需要迁移已有资源，不自动接管其他名称的数据。
 
 文件清理由 JobSchedule 触发，需要时创建可恢复的 Job run。Outbox 派发与清理、Job 成功历史清理、IoT 到期扫描与数据清理、EMQX 连接对账和 TimescaleDB 保留期清理由各自模块声明 ClusterTaskSchedule，Quartz 集群直接执行，因此高频空扫描不会写入 `job.*`。Quartz 禁止同一集群任务 JobDetail 重叠执行；任务自己的数据库行使用状态、租约或 `version` 条件防止旧实例写回，需要跨事务串行的对象在事务前取得 Redis 分布式锁。Web Realtime 租约续约只维护当前 JVM 的连接，继续使用本机定时入口。
 
@@ -160,11 +192,11 @@ backend ID 默认 `local`，container 默认 `files`。root 是 App 进程直接
 
 ## IoT 与 EMQX
 
-基础 IoT 模块始终安装，管理 API 和主库 Device 状态可以在 EMQX 关闭时存在。设置 `SCA4DJ_IOT_EMQX_ENABLED=true` 后，App 才创建 MQTT runtime、健康检查，以及编码为 `iot.emqx.authenticate` 的 Gateway 回调。
+基础 IoT 模块始终安装，管理 API 和主库 Device 状态可以在 EMQX 关闭时存在。设置 `SCA4DJ_IOT_EMQX_ENABLED=true` 后，App 才创建 MQTT runtime、健康检查，以及编码为 `IOT.EMQX.AUTHENTICATE` 的 Gateway 回调。
 
 启用时必须提供：
 
-- 内部 MQTT listener 的 Client ID：可以显式配置唯一的 `SCA4DJ_IOT_EMQX_CLIENT_ID`，也可以留空，由自动配置按 [RuntimeNamespace](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/runtime/RuntimeNamespace.html) 生成 `<spring.application.name>:sca4dj:iot:emqx:client:<UUID>`；
+- 内部 MQTT listener 的 Client ID：可以显式配置唯一的 `SCA4DJ_IOT_EMQX_CLIENT_ID`，也可以留空，由自动配置使用 Key 生成 `<APP_NAME>:IOT:EMQX:CLIENT:V_<UUID的UTF8十六进制>`；
 - 内部 MQTT listener 主机、端口与 TLS，默认 `localhost:1884`、非 TLS；
 - 内部 Runtime 固定使用 `sca4dj-iot-runtime` username 作为系统 Topic ACL 身份，不发送密码；
 - shared subscription group；
@@ -173,7 +205,7 @@ backend ID 默认 `local`，container 默认 `files`。root 是 App 进程直接
 
 Server 内部 Client ID 是进程连接 EMQX 的实例标识，不是设备的 MQTT Client ID。未显式配置时，每个进程启动生成一次新的 UUID，并在自动重连时继续使用同一个值；当前 Clean Start 和零 Session Expiry 不要求它跨进程重启保持不变。显式配置时，多个同时运行的实例必须分别使用不同值。
 
-设备 listener 默认由 Compose 绑定 `127.0.0.1:1883`，使用 Compose 声明的 HTTP Authenticator；内部 listener 是 `1884`，供 Server MQTT runtime 使用，不配置设备认证。Webhook Secret 只校验 `/callbacks/iot.emqx.authenticate`，不能复用设备 Secret、Gateway Secret 或 Management API Secret。
+设备 listener 默认由 Compose 绑定 `127.0.0.1:1883`，使用 Compose 声明的 HTTP Authenticator；内部 listener 是 `1884`，供 Server MQTT runtime 使用，不配置设备认证。Webhook Secret 只校验 `/callbacks/IOT.EMQX.AUTHENTICATE`，不能复用设备 Secret、Gateway Secret 或 Management API Secret。
 
 ::: warning EMQX 回调安全边界
 
@@ -189,7 +221,7 @@ IoT 定时扫描间隔、ACK timeout 和连接 TTL 来自 `SCA4DJ_IOT_*`；HMAC 
 
 MQTT 业务上行默认使用 4 个 Topic 分片，每个分片最多等待 64 条消息；未明确拒绝的失败最多处理 3 次，相邻处理间隔 5 秒。分别通过 `SCA4DJ_IOT_EMQX_INBOUND_WORKER_COUNT`、`SCA4DJ_IOT_EMQX_INBOUND_QUEUE_CAPACITY`、`SCA4DJ_IOT_EMQX_INBOUND_MAXIMUM_ATTEMPTS` 和 `SCA4DJ_IOT_EMQX_INBOUND_RETRY_DELAY` 调整。MQTT Receive Maximum 等于单个分片的等待容量，为 ACK 后立即补发的热点 Topic 消息保留队列位置。
 
-Sca4d Server 只在 `application.yml` 声明各模块的运行间隔。`sca4dj-iot`、`sca4dj-iot-emqx` 与 `sca4dj-iot-timescale` 分别声明自己的 ClusterTask 和 ClusterTaskSchedule；App 不调用模块内部 Worker、Repository 或清理服务。Quartz 使用同一个应用 namespace 在集群中触发这些计划。
+Sca4d Server 只在 `application.yml` 声明各模块的运行间隔。`sca4dj-iot`、`sca4dj-iot-emqx` 与 `sca4dj-iot-timescale` 分别声明自己的 ClusterTask 和 ClusterTaskSchedule；App 不调用模块内部 Worker、Repository 或清理服务。Quartz 使用同一个 App 隔离名称在集群中触发这些计划。
 
 设备定时计划默认按 `sca4dj.iot.schedule-tick=PT0.2S` 触发，DeviceScheduleTask 每次最多处理 `SCA4DJ_IOT_DEVICE_SCHEDULE_BATCH_SIZE` 条，默认 1000。Product 完整目录扫描使用 `SCA4DJ_IOT_PRODUCT_CATALOG_SCAN_BATCH_SIZE`，默认 1000；终态下行清理使用 `SCA4DJ_IOT_DOWNLINK_CLEANUP_BATCH_SIZE`，默认 10000。三项范围都是 1 到 10000，只控制一次后台扫描或清理的工作量，不截断 Service 查询结果。设备定时任务普通查询一条到期候选，取得 `iot:schedule:<scheduleId>` Redis 分布式锁后再开启独立事务，并在事务中重新检查 version、状态和计划时间；不使用显式行锁，也不创建 Redis 到期索引或处理租约。`iot_device_schedule` 保存规则、版本、下一次触发时间和最近一次执行结果。
 
@@ -209,7 +241,7 @@ IoT Realtime 使用共享 topic `iot.device.<deviceId>` 和 STOMP destination `/
 
 ## 可选 TimescaleDB
 
-设置 `SCA4DJ_IOT_TIMESCALE_ENABLED=true` 后，`sca4dj-iot-timescale` 自动配置读取 `sca4dj.iot.timescale` 创建前述 `@IotTimescale` Bean。连接配置直接使用 `url`、`username` 和 `password`，Flyway 只读取该模块的 `classpath:META-INF/sca4dj/timescale/migration`，MyBatis 只读取 IoT 历史 Mapper 目录；默认数据库仍由 `spring.datasource` 配置，不需要增加限定注解或复制一套手工配置。具体应用若需要额外业务历史表，应使用自己的前缀和 Mapper 配置，不能让两个自动配置同时声明同一组 Bean。
+设置 `SCA4DJ_IOT_TIMESCALE_ENABLED=true` 后，历史模块创建前述 `@IotTimescale` Bean。连接配置位于 `spring.datasource.dynamic.datasource.iot-history`；`sca4dj.iot.timescale` 保存保留期、清理间隔和查询上限。Flyway 只读取 `classpath:META-INF/sca4dj/timescale/migration`，历史 MyBatis 工厂只读取 IoT 历史 Mapper。具体应用的其他历史表使用自己的迁移和 Mapper 资源。
 
 最小配置如下，其他参数使用 `application.yml` 中的默认值：
 
@@ -428,11 +460,11 @@ sca4dj:
     history-cleanup-batch-size: 500
 ```
 
-workerCount 是单个实例的容量；三个相同 RuntimeNamespace 的实例各配置 4 时，理论上最多同时执行 12 个节点。claimBatchSize 大于 workerCount 不会让一个实例超出线程池容量。
+workerCount 是单个实例的容量；三个使用相同 App 隔离名称的实例各配置 4 个 worker 时，理论上最多同时执行 12 个节点。claimBatchSize 大于 workerCount 不会让一个实例超出线程池容量。
 
 leaseDuration 应覆盖正常的短暂停顿和数据库延迟，leaseRenewInterval 应留出多次续租机会。租约过短会使仍在执行的节点被其他实例重复领取；租约过长会延迟失联恢复。无论怎样配置，运行语义仍是至少一次，不能依靠租约参数获得仅一次外部操作。
 
-历史清理只选择当前 RuntimeNamespace 中、`completed_at` 超过 succeededRetention 的 SUCCEEDED 根运行。清理 SQL 明确删除这些运行的 attempt、依赖、节点和根记录。FAILED、QUEUED 和 RUNNING 不按该窗口自动删除；删除后的 JobRunId 按不存在处理。
+历史清理只选择当前 App 隔离名称中、`completed_at` 早于 succeededRetention 的 SUCCEEDED 根运行。清理 SQL 明确删除这些运行的 attempt、依赖、节点和根记录。FAILED、QUEUED 和 RUNNING 不按该窗口自动删除；删除后的 JobRunId 按不存在处理。
 
 配置在 JobWorker Bean 创建前校验。数量、间隔、保留时间无效或续租间隔不小于租约时长时，应用启动失败。运行和表状态见[任务与调度](/tutorials/jobs-and-scheduling)。
 
@@ -455,10 +487,10 @@ sca4dj:
       cluster-checkin-interval: PT15S
 ```
 
-没有 `scheduler-name` 配置项。scheduler 名称固定使用 RuntimeNamespace 派生：
+没有 `scheduler-name` 配置项。scheduler 名称由 Key 使用全局 App 名隔离：
 
 ```text
-<spring.application.name>:sca4dj:scheduling:quartz
+<APP_NAME>:SCHEDULING:QUARTZ
 ```
 
 具体应用必须配置 `spring.application.name`。同一应用的多个实例使用相同名称并共享 Quartz 集群；同一 PostgreSQL 中的不同应用使用不同名称。派生结果超过 `quartz.qrtz_*` 表 `sched_name` 的 120 字符限制时，自动配置在创建 Scheduler 前报告实际长度并使启动失败。
@@ -531,7 +563,7 @@ Server 返回以 `/` 开头且不含 scheme/host 的 `Location` 时，普通 `/a
   "instanceId": "server-1",
   "baseUrl": "http://server-1:8080",
   "readinessPath": "/actuator/health/readiness",
-  "callbackCodes": ["iot.emqx.authenticate"]
+  "callbackCodes": ["IOT.EMQX.AUTHENTICATE"]
 }
 ```
 
@@ -584,11 +616,11 @@ Gateway 在路由前删除调用方提交的全部 `X-Gateway-*`、`Forwarded` �
 
 源码：`modules/iot/sca4dj-iot-timescale/src/main/java/com/sca4d/iot/config/IotTimescale.java`
 
-IotTimescale 是限定独立 IoT TimescaleDB 基础 Bean 的 Spring Qualifier。没有该注解的数据库 Bean 仍表示具体应用的默认数据库。
+IotTimescale 是历史 Flyway、MyBatis 工厂和 Mapper 的 Spring Qualifier，不选择事务连接。
 
-`IotTimescale.TRANSACTION_MANAGER` 是 TimescaleDB 事务管理器的稳定 Bean 名称。TimescaleTelemetryConsumer、TimescaleEventConsumer 和 TimescaleRetentionTask 使用该常量声明 `@Transactional`，避免在业务代码重复字符串 `iotTimescaleTransactionManager`。
+`IotTimescale.DATASOURCE` 是 dynamic-datasource 的稳定配置键 `iot-history`。历史入口通过 `@DS` 选择它，并用 Spring 独立事务控制提交与回滚。
 
-该注解不选择 namespace。RuntimeNamespace 用于 Redis、消息和其他共享资源隔离；独立关系数据库通过 DataSource 与配置前缀隔离。
+名称的 App 隔离与数据源选择分别执行。Key 决定服务器资源的物理名称，`@DS` 决定新事务取得哪个数据库连接。
 
 ## 审计内容与脱敏 {#auditproperties}
 

@@ -1,5 +1,7 @@
 package com.sca4d.app.server.iot.view;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.message.DeviceDownlinkKind;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
@@ -56,9 +58,9 @@ public final class IotDownlinkMessageView {
                 ? message.desiredSequence().getAsLong()
                 : null;
         this.data = message.data();
-        this.acknowledgementPolicy = message.acknowledgementPolicy().code().value();
+        this.acknowledgementPolicy = message.acknowledgementPolicy().code().format(COLON);
         this.acknowledgementTimeout = message.acknowledgementTimeout();
-        this.retryPolicy = message.retryPolicy().code().value();
+        this.retryPolicy = message.retryPolicy().code().format(COLON);
         this.status = message.status();
         this.attemptCount = message.attemptCount();
         this.expiresAt = message.expiresAt().orElse(null);

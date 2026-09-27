@@ -33,7 +33,7 @@ public final class LocalFileStorage implements FileStorage {
     /**
      * 创建本地目录存储。
      *
-     * @param properties 本地目录、实现标识和命名空间配置
+     * @param properties 本地目录、实现标识和 App 隔离名称配置
      * @param signer App 文件传输路由的短期地址签名器
      */
     public LocalFileStorage(@NotNull LocalStorageProperties properties, @NotNull StorageTransferSigner signer) {

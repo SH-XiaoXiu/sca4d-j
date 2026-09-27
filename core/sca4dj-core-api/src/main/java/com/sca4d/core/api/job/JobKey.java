@@ -1,52 +1,45 @@
 package com.sca4d.core.api.job;
 
-import com.sca4d.core.api.code.TreeCode;
-import org.jetbrains.annotations.Contract;
+import com.sca4d.core.api.name.NameFormat;
+import com.sca4d.core.api.name.code.Code;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
+import java.util.List;
 
-/** 标识代码中长期存在的一种 Job，不使用 Bean 名或 Java 类名。 */
-public final class JobKey {
+/** 使用稳定节点链标识 Job 定义，并保留独立领域类型。 */
+public final class JobKey extends TreeCode {
 
-    private final @NotNull TreeCode value;
-
-    /**
-     * 创建 Job 标识。
-     *
-     * @param value 不超过 128 个字符，以小写字母开头，可继续使用小写字母、数字、点、横线或下划线
-     * @throws NullPointerException 标识为空时抛出
-     * @throws IllegalArgumentException 标识超过 128 个字符、包含首尾空白或不符合格式时抛出
-     */
-    public JobKey(@NotNull String value) {
-        this.value = TreeCode.of(Objects.requireNonNull(value, "JobKey 不能为空"));
+    /** 从代码声明或序列化边界解析编码，拒绝通配符和超过 128 字符的名称。 */
+    public JobKey(@NotNull String text) {
+        this(TreeCode.of(text));
     }
 
-    /**
-     * 返回稳定 Job 标识文本。
-     *
-     * @return 构造时已经校验的标识
-     */
-    @Contract(pure = true)
-    public @NotNull String value() {
-        return value.value();
+    /** 从已经校验的稳定编码构造领域名称。 */
+    public JobKey(@NotNull Code code) {
+        super(code);
+        if (hasNode(TreeCode.ofSegment("*")) || format(NameFormat.COLON).length() > 128) {
+            throw new IllegalArgumentException("JobKey 必须是最多 128 字符的固定编码");
+        }
     }
 
     @Override
-    @Contract(pure = true)
-    public boolean equals(Object other) {
-        return this == other || other instanceof JobKey key && value.equals(key.value);
+    protected @NotNull JobKey withNodes(@NotNull List<String> nodes) {
+        return new JobKey(super.withNodes(nodes));
     }
 
     @Override
-    @Contract(pure = true)
-    public int hashCode() {
-        return value.hashCode();
+    public @NotNull JobKey child(@NotNull String node) {
+        return (JobKey) super.child(node);
     }
 
     @Override
-    @Contract(pure = true)
-    public @NotNull String toString() {
-        return value.value();
+    public @NotNull JobKey child(@NotNull TreeCode node) {
+        return (JobKey) super.child(node);
+    }
+
+    @Override
+    public @NotNull JobKey append(@NotNull Code code) {
+        return (JobKey) super.append(code);
     }
 }

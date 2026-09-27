@@ -103,7 +103,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">保存 SSE 与 STOMP 共同发送给浏览器的事件编码、版本、发生时间和 payload。</div>
 </dd>
-<dt><a href="com/sca4d/web/realtime/connection/BrowserEnvelope.html#%3Cinit%3E(java.lang.String,int,java.time.Instant,com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">BrowserEnvelope(String, int, Instant, JsonNode)</a> - Constructor for class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/BrowserEnvelope.html" title="class in com.sca4d.web.realtime.connection">BrowserEnvelope</a></dt>
+<dt><a href="com/sca4d/web/realtime/connection/BrowserEnvelope.html#%3Cinit%3E(com.sca4d.core.api.name.code.TreeCode,int,java.time.Instant,com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">BrowserEnvelope(TreeCode, int, Instant, JsonNode)</a> - Constructor for class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/BrowserEnvelope.html" title="class in com.sca4d.web.realtime.connection">BrowserEnvelope</a></dt>
 <dd>
 <div class="block">创建不包含内部目标、业务键和 RabbitMQ 元数据的浏览器信封。</div>
 </dd>
@@ -441,7 +441,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用 Redis Hash、Set 和按租约到期时间排序的 ZSET 保存所有 Web Realtime 共享索引。</div>
 </dd>
-<dt><a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,com.sca4d.web.realtime.config.WebRealtimeInfrastructureNames,com.sca4d.web.realtime.config.WebRealtimeProperties,java.time.Clock,com.sca4d.core.spring.redis.RedisBatches)" class="member-name-link">RedisConnectionRegistry(StringRedisTemplate, WebRealtimeInfrastructureNames, WebRealtimeProperties, Clock, RedisBatches)</a> - Constructor for class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a></dt>
+<dt><a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,com.sca4d.web.realtime.config.WebRealtimeInfrastructureNames,com.sca4d.web.realtime.config.WebRealtimeProperties,java.time.Clock,com.sca4d.core.spring.redis.RedisBatches)" class="member-name-link">RedisConnectionRegistry(RedisTemplate&lt;Key, String&gt;, WebRealtimeInfrastructureNames, WebRealtimeProperties, Clock, RedisBatches)</a> - Constructor for class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a></dt>
 <dd>
 <div class="block">创建使用当前 App 命名空间的共享连接索引。</div>
 </dd>
@@ -449,7 +449,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">把短期一次性 WebSocket 票据保存到 Redis，并在握手时原子读取和删除。</div>
 </dd>
-<dt><a href="com/sca4d/web/realtime/ticket/RedisTicketService.html#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,com.sca4d.core.api.authentication.SessionLifecycle,com.sca4d.web.realtime.config.WebRealtimeInfrastructureNames,com.sca4d.web.realtime.config.WebRealtimeProperties,java.time.Clock)" class="member-name-link">RedisTicketService(StringRedisTemplate, SessionLifecycle, WebRealtimeInfrastructureNames, WebRealtimeProperties, Clock)</a> - Constructor for class com.sca4d.web.realtime.ticket.<a href="com/sca4d/web/realtime/ticket/RedisTicketService.html" title="class in com.sca4d.web.realtime.ticket">RedisTicketService</a></dt>
+<dt><a href="com/sca4d/web/realtime/ticket/RedisTicketService.html#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,com.sca4d.core.api.authentication.SessionLifecycle,com.sca4d.web.realtime.config.WebRealtimeInfrastructureNames,com.sca4d.web.realtime.config.WebRealtimeProperties,java.time.Clock)" class="member-name-link">RedisTicketService(RedisTemplate&lt;Key, String&gt;, SessionLifecycle, WebRealtimeInfrastructureNames, WebRealtimeProperties, Clock)</a> - Constructor for class com.sca4d.web.realtime.ticket.<a href="com/sca4d/web/realtime/ticket/RedisTicketService.html" title="class in com.sca4d.web.realtime.ticket">RedisTicketService</a></dt>
 <dd>
 <div class="block">创建一次性票据签发和消费服务。</div>
 </dd>
@@ -722,9 +722,9 @@ the order they are declared.</div>
 <dd>
 <div class="block">为 Web Realtime 的 Redis 键和 RabbitMQ 对象生成无歧义运行时名称。</div>
 </dd>
-<dt><a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html#%3Cinit%3E(com.sca4d.core.api.runtime.RuntimeNamespace)" class="member-name-link">WebRealtimeInfrastructureNames(RuntimeNamespace)</a> - Constructor for class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html" title="class in com.sca4d.web.realtime.config">WebRealtimeInfrastructureNames</a></dt>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html#%3Cinit%3E()" class="member-name-link">WebRealtimeInfrastructureNames()</a> - Constructor for class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html" title="class in com.sca4d.web.realtime.config">WebRealtimeInfrastructureNames</a></dt>
 <dd>
-<div class="block">创建仅使用当前应用 `RuntimeNamespace` 的基础设施命名对象。</div>
+<div class="block">创建 Web Realtime 基础设施的逻辑名称目录。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/connection/WebRealtimeMessageCodec.html" class="type-name-link" title="class in com.sca4d.web.realtime.connection">WebRealtimeMessageCodec</a> - Class in <a href="com/sca4d/web/realtime/connection/package-summary.html">com.sca4d.web.realtime.connection</a></dt>
 <dd>

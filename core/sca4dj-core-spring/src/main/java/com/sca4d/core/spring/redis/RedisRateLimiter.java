@@ -1,9 +1,11 @@
 package com.sca4d.core.spring.redis;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import com.sca4d.core.api.concurrent.RateLimit;
 import com.sca4d.core.api.concurrent.RateLimitDecision;
 import com.sca4d.core.api.concurrent.RateLimiter;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
 import io.github.bucket4j.BucketConfiguration;
 import io.github.bucket4j.ConsumptionProbe;
 import io.github.bucket4j.distributed.proxy.ProxyManager;
@@ -17,19 +19,14 @@ public final class RedisRateLimiter implements RateLimiter {
 
     private final ProxyManager<String> proxyManager;
 
-    private final RuntimeNamespace runtimeNamespace;
-
     /**
-     * 创建使用当前应用 Redis 命名空间的共享限流器。
+     * 创建使用当前 App 隔离名称的共享限流器。
      *
      * @param proxyManager Bucket4j Redis CAS 代理
-     * @param runtimeNamespace 当前应用的运行时命名空间
      */
     public RedisRateLimiter(
-            @NotNull ProxyManager<String> proxyManager,
-            @NotNull RuntimeNamespace runtimeNamespace) {
+            @NotNull ProxyManager<String> proxyManager) {
         this.proxyManager = Objects.requireNonNull(proxyManager, "Bucket4j 代理不能为空");
-        this.runtimeNamespace = Objects.requireNonNull(runtimeNamespace, "运行时命名空间不能为空");
     }
 
     /**
@@ -42,8 +39,8 @@ public final class RedisRateLimiter implements RateLimiter {
      * @return 是否消耗令牌以及被拒绝后的精确等待时间
      */
     @Override
-    public @NotNull RateLimitDecision tryAcquire(@NotNull String key, @NotNull RateLimit limit) {
-        String checkedKey = Objects.requireNonNull(key, "限流键不能为空");
+    public @NotNull RateLimitDecision tryAcquire(@NotNull Key key, @NotNull RateLimit limit) {
+        Key checkedKey = Objects.requireNonNull(key, "限流键不能为空");
         RateLimit checkedLimit = Objects.requireNonNull(limit, "限流要求不能为空");
         BucketConfiguration configuration = BucketConfiguration.builder()
                 .addLimit(
@@ -51,15 +48,9 @@ public final class RedisRateLimiter implements RateLimiter {
                                 .capacity(checkedLimit.permits())
                                 .refillGreedy(checkedLimit.permits(), checkedLimit.window()))
                 .build();
-        String[] keySegments = checkedKey.split(":", -1);
-        String[] storageSegments = new String[keySegments.length + 3];
-        storageSegments[0] = "rate-limit";
-        System.arraycopy(keySegments, 0, storageSegments, 1, keySegments.length);
-        storageSegments[storageSegments.length - 2] = Long.toString(checkedLimit.permits());
-        storageSegments[storageSegments.length - 1] = Long.toString(checkedLimit.window().toNanos());
-        String storageKey = runtimeNamespace.sca4dj(storageSegments);
+        Key storageKey = checkedKey.part(checkedLimit.permits()).part(checkedLimit.window().toNanos());
         ConsumptionProbe probe = proxyManager
-                .getProxy(storageKey, () -> configuration)
+                .getProxy(storageKey.format(COLON), () -> configuration)
                 .tryConsumeAndReturnRemaining(1);
         if (probe.isConsumed()) {
             return RateLimitDecision.allow();

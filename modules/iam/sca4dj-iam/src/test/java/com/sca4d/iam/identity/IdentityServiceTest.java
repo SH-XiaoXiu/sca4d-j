@@ -12,6 +12,7 @@ import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.identity.AccountIdentifierType;
 import com.sca4d.core.api.identity.RealmKey;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.persistence.AffectedRowsMismatchException;
 import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.core.spring.persistence.batch.SqlBatchProperties;
@@ -194,7 +195,7 @@ class IdentityServiceTest {
     @SuppressWarnings("unchecked")
     private static PrincipalCodec<PlatformPrincipal> platformPrincipalCodec() {
         PrincipalCodec<PlatformPrincipal> codec = mock(PrincipalCodec.class);
-        when(codec.type()).thenReturn("platform");
+        when(codec.type()).thenReturn(TreeCode.of("PLATFORM"));
         when(codec.valueType()).thenReturn(PlatformPrincipal.class);
         return codec;
     }

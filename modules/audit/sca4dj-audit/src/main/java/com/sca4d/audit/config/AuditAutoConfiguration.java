@@ -1,6 +1,5 @@
 package com.sca4d.audit.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.audit.payload.AuditPayloadJson;
 import com.sca4d.audit.payload.AuditPayloadRegistry;
 import com.sca4d.audit.query.AuditQueryService;
@@ -11,7 +10,9 @@ import com.sca4d.core.api.audit.AuditPayloadCodec;
 import com.sca4d.core.api.audit.AuditRecorder;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.spring.config.CoreSpringAutoConfiguration;
+import com.sca4d.core.spring.config.InstanceProperties;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import org.jetbrains.annotations.NotNull;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -40,7 +41,7 @@ public class AuditAutoConfiguration {
 
     @Bean
     AuditPayloadJson auditPayloadJson(
-            @NotNull @Sca4djJson ObjectMapper objectMapper,
+            @NotNull @Sca4djJson Sca4djMapper objectMapper,
             @NotNull AuditPayloadRegistry registry,
             @NotNull AuditProperties properties) {
         return new AuditPayloadJson(objectMapper, registry, properties);
@@ -50,8 +51,9 @@ public class AuditAutoConfiguration {
     AuditRepository auditRepository(
             @NotNull AuditMapper mapper,
             @NotNull IdGenerator ids,
-            @NotNull AuditPayloadJson payloadJson) {
-        return new AuditRepository(mapper, ids, payloadJson);
+            @NotNull AuditPayloadJson payloadJson,
+            @NotNull InstanceProperties instanceProperties) {
+        return new AuditRepository(mapper, ids, payloadJson, instanceProperties.getId());
     }
 
     @Bean

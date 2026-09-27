@@ -2,8 +2,8 @@ package com.sca4d.iot.api.connection;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.message.Message;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.NotNull;
 

@@ -3,7 +3,6 @@ package com.sca4d.storage.file.config;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.job.JobExecutor;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
 import com.sca4d.core.api.scheduling.IntervalSchedule;
 import com.sca4d.core.api.scheduling.JobSchedule;
 import com.sca4d.core.api.scheduling.JobScheduler;
@@ -99,9 +98,8 @@ public class FileAutoConfiguration {
     TransferTokenService storageTransferTokenService(
             @NotNull SecretKeyring keyring,
             @NotNull FileProperties properties,
-            @NotNull Clock storageClock,
-            @NotNull RuntimeNamespace runtimeNamespace) {
-        return new TransferTokenService(keyring, properties.getTransferBaseUrl(), storageClock, runtimeNamespace);
+            @NotNull Clock storageClock) {
+        return new TransferTokenService(keyring, properties.getTransferBaseUrl(), storageClock);
     }
 
     @Bean
@@ -113,7 +111,6 @@ public class FileAutoConfiguration {
             @NotNull Settings settings,
             @NotNull TransferTokenService tokens,
             @NotNull Clock storageClock,
-            @NotNull RuntimeNamespace runtimeNamespace,
             @NotNull DistributedLock distributedLock,
             @NotNull PlatformTransactionManager transactions) {
         return new DefaultFileService(
@@ -124,7 +121,6 @@ public class FileAutoConfiguration {
                 settings,
                 tokens,
                 storageClock,
-                runtimeNamespace,
                 distributedLock,
                 transactions);
     }

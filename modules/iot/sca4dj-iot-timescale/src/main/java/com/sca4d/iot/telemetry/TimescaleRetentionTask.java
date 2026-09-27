@@ -1,11 +1,16 @@
 package com.sca4d.iot.telemetry;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
+import com.sca4d.core.api.annotation.SystemExecution;
 import com.sca4d.core.api.scheduling.ClusterTask;
+import com.sca4d.core.spring.transaction.TransactionCallbacks;
+import com.sca4d.iot.api.IotCapabilities;
 import com.sca4d.iot.config.IotTimescale;
 import com.sca4d.iot.timescale.persistence.TimescaleRepository;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Clock;
@@ -57,15 +62,18 @@ public class TimescaleRetentionTask implements ClusterTask {
 
     /** 清理两个 hypertable 中早于各自保留截止时间的完整 chunk。 */
     @Override
-    @Transactional(transactionManager = IotTimescale.TRANSACTION_MANAGER)
+    @DS(IotTimescale.DATASOURCE)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @SystemExecution(IotCapabilities.SYSTEM_IDENTITY_VALUE)
     public void execute() {
         Instant now = clock.instant();
         Instant telemetryOlderThan = now.minus(telemetryRetention);
         Instant eventOlderThan = now.minus(eventRetention);
         repository.dropChunks(telemetryOlderThan, eventOlderThan);
-        LOG.info(
-                "TimescaleDB IoT 历史 chunk 清理已完成 | telemetryOlderThan={} eventOlderThan={}",
-                telemetryOlderThan,
-                eventOlderThan);
+        TransactionCallbacks.afterCommit(
+                () -> LOG.info(
+                        "TimescaleDB IoT 历史 chunk 清理已完成 | telemetryOlderThan={} eventOlderThan={}",
+                        telemetryOlderThan,
+                        eventOlderThan));
     }
 }

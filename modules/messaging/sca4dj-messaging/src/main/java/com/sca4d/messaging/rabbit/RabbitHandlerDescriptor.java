@@ -1,9 +1,11 @@
 package com.sca4d.messaging.rabbit;
 
-import com.sca4d.core.api.code.TreeCode;
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+
 import com.sca4d.core.api.messaging.EventHandler;
 import com.sca4d.core.api.messaging.HandlingPolicy;
 import com.sca4d.core.api.messaging.MessageHandler;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -38,7 +40,7 @@ final class RabbitHandlerDescriptor {
         EventHandler<?> checked = Objects.requireNonNull(handler, "EventHandler 不能为空");
         return new RabbitHandlerDescriptor(
                 checked.code(),
-                checked.eventType().treeCode(),
+                checked.eventType().code(),
                 checked.handlingPolicy(),
                 checked,
                 null);
@@ -83,7 +85,7 @@ final class RabbitHandlerDescriptor {
 
     private static @NotNull TreeCode requireSlash(@NotNull TreeCode code, @NotNull String name) {
         TreeCode checked = Objects.requireNonNull(code, name + "不能为空");
-        if (checked.separator() != '/' || checked.value().length() > 128) {
+        if (checked.hasNode(TreeCode.ofSegment("*")) || checked.format(SLASH).length() > 128) {
             throw new IllegalArgumentException(name + "必须使用斜杠分层且不能超过 128 个字符");
         }
         return checked;

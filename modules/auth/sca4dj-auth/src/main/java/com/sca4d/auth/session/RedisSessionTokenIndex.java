@@ -1,10 +1,11 @@
 package com.sca4d.auth.session;
 
 import com.sca4d.core.api.authentication.SessionId;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.time.Duration;
 import java.util.Objects;
@@ -13,22 +14,19 @@ import java.util.Optional;
 /** 保存 SessionId 到 Sa-Token 不透明 Token 的短期索引，使 JWT 恢复的 Session 可以注销权威状态。 */
 public final class RedisSessionTokenIndex {
 
-    private final StringRedisTemplate redis;
+    private final RedisTemplate<Key, String> redis;
 
-    private final String keyPrefix;
+    private final Key keyPrefix;
 
     /**
      * 创建 Redis Session Token 索引。
      *
      * @param redis Redis 字符串操作
-     * @param runtimeNamespace 当前应用的运行时命名空间
      */
     public RedisSessionTokenIndex(
-            @NotNull StringRedisTemplate redis,
-            @NotNull RuntimeNamespace runtimeNamespace) {
+            @NotNull RedisTemplate<Key, String> redis) {
         this.redis = Objects.requireNonNull(redis, "Redis 操作不能为空");
-        this.keyPrefix = Objects.requireNonNull(runtimeNamespace, "运行时命名空间不能为空")
-                .sca4dj("auth", "session-token") + ':';
+        this.keyPrefix = Key.of(TreeCode.ofColon("AUTH:SESSION_TOKEN"));
     }
 
     /**
@@ -70,7 +68,7 @@ public final class RedisSessionTokenIndex {
         redis.delete(key(sessionId));
     }
 
-    private String key(SessionId sessionId) {
-        return keyPrefix + Objects.requireNonNull(sessionId, "Session 标识不能为空").value();
+    private Key key(SessionId sessionId) {
+        return keyPrefix.part(Objects.requireNonNull(sessionId, "Session 标识不能为空").value());
     }
 }

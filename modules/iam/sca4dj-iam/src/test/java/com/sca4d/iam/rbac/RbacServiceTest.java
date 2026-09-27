@@ -1,5 +1,6 @@
 package com.sca4d.iam.rbac;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -12,10 +13,10 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.id.Id;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.OperationCatalog;
@@ -147,7 +148,7 @@ class RbacServiceTest {
         when(repository.findActivePermissionSelectors(request)).thenReturn(loaded);
 
         assertThat(rbac.findGrantedOperations(PLATFORM, List.of(PRINCIPAL_ID)).get(PRINCIPAL_ID))
-                .extracting(operation -> operation.code().value())
+                .extracting(operation -> operation.code().format(COLON))
                 .containsExactly("TEST:ITEMS:MANAGE", "TEST:ITEMS:READ");
         verify(permissionCache).put(any(RbacPermissionCacheLookup.class), ArgumentMatchers.eq(loaded));
         assertThat(customCode.code()).isNotEqualTo(PlatformRbacService.ROOT);
@@ -171,7 +172,7 @@ class RbacServiceTest {
         Map<RbacScope, Map<Long, List<Operation>>> result = rbac.findGrantedOperations(request);
 
         assertThat(result.get(PROJECT_A).get(PRINCIPAL_ID))
-                .extracting(operation -> operation.code().value())
+                .extracting(operation -> operation.code().format(COLON))
                 .containsExactly("TEST:ITEMS:READ");
         assertThat(result.get(PROJECT_B).get(SECOND_PRINCIPAL_ID)).isEmpty();
         verify(repository).findActivePermissionSelectors(request);
@@ -204,7 +205,7 @@ class RbacServiceTest {
                 List.of(PRINCIPAL_ID, SECOND_PRINCIPAL_ID));
 
         assertThat(result.get(PRINCIPAL_ID))
-                .extracting(operation -> operation.code().value())
+                .extracting(operation -> operation.code().format(COLON))
                 .containsExactly("TEST:ITEMS:READ");
         assertThat(result.get(SECOND_PRINCIPAL_ID)).isEmpty();
         verify(repository).findActivePermissionSelectors(missing);
@@ -345,7 +346,7 @@ class RbacServiceTest {
                         DEFAULT_ID,
                         List.of(TreeCode.ofColon("TEST:ITEMS:READ")))
                         .operations())
-                .extracting(operation -> operation.code().value())
+                .extracting(operation -> operation.code().format(COLON))
                 .containsExactly("TEST:ITEMS:READ");
         verify(permissionCache).evict(Map.of(PLATFORM, List.of(PRINCIPAL_ID)));
         verify(invalidation).invalidate(PLATFORM, List.of(PRINCIPAL_ID));

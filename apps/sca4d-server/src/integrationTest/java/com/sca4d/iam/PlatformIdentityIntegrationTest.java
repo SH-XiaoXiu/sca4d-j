@@ -9,7 +9,6 @@ import com.sca4d.core.api.authentication.AuthenticationPolicy;
 import com.sca4d.core.api.authentication.AuthenticationRequirement;
 import com.sca4d.core.api.authentication.SessionControl;
 import com.sca4d.core.api.authentication.SessionIdentity;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.concurrent.VersionPreconditionFailedException;
 import com.sca4d.core.api.error.BusinessException;
@@ -19,6 +18,7 @@ import com.sca4d.core.api.identity.AccountIdentifierType;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.core.spring.web.RequestVersionConditions;
 import com.sca4d.iam.base.PlatformAccountEntry;
@@ -38,6 +38,7 @@ import com.sca4d.iam.rbac.Role;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -106,7 +107,7 @@ class PlatformIdentityIntegrationTest {
         @Bean
         @Primary
         SessionControl testSessionControl() {
-            return org.mockito.Mockito.mock(SessionControl.class);
+            return Mockito.mock(SessionControl.class);
         }
     }
 

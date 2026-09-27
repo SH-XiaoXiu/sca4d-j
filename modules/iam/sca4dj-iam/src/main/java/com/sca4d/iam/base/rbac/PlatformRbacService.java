@@ -1,7 +1,6 @@
 package com.sca4d.iam.base.rbac;
 
 import cn.hutool.crypto.digest.DigestUtil;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.error.BusinessException;
@@ -9,6 +8,7 @@ import com.sca4d.core.api.i18n.LocaleCatalog;
 import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.i18n.LocalizedFieldsSchema;
 import com.sca4d.core.api.id.IdGenerator;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.utils.TextUtils;
@@ -53,7 +53,7 @@ public class PlatformRbacService {
 
     private static final int MAX_ROLE_CODE_LENGTH = 128;
 
-    private static final LockKey PLATFORM_INITIALIZATION_LOCK = new LockKey("iam", "rbac", "initialization");
+    private static final LockKey PLATFORM_INITIALIZATION_LOCK = new LockKey(TreeCode.of("IAM:RBAC:INITIALIZATION"));
 
     private static final Duration LOCK_WAIT = Duration.ofSeconds(10);
 
@@ -98,7 +98,7 @@ public class PlatformRbacService {
      * @param permissionSelections Operation Catalog 的校验和展开规则
      * @param idGenerator          角色标识生成器
      * @param locales              应用支持和默认 Locale
-     * @param identities           PlatformPrincipal 身份事实服务
+     * @param identities           PlatformPrincipal 身份管理服务
      * @param accounts             Platform Account 内部持久化边界
      * @param distributedLock      Platform RBAC 跨实例写入锁
      * @param transactions         Platform RBAC 事务模板
@@ -469,18 +469,14 @@ public class PlatformRbacService {
      * 返回同一角色编码创建请求共用的分布式锁键，不在 Redis 键中暴露原始编码。
      */
     private static @NotNull LockKey roleCodeLock(@NotNull String code) {
-        return new LockKey("iam", "rbac", "role-code", DigestUtil.sha256Hex(code));
+        return new LockKey(TreeCode.of("IAM:RBAC:ROLE-CODE"), DigestUtil.sha256Hex(code));
     }
 
     /**
      * 返回同一 Platform 角色全部修改操作共用的分布式锁键。
      */
     private static @NotNull LockKey roleLock(@NotNull Long roleId) {
-        return new LockKey(
-                "iam",
-                "rbac",
-                "role",
-                Objects.requireNonNull(roleId, "角色标识不能为空").toString());
+        return new LockKey(TreeCode.of("IAM:RBAC:ROLE"), Objects.requireNonNull(roleId, "角色标识不能为空").longValue());
     }
 
     /**
@@ -488,10 +484,8 @@ public class PlatformRbacService {
      */
     private static @NotNull LockKey principalLock(@NotNull Long principalId) {
         return new LockKey(
-                "iam",
-                "rbac",
-                "principal",
-                Objects.requireNonNull(principalId, "PlatformPrincipal 标识不能为空").toString());
+                TreeCode.of("IAM:RBAC:PRINCIPAL"),
+                Objects.requireNonNull(principalId, "PlatformPrincipal 标识不能为空").longValue());
     }
 
     /**

@@ -127,7 +127,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用 <a href="com/sca4d/storage/file/persistence/FileRecord.html" title="class in com.sca4d.storage.file.persistence"><code>FileRecord</code></a> 协调文件上传、正式对象读取、业务绑定和异步删除登记。</div>
 </dd>
-<dt><a href="com/sca4d/storage/file/lifecycle/DefaultFileService.html#%3Cinit%3E(com.sca4d.storage.file.persistence.FileRepository,com.sca4d.storage.file.transfer.StorageRegistry,com.sca4d.core.api.id.IdGenerator,com.sca4d.storage.file.config.FileProperties,com.sca4d.core.api.setting.Settings,com.sca4d.storage.file.transfer.TransferTokenService,java.time.Clock,com.sca4d.core.api.runtime.RuntimeNamespace,com.sca4d.core.api.concurrent.DistributedLock,org.springframework.transaction.PlatformTransactionManager)" class="member-name-link">DefaultFileService(FileRepository, StorageRegistry, IdGenerator, FileProperties, Settings, TransferTokenService, Clock, RuntimeNamespace, DistributedLock, PlatformTransactionManager)</a> - Constructor for class com.sca4d.storage.file.lifecycle.<a href="com/sca4d/storage/file/lifecycle/DefaultFileService.html" title="class in com.sca4d.storage.file.lifecycle">DefaultFileService</a></dt>
+<dt><a href="com/sca4d/storage/file/lifecycle/DefaultFileService.html#%3Cinit%3E(com.sca4d.storage.file.persistence.FileRepository,com.sca4d.storage.file.transfer.StorageRegistry,com.sca4d.core.api.id.IdGenerator,com.sca4d.storage.file.config.FileProperties,com.sca4d.core.api.setting.Settings,com.sca4d.storage.file.transfer.TransferTokenService,java.time.Clock,com.sca4d.core.api.concurrent.DistributedLock,org.springframework.transaction.PlatformTransactionManager)" class="member-name-link">DefaultFileService(FileRepository, StorageRegistry, IdGenerator, FileProperties, Settings, TransferTokenService, Clock, DistributedLock, PlatformTransactionManager)</a> - Constructor for class com.sca4d.storage.file.lifecycle.<a href="com/sca4d/storage/file/lifecycle/DefaultFileService.html" title="class in com.sca4d.storage.file.lifecycle">DefaultFileService</a></dt>
 <dd>
 <div class="block">创建使用数据库事务、分布式锁和已注册 <code>FileStorage</code> 的文件服务。</div>
 </dd>
@@ -185,7 +185,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">保存一个文件的上传 Principal、业务用途、存储位置、内容信息和当前状态。</div>
 </dd>
-<dt><a href="com/sca4d/storage/file/persistence/FileRecord.html#%3Cinit%3E(long,long,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,long,java.lang.String,java.lang.Long,com.sca4d.core.api.storage.FileStatus,java.time.Instant,java.time.Instant,boolean)" class="member-name-link">FileRecord(long, long, String, String, String, String, String, String, String, String, String, long, String, Long, FileStatus, Instant, Instant, boolean)</a> - Constructor for class com.sca4d.storage.file.persistence.<a href="com/sca4d/storage/file/persistence/FileRecord.html" title="class in com.sca4d.storage.file.persistence">FileRecord</a></dt>
+<dt><a href="com/sca4d/storage/file/persistence/FileRecord.html#%3Cinit%3E(long,long,java.lang.String,com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,long,java.lang.String,java.lang.Long,com.sca4d.core.api.storage.FileStatus,java.time.Instant,java.time.Instant,boolean)" class="member-name-link">FileRecord(long, long, String, TreeCode, String, String, String, String, String, String, String, long, String, Long, FileStatus, Instant, Instant, boolean)</a> - Constructor for class com.sca4d.storage.file.persistence.<a href="com/sca4d/storage/file/persistence/FileRecord.html" title="class in com.sca4d.storage.file.persistence">FileRecord</a></dt>
 <dd>
 <div class="block">创建包含上传、存储和状态信息的文件记录。</div>
 </dd>
@@ -370,7 +370,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用 SecretKeyring 加密本地 PUT 和 GET 的动作、文件标识及到期时间。</div>
 </dd>
-<dt><a href="com/sca4d/storage/file/transfer/TransferTokenService.html#%3Cinit%3E(com.sca4d.core.api.security.SecretKeyring,java.net.URI,java.time.Clock,com.sca4d.core.api.runtime.RuntimeNamespace)" class="member-name-link">TransferTokenService(SecretKeyring, URI, Clock, RuntimeNamespace)</a> - Constructor for class com.sca4d.storage.file.transfer.<a href="com/sca4d/storage/file/transfer/TransferTokenService.html" title="class in com.sca4d.storage.file.transfer">TransferTokenService</a></dt>
+<dt><a href="com/sca4d/storage/file/transfer/TransferTokenService.html#%3Cinit%3E(com.sca4d.core.api.security.SecretKeyring,java.net.URI,java.time.Clock)" class="member-name-link">TransferTokenService(SecretKeyring, URI, Clock)</a> - Constructor for class com.sca4d.storage.file.transfer.<a href="com/sca4d/storage/file/transfer/TransferTokenService.html" title="class in com.sca4d.storage.file.transfer">TransferTokenService</a></dt>
 <dd>
 <div class="block">创建与当前应用命名空间绑定的本地文件传输令牌签发器。</div>
 </dd>

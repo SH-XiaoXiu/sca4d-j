@@ -1,5 +1,6 @@
 package com.sca4d.iot.api.query;
 
+import com.sca4d.core.api.error.BusinessException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -16,14 +17,14 @@ public interface DeviceRuntimeQueryService {
      *
      * @param deviceId Device 标识
      * @return 调用期间读取到的不可修改运行态快照
-     * @throws com.sca4d.core.api.error.BusinessException Device 不存在时抛出
+     * @throws BusinessException Device 不存在时抛出
      */
     @NotNull
     DeviceRuntimeSnapshot runtime(long deviceId);
 
     /**
      * 批量读取各 Device 当前绑定的指定 reported 字段组，不读取连接和 desired。
-     * @return 按 Device 标识索引的快照；Device 或字段组不存在时不包含该键
+     * @return 按 Device 标识索引的快照；Device 或字段组不存在时不包含对应键
      */
     @NotNull
     Map<Long, ReportedStateSnapshot> reported(@NotNull Collection<Long> deviceIds, @NotNull String groupCode);

@@ -1,6 +1,8 @@
 # 部署 Gateway 与接入回调
 
-先按[第一次运行](/tutorials/local-start)启动 Gateway 和 Server，确认 Gateway health 为 UP、Server 完成注册，再通过 `/api` 调用业务接口。Gateway 使用的 Server Origin 必须从 Gateway 主机可达，不能包含基础路径。
+Gateway 把公开 API、长连接和外部回调转发给已注册的健康 Server，业务处理仍在 Server。先按[第一次运行](/tutorials/local-start)启动并确认注册，再通过 `/api` 调用接口；新增外部回调时声明 `GatewayCallback`，并在回调中校验专用凭据。
+
+Server 注册的 Origin 必须从 Gateway 主机可达，且不能包含基础路径。Gateway health 为 `UP` 只说明网关进程可用，业务请求还需要健康且租约有效的 Server。
 
 ## 接入一个外部回调
 

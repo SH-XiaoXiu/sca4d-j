@@ -1,5 +1,7 @@
 package com.sca4d.app.server.iot.view;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import com.sca4d.core.api.i18n.LocalizableText;
 import com.sca4d.core.spring.web.view.BaseView;
 import com.sca4d.core.spring.web.view.Localize;
@@ -125,7 +127,7 @@ public final class IotThingModelView extends BaseView {
         return localizedDisplayName;
     }
 
-    /** 返回一个 ThingModel 属性及其当前请求 Locale 展示名称。 */
+    /** 返回一个 ThingModel 属性及当前请求 Locale 的展示名称。 */
     public static final class Property extends BaseView {
 
         private final @NotNull String code;
@@ -157,9 +159,9 @@ public final class IotThingModelView extends BaseView {
             this.access = property.access().name();
             this.telemetry = property.telemetry();
             this.acknowledgementPolicy = property.acknowledgementPolicy()
-                    .map(policy -> policy.code().value())
+                    .map(policy -> policy.code().format(COLON))
                     .orElse(null);
-            this.retryPolicy = property.retryPolicy().map(policy -> policy.code().value()).orElse(null);
+            this.retryPolicy = property.retryPolicy().map(policy -> policy.code().format(COLON)).orElse(null);
         }
 
         /** @return 属性稳定 code */
@@ -204,7 +206,7 @@ public final class IotThingModelView extends BaseView {
         }
     }
 
-    /** 返回一个 ThingModel 事件及其本地化输出字段。 */
+    /** 返回一个 ThingModel 事件及本地化输出字段。 */
     public static final class Event extends BaseView {
 
         private final @NotNull String code;
@@ -257,7 +259,7 @@ public final class IotThingModelView extends BaseView {
         }
     }
 
-    /** 返回一个 ThingModel 命令及其本地化输入字段。 */
+    /** 返回一个 ThingModel 命令及本地化输入字段。 */
     public static final class Command extends BaseView {
 
         private final @NotNull String code;
@@ -282,8 +284,8 @@ public final class IotThingModelView extends BaseView {
             this.displayName = command.code();
             this.localizedDisplayName = presentation.textAt(path + "/displayName");
             this.inputs = fields(presentation, path + "/inputs", command.inputs());
-            this.acknowledgementPolicy = command.acknowledgementPolicy().code().value();
-            this.retryPolicy = command.retryPolicy().code().value();
+            this.acknowledgementPolicy = command.acknowledgementPolicy().code().format(COLON);
+            this.retryPolicy = command.retryPolicy().code().format(COLON);
         }
 
         /** @return 命令稳定 code */
@@ -364,7 +366,7 @@ public final class IotThingModelView extends BaseView {
         }
     }
 
-    /** 返回 enum code 及其当前请求 Locale 展示名称。 */
+    /** 返回 enum code 及当前请求 Locale 的展示名称。 */
     public static final class EnumValue extends BaseView {
 
         private final @NotNull String code;
@@ -401,7 +403,7 @@ public final class IotThingModelView extends BaseView {
         }
     }
 
-    /** 返回 ThingModel 递归值类型及其全部技术约束和本地化成员。 */
+    /** 返回 ThingModel 递归值类型及全部技术约束和本地化成员。 */
     public static final class ValueType {
 
         private final @NotNull String kind;
@@ -506,7 +508,7 @@ public final class IotThingModelView extends BaseView {
             return maximumItems;
         }
 
-        /** @return enum 值及其本地化名称 */
+        /** @return enum 值及本地化名称 */
         public @NotNull @Unmodifiable List<EnumValue> getEnumValues() {
             return List.copyOf(enumValues);
         }
@@ -521,7 +523,7 @@ public final class IotThingModelView extends BaseView {
             return List.copyOf(optionalFields);
         }
 
-        /** @return array 元素类型；其他类型为空 */
+        /** @return array 元素类型；非 array 类型为空 */
         public @Nullable ValueType getElementType() {
             return elementType;
         }

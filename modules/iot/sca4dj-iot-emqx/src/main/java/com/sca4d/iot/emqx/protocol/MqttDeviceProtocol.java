@@ -134,7 +134,7 @@ public final class MqttDeviceProtocol implements DeviceUplinkProtocol {
      * 把协议 Topic Filter 中的 Device 层替换为指定 clientId。
      *
      * @param clientId Device MQTT clientId
-     * @return 该 Device 可以发布的全部上行 Topic Filter
+     * @return 当前 Device 可以发布的全部上行 Topic Filter
      */
     public @NotNull List<String> deviceUplinkTopicFilters(@NotNull String clientId) {
         String topicIdentity = topicIdentityMapper.topicIdentity(clientId);
@@ -319,7 +319,7 @@ public final class MqttDeviceProtocol implements DeviceUplinkProtocol {
          * @param groupCode reported 字段组 code
          * @param mergeMode patch 或 snapshot
          * @param pipeline 把 MQTT payload 转为类型化字段的 Core Pipeline
-         * @param keys 允许写入该字段组的物模型属性
+         * @param keys 允许写入当前字段组的物模型属性
          * @return 当前构建器
          */
         public @NotNull Builder reported(

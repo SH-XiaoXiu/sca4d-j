@@ -15,6 +15,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface IotTimescale {
 
-    /** IoT TimescaleDB 写入使用的 Spring 事务管理器 Bean 名称。 */
-    String TRANSACTION_MANAGER = "iotTimescaleTransactionManager";
+    /** 在动态数据源配置中声明的 IoT 历史库名称。 */
+    String DATASOURCE = "iot-history";
 }

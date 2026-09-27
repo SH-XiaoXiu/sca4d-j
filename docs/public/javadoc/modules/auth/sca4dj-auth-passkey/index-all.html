@@ -408,7 +408,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用 Redis TTL 保存 WebAuthn ceremony，并在校验前通过 GETDEL 原子消费。</div>
 </dd>
-<dt><a href="com/sca4d/auth/passkey/ceremony/PasskeyCeremonyStore.html#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,com.fasterxml.jackson.databind.ObjectMapper,java.time.Clock,com.sca4d.core.api.setting.Settings,com.sca4d.core.api.runtime.RuntimeNamespace)" class="member-name-link">PasskeyCeremonyStore(StringRedisTemplate, ObjectMapper, Clock, Settings, RuntimeNamespace)</a> - Constructor for class com.sca4d.auth.passkey.ceremony.<a href="com/sca4d/auth/passkey/ceremony/PasskeyCeremonyStore.html" title="class in com.sca4d.auth.passkey.ceremony">PasskeyCeremonyStore</a></dt>
+<dt><a href="com/sca4d/auth/passkey/ceremony/PasskeyCeremonyStore.html#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,com.fasterxml.jackson.databind.ObjectMapper,java.time.Clock,com.sca4d.core.api.setting.Settings)" class="member-name-link">PasskeyCeremonyStore(RedisTemplate&lt;Key, String&gt;, ObjectMapper, Clock, Settings)</a> - Constructor for class com.sca4d.auth.passkey.ceremony.<a href="com/sca4d/auth/passkey/ceremony/PasskeyCeremonyStore.html" title="class in com.sca4d.auth.passkey.ceremony">PasskeyCeremonyStore</a></dt>
 <dd>
 <div class="block">创建 Passkey ceremony 存储。</div>
 </dd>

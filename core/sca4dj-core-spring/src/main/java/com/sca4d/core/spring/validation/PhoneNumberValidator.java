@@ -82,7 +82,7 @@ public final class PhoneNumberValidator implements ConstraintValidator<PhoneNumb
     private DnfClause<ParsedPhoneNumber> clause(PhoneNumber.Rule rule) {
         List<Predicate<? super ParsedPhoneNumber>> predicates = new ArrayList<>();
 
-        // 先校验并复制 Rule 声明，后续 Predicate 不再读取可变数组。
+        // 先校验并复制 Rule 声明，之后的 Predicate 不再读取可变数组。
         Set<Region> includedRegions = regions(rule.regions());
         Set<Continent> includedContinents = new HashSet<>(Arrays.asList(rule.continents()));
         Set<Integer> includedCallingCodes = callingCodes(rule.countryCallingCodes());

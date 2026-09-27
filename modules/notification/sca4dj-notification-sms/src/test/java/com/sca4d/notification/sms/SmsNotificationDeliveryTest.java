@@ -7,9 +7,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.Notification;
 import com.sca4d.core.api.notification.NotificationRecipient;
 import com.sca4d.core.api.region.ParsedPhoneNumber;
@@ -20,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import java.time.Clock;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -40,7 +42,7 @@ class SmsNotificationDeliveryTest {
         SmsRepository repository = mock(SmsRepository.class);
         SmsDeliveryStore deliveries = mock(SmsDeliveryStore.class);
         SmsProviderClient transport = mock(SmsProviderClient.class);
-        com.sca4d.core.api.messaging.MessageBus messages = mock(com.sca4d.core.api.messaging.MessageBus.class);
+        MessageBus messages = mock(MessageBus.class);
         SmsRoute route = new SmsRoute("east-asia-primary");
         SmsProvider provider = new SmsProvider(11, "aliyun-primary", "ALIYUN", "primary", 10, true, new Version(0));
         SmsProviderBinding binding = new SmsProviderBinding(
@@ -80,7 +82,7 @@ class SmsNotificationDeliveryTest {
                 repository,
                 deliveries,
                 List.of(transport),
-                java.time.Clock.systemUTC(),
+                Clock.systemUTC(),
                 messages,
                 mock(PlatformTransactionManager.class));
         delivery.deliver(new MessageId(21), notification);

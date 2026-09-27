@@ -8,6 +8,8 @@ import com.sca4d.core.api.concurrent.RateLimitDecision;
 import com.sca4d.core.api.concurrent.RateLimitDimension;
 import com.sca4d.core.api.concurrent.RateLimitExceededException;
 import com.sca4d.core.api.concurrent.RateLimiter;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +62,7 @@ public final class RateLimitedCallAssessor {
         String scope = rateLimitScope(checked.declaringType(), checked.method());
         Duration retryAfter = Duration.ZERO;
         for (String key : keys) {
-            RateLimitDecision decision = rateLimiter.tryAcquire(scope + ":" + key, limit);
+            RateLimitDecision decision = rateLimiter.tryAcquire(Key.of(TreeCode.of("RATE_LIMIT"), scope, key), limit);
             if (!decision.isAllowed() && decision.retryAfter().compareTo(retryAfter) > 0) {
                 retryAfter = decision.retryAfter();
             }

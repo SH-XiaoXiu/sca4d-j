@@ -1,6 +1,6 @@
 package com.sca4d.app.server.audit;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.permission.OperationNode;
 import com.sca4d.iam.base.rbac.PlatformRbacRepository;

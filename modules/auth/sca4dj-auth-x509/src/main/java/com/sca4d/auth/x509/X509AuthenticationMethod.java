@@ -6,12 +6,12 @@ import com.sca4d.core.api.authentication.AuthenticationMethod;
 import com.sca4d.core.api.authentication.SessionControl;
 import com.sca4d.core.api.authentication.SessionTerminationReason;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountDirectory;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -208,7 +208,7 @@ public class X509AuthenticationMethod implements AuthenticationMethod<X509Transp
     }
 
     /**
-     * 撤销 Account 的指定 X.509 Credential，并终止该 Account 的全部旧 Session。
+     * 撤销 Account 的指定 X.509 Credential，并终止当前 Account 的全部旧 Session。
      *
      * @param accountId    Account 标识
      * @param credentialId Credential 标识

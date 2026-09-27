@@ -1,6 +1,6 @@
 # 07 Vue、TypeScript 与交互规范
 
-本页规定 `frontends/sca4d-admin` 中手写 TypeScript、Vue 页面、Store 和浏览器交互的写法。Sca4d Server Admin 的具体目录和运行方式见[管理端设计](/tutorials/admin-feature)，页面评审要求见本页的[前端质量与交互评审](/standards/07_frontend#前端质量与交互评审)。
+`common/` 保存 HTTP 契约和业务请求，Vue 页面组织操作与反馈，共享 Store 管理跨页面状态。开发页面时沿用 Vben 和现有业务组件，按后端结果处理权限、版本冲突和失败；目录与接入步骤见[开发管理端页面](/tutorials/admin-feature)。
 
 ## 先使用 Vben 现有结构
 

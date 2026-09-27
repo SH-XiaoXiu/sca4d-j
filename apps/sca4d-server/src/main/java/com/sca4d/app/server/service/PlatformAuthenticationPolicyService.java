@@ -1,5 +1,7 @@
 package com.sca4d.app.server.service;
 
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+
 import com.sca4d.app.server.authentication.AccountAuthenticationSettingConfiguration;
 import com.sca4d.app.server.authentication.AccountAuthenticationSettings;
 import com.sca4d.app.server.authentication.AuthenticationActions;
@@ -11,10 +13,10 @@ import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.AuthenticationMethod;
 import com.sca4d.core.api.authentication.AuthenticationPolicy;
 import com.sca4d.core.api.authentication.AuthenticationRequirement;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.identity.Account;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.setting.SettingOwner;
 import com.sca4d.core.api.setting.SettingValue;
 import com.sca4d.core.api.setting.Settings;
@@ -24,12 +26,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -89,7 +93,7 @@ public class PlatformAuthenticationPolicyService implements AuthenticationPolicy
             @NotNull Account account,
             int loginFactorCount,
             int sensitiveActionFactorCount,
-            @NotNull java.time.Duration reusableAuthenticationMaximumAge,
+            @NotNull Duration reusableAuthenticationMaximumAge,
             @NotNull List<AuthenticationMethodSettings> methodSettings) {
         Account checkedAccount = Objects.requireNonNull(account, "认证设置账号不能为空");
 
@@ -190,7 +194,7 @@ public class PlatformAuthenticationPolicyService implements AuthenticationPolicy
                 Objects.requireNonNull(completedAuthentications, "已完成认证不能为空"));
 
         // 手机号绑定只接受发往当前 Profile 手机号的 SMS Code，不依赖普通 SMS 登录开关。
-        if (AuthenticationActions.PHONE_VERIFY_CODE.equals(actionCode.value())) {
+        if (new AuthenticationActionCode(AuthenticationActions.PHONE_VERIFY_CODE).equals(actionCode)) {
             AuthenticationMethod<?> sms = installedMethods.get(SmsCodeAuthenticationMethod.CODE);
             return sms != null && sms.available(account)
                     ? Set.of(SmsCodeAuthenticationMethod.CODE)
@@ -225,7 +229,7 @@ public class PlatformAuthenticationPolicyService implements AuthenticationPolicy
         // 设置只能引用 Sca4d Server 已安装的认证方法。
         for (AuthenticationMethodSettings configured : replacement.methods().values()) {
             if (!installedMethods.containsKey(configured.methodCode())) {
-                throw new IllegalArgumentException("认证方法未安装: " + configured.methodCode().value());
+                throw new IllegalArgumentException("认证方法未安装: " + configured.methodCode().format(SLASH));
             }
         }
 
@@ -238,7 +242,7 @@ public class PlatformAuthenticationPolicyService implements AuthenticationPolicy
             throw new IllegalArgumentException("登录必须启用至少一种能够识别账号的认证方法");
         }
 
-        // 登录入口和后续方法合并后必须提供设置要求的不同因素。
+        // 登录入口和附加认证方法合并后必须提供设置要求的不同因素。
         Set<AuthenticationFactorKind> loginKinds = factorKinds(
                 replacement,
                 method -> method.loginStartEnabled() || method.loginAdditionalEnabled(),
@@ -262,7 +266,7 @@ public class PlatformAuthenticationPolicyService implements AuthenticationPolicy
      */
     private Set<AuthenticationFactorKind> factorKinds(
             AccountAuthenticationSettings replacement,
-            java.util.function.Predicate<AuthenticationMethodSettings> enabled,
+            Predicate<AuthenticationMethodSettings> enabled,
             Account account) {
         return factorKinds(replacement, enabled, account, null);
     }
@@ -272,7 +276,7 @@ public class PlatformAuthenticationPolicyService implements AuthenticationPolicy
      */
     private Set<AuthenticationFactorKind> factorKinds(
             AccountAuthenticationSettings replacement,
-            java.util.function.Predicate<AuthenticationMethodSettings> enabled,
+            Predicate<AuthenticationMethodSettings> enabled,
             Account account,
             TreeCode excludedMethod) {
         EnumSet<AuthenticationFactorKind> kinds = EnumSet.noneOf(AuthenticationFactorKind.class);
@@ -320,7 +324,7 @@ public class PlatformAuthenticationPolicyService implements AuthenticationPolicy
     }
 
     /**
-     * 返回方法开关是否允许当前登录阶段或敏感动作使用该方法。
+     * 返回方法开关是否允许当前登录阶段或敏感动作使用指定方法。
      */
     private static boolean enabled(
             AuthenticationMethodSettings method,

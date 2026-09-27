@@ -24,7 +24,7 @@ public final class JobHistoryService {
     /**
      * 创建只清理成功历史的 Job 历史服务。
      *
-     * @param repository 当前运行时命名空间的 Job 持久化操作
+     * @param repository 当前 App 隔离名称的 Job 持久化操作
      * @param properties 成功历史保留时间和单次删除上限
      * @param clock 计算保留窗口截止时间的时钟
      */

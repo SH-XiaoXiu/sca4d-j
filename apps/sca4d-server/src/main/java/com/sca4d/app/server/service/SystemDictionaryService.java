@@ -102,7 +102,7 @@ public class SystemDictionaryService {
         LOG.info("动态字典已修改 | dictionaryKey={} enabled={}", checkedKey, enabled);
     }
 
-    /** 按版本删除数据库动态字典及其数据库选项，代码字典不可删除。 */
+    /** 按版本删除数据库动态字典及对应数据库选项，代码字典不可删除。 */
     @Transactional
     public void deleteDictionary(@NotNull String key, long version) {
         String checkedKey = dictionaryKey(key);

@@ -6,6 +6,7 @@ import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
+import com.sca4d.core.api.persistence.AffectedRowsMismatchException;
 import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.core.api.persistence.ZeroRowPolicy;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
@@ -44,7 +45,7 @@ public class IdentityRepository {
     /** 按调用方确定的初始状态创建 `Subject`。 */
     void insertSubject(@NotNull Long id, @NotNull SubjectType type, @NotNull IdentityStatus status) {
         AffectedRowCounts.requireSingle(
-                mapper.insertSubject(id, type, status),
+                mapper.insertSubjects(List.of(new Subject(id, type)), status),
                 ZeroRowPolicy.ERROR,
                 "创建 Subject");
     }
@@ -206,7 +207,7 @@ public class IdentityRepository {
      *
      * @param ids Principal 标识集合；调用方必须已经去重
      * @param type Principal 类型
-     * @throws com.sca4d.core.api.persistence.AffectedRowsMismatchException 实际删除数量与目标数量不一致时抛出
+     * @throws AffectedRowsMismatchException 实际删除数量与目标数量不一致时抛出
      */
     void deletePrincipals(
             @NotNull Collection<@NotNull Long> ids,
@@ -224,7 +225,7 @@ public class IdentityRepository {
      *
      * @param ids Principal 标识集合；调用方必须已经去重
      * @param type Principal 类型
-     * @throws com.sca4d.core.api.persistence.AffectedRowsMismatchException 实际恢复数量与目标数量不一致时抛出
+     * @throws AffectedRowsMismatchException 实际恢复数量与目标数量不一致时抛出
      */
     void restorePrincipals(
             @NotNull Collection<@NotNull Long> ids,

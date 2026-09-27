@@ -11,17 +11,17 @@ import org.jetbrains.annotations.NotNull;
 public enum IamErrorCode implements ErrorCode {
     /** 登录标识格式非法。 */
     IDENTIFIER_INVALID("2000", ErrorCategory.VALIDATION, "error.iam.identifier-invalid"),
-    /** 同一认证域已经存在该登录标识。 */
+    /** 同一认证域已经存在当前登录标识。 */
     IDENTIFIER_EXISTS("2001", ErrorCategory.CONFLICT, "error.iam.identifier-exists"),
     /** 指定登录身份不存在或已经停用。 */
     SUBJECT_UNAVAILABLE("2002", ErrorCategory.NOT_FOUND, "error.iam.subject-unavailable"),
     /** 账号没有可用的平台业务主体。 */
     PRINCIPAL_UNAVAILABLE("2003", ErrorCategory.NOT_FOUND, "error.iam.principal-unavailable"),
-    /** 身份事实已被其他调用方修改。 */
+    /** 身份记录已被另一个调用方修改。 */
     CONCURRENT_CONFLICT("2004", ErrorCategory.CONFLICT, "error.iam.concurrent-conflict"),
     /** 登录标识不存在。 */
     IDENTIFIER_NOT_FOUND("2005", ErrorCategory.NOT_FOUND, "error.iam.identifier-not-found"),
-    /** 应用没有安装该登录标识类型的规范化器。 */
+    /** 应用没有安装当前登录标识类型的规范化器。 */
     IDENTIFIER_TYPE_UNSUPPORTED("2006", ErrorCategory.VALIDATION, "error.iam.identifier-type-unsupported"),
     /** 账号不存在或已经停用。 */
     ACCOUNT_UNAVAILABLE("2007", ErrorCategory.NOT_FOUND, "error.iam.account-unavailable"),

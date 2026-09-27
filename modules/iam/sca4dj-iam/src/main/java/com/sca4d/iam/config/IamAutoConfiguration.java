@@ -1,6 +1,7 @@
 package com.sca4d.iam.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static com.sca4d.core.api.name.NameFormat.DOT;
+
 import com.sca4d.core.api.authentication.SessionControl;
 import com.sca4d.core.api.authentication.principalsession.PrincipalCodec;
 import com.sca4d.core.api.concurrent.DistributedLock;
@@ -10,7 +11,9 @@ import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.identity.AccountDirectory;
 import com.sca4d.core.api.identity.AccountIdentifierType;
 import com.sca4d.core.api.permission.OperationCatalog;
+import com.sca4d.core.api.runtime.InstanceCapability;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.core.spring.persistence.mybatis.StringValueTypeHandler;
 import com.sca4d.iam.acl.AclPermissionPolicy;
@@ -43,10 +46,14 @@ import com.sca4d.iam.identity.IdentityRepository;
 import com.sca4d.iam.identity.IdentityService;
 import com.sca4d.iam.identity.PrincipalType;
 import com.sca4d.iam.identity.PrincipalTypes;
+import com.sca4d.iam.identity.SystemIdentityRepository;
+import com.sca4d.iam.identity.SystemPrincipalCodec;
 import com.sca4d.iam.identity.UsernameAccountIdentifierNormalizer;
 import com.sca4d.iam.identity.mapper.IdentityMapper;
+import com.sca4d.iam.identity.mapper.SystemIdentityMapper;
 import com.sca4d.iam.rbac.NoOpRbacPermissionCache;
 import com.sca4d.iam.rbac.PermissionSelectionRegistry;
+import com.sca4d.iam.rbac.RbacDomain;
 import com.sca4d.iam.rbac.RbacOperationModule;
 import com.sca4d.iam.rbac.RbacPermissionCache;
 import com.sca4d.iam.rbac.RbacRepository;
@@ -64,6 +71,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -73,20 +81,50 @@ import org.springframework.transaction.support.TransactionTemplate;
 import java.util.List;
 
 /**
- * 自动装配 IAM 身份事实、Platform 身份以及内置 RBAC 和 ACL 实现。
+ * 自动装配 IAM 身份管理、Platform 身份以及内置 RBAC 和 ACL 实现。
  */
 @AutoConfiguration(before = MybatisAutoConfiguration.class)
 @MapperScan(basePackageClasses = {IdentityMapper.class, PlatformRbacMapper.class})
 @EnableTransactionManagement
-@EnableConfigurationProperties(IamProperties.class)
+@EnableConfigurationProperties({IamProperties.class, SystemIdentityProperties.class})
 public class IamAutoConfiguration {
 
+    /** 登记系统 Principal 的稳定持久化类型。 */
+    @Bean
+    SystemPrincipalCodec systemPrincipalCodec() {
+        return new SystemPrincipalCodec();
+    }
+
+    /** 创建系统身份编码与 Principal 绑定的持久化边界。 */
+    @Bean
+    SystemIdentityRepository systemIdentityRepository(
+            @NotNull SystemIdentityMapper mapper,
+            @NotNull IdentityMapper identities,
+            @NotNull SqlBatches batches) {
+        return new SystemIdentityRepository(mapper, identities, batches);
+    }
+
+    /** 在数据库迁移后、工作线程启动前完成身份事务并发布常量。 */
+    @Bean
+    @DependsOnDatabaseInitialization
+    SystemIdentityInitializer systemIdentityInitializer(
+            @NotNull SystemIdentityRepository repository,
+            @NotNull PlatformTransactionManager transactionManager,
+            @NotNull SystemIdentityProperties properties,
+            @NotNull List<InstanceCapability> capabilities) {
+        return new SystemIdentityInitializer(
+                repository,
+                new TransactionTemplate(transactionManager),
+                properties,
+                capabilities);
+    }
+
     /**
-     * 创建 IAM 身份事实 Repository。
+     * 创建 IAM 身份 Repository。
      *
      * @param mapper IAM 身份 Mapper
      * @param sqlBatches SQL 批处理器
-     * @return 包内身份事实 Repository
+     * @return 包内身份 Repository
      */
     @Bean
     @NotNull
@@ -119,13 +157,13 @@ public class IamAutoConfiguration {
     }
 
     /**
-     * 创建 IAM 身份事实服务。
+     * 创建 IAM 身份服务。
      *
-     * @param repository 身份事实 Repository
+     * @param repository 身份 Repository
      * @param idGenerator 标识生成器
      * @param principalTypes Principal 类型映射
      * @param normalizers 登录标识规范化器
-     * @return 身份事实服务
+     * @return 身份服务
      */
     @Bean
     @NotNull
@@ -138,9 +176,9 @@ public class IamAutoConfiguration {
     }
 
     /**
-     * 创建使用 IAM 身份事实查找账号的 Core 目录实现。
+     * 创建使用 IAM 身份数据查找账号的 Core 目录实现。
      *
-     * @param identities IAM 身份事实服务
+     * @param identities IAM 身份管理服务
      * @return Core Account 目录
      */
     @Bean
@@ -191,7 +229,7 @@ public class IamAutoConfiguration {
      *
      * @param repositories ACL Repository 注册表
      * @param types ACL 资源类型归属表
-     * @param identities 身份事实服务
+     * @param identities 身份管理服务
      * @return ACL 服务
      */
     @Bean
@@ -231,19 +269,19 @@ public class IamAutoConfiguration {
                     .register(
                             AccountIdentifierType.class,
                             JdbcType.VARCHAR,
-                            new StringValueTypeHandler<>(AccountIdentifierType::new, AccountIdentifierType::value));
+                            new StringValueTypeHandler<>(AccountIdentifierType::new, value -> value.format(DOT)));
             configuration.getTypeHandlerRegistry()
                     .register(
                             PrincipalType.class,
                             JdbcType.VARCHAR,
-                            new StringValueTypeHandler<>(PrincipalType::new, PrincipalType::value));
+                            new StringValueTypeHandler<>(PrincipalType::new, value -> value.format(DOT)));
         };
     }
 
     /**
      * 创建访问 Platform 身份数据的服务。
      *
-     * @param identities IAM 身份事实服务
+     * @param identities IAM 身份管理服务
      * @return Platform 身份服务
      */
     @Bean
@@ -333,7 +371,7 @@ public class IamAutoConfiguration {
     /**
      * 创建 Platform RBAC 的 Session 失效适配器。
      *
-     * @param identities 身份事实服务
+     * @param identities 身份管理服务
      * @param sessions Auth 可选安装的 Account Session 控制器
      * @return 标记 PlatformAccount Session 的实现
      */
@@ -374,7 +412,7 @@ public class IamAutoConfiguration {
      * 创建 RBAC Repository 注册表。
      *
      * @param repositories 应用安装的业务角色 Repository
-     * @return 按 {@link com.sca4d.iam.rbac.RbacDomain} 查找 Repository 的注册表
+     * @return 按 {@link RbacDomain} 查找 Repository 的注册表
      */
     @Bean
     @NotNull
@@ -387,7 +425,7 @@ public class IamAutoConfiguration {
      * 创建 RBAC Session 失效实现注册表。
      *
      * @param invalidations 应用安装的业务 Session 失效实现
-     * @return 按 {@link com.sca4d.iam.rbac.RbacDomain} 查找 Session 失效实现的注册表
+     * @return 按 {@link RbacDomain} 查找 Session 失效实现的注册表
      */
     @Bean
     @NotNull
@@ -425,7 +463,7 @@ public class IamAutoConfiguration {
      * @param selections 按 RBAC 领域查找 Operation 规则的注册表
      * @param idGenerator 角色标识生成器
      * @param locales 应用支持和默认 Locale
-     * @param identities PlatformPrincipal 身份事实服务
+     * @param identities PlatformPrincipal 身份管理服务
      * @param accounts Platform Account 内部持久化边界
      * @param distributedLock Platform RBAC 跨实例写入锁
      * @param transactionManager Platform RBAC 事务管理器
@@ -540,7 +578,7 @@ public class IamAutoConfiguration {
     @Bean
     @NotNull
     PlatformPrincipalCodec platformSessionCodec(
-            @NotNull @Sca4djJson ObjectMapper objectMapper) {
+            @NotNull @Sca4djJson Sca4djMapper objectMapper) {
         return new PlatformPrincipalCodec(objectMapper);
     }
 

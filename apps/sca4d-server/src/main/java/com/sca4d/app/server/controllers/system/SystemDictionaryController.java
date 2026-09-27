@@ -51,7 +51,7 @@ public class SystemDictionaryController {
         this.management = Objects.requireNonNull(management, "系统字典服务不能为空");
     }
 
-    /** @return 代码字典、动态字典及其全部选项的管理结果 */
+    /** @return 代码字典、动态字典以及全部选项的管理结果 */
     @GetMapping
     @Operation(summary = "查询系统字典")
     @RequirePermission(operation = SystemOperations.DICTIONARIES_READ_VALUE)
@@ -104,7 +104,7 @@ public class SystemDictionaryController {
         return ApiResponse.ok(SystemDictionariesView.from(management.findAll()));
     }
 
-    /** 按乐观版本删除一个数据库动态字典及其数据库选项。 */
+    /** 按乐观版本删除一个数据库动态字典以及对应数据库选项。 */
     @DeleteMapping("/{key}")
     @Operation(summary = "删除动态字典")
     @RequirePermission(operation = SystemOperations.DICTIONARIES_MANAGE_VALUE)

@@ -122,7 +122,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">声明认证模块可以由客户管理的会话、尝试和 JWT 有效期。</div>
 </dd>
-<dt><a href="com/sca4d/auth/engine/AuthenticationMethods.html#available(com.sca4d.core.api.identity.Account,com.sca4d.core.api.code.TreeCode)" class="member-name-link">available(Account, TreeCode)</a> - Method in class com.sca4d.auth.engine.<a href="com/sca4d/auth/engine/AuthenticationMethods.html" title="class in com.sca4d.auth.engine">AuthenticationMethods</a></dt>
+<dt><a href="com/sca4d/auth/engine/AuthenticationMethods.html#available(com.sca4d.core.api.identity.Account,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">available(Account, TreeCode)</a> - Method in class com.sca4d.auth.engine.<a href="com/sca4d/auth/engine/AuthenticationMethods.html" title="class in com.sca4d.auth.engine">AuthenticationMethods</a></dt>
 <dd>
 <div class="block">判断指定 Account 当前能否使用已安装的认证方法。</div>
 </dd>
@@ -359,6 +359,8 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:P">P</h2>
 <dl class="index">
+<dt><a href="com/sca4d/auth/session/SaTokenRedisSerialization.html#postProcessAfterInitialization(java.lang.Object,java.lang.String)" class="member-name-link">postProcessAfterInitialization(Object, String)</a> - Method in class com.sca4d.auth.session.<a href="com/sca4d/auth/session/SaTokenRedisSerialization.html" title="class in com.sca4d.auth.session">SaTokenRedisSerialization</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/web/AuthRequestInterceptor.html#preHandleWithCall(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,java.lang.Object,com.sca4d.core.api.call.Call)" class="member-name-link">preHandleWithCall(HttpServletRequest, HttpServletResponse, Object, Call)</a> - Method in class com.sca4d.auth.web.<a href="com/sca4d/auth/web/AuthRequestInterceptor.html" title="class in com.sca4d.auth.web">AuthRequestInterceptor</a></dt>
 <dd>
 <div class="block">在 Controller 执行前按 <code>RequireSessionToken</code> 选择唯一 Token 类型并绑定 Session。
@@ -400,7 +402,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用 Redis TTL 保存认证尝试，并以自动续租的分布式锁串行修改同一尝试。</div>
 </dd>
-<dt><a href="com/sca4d/auth/engine/attempt/RedisAuthenticationAttemptStore.html#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,com.fasterxml.jackson.databind.ObjectMapper,java.time.Clock,com.sca4d.core.api.runtime.RuntimeNamespace,com.sca4d.core.api.concurrent.DistributedLock)" class="member-name-link">RedisAuthenticationAttemptStore(StringRedisTemplate, ObjectMapper, Clock, RuntimeNamespace, DistributedLock)</a> - Constructor for class com.sca4d.auth.engine.attempt.<a href="com/sca4d/auth/engine/attempt/RedisAuthenticationAttemptStore.html" title="class in com.sca4d.auth.engine.attempt">RedisAuthenticationAttemptStore</a></dt>
+<dt><a href="com/sca4d/auth/engine/attempt/RedisAuthenticationAttemptStore.html#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,com.fasterxml.jackson.databind.ObjectMapper,java.time.Clock,com.sca4d.core.api.concurrent.DistributedLock)" class="member-name-link">RedisAuthenticationAttemptStore(RedisTemplate&lt;Key, String&gt;, ObjectMapper, Clock, DistributedLock)</a> - Constructor for class com.sca4d.auth.engine.attempt.<a href="com/sca4d/auth/engine/attempt/RedisAuthenticationAttemptStore.html" title="class in com.sca4d.auth.engine.attempt">RedisAuthenticationAttemptStore</a></dt>
 <dd>
 <div class="block">创建 Redis 认证尝试存储。</div>
 </dd>
@@ -408,7 +410,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">在 Redis 中保存每个 Account 的 Session 失效代次。</div>
 </dd>
-<dt><a href="com/sca4d/auth/session/RedisSessionGeneration.html#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,java.util.function.Supplier,com.sca4d.core.api.runtime.RuntimeNamespace)" class="member-name-link">RedisSessionGeneration(StringRedisTemplate, Supplier&lt;List&lt;SessionInvalidationListener&gt;&gt;, RuntimeNamespace)</a> - Constructor for class com.sca4d.auth.session.<a href="com/sca4d/auth/session/RedisSessionGeneration.html" title="class in com.sca4d.auth.session">RedisSessionGeneration</a></dt>
+<dt><a href="com/sca4d/auth/session/RedisSessionGeneration.html#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,java.util.function.Supplier)" class="member-name-link">RedisSessionGeneration(RedisTemplate&lt;Key, String&gt;, Supplier&lt;List&lt;SessionInvalidationListener&gt;&gt;)</a> - Constructor for class com.sca4d.auth.session.<a href="com/sca4d/auth/session/RedisSessionGeneration.html" title="class in com.sca4d.auth.session">RedisSessionGeneration</a></dt>
 <dd>
 <div class="block">创建 Redis Session 代次存储。</div>
 </dd>
@@ -416,7 +418,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">保存 SessionId 到 Sa-Token 不透明 Token 的短期索引，使 JWT 恢复的 Session 可以注销权威状态。</div>
 </dd>
-<dt><a href="com/sca4d/auth/session/RedisSessionTokenIndex.html#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,com.sca4d.core.api.runtime.RuntimeNamespace)" class="member-name-link">RedisSessionTokenIndex(StringRedisTemplate, RuntimeNamespace)</a> - Constructor for class com.sca4d.auth.session.<a href="com/sca4d/auth/session/RedisSessionTokenIndex.html" title="class in com.sca4d.auth.session">RedisSessionTokenIndex</a></dt>
+<dt><a href="com/sca4d/auth/session/RedisSessionTokenIndex.html#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate)" class="member-name-link">RedisSessionTokenIndex(RedisTemplate&lt;Key, String&gt;)</a> - Constructor for class com.sca4d.auth.session.<a href="com/sca4d/auth/session/RedisSessionTokenIndex.html" title="class in com.sca4d.auth.session">RedisSessionTokenIndex</a></dt>
 <dd>
 <div class="block">创建 Redis Session Token 索引。</div>
 </dd>
@@ -464,6 +466,14 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/auth/engine/attempt/AuthenticationAttemptState.html#satisfied(boolean)" class="member-name-link">satisfied(boolean)</a> - Method in class com.sca4d.auth.engine.attempt.<a href="com/sca4d/auth/engine/attempt/AuthenticationAttemptState.html" title="class in com.sca4d.auth.engine.attempt">AuthenticationAttemptState</a></dt>
 <dd>
 <div class="block">设置当前尝试是否已经满足策略；调用方必须在同一尝试租约内保存结果。</div>
+</dd>
+<dt><a href="com/sca4d/auth/session/SaTokenRedisSerialization.html" class="type-name-link" title="class in com.sca4d.auth.session">SaTokenRedisSerialization</a> - Class in <a href="com/sca4d/auth/session/package-summary.html">com.sca4d.auth.session</a></dt>
+<dd>
+<div class="block">为官方 Sa-Token DAO 的独立 Redis 模板安装服务器 key 序列化，不修改 Token 或客户端协议。</div>
+</dd>
+<dt><a href="com/sca4d/auth/session/SaTokenRedisSerialization.html#%3Cinit%3E()" class="member-name-link">SaTokenRedisSerialization()</a> - Constructor for class com.sca4d.auth.session.<a href="com/sca4d/auth/session/SaTokenRedisSerialization.html" title="class in com.sca4d.auth.session">SaTokenRedisSerialization</a></dt>
+<dd>
+<div class="block">为官方 DAO 安装名称边界转换，不单独创建 Redis 连接。</div>
 </dd>
 <dt><a href="com/sca4d/auth/session/SaTokenSessionControl.html" class="type-name-link" title="class in com.sca4d.auth.session">SaTokenSessionControl</a> - Class in <a href="com/sca4d/auth/session/package-summary.html">com.sca4d.auth.session</a></dt>
 <dd>

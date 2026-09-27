@@ -299,7 +299,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="activate(java.lang.Long,com.sca4d.app.server.authentication.request.TotpCredentialRequest)">
 <h3>activate</h3>
 <div class="member-signature"><span class="annotations">@PostMapping("/credential")
-@Audit(operation="authentication/account/totp/activate")
+@Audit(operation="AUTHENTICATION/ACCOUNT/TOTP/ACTIVATE")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../authentication/view/TotpCredentialView.html" title="class in com.sca4d.app.server.authentication.view">TotpCredentialView</a>&gt;</span>&nbsp;<span class="element-name">activate</span><wbr><span class="parameters">(@AuditTarget(resourceType="IAM/ACCOUNT") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;accountId,
@@ -319,7 +319,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="replace(java.lang.Long,com.sca4d.app.server.authentication.request.TotpCredentialRequest)">
 <h3>replace</h3>
 <div class="member-signature"><span class="annotations">@PutMapping("/credential")
-@Audit(operation="authentication/account/totp/replace")
+@Audit(operation="AUTHENTICATION/ACCOUNT/TOTP/REPLACE")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../authentication/view/TotpCredentialView.html" title="class in com.sca4d.app.server.authentication.view">TotpCredentialView</a>&gt;</span>&nbsp;<span class="element-name">replace</span><wbr><span class="parameters">(@AuditTarget(resourceType="IAM/ACCOUNT") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;accountId,
@@ -339,7 +339,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="delete(com.sca4d.core.api.identity.Account)">
 <h3>delete</h3>
 <div class="member-signature"><span class="annotations">@DeleteMapping("/credential")
-@Audit(operation="authentication/account/totp/delete")
+@Audit(operation="AUTHENTICATION/ACCOUNT/TOTP/DELETE")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">delete</span><wbr><span class="parameters">(@AuditTarget(resourceType="IAM/ACCOUNT") @NotNull
  @NotNull com.sca4d.core.api.identity.Account&nbsp;account)</span></div>

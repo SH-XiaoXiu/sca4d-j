@@ -1,6 +1,6 @@
 package com.sca4d.core.api.permission;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -56,7 +56,7 @@ public final class Action {
     /** 删除资源。 */
     public static final @NotNull Action DELETE = new Action(DELETE_VALUE);
 
-    /** 管理资源及其生命周期。 */
+    /** 管理资源及资源生命周期。 */
     public static final @NotNull Action MANAGE = new Action(MANAGE_VALUE);
 
     /** 执行业务资源提供的操作。 */
@@ -82,7 +82,7 @@ public final class Action {
      */
     public Action(@NotNull TreeCode code) {
         TreeCode checked = Objects.requireNonNull(code, "动作编码不能为空");
-        if (checked.separator() != '\0' || checked.equals(TreeCode.ofSegment("*"))) {
+        if (checked.size() != 1 || checked.equals(TreeCode.ofSegment("*"))) {
             throw new IllegalArgumentException("动作编码必须是不含通配符的单节点 TreeCode: " + checked);
         }
         this.code = checked;

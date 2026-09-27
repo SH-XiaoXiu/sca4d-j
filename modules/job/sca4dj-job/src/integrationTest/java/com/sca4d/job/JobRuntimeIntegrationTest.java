@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.concurrent.OptimisticLockException;
+import com.sca4d.core.api.isolation.AppName;
 import com.sca4d.core.api.job.DirectJob;
 import com.sca4d.core.api.job.Job;
 import com.sca4d.core.api.job.JobExecution;
@@ -19,10 +20,10 @@ import com.sca4d.core.api.job.JobWaitTimeoutException;
 import com.sca4d.core.api.job.ParallelResults;
 import com.sca4d.core.api.job.PipelineJob;
 import com.sca4d.core.api.job.PipelineJobPlan;
+import com.sca4d.core.api.name.NameFormat;
 import com.sca4d.core.api.pipeline.Pipeline;
 import com.sca4d.core.api.pipeline.PipelineStage;
 import com.sca4d.core.api.query.PageRequest;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
 import com.sca4d.core.api.scheduling.OverlapPolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.spring.persistence.batch.SqlBatchProperties;
@@ -77,7 +78,11 @@ class JobRuntimeIntegrationTest {
     @Container
     private static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:17-alpine");
 
-    private static final RuntimeNamespace RUNTIME_NAMESPACE = new RuntimeNamespace("job-test");
+    private static final String APPLICATION_NAME = "JOB_TEST";
+
+    static {
+        AppName.publish(APPLICATION_NAME);
+    }
 
     private DataSource dataSource;
 
@@ -500,15 +505,7 @@ class JobRuntimeIntegrationTest {
                         "SELECT runtime_namespace FROM job.job_run WHERE id = ?",
                         String.class,
                         firstRun.value()))
-                .isEqualTo("job-test");
-        RuntimeNamespace otherNamespace = new RuntimeNamespace("other-job-test");
-        JobRunService otherApplication = new JobRunService(
-                new JobRepository(mapper(), otherNamespace, sqlBatches()),
-                new DataSourceTransactionManager(dataSource),
-                Clock.systemUTC(),
-                immediateLock());
-        assertThat(otherApplication.findRun(firstRun)).isNull();
-
+                .isEqualTo(APPLICATION_NAME);
         Optional<JobRunId> duplicate = runtime.executor.submitScheduled(
                 job,
                 null,
@@ -533,16 +530,16 @@ class JobRuntimeIntegrationTest {
         assertThat(allowed).hasValueSatisfying(runId -> assertThat(runId).isNotEqualTo(firstRun));
     }
 
-    /** 成功历史按默认 30 天窗口和批量删除，其他状态及其他命名空间保持不变。 */
+    /** 成功历史按默认 30 天窗口和批量删除，其他状态及其他 App 隔离名称保持不变。 */
     @Test
     void cleansOnlyExpiredSucceededRunsInConfiguredBatches() {
         Instant now = Instant.parse("2026-08-09T00:00:00Z");
-        long firstExpired = insertRun("job-test", "SUCCEEDED", now.minus(Duration.ofDays(40)));
-        long secondExpired = insertRun("job-test", "SUCCEEDED", now.minus(Duration.ofDays(35)));
-        long recent = insertRun("job-test", "SUCCEEDED", now.minus(Duration.ofDays(20)));
-        long failed = insertRun("job-test", "FAILED", now.minus(Duration.ofDays(60)));
-        long queued = insertRun("job-test", "QUEUED", null);
-        long running = insertRun("job-test", "RUNNING", null);
+        long firstExpired = insertRun(APPLICATION_NAME, "SUCCEEDED", now.minus(Duration.ofDays(40)));
+        long secondExpired = insertRun(APPLICATION_NAME, "SUCCEEDED", now.minus(Duration.ofDays(35)));
+        long recent = insertRun(APPLICATION_NAME, "SUCCEEDED", now.minus(Duration.ofDays(20)));
+        long failed = insertRun(APPLICATION_NAME, "FAILED", now.minus(Duration.ofDays(60)));
+        long queued = insertRun(APPLICATION_NAME, "QUEUED", null);
+        long running = insertRun(APPLICATION_NAME, "RUNNING", null);
         long otherNamespace = insertRun("other-job-test", "SUCCEEDED", now.minus(Duration.ofDays(60)));
 
         long nodeId = Objects.requireNonNull(
@@ -565,7 +562,7 @@ class JobRuntimeIntegrationTest {
         JobProperties properties = new JobProperties();
         properties.setHistoryCleanupBatchSize(1);
         JobHistoryService history = new JobHistoryService(
-                new JobRepository(mapper(), RUNTIME_NAMESPACE, sqlBatches()),
+                new JobRepository(mapper(), sqlBatches()),
                 properties,
                 Clock.fixed(now, ZoneOffset.UTC));
         var cleanupTransactions = new TransactionTemplate(
@@ -654,38 +651,38 @@ class JobRuntimeIntegrationTest {
         Instant first = Instant.parse("2026-09-05T01:00:00Z");
         Instant second = first.plusSeconds(60);
         long failed = insertScheduledRun(
-                RUNTIME_NAMESPACE.applicationId(),
-                job.key().value(),
+                APPLICATION_NAME,
+                job.key().format(NameFormat.SLASH),
                 job.definitionVersion(),
-                scheduleKey.value(),
+                scheduleKey.format(NameFormat.SLASH),
                 "FAILED",
                 first);
         insertOutcome(failed, "\"business-rejected\"", first);
         long succeeded = insertScheduledRun(
-                RUNTIME_NAMESPACE.applicationId(),
-                job.key().value(),
+                APPLICATION_NAME,
+                job.key().format(NameFormat.SLASH),
                 job.definitionVersion(),
-                scheduleKey.value(),
+                scheduleKey.format(NameFormat.SLASH),
                 "SUCCEEDED",
                 second);
         insertOutcome(succeeded, "\"created\"", second);
         insertScheduledRun(
                 "other-application",
-                job.key().value(),
+                job.key().format(NameFormat.SLASH),
                 job.definitionVersion(),
-                scheduleKey.value(),
+                scheduleKey.format(NameFormat.SLASH),
                 "SUCCEEDED",
                 second.plusSeconds(60));
         insertScheduledRun(
-                RUNTIME_NAMESPACE.applicationId(),
-                job.key().value(),
+                APPLICATION_NAME,
+                job.key().format(NameFormat.SLASH),
                 1,
-                scheduleKey.value(),
+                scheduleKey.format(NameFormat.SLASH),
                 "SUCCEEDED",
                 second.plusSeconds(120));
 
         DefaultJobHistory history = new DefaultJobHistory(
-                new JobRepository(mapper(), RUNTIME_NAMESPACE, sqlBatches()),
+                new JobRepository(mapper(), sqlBatches()),
                 new ObjectMapper().findAndRegisterModules());
         var firstPage = history.findScheduledRuns(
                 scheduleKey,
@@ -762,7 +759,7 @@ class JobRuntimeIntegrationTest {
     @Test
     void rejectsStaleAttemptResultsAndClearsVoidOutput() {
         Instant now = Instant.parse("2026-09-15T00:00:00Z");
-        long runId = insertRun("job-test", "RUNNING", null);
+        long runId = insertRun(APPLICATION_NAME, "RUNNING", null);
         long nodeId = Objects.requireNonNull(
                 jdbc.queryForObject(
                         "INSERT INTO job.job_run_node (run_id, node_key, node_kind, status, max_attempts, retry_delay_millis, attempt_count, available_at, lease_owner, lease_until, output_json) VALUES (?, 'direct', 'DIRECT', 'RUNNING', 3, 0, 2, ?, 'new', ?, '\"old\"'::jsonb) RETURNING id",
@@ -774,11 +771,11 @@ class JobRuntimeIntegrationTest {
                 "INSERT INTO job.job_run_attempt (node_id, attempt_number, worker_id, status, started_at) VALUES (?, 2, 'new', 'RUNNING', ?)",
                 nodeId,
                 Timestamp.from(now));
-        JobRepository repository = new JobRepository(mapper(), RUNTIME_NAMESPACE, sqlBatches());
+        JobRepository repository = new JobRepository(mapper(), sqlBatches());
         var previous = new NodeClaim(
                 nodeId,
                 runId,
-                "test",
+                new JobKey("TEST"),
                 1,
                 "DIRECT",
                 "direct",
@@ -789,7 +786,7 @@ class JobRuntimeIntegrationTest {
         var current = new NodeClaim(
                 nodeId,
                 runId,
-                "test",
+                new JobKey("TEST"),
                 1,
                 "DIRECT",
                 "direct",
@@ -844,7 +841,7 @@ class JobRuntimeIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
         JobCatalog catalog = new JobCatalog(List.copyOf(jobs));
         JobMapper mapper = mapper();
-        JobRepository repository = new JobRepository(mapper, RUNTIME_NAMESPACE, sqlBatches());
+        JobRepository repository = new JobRepository(mapper, sqlBatches());
         JobRunService runs = new JobRunService(
                 repository,
                 new DataSourceTransactionManager(dataSource),
@@ -863,8 +860,7 @@ class JobRuntimeIntegrationTest {
                 runs,
                 objectMapper,
                 properties,
-                Clock.systemUTC(),
-                RUNTIME_NAMESPACE);
+                Clock.systemUTC());
         return new Runtime(executor, worker);
     }
 

@@ -33,18 +33,15 @@ class JwtSessionProjectionTest {
     private static final String LEGACY_JWT = "eyJ0eXAiOiJzZXNzaW9uK2p3dCIsImtpZCI6Im9sZCIsImFsZyI6IkhTMjU2In0.eyJpc3MiOiJ0ZXN0LWlzc3VlciIsImF1ZCI6InRlc3QtYXVkaWVuY2UiLCJzdWIiOiIyMiIsImlhdCI6MTc4NDY3ODQwMCwiZXhwIjoxNzg0Njc4NzAwLCJzaWQiOiJzZXNzaW9uLTEiLCJzZXNzaW9uIjoie1wiZm9ybWF0VmVyc2lvblwiOjEsXCJpZFwiOlwic2Vzc2lvbi0xXCIsXCJzdWJqZWN0XCI6e1wic3ViamVjdElkXCI6MTEsXCJ0eXBlXCI6XCJIVU1BTlwifSxcImFjY291bnRcIjp7XCJhY2NvdW50SWRcIjoyMixcInN1YmplY3RJZFwiOjExLFwicmVhbG1LZXlcIjpcInRlc3RcIn0sXCJwcmluY2lwYWxzXCI6W3tcInR5cGVcIjpcInRlc3QucHJpbmNpcGFsXCIsXCJwYXlsb2FkXCI6XCJleUpwWkNJNk16TXNJbVpwWld4a0lqb2ljSEpwYm1OcGNHRnNMV1pwWld4a0luMD1cIn1dLFwiYXV0aGVudGljYXRpb25zXCI6W3tcImFjY291bnRJZFwiOjIyLFwibWV0aG9kQ29kZVwiOlwicGFzc3dvcmRcIixcImZhY3RvcktpbmRzXCI6W1wiS05PV0xFREdFXCIsXCJQT1NTRVNTSU9OXCJdLFwiYXV0aGVudGljYXRlZEF0XCI6XCIyMDI2LTA3LTIyVDAwOjAwOjAwWlwifV0sXCJyZXNvdXJjZXNcIjpbe1wicHJpbmNpcGFsSWRcIjozMyxcInJlc291cmNlXCI6e1widHlwZVwiOlwidGVzdC5yZXNvdXJjZVwiLFwicGF5bG9hZFwiOlwiZXlKMGVYQmxJam9pYjNCbGNtRjBhVzl1SWl3aWFXUWlPaUp3YkdGMFptOXliUzVoWTJOdmRXNTBMbkpsWVdRaUxDSm1hV1ZzWkNJNkluSmxjMjkxY21ObExXWnBaV3hrSW4wPVwifX1dLFwiaXNzdWVkQXRcIjpcIjIwMjYtMDctMjJUMDA6MDA6MDBaXCIsXCJleHBpcmVzQXRcIjpcIjIwMjYtMDctMjJUMDE6MDA6MDBaXCJ9In0.ojQqe9A3SpzAMGrnU9tVRUwphVN9nee5YTg003chcsE";
 
     @Test
-    @DisplayName("Restores A Fixed Legacy JWT")
-    void restoresAFixedLegacyJwt() {
+    @DisplayName("Rejects A Fixed Legacy JWT With An Obsolete Session Wire Version")
+    void rejectsAFixedLegacyJwtWithAnObsoleteSessionWireVersion() {
         JwtSessionProjection projection = new JwtSessionProjection(
                 SessionTestFixture.codec(),
                 jwtProperties("old", OLD_KEY),
                 settings(),
                 Clock.fixed(SessionTestFixture.NOW.plusSeconds(60), ZoneOffset.UTC));
 
-        Session restored = projection.restore(LEGACY_JWT).orElseThrow();
-
-        assertThat(restored.id().value()).isEqualTo("session-1");
-        assertThat(restored.account().accountId()).isEqualTo(22L);
+        assertThat(projection.restore(LEGACY_JWT)).isEmpty();
     }
 
     @Test

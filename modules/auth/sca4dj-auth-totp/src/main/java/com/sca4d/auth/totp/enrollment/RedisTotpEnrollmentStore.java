@@ -1,12 +1,16 @@
 package com.sca4d.auth.totp.enrollment;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+import static java.lang.Boolean.TRUE;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.auth.totp.TotpErrorCode;
 import com.sca4d.core.api.error.BusinessException;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 
 import java.time.Clock;
@@ -20,15 +24,15 @@ public final class RedisTotpEnrollmentStore {
 
     private static final DefaultRedisScript<Long> CONSUME = consumeScript();
 
-    private final StringRedisTemplate redis;
+    private final RedisTemplate<Key, String> redis;
 
     private final TotpEnrollmentCodec codec;
 
     private final Clock clock;
 
-    private final String keyPrefix;
+    private static final TreeCode ENROLLMENT = TreeCode.ofColon("AUTH:TOTP_ENROLLMENT");
 
-    private final String accountKeyPrefix;
+    private static final TreeCode ACCOUNT = TreeCode.ofColon("AUTH:TOTP_ENROLLMENTS:ACCOUNT");
 
     /**
      * 创建 Redis enrollment store。
@@ -36,31 +40,26 @@ public final class RedisTotpEnrollmentStore {
      * @param redis Redis 字符串操作模板
      * @param objectMapper enrollment 状态序列化器
      * @param clock TTL 与过期状态的时间来源
-     * @param runtimeNamespace 当前应用的运行时命名空间
      */
     public RedisTotpEnrollmentStore(
-            @NotNull StringRedisTemplate redis,
+            @NotNull RedisTemplate<Key, String> redis,
             @NotNull ObjectMapper objectMapper,
-            @NotNull Clock clock,
-            @NotNull RuntimeNamespace runtimeNamespace) {
+            @NotNull Clock clock) {
         this.redis = Objects.requireNonNull(redis, "Redis 操作不能为空");
         this.codec = new TotpEnrollmentCodec(objectMapper);
         this.clock = Objects.requireNonNull(clock, "时钟不能为空");
-        RuntimeNamespace checkedNamespace = Objects.requireNonNull(runtimeNamespace, "运行时命名空间不能为空");
-        this.keyPrefix = checkedNamespace.sca4dj("auth", "totp-enrollment") + ':';
-        this.accountKeyPrefix = checkedNamespace.sca4dj("auth", "totp-enrollments", "account") + ':';
     }
 
     void create(TotpEnrollmentState state) {
         Duration ttl = remainingTtl(state);
-        String enrollmentKey = key(state.id());
+        Key enrollmentKey = key(state.id());
         Boolean created = redis.opsForValue().setIfAbsent(enrollmentKey, codec.encode(state), ttl);
-        if (!Boolean.TRUE.equals(created)) {
+        if (!TRUE.equals(created)) {
             throw new IllegalStateException("TOTP enrollment 标识发生冲突");
         }
-        String accountKey = accountKey(state.accountId());
+        Key accountKey = accountKey(state.accountId());
         try {
-            redis.opsForSet().add(accountKey, enrollmentKey);
+            redis.opsForSet().add(accountKey, enrollmentKey.format(COLON));
             redis.expire(accountKey, ttl);
         } catch (RuntimeException exception) {
             redis.delete(enrollmentKey);
@@ -102,9 +101,9 @@ public final class RedisTotpEnrollmentStore {
     /** 删除一个已经验证归属关系的 enrollment。 */
     void delete(TotpEnrollmentState state) {
         TotpEnrollmentState checked = Objects.requireNonNull(state, "TOTP enrollment 不能为空");
-        String enrollmentKey = key(checked.id());
+        Key enrollmentKey = key(checked.id());
         redis.delete(enrollmentKey);
-        redis.opsForSet().remove(accountKey(checked.accountId()), enrollmentKey);
+        redis.opsForSet().remove(accountKey(checked.accountId()), enrollmentKey.format(COLON));
     }
 
     /**
@@ -113,10 +112,10 @@ public final class RedisTotpEnrollmentStore {
      * @param accountId 待清理 enrollment 的 Account
      */
     public void deleteByAccount(long accountId) {
-        String accountKey = accountKey(accountId);
+        Key accountKey = accountKey(accountId);
         Set<String> enrollmentKeys = redis.opsForSet().members(accountKey);
         if (enrollmentKeys != null && !enrollmentKeys.isEmpty()) {
-            redis.delete(enrollmentKeys);
+            redis.delete(enrollmentKeys.stream().map(value -> Key.parse(value, COLON)).toList());
         }
         redis.delete(accountKey);
     }
@@ -129,16 +128,16 @@ public final class RedisTotpEnrollmentStore {
         return ttl;
     }
 
-    private String key(String enrollmentId) {
+    private Key key(String enrollmentId) {
         String checked = Objects.requireNonNull(enrollmentId, "TOTP enrollment 标识不能为空");
         if (checked.isBlank()) {
             throw unavailable();
         }
-        return keyPrefix + checked;
+        return Key.of(ENROLLMENT).part(checked);
     }
 
-    private String accountKey(long accountId) {
-        return accountKeyPrefix + accountId;
+    private Key accountKey(long accountId) {
+        return Key.of(ACCOUNT).part(accountId);
     }
 
     private static BusinessException unavailable() {

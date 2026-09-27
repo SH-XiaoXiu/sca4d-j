@@ -211,7 +211,7 @@ loadScripts(document, 'script');</script>
 <h3>create</h3>
 <div class="member-signature"><span class="annotations">@PostMapping
 @RequirePermission(operation="SYSTEM:EMAIL:MANAGE")
-@Audit(operation="system/email/template/create")
+@Audit(operation="SYSTEM/EMAIL/TEMPLATE/CREATE")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/EmailTemplateView.html" title="class in com.sca4d.app.server.system.view">EmailTemplateView</a>&gt;</span>&nbsp;<span class="element-name">create</span><wbr><span class="parameters">(@RequestBody @Valid @NotNull
  @Valid @NotNull <a href="../../system/request/EmailTemplateRequest.html" title="class in com.sca4d.app.server.system.request">EmailTemplateRequest</a>&nbsp;request)</span></div>
@@ -234,9 +234,9 @@ loadScripts(document, 'script');</script>
 <h3>replace</h3>
 <div class="member-signature"><span class="annotations">@PutMapping("/{templateId}")
 @RequirePermission(operation="SYSTEM:EMAIL:MANAGE")
-@Audit(operation="system/email/template/replace")
+@Audit(operation="SYSTEM/EMAIL/TEMPLATE/REPLACE")
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/EmailTemplateView.html" title="class in com.sca4d.app.server.system.view">EmailTemplateView</a>&gt;</span>&nbsp;<span class="element-name">replace</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="NOTIFICATION/EMAIL/TEMPLATE")
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/EmailTemplateView.html" title="class in com.sca4d.app.server.system.view">EmailTemplateView</a>&gt;</span>&nbsp;<span class="element-name">replace</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="NOTIFICATION/EMAIL/TEMPLATES")
  long&nbsp;templateId,
  @RequestBody @Valid @NotNull
  @Valid @NotNull <a href="../../system/request/EmailTemplateRequest.html" title="class in com.sca4d.app.server.system.request">EmailTemplateRequest</a>&nbsp;request)</span></div>
@@ -248,9 +248,9 @@ loadScripts(document, 'script');</script>
 <h3>setEnabled</h3>
 <div class="member-signature"><span class="annotations">@PatchMapping("/{templateId}/status")
 @RequirePermission(operation="SYSTEM:EMAIL:MANAGE")
-@Audit(operation="system/email/template/status/change")
+@Audit(operation="SYSTEM/EMAIL/TEMPLATE/STATUS/CHANGE")
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/EmailTemplateView.html" title="class in com.sca4d.app.server.system.view">EmailTemplateView</a>&gt;</span>&nbsp;<span class="element-name">setEnabled</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="NOTIFICATION/EMAIL/TEMPLATE")
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/EmailTemplateView.html" title="class in com.sca4d.app.server.system.view">EmailTemplateView</a>&gt;</span>&nbsp;<span class="element-name">setEnabled</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="NOTIFICATION/EMAIL/TEMPLATES")
  long&nbsp;templateId,
  @RequestBody @Valid @NotNull
  @Valid @NotNull <a href="../../system/request/EmailResourceStatusRequest.html" title="class in com.sca4d.app.server.system.request">EmailResourceStatusRequest</a>&nbsp;request)</span></div>
@@ -273,9 +273,9 @@ loadScripts(document, 'script');</script>
 <h3>delete</h3>
 <div class="member-signature"><span class="annotations">@DeleteMapping("/{templateId}")
 @RequirePermission(operation="SYSTEM:EMAIL:MANAGE")
-@Audit(operation="system/email/template/delete")
+@Audit(operation="SYSTEM/EMAIL/TEMPLATE/DELETE")
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">delete</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="NOTIFICATION/EMAIL/TEMPLATE")
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">delete</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="NOTIFICATION/EMAIL/TEMPLATES")
  long&nbsp;templateId)</span></div>
 <div class="block">按 `If-Match` 删除停用模板。</div>
 </section>

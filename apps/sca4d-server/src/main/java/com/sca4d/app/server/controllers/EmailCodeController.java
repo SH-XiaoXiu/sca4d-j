@@ -91,7 +91,7 @@ public class EmailCodeController {
                 URI.create("/login/attempts/" + result.getAuthentication().getAttemptId()));
     }
 
-    /** 为已经确定 Account 的登录尝试签发后续 Email Code Challenge。 */
+    /** 为已经确定 Account 的登录尝试签发附加 Email Code Challenge。 */
     @PostMapping("/login/attempts/{attemptId}/email-code/challenges")
     @AnonymousAccess
     @Operation(summary = "为登录尝试签发 Email Code Challenge")

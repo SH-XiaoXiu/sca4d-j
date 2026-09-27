@@ -44,7 +44,7 @@ public class PlatformLoginService {
     }
 
     /**
-     * 向已有登录尝试提交一个后续认证材料。
+     * 向已有登录尝试提交一个附加认证材料。
      */
     public @NotNull LoginResult submit(
             @NotNull AuthenticationAttemptId attemptId,
@@ -59,12 +59,12 @@ public class PlatformLoginService {
      * 在登录要求满足时单次消费认证结果，并确保登录至少包含一种认证。
      */
     private LoginResult completeWhenSatisfied(AuthenticationProgress progress) {
-        // 认证要求尚未满足时只返回后续可用方法，不提前消费 attempt 或建立 Session。
+        // 认证要求尚未满足时只返回当前可用方法，不提前消费 attempt 或建立 Session。
         if (!progress.satisfied()) {
             return new LoginResult(progress, null);
         }
 
-        // 因素满足后单次消费认证结果，并复核该 attempt 确实属于登录动作。
+        // 因素满足后单次消费认证结果，并复核当前 attempt 确实属于登录动作。
         AuthenticationResult completion = authentication.consume(progress.attemptId());
         if (!AuthenticationActions.LOGIN_ACTION.equals(completion.actionCode())) {
             throw new IllegalStateException("登录尝试返回了其他动作");

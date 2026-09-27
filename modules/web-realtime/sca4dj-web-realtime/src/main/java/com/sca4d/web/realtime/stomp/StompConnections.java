@@ -86,7 +86,7 @@ public final class StompConnections {
             return;
         }
         try {
-            // 先登记本机句柄，再写入 Redis 自动身份目标，成功后让后续帧读取 ConnectionId。
+            // 先登记本机句柄，再写入 Redis 自动身份目标；写入成功后，后面的帧才能读取 ConnectionId。
             local.add(connection);
             shared.register(connectionId, transport.nodeId(), session);
             attributes.put(CONNECTION_ATTRIBUTE, connectionId);

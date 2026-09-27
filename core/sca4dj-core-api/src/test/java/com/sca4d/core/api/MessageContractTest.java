@@ -38,12 +38,12 @@ class MessageContractTest {
         IncomingMessage<Event<Map<String, String>>> incoming = new IncomingMessage<>(
                 new MessageId(42),
                 event,
-                "example-app",
+                new com.sca4d.core.api.name.Name("EXAMPLE_APP"),
                 NOW.plusSeconds(1),
                 true,
                 2);
 
-        assertEquals("ORDER/CREATED", event.type().code());
+        assertEquals(com.sca4d.core.api.name.code.TreeCode.of("ORDER/CREATED"), event.type().code());
         assertEquals(2, event.type().protocolVersion());
         assertEquals(Map.class, event.type().payloadType());
         assertEquals("order:42", event.businessKey());
@@ -51,7 +51,7 @@ class MessageContractTest {
         assertSame(payload, event.payload());
         assertEquals(new MessageId(42), incoming.messageId());
         assertSame(event, incoming.message());
-        assertEquals("example-app", incoming.sourceApplication());
+        assertEquals(new com.sca4d.core.api.name.Name("EXAMPLE_APP"), incoming.sourceApplication());
         assertEquals(NOW.plusSeconds(1), incoming.publishedAt());
         assertTrue(incoming.redelivered());
         assertEquals(2, incoming.attempt());

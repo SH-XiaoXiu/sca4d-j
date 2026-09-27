@@ -19,7 +19,7 @@ public final class EmqxClientConnection {
 
     private final @NotNull Map<String, String> clientAttributes;
 
-    /** 创建用于连接对账的 Broker 当前连接事实。 */
+    /** 创建用于连接对账的 Broker 当前连接信息。 */
     public EmqxClientConnection(
             @NotNull String clientId,
             @NotNull String brokerNode,

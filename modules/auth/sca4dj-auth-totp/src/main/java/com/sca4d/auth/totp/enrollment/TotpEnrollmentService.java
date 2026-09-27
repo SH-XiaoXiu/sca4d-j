@@ -144,7 +144,7 @@ public class TotpEnrollmentService {
     }
 
     /**
-     * 使用首次验证码激活凭据；该时间步在刷新前仍可用于认证。
+     * 使用首次验证码激活凭据；当前时间步在刷新前仍可用于认证。
      *
      * @param accountId enrollment 与新凭据所属账号
      * @param enrollmentId 待消费的 enrollment 标识

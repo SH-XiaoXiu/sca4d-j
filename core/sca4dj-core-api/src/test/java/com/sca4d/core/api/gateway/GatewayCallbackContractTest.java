@@ -1,5 +1,6 @@
 package com.sca4d.core.api.gateway;
 
+import static com.sca4d.core.api.name.NameFormat.DOT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -18,10 +19,10 @@ import java.util.Set;
 class GatewayCallbackContractTest {
 
     @Test
-    @DisplayName("回调编码只接受稳定的小写 namespace")
+    @DisplayName("回调编码复用稳定名称规则并输出大写点式编码")
     void validatesCallbackCode() {
-        assertEquals("iot.emqx.authenticate", new GatewayCallbackCode("iot.emqx.authenticate").value());
-        assertThrows(IllegalArgumentException.class, () -> new GatewayCallbackCode("IoT/Authenticate"));
+        assertEquals("IOT.EMQX.AUTHENTICATE", new GatewayCallbackCode("iot.emqx.authenticate").format(DOT));
+        assertThrows(IllegalArgumentException.class, () -> new GatewayCallbackCode("IOT//AUTHENTICATE"));
     }
 
     @Test
@@ -58,7 +59,9 @@ class GatewayCallbackContractTest {
                 "server-1",
                 URI.create("http://localhost:8080"),
                 "/actuator/health/readiness",
-                Set.of("iot.emqx.authenticate"));
+                Set.of("iot.emqx.authenticate"),
+                Set.of(),
+                Map.of());
 
         GatewayRegistrationRequest decoded = mapper.readValue(
                 mapper.writeValueAsBytes(request),

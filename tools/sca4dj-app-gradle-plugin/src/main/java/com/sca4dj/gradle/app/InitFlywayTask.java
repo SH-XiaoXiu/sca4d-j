@@ -1,5 +1,4 @@
 package com.sca4dj.gradle.app;
-
 import org.gradle.api.DefaultTask;
 import org.gradle.api.GradleException;
 import org.gradle.api.artifacts.Configuration;
@@ -286,7 +285,7 @@ public abstract class InitFlywayTask extends DefaultTask {
             SchemaFragment appFragment) throws IOException {
         StringBuilder migration = new StringBuilder();
         migration.append("-- 此文件由 initFlyway 根据 App 运行模块生成。\n");
-        migration.append("-- 生成后由 App 维护，后续数据库变化请新增 V2、V3 等迁移。\n\n");
+        migration.append("-- 生成后由 App 维护，之后的数据库变化请新增 V2、V3 等迁移。\n\n");
         for (int index = 0; index < orderedComponents.size(); index++) {
             ComponentIdentifier componentId = orderedComponents.get(index);
             SchemaFragment fragment = Objects.requireNonNull(

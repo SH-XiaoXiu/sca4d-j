@@ -210,7 +210,7 @@ public final class InboxTemplateRenderer {
         }
     }
 
-    /** 把一个 Tiptap 节点及其子节点转换为纯文本。 */
+    /** 把一个 Tiptap 节点和子节点转换为纯文本。 */
     private static String text(JsonNode node, Map<String, String> variables, int listDepth) {
         String type = requiredText(node, "type", "notificationTemplate.node");
         return switch (type) {
@@ -249,7 +249,7 @@ public final class InboxTemplateRenderer {
         };
     }
 
-    /** 把一个 Tiptap 节点及其子节点转换为经过清洗前的 HTML。 */
+    /** 把一个 Tiptap 节点和子节点转换为待清洗的 HTML。 */
     private static String html(JsonNode node, Map<String, String> variables) {
         String type = requiredText(node, "type", "notificationTemplate.node");
         return switch (type) {

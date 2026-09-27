@@ -1,6 +1,6 @@
 package com.sca4d.core.api.notification;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -74,14 +74,14 @@ public final class NotificationDefinition<T> {
     }
 
     /**
-     * @return 可选渠道及其 Java 初始默认值
+     * @return 可选渠道及对应 Java 初始默认值
      */
     public @NotNull @Unmodifiable Map<@NotNull TreeCode, @NotNull Boolean> optionalChannels() {
         return Map.copyOf(optionalChannels);
     }
 
     /**
-     * @return 模板变量及其领域值解析回调
+     * @return 模板变量及对应领域值解析回调
      */
     public @NotNull @Unmodifiable Map<@NotNull String, @NotNull BiFunction<T, Locale, String>> variables() {
         return Map.copyOf(variables);

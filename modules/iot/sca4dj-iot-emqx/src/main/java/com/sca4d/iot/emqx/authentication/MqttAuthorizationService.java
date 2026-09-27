@@ -1,7 +1,10 @@
 package com.sca4d.iot.emqx.authentication;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import cn.hutool.crypto.digest.DigestUtil;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.emqx.protocol.MqttDeviceProtocol;
 import com.sca4d.iot.emqx.protocol.MqttProtocolCatalog;
@@ -28,17 +31,15 @@ public final class MqttAuthorizationService {
 
     private final @NotNull List<MqttAuthorizationPolicy> policies;
 
-    private final @NotNull String fingerprintSchema;
+    private final @NotNull Key fingerprintSchema;
 
-    /** 创建应用策略优先、协议 ACL 兜底且使用当前应用命名空间的 MQTT 授权服务。 */
+    /** 创建应用策略优先、协议 ACL 作为默认规则且使用当前 App 隔离名称的 MQTT 授权服务。 */
     public MqttAuthorizationService(
             @NotNull MqttProtocolCatalog protocols,
-            @NotNull Collection<MqttAuthorizationPolicy> policies,
-            @NotNull RuntimeNamespace namespace) {
+            @NotNull Collection<MqttAuthorizationPolicy> policies) {
         this.protocols = Objects.requireNonNull(protocols, "MQTT 协议目录不能为空");
         this.policies = List.copyOf(Objects.requireNonNull(policies, "MQTT 授权策略不能为空"));
-        this.fingerprintSchema = Objects.requireNonNull(namespace, "运行时命名空间不能为空")
-                .sca4dj("iot", "emqx", "authorization", "v1");
+        this.fingerprintSchema = Key.of(TreeCode.ofColon("IOT:EMQX:AUTHORIZATION:V1"));
         if (this.policies.stream().anyMatch(Objects::isNull)) {
             throw new IllegalArgumentException("MQTT 授权策略不能包含空值");
         }
@@ -49,7 +50,7 @@ public final class MqttAuthorizationService {
      *
      * @param device 已完成身份认证的 Device
      * @param identifierValue MQTT 连接身份
-     * @return 完整 ACL 及其稳定指纹
+     * @return 完整 ACL 和稳定指纹
      */
     @CheckReturnValue
     public @NotNull MqttAuthorization resolve(
@@ -125,7 +126,7 @@ public final class MqttAuthorizationService {
     /** 按有序规则和规范化 QoS 计算跨进程稳定的 SHA-256。 */
     private @NotNull String fingerprint(List<EmqxAclRule> rules) {
         ByteArrayOutputStream canonical = new ByteArrayOutputStream();
-        appendFingerprintField(canonical, fingerprintSchema);
+        appendFingerprintField(canonical, fingerprintSchema.format(COLON));
         for (EmqxAclRule rule : rules) {
             appendFingerprintField(canonical, rule.permission());
             appendFingerprintField(canonical, rule.action());

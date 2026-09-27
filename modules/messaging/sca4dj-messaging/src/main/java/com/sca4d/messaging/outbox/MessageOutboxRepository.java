@@ -1,8 +1,9 @@
 package com.sca4d.messaging.outbox;
 
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.persistence.AffectedRows;
+import com.sca4d.core.api.persistence.AffectedRowsMismatchException;
 import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.core.api.persistence.ZeroRowPolicy;
 import com.sca4d.messaging.outbox.mapper.OutboxMapper;
@@ -27,7 +28,7 @@ public class MessageOutboxRepository {
     /**
      * 在调用方事务内保存一条已经序列化的待发布消息。
      *
-     * @throws com.sca4d.core.api.persistence.AffectedRowsMismatchException 新增没有影响一行时抛出
+     * @throws AffectedRowsMismatchException 新增没有影响一行时抛出
      */
     @AffectedRows(target = "新增 Outbox 消息")
     public void add(
@@ -37,7 +38,7 @@ public class MessageOutboxRepository {
             @NotNull Instant availableAt) {
         mapper.insert(
                 messageId.value(),
-                messageCode.value(),
+                messageCode,
                 envelope,
                 OutboxStatus.PENDING,
                 availableAt);
@@ -59,7 +60,7 @@ public class MessageOutboxRepository {
                 .map(
                         row -> new OutboxClaim(
                                 new MessageId(row.messageId()),
-                                TreeCode.of(row.messageCode()),
+                                row.messageCode(),
                                 row.envelope(),
                                 row.attemptCount(),
                                 leaseId,

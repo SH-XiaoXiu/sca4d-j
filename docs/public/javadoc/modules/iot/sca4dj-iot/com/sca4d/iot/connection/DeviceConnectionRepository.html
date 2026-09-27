@@ -108,10 +108,9 @@ implements com.sca4d.iot.api.connection.DeviceConnectionReceiver, com.sca4d.iot.
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,java.time.Clock,java.time.Duration,com.sca4d.core.api.runtime.RuntimeNamespace,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.core.spring.redis.RedisBatches)" class="member-name-link">DeviceConnectionRepository</a><wbr>(@NotNull org.springframework.data.redis.core.StringRedisTemplate&nbsp;redis,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,java.time.Clock,java.time.Duration,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.core.spring.redis.RedisBatches)" class="member-name-link">DeviceConnectionRepository</a><wbr>(@NotNull org.springframework.data.redis.core.RedisTemplate&lt;com.sca4d.core.api.name.Key,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;redis,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;ttl,
- @NotNull com.sca4d.core.api.runtime.RuntimeNamespace&nbsp;namespace,
  @NotNull <a href="../change/DeviceChangeNotifier.html" title="class in com.sca4d.iot.change">DeviceChangeNotifier</a>&nbsp;changes,
  @NotNull com.sca4d.core.spring.redis.RedisBatches&nbsp;redisBatches)</code></div>
 <div class="col-last even-row-color">
@@ -175,16 +174,14 @@ implements com.sca4d.iot.api.connection.DeviceConnectionReceiver, com.sca4d.iot.
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(org.springframework.data.redis.core.StringRedisTemplate,java.time.Clock,java.time.Duration,com.sca4d.core.api.runtime.RuntimeNamespace,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.core.spring.redis.RedisBatches)">
+<section class="detail" id="&lt;init&gt;(org.springframework.data.redis.core.RedisTemplate,java.time.Clock,java.time.Duration,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.core.spring.redis.RedisBatches)">
 <h3>DeviceConnectionRepository</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">DeviceConnectionRepository</span><wbr><span class="parameters">(@NotNull
- @NotNull org.springframework.data.redis.core.StringRedisTemplate&nbsp;redis,
+ @NotNull org.springframework.data.redis.core.RedisTemplate&lt;com.sca4d.core.api.name.Key,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;redis,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;ttl,
- @NotNull
- @NotNull com.sca4d.core.api.runtime.RuntimeNamespace&nbsp;namespace,
  @NotNull
  @NotNull <a href="../change/DeviceChangeNotifier.html" title="class in com.sca4d.iot.change">DeviceChangeNotifier</a>&nbsp;changes,
  @NotNull
@@ -195,7 +192,6 @@ implements com.sca4d.iot.api.connection.DeviceConnectionReceiver, com.sca4d.iot.
 <dd><code>redis</code> - IoT 共享 Redis</dd>
 <dd><code>clock</code> - 计算连接过期时间的时钟</dd>
 <dd><code>ttl</code> - 未续期连接事实的保留时间</dd>
-<dd><code>namespace</code> - 共享资源命名空间</dd>
 <dd><code>changes</code> - Device 运行区域变化通知器</dd>
 <dd><code>redisBatches</code> - Redis pipeline 批处理器</dd>
 </dl>

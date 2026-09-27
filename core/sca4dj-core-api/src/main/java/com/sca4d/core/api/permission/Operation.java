@@ -1,6 +1,7 @@
 package com.sca4d.core.api.permission;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.NameFormat;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,9 +43,6 @@ public final class Operation implements Resource {
      */
     public Operation(@NotNull TreeCode code) {
         TreeCode checked = Objects.requireNonNull(code, "操作编码不能为空");
-        if (checked.separator() != ':') {
-            throw new IllegalArgumentException("Operation 必须使用冒号分层: " + checked);
-        }
         this.code = checked;
     }
 
@@ -72,7 +70,7 @@ public final class Operation implements Resource {
      */
     @Override
     public @NotNull String id() {
-        return code.value();
+        return code.format(NameFormat.COLON);
     }
 
     @Override

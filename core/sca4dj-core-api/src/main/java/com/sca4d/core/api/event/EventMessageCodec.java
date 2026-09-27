@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.messaging.MessageCodec;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -27,7 +27,7 @@ public final class EventMessageCodec<T> implements MessageCodec<Event<T>> {
 
     @Override
     public @NotNull TreeCode code() {
-        return type.treeCode();
+        return type.code();
     }
 
     @Override

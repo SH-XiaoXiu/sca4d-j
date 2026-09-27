@@ -1,10 +1,8 @@
 package com.sca4d.core.api.setting;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.TextNode;
+import com.sca4d.core.api.data.DataOps;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.StandardCharsets;
@@ -14,9 +12,6 @@ import java.util.Objects;
 
 /** 负责一个设置值与数据库文本之间的双向转换和校验。 */
 public interface SettingCodec<T> {
-
-    /** Setting 文档 Codec 使用的严格 JSON 解析器。 */
-    ObjectMapper JSON = new ObjectMapper().enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
 
     /**
      * 把已经通过业务校验的设置值转换为数据库文本。
@@ -41,7 +36,7 @@ public interface SettingCodec<T> {
     /**
      * 把类型化值转换为 HTTP 使用的 JSON 节点。
      *
-     * <p>标量 Codec 默认返回包含持久化文本的 JSON 字符串；文档 Codec 可以覆盖该方法返回对象或数组。
+     * <p>标量 Codec 默认返回包含持久化文本的 JSON 字符串；文档 Codec 可以覆盖当前方法返回对象或数组。
      *
      * @param value 设置值
      * @return 独立 JSON 节点
@@ -53,7 +48,7 @@ public interface SettingCodec<T> {
     /**
      * 把 HTTP JSON 节点转换为类型化值。
      *
-     * <p>标量 Codec 默认只接受 JSON 字符串；文档 Codec 可以覆盖该方法读取对象或数组。
+     * <p>标量 Codec 默认只接受 JSON 字符串；文档 Codec 可以覆盖当前方法读取对象或数组。
      *
      * @param value 请求中的 JSON 值
      * @return 已完成格式和取值校验的类型化值
@@ -219,11 +214,11 @@ public interface SettingCodec<T> {
 
             @Override
             public @NotNull JsonNode decode(@NotNull String value) {
-                try {
-                    return requireObject(JSON.readTree(Objects.requireNonNull(value, "JSON 设置文本不能为空")));
-                } catch (JsonProcessingException exception) {
-                    throw new IllegalArgumentException("JSON 设置格式不正确", exception);
+                JsonNode node = DataOps.j(Objects.requireNonNull(value, "JSON 设置文本不能为空")).node();
+                if (node == null) {
+                    throw new IllegalArgumentException("JSON 设置必须是 object");
                 }
+                return requireObject(node);
             }
 
             @Override

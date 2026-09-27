@@ -1,7 +1,9 @@
 package com.sca4d.core.api.job;
 
-/** 标识当前应用运行时命名空间内一次已经持久化的 Job 运行。 */
-public final class JobRunId extends com.sca4d.core.api.id.Id {
+import com.sca4d.core.api.id.Id;
+
+/** 标识当前 App 隔离名称内一次已经持久化的 Job 运行。 */
+public final class JobRunId extends Id {
 
     /**
      * 创建一次持久化运行的标识。

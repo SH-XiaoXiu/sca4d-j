@@ -6,7 +6,7 @@ import com.sca4d.auth.passkey.PasskeyAuthenticationMethod;
 import com.sca4d.auth.password.PasswordAuthenticationMethod;
 import com.sca4d.auth.sms.SmsCodeAuthenticationMethod;
 import com.sca4d.auth.totp.TotpAuthenticationMethod;
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 

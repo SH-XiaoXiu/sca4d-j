@@ -238,7 +238,7 @@ loadScripts(document, 'script');</script>
 <h3>createProvider</h3>
 <div class="member-signature"><span class="annotations">@PostMapping
 @RequirePermission(operation="SYSTEM:SMS:MANAGE")
-@Audit(operation="system/sms/provider/create")
+@Audit(operation="SYSTEM/SMS/PROVIDER/CREATE")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/SmsProviderView.html" title="class in com.sca4d.app.server.system.view">SmsProviderView</a>&gt;</span>&nbsp;<span class="element-name">createProvider</span><wbr><span class="parameters">(@RequestBody @Valid
  @Valid <a href="../../system/request/SmsProviderRequest.html" title="class in com.sca4d.app.server.system.request">SmsProviderRequest</a>&nbsp;request)</span></div>
 <div class="block">创建默认停用 Provider。</div>
@@ -259,7 +259,7 @@ loadScripts(document, 'script');</script>
 <h3>replaceProvider</h3>
 <div class="member-signature"><span class="annotations">@PutMapping("/{providerId}")
 @RequirePermission(operation="SYSTEM:SMS:MANAGE")
-@Audit(operation="system/sms/provider/replace")
+@Audit(operation="SYSTEM/SMS/PROVIDER/REPLACE")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/SmsProviderView.html" title="class in com.sca4d.app.server.system.view">SmsProviderView</a>&gt;</span>&nbsp;<span class="element-name">replaceProvider</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="notification:sms:provider")
  long&nbsp;providerId,
  @RequestBody @Valid
@@ -272,7 +272,7 @@ loadScripts(document, 'script');</script>
 <h3>setProviderEnabled</h3>
 <div class="member-signature"><span class="annotations">@PatchMapping("/{providerId}/status")
 @RequirePermission(operation="SYSTEM:SMS:MANAGE")
-@Audit(operation="system/sms/provider/status/change")
+@Audit(operation="SYSTEM/SMS/PROVIDER/STATUS/CHANGE")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/SmsProviderView.html" title="class in com.sca4d.app.server.system.view">SmsProviderView</a>&gt;</span>&nbsp;<span class="element-name">setProviderEnabled</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="notification:sms:provider")
  long&nbsp;providerId,
  @RequestBody @Valid
@@ -285,7 +285,7 @@ loadScripts(document, 'script');</script>
 <h3>deleteProvider</h3>
 <div class="member-signature"><span class="annotations">@DeleteMapping("/{providerId}")
 @RequirePermission(operation="SYSTEM:SMS:MANAGE")
-@Audit(operation="system/sms/provider/delete")
+@Audit(operation="SYSTEM/SMS/PROVIDER/DELETE")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">deleteProvider</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="notification:sms:provider")
  long&nbsp;providerId)</span></div>
 <div class="block">按 `If-Match` 删除停用且没有绑定的 Provider。</div>
@@ -309,7 +309,7 @@ loadScripts(document, 'script');</script>
 <h3>createBinding</h3>
 <div class="member-signature"><span class="annotations">@PostMapping("/{providerId}/bindings")
 @RequirePermission(operation="SYSTEM:SMS:MANAGE")
-@Audit(operation="system/sms/binding/create")
+@Audit(operation="SYSTEM/SMS/BINDING/CREATE")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/SmsBindingView.html" title="class in com.sca4d.app.server.system.view">SmsBindingView</a>&gt;</span>&nbsp;<span class="element-name">createBinding</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="notification:sms:provider")
  long&nbsp;providerId,
  @RequestBody @Valid
@@ -334,7 +334,7 @@ loadScripts(document, 'script');</script>
 <h3>replaceBinding</h3>
 <div class="member-signature"><span class="annotations">@PutMapping("/{providerId}/bindings/{bindingId}")
 @RequirePermission(operation="SYSTEM:SMS:MANAGE")
-@Audit(operation="system/sms/binding/replace")
+@Audit(operation="SYSTEM/SMS/BINDING/REPLACE")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/SmsBindingView.html" title="class in com.sca4d.app.server.system.view">SmsBindingView</a>&gt;</span>&nbsp;<span class="element-name">replaceBinding</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;providerId,
  @PathVariable @AuditTarget(resourceType="notification:sms:binding")
@@ -349,7 +349,7 @@ loadScripts(document, 'script');</script>
 <h3>setBindingEnabled</h3>
 <div class="member-signature"><span class="annotations">@PatchMapping("/{providerId}/bindings/{bindingId}/status")
 @RequirePermission(operation="SYSTEM:SMS:MANAGE")
-@Audit(operation="system/sms/binding/status/change")
+@Audit(operation="SYSTEM/SMS/BINDING/STATUS/CHANGE")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/SmsBindingView.html" title="class in com.sca4d.app.server.system.view">SmsBindingView</a>&gt;</span>&nbsp;<span class="element-name">setBindingEnabled</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;providerId,
  @PathVariable @AuditTarget(resourceType="notification:sms:binding")
@@ -364,7 +364,7 @@ loadScripts(document, 'script');</script>
 <h3>deleteBinding</h3>
 <div class="member-signature"><span class="annotations">@DeleteMapping("/{providerId}/bindings/{bindingId}")
 @RequirePermission(operation="SYSTEM:SMS:MANAGE")
-@Audit(operation="system/sms/binding/delete")
+@Audit(operation="SYSTEM/SMS/BINDING/DELETE")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">deleteBinding</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;providerId,
  @PathVariable @AuditTarget(resourceType="notification:sms:binding")

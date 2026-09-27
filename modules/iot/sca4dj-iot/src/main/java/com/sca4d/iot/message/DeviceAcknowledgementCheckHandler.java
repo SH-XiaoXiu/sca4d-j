@@ -1,12 +1,14 @@
 package com.sca4d.iot.message;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.annotation.SystemExecution;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.messaging.HandlingDecision;
 import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.api.messaging.MessageHandler;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.iot.api.IotCapabilities;
 import com.sca4d.iot.api.change.DeviceChangeArea;
 import com.sca4d.iot.api.message.DeviceAcknowledgementCheck;
 import com.sca4d.iot.api.message.DeviceDownlink;
@@ -75,6 +77,7 @@ public class DeviceAcknowledgementCheckHandler implements MessageHandler<DeviceA
 
     /** 只有消息仍在等待同一次发送的 ACK 时才执行超时重试判断。 */
     @Override
+    @SystemExecution(IotCapabilities.SYSTEM_IDENTITY_VALUE)
     public @NotNull HandlingDecision handle(@NotNull IncomingMessage<DeviceAcknowledgementCheck> delivery) {
         DeviceAcknowledgementCheck timeout = Objects.requireNonNull(delivery, "ACK 超时投递不能为空")
                 .message();
@@ -131,6 +134,6 @@ public class DeviceAcknowledgementCheckHandler implements MessageHandler<DeviceA
 
     /** @return 指定下行消息在全部应用实例间共用的锁键 */
     private static @NotNull LockKey downlinkLock(long messageId) {
-        return new LockKey("iot", "downlink", Long.toString(messageId));
+        return new LockKey(TreeCode.of("IOT:DOWNLINK"), messageId);
     }
 }

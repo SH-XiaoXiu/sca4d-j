@@ -1,5 +1,7 @@
 package com.sca4d.core.spring.setting;
 
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.concurrent.VersionConditions;
@@ -376,7 +378,7 @@ public class DatabaseSettings implements Settings, PreferenceSettings {
     private static @NotNull String ownerSecretPurpose(
             @NotNull SettingOwner owner,
             @NotNull String key) {
-        String type = owner.type().value();
+        String type = owner.type().format(SLASH);
         String id = owner.id();
         return "setting:v2:" + type.length() + ":" + type + ":" + id.length() + ":" + id + ":" + key;
     }

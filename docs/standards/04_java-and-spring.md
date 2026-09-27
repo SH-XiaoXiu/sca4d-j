@@ -1,5 +1,7 @@
 # 04 Java 与 Spring 规范
 
+用 Java 类型表达合法输入和状态，用构造器声明依赖，把事务放在负责完整业务动作的 Service。修改 Spring 代码时，重点检查调用是否经过代理、可选 Bean 怎样装配，以及失败后哪些数据和外部操作已经发生。
+
 ## Java 类型
 
 系统定义且取值有限的状态、类型、模式和操作使用枚举或专用值类型。只有外部提供方、租户或协议可以增加新编码，且项目不能在编译时枚举时，才使用字符串。字段文档要说明编码来源和未知值的处理方式。
@@ -42,7 +44,7 @@
 
 ## 序列化与协议转换
 
-使用项目统一配置的 ObjectMapper、枚举 Codec、MyBatis TypeHandler 和 HTTP 响应转换。业务代码不自行创建 ObjectMapper，不通过反射或通用 Map 绕过已有类型。
+脚手架的持久化、Session 和内部消息使用 `@Sca4djJson Sca4djMapper`；该 Mapper 由脚手架定制，业务不依赖它。HTTP 与客户端协议使用各自配置的 `ObjectMapper`，普通业务代码通过注入复用对应 Mapper。Name、Code 与 Key 在内部保持类型，字符串转换只发生在配置、JSON、SQL 或协议边界；使用已有枚举 Codec、MyBatis TypeHandler 和 HTTP 响应转换，不通过反射或通用 Map 绕过类型。
 
 协议输入在 Controller、消息适配或设备协议入口转成 Service 能够理解的类型。Service 不读取 ServletRequest、原始消息头、STOMP 帧或 MQTT 报文；需要保留的业务数据作为显式参数传入。
 

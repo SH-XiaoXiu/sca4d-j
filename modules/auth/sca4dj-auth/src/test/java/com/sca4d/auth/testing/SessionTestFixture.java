@@ -1,5 +1,7 @@
 package com.sca4d.auth.testing;
 
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.auth.session.codec.SessionCodec;
 import com.sca4d.core.api.authentication.Authentication;
@@ -10,12 +12,12 @@ import com.sca4d.core.api.authentication.principalsession.PrincipalCodec;
 import com.sca4d.core.api.authentication.principalsession.PrincipalIdSet;
 import com.sca4d.core.api.authentication.principalsession.ResourceCodec;
 import com.sca4d.core.api.authentication.principalsession.ResourceIdSet;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 
@@ -223,8 +225,8 @@ public final class SessionTestFixture {
         }
 
         @Override
-        public String type() {
-            return "test.principal";
+        public @NotNull TreeCode type() {
+            return TreeCode.of("test.principal");
         }
 
         @Override
@@ -259,8 +261,8 @@ public final class SessionTestFixture {
         }
 
         @Override
-        public String type() {
-            return "test.resource";
+        public @NotNull TreeCode type() {
+            return TreeCode.of("test.resource");
         }
 
         @Override
@@ -270,7 +272,7 @@ public final class SessionTestFixture {
 
         @Override
         public byte[] encode(TestResource value) {
-            return write(new ResourcePayload(value.type().value(), value.id(), value.field()));
+            return write(new ResourcePayload(value.type().format(SLASH), value.id(), value.field()));
         }
 
         @Override

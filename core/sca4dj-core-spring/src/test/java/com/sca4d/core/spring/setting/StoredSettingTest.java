@@ -2,6 +2,7 @@ package com.sca4d.core.spring.setting;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.setting.SettingOwner;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,7 @@ class StoredSettingTest {
     void readsHierarchicalResourceOwnerFromStoredSetting() {
         StoredSetting stored = stored("IAM:ACCOUNT", "42");
 
-        assertThat(stored.owner().type().value()).isEqualTo("IAM:ACCOUNT");
+        assertThat(stored.owner().type()).isEqualTo(TreeCode.of("IAM:ACCOUNT"));
         assertThat(stored.owner().id()).isEqualTo("42");
     }
 

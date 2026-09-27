@@ -15,7 +15,8 @@ CREATE TABLE audit_record (
     http_path VARCHAR(2048),
     client_ip VARCHAR(128),
     user_agent VARCHAR(512),
-    occurred_at TIMESTAMP WITH TIME ZONE NOT NULL
+    occurred_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    instance_id VARCHAR(128)
 );
 
 CREATE INDEX idx_audit_record_request ON audit_record (request_id);
@@ -45,3 +46,4 @@ COMMENT ON COLUMN audit_record.http_path IS '可选且不含查询参数的 HTTP
 COMMENT ON COLUMN audit_record.client_ip IS '可选直连客户端地址，不读取转发 Header';
 COMMENT ON COLUMN audit_record.user_agent IS '可选且完成控制字符清理和长度限制的 User-Agent';
 COMMENT ON COLUMN audit_record.occurred_at IS '被审计操作产生最终结果的时间';
+COMMENT ON COLUMN audit_record.instance_id IS '实际执行实例标识，不是 IAM 身份；历史记录允许为空';

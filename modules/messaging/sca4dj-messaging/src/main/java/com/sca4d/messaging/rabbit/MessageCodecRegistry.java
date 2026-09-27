@@ -1,11 +1,11 @@
 package com.sca4d.messaging.rabbit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.event.EventMessageCodec;
 import com.sca4d.core.api.message.Message;
 import com.sca4d.core.api.messaging.MessageCodec;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 

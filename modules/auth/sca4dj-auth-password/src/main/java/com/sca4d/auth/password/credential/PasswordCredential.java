@@ -1,5 +1,7 @@
 package com.sca4d.auth.password.credential;
 
+import static com.sca4d.auth.password.credential.PasswordCredential.Status.ACTIVE;
+
 import com.sca4d.auth.password.PasswordAuthenticationMethod;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.enums.BaseEnum;
@@ -13,7 +15,7 @@ import java.util.Objects;
 /**
  * Account 绑定的不可逆 Argon2id 密码凭据，仅由 {@link PasswordAuthenticationMethod} 读取摘要并完成验证。
  *
- * <p>该类型不能用于 HTTP 响应或日志，避免不可逆摘要离开 Password 模块。
+ * <p>当前类型不能用于 HTTP 响应或日志，避免不可逆摘要离开 Password 模块。
  */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public final class PasswordCredential {
@@ -81,7 +83,7 @@ public final class PasswordCredential {
             @NotNull String passwordHash,
             @NotNull Instant updatedAt,
             @NotNull Version version) {
-        this(accountId, passwordHash, updatedAt, version, Status.ACTIVE);
+        this(accountId, passwordHash, updatedAt, version, ACTIVE);
     }
 
     /**
@@ -125,6 +127,6 @@ public final class PasswordCredential {
 
     /** @return 当前凭据允许密码认证时为 {@code true} */
     public boolean active() {
-        return status == Status.ACTIVE;
+        return status == ACTIVE;
     }
 }

@@ -11,14 +11,15 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
+import com.sca4d.core.api.isolation.AppName;
 import com.sca4d.core.api.message.Message;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.DispatchReceipt;
 import com.sca4d.core.api.messaging.MessageId;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Name;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.messaging.outbox.MessageOutboxRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +31,9 @@ import java.time.Clock;
 
 /** 验证允许丢失的 RabbitMQ 发布只在事务成功提交后尝试一次。 */
 class RabbitMessageBusTest {
+    static {
+        AppName.publish("sca4d-test");
+    }
 
     private static final TreeCode CODE = TreeCode.of("TEST:MESSAGE");
 
@@ -47,14 +51,13 @@ class RabbitMessageBusTest {
     void setUp() {
         when(ids.nextId()).thenReturn(Id.of(42L));
         when(message.code()).thenReturn(CODE);
-        when(codec.encode(any(), eq(message), any(), eq("test-app"))).thenReturn(new byte[] {1, 2, 3});
+        when(codec.encode(any(), eq(message), any(), eq(new Name("SCA4D_TEST")))).thenReturn(new byte[] {1, 2, 3});
         bus = new RabbitMessageBus(
                 ids,
                 codec,
                 publisher,
                 mock(MessageOutboxRepository.class),
-                Clock.systemUTC(),
-                new RuntimeNamespace("test-app"));
+                Clock.systemUTC());
     }
 
     @AfterEach

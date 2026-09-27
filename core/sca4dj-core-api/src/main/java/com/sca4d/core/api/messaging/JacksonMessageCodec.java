@@ -2,8 +2,8 @@ package com.sca4d.core.api.messaging;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.message.Message;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

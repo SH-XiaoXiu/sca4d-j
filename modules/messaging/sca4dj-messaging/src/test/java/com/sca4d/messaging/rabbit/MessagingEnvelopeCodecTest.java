@@ -8,6 +8,7 @@ import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.event.EventType;
 import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.name.Name;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +30,7 @@ class RabbitMessageEnvelopeCodecTest {
                 new MessageId(101),
                 new Event<>(type, "invoice:8", occurredAt, Map.of("invoiceId", 8)),
                 occurredAt.plusSeconds(1),
-                "test-app");
+                new Name("SCA4D_TEST"));
 
         IncomingMessage<Event<Map>> decoded = codec.decodeEvent(encoded, type, true, 2);
 
@@ -38,7 +39,7 @@ class RabbitMessageEnvelopeCodecTest {
         assertThat(decoded.messageId()).isEqualTo(new MessageId(101));
         assertThat(decoded.message().businessKey()).isEqualTo("invoice:8");
         assertThat(decoded.message().payload()).containsEntry("invoiceId", 8);
-        assertThat(decoded.sourceApplication()).isEqualTo("test-app");
+        assertThat(decoded.sourceApplication()).isEqualTo(new Name("SCA4D_TEST"));
         assertThat(decoded.publishedAt()).isEqualTo(occurredAt.plusSeconds(1));
         assertThat(decoded.redelivered()).isTrue();
         assertThat(decoded.attempt()).isEqualTo(2);

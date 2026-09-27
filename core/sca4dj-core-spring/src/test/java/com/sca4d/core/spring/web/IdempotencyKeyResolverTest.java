@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallExecution;
 import com.sca4d.core.api.concurrent.IdempotencyFingerprints;
+import com.sca4d.core.api.identity.SystemPrincipal;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,7 +23,8 @@ import java.util.Objects;
 
 class IdempotencyKeyResolverTest {
 
-    private final Call call = Call.system("idempotency-test", Instant.EPOCH);
+    private final Call call = Call
+            .system("idempotency-test", Instant.EPOCH, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")));
 
     @AfterEach
     void clearRequest() {

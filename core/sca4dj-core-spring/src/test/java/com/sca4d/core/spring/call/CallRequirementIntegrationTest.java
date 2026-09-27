@@ -8,8 +8,9 @@ import static org.mockito.Mockito.when;
 
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallExecution;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.identity.SystemPrincipal;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.permission.Permission;
 import com.sca4d.core.api.permission.PermissionDecision;
@@ -43,7 +44,8 @@ class CallRequirementIntegrationTest {
     @Test
     @DisplayName("Rejects Transaction Commit Before If Match Is Consumed")
     void rejectsTransactionCommitBeforeIfMatchIsConsumed() throws Exception {
-        Call call = Call.system("transaction-requirement", Instant.EPOCH);
+        Call call = Call
+                .system("transaction-requirement", Instant.EPOCH, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")));
         CallHolder.set(call);
         CallExecution execution = execution(call, Fixture.class.getDeclaredMethod("versioned"));
         CallHolder.push(execution);
@@ -66,7 +68,7 @@ class CallRequirementIntegrationTest {
     @Test
     @DisplayName("Consumes Matching Resource Scope For Every Active Execution")
     void consumesMatchingResourceScopeForEveryActiveExecution() throws Exception {
-        Call call = Call.system("nested-scope", Instant.EPOCH);
+        Call call = Call.system("nested-scope", Instant.EPOCH, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")));
         Permission permission = new Permission(new DeviceCollection(), Action.READ);
         DeviceScope scope = new DeviceScope();
         call.recordPermissionDecision(permission, PermissionDecision.allow(scope));

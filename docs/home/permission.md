@@ -1,15 +1,15 @@
 # 权限与调用
 
-权限检查回答“当前业务身份能否对目标执行这个操作”。例如，平台员工读取角色目录，需要具有 `platform:roles:read`；读取文件 #9001，还需要满足文件的访问规则。
+权限检查用 Principal 确定谁在操作，用 Resource 确定操作目标，用 Action 确定要做什么。接入接口时，先选择当前 Principal，再用 `@RequirePermission` 声明要检查的权限；只有 PermissionPolicy 允许后，业务方法才执行。
 
-Sca4d-J 用 Principal 表示当前业务身份，Resource 表示目标，Action 表示动作。Permission 将 Resource 与 Action 组成待检查的权限，PermissionPolicy 读取当前 Call 中的身份并返回 PermissionDecision。
+Permission 将 Resource 与 Action 组成待检查的权限，PermissionPolicy 读取当前 Call 中的身份并返回 PermissionDecision。
 
 ```text
 Permission = Resource + Action
 授权判断 = 当前 Principal + Permission
 ```
 
-平台角色读取接口的 Permission 是 `operation + platform:roles:read + invoke`。订单读取接口的 Permission 是 `order + orderId + read`。
+平台角色读取接口检查 `operation + platform:roles:read + invoke`；订单读取接口检查 `order + orderId + read`。Operation 管固定入口，对象权限管具体数据，两者可以同时检查，接入步骤见[身份与权限教程](/tutorials/identity-and-permission)。
 
 ## 两类权限
 
@@ -111,7 +111,7 @@ flowchart LR
 
 动态判断业务资源时，所属模块根据 `type + id` 读取对象当前是否存在、状态是否允许目标 Action，以及当前 Principal 与对象之间的业务关系。进入 Session 的静态 Resource 是建立或刷新 Session 时的快照；对应授权发生变化时，负责修改授权的模块需要使相关 Session 失效或刷新。
 
-业务数据是否实现 Resource，取决于它是否会成为一个需要明确命名的操作目标。一个订单可以同时关联顾客 Principal、门店和创建人，但只有权限或审计需要表达“正在读取订单 #8842”时，订单本身才需要作为 `order + 8842` Resource 参与调用。
+业务数据是否实现 Resource，取决于它是否会成为一个需要明确命名的操作目标。一个订单可以同时关联顾客 Principal、门店和创建人，但只有权限或审计需要表达「正在读取订单 #8842」时，订单本身才需要作为 `order + 8842` Resource 参与调用。
 
 权限声明和审计声明分别确定各自的目标 Resource。两者使用相同的 `type + id` 时，表示权限判断和审计记录指向同一个业务对象；一个业务过程涉及文件及其绑定的用户资料时，也可以分别指向两个 Resource。
 
@@ -147,7 +147,7 @@ Operation 数量有限，而且角色变化后可以按 Principal 预先计算�
 
 ### 集合资源与 ResourceScope
 
-有些调用保护的不是一个固定实例，而是一组业务对象，例如“读取当前 Principal 可以查看的设备集合”。模块可以为这组对象定义一个集合 Resource，再让权限策略返回 [ResourceScope](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/permission/ResourceScope.html)。
+有些调用保护的不是一个固定实例，而是一组业务对象，例如「读取当前 Principal 可以查看的设备集合」。模块可以为这组对象定义一个集合 Resource，再让权限策略返回 [ResourceScope](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/permission/ResourceScope.html)。
 
 ResourceScope 保存 PermissionPolicy 在这次权限判断中批准的数据访问条件，例如当前 Principal 可以访问的组织、区域或设备集合。Repository 消费这些条件并转换成查询限制，使查询只返回本次调用允许访问的数据。
 

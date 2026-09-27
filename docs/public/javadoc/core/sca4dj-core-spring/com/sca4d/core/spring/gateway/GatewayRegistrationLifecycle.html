@@ -103,8 +103,10 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.spring.gateway.GatewayRegistrationProperties,java.util.List)" class="member-name-link">GatewayRegistrationLifecycle</a><wbr>(@NotNull <a href="GatewayRegistrationProperties.html" title="class in com.sca4d.core.spring.gateway">GatewayRegistrationProperties</a>&nbsp;properties,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull com.sca4d.core.api.gateway.GatewayCallback&lt;?,<wbr>?&gt;&gt;&nbsp;callbacks)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.spring.gateway.GatewayRegistrationProperties,java.util.List,com.sca4d.core.spring.config.InstanceProperties,com.sca4d.core.api.runtime.InstanceCapabilities)" class="member-name-link">GatewayRegistrationLifecycle</a><wbr>(@NotNull <a href="GatewayRegistrationProperties.html" title="class in com.sca4d.core.spring.gateway">GatewayRegistrationProperties</a>&nbsp;properties,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull com.sca4d.core.api.gateway.GatewayCallback&lt;?,<wbr>?&gt;&gt;&nbsp;callbacks,
+ @NotNull <a href="../config/InstanceProperties.html" title="class in com.sca4d.core.spring.config">InstanceProperties</a>&nbsp;instanceProperties,
+ @NotNull com.sca4d.core.api.runtime.InstanceCapabilities&nbsp;capabilities)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建注册生命周期并校验全部地址、Secret 和间隔。</div>
 </div>
@@ -150,12 +152,16 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.core.spring.gateway.GatewayRegistrationProperties,java.util.List)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.core.spring.gateway.GatewayRegistrationProperties,java.util.List,com.sca4d.core.spring.config.InstanceProperties,com.sca4d.core.api.runtime.InstanceCapabilities)">
 <h3>GatewayRegistrationLifecycle</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">GatewayRegistrationLifecycle</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="GatewayRegistrationProperties.html" title="class in com.sca4d.core.spring.gateway">GatewayRegistrationProperties</a>&nbsp;properties,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull com.sca4d.core.api.gateway.GatewayCallback&lt;?,<wbr>?&gt;&gt;&nbsp;callbacks)</span></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull com.sca4d.core.api.gateway.GatewayCallback&lt;?,<wbr>?&gt;&gt;&nbsp;callbacks,
+ @NotNull
+ @NotNull <a href="../config/InstanceProperties.html" title="class in com.sca4d.core.spring.config">InstanceProperties</a>&nbsp;instanceProperties,
+ @NotNull
+ @NotNull com.sca4d.core.api.runtime.InstanceCapabilities&nbsp;capabilities)</span></div>
 <div class="block">创建注册生命周期并校验全部地址、Secret 和间隔。</div>
 <dl class="notes">
 <dt>Parameters:</dt>

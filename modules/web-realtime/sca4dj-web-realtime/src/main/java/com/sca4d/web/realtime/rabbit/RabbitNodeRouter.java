@@ -1,6 +1,10 @@
 package com.sca4d.web.realtime.rabbit;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import com.sca4d.core.api.connection.ConnectionId;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.web.realtime.config.WebRealtimeInfrastructureNames;
 import com.sca4d.web.realtime.config.WebRealtimeProperties;
 import com.sca4d.web.realtime.connection.BrowserWrite;
@@ -37,9 +41,9 @@ public final class RabbitNodeRouter implements NodeRouter, SmartLifecycle {
 
     private final @NotNull String nodeId = UUID.randomUUID().toString();
 
-    private final @NotNull String exchangeName;
+    private final @NotNull Key exchangeName;
 
-    private final @NotNull String queueName;
+    private final @NotNull Key queueName;
 
     private final @NotNull RabbitTemplate rabbit;
 
@@ -70,7 +74,7 @@ public final class RabbitNodeRouter implements NodeRouter, SmartLifecycle {
         this.properties = Objects.requireNonNull(properties, "Web Realtime 配置不能为空");
         this.listener = new SimpleMessageListenerContainer(
                 Objects.requireNonNull(connectionFactory, "RabbitMQ 连接工厂不能为空"));
-        listener.setQueueNames(queueName);
+        listener.setQueueNames(queueName.format(COLON));
         listener.setAcknowledgeMode(AcknowledgeMode.AUTO);
         listener.setDefaultRequeueRejected(false);
         listener.setAutoStartup(false);
@@ -85,16 +89,18 @@ public final class RabbitNodeRouter implements NodeRouter, SmartLifecycle {
         return nodeId;
     }
 
-    /** @return 当前节点的非持久、独占、自动删除队列及其 direct exchange 绑定 */
+    /** @return 当前节点的非持久、独占、自动删除队列和 direct exchange 绑定 */
     @NotNull
     public Declarables declarables() {
-        DirectExchange exchange = new DirectExchange(exchangeName, false, false);
-        Queue queue = QueueBuilder.nonDurable(queueName)
+        DirectExchange exchange = new DirectExchange(exchangeName.format(COLON), false, false);
+        Queue queue = QueueBuilder.nonDurable(queueName.format(COLON))
                 .exclusive()
                 .autoDelete()
                 .ttl((int) Math.min(Integer.MAX_VALUE, properties.getNodeMessageTtl().toMillis()))
                 .build();
-        Binding binding = BindingBuilder.bind(queue).to(exchange).with(nodeId);
+        Binding binding = BindingBuilder.bind(queue)
+                .to(exchange)
+                .with(Key.of(TreeCode.of("WEB_REALTIME:NODE:ROUTE"), nodeId).format(COLON));
         return new Declarables(exchange, queue, binding);
     }
 
@@ -119,7 +125,10 @@ public final class RabbitNodeRouter implements NodeRouter, SmartLifecycle {
                 .setDeliveryMode(MessageDeliveryMode.NON_PERSISTENT)
                 .setExpiration(Long.toString(properties.getNodeMessageTtl().toMillis()))
                 .build();
-        rabbit.send(exchangeName, destination, rabbitMessage);
+        rabbit.send(
+                exchangeName.format(COLON),
+                Key.of(TreeCode.of("WEB_REALTIME:NODE:ROUTE"), destination).format(COLON),
+                rabbitMessage);
     }
 
     /** 启动当前节点临时队列的监听。 */

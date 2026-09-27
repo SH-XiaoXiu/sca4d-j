@@ -1,5 +1,8 @@
 package com.sca4d.auth.session.codec;
 
+import static com.sca4d.core.api.name.NameFormat.DOT;
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -13,12 +16,12 @@ import com.sca4d.core.api.authentication.principalsession.PrincipalCodec;
 import com.sca4d.core.api.authentication.principalsession.PrincipalIdSet;
 import com.sca4d.core.api.authentication.principalsession.ResourceCodec;
 import com.sca4d.core.api.authentication.principalsession.ResourceIdSet;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.Resource;
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.NotNull;
@@ -47,7 +50,7 @@ import java.util.function.Function;
  */
 public final class SessionCodec {
 
-    private static final int FORMAT_VERSION = 1;
+    private static final int FORMAT_VERSION = 2;
 
     private static final String ID_SET_ENCODING = "roaring64-portable";
 
@@ -55,11 +58,11 @@ public final class SessionCodec {
 
     private final @NotNull Map<Class<?>, PrincipalCodec<?>> principalCodecs;
 
-    private final @NotNull Map<String, PrincipalCodec<?>> principalCodecsByType;
+    private final @NotNull Map<TreeCode, PrincipalCodec<?>> principalCodecsByType;
 
     private final @NotNull Map<Class<?>, ResourceCodec<?>> resourceCodecs;
 
-    private final @NotNull Map<String, ResourceCodec<?>> resourceCodecsByType;
+    private final @NotNull Map<TreeCode, ResourceCodec<?>> resourceCodecsByType;
 
     /**
      * 创建 Session wire Codec，并按 Java 类型和 wire 类型登记 payload Codec。
@@ -119,7 +122,7 @@ public final class SessionCodec {
                 resourceIdSets.add(
                         new ResourceIdSetData(
                                 principal.principalId(),
-                                resourceIdSet.resourceType().value(),
+                                resourceIdSet.resourceType().format(SLASH),
                                 encodeIds(resourceIdSet.ids())));
             }
         }
@@ -227,7 +230,7 @@ public final class SessionCodec {
         if (codec == null) {
             throw new IllegalStateException("缺少 Session Codec: " + checked.getClass().getName());
         }
-        return new TypedPayload(codec.type(), encode(codec, checked));
+        return new TypedPayload(codec.type().format(DOT), encode(codec, checked));
     }
 
     /**
@@ -239,7 +242,7 @@ public final class SessionCodec {
         if (codec == null) {
             throw new IllegalStateException("缺少 Session Codec: " + checked.getClass().getName());
         }
-        return new TypedPayload(codec.type(), encode(codec, checked));
+        return new TypedPayload(codec.type().format(DOT), encode(codec, checked));
     }
 
     /**
@@ -267,7 +270,7 @@ public final class SessionCodec {
      */
     private @NotNull Principal decodePrincipal(@NotNull TypedPayload value) {
         TypedPayload checked = Objects.requireNonNull(value, "Principal payload 不能为空");
-        PrincipalCodec<?> codec = principalCodecsByType.get(checked.type);
+        PrincipalCodec<?> codec = principalCodecsByType.get(TreeCode.of(checked.type));
         if (codec == null) {
             throw new IllegalArgumentException("未知 Session Codec 类型: " + checked.type);
         }
@@ -289,7 +292,7 @@ public final class SessionCodec {
         if (codec == null) {
             throw new IllegalStateException("缺少 Session Codec: " + checked.principalType().getName());
         }
-        return new PrincipalIdSetData(codec.type(), encodeIds(checked.ids()));
+        return new PrincipalIdSetData(codec.type().format(DOT), encodeIds(checked.ids()));
     }
 
     /**
@@ -297,7 +300,8 @@ public final class SessionCodec {
      */
     private @NotNull PrincipalIdSet<?> decodePrincipalIds(@NotNull PrincipalIdSetData value) {
         PrincipalIdSetData checked = Objects.requireNonNull(value, "Principal 标识集合 wire 不能为空");
-        PrincipalCodec<?> codec = principalCodecsByType.get(TextUtils.requireText(checked.type, "Principal Codec 类型"));
+        PrincipalCodec<?> codec = principalCodecsByType
+                .get(TreeCode.of(TextUtils.requireText(checked.type, "Principal Codec 类型")));
         if (codec == null) {
             throw new IllegalArgumentException("未知 Session Codec 类型: " + checked.type);
         }
@@ -376,7 +380,7 @@ public final class SessionCodec {
      */
     private @NotNull Resource decodeResource(@NotNull TypedPayload value) {
         TypedPayload checked = Objects.requireNonNull(value, "Resource payload 不能为空");
-        ResourceCodec<?> codec = resourceCodecsByType.get(checked.type);
+        ResourceCodec<?> codec = resourceCodecsByType.get(TreeCode.of(checked.type));
         if (codec == null) {
             throw new IllegalArgumentException("未知 Session Codec 类型: " + checked.type);
         }
@@ -426,14 +430,14 @@ public final class SessionCodec {
     /**
      * 按 Codec 声明的 wire type 建立唯一索引。
      */
-    private static <C> @NotNull Map<String, C> codecsByType(
+    private static <C> @NotNull Map<TreeCode, C> codecsByType(
             @NotNull List<@NotNull C> codecs,
-            @NotNull Function<C, String> key,
+            @NotNull Function<C, TreeCode> key,
             @NotNull String description) {
-        LinkedHashMap<String, C> result = new LinkedHashMap<>();
+        LinkedHashMap<TreeCode, C> result = new LinkedHashMap<>();
         for (C codec : List.copyOf(Objects.requireNonNull(codecs, description + "列表不能为空"))) {
             C checkedCodec = Objects.requireNonNull(codec, description + " Codec 不能为空");
-            String checkedKey = TextUtils.requireText(key.apply(checkedCodec), description);
+            TreeCode checkedKey = Objects.requireNonNull(key.apply(checkedCodec), description);
             if (result.putIfAbsent(checkedKey, checkedCodec) != null) {
                 throw new IllegalArgumentException("重复 " + description + ": " + checkedKey);
             }
@@ -618,7 +622,7 @@ public final class SessionCodec {
 
         private AuthenticationData(@NotNull Authentication value) {
             accountId = value.accountId();
-            methodCode = value.methodCode().value();
+            methodCode = value.methodCode().format(SLASH);
             factorKinds = value.factorKinds().stream().map(Enum::name).toList();
             authenticatedAt = value.authenticatedAt();
         }

@@ -5,7 +5,7 @@ import com.sca4d.core.api.identity.Subject;
 
 import java.util.Objects;
 
-/** 保存认证完成后恢复出的 Subject 和 Account 身份事实。 */
+/** 保存认证完成后恢复出的 Subject 和 Account 身份信息。 */
 @SuppressWarnings("ClassCanBeRecord")
 public final class SessionIdentity {
 

@@ -72,7 +72,7 @@ public final class CallLifecycle {
             permissionAssessor.assess(checked);
             rateLimitedAssessor.assess(checked);
 
-            // 幂等处理权先于分布式锁取得，锁包围实际业务方法及其内部事务。
+            // 先取得幂等处理权，再取得分布式锁；锁覆盖实际业务方法及其内部事务。
             T result = idempotentExecutor.execute(
                     checked,
                     () -> lockedExecutor.execute(checked, () -> invokeAndVerify(checked, checkedInvocation)));
@@ -151,7 +151,7 @@ public final class CallLifecycle {
     }
 
     /**
-     * 执行业务方法，并在其成功结果离开生命周期前检查全部调用要求。
+     * 执行业务方法，并在成功结果离开生命周期前检查全部调用要求。
      *
      * @param execution 当前方法执行
      * @param invocation 实际业务方法

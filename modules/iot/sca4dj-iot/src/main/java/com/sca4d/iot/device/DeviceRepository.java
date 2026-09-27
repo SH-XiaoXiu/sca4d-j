@@ -1,5 +1,6 @@
 package com.sca4d.iot.device;
 
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.core.api.persistence.AffectedRows;
 import com.sca4d.core.api.persistence.AffectedRowsMismatchException;
@@ -78,7 +79,7 @@ public class DeviceRepository implements DeviceConnectionResolver {
                         connection == null ? null : connection.identifierValue()),
                 ZeroRowPolicy.ERROR,
                 "新增 Device");
-        List<String> accessMethods = checked.accessMethods().stream().map(DeviceAccessMethod::code).toList();
+        List<TreeCode> accessMethods = checked.accessMethods().stream().map(DeviceAccessMethod::code).toList();
         sqlBatches.forEach(
                 accessMethods,
                 2,
@@ -190,7 +191,7 @@ public class DeviceRepository implements DeviceConnectionResolver {
             long productId,
             @NotNull Collection<DeviceAccessMethod> accessMethods,
             @NotNull Collection<String> protocolCodes) {
-        List<String> methods = Objects.requireNonNull(accessMethods, "Product 接入方式不能为空")
+        List<TreeCode> methods = Objects.requireNonNull(accessMethods, "Product 接入方式不能为空")
                 .stream()
                 .map(DeviceAccessMethod::code)
                 .toList();
@@ -211,7 +212,7 @@ public class DeviceRepository implements DeviceConnectionResolver {
         Collection<DeviceAccessMethod> checked = List.copyOf(
                 Objects.requireNonNull(accessMethods, "Device 接入方式不能为空"));
         mapper.deleteDeviceAccessMethods(deviceId);
-        List<String> methodCodes = checked.stream().map(DeviceAccessMethod::code).toList();
+        List<TreeCode> methodCodes = checked.stream().map(DeviceAccessMethod::code).toList();
         sqlBatches.forEach(
                 methodCodes,
                 2,

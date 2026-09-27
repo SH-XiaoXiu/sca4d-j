@@ -13,6 +13,7 @@ import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.SystemPrincipal;
 import com.sca4d.core.api.job.JobExecutor;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.ResourceReference;
 import com.sca4d.core.api.scheduling.JobScheduler;
 import com.sca4d.core.api.setting.LogicSetting;
@@ -184,12 +185,12 @@ class FileServiceIntegrationTest {
         byte[] content = png();
 
         StoredFile ready = files.upload(
-                SystemPrincipal.INSTANCE,
+                new SystemPrincipal(1, TreeCode.ofSegment("MAIN")),
                 new FileUploadIntent(use, "generated.png", "image/png", content.length),
                 new ByteArrayInputStream(content));
 
         assertThat(ready.status()).isEqualTo(FileStatus.READY);
-        assertThat(ready.uploaderPrincipalId()).isEqualTo(SystemPrincipal.ID);
+        assertThat(ready.uploaderPrincipalId()).isEqualTo(1L);
         assertThat(storage.preparedUploadCount()).isZero();
         FileRecord record = repository.find(ready.fileId()).orElseThrow();
         assertThat(storage.contains(record.containerName(), record.uploadObjectKey())).isFalse();
@@ -206,21 +207,25 @@ class FileServiceIntegrationTest {
         assertError(
                 () -> assertThat(
                         files.upload(
-                                SystemPrincipal.INSTANCE,
+                                new SystemPrincipal(1, TreeCode.ofSegment("MAIN")),
                                 intent,
                                 new ByteArrayInputStream(new byte[] {1, 2, 3})))
                         .isNotNull(),
                 FileErrorCode.CONTENT_MISMATCH);
 
         storage.failWritesWithIOException();
-        assertThatThrownBy(() -> files.upload(SystemPrincipal.INSTANCE, intent, new ByteArrayInputStream(png())))
+        assertThatThrownBy(
+                () -> files.upload(
+                        new SystemPrincipal(1, TreeCode.ofSegment("MAIN")),
+                        intent,
+                        new ByteArrayInputStream(png())))
                 .isInstanceOf(IOException.class);
 
         storage.failWritesWithBackendError();
         assertError(
                 () -> assertThat(
                         files.upload(
-                                SystemPrincipal.INSTANCE,
+                                new SystemPrincipal(1, TreeCode.ofSegment("MAIN")),
                                 intent,
                                 new ByteArrayInputStream(png())))
                         .isNotNull(),
@@ -405,7 +410,7 @@ class FileServiceIntegrationTest {
     void readsAndDiscardsUnboundFilesTransactionally() throws Exception {
         FileUse use = use("server-read");
         StoredFile ready = files.upload(
-                SystemPrincipal.INSTANCE,
+                new SystemPrincipal(1, TreeCode.ofSegment("MAIN")),
                 new FileUploadIntent(use, "file.png", "image/png", png().length),
                 new ByteArrayInputStream(png()));
         try (var content = files.openForServer(ready.fileId())) {
@@ -430,13 +435,13 @@ class FileServiceIntegrationTest {
     void discardsPendingAndReadyUploads() throws Exception {
         FileUse use = use("discard");
         FileUpload pending = files.createUpload(
-                SystemPrincipal.INSTANCE,
+                new SystemPrincipal(1, TreeCode.ofSegment("MAIN")),
                 new FileUploadIntent(use, "file.png", "image/png", png().length));
         files.discard(pending.fileId(), use);
         files.discard(pending.fileId(), use);
         assertThat(files.loadById(pending.fileId()).status()).isEqualTo(FileStatus.DELETE_PENDING);
         assertError(
-                () -> files.completeUpload(pending.fileId(), SystemPrincipal.INSTANCE),
+                () -> files.completeUpload(pending.fileId(), new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
                 FileErrorCode.STATE_CONFLICT);
         assertError(() -> {
             try (var content = files.openForServer(pending.fileId())) {
@@ -444,7 +449,7 @@ class FileServiceIntegrationTest {
             }
         }, FileErrorCode.NOT_FOUND);
         StoredFile ready = files.upload(
-                SystemPrincipal.INSTANCE,
+                new SystemPrincipal(1, TreeCode.ofSegment("MAIN")),
                 new FileUploadIntent(use, "file.png", "image/png", png().length),
                 new ByteArrayInputStream(png()));
         files.discard(ready.fileId(), use);
@@ -461,7 +466,7 @@ class FileServiceIntegrationTest {
     @DisplayName("服务端不能读取已经到期且尚未清理的 READY 文件")
     void rejectsExpiredServerRead() throws Exception {
         StoredFile ready = files.upload(
-                SystemPrincipal.INSTANCE,
+                new SystemPrincipal(1, TreeCode.ofSegment("MAIN")),
                 new FileUploadIntent(use("expired-read"), "file.png", "image/png", png().length),
                 new ByteArrayInputStream(png()));
         jdbc.update("UPDATE storage_file SET ready_expires_at = ? WHERE id = ?", Timestamp.from(NOW), ready.fileId());
@@ -477,7 +482,7 @@ class FileServiceIntegrationTest {
                 id,
                 1L,
                 "test",
-                "test:target",
+                TreeCode.of("test:target"),
                 Long.toString(id),
                 "test",
                 "files",

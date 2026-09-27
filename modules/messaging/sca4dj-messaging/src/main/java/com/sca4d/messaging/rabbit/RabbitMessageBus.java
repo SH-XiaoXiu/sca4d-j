@@ -1,13 +1,19 @@
 package com.sca4d.messaging.rabbit;
 
+import static com.sca4d.core.api.messaging.DispatchPolicy.Mode.OUTBOX;
+import static com.sca4d.core.api.messaging.DispatchReceipt.Status.AFTER_COMMIT_REGISTERED;
+import static com.sca4d.core.api.messaging.DispatchReceipt.Status.BROKER_ACCEPTED;
+import static com.sca4d.core.api.messaging.DispatchReceipt.Status.OUTBOX_ENLISTED;
+
 import com.sca4d.core.api.id.IdGenerator;
+import com.sca4d.core.api.isolation.AppName;
 import com.sca4d.core.api.message.BinaryContent;
 import com.sca4d.core.api.message.Message;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.DispatchReceipt;
 import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageId;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Name;
 import com.sca4d.core.spring.transaction.TransactionCallbacks;
 import com.sca4d.messaging.outbox.MessageOutboxRepository;
 import org.jetbrains.annotations.ApiStatus;
@@ -36,29 +42,27 @@ public final class RabbitMessageBus implements MessageBus {
 
     private final @NotNull Clock clock;
 
-    private final @NotNull String sourceApplication;
+    private final @NotNull Name sourceApplication;
 
     public RabbitMessageBus(
             @NotNull IdGenerator ids,
             @NotNull RabbitMessageEnvelopeCodec codec,
             @NotNull RabbitPublisher publisher,
             @NotNull MessageOutboxRepository outbox,
-            @NotNull Clock clock,
-            @NotNull RuntimeNamespace runtimeNamespace) {
+            @NotNull Clock clock) {
         this.ids = Objects.requireNonNull(ids, "消息标识生成器不能为空");
         this.codec = Objects.requireNonNull(codec, "消息信封编解码器不能为空");
         this.publisher = Objects.requireNonNull(publisher, "RabbitMQ Publisher 不能为空");
         this.outbox = Objects.requireNonNull(outbox, "Message Outbox Repository 不能为空");
         this.clock = Objects.requireNonNull(clock, "消息时钟不能为空");
-        this.sourceApplication = Objects.requireNonNull(runtimeNamespace, "运行时命名空间不能为空")
-                .applicationId();
+        this.sourceApplication = AppName.current();
     }
 
     @Override
     public @NotNull DispatchReceipt dispatch(@NotNull Message message, @NotNull DispatchPolicy policy) {
         Message checkedMessage = Objects.requireNonNull(message, "消息不能为空");
         DispatchPolicy checkedPolicy = Objects.requireNonNull(policy, "消息分发策略不能为空");
-        if (checkedPolicy.mode() == DispatchPolicy.Mode.OUTBOX
+        if (checkedPolicy.mode() == OUTBOX
                 && checkedMessage.contents().stream().anyMatch(content -> content.body() instanceof BinaryContent)) {
             throw new IllegalArgumentException("Outbox 消息不能直接携带二进制内容，请使用 ReferencedContent");
         }
@@ -73,7 +77,7 @@ public final class RabbitMessageBus implements MessageBus {
         Instant now = clock.instant();
         MessageId messageId = new MessageId(ids.nextId());
         publisher.send(messageId, message.code(), codec.encode(messageId, message, now, sourceApplication));
-        return new DispatchReceipt(messageId, DispatchReceipt.Status.BROKER_ACCEPTED);
+        return new DispatchReceipt(messageId, BROKER_ACCEPTED);
     }
 
     private @NotNull DispatchReceipt dispatchAfterCommit(@NotNull Message message) {
@@ -92,7 +96,7 @@ public final class RabbitMessageBus implements MessageBus {
                         exception);
             }
         });
-        return new DispatchReceipt(messageId, DispatchReceipt.Status.AFTER_COMMIT_REGISTERED);
+        return new DispatchReceipt(messageId, AFTER_COMMIT_REGISTERED);
     }
 
     private @NotNull DispatchReceipt dispatchThroughOutbox(
@@ -112,7 +116,7 @@ public final class RabbitMessageBus implements MessageBus {
                 messageId,
                 message.code(),
                 availableAt);
-        return new DispatchReceipt(messageId, DispatchReceipt.Status.OUTBOX_ENLISTED);
+        return new DispatchReceipt(messageId, OUTBOX_ENLISTED);
     }
 
     private static void requireTransaction(@NotNull String operation) {

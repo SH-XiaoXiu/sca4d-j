@@ -28,19 +28,19 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-/** 在通用认证拦截器前恢复 OpenAPI 独立 JWT 或验证 OpenAPI HMAC 请求。 */
+/** 在通用认证拦截器前恢复 OpenAPI 独立 JWT 或验证 OpenAPI MAC 请求。 */
 public final class OpenApiAuthenticationInterceptor extends CallHandlerInterceptor {
 
-    /** OpenAPI HMAC Client 标识请求头。 */
+    /** OpenAPI MAC Client 标识请求头。 */
     public static final String CLIENT_ID_HEADER = "X-OpenApi-Client-Id";
 
-    /** OpenAPI HMAC Unix 秒请求头。 */
+    /** OpenAPI MAC Unix 秒请求头。 */
     public static final String TIMESTAMP_HEADER = "X-OpenApi-Timestamp";
 
-    /** OpenAPI HMAC 一次性随机数请求头。 */
+    /** OpenAPI MAC 一次性随机数请求头。 */
     public static final String NONCE_HEADER = "X-OpenApi-Nonce";
 
-    /** OpenAPI HMAC 无填充 Base64URL 签名请求头。 */
+    /** OpenAPI MAC 无填充 Base64URL 签名请求头。 */
     public static final String SIGNATURE_HEADER = "X-OpenApi-Signature";
 
     private final @NotNull OpenApiJwtTokenService jwtTokens;
@@ -63,7 +63,7 @@ public final class OpenApiAuthenticationInterceptor extends CallHandlerIntercept
         this.sessions = Objects.requireNonNull(sessions, "Session 服务不能为空");
     }
 
-    /** 恢复 OpenAPI JWT 或将 HMAC Proof 转换为当前调用的 Session。 */
+    /** 恢复 OpenAPI JWT 或将 MAC Proof 转换为当前调用的 Session。 */
     @Override
     protected boolean preHandleWithCall(
             @NotNull HttpServletRequest request,

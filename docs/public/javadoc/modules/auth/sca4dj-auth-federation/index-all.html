@@ -211,7 +211,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用 `ProviderMapper` 保存联邦 Provider 和协议配置。</div>
 </dd>
-<dt><a href="com/sca4d/auth/federation/provider/DefaultFederatedProviderRepository.html#%3Cinit%3E(com.sca4d.auth.federation.provider.mapper.ProviderMapper,com.fasterxml.jackson.databind.ObjectMapper,com.sca4d.auth.federation.FederatedSecretCryptography,com.sca4d.core.api.concurrent.VersionConditions)" class="member-name-link">DefaultFederatedProviderRepository(ProviderMapper, ObjectMapper, FederatedSecretCryptography, VersionConditions)</a> - Constructor for class com.sca4d.auth.federation.provider.<a href="com/sca4d/auth/federation/provider/DefaultFederatedProviderRepository.html" title="class in com.sca4d.auth.federation.provider">DefaultFederatedProviderRepository</a></dt>
+<dt><a href="com/sca4d/auth/federation/provider/DefaultFederatedProviderRepository.html#%3Cinit%3E(com.sca4d.auth.federation.provider.mapper.ProviderMapper,com.sca4d.core.spring.json.Sca4djMapper,com.sca4d.auth.federation.FederatedSecretCryptography,com.sca4d.core.api.concurrent.VersionConditions)" class="member-name-link">DefaultFederatedProviderRepository(ProviderMapper, Sca4djMapper, FederatedSecretCryptography, VersionConditions)</a> - Constructor for class com.sca4d.auth.federation.provider.<a href="com/sca4d/auth/federation/provider/DefaultFederatedProviderRepository.html" title="class in com.sca4d.auth.federation.provider">DefaultFederatedProviderRepository</a></dt>
 <dd>
 <div class="block">创建 Provider Repository。</div>
 </dd>
@@ -666,7 +666,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用命名空间隔离的 Redis 一次性值保存外部授权状态和标准化资料。</div>
 </dd>
-<dt><a href="com/sca4d/auth/federation/RedisFederatedAuthorizationStore.html#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,com.sca4d.core.api.runtime.RuntimeNamespace)" class="member-name-link">RedisFederatedAuthorizationStore(StringRedisTemplate, RuntimeNamespace)</a> - Constructor for class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/RedisFederatedAuthorizationStore.html" title="class in com.sca4d.auth.federation">RedisFederatedAuthorizationStore</a></dt>
+<dt><a href="com/sca4d/auth/federation/RedisFederatedAuthorizationStore.html#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate)" class="member-name-link">RedisFederatedAuthorizationStore(RedisTemplate&lt;Key, String&gt;)</a> - Constructor for class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/RedisFederatedAuthorizationStore.html" title="class in com.sca4d.auth.federation">RedisFederatedAuthorizationStore</a></dt>
 <dd>
 <div class="block">创建外部授权状态存储。</div>
 </dd>

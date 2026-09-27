@@ -36,7 +36,7 @@ import java.util.Map;
 
 /** 验证 Sca4d Server 审计 payload 不保存凭据、文件名和个人资料实际值。 */
 class ApplicationAuditValuesTest {
-    private static final Call CALL = new Call("audit-test", Instant.EPOCH);
+    private static final Call ALL = new Call("audit-test", Instant.EPOCH);
 
     @Test
     @DisplayName("账号创建被拒绝时只保存字段名，不读取返回值")
@@ -226,7 +226,7 @@ class ApplicationAuditValuesTest {
     /** 创建供审计 payload 工厂读取的已声明方法执行。 */
     private static CallExecution execution(Method method, Object... arguments) {
         return new CallExecution(
-                CALL,
+                ALL,
                 ApplicationAuditValuesTest.class,
                 method,
                 arguments,

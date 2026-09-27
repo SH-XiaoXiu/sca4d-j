@@ -7,12 +7,13 @@ import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.resource.Resource;
 import com.sca4d.iam.base.PlatformIdentityService;
 import com.sca4d.iam.base.PlatformPrincipal;
 import org.junit.jupiter.api.DisplayName;
@@ -80,7 +81,7 @@ class PlatformPrincipalSelectionTest {
     private static Session session(List<? extends Principal> principals) {
         Subject subject = new Subject(11, SubjectType.HUMAN);
         Account account = new Account(21, subject.subjectId(), PlatformIdentityService.PLATFORM_REALM);
-        LinkedHashMap<Long, List<com.sca4d.core.api.resource.Resource>> resources = new LinkedHashMap<>();
+        LinkedHashMap<Long, List<Resource>> resources = new LinkedHashMap<>();
         for (Principal principal : principals) {
             resources.put(principal.principalId(), List.of());
         }

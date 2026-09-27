@@ -6,6 +6,7 @@ import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SystemPrincipal;
+import com.sca4d.core.api.identity.SystemPrincipals;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.Permission;
 import com.sca4d.core.api.permission.PermissionDecision;
@@ -75,11 +76,16 @@ public final class Call {
      * @return 已经完成身份阶段的系统调用
      */
     public static Call system(String callId, Instant startedAt) {
+        return system(callId, startedAt, SystemPrincipals.mainPrincipal());
+    }
+
+    /** 使用已经确认的领域 Principal 建立系统调用，不赋予额外权限。 */
+    public static Call system(String callId, Instant startedAt, SystemPrincipal principal) {
         Call call = new Call(callId, startedAt);
         call.authenticationAssessed = true;
         call.subject = Subject.SYSTEM;
         call.principalAssessed = true;
-        call.principal = SystemPrincipal.INSTANCE;
+        call.principal = Objects.requireNonNull(principal, "系统 Principal 不能为空");
         return call;
     }
 
@@ -102,7 +108,7 @@ public final class Call {
     }
 
     /**
-     * 选择本次调用使用的业务主体，并绑定 Session 中属于该主体的静态资源。
+     * 选择本次调用使用的业务主体，并绑定 Session 中属于所选主体的静态资源。
      *
      * @param principal 当前业务主体
      * @throws IllegalStateException 尚未完成认证、没有 Session 或已经选择其他主体时抛出
@@ -146,7 +152,7 @@ public final class Call {
     /**
      * 判断当前 Principal 的静态资源视图是否包含指定 Operation。
      *
-     * <p>该重载供调用方直接传入注解和 Operation 模块使用的字符串常量，不需要重复创建 {@link Operation}。
+     * <p>此重载供调用方直接传入注解和 Operation 模块使用的字符串常量，不需要重复创建 {@link Operation}。
      *
      * @param operationCode 非空白 Operation 编码
      * @return 尚未选择 Principal、系统调用没有 Session 或 Operation 不存在时为 {@code false}

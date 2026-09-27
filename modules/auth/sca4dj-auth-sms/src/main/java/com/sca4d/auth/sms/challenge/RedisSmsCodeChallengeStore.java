@@ -1,12 +1,15 @@
 package com.sca4d.auth.sms.challenge;
 
+import static java.lang.Boolean.TRUE;
+
 import com.sca4d.auth.sms.SmsCodeChallengeId;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 
 import java.time.Clock;
@@ -21,32 +24,31 @@ import java.util.Objects;
 public final class RedisSmsCodeChallengeStore {
     private static final DefaultRedisScript<Long> VERIFY = verifyScript();
 
-    private final StringRedisTemplate redis;
+    private final RedisTemplate<Key, String> redis;
 
     private final Clock clock;
 
-    private final String challengePrefix;
+    private final Key challengePrefix;
 
-    private final String cooldownPrefix;
+    private final Key cooldownPrefix;
 
-    /** 创建按运行命名空间隔离的 SMS Challenge Store。 */
+    /** 创建按 App 隔离名称隔离的 SMS Challenge Store。 */
     public RedisSmsCodeChallengeStore(
-            @NotNull StringRedisTemplate redis,
-            @NotNull Clock clock,
-            @NotNull RuntimeNamespace namespace) {
+            @NotNull RedisTemplate<Key, String> redis,
+            @NotNull Clock clock) {
         this.redis = Objects.requireNonNull(redis, "Redis 操作不能为空");
         this.clock = Objects.requireNonNull(clock, "Clock 不能为空");
-        RuntimeNamespace checked = Objects.requireNonNull(namespace, "RuntimeNamespace 不能为空");
-        this.challengePrefix = checked.sca4dj("authentication", "sms-code", "challenge") + ':';
-        this.cooldownPrefix = checked.sca4dj("authentication", "sms-code", "cooldown") + ':';
+
+        this.challengePrefix = Key.of(TreeCode.ofColon("AUTHENTICATION:SMS_CODE:CHALLENGE"));
+        this.cooldownPrefix = Key.of(TreeCode.ofColon("AUTHENTICATION:SMS_CODE:COOLDOWN"));
     }
 
     /** @return 当前不存在冷却记录并成功登记时为 true */
     public boolean reserveCooldown(@NotNull String targetHash, @NotNull Duration interval) {
-        return Boolean.TRUE.equals(
+        return TRUE.equals(
                 redis.opsForValue()
                         .setIfAbsent(
-                                cooldownPrefix + targetHash,
+                                cooldownPrefix.part(targetHash),
                                 "1",
                                 Objects.requireNonNull(interval, "重发间隔不能为空")));
     }
@@ -54,8 +56,8 @@ public final class RedisSmsCodeChallengeStore {
     /** 使用 Challenge 剩余有效时间新增状态。 */
     public void create(@NotNull SmsCodeChallengeState state) {
         SmsCodeChallengeState checked = Objects.requireNonNull(state, "Challenge 状态不能为空");
-        String key = key(checked.challengeId());
-        if (Boolean.TRUE.equals(redis.hasKey(key)))
+        Key key = key(checked.challengeId());
+        if (TRUE.equals(redis.hasKey(key)))
             throw new IllegalStateException("SMS Challenge 标识冲突");
         Map<String, String> fields = new LinkedHashMap<>();
         fields.put("accountId", Long.toString(checked.accountId()));
@@ -108,8 +110,8 @@ public final class RedisSmsCodeChallengeStore {
         return result != null && result > 0 ? new Version(result) : null;
     }
 
-    private String key(SmsCodeChallengeId id) {
-        return challengePrefix + id.value();
+    private Key key(SmsCodeChallengeId id) {
+        return challengePrefix.part(id.value());
     }
 
     private static String field(Map<Object, Object> values, String name) {

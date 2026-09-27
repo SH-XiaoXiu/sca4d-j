@@ -1,8 +1,10 @@
 package com.sca4d.notification;
 
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+
 import com.fasterxml.jackson.databind.JsonNode;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.message.MessageContent;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.Notification;
 import com.sca4d.core.api.notification.NotificationDefinition;
 import com.sca4d.core.api.notification.NotificationExecution;
@@ -24,6 +26,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 执行一个通知类型的接收人回调，并把 Settings、语言和区域解析成标准通知。
@@ -144,7 +147,7 @@ final class DefaultNotificationExecution<T> implements NotificationExecution {
                 available,
                 available.stream()
                         .filter(type.definition().requiredChannels()::contains)
-                        .collect(java.util.stream.Collectors.toUnmodifiableSet()));
+                        .collect(Collectors.toUnmodifiableSet()));
     }
 
     /**
@@ -211,8 +214,8 @@ final class DefaultNotificationExecution<T> implements NotificationExecution {
             @NotNull JsonNode root,
             @NotNull TreeCode channel) {
         JsonNode valueNode = Objects.requireNonNull(root, "通知渠道设置不能为空")
-                .path(type.code().value())
-                .path(channel.value());
+                .path(type.code().format(SLASH))
+                .path(channel.format(SLASH));
         return valueNode.isBoolean() ? Optional.of(valueNode.booleanValue()) : Optional.empty();
     }
 

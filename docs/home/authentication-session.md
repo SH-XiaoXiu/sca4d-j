@@ -1,6 +1,10 @@
 # 认证与会话
 
-认证确认调用者可以使用哪个 Account。登录所需的验证完成后，应用建立 Session，后续请求使用 Token 恢复登录状态、选择业务身份并检查权限。修改密码等敏感操作可以再次要求认证，验证通过后执行对应动作。
+认证验证调用者能否使用某个 Account，Session 保存登录结果，Token 用于后续请求恢复这份结果。接入登录时，用 `AuthenticationAttempts` 完成所需验证，再用 `SessionLifecycle` 建立 Session；业务请求仍须选择 Principal 并检查权限。
+
+修改密码等敏感操作可以再次要求认证。认证通过只证明满足验证要求，目标业务动作仍由应用执行；实际请求顺序见[认证与 Session 教程](/tutorials/authentication-and-session)。
+
+## 认证组件怎样协作
 
 应用通过 AuthenticationPolicy 决定需要哪些认证因素；`sca4dj-auth` 组织认证尝试并管理 Session；Password、TOTP、Passkey、验证码和联邦登录等模块验证各自的认证材料。
 

@@ -1,10 +1,10 @@
 package com.sca4d.openapi.web;
 
 import com.sca4d.core.api.call.Call;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.identity.SubjectType;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.spring.call.CallHandlerInterceptor;
 import com.sca4d.openapi.web.annotation.OpenApiRoute;
 import jakarta.servlet.http.HttpServletRequest;

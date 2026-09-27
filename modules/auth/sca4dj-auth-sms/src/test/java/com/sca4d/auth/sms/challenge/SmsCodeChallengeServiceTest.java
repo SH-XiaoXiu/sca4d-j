@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.sca4d.auth.sms.SmsCodeAuthenticationMethod;
+import com.sca4d.auth.sms.SmsCodeChallengeId;
 import com.sca4d.auth.sms.SmsCodeNotice;
 import com.sca4d.auth.sms.SmsCodeProof;
 import com.sca4d.auth.sms.config.SmsCodeSettings;
@@ -80,7 +81,7 @@ class SmsCodeChallengeServiceTest {
     void consumesValidChallengeOnce() {
         RealmKey realm = new RealmKey("platform");
         Account account = new Account(42, 52, realm);
-        var challengeId = new com.sca4d.auth.sms.SmsCodeChallengeId("00000000-0000-0000-0000-000000000001");
+        var challengeId = new SmsCodeChallengeId("00000000-0000-0000-0000-000000000001");
         var state = new SmsCodeChallengeState(
                 challengeId,
                 account.accountId(),

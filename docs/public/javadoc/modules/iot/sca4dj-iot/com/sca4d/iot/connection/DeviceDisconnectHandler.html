@@ -108,12 +108,12 @@ implements com.sca4d.core.api.messaging.MessageHandler&lt;com.sca4d.iot.api.conn
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.iot.connection.DeviceConnectionTerminatorRouter,com.sca4d.iot.api.connection.DeviceConnectionReceiver,com.sca4d.core.api.messaging.MessageBus,java.time.Clock,com.sca4d.core.api.connection.ConnectionRegistry,com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">DeviceDisconnectHandler</a><wbr>(@NotNull <a href="DeviceConnectionTerminatorRouter.html" title="class in com.sca4d.iot.connection">DeviceConnectionTerminatorRouter</a>&nbsp;terminators,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.iot.connection.DeviceConnectionTerminatorRouter,com.sca4d.iot.api.connection.DeviceConnectionReceiver,com.sca4d.core.api.messaging.MessageBus,java.time.Clock,com.sca4d.core.api.connection.ConnectionRegistry,com.sca4d.core.api.messaging.MessageCodec)" class="member-name-link">DeviceDisconnectHandler</a><wbr>(@NotNull <a href="DeviceConnectionTerminatorRouter.html" title="class in com.sca4d.iot.connection">DeviceConnectionTerminatorRouter</a>&nbsp;terminators,
  @NotNull com.sca4d.iot.api.connection.DeviceConnectionReceiver&nbsp;connections,
  @NotNull com.sca4d.core.api.messaging.MessageBus&nbsp;messages,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
  @Nullable com.sca4d.core.api.connection.ConnectionRegistry&nbsp;commonConnections,
- @NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;json)</code></div>
+ @NotNull com.sca4d.core.api.messaging.MessageCodec&lt;com.sca4d.iot.api.connection.DeviceDisconnectMessage&gt;&nbsp;codec)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建使用通用 Messaging 重试、不保存 IoT 断连任务表的 Consumer。</div>
 </div>
@@ -131,7 +131,7 @@ implements com.sca4d.core.api.messaging.MessageHandler&lt;com.sca4d.iot.api.conn
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.code.TreeCode</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#code()" class="member-name-link">code</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.messaging.MessageCodec<wbr>&lt;com.sca4d.iot.api.connection.DeviceDisconnectMessage&gt;</code></div>
@@ -163,7 +163,7 @@ implements com.sca4d.core.api.messaging.MessageHandler&lt;com.sca4d.iot.api.conn
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.iot.connection.DeviceConnectionTerminatorRouter,com.sca4d.iot.api.connection.DeviceConnectionReceiver,com.sca4d.core.api.messaging.MessageBus,java.time.Clock,com.sca4d.core.api.connection.ConnectionRegistry,com.fasterxml.jackson.databind.ObjectMapper)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.iot.connection.DeviceConnectionTerminatorRouter,com.sca4d.iot.api.connection.DeviceConnectionReceiver,com.sca4d.core.api.messaging.MessageBus,java.time.Clock,com.sca4d.core.api.connection.ConnectionRegistry,com.sca4d.core.api.messaging.MessageCodec)">
 <h3>DeviceDisconnectHandler</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">DeviceDisconnectHandler</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="DeviceConnectionTerminatorRouter.html" title="class in com.sca4d.iot.connection">DeviceConnectionTerminatorRouter</a>&nbsp;terminators,
@@ -176,7 +176,7 @@ implements com.sca4d.core.api.messaging.MessageHandler&lt;com.sca4d.iot.api.conn
  @Nullable
  @Nullable com.sca4d.core.api.connection.ConnectionRegistry&nbsp;commonConnections,
  @NotNull
- @NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;json)</span></div>
+ @NotNull com.sca4d.core.api.messaging.MessageCodec&lt;com.sca4d.iot.api.connection.DeviceDisconnectMessage&gt;&nbsp;codec)</span></div>
 <div class="block">创建使用通用 Messaging 重试、不保存 IoT 断连任务表的 Consumer。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -200,7 +200,7 @@ implements com.sca4d.core.api.messaging.MessageHandler&lt;com.sca4d.iot.api.conn
 <section class="detail" id="code()">
 <h3>code</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.code.TreeCode</span>&nbsp;<span class="element-name">code</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">code</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>code</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.messaging.MessageHandler&lt;com.sca4d.iot.api.connection.DeviceDisconnectMessage&gt;</code></dd>
@@ -222,6 +222,7 @@ implements com.sca4d.core.api.messaging.MessageHandler&lt;com.sca4d.iot.api.conn
 <section class="detail" id="handle(com.sca4d.core.api.messaging.IncomingMessage)">
 <h3>handle</h3>
 <div class="member-signature"><span class="annotations">@Transactional
+@SystemExecution("IOT")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.messaging.HandlingDecision</span>&nbsp;<span class="element-name">handle</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.messaging.IncomingMessage&lt;com.sca4d.iot.api.connection.DeviceDisconnectMessage&gt;&nbsp;delivery)</span></div>

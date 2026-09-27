@@ -1,6 +1,6 @@
 package com.sca4d.openapi.client;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.core.api.persistence.ZeroRowPolicy;
@@ -60,17 +60,14 @@ public class OpenApiClientRepository {
     public boolean hasOperation(@NotNull String clientId, @NotNull TreeCode operation) {
         return !mapper.selectOperations(
                 TextUtils.requireText(clientId, "Client ID"),
-                Objects.requireNonNull(operation, "Operation 不能为空").value())
+                Objects.requireNonNull(operation, "Operation 不能为空"))
                 .isEmpty();
     }
 
     /** 读取 Client 当前开放的全部 Operation。 */
     @Transactional(readOnly = true)
     public @NotNull List<@NotNull TreeCode> findOperations(@NotNull String clientId) {
-        return mapper.selectOperations(TextUtils.requireText(clientId, "Client ID"), null)
-                .stream()
-                .map(TreeCode::ofColon)
-                .toList();
+        return mapper.selectOperations(TextUtils.requireText(clientId, "Client ID"), null);
     }
 
     /** 锁定 Client 后原子替换完整 Operation 列表；空集合清空，失败保留原关系。 */
@@ -89,7 +86,7 @@ public class OpenApiClientRepository {
             AffectedRowCounts.requireExactly(
                     mapper.insertOperations(
                             checkedClientId,
-                            batch.stream().map(TreeCode::value).toList()),
+                            batch),
                     batch.size(),
                     "新增 Client Operation 关系");
         });

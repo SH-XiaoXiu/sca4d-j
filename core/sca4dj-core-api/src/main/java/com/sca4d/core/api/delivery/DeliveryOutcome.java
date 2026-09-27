@@ -1,5 +1,11 @@
 package com.sca4d.core.api.delivery;
 
+import static com.sca4d.core.api.delivery.DeliveryOutcome.Status.CONFIRMED;
+import static com.sca4d.core.api.delivery.DeliveryOutcome.Status.PENDING;
+import static com.sca4d.core.api.delivery.DeliveryOutcome.Status.REJECTED;
+import static com.sca4d.core.api.delivery.DeliveryOutcome.Status.RETRYABLE_FAILURE;
+import static com.sca4d.core.api.delivery.DeliveryOutcome.Status.UNKNOWN;
+
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,7 +47,7 @@ public final class DeliveryOutcome {
     /** @return 已确认的投递结果 */
     @CheckReturnValue
     public static @NotNull DeliveryOutcome confirmed() {
-        return new DeliveryOutcome(Status.CONFIRMED, null, null, null);
+        return new DeliveryOutcome(CONFIRMED, null, null, null);
     }
 
     /** @param nextActionAt 下一次动作时间 @param externalRequestId 外部请求标识 @return 待查询结果 */
@@ -49,7 +55,7 @@ public final class DeliveryOutcome {
     public static @NotNull DeliveryOutcome pending(
             @NotNull Instant nextActionAt,
             @Nullable String externalRequestId) {
-        return new DeliveryOutcome(Status.PENDING, nextActionAt, externalRequestId, null);
+        return new DeliveryOutcome(PENDING, nextActionAt, externalRequestId, null);
     }
 
     /** @param nextActionAt 下一次重试时间 @param failureCode 稳定失败编码 @return 可重试失败结果 */
@@ -57,13 +63,13 @@ public final class DeliveryOutcome {
     public static @NotNull DeliveryOutcome retryableFailure(
             @Nullable Instant nextActionAt,
             @NotNull String failureCode) {
-        return new DeliveryOutcome(Status.RETRYABLE_FAILURE, nextActionAt, null, failureCode);
+        return new DeliveryOutcome(RETRYABLE_FAILURE, nextActionAt, null, failureCode);
     }
 
     /** @param failureCode 稳定失败编码 @return 不可重试拒绝结果 */
     @CheckReturnValue
     public static @NotNull DeliveryOutcome rejected(@NotNull String failureCode) {
-        return new DeliveryOutcome(Status.REJECTED, null, null, failureCode);
+        return new DeliveryOutcome(REJECTED, null, null, failureCode);
     }
 
     /** @param nextActionAt 下一次动作时间 @param externalRequestId 外部请求标识 @param failureCode 失败编码 @return 未知结果 */
@@ -72,7 +78,7 @@ public final class DeliveryOutcome {
             @NotNull Instant nextActionAt,
             @Nullable String externalRequestId,
             @Nullable String failureCode) {
-        return new DeliveryOutcome(Status.UNKNOWN, nextActionAt, externalRequestId, failureCode);
+        return new DeliveryOutcome(UNKNOWN, nextActionAt, externalRequestId, failureCode);
     }
 
     /** @return 投递状态 */

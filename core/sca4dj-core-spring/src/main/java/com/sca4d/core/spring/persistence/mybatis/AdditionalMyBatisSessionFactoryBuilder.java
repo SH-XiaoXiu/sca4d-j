@@ -65,12 +65,12 @@ public final class AdditionalMyBatisSessionFactoryBuilder {
     /**
      * 为附加数据源创建会话工厂，只加载调用方明确传入的 Mapper XML。
      *
-     * <p>该方法继承公共 MyBatis 配置、插件、类型处理器和 `ConfigurationCustomizer`，但不会读取
+     * <p>当前方法继承公共 MyBatis 配置、插件、类型处理器和 `ConfigurationCustomizer`，但不会读取
      * `mybatis.mapper-locations`，也不会执行 `SqlSessionFactoryBeanCustomizer`。调用方必须分别声明附加数据源的
      * `DataSource`、`SqlSessionTemplate` 和事务管理器。</p>
      *
      * @param dataSource 附加数据库连接池
-     * @param mapperLocations 只属于该数据库的 Mapper XML；允许为空以支持纯注解 Mapper
+     * @param mapperLocations 只属于当前数据库的 Mapper XML；允许为空以支持纯注解 Mapper
      * @return 只绑定指定数据源和 Mapper 资源的会话工厂
      * @throws Exception MyBatis 配置或 Mapper XML 无法解析时抛出
      */

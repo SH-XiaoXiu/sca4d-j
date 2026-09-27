@@ -1,6 +1,7 @@
 package com.sca4d.core.api.audit;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.NameFormat;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,18 +28,14 @@ public final class AuditOperation implements Resource {
      * @throws IllegalArgumentException 操作键为空白时抛出
      */
     public AuditOperation(@NotNull String value) {
-        this(TreeCode.ofSlash(value));
+        this(TreeCode.of(value));
     }
 
     /**
      * 创建使用已经规范化审计操作编码的审计操作。
      */
     public AuditOperation(@NotNull TreeCode code) {
-        TreeCode checked = Objects.requireNonNull(code, "审计操作不能为空");
-        if (checked.separator() != '/') {
-            throw new IllegalArgumentException("审计操作必须使用斜杠分层: " + checked);
-        }
-        this.code = checked;
+        this.code = Objects.requireNonNull(code, "审计操作不能为空");
     }
 
     /**
@@ -50,7 +47,7 @@ public final class AuditOperation implements Resource {
      * @throws IllegalArgumentException 操作键不符合层级命名规则时抛出
      */
     public static @NotNull AuditOperation declared(@NotNull String value) {
-        return new AuditOperation(TreeCode.ofSlash(value));
+        return new AuditOperation(TreeCode.of(value));
     }
 
     /**
@@ -73,7 +70,7 @@ public final class AuditOperation implements Resource {
      */
     @Override
     public @NotNull String id() {
-        return code.value();
+        return code.format(NameFormat.SLASH);
     }
 
     @Override

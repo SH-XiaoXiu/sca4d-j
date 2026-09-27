@@ -1,5 +1,6 @@
 package com.sca4d.iot.persistence.mapper;
 
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.query.SortOrder;
 import com.sca4d.iot.api.ProductSource;
 import com.sca4d.iot.api.connection.DeviceConnectionBinding;
@@ -58,7 +59,7 @@ public interface DeviceMapper {
      */
     int insertDeviceAccessMethods(
             @Param("deviceId") long deviceId,
-            @Param("methodCodes") @NotNull Collection<@NotNull String> methodCodes);
+            @Param("methodCodes") @NotNull Collection<@NotNull TreeCode> methodCodes);
 
     /** @return Device 当前仍存在且绑定版本未变化时为 {@code true} */
     boolean existsCurrentBinding(
@@ -109,7 +110,7 @@ public interface DeviceMapper {
      */
     boolean existsDeviceIncompatibleWithProduct(
             @Param("productId") long productId,
-            @Param("accessMethodCodes") @NotNull Collection<String> accessMethodCodes,
+            @Param("accessMethodCodes") @NotNull Collection<TreeCode> accessMethodCodes,
             @Param("protocolCodes") @NotNull Collection<String> protocolCodes);
 
     /**

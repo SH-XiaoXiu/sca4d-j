@@ -1,6 +1,6 @@
 package com.sca4d.notification.sms;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.region.ParsedPhoneNumber;
 import com.sca4d.core.api.region.Region;
 import org.jetbrains.annotations.NotNull;

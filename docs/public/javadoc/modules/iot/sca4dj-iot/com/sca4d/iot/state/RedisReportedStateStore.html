@@ -108,9 +108,8 @@ implements com.sca4d.iot.api.state.ReportedStateStore</span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,com.sca4d.iot.model.ThingDataJsonCodec,com.sca4d.core.api.runtime.RuntimeNamespace,com.sca4d.core.spring.redis.RedisBatches)" class="member-name-link">RedisReportedStateStore</a><wbr>(@NotNull org.springframework.data.redis.core.StringRedisTemplate&nbsp;redis,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,com.sca4d.iot.model.ThingDataJsonCodec,com.sca4d.core.spring.redis.RedisBatches)" class="member-name-link">RedisReportedStateStore</a><wbr>(@NotNull org.springframework.data.redis.core.RedisTemplate&lt;com.sca4d.core.api.name.Key,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;redis,
  @NotNull <a href="../model/ThingDataJsonCodec.html" title="class in com.sca4d.iot.model">ThingDataJsonCodec</a>&nbsp;json,
- @NotNull com.sca4d.core.api.runtime.RuntimeNamespace&nbsp;namespace,
  @NotNull com.sca4d.core.spring.redis.RedisBatches&nbsp;redisBatches)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建不设置有效期的 Redis latest reported 存储。</div>
@@ -176,14 +175,12 @@ implements com.sca4d.iot.api.state.ReportedStateStore</span></div>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(org.springframework.data.redis.core.StringRedisTemplate,com.sca4d.iot.model.ThingDataJsonCodec,com.sca4d.core.api.runtime.RuntimeNamespace,com.sca4d.core.spring.redis.RedisBatches)">
+<section class="detail" id="&lt;init&gt;(org.springframework.data.redis.core.RedisTemplate,com.sca4d.iot.model.ThingDataJsonCodec,com.sca4d.core.spring.redis.RedisBatches)">
 <h3>RedisReportedStateStore</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RedisReportedStateStore</span><wbr><span class="parameters">(@NotNull
- @NotNull org.springframework.data.redis.core.StringRedisTemplate&nbsp;redis,
+ @NotNull org.springframework.data.redis.core.RedisTemplate&lt;com.sca4d.core.api.name.Key,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;redis,
  @NotNull
  @NotNull <a href="../model/ThingDataJsonCodec.html" title="class in com.sca4d.iot.model">ThingDataJsonCodec</a>&nbsp;json,
- @NotNull
- @NotNull com.sca4d.core.api.runtime.RuntimeNamespace&nbsp;namespace,
  @NotNull
  @NotNull com.sca4d.core.spring.redis.RedisBatches&nbsp;redisBatches)</span></div>
 <div class="block">创建不设置有效期的 Redis latest reported 存储。</div>
@@ -191,7 +188,6 @@ implements com.sca4d.iot.api.state.ReportedStateStore</span></div>
 <dt>Parameters:</dt>
 <dd><code>redis</code> - IoT 共享 Redis</dd>
 <dd><code>json</code> - 物模型数据 JSON 编解码器</dd>
-<dd><code>namespace</code> - 共享资源命名空间</dd>
 <dd><code>redisBatches</code> - Redis pipeline 批处理器</dd>
 </dl>
 </section>

@@ -1,5 +1,6 @@
 package com.sca4d.core.api;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -36,7 +37,6 @@ import com.sca4d.core.api.call.IdempotentCallExecutor;
 import com.sca4d.core.api.call.LockedCallExecutor;
 import com.sca4d.core.api.call.PermissionCallAssessor;
 import com.sca4d.core.api.call.RateLimitedCallAssessor;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.IdempotencyBeginResult;
 import com.sca4d.core.api.concurrent.IdempotencyFingerprints;
@@ -55,6 +55,9 @@ import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
+import com.sca4d.core.api.identity.SystemPrincipal;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.Permission;
@@ -79,6 +82,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -139,7 +143,7 @@ class CallLifecycleTest {
                 Duration.ofMinutes(5),
                 Duration.ofSeconds(3));
         Method method = SecuredService.class.getDeclaredMethod("update");
-        Call call = Call.system("call-1", NOW);
+        Call call = Call.system("call-1", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")));
 
         String result = execute(
                 executor,
@@ -166,7 +170,7 @@ class CallLifecycleTest {
                 events);
 
         events.clear();
-        Call repeatedCall = Call.system("call-2", NOW);
+        Call repeatedCall = Call.system("call-2", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")));
         String repeated = execute(
                 executor,
                 repeatedCall,
@@ -229,7 +233,7 @@ class CallLifecycleTest {
                 IllegalStateException.class,
                 () -> execute(
                         executor,
-                        Call.system("completion-failure", NOW),
+                        Call.system("completion-failure", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
                         IdempotentService.class,
                         IdempotentService.class.getDeclaredMethod("create"),
                         new Object[0],
@@ -264,7 +268,7 @@ class CallLifecycleTest {
                 Duration.ofSeconds(3));
         Method method = TargetedService.class.getDeclaredMethod("update", long.class);
         CallExecution execution = new CallExecution(
-                Call.system("audit-failure", NOW),
+                Call.system("audit-failure", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
                 TargetedService.class,
                 method,
                 new Object[] {1L},
@@ -301,7 +305,7 @@ class CallLifecycleTest {
 
         String result = execute(
                 executor,
-                Call.system("target-call", NOW),
+                Call.system("target-call", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
                 TargetedService.class,
                 method,
                 new Object[] {42L},
@@ -333,7 +337,7 @@ class CallLifecycleTest {
                 Duration.ofMinutes(5),
                 Duration.ofSeconds(3));
         Method method = DeviceService.class.getDeclaredMethod("list");
-        Call call = Call.system("device-list", NOW);
+        Call call = Call.system("device-list", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")));
 
         Permission permission = new Permission(new DeviceCollection(), Action.READ);
         CallExecution execution = new CallExecution(
@@ -371,7 +375,7 @@ class CallLifecycleTest {
                 IllegalStateException.class,
                 () -> execute(
                         lifecycle,
-                        Call.system("device-list-unconsumed", NOW),
+                        Call.system("device-list-unconsumed", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
                         DeviceService.class,
                         method,
                         new Object[0],
@@ -398,7 +402,7 @@ class CallLifecycleTest {
                 Duration.ofMinutes(5),
                 Duration.ofSeconds(3));
         Method method = DuplicatePermissionService.class.getDeclaredMethod("invoke");
-        Call call = Call.system("duplicate", NOW);
+        Call call = Call.system("duplicate", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")));
 
         String result = execute(
                 executor,
@@ -421,7 +425,7 @@ class CallLifecycleTest {
 
         String result = execute(
                 executor,
-                Call.system("batch-allowed", NOW),
+                Call.system("batch-allowed", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
                 BatchService.class,
                 method,
                 new Object[] {List.of(1L, 2L, 1L)},
@@ -445,7 +449,7 @@ class CallLifecycleTest {
                 BusinessException.class,
                 () -> execute(
                         executor,
-                        Call.system("batch-denied", NOW),
+                        Call.system("batch-denied", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
                         BatchService.class,
                         method,
                         new Object[] {List.of(1L, 2L, 3L)},
@@ -469,7 +473,7 @@ class CallLifecycleTest {
                 IllegalStateException.class,
                 () -> execute(
                         emptyExecutor,
-                        Call.system("batch-empty", NOW),
+                        Call.system("batch-empty", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
                         BatchService.class,
                         batchMethod,
                         new Object[] {List.of()},
@@ -485,7 +489,7 @@ class CallLifecycleTest {
                     IllegalStateException.class,
                     () -> execute(
                             executor,
-                            Call.system("batch-invalid", NOW),
+                            Call.system("batch-invalid", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
                             serviceType,
                             method,
                             new Object[0],
@@ -572,7 +576,7 @@ class CallLifecycleTest {
     @DisplayName("Consumes Every Built In Rate Limit Dimension From An Independent Bucket")
     void consumesEveryBuiltInRateLimitDimensionFromAnIndependentBucket() throws Exception {
         AtomicInteger acquisitions = new AtomicInteger();
-        List<String> acquiredKeys = new ArrayList<>();
+        List<Key> acquiredKeys = new ArrayList<>();
         AtomicReference<RateLimit> acquiredLimit = new AtomicReference<>();
         RateLimiter limiter = (key, limit) -> {
             acquisitions.incrementAndGet();
@@ -596,13 +600,13 @@ class CallLifecycleTest {
 
         assertEquals("done", result);
         assertEquals(5, acquisitions.get());
-        assertTrue(acquiredKeys.get(0).matches("call\\.[0-9a-f]{64}:global"));
-        assertTrue(acquiredKeys.get(1).matches("call\\.[0-9a-f]{64}:ip=[0-9a-f]{64}"));
-        assertTrue(acquiredKeys.get(2).matches("call\\.[0-9a-f]{64}:ua=[0-9a-f]{64}"));
-        assertTrue(acquiredKeys.get(3).matches("call\\.[0-9a-f]{64}:subject=[0-9a-f]{64}"));
-        assertTrue(acquiredKeys.get(4).matches("call\\.[0-9a-f]{64}:account=[0-9a-f]{64}"));
-        assertFalse(String.join(":", acquiredKeys).contains("192.0.2.25"));
-        assertFalse(String.join(":", acquiredKeys).contains("Client/1.0"));
+        assertTrue(rateValue(acquiredKeys.get(0)).matches("global"));
+        assertTrue(rateValue(acquiredKeys.get(1)).matches("ip=[0-9a-f]{64}"));
+        assertTrue(rateValue(acquiredKeys.get(2)).matches("ua=[0-9a-f]{64}"));
+        assertTrue(rateValue(acquiredKeys.get(3)).matches("subject=[0-9a-f]{64}"));
+        assertTrue(rateValue(acquiredKeys.get(4)).matches("account=[0-9a-f]{64}"));
+        assertFalse(acquiredKeys.toString().contains("192.0.2.25"));
+        assertFalse(acquiredKeys.toString().contains("Client/1.0"));
         assertEquals(4, acquiredLimit.get().permits());
         assertEquals(Duration.ofSeconds(30), acquiredLimit.get().window());
     }
@@ -610,7 +614,7 @@ class CallLifecycleTest {
     @Test
     @DisplayName("Uses Global By Default And Supports Custom Only Rate Limits")
     void usesGlobalByDefaultAndSupportsCustomOnlyRateLimits() throws Exception {
-        List<String> acquiredKeys = new ArrayList<>();
+        List<Key> acquiredKeys = new ArrayList<>();
         CallLifecycle executor = rateLimitExecutor(
                 (key, limit) -> {
                     acquiredKeys.add(key);
@@ -620,30 +624,30 @@ class CallLifecycleTest {
 
         execute(
                 executor,
-                Call.system("default-and-custom", NOW),
+                Call.system("default-and-custom", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
                 RateLimitedService.class,
                 RateLimitedService.class.getDeclaredMethod("defaultAndCustom"),
                 new Object[0],
                 () -> "default-and-custom");
         execute(
                 executor,
-                Call.system("custom-only", NOW),
+                Call.system("custom-only", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
                 RateLimitedService.class,
                 RateLimitedService.class.getDeclaredMethod("customOnly"),
                 new Object[0],
                 () -> "custom-only");
 
         assertEquals(3, acquiredKeys.size());
-        assertTrue(acquiredKeys.get(0).endsWith(":global"));
-        assertTrue(acquiredKeys.get(1).matches("call\\.[0-9a-f]{64}:custom=[0-9a-f]{64}"));
-        assertTrue(acquiredKeys.get(2).matches("call\\.[0-9a-f]{64}:custom=[0-9a-f]{64}"));
+        assertEquals("global", rateValue(acquiredKeys.get(0)));
+        assertTrue(rateValue(acquiredKeys.get(1)).matches("custom=[0-9a-f]{64}"));
+        assertTrue(rateValue(acquiredKeys.get(2)).matches("custom=[0-9a-f]{64}"));
         assertFalse(acquiredKeys.toString().contains("system"));
     }
 
     @Test
     @DisplayName("Scopes Global Rate Limits By Concrete Method Signature")
     void scopesGlobalRateLimitsByConcreteMethodSignature() throws Exception {
-        List<String> scopes = new ArrayList<>();
+        List<Key> scopes = new ArrayList<>();
         CallLifecycle executor = rateLimitExecutor(
                 (key, limit) -> {
                     scopes.add(key);
@@ -655,14 +659,14 @@ class CallLifecycleTest {
 
         execute(
                 executor,
-                Call.system("overload-empty", NOW),
+                Call.system("overload-empty", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
                 RateLimitedService.class,
                 RateLimitedService.class.getDeclaredMethod("overloaded"),
                 new Object[0],
                 () -> "empty");
         execute(
                 executor,
-                Call.system("overload-text", NOW),
+                Call.system("overload-text", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
                 RateLimitedService.class,
                 RateLimitedService.class.getDeclaredMethod("overloaded", String.class),
                 new Object[] {"value"},
@@ -687,7 +691,7 @@ class CallLifecycleTest {
                 IllegalStateException.class,
                 () -> execute(
                         executor,
-                        Call.system("duplicate-rate-limit", NOW),
+                        Call.system("duplicate-rate-limit", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
                         RateLimitedService.class,
                         RateLimitedService.class.getDeclaredMethod("duplicateDimensions"),
                         new Object[0],
@@ -696,7 +700,7 @@ class CallLifecycleTest {
                 IllegalStateException.class,
                 () -> execute(
                         executor,
-                        Call.system("empty-rate-limit", NOW),
+                        Call.system("empty-rate-limit", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
                         RateLimitedService.class,
                         RateLimitedService.class.getDeclaredMethod("emptyDimensions"),
                         new Object[0],
@@ -721,7 +725,7 @@ class CallLifecycleTest {
                 IllegalStateException.class,
                 () -> execute(
                         executor,
-                        Call.system("missing-http", NOW),
+                        Call.system("missing-http", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
                         RateLimitedService.class,
                         RateLimitedService.class.getDeclaredMethod("byIp"),
                         new Object[0],
@@ -739,7 +743,7 @@ class CallLifecycleTest {
                 IllegalStateException.class,
                 () -> execute(
                         executor,
-                        Call.system("missing-account", NOW),
+                        Call.system("missing-account", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
                         RateLimitedService.class,
                         RateLimitedService.class.getDeclaredMethod("byAccount"),
                         new Object[0],
@@ -763,7 +767,7 @@ class CallLifecycleTest {
                 IllegalStateException.class,
                 () -> execute(
                         executor,
-                        Call.system("blank-rate-limit", NOW),
+                        Call.system("blank-rate-limit", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
                         RateLimitedService.class,
                         RateLimitedService.class.getDeclaredMethod("customOnly"),
                         new Object[0],
@@ -786,7 +790,7 @@ class CallLifecycleTest {
                 RateLimitExceededException.class,
                 () -> execute(
                         executor,
-                        Call.system("limited", NOW),
+                        Call.system("limited", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
                         RateLimitedService.class,
                         RateLimitedService.class.getDeclaredMethod("overloaded"),
                         new Object[0],
@@ -1051,6 +1055,13 @@ class CallLifecycleTest {
         }
     }
 
+    /** 读取限流 Key 的动态维度值，验证调用者传给 IO 适配器的维度而非 App 前缀。 */
+    private static String rateValue(Key key) {
+        return new String(
+                HexFormat.of().parseHex(key.segments().get(2).substring(2)),
+                UTF_8);
+    }
+
     private static final class RateKeyResolver implements CallValueResolver<String> {
 
         @Override
@@ -1084,7 +1095,7 @@ class CallLifecycleTest {
 
         @Override
         public @NotNull LockKey resolve(@NotNull CallExecution execution) {
-            return new LockKey("account-system");
+            return new LockKey(TreeCode.of("ACCOUNT-SYSTEM"));
         }
     }
 
@@ -1162,7 +1173,7 @@ class CallLifecycleTest {
 
         @Override
         public boolean supports(Resource resource) {
-            return "BATCH/ITEM".equals(resource.type());
+            return TreeCode.of("BATCH/ITEM").equals(resource.type());
         }
 
         @Override

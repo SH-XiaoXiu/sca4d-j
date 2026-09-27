@@ -1,12 +1,14 @@
 package com.sca4d.iot.message;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.annotation.SystemExecution;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.messaging.HandlingDecision;
 import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.api.messaging.MessageHandler;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.iot.api.IotCapabilities;
 import com.sca4d.iot.api.change.DeviceChangeArea;
 import com.sca4d.iot.api.message.DeviceDispatchMessage;
 import com.sca4d.iot.api.message.DeviceDownlink;
@@ -79,6 +81,7 @@ public class DeviceDispatchHandler implements MessageHandler<DeviceDispatchMessa
 
     /** 重复或已经失效的发送消息直接确认；协议 publish 在数据库事务外执行。 */
     @Override
+    @SystemExecution(IotCapabilities.SYSTEM_IDENTITY_VALUE)
     public @NotNull HandlingDecision handle(@NotNull IncomingMessage<DeviceDispatchMessage> delivery) {
         DeviceDispatchMessage dispatch = Objects.requireNonNull(delivery, "下行消息投递不能为空")
                 .message();
@@ -209,6 +212,6 @@ public class DeviceDispatchHandler implements MessageHandler<DeviceDispatchMessa
 
     /** @return 指定下行消息在全部应用实例间共用的锁键 */
     private static @NotNull LockKey downlinkLock(long messageId) {
-        return new LockKey("iot", "downlink", Long.toString(messageId));
+        return new LockKey(TreeCode.of("IOT:DOWNLINK"), messageId);
     }
 }

@@ -1,5 +1,7 @@
 package com.sca4d.app.server.authentication.view;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.permission.Operation;
 import org.jetbrains.annotations.CheckReturnValue;
@@ -61,7 +63,7 @@ public final class CurrentSessionView {
                         .flatMap(principal -> checked.resources(principal.principalId()).stream())
                         .filter(Operation.class::isInstance)
                         .map(Operation.class::cast)
-                        .map(operation -> operation.code().value())
+                        .map(operation -> operation.code().format(COLON))
                         .distinct()
                         .sorted()
                         .toList());

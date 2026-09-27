@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.sca4d.core.api.connection.ConnectionId;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -43,7 +44,7 @@ class LocalNodeRouterTest {
     private static BrowserWrite delivery() {
         return new BrowserWrite(
                 new BrowserEnvelope(
-                        "test.changed",
+                        TreeCode.of("test.changed"),
                         1,
                         Instant.parse("2026-07-30T00:00:00Z"),
                         JsonNodeFactory.instance.objectNode()),

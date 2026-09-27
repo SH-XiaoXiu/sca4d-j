@@ -1,6 +1,7 @@
 package com.sca4d.core.api.permission;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.resource.Resource;
 import org.jetbrains.annotations.Contract;
 
 /**
@@ -17,7 +18,7 @@ public interface ResourceScope {
     /**
      * 返回当前范围约束的资源类型。
      *
-     * @return 与 {@link com.sca4d.core.api.resource.Resource#type()} 一致的资源类型
+     * @return 与 {@link Resource#type()} 一致的资源类型
      */
     @Contract(pure = true)
     TreeCode resourceType();

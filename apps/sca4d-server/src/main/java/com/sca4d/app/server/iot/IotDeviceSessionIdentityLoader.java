@@ -40,7 +40,7 @@ public final class IotDeviceSessionIdentityLoader implements SessionIdentityLoad
     }
 
     /**
-     * 重新读取可用 Device Account 及其 Device Subject。
+     * 重新读取可用 Device Account 以及对应 Device Subject。
      *
      * @param account Session 中保存的 `iot-device` Realm Account
      * @return 当前可用的 Device Subject 和 Account

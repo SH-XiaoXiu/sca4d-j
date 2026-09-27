@@ -47,7 +47,7 @@ public final class User implements Principal {
      * 使用任意一组 Subject、Account、Principal 构造直通对象。
      *
      * @param subject 接入者
-     * @param account 属于该接入者的账号
+     * @param account 属于当前接入者的账号
      * @param principal 业务主体
      * @return USER 直通对象
      */

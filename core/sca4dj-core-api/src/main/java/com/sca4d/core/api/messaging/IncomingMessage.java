@@ -1,7 +1,7 @@
 package com.sca4d.core.api.messaging;
 
 import com.sca4d.core.api.message.Message;
-import com.sca4d.core.api.utils.TextUtils;
+import com.sca4d.core.api.name.Name;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
@@ -14,7 +14,7 @@ public final class IncomingMessage<M extends Message> {
 
     private final @NotNull M message;
 
-    private final @NotNull String sourceApplication;
+    private final @NotNull Name sourceApplication;
 
     private final @NotNull Instant publishedAt;
 
@@ -26,13 +26,13 @@ public final class IncomingMessage<M extends Message> {
     public IncomingMessage(
             @NotNull MessageId messageId,
             @NotNull M message,
-            @NotNull String sourceApplication,
+            @NotNull Name sourceApplication,
             @NotNull Instant publishedAt,
             boolean redelivered,
             int attempt) {
         this.messageId = Objects.requireNonNull(messageId, "MessageId 不能为空");
         this.message = Objects.requireNonNull(message, "消息不能为空");
-        this.sourceApplication = TextUtils.requireText(sourceApplication, "消息来源应用");
+        this.sourceApplication = Objects.requireNonNull(sourceApplication, "消息来源应用不能为空");
         this.publishedAt = Objects.requireNonNull(publishedAt, "消息发布时间不能为空");
         if (attempt < 1) {
             throw new IllegalArgumentException("消息处理尝试次数必须为正数");
@@ -52,7 +52,7 @@ public final class IncomingMessage<M extends Message> {
     }
 
     /** @return 发布消息的应用标识 */
-    public @NotNull String sourceApplication() {
+    public @NotNull Name sourceApplication() {
         return sourceApplication;
     }
 

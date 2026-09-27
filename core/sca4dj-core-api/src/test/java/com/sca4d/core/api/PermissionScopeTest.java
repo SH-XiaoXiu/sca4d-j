@@ -12,12 +12,13 @@ import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallExecution;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
+import com.sca4d.core.api.identity.SystemPrincipal;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.Permission;
@@ -45,7 +46,7 @@ class PermissionScopeTest {
     @Test
     @DisplayName("Stores Resource Scopes By Complete Permission")
     void storesResourceScopesByCompletePermission() {
-        Call call = Call.system("scope-test", NOW);
+        Call call = Call.system("scope-test", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")));
         Resource devices = new DeviceResource("collection");
         Permission read = new Permission(devices, Action.READ);
         Permission update = new Permission(devices, Action.UPDATE);
@@ -69,7 +70,7 @@ class PermissionScopeTest {
     @Test
     @DisplayName("Rejects Missing Denied And Mismatched Resource Scopes")
     void rejectsMissingDeniedAndMismatchedResourceScopes() {
-        Call call = Call.system("scope-test", NOW);
+        Call call = Call.system("scope-test", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")));
         Permission devices = new Permission(new DeviceResource("collection"), Action.READ);
         Permission accounts = new Permission(new AccountResource("collection"), Action.READ);
         CallExecution execution = execution(call);
@@ -82,7 +83,7 @@ class PermissionScopeTest {
                 IllegalStateException.class,
                 () -> call.recordPermissionDecision(accounts, PermissionDecision.allow(new DeviceScope("read"))));
 
-        Call wrongType = Call.system("wrong-type", NOW);
+        Call wrongType = Call.system("wrong-type", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")));
         wrongType.recordPermissionDecision(accounts, PermissionDecision.allow(new AccountScope()));
         CallExecution wrongTypeExecution = execution(wrongType);
         wrongTypeExecution.registerResourceScope(accounts);
@@ -131,7 +132,7 @@ class PermissionScopeTest {
     @DisplayName("Lets Business Policy Produce Scope Without Exact Session Grant")
     void letsBusinessPolicyProduceScopeWithoutExactSessionGrant() {
         Permission collectionRead = new Permission(new DeviceResource("collection"), Action.READ);
-        Call call = Call.system("business-policy", NOW);
+        Call call = Call.system("business-policy", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")));
         PermissionPolicy policy = new DevicePermissionPolicy();
 
         PermissionDecision decision = new PermissionAssessment(List.of(policy))

@@ -1,10 +1,17 @@
 package com.sca4d.core.spring.gateway;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+import static com.sca4d.core.api.name.NameFormat.DOT;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+
 import com.sca4d.core.api.gateway.GatewayCallback;
+import com.sca4d.core.api.gateway.GatewayCallbackCode;
 import com.sca4d.core.api.gateway.GatewayHttpHeaders;
 import com.sca4d.core.api.gateway.GatewayHttpPaths;
 import com.sca4d.core.api.gateway.GatewayRegistrationRequest;
 import com.sca4d.core.api.gateway.GatewayRegistrationResponse;
+import com.sca4d.core.api.runtime.InstanceCapabilities;
+import com.sca4d.core.spring.config.InstanceProperties;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -12,16 +19,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.http.MediaType;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
 
 import java.net.URI;
 import java.time.Duration;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -49,7 +55,9 @@ public final class GatewayRegistrationLifecycle {
 
     private final @NotNull URI registrationsUri;
 
-    private final @NotNull Set<@NotNull String> callbackCodes;
+    private final @NotNull Set<GatewayCallbackCode> callbackCodes;
+
+    private final @NotNull InstanceCapabilities capabilities;
 
     private final @NotNull ScheduledExecutorService scheduler;
 
@@ -68,11 +76,13 @@ public final class GatewayRegistrationLifecycle {
      */
     public GatewayRegistrationLifecycle(
             @NotNull GatewayRegistrationProperties properties,
-            @NotNull List<@NotNull GatewayCallback<?, ?>> callbacks) {
+            @NotNull List<@NotNull GatewayCallback<?, ?>> callbacks,
+            @NotNull InstanceProperties instanceProperties,
+            @NotNull InstanceCapabilities capabilities) {
         Objects.requireNonNull(properties, "Gateway 注册配置不能为空");
         Objects.requireNonNull(callbacks, "Gateway 回调集合不能为空");
 
-        // 固化启动时配置，后续注册、续租和注销始终使用同一组已校验参数。
+        // 固化启动时配置，之后的注册、续租和注销始终使用同一组已校验参数。
         URI gatewayBaseUrl = requireHttpUri(properties.getGatewayBaseUrl(), "Gateway 基础地址", false);
         this.serverBaseUrl = requireHttpUri(properties.getServerBaseUrl(), "Server Origin", true);
         this.secret = requireText(properties.getSecret(), "Gateway 控制 Secret");
@@ -82,14 +92,12 @@ public final class GatewayRegistrationLifecycle {
         if (!readinessPath.startsWith("/") || readinessPath.contains("?") || readinessPath.contains("#")) {
             throw new IllegalStateException("Gateway readiness 路径必须是以斜杠开头且不包含查询参数的路径");
         }
-        String configuredInstanceId = properties.getInstanceId();
-        this.instanceId = configuredInstanceId == null || configuredInstanceId.isBlank()
-                ? UUID.randomUUID().toString()
-                : configuredInstanceId.strip();
+        this.instanceId = instanceProperties.getId();
+        this.capabilities = Objects.requireNonNull(capabilities);
         this.registrationsUri = endpoint(gatewayBaseUrl, GatewayHttpPaths.REGISTRATIONS);
         this.callbackCodes = callbacks.stream()
                 .map(callback -> Objects.requireNonNull(callback, "Gateway 回调不能为空"))
-                .map(callback -> callback.code().value())
+                .map(GatewayCallback::code)
                 .collect(Collectors.toUnmodifiableSet());
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout(requestTimeout);
@@ -157,17 +165,31 @@ public final class GatewayRegistrationLifecycle {
         }
     }
 
-    /** 创建新租约，并用 Gateway 返回的租约 ID 保护后续续租和注销。 */
+    /** 创建新租约，并用 Gateway 返回的租约 ID 保护之后的续租和注销。 */
     private void register() {
         GatewayRegistrationRequest registration = new GatewayRegistrationRequest(
                 instanceId,
                 serverBaseUrl,
                 readinessPath,
-                callbackCodes);
+                callbackCodes.stream().map(code -> code.format(DOT)).collect(Collectors.toUnmodifiableSet()),
+                capabilities.enabledCodes()
+                        .stream()
+                        .map(code -> code.format(COLON))
+                        .collect(Collectors.toUnmodifiableSet()),
+                capabilities.apiRequirements()
+                        .entrySet()
+                        .stream()
+                        .collect(
+                                Collectors.toUnmodifiableMap(
+                                        Entry::getKey,
+                                        entry -> entry.getValue()
+                                                .stream()
+                                                .map(code -> code.format(COLON))
+                                                .collect(Collectors.toUnmodifiableSet()))));
         GatewayRegistrationResponse response = client.post()
                 .uri(registrationsUri)
                 .header(GatewayHttpHeaders.SECRET, secret)
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
                 .body(registration)
                 .retrieve()
                 .body(GatewayRegistrationResponse.class);

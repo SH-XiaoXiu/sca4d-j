@@ -239,7 +239,7 @@ loadScripts(document, 'script');</script>
 <h3>createDictionary</h3>
 <div class="member-signature"><span class="annotations">@PostMapping
 @RequirePermission(operation="SYSTEM:DICTIONARIES:MANAGE")
-@Audit(operation="system/dictionary/create",
+@Audit(operation="SYSTEM/DICTIONARY/CREATE",
        payloadFactory=<a href="../../audit/ApplicationAuditValues.DictionaryMutationDetails.html" title="class in com.sca4d.app.server.audit">DictionaryMutationDetails.class</a>)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/SystemDictionariesView.html" title="class in com.sca4d.app.server.system.view">SystemDictionariesView</a>&gt;</span>&nbsp;<span class="element-name">createDictionary</span><wbr><span class="parameters">(@RequestBody @Valid @NotNull
@@ -252,7 +252,7 @@ loadScripts(document, 'script');</script>
 <h3>updateDictionary</h3>
 <div class="member-signature"><span class="annotations">@PutMapping("/{key}")
 @RequirePermission(operation="SYSTEM:DICTIONARIES:MANAGE")
-@Audit(operation="system/dictionary/update",
+@Audit(operation="SYSTEM/DICTIONARY/UPDATE",
        payloadFactory=<a href="../../audit/ApplicationAuditValues.DictionaryMutationDetails.html" title="class in com.sca4d.app.server.audit">DictionaryMutationDetails.class</a>)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/SystemDictionariesView.html" title="class in com.sca4d.app.server.system.view">SystemDictionariesView</a>&gt;</span>&nbsp;<span class="element-name">updateDictionary</span><wbr><span class="parameters">(@PathVariable @NotNull
@@ -267,7 +267,7 @@ loadScripts(document, 'script');</script>
 <h3>deleteDictionary</h3>
 <div class="member-signature"><span class="annotations">@DeleteMapping("/{key}")
 @RequirePermission(operation="SYSTEM:DICTIONARIES:MANAGE")
-@Audit(operation="system/dictionary/delete",
+@Audit(operation="SYSTEM/DICTIONARY/DELETE",
        payloadFactory=<a href="../../audit/ApplicationAuditValues.DictionaryMutationDetails.html" title="class in com.sca4d.app.server.audit">DictionaryMutationDetails.class</a>)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">deleteDictionary</span><wbr><span class="parameters">(@PathVariable @NotNull
@@ -282,7 +282,7 @@ loadScripts(document, 'script');</script>
 <h3>createOption</h3>
 <div class="member-signature"><span class="annotations">@PostMapping("/{key}/options")
 @RequirePermission(operation="SYSTEM:DICTIONARIES:MANAGE")
-@Audit(operation="system/dictionary/option/create",
+@Audit(operation="SYSTEM/DICTIONARY/OPTION/CREATE",
        payloadFactory=<a href="../../audit/ApplicationAuditValues.DictionaryMutationDetails.html" title="class in com.sca4d.app.server.audit">DictionaryMutationDetails.class</a>)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/SystemDictionariesView.html" title="class in com.sca4d.app.server.system.view">SystemDictionariesView</a>&gt;</span>&nbsp;<span class="element-name">createOption</span><wbr><span class="parameters">(@PathVariable @NotNull
@@ -297,7 +297,7 @@ loadScripts(document, 'script');</script>
 <h3>updateOption</h3>
 <div class="member-signature"><span class="annotations">@PutMapping("/{key}/options/{value}")
 @RequirePermission(operation="SYSTEM:DICTIONARIES:MANAGE")
-@Audit(operation="system/dictionary/option/update",
+@Audit(operation="SYSTEM/DICTIONARY/OPTION/UPDATE",
        payloadFactory=<a href="../../audit/ApplicationAuditValues.DictionaryMutationDetails.html" title="class in com.sca4d.app.server.audit">DictionaryMutationDetails.class</a>)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/SystemDictionariesView.html" title="class in com.sca4d.app.server.system.view">SystemDictionariesView</a>&gt;</span>&nbsp;<span class="element-name">updateOption</span><wbr><span class="parameters">(@PathVariable @NotNull
@@ -314,7 +314,7 @@ loadScripts(document, 'script');</script>
 <h3>deleteOption</h3>
 <div class="member-signature"><span class="annotations">@DeleteMapping("/{key}/options/{value}")
 @RequirePermission(operation="SYSTEM:DICTIONARIES:MANAGE")
-@Audit(operation="system/dictionary/option/delete",
+@Audit(operation="SYSTEM/DICTIONARY/OPTION/DELETE",
        payloadFactory=<a href="../../audit/ApplicationAuditValues.DictionaryMutationDetails.html" title="class in com.sca4d.app.server.audit">DictionaryMutationDetails.class</a>)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">deleteOption</span><wbr><span class="parameters">(@PathVariable @NotNull

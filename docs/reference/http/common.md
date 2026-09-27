@@ -1,6 +1,6 @@
 # HTTP API 通用契约
 
-本页说明客户端调用 Core Spring HTTP 接口时使用的响应字段、错误码、分页参数和请求头。具体路由、认证与权限要求见[Sca4d Server HTTP API](/reference/http/sca4d-server)。
+客户端先检查 HTTP 状态，再从 `data` 读取结果或用稳定 `code` 判断失败；64 位 ID 保持字符串，修改要求版本的资源时原样提交读取到的强 ETag。204 和 SSE 错误没有普通 JSON 响应体，解析前必须区分。具体路由、认证与权限要求见[Sca4d Server HTTP API](/reference/http/sca4d-server)。
 
 | 调用时需要处理的内容 | 查阅位置 |
 |---|---|
@@ -243,7 +243,7 @@ SSE 连接建立后的事件、心跳、超时和断开方式由具体 SSE 路�
 
 ## OpenAPI
 
-存在 springdoc 时，[CoreOpenApiConfiguration](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/openapi/CoreOpenApiConfiguration.html) 默认创建标题为 `${spring.application.name} API`、版本为 `0.0.1-alpha` 的 OpenAPI 定义，并注册名为 `bearerAuth` 的 HTTP Bearer 安全方案，`bearerFormat` 为 `Opaque`。应用名称没有公共回退值；`spring.application.name` 缺失时 RuntimeNamespace 自动配置会使应用启动失败。该配置还把 Java `long` 和 `Long` schema 声明为十进制字符串，与运行时 Jackson 输出保持一致。[HttpInputOpenApiCustomizer](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/openapi/HttpInputOpenApiCustomizer.html) 只向参数和请求体 Schema 添加当前启用的类型默认限制，并遵守显式约束和 `@NoDefaultValidation` 的替代规则。
+存在 springdoc 时，[CoreOpenApiConfiguration](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/openapi/CoreOpenApiConfiguration.html) 默认创建标题为 `${spring.application.name} API`、版本为 `0.0.1-alpha` 的 OpenAPI 定义，并注册名为 `bearerAuth` 的 HTTP Bearer 安全方案，`bearerFormat` 为 `Opaque`。应用名称没有公共回退值；`spring.application.name` 缺失时 AppIsolation 自动配置会使应用启动失败。该配置还把 Java `long` 和 `Long` schema 声明为十进制字符串，与运行时 Jackson 输出保持一致。[HttpInputOpenApiCustomizer](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/openapi/HttpInputOpenApiCustomizer.html) 只向参数和请求体 Schema 添加当前启用的类型默认限制，并遵守显式约束和 `@NoDefaultValidation` 的替代规则。
 
 `sca4dj.core.open-api-enabled=false` 会关闭这项 Core 基础配置。应用还需要同时配置 springdoc 是否开放 `/v3/api-docs` 和 Swagger UI。注册安全方案不等于自动标记每条路由的认证要求；具体路由仍以应用 HTTP API 规格和 Controller 声明为准。
 

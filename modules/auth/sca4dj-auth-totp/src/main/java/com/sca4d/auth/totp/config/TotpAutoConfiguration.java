@@ -1,6 +1,5 @@
 package com.sca4d.auth.totp.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.auth.totp.TotpAuthenticationMethod;
 import com.sca4d.auth.totp.credential.TotpCodeVerifier;
 import com.sca4d.auth.totp.credential.TotpCredentialRepository;
@@ -8,16 +7,17 @@ import com.sca4d.auth.totp.credential.mapper.TotpCredentialMapper;
 import com.sca4d.auth.totp.enrollment.RedisTotpEnrollmentStore;
 import com.sca4d.auth.totp.enrollment.TotpEnrollmentService;
 import com.sca4d.core.api.authentication.SessionControl;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.security.SecretKeyring;
 import com.sca4d.core.api.setting.Settings;
 import com.sca4d.core.api.setting.SystemSetting;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.core.spring.redis.Sca4djRedis;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.time.Clock;
 import java.time.Duration;
@@ -52,11 +52,10 @@ public class TotpAutoConfiguration {
     /** @return Redis enrollment store */
     @Bean
     RedisTotpEnrollmentStore redisTotpEnrollmentStore(
-            @Sca4djRedis StringRedisTemplate redis,
-            @Sca4djJson ObjectMapper objectMapper,
-            Clock clock,
-            RuntimeNamespace runtimeNamespace) {
-        return new RedisTotpEnrollmentStore(redis, objectMapper, clock, runtimeNamespace);
+            @Sca4djRedis RedisTemplate<Key, String> redis,
+            @Sca4djJson Sca4djMapper objectMapper,
+            Clock clock) {
+        return new RedisTotpEnrollmentStore(redis, objectMapper, clock);
     }
 
     /** @return TOTP enrollment 与凭据生命周期服务 */

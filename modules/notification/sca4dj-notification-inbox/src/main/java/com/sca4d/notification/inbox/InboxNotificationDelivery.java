@@ -1,9 +1,9 @@
 package com.sca4d.notification.inbox;
 
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.delivery.DeliveryOutcome;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.Notification;
 import com.sca4d.core.api.notification.NotificationDelivery;
 import com.sca4d.core.api.notification.NotificationRecipient;

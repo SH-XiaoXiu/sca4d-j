@@ -1,10 +1,12 @@
 package com.sca4d.app.server.system.view;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.i18n.LocalizableText;
 import com.sca4d.core.api.i18n.MessageText;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.OperationCatalog;
 import com.sca4d.core.api.permission.OperationNode;
 import com.sca4d.core.api.permission.OperationNodeType;
@@ -124,8 +126,8 @@ public final class OperationCatalogView {
                     .map(child -> from(child, node.code()))
                     .toList();
             return new Node(
-                    node.code().value(),
-                    parentCode == null ? null : parentCode.value(),
+                    node.code().format(COLON),
+                    parentCode == null ? null : parentCode.format(COLON),
                     node.nameKey(),
                     node.type(),
                     node.sortOrder(),
@@ -134,8 +136,8 @@ public final class OperationCatalogView {
 
         private static @NotNull Node from(@NotNull OperationNode.OperationAction item) {
             return new Node(
-                    item.code().value(),
-                    item.parentCode() == null ? null : item.parentCode().value(),
+                    item.code().format(COLON),
+                    item.parentCode() == null ? null : item.parentCode().format(COLON),
                     item.nameKey(),
                     OperationNodeType.ACTION,
                     item.sortOrder(),

@@ -32,7 +32,7 @@ public final class LocalNodeRouter implements NodeRouter {
         return nodeId;
     }
 
-    /** 只投递当前 JVM 持有的连接；其他节点的租约等待 Redis 自动清理。 */
+    /** 只投递当前 JVM 持有的连接；其他节点的连接由 Redis 按租约自动清理。 */
     @Override
     public void send(
             @NotNull String destinationNodeId,

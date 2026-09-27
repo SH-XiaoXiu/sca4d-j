@@ -1,7 +1,6 @@
 package com.sca4d.web.realtime.stomp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sca4d.core.spring.json.Sca4djJson;
 import com.sca4d.web.realtime.config.WebRealtimeProperties;
 import com.sca4d.web.realtime.ticket.TicketHandshakeInterceptor;
 import org.jetbrains.annotations.ApiStatus;
@@ -45,7 +44,7 @@ public class StompConfiguration implements WebSocketMessageBrokerConfigurer {
             @NotNull WebSocketSessions sockets,
             @NotNull StompInboundInterceptor inboundInterceptor,
             @NotNull StompOutboundInterceptor outboundInterceptor,
-            @Sca4djJson @NotNull ObjectMapper objectMapper) {
+            @NotNull ObjectMapper objectMapper) {
         this.properties = Objects.requireNonNull(properties, "Web Realtime 配置不能为空");
         this.handshakeInterceptor = Objects.requireNonNull(handshakeInterceptor, "WebSocket 握手拦截器不能为空");
         this.sockets = Objects.requireNonNull(sockets, "WebSocket 连接句柄不能为空");

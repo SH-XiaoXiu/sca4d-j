@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Locale;
+import java.util.Optional;
 
 /** 用 Account LogicSetting 为 Notification 框架解析全局语言和业务区域。 */
 @Configuration(proxyBeanMethods = false)
@@ -65,7 +66,7 @@ public class PlatformNotificationConfiguration {
     /** @return 从 Account 设置读取具体应用业务区域的解析器 */
     @Bean
     NotificationRegionResolver platformNotificationRegionResolver(@NotNull Settings settings) {
-        return recipient -> java.util.Optional.of(
+        return recipient -> Optional.of(
                 new Region(
                         settings.get(
                                 REGION,

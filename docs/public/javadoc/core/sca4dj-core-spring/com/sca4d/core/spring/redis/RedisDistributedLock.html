@@ -108,8 +108,7 @@ implements com.sca4d.core.api.concurrent.DistributedLock</span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.redisson.api.RedissonClient,com.sca4d.core.api.runtime.RuntimeNamespace)" class="member-name-link">RedisDistributedLock</a><wbr>(@NotNull org.redisson.api.RedissonClient&nbsp;redisson,
- @NotNull com.sca4d.core.api.runtime.RuntimeNamespace&nbsp;runtimeNamespace)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.redisson.api.RedissonClient)" class="member-name-link">RedisDistributedLock</a><wbr>(@NotNull org.redisson.api.RedissonClient&nbsp;redisson)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建使用当前应用 Redis 命名空间的分布式锁。</div>
 </div>
@@ -152,17 +151,14 @@ implements com.sca4d.core.api.concurrent.DistributedLock</span></div>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(org.redisson.api.RedissonClient,com.sca4d.core.api.runtime.RuntimeNamespace)">
+<section class="detail" id="&lt;init&gt;(org.redisson.api.RedissonClient)">
 <h3>RedisDistributedLock</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RedisDistributedLock</span><wbr><span class="parameters">(@NotNull
- @NotNull org.redisson.api.RedissonClient&nbsp;redisson,
- @NotNull
- @NotNull com.sca4d.core.api.runtime.RuntimeNamespace&nbsp;runtimeNamespace)</span></div>
+ @NotNull org.redisson.api.RedissonClient&nbsp;redisson)</span></div>
 <div class="block">创建使用当前应用 Redis 命名空间的分布式锁。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>redisson</code> - Redisson 客户端</dd>
-<dd><code>runtimeNamespace</code> - 当前应用的运行时命名空间</dd>
 </dl>
 </section>
 </li>

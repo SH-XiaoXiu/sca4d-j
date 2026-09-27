@@ -1,7 +1,8 @@
 package com.sca4d.core.api.permission;
 
 import cn.hutool.crypto.digest.DigestUtil;
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.NameFormat;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
@@ -148,9 +149,6 @@ public final class OperationCatalog {
     @CheckReturnValue
     public @NotNull Optional<OperationNode.OperationAction> action(@NotNull TreeCode code) {
         TreeCode checked = Objects.requireNonNull(code, "Operation 编码不能为空");
-        if (checked.separator() != ':') {
-            throw new IllegalArgumentException("Operation 必须使用冒号分层: " + checked);
-        }
         return Optional.ofNullable(actionsByCode.get(checked));
     }
 
@@ -193,7 +191,7 @@ public final class OperationCatalog {
         String canonical = Objects.requireNonNull(actionCodes, "Operation 编码集合不能为空")
                 .stream()
                 .sorted()
-                .map(TreeCode::value)
+                .map(code -> code.format(NameFormat.COLON))
                 .collect(Collectors.joining("\n"));
         return Base64.getUrlEncoder()
                 .withoutPadding()

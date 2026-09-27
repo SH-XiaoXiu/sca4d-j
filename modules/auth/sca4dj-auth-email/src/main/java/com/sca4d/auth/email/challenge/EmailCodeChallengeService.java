@@ -1,5 +1,8 @@
 package com.sca4d.auth.email.challenge;
 
+import static com.sca4d.auth.email.challenge.EmailCodeChallengeStatus.CONSUMED;
+import static com.sca4d.auth.email.challenge.EmailCodeChallengeStatus.PENDING;
+
 import cn.hutool.crypto.digest.DigestUtil;
 import com.sca4d.auth.email.EmailCodeAuthenticationMethod;
 import com.sca4d.auth.email.EmailCodeChallenge;
@@ -123,7 +126,7 @@ public class EmailCodeChallengeService {
     }
 
     /**
-     * 为认证尝试已经确定的 Account 签发后续因素 Challenge。
+     * 为认证尝试已经确定的 Account 签发附加因素 Challenge。
      *
      * @param account 有效认证尝试绑定的 Account
      * @return 不包含完整邮箱的 Challenge
@@ -161,7 +164,7 @@ public class EmailCodeChallengeService {
             throw new BusinessException(EmailCodeErrorCode.CODE_REJECTED);
         }
         Instant now = clock.instant();
-        boolean valid = state.status() == EmailCodeChallengeStatus.PENDING
+        boolean valid = state.status() == PENDING
                 && now.isBefore(state.expiresAt())
                 && state.accountId() > 0
                 && CODE.matcher(checkedProof.code()).matches()
@@ -186,7 +189,7 @@ public class EmailCodeChallengeService {
         EmailCodeChallengeState state = store.find(challengeId);
         if (state == null
                 || state.accountId() != accountId
-                || state.status() != EmailCodeChallengeStatus.CONSUMED
+                || state.status() != CONSUMED
                 || !state.version().equals(version)
                 || !clock.instant().isBefore(state.expiresAt())) {
             throw new IllegalStateException("Email Code Challenge 已变化或不可用");
@@ -221,7 +224,7 @@ public class EmailCodeChallengeService {
                 now.plus(ttl),
                 now.plus(resendInterval),
                 0,
-                EmailCodeChallengeStatus.PENDING,
+                PENDING,
                 new Version(0));
         store.create(state);
 

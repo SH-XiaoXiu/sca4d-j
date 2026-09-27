@@ -1,8 +1,11 @@
 package com.sca4d.messaging.rabbit;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import com.sca4d.core.api.messaging.EventHandler;
 import com.sca4d.core.api.messaging.MessageHandler;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.amqp.core.Binding;
@@ -23,70 +26,79 @@ import java.util.Set;
 @ApiStatus.Internal
 public final class RabbitMessageTopology {
 
-    private final @NotNull String exchangeName;
+    private final @NotNull Key exchangeName;
 
-    private final @NotNull String retryExchangeName;
+    private final @NotNull Key retryExchangeName;
 
-    private final @NotNull String deadLetterExchangeName;
+    private final @NotNull Key deadLetterExchangeName;
 
-    private final @NotNull RuntimeNamespace runtimeNamespace;
-
-    public RabbitMessageTopology(@NotNull RuntimeNamespace runtimeNamespace) {
-        RuntimeNamespace namespace = Objects.requireNonNull(runtimeNamespace, "运行时命名空间不能为空");
-        this.runtimeNamespace = namespace;
-        this.exchangeName = namespace.sca4dj("messaging", "message");
-        this.retryExchangeName = namespace.sca4dj("messaging", "retry");
-        this.deadLetterExchangeName = namespace.sca4dj("messaging", "dead-letter");
+    public RabbitMessageTopology() {
+        this.exchangeName = Key.of(TreeCode.ofColon("MESSAGING:MESSAGE"));
+        this.retryExchangeName = Key.of(TreeCode.ofColon("MESSAGING:RETRY"));
+        this.deadLetterExchangeName = Key.of(TreeCode.ofColon("MESSAGING:DEAD_LETTER"));
     }
 
-    public @NotNull String exchangeName() {
+    public @NotNull Key exchangeName() {
         return exchangeName;
     }
 
+    /** 在实际 RabbitMQ 路由边界追加部署前缀，业务消息编码保持原值。 */
+    public @NotNull Key routingKey(@NotNull TreeCode messageCode) {
+        return Key.of(TreeCode.ofColon("MESSAGING:ROUTE").append(messageCode));
+    }
+
+    /** 返回 Handler 重试路由使用的隔离名称。 */
+    public @NotNull Key retryRoutingKey(@NotNull TreeCode handlerCode) {
+        return Key.of(TreeCode.ofColon("MESSAGING:RETRY_ROUTE").append(handlerCode));
+    }
+
     @NotNull
-    String retryExchangeName() {
+    Key retryExchangeName() {
         return retryExchangeName;
     }
 
     @NotNull
-    String queueName(@NotNull RabbitHandlerDescriptor handler) {
-        return runtimeNamespace.sca4dj("messaging", "handler", handler.code().value());
+    Key queueName(@NotNull RabbitHandlerDescriptor handler) {
+        return Key.of(TreeCode.ofColon("MESSAGING:HANDLER").append(handler.code()));
     }
 
     @NotNull
-    String retryQueueName(@NotNull RabbitHandlerDescriptor handler) {
-        return runtimeNamespace.sca4dj("messaging", "handler", handler.code().value(), "retry");
+    Key retryQueueName(@NotNull RabbitHandlerDescriptor handler) {
+        return Key.of(TreeCode.ofColon("MESSAGING:HANDLER").append(handler.code()).append(TreeCode.ofSegment("RETRY")));
     }
 
     @NotNull
-    String deadLetterQueueName(@NotNull RabbitHandlerDescriptor handler) {
-        return runtimeNamespace.sca4dj("messaging", "handler", handler.code().value(), "dead-letter");
+    Key deadLetterQueueName(@NotNull RabbitHandlerDescriptor handler) {
+        return Key.of(
+                TreeCode.ofColon("MESSAGING:HANDLER").append(handler.code()).append(TreeCode.ofSegment("DEAD_LETTER")));
     }
 
     public @NotNull Declarables declarables(
             @NotNull List<? extends @NotNull EventHandler<?>> eventHandlers,
             @NotNull List<? extends @NotNull MessageHandler<?>> messageHandlers) {
         List<RabbitHandlerDescriptor> handlers = descriptors(eventHandlers, messageHandlers);
-        DirectExchange exchange = new DirectExchange(exchangeName, true, false);
-        DirectExchange retryExchange = new DirectExchange(retryExchangeName, true, false);
-        DirectExchange deadLetterExchange = new DirectExchange(deadLetterExchangeName, true, false);
+        DirectExchange exchange = new DirectExchange(exchangeName.format(COLON), true, false);
+        DirectExchange retryExchange = new DirectExchange(retryExchangeName.format(COLON), true, false);
+        DirectExchange deadLetterExchange = new DirectExchange(deadLetterExchangeName.format(COLON), true, false);
         List<Declarable> result = new ArrayList<>();
         result.add(exchange);
         result.add(retryExchange);
         result.add(deadLetterExchange);
 
         for (RabbitHandlerDescriptor handler : handlers) {
-            String queueName = queueName(handler);
-            String deadLetterQueueName = deadLetterQueueName(handler);
-            Queue queue = QueueBuilder.durable(queueName)
-                    .deadLetterExchange(deadLetterExchangeName)
-                    .deadLetterRoutingKey(queueName)
+            Key queueName = queueName(handler);
+            Key deadLetterQueueName = deadLetterQueueName(handler);
+            Queue queue = QueueBuilder.durable(queueName.format(COLON))
+                    .deadLetterExchange(deadLetterExchangeName.format(COLON))
+                    .deadLetterRoutingKey(queueName.format(COLON))
                     .build();
-            Queue deadLetterQueue = QueueBuilder.durable(deadLetterQueueName).build();
-            Binding binding = BindingBuilder.bind(queue).to(exchange).with(handler.messageCode().value());
+            Queue deadLetterQueue = QueueBuilder.durable(deadLetterQueueName.format(COLON)).build();
+            Binding binding = BindingBuilder.bind(queue)
+                    .to(exchange)
+                    .with(routingKey(handler.messageCode()).format(COLON));
             Binding deadLetterBinding = BindingBuilder.bind(deadLetterQueue)
                     .to(deadLetterExchange)
-                    .with(queueName);
+                    .with(queueName.format(COLON));
             result.add(queue);
             result.add(deadLetterQueue);
             result.add(binding);
@@ -94,15 +106,15 @@ public final class RabbitMessageTopology {
 
             if (handler.handlingPolicy().maximumAttempts() > 1) {
                 long retryDelay = Math.max(1L, handler.handlingPolicy().retryDelay().toMillis());
-                String retryQueueName = retryQueueName(handler);
-                Queue retryQueue = QueueBuilder.durable(retryQueueName)
+                Key retryQueueName = retryQueueName(handler);
+                Queue retryQueue = QueueBuilder.durable(retryQueueName.format(COLON))
                         .ttl((int) Math.min(Integer.MAX_VALUE, retryDelay))
                         .deadLetterExchange("")
-                        .deadLetterRoutingKey(queueName)
+                        .deadLetterRoutingKey(queueName.format(COLON))
                         .build();
                 Binding retryBinding = BindingBuilder.bind(retryQueue)
                         .to(retryExchange)
-                        .with(handler.code().value());
+                        .with(retryRoutingKey(handler.code()).format(COLON));
                 result.add(retryQueue);
                 result.add(retryBinding);
             }
@@ -119,9 +131,9 @@ public final class RabbitMessageTopology {
                 .forEach(handler -> result.add(RabbitHandlerDescriptor.event(handler)));
         Objects.requireNonNull(messageHandlers, "MessageHandler 列表不能为空")
                 .forEach(handler -> result.add(RabbitHandlerDescriptor.message(handler)));
-        Set<String> codes = new HashSet<>();
+        Set<TreeCode> codes = new HashSet<>();
         for (RabbitHandlerDescriptor handler : result) {
-            if (!codes.add(handler.code().value())) {
+            if (!codes.add(handler.code())) {
                 throw new IllegalStateException("MessageHandler 编码重复: " + handler.code());
             }
         }

@@ -11,13 +11,14 @@ import com.sca4d.app.server.service.IotDeviceRuntimeService;
 import com.sca4d.core.api.annotation.RequirePermission;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
+import com.sca4d.core.spring.config.ConditionalOnCapability;
 import com.sca4d.core.spring.web.ApiResponse;
 import com.sca4d.core.spring.web.annotation.CurrentPrincipal;
+import com.sca4d.iot.api.IotCapabilities;
 import com.sca4d.iot.api.query.DeviceHistoryQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +32,7 @@ import java.util.Objects;
 
 /** 提供 Sca4d Server 的 Device 当前投影、业务历史和可选高频历史查询接口。 */
 @RestController
-@ConditionalOnProperty(prefix = "app.iot.capabilities", name = "api", havingValue = "true", matchIfMissing = true)
+@ConditionalOnCapability(IotCapabilities.API)
 @RequestMapping("/iot/devices/{deviceId}")
 @Tag(name = "IoT Device Data")
 @CurrentPrincipal(selection = PlatformPrincipalSelection.class)

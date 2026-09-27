@@ -45,6 +45,7 @@ public final class DataOps {
 
     private static final int DEFAULT_ID_LENGTH = 12;
 
+    /** 通用 JSON 值处理使用的中性解析器，不包含服务器 I/O 或业务 ObjectMapper 定制。 */
     private static final ObjectMapper JSON = new ObjectMapper()
             .enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
 
@@ -1455,7 +1456,7 @@ public final class DataOps {
         }
 
         /**
-         * 保护指定顶层字段，后续 merge 不得改变已有值。
+         * 保护指定顶层字段，之后的 merge 操作不得改变已有值。
          *
          * @param fields 需要保护的字段名；空数组、空值和空白元素均忽略
          * @return 包含新增受保护字段且 JSON 内容不变的新对象
@@ -1484,6 +1485,8 @@ public final class DataOps {
             if (patchJson == null || patchJson.isBlank()) {
                 return this;
             }
+
+            // 先确认 patch 是对象，再检查受保护字段；检查通过后复制当前对象并递归合并，原对象保持不变。
             JsonNode patchValue = parse(patchJson, null);
             if (!(patchValue instanceof ObjectNode patch)) {
                 throw new DataAssertionException(null, "JSON patch 必须是对象", null);
@@ -1590,10 +1593,13 @@ public final class DataOps {
             Objects.requireNonNull(action, "JSON 对象编辑函数不能为空");
             ObjectNode base = object(path);
             if (path == null || path.isBlank()) {
+                // 编辑根对象时沿用当前保护字段集合，回调返回的对象必须独立于当前值。
                 JsonPipe edited = Objects.requireNonNull(action.apply(this), "JSON 对象编辑结果不能为空");
                 edited.object(null);
                 return edited;
             }
+
+            // 编辑嵌套对象时先创建缺失路径，再把回调结果写回深复制的根对象。
             String[] parts = path(path);
             JsonNode current = read(base, parts, path);
             ObjectNode child;
@@ -1631,6 +1637,8 @@ public final class DataOps {
             if (current == null) {
                 return this;
             }
+
+            // 只编辑数组中的对象元素，标量和 null 原样保留；所有元素处理完成后一次性写回新数组。
             if (!(current instanceof ArrayNode array)) {
                 throw new DataAssertionException(path, "目标 JSON 必须是数组", null);
             }
@@ -1657,6 +1665,12 @@ public final class DataOps {
          */
         public @Nullable String get() {
             return value == null ? null : stringify(value);
+        }
+
+        /** 返回独立 JSON 节点，调用方修改节点不会改变当前处理对象；没有 JSON 时为空。 */
+        @CheckReturnValue
+        public @Nullable JsonNode node() {
+            return value == null ? null : value.deepCopy();
         }
 
         /**

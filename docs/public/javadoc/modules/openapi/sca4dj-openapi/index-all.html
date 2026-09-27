@@ -72,7 +72,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">在 Spring 完成全部单例创建后扫描并校验 OpenAPI 路由。</div>
 </dd>
-<dt><a href="com/sca4d/openapi/client/OpenApiClientService.html#allows(java.lang.String,com.sca4d.core.api.code.TreeCode)" class="member-name-link">allows(String, TreeCode)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientService.html" title="class in com.sca4d.openapi.client">OpenApiClientService</a></dt>
+<dt><a href="com/sca4d/openapi/client/OpenApiClientService.html#allows(java.lang.String,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">allows(String, TreeCode)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientService.html" title="class in com.sca4d.openapi.client">OpenApiClientService</a></dt>
 <dd>
 <div class="block">判断 Client 是否有效且已经开放指定 Operation。</div>
 </dd>
@@ -209,7 +209,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:H">H</h2>
 <dl class="index">
-<dt><a href="com/sca4d/openapi/client/OpenApiClientRepository.html#hasOperation(java.lang.String,com.sca4d.core.api.code.TreeCode)" class="member-name-link">hasOperation(String, TreeCode)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientRepository.html" title="class in com.sca4d.openapi.client">OpenApiClientRepository</a></dt>
+<dt><a href="com/sca4d/openapi/client/OpenApiClientRepository.html#hasOperation(java.lang.String,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">hasOperation(String, TreeCode)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientRepository.html" title="class in com.sca4d.openapi.client">OpenApiClientRepository</a></dt>
 <dd>
 <div class="block">判断 Client 是否开放一个 Operation。</div>
 </dd>
@@ -224,7 +224,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">插入 Client 与 IAM Account 的稳定绑定。</div>
 </dd>
-<dt><a href="com/sca4d/openapi/client/mapper/OpenApiClientMapper.html#insertOperations(java.lang.String,java.util.List)" class="member-name-link">insertOperations(String, List&lt;String&gt;)</a> - Method in interface com.sca4d.openapi.client.mapper.<a href="com/sca4d/openapi/client/mapper/OpenApiClientMapper.html" title="interface in com.sca4d.openapi.client.mapper">OpenApiClientMapper</a></dt>
+<dt><a href="com/sca4d/openapi/client/mapper/OpenApiClientMapper.html#insertOperations(java.lang.String,java.util.List)" class="member-name-link">insertOperations(String, List&lt;TreeCode&gt;)</a> - Method in interface com.sca4d.openapi.client.mapper.<a href="com/sca4d/openapi/client/mapper/OpenApiClientMapper.html" title="interface in com.sca4d.openapi.client.mapper">OpenApiClientMapper</a></dt>
 <dd>
 <div class="block">插入一个非空批次的 Operation 关系，返回实际新增数。</div>
 </dd>
@@ -498,7 +498,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/openapi/client/mapper/OpenApiClientMapper.html#selectClient(java.lang.String,java.lang.Long,boolean)" class="member-name-link">selectClient(String, Long, boolean)</a> - Method in interface com.sca4d.openapi.client.mapper.<a href="com/sca4d/openapi/client/mapper/OpenApiClientMapper.html" title="interface in com.sca4d.openapi.client.mapper">OpenApiClientMapper</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/openapi/client/mapper/OpenApiClientMapper.html#selectOperations(java.lang.String,java.lang.String)" class="member-name-link">selectOperations(String, String)</a> - Method in interface com.sca4d.openapi.client.mapper.<a href="com/sca4d/openapi/client/mapper/OpenApiClientMapper.html" title="interface in com.sca4d.openapi.client.mapper">OpenApiClientMapper</a></dt>
+<dt><a href="com/sca4d/openapi/client/mapper/OpenApiClientMapper.html#selectOperations(java.lang.String,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">selectOperations(String, TreeCode)</a> - Method in interface com.sca4d.openapi.client.mapper.<a href="com/sca4d/openapi/client/mapper/OpenApiClientMapper.html" title="interface in com.sca4d.openapi.client.mapper">OpenApiClientMapper</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/openapi/config/OpenApiProperties.Jwt.html#setAccessTtl(java.time.Duration)" class="member-name-link">setAccessTtl(Duration)</a> - Method in class com.sca4d.openapi.config.<a href="com/sca4d/openapi/config/OpenApiProperties.Jwt.html" title="class in com.sca4d.openapi.config">OpenApiProperties.Jwt</a></dt>
 <dd>&nbsp;</dd>
@@ -570,11 +570,11 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
 </dd>
-<dt><a href="com/sca4d/openapi/client/OpenApiClientOperationCheckerImpl.html#verifyAllowed(com.sca4d.core.api.call.Call,com.sca4d.core.api.code.TreeCode)" class="member-name-link">verifyAllowed(Call, TreeCode)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientOperationCheckerImpl.html" title="class in com.sca4d.openapi.client">OpenApiClientOperationCheckerImpl</a></dt>
+<dt><a href="com/sca4d/openapi/client/OpenApiClientOperationCheckerImpl.html#verifyAllowed(com.sca4d.core.api.call.Call,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">verifyAllowed(Call, TreeCode)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientOperationCheckerImpl.html" title="class in com.sca4d.openapi.client">OpenApiClientOperationCheckerImpl</a></dt>
 <dd>
 <div class="block">拒绝停用、未知或未开放目标 Operation 的 Client。</div>
 </dd>
-<dt><a href="com/sca4d/openapi/web/OpenApiClientOperationChecker.html#verifyAllowed(com.sca4d.core.api.call.Call,com.sca4d.core.api.code.TreeCode)" class="member-name-link">verifyAllowed(Call, TreeCode)</a> - Method in interface com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiClientOperationChecker.html" title="interface in com.sca4d.openapi.web">OpenApiClientOperationChecker</a></dt>
+<dt><a href="com/sca4d/openapi/web/OpenApiClientOperationChecker.html#verifyAllowed(com.sca4d.core.api.call.Call,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">verifyAllowed(Call, TreeCode)</a> - Method in interface com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiClientOperationChecker.html" title="interface in com.sca4d.openapi.web">OpenApiClientOperationChecker</a></dt>
 <dd>
 <div class="block">检查一次 OpenAPI 调用。</div>
 </dd>

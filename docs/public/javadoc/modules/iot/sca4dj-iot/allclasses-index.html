@@ -363,56 +363,60 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存 Repository 锁定后返回给 Service 的 reported group 当前投影。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/persistence/mapper/ReportedStateMapper.html" title="interface in com.sca4d.iot.persistence.mapper">ReportedStateMapper</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/state/ReportedStateKeyMigration.html" title="class in com.sca4d.iot.state">ReportedStateKeyMigration</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">在旧实例停止写入后复制非过期 reported 状态到新 Key，保留原始数据供验证和恢复。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/persistence/mapper/ReportedStateMapper.html" title="interface in com.sca4d.iot.persistence.mapper">ReportedStateMapper</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">读写 latest reported state 投影。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/state/ReportedStateResult.html" title="class in com.sca4d.iot.state">ReportedStateResult</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/state/ReportedStateResult.html" title="class in com.sca4d.iot.state">ReportedStateResult</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">返回 reported 更新是否改变 latest 投影以及当前 version。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iot/state/ReportedStateResult.Outcome.html" title="enum class in com.sca4d.iot.state">ReportedStateResult.Outcome</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iot/state/ReportedStateResult.Outcome.html" title="enum class in com.sca4d.iot.state">ReportedStateResult.Outcome</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
 <div class="block">reported 顺序和摘要比较结果。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/state/ReportedStateService.html" title="class in com.sca4d.iot.state">ReportedStateService</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/state/ReportedStateService.html" title="class in com.sca4d.iot.state">ReportedStateService</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">校验 Device 上报，更新 latest reported，收敛 ACK，并发布 Telemetry 和事件消息。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/protocol/StandardDeviceUplinkDispatcher.html" title="class in com.sca4d.iot.protocol">StandardDeviceUplinkDispatcher</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/protocol/StandardDeviceUplinkDispatcher.html" title="class in com.sca4d.iot.protocol">StandardDeviceUplinkDispatcher</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用 Device 台账选择实际协议，并分发协议解码后的标准上行结果。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/message/StandardDeviceUplinkReceiver.html" title="class in com.sca4d.iot.message">StandardDeviceUplinkReceiver</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/message/StandardDeviceUplinkReceiver.html" title="class in com.sca4d.iot.message">StandardDeviceUplinkReceiver</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">把协议标准上行结果交给 IoT 的 reported、事件和回执业务事务。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/model/StaticThingModelRepository.html" title="class in com.sca4d.iot.model">StaticThingModelRepository</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/model/StaticThingModelRepository.html" title="class in com.sca4d.iot.model">StaticThingModelRepository</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">从 App 静态 Builder 定义构造只读 ThingModelRepository。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/model/ThingDataJsonCodec.html" title="class in com.sca4d.iot.model">ThingDataJsonCodec</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/model/ThingDataJsonCodec.html" title="class in com.sca4d.iot.model">ThingDataJsonCodec</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">编解码已经按物模型校验的标准数据，并显式展开专用 object 与 array 值。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/model/ThingModelI18nValidator.html" title="class in com.sca4d.iot.model">ThingModelI18nValidator</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/model/ThingModelI18nValidator.html" title="class in com.sca4d.iot.model">ThingModelI18nValidator</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">校验物模型动态翻译只引用现有展示路径并完整提供默认 Locale。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/model/ThingModelJsonCodec.html" title="class in com.sca4d.iot.model">ThingModelJsonCodec</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/model/ThingModelJsonCodec.html" title="class in com.sca4d.iot.model">ThingModelJsonCodec</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">严格解析物模型 JSON，并把 Builder 对象编码成相同的规范内容。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/persistence/mapper/ThingModelMapper.html" title="interface in com.sca4d.iot.persistence.mapper">ThingModelMapper</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/persistence/mapper/ThingModelMapper.html" title="interface in com.sca4d.iot.persistence.mapper">ThingModelMapper</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">读写主 PostgreSQL 中已经发布且不可修改的 ThingModel 版本。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/model/ThingModelService.html" title="class in com.sca4d.iot.model">ThingModelService</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/model/ThingModelService.html" title="class in com.sca4d.iot.model">ThingModelService</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在发布前校验 Product、策略和全部兼容协议，再调用 App 唯一选择的 Repository。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/model/ThingValueValidator.html" title="class in com.sca4d.iot.model">ThingValueValidator</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/model/ThingValueValidator.html" title="class in com.sca4d.iot.model">ThingValueValidator</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">把结构化输入转换成物模型声明的精确 Java 类型并递归检查约束。</div>
 </div>
 </div>

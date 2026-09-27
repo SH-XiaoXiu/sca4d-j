@@ -1,5 +1,7 @@
 package com.sca4d.auth.sharedsecret;
 
+import static com.sca4d.auth.sharedsecret.SharedSecretCredential.Status.ACTIVE;
+
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.enums.BaseEnum;
 import com.sca4d.core.api.utils.TextUtils;
@@ -64,7 +66,7 @@ public final class SharedSecretCredential {
 
     /** @return 当前凭据是否允许认证 */
     public boolean active() {
-        return status == Status.ACTIVE;
+        return status == ACTIVE;
     }
 
     /** @return 当前凭据状态 */

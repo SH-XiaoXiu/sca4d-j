@@ -15,6 +15,7 @@ import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iam.base.PlatformIdentityService;
 import com.sca4d.iam.base.PlatformPrincipal;
 import com.sca4d.iam.base.rbac.PlatformRbacService;
@@ -199,7 +200,7 @@ public class PlatformFederatedAccountResolver implements FederatedAccountResolve
             @NotNull FederatedProfile profile) {
         FederatedProvider checkedProvider = Objects.requireNonNull(provider, "联邦 Provider 不能为空");
         FederatedProfile checkedProfile = Objects.requireNonNull(profile, "联邦 Profile 不能为空");
-        return new LockKey("federated-identity", checkedProvider.code(), subjectKey(checkedProfile));
+        return new LockKey(TreeCode.of("FEDERATED-IDENTITY"), checkedProvider.code(), subjectKey(checkedProfile));
     }
 
     /**

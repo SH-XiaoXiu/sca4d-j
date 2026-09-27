@@ -34,7 +34,7 @@ public final class OpenApiClientCredentials {
         return method;
     }
 
-    /** @return 仅当前响应可见的明文 Secret 或 HMAC Key */
+    /** @return 仅当前响应可见的明文 Secret 或 MAC Key */
     public @NotNull String secret() {
         return secret;
     }

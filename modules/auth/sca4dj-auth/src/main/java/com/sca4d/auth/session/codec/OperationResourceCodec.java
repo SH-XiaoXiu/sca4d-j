@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.authentication.principalsession.ResourceCodec;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Operation;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,8 +27,8 @@ public final class OperationResourceCodec implements ResourceCodec<Operation> {
     }
 
     @Override
-    public @NotNull String type() {
-        return "core.operation";
+    public @NotNull TreeCode type() {
+        return TreeCode.of("CORE.OPERATION");
     }
 
     @Override

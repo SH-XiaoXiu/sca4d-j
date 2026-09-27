@@ -5,8 +5,10 @@ import com.sca4d.app.server.openapi.iot.OpenApiIotDeviceResponse;
 import com.sca4d.app.server.platform.PlatformPrincipalSelection;
 import com.sca4d.app.server.service.IotApplicationService;
 import com.sca4d.core.api.annotation.RequirePermission;
+import com.sca4d.core.spring.config.ConditionalOnCapability;
 import com.sca4d.core.spring.web.ApiResponse;
 import com.sca4d.core.spring.web.annotation.CurrentPrincipal;
+import com.sca4d.iot.api.IotCapabilities;
 import com.sca4d.openapi.web.annotation.OpenApiRoute;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -24,6 +26,7 @@ import java.util.Objects;
 
 /** 声明具体应用对第三方 OpenAPI Client 公开的 IoT Tool 路由。 */
 @RestController
+@ConditionalOnCapability(IotCapabilities.API)
 @Tag(name = "IoT 设备", description = "供第三方程序读取 Sca4d Server 中已经登记的 IoT 设备。")
 @CurrentPrincipal(selection = PlatformPrincipalSelection.class)
 public class IotOpenApiController {

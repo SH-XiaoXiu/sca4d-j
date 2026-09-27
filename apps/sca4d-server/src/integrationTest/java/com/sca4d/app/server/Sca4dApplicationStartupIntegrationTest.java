@@ -12,10 +12,10 @@ import com.sca4d.app.server.mapper.IotApplicationMapper;
 import com.sca4d.auth.passkey.credential.PasskeyCredential;
 import com.sca4d.auth.passkey.credential.mapper.PasskeyAccountState;
 import com.sca4d.auth.passkey.credential.mapper.PasskeyCredentialMapper;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.enums.BaseEnum;
 import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.identity.Account;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.setting.SettingOwner;
 import com.sca4d.core.api.setting.SettingValue;
 import com.sca4d.core.api.setting.Settings;
@@ -32,6 +32,8 @@ import com.sca4d.iot.persistence.mapper.ThingModelMapper;
 import com.sca4d.iot.timescale.persistence.EncodedTelemetrySample;
 import com.sca4d.iot.timescale.persistence.TimescaleMapper;
 import com.sca4d.iot.timescale.persistence.TimescaleTelemetrySample;
+import org.apache.ibatis.mapping.ResultMap;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.DisplayName;
@@ -59,6 +61,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.WildcardType;
 import java.sql.Timestamp;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
@@ -214,7 +217,7 @@ class Sca4dApplicationStartupIntegrationTest {
 
         assertThat(defaultFlyway.info().current()).isNotNull();
         assertThat(historyFlyway.info().current()).isNotNull();
-        assertThat(settingMapper.select("SYSTEM", "1", List.of("startup.integration.missing"))).isEmpty();
+        assertThat(settingMapper.select(TreeCode.of("SYSTEM"), "1", List.of("startup.integration.missing"))).isEmpty();
         assertThat(
                 timescaleMapper.selectTelemetry(
                         1L,
@@ -287,7 +290,7 @@ class Sca4dApplicationStartupIntegrationTest {
                 new AccountAuthenticationSettings(
                         2,
                         1,
-                        java.time.Duration.ofSeconds(300),
+                        Duration.ofSeconds(300),
                         List.of(new AuthenticationMethodSettings(methodCode, true, false, true))));
         assertThat(savedAuthentication.value().loginFactorCount()).isEqualTo(2);
         assertThat(savedAuthentication.value().reusableAuthenticationMaximumAge().toSeconds()).isEqualTo(300);
@@ -431,9 +434,9 @@ class Sca4dApplicationStartupIntegrationTest {
                         null,
                         null,
                         "{}",
-                        "none",
+                        TreeCode.of("NONE"),
                         30_000L,
-                        "none",
+                        TreeCode.of("NONE"),
                         null))
                 .isOne();
         assertThat(
@@ -447,9 +450,9 @@ class Sca4dApplicationStartupIntegrationTest {
                         null,
                         null,
                         "{}",
-                        "none",
+                        TreeCode.of("NONE"),
                         30_000L,
-                        "none",
+                        TreeCode.of("NONE"),
                         null))
                 .isOne();
 
@@ -462,7 +465,7 @@ class Sca4dApplicationStartupIntegrationTest {
 
     /** 检查一个会话工厂的公共映射配置和已经注册的 Mapper 类型。 */
     private static void assertMyBatisConventions(SqlSessionFactory factory) {
-        org.apache.ibatis.session.Configuration configuration = factory.getConfiguration();
+        Configuration configuration = factory.getConfiguration();
         assertThat(configuration.isMapUnderscoreToCamelCase()).isTrue();
         assertThat(configuration.isArgNameBasedConstructorAutoMapping()).isTrue();
 
@@ -484,7 +487,7 @@ class Sca4dApplicationStartupIntegrationTest {
             }
         }
 
-        for (org.apache.ibatis.mapping.ResultMap resultMap : configuration.getResultMaps()) {
+        for (ResultMap resultMap : configuration.getResultMaps()) {
             Class<?> resultType = resultMap.getType();
             assertThat(resultType.getSimpleName())
                     .as("MyBatis 查询结果类型不能使用 Row 后缀: %s", resultMap.getId())

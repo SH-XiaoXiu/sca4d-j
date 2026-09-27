@@ -1,6 +1,6 @@
 package com.sca4d.core.api.codec;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 
 /** 为需要持久化或跨部署恢复的值声明稳定编码、版本和 Java 类型。 */

@@ -2,8 +2,8 @@ package com.sca4d.iot.api.message;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.message.Message;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 
 /** 请求发送一个标准 Device 下行消息的指定尝试。 */

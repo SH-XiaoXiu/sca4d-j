@@ -1,13 +1,15 @@
 package com.sca4d.web.realtime.connection;
 
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.event.EventType;
 import com.sca4d.core.api.messaging.MessageCodec;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.webrealtime.WebRealtimeMessage;
 import com.sca4d.core.api.webrealtime.WebRealtimeTarget;
 import org.jetbrains.annotations.NotNull;
@@ -52,7 +54,7 @@ public final class WebRealtimeMessageCodec implements MessageCodec<WebRealtimeMe
             root.put("targetQualifier", checked.target().qualifier());
         }
         root.put("targetId", checked.target().id());
-        root.put("eventCode", event.type().code());
+        root.put("eventCode", event.type().code().format(SLASH));
         root.put("eventVersion", event.type().protocolVersion());
         if (event.businessKey() == null) {
             root.putNull("businessKey");

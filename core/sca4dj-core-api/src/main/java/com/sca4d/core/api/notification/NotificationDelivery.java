@@ -1,10 +1,10 @@
 package com.sca4d.core.api.notification;
 
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.delivery.Delivery;
 import com.sca4d.core.api.delivery.DeliveryOutcome;
 import com.sca4d.core.api.messaging.HandlingPolicy;
 import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 
 /**

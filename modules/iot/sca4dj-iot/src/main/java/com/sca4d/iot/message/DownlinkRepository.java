@@ -189,9 +189,9 @@ public class DownlinkRepository {
                 checked.scheduleId().isPresent() ? checked.scheduleId().getAsLong() : null,
                 checked.scheduledAt().orElse(null),
                 json.encodeMap(checked.data()),
-                checked.acknowledgementPolicy().code().value(),
+                checked.acknowledgementPolicy().code(),
                 checked.acknowledgementTimeout().toMillis(),
-                checked.retryPolicy().code().value(),
+                checked.retryPolicy().code(),
                 checked.expiresAt().orElse(null));
     }
 

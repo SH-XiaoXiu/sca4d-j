@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.sca4d.core.api.authentication.principalsession.ResourceIdLoader;
 import com.sca4d.core.api.authentication.principalsession.ResourceIdSet;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Principal;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -1,5 +1,11 @@
 package com.sca4d.core.spring.validation;
 
+import static com.sca4d.core.spring.validation.BizIdMode.CODE;
+import static com.sca4d.core.spring.validation.BizIdMode.CUSTOM;
+import static com.sca4d.core.spring.validation.BizIdMode.NUM;
+import static com.sca4d.core.spring.validation.ValidationPatterns.BIZ_CODE;
+import static com.sca4d.core.spring.validation.ValidationPatterns.NAMESPACED_CODE;
+
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.jetbrains.annotations.NotNull;
@@ -37,13 +43,13 @@ public final class BizIdValidator implements ConstraintValidator<BizId, Object> 
         if (min < 0 || max < min) {
             throw new IllegalArgumentException("@BizId 长度范围不正确");
         }
-        if (mode == BizIdMode.CUSTOM && annotation.regexp().isBlank()) {
+        if (mode == CUSTOM && annotation.regexp().isBlank()) {
             throw new IllegalArgumentException("@BizId CUSTOM 需要提供 regexp");
         }
         pattern = switch (mode) {
             case NUM -> Pattern.compile("^\\d+$");
-            case CODE -> Pattern.compile(ValidationPatterns.BIZ_CODE);
-            case NAMESPACED_CODE -> Pattern.compile(ValidationPatterns.NAMESPACED_CODE);
+            case CODE -> Pattern.compile(BIZ_CODE);
+            case NAMESPACED_CODE -> Pattern.compile(NAMESPACED_CODE);
             case CUSTOM -> Pattern.compile(annotation.regexp());
         };
     }
@@ -61,7 +67,7 @@ public final class BizIdValidator implements ConstraintValidator<BizId, Object> 
             return true;
         }
         if (value instanceof Number number) {
-            return mode == BizIdMode.NUM && isPositiveInteger(number);
+            return mode == NUM && isPositiveInteger(number);
         }
         if (!(value instanceof CharSequence chars)) {
             return false;
@@ -71,7 +77,7 @@ public final class BizIdValidator implements ConstraintValidator<BizId, Object> 
             return false;
         }
         return pattern.matcher(text).matches()
-                && (mode != BizIdMode.NUM || new BigInteger(text).signum() > 0);
+                && (mode != NUM || new BigInteger(text).signum() > 0);
     }
 
     /**

@@ -14,8 +14,8 @@ import com.sca4d.core.api.authentication.AuthenticationRequirement;
 import com.sca4d.core.api.authentication.AuthenticationResult;
 import com.sca4d.core.api.authentication.AuthenticationSubmission;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Account;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.setting.Settings;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -71,7 +71,7 @@ public final class RedisAuthenticationAttempts implements AuthenticationAttempts
     }
 
     /**
-     * 使用首个认证材料识别账号，并按该账号的应用策略开始动作认证。
+     * 使用首个认证材料识别账号，并按已识别账号的应用策略开始动作认证。
      */
     @Override
     public @NotNull AuthenticationProgress start(
@@ -82,7 +82,7 @@ public final class RedisAuthenticationAttempts implements AuthenticationAttempts
         VerifiedAuthentication verification = methods.authenticate(checkedSubmission);
         Account account = verification.account();
 
-        // 账号只能在首个材料验证成功后确定；随后仍按空进度检查该方法是否被应用策略允许。
+        // 账号只能在首个材料验证成功后确定；确定后仍按空进度检查当前方法是否被应用策略允许。
         Set<TreeCode> initiallyAllowed = policy.allowedMethods(account, checkedAction, List.of());
         if (!methods.available(account, initiallyAllowed).contains(checkedSubmission.methodCode())) {
             throw new IllegalArgumentException("认证方法不允许用于当前动作");
@@ -104,7 +104,7 @@ public final class RedisAuthenticationAttempts implements AuthenticationAttempts
                 "首个认证材料已创建认证尝试 | attemptId={} accountId={} actionCode={} status={}",
                 state.id().value(),
                 account.accountId(),
-                checkedAction.value(),
+                checkedAction,
                 progress.satisfied());
         return progress;
     }
@@ -133,7 +133,7 @@ public final class RedisAuthenticationAttempts implements AuthenticationAttempts
                 "已知账号已创建认证尝试 | attemptId={} accountId={} actionCode={} status={}",
                 state.id().value(),
                 state.account().accountId(),
-                state.actionCode().value(),
+                state.actionCode(),
                 progress.satisfied());
         return progress;
     }
@@ -171,7 +171,7 @@ public final class RedisAuthenticationAttempts implements AuthenticationAttempts
             LOG.trace(
                     "认证尝试已推进 | attemptId={} method={} status={} remainingFactorCount={}",
                     state.id().value(),
-                    verification.authentication().methodCode().value(),
+                    verification.authentication().methodCode(),
                     progress.satisfied(),
                     progress.remainingFactorCount());
             return progress;
@@ -211,7 +211,7 @@ public final class RedisAuthenticationAttempts implements AuthenticationAttempts
                     "认证尝试已消费 | attemptId={} accountId={} actionCode={} authenticationCount={}",
                     state.id().value(),
                     state.account().accountId(),
-                    state.actionCode().value(),
+                    state.actionCode(),
                     authentications.size());
             return completion;
         });

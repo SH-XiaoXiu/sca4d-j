@@ -1,5 +1,7 @@
 package com.sca4d.app.server.controllers;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+
 import com.sca4d.app.server.authentication.view.CurrentSessionView;
 import com.sca4d.app.server.authentication.view.SessionTokensView;
 import com.sca4d.auth.session.SessionService;
@@ -72,7 +74,7 @@ public class SessionController {
     @PostMapping("/tokens")
     @RequireSessionToken
     public @NotNull ApiResponse<SessionTokensView> refresh(
-            @RequestHeader(name = org.springframework.http.HttpHeaders.AUTHORIZATION, required = false) @NoDefaultValidation @Nullable String authorization) {
+            @RequestHeader(name = AUTHORIZATION, required = false) @NoDefaultValidation @Nullable String authorization) {
         String sessionToken = BearerToken.parse(authorization)
                 .orElseThrow(() -> new BusinessException(AuthErrorCode.AUTHENTICATION_FAILED));
         return ApiResponse.ok(SessionTokensView.from(sessions.refreshTokens(sessionToken)));

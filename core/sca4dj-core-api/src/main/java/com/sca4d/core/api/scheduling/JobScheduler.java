@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 /**
- * 把当前应用的完整代码计划登记到定时实现，并删除同一运行时命名空间内已经移除的计划。
+ * 把当前应用的完整代码计划登记到定时实现，并删除同一 App 隔离名称内已经移除的计划。
  *
  * <p>Scheduler 只计算触发时间并提交 Job，不执行 Job 业务代码，也不保存 Job 的节点状态和结果。
  */

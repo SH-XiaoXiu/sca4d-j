@@ -1,10 +1,8 @@
 # Sca4d-J
 
-Sca4d-J（Scaffold for Java）是一套 Java 项目模板，适合需要管理端、账号权限和后端业务接口的项目。模板包含可运行的 Sca4d Server、Gateway 和管理端，以及身份认证、文件、消息、任务、实时通信和 IoT 模块。开发者可以按业务需要保留、删除或扩展这些功能。
+Sca4d-J（Scaffold for Java）是一套可运行、可删减的 Java 项目模板，包含管理端、账号权限和后端业务接口。先按[第一次运行](/tutorials/local-start)启动并登录，再按[组装应用](/tutorials/assemble-application)选择功能；新增业务的位置见[项目结构](/home/project-structure)。
 
-Sca4d-J 采用[分布式单体](/home/architecture)：业务体系作为完整应用开发和运行，可以部署一个或多个实例。单实例与集群使用同一套业务实现，认证、权限、并发和数据约束保持一致。
-
-第一次使用，从[本地启动](/tutorials/local-start)运行应用并登录管理端，再按[组装应用](/tutorials/assemble-application)选择所需模块。代码放置位置见[项目结构](/home/project-structure)。
+模板提供 Sca4d Server、Gateway，以及身份认证、文件、消息、任务、实时通信和 IoT 模块。它采用[分布式单体](/home/architecture)：完整业务应用可以运行一个或多个实例，单实例与集群使用同一套认证、权限、并发和数据规则。
 
 ## 开发业务功能
 

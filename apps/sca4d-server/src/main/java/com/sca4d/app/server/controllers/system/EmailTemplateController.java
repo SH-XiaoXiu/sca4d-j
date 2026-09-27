@@ -12,7 +12,7 @@ import com.sca4d.app.server.system.view.RenderedEmailView;
 import com.sca4d.core.api.annotation.Audit;
 import com.sca4d.core.api.annotation.AuditTarget;
 import com.sca4d.core.api.annotation.RequirePermission;
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.Sort;
 import com.sca4d.core.spring.web.ApiResponse;
@@ -63,7 +63,7 @@ public class EmailTemplateController {
         this.templates = Objects.requireNonNull(templates, "Email Template 服务不能为空");
     }
 
-    /** @return 按分页和安全排序要求读取的模板及其变量集合 */
+    /** @return 按分页和安全排序要求读取的模板以及模板变量集合 */
     @GetMapping
     @Operation(summary = "查询 Email 模板")
     @RequirePermission(operation = SystemOperations.EMAIL_READ_VALUE)

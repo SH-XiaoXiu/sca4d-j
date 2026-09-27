@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.authentication.principalsession.PrincipalCodec;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +17,7 @@ import java.util.Objects;
 public final class PlatformPrincipalCodec implements PrincipalCodec<PlatformPrincipal> {
 
     /** Platform Principal 在 Session 和设置 owner 中使用的稳定类型。 */
-    public static final @NotNull String TYPE = "iam.platform-principal";
+    public static final @NotNull TreeCode TYPE = TreeCode.of("IAM.PLATFORM-PRINCIPAL");
 
     private final @NotNull ObjectMapper objectMapper;
 
@@ -32,7 +33,7 @@ public final class PlatformPrincipalCodec implements PrincipalCodec<PlatformPrin
     /** {@inheritDoc} */
     @Override
     @Contract(pure = true)
-    public @NotNull String type() {
+    public @NotNull TreeCode type() {
         return TYPE;
     }
 

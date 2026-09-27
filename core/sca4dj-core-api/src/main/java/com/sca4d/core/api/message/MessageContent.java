@@ -1,12 +1,15 @@
 package com.sca4d.core.api.message;
 
+import static com.sca4d.core.api.message.ContentDisposition.ATTACHMENT;
+import static com.sca4d.core.api.message.ContentDisposition.INLINE;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 import java.util.Objects;
 
-/** 保存 Message 携带的一项媒体内容及其使用方式。 */
+/** 保存 Message 携带的媒体内容及使用方式。 */
 public final class MessageContent {
 
     private final @NotNull String mediaType;
@@ -31,7 +34,7 @@ public final class MessageContent {
 
     /** @return 创建一项内联文本内容 */
     public static @NotNull MessageContent text(@NotNull String mediaType, @NotNull String value) {
-        return new MessageContent(mediaType, ContentDisposition.INLINE, new TextContent(value), null);
+        return new MessageContent(mediaType, INLINE, new TextContent(value), null);
     }
 
     /** @return 创建一项内联二进制附件 */
@@ -39,7 +42,7 @@ public final class MessageContent {
             @NotNull String mediaType,
             byte @NotNull [] value,
             @NotNull String name) {
-        return new MessageContent(mediaType, ContentDisposition.ATTACHMENT, new BinaryContent(value), name);
+        return new MessageContent(mediaType, ATTACHMENT, new BinaryContent(value), name);
     }
 
     /** @return 创建一项外部内容引用 */

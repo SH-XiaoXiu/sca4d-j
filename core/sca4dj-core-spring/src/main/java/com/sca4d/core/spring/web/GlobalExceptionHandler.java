@@ -154,7 +154,7 @@ public final class GlobalExceptionHandler {
     }
 
     /**
-     * 处理仍由其他执行者处理的幂等请求。
+     * 处理仍由其他执行者负责的幂等请求。
      *
      * @param exception 携带建议等待秒数的幂等处理中异常
      * @param request 当前 HTTP 请求

@@ -1,5 +1,6 @@
 package com.sca4d.app.server.service;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
@@ -16,7 +17,6 @@ import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.job.JobExecutor;
 import com.sca4d.core.api.resource.ResourceReference;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
 import com.sca4d.core.api.scheduling.JobScheduler;
 import com.sca4d.core.api.setting.LogicSetting;
 import com.sca4d.core.api.setting.Setting;
@@ -72,9 +72,11 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
@@ -102,10 +104,10 @@ class PlatformUserProfilePersistenceIntegrationTest {
 
     private static final Instant NOW = Instant.parse("2026-08-07T00:00:00Z");
 
-    private static final byte[] FIRST_AVATAR = "first-avatar-content".getBytes(java.nio.charset.StandardCharsets.UTF_8);
+    private static final byte[] FIRST_AVATAR = "first-avatar-content".getBytes(UTF_8);
 
     private static final byte[] SECOND_AVATAR = "second-avatar-content"
-            .getBytes(java.nio.charset.StandardCharsets.UTF_8);
+            .getBytes(UTF_8);
 
     @Container
     static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:17-alpine");
@@ -222,7 +224,7 @@ class PlatformUserProfilePersistenceIntegrationTest {
 
         PlatformUserProfile current = repository.loadByPrincipalId(targetPrincipalId);
         assertThat(current.avatarFileId()).isIn(firstFileId, secondFileId);
-        long currentFileId = java.util.Objects.requireNonNull(current.avatarFileId());
+        long currentFileId = Objects.requireNonNull(current.avatarFileId());
         assertThat(files.loadById(currentFileId).status()).isEqualTo(FileStatus.IN_USE);
         long replacedFileId = currentFileId == firstFileId ? secondFileId : firstFileId;
         assertThat(files.loadById(replacedFileId).status()).isEqualTo(FileStatus.DELETE_PENDING);
@@ -282,18 +284,13 @@ class PlatformUserProfilePersistenceIntegrationTest {
         }
 
         @Bean
-        RuntimeNamespace runtimeNamespace() {
-            return new RuntimeNamespace("profile-avatar-test");
-        }
-
-        @Bean
         ConfiguredSecretKeyring secretKeyring() {
             SecretKeyringProperties properties = new SecretKeyringProperties();
             properties.setActiveKeyId("test");
             properties.setKeys(
                     Map.of(
                             "test",
-                            java.util.Base64.getEncoder().encodeToString(new byte[32])));
+                            Base64.getEncoder().encodeToString(new byte[32])));
             return new ConfiguredSecretKeyring(properties);
         }
 

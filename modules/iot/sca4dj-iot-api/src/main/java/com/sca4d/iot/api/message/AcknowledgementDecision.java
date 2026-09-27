@@ -25,7 +25,7 @@ public final class AcknowledgementDecision {
         this.failure = failure;
     }
 
-    /** @return 继续等待其他 ACK 的结果 */
+    /** @return 继续等待其他 ACK 的决定 */
     @CheckReturnValue
     public static @NotNull AcknowledgementDecision waitForMore() {
         return new AcknowledgementDecision(Outcome.WAIT, null);
@@ -50,7 +50,7 @@ public final class AcknowledgementDecision {
         return outcome;
     }
 
-    /** @return FAIL 的稳定失败 code；其他结果为空 */
+    /** @return FAIL 的稳定失败 code；非 FAIL 结果为空 */
     public @Nullable IotFailureCode failure() {
         return failure;
     }

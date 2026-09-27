@@ -2,6 +2,7 @@ package com.sca4d.core.api.region;
 
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
 import com.google.i18n.phonenumbers.Phonenumber;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
@@ -99,7 +100,7 @@ public final class RegionCatalog {
         try {
             Phonenumber.PhoneNumber number = phoneNumberUtil.parse(value, "ZZ");
             if (!phoneNumberUtil.isValidNumber(number)
-                    || !value.equals(phoneNumberUtil.format(number, PhoneNumberUtil.PhoneNumberFormat.E164))) {
+                    || !value.equals(phoneNumberUtil.format(number, PhoneNumberFormat.E164))) {
                 return null;
             }
             String region = phoneNumberUtil.getRegionCodeForNumber(number);

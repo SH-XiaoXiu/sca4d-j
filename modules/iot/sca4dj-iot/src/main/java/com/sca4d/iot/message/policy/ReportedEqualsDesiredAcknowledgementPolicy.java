@@ -1,6 +1,6 @@
 package com.sca4d.iot.message.policy;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iot.api.message.AcknowledgementDecision;
 import com.sca4d.iot.api.message.AcknowledgementPolicy;
 import com.sca4d.iot.api.message.DeviceAcknowledgement;
@@ -33,7 +33,7 @@ public final class ReportedEqualsDesiredAcknowledgementPolicy implements Acknowl
             @NotNull DeviceDownlink message,
             @NotNull DeviceAcknowledgement acknowledgement,
             @NotNull Instant now) {
-        return CODE.value().equals(acknowledgement.ackCode())
+        return CODE.equals(TreeCode.of(acknowledgement.ackCode()))
                 ? AcknowledgementDecision.succeed()
                 : AcknowledgementDecision.waitForMore();
     }

@@ -292,7 +292,7 @@ loadScripts(document, 'script');</script>
 <h3>changeRoleAccounts</h3>
 <div class="member-signature"><span class="annotations">@PatchMapping("/{roleId}/accounts")
 @RequirePermission(operation="PLATFORM:ROLES:READ") @RequirePermission(operation="PLATFORM:ACCOUNTS:MANAGE")
-@Audit(operation="platform/role/accounts/change",
+@Audit(operation="PLATFORM/ROLE/ACCOUNTS/CHANGE",
        payloadFactory=<a href="../../audit/ApplicationAuditValues.MutationDetails.html" title="class in com.sca4d.app.server.audit">MutationDetails.class</a>)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">changeRoleAccounts</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="IAM/ROLE",idPrefix="platform:")
@@ -314,7 +314,7 @@ loadScripts(document, 'script');</script>
 <h3>createRole</h3>
 <div class="member-signature"><span class="annotations">@PostMapping
 @RequirePermission(operation="PLATFORM:ROLES:MANAGE")
-@Audit(operation="platform/role/create",
+@Audit(operation="PLATFORM/ROLE/CREATE",
        payloadFactory=<a href="../../audit/ApplicationAuditValues.MutationDetails.html" title="class in com.sca4d.app.server.audit">MutationDetails.class</a>)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../platform/view/RoleView.html" title="class in com.sca4d.app.server.platform.view">RoleView</a>&gt;</span>&nbsp;<span class="element-name">createRole</span><wbr><span class="parameters">(@RequestBody @NotNull @AuditPayload
@@ -333,7 +333,7 @@ loadScripts(document, 'script');</script>
 <h3>updateRoleStatus</h3>
 <div class="member-signature"><span class="annotations">@PutMapping("/{roleId}/status")
 @RequirePermission(operation="PLATFORM:ROLES:MANAGE")
-@Audit(operation="platform/role/update",
+@Audit(operation="PLATFORM/ROLE/UPDATE",
        payloadFactory=<a href="../../audit/ApplicationAuditValues.MutationDetails.html" title="class in com.sca4d.app.server.audit">MutationDetails.class</a>)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../platform/view/RoleView.html" title="class in com.sca4d.app.server.platform.view">RoleView</a>&gt;</span>&nbsp;<span class="element-name">updateRoleStatus</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="IAM/ROLE",idPrefix="platform:")
@@ -372,7 +372,7 @@ loadScripts(document, 'script');</script>
 <h3>replaceRoleI18n</h3>
 <div class="member-signature"><span class="annotations">@PutMapping("/{roleId}/i18n")
 @RequirePermission(operation="PLATFORM:ROLES:MANAGE")
-@Audit(operation="platform/role/update",
+@Audit(operation="PLATFORM/ROLE/UPDATE",
        payloadFactory=<a href="../../audit/ApplicationAuditValues.MutationDetails.html" title="class in com.sca4d.app.server.audit">MutationDetails.class</a>)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../platform/view/RoleI18nView.html" title="class in com.sca4d.app.server.platform.view">RoleI18nView</a>&gt;</span>&nbsp;<span class="element-name">replaceRoleI18n</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="IAM/ROLE",idPrefix="platform:")
@@ -394,7 +394,7 @@ loadScripts(document, 'script');</script>
 <h3>deleteRole</h3>
 <div class="member-signature"><span class="annotations">@DeleteMapping("/{roleId}")
 @RequirePermission(operation="PLATFORM:ROLES:MANAGE")
-@Audit(operation="platform/role/delete")
+@Audit(operation="PLATFORM/ROLE/DELETE")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">deleteRole</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="IAM/ROLE",idPrefix="platform:")
  long&nbsp;roleId)</span></div>
@@ -429,7 +429,7 @@ loadScripts(document, 'script');</script>
 <h3>replaceRolePermissions</h3>
 <div class="member-signature"><span class="annotations">@PutMapping("/{roleId}/permissions")
 @RequirePermission(operation="PLATFORM:ROLES:MANAGE")
-@Audit(operation="platform/role/permissions/replace",
+@Audit(operation="PLATFORM/ROLE/PERMISSIONS/REPLACE",
        payloadFactory=<a href="../../audit/ApplicationAuditValues.MutationDetails.html" title="class in com.sca4d.app.server.audit">MutationDetails.class</a>)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../platform/view/RolePermissionsView.html" title="class in com.sca4d.app.server.platform.view">RolePermissionsView</a>&gt;</span>&nbsp;<span class="element-name">replaceRolePermissions</span><wbr><span class="parameters">(@PathVariable @AuditTarget(resourceType="IAM/ROLE",idPrefix="platform:")

@@ -7,7 +7,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.sca4d.core.api.concurrent.LockKey;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.isolation.AppName;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.redisson.api.RLock;
@@ -17,21 +18,23 @@ import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 class RedisDistributedLockTest {
+    static {
+        AppName.publish("sca4d-test");
+    }
 
     @Test
     @DisplayName("Uses The Application Namespace And Lock Key Segments")
     void usesTheApplicationNamespaceAndLockKeySegments() throws Exception {
         RedissonClient redisson = mock(RedissonClient.class);
         RLock lock = mock(RLock.class);
-        when(redisson.getLock("example-app:sca4dj:lock:platform:profile:42")).thenReturn(lock);
+        when(redisson.getLock("SCA4D_TEST:LOCK:PLATFORM:PROFILE:42")).thenReturn(lock);
         when(lock.tryLock(25, TimeUnit.MILLISECONDS)).thenReturn(true);
         when(lock.isHeldByCurrentThread()).thenReturn(true);
         RedisDistributedLock distributedLock = new RedisDistributedLock(
-                redisson,
-                new RuntimeNamespace("example-app"));
+                redisson);
 
         String result = distributedLock.execute(
-                new LockKey("platform", "profile", "42"),
+                new LockKey(TreeCode.of("PLATFORM:PROFILE"), 42L),
                 Duration.ofMillis(25),
                 () -> "done");
 
@@ -44,13 +47,12 @@ class RedisDistributedLockTest {
     void reusesTheLockAlreadyHeldByTheCurrentThread() throws Exception {
         RedissonClient redisson = mock(RedissonClient.class);
         RLock lock = mock(RLock.class);
-        when(redisson.getLock("example-app:sca4dj:lock:iot:device:42")).thenReturn(lock);
+        when(redisson.getLock("SCA4D_TEST:LOCK:IOT:DEVICE:42")).thenReturn(lock);
         when(lock.tryLock(25, TimeUnit.MILLISECONDS)).thenReturn(true);
         when(lock.isHeldByCurrentThread()).thenReturn(true);
         RedisDistributedLock distributedLock = new RedisDistributedLock(
-                redisson,
-                new RuntimeNamespace("example-app"));
-        LockKey key = new LockKey("iot", "device", "42");
+                redisson);
+        LockKey key = new LockKey(TreeCode.of("IOT:DEVICE"), 42L);
 
         String result = distributedLock.execute(
                 key,
@@ -58,7 +60,7 @@ class RedisDistributedLockTest {
                 () -> distributedLock.execute(key, Duration.ofMillis(25), () -> "done"));
 
         assertEquals("done", result);
-        verify(redisson, times(1)).getLock("example-app:sca4dj:lock:iot:device:42");
+        verify(redisson, times(1)).getLock("SCA4D_TEST:LOCK:IOT:DEVICE:42");
         verify(lock, times(1)).tryLock(25, TimeUnit.MILLISECONDS);
         verify(lock, times(1)).unlock();
     }

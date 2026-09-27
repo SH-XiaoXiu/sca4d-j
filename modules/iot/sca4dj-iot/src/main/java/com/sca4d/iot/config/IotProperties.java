@@ -32,12 +32,12 @@ public final class IotProperties {
 
     private int downlinkCleanupBatchSize = 10_000;
 
-    /** @return Broker 连接事实未续期时的保留时间 */
+    /** @return Broker 连接信息未续期时的保留时间 */
     public Duration getConnectionTtl() {
         return connectionTtl;
     }
 
-    /** @param connectionTtl Broker 连接事实未续期时的保留时间 */
+    /** @param connectionTtl Broker 连接信息未续期时的保留时间 */
     public void setConnectionTtl(Duration connectionTtl) {
         this.connectionTtl = connectionTtl;
     }

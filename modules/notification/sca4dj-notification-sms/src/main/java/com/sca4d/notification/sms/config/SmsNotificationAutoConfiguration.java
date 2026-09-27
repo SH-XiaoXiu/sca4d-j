@@ -1,11 +1,12 @@
 package com.sca4d.notification.sms.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.VersionConditions;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.notification.NotificationDelivery;
 import com.sca4d.core.api.region.RegionCatalog;
+import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.notification.NotificationDeliveryRouter;
 import com.sca4d.notification.NotificationMessageCodec;
 import com.sca4d.notification.NotificationMessageHandler;
@@ -46,7 +47,7 @@ public class SmsNotificationAutoConfiguration {
     @Bean
     SmsRepository smsRepository(
             @NotNull SmsProviderMapper mapper,
-            @NotNull ObjectMapper objectMapper,
+            @Sca4djJson @NotNull Sca4djMapper objectMapper,
             @NotNull VersionConditions versionConditions) {
         return new SmsRepository(mapper, objectMapper, versionConditions);
     }
@@ -104,7 +105,7 @@ public class SmsNotificationAutoConfiguration {
     }
 
     @Bean
-    SmsDeliveryCheckCodec smsDeliveryCheckCodec(@NotNull ObjectMapper objectMapper) {
+    SmsDeliveryCheckCodec smsDeliveryCheckCodec(@Sca4djJson @NotNull Sca4djMapper objectMapper) {
         return new SmsDeliveryCheckCodec(objectMapper);
     }
 

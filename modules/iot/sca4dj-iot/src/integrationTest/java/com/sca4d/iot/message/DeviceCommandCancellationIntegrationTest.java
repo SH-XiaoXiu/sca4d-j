@@ -13,6 +13,7 @@ import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.JacksonMessageCodec;
 import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.name.Name;
 import com.sca4d.core.spring.persistence.batch.SqlBatchProperties;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.core.spring.persistence.mybatis.CoreEnumTypeHandler;
@@ -136,9 +137,9 @@ class DeviceCommandCancellationIntegrationTest {
                 null,
                 null,
                 "{}",
-                acknowledgement.code().value(),
+                acknowledgement.code(),
                 1000L,
-                retry.code().value(),
+                retry.code(),
                 null);
     }
 
@@ -216,7 +217,7 @@ class DeviceCommandCancellationIntegrationTest {
                 new IncomingMessage<>(
                         new MessageId(31L),
                         new DeviceDispatchMessage(11L, 1),
-                        "test",
+                        new Name("TEST"),
                         NOW,
                         false,
                         1));

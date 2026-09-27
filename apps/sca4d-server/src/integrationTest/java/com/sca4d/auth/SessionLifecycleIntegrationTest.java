@@ -14,11 +14,11 @@ import com.sca4d.auth.password.PasswordAuthenticationMethod;
 import com.sca4d.auth.session.RedisSessionGeneration;
 import com.sca4d.auth.session.SaTokenSessionManager;
 import com.sca4d.core.api.authentication.Session;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountDirectory;
 import com.sca4d.core.api.identity.AccountIdentifierType;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.OperationCatalog;
 import com.sca4d.iam.base.PlatformIdentityService;
@@ -57,12 +57,16 @@ import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import javax.imageio.ImageIO;
 
@@ -170,7 +174,7 @@ class SessionLifecycleIntegrationTest {
         assertThat(
                 businessHandlers.stream()
                         .flatMap(entry -> entry.getKey().getPatternValues().stream())
-                        .collect(java.util.stream.Collectors.toSet()))
+                        .collect(Collectors.toSet()))
                 .containsExactlyInAnyOrder(
                         "/login/attempts",
                         "/login/attempts/passkey",
@@ -867,17 +871,17 @@ class SessionLifecycleIntegrationTest {
         Role refreshRole = rbac.createRole(
                 "SESSION_REFRESH_TEST",
                 LocalizedFields.of(
-                        java.util.Map.of(
-                                java.util.Locale.forLanguageTag("zh-CN"),
-                                java.util.Map.of("name", "Session Refresh Test"))),
-                java.util.List.of(operationCode))
+                        Map.of(
+                                Locale.forLanguageTag("zh-CN"),
+                                Map.of("name", "Session Refresh Test"))),
+                List.of(operationCode))
                 .role();
         PrincipalRoles currentRoles = rbac.findPrincipalRoles(principal.principalId());
         PrincipalRoles replacedRoles = rbac.replacePrincipalRoles(
                 principal.principalId(),
-                java.util.stream.Stream.concat(
+                Stream.concat(
                         currentRoles.roles().stream().map(Role::roleId),
-                        java.util.stream.Stream.of(refreshRole.roleId()))
+                        Stream.of(refreshRole.roleId()))
                         .toList());
         assertThat(replacedRoles.roles()).extracting(Role::roleId).contains(refreshRole.roleId());
 
@@ -1232,14 +1236,14 @@ class SessionLifecycleIntegrationTest {
     }
 
     private static List<String> textValues(JsonNode array) {
-        return java.util.stream.StreamSupport.stream(array.spliterator(), false)
+        return StreamSupport.stream(array.spliterator(), false)
                 .map(JsonNode::asText)
                 .toList();
     }
 
     private static HttpHeaders copyHeaders(HttpHeaders source) {
         HttpHeaders copy = new HttpHeaders();
-        source.forEach((name, values) -> copy.put(name, new java.util.ArrayList<>(values)));
+        source.forEach((name, values) -> copy.put(name, new ArrayList<>(values)));
         return copy;
     }
 

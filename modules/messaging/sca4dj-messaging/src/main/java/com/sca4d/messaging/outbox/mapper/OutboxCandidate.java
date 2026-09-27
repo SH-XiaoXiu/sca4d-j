@@ -1,5 +1,6 @@
 package com.sca4d.messaging.outbox.mapper;
 
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -11,7 +12,7 @@ public final class OutboxCandidate {
 
     private final long messageId;
 
-    private final @NotNull String messageCode;
+    private final @NotNull TreeCode messageCode;
 
     private final byte @NotNull [] envelope;
 
@@ -22,7 +23,7 @@ public final class OutboxCandidate {
     /** 创建已经登记租约、尝试次数和版本的 Outbox 领取数据。 */
     public OutboxCandidate(
             long messageId,
-            @NotNull String messageCode,
+            @NotNull TreeCode messageCode,
             byte @NotNull [] envelope,
             int attemptCount,
             long version) {
@@ -39,7 +40,7 @@ public final class OutboxCandidate {
     }
 
     /** @return RabbitMQ routing key 使用的消息编码 */
-    public @NotNull String messageCode() {
+    public @NotNull TreeCode messageCode() {
         return messageCode;
     }
 

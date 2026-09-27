@@ -1,10 +1,10 @@
 package com.sca4d.openapi.client;
 
 import com.sca4d.core.api.call.Call;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.identity.Account;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.openapi.web.OpenApiClientOperationChecker;
 import org.jetbrains.annotations.NotNull;
 

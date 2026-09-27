@@ -1,6 +1,6 @@
 package com.sca4d.iot.message;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iot.api.message.AcknowledgementPolicy;
 import com.sca4d.iot.api.message.RetryPolicy;
 import org.jetbrains.annotations.NotNull;

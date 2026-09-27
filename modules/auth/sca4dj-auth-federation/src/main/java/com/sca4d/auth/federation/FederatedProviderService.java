@@ -212,7 +212,7 @@ public class FederatedProviderService {
             if (configuration == null)
                 throw new BusinessException(FederatedErrorCode.CONFIGURATION_INVALID);
             validate(configuration);
-            if (configuration.clientAuthentication() != FederatedClientAuthentication.NONE
+            if (configuration.clientAuthentication() != FederatedClientAuthentication.ONE
                     && !configuration.clientSecretConfigured()) {
                 throw new BusinessException(FederatedErrorCode.CONFIGURATION_INVALID);
             }

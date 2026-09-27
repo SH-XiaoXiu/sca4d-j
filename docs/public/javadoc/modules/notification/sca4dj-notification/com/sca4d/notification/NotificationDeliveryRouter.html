@@ -120,23 +120,23 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#available(com.sca4d.core.api.code.TreeCode,com.sca4d.core.api.notification.Notification)" class="member-name-link">available</a><wbr>(@NotNull com.sca4d.core.api.code.TreeCode&nbsp;channel,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#available(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.notification.Notification)" class="member-name-link">available</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;channel,
  @NotNull com.sca4d.core.api.notification.Notification&nbsp;notification)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">判断指定渠道当前是否安装并能处理通知。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.delivery.DeliveryOutcome</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#deliver(com.sca4d.core.api.code.TreeCode,com.sca4d.core.api.messaging.MessageId,com.sca4d.core.api.notification.Notification)" class="member-name-link">deliver</a><wbr>(@NotNull com.sca4d.core.api.code.TreeCode&nbsp;channel,
- @NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#deliver(com.sca4d.core.api.messaging.MessageId,com.sca4d.core.api.notification.Notification)" class="member-name-link">deliver</a><wbr>(@NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
  @NotNull com.sca4d.core.api.notification.Notification&nbsp;notification)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">只执行一个 Consumer 自己负责的渠道。</div>
+<div class="block">同步执行通知已经选中的全部渠道。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#deliver(com.sca4d.core.api.messaging.MessageId,com.sca4d.core.api.notification.Notification)" class="member-name-link">deliver</a><wbr>(@NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.delivery.DeliveryOutcome</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#deliver(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.messaging.MessageId,com.sca4d.core.api.notification.Notification)" class="member-name-link">deliver</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;channel,
+ @NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
  @NotNull com.sca4d.core.api.notification.Notification&nbsp;notification)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">同步执行通知已经选中的全部渠道。</div>
+<div class="block">只执行一个 Consumer 自己负责的渠道。</div>
 </div>
 </div>
 </div>
@@ -175,11 +175,11 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="available(com.sca4d.core.api.code.TreeCode,com.sca4d.core.api.notification.Notification)">
+<section class="detail" id="available(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.notification.Notification)">
 <h3>available</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">available</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.code.TreeCode&nbsp;channel,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;channel,
  @NotNull
  @NotNull com.sca4d.core.api.notification.Notification&nbsp;notification)</span></div>
 <div class="block">判断指定渠道当前是否安装并能处理通知。</div>
@@ -196,11 +196,11 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="deliver(com.sca4d.core.api.code.TreeCode,com.sca4d.core.api.messaging.MessageId,com.sca4d.core.api.notification.Notification)">
+<section class="detail" id="deliver(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.messaging.MessageId,com.sca4d.core.api.notification.Notification)">
 <h3>deliver</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.delivery.DeliveryOutcome</span>&nbsp;<span class="element-name">deliver</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.code.TreeCode&nbsp;channel,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;channel,
  @NotNull
  @NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
  @NotNull

@@ -10,7 +10,7 @@ import java.time.Instant;
 import java.util.Objects;
 import java.util.Optional;
 
-/** 保存设备接入实现观测到的一条连接事实，不把它等同于 `Session` 或在线状态。 */
+/** 保存设备接入实现观测到的一条连接数据，不把它等同于 `Session` 或在线状态。 */
 public final class DeviceConnection {
 
     private final @NotNull DeviceConnectionId id;
@@ -25,7 +25,7 @@ public final class DeviceConnection {
 
     private final @NotNull Instant connectedAt;
 
-    /** 创建一条具有稳定连接代次的设备连接事实。 */
+    /** 创建一条具有稳定连接代次的设备连接信息。 */
     public DeviceConnection(
             @NotNull DeviceConnectionId id,
             long deviceId,

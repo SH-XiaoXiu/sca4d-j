@@ -1,10 +1,19 @@
 package com.sca4d.scheduling.quartz;
 
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+import static com.sca4d.scheduling.quartz.QuartzClusterTaskJob.TASK_DEFINITION_VERSION;
+import static com.sca4d.scheduling.quartz.QuartzClusterTaskJob.TASK_KEY;
+import static com.sca4d.scheduling.quartz.QuartzDispatchJob.EXECUTOR_CONTEXT_KEY;
+import static com.sca4d.scheduling.quartz.QuartzDispatchJob.SCHEDULE_DEFINITION_VERSION;
+import static com.sca4d.scheduling.quartz.QuartzDispatchJob.SCHEDULE_KEY;
+
 import cn.hutool.crypto.digest.DigestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
 import com.sca4d.core.api.scheduling.ClusterTaskScheduler;
 import com.sca4d.core.api.scheduling.CronSchedule;
@@ -61,7 +70,7 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
 
     private static final String CONTRACT = "scheduleContract";
 
-    private static final LockKey RECONCILE_LOCK = new LockKey("scheduling", "quartz", "reconcile");
+    private static final LockKey RECONCILE_LOCK = new LockKey(TreeCode.of("SCHEDULING:QUARTZ:RECONCILE"));
 
     private static final Duration LOCK_WAIT = Duration.ofSeconds(10);
 
@@ -83,7 +92,7 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
 
     private final @NotNull ObjectProvider<ClusterTaskSchedule> initialClusterTasks;
 
-    private final @NotNull String schedulerName;
+    private final @NotNull Key schedulerName;
 
     private final @NotNull AtomicBoolean running = new AtomicBoolean();
 
@@ -111,7 +120,7 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
             @NotNull Clock clock,
             @NotNull ObjectProvider<JobSchedule<?, ?>> initialSchedules,
             @NotNull ObjectProvider<ClusterTaskSchedule> initialClusterTasks,
-            @NotNull String schedulerName) {
+            @NotNull Key schedulerName) {
         this.scheduler = Objects.requireNonNull(scheduler, "Quartz Scheduler 不能为空");
         this.registry = Objects.requireNonNull(registry, "QuartzScheduleRegistry 不能为空");
         this.clusterTaskRegistry = Objects.requireNonNull(
@@ -199,7 +208,7 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
             // 只有持久化 Job 计划需要 JobExecutor；纯集群任务可以独立使用 Quartz。
             List<JobSchedule<?, ?>> jobSchedules = initialSchedules.orderedStream().toList();
             if (!jobSchedules.isEmpty()
-                    && !scheduler.getContext().containsKey(QuartzDispatchJob.EXECUTOR_CONTEXT_KEY)) {
+                    && !scheduler.getContext().containsKey(EXECUTOR_CONTEXT_KEY)) {
                 throw new IllegalStateException("Quartz 存在 JobSchedule，但应用没有提供 JobExecutor");
             }
             reconcile(jobSchedules);
@@ -252,7 +261,7 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
                 // 定义版本防止倒退，摘要防止调用方忘记递增已经变化的定义版本。
                 JobDataMap existingData = existing.getJobDataMap();
                 String storedDefinitionVersion = existingData.getString(
-                        QuartzDispatchJob.SCHEDULE_DEFINITION_VERSION);
+                        SCHEDULE_DEFINITION_VERSION);
                 if (storedDefinitionVersion != null) {
                     int existingDefinitionVersion = Integer.parseInt(storedDefinitionVersion);
                     String existingFingerprint = existingData.getString(FINGERPRINT);
@@ -294,7 +303,7 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
         int deletedCount = 0;
         Set<JobKey> stored = scheduler.getJobKeys(GroupMatcher.jobGroupEquals(GROUP));
         for (JobKey key : stored) {
-            if (definitions.keySet().stream().noneMatch(definition -> definition.value().equals(key.getName()))) {
+            if (!definitions.containsKey(new ScheduleKey(key.getName()))) {
                 if (scheduler.deleteJob(key)) {
                     deletedCount++;
                 }
@@ -319,7 +328,7 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
             if (existing != null) {
                 JobDataMap existingData = existing.getJobDataMap();
                 String storedDefinitionVersion = existingData.getString(
-                        QuartzClusterTaskJob.TASK_DEFINITION_VERSION);
+                        TASK_DEFINITION_VERSION);
                 if (storedDefinitionVersion != null) {
                     int existingDefinitionVersion = Integer.parseInt(storedDefinitionVersion);
                     String existingFingerprint = existingData.getString(FINGERPRINT);
@@ -364,7 +373,7 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
         int deletedCount = 0;
         Set<JobKey> stored = scheduler.getJobKeys(GroupMatcher.jobGroupEquals(CLUSTER_TASK_GROUP));
         for (JobKey key : stored) {
-            if (definitions.keySet().stream().noneMatch(definition -> definition.value().equals(key.getName()))
+            if (!definitions.containsKey(new ScheduleKey(key.getName()))
                     && scheduler.deleteJob(key)) {
                 deletedCount++;
             }
@@ -378,9 +387,9 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
             @NotNull String contract,
             @NotNull String fingerprint) {
         JobDataMap data = new JobDataMap();
-        data.put(QuartzDispatchJob.SCHEDULE_KEY, schedule.key().value());
+        data.put(SCHEDULE_KEY, schedule.key().format(SLASH));
         data.put(
-                QuartzDispatchJob.SCHEDULE_DEFINITION_VERSION,
+                SCHEDULE_DEFINITION_VERSION,
                 Integer.toString(schedule.definitionVersion()));
         data.put(FINGERPRINT, fingerprint);
         data.put(CONTRACT, contract);
@@ -398,9 +407,9 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
             @NotNull String contract,
             @NotNull String fingerprint) {
         JobDataMap data = new JobDataMap();
-        data.put(QuartzClusterTaskJob.TASK_KEY, schedule.key().value());
+        data.put(TASK_KEY, schedule.key().format(SLASH));
         data.put(
-                QuartzClusterTaskJob.TASK_DEFINITION_VERSION,
+                TASK_DEFINITION_VERSION,
                 Integer.toString(schedule.definitionVersion()));
         data.put(FINGERPRINT, fingerprint);
         data.put(CONTRACT, contract);
@@ -432,7 +441,7 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
             @NotNull JobKey jobKey,
             @NotNull String group) {
         TriggerBuilder<Trigger> builder = TriggerBuilder.newTrigger()
-                .withIdentity(new TriggerKey(key.value(), group))
+                .withIdentity(new TriggerKey(key.format(SLASH), group))
                 .forJob(jobKey);
         if (timing instanceof CronSchedule cron) {
             CronScheduleBuilder cronBuilder = CronScheduleBuilder.cronSchedule(cron.expression())
@@ -504,8 +513,8 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
         } catch (JsonProcessingException exception) {
             throw new IllegalArgumentException("Quartz 计划输入无法序列化: " + schedule.key(), exception);
         }
-        return schedule.key().value() + "|" + schedule.definitionVersion()
-                + "|" + schedule.job().key().value() + "|" + schedule.job().definitionVersion()
+        return schedule.key().format(SLASH) + "|" + schedule.definitionVersion()
+                + "|" + schedule.job().key().format(SLASH) + "|" + schedule.job().definitionVersion()
                 + "|" + timing + "|" + schedule.misfirePolicy() + "|" + schedule.overlapPolicy()
                 + "|" + input;
     }
@@ -513,7 +522,7 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
     /** 计算集群任务不包含实现类名称的稳定调度契约。 */
     private static @NotNull String clusterTaskContract(@NotNull ClusterTaskSchedule schedule) {
         String timing = timingFingerprint(schedule.timing());
-        return schedule.key().value() + "|" + schedule.definitionVersion()
+        return schedule.key().format(SLASH) + "|" + schedule.definitionVersion()
                 + "|" + timing + "|" + schedule.misfirePolicy();
     }
 
@@ -530,21 +539,21 @@ public final class QuartzJobScheduler implements JobScheduler, ClusterTaskSchedu
 
     /** 返回代码计划对应的 Quartz JobKey。 */
     private static @NotNull JobKey quartzJobKey(@NotNull ScheduleKey key) {
-        return new JobKey(key.value(), GROUP);
+        return new JobKey(key.format(SLASH), GROUP);
     }
 
     /** 返回代码计划对应的 Quartz TriggerKey。 */
     private static @NotNull TriggerKey quartzTriggerKey(@NotNull ScheduleKey key) {
-        return new TriggerKey(key.value(), GROUP);
+        return new TriggerKey(key.format(SLASH), GROUP);
     }
 
     /** 返回集群任务对应的 Quartz JobKey。 */
     private static @NotNull JobKey quartzClusterTaskJobKey(@NotNull ScheduleKey key) {
-        return new JobKey(key.value(), CLUSTER_TASK_GROUP);
+        return new JobKey(key.format(SLASH), CLUSTER_TASK_GROUP);
     }
 
     /** 返回集群任务对应的 Quartz TriggerKey。 */
     private static @NotNull TriggerKey quartzClusterTaskTriggerKey(@NotNull ScheduleKey key) {
-        return new TriggerKey(key.value(), CLUSTER_TASK_GROUP);
+        return new TriggerKey(key.format(SLASH), CLUSTER_TASK_GROUP);
     }
 }

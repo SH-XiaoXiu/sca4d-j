@@ -1,10 +1,8 @@
 # 10 Sca4d-J 构建 Gradle 插件
 
-源码：`tools/sca4dj-build-gradle-plugin`
+构建插件把各项目已有任务接到统一的编译、测试、装配、格式和审计阶段。Java 项目使用 `com.sca4dj.build.java`，目录项目使用 `com.sca4dj.build.aggregate`，其他技术栈通过 `com.sca4dj.build.mapping` 显式登记任务；新应用的首份数据库迁移由 `com.sca4dj.app` 生成。
 
-`sca4dj-build-gradle-plugin` 是 Sca4d-J 仓库自己的 Gradle Included Build。它把 Java、前端、构建工具和目录项目各自已有的任务登记到同一组构建阶段，再从实际执行任务的项目逐级连接到仓库根任务。它不替代 Gradle 的 `compileJava`、`test`、`assemble`、Spotless、Checkstyle、SpotBugs 或前端脚本，而是明确这些任务在 Sca4d-J 构建中分别属于编译、测试、装配、格式化、审计还是发布。
-
-这层映射让使用不同技术栈的项目参加同一次仓库构建：根项目不需要知道每个项目使用 Java、pnpm 还是另一个 Included Build，也不需要递归扫描目录寻找任务。每个项目声明自己参加哪些阶段，目录项目只汇总直接子项目，根项目最后给出统一命令和质量报告。
+源码位于 `tools/sca4dj-build-gradle-plugin`。插件作为 Gradle Included Build 先于主构建加载，各目录只汇总直接子项目；根任务沿登记关系执行并汇总质量报告，不递归猜测任务，也不替代 Gradle 或前端原有工具。
 
 ## 组成
 

@@ -132,7 +132,7 @@ public final class DeviceDownlink {
         return desiredSequence == null ? OptionalLong.empty() : OptionalLong.of(desiredSequence);
     }
 
-    /** @return 产生该 command 的设备定时规则标识；即时下行为空 */
+    /** @return 产生当前 command 的设备定时规则标识；即时下行为空 */
     public @NotNull OptionalLong scheduleId() {
         return scheduleId == null ? OptionalLong.empty() : OptionalLong.of(scheduleId);
     }

@@ -16,6 +16,7 @@ import com.sca4d.core.spring.persistence.mybatis.LongValueTypeHandler;
 import com.sca4d.notification.email.sender.EmailSenderRepository;
 import com.sca4d.notification.email.sender.SmtpSecurity;
 import com.sca4d.notification.email.sender.mapper.EmailSenderMapper;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.type.JdbcType;
 import org.junit.jupiter.api.AfterAll;
@@ -26,7 +27,6 @@ import org.junit.jupiter.api.Test;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -50,7 +50,7 @@ class EmailConfigurationPersistenceIntegrationTest {
     private static EmailSenderRepository senders;
 
     /** 装配 Mapper 和实际影响行数检查。 */
-    @Configuration(proxyBeanMethods = false)
+    @org.springframework.context.annotation.Configuration(proxyBeanMethods = false)
     @EnableAspectJAutoProxy
     @MapperScan(basePackageClasses = EmailSenderMapper.class)
     static class PersistenceConfiguration {
@@ -71,7 +71,7 @@ class EmailConfigurationPersistenceIntegrationTest {
         jdbc = new JdbcTemplate(source);
         SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
         factory.setDataSource(source);
-        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
+        Configuration configuration = new Configuration();
         configuration.setMapUnderscoreToCamelCase(true);
         configuration.setDefaultEnumTypeHandler(CoreEnumTypeHandler.class);
         configuration.getTypeHandlerRegistry()
@@ -113,7 +113,7 @@ class EmailConfigurationPersistenceIntegrationTest {
                 "first",
                 "smtp.example",
                 25,
-                SmtpSecurity.NONE,
+                SmtpSecurity.ONE,
                 "user",
                 password,
                 "from@example.test",
@@ -125,7 +125,7 @@ class EmailConfigurationPersistenceIntegrationTest {
                 "first",
                 "smtp.example",
                 25,
-                SmtpSecurity.NONE,
+                SmtpSecurity.ONE,
                 "user",
                 false,
                 null,
@@ -139,7 +139,7 @@ class EmailConfigurationPersistenceIntegrationTest {
                 "first",
                 "smtp.example",
                 25,
-                SmtpSecurity.NONE,
+                SmtpSecurity.ONE,
                 "user",
                 true,
                 replacement,
@@ -156,7 +156,7 @@ class EmailConfigurationPersistenceIntegrationTest {
                 "first",
                 "smtp.example",
                 25,
-                SmtpSecurity.NONE,
+                SmtpSecurity.ONE,
                 null,
                 true,
                 null,
@@ -166,7 +166,7 @@ class EmailConfigurationPersistenceIntegrationTest {
         assertThat(senders.findConfiguration(1).orElseThrow().password()).isNull();
         assertThat(senders.find(1).orElseThrow().username()).isNull();
         senders.setEnabled(1, true);
-        senders.add(2, "second", "smtp.example", 25, SmtpSecurity.NONE, null, null, "from@example.test", null, null);
+        senders.add(2, "second", "smtp.example", 25, SmtpSecurity.ONE, null, null, "from@example.test", null, null);
         assertThatThrownBy(() -> senders.setEnabled(2, true))
                 .isInstanceOf(BusinessException.class);
         assertThat(senders.findEnabledConfiguration().orElseThrow().sender().senderId()).isEqualTo(1);

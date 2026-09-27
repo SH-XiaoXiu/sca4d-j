@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-/** 返回创建或轮换后的 HMAC Credential 和仅本次可见的 Key。 */
+/** 返回创建或轮换后的 MAC Credential 和仅本次可见的 Key。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public final class IssuedHmacKey {
 
@@ -12,7 +12,7 @@ public final class IssuedHmacKey {
 
     private final @NotNull String key;
 
-    /** 创建一次性 HMAC Key 签发结果。 */
+    /** 创建一次性 MAC Key 签发结果。 */
     public IssuedHmacKey(@NotNull HmacCredential credential, @NotNull String key) {
         this.credential = Objects.requireNonNull(credential, "HMAC Credential 不能为空");
         this.key = Objects.requireNonNull(key, "HMAC Key 不能为空");

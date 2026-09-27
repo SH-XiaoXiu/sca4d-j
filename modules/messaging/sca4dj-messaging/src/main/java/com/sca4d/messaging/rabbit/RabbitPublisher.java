@@ -1,7 +1,11 @@
 package com.sca4d.messaging.rabbit;
 
-import com.sca4d.core.api.code.TreeCode;
+import static com.sca4d.core.api.name.NameFormat.COLON;
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+
 import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.messaging.config.MessagingProperties;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -27,9 +31,11 @@ public final class RabbitPublisher {
 
     private final @NotNull RabbitTemplate rabbit;
 
-    private final @NotNull String exchange;
+    private final @NotNull Key exchange;
 
-    private final @NotNull String retryExchange;
+    private final @NotNull Key retryExchange;
+
+    private final @NotNull RabbitMessageTopology topology;
 
     private final @NotNull Duration confirmTimeout;
 
@@ -41,6 +47,7 @@ public final class RabbitPublisher {
         this.rabbit = Objects.requireNonNull(rabbit, "RabbitTemplate 不能为空");
         this.rabbit.setMandatory(true);
         RabbitMessageTopology checkedTopology = Objects.requireNonNull(topology, "Messaging 拓扑不能为空");
+        this.topology = checkedTopology;
         this.exchange = checkedTopology.exchangeName();
         this.retryExchange = checkedTopology.retryExchangeName();
         this.confirmTimeout = Objects.requireNonNull(properties, "Messaging 配置不能为空").getConfirmTimeout();
@@ -64,7 +71,7 @@ public final class RabbitPublisher {
                 .setDeliveryMode(MessageDeliveryMode.PERSISTENT)
                 .setMessageId(checkedId.toString())
                 .build();
-        send(exchange, checkedCode.value(), rabbitMessage, checkedId.toString());
+        send(exchange, topology.routingKey(checkedCode), rabbitMessage, checkedId.toString());
         LOG.trace("业务消息已由 RabbitMQ 确认 | messageId={} messageCode={}", checkedId, checkedCode);
     }
 
@@ -81,17 +88,17 @@ public final class RabbitPublisher {
         Message checkedMessage = Objects.requireNonNull(message, "Handler retry 消息不能为空");
         String messageId = checkedMessage.getMessageProperties().getMessageId();
         String correlationId = (messageId == null ? "UNKNOWN" : messageId)
-                + ':' + checkedCode.value() + ':' + attempt;
-        send(retryExchange, checkedCode.value(), checkedMessage, correlationId);
+                + ':' + checkedCode.format(SLASH) + ':' + attempt;
+        send(retryExchange, topology.retryRoutingKey(checkedCode), checkedMessage, correlationId);
     }
 
     private void send(
-            @NotNull String targetExchange,
-            @NotNull String routingKey,
+            @NotNull Key targetExchange,
+            @NotNull Key routingKey,
             @NotNull Message message,
             @NotNull String correlationId) {
         CorrelationData correlation = new CorrelationData(correlationId);
-        rabbit.send(targetExchange, routingKey, message, correlation);
+        rabbit.send(targetExchange.format(COLON), routingKey.format(COLON), message, correlation);
         try {
             CorrelationData.Confirm confirm = correlation.getFuture()
                     .get(confirmTimeout.toMillis(), TimeUnit.MILLISECONDS);

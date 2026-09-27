@@ -1,5 +1,7 @@
 package com.sca4d.iot.state;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import cn.hutool.crypto.digest.DigestUtil;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.event.Event;
@@ -236,7 +238,7 @@ public class ReportedStateService {
                     + ':' + orderScope + ':' + orderValue + ':' + convergence.propertyCode();
             DeviceAcknowledgement acknowledgement = new DeviceAcknowledgement(
                     convergence.messageId(),
-                    ReportedEqualsDesiredAcknowledgementPolicy.CODE.value(),
+                    ReportedEqualsDesiredAcknowledgementPolicy.CODE.format(COLON),
                     Map.of("propertyCode", convergence.propertyCode()),
                     "REPORTED",
                     sourceAcknowledgementId,

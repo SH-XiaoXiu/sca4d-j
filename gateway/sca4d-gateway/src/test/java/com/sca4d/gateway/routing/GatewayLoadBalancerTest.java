@@ -6,6 +6,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.sca4d.core.api.gateway.GatewayCallbackCode;
 import com.sca4d.gateway.registration.GatewayInstanceRegistry;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ class GatewayLoadBalancerTest {
     @DisplayName("回调没有匹配实例时返回空选择")
     void doesNotFallbackCallbackToApiInstance() {
         GatewayInstanceRegistry registry = mock(GatewayInstanceRegistry.class);
-        when(registry.selectCallback("iot.emqx.connections")).thenReturn(null);
+        when(registry.selectCallback(new GatewayCallbackCode("iot.emqx.connections"))).thenReturn(null);
         GatewayLoadBalancer loadBalancer = new GatewayLoadBalancer(registry, "emergency-light-server");
         RequestData data = new RequestData(
                 HttpMethod.POST,
@@ -39,6 +40,6 @@ class GatewayLoadBalancerTest {
 
         assertThat(response).isNotNull();
         assertThat(response.hasServer()).isFalse();
-        verify(registry, never()).selectApi();
+        verify(registry, never()).selectApi("/");
     }
 }

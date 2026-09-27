@@ -36,7 +36,7 @@ public final class EmqxAuthenticationResponse {
         this.expireAt = expireAt;
     }
 
-    /** @return 明确拒绝且不能由后续 Authenticator 放宽的响应 */
+    /** @return 明确拒绝且不能由之后的 Authenticator 放宽的响应 */
     @CheckReturnValue
     public static @NotNull EmqxAuthenticationResponse deny() {
         return new EmqxAuthenticationResponse("deny", Map.of(), List.of(), null);

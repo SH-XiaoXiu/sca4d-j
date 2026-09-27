@@ -6,9 +6,9 @@ import com.sca4d.auth.email.challenge.EmailCodeChallengeService;
 import com.sca4d.auth.email.challenge.RedisEmailCodeChallengeStore;
 import com.sca4d.core.api.identity.AccountDirectory;
 import com.sca4d.core.api.identity.RealmKey;
+import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.notification.NotificationType;
 import com.sca4d.core.api.notification.Notifications;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
 import com.sca4d.core.api.security.SecretHasher;
 import com.sca4d.core.api.setting.Settings;
 import com.sca4d.core.api.setting.SystemSetting;
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.time.Clock;
 import java.time.Duration;
@@ -55,13 +55,12 @@ public class EmailCodeAutoConfiguration {
         return EmailCodeSettings.MAXIMUM_ATTEMPTS;
     }
 
-    /** @return 使用应用命名空间隔离 Hash、TTL、冷却和 Lua 消费的 Challenge Store */
+    /** @return 使用 App 隔离名称隔离 Hash、TTL、冷却和 Lua 消费的 Challenge Store */
     @Bean
     RedisEmailCodeChallengeStore redisEmailCodeChallengeStore(
-            @Sca4djRedis @NotNull StringRedisTemplate redis,
-            @NotNull Clock clock,
-            @NotNull RuntimeNamespace namespace) {
-        return new RedisEmailCodeChallengeStore(redis, clock, namespace);
+            @Sca4djRedis @NotNull RedisTemplate<Key, String> redis,
+            @NotNull Clock clock) {
+        return new RedisEmailCodeChallengeStore(redis, clock);
     }
 
     /** @return 签发匿名一致响应并可靠登记 Email 通知的 Challenge 服务 */
@@ -84,7 +83,7 @@ public class EmailCodeAutoConfiguration {
                 clock);
     }
 
-    /** @return 可由认证引擎发现并同时支持首因素和后续因素的 Email Code 方法 */
+    /** @return 可由认证引擎发现并同时支持首因素和附加因素的 Email Code 方法 */
     @Bean
     EmailCodeAuthenticationMethod emailCodeAuthenticationMethod(
             @NotNull EmailCodeChallengeService challenges,

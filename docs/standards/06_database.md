@@ -1,6 +1,8 @@
 # 06 数据库规范
 
-本页规定表结构、索引、约束和 Flyway 迁移的写法。Mapper 与 Repository 的职责见[SQL 与持久化](./05_persistence)，数据库访问的技术选择见[数据访问与持久化设计](/tutorials/backend-feature)。
+每张表由一个模块或具体应用负责，约束保护数据完整性，索引服务实际查询。新应用从结构片段生成首份迁移，已有数据库通过新增 Flyway 迁移升级；修改前同时检查新库安装、旧数据转换和失败恢复。
+
+Mapper 与 Repository 的职责见[SQL 与持久化](./05_persistence)，业务字段接入见[开发后端业务接口](/tutorials/backend-feature)。
 
 ## 数据归属
 

@@ -1,14 +1,15 @@
 package com.sca4d.core.api.identity;
 
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.enums.BaseEnum;
+import com.sca4d.core.api.name.NameFormat;
+import com.sca4d.core.api.name.code.TreeCode;
 
 /**
  * 表示实际接入系统并完成认证的主体类型。
  */
 public enum SubjectType implements BaseEnum {
     /**
-     * 使用密码、Passkey 或其他自然人认证方式接入的人。
+     * 使用密码、Passkey 或其他自然人认证方式接入的自然人。
      */
     HUMAN("HUMAN", "自然人"),
     /**
@@ -16,7 +17,7 @@ public enum SubjectType implements BaseEnum {
      */
     DEVICE("DEVICE", "设备"),
     /**
-     * 使用应用密钥、请求签名或其他程序认证方式接入的应用。
+     * 使用应用密钥、请求签名或其他程序认证方式接入的应用程序。
      */
     APPLICATION("APPLICATION", "应用"),
     /**
@@ -40,7 +41,7 @@ public enum SubjectType implements BaseEnum {
      */
     @Override
     public String value() {
-        return code.value();
+        return code.format(NameFormat.COLON);
     }
 
     /**

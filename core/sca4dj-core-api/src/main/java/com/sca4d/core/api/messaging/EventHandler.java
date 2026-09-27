@@ -1,8 +1,8 @@
 package com.sca4d.core.api.messaging;
 
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.event.EventType;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 
 /** 声明一个业务 Event 的稳定 RabbitMQ Handler。 */
@@ -22,7 +22,7 @@ public interface EventHandler<T> {
         return HandlingPolicy.noRetry();
     }
 
-    /** 处理当前 Event；正常返回表示本轮状态变化和后续消息已经可靠保存。 */
+    /** 处理当前 Event；正常返回表示本轮状态变化和随后发布的消息已经可靠保存。 */
     void handleEvent(@NotNull IncomingMessage<Event<T>> message) throws Exception;
 
     /** @return RabbitMQ 对当前 Event 应执行的处理决定 */

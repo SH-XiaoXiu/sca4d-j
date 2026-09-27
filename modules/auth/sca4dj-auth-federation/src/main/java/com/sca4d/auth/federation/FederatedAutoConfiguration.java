@@ -9,9 +9,10 @@ import com.sca4d.auth.federation.provider.FederatedProviderRepository;
 import com.sca4d.auth.federation.provider.mapper.ProviderMapper;
 import com.sca4d.core.api.concurrent.VersionConditions;
 import com.sca4d.core.api.i18n.LocaleCatalog;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.security.SecretKeyring;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.core.spring.redis.Sca4djRedis;
 import org.jetbrains.annotations.NotNull;
 import org.mybatis.spring.annotation.MapperScan;
@@ -19,7 +20,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.client.RestClient;
 
 import java.time.Clock;
@@ -39,7 +40,7 @@ public class FederatedAutoConfiguration {
     @Bean
     FederatedProviderRepository federatedProviderRepository(
             @NotNull ProviderMapper providerMapper,
-            @Sca4djJson @NotNull ObjectMapper mapper,
+            @Sca4djJson @NotNull Sca4djMapper mapper,
             @NotNull FederatedSecretCryptography secrets,
             @NotNull VersionConditions versionConditions) {
         return new DefaultFederatedProviderRepository(providerMapper, mapper, secrets, versionConditions);
@@ -68,9 +69,8 @@ public class FederatedAutoConfiguration {
     /** 创建 Redis 授权状态存储。 */
     @Bean
     FederatedAuthorizationStore federatedAuthorizationStore(
-            @Sca4djRedis @NotNull StringRedisTemplate redis,
-            @NotNull RuntimeNamespace namespace) {
-        return new RedisFederatedAuthorizationStore(redis, namespace);
+            @Sca4djRedis @NotNull RedisTemplate<Key, String> redis) {
+        return new RedisFederatedAuthorizationStore(redis);
     }
 
     /** 创建外部 HTTP 客户端。 */

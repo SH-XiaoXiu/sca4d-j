@@ -2,14 +2,16 @@ package com.sca4d.iot.emqx.config;
 
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.connection.ConnectionRegistry;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
 import com.sca4d.core.api.scheduling.IntervalSchedule;
 import com.sca4d.core.api.scheduling.MisfirePolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
+import com.sca4d.core.spring.config.ConditionalOnCapability;
 import com.sca4d.core.spring.config.CoreRedisAutoConfiguration;
 import com.sca4d.core.spring.redis.RedisBatches;
 import com.sca4d.core.spring.redis.Sca4djRedis;
+import com.sca4d.iot.api.IotCapabilities;
 import com.sca4d.iot.api.connection.DeviceConnectionAdmission;
 import com.sca4d.iot.api.connection.DeviceConnectionReceiver;
 import com.sca4d.iot.api.connection.DeviceConnectionResolver;
@@ -42,7 +44,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.time.Clock;
 
@@ -63,16 +65,14 @@ public class EmqxAutoConfiguration {
         return new MqttProtocolCatalog(protocols.orderedStream().toList());
     }
 
-    /** @return 统一生成应用策略或协议 MQTT ACL 及其稳定指纹 */
+    /** @return 生成应用策略或协议 MQTT ACL 及稳定指纹的服务 */
     @Bean
     MqttAuthorizationService mqttAuthorizationService(
             MqttProtocolCatalog protocols,
-            ObjectProvider<MqttAuthorizationPolicy> authorizationPolicies,
-            RuntimeNamespace namespace) {
+            ObjectProvider<MqttAuthorizationPolicy> authorizationPolicies) {
         return new MqttAuthorizationService(
                 protocols,
-                authorizationPolicies.orderedStream().toList(),
-                namespace);
+                authorizationPolicies.orderedStream().toList());
     }
 
     /** @return 生成 EMQX allow/deny、client_attrs、ACL 和 expire_at 的认证服务 */
@@ -100,6 +100,7 @@ public class EmqxAutoConfiguration {
 
     /** @return 当前实例唯一 MQTT 客户端和共享订阅运行时 */
     @Bean
+    @ConditionalOnCapability(IotCapabilities.TRANSPORT)
     EmqxMqttRuntime emqxMqttRuntime(
             EmqxProperties properties,
             MqttMessageRouter router,
@@ -107,9 +108,8 @@ public class EmqxAutoConfiguration {
             ObjectProvider<MqttMessageObserver> observers,
             ObjectProvider<MqttMessageProcessingObserver> processingObservers,
             ObjectProvider<MqttInboundFailureStore> failureStore,
-            EmqxConnectionReconciler connectionReconciler,
-            RuntimeNamespace namespace) {
-        properties.initializeClientId(namespace);
+            EmqxConnectionReconciler connectionReconciler) {
+        properties.initializeClientId();
         return new EmqxMqttRuntime(
                 properties,
                 router,
@@ -138,19 +138,17 @@ public class EmqxAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(EmqxManagementClient.class)
     EmqxManagementClient emqxManagementClient(
-            EmqxProperties properties,
-            RuntimeNamespace namespace) {
-        properties.initializeClientId(namespace);
+            EmqxProperties properties) {
+        properties.initializeClientId();
         return new HttpEmqxManagementClient(properties);
     }
 
     /** @return EMQX Client ID、Broker 节点和连接代次的专用 Redis 投影 */
     @Bean
     EmqxConnectionRepository emqxConnectionRepository(
-            @Sca4djRedis StringRedisTemplate redis,
-            RuntimeNamespace namespace,
+            @Sca4djRedis RedisTemplate<Key, String> redis,
             RedisBatches redisBatches) {
-        return new EmqxConnectionRepository(redis, namespace, redisBatches);
+        return new EmqxConnectionRepository(redis, redisBatches);
     }
 
     /** @return Session 可靠任务使用的 Broker 断连入口 */

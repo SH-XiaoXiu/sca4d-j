@@ -20,7 +20,7 @@ public final class DeviceRuntimeSnapshot {
     /**
      * 创建不可修改的 Device 运行态快照。
      *
-     * @param connections 查询时仍有效的连接事实
+     * @param connections 查询时仍有效的连接信息
      * @param reported 当前绑定代数 下的 reported 字段组
      * @param desired 当前绑定代数 下的 desired 属性
      */

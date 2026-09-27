@@ -6,7 +6,7 @@ import com.sca4d.core.api.scheduling.ScheduleKey;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 
-/** 只读查询当前应用运行时命名空间中的持久化 Job 历史，不提交或推进 Job。 */
+/** 只读查询当前 App 隔离名称中的持久化 Job 历史，不提交或推进 Job。 */
 public interface JobHistory {
 
     /**
@@ -16,7 +16,7 @@ public interface JobHistory {
      * @param output 已由 PipelineJob 校验且不包含实际运行结果的节点输出声明
      * @param page 调用方已经确定大小限制的分页要求
      * @param <T> 节点输出类型
-     * @return 当前应用命名空间、Job 定义和计划共同限定的运行分页
+     * @return 当前 App 隔离名称、Job 定义和计划共同限定的运行分页
      */
     @CheckReturnValue
     <T> @NotNull Page<ScheduledJobRun<T>> findScheduledRuns(

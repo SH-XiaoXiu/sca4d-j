@@ -1,12 +1,14 @@
 package com.sca4d.web.realtime.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.authentication.SessionLifecycle;
 import com.sca4d.core.api.concurrent.RateLimiter;
 import com.sca4d.core.api.messaging.MessageBus;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.core.spring.redis.RedisBatches;
+import com.sca4d.core.spring.redis.RedisHashTag;
 import com.sca4d.core.spring.redis.Sca4djRedis;
 import com.sca4d.web.realtime.connection.DefaultWebRealtimePublisher;
 import com.sca4d.web.realtime.connection.LocalConnectionRegistry;
@@ -39,7 +41,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -53,17 +55,22 @@ import java.util.List;
 @Import(StompConfiguration.class)
 public class WebRealtimeAutoConfiguration {
 
+    /** 连接和目标索引由 Lua 同时修改，必须位于同一 Redis Cluster 槽。 */
+    @Bean
+    RedisHashTag webRealtimeRedisHashTag() {
+        return new RedisHashTag(TreeCode.ofSegment("WEB_REALTIME"));
+    }
+
     /** @return Web Realtime 全部 Redis 键和 RabbitMQ 对象的统一运行时名称 */
     @Bean
-    WebRealtimeInfrastructureNames webRealtimeInfrastructureNames(
-            @NotNull RuntimeNamespace runtimeNamespace) {
-        return new WebRealtimeInfrastructureNames(runtimeNamespace);
+    WebRealtimeInfrastructureNames webRealtimeInfrastructureNames() {
+        return new WebRealtimeInfrastructureNames();
     }
 
     /** @return Redis 共享连接、目标和租约索引 */
     @Bean
     RedisConnectionRegistry redisConnectionRegistry(
-            @Sca4djRedis @NotNull StringRedisTemplate redis,
+            @Sca4djRedis @NotNull RedisTemplate<Key, String> redis,
             @NotNull WebRealtimeInfrastructureNames names,
             @NotNull WebRealtimeProperties properties,
             @NotNull Clock clock,
@@ -81,7 +88,7 @@ public class WebRealtimeAutoConfiguration {
     /** @return RabbitMQ 节点消息编解码器 */
     @Bean
     @ConditionalOnProperty(prefix = "sca4dj.web-realtime", name = "node-transport", havingValue = "RABBIT")
-    NodeMessageCodec nodeMessageCodec(@Sca4djJson @NotNull ObjectMapper objectMapper) {
+    NodeMessageCodec nodeMessageCodec(@Sca4djJson @NotNull Sca4djMapper objectMapper) {
         return new NodeMessageCodec(objectMapper);
     }
 
@@ -120,7 +127,7 @@ public class WebRealtimeAutoConfiguration {
 
     /** @return Web Realtime Message 与 RabbitMQ payload 之间的稳定转换 */
     @Bean
-    WebRealtimeMessageCodec webRealtimeMessageCodec(@Sca4djJson @NotNull ObjectMapper objectMapper) {
+    WebRealtimeMessageCodec webRealtimeMessageCodec(@Sca4djJson @NotNull Sca4djMapper objectMapper) {
         return new WebRealtimeMessageCodec(objectMapper);
     }
 
@@ -140,7 +147,7 @@ public class WebRealtimeAutoConfiguration {
             @NotNull NodeRouter nodeRouter,
             @NotNull WebRealtimeProperties properties,
             @NotNull Clock clock,
-            @Sca4djJson @NotNull ObjectMapper objectMapper,
+            @Sca4djJson @NotNull Sca4djMapper objectMapper,
             @NotNull WebRealtimeMessageCodec codec) {
         return new WebRealtimeMessageHandler(registry, nodeRouter, properties, clock, objectMapper, codec);
     }
@@ -158,7 +165,7 @@ public class WebRealtimeAutoConfiguration {
     /** @return Redis 一次性 WebSocket 票据服务 */
     @Bean
     RedisTicketService redisTicketService(
-            @Sca4djRedis @NotNull StringRedisTemplate redis,
+            @Sca4djRedis @NotNull RedisTemplate<Key, String> redis,
             @NotNull SessionLifecycle sessions,
             @NotNull WebRealtimeInfrastructureNames names,
             @NotNull WebRealtimeProperties properties,

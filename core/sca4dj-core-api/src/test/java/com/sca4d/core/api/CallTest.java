@@ -13,13 +13,13 @@ import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.core.api.authentication.principalsession.PrincipalIdSet;
 import com.sca4d.core.api.call.Call;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
 import com.sca4d.core.api.identity.SystemPrincipal;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Operation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -124,10 +124,11 @@ class CallTest {
     @Test
     @DisplayName("Creates System Call With Fixed Subject And Principal")
     void createsSystemCallWithFixedSubjectAndPrincipal() {
-        Call call = Call.system("system-call", STARTED_AT);
+        SystemPrincipal principal = new SystemPrincipal(2, TreeCode.ofSegment("IOT"));
+        Call call = Call.system("system-call", STARTED_AT, principal);
 
         assertSame(Subject.SYSTEM, call.subject().orElseThrow());
-        assertSame(SystemPrincipal.INSTANCE, call.principal().orElseThrow());
+        assertSame(principal, call.principal().orElseThrow());
         assertEquals(STARTED_AT, call.startedAt());
         assertTrue(call.session().isEmpty());
         assertTrue(call.account().isEmpty());

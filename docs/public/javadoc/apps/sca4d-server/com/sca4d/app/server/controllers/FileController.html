@@ -187,7 +187,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@PostMapping("/uploads")
 @RequirePermission(resourceResolver=<a href="../files/PlatformUserProfileResourceResolver.html" title="class in com.sca4d.app.server.files">PlatformUserProfileResourceResolver.class</a>,
                    action="WRITE")
-@Audit(operation="storage/file/upload/create",
+@Audit(operation="STORAGE/FILE/UPLOAD/CREATE",
        targetResolver=<a href="../files/PlatformUserProfileResourceResolver.html" title="class in com.sca4d.app.server.files">PlatformUserProfileResourceResolver.class</a>,
        payloadFactory=<a href="../audit/ApplicationAuditValues.FileUploadDetails.html" title="class in com.sca4d.app.server.audit">FileUploadDetails.class</a>)
 @NotNull
@@ -211,7 +211,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@PostMapping("/uploads/{fileId}/completion")
 @RequirePermission(resourceResolver=<a href="../files/FileResourceResolver.html" title="class in com.sca4d.app.server.files">FileResourceResolver.class</a>,
                    action="WRITE")
-@Audit(operation="storage/file/upload/complete")
+@Audit(operation="STORAGE/FILE/UPLOAD/COMPLETE")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">completeUpload</span><wbr><span class="parameters">(@AuditTarget(resourceType="STORAGE/FILE") @PathVariable
  long&nbsp;fileId,

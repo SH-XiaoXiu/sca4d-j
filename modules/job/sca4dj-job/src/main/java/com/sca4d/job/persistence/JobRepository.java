@@ -1,17 +1,21 @@
 package com.sca4d.job.persistence;
 
+import com.sca4d.core.api.isolation.AppName;
 import com.sca4d.core.api.job.DirectJob;
 import com.sca4d.core.api.job.Job;
+import com.sca4d.core.api.job.JobKey;
 import com.sca4d.core.api.job.JobRunId;
 import com.sca4d.core.api.job.JobRunStatus;
 import com.sca4d.core.api.job.PipelineJob;
 import com.sca4d.core.api.job.PipelineJobPlan;
+import com.sca4d.core.api.name.Name;
+import com.sca4d.core.api.name.NameFormat;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.core.api.persistence.ZeroRowPolicy;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.job.JobAttemptStatus;
 import com.sca4d.job.JobNodeStatus;
@@ -26,52 +30,50 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/** 隐藏 Job Mapper 和运行时命名空间，提供稳定的持久化语义。 */
+/** 隐藏 Job Mapper 和 App 隔离名称，提供稳定的持久化语义。 */
 public class JobRepository {
     private static final String DIRECT_NODE_KEY = "direct";
 
     private final @NotNull JobMapper mapper;
 
-    private final @NotNull String runtimeNamespace;
+    private final @NotNull Name appName;
 
     private final @NotNull SqlBatches sqlBatches;
 
-    /** 创建绑定当前应用运行时命名空间的 Job Repository。 */
+    /** 创建绑定当前应用 App 隔离名称的 Job Repository。 */
     public JobRepository(
             @NotNull JobMapper mapper,
-            @NotNull RuntimeNamespace runtimeNamespace,
             @NotNull SqlBatches sqlBatches) {
         this.mapper = Objects.requireNonNull(mapper, "JobMapper 不能为空");
-        RuntimeNamespace checked = Objects.requireNonNull(runtimeNamespace, "Job 运行时命名空间不能为空");
-        this.runtimeNamespace = checked.applicationId();
-        if (this.runtimeNamespace.length() > 128) {
-            throw new IllegalArgumentException("应用技术 ID 超过 Job runtime_namespace 的 128 字符限制");
+        this.appName = AppName.current();
+        if (this.appName.format(NameFormat.COLON).length() > 128) {
+            throw new IllegalArgumentException("应用名称超过 Job app_name 的 128 字符限制");
         }
         this.sqlBatches = Objects.requireNonNull(sqlBatches, "SQL 批处理器不能为空");
     }
 
     /** 查询同一计划和 fire 已存在的根运行。 */
-    public @Nullable Long findScheduledRun(@NotNull String scheduleKey, @NotNull Instant scheduledAt) {
-        return mapper.selectScheduledRun(runtimeNamespace, scheduleKey, scheduledAt, null);
+    public @Nullable Long findScheduledRun(@NotNull ScheduleKey scheduleKey, @NotNull Instant scheduledAt) {
+        return mapper.selectScheduledRun(appName, scheduleKey, scheduledAt, null);
     }
 
-    /** 返回当前命名空间、Job 定义和计划共同限定的运行分页。 */
+    /** 返回当前 App 隔离名称、Job 定义和计划共同限定的运行分页。 */
     public @NotNull Page<ScheduledRunRecord> findScheduledRuns(
-            @NotNull String scheduleKey,
-            @NotNull String jobKey,
+            @NotNull ScheduleKey scheduleKey,
+            @NotNull JobKey jobKey,
             int definitionVersion,
             @NotNull String nodeKey,
             @NotNull PageRequest page) {
         PageRequest checkedPage = Objects.requireNonNull(page, "Job 历史分页要求不能为空");
         long total = mapper.countScheduledRuns(
-                runtimeNamespace,
+                appName,
                 Objects.requireNonNull(scheduleKey, "ScheduleKey 不能为空"),
                 Objects.requireNonNull(jobKey, "Job key 不能为空"),
                 definitionVersion);
         List<ScheduledRunRecord> items = total == 0
                 ? List.of()
                 : mapper.selectScheduledRuns(
-                        runtimeNamespace,
+                        appName,
                         scheduleKey,
                         jobKey,
                         definitionVersion,
@@ -81,26 +83,30 @@ public class JobRepository {
     }
 
     /** 查询同一计划尚未结束的根运行。 */
-    public @Nullable Long findActiveScheduledRun(@NotNull String scheduleKey) {
+    public @Nullable Long findActiveScheduledRun(@NotNull ScheduleKey scheduleKey) {
         return mapper.selectScheduledRun(
-                runtimeNamespace,
+                appName,
                 scheduleKey,
                 null,
                 List.of(JobRunStatus.QUEUED, JobRunStatus.RUNNING));
     }
 
-    /** 查询当前命名空间的根运行。 */
+    /** 查询当前 App 隔离名称的根运行。 */
     public @Nullable RunRecord findRun(@NotNull JobRunId runId) {
         JobRunId checked = Objects.requireNonNull(runId, "JobRunId 不能为空");
-        return mapper.selectRun(runtimeNamespace, checked.value());
+        return mapper.selectRun(appName, checked.value());
     }
 
     /** 原子领取一个可执行节点。 */
     public @Nullable NodeClaim claim(
             @NotNull String workerId,
             @NotNull Instant now,
-            @NotNull Instant leaseUntil) {
-        return mapper.updateClaimableNode(runtimeNamespace, workerId, now, leaseUntil);
+            @NotNull Instant leaseUntil,
+            @NotNull Map<JobKey, Integer> definitions) {
+        if (definitions.isEmpty()) {
+            return null;
+        }
+        return mapper.updateClaimableNode(appName, workerId, now, leaseUntil, definitions);
     }
 
     /** 延长仍由指定 worker 持有的节点租约。 */
@@ -184,17 +190,17 @@ public class JobRepository {
 
     /** 处理租约到期且重试耗尽的节点。 */
     public void failExpiredExhausted(@NotNull Instant now) {
-        mapper.updateExpiredNodes(runtimeNamespace, now);
+        mapper.updateExpiredNodes(appName, now);
     }
 
-    /** 批量删除当前命名空间内超过保留时间的成功根运行及其节点、依赖和尝试。 */
+    /** 批量删除当前 App 隔离名称内超过保留时间的成功根运行及其节点、依赖和尝试。 */
     @Transactional
     public int deleteSucceededRunsBefore(@NotNull Instant completedBefore, int limit) {
         if (limit < 1) {
             throw new IllegalArgumentException("Job 成功历史删除上限必须大于零");
         }
         List<Long> selected = mapper.selectExpiredRunIdsForUpdate(
-                runtimeNamespace,
+                appName,
                 Objects.requireNonNull(completedBefore, "Job 成功历史截止时间不能为空"),
                 limit);
         int[] deleted = {0};
@@ -202,7 +208,7 @@ public class JobRepository {
             mapper.deleteAttempts(batch);
             mapper.deleteDependencies(batch);
             mapper.deleteNodes(batch);
-            int count = mapper.deleteRuns(runtimeNamespace, batch);
+            int count = mapper.deleteRuns(appName, batch);
             AffectedRowCounts.requireExactly(count, batch.size(), "清理 Job 运行历史");
             deleted[0] += count;
         });
@@ -214,7 +220,7 @@ public class JobRepository {
     public @NotNull JobRunId createRun(
             @NotNull Job<?, ?> job,
             @Nullable String inputJson,
-            @Nullable String scheduleKey,
+            @Nullable ScheduleKey scheduleKey,
             @Nullable Instant scheduledAt,
             @NotNull Instant now) {
         Job<?, ?> checked = Objects.requireNonNull(job, "Job 不能为空");
@@ -227,8 +233,8 @@ public class JobRepository {
             throw new IllegalArgumentException("不支持的 Job 子类: " + checked.getClass().getName());
         }
         long runId = mapper.insertRun(
-                runtimeNamespace,
-                checked.key().value(),
+                appName,
+                checked.key(),
                 checked.definitionVersion(),
                 kind,
                 inputJson,

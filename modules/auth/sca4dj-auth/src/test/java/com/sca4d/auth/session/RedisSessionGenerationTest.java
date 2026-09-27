@@ -10,7 +10,10 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import com.sca4d.core.api.authentication.SessionInvalidationListener;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.isolation.AppName;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.spring.redis.KeyRedisSerializer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -18,54 +21,59 @@ import org.mockito.Mockito;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisStringCommands;
 import org.springframework.data.redis.core.RedisCallback;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 class RedisSessionGenerationTest {
+    static {
+        AppName.publish("sca4d-test");
+    }
 
     @Test
     @DisplayName("Reads And Atomically Increments The Account Generation Before Notifying")
     void readsAndAtomicallyIncrementsTheAccountGenerationBeforeNotifying() {
-        StringRedisTemplate redis = mock(StringRedisTemplate.class);
+        @SuppressWarnings("unchecked") // Mockito 的 Class 参数不能表达 RedisTemplate 泛型。
+        RedisTemplate<Key, String> redis = mock(RedisTemplate.class);
+        Mockito.doReturn(new KeyRedisSerializer(List.of())).when(redis).getKeySerializer();
         @SuppressWarnings("unchecked")
-        ValueOperations<String, String> values = mock(ValueOperations.class);
+        ValueOperations<Key, String> values = mock(ValueOperations.class);
         SessionInvalidationListener listener = mock(SessionInvalidationListener.class);
         long accountId = 42;
         when(redis.opsForValue()).thenReturn(values);
-        when(values.get("example-app:sca4dj:auth:session-generation:42")).thenReturn(null, "1");
-        when(values.increment("example-app:sca4dj:auth:session-generation:42")).thenReturn(1L);
+        when(values.get(Key.of(TreeCode.of("AUTH:SESSION_GENERATION"), 42L))).thenReturn(null, "1");
+        when(values.increment(Key.of(TreeCode.of("AUTH:SESSION_GENERATION"), 42L))).thenReturn(1L);
         RedisSessionGeneration generations = new RedisSessionGeneration(
                 redis,
-                () -> List.of(listener),
-                new RuntimeNamespace("example-app"));
+                () -> List.of(listener));
 
         assertThat(generations.current(accountId)).isZero();
         generations.invalidate(accountId);
         assertThat(generations.current(accountId)).isEqualTo(1);
 
-        verify(values).increment("example-app:sca4dj:auth:session-generation:42");
+        verify(values).increment(Key.of(TreeCode.of("AUTH:SESSION_GENERATION"), 42L));
         verify(listener).invalidated(accountId);
     }
 
     @Test
     @DisplayName("Keeps The New Generation When A Notification Listener Fails")
     void keepsTheNewGenerationWhenANotificationListenerFails() {
-        StringRedisTemplate redis = mock(StringRedisTemplate.class);
+        @SuppressWarnings("unchecked") // Mockito 的 Class 参数不能表达 RedisTemplate 泛型。
+        RedisTemplate<Key, String> redis = mock(RedisTemplate.class);
+        Mockito.doReturn(new KeyRedisSerializer(List.of())).when(redis).getKeySerializer();
         @SuppressWarnings("unchecked")
-        ValueOperations<String, String> values = mock(ValueOperations.class);
+        ValueOperations<Key, String> values = mock(ValueOperations.class);
         SessionInvalidationListener failing = mock(SessionInvalidationListener.class);
         SessionInvalidationListener succeeding = mock(SessionInvalidationListener.class);
         long accountId = 42;
         when(redis.opsForValue()).thenReturn(values);
-        when(values.increment("example-app:sca4dj:auth:session-generation:42")).thenReturn(2L);
+        when(values.increment(Key.of(TreeCode.of("AUTH:SESSION_GENERATION"), 42L))).thenReturn(2L);
         doThrow(new IllegalStateException("notification failed")).when(failing).invalidated(accountId);
         RedisSessionGeneration generations = new RedisSessionGeneration(
                 redis,
-                () -> List.of(failing, succeeding),
-                new RuntimeNamespace("example-app"));
+                () -> List.of(failing, succeeding));
 
         generations.invalidate(accountId);
 
@@ -76,18 +84,19 @@ class RedisSessionGenerationTest {
     @Test
     @DisplayName("Propagates Generation Store Failures Without Notifying")
     void propagatesGenerationStoreFailuresWithoutNotifying() {
-        StringRedisTemplate redis = mock(StringRedisTemplate.class);
+        @SuppressWarnings("unchecked") // Mockito 的 Class 参数不能表达 RedisTemplate 泛型。
+        RedisTemplate<Key, String> redis = mock(RedisTemplate.class);
+        Mockito.doReturn(new KeyRedisSerializer(List.of())).when(redis).getKeySerializer();
         @SuppressWarnings("unchecked")
-        ValueOperations<String, String> values = mock(ValueOperations.class);
+        ValueOperations<Key, String> values = mock(ValueOperations.class);
         SessionInvalidationListener listener = mock(SessionInvalidationListener.class);
         long accountId = 42;
         IllegalStateException failure = new IllegalStateException("redis unavailable");
         when(redis.opsForValue()).thenReturn(values);
-        when(values.increment("example-app:sca4dj:auth:session-generation:42")).thenThrow(failure);
+        when(values.increment(Key.of(TreeCode.of("AUTH:SESSION_GENERATION"), 42L))).thenThrow(failure);
         RedisSessionGeneration generations = new RedisSessionGeneration(
                 redis,
-                () -> List.of(listener),
-                new RuntimeNamespace("example-app"));
+                () -> List.of(listener));
 
         assertThatThrownBy(() -> generations.invalidate(accountId)).isSameAs(failure);
 
@@ -98,7 +107,9 @@ class RedisSessionGenerationTest {
     @DisplayName("Invalidates Multiple Account Generations In One Redis Pipeline")
     @SuppressWarnings("unchecked")
     void invalidatesMultipleAccountGenerationsInOneRedisPipeline() {
-        StringRedisTemplate redis = mock(StringRedisTemplate.class);
+        @SuppressWarnings("unchecked") // Mockito 的 Class 参数不能表达 RedisTemplate 泛型。
+        RedisTemplate<Key, String> redis = mock(RedisTemplate.class);
+        Mockito.doReturn(new KeyRedisSerializer(List.of())).when(redis).getKeySerializer();
         RedisConnection connection = mock(RedisConnection.class);
         RedisStringCommands strings = mock(RedisStringCommands.class);
         SessionInvalidationListener listener = mock(SessionInvalidationListener.class);
@@ -111,14 +122,13 @@ class RedisSessionGenerationTest {
                 });
         RedisSessionGeneration generations = new RedisSessionGeneration(
                 redis,
-                () -> List.of(listener),
-                new RuntimeNamespace("example-app"));
+                () -> List.of(listener));
 
         generations.invalidate(List.of(42L, 43L, 42L));
 
         verify(redis, times(1)).executePipelined(ArgumentMatchers.any(RedisCallback.class));
-        verify(strings).incr("example-app:sca4dj:auth:session-generation:42".getBytes(StandardCharsets.UTF_8));
-        verify(strings).incr("example-app:sca4dj:auth:session-generation:43".getBytes(StandardCharsets.UTF_8));
+        verify(strings).incr("SCA4D_TEST:AUTH:SESSION_GENERATION:42".getBytes(StandardCharsets.UTF_8));
+        verify(strings).incr("SCA4D_TEST:AUTH:SESSION_GENERATION:43".getBytes(StandardCharsets.UTF_8));
         verify(listener).invalidated(42L);
         verify(listener).invalidated(43L);
     }
@@ -127,7 +137,9 @@ class RedisSessionGenerationTest {
     @DisplayName("Rejects Invalid Pipeline Generations Before Notifying Listeners")
     @SuppressWarnings("unchecked")
     void rejectsInvalidPipelineGenerationsBeforeNotifyingListeners() {
-        StringRedisTemplate redis = mock(StringRedisTemplate.class);
+        @SuppressWarnings("unchecked") // Mockito 的 Class 参数不能表达 RedisTemplate 泛型。
+        RedisTemplate<Key, String> redis = mock(RedisTemplate.class);
+        Mockito.doReturn(new KeyRedisSerializer(List.of())).when(redis).getKeySerializer();
         RedisConnection connection = mock(RedisConnection.class);
         RedisStringCommands strings = mock(RedisStringCommands.class);
         SessionInvalidationListener listener = mock(SessionInvalidationListener.class);
@@ -140,8 +152,7 @@ class RedisSessionGenerationTest {
                 });
         RedisSessionGeneration generations = new RedisSessionGeneration(
                 redis,
-                () -> List.of(listener),
-                new RuntimeNamespace("example-app"));
+                () -> List.of(listener));
 
         assertThatThrownBy(() -> generations.invalidate(List.of(42L, 43L)))
                 .isInstanceOf(IllegalStateException.class)

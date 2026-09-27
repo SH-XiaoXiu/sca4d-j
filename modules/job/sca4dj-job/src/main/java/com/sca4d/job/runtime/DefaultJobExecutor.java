@@ -195,7 +195,7 @@ public final class DefaultJobExecutor implements JobExecutor {
 
     /** 拒绝用不同 key 或定义版本读取已有 run。 */
     private static void validateDefinition(@NotNull RunRecord run, @NotNull Job<?, ?> job) {
-        if (!run.jobKey().equals(job.key().value())
+        if (!run.jobKey().equals(job.key())
                 || run.jobDefinitionVersion() != job.definitionVersion()) {
             throw new IllegalArgumentException("Job run 与定义不匹配: runId=" + run.id());
         }

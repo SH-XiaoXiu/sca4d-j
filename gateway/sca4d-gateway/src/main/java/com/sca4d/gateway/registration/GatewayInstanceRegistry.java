@@ -2,6 +2,9 @@ package com.sca4d.gateway.registration;
 
 import com.sca4d.core.api.gateway.GatewayCallbackCode;
 import com.sca4d.core.api.gateway.GatewayRegistrationRequest;
+import com.sca4d.core.api.identity.SystemPrincipals;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.runtime.InstanceCapability;
 import com.sca4d.gateway.config.GatewayProperties;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
@@ -42,7 +45,9 @@ public final class GatewayInstanceRegistry {
 
     private final @NotNull AtomicInteger apiSequence = new AtomicInteger();
 
-    private final @NotNull Map<String, AtomicInteger> callbackSequences = new ConcurrentHashMap<>();
+    private final @NotNull Map<GatewayCallbackCode, AtomicInteger> callbackSequences = new ConcurrentHashMap<>();
+
+    private final @NotNull Map<String, Set<TreeCode>> apiRequirements = new ConcurrentHashMap<>();
 
     /**
      * 创建实例注册表。
@@ -63,7 +68,7 @@ public final class GatewayInstanceRegistry {
      * @throws IllegalArgumentException 实例标识、地址、readiness 路径或回调编码不合法时抛出
      */
     @CheckReturnValue
-    public @NotNull GatewayInstance register(@NotNull GatewayRegistrationRequest request) {
+    public synchronized @NotNull GatewayInstance register(@NotNull GatewayRegistrationRequest request) {
         // 校验 Server 声明的地址和路由资料，注册表只保存可以直接参与检查与选择的数据。
         String instanceId = request.getInstanceId();
         if (instanceId == null || !INSTANCE_ID.matcher(instanceId).matches()) {
@@ -71,11 +76,38 @@ public final class GatewayInstanceRegistry {
         }
         URI baseUrl = requireBaseUrl(request.getBaseUrl());
         String readinessPath = requireReadinessPath(request.getReadinessPath());
-        Set<String> callbackCodes = request.getCallbackCodes()
+        Set<GatewayCallbackCode> callbackCodes = request.getCallbackCodes()
                 .stream()
                 .map(GatewayCallbackCode::new)
-                .map(GatewayCallbackCode::value)
                 .collect(Collectors.toUnmodifiableSet());
+        Set<TreeCode> capabilities = request.getCapabilities()
+                .stream()
+                .map(GatewayInstanceRegistry::capabilityCode)
+                .collect(Collectors.toUnmodifiableSet());
+        Map<String, Set<TreeCode>> requirements = request.getApiRequirements()
+                .entrySet()
+                .stream()
+                .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, entry -> {
+                    new InstanceCapability(
+                            TreeCode.ofSegment("VALIDATION"),
+                            SystemPrincipals.MAIN,
+                            List.of(entry.getKey()));
+                    if (entry.getValue().isEmpty()) {
+                        throw new IllegalArgumentException("路径能力要求不能是空集合");
+                    }
+                    return entry.getValue()
+                            .stream()
+                            .map(GatewayInstanceRegistry::capabilityCode)
+                            .collect(Collectors.toUnmodifiableSet());
+                }));
+        // 路径声明在租约过期后仍然保留，避免最后一个 IoT 实例退出后流量落到普通实例。
+        requirements.forEach((path, codes) -> {
+            Set<TreeCode> previous = apiRequirements.get(path);
+            if (previous != null && !previous.equals(codes)) {
+                throw new IllegalArgumentException("同一路径的能力声明不一致: " + path);
+            }
+        });
+        apiRequirements.putAll(requirements);
         // 分配新租约并原子替换同名实例，旧租约 ID 不能再续租或删除新注册。
         String leaseId = UUID.randomUUID().toString();
         GatewayInstance instance = new GatewayInstance(
@@ -84,6 +116,8 @@ public final class GatewayInstanceRegistry {
                 baseUrl,
                 readinessPath,
                 callbackCodes,
+                capabilities,
+                requirements,
                 clock.instant().plus(leaseTtl));
         GatewayInstance replaced = instances.put(instanceId, instance);
         LOGGER.info(
@@ -146,8 +180,22 @@ public final class GatewayInstanceRegistry {
 
     /** @return 轮询选择一个可处理普通 `/api/**` 请求的健康实例 */
     @CheckReturnValue
-    public @Nullable GatewayInstance selectApi() {
-        List<GatewayInstance> candidates = routableInstances(null);
+    public @Nullable GatewayInstance selectApi(@NotNull String path) {
+        String serverPath = path.startsWith("/api/") ? path.substring(4) : path;
+        int longest = -1;
+        Set<TreeCode> required = Set.of();
+        for (Map.Entry<String, Set<TreeCode>> entry : apiRequirements.entrySet()) {
+            String prefix = entry.getKey();
+            if ((prefix.equals("/") || serverPath.equals(prefix) || serverPath.startsWith(prefix + '/'))
+                    && prefix.length() > longest) {
+                longest = prefix.length();
+                required = entry.getValue();
+            }
+        }
+        Set<TreeCode> requirements = required;
+        List<GatewayInstance> candidates = routableInstances(null).stream()
+                .filter(instance -> instance.capabilities().containsAll(requirements))
+                .toList();
         if (candidates.isEmpty()) {
             LOGGER.debug("没有可处理 API 请求的 Server 实例 | routeType={}", "api");
             return null;
@@ -157,6 +205,15 @@ public final class GatewayInstanceRegistry {
         return selected;
     }
 
+    /** 校验固定能力编码，不允许通配符或斜杠编码。 */
+    private static @NotNull TreeCode capabilityCode(@NotNull String value) {
+        TreeCode code = value.indexOf(':') < 0 ? TreeCode.ofSegment(value) : TreeCode.ofColon(value);
+        if (code.hasNode(TreeCode.ofSegment("*"))) {
+            throw new IllegalArgumentException("能力编码不能包含通配符");
+        }
+        return code;
+    }
+
     /**
      * 选择能够处理指定回调的实例。
      *
@@ -164,7 +221,7 @@ public final class GatewayInstanceRegistry {
      * @return 轮询选择的健康实例；没有符合条件的实例时返回 null
      */
     @CheckReturnValue
-    public @Nullable GatewayInstance selectCallback(@NotNull String callbackCode) {
+    public @Nullable GatewayInstance selectCallback(@NotNull GatewayCallbackCode callbackCode) {
         List<GatewayInstance> candidates = routableInstances(callbackCode);
         if (candidates.isEmpty()) {
             LOGGER.debug("没有可处理回调的 Server 实例 | callbackCode={}", callbackCode);
@@ -209,7 +266,7 @@ public final class GatewayInstanceRegistry {
     }
 
     /** 返回健康租约，并可选按回调编码过滤。 */
-    private @NotNull List<GatewayInstance> routableInstances(@Nullable String callbackCode) {
+    private @NotNull List<GatewayInstance> routableInstances(@Nullable GatewayCallbackCode callbackCode) {
         removeExpired();
         Instant now = clock.instant();
         ArrayList<GatewayInstance> candidates = new ArrayList<>();

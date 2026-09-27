@@ -1,5 +1,8 @@
 package com.sca4d.auth.sms.challenge;
 
+import static com.sca4d.auth.sms.challenge.SmsCodeChallengeStatus.CONSUMED;
+import static com.sca4d.auth.sms.challenge.SmsCodeChallengeStatus.PENDING;
+
 import cn.hutool.crypto.digest.DigestUtil;
 import com.sca4d.auth.sms.SmsCodeAuthenticationMethod;
 import com.sca4d.auth.sms.SmsCodeChallenge;
@@ -127,7 +130,7 @@ public class SmsCodeChallengeService {
         if (state == null)
             throw new BusinessException(SmsCodeErrorCode.CODE_REJECTED);
         Instant now = clock.instant();
-        boolean valid = state.status() == SmsCodeChallengeStatus.PENDING
+        boolean valid = state.status() == PENDING
                 && now.isBefore(state.expiresAt())
                 && state.accountId() > 0
                 && CODE.matcher(checked.code()).matches()
@@ -149,7 +152,7 @@ public class SmsCodeChallengeService {
         SmsCodeChallengeState state = store.find(challengeId);
         if (state == null
                 || state.accountId() != accountId
-                || state.status() != SmsCodeChallengeStatus.CONSUMED
+                || state.status() != CONSUMED
                 || !state.version().equals(version)
                 || !clock.instant().isBefore(state.expiresAt())) {
             throw new IllegalStateException("SMS Challenge 已变化或不可用");
@@ -179,7 +182,7 @@ public class SmsCodeChallengeService {
                 now.plus(ttl),
                 now.plus(resend),
                 0,
-                SmsCodeChallengeStatus.PENDING,
+                PENDING,
                 new Version(0));
         store.create(state);
         MessageId messageId = null;

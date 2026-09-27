@@ -348,12 +348,12 @@ public final class HttpInputValidationAspect {
         return !hasAnnotation(declaration, Size.class) && !hasAnnotation(annotatedType, Size.class);
     }
 
-    /** @return 声明或其组合注解中是否包含显式数值范围注解 */
+    /** @return 声明或组合注解中是否包含显式数值范围注解 */
     private boolean hasNumericRangeAnnotation(@NotNull AnnotatedElement element) {
         return NUMERIC_RANGE_ANNOTATIONS.stream().anyMatch(type -> hasAnnotation(element, type));
     }
 
-    /** @return 声明或其组合注解中是否包含目标注解 */
+    /** @return 声明或组合注解中是否包含目标注解 */
     private boolean hasAnnotation(
             @NotNull AnnotatedElement element,
             @NotNull Class<? extends Annotation> annotationType) {

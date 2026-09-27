@@ -103,9 +103,9 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(long,long,java.lang.String,int,java.lang.String,java.lang.String,java.lang.String,int,int,long)" class="member-name-link">NodeClaim</a><wbr>(long&nbsp;nodeId,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(long,long,com.sca4d.core.api.job.JobKey,int,java.lang.String,java.lang.String,java.lang.String,int,int,long)" class="member-name-link">NodeClaim</a><wbr>(long&nbsp;nodeId,
  long&nbsp;runId,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jobKey,
+ com.sca4d.core.api.job.JobKey&nbsp;jobKey,
  int&nbsp;jobDefinitionVersion,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jobKind,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nodeKey,
@@ -157,7 +157,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">返回提交根运行时保存的 Job 定义版本。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>com.sca4d.core.api.job.JobKey</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#jobKey()" class="member-name-link">jobKey</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">返回恢复代码定义使用的 Job key。</div>
@@ -229,12 +229,12 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(long,long,java.lang.String,int,java.lang.String,java.lang.String,java.lang.String,int,int,long)">
+<section class="detail" id="&lt;init&gt;(long,long,com.sca4d.core.api.job.JobKey,int,java.lang.String,java.lang.String,java.lang.String,int,int,long)">
 <h3>NodeClaim</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">NodeClaim</span><wbr><span class="parameters">(long&nbsp;nodeId,
  long&nbsp;runId,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jobKey,
+ com.sca4d.core.api.job.JobKey&nbsp;jobKey,
  int&nbsp;jobDefinitionVersion,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jobKind,
@@ -385,7 +385,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="jobKey()">
 <h3>jobKey</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">jobKey</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.api.job.JobKey</span>&nbsp;<span class="element-name">jobKey</span>()</div>
 <div class="block">返回恢复代码定义使用的 Job key。</div>
 <dl class="notes">
 <dt>Returns:</dt>

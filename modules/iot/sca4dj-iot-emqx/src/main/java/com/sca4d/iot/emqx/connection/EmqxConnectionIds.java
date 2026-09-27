@@ -21,7 +21,7 @@ final class EmqxConnectionIds {
     /**
      * @param clientId MQTT Client ID
      * @param connectedAt EMQX 报告的连接建立时间
-     * @return 相同连接事实始终得到相同的不透明 `DeviceConnectionId`
+     * @return 相同连接信息始终得到相同的不透明 `DeviceConnectionId`
      */
     @CheckReturnValue
     static @NotNull DeviceConnectionId from(@NotNull String clientId, @NotNull Instant connectedAt) {

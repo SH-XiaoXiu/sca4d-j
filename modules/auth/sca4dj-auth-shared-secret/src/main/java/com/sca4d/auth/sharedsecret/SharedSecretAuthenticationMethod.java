@@ -1,14 +1,19 @@
 package com.sca4d.auth.sharedsecret;
 
+import static com.sca4d.auth.sharedsecret.SharedSecretCredential.Status.ACTIVE;
+import static com.sca4d.auth.sharedsecret.SharedSecretCredential.Status.REVOKED;
+import static com.sca4d.auth.sharedsecret.SharedSecretErrorCode.CREDENTIAL_NOT_FOUND;
+import static com.sca4d.auth.sharedsecret.SharedSecretErrorCode.REJECTED;
+
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.AuthenticationMethod;
 import com.sca4d.core.api.authentication.SessionControl;
 import com.sca4d.core.api.authentication.SessionTerminationReason;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.security.SecretHasher;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
@@ -94,7 +99,7 @@ public class SharedSecretAuthenticationMethod implements AuthenticationMethod<Sh
             @Nullable Account account,
             @NotNull SharedSecretProof proof) {
         if (account == null) {
-            throw new BusinessException(SharedSecretErrorCode.REJECTED);
+            throw new BusinessException(REJECTED);
         }
         SharedSecretCredential credential = credentials.find(account.accountId());
         if (credential == null
@@ -102,7 +107,7 @@ public class SharedSecretAuthenticationMethod implements AuthenticationMethod<Sh
                 || !hasher.matches(
                         Objects.requireNonNull(proof, "Shared Secret Proof 不能为空").secret(),
                         credential.secretHash())) {
-            throw new BusinessException(SharedSecretErrorCode.REJECTED);
+            throw new BusinessException(REJECTED);
         }
         Authentication authentication = new Authentication(
                 account.accountId(),
@@ -145,7 +150,7 @@ public class SharedSecretAuthenticationMethod implements AuthenticationMethod<Sh
                 : credentials.replace(
                         current,
                         hasher.hash(plaintext),
-                        SharedSecretCredential.Status.ACTIVE,
+                        ACTIVE,
                         clock.instant());
         if (current != null) {
             sessions.terminateAccount(accountId, SessionTerminationReason.AUTHENTICATION_CHANGED);
@@ -178,15 +183,15 @@ public class SharedSecretAuthenticationMethod implements AuthenticationMethod<Sh
     public boolean revoke(long accountId, @NotNull Instant revokedAt) {
         SharedSecretCredential current = credentials.find(accountId);
         if (current == null) {
-            throw new BusinessException(SharedSecretErrorCode.CREDENTIAL_NOT_FOUND);
+            throw new BusinessException(CREDENTIAL_NOT_FOUND);
         }
         if (!current.active()) {
             return false;
         }
         boolean revoked = credentials.updateStatus(
                 accountId,
-                SharedSecretCredential.Status.ACTIVE,
-                SharedSecretCredential.Status.REVOKED,
+                ACTIVE,
+                REVOKED,
                 Objects.requireNonNull(revokedAt, "撤销时间不能为空"));
         if (revoked) {
             sessions.terminateAccount(accountId, SessionTerminationReason.AUTHENTICATION_CHANGED);

@@ -113,7 +113,7 @@ public class DeviceCommandService {
      *
      * @param deviceId Device 标识
      * @param command 代码物模型声明并由调用方直接引用的命令
-     * @param inputs 使用该命令 `DataKey` 构造的完整输入
+     * @param inputs 使用当前命令 `DataKey` 构造的完整输入
      * @param expiresAt 首次成功发布的最晚时间；普通即时命令为空
      * @param acknowledgementTimeout 本条消息发送成功后等待 Device 业务 ACK 的时间
      * @return 新建下行消息
@@ -173,7 +173,7 @@ public class DeviceCommandService {
     }
 
     /**
-     * 取消仍未结束的 command，并阻止后续发送或重试。
+     * 取消仍未结束的 command，并阻止之后的发送或重试。
      *
      * <p>与调用方的业务写入使用同一事务；已经进入协议发布的命令可能送达，具体应用负责补偿。
      *
@@ -192,7 +192,7 @@ public class DeviceCommandService {
         if (message.status().terminal()) {
             return false;
         }
-        // 条件更新与 ACK 竞争终态；取消事务提交后才对其他消费者生效。
+        // 条件更新与 ACK 竞争终态；取消事务提交后才对其他消费者可见。
         Instant now = clock.instant();
         boolean changed = downlinks.complete(messageId, DeviceDownlinkStatus.CANCELLED, null, now);
         if (changed) {

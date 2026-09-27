@@ -1,5 +1,7 @@
 package com.sca4d.core.spring.validation;
 
+import static com.sca4d.core.spring.validation.ValidationPatterns.DISPLAY_NAME;
+
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.jetbrains.annotations.NotNull;
@@ -39,6 +41,6 @@ public final class DisplayNameValidator implements ConstraintValidator<DisplayNa
     public boolean isValid(@Nullable String value, @Nullable ConstraintValidatorContext context) {
         return value == null
                 || value.isBlank()
-                || value.length() <= max && value.matches(ValidationPatterns.DISPLAY_NAME);
+                || value.length() <= max && value.matches(DISPLAY_NAME);
     }
 }

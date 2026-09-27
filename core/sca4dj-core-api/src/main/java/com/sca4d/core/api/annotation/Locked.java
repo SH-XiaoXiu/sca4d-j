@@ -1,6 +1,7 @@
 package com.sca4d.core.api.annotation;
 
 import com.sca4d.core.api.call.CallValueResolver;
+import com.sca4d.core.api.concurrent.LockKey;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -15,7 +16,7 @@ import java.lang.annotation.Target;
 public @interface Locked {
 
     /**
-     * 返回 {@link com.sca4d.core.api.concurrent.LockKey} 的解析器。
+     * 返回 {@link LockKey} 的解析器。
      *
      * @return 锁键解析器类型
      */

@@ -75,10 +75,19 @@ loadScripts(document, 'script');</script>
 <ul class="summary-list">
 <li>
 <div id="class-summary">
-<div class="caption"><span>Classes</span></div>
-<div class="summary-table two-column-summary">
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab6" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab6', 2)" class="table-tab">Annotation Interfaces</button></div>
+<div id="class-summary.tabpanel" role="tabpanel">
+<div class="summary-table two-column-summary" aria-labelledby="class-summary-tab0">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="AppIsolationAutoConfiguration.html" title="class in com.sca4d.core.spring.config">AppIsolationAutoConfiguration</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">在内部设施创建前校验并发布全局 App 名称。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab6"><a href="ConditionalOnCapability.html" title="annotation interface in com.sca4d.core.spring.config">ConditionalOnCapability</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab6">
+<div class="block">根据实例配置启用一个粗粒度功能入口；能力声明 Bean 本身不能使用此条件。</div>
+</div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="CoreJacksonAutoConfiguration.html" title="class in com.sca4d.core.spring.config">CoreJacksonAutoConfiguration</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">配置 Spring Boot HTTP JSON 格式和脚手架内部稳定 JSON 映射器。</div>
@@ -103,9 +112,26 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">配置默认雪花 ID 生成器使用的运行节点。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RuntimeNamespaceAutoConfiguration.html" title="class in com.sca4d.core.spring.config">RuntimeNamespaceAutoConfiguration</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="InstanceAutoConfiguration.html" title="class in com.sca4d.core.spring.config">InstanceAutoConfiguration</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">从 Spring 应用技术名称创建共享基础设施使用的运行时命名空间。</div>
+<div class="block">校验当前进程标识并固化全部能力声明及启用选择。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="InstanceCapabilityCondition.html" title="class in com.sca4d.core.spring.config">InstanceCapabilityCondition</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">在 Bean 定义阶段读取实例能力选择，防止停用功能启动消费者或监听器。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="InstanceCapabilityFilter.html" title="class in com.sca4d.core.spring.config">InstanceCapabilityFilter</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">在业务 API 入口检查本实例能力，不替代认证、权限或 Gateway 回调校验。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="InstanceEnvironmentPostProcessor.html" title="class in com.sca4d.core.spring.config">InstanceEnvironmentPostProcessor</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">在配置加载后、日志和 Bean 创建前固定进程标识，避免 random.uuid 被多次解析成不同值。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="InstanceProperties.html" title="class in com.sca4d.core.spring.config">InstanceProperties</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">配置进程执行位置和粗粒度能力选择，不影响调用者身份或行级数据范围。</div>
+</div>
 </div>
 </div>
 </div>

@@ -588,12 +588,12 @@ public final class HttpInputOpenApiCustomizer
         return Object.class;
     }
 
-    /** @return 声明或其组合注解中是否包含任一目标注解 */
+    /** @return 声明或组合注解中是否包含任一目标注解 */
     private boolean hasNumericRangeAnnotation(Annotation @Nullable [] annotations) {
         return NUMERIC_RANGE_ANNOTATIONS.stream().anyMatch(type -> hasAnnotation(annotations, type));
     }
 
-    /** @return 声明或其组合注解中是否包含目标注解 */
+    /** @return 声明或组合注解中是否包含目标注解 */
     private boolean hasAnnotation(
             Annotation @Nullable [] annotations,
             @NotNull Class<? extends Annotation> annotationType) {
@@ -609,7 +609,7 @@ public final class HttpInputOpenApiCustomizer
         return false;
     }
 
-    /** @return 声明或其组合注解中是否包含目标注解 */
+    /** @return 声明或组合注解中是否包含目标注解 */
     private boolean hasNoDefaultValidation(@NotNull AnnotatedElement element) {
         return hasAnnotation(element.getAnnotations(), NoDefaultValidation.class);
     }

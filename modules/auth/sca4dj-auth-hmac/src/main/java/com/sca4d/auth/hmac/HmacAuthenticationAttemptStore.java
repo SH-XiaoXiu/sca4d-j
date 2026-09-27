@@ -1,25 +1,26 @@
 package com.sca4d.auth.hmac;
 
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import static java.lang.Boolean.TRUE;
+
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.time.Duration;
 import java.util.Objects;
 
-/** 使用 Redis 保存 HMAC nonce 一次性消费记录和账号失败窗口。 */
+/** 使用 Redis 保存 MAC nonce 一次性消费记录和账号失败窗口。 */
 public final class HmacAuthenticationAttemptStore {
-    private final @NotNull StringRedisTemplate redis;
+    private final @NotNull RedisTemplate<Key, String> redis;
 
-    private final @NotNull String keyPrefix;
+    private final @NotNull Key keyPrefix;
 
-    /** 创建按运行命名空间隔离的 HMAC 认证尝试存储。 */
+    /** 创建按 App 隔离名称隔离的 MAC 认证尝试存储。 */
     public HmacAuthenticationAttemptStore(
-            @NotNull StringRedisTemplate redis,
-            @NotNull RuntimeNamespace namespace) {
+            @NotNull RedisTemplate<Key, String> redis) {
         this.redis = Objects.requireNonNull(redis, "HMAC Redis 不能为空");
-        this.keyPrefix = Objects.requireNonNull(namespace, "运行时命名空间不能为空")
-                .sca4dj("auth", "hmac");
+        this.keyPrefix = Key.of(TreeCode.ofColon("AUTH:HMAC"));
     }
 
     /** @return Account 和 nonce 在 TTL 内首次消费时为 {@code true} */
@@ -54,12 +55,12 @@ public final class HmacAuthenticationAttemptStore {
 
     /** @return 增加后的失败次数；首次失败同时建立固定窗口 TTL */
     public long recordFailure(long accountId, @NotNull Duration window) {
-        String key = failureKey(accountId);
+        Key key = failureKey(accountId);
         Long count = redis.opsForValue().increment(key);
         if (count == null || count < 1) {
             throw new IllegalStateException("Redis 没有返回有效的 HMAC 失败计数");
         }
-        if (count == 1 && !Boolean.TRUE.equals(redis.expire(key, positive(window, "HMAC 失败窗口")))) {
+        if (count == 1 && !TRUE.equals(redis.expire(key, positive(window, "HMAC 失败窗口")))) {
             redis.delete(key);
             throw new IllegalStateException("Redis 未能设置 HMAC 失败计数有效期");
         }
@@ -72,13 +73,15 @@ public final class HmacAuthenticationAttemptStore {
     }
 
     /** @return Account 内一次性 nonce key */
-    private @NotNull String nonceKey(long accountId, @NotNull String nonce) {
-        return keyPrefix + ":nonce:" + accountId + ':' + Objects.requireNonNull(nonce, "HMAC nonce 不能为空");
+    private @NotNull Key nonceKey(long accountId, @NotNull String nonce) {
+        return keyPrefix.append(TreeCode.ofSegment("NONCE"))
+                .part(accountId)
+                .part(Objects.requireNonNull(nonce, "HMAC nonce 不能为空"));
     }
 
     /** @return Account 失败窗口 key */
-    private @NotNull String failureKey(long accountId) {
-        return keyPrefix + ":failure:" + accountId;
+    private @NotNull Key failureKey(long accountId) {
+        return keyPrefix.append(TreeCode.ofSegment("FAILURE")).part(accountId);
     }
 
     /** @return 严格为正的 Redis TTL */

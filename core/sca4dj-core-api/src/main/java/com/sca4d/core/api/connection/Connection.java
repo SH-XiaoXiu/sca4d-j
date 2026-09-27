@@ -24,7 +24,7 @@ public final class Connection {
 
     private final @NotNull String nodeId;
 
-    /** 创建一条已经建立的连接事实。 */
+    /** 创建一条已经建立的连接信息。 */
     public Connection(
             @NotNull ConnectionId id,
             @NotNull ConnectionProtocol protocol,
@@ -69,13 +69,13 @@ public final class Connection {
         return Optional.ofNullable(sessionId);
     }
 
-    /** @return 连接事实首次登记的时间 */
+    /** @return 连接信息首次登记的时间 */
     @Contract(pure = true)
     public @NotNull Instant connectedAt() {
         return connectedAt;
     }
 
-    /** @return 连接事实最后一次收到活动或续租的时间 */
+    /** @return 连接信息最后一次收到活动或续租的时间 */
     @Contract(pure = true)
     public @NotNull Instant lastActivityAt() {
         return lastActivityAt;

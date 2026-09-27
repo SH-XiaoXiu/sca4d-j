@@ -206,7 +206,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="replace(java.lang.Long,com.sca4d.app.server.platform.request.ReplaceProfileRequest)">
 <h3>replace</h3>
 <div class="member-signature"><span class="annotations">@PutMapping
-@Audit(operation="platform/profile/replace",
+@Audit(operation="PLATFORM/PROFILE/REPLACE",
        payloadFactory=<a href="../audit/ApplicationAuditValues.MutationDetails.html" title="class in com.sca4d.app.server.audit">MutationDetails.class</a>)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../platform/view/ProfileView.html" title="class in com.sca4d.app.server.platform.view">ProfileView</a>&gt;</span>&nbsp;<span class="element-name">replace</span><wbr><span class="parameters">(@NotNull @AuditTarget(resourceType="PLATFORM:USERS:PROFILES")
@@ -227,7 +227,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="replaceAvatar(java.lang.Long,com.sca4d.app.server.platform.request.ReplaceAvatarRequest)">
 <h3>replaceAvatar</h3>
 <div class="member-signature"><span class="annotations">@PutMapping("/avatar")
-@Audit(operation="platform/profile/avatar/replace",
+@Audit(operation="PLATFORM/PROFILE/AVATAR/REPLACE",
        payloadFactory=<a href="../audit/ApplicationAuditValues.MutationDetails.html" title="class in com.sca4d.app.server.audit">MutationDetails.class</a>)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../platform/view/ProfileView.html" title="class in com.sca4d.app.server.platform.view">ProfileView</a>&gt;</span>&nbsp;<span class="element-name">replaceAvatar</span><wbr><span class="parameters">(@NotNull @AuditTarget(resourceType="PLATFORM:USERS:PROFILES")
@@ -248,7 +248,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="deleteAvatar(java.lang.Long)">
 <h3>deleteAvatar</h3>
 <div class="member-signature"><span class="annotations">@DeleteMapping("/avatar")
-@Audit(operation="platform/profile/avatar/delete")
+@Audit(operation="PLATFORM/PROFILE/AVATAR/DELETE")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../platform/view/ProfileView.html" title="class in com.sca4d.app.server.platform.view">ProfileView</a>&gt;</span>&nbsp;<span class="element-name">deleteAvatar</span><wbr><span class="parameters">(@NotNull @AuditTarget(resourceType="PLATFORM:USERS:PROFILES")
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId)</span></div>

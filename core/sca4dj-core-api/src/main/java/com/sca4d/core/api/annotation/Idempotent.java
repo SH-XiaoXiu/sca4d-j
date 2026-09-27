@@ -1,6 +1,7 @@
 package com.sca4d.core.api.annotation;
 
 import com.sca4d.core.api.call.CallValueResolver;
+import com.sca4d.core.api.concurrent.IdempotencyKey;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -15,9 +16,9 @@ import java.lang.annotation.Target;
 public @interface Idempotent {
 
     /**
-     * 返回返回 {@link com.sca4d.core.api.concurrent.IdempotencyKey} 的解析器。
+     * 返回用于解析 {@link IdempotencyKey} 的解析器。
      *
-     * @return 返回 {@link com.sca4d.core.api.concurrent.IdempotencyKey} 的解析器
+     * @return 用于解析 {@link IdempotencyKey} 的解析器
      */
     Class<? extends CallValueResolver<?>> keyResolver();
 

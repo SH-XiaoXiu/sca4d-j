@@ -1,5 +1,6 @@
 package com.sca4d.auth.password;
 
+import static com.sca4d.core.api.authentication.SessionTerminationReason.AUTHENTICATION_CHANGED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
@@ -221,7 +222,7 @@ class PasswordAuthenticationMethodTest {
                 .isSameAs(changed);
         verify(sessions).terminateAccount(
                 ACCOUNT.accountId(),
-                com.sca4d.core.api.authentication.SessionTerminationReason.AUTHENTICATION_CHANGED);
+                AUTHENTICATION_CHANGED);
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.sca4d.core.api.webrealtime;
 
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.core.api.connection.ConnectionId;
+import com.sca4d.core.api.name.NameFormat;
 import com.sca4d.core.api.resource.Resource;
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.CheckReturnValue;
@@ -111,7 +112,7 @@ public final class WebRealtimeTarget {
     @Contract(value = "_ -> new", pure = true)
     public static @NotNull WebRealtimeTarget resource(@NotNull Resource resource) {
         Resource checked = Objects.requireNonNull(resource, "Resource 不能为空");
-        return new WebRealtimeTarget(Type.RESOURCE, checked.type().value(), checked.id());
+        return new WebRealtimeTarget(Type.RESOURCE, checked.type().format(NameFormat.SLASH), checked.id());
     }
 
     /**
@@ -156,7 +157,7 @@ public final class WebRealtimeTarget {
     }
 
     /**
-     * @return Resource 类型；其他目标返回 {@code null}
+     * @return Resource 类型；非 Resource 目标返回 {@code null}
      */
     @Contract(pure = true)
     public @Nullable String qualifier() {

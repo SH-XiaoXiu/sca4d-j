@@ -1,5 +1,9 @@
 package com.sca4d.auth.passkey.registration;
 
+import static com.sca4d.auth.passkey.credential.PasskeyCredentialRepository.CredentialSlotReservation.ACCOUNT_MISSING;
+import static com.sca4d.auth.passkey.credential.PasskeyCredentialRepository.CredentialSlotReservation.LIMIT_REACHED;
+import static com.sca4d.auth.passkey.credential.PasskeyCredentialRepository.CredentialSlotReservation.RESERVED;
+
 import com.sca4d.auth.passkey.PasskeyCeremonyId;
 import com.sca4d.auth.passkey.PasskeyErrorCode;
 import com.sca4d.auth.passkey.ceremony.PasskeyCeremonyStore;
@@ -222,14 +226,14 @@ public class PasskeyRegistrationService {
                 CredentialSlotReservation reservation = credentials.reserveCredentialSlot(
                         checkedAccount.accountId(),
                         maximumCredentials);
-                if (reservation == CredentialSlotReservation.RESERVED) {
+                if (reservation == RESERVED) {
                     reserved = true;
                     break;
                 }
-                if (reservation == CredentialSlotReservation.LIMIT_REACHED) {
+                if (reservation == LIMIT_REACHED) {
                     throw new BusinessException(PasskeyErrorCode.CREDENTIAL_LIMIT_REACHED);
                 }
-                if (reservation == CredentialSlotReservation.ACCOUNT_MISSING) {
+                if (reservation == ACCOUNT_MISSING) {
                     throw new IllegalStateException("Passkey 账号锚点不存在");
                 }
             }

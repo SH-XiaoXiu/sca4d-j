@@ -1,7 +1,6 @@
 package com.sca4d.notification.config;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.i18n.LocaleCatalog;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.messaging.MessageBus;
@@ -11,6 +10,8 @@ import com.sca4d.core.api.notification.Notifications;
 import com.sca4d.core.api.setting.LogicSetting;
 import com.sca4d.core.api.setting.Settings;
 import com.sca4d.core.api.setting.SystemSetting;
+import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.notification.DefaultNotifications;
 import com.sca4d.notification.NotificationDeliveryRouter;
 import com.sca4d.notification.NotificationLocaleResolver;
@@ -75,7 +76,7 @@ public class NotificationAutoConfiguration {
 
     /** @return NotificationMessage 与 RabbitMQ payload 之间的稳定转换 */
     @Bean
-    NotificationMessageCodec notificationMessageCodec(@NotNull ObjectMapper objectMapper) {
+    NotificationMessageCodec notificationMessageCodec(@Sca4djJson @NotNull Sca4djMapper objectMapper) {
         return new NotificationMessageCodec(objectMapper);
     }
 

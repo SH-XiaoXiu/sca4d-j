@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sca4d.core.api.connection.ConnectionId;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.web.realtime.connection.BrowserEnvelope;
 import com.sca4d.web.realtime.connection.BrowserWrite;
 import org.jetbrains.annotations.ApiStatus;
@@ -103,7 +104,7 @@ public final class NodeMessageCodec {
                 throw new IllegalArgumentException("节点消息字段不能为 null: payload");
             }
             BrowserEnvelope envelope = new BrowserEnvelope(
-                    requiredText(root, "eventCode"),
+                    TreeCode.of(requiredText(root, "eventCode")),
                     requiredInt(root, "protocolVersion"),
                     Instant.parse(requiredText(root, "occurredAt")),
                     payload);

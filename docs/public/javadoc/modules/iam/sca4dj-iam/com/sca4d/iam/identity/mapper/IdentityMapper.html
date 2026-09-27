@@ -141,8 +141,7 @@ loadScripts(document, 'script');</script>
 <div class="block">插入 `Principal`。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insertSubject(java.lang.Long,com.sca4d.core.api.identity.SubjectType,com.sca4d.iam.identity.IdentityStatus)" class="member-name-link">insertSubject</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;id,
- @NotNull com.sca4d.core.api.identity.SubjectType&nbsp;type,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insertSubjects(java.util.Collection,com.sca4d.iam.identity.IdentityStatus)" class="member-name-link">insertSubjects</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;com.sca4d.core.api.identity.Subject&gt;&nbsp;subjects,
  @NotNull <a href="../IdentityStatus.html" title="enum class in com.sca4d.iam.identity">IdentityStatus</a>&nbsp;status)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">插入 `Subject`。</div>
@@ -248,20 +247,17 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="insertSubject(java.lang.Long,com.sca4d.core.api.identity.SubjectType,com.sca4d.iam.identity.IdentityStatus)">
-<h3>insertSubject</h3>
+<section class="detail" id="insertSubjects(java.util.Collection,com.sca4d.iam.identity.IdentityStatus)">
+<h3>insertSubjects</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
-</span><span class="return-type">int</span>&nbsp;<span class="element-name">insertSubject</span><wbr><span class="parameters">(@Param("id") @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;id,
- @Param("type") @NotNull
- @NotNull com.sca4d.core.api.identity.SubjectType&nbsp;type,
+</span><span class="return-type">int</span>&nbsp;<span class="element-name">insertSubjects</span><wbr><span class="parameters">(@Param("subjects") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;com.sca4d.core.api.identity.Subject&gt;&nbsp;subjects,
  @Param("status") @NotNull
  @NotNull <a href="../IdentityStatus.html" title="enum class in com.sca4d.iam.identity">IdentityStatus</a>&nbsp;status)</span></div>
 <div class="block">插入 `Subject`。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>id</code> - `Subject` 标识</dd>
-<dd><code>type</code> - `Subject` 类型</dd>
+<dd><code>subjects</code> - 非空 Subject 集合；标识已经去重，主键冲突时不覆盖</dd>
 <dd><code>status</code> - 身份状态</dd>
 <dt>Returns:</dt>
 <dd>新增行数</dd>

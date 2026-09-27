@@ -1,5 +1,7 @@
 package com.sca4d.app.server.platform.view;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.spring.web.annotation.ETag;
 import com.sca4d.iam.rbac.RolePermissions;
@@ -42,7 +44,7 @@ public final class RolePermissionsView {
         RolePermissions checked = Objects.requireNonNull(permissions, "角色 Operation 不能为空");
         return new RolePermissionsView(
                 checked.role().roleId(),
-                checked.operations().stream().map(operation -> operation.code().value()).toList(),
+                checked.operations().stream().map(operation -> operation.code().format(COLON)).toList(),
                 checked.role().version());
     }
 

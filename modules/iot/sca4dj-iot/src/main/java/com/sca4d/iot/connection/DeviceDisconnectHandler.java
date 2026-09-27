@@ -1,6 +1,6 @@
 package com.sca4d.iot.connection;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.annotation.SystemExecution;
 import com.sca4d.core.api.connection.ConnectionId;
 import com.sca4d.core.api.connection.ConnectionRegistry;
 import com.sca4d.core.api.messaging.DispatchPolicy;
@@ -10,6 +10,8 @@ import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.api.messaging.MessageHandler;
 import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.iot.api.IotCapabilities;
 import com.sca4d.iot.api.connection.DeviceConnectionReceiver;
 import com.sca4d.iot.api.connection.DeviceDisconnectMessage;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -87,6 +89,7 @@ public class DeviceDisconnectHandler implements MessageHandler<DeviceDisconnectM
      */
     @Override
     @Transactional
+    @SystemExecution(IotCapabilities.SYSTEM_IDENTITY_VALUE)
     public @NotNull HandlingDecision handle(@NotNull IncomingMessage<DeviceDisconnectMessage> delivery) {
         DeviceDisconnectMessage disconnect = Objects.requireNonNull(delivery, "断连消息投递不能为空")
                 .message();

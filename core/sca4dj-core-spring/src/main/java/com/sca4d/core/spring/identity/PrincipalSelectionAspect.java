@@ -69,7 +69,7 @@ public final class PrincipalSelectionAspect {
 
         Call call = CallHolder.current();
         if (!call.isPrincipalAssessed()) {
-            // 只在一次调用中选择一次 Principal；后续切面和业务方法复用 Call 中的选择结果。
+            // 只在一次调用中选择一次 Principal；之后的切面和业务方法复用 Call 中的选择结果。
             PrincipalSelection<?> selection = CurrentPrincipalDeclaration.selection(
                     declaration,
                     applicationContext);

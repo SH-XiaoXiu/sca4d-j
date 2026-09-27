@@ -21,6 +21,7 @@ import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.core.api.persistence.ZeroRowPolicy;
 import com.sca4d.core.api.security.EncryptedSecret;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -46,7 +47,7 @@ public class DefaultFederatedProviderRepository implements FederatedProviderRepo
     /** 创建 Provider Repository。 */
     public DefaultFederatedProviderRepository(
             @NotNull ProviderMapper mapper,
-            @Sca4djJson @NotNull ObjectMapper objectMapper,
+            @Sca4djJson @NotNull Sca4djMapper objectMapper,
             @NotNull FederatedSecretCryptography secrets,
             @NotNull VersionConditions versionConditions) {
         this.mapper = Objects.requireNonNull(mapper, "Provider Mapper 不能为空");

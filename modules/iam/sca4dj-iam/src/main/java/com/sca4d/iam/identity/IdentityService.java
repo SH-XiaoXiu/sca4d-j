@@ -8,6 +8,8 @@ import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
+import com.sca4d.core.api.identity.SystemPrincipal;
+import com.sca4d.core.api.persistence.AffectedRowsMismatchException;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
@@ -42,7 +44,7 @@ public class IdentityService {
 
     private final @NotNull @Unmodifiable Map<@NotNull AccountIdentifierType, @NotNull AccountIdentifierNormalizer> normalizers;
 
-    /** 创建身份事实服务并建立登录标识规范化器索引。 */
+    /** 创建身份服务并建立登录标识规范化器索引。 */
     @ApiStatus.Internal
     public IdentityService(
             @NotNull IdentityRepository repository,
@@ -58,7 +60,7 @@ public class IdentityService {
             AccountIdentifierNormalizer checked = Objects.requireNonNull(normalizer, "登录标识规范化器不能为空");
             AccountIdentifierType type = Objects.requireNonNull(checked.type(), "登录标识规范化器类型不能为空");
             if (values.putIfAbsent(type, checked) != null) {
-                throw new IllegalStateException("同一登录标识类型只能注册一个规范化器: " + type.value());
+                throw new IllegalStateException("同一登录标识类型只能注册一个规范化器: " + type);
             }
         }
         this.normalizers = Map.copyOf(values);
@@ -75,6 +77,9 @@ public class IdentityService {
     @CheckReturnValue
     public @NotNull Subject createSubject(@NotNull SubjectType type) {
         SubjectType checkedType = Objects.requireNonNull(type, "接入者类型不能为空");
+        if (checkedType == SubjectType.SYSTEM) {
+            throw new IllegalArgumentException("SYSTEM 由启动初始化登记，不能创建第二个系统 Subject");
+        }
         Long id = idGenerator.nextId().value();
         repository.insertSubject(id, checkedType, IdentityStatus.ACTIVE);
         Subject subject = new Subject(id, checkedType);
@@ -131,6 +136,9 @@ public class IdentityService {
     public void changeSubjectStatus(
             @NotNull Long id,
             @NotNull IdentityStatus status) {
+        if (id == Subject.SYSTEM.subjectId()) {
+            throw new IllegalArgumentException("SYSTEM 状态不能通过普通身份 API 修改");
+        }
         if (!repository.updateSubjectStatus(
                 Objects.requireNonNull(id, "接入者标识不能为空"),
                 Objects.requireNonNull(status, "接入者状态不能为空"))) {
@@ -171,6 +179,9 @@ public class IdentityService {
             @NotNull RealmKey realm,
             @NotNull IdentityStatus initialStatus) {
         Long checkedSubjectId = Objects.requireNonNull(subjectId, "接入者标识不能为空");
+        if (checkedSubjectId == Subject.SYSTEM.subjectId()) {
+            throw new IllegalArgumentException("SYSTEM 自主执行不使用登录 Account");
+        }
         RealmKey checkedRealm = Objects.requireNonNull(realm, "认证域不能为空");
         IdentityStatus checkedStatus = Objects.requireNonNull(initialStatus, "账号初始状态不能为空");
         if (checkedStatus == IdentityStatus.ACTIVE) {
@@ -271,6 +282,9 @@ public class IdentityService {
     @Transactional
     @CheckReturnValue
     public @NotNull Long createPrincipal(@NotNull Class<? extends Principal> type) {
+        if (type == SystemPrincipal.class) {
+            throw new IllegalArgumentException("系统 Principal 必须使用配置 ID 在启动时登记");
+        }
         PrincipalType discriminator = principalTypes.principalType(Objects.requireNonNull(type, "业务主体类型不能为空"));
         Long id = idGenerator.nextId().value();
         repository.insertPrincipal(id, discriminator, IdentityStatus.ACTIVE);
@@ -391,6 +405,9 @@ public class IdentityService {
     public void changePrincipalStatus(
             @NotNull Long id,
             @NotNull IdentityStatus status) {
+        if (repository.findPrincipalId(id, new PrincipalType(SystemPrincipalCodec.TYPE)).isPresent()) {
+            throw new IllegalArgumentException("系统身份状态必须人工维护，不能通过普通身份 API 修改");
+        }
         if (!repository.updatePrincipalStatus(
                 Objects.requireNonNull(id, "业务主体标识不能为空"),
                 Objects.requireNonNull(status, "业务主体状态不能为空"))) {
@@ -411,12 +428,15 @@ public class IdentityService {
      * @param ids Principal 标识集合；重复标识只处理一次
      * @param type Principal 精确 Java 类型
      * @throws BusinessException Java 类型没有 Principal Codec 时抛出
-     * @throws com.sca4d.core.api.persistence.AffectedRowsMismatchException 任一 Principal 不存在、类型不匹配或已经删除时抛出
+     * @throws AffectedRowsMismatchException 任一 Principal 不存在、类型不匹配或已经删除时抛出
      */
     @Transactional
     public void deletePrincipals(
             @NotNull Collection<@NotNull Long> ids,
             @NotNull Class<? extends Principal> type) {
+        if (type == SystemPrincipal.class) {
+            throw new IllegalArgumentException("系统身份只能人工迁移，不能通过普通身份 API 删除");
+        }
         LinkedHashSet<Long> unique = uniquePrincipalIds(ids);
         PrincipalType discriminator = principalTypes.principalType(Objects.requireNonNull(type, "业务主体类型不能为空"));
         if (unique.isEmpty()) {
@@ -438,12 +458,15 @@ public class IdentityService {
      * @param ids Principal 标识集合；重复标识只处理一次
      * @param type Principal 精确 Java 类型
      * @throws BusinessException Java 类型没有 Principal Codec 时抛出
-     * @throws com.sca4d.core.api.persistence.AffectedRowsMismatchException 任一 Principal 不存在、类型不匹配或未删除时抛出
+     * @throws AffectedRowsMismatchException 任一 Principal 不存在、类型不匹配或未删除时抛出
      */
     @Transactional
     public void restorePrincipals(
             @NotNull Collection<@NotNull Long> ids,
             @NotNull Class<? extends Principal> type) {
+        if (type == SystemPrincipal.class) {
+            throw new IllegalArgumentException("系统身份只能人工迁移，不能通过普通身份 API 恢复");
+        }
         LinkedHashSet<Long> unique = uniquePrincipalIds(ids);
         PrincipalType discriminator = principalTypes.principalType(Objects.requireNonNull(type, "业务主体类型不能为空"));
         if (unique.isEmpty()) {
@@ -465,6 +488,9 @@ public class IdentityService {
      */
     @Transactional
     public void link(@NotNull Long accountId, @NotNull Long principalId) {
+        if (repository.findPrincipalId(principalId, new PrincipalType(SystemPrincipalCodec.TYPE)).isPresent()) {
+            throw new IllegalArgumentException("系统身份不能授权给登录 Account");
+        }
         repository.findActiveAccount(Objects.requireNonNull(accountId, "账号标识不能为空"))
                 .orElseThrow(() -> new BusinessException(IamErrorCode.ACCOUNT_UNAVAILABLE));
         if (!repository.isActivePrincipal(Objects.requireNonNull(principalId, "业务主体标识不能为空"))) {
@@ -629,7 +655,7 @@ public class IdentityService {
                 identifier.id(),
                 accountId,
                 account.realmKey().value(),
-                type.value());
+                type);
         return identifier;
     }
 
@@ -658,7 +684,7 @@ public class IdentityService {
                 "Account 登录标识值已修改 | identifierId={} accountId={} type={}",
                 identifierId,
                 updated.accountId(),
-                updated.type().value());
+                updated.type());
         return updated;
     }
 
@@ -685,7 +711,7 @@ public class IdentityService {
                 "Account 登录标识状态已修改 | identifierId={} accountId={} type={} status={}",
                 identifierId,
                 updated.accountId(),
-                updated.type().value(),
+                updated.type(),
                 updated.status().value());
         return updated;
     }
@@ -706,7 +732,7 @@ public class IdentityService {
                 "Account 登录标识已删除 | identifierId={} accountId={} type={}",
                 identifierId,
                 current.accountId(),
-                current.type().value());
+                current.type());
     }
 
     /**
@@ -782,7 +808,7 @@ public class IdentityService {
         }
         LOG.trace(
                 "登录标识已规范化 | identifierType={} normalizedLength={}",
-                type.value(),
+                type,
                 normalized.length());
         return normalized;
     }

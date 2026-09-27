@@ -11,6 +11,8 @@ import com.sca4d.core.api.annotation.RequirePermission;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallExecution;
 import com.sca4d.core.api.call.CallLifecycle;
+import com.sca4d.core.api.identity.SystemPrincipal;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.spring.web.RequestVersionConditions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,7 +41,7 @@ class CallLifecycleAspectTest {
         factory.setProxyTargetClass(false);
         factory.addAspect(new CallLifecycleAspect(lifecycle, new RequestVersionConditions()));
         LimitedService service = factory.getProxy();
-        Call call = Call.system("class-rate-limit", Instant.EPOCH);
+        Call call = Call.system("class-rate-limit", Instant.EPOCH, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")));
         CallHolder.set(call);
 
         String result = service.invoke("value");
@@ -66,7 +68,8 @@ class CallLifecycleAspectTest {
         factory.setProxyTargetClass(false);
         factory.addAspect(new CallLifecycleAspect(lifecycle, new RequestVersionConditions()));
         PermissionService service = factory.getProxy();
-        CallHolder.set(Call.system("method-permissions", Instant.EPOCH));
+        CallHolder.set(
+                Call.system("method-permissions", Instant.EPOCH, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))));
 
         String result = service.invoke("value");
 
@@ -89,7 +92,8 @@ class CallLifecycleAspectTest {
         factory.setProxyTargetClass(false);
         factory.addAspect(new CallLifecycleAspect(lifecycle, new RequestVersionConditions()));
         PermissionService service = factory.getProxy();
-        CallHolder.set(Call.system("class-permissions", Instant.EPOCH));
+        CallHolder.set(
+                Call.system("class-permissions", Instant.EPOCH, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))));
 
         String result = service.invoke("value");
 

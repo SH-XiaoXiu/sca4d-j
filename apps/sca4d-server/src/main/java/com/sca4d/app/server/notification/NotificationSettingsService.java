@@ -1,8 +1,8 @@
 package com.sca4d.app.server.notification;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Account;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.region.Region;
 import com.sca4d.core.api.setting.SettingOwner;
 import com.sca4d.core.api.setting.Settings;

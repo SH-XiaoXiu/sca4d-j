@@ -1,5 +1,7 @@
 package com.sca4d.auth.engine;
 
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+import static java.util.Locale.ROOT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -20,10 +22,10 @@ import com.sca4d.core.api.authentication.AuthenticationRequirement;
 import com.sca4d.core.api.authentication.AuthenticationResult;
 import com.sca4d.core.api.authentication.AuthenticationSubmission;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.RealmKey;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.setting.Settings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -108,8 +110,8 @@ class RedisAuthenticationAttemptsTest {
 
         assertThat(progress.remainingFactorCount()).isEqualTo(1);
         assertThat(fixture.engine.consume(completed.attemptId()).authentications())
-                .extracting(authentication -> authentication.methodCode().value())
-                .containsExactly("password", "totp");
+                .extracting(authentication -> authentication.methodCode().format(SLASH))
+                .containsExactly("AUTHENTICATION/PASSWORD", "AUTHENTICATION/TOTP");
     }
 
     @Test
@@ -355,7 +357,7 @@ class RedisAuthenticationAttemptsTest {
             return new VerifiedAuthentication(
                     checkedAccount,
                     new Authentication(checkedAccount.accountId(), code, Set.of(kind), authenticatedAt),
-                    code.value(),
+                    code.format(SLASH),
                     new Version(0),
                     null);
         }
@@ -375,7 +377,7 @@ class RedisAuthenticationAttemptsTest {
      * @return 测试认证方法使用的稳定编码
      */
     private static @NotNull TreeCode authenticationMethodCode(@NotNull String value) {
-        return TreeCode.ofSlash("AUTHENTICATION/" + value.toUpperCase(java.util.Locale.ROOT).replace('-', '_'));
+        return TreeCode.ofSlash("AUTHENTICATION/" + value.toUpperCase(ROOT).replace('-', '_'));
     }
 
     /**

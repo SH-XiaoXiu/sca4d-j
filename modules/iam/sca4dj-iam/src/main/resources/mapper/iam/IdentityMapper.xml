@@ -6,9 +6,13 @@
     <sql id="accountColumns">id, subject_id, realm_key</sql>
     <sql id="identifierColumns">id, account_id, realm_key, identifier_type AS type, value, normalized_value, status</sql>
 
-    <insert id="insertSubject">
+    <insert id="insertSubjects">
         INSERT INTO iam_subject (id, subject_type, status)
-        VALUES (#{id}, #{type}, #{status})
+        VALUES
+        <foreach collection="subjects" item="subject" separator=",">
+            (#{subject.id}, #{subject.type}, #{status})
+        </foreach>
+        ON CONFLICT (id) DO NOTHING
     </insert>
     <select id="selectSubject" resultType="com.sca4d.core.api.identity.Subject">
         SELECT <include refid="subjectColumns"/> FROM iam_subject WHERE id = #{id} AND deleted = 0

@@ -1,6 +1,5 @@
 package com.sca4d.auth.passkey.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.auth.passkey.PasskeyAuthenticationMethod;
 import com.sca4d.auth.passkey.ceremony.PasskeyAssertionService;
 import com.sca4d.auth.passkey.ceremony.PasskeyCeremonyStore;
@@ -9,10 +8,11 @@ import com.sca4d.auth.passkey.credential.YubicoCredentialRepository;
 import com.sca4d.auth.passkey.credential.mapper.PasskeyCredentialMapper;
 import com.sca4d.auth.passkey.registration.PasskeyRegistrationService;
 import com.sca4d.core.api.identity.AccountDirectory;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.setting.Settings;
 import com.sca4d.core.api.setting.SystemSetting;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.core.spring.redis.Sca4djRedis;
 import com.yubico.webauthn.RelyingParty;
 import com.yubico.webauthn.data.AttestationConveyancePreference;
@@ -22,7 +22,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.security.SecureRandom;
 import java.time.Clock;
@@ -99,17 +99,15 @@ public class PasskeyAutoConfiguration {
      */
     @Bean
     PasskeyCeremonyStore passkeyCeremonyStore(
-            @Sca4djRedis StringRedisTemplate redis,
-            @Sca4djJson ObjectMapper objectMapper,
+            @Sca4djRedis RedisTemplate<Key, String> redis,
+            @Sca4djJson Sca4djMapper objectMapper,
             Clock clock,
-            Settings settings,
-            RuntimeNamespace runtimeNamespace) {
+            Settings settings) {
         return new PasskeyCeremonyStore(
                 redis,
                 objectMapper,
                 clock,
-                settings,
-                runtimeNamespace);
+                settings);
     }
 
     /**

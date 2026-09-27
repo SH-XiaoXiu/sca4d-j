@@ -7,6 +7,7 @@ import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.change.DeviceChangeArea;
 import com.sca4d.iot.api.history.DeviceEventMessage;
@@ -206,6 +207,6 @@ public class DeviceAcknowledgementService {
 
     /** @return 指定下行消息在全部应用实例间共用的锁键 */
     private static @NotNull LockKey downlinkLock(long messageId) {
-        return new LockKey("iot", "downlink", Long.toString(messageId));
+        return new LockKey(TreeCode.of("IOT:DOWNLINK"), messageId);
     }
 }

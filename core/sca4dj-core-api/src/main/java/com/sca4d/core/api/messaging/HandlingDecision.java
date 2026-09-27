@@ -1,5 +1,9 @@
 package com.sca4d.core.api.messaging;
 
+import static com.sca4d.core.api.messaging.HandlingDecision.Status.ACKNOWLEDGE;
+import static com.sca4d.core.api.messaging.HandlingDecision.Status.REJECT;
+import static com.sca4d.core.api.messaging.HandlingDecision.Status.RETRY;
+
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,19 +32,19 @@ public final class HandlingDecision {
     /** @return 确认当前消息并结束处理 */
     @CheckReturnValue
     public static @NotNull HandlingDecision acknowledge() {
-        return new HandlingDecision(Status.ACKNOWLEDGE, null);
+        return new HandlingDecision(ACKNOWLEDGE, null);
     }
 
     /** @param detail 再次处理原因 @return 要求基础设施再次处理当前消息 */
     @CheckReturnValue
     public static @NotNull HandlingDecision retry(@NotNull String detail) {
-        return new HandlingDecision(Status.RETRY, detail);
+        return new HandlingDecision(RETRY, detail);
     }
 
     /** @param detail 拒绝原因 @return 拒绝当前消息 */
     @CheckReturnValue
     public static @NotNull HandlingDecision reject(@NotNull String detail) {
-        return new HandlingDecision(Status.REJECT, detail);
+        return new HandlingDecision(REJECT, detail);
     }
 
     /** @return 处理决定状态 */

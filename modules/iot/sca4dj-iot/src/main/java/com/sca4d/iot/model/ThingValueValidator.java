@@ -35,7 +35,7 @@ public final class ThingValueValidator {
             case INTEGER -> integer(checkedType, checkedValue);
             case DECIMAL -> decimal(checkedType, checkedValue);
             case STRING -> string(checkedType, checkedValue, false);
-            case ENUM -> enumeration(checkedType, checkedValue);
+            case NUM -> enumeration(checkedType, checkedValue);
             case TIMESTAMP -> timestamp(checkedValue);
             case OBJECT -> object(checkedType, checkedValue);
             case ARRAY -> array(checkedType, checkedValue);

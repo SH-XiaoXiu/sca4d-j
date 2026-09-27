@@ -164,7 +164,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">根据登录阶段或敏感动作开关返回仍能贡献新因素的认证方法。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#allowsMethodUnavailable(com.sca4d.core.api.identity.Account,com.sca4d.core.api.code.TreeCode)" class="member-name-link">allowsMethodUnavailable(Account, TreeCode)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
+<dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#allowsMethodUnavailable(com.sca4d.core.api.identity.Account,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">allowsMethodUnavailable(Account, TreeCode)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
 <dd>
 <div class="block">返回指定认证方法完全不可用后，账号当前设置是否仍能满足全部认证要求。</div>
 </dd>
@@ -206,7 +206,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">开始可用于登录或动作认证的 discoverable assertion。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#assertMethodRemovalAllowed(com.sca4d.core.api.identity.Account,com.sca4d.core.api.code.TreeCode)" class="member-name-link">assertMethodRemovalAllowed(Account, TreeCode)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
+<dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#assertMethodRemovalAllowed(com.sca4d.core.api.identity.Account,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">assertMethodRemovalAllowed(Account, TreeCode)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
 <dd>
 <div class="block">确认指定认证方法完全不可用后，账号当前设置仍能满足登录和敏感动作要求。</div>
 </dd>
@@ -264,7 +264,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">保存一个认证方法在登录首步、登录后续因素和敏感动作中的启用状态。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/authentication/AuthenticationMethodSettings.html#%3Cinit%3E(com.sca4d.core.api.code.TreeCode,boolean,boolean,boolean)" class="member-name-link">AuthenticationMethodSettings(TreeCode, boolean, boolean, boolean)</a> - Constructor for class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AuthenticationMethodSettings.html" title="class in com.sca4d.app.server.authentication">AuthenticationMethodSettings</a></dt>
+<dt><a href="com/sca4d/app/server/authentication/AuthenticationMethodSettings.html#%3Cinit%3E(com.sca4d.core.api.name.code.TreeCode,boolean,boolean,boolean)" class="member-name-link">AuthenticationMethodSettings(TreeCode, boolean, boolean, boolean)</a> - Constructor for class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AuthenticationMethodSettings.html" title="class in com.sca4d.app.server.authentication">AuthenticationMethodSettings</a></dt>
 <dd>
 <div class="block">创建认证方法开关。</div>
 </dd>
@@ -563,7 +563,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">只读取已知请求类型的安全字段；密码、验证码、Passkey proof 和个人资料值不会进入结果。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/system/EmailTemplateManagementService.html#create(com.sca4d.core.api.code.TreeCode,java.util.Map)" class="member-name-link">create(TreeCode, Map&lt;String, EmailTemplateSource&gt;)</a> - Method in class com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/EmailTemplateManagementService.html" title="class in com.sca4d.app.server.system">EmailTemplateManagementService</a></dt>
+<dt><a href="com/sca4d/app/server/system/EmailTemplateManagementService.html#create(com.sca4d.core.api.name.code.TreeCode,java.util.Map)" class="member-name-link">create(TreeCode, Map&lt;String, EmailTemplateSource&gt;)</a> - Method in class com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/EmailTemplateManagementService.html" title="class in com.sca4d.app.server.system">EmailTemplateManagementService</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/Sca4dEmqxDeviceConnectionRequestFactory.html#create(com.sca4d.iot.emqx.authentication.EmqxAuthenticationRequest)" class="member-name-link">create(EmqxAuthenticationRequest)</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/Sca4dEmqxDeviceConnectionRequestFactory.html" title="class in com.sca4d.app.server.iot">Sca4dEmqxDeviceConnectionRequestFactory</a></dt>
 <dd>
@@ -4527,7 +4527,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">按 `If-Match` 完整替换 SMTP 配置，按显式标志保留、替换或清除密码。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/system/EmailTemplateManagementService.html#replace(long,com.sca4d.core.api.code.TreeCode,java.util.Map)" class="member-name-link">replace(long, TreeCode, Map&lt;String, EmailTemplateSource&gt;)</a> - Method in class com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/EmailTemplateManagementService.html" title="class in com.sca4d.app.server.system">EmailTemplateManagementService</a></dt>
+<dt><a href="com/sca4d/app/server/system/EmailTemplateManagementService.html#replace(long,com.sca4d.core.api.name.code.TreeCode,java.util.Map)" class="member-name-link">replace(long, TreeCode, Map&lt;String, EmailTemplateSource&gt;)</a> - Method in class com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/EmailTemplateManagementService.html" title="class in com.sca4d.app.server.system">EmailTemplateManagementService</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/preference/PreferenceService.html#replace(long,java.lang.String,com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">replace(long, String, JsonNode)</a> - Method in class com.sca4d.app.server.preference.<a href="com/sca4d/app/server/preference/PreferenceService.html" title="class in com.sca4d.app.server.preference">PreferenceService</a></dt>
 <dd>
@@ -4957,6 +4957,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回登录后敏感动作所需不同因素数量。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/ServerRuntimeConfiguration.html" class="type-name-link" title="class in com.sca4d.app.server">ServerRuntimeConfiguration</a> - Class in <a href="com/sca4d/app/server/package-summary.html">com.sca4d.app.server</a></dt>
+<dd>
+<div class="block">声明 Sca4d Server 的业务 API、IoT API 和设备接入能力及服务器路径。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/ServerRuntimeConfiguration.html#%3Cinit%3E()" class="member-name-link">ServerRuntimeConfiguration()</a> - Constructor for class com.sca4d.app.server.<a href="com/sca4d/app/server/ServerRuntimeConfiguration.html" title="class in com.sca4d.app.server">ServerRuntimeConfiguration</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/authentication/LoginResult.html#session()" class="member-name-link">session()</a> - Method in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/LoginResult.html" title="class in com.sca4d.app.server.authentication">LoginResult</a></dt>
 <dd>
 <div class="block">返回认证满足后建立的 Session 和 Token。</div>

@@ -3,7 +3,7 @@ package com.sca4d.iot.api;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.junit.jupiter.api.Test;
 
 class DeviceAccessMethodTest {
@@ -12,7 +12,7 @@ class DeviceAccessMethodTest {
     void preservesFullAuthenticationMethodPath() {
         DeviceAccessMethod parsed = DeviceAccessMethod.parse("ACCOUNT:AUTHENTICATION/DEVICE");
 
-        assertEquals("ACCOUNT:AUTHENTICATION/DEVICE", parsed.code());
+        assertEquals(TreeCode.ofColon("ACCOUNT:AUTHENTICATION:DEVICE"), parsed.code());
         assertEquals(
                 DeviceAccessMethod.authentication(TreeCode.ofSlash("AUTHENTICATION/DEVICE")),
                 parsed);
@@ -27,7 +27,7 @@ class DeviceAccessMethodTest {
 
     @Test
     void usesUppercaseReservedAccessMethodCodes() {
-        assertEquals("ANONYMOUS", DeviceAccessMethod.anonymous().code());
-        assertEquals("SESSION", DeviceAccessMethod.session().code());
+        assertEquals(TreeCode.ofSegment("ANONYMOUS"), DeviceAccessMethod.anonymous().code());
+        assertEquals(TreeCode.ofSegment("SESSION"), DeviceAccessMethod.session().code());
     }
 }

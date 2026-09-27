@@ -22,7 +22,7 @@ public final class GatewayControlHeadersFilter implements GlobalFilter, Ordered 
         return Ordered.HIGHEST_PRECEDENCE;
     }
 
-    /** @return 使用已删除伪造 Gateway Header 的后续过滤链 */
+    /** @return 使用已删除伪造 Gateway Header 的过滤链后续部分 */
     @Override
     public @NotNull Mono<Void> filter(
             @NotNull ServerWebExchange exchange,

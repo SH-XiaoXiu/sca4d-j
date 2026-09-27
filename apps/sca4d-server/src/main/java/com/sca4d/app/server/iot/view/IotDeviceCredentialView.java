@@ -62,7 +62,7 @@ public final class IotDeviceCredentialView {
         return sharedSecret;
     }
 
-    /** @return 只允许管理端显示一次的可选 HMAC Key */
+    /** @return 只允许管理端显示一次的可选 MAC Key */
     public @Nullable String getHmacKey() {
         return hmacKey;
     }

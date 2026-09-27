@@ -1,5 +1,7 @@
 package com.sca4d.iot.emqx.authentication;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.iot.api.connection.DeviceConnectionAccess;
 import com.sca4d.iot.api.connection.DeviceConnectionAdmission;
@@ -70,7 +72,7 @@ public final class EmqxAuthenticationService {
         values.put("product_code", result.device().product().code());
         values.put("product_source", result.device().product().source().name());
         values.put("protocol_code", result.device().protocolCode());
-        values.put("access_method", result.accessMethod().code());
+        values.put("access_method", result.accessMethod().code().format(COLON));
         values.put(MqttAuthorizationService.FINGERPRINT_ATTRIBUTE, authorization.fingerprint());
         result.sessionId().ifPresent(value -> values.put("device_session_id", value.value()));
         return Map.copyOf(values);

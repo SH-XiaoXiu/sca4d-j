@@ -11,12 +11,13 @@ import com.sca4d.auth.passkey.PasskeyCeremonyId;
 import com.sca4d.auth.passkey.PasskeyErrorCode;
 import com.sca4d.auth.passkey.config.PasskeySettings;
 import com.sca4d.core.api.error.BusinessException;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.setting.Settings;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
 import java.time.Clock;
@@ -29,12 +30,13 @@ class PasskeyCeremonyStoreTest {
 
     @Test
     @DisplayName("assertion ceremony 消费一次后不再可用")
+    @SuppressWarnings("unchecked") // Mockito 的 Class 参数不能表达 RedisTemplate 泛型。
     void consumesAssertionCeremonyOnce() {
-        StringRedisTemplate redis = mock(StringRedisTemplate.class);
+        RedisTemplate<Key, String> redis = mock(RedisTemplate.class);
         @SuppressWarnings("unchecked")
-        ValueOperations<String, String> values = mock(ValueOperations.class);
+        ValueOperations<Key, String> values = mock(ValueOperations.class);
         when(redis.opsForValue()).thenReturn(values);
-        String key = "example-app:sca4dj:passkey:assertion:ceremony-1";
+        Key key = Key.of(TreeCode.ofColon("PASSKEY:ASSERTION")).part("ceremony-1");
         when(values.getAndDelete(key))
                 .thenReturn("{\"version\":1,\"request\":\"request-json\"}", (String) null);
         Settings settings = mock(Settings.class);
@@ -43,8 +45,7 @@ class PasskeyCeremonyStoreTest {
                 redis,
                 new ObjectMapper(),
                 Clock.fixed(Instant.parse("2026-07-31T00:00:00Z"), ZoneOffset.UTC),
-                settings,
-                new RuntimeNamespace("example-app"));
+                settings);
         PasskeyCeremonyId id = new PasskeyCeremonyId("ceremony-1");
 
         assertThat(store.consumeAssertion(id)).isEqualTo("request-json");

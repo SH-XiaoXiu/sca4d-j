@@ -1,8 +1,9 @@
 package com.sca4d.core.api.setting;
 
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Subject;
+import com.sca4d.core.api.name.NameFormat;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.Resource;
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.Contract;
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /**
- * 保存设置归属者使用的稳定类型和该类型内唯一标识。
+ * 保存设置归属者使用的稳定类型和类型内唯一标识。
  */
 @SuppressWarnings("ClassCanBeRecord") // 项目禁止使用 Java record。
 public final class SettingOwner {
@@ -28,18 +29,18 @@ public final class SettingOwner {
      * 创建设置 owner。
      *
      * @param type 全局稳定的 owner 类型，不使用 Java 类名
-     * @param id   该类型内唯一的 owner 标识
+     * @param id   当前类型内唯一的 owner 标识
      */
     public SettingOwner(@NotNull TreeCode type, @NotNull String id) {
         this.type = Objects.requireNonNull(type, "设置 owner 类型不能为空");
         this.id = TextUtils.requireText(id, "设置 owner 标识");
-        if (this.type.length() > 128 || this.id.length() > 160) {
+        if (this.type.format(NameFormat.SLASH).length() > 128 || this.id.length() > 160) {
             throw new IllegalArgumentException("设置 owner 类型或标识超过数据库长度限制");
         }
     }
 
     /**
-     * @return 固定属于 `Subject.SYSTEM` 的设置 owner
+     * @return 固定归属 `Subject.SYSTEM` 的设置所有者
      */
     @Contract(pure = true)
     public static @NotNull SettingOwner system() {

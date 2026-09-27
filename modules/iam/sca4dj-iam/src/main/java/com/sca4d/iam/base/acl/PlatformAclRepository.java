@@ -1,6 +1,6 @@
 package com.sca4d.iam.base.acl;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.persistence.AffectedRows;
 import com.sca4d.core.api.persistence.ZeroRowPolicy;
@@ -69,7 +69,7 @@ public class PlatformAclRepository implements AclRepository {
             @NotNull TreeCode type,
             @NotNull String id,
             @NotNull Action action) {
-        mapper.insert(principalId, type.value(), id, action);
+        mapper.insert(principalId, type, id, action);
     }
 
     /**
@@ -83,7 +83,7 @@ public class PlatformAclRepository implements AclRepository {
             @NotNull String id,
             @NotNull Action action) {
         AclEntry checked = new AclEntry(principalId, type, id, action);
-        mapper.delete(checked.principalId(), checked.resourceType().value(), checked.resourceId(), checked.action());
+        mapper.delete(checked.principalId(), checked.resourceType(), checked.resourceId(), checked.action());
     }
 
     /**
@@ -100,7 +100,7 @@ public class PlatformAclRepository implements AclRepository {
         return !mapper
                 .selectEntries(
                         checked.principalId(),
-                        checked.resourceType().value(),
+                        checked.resourceType(),
                         checked.resourceId(),
                         checked.action(),
                         1)
@@ -116,7 +116,7 @@ public class PlatformAclRepository implements AclRepository {
             @NotNull Long principalId,
             @NotNull TreeCode type,
             @NotNull Action action) {
-        return mapper.selectEntries(principalId, type.value(), null, Objects.requireNonNull(action, "ACL 动作不能为空"), null)
+        return mapper.selectEntries(principalId, type, null, Objects.requireNonNull(action, "ACL 动作不能为空"), null)
                 .stream()
                 .map(AclEntry::resourceId)
                 .toList();
@@ -130,7 +130,7 @@ public class PlatformAclRepository implements AclRepository {
     public @NotNull @Unmodifiable List<@NotNull AclEntry> findEntries(
             @NotNull Long principalId,
             @NotNull TreeCode type) {
-        return List.copyOf(mapper.selectEntries(principalId, type.value(), null, null, null));
+        return List.copyOf(mapper.selectEntries(principalId, type, null, null, null));
     }
 
     /**
@@ -148,7 +148,7 @@ public class PlatformAclRepository implements AclRepository {
     public void revokeByResource(@NotNull TreeCode type, @NotNull String id) {
         mapper.delete(
                 null,
-                Objects.requireNonNull(type, "资源类型不能为空").value(),
+                Objects.requireNonNull(type, "资源类型不能为空"),
                 Objects.requireNonNull(id, "资源标识不能为空"),
                 null);
     }

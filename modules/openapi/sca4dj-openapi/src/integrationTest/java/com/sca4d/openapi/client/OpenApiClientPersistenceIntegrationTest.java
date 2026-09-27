@@ -9,9 +9,9 @@ import com.sca4d.auth.hmac.HmacCredentialRepository;
 import com.sca4d.auth.sharedsecret.SharedSecretCredential;
 import com.sca4d.auth.sharedsecret.SharedSecretCredentialMapper;
 import com.sca4d.auth.sharedsecret.SharedSecretCredentialRepository;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.OptimisticLockException;
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.security.EncryptedSecret;
 import com.sca4d.core.spring.persistence.batch.SqlBatchProperties;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
@@ -20,6 +20,7 @@ import com.sca4d.core.spring.persistence.mybatis.AffectedRowsInterceptor;
 import com.sca4d.core.spring.persistence.mybatis.CoreEnumTypeHandler;
 import com.sca4d.core.spring.persistence.mybatis.LongValueTypeHandler;
 import com.sca4d.openapi.client.mapper.OpenApiClientMapper;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.type.JdbcType;
 import org.junit.jupiter.api.AfterAll;
@@ -31,7 +32,6 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -75,7 +75,7 @@ class OpenApiClientPersistenceIntegrationTest {
     private static TransactionTemplate transactions;
 
     /** 使用与生产相同的 Mapper 扫描和 Spring 事务代理。 */
-    @Configuration(proxyBeanMethods = false)
+    @org.springframework.context.annotation.Configuration(proxyBeanMethods = false)
     @EnableTransactionManagement
     @EnableAspectJAutoProxy(proxyTargetClass = true)
     @MapperScan(basePackageClasses = OpenApiClientMapper.class)
@@ -99,7 +99,7 @@ class OpenApiClientPersistenceIntegrationTest {
         jdbc = new JdbcTemplate(source);
         SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
         factory.setDataSource(source);
-        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
+        Configuration configuration = new Configuration();
         configuration.setDefaultEnumTypeHandler(CoreEnumTypeHandler.class);
         configuration.setMapUnderscoreToCamelCase(true);
         configuration.getTypeHandlerRegistry()

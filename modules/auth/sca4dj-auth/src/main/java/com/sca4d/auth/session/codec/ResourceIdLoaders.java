@@ -2,8 +2,8 @@ package com.sca4d.auth.session.codec;
 
 import com.sca4d.core.api.authentication.principalsession.ResourceIdLoader;
 import com.sca4d.core.api.authentication.principalsession.ResourceIdSet;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Principal;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;

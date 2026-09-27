@@ -1,5 +1,7 @@
 package com.sca4d.storage.file.lifecycle;
 
+import static java.lang.Boolean.TRUE;
+
 import com.sca4d.core.api.storage.FileStatus;
 import com.sca4d.core.api.storage.FileStorage;
 import com.sca4d.core.api.storage.StorageObject;
@@ -111,7 +113,7 @@ public final class FileCleanupService {
             if (objectKey != null) {
                 storage.delete(new StorageObject(record.containerName(), objectKey));
             }
-            boolean recorded = Boolean.TRUE.equals(
+            boolean recorded = TRUE.equals(
                     transactions.execute(
                             status -> repository.saveDeletionResult(record.id(), owner, FileStatus.DELETED, null)));
             if (recorded) {
@@ -124,7 +126,7 @@ public final class FileCleanupService {
             }
         } catch (RuntimeException exception) {
             Instant retryAt = clock.instant().plus(properties.getDeleteRetryDelay());
-            boolean recorded = Boolean.TRUE.equals(
+            boolean recorded = TRUE.equals(
                     transactions.execute(
                             status -> repository
                                     .saveDeletionResult(record.id(), owner, FileStatus.DELETE_FAILED, retryAt)));

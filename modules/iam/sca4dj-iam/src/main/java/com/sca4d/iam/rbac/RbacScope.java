@@ -98,6 +98,6 @@ public final class RbacScope {
     @Override
     @Contract(pure = true)
     public @NotNull String toString() {
-        return id == null ? domain.value() + ":GLOBAL" : domain.value() + ':' + id;
+        return id == null ? domain.toString() + ":GLOBAL" : domain.toString() + ':' + id;
     }
 }

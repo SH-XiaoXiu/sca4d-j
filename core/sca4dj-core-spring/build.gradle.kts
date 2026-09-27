@@ -21,6 +21,7 @@ dependencyManagement {
 }
 
 dependencies {
+    api(libs.dynamic.datasource.starter)
     api(project(":core:sca4dj-core-api"))
     api(libs.spring.webmvc)
     implementation(libs.spring.tx)

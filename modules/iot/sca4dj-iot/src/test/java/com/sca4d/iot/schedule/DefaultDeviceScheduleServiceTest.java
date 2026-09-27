@@ -17,6 +17,7 @@ import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.DispatchReceipt;
 import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.ProductBinding;
 import com.sca4d.iot.api.history.DeviceHistoryStore;
@@ -200,7 +201,7 @@ class DefaultDeviceScheduleServiceTest {
                         }),
                 argThat(policy -> policy.mode() == DispatchPolicy.Mode.OUTBOX));
         verify(distributedLock).execute(
-                argThat(key -> new LockKey("iot", "schedule", "10").equals(key)),
+                argThat(key -> new LockKey(TreeCode.of("IOT:SCHEDULE"), 10L).equals(key)),
                 ArgumentMatchers.eq(Duration.ofSeconds(10)),
                 any(Supplier.class));
     }

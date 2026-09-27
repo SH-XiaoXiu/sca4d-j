@@ -1,8 +1,8 @@
 package com.sca4d.notification.sms;
 
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.message.Message;
 import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.Notification;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

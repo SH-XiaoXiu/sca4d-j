@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Objects;
 
-/** 使用 SecretKeyring 按 Account 和版本绑定 HMAC Key 密文。 */
+/** 使用 SecretKeyring 按 Account 和版本绑定 MAC Key 密文。 */
 public final class HmacKeyCryptography {
 
     private final @NotNull SecretKeyring keyring;

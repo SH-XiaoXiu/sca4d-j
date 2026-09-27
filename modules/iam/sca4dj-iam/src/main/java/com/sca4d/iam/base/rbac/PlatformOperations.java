@@ -1,6 +1,6 @@
 package com.sca4d.iam.base.rbac;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.permission.OperationNode;
 import com.sca4d.iam.rbac.RbacDomain;
@@ -31,7 +31,7 @@ public final class PlatformOperations implements RbacOperationModule {
     public static final @NotNull TreeCode ROLES_READ = TreeCode.ofColon(ROLES_READ_VALUE);
 
     /**
-     * 管理 Platform 角色及其 Operation。
+     * 管理 Platform 角色和 Operation。
      */
     public static final @NotNull String ROLES_MANAGE_VALUE = "PLATFORM:ROLES:MANAGE";
 

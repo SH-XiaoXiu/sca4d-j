@@ -33,6 +33,8 @@ public final class AuditEntry {
 
     private final @NotNull Instant occurredAt;
 
+    private final @Nullable String instanceId;
+
     /**
      * 创建已从数据库恢复的审计记录。
      *
@@ -57,7 +59,8 @@ public final class AuditEntry {
             @NotNull AuditResult result,
             @Nullable AuditPayloadData payload,
             @Nullable HttpCall httpCall,
-            @NotNull Instant occurredAt) {
+            @NotNull Instant occurredAt,
+            @Nullable String instanceId) {
         if (id <= 0) {
             throw new IllegalArgumentException("审计记录标识必须为正数");
         }
@@ -74,6 +77,7 @@ public final class AuditEntry {
         this.payload = payload;
         this.httpCall = httpCall;
         this.occurredAt = Objects.requireNonNull(occurredAt, "审计发生时间不能为空");
+        this.instanceId = instanceId;
     }
 
     /** @return 正数审计记录标识 */
@@ -119,5 +123,10 @@ public final class AuditEntry {
     /** @return 操作发生时间 */
     public @NotNull Instant occurredAt() {
         return occurredAt;
+    }
+
+    /** 返回操作实际发生的进程标识；旧审计记录为空，不属于 IAM 主体。 */
+    public @Nullable String instanceId() {
+        return instanceId;
     }
 }

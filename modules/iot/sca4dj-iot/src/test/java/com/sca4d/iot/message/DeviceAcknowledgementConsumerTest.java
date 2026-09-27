@@ -9,6 +9,8 @@ import com.sca4d.core.api.messaging.HandlingDecision;
 import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.JacksonMessageCodec;
 import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.name.Name;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iot.api.message.DeviceAcknowledgement;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,14 +45,14 @@ class DeviceAcknowledgementHandlerTest {
         IncomingMessage<DeviceAcknowledgement> delivery = new IncomingMessage<>(
                 new MessageId(20),
                 acknowledgement,
-                "test-app",
+                new Name("TEST_APP"),
                 NOW,
                 false,
                 1);
 
         assertThat(consumer.handle(delivery).status()).isEqualTo(HandlingDecision.Status.ACKNOWLEDGE);
 
-        assertThat(consumer.code()).isEqualTo(com.sca4d.core.api.code.TreeCode.of("IOT/DOWNLINK/ACK/HANDLER"));
+        assertThat(consumer.code()).isEqualTo(TreeCode.of("IOT/DOWNLINK/ACK/HANDLER"));
         verify(acknowledgements).acknowledge(acknowledgement);
     }
 }

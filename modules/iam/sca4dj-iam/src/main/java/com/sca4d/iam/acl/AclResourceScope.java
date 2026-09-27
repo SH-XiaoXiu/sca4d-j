@@ -1,6 +1,6 @@
 package com.sca4d.iam.acl;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.ResourceScope;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

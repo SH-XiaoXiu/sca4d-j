@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-/** 使用当前应用命名空间的 Job Repository 返回类型化调度历史。 */
+/** 使用当前 App 隔离名称的 Job Repository 返回类型化调度历史。 */
 public final class DefaultJobHistory implements JobHistory {
 
     private final @NotNull JobRepository repository;
@@ -38,8 +38,8 @@ public final class DefaultJobHistory implements JobHistory {
         ScheduleKey checkedSchedule = Objects.requireNonNull(scheduleKey, "ScheduleKey 不能为空");
         JobNodeOutput<T> checkedOutput = Objects.requireNonNull(output, "Job 节点输出不能为空");
         return repository.findScheduledRuns(
-                checkedSchedule.value(),
-                checkedOutput.jobKey().value(),
+                checkedSchedule,
+                checkedOutput.jobKey(),
                 checkedOutput.definitionVersion(),
                 checkedOutput.nodeKey(),
                 Objects.requireNonNull(page, "Job 历史分页要求不能为空"))

@@ -1,5 +1,7 @@
 package com.sca4d.app.server.iot.view;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import com.sca4d.app.server.iot.IotDeviceDetails;
 import com.sca4d.app.server.iot.IotDeviceProfile;
 import com.sca4d.app.server.iot.IotProfileStatus;
@@ -78,7 +80,7 @@ public final class IotDeviceView {
         this.connectionIdentity = connection == null ? null : connection.identifierValue();
         this.accessMethods = device.accessMethods()
                 .stream()
-                .map(com.sca4d.iot.api.DeviceAccessMethod::code)
+                .map(method -> method.code().format(COLON))
                 .sorted()
                 .toList();
         this.status = profile.status();

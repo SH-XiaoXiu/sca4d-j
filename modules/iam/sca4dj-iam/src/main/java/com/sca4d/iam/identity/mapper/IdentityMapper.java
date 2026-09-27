@@ -4,7 +4,6 @@ import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountIdentifierType;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
-import com.sca4d.core.api.identity.SubjectType;
 import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.iam.identity.AccountIdentifier;
 import com.sca4d.iam.identity.IdentityStatus;
@@ -22,15 +21,13 @@ public interface IdentityMapper {
     /**
      * 插入 `Subject`。
      *
-     * @param id `Subject` 标识
-     * @param type `Subject` 类型
+     * @param subjects 非空 Subject 集合；标识已经去重，主键冲突时不覆盖
      * @param status 身份状态
      * @return 新增行数
      */
     @CheckReturnValue
-    int insertSubject(
-            @Param("id") @NotNull Long id,
-            @Param("type") @NotNull SubjectType type,
+    int insertSubjects(
+            @Param("subjects") @NotNull Collection<Subject> subjects,
             @Param("status") @NotNull IdentityStatus status);
 
     /** 按标识和可选状态读取未删除 Subject。 */

@@ -96,7 +96,7 @@ public final class ApplicationAuditValues {
                                     request.getI18n()
                                             .locales()
                                             .stream()
-                                            .map(java.util.Locale::toLanguageTag)
+                                            .map(Locale::toLanguageTag)
                                             .toList()));
                 }
                 if (argument instanceof ReplaceRolePermissionsRequest request) {

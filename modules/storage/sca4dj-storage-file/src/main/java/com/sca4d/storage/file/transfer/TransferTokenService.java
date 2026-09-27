@@ -1,7 +1,10 @@
 package com.sca4d.storage.file.transfer;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import com.sca4d.core.api.error.BusinessException;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.security.EncryptedSecret;
 import com.sca4d.core.api.security.SecretCipher;
 import com.sca4d.core.api.security.SecretKeyring;
@@ -26,19 +29,17 @@ public final class TransferTokenService implements StorageTransferSigner {
 
     private final @NotNull Clock clock;
 
-    private final @NotNull String purpose;
+    private final @NotNull Key purpose;
 
-    /** 创建与当前应用命名空间绑定的本地文件传输令牌签发器。 */
+    /** 创建与当前 App 隔离名称绑定的本地文件传输令牌签发器。 */
     public TransferTokenService(
             @NotNull SecretKeyring keyring,
             @NotNull URI baseUrl,
-            @NotNull Clock clock,
-            @NotNull RuntimeNamespace runtimeNamespace) {
+            @NotNull Clock clock) {
         this.keyring = Objects.requireNonNull(keyring, "Secret keyring 不能为空");
         this.baseUrl = Objects.requireNonNull(baseUrl, "文件传输公开地址不能为空");
         this.clock = Objects.requireNonNull(clock, "时钟不能为空");
-        this.purpose = Objects.requireNonNull(runtimeNamespace, "运行时命名空间不能为空")
-                .sca4dj("storage", "local-transfer", "v1");
+        this.purpose = Key.of(TreeCode.ofColon("STORAGE:LOCAL_TRANSFER:V1"));
     }
 
     @Override
@@ -61,7 +62,7 @@ public final class TransferTokenService implements StorageTransferSigner {
                     .orElseThrow(() -> new IllegalArgumentException("unknown key"));
             byte[] ciphertext = Base64.getUrlDecoder().decode(encoded[1]);
             String[] claims = new String(
-                    cipher.decrypt(purpose, new EncryptedSecret(cipher.keyId(), ciphertext)),
+                    cipher.decrypt(purpose.format(COLON), new EncryptedSecret(cipher.keyId(), ciphertext)),
                     StandardCharsets.UTF_8)
                     .split("\\|", 3);
             if (claims.length != 3 || !expectedAction.equals(claims[0]))
@@ -89,7 +90,8 @@ public final class TransferTokenService implements StorageTransferSigner {
         if (fileId <= 0)
             throw new IllegalArgumentException("文件标识必须为正数");
         String claims = action + "|" + fileId + "|" + expiresAt.getEpochSecond();
-        EncryptedSecret encrypted = keyring.activeCipher().encrypt(purpose, claims.getBytes(StandardCharsets.UTF_8));
+        EncryptedSecret encrypted = keyring.activeCipher()
+                .encrypt(purpose.format(COLON), claims.getBytes(StandardCharsets.UTF_8));
         return encodeText(encrypted.keyId()) + "."
                 + Base64.getUrlEncoder().withoutPadding().encodeToString(encrypted.ciphertext());
     }

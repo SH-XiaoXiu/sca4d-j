@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.sca4d.core.api.authentication.principalsession.ResourceLoader;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Principal;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
@@ -49,7 +49,7 @@ class ResourceLoadersTest {
 
         assertThat(resources.get(PRINCIPAL.principalId()))
                 .extracting(resource -> resource.type() + "/" + resource.id())
-                .containsExactly("CORE/OPERATIONS/PLATFORM:ACCOUNT:READ", "tenant/42");
+                .containsExactly("CORE:OPERATIONS/PLATFORM:ACCOUNT:READ", "TENANT/42");
     }
 
     @Test

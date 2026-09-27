@@ -37,6 +37,8 @@ import com.sca4d.core.api.concurrent.IdempotencyFingerprints;
 import com.sca4d.core.api.concurrent.IdempotencyStore;
 import com.sca4d.core.api.concurrent.RateLimiter;
 import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.identity.SystemPrincipal;
+import com.sca4d.core.api.identity.SystemPrincipals;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.permission.Permission;
 import com.sca4d.core.api.permission.PermissionAssessment;
@@ -65,9 +67,17 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 /** 验证文件 Controller 在调用业务服务前执行资源权限，并只审计文件写操作。 */
 class PlatformFileAuditContractTest {
+
+    static {
+        SystemPrincipals.publish(
+                Map.of(
+                        SystemPrincipals.MAIN,
+                        new SystemPrincipal(1L, SystemPrincipals.MAIN)));
+    }
 
     private static final Instant NOW = Instant.parse("2026-08-07T00:00:00Z");
 
@@ -308,7 +318,7 @@ class PlatformFileAuditContractTest {
             Call call,
             Method method,
             Object[] arguments,
-            java.util.concurrent.Callable<T> invocation) throws Exception {
+            Callable<T> invocation) throws Exception {
         return lifecycle.execute(
                 new CallExecution(call, FileController.class, method, arguments, ApiResponse.class),
                 invocation);

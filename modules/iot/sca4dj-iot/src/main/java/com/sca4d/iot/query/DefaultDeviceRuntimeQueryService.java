@@ -29,7 +29,7 @@ public final class DefaultDeviceRuntimeQueryService implements DeviceRuntimeQuer
 
     private final @NotNull DownlinkRepository downlinks;
 
-    /** 创建不把 Redis 连接事实与主库状态互相覆盖的查询服务。 */
+    /** 创建不把 Redis 连接信息与主库状态互相覆盖的查询服务。 */
     public DefaultDeviceRuntimeQueryService(
             @NotNull DeviceRepository devices,
             @NotNull DeviceConnectionQueryService connections,

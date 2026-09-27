@@ -2,10 +2,15 @@ package com.sca4d.iot.connection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.springframework.data.redis.serializer.StringRedisSerializer.UTF_8;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.isolation.AppName;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.spring.redis.KeyRedisSerializer;
 import com.sca4d.core.spring.redis.RedisBatches;
+import com.sca4d.core.spring.redis.RedisHashTag;
 import com.sca4d.core.spring.redis.RedisPipelineProperties;
 import com.sca4d.iot.api.DeviceAccessMethod;
 import com.sca4d.iot.api.connection.DeviceConnection;
@@ -16,6 +21,7 @@ import com.sca4d.iot.api.state.ReportedStateUpdate;
 import com.sca4d.iot.change.DeviceChangeNotifier;
 import com.sca4d.iot.model.ThingDataJsonCodec;
 import com.sca4d.iot.state.RedisReportedStateStore;
+import com.sca4d.iot.state.ReportedStateKeyMigration;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +30,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisCallback;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -47,15 +54,12 @@ class DeviceConnectionRepositoryIntegrationTest {
 
     private static final Instant NOW = Instant.parse("2026-08-27T02:00:00Z");
 
-    private static final RuntimeNamespace NAMESPACE = new RuntimeNamespace("connection-query-test");
-
     @Test
     @DisplayName("reported批量读取分批且只返回指定绑定，单设备与批量结果一致")
     void readsReportedGroupsAcrossBatchesWithoutMixingBindings() {
         RedisReportedStateStore store = new RedisReportedStateStore(
                 redis,
                 new ThingDataJsonCodec(new ObjectMapper()),
-                NAMESPACE,
                 new RedisBatches(new RedisPipelineProperties()));
         var first = new ReportedStateUpdate(
                 "status",
@@ -88,6 +92,25 @@ class DeviceConnectionRepositoryIntegrationTest {
         assertThat(store.find(Map.of(), "status")).isEmpty();
     }
 
+    @Test
+    void copiesNonexpiringReportedDataWithoutOverwritingOrRemovingTheSource() {
+        String index = "old-app:sca4dj:iot:reported-groups:71:1";
+        String group = "old-app:sca4dj:iot:reported-group:71:1:Status:a";
+        rawRedis.opsForSet().add(index, "Status:a");
+        rawRedis.opsForHash().put(group, "version", "7");
+        rawRedis.opsForHash().put(group, "value:power", "1");
+        var migration = new ReportedStateKeyMigration(rawRedis, redis);
+        assertThat(migration.verify("old-app")).isEqualTo(2);
+        assertThat(migration.copy("old-app")).isEqualTo(2);
+        assertThat(migration.copy("old-app")).isEqualTo(2);
+        var target = Key.of(TreeCode.of("IOT:REPORTED_GROUP"), 71L, 1L).part("Status:a");
+        assertThat(redis.opsForHash().get(target, "version")).isEqualTo("7");
+        assertThat(rawRedis.hasKey(group)).isTrue();
+        redis.opsForHash().put(target, "version", "8");
+        assertThatThrownBy(() -> migration.copy("old-app")).hasMessageContaining("禁止覆盖");
+        assertThat(rawRedis.opsForHash().get(group, "version")).isEqualTo("7");
+    }
+
     @Container
     @SuppressWarnings("resource") // Testcontainers 扩展负责测试类结束时停止静态容器。
     private static final GenericContainer<?> REDIS = new GenericContainer<>(
@@ -96,7 +119,9 @@ class DeviceConnectionRepositoryIntegrationTest {
 
     private static LettuceConnectionFactory connectionFactory;
 
-    private static StringRedisTemplate redis;
+    private static RedisTemplate<Key, String> redis;
+
+    private static StringRedisTemplate rawRedis;
 
     @BeforeAll
     static void connectRedis() {
@@ -105,7 +130,14 @@ class DeviceConnectionRepositoryIntegrationTest {
                         REDIS.getHost(),
                         REDIS.getMappedPort(6379)));
         connectionFactory.afterPropertiesSet();
-        redis = new StringRedisTemplate(connectionFactory);
+        AppName.publish("sca4d-test");
+        rawRedis = new StringRedisTemplate(connectionFactory);
+        redis = new RedisTemplate<>();
+        redis.setConnectionFactory(connectionFactory);
+        redis.setKeySerializer(new KeyRedisSerializer(List.of(new RedisHashTag(TreeCode.of("IOT")))));
+        redis.setValueSerializer(UTF_8);
+        redis.setHashKeySerializer(UTF_8);
+        redis.setHashValueSerializer(UTF_8);
         redis.afterPropertiesSet();
     }
 
@@ -181,18 +213,17 @@ class DeviceConnectionRepositoryIntegrationTest {
                 .hasMessageContaining("protocol");
     }
 
-    /** 创建使用当前测试命名空间和一分钟 TTL 的 Repository。 */
+    /** 创建使用当前测试 App 隔离名称和一分钟 TTL 的 Repository。 */
     private static DeviceConnectionRepository repository(Clock clock) {
         return new DeviceConnectionRepository(
                 redis,
                 clock,
                 Duration.ofMinutes(1),
-                NAMESPACE,
                 new DeviceChangeNotifier(List.of()),
                 new RedisBatches(new RedisPipelineProperties()));
     }
 
-    /** 创建 Device 71 不使用 Session 的 MQTT 连接事实。 */
+    /** 创建 Device 71 不使用 Session 的 MQTT 连接信息。 */
     private static DeviceConnection device71Connection(String id, Instant connectedAt) {
         return new DeviceConnection(
                 new DeviceConnectionId(id),
@@ -203,13 +234,13 @@ class DeviceConnectionRepositoryIntegrationTest {
                 connectedAt);
     }
 
-    /** 返回当前测试命名空间中的 Device 反向索引 key。 */
-    private static String deviceKey(long deviceId) {
-        return NAMESPACE.sca4dj("iot", "device-connections") + ':' + deviceId;
+    /** 返回当前测试 App 隔离名称下的 Device 反向索引 key。 */
+    private static Key deviceKey(long deviceId) {
+        return Key.of(TreeCode.of("IOT:DEVICE_CONNECTIONS"), deviceId);
     }
 
     /** 返回损坏数据测试使用的 Connection 主记录 key。 */
-    private static String corruptConnectionKey() {
-        return NAMESPACE.sca4dj("iot", "connection") + ":corrupt";
+    private static Key corruptConnectionKey() {
+        return Key.of(TreeCode.of("IOT:CONNECTION"), "corrupt");
     }
 }

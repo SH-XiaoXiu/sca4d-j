@@ -37,7 +37,7 @@ public final class DeviceScheduleTrigger {
                 null);
     }
 
-    /** @return 由 IoT 模块计算后续触发时间的六字段 Cron 规则 */
+    /** @return 由 IoT 模块计算下一次触发时间的六字段 Cron 规则 */
     @CheckReturnValue
     public static @NotNull DeviceScheduleTrigger cron(
             @NotNull String cronExpression,

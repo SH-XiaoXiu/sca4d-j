@@ -125,8 +125,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull org.springframework.data.redis.core.StringRedisTemplate</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sca4djStringRedisTemplate(org.springframework.data.redis.connection.RedisConnectionFactory)" class="member-name-link">sca4djStringRedisTemplate</a><wbr>(@NotNull org.springframework.data.redis.connection.RedisConnectionFactory&nbsp;connectionFactory)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull org.springframework.data.redis.core.RedisTemplate<wbr>&lt;com.sca4d.core.api.name.Key,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sca4djRedisTemplate(org.springframework.data.redis.connection.RedisConnectionFactory,java.util.List)" class="member-name-link">sca4djRedisTemplate</a><wbr>(@NotNull org.springframework.data.redis.connection.RedisConnectionFactory&nbsp;connectionFactory,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../redis/RedisHashTag.html" title="class in com.sca4d.core.spring.redis">RedisHashTag</a>&gt;&nbsp;hashTags)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">使用应用唯一或默认的 Redis 连接工厂创建脚手架内部字符串操作模板。</div>
 </div>
@@ -163,15 +164,18 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="sca4djStringRedisTemplate(org.springframework.data.redis.connection.RedisConnectionFactory)">
-<h3>sca4djStringRedisTemplate</h3>
-<div class="member-signature"><span class="annotations">@Bean(name="sca4djStringRedisTemplate",
+<section class="detail" id="sca4djRedisTemplate(org.springframework.data.redis.connection.RedisConnectionFactory,java.util.List)">
+<h3>sca4djRedisTemplate</h3>
+<div class="member-signature"><span class="annotations">@Bean(name="sca4djRedisTemplate",
       defaultCandidate=false)
+@DependsOn("sca4djAppName")
 <a href="../redis/Sca4djRedis.html" title="annotation interface in com.sca4d.core.spring.redis">@Sca4djRedis</a>
 @ConditionalOnMissingBean(annotation=<a href="../redis/Sca4djRedis.html" title="annotation interface in com.sca4d.core.spring.redis">Sca4djRedis.class</a>)
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull org.springframework.data.redis.core.StringRedisTemplate</span>&nbsp;<span class="element-name">sca4djStringRedisTemplate</span><wbr><span class="parameters">(@NotNull
- @NotNull org.springframework.data.redis.connection.RedisConnectionFactory&nbsp;connectionFactory)</span></div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull org.springframework.data.redis.core.RedisTemplate&lt;com.sca4d.core.api.name.Key,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">sca4djRedisTemplate</span><wbr><span class="parameters">(@NotNull
+ @NotNull org.springframework.data.redis.connection.RedisConnectionFactory&nbsp;connectionFactory,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../redis/RedisHashTag.html" title="class in com.sca4d.core.spring.redis">RedisHashTag</a>&gt;&nbsp;hashTags)</span></div>
 <div class="block">使用应用唯一或默认的 Redis 连接工厂创建脚手架内部字符串操作模板。</div>
 <dl class="notes">
 <dt>Parameters:</dt>

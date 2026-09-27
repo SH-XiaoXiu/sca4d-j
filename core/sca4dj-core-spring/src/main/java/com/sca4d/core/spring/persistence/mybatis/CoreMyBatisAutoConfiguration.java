@@ -1,13 +1,22 @@
 package com.sca4d.core.spring.persistence.mybatis;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sca4d.core.api.code.TreeCode;
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
+import com.sca4d.core.api.authentication.AuthenticationActionCode;
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.gateway.GatewayCallbackCode;
 import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.identity.RealmKey;
+import com.sca4d.core.api.job.JobKey;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.Name;
+import com.sca4d.core.api.name.NameFormat;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Action;
+import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.spring.config.CoreJacksonAutoConfiguration;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.scripting.LanguageDriver;
@@ -126,7 +135,7 @@ public class CoreMyBatisAutoConfiguration {
      * @return MyBatis 配置定制器
      */
     @Bean
-    ConfigurationCustomizer coreTypeHandlerCustomizer(@Sca4djJson ObjectMapper objectMapper) {
+    ConfigurationCustomizer coreTypeHandlerCustomizer(@Sca4djJson Sca4djMapper objectMapper) {
         return configuration -> {
             configuration.setMapUnderscoreToCamelCase(true);
             configuration.setArgNameBasedConstructorAutoMapping(true);
@@ -145,16 +154,46 @@ public class CoreMyBatisAutoConfiguration {
                     .register(
                             Action.class,
                             JdbcType.VARCHAR,
-                            new StringValueTypeHandler<>(Action::new, action -> action.code().value()));
+                            new StringValueTypeHandler<>(Action::new, action -> action.code().format(COLON)));
             configuration.getTypeHandlerRegistry()
                     .register(
                             TreeCode.class,
                             JdbcType.VARCHAR,
+                            new TreeCodeTypeHandler());
+            configuration.getTypeHandlerRegistry()
+                    .register(
+                            Name.class,
+                            JdbcType.VARCHAR,
+                            new StringValueTypeHandler<>(Name::new, value -> value.format(COLON)));
+            configuration.getTypeHandlerRegistry()
+                    .register(
+                            Key.class,
+                            JdbcType.VARCHAR,
+                            new StringValueTypeHandler<>(text -> Key.parse(text, COLON), value -> value.format(COLON)));
+            configuration.getTypeHandlerRegistry()
+                    .register(
+                            JobKey.class,
+                            JdbcType.VARCHAR,
+                            new StringValueTypeHandler<>(JobKey::new, value -> value.format(NameFormat.SLASH)));
+            configuration.getTypeHandlerRegistry()
+                    .register(
+                            ScheduleKey.class,
+                            JdbcType.VARCHAR,
+                            new StringValueTypeHandler<>(ScheduleKey::new, value -> value.format(NameFormat.SLASH)));
+            configuration.getTypeHandlerRegistry()
+                    .register(
+                            GatewayCallbackCode.class,
+                            JdbcType.VARCHAR,
                             new StringValueTypeHandler<>(
-                                    value -> value.indexOf('/') < 0 && value.indexOf(':') < 0
-                                            ? TreeCode.ofSegment(value)
-                                            : TreeCode.of(value),
-                                    TreeCode::value));
+                                    GatewayCallbackCode::new,
+                                    value -> value.format(NameFormat.DOT)));
+            configuration.getTypeHandlerRegistry()
+                    .register(
+                            AuthenticationActionCode.class,
+                            JdbcType.VARCHAR,
+                            new StringValueTypeHandler<>(
+                                    AuthenticationActionCode::new,
+                                    value -> value.format(NameFormat.DOT)));
             configuration.getTypeHandlerRegistry()
                     .register(
                             LocalizedFields.class,

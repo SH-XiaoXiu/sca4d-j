@@ -2,7 +2,7 @@
 
 Sca4d-J 采用分布式单体架构。一个 App 包含完整业务体系，身份、认证、文件、消息、任务和具体业务在同一业务进程中协作；同一个 App 可以运行一个或多个实例。单实例与集群使用同一套业务代码、数据约束和失败处理。
 
-本页说明代码和数据应该由谁负责。具体的 SQL、并发策略和技术工具见[SQL 与持久化](./05_persistence)、[数据库](./06_database)和[Java 与 Spring](./04_java-and-spring)。
+新增功能先决定数据属于哪个模块，再沿 `Controller -> Service -> Repository -> Mapper` 分配职责；跨模块只调用公开接口。具体的 SQL、并发策略和技术工具见[SQL 与持久化](./05_persistence)、[数据库](./06_database)和[Java 与 Spring](./04_java-and-spring)。
 
 ## 顶层目录
 

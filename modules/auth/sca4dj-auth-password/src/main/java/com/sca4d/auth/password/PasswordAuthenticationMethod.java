@@ -8,12 +8,12 @@ import com.sca4d.core.api.authentication.AuthenticationMethod;
 import com.sca4d.core.api.authentication.SessionControl;
 import com.sca4d.core.api.authentication.SessionTerminationReason;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountDirectory;
 import com.sca4d.core.api.identity.AccountIdentifierType;
 import com.sca4d.core.api.identity.RealmKey;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.security.SecretHasher;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -227,7 +227,7 @@ public class PasswordAuthenticationMethod implements AuthenticationMethod<Passwo
     }
 
     /**
-     * 替换 Password Credential，并终止该 Account 的全部旧 Session。
+     * 替换 Password Credential，并终止当前 Account 的全部旧 Session。
      *
      * @param accountId Account 标识
      * @param password  待编码的新原始密码
@@ -280,7 +280,7 @@ public class PasswordAuthenticationMethod implements AuthenticationMethod<Passwo
     }
 
     /**
-     * 按乐观版本变更 Password Credential 状态，并终止该 Account 的全部旧 Session。
+     * 按乐观版本变更 Password Credential 状态，并终止当前 Account 的全部旧 Session。
      */
     @Transactional
     public @NotNull PasswordCredential changeStatus(

@@ -21,7 +21,7 @@ public final class LinkedAccountCondition {
      * 要求 Principal 至少关联一个指定认证域中仍启用且所属 Subject 仍启用的 Account。
      *
      * @param realm Account 所属认证域
-     * @return 可用于 {@link PrincipalQuery.Builder#linkedAccount(LinkedAccountCondition)} 的条件
+     * @return 可用于 {@link PBuilder#linkedAccount(LinkedAccountCondition)} 的条件
      */
     @Contract(value = "_ -> new", pure = true)
     @CheckReturnValue

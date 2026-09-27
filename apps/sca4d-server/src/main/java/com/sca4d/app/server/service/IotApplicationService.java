@@ -1,5 +1,7 @@
 package com.sca4d.app.server.service;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import cn.hutool.crypto.digest.DigestUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +29,7 @@ import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.query.ListRequest;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
@@ -34,11 +37,12 @@ import com.sca4d.core.api.query.Sort;
 import com.sca4d.core.api.security.EncryptedSecret;
 import com.sca4d.core.api.security.SecretCipher;
 import com.sca4d.core.api.security.SecretKeyring;
-import com.sca4d.core.spring.json.Sca4djJson;
 import com.sca4d.iam.identity.IdentityService;
 import com.sca4d.iam.identity.IdentityStatus;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.*;
+import com.sca4d.iot.api.Product;
+import com.sca4d.iot.api.ProductSource;
 import com.sca4d.iot.api.change.DeviceChangeArea;
 import com.sca4d.iot.api.connection.DeviceConnectionBinding;
 import com.sca4d.iot.api.message.DeviceDownlink;
@@ -63,6 +67,7 @@ import com.sca4d.iot.model.ThingModelService;
 import com.sca4d.iot.product.ProductChange;
 import com.sca4d.iot.product.ProductDefinitionCatalog;
 import com.sca4d.iot.product.ProductRegistration;
+import com.sca4d.iot.product.ProductResolution;
 import com.sca4d.iot.product.ProductService;
 import com.sca4d.iot.protocol.DeviceProtocolCatalog;
 import org.jetbrains.annotations.CheckReturnValue;
@@ -83,6 +88,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -156,7 +162,7 @@ public class IotApplicationService {
             @NotNull SessionControl sessions,
             @NotNull IotApplicationRepository repository,
             @NotNull SecretKeyring keyring,
-            @Sca4djJson @NotNull ObjectMapper objectMapper,
+            @NotNull ObjectMapper objectMapper,
             @NotNull Clock clock,
             @NotNull DeviceChangeNotifier changes,
             @NotNull IotProperties iotProperties,
@@ -502,7 +508,7 @@ public class IotApplicationService {
         });
     }
 
-    /** 重置 Device HMAC Key，并终止旧 Session 和连接。 */
+    /** 重置 Device MAC Key，并终止旧 Session 和连接。 */
     @CheckReturnValue
     public @NotNull IssuedHmacKey resetDeviceHmacKey(long deviceId) {
         return writeDevice(deviceId, () -> {
@@ -534,7 +540,7 @@ public class IotApplicationService {
     public @NotNull DeviceDownlink submitCommand(
             long deviceId,
             @NotNull String commandCode,
-            @NotNull java.util.Map<String, ?> inputs) {
+            @NotNull Map<String, ?> inputs) {
         return writeDevice(deviceId, () -> {
             assertDeviceEnabled(deviceId);
             return deviceCommands.submit(
@@ -551,9 +557,9 @@ public class IotApplicationService {
     @CheckReturnValue
     public @NotNull Page<IotProductDetails> findProducts(@NotNull PageRequest page) {
         // 先取得当前 Product 页，再一次读取本页全部 App Profile，避免逐 Product 查询。
-        Page<com.sca4d.iot.api.Product> productsPage = products.findPage(page);
-        java.util.Map<Long, IotProductProfile> profiles = repository.findProductProfiles(
-                productsPage.getItems().stream().map(com.sca4d.iot.api.Product::id).toList());
+        Page<Product> productsPage = products.findPage(page);
+        Map<Long, IotProductProfile> profiles = repository.findProductProfiles(
+                productsPage.getItems().stream().map(Product::id).toList());
         List<IotProductDetails> items = productsPage.getItems()
                 .stream()
                 .map(
@@ -571,13 +577,13 @@ public class IotApplicationService {
     @CheckReturnValue
     public @NotNull Page<IotProductCatalogItem> findProductCatalog(@NotNull PageRequest page) {
         // 先完成数据库与代码 Product 的统一分页，再收集本页需要 App Profile 的数据库 Product。
-        Page<com.sca4d.iot.product.ProductResolution> catalogPage = productDefinitions.findPage(page);
+        Page<ProductResolution> catalogPage = productDefinitions.findPage(page);
         List<Long> productIds = catalogPage.getItems()
                 .stream()
                 .filter(resolution -> resolution.binding().source() == ProductSource.DATABASE)
                 .map(resolution -> resolution.binding().databaseProductId().orElseThrow())
                 .toList();
-        java.util.Map<Long, IotProductProfile> profiles = repository.findProductProfiles(productIds);
+        Map<Long, IotProductProfile> profiles = repository.findProductProfiles(productIds);
 
         // 按目录页原顺序组装展示项；代码 Product 没有应用数据库中的 Profile。
         List<IotProductCatalogItem> items = catalogPage.getItems()
@@ -640,7 +646,7 @@ public class IotApplicationService {
                                 page,
                                 List.of(Sort.CREATED_AT.asc(), Sort.SERIAL.asc())))
                         .build());
-        java.util.Map<Long, IotDeviceProfile> profiles = repository.findDeviceProfiles(
+        Map<Long, IotDeviceProfile> profiles = repository.findDeviceProfiles(
                 devicesPage.getItems().stream().map(Device::id).toList());
         List<IotDeviceDetails> items = devicesPage.getItems()
                 .stream()
@@ -757,7 +763,7 @@ public class IotApplicationService {
             @NotNull String productCode,
             @NotNull Supplier<@NotNull T> operation) {
         return distributedLock.execute(
-                new LockKey("iot", "product", productCode),
+                new LockKey(TreeCode.of("IOT:PRODUCT"), productCode),
                 LOCK_WAIT,
                 () -> Objects.requireNonNull(
                         transactions.execute(status -> operation.get()),
@@ -767,7 +773,7 @@ public class IotApplicationService {
     /** 取得 Product 聚合锁后，在事务内执行无返回值的应用写操作。 */
     private void writeProduct(@NotNull String productCode, @NotNull Runnable operation) {
         distributedLock.execute(
-                new LockKey("iot", "product", productCode),
+                new LockKey(TreeCode.of("IOT:PRODUCT"), productCode),
                 LOCK_WAIT,
                 () -> {
                     transactions.executeWithoutResult(status -> operation.run());
@@ -778,7 +784,7 @@ public class IotApplicationService {
     /** 取得 Device 聚合锁后，在事务内执行无返回值的应用写操作。 */
     private void writeDevice(long deviceId, @NotNull Runnable operation) {
         distributedLock.execute(
-                new LockKey("iot", "device", Long.toString(deviceId)),
+                new LockKey(TreeCode.of("IOT:DEVICE"), deviceId),
                 LOCK_WAIT,
                 () -> {
                     transactions.executeWithoutResult(status -> operation.run());
@@ -791,7 +797,7 @@ public class IotApplicationService {
             long deviceId,
             @NotNull Supplier<@NotNull T> operation) {
         return distributedLock.execute(
-                new LockKey("iot", "device", Long.toString(deviceId)),
+                new LockKey(TreeCode.of("IOT:DEVICE"), deviceId),
                 LOCK_WAIT,
                 () -> Objects.requireNonNull(
                         transactions.execute(status -> operation.get()),
@@ -804,10 +810,10 @@ public class IotApplicationService {
             long deviceId,
             @NotNull Supplier<@NotNull T> operation) {
         return distributedLock.execute(
-                new LockKey("iot", "product", productCode),
+                new LockKey(TreeCode.of("IOT:PRODUCT"), productCode),
                 LOCK_WAIT,
                 () -> distributedLock.execute(
-                        new LockKey("iot", "device", Long.toString(deviceId)),
+                        new LockKey(TreeCode.of("IOT:DEVICE"), deviceId),
                         LOCK_WAIT,
                         () -> Objects.requireNonNull(
                                 transactions.execute(status -> operation.get()),
@@ -820,10 +826,10 @@ public class IotApplicationService {
             long deviceId,
             @NotNull Runnable operation) {
         distributedLock.execute(
-                new LockKey("iot", "product", productCode),
+                new LockKey(TreeCode.of("IOT:PRODUCT"), productCode),
                 LOCK_WAIT,
                 () -> distributedLock.execute(
-                        new LockKey("iot", "device", Long.toString(deviceId)),
+                        new LockKey(TreeCode.of("IOT:DEVICE"), deviceId),
                         LOCK_WAIT,
                         () -> {
                             transactions.executeWithoutResult(status -> operation.run());
@@ -837,10 +843,10 @@ public class IotApplicationService {
             @NotNull String idempotencyKey,
             @NotNull Supplier<@NotNull T> operation) {
         return distributedLock.execute(
-                new LockKey("iot", "product", productCode),
+                new LockKey(TreeCode.of("IOT:PRODUCT"), productCode),
                 LOCK_WAIT,
                 () -> distributedLock.execute(
-                        new LockKey("app", "iot", "device-create", DigestUtil.sha256Hex(idempotencyKey)),
+                        new LockKey(TreeCode.of("APP:IOT:DEVICE-CREATE"), DigestUtil.sha256Hex(idempotencyKey)),
                         LOCK_WAIT,
                         () -> Objects.requireNonNull(
                                 transactions.execute(status -> operation.get()),
@@ -903,7 +909,7 @@ public class IotApplicationService {
                                 "connection",
                                 registration.connection()
                                         .map(
-                                                value -> java.util.Map.of(
+                                                value -> Map.of(
                                                         "protocol",
                                                         value.definition().protocol().code(),
                                                         "identityType",
@@ -915,7 +921,7 @@ public class IotApplicationService {
                                 "accessMethods",
                                 registration.accessMethods()
                                         .stream()
-                                        .map(DeviceAccessMethod::code)
+                                        .map(method -> method.code().format(COLON))
                                         .sorted()
                                         .toList())
                         .put(

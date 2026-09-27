@@ -106,7 +106,12 @@ public final class SimulatorConfiguration {
         return legacySecret;
     }
 
-    /** @param device standard 或 legacy @return 当前进程是否启动该设备 */
+    /**
+     * 判断当前进程是否启动指定类型的模拟设备。
+     *
+     * @param device `standard` 或 `legacy`
+     * @return 配置允许启动该设备时返回 {@code true}
+     */
     public boolean selected(@NotNull String device) {
         return selectedDevices.equals("all") || selectedDevices.equals(device);
     }

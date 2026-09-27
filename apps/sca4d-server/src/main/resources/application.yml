@@ -7,9 +7,21 @@ spring:
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:local}
   datasource:
-    url: ${SCA4DJ_DB_URL:jdbc:postgresql://localhost:5432/sca4dj?options=-c%20TimeZone%3DUTC}
-    username: ${SCA4DJ_DB_USERNAME:sca4dj}
-    password: ${SCA4DJ_DB_PASSWORD:sca4dj}
+    dynamic:
+      primary: main
+      strict: true
+      datasource:
+        main:
+          url: ${SCA4DJ_DB_URL:jdbc:postgresql://localhost:5432/sca4dj?options=-c%20TimeZone%3DUTC}
+          username: ${SCA4DJ_DB_USERNAME:sca4dj}
+          password: ${SCA4DJ_DB_PASSWORD:sca4dj}
+          driver-class-name: org.postgresql.Driver
+        iot-history:
+          lazy: true
+          url: ${SCA4DJ_IOT_TIMESCALE_URL:jdbc:postgresql://localhost:5433/sca4dj_iot?options=-c%20TimeZone%3DUTC}
+          username: ${SCA4DJ_IOT_TIMESCALE_USERNAME:sca4dj}
+          password: ${SCA4DJ_IOT_TIMESCALE_PASSWORD:sca4dj}
+          driver-class-name: org.postgresql.Driver
   data:
     redis:
       host: ${SCA4DJ_REDIS_HOST:localhost}
@@ -30,14 +42,14 @@ spring:
 
 logging:
   file:
-    path: ${SCA4DJ_LOG_PATH:${SCA4DJ_LOG_ROOT:logs}/${spring.application.name}/${SCA4DJ_INSTANCE_ID:${HOSTNAME:local}}}
+    path: ${SCA4DJ_LOG_PATH:${SCA4DJ_LOG_ROOT:logs}/${spring.application.name}/${sca4dj.instance.id}}
   structured:
     json:
       exclude: sessionId
     ecs:
       service:
         environment: ${SCA4DJ_ENVIRONMENT:${SPRING_PROFILES_ACTIVE:default}}
-        node-name: ${SCA4DJ_INSTANCE_ID:${HOSTNAME:local}}
+        node-name: ${sca4dj.instance.id}
 
 server:
   port: ${SCA4DJ_SERVER_PORT:8080}
@@ -68,12 +80,14 @@ app:
     device-creation-cleanup-interval: ${SCA4DJ_IOT_DEVICE_CREATION_CLEANUP_INTERVAL:PT10M}
 
 sca4dj:
+  instance:
+    id: ${SCA4DJ_INSTANCE_ID:${random.uuid}}
+    enabled-capabilities: ${SCA4DJ_INSTANCE_CAPABILITIES:MAIN:API,IOT:API,IOT:TRANSPORT,JOB:WORKER,SCHEDULING:WORKER}
   gateway:
     registration:
       enabled: ${SCA4DJ_GATEWAY_REGISTRATION_ENABLED:false}
       gateway-base-url: ${SCA4DJ_GATEWAY_BASE_URL:http://localhost:8088}
       server-base-url: ${SCA4DJ_SERVER_BASE_URL:http://localhost:${SCA4DJ_SERVER_PORT:8080}}
-      instance-id: ${SCA4DJ_SERVER_INSTANCE_ID:}
       readiness-path: /actuator/health/readiness
       secret: ${SCA4DJ_GATEWAY_SECRET:}
       renew-interval: ${SCA4DJ_GATEWAY_RENEW_INTERVAL:PT10S}
@@ -182,7 +196,7 @@ sca4dj:
       host: ${SCA4DJ_IOT_EMQX_HOST:localhost}
       port: ${SCA4DJ_IOT_EMQX_INTERNAL_MQTT_PORT:1884}
       tls: ${SCA4DJ_IOT_EMQX_INTERNAL_MQTT_TLS:false}
-      # 未配置环境变量时由 EMQX 自动配置按 RuntimeNamespace 生成带 UUID 的实例 Client ID。
+      # 未配置时按服务器资源前缀生成当前进程独立的 Client ID。
       client-id: ${SCA4DJ_IOT_EMQX_CLIENT_ID:}
       # 内部 listener 不认证；固定 username 仅供 docker/emqx/acl.conf 识别 Runtime 的系统 Topic 订阅。
       username: sca4dj-iot-runtime
@@ -199,9 +213,6 @@ sca4dj:
       management-page-size: ${SCA4DJ_IOT_EMQX_MANAGEMENT_PAGE_SIZE:100}
     timescale:
       enabled: ${SCA4DJ_IOT_TIMESCALE_ENABLED:false}
-      url: ${SCA4DJ_IOT_TIMESCALE_URL:jdbc:postgresql://localhost:5433/sca4dj_iot?options=-c%20TimeZone%3DUTC}
-      username: ${SCA4DJ_IOT_TIMESCALE_USERNAME:sca4dj}
-      password: ${SCA4DJ_IOT_TIMESCALE_PASSWORD:sca4dj}
       cleanup-interval: ${SCA4DJ_IOT_TIMESCALE_CLEANUP_INTERVAL:PT1H}
       telemetry-retention: ${SCA4DJ_IOT_TELEMETRY_RETENTION:P90D}
       event-retention: ${SCA4DJ_IOT_EVENT_RETENTION:P90D}
@@ -228,6 +239,9 @@ sca4dj:
       bucket: ${SCA4DJ_STORAGE_MINIO_BUCKET:sca4dj}
       create-bucket: ${SCA4DJ_STORAGE_MINIO_CREATE_BUCKET:true}
   iam:
+    system-principal-ids:
+      MAIN: 1
+      IOT: 2
     bootstrap:
       enabled: ${SCA4DJ_IAM_BOOTSTRAP_ENABLED:true}
       username: ${SCA4DJ_IAM_BOOTSTRAP_USERNAME:admin}

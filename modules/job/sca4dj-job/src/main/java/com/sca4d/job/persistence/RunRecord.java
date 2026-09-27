@@ -1,5 +1,6 @@
 package com.sca4d.job.persistence;
 
+import com.sca4d.core.api.job.JobKey;
 import com.sca4d.core.api.job.JobRunStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -9,7 +10,7 @@ public final class RunRecord {
 
     private final long id;
 
-    private final @NotNull String jobKey;
+    private final @NotNull JobKey jobKey;
 
     private final int jobDefinitionVersion;
 
@@ -28,7 +29,7 @@ public final class RunRecord {
      */
     public RunRecord(
             long id,
-            @NotNull String jobKey,
+            @NotNull JobKey jobKey,
             int jobDefinitionVersion,
             @Nullable String outputJson,
             @NotNull JobRunStatus status) {
@@ -53,7 +54,7 @@ public final class RunRecord {
      *
      * @return 提交时的 Job key
      */
-    public @NotNull String jobKey() {
+    public @NotNull JobKey jobKey() {
         return jobKey;
     }
 

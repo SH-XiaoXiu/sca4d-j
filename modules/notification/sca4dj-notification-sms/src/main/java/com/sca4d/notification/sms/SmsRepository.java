@@ -1,12 +1,17 @@
 package com.sca4d.notification.sms;
 
+import static com.sca4d.notification.sms.SmsNotificationErrorCode.BINDING_CONFLICT;
+import static com.sca4d.notification.sms.SmsNotificationErrorCode.BINDING_NOT_FOUND;
+import static com.sca4d.notification.sms.SmsNotificationErrorCode.PROVIDER_CONFLICT;
+import static com.sca4d.notification.sms.SmsNotificationErrorCode.PROVIDER_NOT_FOUND;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.concurrent.VersionConditions;
 import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.notification.sms.mapper.SmsBindingState;
 import com.sca4d.notification.sms.mapper.SmsProviderMapper;
@@ -112,7 +117,7 @@ public final class SmsRepository {
         try {
             mapper.insertProvider(providerId, code, type, credentialRef, priority);
         } catch (DataIntegrityViolationException exception) {
-            throw new BusinessException(SmsNotificationErrorCode.PROVIDER_CONFLICT, exception);
+            throw new BusinessException(PROVIDER_CONFLICT, exception);
         }
     }
 
@@ -139,7 +144,7 @@ public final class SmsRepository {
                     condition.whenZero(),
                     "SMS Provider");
         } catch (DataIntegrityViolationException exception) {
-            throw new BusinessException(SmsNotificationErrorCode.PROVIDER_CONFLICT, exception);
+            throw new BusinessException(PROVIDER_CONFLICT, exception);
         }
     }
 
@@ -190,7 +195,7 @@ public final class SmsRepository {
                     providerTemplateCode,
                     write(parameterMapping));
         } catch (DataIntegrityViolationException exception) {
-            throw new BusinessException(SmsNotificationErrorCode.BINDING_CONFLICT, exception);
+            throw new BusinessException(BINDING_CONFLICT, exception);
         }
     }
 
@@ -221,7 +226,7 @@ public final class SmsRepository {
                     condition.whenZero(),
                     "SMS Provider Binding");
         } catch (DataIntegrityViolationException exception) {
-            throw new BusinessException(SmsNotificationErrorCode.BINDING_CONFLICT, exception);
+            throw new BusinessException(BINDING_CONFLICT, exception);
         }
     }
 
@@ -251,12 +256,12 @@ public final class SmsRepository {
 
     private @NotNull SmsProvider loadProvider(long providerId) {
         return provider(providerId)
-                .orElseThrow(() -> new BusinessException(SmsNotificationErrorCode.PROVIDER_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(PROVIDER_NOT_FOUND));
     }
 
     private @NotNull SmsProviderBinding loadBinding(long bindingId) {
         return binding(bindingId)
-                .orElseThrow(() -> new BusinessException(SmsNotificationErrorCode.BINDING_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(BINDING_NOT_FOUND));
     }
 
     private static SmsProvider provider(SmsProviderState state) {

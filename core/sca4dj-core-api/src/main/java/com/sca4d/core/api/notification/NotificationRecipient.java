@@ -1,6 +1,7 @@
 package com.sca4d.core.api.notification;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.NameFormat;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -29,9 +30,9 @@ public final class NotificationRecipient {
      */
     public NotificationRecipient(@NotNull TreeCode type, @NotNull String id) {
         this.type = Objects.requireNonNull(type, "通知接收人类型不能为空");
-        if (this.type.separator() != '\0'
-                || this.type.length() > 64
-                || !Character.isLetter(this.type.value().charAt(0))) {
+        if (this.type.size() != 1
+                || this.type.format(NameFormat.COLON).length() > 64
+                || !Character.isLetter(this.type.format(NameFormat.COLON).charAt(0))) {
             throw new IllegalArgumentException("通知接收人类型必须是以字母开头且最长 64 个字符的单节点 TreeCode");
         }
         String checkedId = TextUtils.requireText(id, "通知接收人标识");

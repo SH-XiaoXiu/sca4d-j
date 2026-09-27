@@ -5,10 +5,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Action;
-import com.sca4d.core.api.permission.Operation;
 import com.sca4d.iam.DomainScope;
+import com.sca4d.iam.base.acl.PlatformAclRepository;
 import com.sca4d.iam.identity.IdentityService;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
@@ -62,7 +62,8 @@ class AclServiceTest {
     @DisplayName("拒绝 Operation 资源类型和跨 Domain 重复资源类型")
     void rejectsOperationAndCrossDomainDuplicateResourceTypes() {
         assertThatThrownBy(
-                () -> registerTypes(new FakeRepository(new DomainScope("a"), Set.of(Operation.RESOURCE_TYPE))))
+                () -> registerTypes(
+                        new FakeRepository(new DomainScope("a"), Set.of(PlatformAclRepository.RESOURCE_TYPE))))
                 .isInstanceOf(IllegalStateException.class);
         assertThatThrownBy(
                 () -> registerTypes(

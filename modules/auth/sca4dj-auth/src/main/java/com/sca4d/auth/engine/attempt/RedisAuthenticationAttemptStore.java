@@ -4,10 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.authentication.AuthenticationAttemptId;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.time.Clock;
 import java.time.Duration;
@@ -20,7 +21,7 @@ public final class RedisAuthenticationAttemptStore {
 
     private static final Duration ACQUIRE_TIMEOUT = Duration.ofSeconds(2);
 
-    private final StringRedisTemplate redis;
+    private final RedisTemplate<Key, String> redis;
 
     private final AuthenticationAttemptCodec codec;
 
@@ -28,7 +29,7 @@ public final class RedisAuthenticationAttemptStore {
 
     private final DistributedLock distributedLock;
 
-    private final String attemptPrefix;
+    private static final TreeCode ATTEMPT = TreeCode.ofColon("AUTHENTICATION:ATTEMPT");
 
     /**
      * 创建 Redis 认证尝试存储。
@@ -36,21 +37,17 @@ public final class RedisAuthenticationAttemptStore {
      * @param redis Redis 字符串操作
      * @param objectMapper JSON 映射器
      * @param clock TTL 时间来源
-     * @param runtimeNamespace 当前应用的运行时命名空间
      * @param distributedLock 自动续租的跨实例分布式锁
      */
     public RedisAuthenticationAttemptStore(
-            @NotNull StringRedisTemplate redis,
+            @NotNull RedisTemplate<Key, String> redis,
             @NotNull ObjectMapper objectMapper,
             @NotNull Clock clock,
-            @NotNull RuntimeNamespace runtimeNamespace,
             @NotNull DistributedLock distributedLock) {
         this.redis = Objects.requireNonNull(redis, "Redis 操作不能为空");
         this.codec = new AuthenticationAttemptCodec(objectMapper);
         this.clock = Objects.requireNonNull(clock, "时钟不能为空");
         this.distributedLock = Objects.requireNonNull(distributedLock, "认证尝试分布式锁不能为空");
-        RuntimeNamespace checkedNamespace = Objects.requireNonNull(runtimeNamespace, "运行时命名空间不能为空");
-        this.attemptPrefix = checkedNamespace.sca4dj("authentication", "attempt") + ':';
     }
 
     /** 使用尝试的剩余有效时间新增状态；标识已经存在时拒绝覆盖。 */
@@ -94,7 +91,7 @@ public final class RedisAuthenticationAttemptStore {
     public <T> T withLease(@NotNull AuthenticationAttemptId id, @NotNull Supplier<T> action) {
         AuthenticationAttemptId checkedId = Objects.requireNonNull(id, "认证尝试标识不能为空");
         return distributedLock.execute(
-                new LockKey("authentication", "attempt", checkedId.value()),
+                new LockKey(TreeCode.of("AUTHENTICATION:ATTEMPT"), checkedId.value()),
                 ACQUIRE_TIMEOUT,
                 Objects.requireNonNull(action, "认证尝试操作不能为空"));
     }
@@ -108,9 +105,9 @@ public final class RedisAuthenticationAttemptStore {
         return ttl;
     }
 
-    /** 返回当前应用命名空间中的认证尝试 Redis key。 */
-    private @NotNull String attemptKey(@NotNull AuthenticationAttemptId id) {
-        return attemptPrefix + Objects.requireNonNull(id, "认证尝试标识不能为空").value();
+    /** 返回当前 App 隔离名称下的认证尝试 Redis key。 */
+    private @NotNull Key attemptKey(@NotNull AuthenticationAttemptId id) {
+        return Key.of(ATTEMPT).part(Objects.requireNonNull(id, "认证尝试标识不能为空").value());
     }
 
 }

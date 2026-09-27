@@ -255,7 +255,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用 Redis TTL 保存加密 enrollment，并以 value CAS 完成一次性消费。</div>
 </dd>
-<dt><a href="com/sca4d/auth/totp/enrollment/RedisTotpEnrollmentStore.html#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,com.fasterxml.jackson.databind.ObjectMapper,java.time.Clock,com.sca4d.core.api.runtime.RuntimeNamespace)" class="member-name-link">RedisTotpEnrollmentStore(StringRedisTemplate, ObjectMapper, Clock, RuntimeNamespace)</a> - Constructor for class com.sca4d.auth.totp.enrollment.<a href="com/sca4d/auth/totp/enrollment/RedisTotpEnrollmentStore.html" title="class in com.sca4d.auth.totp.enrollment">RedisTotpEnrollmentStore</a></dt>
+<dt><a href="com/sca4d/auth/totp/enrollment/RedisTotpEnrollmentStore.html#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,com.fasterxml.jackson.databind.ObjectMapper,java.time.Clock)" class="member-name-link">RedisTotpEnrollmentStore(RedisTemplate&lt;Key, String&gt;, ObjectMapper, Clock)</a> - Constructor for class com.sca4d.auth.totp.enrollment.<a href="com/sca4d/auth/totp/enrollment/RedisTotpEnrollmentStore.html" title="class in com.sca4d.auth.totp.enrollment">RedisTotpEnrollmentStore</a></dt>
 <dd>
 <div class="block">创建 Redis enrollment store。</div>
 </dd>

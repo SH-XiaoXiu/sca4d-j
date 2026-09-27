@@ -16,12 +16,14 @@ import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.JacksonMessageCodec;
 import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.name.Name;
 import com.sca4d.iot.api.connection.DeviceConnectionId;
 import com.sca4d.iot.api.connection.DeviceConnectionProtocol;
 import com.sca4d.iot.api.connection.DeviceConnectionReceiver;
 import com.sca4d.iot.api.connection.DeviceDisconnectMessage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 
@@ -94,7 +96,7 @@ class DeviceDisconnectHandlerTest {
         when(
                 messages.dispatch(
                         any(),
-                        org.mockito.ArgumentMatchers.argThat(
+                        ArgumentMatchers.argThat(
                                 policy -> policy.mode() == DispatchPolicy.Mode.OUTBOX
                                         && NOW.plusSeconds(1).equals(policy.notBefore()))))
                 .thenReturn(new DispatchReceipt(new MessageId(90L), DispatchReceipt.Status.OUTBOX_ENLISTED));
@@ -105,7 +107,7 @@ class DeviceDisconnectHandlerTest {
         verify(commonConnections, never()).remove(any());
         verify(messages).dispatch(
                 any(),
-                org.mockito.ArgumentMatchers.argThat(
+                ArgumentMatchers.argThat(
                         policy -> policy.mode() == DispatchPolicy.Mode.OUTBOX
                                 && NOW.plusSeconds(1).equals(policy.notBefore())));
     }
@@ -118,7 +120,7 @@ class DeviceDisconnectHandlerTest {
         when(
                 messages.dispatch(
                         any(),
-                        org.mockito.ArgumentMatchers.argThat(
+                        ArgumentMatchers.argThat(
                                 policy -> policy.mode() == DispatchPolicy.Mode.OUTBOX
                                         && NOW.plusSeconds(1).equals(policy.notBefore()))))
                 .thenReturn(new DispatchReceipt(new MessageId(91L), DispatchReceipt.Status.OUTBOX_ENLISTED));
@@ -129,7 +131,7 @@ class DeviceDisconnectHandlerTest {
         verify(commonConnections, never()).remove(any());
         verify(messages).dispatch(
                 any(),
-                org.mockito.ArgumentMatchers.argThat(
+                ArgumentMatchers.argThat(
                         policy -> policy.mode() == DispatchPolicy.Mode.OUTBOX
                                 && NOW.plusSeconds(1).equals(policy.notBefore())));
     }
@@ -145,7 +147,7 @@ class DeviceDisconnectHandlerTest {
         return new IncomingMessage<>(
                 new MessageId(80L),
                 payload,
-                "test-app",
+                new Name("TEST_APP"),
                 NOW,
                 false,
                 1);

@@ -5,17 +5,16 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.IdempotencyFingerprints;
 import com.sca4d.core.api.concurrent.IdempotencyStore;
 import com.sca4d.core.api.concurrent.RateLimiter;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.OperationCatalog;
 import com.sca4d.core.api.permission.OperationModule;
 import com.sca4d.core.api.permission.OperationNode;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
 import com.sca4d.core.spring.id.SnowflakeIdGenerator;
 import com.sca4d.core.spring.identity.PrincipalSelectionAspect;
 import com.sca4d.core.spring.identity.PrincipalSelectionInterceptor;
@@ -43,16 +42,17 @@ import java.time.Instant;
 class CoreSpringAutoConfigurationTest {
 
     private final WebApplicationContextRunner contextRunner = new WebApplicationContextRunner()
+            .withPropertyValues("spring.application.name=sca4d-test")
             .withConfiguration(
                     AutoConfigurations.of(
                             CoreJacksonAutoConfiguration.class,
                             JacksonAutoConfiguration.class,
                             WebMvcAutoConfiguration.class,
-                            RuntimeNamespaceAutoConfiguration.class,
+                            AppIsolationAutoConfiguration.class,
                             CoreSpringAutoConfiguration.class,
                             CoreOpenApiConfiguration.class))
             .withPropertyValues(
-                    "spring.application.name=example-app",
+                    "spring.application.name=sca4d-test",
                     "sca4dj.i18n.supported-locales[0]=zh-CN",
                     "sca4dj.i18n.supported-locales[1]=en-US",
                     "sca4dj.i18n.default-locale=zh-CN")
@@ -108,10 +108,10 @@ class CoreSpringAutoConfigurationTest {
             assertThat(context).hasSingleBean(RedisBatches.class);
             assertThat(context).hasSingleBean(ResponseETagContractValidator.class);
             assertThat(context).hasSingleBean(OpenAPI.class);
-            assertThat(context).hasSingleBean(RuntimeNamespace.class);
+            assertThat(context).hasBean("sca4djAppName");
             assertThat(context).hasSingleBean(IdGenerator.class);
             assertThat(context.getBean(IdGenerator.class)).isInstanceOf(SnowflakeIdGenerator.class);
-            assertThat(context.getBean(OpenAPI.class).getInfo().getTitle()).isEqualTo("example-app API");
+            assertThat(context.getBean(OpenAPI.class).getInfo().getTitle()).isEqualTo("sca4d-test API");
         });
     }
 

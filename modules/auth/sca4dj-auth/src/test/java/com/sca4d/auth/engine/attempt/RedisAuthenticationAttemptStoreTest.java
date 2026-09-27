@@ -9,16 +9,16 @@ import com.sca4d.core.api.authentication.AuthenticationActionCode;
 import com.sca4d.core.api.authentication.AuthenticationAttemptId;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.RealmKey;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.time.Clock;
 import java.time.Duration;
@@ -73,21 +73,21 @@ class RedisAuthenticationAttemptStoreTest {
 
     @Test
     @DisplayName("使用认证尝试标识取得自动续租分布式锁")
+    @SuppressWarnings("unchecked") // Mockito 的 Class 参数不能表达 RedisTemplate 泛型。
     void usesDistributedLockForAuthenticationAttempt() {
-        StringRedisTemplate redis = mock(StringRedisTemplate.class);
+        RedisTemplate<Key, String> redis = mock(RedisTemplate.class);
         ImmediateDistributedLock distributedLock = new ImmediateDistributedLock();
         RedisAuthenticationAttemptStore store = new RedisAuthenticationAttemptStore(
                 redis,
                 new ObjectMapper(),
                 Clock.systemUTC(),
-                new RuntimeNamespace("example-app"),
                 distributedLock);
 
         String result = store.withLease(new AuthenticationAttemptId("attempt-1"), () -> "done");
 
         assertThat(result).isEqualTo("done");
         assertThat(distributedLock.key.segments())
-                .containsExactly("authentication", "attempt", "attempt-1");
+                .containsExactly("LOCK", "AUTHENTICATION", "ATTEMPT", "V_617474656D70742D31");
         assertThat(distributedLock.waitTime).isEqualTo(Duration.ofSeconds(2));
     }
 

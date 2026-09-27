@@ -40,7 +40,7 @@ public final class DeviceCreationReplay {
         return sharedSecret;
     }
 
-    /** @return 创建时签发的可选 HMAC Key 明文 */
+    /** @return 创建时签发的可选 MAC Key 明文 */
     public @Nullable String hmacKey() {
         return hmacKey;
     }

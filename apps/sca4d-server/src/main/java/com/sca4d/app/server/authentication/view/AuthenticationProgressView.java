@@ -1,7 +1,8 @@
 package com.sca4d.app.server.authentication.view;
 
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+
 import com.sca4d.core.api.authentication.AuthenticationProgress;
-import com.sca4d.core.api.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
@@ -42,7 +43,7 @@ public final class AuthenticationProgressView {
                 checked.attemptId().value(),
                 checked.satisfied() ? "SATISFIED" : "FACTOR_REQUIRED",
                 checked.remainingFactorCount(),
-                checked.availableMethods().stream().map(TreeCode::value).toList(),
+                checked.availableMethods().stream().map(code -> code.format(SLASH)).toList(),
                 checked.expiresAt());
     }
 

@@ -125,14 +125,14 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#send(com.sca4d.core.api.messaging.MessageId,com.sca4d.core.api.code.TreeCode,byte%5B%5D)" class="member-name-link">send</a><wbr>(@NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
- @NotNull com.sca4d.core.api.code.TreeCode&nbsp;messageCode,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#send(com.sca4d.core.api.messaging.MessageId,com.sca4d.core.api.name.code.TreeCode,byte%5B%5D)" class="member-name-link">send</a><wbr>(@NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;messageCode,
  byte @NotNull []&nbsp;envelope)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">发布持久业务消息，并等待 mandatory return 与 publisher confirm。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendRetry(com.sca4d.core.api.code.TreeCode,org.springframework.amqp.core.Message,int)" class="member-name-link">sendRetry</a><wbr>(@NotNull com.sca4d.core.api.code.TreeCode&nbsp;handlerCode,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendRetry(com.sca4d.core.api.name.code.TreeCode,org.springframework.amqp.core.Message,int)" class="member-name-link">sendRetry</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;handlerCode,
  @NotNull org.springframework.amqp.core.Message&nbsp;message,
  int&nbsp;attempt)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -176,12 +176,12 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="send(com.sca4d.core.api.messaging.MessageId,com.sca4d.core.api.code.TreeCode,byte[])">
+<section class="detail" id="send(com.sca4d.core.api.messaging.MessageId,com.sca4d.core.api.name.code.TreeCode,byte[])">
 <h3>send</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">send</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
  @NotNull
- @NotNull com.sca4d.core.api.code.TreeCode&nbsp;messageCode,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;messageCode,
  byte @NotNull []&nbsp;envelope)</span></div>
 <div class="block">发布持久业务消息，并等待 mandatory return 与 publisher confirm。</div>
 <dl class="notes">
@@ -191,10 +191,10 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="sendRetry(com.sca4d.core.api.code.TreeCode,org.springframework.amqp.core.Message,int)">
+<section class="detail" id="sendRetry(com.sca4d.core.api.name.code.TreeCode,org.springframework.amqp.core.Message,int)">
 <h3>sendRetry</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendRetry</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.code.TreeCode&nbsp;handlerCode,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;handlerCode,
  @NotNull
  @NotNull org.springframework.amqp.core.Message&nbsp;message,
  int&nbsp;attempt)</span></div>

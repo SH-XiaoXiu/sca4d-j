@@ -1,7 +1,7 @@
 package com.sca4d.notification.sms.mapper;
 
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.apache.ibatis.annotations.Param;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
- * 读写 SMS Provider、线路绑定及其版本条件。
+ * 读写 SMS Provider、线路绑定和版本条件。
  */
 public interface SmsProviderMapper {
     /**

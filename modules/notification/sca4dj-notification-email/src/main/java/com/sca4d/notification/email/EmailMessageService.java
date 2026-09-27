@@ -1,7 +1,7 @@
 package com.sca4d.notification.email;
 
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.render.TemplateVariables;
 import com.sca4d.notification.email.sender.EmailGateway;
 import com.sca4d.notification.email.sender.EmailSenderRepository;

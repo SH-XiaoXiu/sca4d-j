@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.auth.federation.identity.FederatedIdentityRepository;
 import com.sca4d.auth.federation.identity.mapper.FederatedIdentityMapper;
 import com.sca4d.auth.federation.provider.DefaultFederatedProviderRepository;
@@ -14,10 +13,12 @@ import com.sca4d.core.api.concurrent.OptimisticLockException;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.security.SecretKeyring;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.core.spring.persistence.mybatis.AffectedRowsAspect;
 import com.sca4d.core.spring.persistence.mybatis.AffectedRowsInterceptor;
 import com.sca4d.core.spring.persistence.mybatis.CoreEnumTypeHandler;
 import com.sca4d.core.spring.persistence.mybatis.LongValueTypeHandler;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.type.JdbcType;
 import org.junit.jupiter.api.AfterAll;
@@ -28,7 +29,6 @@ import org.junit.jupiter.api.Test;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -59,7 +59,7 @@ class FederatedPersistenceIntegrationTest {
     private static JdbcTemplate jdbc;
 
     /** 使用真实 Mapper、事务和影响行数检查。 */
-    @Configuration(proxyBeanMethods = false)
+    @org.springframework.context.annotation.Configuration(proxyBeanMethods = false)
     @EnableTransactionManagement
     @EnableAspectJAutoProxy(proxyTargetClass = true)
     @MapperScan(basePackageClasses = {FederatedIdentityMapper.class, ProviderMapper.class})
@@ -81,7 +81,7 @@ class FederatedPersistenceIntegrationTest {
         jdbc = new JdbcTemplate(source);
         SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
         factory.setDataSource(source);
-        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
+        Configuration configuration = new Configuration();
         configuration.setMapUnderscoreToCamelCase(true);
         configuration.setDefaultEnumTypeHandler(CoreEnumTypeHandler.class);
         configuration.getTypeHandlerRegistry()
@@ -105,7 +105,7 @@ class FederatedPersistenceIntegrationTest {
                 FederatedProviderRepository.class,
                 () -> new DefaultFederatedProviderRepository(
                         context.getBean(ProviderMapper.class),
-                        new ObjectMapper(),
+                        new Sca4djMapper(),
                         new FederatedSecretCryptography(mock(SecretKeyring.class)),
                         VersionCondition::optimistic));
         context.refresh();
@@ -204,7 +204,7 @@ class FederatedPersistenceIntegrationTest {
                 "https://issuer.example/token",
                 null,
                 null,
-                FederatedClientAuthentication.NONE,
+                FederatedClientAuthentication.ONE,
                 List.of("openid"),
                 Map.of(),
                 Map.of());

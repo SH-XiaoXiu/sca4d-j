@@ -14,7 +14,6 @@ import com.sca4d.core.api.authentication.SessionIdentityLoader;
 import com.sca4d.core.api.authentication.principalsession.PrincipalCodec;
 import com.sca4d.core.api.authentication.principalsession.PrincipalLoader;
 import com.sca4d.core.api.call.Call;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
@@ -23,6 +22,7 @@ import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.OperationCatalog;
@@ -83,6 +83,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Testcontainers
 @Sql(statements = "TRUNCATE TABLE auth_password_secret, auth_password_credential, platform_principal_role, iam_account_identifier, iam_account_principal, iam_principal, iam_account, iam_subject CASCADE", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
@@ -358,8 +359,8 @@ class IdentityLayeringExtensionIntegrationTest {
         }
 
         @Override
-        public @NotNull String type() {
-            return type;
+        public @NotNull TreeCode type() {
+            return TreeCode.of(type);
         }
 
         @Override
@@ -765,7 +766,7 @@ class IdentityLayeringExtensionIntegrationTest {
                     .stream()
                     .filter(Map.Entry::getValue)
                     .map(Map.Entry::getKey)
-                    .collect(java.util.stream.Collectors.toUnmodifiableSet());
+                    .collect(Collectors.toUnmodifiableSet());
             return new PrincipalRoles(
                     scope,
                     principalId,

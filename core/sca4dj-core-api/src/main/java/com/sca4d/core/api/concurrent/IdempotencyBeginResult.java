@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import java.time.Duration;
 import java.util.Objects;
 
-/** 保存一次幂等处理权竞争的状态以及该状态允许读取的数据。 */
+/** 保存一次幂等处理权竞争的状态以及对应状态允许读取的数据。 */
 public final class IdempotencyBeginResult<T> {
 
     private final @NotNull IdempotencyBeginStatus status;
@@ -83,7 +83,7 @@ public final class IdempotencyBeginResult<T> {
         return replayResult;
     }
 
-    /** @return 仅 {@link IdempotencyBeginStatus#IN_PROGRESS} 状态返回正数时间，其他状态返回零 */
+    /** @return 仅 {@link IdempotencyBeginStatus#IN_PROGRESS} 状态返回正数时间；其他状态返回零 */
     @Contract(pure = true)
     public @NotNull Duration retryAfter() {
         return retryAfter;

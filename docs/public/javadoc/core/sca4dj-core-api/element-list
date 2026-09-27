@@ -3,7 +3,6 @@ com.sca4d.core.api.audit
 com.sca4d.core.api.authentication
 com.sca4d.core.api.authentication.principalsession
 com.sca4d.core.api.call
-com.sca4d.core.api.code
 com.sca4d.core.api.codec
 com.sca4d.core.api.concurrent
 com.sca4d.core.api.condition
@@ -19,10 +18,13 @@ com.sca4d.core.api.gateway
 com.sca4d.core.api.i18n
 com.sca4d.core.api.id
 com.sca4d.core.api.identity
+com.sca4d.core.api.isolation
 com.sca4d.core.api.job
 com.sca4d.core.api.logging
 com.sca4d.core.api.message
 com.sca4d.core.api.messaging
+com.sca4d.core.api.name
+com.sca4d.core.api.name.code
 com.sca4d.core.api.notification
 com.sca4d.core.api.permission
 com.sca4d.core.api.persistence

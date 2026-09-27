@@ -94,6 +94,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="annotations">@Component("iotRuntimeHealthIndicator")
+@ConditionalOnCapability("IOT:TRANSPORT")
 @ConditionalOnProperty(prefix="sca4dj.iot.emqx",
                        name="enabled",
                        havingValue="true")

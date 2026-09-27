@@ -1,5 +1,7 @@
 package com.sca4d.app.server.system.view;
 
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.spring.web.annotation.ETag;
 import com.sca4d.notification.email.EmailTemplate;
@@ -30,7 +32,7 @@ public final class EmailTemplateView {
     /** 创建 Email 模板响应视图。 */
     private EmailTemplateView(@NotNull EmailTemplate template, @NotNull Set<String> variables) {
         this.templateId = template.templateId();
-        this.notificationCode = template.code().value();
+        this.notificationCode = template.code().format(SLASH);
         this.locales = template.locales();
         this.variables = Set.copyOf(variables);
         this.enabled = template.enabled();

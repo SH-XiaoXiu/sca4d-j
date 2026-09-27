@@ -30,6 +30,21 @@ CREATE TABLE iam_principal (
     deleted SMALLINT NOT NULL DEFAULT 0
 );
 
+CREATE UNIQUE INDEX uk_iam_single_system ON iam_subject(subject_type) WHERE subject_type = 'SYSTEM';
+
+CREATE TABLE iam_system_identity (
+    code VARCHAR(128) PRIMARY KEY,
+    principal_id BIGINT NOT NULL UNIQUE,
+    subject_id BIGINT NOT NULL CHECK (subject_id = 1),
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CHECK (code ~ '^[A-Z0-9_]+(:[A-Z0-9_]+)*$')
+);
+
+COMMENT ON TABLE iam_system_identity IS '整个业务系统的稳定领域身份；各实例共享编码和 Principal ID';
+COMMENT ON COLUMN iam_system_identity.code IS '代码常量声明的系统身份编码';
+COMMENT ON COLUMN iam_system_identity.principal_id IS '配置指定且禁止自动改写的全局 Principal ID';
+COMMENT ON COLUMN iam_system_identity.subject_id IS '整个业务系统唯一的 SYSTEM Subject';
+
 CREATE TABLE iam_account_principal (
     account_id BIGINT NOT NULL,
     principal_id BIGINT NOT NULL,
@@ -104,7 +119,7 @@ CREATE INDEX idx_platform_acl_entry_list ON platform_acl_entry (principal_id, re
 
 COMMENT ON TABLE iam_subject IS '记录完成认证或建立受控调用的具体接入者';
 COMMENT ON COLUMN iam_subject.id IS '接入者全局标识';
-COMMENT ON COLUMN iam_subject.subject_type IS '接入者类型；持久化值为 HUMAN、DEVICE 或 APPLICATION，SYSTEM 不入库';
+COMMENT ON COLUMN iam_subject.subject_type IS '接入者类型；SYSTEM 表示整个业务系统，其固定 ID 为 1';
 COMMENT ON COLUMN iam_subject.status IS '接入者当前状态';
 COMMENT ON COLUMN iam_subject.created_at IS '接入者创建时间';
 COMMENT ON COLUMN iam_subject.updated_at IS '接入者最近更新时间';

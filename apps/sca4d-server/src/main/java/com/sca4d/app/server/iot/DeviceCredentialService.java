@@ -26,7 +26,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-/** 管理 Sca4d Server 的 Device Account 以及 Shared Secret、HMAC 和 X.509 Credential。 */
+/** 管理 Sca4d Server 的 Device Account 以及 Shared Secret、MAC 和 X.509 Credential。 */
 @Service
 public class DeviceCredentialService {
 
@@ -236,7 +236,7 @@ public class DeviceCredentialService {
     }
 
     /**
-     * 重置 Device 建立 Session 使用的 HMAC Key。
+     * 重置 Device 建立 Session 使用的 MAC Key。
      *
      * @param device 已声明 {@code session} 接入的 Device
      * @return 新 Credential 和只在本次调用可见的 Key

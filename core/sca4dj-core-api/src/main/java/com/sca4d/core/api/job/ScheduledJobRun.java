@@ -27,7 +27,7 @@ public final class ScheduledJobRun<T> {
 
     private final @Nullable T output;
 
-    /** 创建一条已经完成命名空间、Job 定义和计划范围检查的历史记录。 */
+    /** 创建一条已经完成 App 隔离名称、Job 定义和计划范围检查的历史记录。 */
     public ScheduledJobRun(
             @NotNull JobRunId runId,
             @NotNull Instant scheduledAt,

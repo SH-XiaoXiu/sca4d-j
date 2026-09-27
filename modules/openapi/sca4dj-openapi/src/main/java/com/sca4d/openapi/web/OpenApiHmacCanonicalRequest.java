@@ -9,7 +9,7 @@ import java.time.Instant;
 import java.util.Locale;
 import java.util.Objects;
 
-/** 按 OpenAPI Client 的固定字段顺序生成 HMAC canonical request。 */
+/** 按 OpenAPI Client 的固定字段顺序生成 MAC canonical request。 */
 public final class OpenApiHmacCanonicalRequest {
 
     private final @NotNull String clientId;
@@ -26,7 +26,7 @@ public final class OpenApiHmacCanonicalRequest {
 
     private final @NotNull String nonce;
 
-    /** 创建已经规范化的 OpenAPI HMAC 请求。 */
+    /** 创建已经规范化的 OpenAPI MAC 请求。 */
     public OpenApiHmacCanonicalRequest(
             @NotNull String clientId,
             @NotNull String method,

@@ -22,10 +22,12 @@ import com.sca4d.core.api.annotation.RequirePermission;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
+import com.sca4d.core.spring.config.ConditionalOnCapability;
 import com.sca4d.core.spring.web.ApiResponse;
 import com.sca4d.core.spring.web.annotation.CurrentPrincipal;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.DeviceAccessMethod;
+import com.sca4d.iot.api.IotCapabilities;
 import com.sca4d.iot.api.ProductSelector;
 import com.sca4d.iot.api.connection.DeviceConnectionBinding;
 import com.sca4d.iot.api.connection.DeviceConnectionProtocol;
@@ -39,7 +41,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,7 +59,7 @@ import java.util.stream.Collectors;
 
 /** 提供 Sca4d Server 的 Device 管理、凭据、desired 和 command HTTP 接口。 */
 @RestController
-@ConditionalOnProperty(prefix = "app.iot.capabilities", name = "api", havingValue = "true", matchIfMissing = true)
+@ConditionalOnCapability(IotCapabilities.API)
 @RequestMapping("/iot/devices")
 @Tag(name = "IoT Devices")
 @CurrentPrincipal(selection = PlatformPrincipalSelection.class)
@@ -188,7 +189,7 @@ public class IotDeviceController {
         return ApiResponse.ok(IotSecretView.from(iot.resetDeviceSharedSecret(deviceId)));
     }
 
-    /** @return 新 HMAC Credential version 和只显示一次的 Key */
+    /** @return 新 MAC Credential version 和只显示一次的 Key */
     @PostMapping("/{deviceId}/hmac-key/reset")
     @Operation(summary = "重置 IoT Device HMAC Key")
     @RequirePermission(operation = IotOperations.DEVICES_MANAGE_VALUE)

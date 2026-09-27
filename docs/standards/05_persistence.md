@@ -1,10 +1,10 @@
 # 05 SQL 与持久化分层完整规范
 
+Service 决定业务动作，Repository 把动作需要的数据组织成稳定读写，Mapper 执行明确的 SQL。写入时把状态、权限范围和版本条件放进同一条 SQL，由 Repository 解释影响行数；查询时先限制范围和数量，再批量装载关联数据。
+
 ## 目标
 
-Mapper、Repository 和 Service 必须形成清晰的抽象梯度。
-
-三层之间的价值来自语义转换、职责收敛和细节隐藏，不来自类名、注解或调用层级本身。
+Mapper、Repository 和 Service 分别隐藏数据库执行、聚合存储和业务规则的细节。每层都要完成职责转换，不能只靠类名、注解或调用层数表示分层。
 
 增加 Repository 后，Service 应当不再理解 SQL 形状、Mapper 返回值、影响行数和持久化结果结构。增加 Mapper 后，Repository 应当不再手写数据库访问细节。
 

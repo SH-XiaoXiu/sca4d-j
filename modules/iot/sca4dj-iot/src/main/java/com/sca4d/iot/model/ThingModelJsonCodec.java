@@ -1,5 +1,7 @@
 package com.sca4d.iot.model;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -278,7 +280,7 @@ public final class ThingModelJsonCodec {
             case INTEGER -> ThingValueType.integerType();
             case DECIMAL -> ThingValueType.decimalType();
             case STRING -> ThingValueType.stringType();
-            case ENUM -> ThingValueType.enumType();
+            case NUM -> ThingValueType.enumType();
             case OBJECT -> ThingValueType.objectType();
             case ARRAY -> ThingValueType.arrayType(
                     valueType(
@@ -371,8 +373,9 @@ public final class ThingModelJsonCodec {
         value.put("valueType", typeMap(property.valueType()));
         value.put("access", property.access().name());
         value.put("telemetry", property.telemetry());
-        property.acknowledgementPolicy().ifPresent(policy -> value.put("acknowledgementPolicy", policy.code().value()));
-        property.retryPolicy().ifPresent(policy -> value.put("retryPolicy", policy.code().value()));
+        property.acknowledgementPolicy()
+                .ifPresent(policy -> value.put("acknowledgementPolicy", policy.code().format(COLON)));
+        property.retryPolicy().ifPresent(policy -> value.put("retryPolicy", policy.code().format(COLON)));
         return value;
     }
 
@@ -390,8 +393,8 @@ public final class ThingModelJsonCodec {
         LinkedHashMap<String, Object> value = new LinkedHashMap<>();
         value.put("code", command.code());
         value.put("inputs", fields(command.inputs()));
-        value.put("acknowledgementPolicy", command.acknowledgementPolicy().code().value());
-        value.put("retryPolicy", command.retryPolicy().code().value());
+        value.put("acknowledgementPolicy", command.acknowledgementPolicy().code().format(COLON));
+        value.put("retryPolicy", command.retryPolicy().code().format(COLON));
         return value;
     }
 

@@ -16,16 +16,17 @@ import com.sca4d.app.server.service.IotApplicationService;
 import com.sca4d.core.api.annotation.RequirePermission;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
+import com.sca4d.core.spring.config.ConditionalOnCapability;
 import com.sca4d.core.spring.web.ApiResponse;
 import com.sca4d.core.spring.web.annotation.CurrentPrincipal;
 import com.sca4d.iot.api.DeviceAccessMethod;
+import com.sca4d.iot.api.IotCapabilities;
 import com.sca4d.iot.product.ProductChange;
 import com.sca4d.iot.product.ProductRegistration;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -40,10 +41,11 @@ import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /** 提供 Sca4d Server 的 IoT Product 管理和整份物模型 JSON 发布接口。 */
 @RestController
-@ConditionalOnProperty(prefix = "app.iot.capabilities", name = "api", havingValue = "true", matchIfMissing = true)
+@ConditionalOnCapability(IotCapabilities.API)
 @RequestMapping("/iot/products")
 @Tag(name = "IoT Products")
 @CurrentPrincipal(selection = PlatformPrincipalSelection.class)
@@ -56,7 +58,7 @@ public class IotProductController {
         this.iot = Objects.requireNonNull(iot, "IoT 应用服务不能为空");
     }
 
-    /** @return 分页 Product 及其启停状态 */
+    /** @return 分页 Product 以及 Product 启停状态 */
     @GetMapping
     @Operation(summary = "查询 IoT Product")
     @RequirePermission(operation = IotOperations.PRODUCTS_READ_VALUE)
@@ -100,7 +102,7 @@ public class IotProductController {
                 IotThingModelView.from(iot.catalogThingModelByCodeVersion(productCode, version)));
     }
 
-    /** @return 指定 Product 及其启停状态 */
+    /** @return 指定 Product 以及 Product 启停状态 */
     @GetMapping("/{productId}")
     @Operation(summary = "查询 IoT Product 详情")
     @RequirePermission(operation = IotOperations.PRODUCTS_READ_VALUE)
@@ -239,6 +241,6 @@ public class IotProductController {
 
     /** 把 HTTP code 集合转换成 IoT 的可扩展接入方式值类型。 */
     private static @NotNull Set<DeviceAccessMethod> accessMethods(@NotNull Set<String> codes) {
-        return codes.stream().map(DeviceAccessMethod::parse).collect(java.util.stream.Collectors.toUnmodifiableSet());
+        return codes.stream().map(DeviceAccessMethod::parse).collect(Collectors.toUnmodifiableSet());
     }
 }

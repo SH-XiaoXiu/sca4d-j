@@ -2,13 +2,13 @@ package com.sca4d.web.realtime.connection;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.connection.ConnectionId;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.messaging.HandlingDecision;
 import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.api.messaging.MessageHandler;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.webrealtime.WebRealtimeMessage;
 import com.sca4d.web.realtime.config.WebRealtimeProperties;
 import org.jetbrains.annotations.ApiStatus;

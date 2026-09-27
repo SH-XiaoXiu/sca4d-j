@@ -1,6 +1,6 @@
 # 项目结构
 
-新增业务通常写在 `apps/sca4d-server`，管理端页面写在 `frontends/sca4d-admin/apps/sca4d-admin/src/pages/`。可复用的功能由 `modules/` 实现，多个模块共用的接口和基础类型放在 `core/`。
+新增具体业务写在 `apps/sca4d-server`，管理端页面写在 `frontends/sca4d-admin/apps/sca4d-admin/src/pages/`。需要独立选择或删除的通用功能放在 `modules/`，多个模块共同依赖的稳定接口和基础类型放在 `core/`；依赖方向始终是 `apps -> modules -> core`。
 
 ```text
 core/       公共接口、基础类型和 Spring 接入
@@ -26,7 +26,7 @@ IAM、认证引擎和认证方法分成独立项目。`sca4dj-auth` 负责认证
 
 `apps/sca4d-server` 是完整示例 App。它选择需要的模块，配置数据源、缓存、消息、存储和 Gateway，并保存只属于该 App 的 Controller、Service、Repository、Mapper 和迁移。
 
-业务项目先组合现有模块。只有一个 App 需要的规则留在 App，不为了“方便共用”移入 Core。
+业务项目先组合现有模块。只有一个 App 需要的规则留在 App，不为了「方便共用」移入 Core。
 
 ## Frontends
 

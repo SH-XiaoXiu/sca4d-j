@@ -104,7 +104,7 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.runtime.RuntimeNamespace)" class="member-name-link">RabbitMessageTopology</a><wbr>(@NotNull com.sca4d.core.api.runtime.RuntimeNamespace&nbsp;runtimeNamespace)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">RabbitMessageTopology</a>()</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
@@ -124,9 +124,19 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#declarables(java.util.List,java.util.List)" class="member-name-link">declarables</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends @NotNull com.sca4d.core.api.messaging.EventHandler&lt;?&gt;&gt;&nbsp;eventHandlers,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends @NotNull com.sca4d.core.api.messaging.MessageHandler&lt;?&gt;&gt;&nbsp;messageHandlers)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.name.Key</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#exchangeName()" class="member-name-link">exchangeName</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.name.Key</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#retryRoutingKey(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">retryRoutingKey</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;handlerCode)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">返回 Handler 重试路由使用的隔离名称。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.name.Key</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#routingKey(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">routingKey</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;messageCode)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">在实际 RabbitMQ 路由边界追加部署前缀，业务消息编码保持原值。</div>
+</div>
 </div>
 </div>
 </div>
@@ -145,10 +155,9 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.runtime.RuntimeNamespace)">
+<section class="detail" id="&lt;init&gt;()">
 <h3>RabbitMessageTopology</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RabbitMessageTopology</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.runtime.RuntimeNamespace&nbsp;runtimeNamespace)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RabbitMessageTopology</span>()</div>
 </section>
 </li>
 </ul>
@@ -163,7 +172,25 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="exchangeName()">
 <h3>exchangeName</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">exchangeName</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.Key</span>&nbsp;<span class="element-name">exchangeName</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="routingKey(com.sca4d.core.api.name.code.TreeCode)">
+<h3>routingKey</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.Key</span>&nbsp;<span class="element-name">routingKey</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;messageCode)</span></div>
+<div class="block">在实际 RabbitMQ 路由边界追加部署前缀，业务消息编码保持原值。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="retryRoutingKey(com.sca4d.core.api.name.code.TreeCode)">
+<h3>retryRoutingKey</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.Key</span>&nbsp;<span class="element-name">retryRoutingKey</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;handlerCode)</span></div>
+<div class="block">返回 Handler 重试路由使用的隔离名称。</div>
 </section>
 </li>
 <li>

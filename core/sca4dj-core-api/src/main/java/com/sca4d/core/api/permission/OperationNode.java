@@ -1,6 +1,6 @@
 package com.sca4d.core.api.permission;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.Contract;
@@ -66,7 +66,7 @@ public abstract class OperationNode {
         LinkedHashSet<TreeCode> resourceCodes = new LinkedHashSet<>();
         for (ResourceDeclaration declaration : resources) {
             ResourceDeclaration checked = Objects.requireNonNull(declaration, "Operation RESOURCE 声明不能为空");
-            TreeCode resourceCode = anchorCode.child(':', checked.segment);
+            TreeCode resourceCode = anchorCode.child(checked.segment);
             if (!resourceCodes.add(resourceCode)) {
                 throw new IllegalArgumentException("Operation RESOURCE 编码重复: " + resourceCode);
             }
@@ -177,7 +177,7 @@ public abstract class OperationNode {
             @NotNull String name,
             boolean wildcardAllowed) {
         TreeCode checked = Objects.requireNonNull(value, name + "不能为空");
-        if (checked.separator() != '\0' || !wildcardAllowed && checked.equals(TreeCode.ofSegment("*"))) {
+        if (checked.size() != 1 || !wildcardAllowed && checked.equals(TreeCode.ofSegment("*"))) {
             throw new IllegalArgumentException(name + "必须是不含分隔符的单节点 TreeCode: " + checked);
         }
         return checked;
@@ -227,7 +227,7 @@ public abstract class OperationNode {
     }
 
     /**
-     * 表示一个业务模块及其完整 RESOURCE 目录。
+     * 表示一个业务模块及完整 RESOURCE 目录。
      */
     public static final class Module extends OperationNode {
 
@@ -287,7 +287,7 @@ public abstract class OperationNode {
     }
 
     /**
-     * 表示一个 MODULE 内的业务资源分组及其完整 ACTION 目录。
+     * 表示一个 MODULE 内的业务资源分组及完整 ACTION 目录。
      */
     public static final class Resource extends OperationNode {
 

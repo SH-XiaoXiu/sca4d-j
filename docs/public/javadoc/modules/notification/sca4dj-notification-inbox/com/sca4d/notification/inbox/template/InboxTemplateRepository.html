@@ -124,8 +124,8 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(long,com.sca4d.core.api.code.TreeCode,com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">add</a><wbr>(long&nbsp;templateId,
- @NotNull com.sca4d.core.api.code.TreeCode&nbsp;code,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(long,com.sca4d.core.api.name.code.TreeCode,com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">add</a><wbr>(long&nbsp;templateId,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;code,
  @NotNull com.fasterxml.jackson.databind.JsonNode&nbsp;content)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">新增默认停用模板。</div>
@@ -139,14 +139,14 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#find(long)" class="member-name-link">find</a><wbr>(long&nbsp;templateId)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="InboxTemplate.html" title="class in com.sca4d.notification.inbox.template">InboxTemplate</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findEnabled(com.sca4d.core.api.code.TreeCode)" class="member-name-link">findEnabled</a><wbr>(@NotNull com.sca4d.core.api.code.TreeCode&nbsp;code)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findEnabled(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">findEnabled</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;code)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.query.Page<wbr>&lt;<a href="InboxTemplate.html" title="class in com.sca4d.notification.inbox.template">InboxTemplate</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#page(com.sca4d.core.api.query.ListRequest)" class="member-name-link">page</a><wbr>(@NotNull com.sca4d.core.api.query.ListRequest&nbsp;request)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#replace(long,com.sca4d.core.api.code.TreeCode,com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">replace</a><wbr>(long&nbsp;templateId,
- @NotNull com.sca4d.core.api.code.TreeCode&nbsp;code,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#replace(long,com.sca4d.core.api.name.code.TreeCode,com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">replace</a><wbr>(long&nbsp;templateId,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;code,
  @NotNull com.fasterxml.jackson.databind.JsonNode&nbsp;content)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">按当前请求版本条件完整替换编码和模板内容。</div>
@@ -220,12 +220,12 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="findEnabled(com.sca4d.core.api.code.TreeCode)">
+<section class="detail" id="findEnabled(com.sca4d.core.api.name.code.TreeCode)">
 <h3>findEnabled</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="InboxTemplate.html" title="class in com.sca4d.notification.inbox.template">InboxTemplate</a>&gt;</span>&nbsp;<span class="element-name">findEnabled</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.code.TreeCode&nbsp;code)</span></div>
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;code)</span></div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>指定通知编码当前启用的统一模板</dd>
@@ -233,23 +233,23 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="add(long,com.sca4d.core.api.code.TreeCode,com.fasterxml.jackson.databind.JsonNode)">
+<section class="detail" id="add(long,com.sca4d.core.api.name.code.TreeCode,com.fasterxml.jackson.databind.JsonNode)">
 <h3>add</h3>
 <div class="member-signature"><span class="annotations">@AffectedRows(target="\u65b0\u589e Inbox Template")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(long&nbsp;templateId,
  @NotNull
- @NotNull com.sca4d.core.api.code.TreeCode&nbsp;code,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;code,
  @NotNull
  @NotNull com.fasterxml.jackson.databind.JsonNode&nbsp;content)</span></div>
 <div class="block">新增默认停用模板。</div>
 </section>
 </li>
 <li>
-<section class="detail" id="replace(long,com.sca4d.core.api.code.TreeCode,com.fasterxml.jackson.databind.JsonNode)">
+<section class="detail" id="replace(long,com.sca4d.core.api.name.code.TreeCode,com.fasterxml.jackson.databind.JsonNode)">
 <h3>replace</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">replace</span><wbr><span class="parameters">(long&nbsp;templateId,
  @NotNull
- @NotNull com.sca4d.core.api.code.TreeCode&nbsp;code,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;code,
  @NotNull
  @NotNull com.fasterxml.jackson.databind.JsonNode&nbsp;content)</span></div>
 <div class="block">按当前请求版本条件完整替换编码和模板内容。</div>

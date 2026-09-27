@@ -21,7 +21,7 @@ import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneOffset;
 
-/** 验证 HMAC Key 轮换和撤销使用独立 Credential，并使旧 Session 失效。 */
+/** 验证 MAC Key 轮换和撤销使用独立 Credential，并使旧 Session 失效。 */
 class HmacAuthenticationMethodTest {
 
     private static final Account ACCOUNT = new Account(20, 10, new RealmKey("machine"));

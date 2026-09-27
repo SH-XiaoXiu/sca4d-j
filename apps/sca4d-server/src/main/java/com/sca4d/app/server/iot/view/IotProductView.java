@@ -1,5 +1,7 @@
 package com.sca4d.app.server.iot.view;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import com.sca4d.app.server.iot.IotProductDetails;
 import com.sca4d.app.server.iot.IotProductProfile;
 import com.sca4d.app.server.iot.IotProfileStatus;
@@ -43,7 +45,7 @@ public final class IotProductView extends BaseView {
         this.displayName = product.code();
         this.accessMethods = product.accessMethods()
                 .stream()
-                .map(com.sca4d.iot.api.DeviceAccessMethod::code)
+                .map(method -> method.code().format(COLON))
                 .sorted()
                 .toList();
         this.protocolCodes = product.protocolCodes().stream().sorted().toList();

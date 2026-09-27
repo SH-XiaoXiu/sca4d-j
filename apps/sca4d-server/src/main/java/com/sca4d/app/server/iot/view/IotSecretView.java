@@ -28,7 +28,7 @@ public final class IotSecretView {
         return new IotSecretView(checked.credential().version().value(), checked.secret());
     }
 
-    /** @return HMAC Key 重置 HTTP 结果 */
+    /** @return MAC Key 重置 HTTP 结果 */
     @CheckReturnValue
     public static @NotNull IotSecretView from(@NotNull IssuedHmacKey result) {
         IssuedHmacKey checked = Objects.requireNonNull(result, "HMAC Key 签发结果不能为空");

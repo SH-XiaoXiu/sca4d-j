@@ -1,11 +1,14 @@
 package com.sca4d.messaging.rabbit;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import com.rabbitmq.client.Channel;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.messaging.EventHandler;
 import com.sca4d.core.api.messaging.HandlingDecision;
 import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.MessageHandler;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.messaging.config.MessagingProperties;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +34,7 @@ public final class RabbitHandlerContainers implements SmartLifecycle {
 
     private static final Logger LOG = LoggerFactory.getLogger(RabbitHandlerContainers.class);
 
-    private static final String ATTEMPT = "sca4d-handler-attempt";
+    private static final TreeCode ATTEMPT = TreeCode.ofColon("HANDLER:ATTEMPT");
 
     private final @NotNull RabbitMessageEnvelopeCodec codec;
 
@@ -59,7 +62,7 @@ public final class RabbitHandlerContainers implements SmartLifecycle {
         List<SimpleMessageListenerContainer> result = new ArrayList<>();
         for (RabbitHandlerDescriptor handler : topology.descriptors(eventHandlers, messageHandlers)) {
             SimpleMessageListenerContainer container = new SimpleMessageListenerContainer(checkedFactory);
-            container.setQueueNames(topology.queueName(handler));
+            container.setQueueNames(topology.queueName(handler).format(COLON));
             container.setAcknowledgeMode(AcknowledgeMode.MANUAL);
             container.setDefaultRequeueRejected(false);
             container.setAutoStartup(false);
@@ -214,7 +217,7 @@ public final class RabbitHandlerContainers implements SmartLifecycle {
             return;
         }
         Message retry = MessageBuilder.fromMessage(original)
-                .setHeader(ATTEMPT, attempt + 1)
+                .setHeader(ATTEMPT.format(COLON), attempt + 1)
                 .build();
         try {
             publisher.sendRetry(handler.code(), retry, attempt + 1);
@@ -240,7 +243,7 @@ public final class RabbitHandlerContainers implements SmartLifecycle {
     }
 
     private static int attempt(Message message) {
-        Object value = message.getMessageProperties().getHeaders().get(ATTEMPT);
+        Object value = message.getMessageProperties().getHeaders().get(ATTEMPT.format(COLON));
         if (value instanceof Number number && number.intValue() > 0) {
             return number.intValue();
         }

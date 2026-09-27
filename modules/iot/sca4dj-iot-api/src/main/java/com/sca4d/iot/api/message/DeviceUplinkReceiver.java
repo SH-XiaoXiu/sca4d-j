@@ -23,7 +23,7 @@ public interface DeviceUplinkReceiver {
             @NotNull List<ThingEventOccurrence> events);
 
     /**
-     * 接受设备显式回执或其他接入事实转换出的业务确认。
+     * 接受设备显式回执或其他接入数据转换出的业务确认。
      *
      * @param device 已经由连接身份解析出的完整 Device
      * @param acknowledgement 尚未分配数据库标识的标准业务确认

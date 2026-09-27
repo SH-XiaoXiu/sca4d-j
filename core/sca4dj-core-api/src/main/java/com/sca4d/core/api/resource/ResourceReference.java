@@ -1,6 +1,6 @@
 package com.sca4d.core.api.resource;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,7 +19,7 @@ public final class ResourceReference implements Resource {
      * 创建资源引用。
      *
      * @param type 资源所属的稳定类型
-     * @param id   该类型内唯一的稳定标识
+     * @param id   当前资源类型内唯一的稳定标识
      * @throws NullPointerException     type 或 id 为空时抛出
      * @throws IllegalArgumentException type 或 id 为空白文本时抛出
      */

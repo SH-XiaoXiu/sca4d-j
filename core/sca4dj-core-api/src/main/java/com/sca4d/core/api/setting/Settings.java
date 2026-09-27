@@ -57,7 +57,7 @@ public interface Settings {
             @NotNull T value);
 
     /**
-     * 删除数据库值，使后续读取恢复 Java 默认值。
+     * 删除数据库值，使之后的读取恢复 Java 默认值。
      *
      * @param setting 设置定义
      * @throws SettingReadOnlyException 设置仍由初始化节点 ENV 同步时抛出

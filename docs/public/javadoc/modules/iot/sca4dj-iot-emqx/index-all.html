@@ -280,7 +280,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用 Redis 保存 EMQX 终止连接和故障对账所需的 Client ID 与 Broker 节点事实。</div>
 </dd>
-<dt><a href="com/sca4d/iot/emqx/connection/EmqxConnectionRepository.html#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,com.sca4d.core.api.runtime.RuntimeNamespace,com.sca4d.core.spring.redis.RedisBatches)" class="member-name-link">EmqxConnectionRepository(StringRedisTemplate, RuntimeNamespace, RedisBatches)</a> - Constructor for class com.sca4d.iot.emqx.connection.<a href="com/sca4d/iot/emqx/connection/EmqxConnectionRepository.html" title="class in com.sca4d.iot.emqx.connection">EmqxConnectionRepository</a></dt>
+<dt><a href="com/sca4d/iot/emqx/connection/EmqxConnectionRepository.html#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,com.sca4d.core.spring.redis.RedisBatches)" class="member-name-link">EmqxConnectionRepository(RedisTemplate&lt;Key, String&gt;, RedisBatches)</a> - Constructor for class com.sca4d.iot.emqx.connection.<a href="com/sca4d/iot/emqx/connection/EmqxConnectionRepository.html" title="class in com.sca4d.iot.emqx.connection">EmqxConnectionRepository</a></dt>
 <dd>
 <div class="block">创建只保存 EMQX 专用连接字段的 Redis Repository。</div>
 </dd>
@@ -529,7 +529,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">统一解析应用授权策略或协议 ACL，并为连接失效判断生成稳定指纹。</div>
 </dd>
-<dt><a href="com/sca4d/iot/emqx/authentication/MqttAuthorizationService.html#%3Cinit%3E(com.sca4d.iot.emqx.protocol.MqttProtocolCatalog,java.util.Collection,com.sca4d.core.api.runtime.RuntimeNamespace)" class="member-name-link">MqttAuthorizationService(MqttProtocolCatalog, Collection&lt;MqttAuthorizationPolicy&gt;, RuntimeNamespace)</a> - Constructor for class com.sca4d.iot.emqx.authentication.<a href="com/sca4d/iot/emqx/authentication/MqttAuthorizationService.html" title="class in com.sca4d.iot.emqx.authentication">MqttAuthorizationService</a></dt>
+<dt><a href="com/sca4d/iot/emqx/authentication/MqttAuthorizationService.html#%3Cinit%3E(com.sca4d.iot.emqx.protocol.MqttProtocolCatalog,java.util.Collection)" class="member-name-link">MqttAuthorizationService(MqttProtocolCatalog, Collection&lt;MqttAuthorizationPolicy&gt;)</a> - Constructor for class com.sca4d.iot.emqx.authentication.<a href="com/sca4d/iot/emqx/authentication/MqttAuthorizationService.html" title="class in com.sca4d.iot.emqx.authentication">MqttAuthorizationService</a></dt>
 <dd>
 <div class="block">创建应用策略优先、协议 ACL 兜底且使用当前应用命名空间的 MQTT 授权服务。</div>
 </dd>

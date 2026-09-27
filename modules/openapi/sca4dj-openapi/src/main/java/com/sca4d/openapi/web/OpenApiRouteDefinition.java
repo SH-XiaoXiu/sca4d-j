@@ -1,6 +1,6 @@
 package com.sca4d.openapi.web;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.openapi.web.annotation.OpenApiRoute;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -9,7 +9,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
-/** 保存已经校验的 OpenAPI 路由标识及其 Client Operation 约束。 */
+/** 保存已经校验的 OpenAPI 路由标识和 Client Operation 约束。 */
 public final class OpenApiRouteDefinition {
 
     private static final Set<String> JAVA_KEYWORDS = Set.of(

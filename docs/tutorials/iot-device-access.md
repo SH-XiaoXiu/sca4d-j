@@ -1,16 +1,10 @@
-# 本地 IoT 环境
+# 接入第一台设备
 
-请先完成[第一次运行](/tutorials/local-start)和[登录并读取当前 Session](/tutorials/authentication-and-session)。以下操作会在基础服务之外启动 EMQX 与 TimescaleDB，然后创建 Product、发布物模型并创建设备。
+接入设备先创建 Product、发布 ThingModel，再登记并启用 Device，最后按绑定协议连接和上报。开始前完成[第一次运行](/tutorials/local-start)与[登录](/tutorials/authentication-and-session)；下面先检查 EMQX、TimescaleDB，再创建一台本地温控器。
 
 ## 启动 IoT 依赖
 
-先确保 `.env/iot.env` 与 `.env/iot-database.env` 已由各自示例复制，再启动两份 Compose 文件：
-
-```bash
-docker compose -f docker-compose.yml -f docker-compose.iot.yml up -d
-
-docker compose -f docker-compose.yml -f docker-compose.iot.yml ps
-```
+确认 `.env/iot.env` 与 `.env/iot-database.env` 已从示例复制，再使用[第一次运行中的完整 Compose 命令](/tutorials/local-start#启动全部本地依赖)检查容器。该命令同时传入分片环境文件和两份 Compose 文件；已经启动完整环境时，不需要重复创建容器。
 
 IoT Compose 会启动：
 
@@ -45,7 +39,7 @@ curl --fail-with-body --silent --show-error \
       "zh-CN":{"displayName":"规范温控器"},
       "en-US":{"displayName":"Standard climate controller"}
     },
-    "accessMethods":["ACCOUNT:AUTHENTICATION/SHARED_SECRET"],
+    "accessMethods":["ACCOUNT:AUTHENTICATION:SHARED_SECRET"],
     "protocolCodes":["standard-climate-json-v1"]
   }' \
   "$BASE_URL/iot/products"
@@ -55,7 +49,7 @@ curl --fail-with-body --silent --show-error \
 
 ## 发布物模型
 
-发布请求同时提交完整技术模型和初始多语言字段，不是局部补丁。格式 2 的 `model` 不包含展示文本；`i18n` 使用稳定 JSON Pointer 路径标识模型和字段名称。下面的最小模型只声明一个可读写的电源属性；策略编码和全部字段请从 IoT 规格核对，不要在业务代码中另造名称。
+发布请求同时提交完整技术模型和初始多语言字段，不是局部补丁。格式 2 的 `model` 不包含展示文本；`i18n` 使用稳定 JSON Pointer 路径标识模型和字段名称。下面的模型与 `StandardClimateDeviceProtocol.thingModel()` 对应：包含 `power`、`temperature`、`mode` 和 `set-mode`。协议会校验全部映射，只发布一个 `power` 属性无法使用这个协议。
 
 ```bash
 PRODUCT_ID='<data.id>'
@@ -73,24 +67,88 @@ curl --fail-with-body --silent --show-error \
     "properties": [
       {
         "code": "power",
-        "valueType": { "kind": "BOOLEAN" },
+        "valueType": {
+          "kind": "BOOLEAN"
+        },
         "access": "READ_WRITE",
         "telemetry": false,
         "acknowledgementPolicy": "IOT/DOWNLINK/ACK/REPORTED/EQUALS/DESIRED",
         "retryPolicy": "IOT/DOWNLINK/RETRY/STATE/SYNC/DEFAULT"
+      },
+      {
+        "code": "temperature",
+        "valueType": {
+          "kind": "DECIMAL",
+          "minimum": "-40",
+          "maximum": "100",
+          "scale": 1,
+          "unit": "celsius"
+        },
+        "access": "READ_ONLY",
+        "telemetry": true
+      },
+      {
+        "code": "mode",
+        "valueType": {
+          "kind": "ENUM",
+          "enumValues": [
+            {
+              "code": "cool"
+            },
+            {
+              "code": "fan"
+            },
+            {
+              "code": "defrost"
+            }
+          ]
+        },
+        "access": "READ_ONLY",
+        "telemetry": false
       }
     ],
     "events": [],
-    "commands": []
+    "commands": [
+      {
+        "code": "set-mode",
+        "inputs": [
+          {
+            "code": "mode",
+            "valueType": {
+              "kind": "ENUM",
+              "enumValues": [
+                {
+                  "code": "cool"
+                },
+                {
+                  "code": "fan"
+                },
+                {
+                  "code": "defrost"
+                }
+              ]
+            }
+          }
+        ],
+        "acknowledgementPolicy": "IOT/DOWNLINK/ACK/DEVICE/RESULT",
+        "retryPolicy": "IOT/DOWNLINK/RETRY/COMMAND/DEFAULT"
+      }
+    ]
   },
   "i18n": {
     "zh-CN": {
       "/displayName": "规范温控器",
-      "/properties/power/displayName": "电源"
-    },
-    "en-US": {
-      "/displayName": "Standard climate controller",
-      "/properties/power/displayName": "Power"
+      "/properties/power/displayName": "电源",
+      "/properties/temperature/displayName": "温度",
+      "/properties/mode/displayName": "模式",
+      "/commands/set-mode/displayName": "设置模式",
+      "/commands/set-mode/inputs/mode/displayName": "模式",
+      "/properties/mode/valueType/enumValues/cool/displayName": "制冷",
+      "/properties/mode/valueType/enumValues/fan/displayName": "送风",
+      "/properties/mode/valueType/enumValues/defrost/displayName": "除霜",
+      "/commands/set-mode/inputs/mode/valueType/enumValues/cool/displayName": "制冷",
+      "/commands/set-mode/inputs/mode/valueType/enumValues/fan/displayName": "送风",
+      "/commands/set-mode/inputs/mode/valueType/enumValues/defrost/displayName": "除霜"
     }
   }
 }
@@ -124,12 +182,12 @@ curl --fail-with-body --silent --show-error \
     \"connectionProtocol\":\"mqtt\",
     \"connectionIdentityType\":\"mqtt-client-id\",
     \"connectionIdentity\":\"climate-1\",
-    \"accessMethods\":[\"ACCOUNT:AUTHENTICATION/SHARED_SECRET\"]
+    \"accessMethods\":[\"ACCOUNT:AUTHENTICATION:SHARED_SECRET\"]
   }" \
   "$BASE_URL/iot/devices"
 ```
 
-创建响应包含设备资料和一次性 Secret。立即把 Secret 交给本地模拟器或设备的安全配置，不要写入文档、日志或版本库；之后只能通过重置接口签发新 Secret。重复同一创建请求应复用相同 `Idempotency-Key`，不要为一次业务动作生成多个设备。
+创建响应包含设备资料和一次性 Secret。立即把 Secret 交给本地模拟器或设备的安全配置，不要写入文档、日志或版本库；在创建幂等窗口结束后，丢失 Secret 只能通过重置接口签发新值。重复同一创建请求应复用相同 `Idempotency-Key`，不要为一次业务动作生成多个设备。
 
 保存 `data.device.id` 为 `DEVICE_ID`，再启用设备：
 
@@ -156,7 +214,33 @@ curl --fail-with-body --silent --show-error \
   "$BASE_URL/iot/devices/$DEVICE_ID"
 ```
 
-现在已经启动依赖、创建并启用 Product、发布物模型、创建并启用 Device。设备连接、上报、desired state 和 command 使用的 Topic、Secret 与报文格式见[设备状态与确认过程](/home/iot)和 [EMQX 接入](/tutorials/iot-device-access)。
+查询结果应显示 Product 与 Device 均已启用，Device 绑定 `standard-climate-json-v1` 和物模型版本 1。到这里仅完成登记，还需要设备真实连接并上报。
+
+## 连接温控器模拟器
+
+使用仓库自带的 `apps/sca4d-iot-simulator`。在单独终端的进程环境中设置以下值；Secret 从创建响应的 `data.sharedSecret` 取得，通过本地秘密管理方式注入，不粘贴进命令历史或提交到 Git。
+
+| 环境变量 | 本例使用值 |
+|---|---|
+| `SIMULATOR_DEVICE` | `standard`，只启动温控器 |
+| `SIMULATOR_STANDARD_CLIENT_ID` | `climate-1`，必须等于 Device 的 `connectionIdentity` |
+| `SIMULATOR_STANDARD_SECRET` | 创建响应中的 Shared Secret |
+| `SIMULATOR_MQTT_HOST` | `localhost` |
+| `SIMULATOR_MQTT_PORT` | `1883` |
+
+在仓库根目录运行：
+
+```bash
+nice -n 10 ./gradlew --no-daemon --max-workers=1 \
+  -Dorg.gradle.jvmargs="-Xmx1g -XX:MaxMetaspaceSize=384m" \
+  :apps:sca4d-iot-simulator:run
+```
+
+模拟器使用用户名 `mqtt-shared-secret`，连接后订阅 `demo/standard/climate-1/downlink`，默认每 5 秒向 `demo/standard/climate-1/reported` 上报。日志应出现连接、下行订阅安装和状态上报结果。
+
+然后读取 `GET /api/iot/devices/{deviceId}/runtime`，确认连接与 reported 中的 `power`、`temperature`、`mode` 已出现。只看到模拟器连接日志还不足以证明 Server 已接收状态。
+
+连接被拒绝时，依次核对 Device/Product 启用状态、Client ID、Shared Secret 和 EMQX 回调凭据。连接成功却没有 reported 时，核对 Server MQTT runtime、协议 Topic 和上报解析日志。确认上报后继续[修改状态与发送命令](/tutorials/iot-state-and-commands)。
 
 ## MqttDeviceProtocol
 

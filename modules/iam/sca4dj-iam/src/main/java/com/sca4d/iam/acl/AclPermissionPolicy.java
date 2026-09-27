@@ -1,8 +1,8 @@
 package com.sca4d.iam.acl;
 
 import com.sca4d.core.api.call.Call;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.identity.Principal;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Permission;
 import com.sca4d.core.api.permission.PermissionDecision;
 import com.sca4d.core.api.permission.PermissionPolicy;
@@ -62,7 +62,7 @@ public final class AclPermissionPolicy implements PermissionPolicy {
         }
         TreeCode type = permission.resource().type();
         DomainScope scope = resourceTypes.scope(type);
-        // 集合权限不能只返回允许/拒绝，还必须把可访问实例范围交给后续查询约束。
+        // 集合权限不能只返回允许/拒绝，还必须把可访问实例范围交给之后查询的约束。
         if (COLLECTION_ID.equals(permission.resource().id())) {
             List<String> ids = acl
                     .findAllowedResourceIds(scope, principal.get().principalId(), type, permission.action());

@@ -1,14 +1,16 @@
 package com.sca4d.openapi.oauth;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import com.sca4d.auth.session.SessionService;
 import com.sca4d.auth.sharedsecret.SharedSecretAuthenticationMethod;
 import com.sca4d.auth.sharedsecret.SharedSecretProof;
 import com.sca4d.core.api.annotation.AnonymousAccess;
 import com.sca4d.core.api.authentication.AuthErrorCode;
 import com.sca4d.core.api.authentication.EstablishedSession;
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iam.identity.IdentityService;
 import com.sca4d.openapi.client.OpenApiClient;
 import com.sca4d.openapi.client.OpenApiClientService;
@@ -129,7 +131,7 @@ public class OpenApiTokenEndpointHandler {
         // 建立 Application Session，并按应用配置签发现有 Session Token 或独立 OpenAPI JWT。
         EstablishedSession established = sessions.establish(account, List.of(verified.authentication()));
         List<TreeCode> operations = clients.operations(client.clientId());
-        String scope = operations.stream().map(TreeCode::value).collect(Collectors.joining(" "));
+        String scope = operations.stream().map(code -> code.format(COLON)).collect(Collectors.joining(" "));
         OpenApiTokenResponse response;
         if (jwtTokens.enabled()) {
             OpenApiJwtTokenService.IssuedOpenApiJwt token = jwtTokens.issue(established.session());

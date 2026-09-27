@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ public final class SystemSettingsView {
     public static @NotNull SystemSettingsView from(@NotNull List<@NotNull ManagedSetting> settings) {
         Map<String, List<ManagedSetting>> grouped = new LinkedHashMap<>();
         for (ManagedSetting setting : Objects.requireNonNull(settings, "设置管理结果不能为空")) {
-            grouped.computeIfAbsent(setting.setting().group().key(), key -> new java.util.ArrayList<>())
+            grouped.computeIfAbsent(setting.setting().group().key(), key -> new ArrayList<>())
                     .add(setting);
         }
         List<Group> groups = grouped.values()
@@ -220,7 +221,7 @@ public final class SystemSettingsView {
             return sortOrder;
         }
 
-        /** @return 当前设置行版本；数据库还没有该设置行时返回 {@code 0} */
+        /** @return 当前设置行版本；数据库没有该设置行时返回 {@code 0} */
         public long getVersion() {
             return version;
         }

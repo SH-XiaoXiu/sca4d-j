@@ -1,6 +1,6 @@
 package com.sca4d.iam.acl;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.iam.DomainScope;
 import org.jetbrains.annotations.CheckReturnValue;

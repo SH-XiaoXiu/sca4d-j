@@ -51,7 +51,7 @@ public class SettingRepository {
                 uniqueKeys,
                 1,
                 2,
-                batch -> mapper.select(owner.type().value(), owner.id(), batch))) {
+                batch -> mapper.select(owner.type(), owner.id(), batch))) {
             if (values.putIfAbsent(value.key(), value) != null) {
                 throw new IllegalStateException("数据库返回重复 SystemSetting: " + value.key());
             }
@@ -68,7 +68,7 @@ public class SettingRepository {
             @NotNull String key) {
         SettingOwner checkedOwner = Objects.requireNonNull(owner, "设置 owner 不能为空");
         return mapper.select(
-                checkedOwner.type().value(),
+                checkedOwner.type(),
                 checkedOwner.id(),
                 List.of(Objects.requireNonNull(key, "设置键不能为空"))).stream().findFirst();
     }
@@ -85,7 +85,7 @@ public class SettingRepository {
             @Nullable Integer encryptionContextVersion) {
         AffectedRowCounts.requireSingle(
                 mapper.insertManaged(
-                        SettingOwner.system().type().value(),
+                        SettingOwner.system().type(),
                         SettingOwner.system().id(),
                         key,
                         schemaVersion,
@@ -145,7 +145,7 @@ public class SettingRepository {
         VersionCondition checkedCondition = Objects.requireNonNull(condition, "设置版本条件不能为空");
         int changed = checkedCondition.expected().value() == 0
                 ? mapper.insertManaged(
-                        checkedOwner.type().value(),
+                        checkedOwner.type(),
                         checkedOwner.id(),
                         key,
                         schemaVersion,
@@ -154,7 +154,7 @@ public class SettingRepository {
                         valueCiphertext,
                         encryptionContextVersion)
                 : mapper.updateManaged(
-                        checkedOwner.type().value(),
+                        checkedOwner.type(),
                         checkedOwner.id(),
                         key,
                         Patch.set(schemaVersion),
@@ -179,7 +179,7 @@ public class SettingRepository {
         VersionCondition checkedCondition = Objects.requireNonNull(condition, "设置版本条件不能为空");
         AffectedRowCounts.requireSingle(
                 mapper.updateManaged(
-                        checkedOwner.type().value(),
+                        checkedOwner.type(),
                         checkedOwner.id(),
                         key,
                         Patch.set(schemaVersion),
@@ -199,7 +199,7 @@ public class SettingRepository {
     @AffectedRows(target = "删除 owner 设置", whenZero = ZeroRowPolicy.ALLOW)
     public void erase(@NotNull SettingOwner owner, @NotNull String key) {
         SettingOwner checkedOwner = Objects.requireNonNull(owner, "设置 owner 不能为空");
-        mapper.erase(checkedOwner.type().value(), checkedOwner.id(), Objects.requireNonNull(key, "设置键不能为空"));
+        mapper.erase(checkedOwner.type(), checkedOwner.id(), Objects.requireNonNull(key, "设置键不能为空"));
     }
 
     /**

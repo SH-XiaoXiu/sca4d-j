@@ -1,16 +1,18 @@
 package com.sca4d.iot.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.connection.ConnectionRegistry;
 import com.sca4d.core.api.i18n.LocaleCatalog;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.messaging.MessageBus;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.core.spring.persistence.mybatis.StringValueTypeHandler;
 import com.sca4d.core.spring.redis.RedisBatches;
+import com.sca4d.core.spring.redis.RedisHashTag;
 import com.sca4d.core.spring.redis.Sca4djRedis;
 import com.sca4d.iot.api.ProductDefinition;
 import com.sca4d.iot.api.change.DeviceChangePublisher;
@@ -82,7 +84,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -95,6 +97,12 @@ import java.util.stream.Stream;
 @MapperScan(basePackageClasses = ProductMapper.class)
 @EnableConfigurationProperties(IotProperties.class)
 public class IotAutoConfiguration {
+
+    /** IoT 连接反向索引和 reported 投影由多 key Lua 原子修改。 */
+    @Bean
+    RedisHashTag iotRedisHashTag() {
+        return new RedisHashTag(TreeCode.ofSegment("IOT"));
+    }
 
     /** @return IoT 开放连接值类型的 MyBatis 字符串映射 */
     @Bean
@@ -185,11 +193,10 @@ public class IotAutoConfiguration {
     @ConditionalOnMissingBean(ReportedStateStore.class)
     @ConditionalOnProperty(prefix = "sca4dj.iot", name = "reported-store", havingValue = "redis")
     ReportedStateStore redisReportedStateStore(
-            @Sca4djRedis StringRedisTemplate redis,
+            @Sca4djRedis RedisTemplate<Key, String> redis,
             ThingDataJsonCodec json,
-            RuntimeNamespace namespace,
             RedisBatches redisBatches) {
-        return new RedisReportedStateStore(redis, json, namespace, redisBatches);
+        return new RedisReportedStateStore(redis, json, redisBatches);
     }
 
     /** @return 设备定时规则和执行结果的主库持久化入口 */
@@ -203,14 +210,14 @@ public class IotAutoConfiguration {
     /** @param objectMapper App 统一 JSON 映射器 @return 严格物模型 JSON 编解码器 */
     @Bean
     ThingModelJsonCodec thingModelJsonCodec(
-            @Sca4djJson ObjectMapper objectMapper,
+            @Sca4djJson Sca4djMapper objectMapper,
             DevicePolicyCatalog policies) {
         return new ThingModelJsonCodec(objectMapper, policies);
     }
 
     /** @param objectMapper App 统一 JSON 映射器 @return 标准 Thing data JSON 编解码器 */
     @Bean
-    ThingDataJsonCodec thingDataJsonCodec(@Sca4djJson ObjectMapper objectMapper) {
+    ThingDataJsonCodec thingDataJsonCodec(@Sca4djJson Sca4djMapper objectMapper) {
         return new ThingDataJsonCodec(objectMapper);
     }
 
@@ -321,13 +328,12 @@ public class IotAutoConfiguration {
                 new TransactionTemplate(transactionManager));
     }
 
-    /** @return 连接事实的 Redis Repository 和设备接入事件接收入口 */
+    /** @return 连接信息的 Redis Repository 和设备接入事件接收入口 */
     @Bean
     DeviceConnectionRepository deviceConnectionRepository(
-            @Sca4djRedis StringRedisTemplate redis,
+            @Sca4djRedis RedisTemplate<Key, String> redis,
             Clock clock,
             IotProperties properties,
-            RuntimeNamespace namespace,
             DeviceChangeNotifier changes,
             RedisBatches redisBatches) {
         properties.validate();
@@ -335,7 +341,6 @@ public class IotAutoConfiguration {
                 redis,
                 clock,
                 properties.getConnectionTtl(),
-                namespace,
                 changes,
                 redisBatches);
     }

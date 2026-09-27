@@ -1,6 +1,6 @@
 package com.sca4d.core.api.authentication;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * 记录一种认证方式已经成功验证账号（Authentication）。
  *
- * <p>认证方法成功后直接返回该对象。多因素认证评估会话（Session，{@link Session}）中的认证列表。
+ * <p>认证方法成功后直接返回当前对象。多因素认证评估会话（Session，{@link Session}）中的认证列表。
  */
 @SuppressWarnings("ClassCanBeRecord")
 public final class Authentication {

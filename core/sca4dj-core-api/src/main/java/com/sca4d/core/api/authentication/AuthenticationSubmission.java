@@ -1,6 +1,6 @@
 package com.sca4d.core.api.authentication;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 
 import java.util.Objects;
 
@@ -57,7 +57,7 @@ public final class AuthenticationSubmission<P> {
     /**
      * 读取本次认证方法调用使用的证明材料。
      *
-     * @return Proof；调用方和认证引擎都不得持久化或记录该值
+     * @return Proof；调用方和认证引擎都不得持久化或记录此值
      */
     public P proof() {
         return proof;

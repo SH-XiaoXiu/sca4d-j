@@ -1,5 +1,6 @@
 package com.sca4d.core.api.job;
 
+import com.sca4d.core.api.pipeline.Pipeline;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -9,7 +10,7 @@ import java.util.Objects;
 /**
  * 把多条 Pipeline 编排为顺序、二路并发和合并节点的 Job。
  *
- * <p>Pipeline 本身仍可通过 {@link com.sca4d.core.api.pipeline.Pipeline#run(Object)} 直接同步执行。
+ * <p>Pipeline 本身仍可通过 {@link Pipeline#run(Object)} 直接同步执行。
  * PipelineJob 只负责把多条 Pipeline 声明为可恢复的节点；每个节点独立保存状态并按自身策略重试，
  * Pipeline 内部不保存阶段进度，节点重试时会从该 Pipeline 的第一个阶段重新开始。
  *

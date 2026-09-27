@@ -1,5 +1,6 @@
 package com.sca4d.job.persistence;
 
+import com.sca4d.core.api.job.JobKey;
 import com.sca4d.job.JobAttemptStatus;
 import com.sca4d.job.JobNodeStatus;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +16,7 @@ public final class NodeClaim {
 
     private final long runId;
 
-    private final @NotNull String jobKey;
+    private final @NotNull JobKey jobKey;
 
     private final int jobDefinitionVersion;
 
@@ -60,7 +61,7 @@ public final class NodeClaim {
     public NodeClaim(
             long nodeId,
             long runId,
-            @NotNull String jobKey,
+            @NotNull JobKey jobKey,
             int jobDefinitionVersion,
             @NotNull String jobKind,
             @NotNull String nodeKey,
@@ -169,7 +170,7 @@ public final class NodeClaim {
      *
      * @return Job key 文本
      */
-    public @NotNull String jobKey() {
+    public @NotNull JobKey jobKey() {
         return jobKey;
     }
 

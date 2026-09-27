@@ -163,7 +163,7 @@ public final class ViewJson {
     /**
      * 读取 Jackson 最终写出的可变根对象。
      *
-     * @return 创建 ViewJson 时传入且后续操作原地修改的同一个 ObjectNode
+     * @return 创建 ViewJson 时传入、之后操作会原地修改的同一个 ObjectNode
      */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "The public contract intentionally exposes the live final JSON object")
     public @NotNull ObjectNode root() {

@@ -1,5 +1,6 @@
 package com.sca4d.iot.message;
 
+import static com.sca4d.core.api.name.NameFormat.SLASH;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
@@ -64,9 +65,9 @@ class DownlinkRepositoryTest {
                 null,
                 null,
                 "{}",
-                DeviceResultAcknowledgementPolicy.CODE.value(),
+                DeviceResultAcknowledgementPolicy.CODE.format(SLASH),
                 30_000L,
-                DefaultCommandRetryPolicy.CODE.value(),
+                DefaultCommandRetryPolicy.CODE.format(SLASH),
                 DeviceDownlinkStatus.PENDING,
                 0,
                 null,
@@ -75,8 +76,9 @@ class DownlinkRepositoryTest {
         RetryPolicy retry = mock(RetryPolicy.class);
         when(messages.selectDownlinkMessages(List.of(12L, 11L))).thenReturn(List.of(row));
         when(json.decodeMap("{}")).thenReturn(Map.of());
-        when(policies.acknowledgement(DeviceResultAcknowledgementPolicy.CODE.value())).thenReturn(acknowledgement);
-        when(policies.retry(DefaultCommandRetryPolicy.CODE.value())).thenReturn(retry);
+        when(policies.acknowledgement(DeviceResultAcknowledgementPolicy.CODE.format(SLASH)))
+                .thenReturn(acknowledgement);
+        when(policies.retry(DefaultCommandRetryPolicy.CODE.format(SLASH))).thenReturn(retry);
 
         Map<Long, DeviceDownlink> result = repository.findAll(List.of(12L, 11L, 12L));
 
@@ -97,17 +99,18 @@ class DownlinkRepositoryTest {
                 null,
                 null,
                 "{}",
-                NoAcknowledgementPolicy.CODE.value(),
+                NoAcknowledgementPolicy.CODE.format(SLASH),
                 1000L,
-                NoRetryPolicy.CODE.value(),
+                NoRetryPolicy.CODE.format(SLASH),
                 DeviceDownlinkStatus.CANCELLED,
                 1,
                 null,
                 Instant.EPOCH);
         when(messages.selectDownlinkMessages(List.of(11L))).thenReturn(List.of(cancelled));
         when(json.decodeMap("{}")).thenReturn(Map.of());
-        when(policies.acknowledgement(NoAcknowledgementPolicy.CODE.value())).thenReturn(new NoAcknowledgementPolicy());
-        when(policies.retry(NoRetryPolicy.CODE.value())).thenReturn(new NoRetryPolicy());
+        when(policies.acknowledgement(NoAcknowledgementPolicy.CODE.format(SLASH)))
+                .thenReturn(new NoAcknowledgementPolicy());
+        when(policies.retry(NoRetryPolicy.CODE.format(SLASH))).thenReturn(new NoRetryPolicy());
         assertThat(repository.markPublished(11L, 1, DeviceDownlinkStatus.WAITING_ACK, Instant.EPOCH, Instant.EPOCH))
                 .isFalse();
         assertThat(repository.reschedule(11L, 1, "transport")).isFalse();

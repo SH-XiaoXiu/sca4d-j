@@ -5,6 +5,7 @@ import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.i18n.LocalizedFields;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.Product;
 import com.sca4d.iot.api.model.ThingCommand;
@@ -91,7 +92,7 @@ public class ThingModelService {
             } catch (IllegalArgumentException exception) {
                 throw new BusinessException(IotErrorCode.PROTOCOL_CONFLICT, exception);
             }
-            // 相同版本、相同技术内容按幂等结果返回；其他版本必须严格连续且内容不能重复。
+            // 相同版本、相同技术内容按幂等结果返回；不同版本必须严格连续且内容不能重复。
             String hash = DigestUtil.sha256Hex(codec.encode(checked));
             List<ThingModelPresentation> published = models.findPublished(checked.productCode());
             if (published.isEmpty()) {
@@ -150,7 +151,7 @@ public class ThingModelService {
             @NotNull String productCode,
             @NotNull Supplier<@NotNull T> operation) {
         return distributedLock.execute(
-                new LockKey("iot", "product", productCode),
+                new LockKey(TreeCode.of("IOT:PRODUCT"), productCode),
                 LOCK_WAIT,
                 () -> Objects.requireNonNull(
                         transactions.execute(status -> operation.get()),

@@ -109,7 +109,7 @@ implements com.sca4d.core.api.connection.ConnectionRegistry</span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,com.sca4d.web.realtime.config.WebRealtimeInfrastructureNames,com.sca4d.web.realtime.config.WebRealtimeProperties,java.time.Clock,com.sca4d.core.spring.redis.RedisBatches)" class="member-name-link">RedisConnectionRegistry</a><wbr>(@NotNull org.springframework.data.redis.core.StringRedisTemplate&nbsp;redis,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,com.sca4d.web.realtime.config.WebRealtimeInfrastructureNames,com.sca4d.web.realtime.config.WebRealtimeProperties,java.time.Clock,com.sca4d.core.spring.redis.RedisBatches)" class="member-name-link">RedisConnectionRegistry</a><wbr>(@NotNull org.springframework.data.redis.core.RedisTemplate&lt;com.sca4d.core.api.name.Key,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;redis,
  @NotNull <a href="../config/WebRealtimeInfrastructureNames.html" title="class in com.sca4d.web.realtime.config">WebRealtimeInfrastructureNames</a>&nbsp;names,
  @NotNull <a href="../config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a>&nbsp;properties,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
@@ -211,10 +211,10 @@ implements com.sca4d.core.api.connection.ConnectionRegistry</span></div>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(org.springframework.data.redis.core.StringRedisTemplate,com.sca4d.web.realtime.config.WebRealtimeInfrastructureNames,com.sca4d.web.realtime.config.WebRealtimeProperties,java.time.Clock,com.sca4d.core.spring.redis.RedisBatches)">
+<section class="detail" id="&lt;init&gt;(org.springframework.data.redis.core.RedisTemplate,com.sca4d.web.realtime.config.WebRealtimeInfrastructureNames,com.sca4d.web.realtime.config.WebRealtimeProperties,java.time.Clock,com.sca4d.core.spring.redis.RedisBatches)">
 <h3>RedisConnectionRegistry</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RedisConnectionRegistry</span><wbr><span class="parameters">(@NotNull
- @NotNull org.springframework.data.redis.core.StringRedisTemplate&nbsp;redis,
+ @NotNull org.springframework.data.redis.core.RedisTemplate&lt;com.sca4d.core.api.name.Key,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;redis,
  @NotNull
  @NotNull <a href="../config/WebRealtimeInfrastructureNames.html" title="class in com.sca4d.web.realtime.config">WebRealtimeInfrastructureNames</a>&nbsp;names,
  @NotNull

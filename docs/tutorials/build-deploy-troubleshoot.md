@@ -1,6 +1,6 @@
 # 构建、部署与排障
 
-Sca4d Server 和 Gateway 分别生成可执行 JAR，管理端生成静态文件。部署前准备各自的运行配置，再检查数据库迁移、实例注册和外部入口。
+部署包含 Server JAR、Gateway JAR 和管理端静态文件，分别配置并启动。先备份数据库、检查迁移与单实例 readiness，再通过 Gateway 验证登录和本次发布功能；请求失败时用响应头 `X-Call-Id` 定位日志。
 
 ## 构建应用
 
@@ -103,7 +103,7 @@ SCA4DJ_LOKI_PUSH_PASSWORD=replace-me
 curl -i -X POST http://127.0.0.1:8088/internal/logging/push
 ```
 
-打开 `SCA4DJ_GRAFANA_BIND` 对应的地址，使用 Grafana 管理员账号登录。数据源页面中的 “Loki” 应显示连接成功，并可在 Explore 中选择该数据源。
+打开 `SCA4DJ_GRAFANA_BIND` 对应的地址，使用 Grafana 管理员账号登录。数据源页面中的「Loki」应显示连接成功，并可在 Explore 中选择该数据源。
 
 使用 S3 或 MinIO 时，先创建独立 Bucket 和最小权限凭据，再设置：
 

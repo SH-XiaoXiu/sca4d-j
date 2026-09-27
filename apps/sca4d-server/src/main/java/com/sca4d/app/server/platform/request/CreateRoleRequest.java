@@ -1,7 +1,7 @@
 package com.sca4d.app.server.platform.request;
 
-import com.sca4d.core.api.code.TreeCode;
 import com.sca4d.core.api.i18n.LocalizedFields;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.spring.validation.Req;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

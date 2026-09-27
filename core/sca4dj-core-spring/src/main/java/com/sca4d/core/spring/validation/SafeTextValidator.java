@@ -1,5 +1,7 @@
 package com.sca4d.core.spring.validation;
 
+import static com.sca4d.core.spring.validation.ValidationPatterns.SAFE_TEXT;
+
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.jetbrains.annotations.NotNull;
@@ -39,6 +41,6 @@ public final class SafeTextValidator implements ConstraintValidator<SafeText, St
     public boolean isValid(@Nullable String value, @Nullable ConstraintValidatorContext context) {
         return value == null
                 || value.isBlank()
-                || value.length() <= max && value.matches(ValidationPatterns.SAFE_TEXT);
+                || value.length() <= max && value.matches(SAFE_TEXT);
     }
 }

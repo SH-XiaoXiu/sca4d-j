@@ -12,12 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.Objects;
 
-/** 隔离 HMAC 认证方法对 MyBatis、状态字段和影响行数的依赖。 */
+/** 隔离 MAC 认证方法对 MyBatis、状态字段和影响行数的依赖。 */
 public class HmacCredentialRepository {
 
     private final @NotNull HmacCredentialMapper mapper;
 
-    /** @param mapper HMAC Credential Mapper */
+    /** @param mapper MAC Credential Mapper */
     public HmacCredentialRepository(@NotNull HmacCredentialMapper mapper) {
         this.mapper = Objects.requireNonNull(mapper, "HMAC Credential Mapper 不能为空");
     }
@@ -27,7 +27,7 @@ public class HmacCredentialRepository {
         return mapper.selectByAccountId(accountId);
     }
 
-    /** 创建 Account 首个 HMAC Credential。 */
+    /** 创建 Account 首个 MAC Credential。 */
     @Transactional
     @AffectedRows(target = "HMAC Credential", whenZero = ZeroRowPolicy.OPTIMISTIC_LOCK)
     public @NotNull HmacCredential create(long accountId, @NotNull EncryptedSecret encrypted) {
@@ -36,7 +36,7 @@ public class HmacCredentialRepository {
         return loadAfterWrite(accountId);
     }
 
-    /** 按版本轮换或重新签发 HMAC Credential。 */
+    /** 按版本轮换或重新签发 MAC Credential。 */
     @Transactional
     @AffectedRows(target = "HMAC Credential", whenZero = ZeroRowPolicy.OPTIMISTIC_LOCK)
     public @NotNull HmacCredential replace(
@@ -74,7 +74,7 @@ public class HmacCredentialRepository {
                 "修改 HMAC Credential 状态");
     }
 
-    /** 幂等删除 Account 保存的加密 HMAC Key 和状态。 */
+    /** 幂等删除 Account 保存的加密 MAC Key 和状态。 */
     @AffectedRows(target = "删除 HMAC Credential", whenZero = ZeroRowPolicy.ALLOW)
     public void erase(long accountId) {
         mapper.deleteByAccountId(accountId);

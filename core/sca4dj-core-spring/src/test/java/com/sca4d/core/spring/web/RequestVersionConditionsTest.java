@@ -7,6 +7,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallExecution;
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.identity.SystemPrincipal;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.spring.web.annotation.IfMatch;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +31,7 @@ class RequestVersionConditionsTest {
     @DisplayName("Attaches If Match Requirement Only To Annotated Execution")
     void attachesIfMatchRequirementOnlyToAnnotatedExecution() throws Exception {
         conditions.bind(new Version(3));
-        Call call = Call.system("if-match", Instant.EPOCH);
+        Call call = Call.system("if-match", Instant.EPOCH, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")));
         CallExecution plain = execution(call, Fixture.class.getDeclaredMethod("plain"));
         CallExecution versioned = execution(call, Fixture.class.getDeclaredMethod("versioned"));
 

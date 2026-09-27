@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.time.Instant;
 import java.util.List;
 
-/** 验证默认在线策略只依赖仍有效的当前连接事实。 */
+/** 验证默认在线策略只依赖仍有效的当前连接信息。 */
 class ConnectionPresentDeviceOnlinePolicyTest {
 
     private final ConnectionPresentDeviceOnlinePolicy policy = new ConnectionPresentDeviceOnlinePolicy();

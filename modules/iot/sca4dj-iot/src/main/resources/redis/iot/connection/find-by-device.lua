@@ -6,10 +6,17 @@ redis.call('ZREMRANGEBYSCORE', index_key, '-inf', now)
 local ids = redis.call('ZRANGEBYSCORE', index_key, now, '+inf')
 local result = {}
 
+-- 与 TreeCode.childValue 一致，按 UTF-8 字节编码动态标识。
+local function identifier(value)
+    return 'V_' .. (string.gsub(value, '.', function(byte)
+        return string.format('%02X', string.byte(byte))
+    end))
+end
+
 for _, id in ipairs(ids) do
     local fields = redis.call(
         'HMGET',
-        connection_prefix .. id,
+        connection_prefix .. identifier(id),
         'deviceId',
         'protocol',
         'sessionId',

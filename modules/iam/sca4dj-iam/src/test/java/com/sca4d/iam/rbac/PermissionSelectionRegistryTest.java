@@ -1,9 +1,10 @@
 package com.sca4d.iam.rbac;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.OperationCatalog;
@@ -31,10 +32,10 @@ class PermissionSelectionRegistryTest {
                 List.of(module));
 
         assertThat(registry.selection(PLATFORM).operations())
-                .extracting(operation -> operation.code().value())
+                .extracting(operation -> operation.code().format(COLON))
                 .containsExactly("PROJECTS:ITEMS:READ");
         assertThat(registry.selection(PROJECT).operations())
-                .extracting(operation -> operation.code().value())
+                .extracting(operation -> operation.code().format(COLON))
                 .containsExactly("PROJECTS:ITEMS:MANAGE", "PROJECTS:ITEMS:READ");
         assertThat(registry.domains()).containsExactlyInAnyOrder(PLATFORM, PROJECT);
     }
@@ -97,7 +98,7 @@ class PermissionSelectionRegistryTest {
 
             @Override
             public boolean canGrant(@NotNull RbacDomain domain, @NotNull Operation operation) {
-                return PROJECT.equals(domain) || operation.code().value().endsWith(":READ");
+                return PROJECT.equals(domain) || operation.code().format(COLON).endsWith(":READ");
             }
         };
     }

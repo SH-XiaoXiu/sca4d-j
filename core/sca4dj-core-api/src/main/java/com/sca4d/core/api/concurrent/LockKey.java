@@ -1,76 +1,52 @@
 package com.sca4d.core.api.concurrent;
 
-import com.sca4d.core.api.utils.TextUtils;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.Code;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
-/** 保存跨应用实例互斥业务操作使用的锁键名称段。 */
-public final class LockKey {
+/** 使用稳定锁资源编码和动态标识组成跨实例互斥键，物理名称使用 App 隔离。 */
+public final class LockKey extends Key {
 
-    private final List<String> segments;
-
-    private final String value;
-
-    /**
-     * 创建互斥锁键。
-     *
-     * @param segments 模块、资源和对象标识等锁键名称段，每段都不能包含空白或冒号
-     * @throws IllegalArgumentException 没有名称段，或任一名称段包含空白、冒号时抛出
-     */
-    public LockKey(String @NotNull... segments) {
-        String[] checked = Objects.requireNonNull(segments, "锁键名称段不能为空");
-        if (checked.length == 0) {
-            throw new IllegalArgumentException("锁键至少需要一个名称段");
-        }
-        this.segments = Arrays.stream(checked).map(LockKey::requireSegment).toList();
-        this.value = String.join(":", this.segments);
+    /** 构造固定锁键。 */
+    public LockKey(@NotNull Code code) {
+        super(Key.of(TreeCode.of("LOCK").append(code)));
     }
 
-    /**
-     * 返回组成锁键的名称段。
-     *
-     * @return 不可修改的锁键名称段
-     */
-    public @NotNull @Unmodifiable List<@NotNull String> segments() {
-        return List.copyOf(segments);
+    /** 在稳定锁编码之后保存动态文本，保持原始大小写及字符区别。 */
+    public LockKey(@NotNull Code code, String @NotNull... values) {
+        super(Key.of(TreeCode.of("LOCK").append(code), values));
     }
 
-    /**
-     * 返回锁键值。
-     *
-     * @return 锁键值
-     */
-    public @NotNull String value() {
-        return value;
+    /** 在稳定锁编码之后保存动态数字。 */
+    public LockKey(@NotNull Code code, long @NotNull... values) {
+        super(Key.of(TreeCode.of("LOCK").append(code), values));
+    }
+
+    /** 保存已校验的锁键节点，避免追加时重复添加 LOCK。 */
+    private LockKey(@NotNull List<String> segments) {
+        super(segments);
     }
 
     @Override
-    public boolean equals(Object other) {
-        return this == other || other instanceof LockKey lockKey && value.equals(lockKey.value);
+    protected @NotNull LockKey withSegments(@NotNull List<String> segments) {
+        return new LockKey(segments);
     }
 
     @Override
-    public int hashCode() {
-        return value.hashCode();
+    public @NotNull LockKey part(@NotNull String value) {
+        return (LockKey) super.part(value);
     }
 
     @Override
-    public String toString() {
-        return value;
+    public @NotNull LockKey part(long value) {
+        return (LockKey) super.part(value);
     }
 
-    /** @return 经过校验的锁键名称段 */
-    private static @NotNull String requireSegment(@NotNull String value) {
-        String checked = TextUtils.requireText(value, "锁键名称段");
-        if (!checked.equals(value)
-                || checked.indexOf(':') >= 0
-                || checked.chars().anyMatch(Character::isWhitespace)) {
-            throw new IllegalArgumentException("锁键名称段不能包含空白或冒号");
-        }
-        return checked;
+    @Override
+    public @NotNull LockKey append(@NotNull Code code) {
+        return (LockKey) super.append(code);
     }
 }

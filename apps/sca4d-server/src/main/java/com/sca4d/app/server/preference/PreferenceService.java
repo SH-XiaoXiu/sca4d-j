@@ -1,7 +1,7 @@
 package com.sca4d.app.server.preference;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.sca4d.core.api.code.TreeCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.setting.PreferenceSetting;
 import com.sca4d.core.api.setting.PreferenceSettings;
 import com.sca4d.core.api.setting.SettingOwner;

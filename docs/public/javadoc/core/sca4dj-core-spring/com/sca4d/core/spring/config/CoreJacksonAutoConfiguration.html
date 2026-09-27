@@ -123,14 +123,19 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sca4djLongJsonCustomizer()" class="member-name-link">sca4djLongJsonCustomizer</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../json/NameJacksonModule.html" title="class in com.sca4d.core.spring.json">NameJacksonModule</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#nameJacksonModule()" class="member-name-link">nameJacksonModule</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">为业务 HTTP Mapper 安装公共名称值类型，不引入 Sca4djMapper 的内部协议配置。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sca4djLongJsonCustomizer()" class="member-name-link">sca4djLongJsonCustomizer</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">把 `Long` 和 `long` 输出为十进制字符串；Jackson 读取时仍恢复为 Java 64 位整数。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.fasterxml.jackson.databind.ObjectMapper</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sca4djObjectMapper()" class="member-name-link">sca4djObjectMapper</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../json/Sca4djMapper.html" title="class in com.sca4d.core.spring.json">Sca4djMapper</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sca4djObjectMapper()" class="member-name-link">sca4djObjectMapper</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">创建脚手架内部 Session wire、Redis 状态和消息共用的 JSON 映射器。</div>
 </div>
 </div>
@@ -166,6 +171,15 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="nameJacksonModule()">
+<h3>nameJacksonModule</h3>
+<div class="member-signature"><span class="annotations">@Bean
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../json/NameJacksonModule.html" title="class in com.sca4d.core.spring.json">NameJacksonModule</a></span>&nbsp;<span class="element-name">nameJacksonModule</span>()</div>
+<div class="block">为业务 HTTP Mapper 安装公共名称值类型，不引入 Sca4djMapper 的内部协议配置。</div>
+</section>
+</li>
+<li>
 <section class="detail" id="sca4djObjectMapper()">
 <h3>sca4djObjectMapper</h3>
 <div class="member-signature"><span class="annotations">@Bean(name="sca4djObjectMapper",
@@ -173,7 +187,7 @@ loadScripts(document, 'script');</script>
 <a href="../json/Sca4djJson.html" title="annotation interface in com.sca4d.core.spring.json">@Sca4djJson</a>
 @ConditionalOnMissingBean(annotation=<a href="../json/Sca4djJson.html" title="annotation interface in com.sca4d.core.spring.json">Sca4djJson.class</a>)
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.fasterxml.jackson.databind.ObjectMapper</span>&nbsp;<span class="element-name">sca4djObjectMapper</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../json/Sca4djMapper.html" title="class in com.sca4d.core.spring.json">Sca4djMapper</a></span>&nbsp;<span class="element-name">sca4djObjectMapper</span>()</div>
 <div class="block">创建脚手架内部 Session wire、Redis 状态和消息共用的 JSON 映射器。</div>
 <dl class="notes">
 <dt>Returns:</dt>

@@ -1,5 +1,7 @@
 package com.sca4d.core.spring.setting;
 
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+
 import com.sca4d.core.api.security.EncryptedSecret;
 import com.sca4d.core.api.security.SecretCipher;
 import com.sca4d.core.api.security.SecretKeyring;
@@ -187,7 +189,7 @@ public class SettingBootstrap {
     private static @NotNull String ownerSecretPurpose(@NotNull String key) {
         SettingOwner owner = SettingOwner.system();
         return "setting:v2:"
-                + owner.type().value().length()
+                + owner.type().format(SLASH).length()
                 + ":"
                 + owner.type()
                 + ":"

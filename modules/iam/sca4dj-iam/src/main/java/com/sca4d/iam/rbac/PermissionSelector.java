@@ -1,6 +1,8 @@
 package com.sca4d.iam.rbac;
 
-import com.sca4d.core.api.code.TreeCode;
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,9 +43,6 @@ public final class PermissionSelector {
      */
     public PermissionSelector(@NotNull TreeCode code) {
         this.code = Objects.requireNonNull(code, "权限选择符不能为空");
-        if (code.separator() != ':') {
-            throw new IllegalArgumentException("权限选择符必须使用冒号分层: " + code);
-        }
     }
 
     /**
@@ -53,7 +52,7 @@ public final class PermissionSelector {
      */
     @Contract(pure = true)
     public @NotNull String value() {
-        return isAll() ? "*" : code.value();
+        return isAll() ? "*" : code.format(COLON);
     }
 
     /**
