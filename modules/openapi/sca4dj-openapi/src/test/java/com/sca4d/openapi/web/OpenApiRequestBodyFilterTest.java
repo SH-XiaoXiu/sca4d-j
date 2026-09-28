@@ -4,12 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import jakarta.servlet.ReadListener;
 import jakarta.servlet.ServletInputStream;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -82,7 +82,7 @@ class OpenApiRequestBodyFilterTest {
         }
 
         @Override
-        public ServletInputStream getInputStream() {
+        public @NotNull ServletInputStream getInputStream() {
             return new ServletInputStream() {
                 @Override
                 public int read() {
@@ -94,7 +94,7 @@ class OpenApiRequestBodyFilterTest {
                 }
 
                 @Override
-                public int read(byte[] bytes, int offset, int length) throws IOException {
+                public int read(byte @NotNull [] bytes, int offset, int length) {
                     if (length == 0) {
                         return 0;
                     }

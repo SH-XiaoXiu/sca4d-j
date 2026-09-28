@@ -8,6 +8,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.sca4d.web.realtime.config.WebRealtimeProperties;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -225,7 +226,7 @@ class StompChannelDispatcherTest {
             ExecutorSubscribableChannel channel = channel(dispatcher);
             channel.addInterceptor(new ChannelInterceptor() {
                 @Override
-                public Message<?> preSend(Message<?> message, MessageChannel ignored) {
+                public Message<?> preSend(@NotNull Message<?> message, @NotNull MessageChannel ignored) {
                     if (((byte[]) message.getPayload())[0] == 1) {
                         throw new IllegalArgumentException("拒绝输入");
                     }
@@ -256,7 +257,7 @@ class StompChannelDispatcherTest {
             ExecutorSubscribableChannel channel = channel(dispatcher);
             channel.addInterceptor(new ChannelInterceptor() {
                 @Override
-                public Message<?> preSend(Message<?> message, MessageChannel target) {
+                public Message<?> preSend(@NotNull Message<?> message, @NotNull MessageChannel target) {
                     if (((byte[]) message.getPayload())[0] == 1) {
                         target.send(message("a", 2));
                     }
