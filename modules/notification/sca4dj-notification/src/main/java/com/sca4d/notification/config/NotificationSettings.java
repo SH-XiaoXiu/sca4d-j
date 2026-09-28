@@ -35,7 +35,7 @@ public class NotificationSettings {
                 GROUP,
                 "setting.notification.channel-defaults",
                 "setting.notification.channel-defaults.description",
-                "SCA4DJ_NOTIFICATION_CHANNEL_DEFAULTS",
+                "NOTIFICATION_CHANNEL_DEFAULTS",
                 JsonNodeFactory.instance.objectNode(),
                 SettingCodec.jsonObject(65_536),
                 Pipeline.identity(JsonNode.class),

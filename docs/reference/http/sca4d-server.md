@@ -364,7 +364,7 @@ Authorization: Bearer <token>
 Accept-Language: zh-CN
 ```
 
-Sca4d Server 默认使用 SESSION。启用 JWT 至少设置 `SCA4DJ_AUTH_TOKEN_MODE=JWT` 和 `SCA4DJ_AUTH_JWT_PRIMARY_KEY=<Base64 key>`；密钥解码后不能少于 32 字节。其他 active key 和历史验证 key 可以通过外部 `sca4dj.auth.jwt` 配置提供。
+Sca4d Server 默认使用 SESSION。启用 JWT 至少设置 `SCA4D_AUTH_TOKEN_MODE=JWT` 和 `SCA4D_AUTH_JWT_PRIMARY_KEY=<Base64 key>`；密钥解码后不能少于 32 字节。其他 active key 和历史验证 key 可以通过外部 `sca4dj.auth.jwt` 配置提供。
 
 应用支持 `zh-CN` 和 `en-US`。`Accept-Language` 影响错误 `message`、角色 `name` 和 permission 目录的 `name`；稳定判断使用 HTTP 状态、`code`、`messageKey` 和资源字段，不比较翻译文案。客户端通过 `GET /system/locales` 读取支持列表和默认 Locale，不把这两个值写死在角色编辑页面。
 
@@ -716,7 +716,7 @@ Content-Type: application/json
 
 ### 属性修改与命令
 
-`PUT /iot/devices/{deviceId}/desired` 的正文由 `set` 对象和 `clear` code 集合组成，只修改本次明确列出的属性。`set` 与 `clear` 合计不能超过 `SCA4DJ_IOT_MAX_DESIRED_PROPERTIES`，默认 100。响应返回最新 `desiredSequence` 和本次实际生成的下行消息；每条消息包含创建时快照的 ACK 等待时间；没有实际变化时消息数组可以为空。command 路由的正文是最多 64 个输入项的 JSON 对象，`commandCode` 与输入必须符合当前绑定物模型。停用 Device 的 desired 与 command 请求返回状态冲突。
+`PUT /iot/devices/{deviceId}/desired` 的正文由 `set` 对象和 `clear` code 集合组成，只修改本次明确列出的属性。`set` 与 `clear` 合计不能超过 `SCA4D_IOT_MAX_DESIRED_PROPERTIES`，默认 100。响应返回最新 `desiredSequence` 和本次实际生成的下行消息；每条消息包含创建时快照的 ACK 等待时间；没有实际变化时消息数组可以为空。command 路由的正文是最多 64 个输入项的 JSON 对象，`commandCode` 与输入必须符合当前绑定物模型。停用 Device 的 desired 与 command 请求返回状态冲突。
 
 ### 设备 HMAC 登录
 
@@ -766,7 +766,7 @@ IOT-HMAC-SHA256
 
 ### EMQX 认证回调
 
-EMQX 认证回调只在 `SCA4DJ_IOT_EMQX_ENABLED=true` 时注册。它比较 `X-Iot-Emqx-Secret` 与 `SCA4DJ_IOT_EMQX_WEBHOOK_SECRET`；错误共享 Secret 返回 401。`@AnonymousAccess` 只取消用户 Session 恢复，不能跳过这项独立校验。`IOT.EMQX.AUTHENTICATE` 返回 EMQX 规定的 `allow` 或 `deny` JSON，以及允许连接时的 `client_attrs` 和 ACL。
+EMQX 认证回调只在 `SCA4D_IOT_EMQX_ENABLED=true` 时注册。它比较 `X-Iot-Emqx-Secret` 与 `SCA4D_IOT_EMQX_WEBHOOK_SECRET`；错误共享 Secret 返回 401。`@AnonymousAccess` 只取消用户 Session 恢复，不能跳过这项独立校验。`IOT.EMQX.AUTHENTICATE` 返回 EMQX 规定的 `allow` 或 `deny` JSON，以及允许连接时的 `client_attrs` 和 ACL。
 
 ## 条件请求与失败
 

@@ -94,12 +94,12 @@ public class SettingCatalog {
             @NotNull SystemSetting<?> definition,
             @NotNull Map<String, SystemSetting<?>> byEnvironment,
             @NotNull Map<TreeCode, SettingGroup> byGroup) {
-        if (!ENV.matcher(definition.environmentVariable()).matches()) {
-            throw new IllegalArgumentException("设置初始化 ENV 格式错误: " + definition.environmentVariable());
+        if (!ENV.matcher(definition.environmentVariableSuffix()).matches()) {
+            throw new IllegalArgumentException("设置初始化 ENV 后缀格式错误: " + definition.environmentVariableSuffix());
         }
-        SystemSetting<?> duplicate = byEnvironment.putIfAbsent(definition.environmentVariable(), definition);
+        SystemSetting<?> duplicate = byEnvironment.putIfAbsent(definition.environmentVariableSuffix(), definition);
         if (duplicate != null) {
-            throw new IllegalArgumentException("重复设置初始化 ENV: " + definition.environmentVariable());
+            throw new IllegalArgumentException("重复设置初始化 ENV 后缀: " + definition.environmentVariableSuffix());
         }
         SettingGroup existingGroup = byGroup.putIfAbsent(definition.group().code(), definition.group());
         if (existingGroup != null

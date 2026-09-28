@@ -87,14 +87,14 @@ public class WebRealtimeAutoConfiguration {
 
     /** @return RabbitMQ 节点消息编解码器 */
     @Bean
-    @ConditionalOnProperty(prefix = "sca4dj.web-realtime", name = "node-transport", havingValue = "RABBIT")
+    @ConditionalOnProperty(prefix = "sca4dj.web-realtime.node", name = "transport", havingValue = "RABBIT")
     NodeMessageCodec nodeMessageCodec(@Sca4djJson @NotNull Sca4djMapper objectMapper) {
         return new NodeMessageCodec(objectMapper);
     }
 
     /** @return 当前节点的独占自动删除队列和消息转发器 */
     @Bean
-    @ConditionalOnProperty(prefix = "sca4dj.web-realtime", name = "node-transport", havingValue = "RABBIT")
+    @ConditionalOnProperty(prefix = "sca4dj.web-realtime.node", name = "transport", havingValue = "RABBIT")
     RabbitNodeRouter rabbitNodeRouter(
             @NotNull WebRealtimeInfrastructureNames names,
             @NotNull RabbitTemplate rabbitTemplate,
@@ -113,14 +113,14 @@ public class WebRealtimeAutoConfiguration {
 
     /** @return 当前节点临时 exchange、queue 和 binding 声明 */
     @Bean
-    @ConditionalOnProperty(prefix = "sca4dj.web-realtime", name = "node-transport", havingValue = "RABBIT")
+    @ConditionalOnProperty(prefix = "sca4dj.web-realtime.node", name = "transport", havingValue = "RABBIT")
     Declarables webRealtimeDeclarables(@NotNull RabbitNodeRouter node) {
         return node.declarables();
     }
 
     /** @return 不依赖 RabbitMQ 的当前 JVM 节点传输 */
     @Bean
-    @ConditionalOnProperty(prefix = "sca4dj.web-realtime", name = "node-transport", havingValue = "LOCAL", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = "sca4dj.web-realtime.node", name = "transport", havingValue = "LOCAL", matchIfMissing = true)
     LocalNodeRouter localNodeRouter(@NotNull LocalConnectionRegistry connections) {
         return new LocalNodeRouter(connections);
     }

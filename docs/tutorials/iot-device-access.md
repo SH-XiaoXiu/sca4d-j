@@ -13,7 +13,7 @@ IoT Compose 会启动：
 
 默认本机入口为 MQTT `127.0.0.1:1883`、EMQX Dashboard `http://127.0.0.1:18083`、TimescaleDB `127.0.0.1:5433`。示例密钥和密码只适用于本机。
 
-IoT Compose 直接把 EMQX HTTP Authenticator 指向宿主机 Gateway `8088`，不创建 Rule Engine、HTTP Connector 或 Action。Gateway 与 Server 必须按[第一次运行](/tutorials/local-start)使用相同的 `SCA4DJ_GATEWAY_SECRET`，Server 还必须使用与 Compose 相同的 `SCA4DJ_IOT_EMQX_WEBHOOK_SECRET`。只有 MQTT CONNECT 实际发生时，EMQX 才调用认证回调。
+IoT Compose 直接把 EMQX HTTP Authenticator 指向宿主机 Gateway `8088`，不创建 Rule Engine、HTTP Connector 或 Action。Gateway 与 Server 必须按[第一次运行](/tutorials/local-start)使用相同的 `SCA4D_GATEWAY_SECRET`，Server 还必须使用与 Compose 相同的 `SCA4D_IOT_EMQX_WEBHOOK_SECRET`。只有 MQTT CONNECT 实际发生时，EMQX 才调用认证回调。
 
 ## 准备管理请求
 

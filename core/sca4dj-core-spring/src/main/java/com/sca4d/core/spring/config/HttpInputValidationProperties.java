@@ -3,7 +3,7 @@ package com.sca4d.core.spring.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /** 配置外部 HTTP 输入按 Java 数据类型自动执行的默认校验。 */
-@ConfigurationProperties("sca4dj.core.http-input-validation")
+@ConfigurationProperties("sca4dj.core.http.input.validation")
 public class HttpInputValidationProperties {
 
     private boolean positiveIntegerEnabled = true;

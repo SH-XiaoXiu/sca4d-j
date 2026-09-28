@@ -2,8 +2,8 @@ local.file_match "applications" {
 	path_targets = [
 		{
 			"__path__"    = "/var/log/applications/*/*/application.json",
-			"environment" = sys.env("SCA4DJ_ENVIRONMENT"),
-			"host"        = sys.env("SCA4DJ_LOG_HOST"),
+			"environment" = sys.env("SCA4D_ENVIRONMENT"),
+			"host"        = sys.env("SCA4D_LOG_HOST"),
 		},
 	]
 	sync_period = "10s"
@@ -55,11 +55,11 @@ loki.process "ecs" {
 
 loki.write "central" {
 	endpoint {
-		url = sys.env("SCA4DJ_LOKI_PUSH_URL")
+		url = sys.env("SCA4D_LOKI_PUSH_URL")
 
 		basic_auth {
-			username = sys.env("SCA4DJ_LOKI_PUSH_USERNAME")
-			password = sys.env("SCA4DJ_LOKI_PUSH_PASSWORD")
+			username = sys.env("SCA4D_LOKI_PUSH_USERNAME")
+			password = sys.env("SCA4D_LOKI_PUSH_PASSWORD")
 		}
 	}
 }

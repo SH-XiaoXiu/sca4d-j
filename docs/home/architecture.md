@@ -28,10 +28,10 @@ Gateway 保存已注册 Server 实例的路由信息，转发 `/api/**`，并处
 
 | 配置或组件 | 多实例要求 |
 |---|---|
-| App 隔离名称 | 同一业务集群使用相同 `SCA4DJ_APPLICATION_NAME`，名称归一化后隔离 Redis、RabbitMQ、Job 和 Quartz 资源 |
-| 实例标识 | 同时运行的 Server 使用不同 `SCA4DJ_INSTANCE_ID`；未配置时进程启动生成 UUID |
+| App 隔离名称 | 同一业务集群使用相同 `SCA4D_APPLICATION_NAME`，名称归一化后隔离 Redis、RabbitMQ、Job 和 Quartz 资源 |
+| 实例标识 | 同时运行的 Server 使用不同 `SCA4D_INSTANCE_ID`；未配置时进程启动生成 UUID |
 | 系统身份 | 同一业务系统共享相同编码与 Principal ID；启动时必须通过数据库确认 |
-| 能力选择 | 用 `SCA4DJ_INSTANCE_CAPABILITIES` 选择入口和工作线程；Gateway 按路径要求筛选实例 |
+| 能力选择 | 用 `SCA4D_INSTANCE_CAPABILITIES` 选择入口和工作线程；Gateway 按路径要求筛选实例 |
 | Web Realtime | `node transport` 使用 `RABBIT`，将事件投递到连接所在实例 |
 | 文件存储 | 使用 MinIO 或共享目录，保证每个实例都能访问已上传文件 |
 | Gateway | 注册表保存在当前进程内，多个 Gateway 副本不会同步 Server 租约 |

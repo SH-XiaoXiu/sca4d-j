@@ -180,7 +180,7 @@ public class IotAutoConfiguration {
     /** @return 默认使用 PostgreSQL 保存 latest reported 投影 */
     @Bean
     @ConditionalOnMissingBean(ReportedStateStore.class)
-    @ConditionalOnProperty(prefix = "sca4dj.iot", name = "reported-store", havingValue = "postgresql", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = "sca4dj.iot.reported", name = "store", havingValue = "POSTGRESQL", matchIfMissing = true)
     ReportedStateStore postgresqlReportedStateStore(
             ReportedStateMapper mapper,
             ThingDataJsonCodec json,
@@ -191,7 +191,7 @@ public class IotAutoConfiguration {
     /** @return 具体应用选择 Redis 时使用 Lua 原子保存 latest reported 投影 */
     @Bean
     @ConditionalOnMissingBean(ReportedStateStore.class)
-    @ConditionalOnProperty(prefix = "sca4dj.iot", name = "reported-store", havingValue = "redis")
+    @ConditionalOnProperty(prefix = "sca4dj.iot.reported", name = "store", havingValue = "REDIS")
     ReportedStateStore redisReportedStateStore(
             @Sca4djRedis RedisTemplate<Key, String> redis,
             ThingDataJsonCodec json,

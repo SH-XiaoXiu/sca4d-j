@@ -126,6 +126,27 @@ class SettingCodesFlywayIntegrationTest {
                 .isEqualTo("before");
     }
 
+    @Test
+    void readsKeyringFromFlywayPlaceholders() {
+        var encrypted = new SettingSecretCodecCatalog(keys.activeCipher(), SettingOwner.system(), "z.secret")
+                .select(2)
+                .encode(new byte[] {1});
+        jdbc.update(
+                "INSERT INTO sys_setting(owner_type,owner_id,setting_key,schema_version,has_value,value_key_id,value_ciphertext,encryption_context_version,version) VALUES ('SYSTEM','1','z.secret',1,TRUE,?,?,2,1)",
+                encrypted.keyId(),
+                encrypted.ciphertext());
+
+        flywayWithPlaceholders().migrate();
+
+        byte[] cipher = jdbc.queryForObject(
+                "SELECT value_ciphertext FROM sys_setting WHERE setting_key='Z:SECRET'",
+                byte[].class);
+        byte[] plain = new SettingSecretCodecCatalog(keys.activeCipher(), SettingOwner.system(), "Z:SECRET")
+                .select(2)
+                .decode(new EncryptedSecret("test", cipher));
+        assertThat(plain).containsExactly(1);
+    }
+
     /** 在 V12 基线上只运行新的 Java 迁移，验证迁移本身而不启动业务模块。 */
     private Flyway flyway(boolean withKeys) {
         return Flyway.configure()
@@ -136,6 +157,25 @@ class SettingCodesFlywayIntegrationTest {
                 .baselineVersion("12")
                 .locations("classpath:setting-migration-test-empty")
                 .javaMigrations(new V13__normalize_setting_codes(withKeys ? keys : null))
+                .load();
+    }
+
+    /** 验证 Java migration 使用 Spring/Flyway 配置边界传入的密钥材料。 */
+    private Flyway flywayWithPlaceholders() {
+        return Flyway.configure()
+                .dataSource(source)
+                .schemas(schema)
+                .defaultSchema(schema)
+                .baselineOnMigrate(true)
+                .baselineVersion("12")
+                .locations("classpath:setting-migration-test-empty")
+                .placeholders(
+                        Map.of(
+                                "sca4dj_keyring_active_key_id",
+                                "test",
+                                "sca4dj_keyring_test_key",
+                                Base64.getEncoder().encodeToString(new byte[32])))
+                .javaMigrations(new V13__normalize_setting_codes())
                 .load();
     }
 

@@ -62,7 +62,7 @@ public final class V13__normalize_setting_codes extends BaseJavaMigration {
                 byte[] ciphertext = rows.getBytes("value_ciphertext");
                 Integer encryptionVersion = (Integer) rows.getObject("encryption_context_version");
                 if (ciphertext != null) {
-                    SecretKeyring keyring = testKeyring == null ? configuredKeyring() : testKeyring;
+                    SecretKeyring keyring = testKeyring == null ? configuredKeyring(context) : testKeyring;
                     if (keyring == null)
                         throw new IllegalStateException("迁移敏感设置需要密钥环环境变量");
                     SettingOwner owner = new SettingOwner(TreeCode.of(ownerType), ownerId);
@@ -97,16 +97,17 @@ public final class V13__normalize_setting_codes extends BaseJavaMigration {
         return TreeCode.of(value.replace('-', '_').replace('/', ':').replace('.', ':'));
     }
 
-    /** Flyway 运行在 Spring 之前，从部署环境恢复应用相同的密钥材料；不生成新 key。 */
-    private static SecretKeyring configuredKeyring() {
-        String active = System.getenv("SCA4DJ_SECRET_KEYRING_ACTIVE_KEY_ID");
+    /** 从 Spring 已解析并传给 Flyway 的 placeholder 恢复应用相同的密钥材料；不生成新 key。 */
+    private static SecretKeyring configuredKeyring(Context context) {
+        Map<String, String> placeholders = context.getConfiguration().getPlaceholders();
+        String active = placeholders.get("sca4dj_keyring_active_key_id");
         if (active == null || active.isBlank())
             return null;
         Map<String, SecretCipher> ciphers = new HashMap<>();
-        System.getenv().forEach((name, value) -> {
-            String prefix = "SCA4DJ_SECRET_KEYRING_";
-            if (name.startsWith(prefix) && name.endsWith("_KEY") && !name.equals(prefix + "ACTIVE_KEY_ID")) {
-                String keyId = name.substring(prefix.length(), name.length() - 4).toLowerCase().replace('_', '-');
+        String keyPrefix = "sca4dj_keyring_";
+        placeholders.forEach((name, value) -> {
+            if (name.startsWith(keyPrefix) && name.endsWith("_key") && !name.equals("sca4dj_keyring_active_key_id")) {
+                String keyId = name.substring(keyPrefix.length(), name.length() - 4);
                 ciphers.put(
                         keyId,
                         new com.sca4d.core.spring.security.AesGcmSecretCipher(

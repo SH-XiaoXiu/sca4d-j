@@ -26,7 +26,7 @@ public class TotpSettings {
                 new SettingGroup(TreeCode.of("AUTHENTICATION"), "setting.group.authentication", 100),
                 "setting.auth.totp.enrollment-ttl",
                 "setting.auth.totp.enrollment-ttl.description",
-                "SCA4DJ_AUTH_TOTP_ENROLLMENT_TTL",
+                "AUTH_TOTP_ENROLLMENT_TTL",
                 Duration.ofMinutes(10),
                 SettingCodec.positiveDuration(),
                 Pipeline.identity(Duration.class),

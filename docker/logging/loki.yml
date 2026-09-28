@@ -16,7 +16,7 @@ schema_config:
   configs:
     - from: 2024-01-01
       store: tsdb
-      object_store: ${SCA4DJ_LOKI_STORAGE_MODE}
+      object_store: ${SCA4D_LOKI_STORAGE_MODE}
       schema: v13
       index:
         prefix: index_
@@ -29,24 +29,24 @@ storage_config:
   filesystem:
     directory: /loki/chunks
   aws:
-    endpoint: ${SCA4DJ_LOKI_S3_ENDPOINT}
-    region: ${SCA4DJ_LOKI_S3_REGION}
-    bucketnames: ${SCA4DJ_LOKI_S3_BUCKET}
-    access_key_id: ${SCA4DJ_LOKI_S3_ACCESS_KEY}
-    secret_access_key: ${SCA4DJ_LOKI_S3_SECRET_KEY}
+    endpoint: ${SCA4D_LOKI_S3_ENDPOINT}
+    region: ${SCA4D_LOKI_S3_REGION}
+    bucketnames: ${SCA4D_LOKI_S3_BUCKET}
+    access_key_id: ${SCA4D_LOKI_S3_ACCESS_KEY}
+    secret_access_key: ${SCA4D_LOKI_S3_SECRET_KEY}
     s3forcepathstyle: true
-    insecure: ${SCA4DJ_LOKI_S3_INSECURE}
+    insecure: ${SCA4D_LOKI_S3_INSECURE}
 
 compactor:
   working_directory: /loki/compactor
   compaction_interval: 10m
   retention_enabled: true
   retention_delete_delay: 2h
-  delete_request_store: ${SCA4DJ_LOKI_STORAGE_MODE}
+  delete_request_store: ${SCA4D_LOKI_STORAGE_MODE}
 
 limits_config:
   allow_structured_metadata: true
-  retention_period: ${SCA4DJ_LOKI_RETENTION}
+  retention_period: ${SCA4D_LOKI_RETENTION}
 
 analytics:
   reporting_enabled: false

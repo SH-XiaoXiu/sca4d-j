@@ -14,7 +14,7 @@ public class InstanceProperties {
     private String id = UUID.randomUUID().toString();
 
     /** 未配置时启用所有已声明能力；空集合表示不启用任何能力。 */
-    private @Nullable List<String> enabledCapabilities;
+    private @Nullable List<String> capabilities;
 
     public String getId() {
         return id;
@@ -24,11 +24,11 @@ public class InstanceProperties {
         this.id = id;
     }
 
-    public @Nullable List<String> getEnabledCapabilities() {
-        return enabledCapabilities;
+    public @Nullable List<String> getCapabilities() {
+        return capabilities;
     }
 
-    public void setEnabledCapabilities(@Nullable List<String> enabledCapabilities) {
-        this.enabledCapabilities = enabledCapabilities;
+    public void setCapabilities(@Nullable List<String> capabilities) {
+        this.capabilities = capabilities;
     }
 }

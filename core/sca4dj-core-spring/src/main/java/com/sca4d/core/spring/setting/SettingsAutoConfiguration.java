@@ -21,11 +21,19 @@ import java.util.List;
 @AutoConfiguration(afterName = "org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration")
 @ConditionalOnClass(name = "org.mybatis.spring.SqlSessionFactoryBean")
 @MapperScan(basePackageClasses = SettingMapper.class)
-@EnableConfigurationProperties(SettingsBootstrapProperties.class)
+@EnableConfigurationProperties({SettingsBootstrapProperties.class, EnvironmentPrefixProperties.class})
 public class SettingsAutoConfiguration {
 
     /** 创建设置自动配置。 */
     public SettingsAutoConfiguration() {
+    }
+
+    /** @return 解析当前应用系统设置 ENV 名称的 Spring 配置边界 */
+    @Bean
+    EnvironmentVariableResolver environmentVariableResolver(
+            Environment environment,
+            EnvironmentPrefixProperties properties) {
+        return new EnvironmentVariableResolver(environment, properties);
     }
 
     /** @return 已校验重复键和 ENV 的设置目录 */
@@ -57,8 +65,9 @@ public class SettingsAutoConfiguration {
             SettingCatalog catalog,
             SettingRepository repository,
             ObjectProvider<SecretKeyring> keyring,
-            Environment environment) {
-        return new SettingBootstrap(catalog, repository, keyring.getIfAvailable(), environment);
+            Environment environment,
+            EnvironmentVariableResolver variables) {
+        return new SettingBootstrap(catalog, repository, keyring.getIfAvailable(), environment, variables);
     }
 
     /** @return 容器启动后执行一次且失败会阻止节点就绪的 Settings 初始化调用 */

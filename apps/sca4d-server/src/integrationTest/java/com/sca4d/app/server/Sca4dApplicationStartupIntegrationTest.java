@@ -131,9 +131,9 @@ class Sca4dApplicationStartupIntegrationTest {
         registry.add("sca4dj.iot.emqx.management-base-url", () -> "http://localhost:18083");
         registry.add("sca4dj.iot.emqx.management-api-key", () -> "integration-key");
         registry.add("sca4dj.iot.emqx.management-secret", () -> "integration-secret");
-        registry.add("app.iot.emqx-webhook-secret", () -> "integration-webhook-secret");
+        registry.add("app.iot.emqx.webhook-secret", () -> "integration-webhook-secret");
         registry.add("sca4dj.iam.bootstrap.enabled", () -> false);
-        registry.add("sca4dj.auth.password.bootstrap-enabled", () -> false);
+        registry.add("sca4dj.auth.password.bootstrap.enabled", () -> false);
         registry.add("sca4dj.bootstrap.enabled", () -> false);
     }
 

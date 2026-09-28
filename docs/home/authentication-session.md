@@ -55,7 +55,7 @@ flowchart LR
     Online[Session Token 请求] --> Backing
 ```
 
-`sca4dj.auth.token-mode` 默认为 `SESSION`。JWT 模式需要具体应用提供 issuer、audience 和独立 HS256 密钥。普通 JWT 请求不在线检查注销、账号停用、权限变化或 Operation 目录变化；旧 JWT 最多继续有效到自身过期。要求在线状态的接口使用 [RequireSessionToken](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/authentication/RequireSessionToken.html)。
+`sca4dj.auth.token.mode` 默认为 `SESSION`。JWT 模式需要具体应用提供 issuer、audience 和独立 HS256 密钥。普通 JWT 请求不在线检查注销、账号停用、权限变化或 Operation 目录变化；旧 JWT 最多继续有效到自身过期。要求在线状态的接口使用 [RequireSessionToken](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/authentication/RequireSessionToken.html)。
 
 ## Session 生命周期与账号控制
 

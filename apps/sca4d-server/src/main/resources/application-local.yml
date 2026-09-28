@@ -30,13 +30,14 @@ mybatis:
 
 springdoc:
   api-docs:
-    enabled: ${SCA4DJ_OPENAPI_ENABLED:true}
+    enabled: ${sca4dj.core.openapi.enabled:true}
   swagger-ui:
-    enabled: ${SCA4DJ_OPENAPI_ENABLED:true}
+    enabled: ${sca4dj.core.openapi.enabled:true}
 
 sca4dj:
   core:
-    open-api-enabled: ${SCA4DJ_OPENAPI_ENABLED:true}
+    openapi:
+      enabled: ${SCA4D_CORE_OPENAPI_ENABLED:true}
   auth:
     excluded-paths:
       - /v3/api-docs

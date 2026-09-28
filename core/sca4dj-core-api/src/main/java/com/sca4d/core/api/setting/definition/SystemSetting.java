@@ -25,7 +25,7 @@ public final class SystemSetting<T> extends WritableSetting<T> {
 
     private final String descriptionKey;
 
-    private final String environmentVariable;
+    private final String environmentVariableSuffix;
 
     private final int sortOrder;
 
@@ -38,7 +38,7 @@ public final class SystemSetting<T> extends WritableSetting<T> {
      * @param group 管理端所属分组
      * @param labelKey 设置名称的国际化消息键
      * @param descriptionKey 设置说明的国际化消息键
-     * @param environmentVariable 初始化节点读取的 ENV 名称
+     * @param environmentVariableSuffix 初始化节点读取的 ENV 后缀，不包含产品前缀
      * @param defaultValue 数据库没有覆盖值时使用的默认值
      * @param codec 设置值的文本和 JSON 编解码器
      * @param pipeline 对类型值执行规范化和校验的 Pipeline
@@ -52,7 +52,7 @@ public final class SystemSetting<T> extends WritableSetting<T> {
             @NotNull SettingGroup group,
             @NotNull String labelKey,
             @NotNull String descriptionKey,
-            @NotNull String environmentVariable,
+            @NotNull String environmentVariableSuffix,
             @NotNull T defaultValue,
             @NotNull SettingCodec<T> codec,
             @NotNull Pipeline<T, T> pipeline,
@@ -71,7 +71,7 @@ public final class SystemSetting<T> extends WritableSetting<T> {
         this.group = Objects.requireNonNull(group, "设置分组不能为空");
         this.labelKey = TextUtils.requireText(labelKey, "设置标签消息键");
         this.descriptionKey = TextUtils.requireText(descriptionKey, "设置说明消息键");
-        this.environmentVariable = TextUtils.requireText(environmentVariable, "设置初始化 ENV");
+        this.environmentVariableSuffix = TextUtils.requireText(environmentVariableSuffix, "设置初始化 ENV 后缀");
         this.sortOrder = sortOrder;
     }
 
@@ -93,10 +93,10 @@ public final class SystemSetting<T> extends WritableSetting<T> {
         return descriptionKey;
     }
 
-    /** @return 初始化节点读取的 ENV 名称 */
+    /** @return 初始化节点读取的 ENV 后缀 */
     @Contract(pure = true)
-    public @NotNull String environmentVariable() {
-        return environmentVariable;
+    public @NotNull String environmentVariableSuffix() {
+        return environmentVariableSuffix;
     }
 
     /** @return 分组内展示顺序 */

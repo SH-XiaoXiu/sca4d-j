@@ -64,7 +64,7 @@ import java.util.Set;
 @Sql(statements = "TRUNCATE TABLE auth_password_secret, auth_password_credential, platform_acl_entry, platform_principal_role, platform_role_permission, platform_role, iam_account_identifier, iam_account_principal, iam_principal, iam_account, iam_subject CASCADE", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @SpringBootTest(classes = PlatformIdentityIntegrationTest.TestApplication.class, properties = {
         "sca4dj.iam.bootstrap.enabled=false",
-        "sca4dj.auth.password.bootstrap-enabled=false",
+        "sca4dj.auth.password.bootstrap.enabled=false",
         "spring.autoconfigure.exclude=com.sca4d.messaging.config.MessagingAutoConfiguration,com.sca4d.web.realtime.config.WebRealtimeAutoConfiguration,com.sca4d.notification.config.NotificationAutoConfiguration,com.sca4d.notification.email.config.EmailNotificationAutoConfiguration,com.sca4d.auth.email.config.EmailCodeAutoConfiguration,com.sca4d.iot.config.IotAutoConfiguration,com.sca4d.iot.config.IotWorkerAutoConfiguration,com.sca4d.iot.emqx.config.EmqxAutoConfiguration,com.sca4d.iot.config.TimescaleIotAutoConfiguration"
 })
 @SuppressWarnings({

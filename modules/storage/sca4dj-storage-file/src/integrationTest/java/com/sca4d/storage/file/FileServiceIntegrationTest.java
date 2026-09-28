@@ -123,7 +123,7 @@ class FileServiceIntegrationTest {
         registry.add("spring.datasource.username", POSTGRES::getUsername);
         registry.add("spring.datasource.password", POSTGRES::getPassword);
         registry.add("spring.application.name", () -> "storage-test");
-        registry.add("sca4dj.storage.default-backend", () -> "test");
+        registry.add("sca4dj.storage.backend.default", () -> "test");
         registry.add("sca4dj.storage.cleanup-interval", () -> "PT24H");
     }
 
