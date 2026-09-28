@@ -66,7 +66,7 @@ Session wire 使用版本 2，旧版本 1 的 Session 与 JWT 快照拒绝恢复
 
 `spring.datasource.dynamic` 使用 dynamic-datasource Boot 3 starter 4.5.0。`primary: main` 指定主库，`strict: true` 禁止未知数据源退回主库；`datasource.main` 与 `datasource.iot-history` 分别保存主库和 IoT 历史库连接。默认 `DataSource` 是路由器，普通模块使用主库，历史入口通过 `@DS(IotTimescale.DATASOURCE)` 选择 `iot-history`。
 
-公共 Repository 的集合 SQL 默认每批最多 1000 项和 30000 个绑定参数，分别由 `SCA4D_PERSISTENCE_BATCH_MAX_ITEMS` 与 `SCA4D_PERSISTENCE_BATCH_MAX_BIND_PARAMETERS` 调整。Redis pipeline 默认每批最多 1000 条命令，由 `SCA4D_REDIS_PIPELINE_MAX_COMMANDS` 调整。这些配置只改变内部批次，不截断公共查询结果。
+公共 Repository 的集合 SQL 默认每批最多 1000 项和 30000 个绑定参数，分别由 `SCA4DJ_PERSISTENCE_BATCH_MAX_ITEMS` 与 `SCA4DJ_PERSISTENCE_BATCH_MAX_BIND_PARAMETERS` 调整。Redis pipeline 默认每批最多 1000 条命令，由 `SCA4DJ_REDIS_PIPELINE_MAX_COMMANDS` 调整。这些配置只改变内部批次，不截断公共查询结果。
 
 TimescaleIotAutoConfiguration 使用 `@IotTimescale` 限定历史库的 Flyway、SqlSessionFactory、SqlSessionTemplate 和 Mapper。Flyway 直接使用物理 `iot-history` 数据源；MyBatis 使用共享路由器。历史入口先选择数据源，再通过 `@Transactional(propagation = REQUIRES_NEW)` 开启独立事务。已有事务的连接不能靠切换路由改变；历史库事务内不能把 IAM、Audit 或 Outbox 当作同库读写，不承诺跨库原子提交。
 
@@ -92,17 +92,17 @@ flowchart LR
 `.env/application.env` 定义两个通常需要一起使用的基础地址：
 
 ```properties
-SCA4D_FRONTEND_ORIGIN=http://localhost:5666
-SCA4D_GATEWAY_ORIGIN=http://localhost:8088
+SCA4DJ_FRONTEND_ORIGIN=http://localhost:5666
+SCA4DJ_GATEWAY_ORIGIN=http://localhost:8088
 ```
 
-Passkey、Web Realtime 和 MinIO CORS 默认引用 `SCA4D_FRONTEND_ORIGIN`，Storage 文件传输地址与联邦登录回调默认引用 `SCA4D_GATEWAY_ORIGIN` 的 `/api` 入口。部署地址变化时通常只修改这两个值；只有某个入口确实使用不同地址时，才分别覆盖 `SCA4D_AUTH_PASSKEY_ORIGINS`、`SCA4D_WEB_REALTIME_ALLOWED_ORIGINS`、`SCA4D_MINIO_CORS_ALLOW_ORIGIN`、`SCA4D_STORAGE_TRANSFER_BASE_URL` 或 `SCA4D_AUTH_FEDERATION_CALLBACK_URI`。
+Passkey、Web Realtime 和 MinIO CORS 默认引用 `SCA4DJ_FRONTEND_ORIGIN`，Storage 文件传输地址与联邦登录回调默认引用 `SCA4DJ_GATEWAY_ORIGIN` 的 `/api` 入口。部署地址变化时通常只修改这两个值；只有某个入口确实使用不同地址时，才分别覆盖 `SCA4DJ_AUTH_PASSKEY_ORIGINS`、`SCA4DJ_WEB_REALTIME_ALLOWED_ORIGINS`、`SCA4DJ_MINIO_CORS_ALLOW_ORIGIN`、`SCA4DJ_STORAGE_TRANSFER_BASE_URL` 或 `SCA4DJ_AUTH_FEDERATION_CALLBACK_URI`。
 
-Server 通过 `sca4dj.gateway.registration` 接入 Gateway。`SCA4D_GATEWAY_REGISTRATION_ENABLED` 控制是否注册，`SCA4D_GATEWAY_BASE_URL` 是控制 API 地址，`SCA4D_SERVER_BASE_URL` 是 Gateway 可以访问的当前实例地址，`SCA4D_INSTANCE_ID` 在同时运行的 Server 实例之间必须唯一，`SCA4D_GATEWAY_SECRET` 必须与 Gateway 完全相同。续租和请求超时分别由 `SCA4D_GATEWAY_RENEW_INTERVAL` 与 `SCA4D_GATEWAY_REQUEST_TIMEOUT` 配置。准确默认值和失败行为见 [GatewayRegistrationProperties](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/gateway/GatewayRegistrationProperties.html)。
+Server 通过 `sca4dj.gateway.registration` 接入 Gateway。`SCA4DJ_GATEWAY_REGISTRATION_ENABLED` 控制是否注册，`SCA4DJ_GATEWAY_BASE_URL` 是控制 API 地址，`SCA4DJ_SERVER_BASE_URL` 是 Gateway 可以访问的当前实例地址，`SCA4DJ_INSTANCE_ID` 在同时运行的 Server 实例之间必须唯一，`SCA4DJ_GATEWAY_SECRET` 必须与 Gateway 完全相同。续租和请求超时分别由 `SCA4DJ_GATEWAY_RENEW_INTERVAL` 与 `SCA4DJ_GATEWAY_REQUEST_TIMEOUT` 配置。准确默认值和失败行为见 [GatewayRegistrationProperties](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/gateway/GatewayRegistrationProperties.html)。
 
 ## Setting 初始化节点
 
-Setting 默认读取数据库覆盖值或 Java 默认值，不把普通运行节点上的 ENV 直接当作覆盖值。只有设置 `SCA4D_BOOTSTRAP_ENABLED=true` 的初始化节点解释每个 SystemSetting 声明的 `<ENV>`、`<ENV>_INIT` 和 `<ENV>_SYNC`。
+Setting 默认读取数据库覆盖值或 Java 默认值，不把普通运行节点上的 ENV 直接当作覆盖值。只有设置 `SCA4DJ_BOOTSTRAP_ENABLED=true` 的初始化节点解释每个 SystemSetting 声明的 `<ENV>`、`<ENV>_INIT` 和 `<ENV>_SYNC`。
 
 | 环境声明 | 启动结果 |
 |---|---|
@@ -117,7 +117,7 @@ Setting 默认读取数据库覆盖值或 Java 默认值，不把普通运行节
 
 RabbitMQ 连接默认值来自 `application.yml`：主机 `localhost`、端口 `5672`、账号与密码均为 `sca4dj`。App 固定启用 correlated publisher confirm 和 publisher returns；这些示例凭据只适合本地。
 
-`sca4dj.messaging` 通过 `SCA4D_MESSAGING_*` 配置 confirm timeout、派发间隔、批量、租约、初始/最大退避、已发送保留期和清理批量。完整变量示例在 `.env/rabbitmq.env.example`。
+`sca4dj.messaging` 通过 `SCA4DJ_MESSAGING_*` 配置 confirm timeout、派发间隔、批量、租约、初始/最大退避、已发送保留期和清理批量。完整变量示例在 `.env/rabbitmq.env.example`。
 
 业务事务把消息先写入主 PostgreSQL Outbox。派发失败会按退避持续重试，没有发布侧最大次数或 `DEAD` 状态；发布成功后由 RabbitMQ 持久保存。Consumer 默认不重试，失败进入独立 DLQ；声明 HandlingPolicy 后按该策略重试，耗尽或明确拒绝才进入 DLQ。死信由运维明确重发或删除。
 
@@ -125,9 +125,9 @@ RabbitMQ 连接默认值来自 `application.yml`：主机 `localhost`、端口 `
 
 Job 和 Quartz 使用主 PostgreSQL DataSource。Flyway V7 建立 `job.*` 和 `quartz.qrtz_*`，`spring.quartz.jdbc.initialize-schema=never`，避免 Quartz 自己创建另一份表。Quartz 初始 `auto-startup=false`，代码计划完成对账后才开始获取 trigger。
 
-`SCA4D_JOB_*` 配置 worker 数量、领取批量、轮询间隔、租约、续租间隔以及成功历史的保留时间、清理间隔和批量；`SCA4D_QUARTZ_*` 配置线程数与集群 check-in。SUCCEEDED run 默认保留 30 天，FAILED、QUEUED 和 RUNNING 不按该窗口自动删除。参数限制见 [JobProperties](#jobproperties) 与 [QuartzSchedulingProperties](#quartzschedulingproperties)。
+`SCA4DJ_JOB_*` 配置 worker 数量、领取批量、轮询间隔、租约、续租间隔以及成功历史的保留时间、清理间隔和批量；`SCA4DJ_QUARTZ_*` 配置线程数与集群 check-in。SUCCEEDED run 默认保留 30 天，FAILED、QUEUED 和 RUNNING 不按该窗口自动删除。参数限制见 [JobProperties](#jobproperties) 与 [QuartzSchedulingProperties](#quartzschedulingproperties)。
 
-Quartz scheduler name 通过 Key 输出为 `<APP_NAME>:SCHEDULING:QUARTZ`；Job run 将同一 App 隔离名称写入 `app_name`。同一 App 的多个实例必须使用相同 `SCA4D_APPLICATION_NAME`。App 名转大写并将连字符替换为下划线；共享中间件的 App 必须避免归一化后重名。修改已运行名称需要迁移已有资源，不自动接管其他名称的数据。
+Quartz scheduler name 通过 Key 输出为 `<APP_NAME>:SCHEDULING:QUARTZ`；Job run 将同一 App 隔离名称写入 `app_name`。同一 App 的多个实例必须使用相同 `SCA4DJ_APPLICATION_NAME`。App 名转大写并将连字符替换为下划线；共享中间件的 App 必须避免归一化后重名。修改已运行名称需要迁移已有资源，不自动接管其他名称的数据。
 
 文件清理由 JobSchedule 触发，需要时创建可恢复的 Job run。Outbox 派发与清理、Job 成功历史清理、IoT 到期扫描与数据清理、EMQX 连接对账和 TimescaleDB 保留期清理由各自模块声明 ClusterTaskSchedule，Quartz 集群直接执行，因此高频空扫描不会写入 `job.*`。Quartz 禁止同一集群任务 JobDetail 重叠执行；任务自己的数据库行使用状态、租约或 `version` 条件防止旧实例写回，需要跨事务串行的对象在事务前取得 Redis 分布式锁。Web Realtime 租约续约只维护当前 JVM 的连接，继续使用本机定时入口。
 
@@ -136,15 +136,15 @@ Quartz scheduler name 通过 Key 输出为 `<APP_NAME>:SCHEDULING:QUARTZ`；Job 
 默认配置为：
 
 ```properties
-SCA4D_FRONTEND_ORIGIN=http://localhost:5666
-SCA4D_WEB_REALTIME_NODE_TRANSPORT=LOCAL
-SCA4D_WEB_REALTIME_STOMP_MODE=NODE_ROUTED
-SCA4D_WEB_REALTIME_ALLOWED_ORIGINS=${SCA4D_FRONTEND_ORIGIN}
+SCA4DJ_FRONTEND_ORIGIN=http://localhost:5666
+SCA4DJ_WEB_REALTIME_NODE_TRANSPORT=LOCAL
+SCA4DJ_WEB_REALTIME_STOMP_MODE=NODE_ROUTED
+SCA4DJ_WEB_REALTIME_ALLOWED_ORIGINS=${SCA4DJ_FRONTEND_ORIGIN}
 ```
 
 `LOCAL` 只在单个 App 实例内投递。多实例部署把 node transport 改为 `RABBIT`，各实例声明 RabbitMQ 临时节点队列；这不改变 Messaging，可靠业务消息仍经 Outbox 和 RabbitMQ。STOMP 默认 `NODE_ROUTED`；改为 `BROKER_RELAY` 时还要为 RabbitMQ STOMP relay 配置主机、端口、client/system 登录、virtual host 和启动连接超时。
 
-其余 `SCA4D_WEB_REALTIME_*` 变量控制连接租约、路由批量、节点消息 TTL、heartbeat、SSE timeout、连接队列、票据 TTL、STOMP CONNECT timeout、帧大小和发送限制。完整示例在 `.env/web-realtime.env.example`，默认值和限制见 [WebRealtimeProperties](#webrealtimeproperties)。
+其余 `SCA4DJ_WEB_REALTIME_*` 变量控制连接租约、路由批量、节点消息 TTL、heartbeat、SSE timeout、连接队列、票据 TTL、STOMP CONNECT timeout、帧大小和发送限制。完整示例在 `.env/web-realtime.env.example`，默认值和限制见 [WebRealtimeProperties](#webrealtimeproperties)。
 
 生产环境必须把 allowed origins 改为实际管理端完整 Origin。反向代理必须允许 `/events` 长连接；接入 WebSocket 时还要允许 `/events/ws` Upgrade，并从访问日志中删除票据查询参数。
 
@@ -157,33 +157,33 @@ SCA4D_WEB_REALTIME_ALLOWED_ORIGINS=${SCA4D_FRONTEND_ORIGIN}
 `application.yml` 与 `.env/storage.env.example` 的默认组合是：
 
 ```properties
-SCA4D_GATEWAY_ORIGIN=http://localhost:8088
-SCA4D_STORAGE_BACKEND_DEFAULT=minio
-SCA4D_STORAGE_LOCAL_ENABLED=false
-SCA4D_STORAGE_MINIO_ENABLED=true
-SCA4D_STORAGE_TRANSFER_BASE_URL=${SCA4D_GATEWAY_ORIGIN}/api
+SCA4DJ_GATEWAY_ORIGIN=http://localhost:8088
+SCA4DJ_STORAGE_BACKEND_DEFAULT=minio
+SCA4DJ_STORAGE_LOCAL_ENABLED=false
+SCA4DJ_STORAGE_MINIO_ENABLED=true
+SCA4DJ_STORAGE_TRANSFER_BASE_URL=${SCA4DJ_GATEWAY_ORIGIN}/api
 ```
 
-StorageRegistry 在启动时收集所有已启用 FileStorage。`SCA4D_STORAGE_BACKEND_DEFAULT` 必须精确等于其中一个唯一 backend ID；没有已启用实现、默认 ID 不存在或 backend ID 重复都会使装配失败。默认 backend 只决定新文件写到哪里；数据库中已有文件仍按自身 `backend_id` 查找，所以迁移期间必须继续启用仍有历史文件的 backend。
+StorageRegistry 在启动时收集所有已启用 FileStorage。`SCA4DJ_STORAGE_BACKEND_DEFAULT` 必须精确等于其中一个唯一 backend ID；没有已启用实现、默认 ID 不存在或 backend ID 重复都会使装配失败。默认 backend 只决定新文件写到哪里；数据库中已有文件仍按自身 `backend_id` 查找，所以迁移期间必须继续启用仍有历史文件的 backend。
 
-FileProperties 还配置清理间隔、删除租约和失败重试间隔。上传 URL TTL、读取 URL TTL、完成但未绑定文件保留期与全局文件大小上限是 Setting，环境变量分别为 `SCA4D_STORAGE_UPLOAD_TTL`、`SCA4D_STORAGE_ACCESS_TTL`、`SCA4D_STORAGE_READY_RETENTION` 和 `SCA4D_STORAGE_MAX_SIZE_BYTES`；需要按前述 Setting 初始化规则写入数据库，不能把它们误当成普通 Spring 属性覆盖。
+FileProperties 还配置清理间隔、删除租约和失败重试间隔。上传 URL TTL、读取 URL TTL、完成但未绑定文件保留期与全局文件大小上限是 Setting，环境变量分别为 `SCA4DJ_STORAGE_UPLOAD_TTL`、`SCA4DJ_STORAGE_ACCESS_TTL`、`SCA4DJ_STORAGE_READY_RETENTION` 和 `SCA4DJ_STORAGE_MAX_SIZE_BYTES`；需要按前述 Setting 初始化规则写入数据库，不能把它们误当成普通 Spring 属性覆盖。
 
 ### MinIO backend
 
 MinIO 默认启用，backend ID 为 `minio`。App 内部端点和浏览器公开端点默认都是 `http://localhost:9000`，Region 为 `us-east-1`，Bucket 为 `sca4dj`，本地启动允许自动创建缺失 Bucket。内部端点由 App 请求对象存储，公开端点写入预签名 URL；两者都必须是 HTTP(S) Origin，不得带用户信息、业务路径、查询或 fragment。
 
-`SCA4D_MINIO_ACCESS_KEY` 和 `SCA4D_MINIO_SECRET_KEY` 默认 `minioadmin`，只适合本地。浏览器直接请求预签名 URL 时，MinIO CORS 需要允许管理端 Origin；本地 `.env/storage.env.example` 的 `SCA4D_MINIO_CORS_ALLOW_ORIGIN` 默认引用 `SCA4D_FRONTEND_ORIGIN`。更新该变量后，必须使用传入该环境文件的 Compose 命令更新 MinIO 容器，浏览器的预检请求才会返回该 Origin。生产环境关闭 `SCA4D_STORAGE_MINIO_CREATE_BUCKET` 后，Bucket 必须在 App 启动前存在且凭据可访问；否则 MinIO backend 启动检查失败。
+`SCA4DJ_MINIO_ACCESS_KEY` 和 `SCA4DJ_MINIO_SECRET_KEY` 默认 `minioadmin`，只适合本地。浏览器直接请求预签名 URL 时，MinIO CORS 需要允许管理端 Origin；本地 `.env/storage.env.example` 的 `SCA4DJ_MINIO_CORS_ALLOW_ORIGIN` 默认引用 `SCA4DJ_FRONTEND_ORIGIN`。更新该变量后，必须使用传入该环境文件的 Compose 命令更新 MinIO 容器，浏览器的预检请求才会返回该 Origin。生产环境关闭 `SCA4DJ_STORAGE_MINIO_CREATE_BUCKET` 后，Bucket 必须在 App 启动前存在且凭据可访问；否则 MinIO backend 启动检查失败。
 
 ### 本地目录 backend
 
 本地 backend 默认关闭。切换到本地目录的最小组合是：
 
 ```properties
-SCA4D_STORAGE_BACKEND_DEFAULT=local
-SCA4D_STORAGE_LOCAL_ENABLED=true
-SCA4D_STORAGE_LOCAL_ROOT=docker-data/files
-SCA4D_STORAGE_MINIO_ENABLED=false
-SCA4D_STORAGE_TRANSFER_BASE_URL=https://api.example.com
+SCA4DJ_STORAGE_BACKEND_DEFAULT=local
+SCA4DJ_STORAGE_LOCAL_ENABLED=true
+SCA4DJ_STORAGE_LOCAL_ROOT=docker-data/files
+SCA4DJ_STORAGE_MINIO_ENABLED=false
+SCA4DJ_STORAGE_TRANSFER_BASE_URL=https://api.example.com
 ```
 
 backend ID 默认 `local`，container 默认 `files`。root 是 App 进程直接读写的路径，多实例若使用各自本地磁盘就不能互相读取对象；需要共享文件时应挂载同一可靠目录或使用 MinIO。
@@ -192,16 +192,16 @@ backend ID 默认 `local`，container 默认 `files`。root 是 App 进程直接
 
 ## IoT 与 EMQX
 
-基础 IoT 模块始终安装，管理 API 和主库 Device 状态可以在 EMQX 关闭时存在。设置 `SCA4D_IOT_EMQX_ENABLED=true` 后，App 才创建 MQTT runtime、健康检查，以及编码为 `IOT.EMQX.AUTHENTICATE` 的 Gateway 回调。
+基础 IoT 模块始终安装，管理 API 和主库 Device 状态可以在 EMQX 关闭时存在。设置 `SCA4DJ_IOT_EMQX_ENABLED=true` 后，App 才创建 MQTT runtime、健康检查，以及编码为 `IOT.EMQX.AUTHENTICATE` 的 Gateway 回调。
 
 启用时必须提供：
 
-- 内部 MQTT listener 的 Client ID：可以显式配置唯一的 `SCA4D_IOT_EMQX_CLIENT_ID`，也可以留空，由自动配置使用 Key 生成 `<APP_NAME>:IOT:EMQX:CLIENT:V_<UUID的UTF8十六进制>`；
+- 内部 MQTT listener 的 Client ID：可以显式配置唯一的 `SCA4DJ_IOT_EMQX_CLIENT_ID`，也可以留空，由自动配置使用 Key 生成 `<APP_NAME>:IOT:EMQX:CLIENT:V_<UUID的UTF8十六进制>`；
 - 内部 MQTT listener 主机、端口与 TLS，默认 `localhost:1884`、非 TLS；
 - 内部 Runtime 固定使用 `sca4dj-iot-runtime` username 作为系统 Topic ACL 身份，不发送密码；
 - shared subscription group；
 - EMQX Management API 地址、Key 和 Secret；
-- 非空 `SCA4D_IOT_EMQX_WEBHOOK_SECRET`。
+- 非空 `SCA4DJ_IOT_EMQX_WEBHOOK_SECRET`。
 
 Server 内部 Client ID 是进程连接 EMQX 的实例标识，不是设备的 MQTT Client ID。未显式配置时，每个进程启动生成一次新的 UUID，并在自动重连时继续使用同一个值；当前 Clean Start 和零 Session Expiry 不要求它跨进程重启保持不变。显式配置时，多个同时运行的实例必须分别使用不同值。
 
@@ -209,23 +209,23 @@ Server 内部 Client ID 是进程连接 EMQX 的实例标识，不是设备的 M
 
 ::: warning EMQX 回调安全边界
 
-[GatewayCallbackDispatcher](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/gateway/GatewayCallbackDispatcher.html) 声明 `@AnonymousAccess`，使 Auth 拦截器不要求用户 Session；这不表示回调无需认证。`EmqxAuthenticationCallback` 以固定时间比较 `X-Iot-Emqx-Secret` 和 `SCA4D_IOT_EMQX_WEBHOOK_SECRET`，错误或缺失返回 401。EMQX 只能持有这个专用共享 Secret，不能使用 Gateway Secret 或管理端用户的 Session Token。
+[GatewayCallbackDispatcher](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/gateway/GatewayCallbackDispatcher.html) 声明 `@AnonymousAccess`，使 Auth 拦截器不要求用户 Session；这不表示回调无需认证。`EmqxAuthenticationCallback` 以固定时间比较 `X-Iot-Emqx-Secret` 和 `SCA4DJ_IOT_EMQX_WEBHOOK_SECRET`，错误或缺失返回 401。EMQX 只能持有这个专用共享 Secret，不能使用 Gateway Secret 或管理端用户的 Session Token。
 
 :::
 
-IoT 定时扫描间隔、ACK timeout 和连接 TTL 来自 `SCA4D_IOT_*`；HMAC 时间窗、nonce 和失败限制来自 `SCA4D_AUTH_HMAC_*`。`SCA4D_IOT_ACKNOWLEDGEMENT_TIMEOUT` 在创建即时、desired 或定时下行消息时写入该消息，单位由 Spring `Duration` 解析。配置必须至少为 1 毫秒；已经创建的消息继续按保存的等待时长计算 ACK 超时时间。
+IoT 定时扫描间隔、ACK timeout 和连接 TTL 来自 `SCA4DJ_IOT_*`；HMAC 时间窗、nonce 和失败限制来自 `SCA4DJ_AUTH_HMAC_*`。`SCA4DJ_IOT_ACKNOWLEDGEMENT_TIMEOUT` 在创建即时、desired 或定时下行消息时写入该消息，单位由 Spring `Duration` 解析。配置必须至少为 1 毫秒；已经创建的消息继续按保存的等待时长计算 ACK 超时时间。
 
-设备 HMAC 或 MQTT 认证由 Sca4d Server 组合通用 Auth 方法与 SessionLifecycle；Session 有效期使用 `SCA4D_AUTH_SESSION_TTL`。
+设备 HMAC 或 MQTT 认证由 Sca4d Server 组合通用 Auth 方法与 SessionLifecycle；Session 有效期使用 `SCA4DJ_AUTH_SESSION_TTL`。
 
-`SCA4D_IOT_MAX_REPORTED_PROPERTIES`、`SCA4D_IOT_MAX_DESIRED_PROPERTIES` 和 `SCA4D_IOT_MAX_EVENTS_PER_MESSAGE` 分别限制单条 reported 覆盖属性、单次 desired 修改属性和单条上行离散事件数量。三项默认都是 100，必须位于 1 到 1000。EMQX 完整连接对账使用 watchdog 分布式锁，由 `SCA4D_IOT_EMQX_RECONCILIATION_INTERVAL` 控制触发间隔。
+`SCA4DJ_IOT_MAX_REPORTED_PROPERTIES`、`SCA4DJ_IOT_MAX_DESIRED_PROPERTIES` 和 `SCA4DJ_IOT_MAX_EVENTS_PER_MESSAGE` 分别限制单条 reported 覆盖属性、单次 desired 修改属性和单条上行离散事件数量。三项默认都是 100，必须位于 1 到 1000。EMQX 完整连接对账使用 watchdog 分布式锁，由 `SCA4DJ_IOT_EMQX_RECONCILIATION_INTERVAL` 控制触发间隔。
 
-MQTT 业务上行默认使用 4 个 Topic 分片，每个分片最多等待 64 条消息；未明确拒绝的失败最多处理 3 次，相邻处理间隔 5 秒。分别通过 `SCA4D_IOT_EMQX_INBOUND_WORKER_COUNT`、`SCA4D_IOT_EMQX_INBOUND_QUEUE_CAPACITY`、`SCA4D_IOT_EMQX_INBOUND_MAXIMUM_ATTEMPTS` 和 `SCA4D_IOT_EMQX_INBOUND_RETRY_DELAY` 调整。MQTT Receive Maximum 等于单个分片的等待容量，为 ACK 后立即补发的热点 Topic 消息保留队列位置。
+MQTT 业务上行默认使用 4 个 Topic 分片，每个分片最多等待 64 条消息；未明确拒绝的失败最多处理 3 次，相邻处理间隔 5 秒。分别通过 `SCA4DJ_IOT_EMQX_INBOUND_WORKER_COUNT`、`SCA4DJ_IOT_EMQX_INBOUND_QUEUE_CAPACITY`、`SCA4DJ_IOT_EMQX_INBOUND_MAXIMUM_ATTEMPTS` 和 `SCA4DJ_IOT_EMQX_INBOUND_RETRY_DELAY` 调整。MQTT Receive Maximum 等于单个分片的等待容量，为 ACK 后立即补发的热点 Topic 消息保留队列位置。
 
 Sca4d Server 只在 `application.yml` 声明各模块的运行间隔。`sca4dj-iot`、`sca4dj-iot-emqx` 与 `sca4dj-iot-timescale` 分别声明自己的 ClusterTask 和 ClusterTaskSchedule；App 不调用模块内部 Worker、Repository 或清理服务。Quartz 使用同一个 App 隔离名称在集群中触发这些计划。
 
-设备定时计划默认按 `sca4dj.iot.schedule-tick=PT0.2S` 触发，DeviceScheduleTask 每次最多处理 `SCA4D_IOT_DEVICE_SCHEDULE_BATCH_SIZE` 条，默认 1000。Product 完整目录扫描使用 `SCA4D_IOT_PRODUCT_CATALOG_SCAN_BATCH_SIZE`，默认 1000；终态下行清理使用 `SCA4D_IOT_DOWNLINK_CLEANUP_BATCH_SIZE`，默认 10000。三项范围都是 1 到 10000，只控制一次后台扫描或清理的工作量，不截断 Service 查询结果。设备定时任务普通查询一条到期候选，取得 `iot:schedule:<scheduleId>` Redis 分布式锁后再开启独立事务，并在事务中重新检查 version、状态和计划时间；不使用显式行锁，也不创建 Redis 到期索引或处理租约。`iot_device_schedule` 保存规则、版本、下一次触发时间和最近一次执行结果。
+设备定时计划默认按 `sca4dj.iot.schedule-tick=PT0.2S` 触发，DeviceScheduleTask 每次最多处理 `SCA4DJ_IOT_DEVICE_SCHEDULE_BATCH_SIZE` 条，默认 1000。Product 完整目录扫描使用 `SCA4DJ_IOT_PRODUCT_CATALOG_SCAN_BATCH_SIZE`，默认 1000；终态下行清理使用 `SCA4DJ_IOT_DOWNLINK_CLEANUP_BATCH_SIZE`，默认 10000。三项范围都是 1 到 10000，只控制一次后台扫描或清理的工作量，不截断 Service 查询结果。设备定时任务普通查询一条到期候选，取得 `iot:schedule:<scheduleId>` Redis 分布式锁后再开启独立事务，并在事务中重新检查 version、状态和计划时间；不使用显式行锁，也不创建 Redis 到期索引或处理租约。`iot_device_schedule` 保存规则、版本、下一次触发时间和最近一次执行结果。
 
-Device 创建幂等结果只允许在十分钟窗口内重放。App 自己声明该表的 ClusterTaskSchedule，默认每十分钟按 `expires_at` 索引清理，每批最多 10000 条，每轮最多执行 500 个有界删除事务；删除 SQL 不使用显式行锁，多个实例重复选择同一记录时由 `DELETE` 的实际结果自然竞争。App 只通过 `SCA4D_IOT_DEVICE_CREATION_CLEANUP_INTERVAL` 声明触发间隔，批量上限由任务实现固定。
+Device 创建幂等结果只允许在十分钟窗口内重放。App 自己声明该表的 ClusterTaskSchedule，默认每十分钟按 `expires_at` 索引清理，每批最多 10000 条，每轮最多执行 500 个有界删除事务；删除 SQL 不使用显式行锁，多个实例重复选择同一记录时由 `DELETE` 的实际结果自然竞争。App 只通过 `SCA4DJ_IOT_DEVICE_CREATION_CLEANUP_INTERVAL` 声明触发间隔，批量上限由任务实现固定。
 
 DeviceScheduleTask 到期时不会通过 Connection 或 EMQX 直接发送。它在主库事务中调用 DeviceCommandService 重新校验当前物模型，创建带 `expiresAt` 的 PENDING 下行，并通过通用 Messaging Outbox 登记派发消息。DeviceDownlinkDispatchConsumer 随后通过 DeviceDownlinkRouter 选择 Transport 发布。低精度、长周期业务预约使用 JobSchedule，不进入设备定时规则。
 
@@ -241,16 +241,16 @@ IoT Realtime 使用共享 topic `iot.device.<deviceId>` 和 STOMP destination `/
 
 ## 可选 TimescaleDB
 
-设置 `SCA4D_IOT_TIMESCALE_ENABLED=true` 后，历史模块创建前述 `@IotTimescale` Bean。连接配置位于 `spring.datasource.dynamic.datasource.iot-history`；`sca4dj.iot.timescale` 保存保留期、清理间隔和查询上限。Flyway 只读取 `classpath:META-INF/sca4dj/timescale/migration`，历史 MyBatis 工厂只读取 IoT 历史 Mapper。具体应用的其他历史表使用自己的迁移和 Mapper 资源。
+设置 `SCA4DJ_IOT_TIMESCALE_ENABLED=true` 后，历史模块创建前述 `@IotTimescale` Bean。连接配置位于 `spring.datasource.dynamic.datasource.iot-history`；`sca4dj.iot.timescale` 保存保留期、清理间隔和查询上限。Flyway 只读取 `classpath:META-INF/sca4dj/timescale/migration`，历史 MyBatis 工厂只读取 IoT 历史 Mapper。具体应用的其他历史表使用自己的迁移和 Mapper 资源。
 
 最小配置如下，其他参数使用 `application.yml` 中的默认值：
 
 ```properties
-SCA4D_IOT_TIMESCALE_ENABLED=true
-SCA4D_IOT_TIMESCALE_URL=jdbc:postgresql://localhost:5433/sca4dj_iot
-SCA4D_IOT_TIMESCALE_USERNAME=sca4dj
-SCA4D_IOT_TIMESCALE_PASSWORD=sca4dj
-SCA4D_IOT_TIMESCALE_MAX_QUERY_RESULTS=1000
+SCA4DJ_IOT_TIMESCALE_ENABLED=true
+SCA4DJ_IOT_TIMESCALE_URL=jdbc:postgresql://localhost:5433/sca4dj_iot
+SCA4DJ_IOT_TIMESCALE_USERNAME=sca4dj
+SCA4DJ_IOT_TIMESCALE_PASSWORD=sca4dj
+SCA4DJ_IOT_TIMESCALE_MAX_QUERY_RESULTS=1000
 ```
 
 默认清理间隔为 `PT1H`，Telemetry 与事件都保留 `P90D`；三个时长启用时都必须为正数。TimescaleDB 只保存 `iot_telemetry_sample` 和 `iot_event`。主 PostgreSQL 保存 Product、Device、reported/desired、可靠下行当前状态、最新 ACK 和设备定时规则；通用 Messaging Outbox 保存可靠事件、下行派发、ACK timeout 和断连消息。Telemetry 在主事务提交后直接发布，声明为 `RELIABLE` 的物模型事件和 IoT 状态机事件通过通用 Outbox 发布。Timescale Consumer 使用独立事务写入历史库，不能拿它代替主库业务状态。
@@ -289,7 +289,7 @@ Compose 只读挂载 `docker/emqx/base.hocon` 和 `docker/emqx/acl.conf`，并�
 
 JWT 密钥独立于 `sca4dj.security.secret-keyring`。切换 active key 时，应保留仍可能验证未过期 JWT 的历史 key；超过最长 access TTL 后可以从 keys 删除旧 key。
 
-Sca4d Server 默认把 `active-key-id` 设为 `primary`，`issuer` 和 `audience` 设为 `spring.application.name`。启用 JWT 时仍必须设置 `SCA4D_AUTH_JWT_PRIMARY_KEY`；模块本身没有这些应用默认值。
+Sca4d Server 默认把 `active-key-id` 设为 `primary`，`issuer` 和 `audience` 设为 `spring.application.name`。启用 JWT 时仍必须设置 `SCA4DJ_AUTH_JWT_PRIMARY_KEY`；模块本身没有这些应用默认值。
 
 `max-token-length` 限制完整 JWS 字符数，不只限制 Session JSON。紧凑 Principal 和 Resource ID 使用 Roaring64 编码后仍可能因 ID 分布而超过上限；规模大或分布不可预测时使用 `SESSION` 模式，或先按真实数据测量再调整限制。提高限制时还要同时检查反向代理和应用服务器的请求头上限。
 
@@ -313,7 +313,7 @@ PasswordProperties 读取 `sca4dj.auth.password` 配置：
 
 `login-identifier-types` 必须至少包含一个非空白值且不能重复。Password 模块只按这些稳定类型查询 AccountDirectory，不依赖负责登记标识的具体模块。
 
-Sca4d Server 将 `login-identifier-types` 覆盖为 `USERNAME,EMAIL`，因此默认接受用户名或已绑定邮箱。通过 `SCA4D_AUTH_PASSWORD_LOGIN_IDENTIFIER_TYPES` 可以修改应用配置。
+Sca4d Server 将 `login-identifier-types` 覆盖为 `USERNAME,EMAIL`，因此默认接受用户名或已绑定邮箱。通过 `SCA4DJ_AUTH_PASSWORD_LOGIN_IDENTIFIER_TYPES` 可以修改应用配置。
 
 ## 具体应用联邦登录配置
 
@@ -505,7 +505,7 @@ threadCount 控制 Quartz 触发提交的并发数，JobProperties.workerCount �
 
 `WebRealtimeProperties` 绑定 `sca4dj.web-realtime`。
 
-下表为模块默认值。Sca4d Server 将 `allowedOrigins` 覆盖为 `SCA4D_FRONTEND_ORIGIN`，应用默认地址是 `http://localhost:5666`。
+下表为模块默认值。Sca4d Server 将 `allowedOrigins` 覆盖为 `SCA4DJ_FRONTEND_ORIGIN`，应用默认地址是 `http://localhost:5666`。
 
 | 属性 | 默认值 |
 |---|---:|
@@ -575,21 +575,21 @@ Server 返回以 `/` 开头且不含 scheme/host 的 `Location` 时，普通 `/a
 
 | 环境变量 | 默认值 | 含义 |
 |---|---|---|
-| `SCA4D_GATEWAY_PORT` | `8088` | Gateway HTTP 端口 |
-| `SCA4D_GATEWAY_APPLICATION_NAME` | `sca4d-gateway` | Spring application name |
-| `SCA4D_GATEWAY_SECRET` | 无 | 必填控制和可信转发 Secret |
-| `SCA4D_GATEWAY_LEASE_TTL` | `PT30S` | 未续租注册的保留时长 |
-| `SCA4D_GATEWAY_HEALTH_INTERVAL` | `PT5S` | readiness 扫描间隔 |
-| `SCA4D_GATEWAY_HEALTH_TIMEOUT` | `PT3S` | 单次 readiness 请求超时 |
-| `SCA4D_GATEWAY_CONNECT_TIMEOUT_MILLIS` | `3000` | 转发连接超时，单位毫秒 |
-| `SCA4D_GATEWAY_RESPONSE_TIMEOUT` | `PT30S` | 普通 HTTP 转发响应超时 |
-| `SCA4D_GATEWAY_LOGGING_ENABLED` | `false` | 是否注册 Loki 日志写入路由 |
-| `SCA4D_GATEWAY_LOKI_ORIGIN` | 无 | Gateway 可以访问的 Loki HTTP(S) Origin |
-| `SCA4D_LOKI_PUSH_USERNAME` | `alloy` | Alloy 写入日志使用的独立用户名 |
-| `SCA4D_LOKI_PUSH_PASSWORD` | 无 | Alloy 写入日志使用的独立密码 |
-| `SCA4D_LOG_ROOT` | `logs` | Gateway ECS JSON 文件的宿主机日志根目录 |
-| `SCA4D_INSTANCE_ID` | `HOSTNAME` 或 `local` | 日志目录和 ECS service node 使用的稳定实例标识 |
-| `SCA4D_ENVIRONMENT` | 活动 profile 或 `default` | ECS service environment |
+| `SCA4DJ_GATEWAY_PORT` | `8088` | Gateway HTTP 端口 |
+| `SCA4DJ_GATEWAY_APPLICATION_NAME` | `sca4d-gateway` | Spring application name |
+| `SCA4DJ_GATEWAY_SECRET` | 无 | 必填控制和可信转发 Secret |
+| `SCA4DJ_GATEWAY_LEASE_TTL` | `PT30S` | 未续租注册的保留时长 |
+| `SCA4DJ_GATEWAY_HEALTH_INTERVAL` | `PT5S` | readiness 扫描间隔 |
+| `SCA4DJ_GATEWAY_HEALTH_TIMEOUT` | `PT3S` | 单次 readiness 请求超时 |
+| `SCA4DJ_GATEWAY_CONNECT_TIMEOUT_MILLIS` | `3000` | 转发连接超时，单位毫秒 |
+| `SCA4DJ_GATEWAY_RESPONSE_TIMEOUT` | `PT30S` | 普通 HTTP 转发响应超时 |
+| `SCA4DJ_GATEWAY_LOGGING_ENABLED` | `false` | 是否注册 Loki 日志写入路由 |
+| `SCA4DJ_GATEWAY_LOKI_ORIGIN` | 无 | Gateway 可以访问的 Loki HTTP(S) Origin |
+| `SCA4DJ_LOKI_PUSH_USERNAME` | `alloy` | Alloy 写入日志使用的独立用户名 |
+| `SCA4DJ_LOKI_PUSH_PASSWORD` | 无 | Alloy 写入日志使用的独立密码 |
+| `SCA4DJ_LOG_ROOT` | `logs` | Gateway ECS JSON 文件的宿主机日志根目录 |
+| `SCA4DJ_INSTANCE_ID` | `HOSTNAME` 或 `local` | 日志目录和 ECS service node 使用的稳定实例标识 |
+| `SCA4DJ_ENVIRONMENT` | 活动 profile 或 `default` | ECS service environment |
 
 Secret 为空，或租约与 readiness 检查时长不是正数时，Gateway 启动失败。日志写入启用后，Loki Origin、写入用户名和写入密码也必须完整有效；写入凭据不能复用注册 Secret。Server 的续租间隔必须小于租约 TTL，Gateway 按 UTC 时间判断租约是否过期。
 
@@ -652,10 +652,10 @@ AuditProperties 读取 `sca4dj.audit` 下的 payload 保存配置。
 Java 应用的活动文件路径为：
 
 ```text
-<SCA4D_LOG_ROOT>/<spring.application.name>/<SCA4D_INSTANCE_ID>/application.json
+<SCA4DJ_LOG_ROOT>/<spring.application.name>/<SCA4DJ_INSTANCE_ID>/application.json
 ```
 
-`SCA4D_LOG_PATH` 非空时直接覆盖完整目录。默认 `SCA4D_LOG_ROOT=logs`，实例 ID 依次读取当前进程的 `SCA4D_INSTANCE_ID`、`HOSTNAME`，最终使用 `local`。同一主机上的并行实例必须为每个进程单独设置不同实例 ID，不能把同一个 `SCA4D_INSTANCE_ID` 写入这些进程共用的环境文件，也不能同时写同一个活动文件。
+`SCA4DJ_LOG_PATH` 非空时直接覆盖完整目录。默认 `SCA4DJ_LOG_ROOT=logs`，实例 ID 依次读取当前进程的 `SCA4DJ_INSTANCE_ID`、`HOSTNAME`，最终使用 `local`。同一主机上的并行实例必须为每个进程单独设置不同实例 ID，不能把同一个 `SCA4DJ_INSTANCE_ID` 写入这些进程共用的环境文件，也不能同时写同一个活动文件。
 
 Sca4d Server 在生产环境把 DEBUG 及以上事件写入文件，在本地与开发环境写入 TRACE 及以上事件；Sca4d Gateway 写入 INFO 及以上事件。活动文件达到 100 MB 或日期变化时归档为 `application.<date>.<index>.json.gz`，保留 30 天，总上限为 10 GB。
 
@@ -669,45 +669,45 @@ Sca4d Server 在生产环境把 DEBUG 及以上事件写入文件，在本地与
 | `principalId` | 当前业务主体 | 否 |
 | `sessionId` | 不写入 ECS JSON | 否 |
 | `service.name` | `spring.application.name` | Alloy 从目录映射为 `service` label |
-| `service.environment` | `SCA4D_ENVIRONMENT` 或活动 profile | Alloy 使用自己的 `environment` label |
-| `service.node.name` | `SCA4D_INSTANCE_ID` 或 `HOSTNAME` | Alloy 从目录映射为 `instance` label |
+| `service.environment` | `SCA4DJ_ENVIRONMENT` 或活动 profile | Alloy 使用自己的 `environment` label |
+| `service.node.name` | `SCA4DJ_INSTANCE_ID` 或 `HOSTNAME` | Alloy 从目录映射为 `instance` label |
 
 ### Alloy 采集
 
 应用日志根目录在 Alloy 容器中的只读挂载点固定为 `/var/log/applications`。Alloy 匹配 `/var/log/applications/*/*/application.json`，从两级目录分别提取 `service` 和 `instance`，并保存读取位置到 `docker-data/logging-agent/alloy`。`environment`、`host`、`service` 和 `instance` 组成 Loki stream label；不会从 JSON 提取调用或用户字段作为 label。
 
-Alloy 不读取 Docker Socket，也不采集基础设施容器标准输出。它使用 host 网络访问 Gateway；自身 HTTP 端点默认只监听宿主机 `127.0.0.1:12345`，端口冲突时通过 `SCA4D_ALLOY_HTTP_LISTEN_ADDR` 修改。
+Alloy 不读取 Docker Socket，也不采集基础设施容器标准输出。它使用 host 网络访问 Gateway；自身 HTTP 端点默认只监听宿主机 `127.0.0.1:12345`，端口冲突时通过 `SCA4DJ_ALLOY_HTTP_LISTEN_ADDR` 修改。
 
 ### Gateway 写入路由
 
-`SCA4D_GATEWAY_LOGGING_ENABLED=true` 时，Gateway 只注册 `POST /internal/logging/push`。请求必须提交 `SCA4D_LOKI_PUSH_USERNAME` 和 `SCA4D_LOKI_PUSH_PASSWORD` 对应的 Basic Auth；缺失、重复、格式错误或不匹配时返回 401。认证成功后，Gateway 删除 `Authorization` 和自身添加的 `X-Gateway-*` Header，把路径改为 `/loki/api/v1/push`，并转发到 `SCA4D_GATEWAY_LOKI_ORIGIN`。
+`SCA4DJ_GATEWAY_LOGGING_ENABLED=true` 时，Gateway 只注册 `POST /internal/logging/push`。请求必须提交 `SCA4DJ_LOKI_PUSH_USERNAME` 和 `SCA4DJ_LOKI_PUSH_PASSWORD` 对应的 Basic Auth；缺失、重复、格式错误或不匹配时返回 401。认证成功后，Gateway 删除 `Authorization` 和自身添加的 `X-Gateway-*` Header，把路径改为 `/loki/api/v1/push`，并转发到 `SCA4DJ_GATEWAY_LOKI_ORIGIN`。
 
-日志写入凭据不复用 `SCA4D_GATEWAY_SECRET`。Alloy 因此不能调用 Server 注册、续租和注销接口。Gateway 不为日志功能开放 Loki 查询、删除、管理或就绪检查 API。日志写入未启用时该路径返回 404；启用但 Loki Origin、用户名或密码不合法时 Gateway 启动失败；Loki 连接失败时返回 502。
+日志写入凭据不复用 `SCA4DJ_GATEWAY_SECRET`。Alloy 因此不能调用 Server 注册、续租和注销接口。Gateway 不为日志功能开放 Loki 查询、删除、管理或就绪检查 API。日志写入未启用时该路径返回 404；启用但 Loki Origin、用户名或密码不合法时 Gateway 启动失败；Loki 连接失败时返回 502。
 
-Loki 自身没有 HTTP 身份认证层，`auth_enabled` 只控制多租户行为，不能替代身份认证。`SCA4D_LOKI_BIND` 默认是 `127.0.0.1:3100`，不能改成公网监听地址。跨公网部署时，`SCA4D_LOKI_PUSH_URL` 必须使用 Gateway 的 HTTPS 地址；Basic Auth 不能在明文 HTTP 上使用。
+Loki 自身没有 HTTP 身份认证层，`auth_enabled` 只控制多租户行为，不能替代身份认证。`SCA4DJ_LOKI_BIND` 默认是 `127.0.0.1:3100`，不能改成公网监听地址。跨公网部署时，`SCA4DJ_LOKI_PUSH_URL` 必须使用 Gateway 的 HTTPS 地址；Basic Auth 不能在明文 HTTP 上使用。
 
 ### 配置
 
 | 环境变量 | 默认值 | 限制 |
 |---|---|---|
-| `SCA4D_ENVIRONMENT` | `local` | 同一部署环境使用稳定名称 |
-| `SCA4D_LOG_HOST` | 无 | 每台 Alloy 主机必填且保持唯一稳定 |
-| `SCA4D_LOG_ROOT` | `./logs` | Java 写入并由 Alloy 只读挂载的宿主机根目录 |
-| `SCA4D_INSTANCE_ID` | `HOSTNAME` 或 `local` | 同一主机中的并行实例必须不同 |
-| `SCA4D_ALLOY_HTTP_LISTEN_ADDR` | `127.0.0.1:12345` | Alloy 管理端点必须只绑定受信任地址 |
-| `SCA4D_LOKI_PUSH_URL` | `http://127.0.0.1:8088/internal/logging/push` | 各地部署时改为中心 Gateway 的 HTTPS 或可信专网地址 |
-| `SCA4D_LOKI_PUSH_USERNAME` | `alloy` | Gateway 与所有 Alloy 必须一致 |
-| `SCA4D_LOKI_PUSH_PASSWORD` | 无 | Gateway 与所有 Alloy 必须一致，不能等于注册 Secret |
-| `SCA4D_GATEWAY_LOGGING_ENABLED` | `false` | 中心 Gateway 启用日志写入时设为 `true` |
-| `SCA4D_GATEWAY_LOKI_ORIGIN` | 无 | 中心 Gateway 可以访问的 Loki HTTP(S) Origin |
-| `SCA4D_LOKI_BIND` | `127.0.0.1:3100` | 只供中心主机上的 Gateway 访问 |
-| `SCA4D_GRAFANA_ADMIN_USERNAME` | `admin` | Grafana 初始管理员 |
-| `SCA4D_GRAFANA_ADMIN_PASSWORD` | 无 | 启动中心端前必填 |
-| `SCA4D_GRAFANA_BIND` | `127.0.0.1:3000` | Grafana 宿主机监听地址 |
-| `SCA4D_LOKI_RETENTION` | `720h` | Loki 最短允许 24 小时 |
-| `SCA4D_LOKI_STORAGE_MODE` | `filesystem` | 只允许 `filesystem` 或 `s3` |
+| `SCA4DJ_ENVIRONMENT` | `local` | 同一部署环境使用稳定名称 |
+| `SCA4DJ_LOG_HOST` | 无 | 每台 Alloy 主机必填且保持唯一稳定 |
+| `SCA4DJ_LOG_ROOT` | `./logs` | Java 写入并由 Alloy 只读挂载的宿主机根目录 |
+| `SCA4DJ_INSTANCE_ID` | `HOSTNAME` 或 `local` | 同一主机中的并行实例必须不同 |
+| `SCA4DJ_ALLOY_HTTP_LISTEN_ADDR` | `127.0.0.1:12345` | Alloy 管理端点必须只绑定受信任地址 |
+| `SCA4DJ_LOKI_PUSH_URL` | `http://127.0.0.1:8088/internal/logging/push` | 各地部署时改为中心 Gateway 的 HTTPS 或可信专网地址 |
+| `SCA4DJ_LOKI_PUSH_USERNAME` | `alloy` | Gateway 与所有 Alloy 必须一致 |
+| `SCA4DJ_LOKI_PUSH_PASSWORD` | 无 | Gateway 与所有 Alloy 必须一致，不能等于注册 Secret |
+| `SCA4DJ_GATEWAY_LOGGING_ENABLED` | `false` | 中心 Gateway 启用日志写入时设为 `true` |
+| `SCA4DJ_GATEWAY_LOKI_ORIGIN` | 无 | 中心 Gateway 可以访问的 Loki HTTP(S) Origin |
+| `SCA4DJ_LOKI_BIND` | `127.0.0.1:3100` | 只供中心主机上的 Gateway 访问 |
+| `SCA4DJ_GRAFANA_ADMIN_USERNAME` | `admin` | Grafana 初始管理员 |
+| `SCA4DJ_GRAFANA_ADMIN_PASSWORD` | 无 | 启动中心端前必填 |
+| `SCA4DJ_GRAFANA_BIND` | `127.0.0.1:3000` | Grafana 宿主机监听地址 |
+| `SCA4DJ_LOKI_RETENTION` | `720h` | Loki 最短允许 24 小时 |
+| `SCA4DJ_LOKI_STORAGE_MODE` | `filesystem` | 只允许 `filesystem` 或 `s3` |
 
-`filesystem` 把索引、块和 Compactor 状态写入 `docker-data/logging/loki`。`s3` 还需要 `SCA4D_LOKI_S3_ENDPOINT`、`SCA4D_LOKI_S3_REGION`、`SCA4D_LOKI_S3_BUCKET`、`SCA4D_LOKI_S3_ACCESS_KEY` 和 `SCA4D_LOKI_S3_SECRET_KEY`；MinIO 使用 path-style 请求。同一 Docker Compose project 中，Loki 通过默认网络直接访问根 Compose 的 `minio:9000`；其他部署必须填写 Loki 实际可达的 MinIO/S3 地址。`SCA4D_LOKI_S3_INSECURE=true` 只表示 S3 endpoint 使用 HTTP，不会关闭 HTTPS 证书校验。MinIO/S3 凭据只保护对象存储，不能用于 Gateway 日志写入认证。
+`filesystem` 把索引、块和 Compactor 状态写入 `docker-data/logging/loki`。`s3` 还需要 `SCA4DJ_LOKI_S3_ENDPOINT`、`SCA4DJ_LOKI_S3_REGION`、`SCA4DJ_LOKI_S3_BUCKET`、`SCA4DJ_LOKI_S3_ACCESS_KEY` 和 `SCA4DJ_LOKI_S3_SECRET_KEY`；MinIO 使用 path-style 请求。同一 Docker Compose project 中，Loki 通过默认网络直接访问根 Compose 的 `minio:9000`；其他部署必须填写 Loki 实际可达的 MinIO/S3 地址。`SCA4DJ_LOKI_S3_INSECURE=true` 只表示 S3 endpoint 使用 HTTP，不会关闭 HTTPS 证书校验。MinIO/S3 凭据只保护对象存储，不能用于 Gateway 日志写入认证。
 
 Grafana 通过 `logging-backend` Docker 内部网络直接连接 Loki。Grafana 页面由自己的登录认证保护，Loki 不发布查询端口。预置的 Loki 数据源可以在 Grafana Explore 中按环境、主机、服务和实例筛选。Java ECS 文件可以继续解析 JSON 字段：
 

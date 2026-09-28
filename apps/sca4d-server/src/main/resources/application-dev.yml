@@ -11,7 +11,7 @@ springdoc:
 sca4dj:
   core:
     openapi:
-      enabled: ${SCA4D_CORE_OPENAPI_ENABLED:true}
+      enabled: ${SCA4DJ_CORE_OPENAPI_ENABLED:true}
   auth:
     excluded-paths:
       - /v3/api-docs

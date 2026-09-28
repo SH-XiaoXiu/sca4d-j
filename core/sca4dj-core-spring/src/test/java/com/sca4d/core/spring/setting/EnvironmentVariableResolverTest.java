@@ -11,13 +11,13 @@ class EnvironmentVariableResolverTest {
     @Test
     void resolvesConfiguredPrefix() {
         EnvironmentPrefixProperties properties = new EnvironmentPrefixProperties();
-        properties.setPrefix("SCA4D");
+        properties.setPrefix("SCA4DJ");
 
         EnvironmentVariableResolver resolver = new EnvironmentVariableResolver(
                 new MockEnvironment().withProperty("spring.application.name", "sca4d-server"),
                 properties);
 
-        assertThat(resolver.resolve("AUTH_SESSION_TTL")).isEqualTo("SCA4D_AUTH_SESSION_TTL");
+        assertThat(resolver.resolve("AUTH_SESSION_TTL")).isEqualTo("SCA4DJ_AUTH_SESSION_TTL");
     }
 
     @Test

@@ -38,7 +38,7 @@ class LoggingConfigurationTest {
                 .contains("<maxHistory>30</maxHistory>")
                 .contains("<totalSizeCap>10GB</totalSizeCap>");
         assertThat(resource("application.yml"))
-                .contains("path: ${SCA4D_LOG_PATH:${SCA4D_LOG_ROOT:logs}/${spring.application.name}/")
+                .contains("path: ${SCA4DJ_LOG_PATH:${SCA4DJ_LOG_ROOT:logs}/${spring.application.name}/")
                 .contains("exclude: sessionId");
     }
 

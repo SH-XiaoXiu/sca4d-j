@@ -34,11 +34,11 @@ for example in .env/*.env.example; do
 done
 ```
 
-本地初始管理员用户名来自 `.env/iam.env` 的 `SCA4D_IAM_BOOTSTRAP_USERNAME`，初始密码来自 `.env/auth.env` 的 `SCA4D_AUTH_PASSWORD_BOOTSTRAP_PASSWORD`。示例密码只用于本机开发；共享或生产环境必须使用外部秘密配置并替换示例值。
+本地初始管理员用户名来自 `.env/iam.env` 的 `SCA4DJ_IAM_BOOTSTRAP_USERNAME`，初始密码来自 `.env/auth.env` 的 `SCA4DJ_AUTH_PASSWORD_BOOTSTRAP_PASSWORD`。示例密码只用于本机开发；共享或生产环境必须使用外部秘密配置并替换示例值。
 
-`.env/application.env` 中的 `SCA4D_FRONTEND_ORIGIN` 和 `SCA4D_GATEWAY_ORIGIN` 分别表示浏览器访问管理端与 Gateway 的完整 Origin。Passkey、Web Realtime 和 MinIO CORS 引用前端地址，Storage 文件传输与联邦登录回调默认使用 Gateway 的 `/api` 入口。需要让某项功能使用不同地址时，再到对应环境文件覆盖它自己的变量。
+`.env/application.env` 中的 `SCA4DJ_FRONTEND_ORIGIN` 和 `SCA4DJ_GATEWAY_ORIGIN` 分别表示浏览器访问管理端与 Gateway 的完整 Origin。Passkey、Web Realtime 和 MinIO CORS 引用前端地址，Storage 文件传输与联邦登录回调默认使用 Gateway 的 `/api` 入口。需要让某项功能使用不同地址时，再到对应环境文件覆盖它自己的变量。
 
-管理端开发服务器默认使用 `http://localhost:5666`，Gateway 默认使用 `http://localhost:8088`，Server 默认使用 `http://localhost:8080`。本地 `SCA4D_AUTH_PASSKEY_RELYING_PARTY_ID` 为 `localhost`；Passkey 必须从 `SCA4D_FRONTEND_ORIGIN` 对应的完整地址打开页面，不要混用 `127.0.0.1` 或其他端口。
+管理端开发服务器默认使用 `http://localhost:5666`，Gateway 默认使用 `http://localhost:8088`，Server 默认使用 `http://localhost:8080`。本地 `SCA4DJ_AUTH_PASSKEY_RELYING_PARTY_ID` 为 `localhost`；Passkey 必须从 `SCA4DJ_FRONTEND_ORIGIN` 对应的完整地址打开页面，不要混用 `127.0.0.1` 或其他端口。
 
 PostgreSQL 和 TimescaleDB 只在各自数据目录首次初始化时读取用户名与密码。清理数据目录会删除其中的全部数据库数据，只能在确认数据可丢弃或已经备份后执行。要按新的 `.env/database.env` 或 `.env/iot-database.env` 重建本地数据库，先停止对应容器，再由操作者清理 `docker-data/postgresql` 与可选的 `docker-data/iot/timescaledb`；仅修改环境文件不会修改已经存在数据库角色的密码。
 
@@ -94,7 +94,7 @@ Gateway 默认监听 `http://localhost:8088`。打开 `http://localhost:8088/act
 ./gradlew :apps:sca4d-server:bootRun
 ```
 
-Server 默认监听 `http://localhost:8080`，readiness 后使用 `.env/application.env` 中相同的 Secret 向 Gateway 注册。`local` 配置在 `SCA4D_CORE_OPENAPI_ENABLED=true` 时启用 OpenAPI 和 Swagger UI，可从统一入口打开：
+Server 默认监听 `http://localhost:8080`，readiness 后使用 `.env/application.env` 中相同的 Secret 向 Gateway 注册。`local` 配置在 `SCA4DJ_CORE_OPENAPI_ENABLED=true` 时启用 OpenAPI 和 Swagger UI，可从统一入口打开：
 
 - `http://localhost:8088/api/swagger-ui/index.html`；
 - `http://localhost:8088/api/v3/api-docs`。
@@ -103,7 +103,7 @@ Server 启动日志出现「Server 实例已向 Gateway 注册」后，再使用
 
 ## 启动管理端
 
-另开一个终端。开发服务器自动读取仓库根目录 `.env/frontend.env` 中的 `SCA4D_API_TARGET`，修改目标地址后需要重启开发服务器：
+另开一个终端。开发服务器自动读取仓库根目录 `.env/frontend.env` 中的 `SCA4DJ_API_TARGET`，修改目标地址后需要重启开发服务器：
 
 ```bash
 cd frontends/sca4d-admin
@@ -111,7 +111,7 @@ pnpm install
 pnpm dev
 ```
 
-开发脚本默认监听 `http://localhost:5666`。浏览器请求使用 `/api`，Vite 保留路径并转发到 `SCA4D_API_TARGET`；环境示例默认指向 `http://localhost:8088`，端口被占用时应与 `.env/application.env` 中的 Gateway 地址保持一致。
+开发脚本默认监听 `http://localhost:5666`。浏览器请求使用 `/api`，Vite 保留路径并转发到 `SCA4DJ_API_TARGET`；环境示例默认指向 `http://localhost:8088`，端口被占用时应与 `.env/application.env` 中的 Gateway 地址保持一致。
 
 ## 配置本地邮件
 
