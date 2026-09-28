@@ -1,4 +1,4 @@
-# 10 Sca4d-J 构建 Gradle 插件
+# Sca4d-J 构建 Gradle 插件
 
 构建插件把各项目已有任务接到统一的编译、测试、装配、格式和审计阶段。Java 项目使用 `com.sca4dj.build.java`，目录项目使用 `com.sca4dj.build.aggregate`，其他技术栈通过 `com.sca4dj.build.mapping` 显式登记任务；新应用的首份数据库迁移由 `com.sca4dj.app` 生成。
 

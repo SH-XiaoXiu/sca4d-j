@@ -1,6 +1,6 @@
 # 文档维护
 
-修改文档前阅读根 `AGENTS.md` 和[文档规范](standards/13_documentation.md)。按根指令报告编码视角，并说明本次文档目的及适用路径。
+修改文档前阅读根 `AGENTS.md` 和[文档规范](standards/12_documentation.md)。按根指令报告编码视角，并说明本次文档目的及适用路径。
 
 ## 目录与导航
 

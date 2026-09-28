@@ -214,20 +214,23 @@ const standardsSidebar: DefaultTheme.SidebarItem[] = [
     "text": "构建与验收",
     "items": [
       { "text": "格式化与构建", "link": "/standards/09_build" },
-      { "text": "Sca4d-J 构建 Gradle 插件", "link": "/standards/10_gradle-plugins" },
-      { "text": "测试与验证", "link": "/standards/11_testing" },
-      { "text": "代码评审", "link": "/standards/12_review" }
+      { "text": "测试与验证", "link": "/standards/10_testing" },
+      { "text": "代码评审", "link": "/standards/11_review" }
     ]
   },
   {
     "text": "文档",
     "items": [
-      { "text": "文档规范", "link": "/standards/13_documentation" }
+      { "text": "文档规范", "link": "/standards/12_documentation" }
     ]
   }
 ]
 
 const referenceSidebar: DefaultTheme.SidebarItem[] = [
+  {
+    "text": "构建 Gradle 插件",
+    "link": "/reference/build-plugins"
+  },
   {
     "text": "参考入口与 Java API",
     "link": "/reference/"

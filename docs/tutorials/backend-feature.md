@@ -55,7 +55,7 @@ Authorization: Bearer <sessionToken>
 
 再次读取，应得到修改后的资料。当前个人资料接口没有要求 `If-Match`；增加其他资源的完整编辑接口时，按[HTTP 并发契约](/reference/http/common#etag、if-match-与修改冲突)判断是否需要 ETag。
 
-测试覆盖有效输入、非法值、清空和事务失败。涉及邮箱时，还要覆盖标识冲突及回滚后资料与 Account 是否一致。只修改本应用时，先编译 `:apps:sca4d-server:compileJava`，再运行直接相关测试；资源限制见[测试规范](/standards/11_testing#资源限制)。
+测试覆盖有效输入、非法值、清空和事务失败。涉及邮箱时，还要覆盖标识冲突及回滚后资料与 Account 是否一致。只修改本应用时，先编译 `:apps:sca4d-server:compileJava`，再运行直接相关测试；检查范围见[测试规范](/standards/10_testing)，资源限制以仓库构建指令为准。
 
 ## 列表查询
 
