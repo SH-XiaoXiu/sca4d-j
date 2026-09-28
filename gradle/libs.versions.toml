@@ -97,6 +97,7 @@ spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-star
 spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
 spring-boot-starter-websocket = { module = "org.springframework.boot:spring-boot-starter-websocket" }
+reactor-netty-http = { module = "io.projectreactor.netty:reactor-netty-http" }
 spring-boot-testcontainers = { module = "org.springframework.boot:spring-boot-testcontainers" }
 spring-amqp = { module = "org.springframework.amqp:spring-amqp" }
 spring-data-redis = { module = "org.springframework.data:spring-data-redis" }

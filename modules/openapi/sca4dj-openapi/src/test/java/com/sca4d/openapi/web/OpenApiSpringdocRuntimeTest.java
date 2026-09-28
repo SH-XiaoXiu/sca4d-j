@@ -49,6 +49,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 /** 验证 Springdoc 运行时生成的“开放 API”分组和动态认证端点契约。 */
 @WebMvcTest(controllers = OpenApiSpringdocRuntimeTest.InternalController.class, properties = {
+        "spring.application.name=openapi-test",
         "springdoc.api-docs.enabled=true",
         "springdoc.swagger-ui.enabled=true"
 })

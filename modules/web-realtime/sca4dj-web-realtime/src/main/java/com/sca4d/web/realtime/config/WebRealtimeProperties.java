@@ -225,6 +225,21 @@ public class WebRealtimeProperties {
 
         private Duration sendTimeLimit = Duration.ofSeconds(10);
 
+        /** 每个方向的固定工作线程数。 */
+        private int channelWorkerCount = 4;
+
+        /** 每个方向已接收但尚未完成的消息总数上限。 */
+        private int channelQueueCapacity = 256;
+
+        /** 每个方向尚未完成的载荷总字节数上限。 */
+        private int channelQueueMaxBytes = 16 * 1024 * 1024;
+
+        /** 每个方向中单连接尚未完成的消息数上限。 */
+        private int connectionQueueCapacity = 64;
+
+        /** 每个方向中单连接尚未完成的载荷总字节数上限。 */
+        private int connectionQueueMaxBytes = 1024 * 1024;
+
         private final Relay relay = new Relay();
 
         /** @return Spring STOMP broker 模式，默认由当前节点处理订阅 */
@@ -255,6 +270,59 @@ public class WebRealtimeProperties {
         /** @param value 正数 WebSocket 发送时间限制 */
         public void setSendTimeLimit(Duration value) {
             sendTimeLimit = positiveIntMillis(value, "STOMP 发送时间限制");
+        }
+
+        public int getChannelWorkerCount() {
+            return channelWorkerCount;
+        }
+
+        /** @param value 1 到 64 个工作线程，入站和出站分别使用独立线程池 */
+        public void setChannelWorkerCount(int value) {
+            channelWorkerCount = bounded(value, 64, "STOMP 通道工作线程数");
+        }
+
+        public int getChannelQueueCapacity() {
+            return channelQueueCapacity;
+        }
+
+        /** @param value 1 到 65536 条尚未完成的消息，包含正在执行的消息 */
+        public void setChannelQueueCapacity(int value) {
+            channelQueueCapacity = bounded(value, 65_536, "STOMP 通道消息容量");
+        }
+
+        public int getChannelQueueMaxBytes() {
+            return channelQueueMaxBytes;
+        }
+
+        /** @param value 1 字节到 1 GiB 的通道载荷预算 */
+        public void setChannelQueueMaxBytes(int value) {
+            channelQueueMaxBytes = bounded(value, 1024 * 1024 * 1024, "STOMP 通道载荷字节数");
+        }
+
+        public int getConnectionQueueCapacity() {
+            return connectionQueueCapacity;
+        }
+
+        /** @param value 1 到 65536 条单连接尚未完成的消息，同时受通道总容量限制 */
+        public void setConnectionQueueCapacity(int value) {
+            connectionQueueCapacity = bounded(value, 65_536, "STOMP 连接消息容量");
+        }
+
+        public int getConnectionQueueMaxBytes() {
+            return connectionQueueMaxBytes;
+        }
+
+        /** @param value 1 字节到 1 GiB 的单连接载荷预算，同时受通道总预算限制 */
+        public void setConnectionQueueMaxBytes(int value) {
+            connectionQueueMaxBytes = bounded(value, 1024 * 1024 * 1024, "STOMP 连接载荷字节数");
+        }
+
+        /** 拒绝无效或容易误配为无界容量的设置。 */
+        private static int bounded(int value, int maximum, String name) {
+            if (value < 1 || value > maximum) {
+                throw new IllegalArgumentException(name + "必须在 1 到 " + maximum + " 之间");
+            }
+            return value;
         }
 
         /** @return RabbitMQ STOMP plugin relay 连接配置 */

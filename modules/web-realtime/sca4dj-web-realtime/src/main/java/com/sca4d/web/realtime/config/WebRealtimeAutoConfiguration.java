@@ -21,6 +21,7 @@ import com.sca4d.web.realtime.rabbit.NodeMessageCodec;
 import com.sca4d.web.realtime.rabbit.RabbitNodeRouter;
 import com.sca4d.web.realtime.sse.SseConnections;
 import com.sca4d.web.realtime.sse.WebRealtimeSseConnector;
+import com.sca4d.web.realtime.stomp.StompChannelDispatcher;
 import com.sca4d.web.realtime.stomp.StompConfiguration;
 import com.sca4d.web.realtime.stomp.StompConnections;
 import com.sca4d.web.realtime.stomp.StompInboundInterceptor;
@@ -183,6 +184,18 @@ public class WebRealtimeAutoConfiguration {
     @Bean
     WebSocketSessions webSocketSessions() {
         return new WebSocketSessions();
+    }
+
+    /** @return 独立预算的 STOMP 入站有界分派器，不参与应用默认 Executor 选择 */
+    @Bean(destroyMethod = "close", defaultCandidate = false)
+    StompChannelDispatcher stompInboundDispatcher(WebRealtimeProperties properties, WebSocketSessions sockets) {
+        return new StompChannelDispatcher("inbound", properties.getStomp(), sockets);
+    }
+
+    /** @return 独立预算的 STOMP 出站有界分派器，不参与应用默认 Executor 选择 */
+    @Bean(destroyMethod = "close", defaultCandidate = false)
+    StompChannelDispatcher stompOutboundDispatcher(WebRealtimeProperties properties, WebSocketSessions sockets) {
+        return new StompChannelDispatcher("outbound", properties.getStomp(), sockets);
     }
 
     /** @return Spring STOMP Session 到 Redis 路由和本机连接句柄的生命周期桥接 */

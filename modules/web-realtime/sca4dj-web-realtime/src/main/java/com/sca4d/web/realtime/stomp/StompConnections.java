@@ -66,7 +66,8 @@ public class StompConnections {
         // 只接受由一次性票据握手创建且包含可写 Session 属性的 Spring STOMP 连接。
         SimpMessageHeaderAccessor headers = SimpMessageHeaderAccessor.wrap(event.getMessage());
         String simpSessionId = headers.getSessionId();
-        Map<String, Object> attributes = headers.getSessionAttributes();
+        // 延迟到达的 CONNECTED 不能让已断开的 WebSocket 重新登记本机和 Redis 连接。
+        Map<String, Object> attributes = simpSessionId == null ? null : sockets.attributes(simpSessionId);
         Object sessionValue = attributes == null
                 ? null
                 : attributes.get(TicketHandshakeInterceptor.SESSION_ATTRIBUTE);
@@ -90,6 +91,12 @@ public class StompConnections {
             local.add(connection);
             shared.register(connectionId, transport.nodeId(), session);
             attributes.put(CONNECTION_ATTRIBUTE, connectionId);
+            if (!sockets.accepts(simpSessionId)) {
+                // 断连事件可能先于 Redis 登记完成，补偿删除刚写入的本机和共享索引。
+                connections.remove(simpSessionId, connection);
+                local.remove(connectionId);
+                return;
+            }
             LOG.debug(
                     "Spring STOMP 连接已登记 | connectionId={} sessionId={} accountId={}",
                     connectionId,
@@ -156,6 +163,10 @@ public class StompConnections {
             SimpMessageHeaderAccessor headers = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
             headers.setSessionId(simpSessionId);
             headers.setHeader(CLOSE_AFTER_HEADER, checked.closeAfter());
+            if (checked.closeAfter()) {
+                // Relay 只往返 STOMP native headers；写出前由出站拦截器移除此内部标记。
+                headers.setNativeHeader(CLOSE_AFTER_HEADER, "true");
+            }
             headers.setLeaveMutable(true);
             messaging.convertAndSendToUser(
                     simpSessionId,

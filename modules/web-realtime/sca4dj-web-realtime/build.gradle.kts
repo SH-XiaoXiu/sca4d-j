@@ -42,6 +42,8 @@ dependencies {
     add("integrationTestImplementation", libs.spring.amqp)
     add("integrationTestImplementation", libs.jakarta.servlet)
     add("integrationTestRuntimeOnly", libs.lettuce.core)
+    add("integrationTestRuntimeOnly", libs.reactor.netty.http)
+    add("integrationTestRuntimeOnly", libs.spring.boot.starter.websocket)
     add("integrationTestImplementation", libs.testcontainers.core)
     add("integrationTestImplementation", libs.testcontainers.rabbitmq)
     add("integrationTestImplementation", libs.testcontainers.junit.jupiter)

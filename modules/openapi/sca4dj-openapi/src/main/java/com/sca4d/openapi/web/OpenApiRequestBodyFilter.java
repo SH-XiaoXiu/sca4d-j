@@ -6,14 +6,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.io.IOException;
 
 /** 只为 OpenAPI 路由缓存请求体，供 MAC 校验和 Controller 参数绑定共同读取。 */
 public class OpenApiRequestBodyFilter extends OncePerRequestFilter {
-
-    /** 允许缓存的单次请求体上限，避免 MAC 校验把无限输入读入内存。 */
-    private static final int MAX_BODY_BYTES = 8 * 1024 * 1024;
 
     /** 在 OpenAPI 路径读取请求体并转交可重复读取的包装请求。 */
     @Override
@@ -22,11 +20,18 @@ public class OpenApiRequestBodyFilter extends OncePerRequestFilter {
             @NotNull HttpServletResponse response,
             @NotNull FilterChain filterChain)
             throws ServletException, IOException {
-        if (request.getContentLengthLong() > MAX_BODY_BYTES) {
+        if (request.getContentLengthLong() > OpenApiCachedBodyHttpServletRequest.MAX_BODY_BYTES) {
             response.sendError(HttpServletResponse.SC_REQUEST_ENTITY_TOO_LARGE, "OpenAPI 请求体过大");
             return;
         }
-        filterChain.doFilter(new OpenApiCachedBodyHttpServletRequest(request), response);
+        OpenApiCachedBodyHttpServletRequest cached;
+        try {
+            cached = new OpenApiCachedBodyHttpServletRequest(request);
+        } catch (MaxUploadSizeExceededException exception) {
+            response.sendError(HttpServletResponse.SC_REQUEST_ENTITY_TOO_LARGE, "OpenAPI 请求体过大");
+            return;
+        }
+        filterChain.doFilter(cached, response);
     }
 
     /** 认证 Token 端点也需要表单绑定，因此所有 OpenAPI 路径都使用同一包装。 */

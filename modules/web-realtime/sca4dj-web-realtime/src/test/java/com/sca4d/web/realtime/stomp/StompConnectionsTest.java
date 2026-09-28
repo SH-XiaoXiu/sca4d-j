@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.same;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -13,6 +14,7 @@ import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
+import com.sca4d.core.api.connection.ConnectionId;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
@@ -41,11 +43,70 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * 验证 STOMP 连接不依赖 Spring Principal，并按 Spring Session 精确投递。
  */
 class StompConnectionsTest {
+
+    @Test
+    void ignoresConnectedEventAfterWebSocketHasClosed() {
+        RedisConnectionRegistry shared = mock(RedisConnectionRegistry.class);
+        LocalConnectionRegistry local = mock(LocalConnectionRegistry.class);
+        WebSocketSessions sockets = mock(WebSocketSessions.class);
+        StompConnections connections = new StompConnections(
+                shared,
+                local,
+                mock(NodeRouter.class),
+                mock(SimpMessagingTemplate.class),
+                sockets);
+        SimpMessageHeaderAccessor headers = SimpMessageHeaderAccessor.create(SimpMessageType.CONNECT_ACK);
+        headers.setSessionId("closed-browser");
+        headers.setSessionAttributes(Map.of(TicketHandshakeInterceptor.SESSION_ATTRIBUTE, session()));
+        Message<byte[]> message = MessageBuilder.createMessage(new byte[0], headers.getMessageHeaders());
+
+        connections.connected(new SessionConnectedEvent(this, message));
+
+        verifyNoInteractions(local, shared);
+        verify(sockets).close("closed-browser");
+    }
+
+    @Test
+    void unregistersWhenWebSocketClosesDuringRedisRegistration() {
+        Session session = session();
+        RedisConnectionRegistry shared = mock(RedisConnectionRegistry.class);
+        LocalConnectionRegistry local = mock(LocalConnectionRegistry.class);
+        NodeRouter transport = mock(NodeRouter.class);
+        WebSocketSessions sockets = mock(WebSocketSessions.class);
+        when(transport.nodeId()).thenReturn("node-1");
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put(TicketHandshakeInterceptor.SESSION_ATTRIBUTE, session);
+        when(sockets.attributes("closing-browser")).thenReturn(attributes);
+        AtomicBoolean open = new AtomicBoolean(true);
+        when(sockets.accepts("closing-browser")).thenAnswer(ignored -> open.get());
+        org.mockito.Mockito.doAnswer(call -> {
+            open.set(false);
+            return null;
+        }).when(shared).register(any(ConnectionId.class), eq("node-1"), same(session));
+        StompConnections connections = new StompConnections(
+                shared,
+                local,
+                transport,
+                mock(SimpMessagingTemplate.class),
+                sockets);
+        SimpMessageHeaderAccessor headers = SimpMessageHeaderAccessor.create(SimpMessageType.CONNECT_ACK);
+        headers.setSessionId("closing-browser");
+
+        connections.connected(
+                new SessionConnectedEvent(
+                        this,
+                        MessageBuilder.createMessage(new byte[0], headers.getMessageHeaders())));
+
+        ArgumentCaptor<LocalConnection> registered = ArgumentCaptor.forClass(LocalConnection.class);
+        verify(local).add(registered.capture());
+        verify(local).remove(registered.getValue().id());
+    }
 
     @Test
     void registersTicketSessionAndDeliversToExactSpringSession() {
@@ -55,14 +116,16 @@ class StompConnectionsTest {
         NodeRouter transport = mock(NodeRouter.class);
         SimpMessagingTemplate messaging = mock(SimpMessagingTemplate.class);
         WebSocketSessions sockets = mock(WebSocketSessions.class);
+        when(sockets.accepts("stomp-session-1")).thenReturn(true);
         when(transport.nodeId()).thenReturn("node-1");
         StompConnections connections = new StompConnections(shared, local, transport, messaging, sockets);
 
         SimpMessageHeaderAccessor accessor = SimpMessageHeaderAccessor.create(SimpMessageType.CONNECT_ACK);
         accessor.setSessionId("stomp-session-1");
-        Map<String, Object> attributes = new HashMap<>();
-        attributes.put(TicketHandshakeInterceptor.SESSION_ATTRIBUTE, session);
-        accessor.setSessionAttributes(attributes);
+        Map<String, Object> socketAttributes = new HashMap<>();
+        socketAttributes.put(TicketHandshakeInterceptor.SESSION_ATTRIBUTE, session);
+        when(sockets.attributes("stomp-session-1")).thenReturn(socketAttributes);
+        accessor.setSessionAttributes(Map.of(TicketHandshakeInterceptor.SESSION_ATTRIBUTE, "broker-copy"));
         accessor.setLeaveMutable(true);
         Message<byte[]> message = MessageBuilder.createMessage(new byte[0], accessor.getMessageHeaders());
 
@@ -72,7 +135,7 @@ class StompConnectionsTest {
         verify(local).add(connectionCaptor.capture());
         LocalConnection connection = connectionCaptor.getValue();
         verify(shared).register(connection.id(), "node-1", session);
-        assertThat(attributes.get(StompConnections.CONNECTION_ATTRIBUTE)).isEqualTo(connection.id());
+        assertThat(socketAttributes.get(StompConnections.CONNECTION_ATTRIBUTE)).isEqualTo(connection.id());
 
         BrowserEnvelope envelope = new BrowserEnvelope(
                 TreeCode.of("invoice.changed"),
