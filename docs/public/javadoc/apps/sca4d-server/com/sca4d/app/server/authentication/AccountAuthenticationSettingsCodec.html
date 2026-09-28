@@ -90,12 +90,12 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code>com.sca4d.core.api.setting.SettingCodec&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</code></dd>
+<dd><code>com.sca4d.core.api.codec.Codec&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code>, <code>com.sca4d.core.api.codec.VersionedCodec&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code>, <code>com.sca4d.core.api.setting.codec.SettingCodec&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">AccountAuthenticationSettingsCodec</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">AccountAuthenticationSettingsCodec</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
-implements com.sca4d.core.api.setting.SettingCodec&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</span></div>
+implements com.sca4d.core.api.setting.codec.SettingCodec&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</span></div>
 <div class="block">把账号认证策略转换为不包含 Account 标识的稳定 JSON 文档。</div>
 </section>
 <section class="summary">
@@ -126,21 +126,30 @@ implements com.sca4d.core.api.setting.SettingCodec&lt;<a href="AccountAuthentica
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#decode(java.lang.String)" class="member-name-link">decode</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#code()" class="member-name-link">code</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#decodeJson(com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">decodeJson</a><wbr>(@NotNull com.fasterxml.jackson.databind.JsonNode&nbsp;value)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#decode(java.lang.String)" class="member-name-link">decode</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"></div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#encode(com.sca4d.app.server.authentication.AccountAuthenticationSettings)" class="member-name-link">encode</a><wbr>(@NotNull <a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&nbsp;value)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#decodeJson(com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">decodeJson</a><wbr>(@NotNull com.fasterxml.jackson.databind.JsonNode&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"></div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.fasterxml.jackson.databind.JsonNode</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#encodeJson(com.sca4d.app.server.authentication.AccountAuthenticationSettings)" class="member-name-link">encodeJson</a><wbr>(@NotNull <a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&nbsp;value)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#encode(com.sca4d.app.server.authentication.AccountAuthenticationSettings)" class="member-name-link">encode</a><wbr>(@NotNull <a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"></div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.fasterxml.jackson.databind.JsonNode</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#encodeJson(com.sca4d.app.server.authentication.AccountAuthenticationSettings)" class="member-name-link">encodeJson</a><wbr>(@NotNull <a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#presentationType()" class="member-name-link">presentationType</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a><wbr>&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#valueType()" class="member-name-link">valueType</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#version()" class="member-name-link">version</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -174,6 +183,38 @@ implements com.sca4d.core.api.setting.SettingCodec&lt;<a href="AccountAuthentica
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="code()">
+<h3>code</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">code</span>()</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>code</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.codec.VersionedCodec&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="version()">
+<h3>version</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">version</span>()</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>version</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.codec.VersionedCodec&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="valueType()">
+<h3>valueType</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</span>&nbsp;<span class="element-name">valueType</span>()</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>valueType</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.codec.VersionedCodec&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="encode(com.sca4d.app.server.authentication.AccountAuthenticationSettings)">
 <h3>encode</h3>
 <div class="member-signature"><span class="annotations">@NotNull
@@ -181,7 +222,9 @@ implements com.sca4d.core.api.setting.SettingCodec&lt;<a href="AccountAuthentica
  @NotNull <a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&nbsp;value)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code>encode</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.setting.SettingCodec&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</code></dd>
+<dd><code>encode</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.codec.Codec&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></dd>
+<dt>Specified by:</dt>
+<dd><code>encode</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.setting.codec.SettingCodec&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
@@ -193,7 +236,9 @@ implements com.sca4d.core.api.setting.SettingCodec&lt;<a href="AccountAuthentica
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code>decode</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.setting.SettingCodec&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</code></dd>
+<dd><code>decode</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.codec.Codec&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></dd>
+<dt>Specified by:</dt>
+<dd><code>decode</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.setting.codec.SettingCodec&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
@@ -205,7 +250,7 @@ implements com.sca4d.core.api.setting.SettingCodec&lt;<a href="AccountAuthentica
  @NotNull <a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&nbsp;value)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code>encodeJson</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.setting.SettingCodec&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</code></dd>
+<dd><code>encodeJson</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.setting.codec.SettingCodec&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
@@ -217,18 +262,18 @@ implements com.sca4d.core.api.setting.SettingCodec&lt;<a href="AccountAuthentica
  @NotNull com.fasterxml.jackson.databind.JsonNode&nbsp;value)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code>decodeJson</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.setting.SettingCodec&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</code></dd>
+<dd><code>decodeJson</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.setting.codec.SettingCodec&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="valueType()">
-<h3>valueType</h3>
+<section class="detail" id="presentationType()">
+<h3>presentationType</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">valueType</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">presentationType</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code>valueType</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.setting.SettingCodec&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</code></dd>
+<dd><code>presentationType</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.setting.codec.SettingCodec&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</code></dd>
 </dl>
 </section>
 </li>

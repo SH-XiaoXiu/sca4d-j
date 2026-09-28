@@ -8,13 +8,14 @@ group = "com.sca4dj"
 version = providers.gradleProperty("sca4dj.version").orElse("0.0.1-alpha").get()
 
 val pluginProcessor = sourceSets.create("pluginProcessor")
-val pluginProcessorJar = tasks.register<Jar>("pluginProcessorJar") {
-    group = "build"
-    description = "构建 App 插件 API 注解处理器"
-    archiveClassifier.set("plugin-processor")
-    archiveFileName.set("sca4dj-plugin-processor.jar")
-    from(pluginProcessor.output)
-}
+val pluginProcessorJar =
+    tasks.register<Jar>("pluginProcessorJar") {
+        group = "build"
+        description = "构建 App 插件 API 注解处理器"
+        archiveClassifier.set("plugin-processor")
+        archiveFileName.set("sca4dj-plugin-processor.jar")
+        from(pluginProcessor.output)
+    }
 
 repositories {
     mavenCentral()
@@ -44,7 +45,7 @@ gradlePlugin {
             id = "com.sca4dj.plugin"
             implementationClass = "com.sca4dj.gradle.app.PluginArtifactGradlePlugin"
             displayName = "Sca4d-J Plugin Artifact"
-            description = "生成插件交付描述并打包私有依赖"
+            description = "原样打包插件资源并打包私有依赖"
         }
     }
 }

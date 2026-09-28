@@ -67,13 +67,19 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">根据宿主返回的账号设置和方法事实判断 MFA 要求、设置有效性及凭据移除条件。</div>
 </dd>
-<dt><a href="com/sca4d/app/mfa/DefaultMfaPolicy.html#%3Cinit%3E(com.sca4d.app.server.plugin.mfa.MfaFacts)" class="member-name-link">DefaultMfaPolicy(MfaFacts)</a> - Constructor for class com.sca4d.app.mfa.<a href="com/sca4d/app/mfa/DefaultMfaPolicy.html" title="class in com.sca4d.app.mfa">DefaultMfaPolicy</a></dt>
+<dt><a href="com/sca4d/app/mfa/DefaultMfaPolicy.html#%3Cinit%3E(com.sca4d.app.server.plugin.mfa.MfaFacts,com.sca4d.app.mfa.MfaPolicyOptions)" class="member-name-link">DefaultMfaPolicy(MfaFacts, MfaPolicyOptions)</a> - Constructor for class com.sca4d.app.mfa.<a href="com/sca4d/app/mfa/DefaultMfaPolicy.html" title="class in com.sca4d.app.mfa">DefaultMfaPolicy</a></dt>
 <dd>
 <div class="block">保存宿主事实客户端；计算策略时通过客户端读取当前账号设置和方法状态。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:M">M</h2>
 <dl class="index">
+<dt><a href="com/sca4d/app/mfa/MfaPolicyOptions.html" class="type-name-link" title="class in com.sca4d.app.mfa">MfaPolicyOptions</a> - Class in <a href="com/sca4d/app/mfa/package-summary.html">com.sca4d.app.mfa</a></dt>
+<dd>
+<div class="block">由 MFA 插件自行解释内嵌 YAML 的策略选项，宿主不依赖这些字段或类型。</div>
+</dd>
+<dt><a href="com/sca4d/app/mfa/MfaPolicyOptions.html#%3Cinit%3E(boolean)" class="member-name-link">MfaPolicyOptions(boolean)</a> - Constructor for class com.sca4d.app.mfa.<a href="com/sca4d/app/mfa/MfaPolicyOptions.html" title="class in com.sca4d.app.mfa">MfaPolicyOptions</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/mfa/MfaPolicyPlugin.html" class="type-name-link" title="class in com.sca4d.app.mfa">MfaPolicyPlugin</a> - Class in <a href="com/sca4d/app/mfa/package-summary.html">com.sca4d.app.mfa</a></dt>
 <dd>
 <div class="block">为 Sca4d Server 安装完整的登录和敏感动作 MFA 策略。</div>
@@ -88,8 +94,17 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:R">R</h2>
 <dl class="index">
+<dt><a href="com/sca4d/app/mfa/MfaPolicyOptions.html#read(java.io.InputStream)" class="member-name-link">read(InputStream)</a> - Static method in class com.sca4d.app.mfa.<a href="com/sca4d/app/mfa/MfaPolicyOptions.html" title="class in com.sca4d.app.mfa">MfaPolicyOptions</a></dt>
+<dd>
+<div class="block">从当前插件资源读取私有策略选项；字段缺失时允许按账号设置复用已有认证。
+ 拒绝空文档、重复键、非布尔开关及超过 1 MiB 的资源，读取后由调用方关闭输入。</div>
+</dd>
 <dt><a href="com/sca4d/app/mfa/DefaultMfaPolicy.html#requirementFor(long,com.sca4d.core.api.authentication.AuthenticationActionCode)" class="member-name-link">requirementFor(long, AuthenticationActionCode)</a> - Method in class com.sca4d.app.mfa.<a href="com/sca4d/app/mfa/DefaultMfaPolicy.html" title="class in com.sca4d.app.mfa">DefaultMfaPolicy</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/mfa/MfaPolicyOptions.html#reuseSensitiveAuthentication()" class="member-name-link">reuseSensitiveAuthentication()</a> - Method in class com.sca4d.app.mfa.<a href="com/sca4d/app/mfa/MfaPolicyOptions.html" title="class in com.sca4d.app.mfa">MfaPolicyOptions</a></dt>
+<dd>
+<div class="block">返回敏感动作是否允许在账号设置的时间范围内复用已有认证。</div>
+</dd>
 </dl>
 <h2 class="title" id="I:V">V</h2>
 <dl class="index">

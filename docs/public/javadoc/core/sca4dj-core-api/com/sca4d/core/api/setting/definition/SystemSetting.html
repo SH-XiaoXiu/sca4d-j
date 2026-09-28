@@ -122,7 +122,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="../SettingGroup.html" title="class in com.sca4d.core.api.setting">SettingGroup</a>&nbsp;group,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;labelKey,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;descriptionKey,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;environmentVariable,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;environmentVariableSuffix,
  <a href="SystemSetting.html" title="type parameter in SystemSetting">T</a>&nbsp;defaultValue,
  @NotNull <a href="../codec/SettingCodec.html" title="interface in com.sca4d.core.api.setting.codec">SettingCodec</a>&lt;<a href="SystemSetting.html" title="type parameter in SystemSetting">T</a>&gt;&nbsp;codec,
  @NotNull <a href="../../pipeline/Pipeline.html" title="class in com.sca4d.core.api.pipeline">Pipeline</a>&lt;<a href="SystemSetting.html" title="type parameter in SystemSetting">T</a>,<wbr><a href="SystemSetting.html" title="type parameter in SystemSetting">T</a>&gt;&nbsp;pipeline,
@@ -154,7 +154,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#descriptionKey()" class="member-name-link">descriptionKey</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#environmentVariable()" class="member-name-link">environmentVariable</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#environmentVariableSuffix()" class="member-name-link">environmentVariableSuffix</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../SettingGroup.html" title="class in com.sca4d.core.api.setting">SettingGroup</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#group()" class="member-name-link">group</a>()</code></div>
@@ -204,7 +204,7 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;descriptionKey,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;environmentVariable,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;environmentVariableSuffix,
  @NotNull
  <a href="SystemSetting.html" title="type parameter in SystemSetting">T</a>&nbsp;defaultValue,
  @NotNull
@@ -222,7 +222,7 @@ loadScripts(document, 'script');</script>
 <dd><code>group</code> - 管理端所属分组</dd>
 <dd><code>labelKey</code> - 设置名称的国际化消息键</dd>
 <dd><code>descriptionKey</code> - 设置说明的国际化消息键</dd>
-<dd><code>environmentVariable</code> - 初始化节点读取的 ENV 名称</dd>
+<dd><code>environmentVariableSuffix</code> - 初始化节点读取的 ENV 后缀，不包含产品前缀</dd>
 <dd><code>defaultValue</code> - 数据库没有覆盖值时使用的默认值</dd>
 <dd><code>codec</code> - 设置值的文本和 JSON 编解码器</dd>
 <dd><code>pipeline</code> - 对类型值执行规范化和校验的 Pipeline</dd>
@@ -276,14 +276,14 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="environmentVariable()">
-<h3>environmentVariable</h3>
+<section class="detail" id="environmentVariableSuffix()">
+<h3>environmentVariableSuffix</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">environmentVariable</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">environmentVariableSuffix</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>初始化节点读取的 ENV 名称</dd>
+<dd>初始化节点读取的 ENV 后缀</dd>
 </dl>
 </section>
 </li>

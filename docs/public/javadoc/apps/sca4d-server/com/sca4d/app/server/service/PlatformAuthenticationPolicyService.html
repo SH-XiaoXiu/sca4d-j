@@ -109,7 +109,7 @@ implements com.sca4d.core.api.authentication.AuthenticationPolicy</span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.setting.Settings,com.sca4d.app.server.plugin.mfa.MfaPolicy)" class="member-name-link">PlatformAuthenticationPolicyService</a><wbr>(@NotNull com.sca4d.core.api.setting.Settings&nbsp;settings,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.app.server.authentication.AccountAuthenticationSettingConfiguration,com.sca4d.app.server.plugin.mfa.MfaPolicy)" class="member-name-link">PlatformAuthenticationPolicyService</a><wbr>(@NotNull <a href="../authentication/AccountAuthenticationSettingConfiguration.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettingConfiguration</a>&nbsp;settings,
  @NotNull <a href="../plugin/mfa/MfaPolicy.html" title="interface in com.sca4d.app.server.plugin.mfa">MfaPolicy</a>&nbsp;policy)</code></div>
 <div class="col-last even-row-color">
 <div class="block">挂载生成客户端，设置持久化仍使用宿主事务。</div>
@@ -150,12 +150,12 @@ implements com.sca4d.core.api.authentication.AuthenticationPolicy</span></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">幂等删除账号的应用认证设置。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.setting.SettingValue<wbr>&lt;<a href="../authentication/AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.setting.value.SettingValue<wbr>&lt;<a href="../authentication/AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#inspect(long)" class="member-name-link">inspect</a><wbr>(long&nbsp;accountId)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">返回账号认证设置值、来源及版本。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.setting.SettingValue<wbr>&lt;<a href="../authentication/AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.setting.value.SettingValue<wbr>&lt;<a href="../authentication/AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#replace(com.sca4d.core.api.identity.Account,int,int,java.time.Duration,java.util.List)" class="member-name-link">replace</a><wbr>(@NotNull com.sca4d.core.api.identity.Account&nbsp;account,
  int&nbsp;loginFactorCount,
  int&nbsp;sensitiveActionFactorCount,
@@ -191,10 +191,10 @@ implements com.sca4d.core.api.authentication.AuthenticationPolicy</span></div>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.setting.Settings,com.sca4d.app.server.plugin.mfa.MfaPolicy)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.app.server.authentication.AccountAuthenticationSettingConfiguration,com.sca4d.app.server.plugin.mfa.MfaPolicy)">
 <h3>PlatformAuthenticationPolicyService</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">PlatformAuthenticationPolicyService</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.setting.Settings&nbsp;settings,
+ @NotNull <a href="../authentication/AccountAuthenticationSettingConfiguration.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettingConfiguration</a>&nbsp;settings,
  @NotNull
  @NotNull <a href="../plugin/mfa/MfaPolicy.html" title="interface in com.sca4d.app.server.plugin.mfa">MfaPolicy</a>&nbsp;policy)</span></div>
 <div class="block">挂载生成客户端，设置持久化仍使用宿主事务。</div>
@@ -222,7 +222,7 @@ implements com.sca4d.core.api.authentication.AuthenticationPolicy</span></div>
 <h3>inspect</h3>
 <div class="member-signature"><span class="annotations">@Transactional(readOnly=true)
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.setting.SettingValue&lt;<a href="../authentication/AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</span>&nbsp;<span class="element-name">inspect</span><wbr><span class="parameters">(long&nbsp;accountId)</span></div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.setting.value.SettingValue&lt;<a href="../authentication/AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</span>&nbsp;<span class="element-name">inspect</span><wbr><span class="parameters">(long&nbsp;accountId)</span></div>
 <div class="block">返回账号认证设置值、来源及版本。</div>
 </section>
 </li>
@@ -231,7 +231,7 @@ implements com.sca4d.core.api.authentication.AuthenticationPolicy</span></div>
 <h3>replace</h3>
 <div class="member-signature"><span class="annotations">@Transactional
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.setting.SettingValue&lt;<a href="../authentication/AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</span>&nbsp;<span class="element-name">replace</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.setting.value.SettingValue&lt;<a href="../authentication/AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</span>&nbsp;<span class="element-name">replace</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.identity.Account&nbsp;account,
  int&nbsp;loginFactorCount,
  int&nbsp;sensitiveActionFactorCount,

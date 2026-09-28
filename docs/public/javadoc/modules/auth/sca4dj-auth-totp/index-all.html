@@ -171,7 +171,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用当前活动密钥和指定 purpose 加密 Base32 Secret。</div>
 </dd>
-<dt><a href="com/sca4d/auth/totp/config/TotpSettings.html#ENROLLMENT_TTL" class="member-name-link">ENROLLMENT_TTL</a> - Static variable in class com.sca4d.auth.totp.config.<a href="com/sca4d/auth/totp/config/TotpSettings.html" title="class in com.sca4d.auth.totp.config">TotpSettings</a></dt>
+<dt><a href="com/sca4d/auth/totp/config/TotpSettings.html#ENROLLMENT_TTL" class="member-name-link">ENROLLMENT_TTL</a> - Variable in class com.sca4d.auth.totp.config.<a href="com/sca4d/auth/totp/config/TotpSettings.html" title="class in com.sca4d.auth.totp.config">TotpSettings</a></dt>
 <dd>
 <div class="block">TOTP enrollment 有效期。</div>
 </dd>
@@ -359,7 +359,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">管理 TOTP enrollment、激活、替换和删除，不提供 HTTP 或二维码图片类型。</div>
 </dd>
-<dt><a href="com/sca4d/auth/totp/enrollment/TotpEnrollmentService.html#%3Cinit%3E(com.sca4d.auth.totp.enrollment.RedisTotpEnrollmentStore,com.sca4d.auth.totp.credential.TotpCredentialRepository,com.sca4d.auth.totp.credential.TotpCodeVerifier,com.sca4d.core.api.security.SecretKeyring,com.sca4d.core.api.authentication.SessionControl,com.sca4d.core.api.setting.Settings,java.time.Clock)" class="member-name-link">TotpEnrollmentService(RedisTotpEnrollmentStore, TotpCredentialRepository, TotpCodeVerifier, SecretKeyring, SessionControl, Settings, Clock)</a> - Constructor for class com.sca4d.auth.totp.enrollment.<a href="com/sca4d/auth/totp/enrollment/TotpEnrollmentService.html" title="class in com.sca4d.auth.totp.enrollment">TotpEnrollmentService</a></dt>
+<dt><a href="com/sca4d/auth/totp/enrollment/TotpEnrollmentService.html#%3Cinit%3E(com.sca4d.auth.totp.enrollment.RedisTotpEnrollmentStore,com.sca4d.auth.totp.credential.TotpCredentialRepository,com.sca4d.auth.totp.credential.TotpCodeVerifier,com.sca4d.core.api.security.SecretKeyring,com.sca4d.core.api.authentication.SessionControl,com.sca4d.auth.totp.config.TotpSettings,java.time.Clock)" class="member-name-link">TotpEnrollmentService(RedisTotpEnrollmentStore, TotpCredentialRepository, TotpCodeVerifier, SecretKeyring, SessionControl, TotpSettings, Clock)</a> - Constructor for class com.sca4d.auth.totp.enrollment.<a href="com/sca4d/auth/totp/enrollment/TotpEnrollmentService.html" title="class in com.sca4d.auth.totp.enrollment">TotpEnrollmentService</a></dt>
 <dd>
 <div class="block">创建 TOTP 凭据生命周期服务。</div>
 </dd>
@@ -386,6 +386,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/auth/totp/config/TotpSettings.html" class="type-name-link" title="class in com.sca4d.auth.totp.config">TotpSettings</a> - Class in <a href="com/sca4d/auth/totp/config/package-summary.html">com.sca4d.auth.totp.config</a></dt>
 <dd>
 <div class="block">声明 TOTP enrollment 可以由客户管理的有效期。</div>
+</dd>
+<dt><a href="com/sca4d/auth/totp/config/TotpSettings.html#%3Cinit%3E(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.setting.access.SettingWriter)" class="member-name-link">TotpSettings(SettingReader&lt;String&gt;, SettingWriter&lt;String&gt;)</a> - Constructor for class com.sca4d.auth.totp.config.<a href="com/sca4d/auth/totp/config/TotpSettings.html" title="class in com.sca4d.auth.totp.config">TotpSettings</a></dt>
+<dd>
+<div class="block">构造模块设置，每个应用上下文独立保存 Source。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:U">U</h2>

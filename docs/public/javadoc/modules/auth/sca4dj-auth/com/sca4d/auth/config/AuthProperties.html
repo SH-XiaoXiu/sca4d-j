@@ -110,6 +110,11 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">配置 HS256 JWT 的密钥轮换、受众、有效期和长度限制。</div>
 </div>
+<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="AuthProperties.Token.html" class="type-name-link" title="class in com.sca4d.auth.config">AuthProperties.Token</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">配置普通请求使用的认证 Token 模式。</div>
+</div>
 </div>
 </section>
 </li>
@@ -149,19 +154,22 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">读取 JWT 签发和验证配置。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>com.sca4d.core.api.authentication.AuthTokenMode</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTokenMode()" class="member-name-link">getTokenMode</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="AuthProperties.Token.html" title="class in com.sca4d.auth.config">AuthProperties.Token</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getToken()" class="member-name-link">getToken</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>com.sca4d.core.api.authentication.AuthTokenMode</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTokenMode()" class="member-name-link">getTokenMode</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">读取普通 HTTP 请求默认使用的 Token 模式。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setExcludedPaths(java.util.List)" class="member-name-link">setExcludedPaths</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;excludedPaths)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setExcludedPaths(java.util.List)" class="member-name-link">setExcludedPaths</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;excludedPaths)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">设置不进入认证拦截器的 Spring MVC 路径模式。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTokenMode(com.sca4d.core.api.authentication.AuthTokenMode)" class="member-name-link">setTokenMode</a><wbr>(com.sca4d.core.api.authentication.AuthTokenMode&nbsp;tokenMode)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTokenMode(com.sca4d.core.api.authentication.AuthTokenMode)" class="member-name-link">setTokenMode</a><wbr>(com.sca4d.core.api.authentication.AuthTokenMode&nbsp;tokenMode)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">设置普通 HTTP 请求默认使用的 Token 模式。</div>
 </div>
 </div>
@@ -215,6 +223,16 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>tokenMode</code> - SESSION 或 JWT</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getToken()">
+<h3>getToken</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AuthProperties.Token.html" title="class in com.sca4d.auth.config">AuthProperties.Token</a></span>&nbsp;<span class="element-name">getToken</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>Token 资源配置</dd>
 </dl>
 </section>
 </li>

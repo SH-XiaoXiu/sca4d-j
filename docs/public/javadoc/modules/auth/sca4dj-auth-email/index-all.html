@@ -73,7 +73,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/email/EmailCodeErrorCode.html#category()" class="member-name-link">category()</a> - Method in enum class com.sca4d.auth.email.<a href="com/sca4d/auth/email/EmailCodeErrorCode.html" title="enum class in com.sca4d.auth.email">EmailCodeErrorCode</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/auth/email/config/EmailCodeSettings.html#CHALLENGE_TTL" class="member-name-link">CHALLENGE_TTL</a> - Static variable in class com.sca4d.auth.email.config.<a href="com/sca4d/auth/email/config/EmailCodeSettings.html" title="class in com.sca4d.auth.email.config">EmailCodeSettings</a></dt>
+<dt><a href="com/sca4d/auth/email/config/EmailCodeSettings.html#CHALLENGE_TTL" class="member-name-link">CHALLENGE_TTL</a> - Variable in class com.sca4d.auth.email.config.<a href="com/sca4d/auth/email/config/EmailCodeSettings.html" title="class in com.sca4d.auth.email.config">EmailCodeSettings</a></dt>
 <dd>
 <div class="block">Challenge 和验证码有效期。</div>
 </dd>
@@ -174,7 +174,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">签发匿名一致的 Challenge，异步登记通知，并原子验证 Argon2id 验证码摘要。</div>
 </dd>
-<dt><a href="com/sca4d/auth/email/challenge/EmailCodeChallengeService.html#%3Cinit%3E(com.sca4d.core.api.identity.AccountDirectory,com.sca4d.core.api.identity.RealmKey,com.sca4d.core.api.notification.Notifications,com.sca4d.auth.email.challenge.RedisEmailCodeChallengeStore,com.sca4d.core.api.security.SecretHasher,com.sca4d.core.api.setting.Settings,java.time.Clock)" class="member-name-link">EmailCodeChallengeService(AccountDirectory, RealmKey, Notifications, RedisEmailCodeChallengeStore, SecretHasher, Settings, Clock)</a> - Constructor for class com.sca4d.auth.email.challenge.<a href="com/sca4d/auth/email/challenge/EmailCodeChallengeService.html" title="class in com.sca4d.auth.email.challenge">EmailCodeChallengeService</a></dt>
+<dt><a href="com/sca4d/auth/email/challenge/EmailCodeChallengeService.html#%3Cinit%3E(com.sca4d.core.api.identity.AccountDirectory,com.sca4d.core.api.identity.RealmKey,com.sca4d.core.api.notification.Notifications,com.sca4d.auth.email.challenge.RedisEmailCodeChallengeStore,com.sca4d.core.api.security.SecretHasher,com.sca4d.auth.email.config.EmailCodeSettings,java.time.Clock)" class="member-name-link">EmailCodeChallengeService(AccountDirectory, RealmKey, Notifications, RedisEmailCodeChallengeStore, SecretHasher, EmailCodeSettings, Clock)</a> - Constructor for class com.sca4d.auth.email.challenge.<a href="com/sca4d/auth/email/challenge/EmailCodeChallengeService.html" title="class in com.sca4d.auth.email.challenge">EmailCodeChallengeService</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/email/challenge/EmailCodeChallengeState.html" class="type-name-link" title="class in com.sca4d.auth.email.challenge">EmailCodeChallengeState</a> - Class in <a href="com/sca4d/auth/email/challenge/package-summary.html">com.sca4d.auth.email.challenge</a></dt>
 <dd>
@@ -215,6 +215,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/auth/email/config/EmailCodeSettings.html" class="type-name-link" title="class in com.sca4d.auth.email.config">EmailCodeSettings</a> - Class in <a href="com/sca4d/auth/email/config/package-summary.html">com.sca4d.auth.email.config</a></dt>
 <dd>
 <div class="block">声明 Email Code Challenge 有效期、重发间隔和错误次数上限。</div>
+</dd>
+<dt><a href="com/sca4d/auth/email/config/EmailCodeSettings.html#%3Cinit%3E(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.setting.access.SettingWriter)" class="member-name-link">EmailCodeSettings(SettingReader&lt;String&gt;, SettingWriter&lt;String&gt;)</a> - Constructor for class com.sca4d.auth.email.config.<a href="com/sca4d/auth/email/config/EmailCodeSettings.html" title="class in com.sca4d.auth.email.config">EmailCodeSettings</a></dt>
+<dd>
+<div class="block">构造模块设置，每个应用上下文独立保存 Source。</div>
 </dd>
 <dt><a href="com/sca4d/auth/email/EmailCodeChallengeId.html#equals(java.lang.Object)" class="member-name-link">equals(Object)</a> - Method in class com.sca4d.auth.email.<a href="com/sca4d/auth/email/EmailCodeChallengeId.html" title="class in com.sca4d.auth.email">EmailCodeChallengeId</a></dt>
 <dd>&nbsp;</dd>
@@ -267,7 +271,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/email/EmailCodeChallenge.html#maskedRecipient()" class="member-name-link">maskedRecipient()</a> - Method in class com.sca4d.auth.email.<a href="com/sca4d/auth/email/EmailCodeChallenge.html" title="class in com.sca4d.auth.email">EmailCodeChallenge</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/auth/email/config/EmailCodeSettings.html#MAXIMUM_ATTEMPTS" class="member-name-link">MAXIMUM_ATTEMPTS</a> - Static variable in class com.sca4d.auth.email.config.<a href="com/sca4d/auth/email/config/EmailCodeSettings.html" title="class in com.sca4d.auth.email.config">EmailCodeSettings</a></dt>
+<dt><a href="com/sca4d/auth/email/config/EmailCodeSettings.html#MAXIMUM_ATTEMPTS" class="member-name-link">MAXIMUM_ATTEMPTS</a> - Variable in class com.sca4d.auth.email.config.<a href="com/sca4d/auth/email/config/EmailCodeSettings.html" title="class in com.sca4d.auth.email.config">EmailCodeSettings</a></dt>
 <dd>
 <div class="block">单个 Challenge 允许的错误验证码次数。</div>
 </dd>
@@ -293,7 +297,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/auth/email/challenge/RedisEmailCodeChallengeStore.html#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,java.time.Clock)" class="member-name-link">RedisEmailCodeChallengeStore(RedisTemplate&lt;Key, String&gt;, Clock)</a> - Constructor for class com.sca4d.auth.email.challenge.<a href="com/sca4d/auth/email/challenge/RedisEmailCodeChallengeStore.html" title="class in com.sca4d.auth.email.challenge">RedisEmailCodeChallengeStore</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/auth/email/config/EmailCodeSettings.html#RESEND_INTERVAL" class="member-name-link">RESEND_INTERVAL</a> - Static variable in class com.sca4d.auth.email.config.<a href="com/sca4d/auth/email/config/EmailCodeSettings.html" title="class in com.sca4d.auth.email.config">EmailCodeSettings</a></dt>
+<dt><a href="com/sca4d/auth/email/config/EmailCodeSettings.html#RESEND_INTERVAL" class="member-name-link">RESEND_INTERVAL</a> - Variable in class com.sca4d.auth.email.config.<a href="com/sca4d/auth/email/config/EmailCodeSettings.html" title="class in com.sca4d.auth.email.config">EmailCodeSettings</a></dt>
 <dd>
 <div class="block">同一邮箱或 Account 的最短重新签发间隔。</div>
 </dd>

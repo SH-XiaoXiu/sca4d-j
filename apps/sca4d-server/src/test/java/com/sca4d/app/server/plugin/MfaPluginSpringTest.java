@@ -57,6 +57,15 @@ class MfaPluginSpringTest {
         }
     }
 
+    @Test
+    @DisplayName("启用插件但未提供 App 配置提供者时上下文启动失败")
+    void rejectsMissingConfigurationProvider() {
+        try (var context = context(System.getProperty("sca4dj.plugin.artifacts[0]"))) {
+            context.removeBeanDefinition("sca4dServerPluginConfiguration");
+            assertThrows(RuntimeException.class, context::refresh);
+        }
+    }
+
     /** 使用独立上下文只装配插件机制，不启动 HTTP 或访问业务数据库。 */
     private AnnotationConfigApplicationContext context(String artifact) {
         var context = new AnnotationConfigApplicationContext();
@@ -68,13 +77,15 @@ class MfaPluginSpringTest {
                                 Map.of(
                                         "sca4dj.plugin.enabled",
                                         "true",
+                                        "spring.application.name",
+                                        "sca4d-server",
                                         "sca4dj.plugin.api",
                                         "SCA4D:SERVER",
                                         "sca4dj.plugin.artifacts[0]",
                                         artifact,
                                         "sca4dj.plugin.cache-directory",
                                         temporary.resolve("cache").toString())));
-        context.register(PluginAutoConfiguration.class, Beans.class);
+        context.register(PluginAutoConfiguration.class, Sca4dServerPluginConfiguration.class, Beans.class);
         return context;
     }
 

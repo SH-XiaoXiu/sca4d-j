@@ -1,0 +1,9 @@
+plugin:
+  name: SCA4D:SERVER:MFA
+  version: 1.0.0
+  main: com.sca4d.app.mfa.MfaPolicyPlugin
+  api: SCA4D:SERVER
+  requires: ">=1.1.0 & <2.0.0"
+policy:
+  # false 不复用已有认证，因素数量与允许的方法仍由账号设置决定。
+  reuse-sensitive-authentication: true

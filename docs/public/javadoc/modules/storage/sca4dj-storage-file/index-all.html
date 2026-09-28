@@ -52,7 +52,7 @@ loadScripts(document, 'script');</script>
 <a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:K">K</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
-<dt><a href="com/sca4d/storage/file/config/FileSettings.html#ACCESS_TTL" class="member-name-link">ACCESS_TTL</a> - Static variable in class com.sca4d.storage.file.config.<a href="com/sca4d/storage/file/config/FileSettings.html" title="class in com.sca4d.storage.file.config">FileSettings</a></dt>
+<dt><a href="com/sca4d/storage/file/config/FileSettings.html#ACCESS_TTL" class="member-name-link">ACCESS_TTL</a> - Variable in class com.sca4d.storage.file.config.<a href="com/sca4d/storage/file/config/FileSettings.html" title="class in com.sca4d.storage.file.config">FileSettings</a></dt>
 <dd>
 <div class="block">文件读取地址有效期。</div>
 </dd>
@@ -61,6 +61,8 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:B">B</h2>
 <dl class="index">
+<dt><a href="com/sca4d/storage/file/config/FileProperties.Backend.html#%3Cinit%3E()" class="member-name-link">Backend()</a> - Constructor for class com.sca4d.storage.file.config.<a href="com/sca4d/storage/file/config/FileProperties.Backend.html" title="class in com.sca4d.storage.file.config">FileProperties.Backend</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/storage/file/persistence/FileRecord.html#backendId()" class="member-name-link">backendId()</a> - Method in class com.sca4d.storage.file.persistence.<a href="com/sca4d/storage/file/persistence/FileRecord.html" title="class in com.sca4d.storage.file.persistence">FileRecord</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/storage/file/lifecycle/DefaultFileService.html#bind(long,com.sca4d.core.api.storage.FileUse)" class="member-name-link">bind(long, FileUse)</a> - Method in class com.sca4d.storage.file.lifecycle.<a href="com/sca4d/storage/file/lifecycle/DefaultFileService.html" title="class in com.sca4d.storage.file.lifecycle">DefaultFileService</a></dt>
@@ -127,7 +129,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用 <a href="com/sca4d/storage/file/persistence/FileRecord.html" title="class in com.sca4d.storage.file.persistence"><code>FileRecord</code></a> 协调文件上传、正式对象读取、业务绑定和异步删除登记。</div>
 </dd>
-<dt><a href="com/sca4d/storage/file/lifecycle/DefaultFileService.html#%3Cinit%3E(com.sca4d.storage.file.persistence.FileRepository,com.sca4d.storage.file.transfer.StorageRegistry,com.sca4d.core.api.id.IdGenerator,com.sca4d.storage.file.config.FileProperties,com.sca4d.core.api.setting.Settings,com.sca4d.storage.file.transfer.TransferTokenService,java.time.Clock,com.sca4d.core.api.concurrent.DistributedLock,org.springframework.transaction.PlatformTransactionManager)" class="member-name-link">DefaultFileService(FileRepository, StorageRegistry, IdGenerator, FileProperties, Settings, TransferTokenService, Clock, DistributedLock, PlatformTransactionManager)</a> - Constructor for class com.sca4d.storage.file.lifecycle.<a href="com/sca4d/storage/file/lifecycle/DefaultFileService.html" title="class in com.sca4d.storage.file.lifecycle">DefaultFileService</a></dt>
+<dt><a href="com/sca4d/storage/file/lifecycle/DefaultFileService.html#%3Cinit%3E(com.sca4d.storage.file.persistence.FileRepository,com.sca4d.storage.file.transfer.StorageRegistry,com.sca4d.core.api.id.IdGenerator,com.sca4d.storage.file.config.FileProperties,com.sca4d.storage.file.config.FileSettings,com.sca4d.storage.file.transfer.TransferTokenService,java.time.Clock,com.sca4d.core.api.concurrent.DistributedLock,org.springframework.transaction.PlatformTransactionManager)" class="member-name-link">DefaultFileService(FileRepository, StorageRegistry, IdGenerator, FileProperties, FileSettings, TransferTokenService, Clock, DistributedLock, PlatformTransactionManager)</a> - Constructor for class com.sca4d.storage.file.lifecycle.<a href="com/sca4d/storage/file/lifecycle/DefaultFileService.html" title="class in com.sca4d.storage.file.lifecycle">DefaultFileService</a></dt>
 <dd>
 <div class="block">创建使用数据库事务、分布式锁和已注册 <code>FileStorage</code> 的文件服务。</div>
 </dd>
@@ -181,6 +183,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建使用本地开发默认值的文件配置。</div>
 </dd>
+<dt><a href="com/sca4d/storage/file/config/FileProperties.Backend.html" class="type-name-link" title="class in com.sca4d.storage.file.config">FileProperties.Backend</a> - Class in <a href="com/sca4d/storage/file/config/package-summary.html">com.sca4d.storage.file.config</a></dt>
+<dd>
+<div class="block">配置新文件使用的默认 backend。</div>
+</dd>
 <dt><a href="com/sca4d/storage/file/persistence/FileRecord.html" class="type-name-link" title="class in com.sca4d.storage.file.persistence">FileRecord</a> - Class in <a href="com/sca4d/storage/file/persistence/package-summary.html">com.sca4d.storage.file.persistence</a></dt>
 <dd>
 <div class="block">保存一个文件的上传 Principal、业务用途、存储位置、内容信息和当前状态。</div>
@@ -201,6 +207,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">声明客户可以管理的文件传输有效期、待绑定保留期和大小上限。</div>
 </dd>
+<dt><a href="com/sca4d/storage/file/config/FileSettings.html#%3Cinit%3E(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.setting.access.SettingWriter)" class="member-name-link">FileSettings(SettingReader&lt;String&gt;, SettingWriter&lt;String&gt;)</a> - Constructor for class com.sca4d.storage.file.config.<a href="com/sca4d/storage/file/config/FileSettings.html" title="class in com.sca4d.storage.file.config">FileSettings</a></dt>
+<dd>
+<div class="block">构造模块设置，每个应用上下文独立保存 Source。</div>
+</dd>
 <dt><a href="com/sca4d/storage/file/persistence/FileRepository.html#find(long)" class="member-name-link">find(long)</a> - Method in class com.sca4d.storage.file.persistence.<a href="com/sca4d/storage/file/persistence/FileRepository.html" title="class in com.sca4d.storage.file.persistence">FileRepository</a></dt>
 <dd>
 <div class="block">按标识读取文件记录。</div>
@@ -216,14 +226,20 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:G">G</h2>
 <dl class="index">
+<dt><a href="com/sca4d/storage/file/config/FileProperties.html#getBackend()" class="member-name-link">getBackend()</a> - Method in class com.sca4d.storage.file.config.<a href="com/sca4d/storage/file/config/FileProperties.html" title="class in com.sca4d.storage.file.config">FileProperties</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/storage/file/config/FileProperties.html#getCleanupInterval()" class="member-name-link">getCleanupInterval()</a> - Method in class com.sca4d.storage.file.config.<a href="com/sca4d/storage/file/config/FileProperties.html" title="class in com.sca4d.storage.file.config">FileProperties</a></dt>
 <dd>
 <div class="block">返回文件清理任务固定延迟。</div>
 </dd>
+<dt><a href="com/sca4d/storage/file/config/FileProperties.Backend.html#getDefault()" class="member-name-link">getDefault()</a> - Method in class com.sca4d.storage.file.config.<a href="com/sca4d/storage/file/config/FileProperties.Backend.html" title="class in com.sca4d.storage.file.config">FileProperties.Backend</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/storage/file/config/FileProperties.html#getDefaultBackend()" class="member-name-link">getDefaultBackend()</a> - Method in class com.sca4d.storage.file.config.<a href="com/sca4d/storage/file/config/FileProperties.html" title="class in com.sca4d.storage.file.config">FileProperties</a></dt>
 <dd>
 <div class="block">返回新文件使用的默认存储实现标识。</div>
 </dd>
+<dt><a href="com/sca4d/storage/file/config/FileProperties.Backend.html#getDefaultId()" class="member-name-link">getDefaultId()</a> - Method in class com.sca4d.storage.file.config.<a href="com/sca4d/storage/file/config/FileProperties.Backend.html" title="class in com.sca4d.storage.file.config">FileProperties.Backend</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/storage/file/config/FileProperties.html#getDeleteLease()" class="member-name-link">getDeleteLease()</a> - Method in class com.sca4d.storage.file.config.<a href="com/sca4d/storage/file/config/FileProperties.html" title="class in com.sca4d.storage.file.config">FileProperties</a></dt>
 <dd>
 <div class="block">返回文件删除租约时间。</div>
@@ -264,7 +280,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">记录临时对象已在上传签名到期后删除。</div>
 </dd>
-<dt><a href="com/sca4d/storage/file/config/FileSettings.html#MAXIMUM_SIZE_BYTES" class="member-name-link">MAXIMUM_SIZE_BYTES</a> - Static variable in class com.sca4d.storage.file.config.<a href="com/sca4d/storage/file/config/FileSettings.html" title="class in com.sca4d.storage.file.config">FileSettings</a></dt>
+<dt><a href="com/sca4d/storage/file/config/FileSettings.html#MAXIMUM_SIZE_BYTES" class="member-name-link">MAXIMUM_SIZE_BYTES</a> - Variable in class com.sca4d.storage.file.config.<a href="com/sca4d/storage/file/config/FileSettings.html" title="class in com.sca4d.storage.file.config">FileSettings</a></dt>
 <dd>
 <div class="block">所有文件场景共同遵守的最大申请字节数。</div>
 </dd>
@@ -282,7 +298,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:R">R</h2>
 <dl class="index">
-<dt><a href="com/sca4d/storage/file/config/FileSettings.html#READY_RETENTION" class="member-name-link">READY_RETENTION</a> - Static variable in class com.sca4d.storage.file.config.<a href="com/sca4d/storage/file/config/FileSettings.html" title="class in com.sca4d.storage.file.config">FileSettings</a></dt>
+<dt><a href="com/sca4d/storage/file/config/FileSettings.html#READY_RETENTION" class="member-name-link">READY_RETENTION</a> - Variable in class com.sca4d.storage.file.config.<a href="com/sca4d/storage/file/config/FileSettings.html" title="class in com.sca4d.storage.file.config">FileSettings</a></dt>
 <dd>
 <div class="block">上传完成但尚未绑定的文件保留期。</div>
 </dd>
@@ -327,10 +343,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">设置文件清理任务固定延迟。</div>
 </dd>
+<dt><a href="com/sca4d/storage/file/config/FileProperties.Backend.html#setDefault(java.lang.String)" class="member-name-link">setDefault(String)</a> - Method in class com.sca4d.storage.file.config.<a href="com/sca4d/storage/file/config/FileProperties.Backend.html" title="class in com.sca4d.storage.file.config">FileProperties.Backend</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/storage/file/config/FileProperties.html#setDefaultBackend(java.lang.String)" class="member-name-link">setDefaultBackend(String)</a> - Method in class com.sca4d.storage.file.config.<a href="com/sca4d/storage/file/config/FileProperties.html" title="class in com.sca4d.storage.file.config">FileProperties</a></dt>
 <dd>
 <div class="block">设置新文件使用的默认存储实现。</div>
 </dd>
+<dt><a href="com/sca4d/storage/file/config/FileProperties.Backend.html#setDefaultId(java.lang.String)" class="member-name-link">setDefaultId(String)</a> - Method in class com.sca4d.storage.file.config.<a href="com/sca4d/storage/file/config/FileProperties.Backend.html" title="class in com.sca4d.storage.file.config">FileProperties.Backend</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/storage/file/config/FileProperties.html#setDeleteLease(java.time.Duration)" class="member-name-link">setDeleteLease(Duration)</a> - Method in class com.sca4d.storage.file.config.<a href="com/sca4d/storage/file/config/FileProperties.html" title="class in com.sca4d.storage.file.config">FileProperties</a></dt>
 <dd>
 <div class="block">设置文件删除租约时间。</div>
@@ -403,7 +423,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/storage/file/lifecycle/DefaultFileService.html#upload(com.sca4d.core.api.identity.Principal,com.sca4d.core.api.storage.FileUploadIntent,java.io.InputStream)" class="member-name-link">upload(Principal, FileUploadIntent, InputStream)</a> - Method in class com.sca4d.storage.file.lifecycle.<a href="com/sca4d/storage/file/lifecycle/DefaultFileService.html" title="class in com.sca4d.storage.file.lifecycle">DefaultFileService</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/storage/file/config/FileSettings.html#UPLOAD_TTL" class="member-name-link">UPLOAD_TTL</a> - Static variable in class com.sca4d.storage.file.config.<a href="com/sca4d/storage/file/config/FileSettings.html" title="class in com.sca4d.storage.file.config">FileSettings</a></dt>
+<dt><a href="com/sca4d/storage/file/config/FileSettings.html#UPLOAD_TTL" class="member-name-link">UPLOAD_TTL</a> - Variable in class com.sca4d.storage.file.config.<a href="com/sca4d/storage/file/config/FileSettings.html" title="class in com.sca4d.storage.file.config">FileSettings</a></dt>
 <dd>
 <div class="block">上传申请和上传地址有效期。</div>
 </dd>

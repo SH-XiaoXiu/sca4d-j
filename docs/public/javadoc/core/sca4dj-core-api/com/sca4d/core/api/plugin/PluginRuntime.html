@@ -128,28 +128,36 @@ extends <a href="ApiInvoker.html" title="interface in com.sca4d.core.api.plugin"
 <div class="block">固定当前线程的绑定快照，嵌套范围复用同一代次；返回的租用必须在原线程关闭。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="PluginUpdate.html" title="class in com.sca4d.core.api.plugin">PluginUpdate</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#replace(java.nio.file.Path,java.time.Duration)" class="member-name-link">replace</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;artifact,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#reload(com.sca4d.core.api.name.code.TreeCode,java.time.Duration)" class="member-name-link">reload</a><wbr>(@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;id,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;drainTimeout)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">从活动代次保存的构件重载 App 配置，并用独立实例发布新代次；必须在调用作用域外执行。
+ 不重新读取原部署文件；配置或插件初始化失败时已有实例和配置继续接受调用。
+ 发布后旧作用域仍使用旧实例和配置，等待及释放结果与 `replace` 相同。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="PluginUpdate.html" title="class in com.sca4d.core.api.plugin">PluginUpdate</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#replace(java.nio.file.Path,java.time.Duration)" class="member-name-link">replace</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;artifact,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;drainTimeout)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">从本地普通 JAR 加载插件或替换同编码插件；必须在调用作用域外执行。
  候选初始化、版本校验或绑定冲突失败时抛出异常，已有代次继续接受调用。
  新代次发布后等待旧租用归还；等待超时或线程中断时，新代次仍然生效，旧代次保留 DRAINING 状态。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="PluginStatus.html" title="class in com.sca4d.core.api.plugin">PluginStatus</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#statuses()" class="member-name-link">statuses</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="PluginStatus.html" title="class in com.sca4d.core.api.plugin">PluginStatus</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#statuses()" class="member-name-link">statuses</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">返回不持有实现对象的所有代次状态。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="PluginStatus.html" title="class in com.sca4d.core.api.plugin">PluginStatus</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#stop(com.sca4d.core.api.name.code.TreeCode,java.time.Duration)" class="member-name-link">stop</a><wbr>(@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;id,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="PluginStatus.html" title="class in com.sca4d.core.api.plugin">PluginStatus</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#stop(com.sca4d.core.api.name.code.TreeCode,java.time.Duration)" class="member-name-link">stop</a><wbr>(@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;id,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;drainTimeout)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">关闭指定插件的新调用入口并等待已有调用；必须在调用作用域外执行。
  必需扩展不可被普通停用，停用失败时保留入口；等待超时不会强行终止代码。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#verifyRequired()" class="member-name-link">verifyRequired</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#verifyRequired()" class="member-name-link">verifyRequired</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">检查必需扩展均已加载。</div>
 </div>
 </div>
@@ -202,6 +210,26 @@ extends <a href="ApiInvoker.html" title="interface in com.sca4d.core.api.plugin"
 <dd><code>drainTimeout</code> - 非负等待时长；零表示不等待，已有调用仍可完成</dd>
 <dt>Returns:</dt>
 <dd>已发布的新代次及被替换的旧代次状态；首次加载没有旧代次</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="reload(com.sca4d.core.api.name.code.TreeCode,java.time.Duration)">
+<h3>reload</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="PluginUpdate.html" title="class in com.sca4d.core.api.plugin">PluginUpdate</a></span>&nbsp;<span class="element-name">reload</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;id,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;drainTimeout)</span></div>
+<div class="block">从活动代次保存的构件重载 App 配置，并用独立实例发布新代次；必须在调用作用域外执行。
+ 不重新读取原部署文件；配置或插件初始化失败时已有实例和配置继续接受调用。
+ 发布后旧作用域仍使用旧实例和配置，等待及释放结果与 `replace` 相同。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>id</code> - 已启用插件的稳定编码，重载不能改变该编码</dd>
+<dd><code>drainTimeout</code> - 非负等待时长；零表示不等待旧调用</dd>
+<dt>Returns:</dt>
+<dd>新旧代次的实际发布和释放状态</dd>
 </dl>
 </section>
 </li>

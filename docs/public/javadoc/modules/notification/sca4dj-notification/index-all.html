@@ -61,11 +61,11 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/notification/NotificationErrorCode.html#category()" class="member-name-link">category()</a> - Method in enum class com.sca4d.notification.<a href="com/sca4d/notification/NotificationErrorCode.html" title="enum class in com.sca4d.notification">NotificationErrorCode</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/notification/config/NotificationSettings.html#CHANNEL_DEFAULTS" class="member-name-link">CHANNEL_DEFAULTS</a> - Static variable in class com.sca4d.notification.config.<a href="com/sca4d/notification/config/NotificationSettings.html" title="class in com.sca4d.notification.config">NotificationSettings</a></dt>
+<dt><a href="com/sca4d/notification/config/NotificationSettings.html#CHANNEL_DEFAULTS" class="member-name-link">CHANNEL_DEFAULTS</a> - Variable in class com.sca4d.notification.config.<a href="com/sca4d/notification/config/NotificationSettings.html" title="class in com.sca4d.notification.config">NotificationSettings</a></dt>
 <dd>
 <div class="block">管理员在通知类型 Java 初值之上设置的渠道默认值。</div>
 </dd>
-<dt><a href="com/sca4d/notification/config/NotificationSettings.html#CHANNEL_PREFERENCES" class="member-name-link">CHANNEL_PREFERENCES</a> - Static variable in class com.sca4d.notification.config.<a href="com/sca4d/notification/config/NotificationSettings.html" title="class in com.sca4d.notification.config">NotificationSettings</a></dt>
+<dt><a href="com/sca4d/notification/config/NotificationSettings.html#CHANNEL_PREFERENCES" class="member-name-link">CHANNEL_PREFERENCES</a> - Variable in class com.sca4d.notification.config.<a href="com/sca4d/notification/config/NotificationSettings.html" title="class in com.sca4d.notification.config">NotificationSettings</a></dt>
 <dd>
 <div class="block">接收人在系统默认值之上保存的可选渠道覆盖值。</div>
 </dd>
@@ -98,7 +98,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用通知类型回调解析领域对象，并执行同步或 Outbox 发布。</div>
 </dd>
-<dt><a href="com/sca4d/notification/DefaultNotifications.html#%3Cinit%3E(com.sca4d.notification.NotificationTypeCatalog,com.sca4d.core.api.setting.Settings,com.sca4d.notification.NotificationLocaleResolver,com.sca4d.notification.NotificationRegionResolver,com.sca4d.notification.NotificationDeliveryRouter,com.sca4d.core.api.messaging.MessageBus,com.sca4d.core.api.id.IdGenerator)" class="member-name-link">DefaultNotifications(NotificationTypeCatalog, Settings, NotificationLocaleResolver, NotificationRegionResolver, NotificationDeliveryRouter, MessageBus, IdGenerator)</a> - Constructor for class com.sca4d.notification.<a href="com/sca4d/notification/DefaultNotifications.html" title="class in com.sca4d.notification">DefaultNotifications</a></dt>
+<dt><a href="com/sca4d/notification/DefaultNotifications.html#%3Cinit%3E(com.sca4d.notification.NotificationTypeCatalog,com.sca4d.notification.config.NotificationSettings,com.sca4d.notification.NotificationLocaleResolver,com.sca4d.notification.NotificationRegionResolver,com.sca4d.notification.NotificationDeliveryRouter,com.sca4d.core.api.messaging.MessageBus,com.sca4d.core.api.id.IdGenerator)" class="member-name-link">DefaultNotifications(NotificationTypeCatalog, NotificationSettings, NotificationLocaleResolver, NotificationRegionResolver, NotificationDeliveryRouter, MessageBus, IdGenerator)</a> - Constructor for class com.sca4d.notification.<a href="com/sca4d/notification/DefaultNotifications.html" title="class in com.sca4d.notification">DefaultNotifications</a></dt>
 <dd>
 <div class="block">创建类型化通知发布入口。</div>
 </dd>
@@ -186,6 +186,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/notification/config/NotificationSettings.html" class="type-name-link" title="class in com.sca4d.notification.config">NotificationSettings</a> - Class in <a href="com/sca4d/notification/config/package-summary.html">com.sca4d.notification.config</a></dt>
 <dd>
 <div class="block">声明 Notification 框架内部保存的系统渠道默认值和接收人覆盖值。</div>
+</dd>
+<dt><a href="com/sca4d/notification/config/NotificationSettings.html#%3Cinit%3E(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.setting.access.SettingWriter)" class="member-name-link">NotificationSettings(SettingReader&lt;String&gt;, SettingWriter&lt;String&gt;)</a> - Constructor for class com.sca4d.notification.config.<a href="com/sca4d/notification/config/NotificationSettings.html" title="class in com.sca4d.notification.config">NotificationSettings</a></dt>
+<dd>
+<div class="block">构造模块设置，每个应用上下文独立保存 Source。</div>
 </dd>
 <dt><a href="com/sca4d/notification/NotificationTypeCatalog.html" class="type-name-link" title="class in com.sca4d.notification">NotificationTypeCatalog</a> - Class in <a href="com/sca4d/notification/package-summary.html">com.sca4d.notification</a></dt>
 <dd>

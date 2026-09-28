@@ -98,7 +98,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/passkey/PasskeyErrorCode.html#category()" class="member-name-link">category()</a> - Method in enum class com.sca4d.auth.passkey.<a href="com/sca4d/auth/passkey/PasskeyErrorCode.html" title="enum class in com.sca4d.auth.passkey">PasskeyErrorCode</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/auth/passkey/config/PasskeySettings.html#CEREMONY_TTL" class="member-name-link">CEREMONY_TTL</a> - Static variable in class com.sca4d.auth.passkey.config.<a href="com/sca4d/auth/passkey/config/PasskeySettings.html" title="class in com.sca4d.auth.passkey.config">PasskeySettings</a></dt>
+<dt><a href="com/sca4d/auth/passkey/config/PasskeySettings.html#CEREMONY_TTL" class="member-name-link">CEREMONY_TTL</a> - Variable in class com.sca4d.auth.passkey.config.<a href="com/sca4d/auth/passkey/config/PasskeySettings.html" title="class in com.sca4d.auth.passkey.config">PasskeySettings</a></dt>
 <dd>
 <div class="block">registration 和 assertion ceremony 有效期。</div>
 </dd>
@@ -331,7 +331,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:M">M</h2>
 <dl class="index">
-<dt><a href="com/sca4d/auth/passkey/config/PasskeySettings.html#MAXIMUM_CREDENTIALS" class="member-name-link">MAXIMUM_CREDENTIALS</a> - Static variable in class com.sca4d.auth.passkey.config.<a href="com/sca4d/auth/passkey/config/PasskeySettings.html" title="class in com.sca4d.auth.passkey.config">PasskeySettings</a></dt>
+<dt><a href="com/sca4d/auth/passkey/config/PasskeySettings.html#MAXIMUM_CREDENTIALS" class="member-name-link">MAXIMUM_CREDENTIALS</a> - Variable in class com.sca4d.auth.passkey.config.<a href="com/sca4d/auth/passkey/config/PasskeySettings.html" title="class in com.sca4d.auth.passkey.config">PasskeySettings</a></dt>
 <dd>
 <div class="block">每个账号允许保存的 Passkey Credential 上限。</div>
 </dd>
@@ -408,7 +408,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用 Redis TTL 保存 WebAuthn ceremony，并在校验前通过 GETDEL 原子消费。</div>
 </dd>
-<dt><a href="com/sca4d/auth/passkey/ceremony/PasskeyCeremonyStore.html#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,com.fasterxml.jackson.databind.ObjectMapper,java.time.Clock,com.sca4d.core.api.setting.Settings)" class="member-name-link">PasskeyCeremonyStore(RedisTemplate&lt;Key, String&gt;, ObjectMapper, Clock, Settings)</a> - Constructor for class com.sca4d.auth.passkey.ceremony.<a href="com/sca4d/auth/passkey/ceremony/PasskeyCeremonyStore.html" title="class in com.sca4d.auth.passkey.ceremony">PasskeyCeremonyStore</a></dt>
+<dt><a href="com/sca4d/auth/passkey/ceremony/PasskeyCeremonyStore.html#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,com.fasterxml.jackson.databind.ObjectMapper,java.time.Clock,com.sca4d.auth.passkey.config.PasskeySettings)" class="member-name-link">PasskeyCeremonyStore(RedisTemplate&lt;Key, String&gt;, ObjectMapper, Clock, PasskeySettings)</a> - Constructor for class com.sca4d.auth.passkey.ceremony.<a href="com/sca4d/auth/passkey/ceremony/PasskeyCeremonyStore.html" title="class in com.sca4d.auth.passkey.ceremony">PasskeyCeremonyStore</a></dt>
 <dd>
 <div class="block">创建 Passkey ceremony 存储。</div>
 </dd>
@@ -476,13 +476,17 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">管理 discoverable Passkey registration 和 Credential 列表、删除操作。</div>
 </dd>
-<dt><a href="com/sca4d/auth/passkey/registration/PasskeyRegistrationService.html#%3Cinit%3E(com.yubico.webauthn.RelyingParty,com.sca4d.auth.passkey.ceremony.PasskeyCeremonyStore,com.sca4d.auth.passkey.credential.PasskeyCredentialRepository,com.sca4d.core.api.setting.Settings,java.time.Clock,java.security.SecureRandom)" class="member-name-link">PasskeyRegistrationService(RelyingParty, PasskeyCeremonyStore, PasskeyCredentialRepository, Settings, Clock, SecureRandom)</a> - Constructor for class com.sca4d.auth.passkey.registration.<a href="com/sca4d/auth/passkey/registration/PasskeyRegistrationService.html" title="class in com.sca4d.auth.passkey.registration">PasskeyRegistrationService</a></dt>
+<dt><a href="com/sca4d/auth/passkey/registration/PasskeyRegistrationService.html#%3Cinit%3E(com.yubico.webauthn.RelyingParty,com.sca4d.auth.passkey.ceremony.PasskeyCeremonyStore,com.sca4d.auth.passkey.credential.PasskeyCredentialRepository,com.sca4d.auth.passkey.config.PasskeySettings,java.time.Clock,java.security.SecureRandom)" class="member-name-link">PasskeyRegistrationService(RelyingParty, PasskeyCeremonyStore, PasskeyCredentialRepository, PasskeySettings, Clock, SecureRandom)</a> - Constructor for class com.sca4d.auth.passkey.registration.<a href="com/sca4d/auth/passkey/registration/PasskeyRegistrationService.html" title="class in com.sca4d.auth.passkey.registration">PasskeyRegistrationService</a></dt>
 <dd>
 <div class="block">创建 Passkey registration 服务。</div>
 </dd>
 <dt><a href="com/sca4d/auth/passkey/config/PasskeySettings.html" class="type-name-link" title="class in com.sca4d.auth.passkey.config">PasskeySettings</a> - Class in <a href="com/sca4d/auth/passkey/config/package-summary.html">com.sca4d.auth.passkey.config</a></dt>
 <dd>
 <div class="block">声明 Passkey ceremony 有效期和账号 Credential 数量上限。</div>
+</dd>
+<dt><a href="com/sca4d/auth/passkey/config/PasskeySettings.html#%3Cinit%3E(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.setting.access.SettingWriter)" class="member-name-link">PasskeySettings(SettingReader&lt;String&gt;, SettingWriter&lt;String&gt;)</a> - Constructor for class com.sca4d.auth.passkey.config.<a href="com/sca4d/auth/passkey/config/PasskeySettings.html" title="class in com.sca4d.auth.passkey.config">PasskeySettings</a></dt>
+<dd>
+<div class="block">构造模块设置，每个应用上下文独立保存 Source。</div>
 </dd>
 <dt><a href="com/sca4d/auth/passkey/credential/mapper/PasskeyTransportsTypeHandler.html" class="type-name-link" title="class in com.sca4d.auth.passkey.credential.mapper">PasskeyTransportsTypeHandler</a> - Class in <a href="com/sca4d/auth/passkey/credential/mapper/package-summary.html">com.sca4d.auth.passkey.credential.mapper</a></dt>
 <dd>

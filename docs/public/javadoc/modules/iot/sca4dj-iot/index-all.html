@@ -1068,9 +1068,13 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">通过 JavaBean 属性读取备注的字段更新意图，供 MyBatis 解析 Mapper 参数。</div>
 </dd>
+<dt><a href="com/sca4d/iot/config/IotProperties.html#getReported()" class="member-name-link">getReported()</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotProperties.html" title="class in com.sca4d.iot.config">IotProperties</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/config/IotProperties.html#getReportedStore()" class="member-name-link">getReportedStore()</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotProperties.html" title="class in com.sca4d.iot.config">IotProperties</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/config/IotProperties.html#getScheduleTick()" class="member-name-link">getScheduleTick()</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotProperties.html" title="class in com.sca4d.iot.config">IotProperties</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/config/IotProperties.Reported.html#getStore()" class="member-name-link">getStore()</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotProperties.Reported.html" title="class in com.sca4d.iot.config">IotProperties.Reported</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/persistence/EncodedReportedGroupSnapshot.html#groupCode()" class="member-name-link">groupCode()</a> - Method in class com.sca4d.iot.persistence.<a href="com/sca4d/iot/persistence/EncodedReportedGroupSnapshot.html" title="class in com.sca4d.iot.persistence">EncodedReportedGroupSnapshot</a></dt>
 <dd>&nbsp;</dd>
@@ -1172,6 +1176,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/config/IotProperties.html#%3Cinit%3E()" class="member-name-link">IotProperties()</a> - Constructor for class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotProperties.html" title="class in com.sca4d.iot.config">IotProperties</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/config/IotProperties.Reported.html" class="type-name-link" title="class in com.sca4d.iot.config">IotProperties.Reported</a> - Class in <a href="com/sca4d/iot/config/package-summary.html">com.sca4d.iot.config</a></dt>
+<dd>
+<div class="block">配置 latest reported 投影的存储选择。</div>
+</dd>
 <dt><a href="com/sca4d/iot/config/IotWorkerAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.iot.config">IotWorkerAutoConfiguration</a> - Class in <a href="com/sca4d/iot/config/package-summary.html">com.sca4d.iot.config</a></dt>
 <dd>
 <div class="block">在具体应用选择 Transport 或 Connection 终止入口后创建 IoT 可靠任务 Worker。</div>
@@ -1282,6 +1290,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/schedule/DeviceScheduleTriggerFailure.html#plannedAt()" class="member-name-link">plannedAt()</a> - Method in exception class com.sca4d.iot.schedule.<a href="com/sca4d/iot/schedule/DeviceScheduleTriggerFailure.html" title="class in com.sca4d.iot.schedule">DeviceScheduleTriggerFailure</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/config/ReportedStore.html#POSTGRESQL" class="member-name-link">POSTGRESQL</a> - Enum constant in enum class com.sca4d.iot.config.<a href="com/sca4d/iot/config/ReportedStore.html" title="enum class in com.sca4d.iot.config">ReportedStore</a></dt>
+<dd>
+<div class="block">保存到 PostgreSQL 主库。</div>
+</dd>
 <dt><a href="com/sca4d/iot/state/PostgresqlReportedStateStore.html" class="type-name-link" title="class in com.sca4d.iot.state">PostgresqlReportedStateStore</a> - Class in <a href="com/sca4d/iot/state/package-summary.html">com.sca4d.iot.state</a></dt>
 <dd>
 <div class="block">使用 PostgreSQL version 条件写入维护每个 Device 字段组的 latest reported 投影。</div>
@@ -1439,6 +1451,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">保存最新执行结果，并在同一写入中推进状态和下一次触发时间。</div>
 </dd>
+<dt><a href="com/sca4d/iot/config/ReportedStore.html#REDIS" class="member-name-link">REDIS</a> - Enum constant in enum class com.sca4d.iot.config.<a href="com/sca4d/iot/config/ReportedStore.html" title="enum class in com.sca4d.iot.config">ReportedStore</a></dt>
+<dd>
+<div class="block">保存到带 App 隔离的 Redis。</div>
+</dd>
 <dt><a href="com/sca4d/iot/state/RedisReportedStateStore.html" class="type-name-link" title="class in com.sca4d.iot.state">RedisReportedStateStore</a> - Class in <a href="com/sca4d/iot/state/package-summary.html">com.sca4d.iot.state</a></dt>
 <dd>
 <div class="block">使用 Redis Hash 和 Lua 原子维护每个 Device 字段组的 latest reported 投影。</div>
@@ -1501,6 +1517,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">先取得当前绑定代数，再批量读取对应 reported，缺失 Device 不会被替换成旧绑定。</div>
 </dd>
+<dt><a href="com/sca4d/iot/config/IotProperties.Reported.html#%3Cinit%3E()" class="member-name-link">Reported()</a> - Constructor for class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotProperties.Reported.html" title="class in com.sca4d.iot.config">IotProperties.Reported</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/message/policy/ReportedEqualsDesiredAcknowledgementPolicy.html" class="type-name-link" title="class in com.sca4d.iot.message.policy">ReportedEqualsDesiredAcknowledgementPolicy</a> - Class in <a href="com/sca4d/iot/message/policy/package-summary.html">com.sca4d.iot.message.policy</a></dt>
 <dd>
 <div class="block">只在 reported state 已经与当前 desired sequence 相等时完成状态同步。</div>
@@ -1546,6 +1564,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/iot/state/ReportedStateService.html#%3Cinit%3E(com.sca4d.iot.device.DeviceRepository,com.sca4d.iot.product.ProductDefinitionCatalog,com.sca4d.iot.api.state.ReportedStateStore,com.sca4d.iot.message.DownlinkRepository,com.sca4d.iot.api.model.ThingModelRepository,com.sca4d.iot.model.ThingValueValidator,com.sca4d.core.api.id.IdGenerator,com.sca4d.core.api.messaging.MessageBus,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,int,int)" class="member-name-link">ReportedStateService(DeviceRepository, ProductDefinitionCatalog, ReportedStateStore, DownlinkRepository, ThingModelRepository, ThingValueValidator, IdGenerator, MessageBus, Clock, DeviceChangeNotifier, int, int)</a> - Constructor for class com.sca4d.iot.state.<a href="com/sca4d/iot/state/ReportedStateService.html" title="class in com.sca4d.iot.state">ReportedStateService</a></dt>
 <dd>
 <div class="block">创建 reported 主事务服务。</div>
+</dd>
+<dt><a href="com/sca4d/iot/config/ReportedStore.html" class="type-name-link" title="enum class in com.sca4d.iot.config">ReportedStore</a> - Enum Class in <a href="com/sca4d/iot/config/package-summary.html">com.sca4d.iot.config</a></dt>
+<dd>
+<div class="block">latest reported 投影使用的内置存储。</div>
 </dd>
 <dt><a href="com/sca4d/iot/message/policy/DeviceResultAcknowledgementPolicy.html#requiresAcknowledgement()" class="member-name-link">requiresAcknowledgement()</a> - Method in class com.sca4d.iot.message.policy.<a href="com/sca4d/iot/message/policy/DeviceResultAcknowledgementPolicy.html" title="class in com.sca4d.iot.message.policy">DeviceResultAcknowledgementPolicy</a></dt>
 <dd>&nbsp;</dd>
@@ -1680,9 +1702,11 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/config/IotProperties.html#setProductCatalogScanBatchSize(int)" class="member-name-link">setProductCatalogScanBatchSize(int)</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotProperties.html" title="class in com.sca4d.iot.config">IotProperties</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/config/IotProperties.html#setReportedStore(java.lang.String)" class="member-name-link">setReportedStore(String)</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotProperties.html" title="class in com.sca4d.iot.config">IotProperties</a></dt>
+<dt><a href="com/sca4d/iot/config/IotProperties.html#setReportedStore(com.sca4d.iot.config.ReportedStore)" class="member-name-link">setReportedStore(ReportedStore)</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotProperties.html" title="class in com.sca4d.iot.config">IotProperties</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/config/IotProperties.html#setScheduleTick(java.time.Duration)" class="member-name-link">setScheduleTick(Duration)</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotProperties.html" title="class in com.sca4d.iot.config">IotProperties</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/config/IotProperties.Reported.html#setStore(com.sca4d.iot.config.ReportedStore)" class="member-name-link">setStore(ReportedStore)</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotProperties.Reported.html" title="class in com.sca4d.iot.config">IotProperties.Reported</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/message/DesiredStateChange.html#setValues()" class="member-name-link">setValues()</a> - Method in class com.sca4d.iot.message.<a href="com/sca4d/iot/message/DesiredStateChange.html" title="class in com.sca4d.iot.message">DesiredStateChange</a></dt>
 <dd>&nbsp;</dd>
@@ -1931,6 +1955,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/persistence/EncodedDesiredProperty.html#valueJson()" class="member-name-link">valueJson()</a> - Method in class com.sca4d.iot.persistence.<a href="com/sca4d/iot/persistence/EncodedDesiredProperty.html" title="class in com.sca4d.iot.persistence">EncodedDesiredProperty</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/config/ReportedStore.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class com.sca4d.iot.config.<a href="com/sca4d/iot/config/ReportedStore.html" title="enum class in com.sca4d.iot.config">ReportedStore</a></dt>
+<dd>
+<div class="block">Returns the enum constant of this class with the specified name.</div>
+</dd>
 <dt><a href="com/sca4d/iot/IotErrorCode.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class com.sca4d.iot.<a href="com/sca4d/iot/IotErrorCode.html" title="enum class in com.sca4d.iot">IotErrorCode</a></dt>
 <dd>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
@@ -1938,6 +1966,11 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/iot/state/ReportedStateResult.Outcome.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class com.sca4d.iot.state.<a href="com/sca4d/iot/state/ReportedStateResult.Outcome.html" title="enum class in com.sca4d.iot.state">ReportedStateResult.Outcome</a></dt>
 <dd>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
+</dd>
+<dt><a href="com/sca4d/iot/config/ReportedStore.html#values()" class="member-name-link">values()</a> - Static method in enum class com.sca4d.iot.config.<a href="com/sca4d/iot/config/ReportedStore.html" title="enum class in com.sca4d.iot.config">ReportedStore</a></dt>
+<dd>
+<div class="block">Returns an array containing the constants of this enum class, in
+the order they are declared.</div>
 </dd>
 <dt><a href="com/sca4d/iot/IotErrorCode.html#values()" class="member-name-link">values()</a> - Static method in enum class com.sca4d.iot.<a href="com/sca4d/iot/IotErrorCode.html" title="enum class in com.sca4d.iot">IotErrorCode</a></dt>
 <dd>

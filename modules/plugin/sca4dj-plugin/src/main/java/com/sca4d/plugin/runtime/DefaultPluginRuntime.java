@@ -7,6 +7,8 @@ import com.sca4d.core.api.plugin.ApiKind;
 import com.sca4d.core.api.plugin.ApiOperation;
 import com.sca4d.core.api.plugin.ApiTarget;
 import com.sca4d.core.api.plugin.LoadedPlugin;
+import com.sca4d.core.api.plugin.PluginConfiguration;
+import com.sca4d.core.api.plugin.PluginConfigurationSnapshot;
 import com.sca4d.core.api.plugin.PluginContext;
 import com.sca4d.core.api.plugin.PluginDescriptor;
 import com.sca4d.core.api.plugin.PluginEntrypoint;
@@ -22,60 +24,85 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
+import java.lang.reflect.Array;
+import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Array;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.IdentityHashMap;
 import java.util.Collection;
-import java.util.Optional;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.HexFormat;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Properties;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.jar.JarFile;
 
 /** 管理一个 App 的绑定快照和插件代次，在同步操作结束后释放旧实现。 */
-public class DefaultPluginRuntime implements PluginRuntime {
+public class DefaultPluginRuntime<C> implements PluginRuntime {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultPluginRuntime.class);
+
     private final TreeCode api;
+
     private final String apiVersion;
+
     private final Class<? extends PluginEntrypoint> entryBase;
+
     private final Set<String> sharedClasses;
+
     private final PluginLoader loader;
+
     private final Path cache;
+
+    private final PluginConfiguration<C> configuration;
+
+    private final Class<C> configurationType;
+
     private final ReentrantLock management = new ReentrantLock();
+
     private final ReentrantLock lock = new ReentrantLock();
+
     private final Condition changed = lock.newCondition();
+
     private final Map<TreeCode, ApiContract<?>> contracts = new LinkedHashMap<>();
+
     private final Map<ApiTarget, OwnedBinding> services = new LinkedHashMap<>();
+
     private final Map<TreeCode, Generation> active = new LinkedHashMap<>();
+
     private final List<Generation> generations = new ArrayList<>();
+
     private final ThreadLocal<Frame> scope = new ThreadLocal<>();
+
     private long sequence;
+
     private boolean closed;
 
     /** 保存宿主 API、共享类清单与具体加载实现；不扫描宿主 classpath。 */
-    public DefaultPluginRuntime(@NotNull TreeCode api, @NotNull String apiVersion,
-            @NotNull Class<? extends PluginEntrypoint> entryBase, @NotNull Set<String> sharedClasses,
-            @NotNull PluginLoader loader, @NotNull Path cache) {
+    public DefaultPluginRuntime(
+            @NotNull TreeCode api,
+            @NotNull String apiVersion,
+            @NotNull Class<? extends PluginEntrypoint> entryBase,
+            @NotNull Set<String> sharedClasses,
+            @NotNull PluginLoader loader,
+            @NotNull Path cache,
+            @NotNull PluginConfiguration<C> configuration) {
         this.api = Objects.requireNonNull(api);
         this.apiVersion = Objects.requireNonNull(apiVersion);
         this.entryBase = Objects.requireNonNull(entryBase);
         this.sharedClasses = Set.copyOf(sharedClasses);
         this.loader = Objects.requireNonNull(loader);
         this.cache = Objects.requireNonNull(cache);
+        this.configuration = Objects.requireNonNull(configuration);
+        this.configurationType = Objects.requireNonNull(configuration.type());
     }
 
     @Override
@@ -107,6 +134,37 @@ public class DefaultPluginRuntime implements PluginRuntime {
 
     @Override
     public @NotNull PluginUpdate replace(@NotNull Path artifact, @NotNull Duration drainTimeout) {
+        return installGeneration(artifact, drainTimeout, null);
+    }
+
+    @Override
+    public @NotNull PluginUpdate reload(@NotNull TreeCode id, @NotNull Duration drainTimeout) {
+        validateManagement(drainTimeout);
+        management.lock();
+        try {
+            Path artifact;
+            lock.lock();
+            try {
+                Generation current = active.get(Objects.requireNonNull(id));
+                if (current == null) {
+                    throw new PluginUnavailableException("插件未启用: " + id);
+                }
+                artifact = current.artifact;
+            } finally {
+                lock.unlock();
+            }
+            // 固定活动构件后再复制，管理锁阻止它在重载读取期间被其他更新释放。
+            return installGeneration(artifact, drainTimeout, id);
+        } finally {
+            management.unlock();
+        }
+    }
+
+    /** 将构件和 App 配置作为同一个候选代次初始化、校验并发布，重载时保持插件编码。 */
+    private @NotNull PluginUpdate installGeneration(
+            @NotNull Path artifact,
+            @NotNull Duration drainTimeout,
+            @Nullable TreeCode reloadedId) {
         validateManagement(drainTimeout);
         management.lock();
         try {
@@ -125,27 +183,6 @@ public class DefaultPluginRuntime implements PluginRuntime {
             Generation candidate = null;
             try {
                 Files.copy(artifact, copy, StandardCopyOption.REPLACE_EXISTING);
-                Properties properties = new Properties();
-                try (JarFile jar = new JarFile(copy.toFile())) {
-                    var entry = jar.getJarEntry("META-INF/sca4dj/plugin.properties");
-                    if (entry == null) {
-                        throw new IllegalArgumentException("插件缺少描述文件");
-                    }
-                    try (InputStream input = jar.getInputStream(entry)) {
-                        properties.load(input);
-                    }
-                }
-                // 在创建加载器前核对插件身份和 API 版本，避免不兼容入口执行初始化。
-                PluginDescriptor descriptor = new PluginDescriptor(
-                        TreeCode.of(property(properties, "plugin.id")),
-                        property(properties, "plugin.version"),
-                        TreeCode.of(property(properties, "plugin.api")),
-                        property(properties, "plugin.requires-api"),
-                        property(properties, "plugin.entry"));
-                if (!loader.supportsVersion(descriptor.version(), "*") || !api.equals(descriptor.api())
-                        || !loader.supportsVersion(apiVersion, descriptor.requiresApi())) {
-                    throw new IllegalArgumentException("插件 App API 或版本不兼容");
-                }
                 MessageDigest digest = MessageDigest.getInstance("SHA-256");
                 try (InputStream input = Files.newInputStream(copy)) {
                     byte[] buffer = new byte[8192];
@@ -153,10 +190,33 @@ public class DefaultPluginRuntime implements PluginRuntime {
                         digest.update(buffer, 0, count);
                     }
                 }
+                // App 解释资源字段并提供独立配置；框架不规定 YAML 路径或元信息的键。
+                PluginConfigurationSnapshot<C> configured = Objects.requireNonNull(
+                        reloadedId == null ? configuration.load(copy) : configuration.reload(copy),
+                        "App 插件配置不能为空");
+                candidate = new Generation(
+                        configured,
+                        ++sequence,
+                        copy,
+                        HexFormat.of().formatHex(digest.digest()));
+                PluginDescriptor descriptor = configured.descriptor();
+                if (reloadedId != null && !reloadedId.equals(descriptor.id())) {
+                    throw new IllegalArgumentException("配置重载不能改变插件编码");
+                }
+                if (!configurationType.isInstance(configured.values())) {
+                    throw new IllegalArgumentException("App 插件配置类型与声明不一致");
+                }
+                checkSharedValue(configured.values(), Collections.newSetFromMap(new IdentityHashMap<>()));
+                // 在创建加载器前核对插件身份和 API 版本，避免不兼容入口执行初始化。
+                if (!loader.supportsVersion(descriptor.version(), "*")
+                        || !api.equals(descriptor.api())
+                        || !loader.supportsVersion(apiVersion, descriptor.requiresApi())) {
+                    throw new IllegalArgumentException("插件 App API 或版本不兼容");
+                }
+                LOG.trace("App 插件配置已读取 | plugin={} reload={}", descriptor.id(), reloadedId != null);
                 // 候选在独立加载器中登记实现；此时调用目录仍使用旧代次。
                 LoadedPlugin loaded = loader.load(copy, descriptor, entryBase, sharedClasses);
-                candidate = new Generation(descriptor, ++sequence, loaded, copy,
-                        HexFormat.of().formatHex(digest.digest()));
+                candidate.loaded = loaded;
                 ClassLoader before = Thread.currentThread().getContextClassLoader();
                 try {
                     Thread.currentThread().setContextClassLoader(loaded.classLoader());
@@ -169,6 +229,9 @@ public class DefaultPluginRuntime implements PluginRuntime {
                 Generation previous;
                 lock.lock();
                 try {
+                    if (closed) {
+                        throw new PluginUnavailableException("插件运行机制已关闭");
+                    }
                     previous = active.get(descriptor.id());
                     Map<ApiTarget, OwnedBinding> next = snapshot(previous);
                     for (ApiBinding binding : candidate.bindings.values()) {
@@ -188,8 +251,11 @@ public class DefaultPluginRuntime implements PluginRuntime {
                 } finally {
                     lock.unlock();
                 }
-                LOG.info("插件代次已启用 | plugin={} version={} generation={}",
-                        descriptor.id(), descriptor.version(), candidate.number);
+                LOG.info(
+                        "插件代次已启用 | plugin={} version={} generation={}",
+                        descriptor.id(),
+                        descriptor.version(),
+                        candidate.number);
                 // 新调用已经使用候选；等待旧租用结束不会阻塞新调用，也不会撤销发布结果。
                 if (previous != null) {
                     drain(previous, drainTimeout);
@@ -199,7 +265,11 @@ public class DefaultPluginRuntime implements PluginRuntime {
                 if (candidate != null && candidate.state != PluginStatus.State.ACTIVE) {
                     cleanupCandidate(candidate, failure);
                 } else if (candidate == null) {
-                    Files.deleteIfExists(copy);
+                    try {
+                        Files.deleteIfExists(copy);
+                    } catch (Exception cleanupFailure) {
+                        failure.addSuppressed(cleanupFailure);
+                    }
                 }
                 throw new IllegalStateException("插件候选加载失败: " + failure.getClass().getSimpleName(), failure);
             }
@@ -266,7 +336,9 @@ public class DefaultPluginRuntime implements PluginRuntime {
     }
 
     @Override
-    public @Nullable Object invoke(@NotNull ApiTarget target, @NotNull TreeCode operation,
+    public @Nullable Object invoke(
+            @NotNull ApiTarget target,
+            @NotNull TreeCode operation,
             Object @NotNull [] arguments) throws Throwable {
         try (PluginLease ignored = openScope()) {
             // 动态入口也检查操作签名，不能绕过生成客户端传入不兼容参数。
@@ -282,7 +354,9 @@ public class DefaultPluginRuntime implements PluginRuntime {
                 throw new IllegalArgumentException("调用参数数量不一致");
             }
             for (int index = 0; index < arguments.length; index++) {
-                checkValue(signature.parameters().get(index), arguments[index],
+                checkValue(
+                        signature.parameters().get(index),
+                        arguments[index],
                         signature.nullableParameters().get(index));
                 checkSharedValue(arguments[index], Collections.newSetFromMap(new IdentityHashMap<>()));
             }
@@ -369,8 +443,8 @@ public class DefaultPluginRuntime implements PluginRuntime {
         Map<ApiTarget, OwnedBinding> result = new LinkedHashMap<>(services);
         for (Generation generation : active.values()) {
             if (generation != excluded) {
-                generation.bindings.forEach((target, binding) ->
-                        result.put(target, new OwnedBinding(binding, generation)));
+                generation.bindings
+                        .forEach((target, binding) -> result.put(target, new OwnedBinding(binding, generation)));
             }
         }
         return result;
@@ -414,8 +488,11 @@ public class DefaultPluginRuntime implements PluginRuntime {
             lock.unlock();
         }
         if (status(generation).uses() > 0) {
-            LOG.warn("插件仍有活动租用，旧代次将在租用归还后释放 | plugin={} generation={} interrupted={}",
-                    generation.descriptor.id(), generation.number, Thread.currentThread().isInterrupted());
+            LOG.warn(
+                    "插件仍有活动租用，旧代次将在租用归还后释放 | plugin={} generation={} interrupted={}",
+                    generation.descriptor.id(),
+                    generation.number,
+                    Thread.currentThread().isInterrupted());
         }
         cleanup(generation);
     }
@@ -432,81 +509,123 @@ public class DefaultPluginRuntime implements PluginRuntime {
         } finally {
             lock.unlock();
         }
-        // 调用卸载回调并关闭加载资源，失败状态保留在诊断快照中。
-        String failure = null;
-        ClassLoader before = Thread.currentThread().getContextClassLoader();
-        try {
-            Thread.currentThread().setContextClassLoader(generation.loaded.classLoader());
-            generation.loaded.entrypoint().onUnload();
-            generation.loaded.close();
-            Files.deleteIfExists(generation.artifact);
-        } catch (Throwable exception) {
-            failure = exception.getClass().getName();
-            LOG.error("插件代次释放失败 | plugin={} generation={} failureType={}",
-                    generation.descriptor.id(), generation.number, failure);
-        } finally {
-            Thread.currentThread().setContextClassLoader(before);
+        // 任一卸载回调失败仍继续释放其余资源，最后只保留不持有实现对象的失败状态。
+        Throwable exception = releaseResources(generation);
+        String failure = exception == null ? null : exception.getClass().getName();
+        if (exception != null) {
+            LOG.error(
+                    "插件代次释放失败 | plugin={} generation={} failureType={}",
+                    generation.descriptor.id(),
+                    generation.number,
+                    failure,
+                    exception);
         }
         lock.lock();
         try {
             generation.failure = failure;
             generation.state = failure == null ? PluginStatus.State.STOPPED : PluginStatus.State.FAILED;
-            if (failure == null) {
-                generation.bindings.clear();
-                generation.loaded = null;
-            }
             changed.signalAll();
         } finally {
             lock.unlock();
         }
-        LOG.info("插件代次停止结果 | plugin={} generation={} state={}",
-                generation.descriptor.id(), generation.number, generation.state);
+        LOG.info(
+                "插件代次停止结果 | plugin={} generation={} state={}",
+                generation.descriptor.id(),
+                generation.number,
+                generation.state);
     }
 
     /** 候选初始化失败后尝试停止并关闭加载器，清理错误保留为原失败的附加异常。 */
     private void cleanupCandidate(Generation candidate, Throwable failure) {
+        Throwable cleanupFailure = releaseResources(candidate);
+        if (cleanupFailure != null) {
+            failure.addSuppressed(cleanupFailure);
+        }
+        candidate.state = cleanupFailure == null ? PluginStatus.State.STOPPED : PluginStatus.State.FAILED;
+    }
+
+    /** 分别释放插件入口、App 配置、加载器和构件副本，汇总失败并解除代次对实现对象的引用。 */
+    private @Nullable Throwable releaseResources(Generation generation) {
+        Throwable failure = null;
+        LoadedPlugin loaded = generation.loaded;
         ClassLoader before = Thread.currentThread().getContextClassLoader();
         try {
-            Thread.currentThread().setContextClassLoader(candidate.loaded.classLoader());
-            try {
-                candidate.loaded.entrypoint().onUnload();
-            } finally {
-                candidate.loaded.close();
+            if (loaded != null) {
+                Thread.currentThread().setContextClassLoader(loaded.classLoader());
+                loaded.entrypoint().onUnload();
             }
-            Files.deleteIfExists(candidate.artifact);
-        } catch (Exception cleanupFailure) {
-            failure.addSuppressed(cleanupFailure);
+        } catch (Throwable exception) {
+            failure = exception;
         } finally {
             Thread.currentThread().setContextClassLoader(before);
-            candidate.state = PluginStatus.State.STOPPED;
         }
+        try {
+            configuration.unload(Objects.requireNonNull(generation.configuration));
+        } catch (Throwable exception) {
+            if (failure == null)
+                failure = exception;
+            else if (failure != exception)
+                failure.addSuppressed(exception);
+        }
+        if (loaded != null) {
+            try {
+                loaded.close();
+            } catch (Throwable exception) {
+                if (failure == null)
+                    failure = exception;
+                else if (failure != exception)
+                    failure.addSuppressed(exception);
+            }
+        }
+        try {
+            Files.deleteIfExists(generation.artifact);
+        } catch (Throwable exception) {
+            if (failure == null)
+                failure = exception;
+            else if (failure != exception)
+                failure.addSuppressed(exception);
+        }
+        generation.bindings.clear();
+        generation.loaded = null;
+        generation.configuration = null;
+        return failure;
     }
 
     /** 返回持锁读取的诊断快照。 */
     private PluginStatus status(Generation generation) {
         lock.lock();
         try {
-            return new PluginStatus(generation.descriptor, generation.number, generation.state,
-                    generation.uses, generation.digest, generation.failure);
+            return new PluginStatus(
+                    generation.descriptor,
+                    generation.number,
+                    generation.state,
+                    generation.uses,
+                    generation.digest,
+                    generation.failure);
         } finally {
             lock.unlock();
         }
     }
 
-    /** 读取必须存在的交付描述属性。 */
-    private static String property(Properties properties, String key) {
-        String value = properties.getProperty(key);
-        if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException("插件描述缺少属性: " + key);
-        }
-        return value;
-    }
-
     /** 检查空值和基本类型装箱，不允许动态调用绕过参数签名。 */
     private static void checkValue(Class<?> type, Object value, boolean nullable) {
-        Map<Class<?>, Class<?>> boxed = Map.of(boolean.class, Boolean.class, byte.class, Byte.class,
-                short.class, Short.class, int.class, Integer.class, long.class, Long.class,
-                float.class, Float.class, double.class, Double.class, char.class, Character.class);
+        Map<Class<?>, Class<?>> boxed = Map.of(
+                boolean.class,
+                Boolean.class,
+                byte.class,
+                Byte.class,
+                short.class,
+                Short.class,
+                int.class,
+                Integer.class,
+                long.class,
+                Long.class,
+                float.class,
+                Float.class,
+                double.class,
+                Double.class,
+                char.class,
+                Character.class);
         if (value == null ? !nullable || type.isPrimitive() : !boxed.getOrDefault(type, type).isInstance(value)) {
             throw new IllegalArgumentException("调用值与公开类型不一致: " + type.getName());
         }
@@ -515,11 +634,14 @@ public class DefaultPluginRuntime implements PluginRuntime {
     /** 禁止私有实现对象逃出调用范围，容器元素也必须属于平台或共享类型。 */
     private void checkSharedValue(Object value, Set<Object> visited) {
         // 用对象身份去重，允许循环容器；检查容器中的实际值，而不只检查擦除后的签名。
-        if (value == null || !visited.add(value)) return;
+        if (value == null || !visited.add(value))
+            return;
         Class<?> type = value.getClass();
         if (type.isArray()) {
-            if (type.getComponentType().isPrimitive()) return;
-            for (int index = 0; index < Array.getLength(value); index++) checkSharedValue(Array.get(value, index), visited);
+            if (type.getComponentType().isPrimitive())
+                return;
+            for (int index = 0; index < Array.getLength(value); index++)
+                checkSharedValue(Array.get(value, index), visited);
             return;
         }
         ClassLoader defining = type.getClassLoader();
@@ -536,13 +658,17 @@ public class DefaultPluginRuntime implements PluginRuntime {
                 throw new IllegalArgumentException("共享类型不存在", failure);
             }
         }
-        if (value instanceof Collection<?> collection) collection.forEach(item -> checkSharedValue(item, visited));
-        if (value instanceof Map<?, ?> map) map.forEach((key, item) -> {
-            checkSharedValue(key, visited);
-            checkSharedValue(item, visited);
-        });
-        if (value instanceof Optional<?> optional) optional.ifPresent(item -> checkSharedValue(item, visited));
-        if (value instanceof Class<?> represented && represented.getClassLoader() != null
+        if (value instanceof Collection<?> collection)
+            collection.forEach(item -> checkSharedValue(item, visited));
+        if (value instanceof Map<?, ?> map)
+            map.forEach((key, item) -> {
+                checkSharedValue(key, visited);
+                checkSharedValue(item, visited);
+            });
+        if (value instanceof Optional<?> optional)
+            optional.ifPresent(item -> checkSharedValue(item, visited));
+        if (value instanceof Class<?> represented
+                && represented.getClassLoader() != null
                 && represented.getClassLoader() != ClassLoader.getPlatformClassLoader()
                 && !sharedClasses.contains(represented.getName())) {
             throw new IllegalArgumentException("调用不能传递私有 Class 对象");
@@ -552,12 +678,43 @@ public class DefaultPluginRuntime implements PluginRuntime {
     /** 保存当前插件的候选登记范围，关闭后不允许遗留上下文继续调用。 */
     private final class CandidateContext implements PluginContext {
         private final Generation owner;
-        private CandidateContext(Generation owner) { this.owner = owner; }
-        @Override public @NotNull PluginDescriptor descriptor() { return owner.descriptor; }
-        @Override public <T> @NotNull T service(@NotNull ApiContract<T> contract) {
+
+        private CandidateContext(Generation owner) {
+            this.owner = owner;
+        }
+
+        @Override
+        public @NotNull PluginDescriptor descriptor() {
+            return owner.descriptor;
+        }
+
+        @Override
+        public <T> @NotNull T configuration(@NotNull Class<T> type) {
             lock.lock();
             try {
-                if (contracts.get(contract.definition().code()) != contract || contract.definition().kind() != ApiKind.SERVICE) {
+                Frame frame = scope.get();
+                if (owner.state != null
+                        && owner.state != PluginStatus.State.ACTIVE
+                        && !(owner.state == PluginStatus.State.DRAINING
+                                && frame != null
+                                && frame.generations.contains(owner))) {
+                    throw new PluginUnavailableException("插件代次已停止");
+                }
+                if (type != configurationType) {
+                    throw new IllegalArgumentException("请求的配置类型不是 App 公开类型");
+                }
+                return type.cast(Objects.requireNonNull(owner.configuration).values());
+            } finally {
+                lock.unlock();
+            }
+        }
+
+        @Override
+        public <T> @NotNull T service(@NotNull ApiContract<T> contract) {
+            lock.lock();
+            try {
+                if (contracts.get(contract.definition().code()) != contract
+                        || contract.definition().kind() != ApiKind.SERVICE) {
                     throw new IllegalArgumentException("宿主服务未公开");
                 }
             } finally {
@@ -566,14 +723,18 @@ public class DefaultPluginRuntime implements PluginRuntime {
             return contract.client((target, operation, arguments) -> {
                 Frame frame = scope.get();
                 if (owner.state != PluginStatus.State.ACTIVE
-                        && !(owner.state == PluginStatus.State.DRAINING && frame != null && frame.generations.contains(owner))
+                        && !(owner.state == PluginStatus.State.DRAINING
+                                && frame != null
+                                && frame.generations.contains(owner))
                         && owner.state != null) {
                     throw new PluginUnavailableException("插件代次已停止");
                 }
                 return DefaultPluginRuntime.this.invoke(target, operation, arguments);
             }, null);
         }
-        @Override public <T> void register(@NotNull ApiContract<T> contract, @NotNull T implementation, @Nullable TreeCode key) {
+
+        @Override
+        public <T> void register(@NotNull ApiContract<T> contract, @NotNull T implementation, @Nullable TreeCode key) {
             lock.lock();
             try {
                 if (owner.state != null) {
@@ -603,14 +764,21 @@ public class DefaultPluginRuntime implements PluginRuntime {
     }
 
     /** 保存一次线程绑定快照的嵌套深度与实际插件租用。 */
-    private static final class Frame {
+    private final class Frame {
         private Map<ApiTarget, OwnedBinding> bindings;
+
         private final Set<Generation> generations = new HashSet<>();
+
         private final Thread thread;
+
         private int depth = 1;
+
         private Frame(Map<ApiTarget, OwnedBinding> bindings, Thread thread) {
             this.bindings = Map.copyOf(bindings);
-            bindings.values().forEach(binding -> { if (binding.owner != null) generations.add(binding.owner); });
+            bindings.values().forEach(binding -> {
+                if (binding.owner != null)
+                    generations.add(binding.owner);
+            });
             this.thread = thread;
         }
     }
@@ -618,15 +786,23 @@ public class DefaultPluginRuntime implements PluginRuntime {
     /** 在最后一个嵌套范围关闭时解除线程绑定，再清理已无使用者的旧代次。 */
     private final class Lease implements PluginLease {
         private final Frame frame;
+
         private boolean released;
-        private Lease(Frame frame) { this.frame = frame; }
-        @Override public void close() {
+
+        private Lease(Frame frame) {
+            this.frame = frame;
+        }
+
+        @Override
+        public void close() {
             if (Thread.currentThread() != frame.thread) {
                 throw new IllegalStateException("插件作用域必须在原线程关闭");
             }
-            if (released) return;
+            if (released)
+                return;
             released = true;
-            if (--frame.depth != 0) return;
+            if (--frame.depth != 0)
+                return;
             scope.remove();
             // 先解除线程和快照引用，再减少租用计数；旧代次清理不会留下当前范围的强引用。
             List<Generation> owners = List.copyOf(frame.generations);
@@ -644,28 +820,45 @@ public class DefaultPluginRuntime implements PluginRuntime {
     }
 
     /** 保存已声明操作及它所属的代次；宿主服务没有插件所有者。 */
-    private static final class OwnedBinding {
+    private final class OwnedBinding {
         private final ApiBinding binding;
+
         private final Generation owner;
-        private OwnedBinding(ApiBinding binding, Generation owner) { this.binding = binding; this.owner = owner; }
+
+        private OwnedBinding(ApiBinding binding, Generation owner) {
+            this.binding = binding;
+            this.owner = owner;
+        }
     }
 
     /** 保存可释放的实现资源；停止成功后清除入口和分发器引用。 */
-    private static final class Generation {
+    private final class Generation {
         private final PluginDescriptor descriptor;
+
+        private @Nullable PluginConfigurationSnapshot<C> configuration;
+
         private final long number;
+
         private LoadedPlugin loaded;
+
         private final Path artifact;
+
         private final String digest;
+
         private final Map<ApiTarget, ApiBinding> bindings = new LinkedHashMap<>();
+
         private volatile PluginStatus.State state;
+
         private int uses;
+
         private boolean cleaning;
+
         private String failure;
-        private Generation(PluginDescriptor descriptor, long number, LoadedPlugin loaded, Path artifact, String digest) {
-            this.descriptor = descriptor;
+
+        private Generation(PluginConfigurationSnapshot<C> configuration, long number, Path artifact, String digest) {
+            this.descriptor = configuration.descriptor();
+            this.configuration = configuration;
             this.number = number;
-            this.loaded = loaded;
             this.artifact = artifact;
             this.digest = digest;
         }

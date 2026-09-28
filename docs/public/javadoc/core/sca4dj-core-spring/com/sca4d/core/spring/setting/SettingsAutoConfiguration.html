@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="annotations">@AutoConfiguration(afterName="org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration")
 @ConditionalOnClass(name="org.mybatis.spring.SqlSessionFactoryBean")
 @MapperScan(basePackageClasses=<a href="SettingMapper.html" title="interface in com.sca4d.core.spring.setting">SettingMapper.class</a>)
-@EnableConfigurationProperties(<a href="SettingsBootstrapProperties.html" title="class in com.sca4d.core.spring.setting">SettingsBootstrapProperties.class</a>)
+@EnableConfigurationProperties({<a href="SettingsBootstrapProperties.html" title="class in com.sca4d.core.spring.setting">SettingsBootstrapProperties.class</a>,<a href="EnvironmentPrefixProperties.html" title="class in com.sca4d.core.spring.setting">EnvironmentPrefixProperties.class</a>})
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">SettingsAutoConfiguration</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">自动装配设置目录、数据库读写、密钥保护和指定初始化节点。</div>

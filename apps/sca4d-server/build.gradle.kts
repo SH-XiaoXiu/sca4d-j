@@ -15,6 +15,7 @@ val buildVersion = rootProject.extra["sca4dBuildVersion"] as String
 dependencies {
     implementation(project(":modules:plugin:sca4dj-plugin-spring"))
     add("pluginShared", project(":core:sca4dj-core-api"))
+    add("pluginShared", libs.slf4j.api)
     add(
         "pluginProcessor",
         files(
@@ -107,9 +108,10 @@ sca4djApp {
 
 appPluginApi {
     id.set("SCA4D:SERVER")
-    version.set("1.0.0")
+    version.set("1.1.0")
     generatedPackage.set("com.sca4d.app.server.plugin.api")
     entryName.set("Sca4dServerPlugin")
+    configurationType.set("com.sca4d.app.server.plugin.Sca4dServerPluginSettings")
 }
 
 tasks.named<BootJar>("bootJar") {

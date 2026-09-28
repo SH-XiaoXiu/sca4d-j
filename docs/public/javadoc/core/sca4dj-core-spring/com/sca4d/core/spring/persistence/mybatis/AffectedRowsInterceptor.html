@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="annotations">@Intercepts(@Signature(type=org.apache.ibatis.executor.Executor.class,method="update",args={org.apache.ibatis.mapping.MappedStatement.class,<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object.class</a>}))
-</span><span class="modifiers">public final class </span><span class="element-name type-name-label">AffectedRowsInterceptor</span>
+</span><span class="modifiers">public class </span><span class="element-name type-name-label">AffectedRowsInterceptor</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements org.apache.ibatis.plugin.Interceptor</span></div>
 <div class="block">把 MyBatis `Executor.update()` 返回的真实影响行数交给当前 Repository 的 `@AffectedRows` 声明。</div>

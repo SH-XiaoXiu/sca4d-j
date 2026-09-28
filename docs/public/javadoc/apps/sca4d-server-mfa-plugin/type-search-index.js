@@ -1,1 +1,1 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.sca4d.app.mfa","l":"DefaultMfaPolicy"},{"p":"com.sca4d.app.mfa","l":"MfaPolicyPlugin"}];updateSearchResults();
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.sca4d.app.mfa","l":"DefaultMfaPolicy"},{"p":"com.sca4d.app.mfa","l":"MfaPolicyOptions"},{"p":"com.sca4d.app.mfa","l":"MfaPolicyPlugin"}];updateSearchResults();

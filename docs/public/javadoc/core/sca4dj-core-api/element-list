@@ -38,6 +38,11 @@ com.sca4d.core.api.runtime
 com.sca4d.core.api.scheduling
 com.sca4d.core.api.security
 com.sca4d.core.api.setting
+com.sca4d.core.api.setting.access
+com.sca4d.core.api.setting.codec
+com.sca4d.core.api.setting.definition
+com.sca4d.core.api.setting.exception
+com.sca4d.core.api.setting.value
 com.sca4d.core.api.storage
 com.sca4d.core.api.utils
 com.sca4d.core.api.validation

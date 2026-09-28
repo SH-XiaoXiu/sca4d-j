@@ -65,11 +65,11 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/plugin/runtime/DefaultPluginRuntime.html#declare(com.sca4d.core.api.plugin.ApiContract)" class="member-name-link">declare(ApiContract&lt;?&gt;)</a> - Method in class com.sca4d.plugin.runtime.<a href="com/sca4d/plugin/runtime/DefaultPluginRuntime.html" title="class in com.sca4d.plugin.runtime">DefaultPluginRuntime</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/plugin/runtime/DefaultPluginRuntime.html" class="type-name-link" title="class in com.sca4d.plugin.runtime">DefaultPluginRuntime</a> - Class in <a href="com/sca4d/plugin/runtime/package-summary.html">com.sca4d.plugin.runtime</a></dt>
+<dt><a href="com/sca4d/plugin/runtime/DefaultPluginRuntime.html" class="type-name-link" title="class in com.sca4d.plugin.runtime">DefaultPluginRuntime&lt;C&gt;</a> - Class in <a href="com/sca4d/plugin/runtime/package-summary.html">com.sca4d.plugin.runtime</a></dt>
 <dd>
 <div class="block">管理一个 App 的绑定快照和插件代次，在同步操作结束后释放旧实现。</div>
 </dd>
-<dt><a href="com/sca4d/plugin/runtime/DefaultPluginRuntime.html#%3Cinit%3E(com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.Class,java.util.Set,com.sca4d.core.api.plugin.PluginLoader,java.nio.file.Path)" class="member-name-link">DefaultPluginRuntime(TreeCode, String, Class&lt;? extends PluginEntrypoint&gt;, Set&lt;String&gt;, PluginLoader, Path)</a> - Constructor for class com.sca4d.plugin.runtime.<a href="com/sca4d/plugin/runtime/DefaultPluginRuntime.html" title="class in com.sca4d.plugin.runtime">DefaultPluginRuntime</a></dt>
+<dt><a href="com/sca4d/plugin/runtime/DefaultPluginRuntime.html#%3Cinit%3E(com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.Class,java.util.Set,com.sca4d.core.api.plugin.PluginLoader,java.nio.file.Path,com.sca4d.core.api.plugin.PluginConfiguration)" class="member-name-link">DefaultPluginRuntime(TreeCode, String, Class&lt;? extends PluginEntrypoint&gt;, Set&lt;String&gt;, PluginLoader, Path, PluginConfiguration&lt;C&gt;)</a> - Constructor for class com.sca4d.plugin.runtime.<a href="com/sca4d/plugin/runtime/DefaultPluginRuntime.html" title="class in com.sca4d.plugin.runtime">DefaultPluginRuntime</a></dt>
 <dd>
 <div class="block">保存宿主 API、共享类清单与具体加载实现；不扫描宿主 classpath。</div>
 </dd>
@@ -86,6 +86,8 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:R">R</h2>
 <dl class="index">
+<dt><a href="com/sca4d/plugin/runtime/DefaultPluginRuntime.html#reload(com.sca4d.core.api.name.code.TreeCode,java.time.Duration)" class="member-name-link">reload(TreeCode, Duration)</a> - Method in class com.sca4d.plugin.runtime.<a href="com/sca4d/plugin/runtime/DefaultPluginRuntime.html" title="class in com.sca4d.plugin.runtime">DefaultPluginRuntime</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/plugin/runtime/DefaultPluginRuntime.html#replace(java.nio.file.Path,java.time.Duration)" class="member-name-link">replace(Path, Duration)</a> - Method in class com.sca4d.plugin.runtime.<a href="com/sca4d/plugin/runtime/DefaultPluginRuntime.html" title="class in com.sca4d.plugin.runtime">DefaultPluginRuntime</a></dt>
 <dd>&nbsp;</dd>
 </dl>

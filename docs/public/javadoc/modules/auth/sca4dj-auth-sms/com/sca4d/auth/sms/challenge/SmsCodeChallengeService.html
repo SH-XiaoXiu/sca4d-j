@@ -103,12 +103,12 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.identity.AccountDirectory,com.sca4d.core.api.identity.RealmKey,com.sca4d.core.api.notification.Notifications,com.sca4d.auth.sms.challenge.RedisSmsCodeChallengeStore,com.sca4d.core.api.security.SecretHasher,com.sca4d.core.api.setting.Settings,java.time.Clock)" class="member-name-link">SmsCodeChallengeService</a><wbr>(@NotNull com.sca4d.core.api.identity.AccountDirectory&nbsp;accounts,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.identity.AccountDirectory,com.sca4d.core.api.identity.RealmKey,com.sca4d.core.api.notification.Notifications,com.sca4d.auth.sms.challenge.RedisSmsCodeChallengeStore,com.sca4d.core.api.security.SecretHasher,com.sca4d.auth.sms.config.SmsCodeSettings,java.time.Clock)" class="member-name-link">SmsCodeChallengeService</a><wbr>(@NotNull com.sca4d.core.api.identity.AccountDirectory&nbsp;accounts,
  @NotNull com.sca4d.core.api.identity.RealmKey&nbsp;accountRealm,
  @NotNull com.sca4d.core.api.notification.Notifications&nbsp;notifications,
  @NotNull <a href="RedisSmsCodeChallengeStore.html" title="class in com.sca4d.auth.sms.challenge">RedisSmsCodeChallengeStore</a>&nbsp;store,
  @NotNull com.sca4d.core.api.security.SecretHasher&nbsp;hasher,
- @NotNull com.sca4d.core.api.setting.Settings&nbsp;settings,
+ @NotNull <a href="../config/SmsCodeSettings.html" title="class in com.sca4d.auth.sms.config">SmsCodeSettings</a>&nbsp;settings,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建 SMS Challenge 服务。</div>
@@ -170,7 +170,7 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.identity.AccountDirectory,com.sca4d.core.api.identity.RealmKey,com.sca4d.core.api.notification.Notifications,com.sca4d.auth.sms.challenge.RedisSmsCodeChallengeStore,com.sca4d.core.api.security.SecretHasher,com.sca4d.core.api.setting.Settings,java.time.Clock)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.identity.AccountDirectory,com.sca4d.core.api.identity.RealmKey,com.sca4d.core.api.notification.Notifications,com.sca4d.auth.sms.challenge.RedisSmsCodeChallengeStore,com.sca4d.core.api.security.SecretHasher,com.sca4d.auth.sms.config.SmsCodeSettings,java.time.Clock)">
 <h3>SmsCodeChallengeService</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">SmsCodeChallengeService</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.identity.AccountDirectory&nbsp;accounts,
@@ -183,7 +183,7 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull com.sca4d.core.api.security.SecretHasher&nbsp;hasher,
  @NotNull
- @NotNull com.sca4d.core.api.setting.Settings&nbsp;settings,
+ @NotNull <a href="../config/SmsCodeSettings.html" title="class in com.sca4d.auth.sms.config">SmsCodeSettings</a>&nbsp;settings,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</span></div>
 <div class="block">创建 SMS Challenge 服务。</div>

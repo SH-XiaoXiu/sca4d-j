@@ -2,6 +2,8 @@ package com.sca4d.app.server.plugin;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sca4d.app.server.authentication.AuthenticationActions;
 import com.sca4d.app.server.authentication.AuthenticationMethodSettings;
 import com.sca4d.app.server.plugin.api.Sca4dServerPlugin;
@@ -14,17 +16,20 @@ import com.sca4d.app.server.plugin.mfa.MfaSettings;
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationActionCode;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
+import com.sca4d.core.api.codec.JsonCodec;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.plugin.ApiTarget;
 import com.sca4d.core.api.plugin.PluginLease;
 import com.sca4d.core.api.plugin.PluginStatus;
 import com.sca4d.core.api.plugin.PluginUnavailableException;
+import com.sca4d.core.spring.setting.YamlCodec;
 import com.sca4d.plugin.pf4j.Pf4jPluginLoader;
 import com.sca4d.plugin.runtime.DefaultPluginRuntime;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.springframework.mock.env.MockEnvironment;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -40,6 +45,7 @@ import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
@@ -58,7 +64,7 @@ class MfaPluginRuntimeTest {
     @Test
     @DisplayName("实际 JAR 双向读取宿主事实并保留登录和独立因素规则")
     void authenticatesUsingActualPluginJar() {
-        try (DefaultPluginRuntime runtime = runtime()) {
+        try (var runtime = runtime()) {
             assertThrows(PluginUnavailableException.class, runtime::verifyRequired);
             runtime.replace(artifact(), Duration.ZERO);
             runtime.verifyRequired();
@@ -101,7 +107,7 @@ class MfaPluginRuntimeTest {
     @Test
     @DisplayName("原始 invoke 拒绝未公开操作、非法参数和不存在的扩展")
     void validatesRawInvocation() {
-        try (DefaultPluginRuntime runtime = runtime()) {
+        try (var runtime = runtime()) {
             runtime.replace(artifact(), Duration.ZERO);
             ApiTarget target = new ApiTarget(TreeCode.of("AUTH:MFA:POLICY"), null);
             assertThrows(
@@ -125,11 +131,12 @@ class MfaPluginRuntimeTest {
     @Test
     @DisplayName("错误入口和不兼容 API 的候选不会替换活动策略")
     void preservesActivePluginAfterCandidateFailure() throws Exception {
-        try (DefaultPluginRuntime runtime = runtime()) {
+        try (var runtime = runtime()) {
             runtime.replace(artifact(), Duration.ZERO);
-            Path badEntry = candidate("1.1.0", "missing.Plugin", ">=1.0.0 & <2.0.0");
+            Path badEntry = candidate(document -> ((ObjectNode) document.path("plugin")).put("main", "missing.Plugin"));
             assertThrows(IllegalStateException.class, () -> runtime.replace(badEntry, Duration.ZERO));
-            Path incompatible = candidate("1.1.0", "com.sca4d.app.mfa.MfaPolicyPlugin", ">=2.0.0");
+            Path incompatible = candidate(
+                    document -> ((ObjectNode) document.path("plugin")).put("requires", ">=2.0.0"));
             assertThrows(IllegalStateException.class, () -> runtime.replace(incompatible, Duration.ZERO));
             assertEquals(1, runtime.statuses().size());
             assertEquals(PluginStatus.State.ACTIVE, runtime.statuses().getFirst().state());
@@ -144,7 +151,7 @@ class MfaPluginRuntimeTest {
     @Test
     @DisplayName("更新等待旧作用域结束且稳定客户端使用新代次")
     void drainsOldGenerationAfterScope() throws Exception {
-        try (DefaultPluginRuntime runtime = runtime();
+        try (var runtime = runtime();
                 var workers = Executors.newSingleThreadExecutor()) {
             runtime.replace(artifact(), Duration.ZERO);
             MfaPolicy policy = MfaPolicyContract.INSTANCE.client(runtime, null);
@@ -160,10 +167,7 @@ class MfaPluginRuntimeTest {
             });
             assertTrue(entered.await(10, TimeUnit.SECONDS));
             var update = runtime.replace(
-                    candidate(
-                            "1.1.0",
-                            "com.sca4d.app.mfa.MfaPolicyPlugin",
-                            ">=1.0.0 & <2.0.0"),
+                    candidate(document -> ((ObjectNode) document.path("plugin")).put("version", "1.1.0")),
                     Duration.ZERO);
             assertEquals(PluginStatus.State.DRAINING, update.previous().state());
             assertEquals("1.1.0", update.current().descriptor().version());
@@ -183,13 +187,63 @@ class MfaPluginRuntimeTest {
         assertThrows(ClassNotFoundException.class, () -> Class.forName("com.sca4d.app.mfa.MfaPolicyPlugin"));
         try (JarFile jar = new JarFile(artifact().toFile())) {
             assertNotNull(jar.getJarEntry("com/sca4d/app/mfa/MfaPolicyPlugin.class"));
+            assertNotNull(jar.getJarEntry("plugin.yml"));
+            assertNull(jar.getJarEntry("META-INF/sca4dj/plugin.properties"));
+            assertTrue(jar.stream().anyMatch(entry -> entry.getName().startsWith("META-INF/licenses/jackson-core-")));
+            assertTrue(
+                    jar.stream().anyMatch(entry -> entry.getName().startsWith("META-INF/licenses/jackson-databind-")));
+            try (InputStream input = jar
+                    .getInputStream(jar.getJarEntry("META-INF/services/com.fasterxml.jackson.core.JsonFactory"))) {
+                String providers = new String(input.readAllBytes(), StandardCharsets.UTF_8);
+                assertTrue(providers.contains("com.fasterxml.jackson.core.JsonFactory"));
+                assertTrue(providers.contains("com.fasterxml.jackson.dataformat.yaml.YAMLFactory"));
+            }
             assertNull(jar.getJarEntry("com/sca4d/app/server/plugin/mfa/MfaPolicy.class"));
             assertNull(jar.getJarEntry("com/sca4d/core/api/name/code/TreeCode.class"));
         }
     }
 
+    @Test
+    @DisplayName("插件私有 YAML 开关可以要求敏感动作重新认证，配置重载沿用活动构件")
+    void appliesPrivatePolicyOptionsAndReloadsCachedArtifact() throws Exception {
+        try (var runtime = runtime()) {
+            runtime.replace(artifact(), Duration.ZERO);
+            MfaPolicy policy = MfaPolicyContract.INSTANCE.client(runtime, null);
+            var action = new AuthenticationActionCode(AuthenticationActions.PASSWORD_REPLACE_CODE);
+            assertTrue(policy.requirementFor(42, action).reusableAuthenticationMaximumAge().isPresent());
+            Path strict = candidate(
+                    document -> ((ObjectNode) document.path("policy"))
+                            .put("reuse-sensitive-authentication", false));
+            runtime.replace(strict, Duration.ZERO);
+            assertTrue(policy.requirementFor(42, action).reusableAuthenticationMaximumAge().isEmpty());
+            assertEquals(2, policy.requirementFor(42, action).factorCount());
+            Files.delete(strict);
+            runtime.reload(TreeCode.of("SCA4D:SERVER:MFA"), Duration.ZERO);
+            assertTrue(policy.requirementFor(42, action).reusableAuthenticationMaximumAge().isEmpty());
+        }
+    }
+
+    @Test
+    @DisplayName("App 不解释插件私有字段，私有字段非法时插件候选失败并保留活动策略")
+    void preservesPolicyWhenPrivateConfigurationIsInvalid() throws Exception {
+        try (var runtime = runtime()) {
+            runtime.replace(artifact(), Duration.ZERO);
+            Path invalid = candidate(
+                    document -> ((ObjectNode) document.path("policy"))
+                            .put("reuse-sensitive-authentication", "false"));
+            assertThrows(IllegalStateException.class, () -> runtime.replace(invalid, Duration.ZERO));
+            assertEquals(1, runtime.statuses().size());
+            var action = new AuthenticationActionCode(AuthenticationActions.PASSWORD_REPLACE_CODE);
+            assertTrue(
+                    MfaPolicyContract.INSTANCE.client(runtime, null)
+                            .requirementFor(42, action)
+                            .reusableAuthenticationMaximumAge()
+                            .isPresent());
+        }
+    }
+
     /** 用生成契约与测试事实构造公开运行入口。 */
-    private DefaultPluginRuntime runtime() {
+    private DefaultPluginRuntime<Sca4dServerPluginSettings> runtime() {
         Set<String> shared = new HashSet<>();
         Properties description = new Properties();
         try (InputStream input = Sca4dServerPlugin.class.getClassLoader()
@@ -206,13 +260,16 @@ class MfaPluginRuntimeTest {
         } catch (Exception failure) {
             throw new IllegalStateException(failure);
         }
-        DefaultPluginRuntime runtime = new DefaultPluginRuntime(
+        var runtime = new DefaultPluginRuntime<>(
                 TreeCode.of("SCA4D:SERVER"),
-                "1.0.0",
+                "1.1.0",
                 Sca4dServerPlugin.class,
                 shared,
                 new Pf4jPluginLoader(),
-                temporary.resolve("cache"));
+                temporary.resolve("cache"),
+                new Sca4dServerPluginConfiguration(
+                        new MockEnvironment()
+                                .withProperty("spring.application.name", "sca4d-server")));
         runtime.declare(MfaFactsContract.INSTANCE);
         runtime.declare(MfaPolicyContract.INSTANCE);
         runtime.bind(MfaFactsContract.INSTANCE.bind(new Facts(), null));
@@ -236,8 +293,19 @@ class MfaPluginRuntimeTest {
                         new AuthenticationMethodSettings(PASSKEY, false, true, true)));
     }
 
-    /** 仅改变构件描述构造候选，实际类仍来自独立 JAR。 */
-    private Path candidate(String version, String entry, String range) throws Exception {
+    /** 用结构化 YAML 修改候选元信息或私有配置，实际类仍来自独立 JAR。 */
+    private Path candidate(Consumer<ObjectNode> edit) throws Exception {
+        YamlCodec<JsonNode> yaml = new YamlCodec<>(new JsonCodec<>() {
+            @Override
+            public @NotNull JsonNode encode(@NotNull JsonNode value) {
+                return value;
+            }
+
+            @Override
+            public @NotNull JsonNode decode(@NotNull JsonNode wire) {
+                return wire;
+            }
+        });
         Path result = Files.createTempFile(temporary, "candidate-", ".jar");
         try (JarFile original = new JarFile(artifact().toFile());
                 JarOutputStream output = new JarOutputStream(Files.newOutputStream(result))) {
@@ -245,15 +313,13 @@ class MfaPluginRuntimeTest {
             while (entries.hasMoreElements()) {
                 JarEntry old = entries.nextElement();
                 output.putNextEntry(new JarEntry(old.getName()));
-                if (old.getName().equals("META-INF/sca4dj/plugin.properties")) {
-                    Properties properties = new Properties();
+                if (old.getName().equals("plugin.yml")) {
+                    ObjectNode document;
                     try (InputStream input = original.getInputStream(old)) {
-                        properties.load(input);
+                        document = (ObjectNode) yaml.decode(input.readAllBytes());
                     }
-                    properties.setProperty("plugin.version", version);
-                    properties.setProperty("plugin.entry", entry);
-                    properties.setProperty("plugin.requires-api", range);
-                    properties.store(output, "Test candidate");
+                    edit.accept(document);
+                    output.write(yaml.encode(document));
                 } else if (!old.isDirectory()) {
                     try (InputStream input = original.getInputStream(old)) {
                         input.transferTo(output);

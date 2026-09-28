@@ -15,6 +15,7 @@ import org.junit.jupiter.api.io.TempDir;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.tools.DiagnosticCollector;
@@ -98,8 +99,60 @@ class PluginCodeGenerationTest {
                 """));
     }
 
+    @Test
+    @DisplayName("App 配置类型生成强类型读取入口并进入 API 导出清单")
+    void exportsTypedApplicationConfiguration() throws Exception {
+        Path values = temporary.resolve("Values.java");
+        Files.writeString(values, """
+                package fixture;
+                import com.sca4d.core.api.plugin.PluginApiType;
+                /** 保存 App 公开的测试配置。 */
+                @PluginApiType public final class Values {
+                    private final String name;
+                    public Values(String name) { this.name = name; }
+                    /** 返回测试配置值。 */
+                    public String name() { return name; }
+                }
+                """);
+        assertTrue(
+                compile(
+                        "Configured",
+                        """
+                                package fixture;
+                                import com.sca4d.core.api.plugin.*;
+                                /** 声明配置生成测试使用的宿主接口。 */
+                                @PluginService("TEST:CONFIGURED") public interface Configured {
+                                    /** 返回测试值。 */
+                                    @PluginOperation("READ") String read();
+                                }
+                                """,
+                        List.of(
+                                "-Asca4dj.plugin.api.id=TEST:APP",
+                                "-Asca4dj.plugin.api.version=1.1.0",
+                                "-Asca4dj.plugin.api.package=fixture.generated",
+                                "-Asca4dj.plugin.api.entry=TestPlugin",
+                                "-Asca4dj.plugin.api.configuration=fixture.Values"),
+                        values));
+        String context = Files.readString(temporary.resolve("sources/fixture/generated/TestPluginContext.java"));
+        assertTrue(context.contains("fixture.Values configuration()"));
+        assertTrue(context.contains("delegate.configuration(fixture.Values.class)"));
+        assertTrue(
+                Files.readString(temporary.resolve("META-INF/sca4dj/api-classes.list"))
+                        .contains("fixture.Values\n"));
+        try (var input = Files.newInputStream(temporary.resolve("META-INF/sca4dj/api.properties"))) {
+            var metadata = new java.util.Properties();
+            metadata.load(input);
+            assertEquals("fixture.Values", metadata.getProperty("api.configuration-type"));
+        }
+    }
+
     /** 在独立输出中编译声明与生成代码，使用实际 Core API 的类型。 */
     private boolean compile(String name, String source) throws Exception {
+        return compile(name, source, List.of());
+    }
+
+    /** 编译带有 App 生成参数及额外公开类型的声明，输出目录保持与单契约测试相同。 */
+    private boolean compile(String name, String source, List<String> arguments, Path... companions) throws Exception {
         Path file = temporary.resolve(name + ".java");
         Files.writeString(file, source);
         var compiler = ToolProvider.getSystemJavaCompiler();
@@ -107,19 +160,24 @@ class PluginCodeGenerationTest {
         try (var manager = compiler.getStandardFileManager(diagnostics, null, null)) {
             String classpath = Path.of(ApiContract.class.getProtectionDomain().getCodeSource().getLocation().toURI())
                     .toString();
-            var task = compiler.getTask(
-                    null,
-                    manager,
-                    diagnostics,
+            List<String> options = new ArrayList<>(
                     List.of(
                             "-classpath",
                             classpath,
                             "-d",
                             temporary.toString(),
                             "-s",
-                            temporary.resolve("sources").toString()),
+                            temporary.resolve("sources").toString()));
+            options.addAll(arguments);
+            List<Path> sources = new ArrayList<>(List.of(file));
+            sources.addAll(List.of(companions));
+            var task = compiler.getTask(
                     null,
-                    manager.getJavaFileObjects(file.toFile()));
+                    manager,
+                    diagnostics,
+                    options,
+                    null,
+                    manager.getJavaFileObjectsFromPaths(sources));
             task.setProcessors(List.of(new PluginApiProcessor()));
             return task.call();
         }

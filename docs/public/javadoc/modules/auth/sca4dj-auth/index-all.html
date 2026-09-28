@@ -64,7 +64,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回认证完成后允许执行的动作。</div>
 </dd>
-<dt><a href="com/sca4d/auth/config/AuthSettings.html#ATTEMPT_TTL" class="member-name-link">ATTEMPT_TTL</a> - Static variable in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthSettings.html" title="class in com.sca4d.auth.config">AuthSettings</a></dt>
+<dt><a href="com/sca4d/auth/config/AuthSettings.html#ATTEMPT_TTL" class="member-name-link">ATTEMPT_TTL</a> - Variable in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthSettings.html" title="class in com.sca4d.auth.config">AuthSettings</a></dt>
 <dd>
 <div class="block">跨请求认证尝试有效期。</div>
 </dd>
@@ -110,6 +110,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">配置 HS256 JWT 的密钥轮换、受众、有效期和长度限制。</div>
 </dd>
+<dt><a href="com/sca4d/auth/config/AuthProperties.Token.html" class="type-name-link" title="class in com.sca4d.auth.config">AuthProperties.Token</a> - Class in <a href="com/sca4d/auth/config/package-summary.html">com.sca4d.auth.config</a></dt>
+<dd>
+<div class="block">配置普通请求使用的认证 Token 模式。</div>
+</dd>
 <dt><a href="com/sca4d/auth/web/AuthRequestInterceptor.html" class="type-name-link" title="class in com.sca4d.auth.web">AuthRequestInterceptor</a> - Class in <a href="com/sca4d/auth/web/package-summary.html">com.sca4d.auth.web</a></dt>
 <dd>
 <div class="block">按 Controller 注解恢复 Session，并在参数绑定前拒绝未声明匿名访问的未认证请求。</div>
@@ -121,6 +125,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/auth/config/AuthSettings.html" class="type-name-link" title="class in com.sca4d.auth.config">AuthSettings</a> - Class in <a href="com/sca4d/auth/config/package-summary.html">com.sca4d.auth.config</a></dt>
 <dd>
 <div class="block">声明认证模块可以由客户管理的会话、尝试和 JWT 有效期。</div>
+</dd>
+<dt><a href="com/sca4d/auth/config/AuthSettings.html#%3Cinit%3E(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.setting.access.SettingWriter)" class="member-name-link">AuthSettings(SettingReader&lt;String&gt;, SettingWriter&lt;String&gt;)</a> - Constructor for class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthSettings.html" title="class in com.sca4d.auth.config">AuthSettings</a></dt>
+<dd>
+<div class="block">构造模块设置，每个应用上下文独立保存 Source。</div>
 </dd>
 <dt><a href="com/sca4d/auth/engine/AuthenticationMethods.html#available(com.sca4d.core.api.identity.Account,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">available(Account, TreeCode)</a> - Method in class com.sca4d.auth.engine.<a href="com/sca4d/auth/engine/AuthenticationMethods.html" title="class in com.sca4d.auth.engine">AuthenticationMethods</a></dt>
 <dd>
@@ -263,6 +271,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/auth/config/AuthProperties.Jwt.html#getMaxTokenLength()" class="member-name-link">getMaxTokenLength()</a> - Method in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthProperties.Jwt.html" title="class in com.sca4d.auth.config">AuthProperties.Jwt</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/config/AuthProperties.Token.html#getMode()" class="member-name-link">getMode()</a> - Method in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthProperties.Token.html" title="class in com.sca4d.auth.config">AuthProperties.Token</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/config/AuthProperties.html#getToken()" class="member-name-link">getToken()</a> - Method in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthProperties.html" title="class in com.sca4d.auth.config">AuthProperties</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/config/AuthProperties.html#getTokenMode()" class="member-name-link">getTokenMode()</a> - Method in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthProperties.html" title="class in com.sca4d.auth.config">AuthProperties</a></dt>
 <dd>
 <div class="block">读取普通 HTTP 请求默认使用的 Token 模式。</div>
@@ -299,7 +311,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建使用五分钟 access Token 和 6144 字符上限的 JWT 配置。</div>
 </dd>
-<dt><a href="com/sca4d/auth/config/AuthSettings.html#JWT_ACCESS_TTL" class="member-name-link">JWT_ACCESS_TTL</a> - Static variable in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthSettings.html" title="class in com.sca4d.auth.config">AuthSettings</a></dt>
+<dt><a href="com/sca4d/auth/config/AuthSettings.html#JWT_ACCESS_TTL" class="member-name-link">JWT_ACCESS_TTL</a> - Variable in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthSettings.html" title="class in com.sca4d.auth.config">AuthSettings</a></dt>
 <dd>
 <div class="block">短效 access JWT 有效期。</div>
 </dd>
@@ -307,7 +319,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用独立 HS256 密钥把完整 Core Session 编码为短效 JWS 投影，并在请求中离线恢复。</div>
 </dd>
-<dt><a href="com/sca4d/auth/jwt/JwtSessionProjection.html#%3Cinit%3E(com.sca4d.auth.session.codec.SessionCodec,com.sca4d.auth.config.AuthProperties,com.sca4d.core.api.setting.Settings,java.time.Clock)" class="member-name-link">JwtSessionProjection(SessionCodec, AuthProperties, Settings, Clock)</a> - Constructor for class com.sca4d.auth.jwt.<a href="com/sca4d/auth/jwt/JwtSessionProjection.html" title="class in com.sca4d.auth.jwt">JwtSessionProjection</a></dt>
+<dt><a href="com/sca4d/auth/jwt/JwtSessionProjection.html#%3Cinit%3E(com.sca4d.auth.session.codec.SessionCodec,com.sca4d.auth.config.AuthProperties,com.sca4d.auth.config.AuthSettings,java.time.Clock)" class="member-name-link">JwtSessionProjection(SessionCodec, AuthProperties, AuthSettings, Clock)</a> - Constructor for class com.sca4d.auth.jwt.<a href="com/sca4d/auth/jwt/JwtSessionProjection.html" title="class in com.sca4d.auth.jwt">JwtSessionProjection</a></dt>
 <dd>
 <div class="block">创建 JWT 投影服务并验证 JWT 模式需要的全部签名配置。</div>
 </dd>
@@ -396,7 +408,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用认证方法目录、Redis 尝试和应用动作策略编排零到三因素认证。</div>
 </dd>
-<dt><a href="com/sca4d/auth/engine/RedisAuthenticationAttempts.html#%3Cinit%3E(com.sca4d.auth.engine.AuthenticationMethods,com.sca4d.auth.engine.attempt.RedisAuthenticationAttemptStore,com.sca4d.core.api.authentication.AuthenticationPolicy,com.sca4d.core.api.setting.Settings,java.time.Clock)" class="member-name-link">RedisAuthenticationAttempts(AuthenticationMethods, RedisAuthenticationAttemptStore, AuthenticationPolicy, Settings, Clock)</a> - Constructor for class com.sca4d.auth.engine.<a href="com/sca4d/auth/engine/RedisAuthenticationAttempts.html" title="class in com.sca4d.auth.engine">RedisAuthenticationAttempts</a></dt>
+<dt><a href="com/sca4d/auth/engine/RedisAuthenticationAttempts.html#%3Cinit%3E(com.sca4d.auth.engine.AuthenticationMethods,com.sca4d.auth.engine.attempt.RedisAuthenticationAttemptStore,com.sca4d.core.api.authentication.AuthenticationPolicy,com.sca4d.auth.config.AuthSettings,java.time.Clock)" class="member-name-link">RedisAuthenticationAttempts(AuthenticationMethods, RedisAuthenticationAttemptStore, AuthenticationPolicy, AuthSettings, Clock)</a> - Constructor for class com.sca4d.auth.engine.<a href="com/sca4d/auth/engine/RedisAuthenticationAttempts.html" title="class in com.sca4d.auth.engine">RedisAuthenticationAttempts</a></dt>
 <dd>
 <div class="block">创建默认认证引擎。</div>
 </dd>
@@ -501,7 +513,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">保存与 backing Session 相同有效期的 Token 索引。</div>
 </dd>
-<dt><a href="com/sca4d/auth/config/AuthSettings.html#SESSION_TTL" class="member-name-link">SESSION_TTL</a> - Static variable in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthSettings.html" title="class in com.sca4d.auth.config">AuthSettings</a></dt>
+<dt><a href="com/sca4d/auth/config/AuthSettings.html#SESSION_TTL" class="member-name-link">SESSION_TTL</a> - Variable in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthSettings.html" title="class in com.sca4d.auth.config">AuthSettings</a></dt>
 <dd>
 <div class="block">登录建立的 Session 有效期。</div>
 </dd>
@@ -533,7 +545,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用已经成功的认证记录建立、恢复、刷新和终止 Session。</div>
 </dd>
-<dt><a href="com/sca4d/auth/session/SessionService.html#%3Cinit%3E(com.sca4d.auth.session.SessionIdentityLoadService,com.sca4d.auth.session.codec.PrincipalLoaders,com.sca4d.auth.session.codec.PrincipalIdLoaders,com.sca4d.auth.session.codec.ResourceLoaders,com.sca4d.auth.session.codec.ResourceIdLoaders,com.sca4d.auth.session.SaTokenSessionManager,com.sca4d.auth.jwt.JwtSessionProjection,com.sca4d.core.api.setting.Settings,java.time.Clock)" class="member-name-link">SessionService(SessionIdentityLoadService, PrincipalLoaders, PrincipalIdLoaders, ResourceLoaders, ResourceIdLoaders, SaTokenSessionManager, JwtSessionProjection, Settings, Clock)</a> - Constructor for class com.sca4d.auth.session.<a href="com/sca4d/auth/session/SessionService.html" title="class in com.sca4d.auth.session">SessionService</a></dt>
+<dt><a href="com/sca4d/auth/session/SessionService.html#%3Cinit%3E(com.sca4d.auth.session.SessionIdentityLoadService,com.sca4d.auth.session.codec.PrincipalLoaders,com.sca4d.auth.session.codec.PrincipalIdLoaders,com.sca4d.auth.session.codec.ResourceLoaders,com.sca4d.auth.session.codec.ResourceIdLoaders,com.sca4d.auth.session.SaTokenSessionManager,com.sca4d.auth.jwt.JwtSessionProjection,com.sca4d.auth.config.AuthSettings,java.time.Clock)" class="member-name-link">SessionService(SessionIdentityLoadService, PrincipalLoaders, PrincipalIdLoaders, ResourceLoaders, ResourceIdLoaders, SaTokenSessionManager, JwtSessionProjection, AuthSettings, Clock)</a> - Constructor for class com.sca4d.auth.session.<a href="com/sca4d/auth/session/SessionService.html" title="class in com.sca4d.auth.session">SessionService</a></dt>
 <dd>
 <div class="block">创建 Session 服务。</div>
 </dd>
@@ -551,6 +563,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">设置接受和签发的 JWT 最大字符数。</div>
 </dd>
+<dt><a href="com/sca4d/auth/config/AuthProperties.Token.html#setMode(com.sca4d.core.api.authentication.AuthTokenMode)" class="member-name-link">setMode(AuthTokenMode)</a> - Method in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthProperties.Token.html" title="class in com.sca4d.auth.config">AuthProperties.Token</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/config/AuthProperties.html#setTokenMode(com.sca4d.core.api.authentication.AuthTokenMode)" class="member-name-link">setTokenMode(AuthTokenMode)</a> - Method in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthProperties.html" title="class in com.sca4d.auth.config">AuthProperties</a></dt>
 <dd>
 <div class="block">设置普通 HTTP 请求默认使用的 Token 模式。</div>
@@ -581,6 +595,8 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/auth/session/SaTokenSessionControl.html#terminateAccount(long,com.sca4d.core.api.authentication.SessionTerminationReason)" class="member-name-link">terminateAccount(long, SessionTerminationReason)</a> - Method in class com.sca4d.auth.session.<a href="com/sca4d/auth/session/SaTokenSessionControl.html" title="class in com.sca4d.auth.session">SaTokenSessionControl</a></dt>
 <dt><a href="com/sca4d/auth/session/SaTokenSessionControl.html#terminateOtherSessions(long,com.sca4d.core.api.authentication.SessionId,com.sca4d.core.api.authentication.SessionTerminationReason)" class="member-name-link">terminateOtherSessions(long, SessionId, SessionTerminationReason)</a> - Method in class com.sca4d.auth.session.<a href="com/sca4d/auth/session/SaTokenSessionControl.html" title="class in com.sca4d.auth.session">SaTokenSessionControl</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/config/AuthProperties.Token.html#%3Cinit%3E()" class="member-name-link">Token()</a> - Constructor for class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthProperties.Token.html" title="class in com.sca4d.auth.config">AuthProperties.Token</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/session/codec/OperationResourceCodec.html#type()" class="member-name-link">type()</a> - Method in class com.sca4d.auth.session.codec.<a href="com/sca4d/auth/session/codec/OperationResourceCodec.html" title="class in com.sca4d.auth.session.codec">OperationResourceCodec</a></dt>
 <dd>&nbsp;</dd>

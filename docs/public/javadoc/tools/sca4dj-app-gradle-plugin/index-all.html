@@ -57,7 +57,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4dj/gradle/app/PluginArtifactGradlePlugin.html#apply(org.gradle.api.Project)" class="member-name-link">apply(Project)</a> - Method in class com.sca4dj.gradle.app.<a href="com/sca4dj/gradle/app/PluginArtifactGradlePlugin.html" title="class in com.sca4dj.gradle.app">PluginArtifactGradlePlugin</a></dt>
 <dd>
-<div class="block">API 仅用于编译与测试，交付描述写入构建目录。</div>
+<div class="block">API 仅用于编译与测试，插件作者维护的元信息与配置资源原样打包。</div>
 </dd>
 <dt><a href="com/sca4dj/gradle/app/Sca4djAppPlugin.html#apply(org.gradle.api.Project)" class="member-name-link">apply(Project)</a> - Method in class com.sca4dj.gradle.app.<a href="com/sca4dj/gradle/app/Sca4djAppPlugin.html" title="class in com.sca4dj.gradle.app">Sca4djAppPlugin</a></dt>
 <dd>
@@ -77,10 +77,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">读取模块结构片段，按组件依赖顺序生成不可覆盖的 V1。</div>
 </dd>
-<dt><a href="com/sca4dj/gradle/app/PluginArtifactExtension.html#getApi()" class="member-name-link">getApi()</a> - Method in class com.sca4dj.gradle.app.<a href="com/sca4dj/gradle/app/PluginArtifactExtension.html" title="class in com.sca4dj.gradle.app">PluginArtifactExtension</a></dt>
-<dd>
-<div class="block">返回目标 App API 编码。</div>
-</dd>
 <dt><a href="com/sca4dj/gradle/app/PluginApiCompilerArguments.html#getApiId()" class="member-name-link">getApiId()</a> - Method in class com.sca4dj.gradle.app.<a href="com/sca4dj/gradle/app/PluginApiCompilerArguments.html" title="class in com.sca4dj.gradle.app">PluginApiCompilerArguments</a></dt>
 <dd>
 <div class="block">返回 App API 编码输入。</div>
@@ -89,9 +85,13 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回 API 版本输入。</div>
 </dd>
-<dt><a href="com/sca4dj/gradle/app/PluginArtifactExtension.html#getEntryClass()" class="member-name-link">getEntryClass()</a> - Method in class com.sca4dj.gradle.app.<a href="com/sca4dj/gradle/app/PluginArtifactExtension.html" title="class in com.sca4dj.gradle.app">PluginArtifactExtension</a></dt>
+<dt><a href="com/sca4dj/gradle/app/PluginApiCompilerArguments.html#getConfigurationType()" class="member-name-link">getConfigurationType()</a> - Method in class com.sca4dj.gradle.app.<a href="com/sca4dj/gradle/app/PluginApiCompilerArguments.html" title="class in com.sca4dj.gradle.app">PluginApiCompilerArguments</a></dt>
 <dd>
-<div class="block">返回插件入口完整类名。</div>
+<div class="block">返回 App 公开配置类型输入。</div>
+</dd>
+<dt><a href="com/sca4dj/gradle/app/PluginApiExtension.html#getConfigurationType()" class="member-name-link">getConfigurationType()</a> - Method in class com.sca4dj.gradle.app.<a href="com/sca4dj/gradle/app/PluginApiExtension.html" title="class in com.sca4dj.gradle.app">PluginApiExtension</a></dt>
+<dd>
+<div class="block">返回 App 向插件公开的配置完整类名，类型必须声明 PluginApiType。</div>
 </dd>
 <dt><a href="com/sca4dj/gradle/app/PluginApiCompilerArguments.html#getEntryName()" class="member-name-link">getEntryName()</a> - Method in class com.sca4dj.gradle.app.<a href="com/sca4dj/gradle/app/PluginApiCompilerArguments.html" title="class in com.sca4dj.gradle.app">PluginApiCompilerArguments</a></dt>
 <dd>
@@ -113,10 +113,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回稳定 App API 编码。</div>
 </dd>
-<dt><a href="com/sca4dj/gradle/app/PluginArtifactExtension.html#getId()" class="member-name-link">getId()</a> - Method in class com.sca4dj.gradle.app.<a href="com/sca4dj/gradle/app/PluginArtifactExtension.html" title="class in com.sca4dj.gradle.app">PluginArtifactExtension</a></dt>
-<dd>
-<div class="block">返回稳定插件编码。</div>
-</dd>
 <dt><a href="com/sca4dj/gradle/app/InitFlywayTask.html#getMigrationDirectory()" class="member-name-link">getMigrationDirectory()</a> - Method in class com.sca4dj.gradle.app.<a href="com/sca4dj/gradle/app/InitFlywayTask.html" title="class in com.sca4dj.gradle.app">InitFlywayTask</a></dt>
 <dd>
 <div class="block">返回 App 自己维护的 Flyway 迁移目录。</div>
@@ -128,10 +124,6 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4dj/gradle/app/Sca4djAppExtension.html#getMigrationName()" class="member-name-link">getMigrationName()</a> - Method in class com.sca4dj.gradle.app.<a href="com/sca4dj/gradle/app/Sca4djAppExtension.html" title="class in com.sca4dj.gradle.app">Sca4djAppExtension</a></dt>
 <dd>
 <div class="block">返回 Flyway 初始迁移文件使用的稳定名称。</div>
-</dd>
-<dt><a href="com/sca4dj/gradle/app/PluginArtifactExtension.html#getRequiresApi()" class="member-name-link">getRequiresApi()</a> - Method in class com.sca4dj.gradle.app.<a href="com/sca4dj/gradle/app/PluginArtifactExtension.html" title="class in com.sca4dj.gradle.app">PluginArtifactExtension</a></dt>
-<dd>
-<div class="block">返回插件接受的 App API 版本范围。</div>
 </dd>
 <dt><a href="com/sca4dj/gradle/app/InitFlywayTask.html#getRuntimeClasspath()" class="member-name-link">getRuntimeClasspath()</a> - Method in class com.sca4dj.gradle.app.<a href="com/sca4dj/gradle/app/InitFlywayTask.html" title="class in com.sca4dj.gradle.app">InitFlywayTask</a></dt>
 <dd>
@@ -186,12 +178,6 @@ loadScripts(document, 'script');</script>
 <div class="block">为 App 注册代码生成、可发布 API 构件和精确共享类索引。</div>
 </dd>
 <dt><a href="com/sca4dj/gradle/app/PluginApiGradlePlugin.html#%3Cinit%3E()" class="member-name-link">PluginApiGradlePlugin()</a> - Constructor for class com.sca4dj.gradle.app.<a href="com/sca4dj/gradle/app/PluginApiGradlePlugin.html" title="class in com.sca4dj.gradle.app">PluginApiGradlePlugin</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="com/sca4dj/gradle/app/PluginArtifactExtension.html" class="type-name-link" title="class in com.sca4dj.gradle.app">PluginArtifactExtension</a> - Class in <a href="com/sca4dj/gradle/app/package-summary.html">com.sca4dj.gradle.app</a></dt>
-<dd>
-<div class="block">配置具体插件的身份、入口及所需 App API。</div>
-</dd>
-<dt><a href="com/sca4dj/gradle/app/PluginArtifactExtension.html#%3Cinit%3E()" class="member-name-link">PluginArtifactExtension()</a> - Constructor for class com.sca4dj.gradle.app.<a href="com/sca4dj/gradle/app/PluginArtifactExtension.html" title="class in com.sca4dj.gradle.app">PluginArtifactExtension</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4dj/gradle/app/PluginArtifactGradlePlugin.html" class="type-name-link" title="class in com.sca4dj.gradle.app">PluginArtifactGradlePlugin</a> - Class in <a href="com/sca4dj/gradle/app/package-summary.html">com.sca4dj.gradle.app</a></dt>
 <dd>

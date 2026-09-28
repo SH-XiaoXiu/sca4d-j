@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">读取仍然有效的认证尝试已经确定的账号，供 Challenge 类认证方法准备后续材料。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingOwner.html#account(com.sca4d.core.api.identity.Account)" class="member-name-link">account(Account)</a> - Static method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingOwner.html" title="class in com.sca4d.core.api.setting">SettingOwner</a></dt>
+<dt><a href="com/sca4d/core/api/setting/value/SettingOwner.html#account(com.sca4d.core.api.identity.Account)" class="member-name-link">account(Account)</a> - Static method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/identity/Account.html" class="type-name-link" title="class in com.sca4d.core.api.identity">Account</a> - Class in <a href="com/sca4d/core/api/identity/package-summary.html">com.sca4d.core.api.identity</a></dt>
 <dd>
@@ -761,6 +761,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建不可变值集合。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/setting/Setting.Builder.html#build()" class="member-name-link">build()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.Builder.html" title="class in com.sca4d.core.api.setting">Setting.Builder</a></dt>
+<dd>
+<div class="block">创建只读设置，历史 Codec 目录必须完整且无冲突。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/data/DataGraph.html#builder()" class="member-name-link">builder()</a> - Static method in class com.sca4d.core.api.data.<a href="com/sca4d/core/api/data/DataGraph.html" title="class in com.sca4d.core.api.data">DataGraph</a></dt>
 <dd>
 <div class="block">开始声明输入键和计算节点。</div>
@@ -769,6 +773,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建数据值构建器。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/setting/Setting.html#builder(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.codec.VersionedCodec)" class="member-name-link">builder(TreeCode, VersionedCodec&lt;T, W&gt;)</a> - Static method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.html" title="class in com.sca4d.core.api.setting">Setting</a></dt>
+<dd>
+<div class="block">用领域 Codec 创建构造器，值类型和内容版本均从 Codec 获取。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/data/DataGraph.Builder.html#%3Cinit%3E()" class="member-name-link">Builder()</a> - Constructor for class com.sca4d.core.api.data.<a href="com/sca4d/core/api/data/DataGraph.Builder.html" title="class in com.sca4d.core.api.data">DataGraph.Builder</a></dt>
 <dd>
 <div class="block">创建空 Graph 构建器。</div>
@@ -776,6 +784,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/data/DataValues.Builder.html#%3Cinit%3E()" class="member-name-link">Builder()</a> - Constructor for class com.sca4d.core.api.data.<a href="com/sca4d/core/api/data/DataValues.Builder.html" title="class in com.sca4d.core.api.data">DataValues.Builder</a></dt>
 <dd>
 <div class="block">创建空构建器。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/Setting.Builder.html#buildWritable()" class="member-name-link">buildWritable()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.Builder.html" title="class in com.sca4d.core.api.setting">Setting.Builder</a></dt>
+<dd>
+<div class="block">创建可写设置；没有写入目标时失败。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/error/BusinessException.html" class="type-name-link" title="class in com.sca4d.core.api.error">BusinessException</a> - Exception Class in <a href="com/sca4d/core/api/error/package-summary.html">com.sca4d.core.api.error</a></dt>
 <dd>
@@ -907,6 +919,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/storage/FileStorage.html#checkAvailable()" class="member-name-link">checkAvailable()</a> - Method in interface com.sca4d.core.api.storage.<a href="com/sca4d/core/api/storage/FileStorage.html" title="interface in com.sca4d.core.api.storage">FileStorage</a></dt>
 <dd>
 <div class="block">验证连接、凭据和默认容器可用。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/Setting.html#checkOwner(com.sca4d.core.api.setting.value.SettingOwner)" class="member-name-link">checkOwner(SettingOwner)</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.html" title="class in com.sca4d.core.api.setting">Setting</a></dt>
+<dd>
+<div class="block">拒绝把固定 owner 的设置当成其他所属访问。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/authentication/AuthenticationActionCode.html#child(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">child(TreeCode)</a> - Method in class com.sca4d.core.api.authentication.<a href="com/sca4d/core/api/authentication/AuthenticationActionCode.html" title="class in com.sca4d.core.api.authentication">AuthenticationActionCode</a></dt>
 <dd>&nbsp;</dd>
@@ -1089,6 +1105,24 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回固定能力编码。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/setting/access/SettingReader.html#code()" class="member-name-link">code()</a> - Method in interface com.sca4d.core.api.setting.access.<a href="com/sca4d/core/api/setting/access/SettingReader.html" title="interface in com.sca4d.core.api.setting.access">SettingReader</a></dt>
+<dd>
+<div class="block">返回读写实现的稳定诊断编码。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/access/SettingWriter.html#code()" class="member-name-link">code()</a> - Method in interface com.sca4d.core.api.setting.access.<a href="com/sca4d/core/api/setting/access/SettingWriter.html" title="interface in com.sca4d.core.api.setting.access">SettingWriter</a></dt>
+<dd>
+<div class="block">返回与对应读取器一致的稳定诊断编码。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/Setting.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.html" title="class in com.sca4d.core.api.setting">Setting</a></dt>
+<dd>
+<div class="block">返回设置身份，序列化格式不参与身份判断。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/SettingGroup.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingGroup.html" title="class in com.sca4d.core.api.setting">SettingGroup</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/setting/value/SettingValue.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingValue.html" title="class in com.sca4d.core.api.setting.value">SettingValue</a></dt>
+<dd>
+<div class="block">返回设置稳定编码。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/storage/FileErrorCode.html#code()" class="member-name-link">code()</a> - Method in enum class com.sca4d.core.api.storage.<a href="com/sca4d/core/api/storage/FileErrorCode.html" title="enum class in com.sca4d.core.api.storage">FileErrorCode</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/webrealtime/WebRealtimeMessage.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.core.api.webrealtime.<a href="com/sca4d/core/api/webrealtime/WebRealtimeMessage.html" title="class in com.sca4d.core.api.webrealtime">WebRealtimeMessage</a></dt>
@@ -1109,8 +1143,18 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/messaging/MessageHandler.html#codec()" class="member-name-link">codec()</a> - Method in interface com.sca4d.core.api.messaging.<a href="com/sca4d/core/api/messaging/MessageHandler.html" title="interface in com.sca4d.core.api.messaging">MessageHandler</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/setting/definition/PersonalSetting.html#codec()" class="member-name-link">codec()</a> - Method in class com.sca4d.core.api.setting.definition.<a href="com/sca4d/core/api/setting/definition/PersonalSetting.html" title="class in com.sca4d.core.api.setting.definition">PersonalSetting</a></dt>
+<dd>
+<div class="block">返回支持管理界面 JSON 表示的当前版本 Codec。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/definition/SystemSetting.html#codec()" class="member-name-link">codec()</a> - Method in class com.sca4d.core.api.setting.definition.<a href="com/sca4d/core/api/setting/definition/SystemSetting.html" title="class in com.sca4d.core.api.setting.definition">SystemSetting</a></dt>
+<dd>
+<div class="block">返回支持管理界面 JSON 表示的当前版本 Codec。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/setting/Setting.html#codec()" class="member-name-link">codec()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.html" title="class in com.sca4d.core.api.setting">Setting</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">返回当前写入 Codec，版本与 Java 类型不在 Setting 中重复声明。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/codec/Codec.html" class="type-name-link" title="interface in com.sca4d.core.api.codec">Codec&lt;V,<wbr>W&gt;</a> - Interface in <a href="com/sca4d/core/api/codec/package-summary.html">com.sca4d.core.api.codec</a></dt>
 <dd>
 <div class="block">定义领域值与外部表示之间的双向转换。</div>
@@ -1122,6 +1166,14 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/codec/CodecMigrationStep.html#%3Cinit%3E(com.sca4d.core.api.codec.VersionedCodec,com.sca4d.core.api.codec.VersionedCodec)" class="member-name-link">CodecMigrationStep(VersionedCodec&lt;V, W&gt;, VersionedCodec&lt;V, W&gt;)</a> - Constructor for class com.sca4d.core.api.codec.<a href="com/sca4d/core/api/codec/CodecMigrationStep.html" title="class in com.sca4d.core.api.codec">CodecMigrationStep</a></dt>
 <dd>
 <div class="block">创建相邻版本迁移步骤。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/value/SettingValue.html#codecVersion()" class="member-name-link">codecVersion()</a> - Method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingValue.html" title="class in com.sca4d.core.api.setting.value">SettingValue</a></dt>
+<dd>
+<div class="block">返回内容结构版本；原始无版本来源为零，最终结果使用当前 Codec 版本。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/value/SettingValue.Origin.html#codecVersion()" class="member-name-link">codecVersion()</a> - Method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingValue.Origin.html" title="class in com.sca4d.core.api.setting.value">SettingValue.Origin</a></dt>
+<dd>
+<div class="block">返回原始内容声明的版本。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/codec/CodecVersionSelector.html" class="type-name-link" title="interface in com.sca4d.core.api.codec">CodecVersionSelector&lt;W&gt;</a> - Interface in <a href="com/sca4d/core/api/codec/package-summary.html">com.sca4d.core.api.codec</a></dt>
 <dd>
@@ -1277,6 +1329,26 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">定义数据库设置的类型化键、编解码和无缓存读取入口。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/setting/access/package-summary.html">com.sca4d.core.api.setting.access</a> - package com.sca4d.core.api.setting.access</dt>
+<dd>
+<div class="block">定义设置读取和条件写入的边界。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/codec/package-summary.html">com.sca4d.core.api.setting.codec</a> - package com.sca4d.core.api.setting.codec</dt>
+<dd>
+<div class="block">定义设置内容的结构化编解码契约。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/definition/package-summary.html">com.sca4d.core.api.setting.definition</a> - package com.sca4d.core.api.setting.definition</dt>
+<dd>
+<div class="block">定义系统、业务和个人设置的管理入口及所属约束。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/exception/package-summary.html">com.sca4d.core.api.setting.exception</a> - package com.sca4d.core.api.setting.exception</dt>
+<dd>
+<div class="block">定义设置读取、写入和结构校验失败。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/value/package-summary.html">com.sca4d.core.api.setting.value</a> - package com.sca4d.core.api.setting.value</dt>
+<dd>
+<div class="block">保存设置所属和一次读取结果的值对象。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/storage/package-summary.html">com.sca4d.core.api.storage</a> - package com.sca4d.core.api.storage</dt>
 <dd>
 <div class="block">声明文件上传、业务绑定、短期读取地址和存储对象操作。</div>
@@ -1312,6 +1384,15 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/condition/DnfClause.html#conditions()" class="member-name-link">conditions()</a> - Method in class com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a></dt>
 <dd>
 <div class="block">读取该子句按登记顺序检查的全部条件。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/plugin/PluginContext.html#configuration(java.lang.Class)" class="member-name-link">configuration(Class&lt;C&gt;)</a> - Method in interface com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/PluginContext.html" title="interface in com.sca4d.core.api.plugin">PluginContext</a></dt>
+<dd>
+<div class="block">返回当前代次的 App 公开配置；生成上下文使用准确类型调用此入口。
+ 类型不一致或代次停止后访问时失败，旧作用域在排空期间继续使用旧配置。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/identity/Subject.html#configureSystemId(long)" class="member-name-link">configureSystemId(long)</a> - Static method in class com.sca4d.core.api.identity.<a href="com/sca4d/core/api/identity/Subject.html" title="class in com.sca4d.core.api.identity">Subject</a></dt>
+<dd>
+<div class="block">发布启动配置确认的 SYSTEM Subject ID；只能把默认值替换为一次正数配置。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/delivery/DeliveryOutcome.html#confirmed()" class="member-name-link">confirmed()</a> - Static method in class com.sca4d.core.api.delivery.<a href="com/sca4d/core/api/delivery/DeliveryOutcome.html" title="class in com.sca4d.core.api.delivery">DeliveryOutcome</a></dt>
 <dd>&nbsp;</dd>
@@ -1688,7 +1769,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">把对应类型和版本的历史 JSON 还原成强类型载荷。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingCodec.html#decode(java.lang.String)" class="member-name-link">decode(String)</a> - Method in interface com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingCodec.html" title="interface in com.sca4d.core.api.setting">SettingCodec</a></dt>
+<dt><a href="com/sca4d/core/api/setting/codec/SettingCodec.html#decode(java.lang.String)" class="member-name-link">decode(String)</a> - Method in interface com.sca4d.core.api.setting.codec.<a href="com/sca4d/core/api/setting/codec/SettingCodec.html" title="interface in com.sca4d.core.api.setting.codec">SettingCodec</a></dt>
 <dd>
 <div class="block">把数据库或初始化节点提供的文本转换为设置值。</div>
 </dd>
@@ -1704,7 +1785,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用外部保存的版本解码，例如数据库单独保存 schema_version 的场景。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingCodec.html#decodeJson(com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">decodeJson(JsonNode)</a> - Method in interface com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingCodec.html" title="interface in com.sca4d.core.api.setting">SettingCodec</a></dt>
+<dt><a href="com/sca4d/core/api/setting/codec/SettingCodec.html#decodeJson(com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">decodeJson(JsonNode)</a> - Method in interface com.sca4d.core.api.setting.codec.<a href="com/sca4d/core/api/setting/codec/SettingCodec.html" title="interface in com.sca4d.core.api.setting.codec">SettingCodec</a></dt>
 <dd>
 <div class="block">把 HTTP JSON 节点转换为类型化值。</div>
 </dd>
@@ -1721,7 +1802,13 @@ loadScripts(document, 'script');</script>
 <div class="block">读取所有请求语言都不受支持时使用的 Locale。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/setting/Setting.html#defaultValue()" class="member-name-link">defaultValue()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.html" title="class in com.sca4d.core.api.setting">Setting</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">返回默认值副本；必需设置没有默认值。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/Setting.Builder.html#defaultValue(T)" class="member-name-link">defaultValue(T)</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.Builder.html" title="class in com.sca4d.core.api.setting">Setting.Builder</a></dt>
+<dd>
+<div class="block">声明最低优先级默认值；未声明则为必需设置。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/notification/NotificationType.html#define(java.lang.String,java.lang.Class,java.util.function.Consumer,java.util.function.BiConsumer)" class="member-name-link">define(String, Class&lt;T&gt;, Consumer&lt;NotificationDefinition&lt;T&gt;&gt;, BiConsumer&lt;T, NotificationExecution&gt;)</a> - Static method in class com.sca4d.core.api.notification.<a href="com/sca4d/core/api/notification/NotificationType.html" title="class in com.sca4d.core.api.notification">NotificationType</a></dt>
 <dd>
 <div class="block">创建一种在应用启动时完成声明的领域通知类型。</div>
@@ -1860,8 +1947,12 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/storage/FileStatus.html#description()" class="member-name-link">description()</a> - Method in enum class com.sca4d.core.api.storage.<a href="com/sca4d/core/api/storage/FileStatus.html" title="enum class in com.sca4d.core.api.storage">FileStatus</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/setting/SystemSetting.html#descriptionKey()" class="member-name-link">descriptionKey()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SystemSetting.html" title="class in com.sca4d.core.api.setting">SystemSetting</a></dt>
+<dt><a href="com/sca4d/core/api/setting/definition/SystemSetting.html#descriptionKey()" class="member-name-link">descriptionKey()</a> - Method in class com.sca4d.core.api.setting.definition.<a href="com/sca4d/core/api/setting/definition/SystemSetting.html" title="class in com.sca4d.core.api.setting.definition">SystemSetting</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/plugin/PluginConfigurationSnapshot.html#descriptor()" class="member-name-link">descriptor()</a> - Method in class com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/PluginConfigurationSnapshot.html" title="class in com.sca4d.core.api.plugin">PluginConfigurationSnapshot</a></dt>
+<dd>
+<div class="block">返回 App 从插件元信息映射的运行描述。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/plugin/PluginContext.html#descriptor()" class="member-name-link">descriptor()</a> - Method in interface com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/PluginContext.html" title="interface in com.sca4d.core.api.plugin">PluginContext</a></dt>
 <dd>
 <div class="block">返回当前插件描述。</div>
@@ -2019,7 +2110,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">把 Resource 编码为 Session wire 载荷。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingCodec.html#encode(T)" class="member-name-link">encode(T)</a> - Method in interface com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingCodec.html" title="interface in com.sca4d.core.api.setting">SettingCodec</a></dt>
+<dt><a href="com/sca4d/core/api/setting/codec/SettingCodec.html#encode(T)" class="member-name-link">encode(T)</a> - Method in interface com.sca4d.core.api.setting.codec.<a href="com/sca4d/core/api/setting/codec/SettingCodec.html" title="interface in com.sca4d.core.api.setting.codec">SettingCodec</a></dt>
 <dd>
 <div class="block">把已经通过业务校验的设置值转换为数据库文本。</div>
 </dd>
@@ -2027,7 +2118,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/codec/VersionedCodecAdapter.html#encode(V)" class="member-name-link">encode(V)</a> - Method in class com.sca4d.core.api.codec.<a href="com/sca4d/core/api/codec/VersionedCodecAdapter.html" title="class in com.sca4d.core.api.codec">VersionedCodecAdapter</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/setting/SettingCodec.html#encodeJson(T)" class="member-name-link">encodeJson(T)</a> - Method in interface com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingCodec.html" title="interface in com.sca4d.core.api.setting">SettingCodec</a></dt>
+<dt><a href="com/sca4d/core/api/setting/codec/SettingCodec.html#encodeJson(T)" class="member-name-link">encodeJson(T)</a> - Method in interface com.sca4d.core.api.setting.codec.<a href="com/sca4d/core/api/setting/codec/SettingCodec.html" title="interface in com.sca4d.core.api.setting.codec">SettingCodec</a></dt>
 <dd>
 <div class="block">把类型化值转换为 HTTP 使用的 JSON 节点。</div>
 </dd>
@@ -2079,7 +2170,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">表示应用当前运行阶段（Environment）。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SystemSetting.html#environmentVariable()" class="member-name-link">environmentVariable()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SystemSetting.html" title="class in com.sca4d.core.api.setting">SystemSetting</a></dt>
+<dt><a href="com/sca4d/core/api/setting/definition/SystemSetting.html#environmentVariableSuffix()" class="member-name-link">environmentVariableSuffix()</a> - Method in class com.sca4d.core.api.setting.definition.<a href="com/sca4d/core/api/setting/definition/SystemSetting.html" title="class in com.sca4d.core.api.setting.definition">SystemSetting</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/event/EventType.html#equals(java.lang.Object)" class="member-name-link">equals(Object)</a> - Method in class com.sca4d.core.api.event.<a href="com/sca4d/core/api/event/EventType.html" title="class in com.sca4d.core.api.event">EventType</a></dt>
 <dd>&nbsp;</dd>
@@ -2133,15 +2224,15 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/security/EncryptedSecret.html#equals(java.lang.Object)" class="member-name-link">equals(Object)</a> - Method in class com.sca4d.core.api.security.<a href="com/sca4d/core/api/security/EncryptedSecret.html" title="class in com.sca4d.core.api.security">EncryptedSecret</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/setting/SettingOwner.html#equals(java.lang.Object)" class="member-name-link">equals(Object)</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingOwner.html" title="class in com.sca4d.core.api.setting">SettingOwner</a></dt>
+<dt><a href="com/sca4d/core/api/setting/value/SettingOwner.html#equals(java.lang.Object)" class="member-name-link">equals(Object)</a> - Method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/setting/Settings.html#erase(com.sca4d.core.api.setting.LogicSetting,com.sca4d.core.api.setting.SettingOwner)" class="member-name-link">erase(LogicSetting&lt;?&gt;, SettingOwner)</a> - Method in interface com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Settings.html" title="interface in com.sca4d.core.api.setting">Settings</a></dt>
+<dt><a href="com/sca4d/core/api/setting/access/SettingWriter.html#erase(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.setting.value.SettingOwner)" class="member-name-link">erase(TreeCode, SettingOwner)</a> - Method in interface com.sca4d.core.api.setting.access.<a href="com/sca4d/core/api/setting/access/SettingWriter.html" title="interface in com.sca4d.core.api.setting.access">SettingWriter</a></dt>
 <dd>
-<div class="block">在 owner 已删除时物理删除指定逻辑设置行。</div>
+<div class="block">owner 生命周期结束时物理清理；普通恢复默认值使用 reset。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/PreferenceSettings.html#erase(com.sca4d.core.api.setting.PreferenceSetting,com.sca4d.core.api.setting.SettingOwner)" class="member-name-link">erase(PreferenceSetting&lt;?&gt;, SettingOwner)</a> - Method in interface com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/PreferenceSettings.html" title="interface in com.sca4d.core.api.setting">PreferenceSettings</a></dt>
+<dt><a href="com/sca4d/core/api/setting/WritableSetting.html#erase(com.sca4d.core.api.setting.value.SettingOwner)" class="member-name-link">erase(SettingOwner)</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/WritableSetting.html" title="class in com.sca4d.core.api.setting">WritableSetting</a></dt>
 <dd>
-<div class="block">在 owner 已删除时物理删除指定偏好行。</div>
+<div class="block">owner 已删除时物理清理；不用于普通恢复默认值。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/authentication/AuthenticationMethod.html#eraseAccount(long)" class="member-name-link">eraseAccount(long)</a> - Method in interface com.sca4d.core.api.authentication.<a href="com/sca4d/core/api/authentication/AuthenticationMethod.html" title="interface in com.sca4d.core.api.authentication">AuthenticationMethod</a></dt>
 <dd>
@@ -2510,6 +2601,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">元数据不能进一步区分固定电话和移动电话。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/setting/Setting.html#fixedOwner()" class="member-name-link">fixedOwner()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.html" title="class in com.sca4d.core.api.setting">Setting</a></dt>
+<dd>
+<div class="block">返回固定 owner；未声明时为空，每次调用必须提供 owner。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/id/Id.html#floatValue()" class="member-name-link">floatValue()</a> - Method in class com.sca4d.core.api.id.<a href="com/sca4d/core/api/id/Id.html" title="class in com.sca4d.core.api.id">Id</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/flow/FlowCatalog.html" class="type-name-link" title="class in com.sca4d.core.api.flow">FlowCatalog</a> - Class in <a href="com/sca4d/core/api/flow/package-summary.html">com.sca4d.core.api.flow</a></dt>
@@ -2642,6 +2737,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回起始节点标识。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/setting/Setting.Builder.html#from(com.sca4d.core.api.setting.access.SettingReader)" class="member-name-link">from(SettingReader&lt;D&gt;)</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.Builder.html" title="class in com.sca4d.core.api.setting">Setting.Builder</a></dt>
+<dd>
+<div class="block">追加与领域外部表示相同的读取器。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/Setting.Builder.html#from(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.codec.Codec)" class="member-name-link">from(SettingReader&lt;W&gt;, Codec&lt;D, W&gt;)</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.Builder.html" title="class in com.sca4d.core.api.setting">Setting.Builder</a></dt>
+<dd>
+<div class="block">先转换文件等内容格式，再选择领域版本 Codec。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/job/PipelineJobPlan.html#from(java.lang.Class)" class="member-name-link">from(Class&lt;I&gt;)</a> - Static method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/PipelineJobPlan.html" title="class in com.sca4d.core.api.job">PipelineJobPlan</a></dt>
 <dd>
 <div class="block">从 PipelineJob 根输入开始声明计划，允许第一个动作直接形成并发分支。</div>
@@ -2753,6 +2856,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">读取不执行额外断言或转换的值。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/setting/Setting.html#get()" class="member-name-link">get()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.html" title="class in com.sca4d.core.api.setting">Setting</a></dt>
+<dd>
+<div class="block">读取固定 owner 的值。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/data/DataOps.IdPipe.html#get(int)" class="member-name-link">get(int)</a> - Method in class com.sca4d.core.api.data.<a href="com/sca4d/core/api/data/DataOps.IdPipe.html" title="class in com.sca4d.core.api.data">DataOps.IdPipe</a></dt>
 <dd>
 <div class="block">生成包含指定长度随机部分的新 ID。</div>
@@ -2761,19 +2868,13 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">读取指定键的非空值。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/Settings.html#get(com.sca4d.core.api.setting.LogicSetting,com.sca4d.core.api.setting.SettingOwner)" class="member-name-link">get(LogicSetting&lt;T&gt;, SettingOwner)</a> - Method in interface com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Settings.html" title="interface in com.sca4d.core.api.setting">Settings</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/setting/Settings.html#get(com.sca4d.core.api.setting.SystemSetting)" class="member-name-link">get(SystemSetting&lt;T&gt;)</a> - Method in interface com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Settings.html" title="interface in com.sca4d.core.api.setting">Settings</a></dt>
-<dd>
-<div class="block">每次调用都从数据库读取一个设置；数据库没有值时返回 Java 默认值。</div>
-</dd>
-<dt><a href="com/sca4d/core/api/setting/SettingValues.html#get(com.sca4d.core.api.setting.SystemSetting)" class="member-name-link">get(SystemSetting&lt;T&gt;)</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingValues.html" title="class in com.sca4d.core.api.setting">SettingValues</a></dt>
+<dt><a href="com/sca4d/core/api/setting/value/SettingValues.html#get(com.sca4d.core.api.setting.definition.SystemSetting)" class="member-name-link">get(SystemSetting&lt;T&gt;)</a> - Method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingValues.html" title="class in com.sca4d.core.api.setting.value">SettingValues</a></dt>
 <dd>
 <div class="block">按类型化定义读取当前快照中的值。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/Settings.html#get(java.util.Collection)" class="member-name-link">get(Collection&lt;? extends SystemSetting&lt;?&gt;&gt;)</a> - Method in interface com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Settings.html" title="interface in com.sca4d.core.api.setting">Settings</a></dt>
+<dt><a href="com/sca4d/core/api/setting/Setting.html#get(com.sca4d.core.api.setting.value.SettingOwner)" class="member-name-link">get(SettingOwner)</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.html" title="class in com.sca4d.core.api.setting">Setting</a></dt>
 <dd>
-<div class="block">使用一次数据库查询读取多个设置并返回不可变快照。</div>
+<div class="block">读取指定 owner 的有效值。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/gateway/GatewayRegistrationRequest.html#getApiRequirements()" class="member-name-link">getApiRequirements()</a> - Method in class com.sca4d.core.api.gateway.<a href="com/sca4d/core/api/gateway/GatewayRegistrationRequest.html" title="class in com.sca4d.core.api.gateway">GatewayRegistrationRequest</a></dt>
 <dd>
@@ -2849,7 +2950,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回不可变的 <a href="com/sca4d/core/api/flow/FlowGraph.html" title="class in com.sca4d.core.api.flow"><code>FlowGraph</code></a>。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SystemSetting.html#group()" class="member-name-link">group()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SystemSetting.html" title="class in com.sca4d.core.api.setting">SystemSetting</a></dt>
+<dt><a href="com/sca4d/core/api/setting/definition/SystemSetting.html#group()" class="member-name-link">group()</a> - Method in class com.sca4d.core.api.setting.definition.<a href="com/sca4d/core/api/setting/definition/SystemSetting.html" title="class in com.sca4d.core.api.setting.definition">SystemSetting</a></dt>
 <dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:H">H</h2>
@@ -2942,7 +3043,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/security/EncryptedSecret.html#hashCode()" class="member-name-link">hashCode()</a> - Method in class com.sca4d.core.api.security.<a href="com/sca4d/core/api/security/EncryptedSecret.html" title="class in com.sca4d.core.api.security">EncryptedSecret</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/setting/SettingOwner.html#hashCode()" class="member-name-link">hashCode()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingOwner.html" title="class in com.sca4d.core.api.setting">SettingOwner</a></dt>
+<dt><a href="com/sca4d/core/api/setting/value/SettingOwner.html#hashCode()" class="member-name-link">hashCode()</a> - Method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/name/code/TreeCode.html#hasNode(com.sca4d.core.api.name.code.Code)" class="member-name-link">hasNode(Code)</a> - Method in class com.sca4d.core.api.name.code.<a href="com/sca4d/core/api/name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></dt>
 <dd>
@@ -3041,7 +3142,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回资源标识。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingOwner.html#id()" class="member-name-link">id()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingOwner.html" title="class in com.sca4d.core.api.setting">SettingOwner</a></dt>
+<dt><a href="com/sca4d/core/api/setting/value/SettingOwner.html#id()" class="member-name-link">id()</a> - Method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/storage/StoredFile.html#id()" class="member-name-link">id()</a> - Method in class com.sca4d.core.api.storage.<a href="com/sca4d/core/api/storage/StoredFile.html" title="class in com.sca4d.core.api.storage">StoredFile</a></dt>
 <dd>
@@ -3177,6 +3278,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">由用户自身特征产生的证明，例如指纹或人脸。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/setting/Setting.Builder.html#inherit(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.setting.value.SettingOwner)" class="member-name-link">inherit(SettingReader&lt;D&gt;, SettingOwner)</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.Builder.html" title="class in com.sca4d.core.api.setting">Setting.Builder</a></dt>
+<dd>
+<div class="block">使用明确的继承 owner，来源顺序仍由声明位置决定。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/scheduling/IntervalSchedule.html#initialDelay()" class="member-name-link">initialDelay()</a> - Method in class com.sca4d.core.api.scheduling.<a href="com/sca4d/core/api/scheduling/IntervalSchedule.html" title="class in com.sca4d.core.api.scheduling">IntervalSchedule</a></dt>
 <dd>
 <div class="block">返回首次触发延迟。</div>
@@ -3223,18 +3328,24 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回阶段输入类型。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/Settings.html#inspect(com.sca4d.core.api.setting.LogicSetting,com.sca4d.core.api.setting.SettingOwner)" class="member-name-link">inspect(LogicSetting&lt;T&gt;, SettingOwner)</a> - Method in interface com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Settings.html" title="interface in com.sca4d.core.api.setting">Settings</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/setting/PreferenceSettings.html#inspect(com.sca4d.core.api.setting.PreferenceSetting,com.sca4d.core.api.setting.SettingOwner)" class="member-name-link">inspect(PreferenceSetting&lt;T&gt;, SettingOwner)</a> - Method in interface com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/PreferenceSettings.html" title="interface in com.sca4d.core.api.setting">PreferenceSettings</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/setting/Settings.html#inspect(com.sca4d.core.api.setting.SystemSetting)" class="member-name-link">inspect(SystemSetting&lt;T&gt;)</a> - Method in interface com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Settings.html" title="interface in com.sca4d.core.api.setting">Settings</a></dt>
-<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/setting/Setting.html#inspect()" class="member-name-link">inspect()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.html" title="class in com.sca4d.core.api.setting">Setting</a></dt>
+<dd>
+<div class="block">返回固定 owner 的值和读取元数据。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/Setting.html#inspect(com.sca4d.core.api.setting.value.SettingOwner)" class="member-name-link">inspect(SettingOwner)</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.html" title="class in com.sca4d.core.api.setting">Setting</a></dt>
+<dd>
+<div class="block">只有缺失才读取下一层；基础值及所有覆盖完成后校验完整结果。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/storage/FileStorage.html#inspect(com.sca4d.core.api.storage.StorageObject)" class="member-name-link">inspect(StorageObject)</a> - Method in interface com.sca4d.core.api.storage.<a href="com/sca4d/core/api/storage/FileStorage.html" title="interface in com.sca4d.core.api.storage">FileStorage</a></dt>
 <dd>
 <div class="block">读取存储中的实际对象元数据。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/render/Renderer.html#inspect(S)" class="member-name-link">inspect(S)</a> - Method in interface com.sca4d.core.api.render.<a href="com/sca4d/core/api/render/Renderer.html" title="interface in com.sca4d.core.api.render">Renderer</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/setting/WritableSetting.html#inspectTarget(com.sca4d.core.api.setting.value.SettingOwner)" class="member-name-link">inspectTarget(SettingOwner)</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/WritableSetting.html" title="class in com.sca4d.core.api.setting">WritableSetting</a></dt>
+<dd>
+<div class="block">返回写入目标的实际存储状态，管理接口使用其版本而不是组合读取版本。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/runtime/InstanceCapabilities.html" class="type-name-link" title="class in com.sca4d.core.api.runtime">InstanceCapabilities</a> - Class in <a href="com/sca4d/core/api/runtime/package-summary.html">com.sca4d.core.api.runtime</a></dt>
 <dd>
 <div class="block">保存当前实例全部能力声明与启用选择；能力不参与业务权限判定。</div>
@@ -3527,7 +3638,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">把领域值与已解析 JSON 树互相转换。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingCodec.html#jsonObject(int)" class="member-name-link">jsonObject(int)</a> - Static method in interface com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingCodec.html" title="interface in com.sca4d.core.api.setting">SettingCodec</a></dt>
+<dt><a href="com/sca4d/core/api/setting/codec/SettingCodec.html#jsonObject(int)" class="member-name-link">jsonObject(int)</a> - Static method in interface com.sca4d.core.api.setting.codec.<a href="com/sca4d/core/api/setting/codec/SettingCodec.html" title="interface in com.sca4d.core.api.setting.codec">SettingCodec</a></dt>
 <dd>
 <div class="block">创建只接受 JSON object 且限制规范编码字节数的文档编解码器。</div>
 </dd>
@@ -3566,10 +3677,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回稳定计划标识。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/Setting.html#key()" class="member-name-link">key()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.html" title="class in com.sca4d.core.api.setting">Setting</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/setting/SettingGroup.html#key()" class="member-name-link">key()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingGroup.html" title="class in com.sca4d.core.api.setting">SettingGroup</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/webrealtime/WebRealtimeTarget.html#key()" class="member-name-link">key()</a> - Method in class com.sca4d.core.api.webrealtime.<a href="com/sca4d/core/api/webrealtime/WebRealtimeTarget.html" title="class in com.sca4d.core.api.webrealtime">WebRealtimeTarget</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/name/Key.html" class="type-name-link" title="class in com.sca4d.core.api.name">Key</a> - Class in <a href="com/sca4d/core/api/name/package-summary.html">com.sca4d.core.api.name</a></dt>
@@ -3631,9 +3738,9 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/dictionary/DictionaryOption.html#labelKey()" class="member-name-link">labelKey()</a> - Method in class com.sca4d.core.api.dictionary.<a href="com/sca4d/core/api/dictionary/DictionaryOption.html" title="class in com.sca4d.core.api.dictionary">DictionaryOption</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/setting/SettingGroup.html#labelKey()" class="member-name-link">labelKey()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingGroup.html" title="class in com.sca4d.core.api.setting">SettingGroup</a></dt>
+<dt><a href="com/sca4d/core/api/setting/definition/SystemSetting.html#labelKey()" class="member-name-link">labelKey()</a> - Method in class com.sca4d.core.api.setting.definition.<a href="com/sca4d/core/api/setting/definition/SystemSetting.html" title="class in com.sca4d.core.api.setting.definition">SystemSetting</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/setting/SystemSetting.html#labelKey()" class="member-name-link">labelKey()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SystemSetting.html" title="class in com.sca4d.core.api.setting">SystemSetting</a></dt>
+<dt><a href="com/sca4d/core/api/setting/SettingGroup.html#labelKey()" class="member-name-link">labelKey()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingGroup.html" title="class in com.sca4d.core.api.setting">SettingGroup</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/dictionary/DictionaryOption.html#labelText()" class="member-name-link">labelText()</a> - Method in class com.sca4d.core.api.dictionary.<a href="com/sca4d/core/api/dictionary/DictionaryOption.html" title="class in com.sca4d.core.api.dictionary">DictionaryOption</a></dt>
 <dd>&nbsp;</dd>
@@ -3674,6 +3781,11 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/authentication/SessionIdentityLoader.html#load(com.sca4d.core.api.identity.Account)" class="member-name-link">load(Account)</a> - Method in interface com.sca4d.core.api.authentication.<a href="com/sca4d/core/api/authentication/SessionIdentityLoader.html" title="interface in com.sca4d.core.api.authentication">SessionIdentityLoader</a></dt>
 <dd>
 <div class="block">重新读取可用 Account 及其 Subject。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/plugin/PluginConfiguration.html#load(java.nio.file.Path)" class="member-name-link">load(Path)</a> - Method in interface com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/PluginConfiguration.html" title="interface in com.sca4d.core.api.plugin">PluginConfiguration</a></dt>
+<dd>
+<div class="block">为新构件读取元信息及额外配置；字段、格式和配置来源由 App 定义。
+ 返回值归候选代次所有，不得修改活动代次的数据；返回前失败时自行释放已创建的资源。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/plugin/PluginLoader.html#load(java.nio.file.Path,com.sca4d.core.api.plugin.PluginDescriptor,java.lang.Class,java.util.Set)" class="member-name-link">load(Path, PluginDescriptor, Class&lt;? extends PluginEntrypoint&gt;, Set&lt;String&gt;)</a> - Method in interface com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/PluginLoader.html" title="interface in com.sca4d.core.api.plugin">PluginLoader</a></dt>
 <dd>
@@ -3751,6 +3863,14 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/call/CallExecution.html#locked()" class="member-name-link">locked()</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/setting/value/SettingValue.html#locked()" class="member-name-link">locked()</a> - Method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingValue.html" title="class in com.sca4d.core.api.setting.value">SettingValue</a></dt>
+<dd>
+<div class="block">返回是否有实际覆盖内容被同步规则锁定。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/value/SettingValue.Origin.html#locked()" class="member-name-link">locked()</a> - Method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingValue.Origin.html" title="class in com.sca4d.core.api.setting.value">SettingValue.Origin</a></dt>
+<dd>
+<div class="block">返回来源内容是否被同步锁定。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/annotation/Locked.html" class="type-name-link" title="annotation interface in com.sca4d.core.api.annotation">Locked</a> - Annotation Interface in <a href="com/sca4d/core/api/annotation/package-summary.html">com.sca4d.core.api.annotation</a></dt>
 <dd>
 <div class="block">声明完整业务调用必须在一项分布式锁内连续执行。</div>
@@ -3787,11 +3907,11 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">输出尚未应用隔离的逻辑名称；普通 Name 不解释分隔符。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/LogicSetting.html" class="type-name-link" title="class in com.sca4d.core.api.setting">LogicSetting&lt;T&gt;</a> - Class in <a href="com/sca4d/core/api/setting/package-summary.html">com.sca4d.core.api.setting</a></dt>
+<dt><a href="com/sca4d/core/api/setting/definition/LogicSetting.html" class="type-name-link" title="class in com.sca4d.core.api.setting.definition">LogicSetting&lt;T&gt;</a> - Class in <a href="com/sca4d/core/api/setting/definition/package-summary.html">com.sca4d.core.api.setting.definition</a></dt>
 <dd>
 <div class="block">定义由后端领域 Service 类型化读取和修改的 owner 设置。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/LogicSetting.html#%3Cinit%3E(java.lang.String,int,T,com.sca4d.core.api.setting.SettingCodec,com.sca4d.core.api.pipeline.Pipeline,boolean)" class="member-name-link">LogicSetting(String, int, T, SettingCodec&lt;T&gt;, Pipeline&lt;T, T&gt;, boolean)</a> - Constructor for class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/LogicSetting.html" title="class in com.sca4d.core.api.setting">LogicSetting</a></dt>
+<dt><a href="com/sca4d/core/api/setting/definition/LogicSetting.html#%3Cinit%3E(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.setting.access.SettingWriter,com.sca4d.core.api.name.code.TreeCode,T,com.sca4d.core.api.setting.codec.SettingCodec,com.sca4d.core.api.pipeline.Pipeline,boolean)" class="member-name-link">LogicSetting(SettingReader&lt;String&gt;, SettingWriter&lt;String&gt;, TreeCode, T, SettingCodec&lt;T&gt;, Pipeline&lt;T, T&gt;, boolean)</a> - Constructor for class com.sca4d.core.api.setting.definition.<a href="com/sca4d/core/api/setting/definition/LogicSetting.html" title="class in com.sca4d.core.api.setting.definition">LogicSetting</a></dt>
 <dd>
 <div class="block">创建后端逻辑设置定义。</div>
 </dd>
@@ -3847,6 +3967,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/query/Page.html#map(java.util.function.Function)" class="member-name-link">map(Function&lt;? super T, ? extends R&gt;)</a> - Method in class com.sca4d.core.api.query.<a href="com/sca4d/core/api/query/Page.html" title="class in com.sca4d.core.api.query">Page</a></dt>
 <dd>
 <div class="block">转换当前页记录并保留分页元数据。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/value/SettingValue.html#map(java.util.function.Function)" class="member-name-link">map(Function&lt;? super T, ? extends R&gt;)</a> - Method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingValue.html" title="class in com.sca4d.core.api.setting.value">SettingValue</a></dt>
+<dd>
+<div class="block">转换存在的内容并保留 IO 元数据；缺失内容不调用解码器。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/flow/FlowCondition.html#matches(com.sca4d.core.api.flow.FlowInstance,com.sca4d.core.api.flow.FlowEvent)" class="member-name-link">matches(FlowInstance, FlowEvent)</a> - Method in interface com.sca4d.core.api.flow.<a href="com/sca4d/core/api/flow/FlowCondition.html" title="interface in com.sca4d.core.api.flow">FlowCondition</a></dt>
 <dd>
@@ -4514,6 +4638,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">在当前值为空时使用指定替代值。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/setting/value/SettingValue.html#origins()" class="member-name-link">origins()</a> - Method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingValue.html" title="class in com.sca4d.core.api.setting.value">SettingValue</a></dt>
+<dd>
+<div class="block">返回不包含原始数据的来源说明。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/data/DataOps.JsonPipe.html#orObj()" class="member-name-link">orObj()</a> - Method in class com.sca4d.core.api.data.<a href="com/sca4d/core/api/data/DataOps.JsonPipe.html" title="class in com.sca4d.core.api.data">DataOps.JsonPipe</a></dt>
 <dd>
 <div class="block">仅在没有 JSON 时创建空对象；已有非对象 JSON 直接失败。</div>
@@ -4590,8 +4718,26 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">指定同一计划已有活动 run 时怎样处理新的 fire。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingValue.html#owner()" class="member-name-link">owner()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingValue.html" title="class in com.sca4d.core.api.setting">SettingValue</a></dt>
-<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/setting/Setting.Builder.html#overlay(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.codec.VersionedCodec,java.util.function.BiFunction)" class="member-name-link">overlay(SettingReader&lt;W&gt;, VersionedCodec&lt;P, W&gt;, BiFunction&lt;P, T, T&gt;)</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.Builder.html" title="class in com.sca4d.core.api.setting">Setting.Builder</a></dt>
+<dd>
+<div class="block">覆盖输入是普通数据；字段 IGNORE、SET、CLEAR 由明确的合并函数解释。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/value/SettingValue.Origin.html#owner()" class="member-name-link">owner()</a> - Method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingValue.Origin.html" title="class in com.sca4d.core.api.setting.value">SettingValue.Origin</a></dt>
+<dd>
+<div class="block">返回实际读取所属。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/value/SettingValue.html#owner()" class="member-name-link">owner()</a> - Method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingValue.html" title="class in com.sca4d.core.api.setting.value">SettingValue</a></dt>
+<dd>
+<div class="block">返回本次请求所属；每个来源的实际所属保存在 origins。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/Setting.Builder.html#owner(com.sca4d.core.api.setting.value.SettingOwner)" class="member-name-link">owner(SettingOwner)</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.Builder.html" title="class in com.sca4d.core.api.setting">Setting.Builder</a></dt>
+<dd>
+<div class="block">固定本设置的 owner，空值表示调用时必须显式提供。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/Setting.Builder.html#owner(java.util.function.Supplier)" class="member-name-link">owner(Supplier&lt;SettingOwner&gt;)</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.Builder.html" title="class in com.sca4d.core.api.setting">Setting.Builder</a></dt>
+<dd>
+<div class="block">声明每次读取都从同一全局配置取得所属，例如运行时可配置的 `Subject.SYSTEM`。</div>
+</dd>
 </dl>
 <h2 class="title" id="I:P">P</h2>
 <dl class="index">
@@ -4773,11 +4919,11 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">个人号码。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/PersonalSetting.html" class="type-name-link" title="class in com.sca4d.core.api.setting">PersonalSetting&lt;T&gt;</a> - Class in <a href="com/sca4d/core/api/setting/package-summary.html">com.sca4d.core.api.setting</a></dt>
+<dt><a href="com/sca4d/core/api/setting/definition/PersonalSetting.html" class="type-name-link" title="class in com.sca4d.core.api.setting.definition">PersonalSetting&lt;T&gt;</a> - Class in <a href="com/sca4d/core/api/setting/definition/package-summary.html">com.sca4d.core.api.setting.definition</a></dt>
 <dd>
 <div class="block">定义需要调用方明确提供 Account、Principal 或 Resource owner 的设置。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/PersonalSetting.html#%3Cinit%3E(java.lang.String,int,T,com.sca4d.core.api.setting.SettingCodec,com.sca4d.core.api.pipeline.Pipeline,boolean)" class="member-name-link">PersonalSetting(String, int, T, SettingCodec&lt;T&gt;, Pipeline&lt;T, T&gt;, boolean)</a> - Constructor for class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/PersonalSetting.html" title="class in com.sca4d.core.api.setting">PersonalSetting</a></dt>
+<dt><a href="com/sca4d/core/api/setting/definition/PersonalSetting.html#%3Cinit%3E(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.setting.access.SettingWriter,com.sca4d.core.api.name.code.TreeCode,T,com.sca4d.core.api.setting.codec.SettingCodec,com.sca4d.core.api.pipeline.Pipeline,boolean)" class="member-name-link">PersonalSetting(SettingReader&lt;String&gt;, SettingWriter&lt;String&gt;, TreeCode, T, SettingCodec&lt;T&gt;, Pipeline&lt;T, T&gt;, boolean)</a> - Constructor for class com.sca4d.core.api.setting.definition.<a href="com/sca4d/core/api/setting/definition/PersonalSetting.html" title="class in com.sca4d.core.api.setting.definition">PersonalSetting</a></dt>
 <dd>
 <div class="block">创建个人设置定义。</div>
 </dd>
@@ -4793,8 +4939,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回节点处理线。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/Setting.html#pipeline()" class="member-name-link">pipeline()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.html" title="class in com.sca4d.core.api.setting">Setting</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/pipeline/Pipeline.html" class="type-name-link" title="class in com.sca4d.core.api.pipeline">Pipeline&lt;I,<wbr>O&gt;</a> - Class in <a href="com/sca4d/core/api/pipeline/package-summary.html">com.sca4d.core.api.pipeline</a></dt>
 <dd>
 <div class="block">按固定顺序把输入传过一组类型相接的 <a href="com/sca4d/core/api/pipeline/PipelineStage.html" title="interface in com.sca4d.core.api.pipeline"><code>PipelineStage</code></a>。</div>
@@ -4842,6 +4986,18 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/plugin/PluginBinding.html" class="type-name-link" title="annotation interface in com.sca4d.core.api.plugin">PluginBinding</a> - Annotation Interface in <a href="com/sca4d/core/api/plugin/package-summary.html">com.sca4d.core.api.plugin</a></dt>
 <dd>
 <div class="block">将宿主对象绑定到生成的服务契约。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/plugin/PluginConfiguration.html" class="type-name-link" title="interface in com.sca4d.core.api.plugin">PluginConfiguration&lt;C&gt;</a> - Interface in <a href="com/sca4d/core/api/plugin/package-summary.html">com.sca4d.core.api.plugin</a></dt>
+<dd>
+<div class="block">由 App 读取插件声明的元信息、映射运行描述，并管理每个代次的公开配置。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/plugin/PluginConfigurationSnapshot.html" class="type-name-link" title="class in com.sca4d.core.api.plugin">PluginConfigurationSnapshot&lt;C&gt;</a> - Class in <a href="com/sca4d/core/api/plugin/package-summary.html">com.sca4d.core.api.plugin</a></dt>
+<dd>
+<div class="block">保存 App 映射的插件描述与一个代次独立使用的公开配置，不决定资源格式或字段。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/plugin/PluginConfigurationSnapshot.html#%3Cinit%3E(com.sca4d.core.api.plugin.PluginDescriptor,C)" class="member-name-link">PluginConfigurationSnapshot(PluginDescriptor, C)</a> - Constructor for class com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/PluginConfigurationSnapshot.html" title="class in com.sca4d.core.api.plugin">PluginConfigurationSnapshot</a></dt>
+<dd>
+<div class="block">保存描述与配置；App 必须提供不可变配置，避免活动代次受到后续重载影响。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/plugin/PluginContext.html" class="type-name-link" title="interface in com.sca4d.core.api.plugin">PluginContext</a> - Interface in <a href="com/sca4d/core/api/plugin/package-summary.html">com.sca4d.core.api.plugin</a></dt>
 <dd>
@@ -4913,11 +5069,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/plugin/PluginUpdate.html#%3Cinit%3E(com.sca4d.core.api.plugin.PluginStatus,com.sca4d.core.api.plugin.PluginStatus)" class="member-name-link">PluginUpdate(PluginStatus, PluginStatus)</a> - Constructor for class com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/PluginUpdate.html" title="class in com.sca4d.core.api.plugin">PluginUpdate</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/setting/SettingCodec.html#positiveDuration()" class="member-name-link">positiveDuration()</a> - Static method in interface com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingCodec.html" title="interface in com.sca4d.core.api.setting">SettingCodec</a></dt>
+<dt><a href="com/sca4d/core/api/setting/codec/SettingCodec.html#positiveDuration()" class="member-name-link">positiveDuration()</a> - Static method in interface com.sca4d.core.api.setting.codec.<a href="com/sca4d/core/api/setting/codec/SettingCodec.html" title="interface in com.sca4d.core.api.setting.codec">SettingCodec</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/setting/SettingCodec.html#positiveInteger()" class="member-name-link">positiveInteger()</a> - Static method in interface com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingCodec.html" title="interface in com.sca4d.core.api.setting">SettingCodec</a></dt>
+<dt><a href="com/sca4d/core/api/setting/codec/SettingCodec.html#positiveInteger()" class="member-name-link">positiveInteger()</a> - Static method in interface com.sca4d.core.api.setting.codec.<a href="com/sca4d/core/api/setting/codec/SettingCodec.html" title="interface in com.sca4d.core.api.setting.codec">SettingCodec</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/setting/SettingCodec.html#positiveLong()" class="member-name-link">positiveLong()</a> - Static method in interface com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingCodec.html" title="interface in com.sca4d.core.api.setting">SettingCodec</a></dt>
+<dt><a href="com/sca4d/core/api/setting/codec/SettingCodec.html#positiveLong()" class="member-name-link">positiveLong()</a> - Static method in interface com.sca4d.core.api.setting.codec.<a href="com/sca4d/core/api/setting/codec/SettingCodec.html" title="interface in com.sca4d.core.api.setting.codec">SettingCodec</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/authentication/AuthenticationFactorKind.html#POSSESSION" class="member-name-link">POSSESSION</a> - Enum constant in enum class com.sca4d.core.api.authentication.<a href="com/sca4d/core/api/authentication/AuthenticationFactorKind.html" title="enum class in com.sca4d.core.api.authentication">AuthenticationFactorKind</a></dt>
 <dd>
@@ -4927,17 +5083,13 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建调用方提交的版本前置条件。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/PreferenceSetting.html" class="type-name-link" title="class in com.sca4d.core.api.setting">PreferenceSetting&lt;T&gt;</a> - Class in <a href="com/sca4d/core/api/setting/package-summary.html">com.sca4d.core.api.setting</a></dt>
+<dt><a href="com/sca4d/core/api/setting/definition/PreferenceSetting.html" class="type-name-link" title="class in com.sca4d.core.api.setting.definition">PreferenceSetting&lt;T&gt;</a> - Class in <a href="com/sca4d/core/api/setting/definition/package-summary.html">com.sca4d.core.api.setting.definition</a></dt>
 <dd>
 <div class="block">定义由前端完整读取和替换、后端不解释具体展示字段的个人偏好。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/PreferenceSetting.html#%3Cinit%3E(java.lang.String,int,T,com.sca4d.core.api.setting.SettingCodec,com.sca4d.core.api.pipeline.Pipeline)" class="member-name-link">PreferenceSetting(String, int, T, SettingCodec&lt;T&gt;, Pipeline&lt;T, T&gt;)</a> - Constructor for class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/PreferenceSetting.html" title="class in com.sca4d.core.api.setting">PreferenceSetting</a></dt>
+<dt><a href="com/sca4d/core/api/setting/definition/PreferenceSetting.html#%3Cinit%3E(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.setting.access.SettingWriter,com.sca4d.core.api.name.code.TreeCode,T,com.sca4d.core.api.setting.codec.SettingCodec,com.sca4d.core.api.pipeline.Pipeline)" class="member-name-link">PreferenceSetting(SettingReader&lt;String&gt;, SettingWriter&lt;String&gt;, TreeCode, T, SettingCodec&lt;T&gt;, Pipeline&lt;T, T&gt;)</a> - Constructor for class com.sca4d.core.api.setting.definition.<a href="com/sca4d/core/api/setting/definition/PreferenceSetting.html" title="class in com.sca4d.core.api.setting.definition">PreferenceSetting</a></dt>
 <dd>
 <div class="block">创建只能以明文 JSON 传输和保存的个人偏好定义。</div>
-</dd>
-<dt><a href="com/sca4d/core/api/setting/PreferenceSettings.html" class="type-name-link" title="interface in com.sca4d.core.api.setting">PreferenceSettings</a> - Interface in <a href="com/sca4d/core/api/setting/package-summary.html">com.sca4d.core.api.setting</a></dt>
-<dd>
-<div class="block">提供个人偏好完整读取、替换、恢复默认值和 owner 删除清理。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/gateway/GatewayHttpHeaders.html#PREFIX" class="member-name-link">PREFIX</a> - Static variable in class com.sca4d.core.api.gateway.<a href="com/sca4d/core/api/gateway/GatewayHttpHeaders.html" title="class in com.sca4d.core.api.gateway">GatewayHttpHeaders</a></dt>
 <dd>
@@ -4954,6 +5106,18 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/storage/FileStorage.html#prepareUpload(long,com.sca4d.core.api.storage.StorageObject,java.lang.String,long,java.time.Instant)" class="member-name-link">prepareUpload(long, StorageObject, String, long, Instant)</a> - Method in interface com.sca4d.core.api.storage.<a href="com/sca4d/core/api/storage/FileStorage.html" title="interface in com.sca4d.core.api.storage">FileStorage</a></dt>
 <dd>
 <div class="block">创建客户端上传临时对象所需的请求。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/value/SettingValue.Origin.html#present()" class="member-name-link">present()</a> - Method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingValue.Origin.html" title="class in com.sca4d.core.api.setting.value">SettingValue.Origin</a></dt>
+<dd>
+<div class="block">返回来源是否包含覆盖内容。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/value/SettingValue.html#present()" class="member-name-link">present()</a> - Method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingValue.html" title="class in com.sca4d.core.api.setting.value">SettingValue</a></dt>
+<dd>
+<div class="block">返回本结果是否含有值，与版本记录是否存在无关。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/codec/SettingCodec.html#presentationType()" class="member-name-link">presentationType()</a> - Method in interface com.sca4d.core.api.setting.codec.<a href="com/sca4d/core/api/setting/codec/SettingCodec.html" title="interface in com.sca4d.core.api.setting.codec">SettingCodec</a></dt>
+<dd>
+<div class="block">返回管理端选择输入控件时使用的稳定值类型。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/plugin/PluginUpdate.html#previous()" class="member-name-link">previous()</a> - Method in class com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/PluginUpdate.html" title="class in com.sca4d.core.api.plugin">PluginUpdate</a></dt>
 <dd>
@@ -5165,6 +5329,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建限流拒绝异常。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/setting/value/SettingValue.html#read(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.setting.value.SettingOwner,T,int,com.sca4d.core.api.concurrent.Version,boolean)" class="member-name-link">read(TreeCode, TreeCode, SettingOwner, T, int, Version, boolean)</a> - Static method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingValue.html" title="class in com.sca4d.core.api.setting.value">SettingValue</a></dt>
+<dd>
+<div class="block">创建一次 IO 读取结果；null 内容表示缺失，codecVersion 为零表示外部表示未携带版本。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/access/SettingReader.html#read(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.setting.value.SettingOwner)" class="member-name-link">read(TreeCode, SettingOwner)</a> - Method in interface com.sca4d.core.api.setting.access.<a href="com/sca4d/core/api/setting/access/SettingReader.html" title="interface in com.sca4d.core.api.setting.access">SettingReader</a></dt>
+<dd>
+<div class="block">返回本次读取的内容、所属和版本；读取失败不能伪装成没有覆盖值。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/permission/Action.html#READ" class="member-name-link">READ</a> - Static variable in class com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/Action.html" title="class in com.sca4d.core.api.permission">Action</a></dt>
 <dd>
 <div class="block">读取资源。</div>
@@ -5172,6 +5344,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/permission/Action.html#READ_VALUE" class="member-name-link">READ_VALUE</a> - Static variable in class com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/Action.html" title="class in com.sca4d.core.api.permission">Action</a></dt>
 <dd>
 <div class="block">`READ` 的稳定动作键，可用于注解参数。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/value/SettingValue.Origin.html#reader()" class="member-name-link">reader()</a> - Method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingValue.Origin.html" title="class in com.sca4d.core.api.setting.value">SettingValue.Origin</a></dt>
+<dd>
+<div class="block">返回读写实现编码。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/data/DataOps.BytePipe.html#readInt(int,java.nio.ByteOrder,java.lang.String)" class="member-name-link">readInt(int, ByteOrder, String)</a> - Method in class com.sca4d.core.api.data.<a href="com/sca4d/core/api/data/DataOps.BytePipe.html" title="class in com.sca4d.core.api.data">DataOps.BytePipe</a></dt>
 <dd>
@@ -5192,6 +5368,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/data/DataOps.BytePipe.html#readUnsignedShort(int,java.nio.ByteOrder,java.lang.String)" class="member-name-link">readUnsignedShort(int, ByteOrder, String)</a> - Method in class com.sca4d.core.api.data.<a href="com/sca4d/core/api/data/DataOps.BytePipe.html" title="class in com.sca4d.core.api.data">DataOps.BytePipe</a></dt>
 <dd>
 <div class="block">按指定字节序读取无符号 short。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/Setting.Builder.html#readVersion(com.sca4d.core.api.codec.VersionedCodec)" class="member-name-link">readVersion(VersionedCodec&lt;T, D&gt;)</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.Builder.html" title="class in com.sca4d.core.api.setting">Setting.Builder</a></dt>
+<dd>
+<div class="block">登记同一领域类型的历史读取 Codec；当前版本始终用于写入。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/storage/FileStatus.html#READY" class="member-name-link">READY</a> - Enum constant in enum class com.sca4d.core.api.storage.<a href="com/sca4d/core/api/storage/FileStatus.html" title="enum class in com.sca4d.core.api.storage">FileStatus</a></dt>
 <dd>
@@ -5317,6 +5497,17 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">仅在 token 仍拥有处理中记录时原子释放失败执行的所有权。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/plugin/PluginRuntime.html#reload(com.sca4d.core.api.name.code.TreeCode,java.time.Duration)" class="member-name-link">reload(TreeCode, Duration)</a> - Method in interface com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/PluginRuntime.html" title="interface in com.sca4d.core.api.plugin">PluginRuntime</a></dt>
+<dd>
+<div class="block">从活动代次保存的构件重载 App 配置，并用独立实例发布新代次；必须在调用作用域外执行。
+ 不重新读取原部署文件；配置或插件初始化失败时已有实例和配置继续接受调用。
+ 发布后旧作用域仍使用旧实例和配置，等待及释放结果与 `replace` 相同。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/plugin/PluginConfiguration.html#reload(java.nio.file.Path)" class="member-name-link">reload(Path)</a> - Method in interface com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/PluginConfiguration.html" title="interface in com.sca4d.core.api.plugin">PluginConfiguration</a></dt>
+<dd>
+<div class="block">从活动构件的副本重新读取配置，为新实例创建独立快照；不得修改已有快照。
+ 返回的插件编码必须与活动代次一致，返回前失败时自行释放已创建的资源。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/authentication/AuthenticationProgress.html#remainingFactorCount()" class="member-name-link">remainingFactorCount()</a> - Method in class com.sca4d.core.api.authentication.<a href="com/sca4d/core/api/authentication/AuthenticationProgress.html" title="class in com.sca4d.core.api.authentication">AuthenticationProgress</a></dt>
 <dd>
 <div class="block">返回满足要求前还需成功验证的不同因素数量。</div>
@@ -5339,23 +5530,23 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">校验一种模板源，并按 Locale 和变量生成具体结果。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/Settings.html#replace(com.sca4d.core.api.setting.LogicSetting,com.sca4d.core.api.setting.SettingOwner,T)" class="member-name-link">replace(LogicSetting&lt;T&gt;, SettingOwner, T)</a> - Method in interface com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Settings.html" title="interface in com.sca4d.core.api.setting">Settings</a></dt>
+<dt><a href="com/sca4d/core/api/setting/access/SettingWriter.html#replace(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.setting.value.SettingOwner,W,int,boolean,com.sca4d.core.api.concurrent.Version)" class="member-name-link">replace(TreeCode, SettingOwner, W, int, boolean, Version)</a> - Method in interface com.sca4d.core.api.setting.access.<a href="com/sca4d/core/api/setting/access/SettingWriter.html" title="interface in com.sca4d.core.api.setting.access">SettingWriter</a></dt>
 <dd>
-<div class="block">完整替换指定 owner 的后端逻辑设置。</div>
+<div class="block">原子校验存储版本并保存完整值；codecVersion 来自实际编码器，secret 要求加密保存。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/PreferenceSettings.html#replace(com.sca4d.core.api.setting.PreferenceSetting,com.sca4d.core.api.setting.SettingOwner,T)" class="member-name-link">replace(PreferenceSetting&lt;T&gt;, SettingOwner, T)</a> - Method in interface com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/PreferenceSettings.html" title="interface in com.sca4d.core.api.setting">PreferenceSettings</a></dt>
+<dt><a href="com/sca4d/core/api/setting/WritableSetting.html#replace(com.sca4d.core.api.setting.value.SettingOwner,T)" class="member-name-link">replace(SettingOwner, T)</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/WritableSetting.html" title="class in com.sca4d.core.api.setting">WritableSetting</a></dt>
 <dd>
-<div class="block">完整替换指定 owner 的偏好。</div>
-</dd>
-<dt><a href="com/sca4d/core/api/setting/Settings.html#replace(com.sca4d.core.api.setting.SystemSetting,T)" class="member-name-link">replace(SystemSetting&lt;T&gt;, T)</a> - Method in interface com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Settings.html" title="interface in com.sca4d.core.api.setting">Settings</a></dt>
-<dd>
-<div class="block">覆盖一个数据库设置值。</div>
+<div class="block">校验并条件保存完整值，返回写入后的有效读取结果。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/plugin/PluginRuntime.html#replace(java.nio.file.Path,java.time.Duration)" class="member-name-link">replace(Path, Duration)</a> - Method in interface com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/PluginRuntime.html" title="interface in com.sca4d.core.api.plugin">PluginRuntime</a></dt>
 <dd>
 <div class="block">从本地普通 JAR 加载插件或替换同编码插件；必须在调用作用域外执行。
  候选初始化、版本校验或绑定冲突失败时抛出异常，已有代次继续接受调用。
  新代次发布后等待旧租用归还；等待超时或线程中断时，新代次仍然生效，旧代次保留 DRAINING 状态。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/WritableSetting.html#replace(T)" class="member-name-link">replace(T)</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/WritableSetting.html" title="class in com.sca4d.core.api.setting">WritableSetting</a></dt>
+<dd>
+<div class="block">保存固定 owner 的完整值。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/call/CallExecution.html#replay(java.lang.Object)" class="member-name-link">replay(Object)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></dt>
 <dd>&nbsp;</dd>
@@ -5467,6 +5658,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回指定账号执行动作前必须满足的认证要求。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/setting/Setting.html#requireOwner()" class="member-name-link">requireOwner()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.html" title="class in com.sca4d.core.api.setting">Setting</a></dt>
+<dd>
+<div class="block">返回明确固定的 owner，不从线程或全局身份猜测。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/annotation/RequirePermission.html" class="type-name-link" title="annotation interface in com.sca4d.core.api.annotation">RequirePermission</a> - Annotation Interface in <a href="com/sca4d/core/api/annotation/package-summary.html">com.sca4d.core.api.annotation</a></dt>
 <dd>
 <div class="block">声明调用必须具有一组资源权限（Required Permission）。</div>
@@ -5507,17 +5702,17 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">校验必填文本并限制规范化后的最大 UTF-16 长度。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/Settings.html#reset(com.sca4d.core.api.setting.LogicSetting,com.sca4d.core.api.setting.SettingOwner)" class="member-name-link">reset(LogicSetting&lt;?&gt;, SettingOwner)</a> - Method in interface com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Settings.html" title="interface in com.sca4d.core.api.setting">Settings</a></dt>
+<dt><a href="com/sca4d/core/api/setting/WritableSetting.html#reset()" class="member-name-link">reset()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/WritableSetting.html" title="class in com.sca4d.core.api.setting">WritableSetting</a></dt>
 <dd>
-<div class="block">删除指定 owner 的逻辑设置覆盖值并保留递增版本。</div>
+<div class="block">清除固定 owner 的目标覆盖值。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/PreferenceSettings.html#reset(com.sca4d.core.api.setting.PreferenceSetting,com.sca4d.core.api.setting.SettingOwner)" class="member-name-link">reset(PreferenceSetting&lt;?&gt;, SettingOwner)</a> - Method in interface com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/PreferenceSettings.html" title="interface in com.sca4d.core.api.setting">PreferenceSettings</a></dt>
+<dt><a href="com/sca4d/core/api/setting/access/SettingWriter.html#reset(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.setting.value.SettingOwner,int,com.sca4d.core.api.concurrent.Version)" class="member-name-link">reset(TreeCode, SettingOwner, int, Version)</a> - Method in interface com.sca4d.core.api.setting.access.<a href="com/sca4d/core/api/setting/access/SettingWriter.html" title="interface in com.sca4d.core.api.setting.access">SettingWriter</a></dt>
 <dd>
-<div class="block">删除指定 owner 的偏好覆盖值并保留递增版本。</div>
+<div class="block">清除当前 owner 的覆盖值并保留递增版本，不清除继承 owner。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/Settings.html#reset(com.sca4d.core.api.setting.SystemSetting)" class="member-name-link">reset(SystemSetting&lt;?&gt;)</a> - Method in interface com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Settings.html" title="interface in com.sca4d.core.api.setting">Settings</a></dt>
+<dt><a href="com/sca4d/core/api/setting/WritableSetting.html#reset(com.sca4d.core.api.setting.value.SettingOwner)" class="member-name-link">reset(SettingOwner)</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/WritableSetting.html" title="class in com.sca4d.core.api.setting">WritableSetting</a></dt>
 <dd>
-<div class="block">删除数据库值，使之后的读取恢复 Java 默认值。</div>
+<div class="block">清除目标覆盖并重新计算继承或默认值，保留目标版本。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/identity/PrincipalResolver.html#resolve(long)" class="member-name-link">resolve(long)</a> - Method in interface com.sca4d.core.api.identity.<a href="com/sca4d/core/api/identity/PrincipalResolver.html" title="interface in com.sca4d.core.api.identity">PrincipalResolver</a></dt>
 <dd>
@@ -5565,6 +5760,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用回调把业务处理结果解析成字段写入意图。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/setting/value/SettingValue.html#resolved(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.setting.value.SettingOwner,T,int,java.util.List)" class="member-name-link">resolved(TreeCode, SettingOwner, T, int, List&lt;? extends SettingValue&lt;?&gt;&gt;)</a> - Static method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingValue.html" title="class in com.sca4d.core.api.setting.value">SettingValue</a></dt>
+<dd>
+<div class="block">创建最终结果，只收集读取元数据；默认值没有来源内容。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/call/CallValueResolverLookup.html#resolver(java.lang.Class)" class="member-name-link">resolver(Class&lt;? extends CallValueResolver&lt;?&gt;&gt;)</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallValueResolverLookup.html" title="interface in com.sca4d.core.api.call">CallValueResolverLookup</a></dt>
 <dd>
 <div class="block">取得指定类型的解析器实例。</div>
@@ -5581,7 +5780,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">声明 MODULE 下的一个局部资源段。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingOwner.html#resource(com.sca4d.core.api.resource.Resource)" class="member-name-link">resource(Resource)</a> - Static method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingOwner.html" title="class in com.sca4d.core.api.setting">SettingOwner</a></dt>
+<dt><a href="com/sca4d/core/api/setting/value/SettingOwner.html#resource(com.sca4d.core.api.resource.Resource)" class="member-name-link">resource(Resource)</a> - Static method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/webrealtime/WebRealtimeTarget.html#resource(com.sca4d.core.api.resource.Resource)" class="member-name-link">resource(Resource)</a> - Static method in class com.sca4d.core.api.webrealtime.<a href="com/sca4d/core/api/webrealtime/WebRealtimeTarget.html" title="class in com.sca4d.core.api.webrealtime">WebRealtimeTarget</a></dt>
 <dd>&nbsp;</dd>
@@ -5749,6 +5948,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回允许从已有认证记录中复用因素的最大年龄。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/setting/value/SettingValue.Origin.html#revision()" class="member-name-link">revision()</a> - Method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingValue.Origin.html" title="class in com.sca4d.core.api.setting.value">SettingValue.Origin</a></dt>
+<dd>
+<div class="block">返回 IO 存储版本；不支持条件写入的来源可为空。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/value/SettingValue.html#revision()" class="member-name-link">revision()</a> - Method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingValue.html" title="class in com.sca4d.core.api.setting.value">SettingValue</a></dt>
+<dd>
+<div class="block">仅单一来源具有存储版本；ENV、JAR 和组合结果不伪造版本。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/job/ParallelResults.html#right()" class="member-name-link">right()</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/ParallelResults.html" title="class in com.sca4d.core.api.job">ParallelResults</a></dt>
 <dd>
 <div class="block">返回右分支结果。</div>
@@ -5832,8 +6039,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">标明 JobSchedule 或 ClusterTaskSchedule 使用 Cron 或固定间隔计算原定触发时间。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/Setting.html#schemaVersion()" class="member-name-link">schemaVersion()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.html" title="class in com.sca4d.core.api.setting">Setting</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/message/ReferencedContent.html#scheme()" class="member-name-link">scheme()</a> - Method in class com.sca4d.core.api.message.<a href="com/sca4d/core/api/message/ReferencedContent.html" title="class in com.sca4d.core.api.message">ReferencedContent</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/permission/PermissionDecision.html#scope()" class="member-name-link">scope()</a> - Method in class com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/PermissionDecision.html" title="class in com.sca4d.core.api.permission">PermissionDecision</a></dt>
@@ -5845,7 +6050,13 @@ loadScripts(document, 'script');</script>
 <div class="block">按明确类型取得允许判定携带的业务资源范围。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/setting/Setting.html#secret()" class="member-name-link">secret()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.html" title="class in com.sca4d.core.api.setting">Setting</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">返回是否要求持久化实现加密保存。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/Setting.Builder.html#secret(boolean)" class="member-name-link">secret(boolean)</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.Builder.html" title="class in com.sca4d.core.api.setting">Setting.Builder</a></dt>
+<dd>
+<div class="block">声明持久化敏感值。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/gateway/GatewayHttpHeaders.html#SECRET" class="member-name-link">SECRET</a> - Static variable in class com.sca4d.core.api.gateway.<a href="com/sca4d/core/api/gateway/GatewayHttpHeaders.html" title="class in com.sca4d.core.api.gateway">GatewayHttpHeaders</a></dt>
 <dd>
 <div class="block">Gateway 控制 API 和 Server 可信转发校验共同使用的 Secret Header。</div>
@@ -6036,17 +6247,19 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">条件命中时选择写入给定非空值。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingValue.html#setting()" class="member-name-link">setting()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingValue.html" title="class in com.sca4d.core.api.setting">SettingValue</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/setting/Setting.html" class="type-name-link" title="class in com.sca4d.core.api.setting">Setting&lt;T&gt;</a> - Class in <a href="com/sca4d/core/api/setting/package-summary.html">com.sca4d.core.api.setting</a></dt>
 <dd>
-<div class="block">定义一个由 Java Bean 声明并按 owner 保存完整类型化值的设置。</div>
+<div class="block">直接读取一项类型化设置，按构造声明选择所属、版本 Codec、继承及覆盖规则。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/Setting.html#%3Cinit%3E(java.lang.String,int,T,com.sca4d.core.api.setting.SettingCodec,com.sca4d.core.api.pipeline.Pipeline,boolean)" class="member-name-link">Setting(String, int, T, SettingCodec&lt;T&gt;, Pipeline&lt;T, T&gt;, boolean)</a> - Constructor for class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.html" title="class in com.sca4d.core.api.setting">Setting</a></dt>
+<dt><a href="com/sca4d/core/api/setting/Setting.html#%3Cinit%3E(com.sca4d.core.api.setting.Setting.Builder)" class="member-name-link">Setting(Setting.Builder&lt;T, ?&gt;)</a> - Constructor for class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.html" title="class in com.sca4d.core.api.setting">Setting</a></dt>
 <dd>
-<div class="block">创建设置定义。</div>
+<div class="block">固定构造配置并校验默认值；不会在启动后补写 IO 依赖。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingCodec.html" class="type-name-link" title="interface in com.sca4d.core.api.setting">SettingCodec&lt;T&gt;</a> - Interface in <a href="com/sca4d/core/api/setting/package-summary.html">com.sca4d.core.api.setting</a></dt>
+<dt><a href="com/sca4d/core/api/setting/Setting.Builder.html" class="type-name-link" title="class in com.sca4d.core.api.setting">Setting.Builder&lt;T,<wbr>D&gt;</a> - Class in <a href="com/sca4d/core/api/setting/package-summary.html">com.sca4d.core.api.setting</a></dt>
+<dd>
+<div class="block">在构造阶段声明 IO 与解码顺序；构造后只通过 Setting 访问。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/codec/SettingCodec.html" class="type-name-link" title="interface in com.sca4d.core.api.setting.codec">SettingCodec&lt;T&gt;</a> - Interface in <a href="com/sca4d/core/api/setting/codec/package-summary.html">com.sca4d.core.api.setting.codec</a></dt>
 <dd>
 <div class="block">负责一个设置值与数据库文本之间的双向转换和校验。</div>
 </dd>
@@ -6054,55 +6267,59 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">标识管理端中一起展示的一组设置。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingGroup.html#%3Cinit%3E(java.lang.String,java.lang.String,int)" class="member-name-link">SettingGroup(String, String, int)</a> - Constructor for class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingGroup.html" title="class in com.sca4d.core.api.setting">SettingGroup</a></dt>
+<dt><a href="com/sca4d/core/api/setting/SettingGroup.html#%3Cinit%3E(com.sca4d.core.api.name.code.TreeCode,java.lang.String,int)" class="member-name-link">SettingGroup(TreeCode, String, int)</a> - Constructor for class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingGroup.html" title="class in com.sca4d.core.api.setting">SettingGroup</a></dt>
 <dd>
 <div class="block">创建设置分组。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingReadOnlyException.html#settingKey()" class="member-name-link">settingKey()</a> - Method in exception class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingReadOnlyException.html" title="class in com.sca4d.core.api.setting">SettingReadOnlyException</a></dt>
+<dt><a href="com/sca4d/core/api/setting/exception/SettingReadOnlyException.html#settingKey()" class="member-name-link">settingKey()</a> - Method in exception class com.sca4d.core.api.setting.exception.<a href="com/sca4d/core/api/setting/exception/SettingReadOnlyException.html" title="class in com.sca4d.core.api.setting.exception">SettingReadOnlyException</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/setting/SettingOwner.html" class="type-name-link" title="class in com.sca4d.core.api.setting">SettingOwner</a> - Class in <a href="com/sca4d/core/api/setting/package-summary.html">com.sca4d.core.api.setting</a></dt>
+<dt><a href="com/sca4d/core/api/setting/value/SettingOwner.html" class="type-name-link" title="class in com.sca4d.core.api.setting.value">SettingOwner</a> - Class in <a href="com/sca4d/core/api/setting/value/package-summary.html">com.sca4d.core.api.setting.value</a></dt>
 <dd>
 <div class="block">保存设置归属者使用的稳定类型和类型内唯一标识。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingOwner.html#%3Cinit%3E(com.sca4d.core.api.name.code.TreeCode,java.lang.String)" class="member-name-link">SettingOwner(TreeCode, String)</a> - Constructor for class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingOwner.html" title="class in com.sca4d.core.api.setting">SettingOwner</a></dt>
+<dt><a href="com/sca4d/core/api/setting/value/SettingOwner.html#%3Cinit%3E(com.sca4d.core.api.name.code.TreeCode,java.lang.String)" class="member-name-link">SettingOwner(TreeCode, String)</a> - Constructor for class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a></dt>
 <dd>
 <div class="block">创建设置 owner。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingReadOnlyException.html" class="type-name-link" title="class in com.sca4d.core.api.setting">SettingReadOnlyException</a> - Exception Class in <a href="com/sca4d/core/api/setting/package-summary.html">com.sca4d.core.api.setting</a></dt>
+<dt><a href="com/sca4d/core/api/setting/access/SettingReader.html" class="type-name-link" title="interface in com.sca4d.core.api.setting.access">SettingReader&lt;W&gt;</a> - Interface in <a href="com/sca4d/core/api/setting/access/package-summary.html">com.sca4d.core.api.setting.access</a></dt>
+<dd>
+<div class="block">读取明确所属的一项设置；返回外部表示，不执行领域解码、继承或降级。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/exception/SettingReadOnlyException.html" class="type-name-link" title="class in com.sca4d.core.api.setting.exception">SettingReadOnlyException</a> - Exception Class in <a href="com/sca4d/core/api/setting/exception/package-summary.html">com.sca4d.core.api.setting.exception</a></dt>
 <dd>
 <div class="block">表示管理端尝试修改仍由初始化节点 ENV 持续同步的设置。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingReadOnlyException.html#%3Cinit%3E(java.lang.String)" class="member-name-link">SettingReadOnlyException(String)</a> - Constructor for exception class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingReadOnlyException.html" title="class in com.sca4d.core.api.setting">SettingReadOnlyException</a></dt>
+<dt><a href="com/sca4d/core/api/setting/exception/SettingReadOnlyException.html#%3Cinit%3E(java.lang.String)" class="member-name-link">SettingReadOnlyException(String)</a> - Constructor for exception class com.sca4d.core.api.setting.exception.<a href="com/sca4d/core/api/setting/exception/SettingReadOnlyException.html" title="class in com.sca4d.core.api.setting.exception">SettingReadOnlyException</a></dt>
 <dd>
 <div class="block">创建设置只读异常。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/Settings.html" class="type-name-link" title="interface in com.sca4d.core.api.setting">Settings</a> - Interface in <a href="com/sca4d/core/api/setting/package-summary.html">com.sca4d.core.api.setting</a></dt>
-<dd>
-<div class="block">提供不带进程缓存的类型化设置读取和数据库修改。</div>
-</dd>
-<dt><a href="com/sca4d/core/api/setting/SettingSchemaVersionException.html" class="type-name-link" title="class in com.sca4d.core.api.setting">SettingSchemaVersionException</a> - Exception Class in <a href="com/sca4d/core/api/setting/package-summary.html">com.sca4d.core.api.setting</a></dt>
+<dt><a href="com/sca4d/core/api/setting/exception/SettingSchemaVersionException.html" class="type-name-link" title="class in com.sca4d.core.api.setting.exception">SettingSchemaVersionException</a> - Exception Class in <a href="com/sca4d/core/api/setting/exception/package-summary.html">com.sca4d.core.api.setting.exception</a></dt>
 <dd>
 <div class="block">表示数据库设置值结构版本与当前 Java 定义不一致且没有声明转换规则。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingSchemaVersionException.html#%3Cinit%3E(java.lang.String,int,int)" class="member-name-link">SettingSchemaVersionException(String, int, int)</a> - Constructor for exception class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingSchemaVersionException.html" title="class in com.sca4d.core.api.setting">SettingSchemaVersionException</a></dt>
+<dt><a href="com/sca4d/core/api/setting/exception/SettingSchemaVersionException.html#%3Cinit%3E(java.lang.String,int,int)" class="member-name-link">SettingSchemaVersionException(String, int, int)</a> - Constructor for exception class com.sca4d.core.api.setting.exception.<a href="com/sca4d/core/api/setting/exception/SettingSchemaVersionException.html" title="class in com.sca4d.core.api.setting.exception">SettingSchemaVersionException</a></dt>
 <dd>
 <div class="block">创建不支持的设置结构版本异常。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingValue.html" class="type-name-link" title="class in com.sca4d.core.api.setting">SettingValue&lt;T&gt;</a> - Class in <a href="com/sca4d/core/api/setting/package-summary.html">com.sca4d.core.api.setting</a></dt>
+<dt><a href="com/sca4d/core/api/setting/value/SettingValue.html" class="type-name-link" title="class in com.sca4d.core.api.setting.value">SettingValue&lt;T&gt;</a> - Class in <a href="com/sca4d/core/api/setting/value/package-summary.html">com.sca4d.core.api.setting.value</a></dt>
 <dd>
-<div class="block">保存一次数据库查询得到的设置值及其维护来源。</div>
+<div class="block">保存原始或已解码的读取结果；元数据不持有其他来源的原始内容。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingValue.html#%3Cinit%3E(com.sca4d.core.api.setting.Setting,com.sca4d.core.api.setting.SettingOwner,T,boolean,boolean,com.sca4d.core.api.concurrent.Version)" class="member-name-link">SettingValue(Setting&lt;T&gt;, SettingOwner, T, boolean, boolean, Version)</a> - Constructor for class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingValue.html" title="class in com.sca4d.core.api.setting">SettingValue</a></dt>
+<dt><a href="com/sca4d/core/api/setting/value/SettingValue.Origin.html" class="type-name-link" title="class in com.sca4d.core.api.setting.value">SettingValue.Origin</a> - Class in <a href="com/sca4d/core/api/setting/value/package-summary.html">com.sca4d.core.api.setting.value</a></dt>
 <dd>
-<div class="block">创建设置值。</div>
+<div class="block">记录一次实际读取的元数据；IO 身份与请求所属分别保留。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingValues.html" class="type-name-link" title="class in com.sca4d.core.api.setting">SettingValues</a> - Class in <a href="com/sca4d/core/api/setting/package-summary.html">com.sca4d.core.api.setting</a></dt>
+<dt><a href="com/sca4d/core/api/setting/value/SettingValues.html" class="type-name-link" title="class in com.sca4d.core.api.setting.value">SettingValues</a> - Class in <a href="com/sca4d/core/api/setting/value/package-summary.html">com.sca4d.core.api.setting.value</a></dt>
 <dd>
 <div class="block">保存一次批量查询得到的不可变设置快照。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingValues.html#%3Cinit%3E(java.util.Collection)" class="member-name-link">SettingValues(Collection&lt;? extends SettingValue&lt;?&gt;&gt;)</a> - Constructor for class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingValues.html" title="class in com.sca4d.core.api.setting">SettingValues</a></dt>
+<dt><a href="com/sca4d/core/api/setting/value/SettingValues.html#%3Cinit%3E(java.util.Collection)" class="member-name-link">SettingValues(Collection&lt;? extends SettingValue&lt;?&gt;&gt;)</a> - Constructor for class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingValues.html" title="class in com.sca4d.core.api.setting.value">SettingValues</a></dt>
 <dd>
 <div class="block">创建设置快照。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/access/SettingWriter.html" class="type-name-link" title="interface in com.sca4d.core.api.setting.access">SettingWriter&lt;W&gt;</a> - Interface in <a href="com/sca4d/core/api/setting/access/package-summary.html">com.sca4d.core.api.setting.access</a></dt>
+<dd>
+<div class="block">按条件写入明确所属的设置，不决定读取优先级，也不反向修改继承值。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/region/PhoneNumberType.html#SHARED_COST" class="member-name-link">SHARED_COST</a> - Enum constant in enum class com.sca4d.core.api.region.<a href="com/sca4d/core/api/region/PhoneNumberType.html" title="enum class in com.sca4d.core.api.region">PhoneNumberType</a></dt>
 <dd>
@@ -6178,9 +6395,9 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/permission/OperationNode.html#sortOrder()" class="member-name-link">sortOrder()</a> - Method in class com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/OperationNode.html" title="class in com.sca4d.core.api.permission">OperationNode</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/setting/SettingGroup.html#sortOrder()" class="member-name-link">sortOrder()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingGroup.html" title="class in com.sca4d.core.api.setting">SettingGroup</a></dt>
+<dt><a href="com/sca4d/core/api/setting/definition/SystemSetting.html#sortOrder()" class="member-name-link">sortOrder()</a> - Method in class com.sca4d.core.api.setting.definition.<a href="com/sca4d/core/api/setting/definition/SystemSetting.html" title="class in com.sca4d.core.api.setting.definition">SystemSetting</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/setting/SystemSetting.html#sortOrder()" class="member-name-link">sortOrder()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SystemSetting.html" title="class in com.sca4d.core.api.setting">SystemSetting</a></dt>
+<dt><a href="com/sca4d/core/api/setting/SettingGroup.html#sortOrder()" class="member-name-link">sortOrder()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingGroup.html" title="class in com.sca4d.core.api.setting">SettingGroup</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/query/SortOrder.html" class="type-name-link" title="class in com.sca4d.core.api.query">SortOrder</a> - Class in <a href="com/sca4d/core/api/query/package-summary.html">com.sca4d.core.api.query</a></dt>
 <dd>
@@ -6319,8 +6536,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建存储实现生成的上传请求。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingValue.html#stored()" class="member-name-link">stored()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingValue.html" title="class in com.sca4d.core.api.setting">SettingValue</a></dt>
-<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/setting/value/SettingValue.html#stored()" class="member-name-link">stored()</a> - Method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingValue.html" title="class in com.sca4d.core.api.setting.value">SettingValue</a></dt>
+<dd>
+<div class="block">返回是否读取到了持久化或外部覆盖值。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/storage/StoredFile.html" class="type-name-link" title="class in com.sca4d.core.api.storage">StoredFile</a> - Class in <a href="com/sca4d/core/api/storage/package-summary.html">com.sca4d.core.api.storage</a></dt>
 <dd>
 <div class="block">返回文件标识、上传 Principal、业务用途、内容信息和当前状态。</div>
@@ -6457,9 +6676,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">检查 API 版本是否满足插件范围。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingValue.html#synchronizedFromEnvironment()" class="member-name-link">synchronizedFromEnvironment()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingValue.html" title="class in com.sca4d.core.api.setting">SettingValue</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/setting/SettingOwner.html#system()" class="member-name-link">system()</a> - Static method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingOwner.html" title="class in com.sca4d.core.api.setting">SettingOwner</a></dt>
+<dt><a href="com/sca4d/core/api/setting/value/SettingOwner.html#system()" class="member-name-link">system()</a> - Static method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/call/Call.html#system(java.lang.String,java.time.Instant)" class="member-name-link">system(String, Instant)</a> - Static method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/Call.html" title="class in com.sca4d.core.api.call">Call</a></dt>
 <dd>
@@ -6475,7 +6692,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/identity/Subject.html#SYSTEM" class="member-name-link">SYSTEM</a> - Static variable in class com.sca4d.core.api.identity.<a href="com/sca4d/core/api/identity/Subject.html" title="class in com.sca4d.core.api.identity">Subject</a></dt>
 <dd>
-<div class="block">整个业务系统唯一的 SYSTEM Subject；各实例和模块共享此身份，不对应用户 Session。</div>
+<div class="block">整个业务系统唯一的 SYSTEM Subject；各实例和模块共享此身份，不对应用户 Session。启动时由 IAM 配置发布 ID。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/annotation/SystemExecution.html" class="type-name-link" title="annotation interface in com.sca4d.core.api.annotation">SystemExecution</a> - Annotation Interface in <a href="com/sca4d/core/api/annotation/package-summary.html">com.sca4d.core.api.annotation</a></dt>
 <dd>
@@ -6497,11 +6714,11 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">在数据库提交成功后一次性发布系统身份的不可变运行期常量。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SystemSetting.html" class="type-name-link" title="class in com.sca4d.core.api.setting">SystemSetting&lt;T&gt;</a> - Class in <a href="com/sca4d/core/api/setting/package-summary.html">com.sca4d.core.api.setting</a></dt>
+<dt><a href="com/sca4d/core/api/setting/definition/SystemSetting.html" class="type-name-link" title="class in com.sca4d.core.api.setting.definition">SystemSetting&lt;T&gt;</a> - Class in <a href="com/sca4d/core/api/setting/definition/package-summary.html">com.sca4d.core.api.setting.definition</a></dt>
 <dd>
 <div class="block">定义固定归属 `Subject.SYSTEM`、可以由系统设置管理接口维护的设置。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SystemSetting.html#%3Cinit%3E(java.lang.String,int,com.sca4d.core.api.setting.SettingGroup,java.lang.String,java.lang.String,java.lang.String,T,com.sca4d.core.api.setting.SettingCodec,com.sca4d.core.api.pipeline.Pipeline,boolean,int)" class="member-name-link">SystemSetting(String, int, SettingGroup, String, String, String, T, SettingCodec&lt;T&gt;, Pipeline&lt;T, T&gt;, boolean, int)</a> - Constructor for class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SystemSetting.html" title="class in com.sca4d.core.api.setting">SystemSetting</a></dt>
+<dt><a href="com/sca4d/core/api/setting/definition/SystemSetting.html#%3Cinit%3E(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.setting.access.SettingWriter,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.setting.SettingGroup,java.lang.String,java.lang.String,java.lang.String,T,com.sca4d.core.api.setting.codec.SettingCodec,com.sca4d.core.api.pipeline.Pipeline,boolean,int)" class="member-name-link">SystemSetting(SettingReader&lt;String&gt;, SettingWriter&lt;String&gt;, TreeCode, SettingGroup, String, String, String, T, SettingCodec&lt;T&gt;, Pipeline&lt;T, T&gt;, boolean, int)</a> - Constructor for class com.sca4d.core.api.setting.definition.<a href="com/sca4d/core/api/setting/definition/SystemSetting.html" title="class in com.sca4d.core.api.setting.definition">SystemSetting</a></dt>
 <dd>
 <div class="block">创建系统设置定义。</div>
 </dd>
@@ -6590,7 +6807,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">自动化测试环境。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingCodec.html#text(int)" class="member-name-link">text(int)</a> - Static method in interface com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingCodec.html" title="interface in com.sca4d.core.api.setting">SettingCodec</a></dt>
+<dt><a href="com/sca4d/core/api/setting/codec/SettingCodec.html#text(int)" class="member-name-link">text(int)</a> - Static method in interface com.sca4d.core.api.setting.codec.<a href="com/sca4d/core/api/setting/codec/SettingCodec.html" title="interface in com.sca4d.core.api.setting.codec">SettingCodec</a></dt>
 <dd>
 <div class="block">创建限制字符数的普通文本编解码器。</div>
 </dd>
@@ -6750,7 +6967,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/resource/ResourceReference.html#toString()" class="member-name-link">toString()</a> - Method in class com.sca4d.core.api.resource.<a href="com/sca4d/core/api/resource/ResourceReference.html" title="class in com.sca4d.core.api.resource">ResourceReference</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/setting/SettingOwner.html#toString()" class="member-name-link">toString()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingOwner.html" title="class in com.sca4d.core.api.setting">SettingOwner</a></dt>
+<dt><a href="com/sca4d/core/api/setting/value/SettingOwner.html#toString()" class="member-name-link">toString()</a> - Method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/connection/ConnectionRegistry.html#touch(com.sca4d.core.api.connection.ConnectionId,java.time.Instant)" class="member-name-link">touch(ConnectionId, Instant)</a> - Method in interface com.sca4d.core.api.connection.<a href="com/sca4d/core/api/connection/ConnectionRegistry.html" title="interface in com.sca4d.core.api.connection">ConnectionRegistry</a></dt>
 <dd>
@@ -6847,6 +7064,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回契约接口，类式声明使用生成的接口。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/plugin/PluginConfiguration.html#type()" class="member-name-link">type()</a> - Method in interface com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/PluginConfiguration.html" title="interface in com.sca4d.core.api.plugin">PluginConfiguration</a></dt>
+<dd>
+<div class="block">返回 App 向插件公开的配置类型，必须来自 App API 或明确共享的构件。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/region/ParsedPhoneNumber.html#type()" class="member-name-link">type()</a> - Method in class com.sca4d.core.api.region.<a href="com/sca4d/core/api/region/ParsedPhoneNumber.html" title="class in com.sca4d.core.api.region">ParsedPhoneNumber</a></dt>
 <dd>
 <div class="block">读取 libphonenumber 判断的号码用途。</div>
@@ -6859,7 +7080,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回资源类型。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingOwner.html#type()" class="member-name-link">type()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingOwner.html" title="class in com.sca4d.core.api.setting">SettingOwner</a></dt>
+<dt><a href="com/sca4d/core/api/setting/value/SettingOwner.html#type()" class="member-name-link">type()</a> - Method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/storage/StoredFile.html#type()" class="member-name-link">type()</a> - Method in class com.sca4d.core.api.storage.<a href="com/sca4d/core/api/storage/StoredFile.html" title="class in com.sca4d.core.api.storage">StoredFile</a></dt>
 <dd>
@@ -6893,6 +7114,11 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/region/PhoneNumberType.html#UNKNOWN" class="member-name-link">UNKNOWN</a> - Enum constant in enum class com.sca4d.core.api.region.<a href="com/sca4d/core/api/region/PhoneNumberType.html" title="enum class in com.sca4d.core.api.region">PhoneNumberType</a></dt>
 <dd>
 <div class="block">libphonenumber 无法确定用途类型。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/plugin/PluginConfiguration.html#unload(com.sca4d.core.api.plugin.PluginConfigurationSnapshot)" class="member-name-link">unload(PluginConfigurationSnapshot&lt;C&gt;)</a> - Method in interface com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/PluginConfiguration.html" title="interface in com.sca4d.core.api.plugin">PluginConfiguration</a></dt>
+<dd>
+<div class="block">释放快照拥有的资源；候选失败或代次无活动租用后，每个快照只调用一次。
+ 可能与另一个代次的加载同时执行，不得释放其他快照或 App 共享服务。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/data/DataOps.BytePipe.html#unsignedByte(int,java.lang.String)" class="member-name-link">unsignedByte(int, String)</a> - Method in class com.sca4d.core.api.data.<a href="com/sca4d/core/api/data/DataOps.BytePipe.html" title="class in com.sca4d.core.api.data">DataOps.BytePipe</a></dt>
 <dd>
@@ -6991,9 +7217,17 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">按默认 Locale 和当前业务 schema 校验完整多语言内容。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/setting/Setting.Builder.html#validate(com.sca4d.core.api.pipeline.Pipeline)" class="member-name-link">validate(Pipeline&lt;T, T&gt;)</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.Builder.html" title="class in com.sca4d.core.api.setting">Setting.Builder</a></dt>
+<dd>
+<div class="block">声明完整值校验。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/validation/Validator.html#validate(T)" class="member-name-link">validate(T)</a> - Method in interface com.sca4d.core.api.validation.<a href="com/sca4d/core/api/validation/Validator.html" title="interface in com.sca4d.core.api.validation">Validator</a></dt>
 <dd>
 <div class="block">校验输入。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/Setting.html#validate(T)" class="member-name-link">validate(T)</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.html" title="class in com.sca4d.core.api.setting">Setting</a></dt>
+<dd>
+<div class="block">对完整值执行类型检查和领域校验。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/validation/Validation.html#validate(T,java.util.List)" class="member-name-link">validate(T, List&lt;Validator&lt;T&gt;&gt;)</a> - Static method in class com.sca4d.core.api.validation.<a href="com/sca4d/core/api/validation/Validation.html" title="class in com.sca4d.core.api.validation">Validation</a></dt>
 <dd>
@@ -7111,11 +7345,13 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">读取已经通过有效性和格式检查的号码。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingValue.html#value()" class="member-name-link">value()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingValue.html" title="class in com.sca4d.core.api.setting">SettingValue</a></dt>
-<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/setting/value/SettingValue.html#value()" class="member-name-link">value()</a> - Method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingValue.html" title="class in com.sca4d.core.api.setting.value">SettingValue</a></dt>
+<dd>
+<div class="block">返回存在的值；缺失时明确失败，不返回伪造的默认值。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/storage/FileStatus.html#value()" class="member-name-link">value()</a> - Method in enum class com.sca4d.core.api.storage.<a href="com/sca4d/core/api/storage/FileStatus.html" title="enum class in com.sca4d.core.api.storage">FileStatus</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/setting/SettingValues.html#value(com.sca4d.core.api.setting.SystemSetting)" class="member-name-link">value(SystemSetting&lt;T&gt;)</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingValues.html" title="class in com.sca4d.core.api.setting">SettingValues</a></dt>
+<dt><a href="com/sca4d/core/api/setting/value/SettingValues.html#value(com.sca4d.core.api.setting.definition.SystemSetting)" class="member-name-link">value(SystemSetting&lt;T&gt;)</a> - Method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingValues.html" title="class in com.sca4d.core.api.setting.value">SettingValues</a></dt>
 <dd>
 <div class="block">按类型化定义读取当前快照中的完整值和来源。</div>
 </dd>
@@ -7357,6 +7593,10 @@ the order they are declared.</div>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
 </dd>
+<dt><a href="com/sca4d/core/api/plugin/PluginConfigurationSnapshot.html#values()" class="member-name-link">values()</a> - Method in class com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/PluginConfigurationSnapshot.html" title="class in com.sca4d.core.api.plugin">PluginConfigurationSnapshot</a></dt>
+<dd>
+<div class="block">返回 App 为当前代次提供的公开配置，不包含插件的私有实现对象。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/plugin/PluginStatus.State.html#values()" class="member-name-link">values()</a> - Static method in enum class com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/PluginStatus.State.html" title="enum class in com.sca4d.core.api.plugin">PluginStatus.State</a></dt>
 <dd>
 <div class="block">Returns an array containing the constants of this enum class, in
@@ -7392,7 +7632,7 @@ the order they are declared.</div>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingValues.html#values()" class="member-name-link">values()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingValues.html" title="class in com.sca4d.core.api.setting">SettingValues</a></dt>
+<dt><a href="com/sca4d/core/api/setting/value/SettingValues.html#values()" class="member-name-link">values()</a> - Method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingValues.html" title="class in com.sca4d.core.api.setting.value">SettingValues</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/storage/FileErrorCode.html#values()" class="member-name-link">values()</a> - Static method in enum class com.sca4d.core.api.storage.<a href="com/sca4d/core/api/storage/FileErrorCode.html" title="enum class in com.sca4d.core.api.storage">FileErrorCode</a></dt>
 <dd>
@@ -7429,10 +7669,6 @@ the order they are declared.</div>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/notification/NotificationType.html#valueType()" class="member-name-link">valueType()</a> - Method in class com.sca4d.core.api.notification.<a href="com/sca4d/core/api/notification/NotificationType.html" title="class in com.sca4d.core.api.notification">NotificationType</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/setting/SettingCodec.html#valueType()" class="member-name-link">valueType()</a> - Method in interface com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingCodec.html" title="interface in com.sca4d.core.api.setting">SettingCodec</a></dt>
-<dd>
-<div class="block">返回管理端选择输入控件时使用的稳定值类型。</div>
-</dd>
 <dt><a href="com/sca4d/core/api/notification/NotificationDefinition.html#variable(java.lang.String,java.util.function.BiFunction)" class="member-name-link">variable(String, BiFunction&lt;T, Locale, String&gt;)</a> - Method in class com.sca4d.core.api.notification.<a href="com/sca4d/core/api/notification/NotificationDefinition.html" title="class in com.sca4d.core.api.notification">NotificationDefinition</a></dt>
 <dd>
 <div class="block">声明统一模板可以读取的一个变量。</div>
@@ -7509,8 +7745,6 @@ the order they are declared.</div>
 <dd>
 <div class="block">返回交付版本。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/setting/SettingValue.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/SettingValue.html" title="class in com.sca4d.core.api.setting">SettingValue</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/codec/CodecVersionSelector.html#version(W)" class="member-name-link">version(W)</a> - Method in interface com.sca4d.core.api.codec.<a href="com/sca4d/core/api/codec/CodecVersionSelector.html" title="interface in com.sca4d.core.api.codec">CodecVersionSelector</a></dt>
 <dd>
 <div class="block">读取外部表示声明的版本。</div>
@@ -7656,6 +7890,14 @@ the order they are declared.</div>
 <dd>
 <div class="block">返回保持当前领域类型的新键；专属子类覆盖此方法。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/setting/WritableSetting.html" class="type-name-link" title="class in com.sca4d.core.api.setting">WritableSetting&lt;T&gt;</a> - Class in <a href="com/sca4d/core/api/setting/package-summary.html">com.sca4d.core.api.setting</a></dt>
+<dd>
+<div class="block">直接在明确目标中替换或清除当前 owner 的覆盖值，不修改继承 owner。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/WritableSetting.html#%3Cinit%3E(com.sca4d.core.api.setting.Setting.Builder,com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.setting.access.SettingWriter,java.util.function.Function)" class="member-name-link">WritableSetting(Setting.Builder&lt;T, D&gt;, SettingReader&lt;W&gt;, SettingWriter&lt;W&gt;, Function&lt;D, W&gt;)</a> - Constructor for class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/WritableSetting.html" title="class in com.sca4d.core.api.setting">WritableSetting</a></dt>
+<dd>
+<div class="block">捕获同一种外部表示的读取器、写入器和编码函数，避免擦除类型后强制转换。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/storage/FileStorage.html#write(com.sca4d.core.api.storage.StorageObject,java.lang.String,long,java.io.InputStream)" class="member-name-link">write(StorageObject, String, long, InputStream)</a> - Method in interface com.sca4d.core.api.storage.<a href="com/sca4d/core/api/storage/FileStorage.html" title="interface in com.sca4d.core.api.storage">FileStorage</a></dt>
 <dd>
 <div class="block">把服务端持有的内容流写入指定临时对象。</div>
@@ -7679,6 +7921,14 @@ the order they are declared.</div>
 <dt><a href="com/sca4d/core/api/data/DataOps.ByteBuilder.html#writeShort(int,short,java.nio.ByteOrder,java.lang.String)" class="member-name-link">writeShort(int, short, ByteOrder, String)</a> - Method in class com.sca4d.core.api.data.<a href="com/sca4d/core/api/data/DataOps.ByteBuilder.html" title="class in com.sca4d.core.api.data">DataOps.ByteBuilder</a></dt>
 <dd>
 <div class="block">按指定字节序写入 short。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/Setting.Builder.html#writeTo(A)" class="member-name-link">writeTo(A)</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.Builder.html" title="class in com.sca4d.core.api.setting">Setting.Builder</a></dt>
+<dd>
+<div class="block">选择同时支持读写的目标；读取用于取得目标自己的条件版本。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/setting/Setting.Builder.html#writeTo(A,com.sca4d.core.api.codec.Codec)" class="member-name-link">writeTo(A, Codec&lt;D, W&gt;)</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.Builder.html" title="class in com.sca4d.core.api.setting">Setting.Builder</a></dt>
+<dd>
+<div class="block">用指定外部格式保存到明确的可读写目标。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/data/DataOps.ByteBuilder.html#writeUnsignedByte(int,int,java.lang.String)" class="member-name-link">writeUnsignedByte(int, int, String)</a> - Method in class com.sca4d.core.api.data.<a href="com/sca4d/core/api/data/DataOps.ByteBuilder.html" title="class in com.sca4d.core.api.data">DataOps.ByteBuilder</a></dt>
 <dd>

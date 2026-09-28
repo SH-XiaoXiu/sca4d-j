@@ -102,21 +102,27 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="PluginDescriptor.html" title="class in com.sca4d.core.api.plugin">PluginDescriptor</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#descriptor()" class="member-name-link">descriptor</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;C&gt;&nbsp;C</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#configuration(java.lang.Class)" class="member-name-link">configuration</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;C&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">返回当前代次的 App 公开配置；生成上下文使用准确类型调用此入口。
+ 类型不一致或代次停止后访问时失败，旧作用域在排空期间继续使用旧配置。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="PluginDescriptor.html" title="class in com.sca4d.core.api.plugin">PluginDescriptor</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#descriptor()" class="member-name-link">descriptor</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">返回当前插件描述。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#register(com.sca4d.core.api.plugin.ApiContract,T,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">register</a><wbr>(@NotNull <a href="ApiContract.html" title="interface in com.sca4d.core.api.plugin">ApiContract</a>&lt;T&gt;&nbsp;contract,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#register(com.sca4d.core.api.plugin.ApiContract,T,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">register</a><wbr>(@NotNull <a href="ApiContract.html" title="interface in com.sca4d.core.api.plugin">ApiContract</a>&lt;T&gt;&nbsp;contract,
  T&nbsp;implementation,
  @Nullable <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;key)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">在 onLoad 中登记当前代次扩展；发布后禁止登记，冲突或重复登记时失败。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#service(com.sca4d.core.api.plugin.ApiContract)" class="member-name-link">service</a><wbr>(@NotNull <a href="ApiContract.html" title="interface in com.sca4d.core.api.plugin">ApiContract</a>&lt;T&gt;&nbsp;contract)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;T</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#service(com.sca4d.core.api.plugin.ApiContract)" class="member-name-link">service</a><wbr>(@NotNull <a href="ApiContract.html" title="interface in com.sca4d.core.api.plugin">ApiContract</a>&lt;T&gt;&nbsp;contract)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">取得已声明的宿主服务客户端；同步调用保留原线程，插件停止后拒绝继续使用。</div>
 </div>
 </div>
@@ -139,6 +145,22 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="return-type">@NotNull <a href="PluginDescriptor.html" title="class in com.sca4d.core.api.plugin">PluginDescriptor</a></span>&nbsp;<span class="element-name">descriptor</span>()</div>
 <div class="block">返回当前插件描述。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="configuration(java.lang.Class)">
+<h3>configuration</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="type-parameters">&lt;C&gt;</span>&nbsp;<span class="return-type">C</span>&nbsp;<span class="element-name">configuration</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;C&gt;&nbsp;type)</span></div>
+<div class="block">返回当前代次的 App 公开配置；生成上下文使用准确类型调用此入口。
+ 类型不一致或代次停止后访问时失败，旧作用域在排空期间继续使用旧配置。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>type</code> - App 配置提供者声明的同一个共享类型</dd>
+<dt>Returns:</dt>
+<dd>当前代次独立使用的不可变配置</dd>
+</dl>
 </section>
 </li>
 <li>

@@ -81,10 +81,10 @@ loadScripts(document, 'script');</script>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">com.sca4d.plugin.runtime</a></div>
-<h1 title="Class DefaultPluginRuntime" class="title">Class DefaultPluginRuntime</h1>
+<h1 title="Class DefaultPluginRuntime" class="title">Class DefaultPluginRuntime&lt;C&gt;</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">com.sca4d.plugin.runtime.DefaultPluginRuntime</div>
+<div class="inheritance">com.sca4d.plugin.runtime.DefaultPluginRuntime&lt;C&gt;</div>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <dd><code>com.sca4d.core.api.plugin.ApiInvoker</code>, <code>com.sca4d.core.api.plugin.PluginRuntime</code>, <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">DefaultPluginRuntime</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">DefaultPluginRuntime&lt;C&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.core.api.plugin.PluginRuntime</span></div>
 <div class="block">管理一个 App 的绑定快照和插件代次，在同步操作结束后释放旧实现。</div>
@@ -107,12 +107,13 @@ implements com.sca4d.core.api.plugin.PluginRuntime</span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.Class,java.util.Set,com.sca4d.core.api.plugin.PluginLoader,java.nio.file.Path)" class="member-name-link">DefaultPluginRuntime</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;api,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.Class,java.util.Set,com.sca4d.core.api.plugin.PluginLoader,java.nio.file.Path,com.sca4d.core.api.plugin.PluginConfiguration)" class="member-name-link">DefaultPluginRuntime</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;api,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;apiVersion,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends com.sca4d.core.api.plugin.PluginEntrypoint&gt;&nbsp;entryBase,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;sharedClasses,
  @NotNull com.sca4d.core.api.plugin.PluginLoader&nbsp;loader,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;cache)</code></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;cache,
+ @NotNull com.sca4d.core.api.plugin.PluginConfiguration&lt;<a href="DefaultPluginRuntime.html" title="type parameter in DefaultPluginRuntime">C</a>&gt;&nbsp;configuration)</code></div>
 <div class="col-last even-row-color">
 <div class="block">保存宿主 API、共享类清单与具体加载实现；不扫描宿主 classpath。</div>
 </div>
@@ -148,19 +149,23 @@ implements com.sca4d.core.api.plugin.PluginRuntime</span></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#openScope()" class="member-name-link">openScope</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.plugin.PluginUpdate</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#replace(java.nio.file.Path,java.time.Duration)" class="member-name-link">replace</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;artifact,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#reload(com.sca4d.core.api.name.code.TreeCode,java.time.Duration)" class="member-name-link">reload</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;id,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;drainTimeout)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;com.sca4d.core.api.plugin.PluginStatus&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#statuses()" class="member-name-link">statuses</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.plugin.PluginStatus</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stop(com.sca4d.core.api.name.code.TreeCode,java.time.Duration)" class="member-name-link">stop</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;id,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.plugin.PluginUpdate</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#replace(java.nio.file.Path,java.time.Duration)" class="member-name-link">replace</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;artifact,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;drainTimeout)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#verifyRequired()" class="member-name-link">verifyRequired</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;com.sca4d.core.api.plugin.PluginStatus&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#statuses()" class="member-name-link">statuses</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.plugin.PluginStatus</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stop(com.sca4d.core.api.name.code.TreeCode,java.time.Duration)" class="member-name-link">stop</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;id,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;drainTimeout)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#verifyRequired()" class="member-name-link">verifyRequired</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -179,7 +184,7 @@ implements com.sca4d.core.api.plugin.PluginRuntime</span></div>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.Class,java.util.Set,com.sca4d.core.api.plugin.PluginLoader,java.nio.file.Path)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.Class,java.util.Set,com.sca4d.core.api.plugin.PluginLoader,java.nio.file.Path,com.sca4d.core.api.plugin.PluginConfiguration)">
 <h3>DefaultPluginRuntime</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">DefaultPluginRuntime</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;api,
@@ -192,7 +197,9 @@ implements com.sca4d.core.api.plugin.PluginRuntime</span></div>
  @NotNull
  @NotNull com.sca4d.core.api.plugin.PluginLoader&nbsp;loader,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;cache)</span></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;cache,
+ @NotNull
+ @NotNull com.sca4d.core.api.plugin.PluginConfiguration&lt;<a href="DefaultPluginRuntime.html" title="type parameter in DefaultPluginRuntime">C</a>&gt;&nbsp;configuration)</span></div>
 <div class="block">保存宿主 API、共享类清单与具体加载实现；不扫描宿主 classpath。</div>
 </section>
 </li>
@@ -237,6 +244,20 @@ implements com.sca4d.core.api.plugin.PluginRuntime</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>replace</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.plugin.PluginRuntime</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="reload(com.sca4d.core.api.name.code.TreeCode,java.time.Duration)">
+<h3>reload</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.plugin.PluginUpdate</span>&nbsp;<span class="element-name">reload</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;id,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;drainTimeout)</span></div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>reload</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.plugin.PluginRuntime</code></dd>
 </dl>
 </section>
 </li>

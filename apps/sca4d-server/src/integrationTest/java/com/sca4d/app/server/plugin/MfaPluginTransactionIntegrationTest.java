@@ -57,13 +57,15 @@ class MfaPluginTransactionIntegrationTest {
                                     Map.of(
                                             "sca4dj.plugin.enabled",
                                             "true",
+                                            "spring.application.name",
+                                            "sca4d-server",
                                             "sca4dj.plugin.api",
                                             "SCA4D:SERVER",
                                             "sca4dj.plugin.artifacts[0]",
                                             System.getProperty("sca4dj.plugin.artifacts[0]"),
                                             "sca4dj.plugin.cache-directory",
                                             temporary.resolve("cache").toString())));
-            context.register(PluginAutoConfiguration.class, Beans.class);
+            context.register(PluginAutoConfiguration.class, Sca4dServerPluginConfiguration.class, Beans.class);
             context.refresh();
             JdbcTemplate jdbc = context.getBean(JdbcTemplate.class);
             jdbc.execute("CREATE TABLE plugin_transaction_probe (account_id BIGINT NOT NULL)");
