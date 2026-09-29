@@ -16,7 +16,7 @@ import com.sca4d.core.api.authentication.AuthenticationAttemptId;
 import com.sca4d.core.api.authentication.AuthenticationAttempts;
 import com.sca4d.core.api.authentication.AuthenticationSubmission;
 import com.sca4d.core.api.authentication.Session;
-import com.sca4d.core.api.concurrent.RateLimitDimension;
+import com.sca4d.core.api.concurrent.RateLimit;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.identity.Account;
@@ -81,7 +81,7 @@ public class EmailCodeController {
     /** 使用已消费的 Email Code Challenge 开始登录。 */
     @PostMapping("/login/email-code/proofs")
     @AnonymousAccess
-    @RateLimited(dimensions = RateLimitDimension.IP, permits = 10, windowSeconds = 300)
+@RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
     @Operation(summary = "使用 Email Code 开始登录")
     public @NotNull ApiResponse<LoginResultView> login(
             @RequestBody @Valid @NotNull EmailCodeProofRequest request) {
@@ -104,7 +104,7 @@ public class EmailCodeController {
     /** 向已经确定 Account 的登录尝试提交 Email Code。 */
     @PostMapping("/login/attempts/{attemptId}/email-code/proofs")
     @AnonymousAccess
-    @RateLimited(dimensions = RateLimitDimension.IP, permits = 10, windowSeconds = 300)
+@RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
     @Operation(summary = "向登录尝试提交 Email Code")
     public @NotNull ApiResponse<LoginResultView> loginAttempt(
             @PathVariable @Size(max = 128) @NotNull String attemptId,
@@ -126,7 +126,7 @@ public class EmailCodeController {
 
     /** 向当前 Session 所属动作认证提交 Email Code。 */
     @PostMapping("/verifications/{verificationId}/email-code/proofs")
-    @RateLimited(dimensions = RateLimitDimension.IP, permits = 10, windowSeconds = 300)
+@RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
     @Operation(summary = "向动作认证提交 Email Code")
     public @NotNull ApiResponse<VerificationView> verification(
             @PathVariable @Size(max = 128) @NotNull String verificationId,

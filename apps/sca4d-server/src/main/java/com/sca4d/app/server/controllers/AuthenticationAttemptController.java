@@ -20,7 +20,7 @@ import com.sca4d.core.api.authentication.AuthenticationActionCode;
 import com.sca4d.core.api.authentication.AuthenticationAttemptId;
 import com.sca4d.core.api.authentication.AuthenticationSubmission;
 import com.sca4d.core.api.authentication.Session;
-import com.sca4d.core.api.concurrent.RateLimitDimension;
+import com.sca4d.core.api.concurrent.RateLimit;
 import com.sca4d.core.spring.web.ApiResponse;
 import com.sca4d.core.spring.web.annotation.CurrentSession;
 import io.swagger.v3.oas.annotations.Operation;
@@ -58,7 +58,7 @@ public class AuthenticationAttemptController {
     /** 向登录尝试提交 Password。 */
     @PostMapping("/login/attempts/{attemptId}/password/proofs")
     @AnonymousAccess
-    @RateLimited(dimensions = RateLimitDimension.IP, permits = 10, windowSeconds = 300)
+@RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
     public @NotNull ApiResponse<LoginResultView> loginPassword(
             @PathVariable @Size(max = 128) @NotNull String attemptId,
             @RequestBody @Valid @NotNull PasswordProofRequest request) {
@@ -75,7 +75,7 @@ public class AuthenticationAttemptController {
     /** 向登录尝试提交 TOTP。 */
     @PostMapping("/login/attempts/{attemptId}/totp/proofs")
     @AnonymousAccess
-    @RateLimited(dimensions = RateLimitDimension.IP, permits = 10, windowSeconds = 300)
+@RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
     public @NotNull ApiResponse<LoginResultView> loginTotp(
             @PathVariable @Size(max = 128) @NotNull String attemptId,
             @RequestBody @Valid @NotNull TotpProofRequest request) {
@@ -92,7 +92,7 @@ public class AuthenticationAttemptController {
     /** 向登录尝试提交 Passkey。 */
     @PostMapping("/login/attempts/{attemptId}/passkey/proofs")
     @AnonymousAccess
-    @RateLimited(dimensions = RateLimitDimension.IP, permits = 10, windowSeconds = 300)
+@RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
     public @NotNull ApiResponse<LoginResultView> loginPasskey(
             @PathVariable @Size(max = 128) @NotNull String attemptId,
             @RequestBody @Valid @NotNull PasskeyProofRequest request) {
@@ -123,7 +123,7 @@ public class AuthenticationAttemptController {
 
     /** 向动作认证尝试提交 Password。 */
     @PostMapping("/verifications/{verificationId}/password/proofs")
-    @RateLimited(dimensions = RateLimitDimension.IP, permits = 10, windowSeconds = 300)
+@RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
     public @NotNull ApiResponse<VerificationView> password(
             @PathVariable @Size(max = 128) @NotNull String verificationId,
             @RequestBody @Valid @NotNull PasswordProofRequest request) {
@@ -139,7 +139,7 @@ public class AuthenticationAttemptController {
 
     /** 向动作认证尝试提交 TOTP。 */
     @PostMapping("/verifications/{verificationId}/totp/proofs")
-    @RateLimited(dimensions = RateLimitDimension.IP, permits = 10, windowSeconds = 300)
+@RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
     public @NotNull ApiResponse<VerificationView> totp(
             @PathVariable @Size(max = 128) @NotNull String verificationId,
             @RequestBody @Valid @NotNull TotpProofRequest request) {
@@ -155,7 +155,7 @@ public class AuthenticationAttemptController {
 
     /** 向动作认证尝试提交 Passkey。 */
     @PostMapping("/verifications/{verificationId}/passkey/proofs")
-    @RateLimited(dimensions = RateLimitDimension.IP, permits = 10, windowSeconds = 300)
+@RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
     public @NotNull ApiResponse<VerificationView> passkey(
             @PathVariable @Size(max = 128) @NotNull String verificationId,
             @RequestBody @Valid @NotNull PasskeyProofRequest request) {

@@ -29,7 +29,7 @@ import com.sca4d.core.api.audit.AuditResult;
 import com.sca4d.core.api.audit.AuditTargetResolver;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallExecution;
-import com.sca4d.core.api.call.CallLifecycle;
+import com.sca4d.core.api.call.CallInvoker;
 import com.sca4d.core.api.call.CallValueResolverLookup;
 import com.sca4d.core.api.call.SPICallValueResolver;
 import com.sca4d.core.api.concurrent.DistributedLock;
@@ -99,7 +99,7 @@ class PlatformFileAuditContractTest {
 
     private List<AuditRecord> records;
 
-    private CallLifecycle lifecycle;
+    private CallInvoker lifecycle;
 
     @BeforeEach
     void createExecutor() {
@@ -309,7 +309,7 @@ class PlatformFileAuditContractTest {
     }
 
     /** 创建可以拒绝指定资源标识的固定调用生命周期。 */
-    private CallLifecycle createLifecycle(@Nullable String deniedId) {
+    private CallInvoker createLifecycle(@Nullable String deniedId) {
         assessedPermissions = new ArrayList<>();
         records = new ArrayList<>();
         PermissionPolicy applicationFiles = new PermissionPolicy() {
@@ -361,7 +361,7 @@ class PlatformFileAuditContractTest {
         SPICallValueResolver expressions = (expression, execution) -> {
             throw new AssertionError("文件审计测试不使用注解表达式");
         };
-        return new CallLifecycle(
+        return new CallInvoker(
                 List.of(
                         new IdentityCallInterceptor(),
                         new PermissionCallInterceptor(new PermissionAssessment(List.of(applicationFiles)), resolvers, expressions),
