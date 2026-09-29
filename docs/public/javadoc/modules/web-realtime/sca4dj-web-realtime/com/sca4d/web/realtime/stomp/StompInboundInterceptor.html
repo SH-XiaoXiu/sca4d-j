@@ -116,6 +116,14 @@ implements org.springframework.messaging.support.ExecutorChannelInterceptor</spa
 <div class="col-last even-row-color">
 <div class="block">创建 Spring STOMP 入站检查器。</div>
 </div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(com.sca4d.web.realtime.stomp.StompRateLimits,com.sca4d.web.realtime.connection.RedisConnectionRegistry,java.util.List,java.time.Clock,com.sca4d.core.api.call.CallInvoker)" class="member-name-link">StompInboundInterceptor</a><wbr>(@NotNull <a href="StompRateLimits.html" title="class in com.sca4d.web.realtime.stomp">StompRateLimits</a>&nbsp;rateLimits,
+ @NotNull <a href="../connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a>&nbsp;shared,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="WebRealtimeSubscriptionPolicy.html" title="interface in com.sca4d.web.realtime.stomp">WebRealtimeSubscriptionPolicy</a>&gt;&nbsp;subscriptionPolicies,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
+ @Nullable com.sca4d.core.api.call.CallInvoker&nbsp;invoker)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">创建绑定统一生命周期执行器的 Spring STOMP 入站检查器。</div>
+</div>
 </div>
 </section>
 </li>
@@ -183,6 +191,22 @@ implements org.springframework.messaging.support.ExecutorChannelInterceptor</spa
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</span></div>
 <div class="block">创建 Spring STOMP 入站检查器。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(com.sca4d.web.realtime.stomp.StompRateLimits,com.sca4d.web.realtime.connection.RedisConnectionRegistry,java.util.List,java.time.Clock,com.sca4d.core.api.call.CallInvoker)">
+<h3>StompInboundInterceptor</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">StompInboundInterceptor</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="StompRateLimits.html" title="class in com.sca4d.web.realtime.stomp">StompRateLimits</a>&nbsp;rateLimits,
+ @NotNull
+ @NotNull <a href="../connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a>&nbsp;shared,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="WebRealtimeSubscriptionPolicy.html" title="interface in com.sca4d.web.realtime.stomp">WebRealtimeSubscriptionPolicy</a>&gt;&nbsp;subscriptionPolicies,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
+ @Nullable
+ @Nullable com.sca4d.core.api.call.CallInvoker&nbsp;invoker)</span></div>
+<div class="block">创建绑定统一生命周期执行器的 Spring STOMP 入站检查器。</div>
 </section>
 </li>
 </ul>

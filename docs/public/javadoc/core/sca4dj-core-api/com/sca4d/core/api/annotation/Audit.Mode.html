@@ -122,16 +122,20 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Enum Constant</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="#DEFAULT" class="member-name-link">DEFAULT</a></code></div>
+<div class="col-first even-row-color"><code><a href="#AFTER_COMMIT" class="member-name-link">AFTER_COMMIT</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">主事务提交后尽力登记进程内写入任务；进程退出或队列拒绝时可能丢失。</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="#DEFAULT" class="member-name-link">DEFAULT</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">继承类型声明或应用配置。</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="#DIRECT" class="member-name-link">DIRECT</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="#DIRECT" class="member-name-link">DIRECT</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">同步写入审计，参与已有事务；没有事务时由记录器建立事务。</div>
 </div>
-<div class="col-first even-row-color"><code><a href="#QUEUED" class="member-name-link">QUEUED</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="#QUEUED" class="member-name-link">QUEUED</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">等待独立 Outbox 事务提交，随后由消息消费者写入审计。</div>
 </div>
 </div>
@@ -200,6 +204,13 @@ the order they are declared.</div>
 <div class="block">等待独立 Outbox 事务提交，随后由消息消费者写入审计。</div>
 </section>
 </li>
+<li>
+<section class="detail" id="AFTER_COMMIT">
+<h3>AFTER_COMMIT</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Audit.Mode.html" title="enum class in com.sca4d.core.api.annotation">Audit.Mode</a></span>&nbsp;<span class="element-name">AFTER_COMMIT</span></div>
+<div class="block">主事务提交后尽力登记进程内写入任务；进程退出或队列拒绝时可能丢失。</div>
+</section>
+</li>
 </ul>
 </section>
 </li>
@@ -226,7 +237,7 @@ the order they are declared.</div>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Audit.Mode.html" title="enum class in com.sca4d.core.api.annotation">Audit.Mode</a></span>&nbsp;<span class="element-name">valueOf</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns the enum constant of this class with the specified name.
 The string must match <i>exactly</i> an identifier used to declare an
-enum constant in this class.  (Extraneous whitespace characters are
+enum constant in this class.  (Extraneous whitespace characters are 
 not permitted.)</div>
 <dl class="notes">
 <dt>Parameters:</dt>

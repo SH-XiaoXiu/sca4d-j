@@ -86,35 +86,83 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">保存一次被声明式调用规则包围的方法执行及其成功要求。</div>
+<div class="block">保存一次被声明式调用规则包围的方法执行、结果和预提交条件。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="CallLifecycle.html" title="class in com.sca4d.core.api.call">CallLifecycle</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="CallInvoker.html" title="class in com.sca4d.core.api.call">CallInvoker</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">编排方法执行的环绕处理、短路、成功要求及结果记录；入口负责建立 Call 和线程绑定。</div>
+<div class="block">执行已经配置的 Call 环绕处理；生命周期阶段由 <a href="CallLifecycle.html" title="enum class in com.sca4d.core.api.call"><code>CallLifecycle</code></a> 表达。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="CallLifecycle.Around.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab3"><a href="CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab3">
+<div class="block">定义 Call 参与者可以介入的通用生命周期语义。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="CallLifecycle.After.html" title="interface in com.sca4d.core.api.call">CallLifecycle.After</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">无论调用成功失败都执行的 finally 语义回调。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="CallLifecycle.AfterCommit.html" title="interface in com.sca4d.core.api.call">CallLifecycle.AfterCommit</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab1">
-<div class="block">包围剩余方法执行；允许明确重放或拒绝，不能隐式吞掉内层失败。</div>
+<div class="block">事务成功提交后的回调；提交发生在目标方法返回前，不提供最终 CallOutcome。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="CallLifecycle.AfterReturning.html" title="interface in com.sca4d.core.api.call">CallLifecycle.AfterReturning</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">只在调用成功返回后执行观察逻辑。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="CallLifecycle.AfterThrowing.html" title="interface in com.sca4d.core.api.call">CallLifecycle.AfterThrowing</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">只在调用拒绝或失败后执行观察逻辑。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="CallLifecycle.Around.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">使用 AOP 环绕语义介入调用。实现类的类型即表示其采用 Around 语义。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="CallLifecycle.AsyncNext.html" title="interface in com.sca4d.core.api.call">CallLifecycle.AsyncNext</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">在异步生命周期中继续内层处理。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="CallLifecycle.Before.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Before</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">只在目标调用前执行校验或准备。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="CallLifecycle.Completion.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Completion</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">Call 最终结束后的清理回调。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab6"><a href="CallLifecycle.Intercepted.html" title="annotation interface in com.sca4d.core.api.call">CallLifecycle.Intercepted</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab6">
-<div class="block">标记调用入口或功能注解；功能注解必须由所属功能注册，不能静默跳过。</div>
+<div class="block">标记调用入口或功能注解；功能注解必须由所属功能注册。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab1"><a href="CallLifecycle.Next.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Next</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab1">
-<div class="block">在当前线程继续内层处理，返回成功、重放、拒绝或失败，错误由结果携带。</div>
+<div class="block">在当前线程继续内层处理，返回成功、重放、拒绝或失败。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="CallOutcome.html" title="class in com.sca4d.core.api.call">CallOutcome</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="CallLifecycle.Participant.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Participant</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">所有生命周期参与者共享的编码和依赖声明。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="CallLifecycle.PreCommit.html" title="interface in com.sca4d.core.api.call">CallLifecycle.PreCommit</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">表示业务成功前必须在预提交阶段满足的一项条件。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="CallLifecycleConfiguration.html" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">集中登记 Call 阶段、Interceptor 和依赖关系。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="CallLifecycleConfiguration.Customizer.html" title="interface in com.sca4d.core.api.call">CallLifecycleConfiguration.Customizer</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">模块或应用在执行器构建前补充生命周期依赖。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="CallLifecycleConfiguration.Registration.html" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration.Registration</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">保存一个已登记的阶段参与者及其排序约束。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="CallOutcome.html" title="class in com.sca4d.core.api.call">CallOutcome</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">保存一次方法执行的实际路径、返回结果或失败。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab3"><a href="CallOutcome.Status.html" title="enum class in com.sca4d.core.api.call">CallOutcome.Status</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab3">
+<div class="col-first even-row-color class-summary class-summary-tab3"><a href="CallOutcome.Status.html" title="enum class in com.sca4d.core.api.call">CallOutcome.Status</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab3">
 <div class="block">列出方法执行可以产生的最终结果。</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="CallRequirement.html" title="interface in com.sca4d.core.api.call">CallRequirement</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
-<div class="block">表示业务方法成功前必须由调用过程满足的一项要求。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab1"><a href="CallValueResolver.html" title="interface in com.sca4d.core.api.call">CallValueResolver</a>&lt;T&gt;</div>
 <div class="col-last odd-row-color class-summary class-summary-tab1">
@@ -127,6 +175,10 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="NoCallValueResolver.html" title="class in com.sca4d.core.api.call">NoCallValueResolver</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">注解用于表示未声明动态值解析器的占位类型，不应被实际调用。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="SPICallValueResolver.html" title="interface in com.sca4d.core.api.call">SPICallValueResolver</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">由集成层提供的默认调用值解析器，读取注解表达式中的参数、Bean 和执行结果。</div>
 </div>
 </div>
 </div>

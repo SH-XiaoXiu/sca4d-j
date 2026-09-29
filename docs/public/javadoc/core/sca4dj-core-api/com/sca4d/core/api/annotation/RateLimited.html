@@ -121,14 +121,19 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Optional Element</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../concurrent/RateLimitDimension.html" title="enum class in com.sca4d.core.api.concurrent">RateLimitDimension</a>[]</code></div>
+<div class="col-first even-row-color"><code><a href="../concurrent/RateLimit.Dim.html" title="enum class in com.sca4d.core.api.concurrent">RateLimit.Dim</a>[]</code></div>
 <div class="col-second even-row-color"><code><a href="#dimensions()" class="member-name-link">dimensions</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">返回需要分别取得额度的内置限流维度。</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a><wbr>&lt;? extends <a href="../call/CallValueResolver.html" title="interface in com.sca4d.core.api.call">CallValueResolver</a>&lt;?&gt;&gt;</code></div>
-<div class="col-second odd-row-color"><code><a href="#keyResolver()" class="member-name-link">keyResolver</a></code></div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#key()" class="member-name-link">key</a></code></div>
 <div class="col-last odd-row-color">
+<div class="block">从方法参数读取自定义限流键的表达式；与 `keyResolver` 二选一。</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a><wbr>&lt;? extends <a href="../call/CallValueResolver.html" title="interface in com.sca4d.core.api.call">CallValueResolver</a>&lt;?&gt;&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#keyResolver()" class="member-name-link">keyResolver</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">返回额外自定义限流维度使用的业务键解析器。</div>
 </div>
 </div>
@@ -146,7 +151,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="dimensions()">
 <h3>dimensions</h3>
-<div class="member-signature"><span class="return-type"><a href="../concurrent/RateLimitDimension.html" title="enum class in com.sca4d.core.api.concurrent">RateLimitDimension</a>[]</span>&nbsp;<span class="element-name">dimensions</span></div>
+<div class="member-signature"><span class="return-type"><a href="../concurrent/RateLimit.Dim.html" title="enum class in com.sca4d.core.api.concurrent">RateLimit.Dim</a>[]</span>&nbsp;<span class="element-name">dimensions</span></div>
 <div class="block">返回需要分别取得额度的内置限流维度。
 
  <p>默认按当前方法的全部调用共享额度。声明多个维度时，只有全部维度仍有额度才会执行当前调用。</div>
@@ -175,6 +180,17 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Default:</dt>
 <dd><code>com.sca4d.core.api.concurrent.NoRateLimitKeyResolver.class</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="key()">
+<h3>key</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">key</span></div>
+<div class="block">从方法参数读取自定义限流键的表达式；与 `keyResolver` 二选一。</div>
+<dl class="notes">
+<dt>Default:</dt>
+<dd><code>""</code></dd>
 </dl>
 </section>
 </li>

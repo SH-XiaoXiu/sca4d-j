@@ -1,12 +1,15 @@
 package com.sca4d.core.api.condition;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 class DnfExpressionTest {
 
@@ -31,5 +34,23 @@ class DnfExpressionTest {
         assertEquals("matched", expression.evaluate("ABZ").orElseThrow());
         assertEquals("fallback", expression.evaluate("fallback").orElseThrow());
         assertTrue(expression.evaluate("AB").isEmpty());
+    }
+
+    @Test
+    @DisplayName("异步条件拒绝同步入口，完整并行判断等待所有条件")
+    void asyncConditionsRequireAsyncEntryAndWaitForAllResults() {
+        CompletableFuture<Boolean> pending = new CompletableFuture<>();
+        DnfClause.Condition<String> remote = DnfClause.Condition.async((value, executor) -> pending);
+        DnfClause<String, Boolean> clause = DnfClause.allOf(
+                "parallel",
+                true,
+                remote,
+                value -> false);
+
+        assertThrows(IllegalStateException.class, () -> clause.matches("value"));
+        var result = clause.matchesAsync("value", Runnable::run).toCompletableFuture();
+        assertFalse(result.isDone());
+        pending.complete(true);
+        assertFalse(result.join());
     }
 }

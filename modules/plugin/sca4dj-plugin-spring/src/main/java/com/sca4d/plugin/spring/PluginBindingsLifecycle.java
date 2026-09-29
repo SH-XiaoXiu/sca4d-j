@@ -16,9 +16,13 @@ import java.nio.file.Path;
 /** 在单例、迁移及系统身份准备完成后绑定代理 Bean，再加载必需插件。 */
 final class PluginBindingsLifecycle implements SmartLifecycle {
     private static final Logger LOG = LoggerFactory.getLogger(PluginBindingsLifecycle.class);
+
     private final PluginHost host;
+
     private final PluginProperties properties;
+
     private final ConfigurableListableBeanFactory factory;
+
     private boolean running;
 
     PluginBindingsLifecycle(PluginHost host, PluginProperties properties, ConfigurableListableBeanFactory factory) {
@@ -33,21 +37,29 @@ final class PluginBindingsLifecycle implements SmartLifecycle {
         try {
             // 绑定 Spring 已完成代理的单例，插件调用仍经过原有事务和权限代理。
             for (String name : factory.getBeanDefinitionNames()) {
-                if (!factory.containsSingleton(name)) continue;
+                if (!factory.containsSingleton(name))
+                    continue;
                 Object bean = factory.getBean(name);
-                PluginBinding binding = AnnotatedElementUtils.findMergedAnnotation(AopUtils.getTargetClass(bean), PluginBinding.class);
-                if (binding == null && factory.getBeanDefinition(name) instanceof RootBeanDefinition definition
+                PluginBinding binding = AnnotatedElementUtils
+                        .findMergedAnnotation(AopUtils.getTargetClass(bean), PluginBinding.class);
+                if (binding == null
+                        && factory.getBeanDefinition(name) instanceof RootBeanDefinition definition
                         && definition.getResolvedFactoryMethod() != null) {
-                    binding = AnnotatedElementUtils.findMergedAnnotation(definition.getResolvedFactoryMethod(), PluginBinding.class);
+                    binding = AnnotatedElementUtils
+                            .findMergedAnnotation(definition.getResolvedFactoryMethod(), PluginBinding.class);
                 }
-                if (binding == null) continue;
+                if (binding == null)
+                    continue;
                 Class<?> declaration = binding.value();
                 if (declaration.isInterface()) {
-                    ApiContract contract = (ApiContract) Class.forName(declaration.getName() + "Contract", true,
+                    ApiContract contract = (ApiContract) Class.forName(
+                            declaration.getName() + "Contract",
+                            true,
                             declaration.getClassLoader()).getField("INSTANCE").get(null);
                     host.runtime().bind(contract.bind(bean, null));
                 } else {
-                    Class<?> bridge = Class.forName(declaration.getName() + "ApiBinding", true, declaration.getClassLoader());
+                    Class<?> bridge = Class
+                            .forName(declaration.getName() + "ApiBinding", true, declaration.getClassLoader());
                     host.runtime().bind((ApiBinding) bridge.getMethod("bind", declaration).invoke(null, bean));
                 }
             }
@@ -63,7 +75,20 @@ final class PluginBindingsLifecycle implements SmartLifecycle {
             throw new IllegalStateException("App 必需插件装配失败", failure);
         }
     }
-    @Override public void stop() { host.runtime().close(); running = false; }
-    @Override public boolean isRunning() { return running; }
-    @Override public int getPhase() { return Integer.MIN_VALUE + 100; }
+
+    @Override
+    public void stop() {
+        host.runtime().close();
+        running = false;
+    }
+
+    @Override
+    public boolean isRunning() {
+        return running;
+    }
+
+    @Override
+    public int getPhase() {
+        return Integer.MIN_VALUE + 100;
+    }
 }

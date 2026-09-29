@@ -8,6 +8,8 @@ import static org.mockito.Mockito.when;
 
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallExecution;
+import com.sca4d.core.api.call.CallLifecycle;
+import com.sca4d.core.api.call.CallOutcome;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.identity.SystemPrincipal;
 import com.sca4d.core.api.name.code.TreeCode;
@@ -25,9 +27,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.TransactionExecution;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.lang.reflect.Method;
 import java.time.Instant;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 验证 Spring 事务和嵌套方法执行会共同落实调用成功要求。
@@ -40,6 +45,10 @@ class CallPreCommitIntegrationTest {
     void clearCall() {
         CallHolder.clear();
         versionConditions.clear();
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.clearSynchronization();
+        }
+        TransactionSynchronizationManager.setActualTransactionActive(false);
     }
 
     @Test
@@ -84,6 +93,74 @@ class CallPreCommitIntegrationTest {
         assertThat(new CurrentResourceScope().scope(permission, DeviceScope.class)).isSameAs(scope);
         assertThatCode(outer::verifyPreCommit).doesNotThrowAnyException();
         assertThatCode(inner::verifyPreCommit).doesNotThrowAnyException();
+    }
+
+    @Test
+    @DisplayName("提交后回调在方法结果记录前运行，提交失败时不运行")
+    void runsAfterCommitBeforeMethodResultExists() throws Exception {
+        Call call = Call.system("after-commit", Instant.EPOCH, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")));
+        CallExecution execution = execution(call, Fixture.class.getDeclaredMethod("plain"));
+        AtomicInteger committed = new AtomicInteger();
+        execution.addAfterCommit(new CallLifecycle.AfterCommit() {
+            @Override
+            public @NotNull TreeCode code() {
+                return TreeCode.of("TEST/AFTER_COMMIT");
+            }
+
+            @Override
+            public void afterCommit(@NotNull CallExecution current) {
+                assertThat(current.outcome()).isEmpty();
+                committed.incrementAndGet();
+            }
+        });
+        CallHolder.set(call);
+        CallHolder.push(execution);
+        execution.beginInvocation();
+        TransactionSynchronizationManager.setActualTransactionActive(true);
+        TransactionSynchronizationManager.initSynchronization();
+        CallPreCommitTransactionListener.track(execution);
+        TransactionSynchronization synchronization = TransactionSynchronizationManager.getSynchronizations().getFirst();
+        synchronization.afterCommit();
+
+        assertThat(committed.get()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("外层事务晚于方法结束时仍检查条件并执行提交后回调")
+    void tracksExecutionUntilOuterTransactionCommits() throws Exception {
+        Call call = Call.system("outer-transaction", Instant.EPOCH, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")));
+        CallExecution execution = execution(call, Fixture.class.getDeclaredMethod("plain"));
+        AtomicInteger checked = new AtomicInteger();
+        AtomicInteger committed = new AtomicInteger();
+        execution.addPreCommit(checked::incrementAndGet);
+        execution.addAfterCommit(new CallLifecycle.AfterCommit() {
+            @Override
+            public @NotNull TreeCode code() {
+                return TreeCode.of("TEST/OUTER_COMMIT");
+            }
+
+            @Override
+            public void afterCommit(@NotNull CallExecution current) {
+                committed.incrementAndGet();
+            }
+        });
+        TransactionSynchronizationManager.setActualTransactionActive(true);
+        TransactionSynchronizationManager.initSynchronization();
+        CallHolder.set(call);
+        CallHolder.push(execution);
+        CallPreCommitTransactionListener.track(execution);
+        execution.beginInvocation();
+        execution.endInvocation();
+        execution.recordOutcome(CallOutcome.success("done"));
+        CallHolder.pop(execution);
+        CallHolder.clear();
+
+        TransactionSynchronization synchronization = TransactionSynchronizationManager.getSynchronizations().getFirst();
+        synchronization.beforeCommit(false);
+        synchronization.afterCommit();
+
+        assertThat(checked.get()).isEqualTo(1);
+        assertThat(committed.get()).isEqualTo(1);
     }
 
     private static CallExecution execution(Call call, Method method) {

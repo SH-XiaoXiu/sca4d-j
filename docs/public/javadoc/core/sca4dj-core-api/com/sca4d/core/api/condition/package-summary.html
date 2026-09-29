@@ -75,17 +75,23 @@ loadScripts(document, 'script');</script>
 <ul class="summary-list">
 <li>
 <div id="class-summary">
-<div class="caption"><span>Classes</span></div>
-<div class="summary-table two-column-summary">
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button></div>
+<div id="class-summary.tabpanel" role="tabpanel">
+<div class="summary-table two-column-summary" aria-labelledby="class-summary-tab0">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a>&lt;T&gt;</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a>&lt;T,<wbr>R&gt;</div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">保存析取范式中必须全部满足的一组条件。</div>
+<div class="block">保存一组必须全部满足并产生同一个结果的条件。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="DnfExpression.html" title="class in com.sca4d.core.api.condition">DnfExpression</a>&lt;T&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">保存任意一个 Clause 满足即可通过的析取范式表达式。</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="DnfClause.Condition.html" title="interface in com.sca4d.core.api.condition">DnfClause.Condition</a>&lt;T&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">一个可以同步或异步判断的纯条件。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="DnfExpression.html" title="class in com.sca4d.core.api.condition">DnfExpression</a>&lt;T,<wbr>R&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">保存按顺序选择第一个命中 Clause 的析取规则表达式。</div>
+</div>
 </div>
 </div>
 </div>

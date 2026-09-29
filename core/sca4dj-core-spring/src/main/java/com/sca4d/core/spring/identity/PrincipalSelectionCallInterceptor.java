@@ -28,7 +28,7 @@ import java.util.concurrent.CompletionStage;
 public class PrincipalSelectionCallInterceptor
         implements
             CallLifecycle.Around,
-            CallLifecycleAdvisor.Declaration<CurrentPrincipal> {
+            CallLifecycleAdvisor.AnnotationBinding<CurrentPrincipal> {
 
     /** 业务主体选择节点编码。 */
     public static final TreeCode CODE = TreeCode.of("CALL/PRINCIPAL_SELECTION");
@@ -109,7 +109,6 @@ public class PrincipalSelectionCallInterceptor
             }
         }
         // Principal 已写入 Call 后才继续 Controller，权限判断不会重新选择业务身份。
-        execution.verifyPrincipal();
         return next.proceed();
     }
 
@@ -139,6 +138,6 @@ public class PrincipalSelectionCallInterceptor
 
     @Override
     public @NotNull Set<TreeCode> before() {
-        return Set.of(PermissionCallInterceptor.CODE);
+        return Set.of(IdentityCallInterceptor.PrincipalRequirement.CODE, PermissionCallInterceptor.CODE);
     }
 }

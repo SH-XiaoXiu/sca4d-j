@@ -88,17 +88,25 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">按各模块注册的注解声明选择方法，建立执行范围并进入唯一 CallLifecycle。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="CallLifecycleAdvisor.Declaration.html" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.Declaration</a>&lt;A extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="CallLifecycleAdvisor.AnnotationBinding.html" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.AnnotationBinding</a>&lt;A extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</div>
 <div class="col-last even-row-color class-summary class-summary-tab1">
-<div class="block">由注解所属模块注册匹配、入口身份与执行要求；不在注册回调中执行业务动作。</div>
+<div class="block">由模块注册注解匹配、入口身份与执行要求；不在绑定回调中执行业务动作。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="CallRequirementTransactionInstaller.html" title="class in com.sca4d.core.spring.call">CallRequirementTransactionInstaller</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">把调用要求监听器安装到应用提供的每一个可配置 Spring 事务管理器。</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="CallLifecycleAdvisor.MethodBinding.html" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.MethodBinding</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">通过方法元数据进入 Call 的绑定方式；不要求任何注解。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="CallRequirementTransactionListener.html" title="class in com.sca4d.core.spring.call">CallRequirementTransactionListener</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="CallPreCommitTransactionInstaller.html" title="class in com.sca4d.core.spring.call">CallPreCommitTransactionInstaller</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">在 Spring 事务提交前检查当前方法执行登记的权限范围和版本条件等要求。</div>
+<div class="block">把预提交条件监听器安装到应用提供的每一个可配置 Spring 事务管理器。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="CallPreCommitTransactionListener.html" title="class in com.sca4d.core.spring.call">CallPreCommitTransactionListener</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">在 Spring 事务提交前检查当前方法登记的预提交条件。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SpelCallValueResolver.html" title="class in com.sca4d.core.spring.call">SpelCallValueResolver</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">使用 SpEL 从调用注解读取参数和执行结果，只缓存表达式，不缓存调用数据。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SpringCallValueResolverLookup.html" title="class in com.sca4d.core.spring.call">SpringCallValueResolverLookup</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">

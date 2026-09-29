@@ -173,7 +173,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/audit/AuditRecorder.html" title="interface in com.sca4d.core.api.audit">AuditRecorder</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
-<div class="block">按明确方式记录审计；同步记录返回时完成当前事务内写入，队列记录返回时完成可靠交接提交。</div>
+<div class="block">按明确方式记录审计；具体实现决定返回时完成写入、可靠交接或提交后尽力登记。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/audit/AuditResolverLookup.html" title="interface in com.sca4d.core.api.audit">AuditResolverLookup</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab1">
@@ -265,35 +265,83 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">保存一次被声明式调用规则包围的方法执行及其成功要求。</div>
+<div class="block">保存一次被声明式调用规则包围的方法执行、结果和预提交条件。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/call/CallLifecycle.html" title="class in com.sca4d.core.api.call">CallLifecycle</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/call/CallInvoker.html" title="class in com.sca4d.core.api.call">CallInvoker</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">编排方法执行的环绕处理、短路、成功要求及结果记录；入口负责建立 Call 和线程绑定。</div>
+<div class="block">执行已经配置的 Call 环绕处理；生命周期阶段由 <a href="com/sca4d/core/api/call/CallLifecycle.html" title="enum class in com.sca4d.core.api.call"><code>CallLifecycle</code></a> 表达。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/call/CallLifecycle.Around.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a></div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/core/api/call/CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="block">定义 Call 参与者可以介入的通用生命周期语义。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/call/CallLifecycle.After.html" title="interface in com.sca4d.core.api.call">CallLifecycle.After</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="block">无论调用成功失败都执行的 finally 语义回调。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/call/CallLifecycle.AfterCommit.html" title="interface in com.sca4d.core.api.call">CallLifecycle.AfterCommit</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab1">
-<div class="block">包围剩余方法执行；允许明确重放或拒绝，不能隐式吞掉内层失败。</div>
+<div class="block">事务成功提交后的回调；提交发生在目标方法返回前，不提供最终 CallOutcome。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/call/CallLifecycle.AfterReturning.html" title="interface in com.sca4d.core.api.call">CallLifecycle.AfterReturning</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="block">只在调用成功返回后执行观察逻辑。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/call/CallLifecycle.AfterThrowing.html" title="interface in com.sca4d.core.api.call">CallLifecycle.AfterThrowing</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="block">只在调用拒绝或失败后执行观察逻辑。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/call/CallLifecycle.Around.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="block">使用 AOP 环绕语义介入调用。实现类的类型即表示其采用 Around 语义。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/call/CallLifecycle.AsyncNext.html" title="interface in com.sca4d.core.api.call">CallLifecycle.AsyncNext</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="block">在异步生命周期中继续内层处理。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/call/CallLifecycle.Before.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Before</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="block">只在目标调用前执行校验或准备。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/call/CallLifecycle.Completion.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Completion</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="block">Call 最终结束后的清理回调。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/api/call/CallLifecycle.Intercepted.html" title="annotation interface in com.sca4d.core.api.call">CallLifecycle.Intercepted</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab6">
-<div class="block">标记调用入口或功能注解；功能注解必须由所属功能注册，不能静默跳过。</div>
+<div class="block">标记调用入口或功能注解；功能注解必须由所属功能注册。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/call/CallLifecycle.Next.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Next</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab1">
-<div class="block">在当前线程继续内层处理，返回成功、重放、拒绝或失败，错误由结果携带。</div>
+<div class="block">在当前线程继续内层处理，返回成功、重放、拒绝或失败。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/call/CallOutcome.html" title="class in com.sca4d.core.api.call">CallOutcome</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/call/CallLifecycle.Participant.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Participant</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="block">所有生命周期参与者共享的编码和依赖声明。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/call/CallLifecycle.PreCommit.html" title="interface in com.sca4d.core.api.call">CallLifecycle.PreCommit</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="block">表示业务成功前必须在预提交阶段满足的一项条件。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/call/CallLifecycleConfiguration.html" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">集中登记 Call 阶段、Interceptor 和依赖关系。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/call/CallLifecycleConfiguration.Customizer.html" title="interface in com.sca4d.core.api.call">CallLifecycleConfiguration.Customizer</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="block">模块或应用在执行器构建前补充生命周期依赖。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/call/CallLifecycleConfiguration.Registration.html" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration.Registration</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">保存一个已登记的阶段参与者及其排序约束。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/call/CallOutcome.html" title="class in com.sca4d.core.api.call">CallOutcome</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存一次方法执行的实际路径、返回结果或失败。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/core/api/call/CallOutcome.Status.html" title="enum class in com.sca4d.core.api.call">CallOutcome.Status</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/core/api/call/CallOutcome.Status.html" title="enum class in com.sca4d.core.api.call">CallOutcome.Status</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
 <div class="block">列出方法执行可以产生的最终结果。</div>
-</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/call/CallRequirement.html" title="interface in com.sca4d.core.api.call">CallRequirement</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
-<div class="block">表示业务方法成功前必须由调用过程满足的一项要求。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/call/CallValueResolver.html" title="interface in com.sca4d.core.api.call">CallValueResolver&lt;T&gt;</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab1">
@@ -385,7 +433,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/data/DataGraphExecutor.html" title="class in com.sca4d.core.api.data">DataGraphExecutor</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">按 DataGraph 数据依赖同步或并行计算，成功后以稳定拓扑顺序返回完整结果。</div>
+<div class="block">按 DataGraph 数据依赖同步或异步计算，成功后以稳定拓扑顺序返回完整结果。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/data/DataKey.html" title="class in com.sca4d.core.api.data">DataKey&lt;T&gt;</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
@@ -393,7 +441,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/data/DataOperation.html" title="class in com.sca4d.core.api.data">DataOperation&lt;T&gt;</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">声明一个只读取指定输入并产生唯一非空输出的纯数据操作。</div>
+<div class="block">声明一个只读取指定输入并产生唯一非空输出的数据操作。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/core/api/data/DataOperationExecutionException.html" title="class in com.sca4d.core.api.data">DataOperationExecutionException</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab5">
@@ -485,243 +533,251 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">保证相同锁键在所有参与协调的应用实例中互斥执行的分布式锁（Distributed Lock）。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/condition/DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause&lt;T&gt;</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/condition/DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause&lt;T,<wbr>R&gt;</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">保存析取范式中必须全部满足的一组条件。</div>
+<div class="block">保存一组必须全部满足并产生同一个结果的条件。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/condition/DnfExpression.html" title="class in com.sca4d.core.api.condition">DnfExpression&lt;T&gt;</a></div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/condition/DnfClause.Condition.html" title="interface in com.sca4d.core.api.condition">DnfClause.Condition&lt;T&gt;</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="block">一个可以同步或异步判断的纯条件。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/condition/DnfExpression.html" title="class in com.sca4d.core.api.condition">DnfExpression&lt;T,<wbr>R&gt;</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">保存按顺序选择第一个命中 Clause 的析取规则表达式。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/utils/DurationUtils.html" title="class in com.sca4d.core.api.utils">DurationUtils</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">保存任意一个 Clause 满足即可通过的析取范式表达式。</div>
-</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/utils/DurationUtils.html" title="class in com.sca4d.core.api.utils">DurationUtils</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">校验时间长度为正数。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/security/EncryptedSecret.html" title="class in com.sca4d.core.api.security">EncryptedSecret</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/security/EncryptedSecret.html" title="class in com.sca4d.core.api.security">EncryptedSecret</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">带密钥标识且不暴露具体算法的加密结果。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/enums/EnumValueCodec.html" title="class in com.sca4d.core.api.enums">EnumValueCodec</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/enums/EnumValueCodec.html" title="class in com.sca4d.core.api.enums">EnumValueCodec</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在业务枚举与外部字符串之间转换。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/core/api/runtime/Environment.html" title="enum class in com.sca4d.core.api.runtime">Environment</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/core/api/runtime/Environment.html" title="enum class in com.sca4d.core.api.runtime">Environment</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
 <div class="block">表示应用当前运行阶段（Environment）。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/core/api/error/ErrorCategory.html" title="enum class in com.sca4d.core.api.error">ErrorCategory</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/core/api/error/ErrorCategory.html" title="enum class in com.sca4d.core.api.error">ErrorCategory</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
 <div class="block">表示 Core 和业务模块使用的错误分类。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/error/ErrorCode.html" title="interface in com.sca4d.core.api.error">ErrorCode</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/error/ErrorCode.html" title="interface in com.sca4d.core.api.error">ErrorCode</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">表示可由 HTTP 响应转换器识别的错误码（Error Code）。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/error/ErrorCodeCatalog.html" title="class in com.sca4d.core.api.error">ErrorCodeCatalog</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/error/ErrorCodeCatalog.html" title="class in com.sca4d.core.api.error">ErrorCodeCatalog</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">合并并校验多个错误码枚举的不可变目录（Error Code Catalog）。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/api/error/ErrorCodeRange.html" title="annotation interface in com.sca4d.core.api.error">ErrorCodeRange</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab6">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/api/error/ErrorCodeRange.html" title="annotation interface in com.sca4d.core.api.error">ErrorCodeRange</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab6">
 <div class="block">声明一个错误码枚举使用的闭区间号段（Error Code Range）。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/authentication/EstablishedSession.html" title="class in com.sca4d.core.api.authentication">EstablishedSession</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/authentication/EstablishedSession.html" title="class in com.sca4d.core.api.authentication">EstablishedSession</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存一次成功登录建立的 Session 和仅向调用方返回一次的 Token 集合。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/event/Event.html" title="class in com.sca4d.core.api.event">Event&lt;T&gt;</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/event/Event.html" title="class in com.sca4d.core.api.event">Event&lt;T&gt;</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存一种已经发生的业务事件及对应的强类型 payload 数据。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/messaging/EventHandler.html" title="interface in com.sca4d.core.api.messaging">EventHandler&lt;T&gt;</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/messaging/EventHandler.html" title="interface in com.sca4d.core.api.messaging">EventHandler&lt;T&gt;</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">声明一个业务 Event 的稳定 RabbitMQ Handler。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/event/EventMessageCodec.html" title="class in com.sca4d.core.api.event">EventMessageCodec&lt;T&gt;</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/event/EventMessageCodec.html" title="class in com.sca4d.core.api.event">EventMessageCodec&lt;T&gt;</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用固定 ObjectMapper 编解码一种 EventType 的业务键、发生时间和 payload。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/event/EventType.html" title="class in com.sca4d.core.api.event">EventType&lt;T&gt;</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/event/EventType.html" title="class in com.sca4d.core.api.event">EventType&lt;T&gt;</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用稳定编码、协议版本和 payload 类型声明一种业务事件。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/core/api/plugin/ExtensionSelection.html" title="enum class in com.sca4d.core.api.plugin">ExtensionSelection</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/core/api/plugin/ExtensionSelection.html" title="enum class in com.sca4d.core.api.plugin">ExtensionSelection</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
 <div class="block">声明扩展实现的选择规则。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/storage/FileAccessUrl.html" title="class in com.sca4d.core.api.storage">FileAccessUrl</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/storage/FileAccessUrl.html" title="class in com.sca4d.core.api.storage">FileAccessUrl</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">返回一个文件的短期读取地址。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/storage/FileContent.html" title="class in com.sca4d.core.api.storage">FileContent</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/storage/FileContent.html" title="class in com.sca4d.core.api.storage">FileContent</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">返回由 HTTP 路由或服务端业务读取并关闭的文件内容。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/core/api/storage/FileErrorCode.html" title="enum class in com.sca4d.core.api.storage">FileErrorCode</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/core/api/storage/FileErrorCode.html" title="enum class in com.sca4d.core.api.storage">FileErrorCode</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
 <div class="block">表示文件申请、完成、绑定、读取和存储不可用的失败结果。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/storage/FileService.html" title="interface in com.sca4d.core.api.storage">FileService</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/storage/FileService.html" title="interface in com.sca4d.core.api.storage">FileService</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">管理上传意图、完成确认、业务绑定、读取地址和对象删除。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/core/api/storage/FileStatus.html" title="enum class in com.sca4d.core.api.storage">FileStatus</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/core/api/storage/FileStatus.html" title="enum class in com.sca4d.core.api.storage">FileStatus</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
 <div class="block">表示文件从等待上传到对象删除完成的持久化状态。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/storage/FileStorage.html" title="interface in com.sca4d.core.api.storage">FileStorage</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/storage/FileStorage.html" title="interface in com.sca4d.core.api.storage">FileStorage</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">对指定容器和对象键执行上传、转正、读取和删除操作。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/storage/FileUpload.html" title="class in com.sca4d.core.api.storage">FileUpload</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/storage/FileUpload.html" title="class in com.sca4d.core.api.storage">FileUpload</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">返回客户端可以原样执行的文件上传请求。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/storage/FileUploadIntent.html" title="class in com.sca4d.core.api.storage">FileUploadIntent</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/storage/FileUploadIntent.html" title="class in com.sca4d.core.api.storage">FileUploadIntent</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存申请上传时已经确认的用途、名称、媒体类型和字节数。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/storage/FileUse.html" title="class in com.sca4d.core.api.storage">FileUse</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/storage/FileUse.html" title="class in com.sca4d.core.api.storage">FileUse</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">标识文件准备绑定或已经绑定的业务对象。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/flow/FlowCatalog.html" title="class in com.sca4d.core.api.flow">FlowCatalog</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/flow/FlowCatalog.html" title="class in com.sca4d.core.api.flow">FlowCatalog</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">按名称和版本索引不可变的 <a href="com/sca4d/core/api/flow/FlowDefinition.html" title="interface in com.sca4d.core.api.flow"><code>FlowDefinition</code></a>。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/flow/FlowCondition.html" title="interface in com.sca4d.core.api.flow">FlowCondition</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/flow/FlowCondition.html" title="interface in com.sca4d.core.api.flow">FlowCondition</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">判断转换是否适用于当前实例和事件。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/flow/FlowDefinition.html" title="interface in com.sca4d.core.api.flow">FlowDefinition</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/flow/FlowDefinition.html" title="interface in com.sca4d.core.api.flow">FlowDefinition</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">描述可创建 <a href="com/sca4d/core/api/flow/FlowInstance.html" title="class in com.sca4d.core.api.flow"><code>FlowInstance</code></a> 的名称、版本、<a href="com/sca4d/core/api/flow/FlowGraph.html" title="class in com.sca4d.core.api.flow"><code>FlowGraph</code></a> 和有效时间。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/flow/FlowEngine.html" title="class in com.sca4d.core.api.flow">FlowEngine</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/flow/FlowEngine.html" title="class in com.sca4d.core.api.flow">FlowEngine</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">创建、推进和单次消费 <a href="com/sca4d/core/api/flow/FlowInstance.html" title="class in com.sca4d.core.api.flow"><code>FlowInstance</code></a>。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/flow/FlowEvent.html" title="class in com.sca4d.core.api.flow">FlowEvent</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/flow/FlowEvent.html" title="class in com.sca4d.core.api.flow">FlowEvent</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存推动 <a href="com/sca4d/core/api/flow/FlowInstance.html" title="class in com.sca4d.core.api.flow"><code>FlowInstance</code></a> 状态变化的已确认事件。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/flow/FlowGraph.html" title="class in com.sca4d.core.api.flow">FlowGraph</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/flow/FlowGraph.html" title="class in com.sca4d.core.api.flow">FlowGraph</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存由 Java 节点和转换组成的不可变状态图。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/flow/FlowId.html" title="class in com.sca4d.core.api.flow">FlowId</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/flow/FlowId.html" title="class in com.sca4d.core.api.flow">FlowId</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存一个 <a href="com/sca4d/core/api/flow/FlowInstance.html" title="class in com.sca4d.core.api.flow"><code>FlowInstance</code></a> 的不透明标识。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/flow/FlowInstance.html" title="class in com.sca4d.core.api.flow">FlowInstance</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/flow/FlowInstance.html" title="class in com.sca4d.core.api.flow">FlowInstance</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存跨多次调用的 <a href="com/sca4d/core/api/flow/FlowDefinition.html" title="interface in com.sca4d.core.api.flow"><code>FlowDefinition</code></a> 当前节点、数据和消费状态。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/flow/FlowNode.html" title="class in com.sca4d.core.api.flow">FlowNode</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/flow/FlowNode.html" title="class in com.sca4d.core.api.flow">FlowNode</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">表示 <a href="com/sca4d/core/api/flow/FlowGraph.html" title="class in com.sca4d.core.api.flow"><code>FlowGraph</code></a> 中的一个节点。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/core/api/flow/FlowNodeType.html" title="enum class in com.sca4d.core.api.flow">FlowNodeType</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/core/api/flow/FlowNodeType.html" title="enum class in com.sca4d.core.api.flow">FlowNodeType</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
 <div class="block">指定 <a href="com/sca4d/core/api/flow/FlowGraph.html" title="class in com.sca4d.core.api.flow"><code>FlowGraph</code></a> 节点接收事件的方式。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/flow/FlowStore.html" title="interface in com.sca4d.core.api.flow">FlowStore</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/flow/FlowStore.html" title="interface in com.sca4d.core.api.flow">FlowStore</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">保存 <a href="com/sca4d/core/api/flow/FlowInstance.html" title="class in com.sca4d.core.api.flow"><code>FlowInstance</code></a>，并按 <a href="com/sca4d/core/api/concurrent/Version.html" title="class in com.sca4d.core.api.concurrent"><code>Version</code></a> 执行乐观更新。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/flow/FlowTransition.html" title="class in com.sca4d.core.api.flow">FlowTransition</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/flow/FlowTransition.html" title="class in com.sca4d.core.api.flow">FlowTransition</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">记录 <a href="com/sca4d/core/api/flow/FlowGraph.html" title="class in com.sca4d.core.api.flow"><code>FlowGraph</code></a> 在事件满足条件时从一个节点转到另一个节点的规则。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/gateway/GatewayCallback.html" title="interface in com.sca4d.core.api.gateway">GatewayCallback&lt;I,<wbr>O&gt;</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/gateway/GatewayCallback.html" title="interface in com.sca4d.core.api.gateway">GatewayCallback&lt;I,<wbr>O&gt;</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">声明一个可由 Gateway 按编码路由的 HTTP 回调。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/gateway/GatewayCallbackCode.html" title="class in com.sca4d.core.api.gateway">GatewayCallbackCode</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/gateway/GatewayCallbackCode.html" title="class in com.sca4d.core.api.gateway">GatewayCallbackCode</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用稳定节点链标识跨实例发现的稳定回调，保留独立领域类型。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/gateway/GatewayCallbackRequest.html" title="class in com.sca4d.core.api.gateway">GatewayCallbackRequest&lt;I&gt;</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/gateway/GatewayCallbackRequest.html" title="class in com.sca4d.core.api.gateway">GatewayCallbackRequest&lt;I&gt;</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存回调调用方提交的大小写不敏感 Header 和已经转换类型的 JSON 请求体。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/gateway/GatewayCallbackResponse.html" title="class in com.sca4d.core.api.gateway">GatewayCallbackResponse&lt;O&gt;</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/gateway/GatewayCallbackResponse.html" title="class in com.sca4d.core.api.gateway">GatewayCallbackResponse&lt;O&gt;</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存回调返回的原始 HTTP 状态、大小写不敏感 Header 和可选 JSON 响应体。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/gateway/GatewayHttpHeaders.html" title="class in com.sca4d.core.api.gateway">GatewayHttpHeaders</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/gateway/GatewayHttpHeaders.html" title="class in com.sca4d.core.api.gateway">GatewayHttpHeaders</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">定义 Gateway 控制请求和可信转发信息使用的 HTTP Header。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/gateway/GatewayHttpPaths.html" title="class in com.sca4d.core.api.gateway">GatewayHttpPaths</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/gateway/GatewayHttpPaths.html" title="class in com.sca4d.core.api.gateway">GatewayHttpPaths</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">定义 Gateway 与应用实例共同使用且不能由单侧配置改变的内部 HTTP 路径。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/gateway/GatewayRegistrationRequest.html" title="class in com.sca4d.core.api.gateway">GatewayRegistrationRequest</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/gateway/GatewayRegistrationRequest.html" title="class in com.sca4d.core.api.gateway">GatewayRegistrationRequest</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存 Server 实例向 Gateway 提交的地址、readiness 路径和回调编码。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/gateway/GatewayRegistrationResponse.html" title="class in com.sca4d.core.api.gateway">GatewayRegistrationResponse</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/gateway/GatewayRegistrationResponse.html" title="class in com.sca4d.core.api.gateway">GatewayRegistrationResponse</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存 Gateway 为 Server 实例注册分配的租约标识。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/messaging/HandlingDecision.html" title="class in com.sca4d.core.api.messaging">HandlingDecision</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/messaging/HandlingDecision.html" title="class in com.sca4d.core.api.messaging">HandlingDecision</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">指示 RabbitMQ 对当前 Handler 收到的消息执行确认、再次处理或拒绝。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/core/api/messaging/HandlingDecision.Status.html" title="enum class in com.sca4d.core.api.messaging">HandlingDecision.Status</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/messaging/HandlingPolicy.html" title="class in com.sca4d.core.api.messaging">HandlingPolicy</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/core/api/messaging/HandlingDecision.Status.html" title="enum class in com.sca4d.core.api.messaging">HandlingDecision.Status</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/messaging/HandlingPolicy.html" title="class in com.sca4d.core.api.messaging">HandlingPolicy</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">限制 MessageHandler 因技术失败再次处理同一 RabbitMQ 消息的次数和间隔。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/audit/HttpCall.html" title="class in com.sca4d.core.api.audit">HttpCall</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/audit/HttpCall.html" title="class in com.sca4d.core.api.audit">HttpCall</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存审计记录需要的 HTTP 方法、请求路径、客户端地址和 User-Agent 快照。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/id/Id.html" title="class in com.sca4d.core.api.id">Id</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/id/Id.html" title="class in com.sca4d.core.api.id">Id</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存严格大于零的正整数标识，并提供无需拆出原始数值的比较操作。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/concurrent/IdempotencyBeginResult.html" title="class in com.sca4d.core.api.concurrent">IdempotencyBeginResult&lt;T&gt;</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/concurrent/IdempotencyBeginResult.html" title="class in com.sca4d.core.api.concurrent">IdempotencyBeginResult&lt;T&gt;</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存一次幂等处理权竞争的状态以及对应状态允许读取的数据。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/core/api/concurrent/IdempotencyBeginStatus.html" title="enum class in com.sca4d.core.api.concurrent">IdempotencyBeginStatus</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/core/api/concurrent/IdempotencyBeginStatus.html" title="enum class in com.sca4d.core.api.concurrent">IdempotencyBeginStatus</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
 <div class="block">列出幂等请求开始处理时可能得到的互斥状态。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/concurrent/IdempotencyCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">IdempotencyCallInterceptor</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/concurrent/IdempotencyCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">IdempotencyCallInterceptor</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">执行 `@Idempotent` 的处理权取得、结果重放、成功保存和失败释放。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/concurrent/IdempotencyFingerprints.html" title="class in com.sca4d.core.api.concurrent">IdempotencyFingerprints</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/concurrent/IdempotencyFingerprints.html" title="class in com.sca4d.core.api.concurrent">IdempotencyFingerprints</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">把方法参数转换成字段顺序稳定的 JSON，并生成不暴露原始参数的幂等摘要。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/core/api/concurrent/IdempotencyInProgressException.html" title="class in com.sca4d.core.api.concurrent">IdempotencyInProgressException</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab5">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/core/api/concurrent/IdempotencyInProgressException.html" title="class in com.sca4d.core.api.concurrent">IdempotencyInProgressException</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab5">
 <div class="block">表示同一幂等请求仍由其他执行者处理。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/concurrent/IdempotencyKey.html" title="class in com.sca4d.core.api.concurrent">IdempotencyKey</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/concurrent/IdempotencyKey.html" title="class in com.sca4d.core.api.concurrent">IdempotencyKey</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">一次幂等操作的不透明键。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/core/api/concurrent/IdempotencyKeyConflictException.html" title="class in com.sca4d.core.api.concurrent">IdempotencyKeyConflictException</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab5">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/core/api/concurrent/IdempotencyKeyConflictException.html" title="class in com.sca4d.core.api.concurrent">IdempotencyKeyConflictException</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab5">
 <div class="block">表示同一幂等键已经用于不同的方法参数。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/concurrent/IdempotencyStore.html" title="interface in com.sca4d.core.api.concurrent">IdempotencyStore</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/concurrent/IdempotencyStore.html" title="interface in com.sca4d.core.api.concurrent">IdempotencyStore</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">使用集群共享原子存储区分首次请求、处理中请求和可重放的成功结果。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/api/annotation/Idempotent.html" title="annotation interface in com.sca4d.core.api.annotation">Idempotent</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab6">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/api/annotation/Idempotent.html" title="annotation interface in com.sca4d.core.api.annotation">Idempotent</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab6">
 <div class="block">声明调用按动态幂等键复用首次成功结果。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/identity/IdentityCallInterceptor.html" title="class in com.sca4d.core.api.identity">IdentityCallInterceptor</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/identity/IdentityCallInterceptor.html" title="class in com.sca4d.core.api.identity">IdentityCallInterceptor</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">检查调用声明的认证前提，并在主体选择后确认权限和身份审计所需的 Principal。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/identity/IdentityCallInterceptor.PrincipalRequirement.html" title="class in com.sca4d.core.api.identity">IdentityCallInterceptor.PrincipalRequirement</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">在主体选择之后检查权限和审计声明需要的业务主体。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/id/IdGenerator.html" title="interface in com.sca4d.core.api.id">IdGenerator</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
@@ -1207,17 +1263,17 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">指定时间窗口内允许的最大调用次数。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/concurrent/RateLimitCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">RateLimitCallInterceptor</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/core/api/concurrent/RateLimit.Dim.html" title="enum class in com.sca4d.core.api.concurrent">RateLimit.Dim</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="block">声明限流键使用的稳定维度。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/concurrent/RateLimitCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">RateLimitCallInterceptor</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">解析 `@RateLimited` 的内置和自定义维度，并取得每个维度的限流额度。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/concurrent/RateLimitDecision.html" title="class in com.sca4d.core.api.concurrent">RateLimitDecision</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/concurrent/RateLimitDecision.html" title="class in com.sca4d.core.api.concurrent">RateLimitDecision</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存一次限流额度判断是否允许以及拒绝后的等待时间。</div>
-</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/core/api/concurrent/RateLimitDimension.html" title="enum class in com.sca4d.core.api.concurrent">RateLimitDimension</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
-<div class="block">列出 `@RateLimited` 可以直接读取的调用限流维度。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/api/annotation/RateLimited.html" title="annotation interface in com.sca4d.core.api.annotation">RateLimited</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab6">
@@ -1231,201 +1287,209 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab5">
 <div class="block">表示调用没有取得全部限流额度，并携带调用方再次尝试前的等待秒数。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/identity/RealmKey.html" title="class in com.sca4d.core.api.identity">RealmKey</a></div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/concurrent/RateLimitKey.html" title="class in com.sca4d.core.api.concurrent">RateLimitKey</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">使用稳定限流编码和动态维度值组成跨实例限流键。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/identity/RealmKey.html" title="class in com.sca4d.core.api.identity">RealmKey</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存账号所属认证域的键。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/message/ReferencedContent.html" title="class in com.sca4d.core.api.message">ReferencedContent</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/message/ReferencedContent.html" title="class in com.sca4d.core.api.message">ReferencedContent</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存需要由具体组件按 scheme 解析的外部内容引用。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/region/Region.html" title="class in com.sca4d.core.api.region">Region</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/region/Region.html" title="class in com.sca4d.core.api.region">Region</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">表示具体应用定义并用于业务策略判断的稳定区域。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/region/RegionCatalog.html" title="class in com.sca4d.core.api.region">RegionCatalog</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/region/RegionCatalog.html" title="class in com.sca4d.core.api.region">RegionCatalog</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">查询 libphonenumber 地区代码、国际电话代码和洲别之间的对应关系。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/render/Renderer.html" title="interface in com.sca4d.core.api.render">Renderer&lt;S,<wbr>R&gt;</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/render/Renderer.html" title="interface in com.sca4d.core.api.render">Renderer&lt;S,<wbr>R&gt;</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">校验一种模板源，并按 Locale 和变量生成具体结果。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/api/annotation/RequirePermission.html" title="annotation interface in com.sca4d.core.api.annotation">RequirePermission</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab6">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/api/annotation/RequirePermission.html" title="annotation interface in com.sca4d.core.api.annotation">RequirePermission</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab6">
 <div class="block">声明调用必须具有一组资源权限（Required Permission）。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/api/annotation/RequirePermissions.html" title="annotation interface in com.sca4d.core.api.annotation">RequirePermissions</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab6">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/api/annotation/RequirePermissions.html" title="annotation interface in com.sca4d.core.api.annotation">RequirePermissions</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab6">
 <div class="block">保存多个 <a href="com/sca4d/core/api/annotation/RequirePermission.html" title="annotation interface in com.sca4d.core.api.annotation"><code>RequirePermission</code></a> 的重复注解容器。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/api/authentication/RequireSessionToken.html" title="annotation interface in com.sca4d.core.api.authentication">RequireSessionToken</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab6">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/api/authentication/RequireSessionToken.html" title="annotation interface in com.sca4d.core.api.authentication">RequireSessionToken</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab6">
 <div class="block">强制 Controller 类型或方法使用在线读取的 Sa-Token Session Token。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">表示权限判断所保护的业务资源（Resource）。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/authentication/principalsession/ResourceCodec.html" title="interface in com.sca4d.core.api.authentication.principalsession">ResourceCodec&lt;R&gt;</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/authentication/principalsession/ResourceCodec.html" title="interface in com.sca4d.core.api.authentication.principalsession">ResourceCodec&lt;R&gt;</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">Resource 的无框架 Session wire 编解码契约。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/authentication/principalsession/ResourceIdLoader.html" title="interface in com.sca4d.core.api.authentication.principalsession">ResourceIdLoader</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/authentication/principalsession/ResourceIdLoader.html" title="interface in com.sca4d.core.api.authentication.principalsession">ResourceIdLoader</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">为 Session 中完整装载的 Principal 批量贡献数字 Resource 标识集合。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/authentication/principalsession/ResourceIdSet.html" title="class in com.sca4d.core.api.authentication.principalsession">ResourceIdSet</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/authentication/principalsession/ResourceIdSet.html" title="class in com.sca4d.core.api.authentication.principalsession">ResourceIdSet</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存一种 Resource 类型在 Session 中受信任的正数标识集合。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/authentication/principalsession/ResourceLoader.html" title="interface in com.sca4d.core.api.authentication.principalsession">ResourceLoader</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/authentication/principalsession/ResourceLoader.html" title="interface in com.sca4d.core.api.authentication.principalsession">ResourceLoader</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">为 Session 中的 Principal 批量贡献静态授权资源。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/resource/ResourceReference.html" title="class in com.sca4d.core.api.resource">ResourceReference</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/resource/ResourceReference.html" title="class in com.sca4d.core.api.resource">ResourceReference</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存能够从数据库或消息中恢复的资源类型和资源标识。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/permission/ResourceScope.html" title="interface in com.sca4d.core.api.permission">ResourceScope</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/permission/ResourceScope.html" title="interface in com.sca4d.core.api.permission">ResourceScope</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">表示一次允许判定可以作用的业务资源子集（Resource Scope）。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/permission/ResourceScopeRequirement.html" title="class in com.sca4d.core.api.permission">ResourceScopeRequirement</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/permission/ResourceScopeRequirement.html" title="class in com.sca4d.core.api.permission">ResourceScopeRequirement</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存一次方法执行必须由 Repository 消费的权限资源范围。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/job/ScheduledJobRun.html" title="class in com.sca4d.core.api.job">ScheduledJobRun&lt;T&gt;</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/job/ScheduledJobRun.html" title="class in com.sca4d.core.api.job">ScheduledJobRun&lt;T&gt;</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">返回一次定时 Job run 的状态和调用方选择的类型化节点输出。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/scheduling/ScheduleKey.html" title="class in com.sca4d.core.api.scheduling">ScheduleKey</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/scheduling/ScheduleKey.html" title="class in com.sca4d.core.api.scheduling">ScheduleKey</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用稳定节点链标识调度计划，并保留独立领域类型。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/scheduling/ScheduleTiming.html" title="interface in com.sca4d.core.api.scheduling">ScheduleTiming</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/scheduling/ScheduleTiming.html" title="interface in com.sca4d.core.api.scheduling">ScheduleTiming</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">标明 JobSchedule 或 ClusterTaskSchedule 使用 Cron 或固定间隔计算原定触发时间。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/security/SecretCipher.html" title="interface in com.sca4d.core.api.security">SecretCipher</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/security/SecretCipher.html" title="interface in com.sca4d.core.api.security">SecretCipher</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">使用指定密钥加解密秘密值。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/codec/SecretCodec.html" title="interface in com.sca4d.core.api.codec">SecretCodec&lt;V&gt;</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/codec/SecretCodec.html" title="interface in com.sca4d.core.api.codec">SecretCodec&lt;V&gt;</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">把已经绑定加密密钥和用途的秘密值与密文互相转换，并声明密文结构版本。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/security/SecretHasher.html" title="interface in com.sca4d.core.api.security">SecretHasher</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/security/SecretHasher.html" title="interface in com.sca4d.core.api.security">SecretHasher</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">为不需要恢复原文的秘密值生成单向摘要，并校验原始值与摘要是否匹配。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/security/SecretKeyring.html" title="interface in com.sca4d.core.api.security">SecretKeyring</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/security/SecretKeyring.html" title="interface in com.sca4d.core.api.security">SecretKeyring</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">选择新数据加密使用的密钥，并按密钥标识查找解密密码器。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/authentication/Session.html" title="class in com.sca4d.core.api.authentication">Session</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/authentication/Session.html" title="class in com.sca4d.core.api.authentication">Session</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存 Principal、静态授权资源和认证记录的不可变 Session 快照。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/authentication/SessionControl.html" title="interface in com.sca4d.core.api.authentication">SessionControl</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/authentication/SessionControl.html" title="interface in com.sca4d.core.api.authentication">SessionControl</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">控制指定 Account 的全部权威 Session，不读取或建立 Session。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/authentication/SessionId.html" title="class in com.sca4d.core.api.authentication">SessionId</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/authentication/SessionId.html" title="class in com.sca4d.core.api.authentication">SessionId</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存任意认证 Session 的不透明标识。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/authentication/SessionIdentity.html" title="class in com.sca4d.core.api.authentication">SessionIdentity</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/authentication/SessionIdentity.html" title="class in com.sca4d.core.api.authentication">SessionIdentity</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存认证完成后恢复出的 Subject 和 Account 身份信息。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/authentication/SessionIdentityLoader.html" title="interface in com.sca4d.core.api.authentication">SessionIdentityLoader</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/authentication/SessionIdentityLoader.html" title="interface in com.sca4d.core.api.authentication">SessionIdentityLoader</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">认领 Account 并读取认证 Session 共用的 Subject 和 Account。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/core/api/authentication/SessionIdentityUnavailableException.html" title="class in com.sca4d.core.api.authentication">SessionIdentityUnavailableException</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab5">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/core/api/authentication/SessionIdentityUnavailableException.html" title="class in com.sca4d.core.api.authentication">SessionIdentityUnavailableException</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab5">
 <div class="block">表示 Account 当前状态或身份关系已经不能恢复为有效 Session。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/authentication/SessionInvalidationListener.html" title="interface in com.sca4d.core.api.authentication">SessionInvalidationListener</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/authentication/SessionInvalidationListener.html" title="interface in com.sca4d.core.api.authentication">SessionInvalidationListener</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">接收 Account Session 失效结果，并执行通知等不改变失效代次的操作。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/authentication/SessionLifecycle.html" title="interface in com.sca4d.core.api.authentication">SessionLifecycle</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/authentication/SessionLifecycle.html" title="interface in com.sca4d.core.api.authentication">SessionLifecycle</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">建立、读取和终止单个权威 Session。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/permission/SessionOperationPermissionPolicy.html" title="class in com.sca4d.core.api.permission">SessionOperationPermissionPolicy</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/permission/SessionOperationPermissionPolicy.html" title="class in com.sca4d.core.api.permission">SessionOperationPermissionPolicy</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用当前调用绑定的 Session 静态资源判断固定操作（Session Operation Permission Policy）。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/authentication/SessionTerminationReason.html" title="class in com.sca4d.core.api.authentication">SessionTerminationReason</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/authentication/SessionTerminationReason.html" title="class in com.sca4d.core.api.authentication">SessionTerminationReason</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">表示结束认证 Session 的开放原因。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/authentication/SessionTokens.html" title="class in com.sca4d.core.api.authentication">SessionTokens</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/authentication/SessionTokens.html" title="class in com.sca4d.core.api.authentication">SessionTokens</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存客户端访问当前 Session 所需的 access Token 和可选在线 Session Token。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/setting/Setting.html" title="class in com.sca4d.core.api.setting">Setting&lt;T&gt;</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/setting/Setting.html" title="class in com.sca4d.core.api.setting">Setting&lt;T&gt;</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">直接读取一项类型化设置，按构造声明选择所属、版本 Codec、继承及覆盖规则。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/setting/Setting.Builder.html" title="class in com.sca4d.core.api.setting">Setting.Builder&lt;T,<wbr>D&gt;</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/setting/Setting.Builder.html" title="class in com.sca4d.core.api.setting">Setting.Builder&lt;T,<wbr>D&gt;</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在构造阶段声明 IO 与解码顺序；构造后只通过 Setting 访问。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/setting/codec/SettingCodec.html" title="interface in com.sca4d.core.api.setting.codec">SettingCodec&lt;T&gt;</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/setting/codec/SettingCodec.html" title="interface in com.sca4d.core.api.setting.codec">SettingCodec&lt;T&gt;</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">负责一个设置值与数据库文本之间的双向转换和校验。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/setting/SettingGroup.html" title="class in com.sca4d.core.api.setting">SettingGroup</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/setting/SettingGroup.html" title="class in com.sca4d.core.api.setting">SettingGroup</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">标识管理端中一起展示的一组设置。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/setting/value/SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/setting/value/SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存设置归属者使用的稳定类型和类型内唯一标识。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/setting/access/SettingReader.html" title="interface in com.sca4d.core.api.setting.access">SettingReader&lt;W&gt;</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/setting/access/SettingReader.html" title="interface in com.sca4d.core.api.setting.access">SettingReader&lt;W&gt;</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">读取明确所属的一项设置；返回外部表示，不执行领域解码、继承或降级。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/core/api/setting/exception/SettingReadOnlyException.html" title="class in com.sca4d.core.api.setting.exception">SettingReadOnlyException</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab5">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/core/api/setting/exception/SettingReadOnlyException.html" title="class in com.sca4d.core.api.setting.exception">SettingReadOnlyException</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab5">
 <div class="block">表示管理端尝试修改仍由初始化节点 ENV 持续同步的设置。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/core/api/setting/exception/SettingSchemaVersionException.html" title="class in com.sca4d.core.api.setting.exception">SettingSchemaVersionException</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab5">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/core/api/setting/exception/SettingSchemaVersionException.html" title="class in com.sca4d.core.api.setting.exception">SettingSchemaVersionException</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab5">
 <div class="block">表示数据库设置值结构版本与当前 Java 定义不一致且没有声明转换规则。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/setting/value/SettingValue.html" title="class in com.sca4d.core.api.setting.value">SettingValue&lt;T&gt;</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/setting/value/SettingValue.html" title="class in com.sca4d.core.api.setting.value">SettingValue&lt;T&gt;</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存原始或已解码的读取结果；元数据不持有其他来源的原始内容。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/setting/value/SettingValue.Origin.html" title="class in com.sca4d.core.api.setting.value">SettingValue.Origin</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/setting/value/SettingValue.Origin.html" title="class in com.sca4d.core.api.setting.value">SettingValue.Origin</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">记录一次实际读取的元数据；IO 身份与请求所属分别保留。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/setting/value/SettingValues.html" title="class in com.sca4d.core.api.setting.value">SettingValues</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/setting/value/SettingValues.html" title="class in com.sca4d.core.api.setting.value">SettingValues</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存一次批量查询得到的不可变设置快照。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/setting/access/SettingWriter.html" title="interface in com.sca4d.core.api.setting.access">SettingWriter&lt;W&gt;</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/setting/access/SettingWriter.html" title="interface in com.sca4d.core.api.setting.access">SettingWriter&lt;W&gt;</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">按条件写入明确所属的设置，不决定读取优先级，也不反向修改继承值。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/query/Sort.html" title="class in com.sca4d.core.api.query">Sort</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/query/Sort.html" title="class in com.sca4d.core.api.query">Sort</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">表示一个可以由列表声明选用的安全排序字段名。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/core/api/query/SortDir.html" title="enum class in com.sca4d.core.api.query">SortDir</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/core/api/query/SortDir.html" title="enum class in com.sca4d.core.api.query">SortDir</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
 <div class="block">定义列表查询使用的两个排序方向。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/query/SortOrder.html" title="class in com.sca4d.core.api.query">SortOrder</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/query/SortOrder.html" title="class in com.sca4d.core.api.query">SortOrder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存一个安全排序字段及其排序方向。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/api/call/SPICallValueResolver.html" title="interface in com.sca4d.core.api.call">SPICallValueResolver</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="block">由集成层提供的默认调用值解析器，读取注解表达式中的参数、Bean 和执行结果。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/api/storage/StorageObject.html" title="class in com.sca4d.core.api.storage">StorageObject</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">

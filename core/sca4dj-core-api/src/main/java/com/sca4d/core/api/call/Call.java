@@ -17,17 +17,24 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletionStage;
+import java.util.function.Supplier;
 
 /** 保存入口界定的一次往返的输入快照、目标资源、身份和权限判定；不解释传输协议。 */
 public final class Call {
 
     private final String callId;
+
+    private @Nullable CallInvoker invoker;
 
     private final Instant startedAt;
 
@@ -58,7 +65,7 @@ public final class Call {
      * @param startedAt 调用开始时间
      */
     public Call(String callId, Instant startedAt) {
-        this(callId, startedAt, DataValues.builder().build(), null);
+        this(null, callId, startedAt, DataValues.builder().build(), null);
     }
 
     /**
@@ -70,8 +77,19 @@ public final class Call {
      * @param targetResource 已明确的主要目标；不能从协议路径猜测
      */
     public Call(String callId, Instant startedAt, @NotNull DataValues inputs, @Nullable Resource targetResource) {
+        this(null, callId, startedAt, inputs, targetResource);
+    }
+
+    /** 创建可以直接执行生命周期的调用。 */
+    public Call(
+            @Nullable CallInvoker invoker,
+            String callId,
+            Instant startedAt,
+            @NotNull DataValues inputs,
+            @Nullable Resource targetResource) {
         this.callId = TextUtils.requireText(callId, "调用标识");
         this.startedAt = Objects.requireNonNull(startedAt, "调用开始时间不能为空");
+        this.invoker = invoker;
         this.inputs = Objects.requireNonNull(inputs, "调用输入不能为空");
         this.targetResource = targetResource;
     }
@@ -110,7 +128,7 @@ public final class Call {
             @NotNull Instant startedAt,
             @NotNull DataValues inputs,
             @Nullable Resource targetResource) {
-        Call child = new Call(callId, startedAt, inputs, targetResource);
+        Call child = new Call(invoker, callId, startedAt, inputs, targetResource);
         if (this.callId.equals(child.callId)) {
             throw new IllegalArgumentException("异步调用必须使用独立调用标识");
         }
@@ -135,14 +153,133 @@ public final class Call {
         return system(callId, startedAt, SystemPrincipals.mainPrincipal());
     }
 
+    /** 创建绑定生命周期执行器的系统调用。 */
+    public static Call system(@NotNull CallInvoker invoker, String callId, Instant startedAt) {
+        return system(invoker, callId, startedAt, SystemPrincipals.mainPrincipal());
+    }
+
     /** 使用已经确认的领域 Principal 建立系统调用，不赋予额外权限。 */
     public static Call system(String callId, Instant startedAt, SystemPrincipal principal) {
-        Call call = new Call(callId, startedAt);
+        return system(null, callId, startedAt, principal);
+    }
+
+    /** 使用已经确认的领域 Principal 建立绑定生命周期执行器的系统调用。 */
+    public static Call system(
+            @Nullable CallInvoker invoker,
+            String callId,
+            Instant startedAt,
+            SystemPrincipal principal) {
+        Call call = new Call(invoker, callId, startedAt, DataValues.builder().build(), null);
         call.authenticationAssessed = true;
         call.subject = Subject.SYSTEM;
         call.principalAssessed = true;
         call.principal = Objects.requireNonNull(principal, "系统 Principal 不能为空");
         return call;
+    }
+
+    /** 执行带 Java Method 元数据的调用。 */
+    public <T> @Nullable T invoke(
+            @NotNull Method method,
+            Object @NotNull [] arguments,
+            @NotNull Callable<T> target) throws Exception {
+        return requireInvoker().execute(
+                new CallExecution(this, method.getDeclaringClass(), method, arguments, method.getGenericReturnType()),
+                target);
+    }
+
+    /** 使用已经附着声明的执行描述进入生命周期；供 Spring 适配器和高级绑定使用。 */
+    public <T> @Nullable T invoke(
+            @NotNull CallExecution execution,
+            @NotNull Callable<T> target) throws Exception {
+        if (execution.call() != this) {
+            throw new IllegalArgumentException("执行描述不属于当前 Call");
+        }
+        return requireInvoker().execute(execution, target);
+    }
+
+    /** 执行使用稳定 TreeCode 标识的纯函数。 */
+    public <T> @Nullable T invoke(
+            @NotNull com.sca4d.core.api.name.code.TreeCode operation,
+            Object @NotNull [] arguments,
+            @NotNull Type resultType,
+            @NotNull Callable<T> target) throws Exception {
+        return requireInvoker().execute(
+                CallExecution.function(this, operation, arguments, resultType),
+                target);
+    }
+
+    /** 使用冒号格式字符串解析 TreeCode 后执行纯函数。 */
+    public <T> @Nullable T invoke(
+            @NotNull String operation,
+            Object @NotNull [] arguments,
+            @NotNull Type resultType,
+            @NotNull Callable<T> target) throws Exception {
+        return invoke(
+                com.sca4d.core.api.name.code.TreeCode.ofColon(operation),
+                arguments,
+                resultType,
+                target);
+    }
+
+    /** 执行异步 Java Method 调用。 */
+    public <T> @NotNull CompletionStage<T> invokeAsync(
+            @NotNull Method method,
+            Object @NotNull [] arguments,
+            @NotNull Supplier<? extends @NotNull CompletionStage<T>> target) {
+        return requireInvoker().executeAsync(
+                new CallExecution(this, method.getDeclaringClass(), method, arguments, method.getGenericReturnType()),
+                target);
+    }
+
+    /** 使用已经附着声明的异步执行描述进入生命周期。 */
+    public <T> @NotNull CompletionStage<T> invokeAsync(
+            @NotNull CallExecution execution,
+            @NotNull Supplier<? extends @NotNull CompletionStage<T>> target) {
+        if (execution.call() != this) {
+            throw new IllegalArgumentException("执行描述不属于当前 Call");
+        }
+        return requireInvoker().executeAsync(execution, target);
+    }
+
+    /** 执行异步纯函数调用。 */
+    public <T> @NotNull CompletionStage<T> invokeAsync(
+            @NotNull com.sca4d.core.api.name.code.TreeCode operation,
+            Object @NotNull [] arguments,
+            @NotNull Type resultType,
+            @NotNull Supplier<? extends @NotNull CompletionStage<T>> target) {
+        return requireInvoker().executeAsync(
+                CallExecution.function(this, operation, arguments, resultType),
+                target);
+    }
+
+    /** 使用冒号格式字符串解析 TreeCode 后执行异步纯函数。 */
+    public <T> @NotNull CompletionStage<T> invokeAsync(
+            @NotNull String operation,
+            Object @NotNull [] arguments,
+            @NotNull Type resultType,
+            @NotNull Supplier<? extends @NotNull CompletionStage<T>> target) {
+        return invokeAsync(
+                com.sca4d.core.api.name.code.TreeCode.ofColon(operation),
+                arguments,
+                resultType,
+                target);
+    }
+
+    private @NotNull CallInvoker requireInvoker() {
+        return Objects.requireNonNull(
+                invoker,
+                "当前 Call 没有绑定 CallInvoker，不能执行生命周期");
+    }
+
+    /** 把生命周期执行器绑定到已有入口快照；身份和权限事实保持不变。 */
+    public @NotNull Call withInvoker(@NotNull CallInvoker invoker) {
+        CallInvoker checked = Objects.requireNonNull(invoker, "调用执行器不能为空");
+        if (this.invoker == null) {
+            this.invoker = checked;
+        } else if (this.invoker != checked) {
+            throw new IllegalStateException("同一个 Call 不能绑定多个生命周期执行器");
+        }
+        return this;
     }
 
     /**

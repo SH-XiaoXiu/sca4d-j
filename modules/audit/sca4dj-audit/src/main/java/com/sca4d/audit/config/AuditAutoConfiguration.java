@@ -3,6 +3,7 @@ package com.sca4d.audit.config;
 import com.sca4d.audit.payload.AuditPayloadJson;
 import com.sca4d.audit.payload.AuditPayloadRegistry;
 import com.sca4d.audit.query.AuditQueryService;
+import com.sca4d.audit.recording.AfterCommitAuditRecorder;
 import com.sca4d.audit.recording.AuditMessageCodec;
 import com.sca4d.audit.recording.AuditMessageHandler;
 import com.sca4d.audit.recording.AuditRepository;
@@ -39,6 +40,10 @@ import java.time.Clock;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /** 自动装配通用审计编码、数据库记录器和查询服务。 */
 @AutoConfiguration(before = CoreSpringAutoConfiguration.class, afterName = "com.sca4d.messaging.config.MessagingAutoConfiguration")
@@ -80,6 +85,32 @@ public class AuditAutoConfiguration {
         return new DatabaseAuditRecorder(repository);
     }
 
+    /** @return 最多排队 1024 条尽力审计任务的单线程执行器 */
+    @Bean(destroyMethod = "shutdown")
+    ExecutorService afterCommitAuditExecutor() {
+        return new ThreadPoolExecutor(
+                1,
+                1,
+                0,
+                TimeUnit.MILLISECONDS,
+                new ArrayBlockingQueue<>(1024),
+                task -> {
+                    Thread thread = new Thread(task, "sca4dj-audit-after-commit");
+                    thread.setDaemon(true);
+                    return thread;
+                },
+                new ThreadPoolExecutor.AbortPolicy());
+    }
+
+    /** @return 仅保证提交后进程内执行机会的审计记录器 */
+    @Bean
+    @ConditionalOnMissingBean(name = "afterCommitAuditRecorder")
+    AuditRecorder afterCommitAuditRecorder(
+            AuditRepository repository,
+            @Qualifier("afterCommitAuditExecutor") ExecutorService executor) {
+        return new AfterCommitAuditRecorder(repository, executor);
+    }
+
     /** Messaging 存在时安装队列记录器，供全局默认及方法覆盖选择。 */
     @Bean
     @ConditionalOnMissingBean(name = "queuedAuditRecorder")
@@ -104,7 +135,7 @@ public class AuditAutoConfiguration {
 
     /** Audit 自己注册调用声明，Core Spring 不维护审计注解清单。 */
     @Bean
-    CallLifecycleAdvisor.Declaration<Audit> auditCallDeclaration() {
+    CallLifecycleAdvisor.AnnotationBinding<Audit> auditCallBinding() {
         return () -> Audit.class;
     }
 
@@ -121,16 +152,19 @@ public class AuditAutoConfiguration {
             List<AuditRecorder> recorders,
             @Qualifier("databaseAuditRecorder") ObjectProvider<AuditRecorder> database,
             @Qualifier("queuedAuditRecorder") ObjectProvider<AuditRecorder> queued,
+            @Qualifier("afterCommitAuditRecorder") ObjectProvider<AuditRecorder> afterCommit,
             AuditProperties properties,
             AuditResolverLookup resolvers,
             SPICallValueResolver expressionResolver,
             Clock clock) {
         AuditRecorder directDefault = database.getIfAvailable();
         AuditRecorder queuedDefault = queued.getIfAvailable();
+        AuditRecorder afterCommitDefault = afterCommit.getIfAvailable();
         Map<Audit.Mode, AuditRecorder> selected = new EnumMap<>(Audit.Mode.class);
         for (AuditRecorder recorder : recorders) {
             if (recorder != directDefault
                     && recorder != queuedDefault
+                    && recorder != afterCommitDefault
                     && selected.putIfAbsent(recorder.mode(), recorder) != null) {
                 throw new IllegalArgumentException("同一审计方式不能注册多个自定义实现: " + recorder.mode());
             }
@@ -141,8 +175,15 @@ public class AuditAutoConfiguration {
         if (queuedDefault != null) {
             selected.putIfAbsent(queuedDefault.mode(), queuedDefault);
         }
+        if (afterCommitDefault != null) {
+            selected.putIfAbsent(afterCommitDefault.mode(), afterCommitDefault);
+        }
         return new AuditCallInterceptor(
-                List.copyOf(selected.values()), properties.getMode(), resolvers, expressionResolver, clock);
+                List.copyOf(selected.values()),
+                properties.getMode(),
+                resolvers,
+                expressionResolver,
+                clock);
     }
 
     @Bean

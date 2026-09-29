@@ -51,6 +51,10 @@ public class RedisIdempotencyStore implements IdempotencyStore {
             "redis/idempotency/release.lua",
             Long.class);
 
+    private static final DefaultRedisScript<Long> RENEW = script(
+            "redis/idempotency/renew.lua",
+            Long.class);
+
     private final RedisTemplate<Key, String> redis;
 
     private final ObjectMapper objectMapper;
@@ -169,6 +173,16 @@ public class RedisIdempotencyStore implements IdempotencyStore {
                 List.of(storageKey(key)),
                 requireText(token, "所有权 token"));
         return Long.valueOf(1L).equals(deleted);
+    }
+
+    @Override
+    public boolean renew(@NotNull IdempotencyKey key, @NotNull String token, @NotNull Duration processingTtl) {
+        Long renewed = redis.execute(
+                RENEW,
+                List.of(storageKey(key)),
+                requireText(token, "所有权 token"),
+                Long.toString(ttl(processingTtl).toMillis()));
+        return Long.valueOf(1L).equals(renewed);
     }
 
     /** 使用摘要后的幂等键生成当前应用独立的 Redis key。 */

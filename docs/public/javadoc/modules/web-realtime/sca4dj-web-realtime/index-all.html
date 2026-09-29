@@ -68,6 +68,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">在 Spring WebSocket transport 处理完浏览器事件后执行关闭。</div>
 </dd>
+<dt><a href="com/sca4d/web/realtime/stomp/StompChannelDispatcher.html#afterSendCompletion(org.springframework.messaging.Message,org.springframework.messaging.MessageChannel,boolean,java.lang.Exception)" class="member-name-link">afterSendCompletion(Message&lt;?&gt;, MessageChannel, boolean, Exception)</a> - Method in class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompChannelDispatcher.html" title="class in com.sca4d.web.realtime.stomp">StompChannelDispatcher</a></dt>
+<dd>
+<div class="block">恢复嵌套调用的提交上下文，成功时使消息可执行，失败时归还预留容量。</div>
+</dd>
 <dt><a href="com/sca4d/web/realtime/stomp/StompRelayPortCheck.html#afterSingletonsInstantiated()" class="member-name-link">afterSingletonsInstantiated()</a> - Method in class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompRelayPortCheck.html" title="class in com.sca4d.web.realtime.stomp">StompRelayPortCheck</a></dt>
 <dd>
 <div class="block">relay 模式下无法建立 TCP 连接时直接阻止 Spring 应用启动。</div>
@@ -133,6 +137,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/web/realtime/sse/WebRealtimeSseConnector.html#close()" class="member-name-link">close()</a> - Method in interface com.sca4d.web.realtime.sse.<a href="com/sca4d/web/realtime/sse/WebRealtimeSseConnector.html" title="interface in com.sca4d.web.realtime.sse">WebRealtimeSseConnector</a></dt>
 <dd>
 <div class="block">关闭当前进程的全部 SSE 连接、心跳和写出任务。</div>
+</dd>
+<dt><a href="com/sca4d/web/realtime/stomp/StompChannelDispatcher.html#close()" class="member-name-link">close()</a> - Method in class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompChannelDispatcher.html" title="class in com.sca4d.web.realtime.stomp">StompChannelDispatcher</a></dt>
+<dd>
+<div class="block">停止接受消息，释放排队引用并中断工作线程。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/connection/BrowserWrite.html#closeAfter()" class="member-name-link">closeAfter()</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/BrowserWrite.html" title="class in com.sca4d.web.realtime.connection">BrowserWrite</a></dt>
 <dd>&nbsp;</dd>
@@ -236,6 +244,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/connection/BrowserWrite.html#envelope()" class="member-name-link">envelope()</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/BrowserWrite.html" title="class in com.sca4d.web.realtime.connection">BrowserWrite</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/stomp/StompChannelDispatcher.html#execute(java.lang.Runnable)" class="member-name-link">execute(Runnable)</a> - Method in class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompChannelDispatcher.html" title="class in com.sca4d.web.realtime.stomp">StompChannelDispatcher</a></dt>
+<dd>
+<div class="block">收集 Spring 为当前消息创建的处理任务，等待所有 preSend 检查及任务提交完成。</div>
+</dd>
 <dt><a href="com/sca4d/web/realtime/ticket/WebRealtimeTicket.html#expiresAt()" class="member-name-link">expiresAt()</a> - Method in class com.sca4d.web.realtime.ticket.<a href="com/sca4d/web/realtime/ticket/WebRealtimeTicket.html" title="class in com.sca4d.web.realtime.ticket">WebRealtimeTicket</a></dt>
 <dd>&nbsp;</dd>
 </dl>
@@ -250,11 +262,21 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html#getAllowedOrigins()" class="member-name-link">getAllowedOrigins()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html#getChannelQueueCapacity()" class="member-name-link">getChannelQueueCapacity()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Stomp</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html#getChannelQueueMaxBytes()" class="member-name-link">getChannelQueueMaxBytes()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Stomp</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html#getChannelWorkerCount()" class="member-name-link">getChannelWorkerCount()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Stomp</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Relay.html#getClientLogin()" class="member-name-link">getClientLogin()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Relay.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Relay</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Relay.html#getClientPasscode()" class="member-name-link">getClientPasscode()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Relay.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Relay</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html#getConnectionQueueCapacity()" class="member-name-link">getConnectionQueueCapacity()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html#getConnectionQueueCapacity()" class="member-name-link">getConnectionQueueCapacity()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Stomp</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html#getConnectionQueueMaxBytes()" class="member-name-link">getConnectionQueueMaxBytes()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Stomp</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/connection/BrowserEnvelope.html#getEventCode()" class="member-name-link">getEventCode()</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/BrowserEnvelope.html" title="class in com.sca4d.web.realtime.connection">BrowserEnvelope</a></dt>
 <dd>&nbsp;</dd>
@@ -411,9 +433,17 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:P">P</h2>
 <dl class="index">
+<dt><a href="com/sca4d/web/realtime/stomp/StompChannelDispatcher.html#preSend(org.springframework.messaging.Message,org.springframework.messaging.MessageChannel)" class="member-name-link">preSend(Message&lt;?&gt;, MessageChannel)</a> - Method in class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompChannelDispatcher.html" title="class in com.sca4d.web.realtime.stomp">StompChannelDispatcher</a></dt>
+<dd>
+<div class="block">在任何业务拦截器和执行器提交之前占用预算，失败时不创建排队任务。</div>
+</dd>
 <dt><a href="com/sca4d/web/realtime/stomp/StompInboundInterceptor.html#preSend(org.springframework.messaging.Message,org.springframework.messaging.MessageChannel)" class="member-name-link">preSend(Message&lt;?&gt;, MessageChannel)</a> - Method in class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompInboundInterceptor.html" title="class in com.sca4d.web.realtime.stomp">StompInboundInterceptor</a></dt>
 <dd>
 <div class="block">在 Spring 分派命令前检查身份、STOMP 1.2、限流和动态订阅策略。</div>
+</dd>
+<dt><a href="com/sca4d/web/realtime/stomp/StompOutboundInterceptor.html#preSend(org.springframework.messaging.Message,org.springframework.messaging.MessageChannel)" class="member-name-link">preSend(Message&lt;?&gt;, MessageChannel)</a> - Method in class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompOutboundInterceptor.html" title="class in com.sca4d.web.realtime.stomp">StompOutboundInterceptor</a></dt>
+<dd>
+<div class="block">恢复经过 broker relay 返回的关闭标记，并在编码浏览器帧之前删除内部 native header。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/stomp/WebRealtimeProtocol.html#PRINCIPAL_ID_HEADER" class="member-name-link">PRINCIPAL_ID_HEADER</a> - Static variable in class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/WebRealtimeProtocol.html" title="class in com.sca4d.web.realtime.stomp">WebRealtimeProtocol</a></dt>
 <dd>
@@ -514,11 +544,21 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html#setAllowedOrigins(java.util.List)" class="member-name-link">setAllowedOrigins(List&lt;String&gt;)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html#setChannelQueueCapacity(int)" class="member-name-link">setChannelQueueCapacity(int)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Stomp</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html#setChannelQueueMaxBytes(int)" class="member-name-link">setChannelQueueMaxBytes(int)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Stomp</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html#setChannelWorkerCount(int)" class="member-name-link">setChannelWorkerCount(int)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Stomp</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Relay.html#setClientLogin(java.lang.String)" class="member-name-link">setClientLogin(String)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Relay.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Relay</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Relay.html#setClientPasscode(java.lang.String)" class="member-name-link">setClientPasscode(String)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Relay.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Relay</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html#setConnectionQueueCapacity(int)" class="member-name-link">setConnectionQueueCapacity(int)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html#setConnectionQueueCapacity(int)" class="member-name-link">setConnectionQueueCapacity(int)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Stomp</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html#setConnectionQueueMaxBytes(int)" class="member-name-link">setConnectionQueueMaxBytes(int)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Stomp</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html#setHeartbeatInterval(java.time.Duration)" class="member-name-link">setHeartbeatInterval(Duration)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a></dt>
 <dd>&nbsp;</dd>
@@ -582,11 +622,19 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">选择 Spring STOMP destination 由当前节点还是 RabbitMQ STOMP 插件代理。</div>
 </dd>
+<dt><a href="com/sca4d/web/realtime/stomp/StompChannelDispatcher.html" class="type-name-link" title="class in com.sca4d.web.realtime.stomp">StompChannelDispatcher</a> - Class in <a href="com/sca4d/web/realtime/stomp/package-summary.html">com.sca4d.web.realtime.stomp</a></dt>
+<dd>
+<div class="block">在 Spring 通道分派前预留容量，按连接串行执行一条消息的全部订阅处理器。</div>
+</dd>
+<dt><a href="com/sca4d/web/realtime/stomp/StompChannelDispatcher.html#%3Cinit%3E(java.lang.String,com.sca4d.web.realtime.config.WebRealtimeProperties.Stomp,com.sca4d.web.realtime.stomp.WebSocketSessions)" class="member-name-link">StompChannelDispatcher(String, WebRealtimeProperties.Stomp, WebSocketSessions)</a> - Constructor for class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompChannelDispatcher.html" title="class in com.sca4d.web.realtime.stomp">StompChannelDispatcher</a></dt>
+<dd>
+<div class="block">创建某一方向独立的容量预算、固定工作线程和断连清理监听。</div>
+</dd>
 <dt><a href="com/sca4d/web/realtime/stomp/StompConfiguration.html" class="type-name-link" title="class in com.sca4d.web.realtime.stomp">StompConfiguration</a> - Class in <a href="com/sca4d/web/realtime/stomp/package-summary.html">com.sca4d.web.realtime.stomp</a></dt>
 <dd>
 <div class="block">使用 Spring STOMP 配置 WebSocket 端点、broker 模式和入出站拦截器。</div>
 </dd>
-<dt><a href="com/sca4d/web/realtime/stomp/StompConfiguration.html#%3Cinit%3E(com.sca4d.web.realtime.config.WebRealtimeProperties,com.sca4d.web.realtime.ticket.TicketHandshakeInterceptor,com.sca4d.web.realtime.stomp.WebSocketSessions,com.sca4d.web.realtime.stomp.StompInboundInterceptor,com.sca4d.web.realtime.stomp.StompOutboundInterceptor,com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">StompConfiguration(WebRealtimeProperties, TicketHandshakeInterceptor, WebSocketSessions, StompInboundInterceptor, StompOutboundInterceptor, ObjectMapper)</a> - Constructor for class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompConfiguration.html" title="class in com.sca4d.web.realtime.stomp">StompConfiguration</a></dt>
+<dt><a href="com/sca4d/web/realtime/stomp/StompConfiguration.html#%3Cinit%3E(com.sca4d.web.realtime.config.WebRealtimeProperties,com.sca4d.web.realtime.ticket.TicketHandshakeInterceptor,com.sca4d.web.realtime.stomp.WebSocketSessions,com.sca4d.web.realtime.stomp.StompInboundInterceptor,com.sca4d.web.realtime.stomp.StompOutboundInterceptor,com.fasterxml.jackson.databind.ObjectMapper,com.sca4d.web.realtime.stomp.StompChannelDispatcher,com.sca4d.web.realtime.stomp.StompChannelDispatcher)" class="member-name-link">StompConfiguration(WebRealtimeProperties, TicketHandshakeInterceptor, WebSocketSessions, StompInboundInterceptor, StompOutboundInterceptor, ObjectMapper, StompChannelDispatcher, StompChannelDispatcher)</a> - Constructor for class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompConfiguration.html" title="class in com.sca4d.web.realtime.stomp">StompConfiguration</a></dt>
 <dd>
 <div class="block">创建 Spring STOMP 基础设施配置。</div>
 </dd>
@@ -605,6 +653,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/web/realtime/stomp/StompInboundInterceptor.html#%3Cinit%3E(com.sca4d.web.realtime.stomp.StompRateLimits,com.sca4d.web.realtime.connection.RedisConnectionRegistry,java.util.List,java.time.Clock)" class="member-name-link">StompInboundInterceptor(StompRateLimits, RedisConnectionRegistry, List&lt;WebRealtimeSubscriptionPolicy&gt;, Clock)</a> - Constructor for class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompInboundInterceptor.html" title="class in com.sca4d.web.realtime.stomp">StompInboundInterceptor</a></dt>
 <dd>
 <div class="block">创建 Spring STOMP 入站检查器。</div>
+</dd>
+<dt><a href="com/sca4d/web/realtime/stomp/StompInboundInterceptor.html#%3Cinit%3E(com.sca4d.web.realtime.stomp.StompRateLimits,com.sca4d.web.realtime.connection.RedisConnectionRegistry,java.util.List,java.time.Clock,com.sca4d.core.api.call.CallInvoker)" class="member-name-link">StompInboundInterceptor(StompRateLimits, RedisConnectionRegistry, List&lt;WebRealtimeSubscriptionPolicy&gt;, Clock, CallInvoker)</a> - Constructor for class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompInboundInterceptor.html" title="class in com.sca4d.web.realtime.stomp">StompInboundInterceptor</a></dt>
+<dd>
+<div class="block">创建绑定统一生命周期执行器的 Spring STOMP 入站检查器。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/stomp/StompOutboundInterceptor.html" class="type-name-link" title="class in com.sca4d.web.realtime.stomp">StompOutboundInterceptor</a> - Class in <a href="com/sca4d/web/realtime/stomp/package-summary.html">com.sca4d.web.realtime.stomp</a></dt>
 <dd>

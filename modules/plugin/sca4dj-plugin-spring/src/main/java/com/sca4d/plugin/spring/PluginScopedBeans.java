@@ -14,7 +14,9 @@ import org.springframework.core.annotation.AnnotatedElementUtils;
 /** 将 Bean 工厂方法的作用域声明应用到实际对象，原实现无需感知插件。 */
 final class PluginScopedBeans implements BeanPostProcessor, Ordered {
     private final ConfigurableListableBeanFactory factory;
+
     private final ObjectProvider<PluginRuntime> runtime;
+
     PluginScopedBeans(ConfigurableListableBeanFactory factory, ObjectProvider<PluginRuntime> runtime) {
         this.factory = factory;
         this.runtime = runtime;
@@ -29,10 +31,16 @@ final class PluginScopedBeans implements BeanPostProcessor, Ordered {
             return bean;
         }
         ProxyFactory proxy = new ProxyFactory(bean);
-        if (bean.getClass().getInterfaces().length == 0) proxy.setProxyTargetClass(true);
-        proxy.addAdvice((MethodInterceptor) invocation ->
-                PluginScopeInvocation.invoke(runtime.getObject(), invocation::proceed));
+        if (bean.getClass().getInterfaces().length == 0)
+            proxy.setProxyTargetClass(true);
+        proxy.addAdvice(
+                (MethodInterceptor) invocation -> PluginScopeInvocation
+                        .invoke(runtime.getObject(), invocation::proceed));
         return proxy.getProxy(bean.getClass().getClassLoader());
     }
-    @Override public int getOrder() { return Ordered.LOWEST_PRECEDENCE; }
+
+    @Override
+    public int getOrder() {
+        return Ordered.LOWEST_PRECEDENCE;
+    }
 }

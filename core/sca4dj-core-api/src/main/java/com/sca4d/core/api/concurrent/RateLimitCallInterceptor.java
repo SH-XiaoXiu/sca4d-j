@@ -89,7 +89,7 @@ public class RateLimitCallInterceptor implements CallLifecycle.Around {
         LOG.trace(
                 "调用已判断限流额度 | callId={} method={} dimensions={} allowed={}",
                 checked.call().callId(),
-                checked.method().getName(),
+                checked.invocationName(),
                 keys.size(),
                 retryAfter.isZero());
         if (!retryAfter.isZero()) {

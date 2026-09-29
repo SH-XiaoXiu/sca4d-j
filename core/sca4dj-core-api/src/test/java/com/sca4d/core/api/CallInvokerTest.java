@@ -1,6 +1,5 @@
 package com.sca4d.core.api;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -46,7 +45,6 @@ import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.concurrent.RateLimit;
 import com.sca4d.core.api.concurrent.RateLimitCallInterceptor;
 import com.sca4d.core.api.concurrent.RateLimitDecision;
-import com.sca4d.core.api.concurrent.RateLimit;
 import com.sca4d.core.api.concurrent.RateLimitExceededException;
 import com.sca4d.core.api.concurrent.RateLimiter;
 import com.sca4d.core.api.data.DataValues;
@@ -87,19 +85,32 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 @SuppressWarnings({"ClassCanBeRecord", "ExtractMethodRecommender"})
 class CallInvokerTest {
+
+    private static final ScheduledExecutorService RENEWAL_SCHEDULER = new ScheduledThreadPoolExecutor(1, task -> {
+        Thread thread = new Thread(task, "call-invoker-test-renewal");
+        thread.setDaemon(true);
+        return thread;
+    });
+
+    @org.junit.jupiter.api.AfterAll
+    static void stopRenewalScheduler() {
+        RENEWAL_SCHEDULER.shutdown();
+    }
 
     @Test
     @DisplayName("审计方法显式方式覆盖类型，类型显式方式覆盖应用默认")
@@ -186,7 +197,12 @@ class CallInvokerTest {
                         new IdentityCallInterceptor(),
                         new IdempotencyCallInterceptor(new MemoryIdempotencyStore(events), type -> {
                             throw new AssertionError("非法返回类型不应解析幂等键");
-                        }, NO_EXPRESSIONS, IDEMPOTENCY_FINGERPRINTS, Duration.ofSeconds(30), Duration.ofSeconds(1))));
+                        },
+                                NO_EXPRESSIONS,
+                                IDEMPOTENCY_FINGERPRINTS,
+                                Duration.ofSeconds(30),
+                                Duration.ofSeconds(1),
+                                RENEWAL_SCHEDULER)));
         Method method = IdempotentService.class.getDeclaredMethod("submit");
         CallExecution execution = new CallExecution(
                 Call.system("future", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
@@ -242,6 +258,137 @@ class CallInvokerTest {
                         new Object[0],
                         () -> "done"));
         assertTrue(events.contains("idempotency-release"));
+    }
+
+    @Test
+    @DisplayName("同步解锁失败保留业务结果并允许同键重放")
+    void replaysSuccessfulResultAfterSynchronousUnlockFailure() throws Exception {
+        List<String> events = new ArrayList<>();
+        RuntimeException unlockFailure = new IllegalStateException("unlock failed");
+        DistributedLock lock = new DistributedLock() {
+            @Override
+            public <T> T execute(LockKey key, Duration waitTime, Supplier<T> task) {
+                task.get();
+                throw unlockFailure;
+            }
+        };
+        CallInvoker invoker = idempotentLockedInvoker(new MemoryIdempotencyStore(events), lock);
+        Method method = IdempotentService.class.getDeclaredMethod("createUnderLock");
+        AtomicInteger invocations = new AtomicInteger();
+
+        assertSame(
+                unlockFailure,
+                assertThrows(
+                        IllegalStateException.class,
+                        () -> execute(
+                                invoker,
+                                systemCall("first"),
+                                IdempotentService.class,
+                                method,
+                                new Object[0],
+                                () -> {
+                                    invocations.incrementAndGet();
+                                    return "created";
+                                })));
+        assertEquals(
+                "created",
+                execute(
+                        invoker,
+                        systemCall("retry"),
+                        IdempotentService.class,
+                        method,
+                        new Object[0],
+                        () -> {
+                            invocations.incrementAndGet();
+                            return "duplicate";
+                        }));
+        assertEquals(1, invocations.get());
+        assertTrue(events.contains("idempotency-succeed"));
+        assertFalse(events.contains("idempotency-release"));
+    }
+
+    @Test
+    @DisplayName("异步解锁失败保留业务结果并允许同键重放")
+    void replaysSuccessfulResultAfterAsynchronousUnlockFailure() throws Exception {
+        List<String> events = new ArrayList<>();
+        RuntimeException unlockFailure = new IllegalStateException("async unlock failed");
+        DistributedLock lock = new DistributedLock() {
+            @Override
+            public <T> T execute(LockKey key, Duration waitTime, Supplier<T> task) {
+                return task.get();
+            }
+
+            @Override
+            public <T> CompletionStage<T> executeAsync(
+                    LockKey key,
+                    Duration waitTime,
+                    Supplier<? extends CompletionStage<T>> task) {
+                return task.get().thenCompose(value -> CompletableFuture.failedFuture(unlockFailure));
+            }
+        };
+        CallInvoker invoker = idempotentLockedInvoker(new MemoryIdempotencyStore(events), lock);
+        Method method = IdempotentService.class.getDeclaredMethod("submitUnderLock");
+        AtomicInteger invocations = new AtomicInteger();
+
+        assertSame(
+                unlockFailure,
+                assertThrows(
+                        CompletionException.class,
+                        () -> invoker.executeAsync(
+                                new CallExecution(
+                                        systemCall("first"),
+                                        IdempotentService.class,
+                                        method,
+                                        new Object[0],
+                                        String.class),
+                                () -> {
+                                    invocations.incrementAndGet();
+                                    return CompletableFuture.completedFuture("created");
+                                }).toCompletableFuture().join())
+                        .getCause());
+        assertEquals(
+                "created",
+                invoker.executeAsync(
+                        new CallExecution(
+                                systemCall("retry"),
+                                IdempotentService.class,
+                                method,
+                                new Object[0],
+                                String.class),
+                        () -> {
+                            invocations.incrementAndGet();
+                            return CompletableFuture.completedFuture("duplicate");
+                        }).toCompletableFuture().join());
+        assertEquals(1, invocations.get());
+        assertTrue(events.contains("idempotency-succeed"));
+        assertFalse(events.contains("idempotency-release"));
+    }
+
+    private static Call systemCall(String callId) {
+        return Call.system(callId, NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")));
+    }
+
+    private static CallInvoker idempotentLockedInvoker(IdempotencyStore store, DistributedLock lock) {
+        CallValueResolverLookup resolvers = type -> {
+            if (type == IdempotencyKeyResolver.class) {
+                return new IdempotencyKeyResolver();
+            }
+            if (type == LockKeyResolver.class) {
+                return new LockKeyResolver();
+            }
+            throw new IllegalArgumentException("未知解析器: " + type);
+        };
+        return new CallInvoker(
+                List.of(
+                        new IdempotencyCallInterceptor(
+                                store,
+                                resolvers,
+                                NO_EXPRESSIONS,
+                                IDEMPOTENCY_FINGERPRINTS,
+                                Duration.ofSeconds(30),
+                                Duration.ofSeconds(1),
+                                RENEWAL_SCHEDULER),
+                        new LockCallInterceptor(lock, resolvers, NO_EXPRESSIONS)));
     }
 
     @Test
@@ -377,15 +524,22 @@ class CallInvokerTest {
                 List.of(
                         new IdentityCallInterceptor(),
                         new PermissionCallInterceptor(new PermissionAssessment(List.of()), resolvers, NO_EXPRESSIONS),
-                        new RateLimitCallInterceptor((key, limit) -> RateLimitDecision.allow(), resolvers, NO_EXPRESSIONS),
+                        new RateLimitCallInterceptor(
+                                (key, limit) -> RateLimitDecision.allow(),
+                                resolvers,
+                                NO_EXPRESSIONS),
                         new IdempotencyCallInterceptor(
                                 new MemoryIdempotencyStore(new ArrayList<>()),
                                 resolvers,
                                 NO_EXPRESSIONS,
                                 IDEMPOTENCY_FINGERPRINTS,
                                 Duration.ofSeconds(30),
-                                Duration.ofSeconds(1)),
-                        new LockCallInterceptor(new RecordingDistributedLock(new ArrayList<>()), resolvers, NO_EXPRESSIONS),
+                                Duration.ofSeconds(1),
+                                RENEWAL_SCHEDULER),
+                        new LockCallInterceptor(
+                                new RecordingDistributedLock(new ArrayList<>()),
+                                resolvers,
+                                NO_EXPRESSIONS),
                         new AuditCallInterceptor(List.<AuditRecorder>of(record -> {
                         }), Audit.Mode.DIRECT, NO_AUDIT_RESOLVERS, NO_EXPRESSIONS, Clock.fixed(NOW, ZoneOffset.UTC))));
         registered.addAll(extensions);
@@ -580,6 +734,11 @@ class CallInvokerTest {
             @Override
             public boolean release(@NotNull IdempotencyKey key, @NotNull String token) {
                 throw new AssertionError("业务已经执行成功时不能释放幂等处理中记录");
+            }
+
+            @Override
+            public boolean renew(@NotNull IdempotencyKey key, @NotNull String token, @NotNull Duration ttl) {
+                return true;
             }
         };
         CallInvoker executor = lifecycle(
@@ -966,7 +1125,8 @@ class CallInvokerTest {
 
         assertEquals("done", result);
         assertEquals(5, acquisitions.get());
-        assertEquals(List.of("global", "ip", "ua", "subject", "account"),
+        assertEquals(
+                List.of("global", "ip", "ua", "subject", "account"),
                 acquiredKeys.stream().map(CallInvokerTest::rateValue).toList());
         assertFalse(acquiredKeys.toString().contains("192.0.2.25"));
         assertFalse(acquiredKeys.toString().contains("Client/1.0"));
@@ -1001,7 +1161,8 @@ class CallInvokerTest {
                 () -> "custom-only");
 
         assertEquals(3, acquiredKeys.size());
-        assertEquals(List.of("global", "custom", "custom"),
+        assertEquals(
+                List.of("global", "custom", "custom"),
                 acquiredKeys.stream().map(CallInvokerTest::rateValue).toList());
         assertFalse(acquiredKeys.toString().contains("system"));
     }
@@ -1252,7 +1413,8 @@ class CallInvokerTest {
                                 NO_EXPRESSIONS,
                                 IDEMPOTENCY_FINGERPRINTS,
                                 processingTtl,
-                                retryAfter),
+                                retryAfter,
+                                RENEWAL_SCHEDULER),
                         new LockCallInterceptor(distributedLock, resolverLookup, NO_EXPRESSIONS),
                         new AuditCallInterceptor(
                                 List.of(auditRecorder),
@@ -1368,6 +1530,18 @@ class CallInvokerTest {
             return "unused";
         }
 
+        @Idempotent(keyResolver = IdempotencyKeyResolver.class, retentionSeconds = 300)
+        @Locked(keyResolver = LockKeyResolver.class, waitMillis = 1000)
+        private String createUnderLock() {
+            return "unused";
+        }
+
+        @Idempotent(keyResolver = IdempotencyKeyResolver.class, retentionSeconds = 300)
+        @Locked(keyResolver = LockKeyResolver.class, waitMillis = 1000)
+        private CompletionStage<String> submitUnderLock() {
+            return CompletableFuture.completedFuture("unused");
+        }
+
         /** 声明不能作为可重放结果的异步返回值。 */
         @Idempotent(keyResolver = IdempotencyKeyResolver.class, retentionSeconds = 300)
         private CompletionStage<String> submit() {
@@ -1400,14 +1574,15 @@ class CallInvokerTest {
     private static class TargetedService {
 
         @Audit(operation = "platform/account/status/change")
-        private String update(@AuditTarget(resourceType = Account.RESOURCE_TYPE_VALUE, idPrefix = "platform:") long accountId) {
+        private String update(
+                @AuditTarget(resourceType = Account.RESOURCE_TYPE_VALUE, idPrefix = "platform:") long accountId) {
             return Long.toString(accountId);
         }
     }
 
     private static class DeviceService {
 
-        @RequirePermission(resolver= DeviceCollectionResolver.class, action = "read")
+        @RequirePermission(resolver = DeviceCollectionResolver.class, action = "read")
         private String list() {
             return "unused";
         }
@@ -1418,7 +1593,7 @@ class CallInvokerTest {
      */
     private static class BatchService {
 
-        @RequirePermission(resolver= BatchResourcesResolver.class, action = Action.READ_VALUE)
+        @RequirePermission(resolver = BatchResourcesResolver.class, action = Action.READ_VALUE)
         private String read(List<Long> ids) {
             return ids.toString();
         }
@@ -1429,7 +1604,7 @@ class CallInvokerTest {
      */
     private static class NullResourceService {
 
-        @RequirePermission(resolver= NullResourceResolver.class, action = Action.READ_VALUE)
+        @RequirePermission(resolver = NullResourceResolver.class, action = Action.READ_VALUE)
         @SuppressWarnings("unused") // 测试通过反射读取权限声明，不直接调用该方法。
         private String read() {
             return "unused";
@@ -1441,7 +1616,7 @@ class CallInvokerTest {
      */
     private static class InvalidResourceService {
 
-        @RequirePermission(resolver= InvalidResourceResolver.class, action = Action.READ_VALUE)
+        @RequirePermission(resolver = InvalidResourceResolver.class, action = Action.READ_VALUE)
         @SuppressWarnings("unused") // 测试通过反射读取权限声明，不直接调用该方法。
         private String read() {
             return "unused";
@@ -1703,6 +1878,11 @@ class CallInvokerTest {
         public boolean release(@NotNull IdempotencyKey key, @NotNull String token) {
             events.add("idempotency-release");
             return token.equals(tokens.remove(key));
+        }
+
+        @Override
+        public boolean renew(@NotNull IdempotencyKey key, @NotNull String token, @NotNull Duration ttl) {
+            return token.equals(tokens.get(key));
         }
     }
 

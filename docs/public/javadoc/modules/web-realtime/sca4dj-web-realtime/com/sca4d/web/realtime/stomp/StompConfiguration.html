@@ -111,12 +111,14 @@ implements org.springframework.web.socket.config.annotation.WebSocketMessageBrok
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.web.realtime.config.WebRealtimeProperties,com.sca4d.web.realtime.ticket.TicketHandshakeInterceptor,com.sca4d.web.realtime.stomp.WebSocketSessions,com.sca4d.web.realtime.stomp.StompInboundInterceptor,com.sca4d.web.realtime.stomp.StompOutboundInterceptor,com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">StompConfiguration</a><wbr>(@NotNull <a href="../config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a>&nbsp;properties,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.web.realtime.config.WebRealtimeProperties,com.sca4d.web.realtime.ticket.TicketHandshakeInterceptor,com.sca4d.web.realtime.stomp.WebSocketSessions,com.sca4d.web.realtime.stomp.StompInboundInterceptor,com.sca4d.web.realtime.stomp.StompOutboundInterceptor,com.fasterxml.jackson.databind.ObjectMapper,com.sca4d.web.realtime.stomp.StompChannelDispatcher,com.sca4d.web.realtime.stomp.StompChannelDispatcher)" class="member-name-link">StompConfiguration</a><wbr>(@NotNull <a href="../config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a>&nbsp;properties,
  @NotNull <a href="../ticket/TicketHandshakeInterceptor.html" title="class in com.sca4d.web.realtime.ticket">TicketHandshakeInterceptor</a>&nbsp;handshakeInterceptor,
  @NotNull <a href="WebSocketSessions.html" title="class in com.sca4d.web.realtime.stomp">WebSocketSessions</a>&nbsp;sockets,
  @NotNull <a href="StompInboundInterceptor.html" title="class in com.sca4d.web.realtime.stomp">StompInboundInterceptor</a>&nbsp;inboundInterceptor,
  @NotNull <a href="StompOutboundInterceptor.html" title="class in com.sca4d.web.realtime.stomp">StompOutboundInterceptor</a>&nbsp;outboundInterceptor,
- @NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;objectMapper)</code></div>
+ @NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;objectMapper,
+ @NotNull <a href="StompChannelDispatcher.html" title="class in com.sca4d.web.realtime.stomp">StompChannelDispatcher</a>&nbsp;inboundDispatcher,
+ @NotNull <a href="StompChannelDispatcher.html" title="class in com.sca4d.web.realtime.stomp">StompChannelDispatcher</a>&nbsp;outboundDispatcher)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建 Spring STOMP 基础设施配置。</div>
 </div>
@@ -185,7 +187,7 @@ implements org.springframework.web.socket.config.annotation.WebSocketMessageBrok
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.web.realtime.config.WebRealtimeProperties,com.sca4d.web.realtime.ticket.TicketHandshakeInterceptor,com.sca4d.web.realtime.stomp.WebSocketSessions,com.sca4d.web.realtime.stomp.StompInboundInterceptor,com.sca4d.web.realtime.stomp.StompOutboundInterceptor,com.fasterxml.jackson.databind.ObjectMapper)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.web.realtime.config.WebRealtimeProperties,com.sca4d.web.realtime.ticket.TicketHandshakeInterceptor,com.sca4d.web.realtime.stomp.WebSocketSessions,com.sca4d.web.realtime.stomp.StompInboundInterceptor,com.sca4d.web.realtime.stomp.StompOutboundInterceptor,com.fasterxml.jackson.databind.ObjectMapper,com.sca4d.web.realtime.stomp.StompChannelDispatcher,com.sca4d.web.realtime.stomp.StompChannelDispatcher)">
 <h3>StompConfiguration</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">StompConfiguration</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a>&nbsp;properties,
@@ -198,7 +200,11 @@ implements org.springframework.web.socket.config.annotation.WebSocketMessageBrok
  @NotNull
  @NotNull <a href="StompOutboundInterceptor.html" title="class in com.sca4d.web.realtime.stomp">StompOutboundInterceptor</a>&nbsp;outboundInterceptor,
  @NotNull
- @NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;objectMapper)</span></div>
+ @NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;objectMapper,
+ @Qualifier("stompInboundDispatcher") @NotNull
+ @NotNull <a href="StompChannelDispatcher.html" title="class in com.sca4d.web.realtime.stomp">StompChannelDispatcher</a>&nbsp;inboundDispatcher,
+ @Qualifier("stompOutboundDispatcher") @NotNull
+ @NotNull <a href="StompChannelDispatcher.html" title="class in com.sca4d.web.realtime.stomp">StompChannelDispatcher</a>&nbsp;outboundDispatcher)</span></div>
 <div class="block">创建 Spring STOMP 基础设施配置。</div>
 </section>
 </li>

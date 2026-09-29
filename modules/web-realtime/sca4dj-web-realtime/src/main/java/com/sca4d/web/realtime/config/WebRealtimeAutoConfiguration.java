@@ -1,6 +1,7 @@
 package com.sca4d.web.realtime.config;
 
 import com.sca4d.core.api.authentication.SessionLifecycle;
+import com.sca4d.core.api.call.CallInvoker;
 import com.sca4d.core.api.concurrent.RateLimiter;
 import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.name.Key;
@@ -215,8 +216,9 @@ public class WebRealtimeAutoConfiguration {
             @NotNull StompRateLimits rateLimits,
             @NotNull RedisConnectionRegistry shared,
             @NotNull List<@NotNull WebRealtimeSubscriptionPolicy> subscriptionPolicies,
-            @NotNull Clock clock) {
-        return new StompInboundInterceptor(rateLimits, shared, subscriptionPolicies, clock);
+            @NotNull Clock clock,
+            @NotNull CallInvoker invoker) {
+        return new StompInboundInterceptor(rateLimits, shared, subscriptionPolicies, clock, invoker);
     }
 
     /** @return Spring 写出失效事件后的 WebSocket 定向关闭拦截器 */

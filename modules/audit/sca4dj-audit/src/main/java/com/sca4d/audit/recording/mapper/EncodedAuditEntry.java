@@ -105,6 +105,29 @@ public class EncodedAuditEntry {
         this.instanceId = instanceId;
     }
 
+    /** 为冻结的审计字段分配数据库主键，其他列保持不变。 */
+    public @NotNull EncodedAuditEntry withId(long id) {
+        return new EncodedAuditEntry(
+                id,
+                requestId,
+                subjectId,
+                accountId,
+                principalId,
+                operation,
+                targetType,
+                targetId,
+                result,
+                payloadType,
+                payloadVersion,
+                payloadJson,
+                httpMethod,
+                httpPath,
+                clientIp,
+                userAgent,
+                occurredAt,
+                instanceId);
+    }
+
     /** @return 主键 */
     public long id() {
         return id;

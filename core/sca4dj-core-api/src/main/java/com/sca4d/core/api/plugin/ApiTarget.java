@@ -3,11 +3,13 @@ package com.sca4d.core.api.plugin;
 import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Objects;
 
 /** 标识服务或扩展及其可选实现编码，不包含反射类名。 */
 public final class ApiTarget {
     private final @NotNull TreeCode code;
+
     private final @Nullable TreeCode key;
 
     public ApiTarget(@NotNull TreeCode code, @Nullable TreeCode key) {
@@ -20,10 +22,14 @@ public final class ApiTarget {
     }
 
     /** 返回契约编码。 */
-    public @NotNull TreeCode code() { return code; }
+    public @NotNull TreeCode code() {
+        return code;
+    }
 
     /** 返回按编码选择的实现；单实现与服务没有此值。 */
-    public @Nullable TreeCode key() { return key; }
+    public @Nullable TreeCode key() {
+        return key;
+    }
 
     @Override
     public boolean equals(Object other) {
@@ -31,8 +37,12 @@ public final class ApiTarget {
     }
 
     @Override
-    public int hashCode() { return Objects.hash(code, key); }
+    public int hashCode() {
+        return Objects.hash(code, key);
+    }
 
     @Override
-    public String toString() { return code + (key == null ? "" : "[" + key + "]"); }
+    public String toString() {
+        return code + (key == null ? "" : "[" + key + "]");
+    }
 }

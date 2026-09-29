@@ -5,7 +5,7 @@
 <title>CallLifecycle.Around (sca4dj-core-api 0.0.1-alpha API)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="declaration: package: com.sca4d.core.api.call, class: CallLifecycle, interface: Around">
+<meta name="description" content="declaration: package: com.sca4d.core.api.call, enum: CallLifecycle, interface: Around">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../../script-dir/jquery-ui.min.css" title="Style">
@@ -86,16 +86,21 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
+<dt>All Superinterfaces:</dt>
+<dd><code><a href="CallLifecycle.Participant.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Participant</a></code></dd>
+</dl>
+<dl class="notes">
 <dt>All Known Implementing Classes:</dt>
 <dd><code><a href="../audit/AuditCallInterceptor.html" title="class in com.sca4d.core.api.audit">AuditCallInterceptor</a></code>, <code><a href="../concurrent/IdempotencyCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">IdempotencyCallInterceptor</a></code>, <code><a href="../identity/IdentityCallInterceptor.html" title="class in com.sca4d.core.api.identity">IdentityCallInterceptor</a></code>, <code><a href="../concurrent/LockCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">LockCallInterceptor</a></code>, <code><a href="../permission/PermissionCallInterceptor.html" title="class in com.sca4d.core.api.permission">PermissionCallInterceptor</a></code>, <code><a href="../concurrent/RateLimitCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">RateLimitCallInterceptor</a></code></dd>
 </dl>
 <dl class="notes">
 <dt>Enclosing class:</dt>
-<dd><code><a href="CallLifecycle.html" title="class in com.sca4d.core.api.call">CallLifecycle</a></code></dd>
+<dd><code><a href="CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static interface </span><span class="element-name type-name-label">CallLifecycle.Around</span></div>
-<div class="block">包围剩余方法执行；允许明确重放或拒绝，不能隐式吞掉内层失败。</div>
+<div class="type-signature"><span class="modifiers">public static interface </span><span class="element-name type-name-label">CallLifecycle.Around</span><span class="extends-implements">
+extends <a href="CallLifecycle.Participant.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Participant</a></span></div>
+<div class="block">使用 AOP 环绕语义介入调用。实现类的类型即表示其采用 Around 语义。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -110,40 +115,24 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;<a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#after()" class="member-name-link">after</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
-<div class="block">返回必须位于本层之外的编码，锚点在没有对应注解时仍存在。</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="CallOutcome.html" title="class in com.sca4d.core.api.call">CallOutcome</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#around(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.Next)" class="member-name-link">around</a><wbr>(@NotNull <a href="CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="CallOutcome.html" title="class in com.sca4d.core.api.call">CallOutcome</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#around(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.Next)" class="member-name-link">around</a><wbr>(@NotNull <a href="CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution,
  @NotNull <a href="CallLifecycle.Next.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Next</a>&nbsp;next)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">处理本层并返回实际路径，Next 最多调用一次且不能跨线程保存。</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">处理本层并返回实际路径。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;<a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#before()" class="member-name-link">before</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
-<div class="block">返回必须位于本层之内的编码。</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#code()" class="member-name-link">code</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">返回在生命周期内唯一的稳定编码。</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#priority()" class="member-name-link">priority</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
-<div class="block">无依赖关系时，数值越小越先进入。</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#supports(com.sca4d.core.api.call.CallExecution)" class="member-name-link">supports</a><wbr>(@NotNull <a href="CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a><wbr>&lt;<a href="CallOutcome.html" title="class in com.sca4d.core.api.call">CallOutcome</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#aroundAsync(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.AsyncNext)" class="member-name-link">aroundAsync</a><wbr>(@NotNull <a href="CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution,
+ @NotNull <a href="CallLifecycle.AsyncNext.html" title="interface in com.sca4d.core.api.call">CallLifecycle.AsyncNext</a>&nbsp;next)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
-<div class="block">当前方法是否适用；该判断也不得写入共享状态。</div>
+<div class="block">异步处理本层；没有明确异步实现时失败，避免隐式阻塞。</div>
 </div>
 </div>
 </div>
 </div>
+<div class="inherited-list">
+<h3 id="methods-inherited-from-class-com.sca4d.core.api.call.CallLifecycle.Participant">Methods inherited from interface&nbsp;com.sca4d.core.api.call.<a href="CallLifecycle.Participant.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Participant</a></h3>
+<code><a href="CallLifecycle.Participant.html#after()">after</a>, <a href="CallLifecycle.Participant.html#before()">before</a>, <a href="CallLifecycle.Participant.html#code()">code</a>, <a href="CallLifecycle.Participant.html#priority()">priority</a>, <a href="CallLifecycle.Participant.html#supports(com.sca4d.core.api.call.CallExecution)">supports</a></code></div>
 </section>
 </li>
 </ul>
@@ -156,45 +145,6 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="code()">
-<h3>code</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="return-type">@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></span>&nbsp;<span class="element-name">code</span>()</div>
-<div class="block">返回在生命周期内唯一的稳定编码。</div>
-</section>
-</li>
-<li>
-<section class="detail" id="after()">
-<h3>after</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&gt;</span>&nbsp;<span class="element-name">after</span>()</div>
-<div class="block">返回必须位于本层之外的编码，锚点在没有对应注解时仍存在。</div>
-</section>
-</li>
-<li>
-<section class="detail" id="before()">
-<h3>before</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&gt;</span>&nbsp;<span class="element-name">before</span>()</div>
-<div class="block">返回必须位于本层之内的编码。</div>
-</section>
-</li>
-<li>
-<section class="detail" id="priority()">
-<h3>priority</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">priority</span>()</div>
-<div class="block">无依赖关系时，数值越小越先进入。</div>
-</section>
-</li>
-<li>
-<section class="detail" id="supports(com.sca4d.core.api.call.CallExecution)">
-<h3>supports</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">supports</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution)</span></div>
-<div class="block">当前方法是否适用；该判断也不得写入共享状态。</div>
-</section>
-</li>
-<li>
 <section class="detail" id="around(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.Next)">
 <h3>around</h3>
 <div class="member-signature"><span class="annotations">@NotNull
@@ -203,7 +153,23 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull <a href="CallLifecycle.Next.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Next</a>&nbsp;next)</span>
                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a></span></div>
-<div class="block">处理本层并返回实际路径，Next 最多调用一次且不能跨线程保存。</div>
+<div class="block">处理本层并返回实际路径。</div>
+<dl class="notes">
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="aroundAsync(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.AsyncNext)">
+<h3>aroundAsync</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;<a href="CallOutcome.html" title="class in com.sca4d.core.api.call">CallOutcome</a>&gt;</span>&nbsp;<span class="element-name">aroundAsync</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution,
+ @NotNull
+ @NotNull <a href="CallLifecycle.AsyncNext.html" title="interface in com.sca4d.core.api.call">CallLifecycle.AsyncNext</a>&nbsp;next)</span>
+                                                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a></span></div>
+<div class="block">异步处理本层；没有明确异步实现时失败，避免隐式阻塞。</div>
 <dl class="notes">
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a></code></dd>

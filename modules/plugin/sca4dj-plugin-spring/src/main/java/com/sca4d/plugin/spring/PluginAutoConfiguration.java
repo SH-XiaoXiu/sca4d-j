@@ -47,10 +47,10 @@ public class PluginAutoConfiguration {
         return host.runtime();
     }
 
-    /** 装配声明式代次作用域。 */
+    /** 将插件代次作用域挂载到统一 Call 生命周期。 */
     @Bean
-    PluginScopeAspect pluginScopeAspect(PluginRuntime runtime) {
-        return new PluginScopeAspect(runtime);
+    PluginScopeCallInterceptor pluginScopeCallInterceptor(PluginRuntime runtime) {
+        return new PluginScopeCallInterceptor(runtime);
     }
 
     /** 先加载必需插件，再允许正常业务进入。 */

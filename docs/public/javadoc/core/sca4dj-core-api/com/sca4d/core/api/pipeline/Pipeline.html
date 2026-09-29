@@ -139,9 +139,15 @@ O&gt;&nbsp;@NotNull <a href="Pipeline.html" title="class in com.sca4d.core.api.p
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">从第一阶段开始同步处理输入，并返回最后一个阶段的输出。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;N&gt;&nbsp;@NotNull <a href="Pipeline.html" title="class in com.sca4d.core.api.pipeline">Pipeline</a><wbr>&lt;<a href="Pipeline.html" title="type parameter in Pipeline">I</a>,<wbr>N&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#then(com.sca4d.core.api.pipeline.PipelineStage)" class="member-name-link">then</a><wbr>(@NotNull <a href="PipelineStage.html" title="interface in com.sca4d.core.api.pipeline">PipelineStage</a>&lt;<a href="Pipeline.html" title="type parameter in Pipeline">O</a>,<wbr>N&gt;&nbsp;stage)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a><wbr>&lt;<a href="Pipeline.html" title="type parameter in Pipeline">O</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#runAsync(I,java.util.concurrent.Executor)" class="member-name-link">runAsync</a><wbr>(<a href="Pipeline.html" title="type parameter in Pipeline">I</a>&nbsp;input,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Executor.html" title="class or interface in java.util.concurrent" class="external-link">Executor</a>&nbsp;executor)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">按同一阶段顺序异步转换；后一阶段只在前一阶段成功完成后执行。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;N&gt;&nbsp;@NotNull <a href="Pipeline.html" title="class in com.sca4d.core.api.pipeline">Pipeline</a><wbr>&lt;<a href="Pipeline.html" title="type parameter in Pipeline">I</a>,<wbr>N&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#then(com.sca4d.core.api.pipeline.PipelineStage)" class="member-name-link">then</a><wbr>(@NotNull <a href="PipelineStage.html" title="interface in com.sca4d.core.api.pipeline">PipelineStage</a>&lt;<a href="Pipeline.html" title="type parameter in Pipeline">O</a>,<wbr>N&gt;&nbsp;stage)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">在尾部追加一个输入类型与当前输出类型相同的阶段。</div>
 </div>
 </div>
@@ -245,6 +251,18 @@ O&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="Pipeline.html" tit
 <dd><code><a href="PipelineExecutionException.html" title="class in com.sca4d.core.api.pipeline">PipelineExecutionException</a></code> - 阶段抛出运行时异常、返回空值或返回声明类型以外的值时抛出；
      <a href="PipelineExecutionException.html#stageCode()"><code>PipelineExecutionException.stageCode()</code></a> 指向失败阶段</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="runAsync(I,java.util.concurrent.Executor)">
+<h3 id="runAsync(java.lang.Object,java.util.concurrent.Executor)">runAsync</h3>
+<div class="member-signature"><span class="annotations">@CheckReturnValue
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;<a href="Pipeline.html" title="type parameter in Pipeline">O</a>&gt;</span>&nbsp;<span class="element-name">runAsync</span><wbr><span class="parameters">(@NotNull
+ <a href="Pipeline.html" title="type parameter in Pipeline">I</a>&nbsp;input,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Executor.html" title="class or interface in java.util.concurrent" class="external-link">Executor</a>&nbsp;executor)</span></div>
+<div class="block">按同一阶段顺序异步转换；后一阶段只在前一阶段成功完成后执行。</div>
 </section>
 </li>
 <li>

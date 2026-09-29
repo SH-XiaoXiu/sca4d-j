@@ -58,7 +58,8 @@ public class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, St
             expression = DnfExpression.always("always", true);
             return;
         }
-        List<DnfClause<ParsedPhoneNumber, Boolean>> clauses = java.util.stream.IntStream.range(0, annotation.anyOf().length)
+        List<DnfClause<ParsedPhoneNumber, Boolean>> clauses = java.util.stream.IntStream
+                .range(0, annotation.anyOf().length)
                 .mapToObj(index -> clause("phone-rule-" + index, annotation.anyOf()[index]))
                 .toList();
         expression = new DnfExpression<>(clauses);

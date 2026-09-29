@@ -11,12 +11,16 @@ import org.springframework.context.annotation.ContextAnnotationAutowireCandidate
 /** 将明确声明的注入点解析为生成客户端，其他注入保持 Spring 原有规则。 */
 final class PluginMountResolver extends ContextAnnotationAutowireCandidateResolver {
     private final DefaultListableBeanFactory factory;
-    PluginMountResolver(DefaultListableBeanFactory factory) { this.factory = factory; }
+
+    PluginMountResolver(DefaultListableBeanFactory factory) {
+        this.factory = factory;
+    }
 
     @Override
     public Object getLazyResolutionProxyIfNecessary(DependencyDescriptor descriptor, String beanName) {
         PluginMount mount = descriptor.getAnnotation(PluginMount.class);
-        if (mount == null) return super.getLazyResolutionProxyIfNecessary(descriptor, beanName);
+        if (mount == null)
+            return super.getLazyResolutionProxyIfNecessary(descriptor, beanName);
         PluginHost host = factory.getBean(PluginHost.class);
         ApiContract<?> contract = host.contract(TreeCode.of(mount.value()));
         if (contract.definition().kind() != ApiKind.EXTENSION

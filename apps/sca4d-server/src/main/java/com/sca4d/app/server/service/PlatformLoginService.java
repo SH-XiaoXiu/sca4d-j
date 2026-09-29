@@ -2,6 +2,7 @@ package com.sca4d.app.server.service;
 
 import com.sca4d.app.server.authentication.AuthenticationActions;
 import com.sca4d.app.server.authentication.LoginResult;
+import com.sca4d.core.api.annotation.AnonymousAccess;
 import com.sca4d.core.api.authentication.AuthenticationAttemptId;
 import com.sca4d.core.api.authentication.AuthenticationAttempts;
 import com.sca4d.core.api.authentication.AuthenticationProgress;
@@ -19,6 +20,7 @@ import java.util.Objects;
  */
 @Service
 @PluginScope
+@AnonymousAccess
 public class PlatformLoginService {
 
     private final AuthenticationAttempts authentication;

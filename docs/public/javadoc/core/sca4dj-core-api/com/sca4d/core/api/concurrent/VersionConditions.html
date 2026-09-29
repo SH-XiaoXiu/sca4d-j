@@ -101,15 +101,21 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button><button id="method-summary-table-tab5" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab5', 3)" class="table-tab">Default Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="VersionCondition.html" title="class in com.sca4d.core.api.concurrent">VersionCondition</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#resolve(com.sca4d.core.api.concurrent.Version)" class="member-name-link">resolve</a><wbr>(@NotNull <a href="Version.html" title="class in com.sca4d.core.api.concurrent">Version</a>&nbsp;currentVersion)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="VersionConditions.html" title="interface in com.sca4d.core.api.concurrent">VersionConditions</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#capture()" class="member-name-link">capture</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="block">冻结当前调用的版本条件入口，供显式传入异步工作；默认无请求状态的实现保持自身。
+ 异步工作仍须使用自己的事务，不传播当前线程的事务或 CallHolder。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="VersionCondition.html" title="class in com.sca4d.core.api.concurrent">VersionCondition</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#resolve(com.sca4d.core.api.concurrent.Version)" class="member-name-link">resolve</a><wbr>(@NotNull <a href="Version.html" title="class in com.sca4d.core.api.concurrent">Version</a>&nbsp;currentVersion)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">解析根资源写入条件。</div>
 </div>
 </div>
@@ -143,6 +149,19 @@ loadScripts(document, 'script');</script>
 <dd>本次条件 SQL 使用的版本和零行失败含义</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 同一个 `If-Match` 已经被另一个根资源写入消费时抛出</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="capture()">
+<h3>capture</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="VersionConditions.html" title="interface in com.sca4d.core.api.concurrent">VersionConditions</a></span>&nbsp;<span class="element-name">capture</span>()</div>
+<div class="block">冻结当前调用的版本条件入口，供显式传入异步工作；默认无请求状态的实现保持自身。
+ 异步工作仍须使用自己的事务，不传播当前线程的事务或 CallHolder。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>只消费当前请求条件一次的版本条件入口</dd>
 </dl>
 </section>
 </li>

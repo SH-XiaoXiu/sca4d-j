@@ -103,16 +103,24 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.time.Instant)" class="member-name-link">Call</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callId,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;startedAt)</code></div>
-<div class="col-last even-row-color">
-<div class="block">创建尚未认证的调用。</div>
-</div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.time.Instant,com.sca4d.core.api.data.DataValues,com.sca4d.core.api.resource.Resource)" class="member-name-link">Call</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callId,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.call.CallInvoker,java.lang.String,java.time.Instant,com.sca4d.core.api.data.DataValues,com.sca4d.core.api.resource.Resource)" class="member-name-link">Call</a><wbr>(@Nullable <a href="CallInvoker.html" title="class in com.sca4d.core.api.call">CallInvoker</a>&nbsp;invoker,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callId,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;startedAt,
  @NotNull <a href="../data/DataValues.html" title="class in com.sca4d.core.api.data">DataValues</a>&nbsp;inputs,
  @Nullable <a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&nbsp;targetResource)</code></div>
+<div class="col-last even-row-color">
+<div class="block">创建可以直接执行生命周期的调用。</div>
+</div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.time.Instant)" class="member-name-link">Call</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callId,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;startedAt)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">创建尚未认证的调用。</div>
+</div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.time.Instant,com.sca4d.core.api.data.DataValues,com.sca4d.core.api.resource.Resource)" class="member-name-link">Call</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callId,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;startedAt,
+ @NotNull <a href="../data/DataValues.html" title="class in com.sca4d.core.api.data">DataValues</a>&nbsp;inputs,
+ @Nullable <a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&nbsp;targetResource)</code></div>
+<div class="col-last even-row-color">
 <div class="block">创建带有类型化入口数据和可选目标资源、尚未认证的调用。</div>
 </div>
 </div>
@@ -188,6 +196,64 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../data/DataValues.html" title="class in com.sca4d.core.api.data">DataValues</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#inputs()" class="member-name-link">inputs</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;T</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invoke(com.sca4d.core.api.call.CallExecution,java.util.concurrent.Callable)" class="member-name-link">invoke</a><wbr>(@NotNull <a href="CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;target)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">使用已经附着声明的执行描述进入生命周期；供 Spring 适配器和高级绑定使用。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;T</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invoke(com.sca4d.core.api.name.code.TreeCode,java.lang.Object%5B%5D,java.lang.reflect.Type,java.util.concurrent.Callable)" class="member-name-link">invoke</a><wbr>(<a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;operation,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a> @NotNull []&nbsp;arguments,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;resultType,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;target)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">执行使用稳定 TreeCode 标识的纯函数。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;T</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invoke(java.lang.String,java.lang.Object%5B%5D,java.lang.reflect.Type,java.util.concurrent.Callable)" class="member-name-link">invoke</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;operation,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a> @NotNull []&nbsp;arguments,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;resultType,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;target)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">使用冒号格式字符串解析 TreeCode 后执行纯函数。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;T</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invoke(java.lang.reflect.Method,java.lang.Object%5B%5D,java.util.concurrent.Callable)" class="member-name-link">invoke</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;method,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a> @NotNull []&nbsp;arguments,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;target)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">执行带 Java Method 元数据的调用。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a><wbr>&lt;T&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invokeAsync(com.sca4d.core.api.call.CallExecution,java.util.function.Supplier)" class="member-name-link">invokeAsync</a><wbr>(@NotNull <a href="CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;? extends @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;T&gt;&gt;&nbsp;target)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">使用已经附着声明的异步执行描述进入生命周期。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a><wbr>&lt;T&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invokeAsync(com.sca4d.core.api.name.code.TreeCode,java.lang.Object%5B%5D,java.lang.reflect.Type,java.util.function.Supplier)" class="member-name-link">invokeAsync</a><wbr>(<a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;operation,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a> @NotNull []&nbsp;arguments,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;resultType,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;? extends @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;T&gt;&gt;&nbsp;target)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">执行异步纯函数调用。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a><wbr>&lt;T&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invokeAsync(java.lang.String,java.lang.Object%5B%5D,java.lang.reflect.Type,java.util.function.Supplier)" class="member-name-link">invokeAsync</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;operation,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a> @NotNull []&nbsp;arguments,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;resultType,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;? extends @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;T&gt;&gt;&nbsp;target)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">使用冒号格式字符串解析 TreeCode 后执行异步纯函数。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a><wbr>&lt;T&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invokeAsync(java.lang.reflect.Method,java.lang.Object%5B%5D,java.util.function.Supplier)" class="member-name-link">invokeAsync</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;method,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a> @NotNull []&nbsp;arguments,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;? extends @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;T&gt;&gt;&nbsp;target)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">执行异步 Java Method 调用。</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isAuthenticationAssessed()" class="member-name-link">isAuthenticationAssessed</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -226,6 +292,21 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#subject()" class="member-name-link">subject</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#system(com.sca4d.core.api.call.CallInvoker,java.lang.String,java.time.Instant)" class="member-name-link">system</a><wbr>(@NotNull <a href="CallInvoker.html" title="class in com.sca4d.core.api.call">CallInvoker</a>&nbsp;invoker,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callId,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;startedAt)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">创建绑定生命周期执行器的系统调用。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#system(com.sca4d.core.api.call.CallInvoker,java.lang.String,java.time.Instant,com.sca4d.core.api.identity.SystemPrincipal)" class="member-name-link">system</a><wbr>(@Nullable <a href="CallInvoker.html" title="class in com.sca4d.core.api.call">CallInvoker</a>&nbsp;invoker,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callId,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;startedAt,
+ <a href="../identity/SystemPrincipal.html" title="class in com.sca4d.core.api.identity">SystemPrincipal</a>&nbsp;principal)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">使用已经确认的领域 Principal 建立绑定生命周期执行器的系统调用。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#system(java.lang.String,java.time.Instant)" class="member-name-link">system</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callId,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;startedAt)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
@@ -241,6 +322,11 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#targetResource()" class="member-name-link">targetResource</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withInvoker(com.sca4d.core.api.call.CallInvoker)" class="member-name-link">withInvoker</a><wbr>(@NotNull <a href="CallInvoker.html" title="class in com.sca4d.core.api.call">CallInvoker</a>&nbsp;invoker)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">把生命周期执行器绑定到已有入口快照；身份和权限事实保持不变。</div>
+</div>
 </div>
 </div>
 </div>
@@ -288,6 +374,20 @@ loadScripts(document, 'script');</script>
 <dd><code>inputs</code> - 入口已采集的快照；所含值必须在调用期间保持不变</dd>
 <dd><code>targetResource</code> - 已明确的主要目标；不能从协议路径猜测</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.call.CallInvoker,java.lang.String,java.time.Instant,com.sca4d.core.api.data.DataValues,com.sca4d.core.api.resource.Resource)">
+<h3>Call</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">Call</span><wbr><span class="parameters">(@Nullable
+ @Nullable <a href="CallInvoker.html" title="class in com.sca4d.core.api.call">CallInvoker</a>&nbsp;invoker,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callId,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;startedAt,
+ @NotNull
+ @NotNull <a href="../data/DataValues.html" title="class in com.sca4d.core.api.data">DataValues</a>&nbsp;inputs,
+ @Nullable
+ @Nullable <a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&nbsp;targetResource)</span></div>
+<div class="block">创建可以直接执行生命周期的调用。</div>
 </section>
 </li>
 </ul>
@@ -377,12 +477,164 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="system(com.sca4d.core.api.call.CallInvoker,java.lang.String,java.time.Instant)">
+<h3>system</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></span>&nbsp;<span class="element-name">system</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="CallInvoker.html" title="class in com.sca4d.core.api.call">CallInvoker</a>&nbsp;invoker,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callId,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;startedAt)</span></div>
+<div class="block">创建绑定生命周期执行器的系统调用。</div>
+</section>
+</li>
+<li>
 <section class="detail" id="system(java.lang.String,java.time.Instant,com.sca4d.core.api.identity.SystemPrincipal)">
 <h3>system</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></span>&nbsp;<span class="element-name">system</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callId,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;startedAt,
  <a href="../identity/SystemPrincipal.html" title="class in com.sca4d.core.api.identity">SystemPrincipal</a>&nbsp;principal)</span></div>
 <div class="block">使用已经确认的领域 Principal 建立系统调用，不赋予额外权限。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="system(com.sca4d.core.api.call.CallInvoker,java.lang.String,java.time.Instant,com.sca4d.core.api.identity.SystemPrincipal)">
+<h3>system</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></span>&nbsp;<span class="element-name">system</span><wbr><span class="parameters">(@Nullable
+ @Nullable <a href="CallInvoker.html" title="class in com.sca4d.core.api.call">CallInvoker</a>&nbsp;invoker,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callId,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;startedAt,
+ <a href="../identity/SystemPrincipal.html" title="class in com.sca4d.core.api.identity">SystemPrincipal</a>&nbsp;principal)</span></div>
+<div class="block">使用已经确认的领域 Principal 建立绑定生命周期执行器的系统调用。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="invoke(java.lang.reflect.Method,java.lang.Object[],java.util.concurrent.Callable)">
+<h3>invoke</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name">invoke</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;method,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a> @NotNull []&nbsp;arguments,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;target)</span>
+             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
+<div class="block">执行带 Java Method 元数据的调用。</div>
+<dl class="notes">
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="invoke(com.sca4d.core.api.call.CallExecution,java.util.concurrent.Callable)">
+<h3>invoke</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name">invoke</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;target)</span>
+             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
+<div class="block">使用已经附着声明的执行描述进入生命周期；供 Spring 适配器和高级绑定使用。</div>
+<dl class="notes">
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="invoke(com.sca4d.core.api.name.code.TreeCode,java.lang.Object[],java.lang.reflect.Type,java.util.concurrent.Callable)">
+<h3>invoke</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name">invoke</span><wbr><span class="parameters">(@NotNull
+ <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;operation,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a> @NotNull []&nbsp;arguments,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;resultType,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;target)</span>
+             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
+<div class="block">执行使用稳定 TreeCode 标识的纯函数。</div>
+<dl class="notes">
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="invoke(java.lang.String,java.lang.Object[],java.lang.reflect.Type,java.util.concurrent.Callable)">
+<h3>invoke</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name">invoke</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;operation,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a> @NotNull []&nbsp;arguments,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;resultType,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;target)</span>
+             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
+<div class="block">使用冒号格式字符串解析 TreeCode 后执行纯函数。</div>
+<dl class="notes">
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="invokeAsync(java.lang.reflect.Method,java.lang.Object[],java.util.function.Supplier)">
+<h3>invokeAsync</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;T&gt;</span>&nbsp;<span class="element-name">invokeAsync</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;method,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a> @NotNull []&nbsp;arguments,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;? extends @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;T&gt;&gt;&nbsp;target)</span></div>
+<div class="block">执行异步 Java Method 调用。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="invokeAsync(com.sca4d.core.api.call.CallExecution,java.util.function.Supplier)">
+<h3>invokeAsync</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;T&gt;</span>&nbsp;<span class="element-name">invokeAsync</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;? extends @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;T&gt;&gt;&nbsp;target)</span></div>
+<div class="block">使用已经附着声明的异步执行描述进入生命周期。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="invokeAsync(com.sca4d.core.api.name.code.TreeCode,java.lang.Object[],java.lang.reflect.Type,java.util.function.Supplier)">
+<h3>invokeAsync</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;T&gt;</span>&nbsp;<span class="element-name">invokeAsync</span><wbr><span class="parameters">(@NotNull
+ <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;operation,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a> @NotNull []&nbsp;arguments,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;resultType,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;? extends @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;T&gt;&gt;&nbsp;target)</span></div>
+<div class="block">执行异步纯函数调用。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="invokeAsync(java.lang.String,java.lang.Object[],java.lang.reflect.Type,java.util.function.Supplier)">
+<h3>invokeAsync</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;T&gt;</span>&nbsp;<span class="element-name">invokeAsync</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;operation,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a> @NotNull []&nbsp;arguments,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;resultType,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;? extends @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;T&gt;&gt;&nbsp;target)</span></div>
+<div class="block">使用冒号格式字符串解析 TreeCode 后执行异步纯函数。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="withInvoker(com.sca4d.core.api.call.CallInvoker)">
+<h3>withInvoker</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></span>&nbsp;<span class="element-name">withInvoker</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="CallInvoker.html" title="class in com.sca4d.core.api.call">CallInvoker</a>&nbsp;invoker)</span></div>
+<div class="block">把生命周期执行器绑定到已有入口快照；身份和权限事实保持不变。</div>
 </section>
 </li>
 <li>

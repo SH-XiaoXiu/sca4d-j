@@ -7,7 +7,6 @@ import com.sca4d.core.api.annotation.RateLimited;
 import com.sca4d.core.api.annotation.RequirePermission;
 import com.sca4d.core.api.annotation.RequirePermissions;
 import com.sca4d.core.api.annotation.SystemExecution;
-import com.sca4d.core.api.audit.AuditCallInterceptor;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallInvoker;
 import com.sca4d.core.api.call.CallLifecycle;
@@ -39,8 +38,8 @@ import com.sca4d.core.api.region.RegionCatalog;
 import com.sca4d.core.spring.call.CallLifecycleAdvisor;
 import com.sca4d.core.spring.call.CallPreCommitTransactionInstaller;
 import com.sca4d.core.spring.call.CallPreCommitTransactionListener;
-import com.sca4d.core.spring.call.SpringCallValueResolverLookup;
 import com.sca4d.core.spring.call.SpelCallValueResolver;
+import com.sca4d.core.spring.call.SpringCallValueResolverLookup;
 import com.sca4d.core.spring.i18n.CatalogMessageSource;
 import com.sca4d.core.spring.i18n.ClasspathMessageCatalog;
 import com.sca4d.core.spring.i18n.I18nProperties;
@@ -63,7 +62,6 @@ import com.sca4d.core.spring.web.ApiResponseAdvice;
 import com.sca4d.core.spring.web.CurrentIdentityArgumentResolver;
 import com.sca4d.core.spring.web.GlobalExceptionHandler;
 import com.sca4d.core.spring.web.HttpCallFilter;
-import com.sca4d.core.spring.web.HttpIdempotencyKeyResolver;
 import com.sca4d.core.spring.web.HttpInputValidationAspect;
 import com.sca4d.core.spring.web.IdentityMdcInterceptor;
 import com.sca4d.core.spring.web.IfMatchInterceptor;
@@ -110,6 +108,8 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /** 注册 Core API 在 Spring MVC 中使用的 Filter、参数解析器、异常处理器和 AOP Bean。 */
 @AutoConfiguration(after = WebMvcAutoConfiguration.class)
@@ -239,9 +239,9 @@ public class CoreSpringAutoConfiguration {
 
     /** @param clock 调用开始时间使用的时钟 @return 最外层调用过滤器 */
     @Bean
-    FilterRegistrationBean<HttpCallFilter> httpCallFilter(Clock clock) {
+    FilterRegistrationBean<HttpCallFilter> httpCallFilter(Clock clock, CallInvoker invoker) {
         FilterRegistrationBean<HttpCallFilter> registration = new FilterRegistrationBean<>(
-                new HttpCallFilter(clock));
+                new HttpCallFilter(clock, invoker));
         registration.setOrder(Ordered.HIGHEST_PRECEDENCE + 10);
         return registration;
     }
@@ -330,13 +330,6 @@ public class CoreSpringAutoConfiguration {
         return new IdempotencyFingerprints(objectMapper);
     }
 
-    /** @return 从 HTTP `Idempotency-Key` Header 读取幂等键的解析器 */
-    @Bean
-    @ConditionalOnMissingBean
-    HttpIdempotencyKeyResolver httpIdempotencyKeyResolver() {
-        return new HttpIdempotencyKeyResolver();
-    }
-
     /** @param fingerprints 幂等参数规范化入口 @return 使用方法参数摘要的幂等键解析器 */
     @Bean
     @ConditionalOnMissingBean
@@ -410,14 +403,30 @@ public class CoreSpringAutoConfiguration {
             CallValueResolverLookup resolverLookup,
             SPICallValueResolver expressionResolver,
             IdempotencyFingerprints idempotencyFingerprints,
-            RedisIdempotencyProperties idempotencyProperties) {
+            RedisIdempotencyProperties idempotencyProperties,
+            @Qualifier("callIdempotencyScheduler") ScheduledExecutorService renewalScheduler) {
         return new IdempotencyCallInterceptor(
                 idempotencyStore,
                 resolverLookup,
                 expressionResolver,
                 idempotencyFingerprints,
                 idempotencyProperties.getProcessingTtl(),
-                idempotencyProperties.getRetryAfter());
+                idempotencyProperties.getRetryAfter(),
+                idempotencyProperties.getResultRetention(),
+                renewalScheduler);
+    }
+
+    /** @return 在异步调用结束前按 token 续期幂等处理权的单线程调度器 */
+    @Bean(destroyMethod = "shutdown")
+    @ConditionalOnMissingBean(name = "callIdempotencyScheduler")
+    ScheduledExecutorService callIdempotencyScheduler() {
+        ScheduledThreadPoolExecutor scheduler = new ScheduledThreadPoolExecutor(1, task -> {
+            Thread thread = new Thread(task, "sca4dj-call-idempotency-renewal");
+            thread.setDaemon(true);
+            return thread;
+        });
+        scheduler.setRemoveOnCancelPolicy(true);
+        return scheduler;
     }
 
     /** @param distributedLock 分布式锁 @param resolverLookup 调用值解析器目录 @return 锁执行控制器 */
@@ -435,13 +444,26 @@ public class CoreSpringAutoConfiguration {
         return new IdentityCallInterceptor();
     }
 
-    /** @param arounds 功能和应用注册的环绕处理 @return 已完成依赖校验的调用执行器 */
+    /** @return 主体选择完成后检查权限和审计声明的业务主体前提 */
     @Bean
-    CallInvoker callInvoker(List<CallLifecycle.Around> arounds) {
-        CallLifecycleConfiguration configuration = new CallLifecycleConfiguration(arounds);
-        configuration.afterIfRegistered(
-                PrincipalSelectionCallInterceptor.CODE,
-                IdentityCallInterceptor.CODE);
+    IdentityCallInterceptor.PrincipalRequirement principalRequirement() {
+        return new IdentityCallInterceptor.PrincipalRequirement();
+    }
+
+    /** @param participants 功能和应用注册的阶段参与者 @param customizers 模块和应用补充的依赖 @return 待校验的生命周期配置 */
+    @Bean
+    @ConditionalOnMissingBean
+    CallLifecycleConfiguration callLifecycleConfiguration(
+            List<CallLifecycle.Participant> participants,
+            List<CallLifecycleConfiguration.Customizer> customizers) {
+        CallLifecycleConfiguration configuration = new CallLifecycleConfiguration(participants);
+        customizers.forEach(customizer -> customizer.configure(configuration));
+        return configuration;
+    }
+
+    /** @param configuration 已登记阶段和依赖的配置 @return 已完成依赖校验的调用执行器 */
+    @Bean
+    CallInvoker callInvoker(CallLifecycleConfiguration configuration) {
         return new CallInvoker(configuration);
     }
 
@@ -449,57 +471,58 @@ public class CoreSpringAutoConfiguration {
     @Bean
     CallLifecycleAdvisor callLifecycleAdvisor(
             CallInvoker invoker,
-            List<CallLifecycleAdvisor.Declaration<?>> declarations,
+            List<CallLifecycleAdvisor.AnnotationBinding<?>> declarations,
+            List<CallLifecycleAdvisor.MethodBinding> methodBindings,
             Clock clock) {
-        return new CallLifecycleAdvisor(invoker, declarations, clock);
+        return new CallLifecycleAdvisor(invoker, declarations, methodBindings, clock);
     }
 
     /** 注册 Core 自己定义的匿名访问注解。 */
     @Bean
-    CallLifecycleAdvisor.Declaration<AnonymousAccess> anonymousCallDeclaration() {
+    CallLifecycleAdvisor.AnnotationBinding<AnonymousAccess> anonymousCallBinding() {
         return () -> AnonymousAccess.class;
     }
 
     /** 注册 Core 自己定义的权限注解。 */
     @Bean
-    CallLifecycleAdvisor.Declaration<RequirePermission> permissionCallDeclaration() {
+    CallLifecycleAdvisor.AnnotationBinding<RequirePermission> permissionCallBinding() {
         return () -> RequirePermission.class;
     }
 
     /** 注册 repeatable 权限注解的容器。 */
     @Bean
-    CallLifecycleAdvisor.Declaration<RequirePermissions> permissionsCallDeclaration() {
+    CallLifecycleAdvisor.AnnotationBinding<RequirePermissions> permissionsCallBinding() {
         return () -> RequirePermissions.class;
     }
 
     /** 注册 Core 自己定义的限流注解。 */
     @Bean
-    CallLifecycleAdvisor.Declaration<RateLimited> rateLimitCallDeclaration() {
+    CallLifecycleAdvisor.AnnotationBinding<RateLimited> rateLimitCallBinding() {
         return () -> RateLimited.class;
     }
 
     /** 注册 Core 自己定义的幂等注解。 */
     @Bean
-    CallLifecycleAdvisor.Declaration<Idempotent> idempotentCallDeclaration() {
+    CallLifecycleAdvisor.AnnotationBinding<Idempotent> idempotentCallBinding() {
         return () -> Idempotent.class;
     }
 
     /** 注册 Core 自己定义的锁注解。 */
     @Bean
-    CallLifecycleAdvisor.Declaration<Locked> lockedCallDeclaration() {
+    CallLifecycleAdvisor.AnnotationBinding<Locked> lockedCallBinding() {
         return () -> Locked.class;
     }
 
     /** 注册无内置注解但显式要求进入调用生命周期的方法。 */
     @Bean
-    CallLifecycleAdvisor.Declaration<CallLifecycle.Intercepted> interceptedCallDeclaration() {
+    CallLifecycleAdvisor.AnnotationBinding<CallLifecycle.Intercepted> interceptedCallBinding() {
         return () -> CallLifecycle.Intercepted.class;
     }
 
     /** 系统注解只负责自主入口身份，不向已有用户调用赋予额外权限。 */
     @Bean
-    CallLifecycleAdvisor.Declaration<SystemExecution> systemCallDeclaration() {
-        return new CallLifecycleAdvisor.Declaration<>() {
+    CallLifecycleAdvisor.AnnotationBinding<SystemExecution> systemCallBinding() {
+        return new CallLifecycleAdvisor.AnnotationBinding<>() {
             @Override
             public @NonNull Class<SystemExecution> annotationType() {
                 return SystemExecution.class;

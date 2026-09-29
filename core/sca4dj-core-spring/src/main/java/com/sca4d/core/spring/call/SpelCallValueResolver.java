@@ -29,8 +29,11 @@ public class SpelCallValueResolver implements SPICallValueResolver {
     private static final Logger LOG = LoggerFactory.getLogger(SpelCallValueResolver.class);
 
     private final SpelExpressionParser parser = new SpelExpressionParser();
+
     private final ConcurrentMap<String, Expression> expressions = new ConcurrentHashMap<>();
+
     private final ParameterNameDiscoverer parameterNames = new DefaultParameterNameDiscoverer();
+
     private final BeanFactoryResolver beans;
 
     /** 创建支持 Spring Bean 引用的注解表达式解析器。 */
@@ -55,8 +58,10 @@ public class SpelCallValueResolver implements SPICallValueResolver {
             CallEvaluationContext context = new CallEvaluationContext(execution, parameterNames);
             context.setBeanResolver(beans);
             Object value = parsed.getValue(context);
-            LOG.trace("注解表达式取值完成 | callId={} method={} valueType={}",
-                    execution.call().callId(), execution.method().getName(),
+            LOG.trace(
+                    "注解表达式取值完成 | callId={} method={} valueType={}",
+                    execution.call().callId(),
+                    execution.method().getName(),
                     value == null ? null : value.getClass().getName());
             return value;
         } catch (ExpressionException exception) {
@@ -67,6 +72,7 @@ public class SpelCallValueResolver implements SPICallValueResolver {
     /** 为一次取值绑定参数别名，并阻止调用前读取执行结果。 */
     private static final class CallEvaluationContext extends MethodBasedEvaluationContext {
         private final CallExecution execution;
+
         private final Set<String> variables = new HashSet<>(Set.of("args", "call", "execution"));
 
         private CallEvaluationContext(CallExecution execution, ParameterNameDiscoverer parameterNames) {

@@ -56,7 +56,7 @@ public class AuditCallInterceptor implements CallLifecycle.Around {
             @NotNull Clock clock) {
         this.defaultMode = Objects.requireNonNull(defaultMode);
         if (defaultMode == Audit.Mode.DEFAULT) {
-            throw new IllegalArgumentException("应用审计配置必须指定 DIRECT 或 QUEUED");
+            throw new IllegalArgumentException("应用审计配置不能使用 DEFAULT");
         }
         Map<Audit.Mode, AuditRecorder> installed = new EnumMap<>(Audit.Mode.class);
         for (AuditRecorder recorder : Objects.requireNonNull(recorders)) {
@@ -87,7 +87,6 @@ public class AuditCallInterceptor implements CallLifecycle.Around {
     @Override
     public @NotNull CallOutcome around(@NotNull CallExecution execution, @NotNull CallLifecycle.Next next) {
         CallExecution checked = Objects.requireNonNull(execution, "方法执行不能为空");
-        checked.verifyPrincipal();
         Audit audit = checked.declaration(Audit.class).orElseThrow();
         Audit.Mode mode = checked.declarations(Audit.class)
                 .stream()
@@ -122,7 +121,6 @@ public class AuditCallInterceptor implements CallLifecycle.Around {
             @NotNull CallExecution execution,
             @NotNull CallLifecycle.AsyncNext next) {
         CallExecution checked = Objects.requireNonNull(execution, "方法执行不能为空");
-        checked.verifyPrincipal();
         Audit audit = checked.declaration(Audit.class).orElseThrow();
         Audit.Mode mode = checked.declarations(Audit.class)
                 .stream()

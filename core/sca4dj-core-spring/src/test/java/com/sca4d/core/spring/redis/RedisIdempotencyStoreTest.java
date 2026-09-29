@@ -126,7 +126,10 @@ class RedisIdempotencyStoreTest {
                         Duration.ofHours(1)))
                 .isFalse();
         assertThat(store.release(key, "other-token")).isFalse();
+        assertThat(store.renew(key, "other-token", Duration.ofMinutes(1))).isFalse();
+        assertThat(store.renew(key, acquired.token(), Duration.ofMinutes(1))).isTrue();
         assertThat(store.release(key, acquired.token())).isTrue();
+        assertThat(store.renew(key, acquired.token(), Duration.ofMinutes(1))).isFalse();
         assertThat(
                 store.begin(
                         key,
@@ -303,7 +306,7 @@ class RedisIdempotencyStoreTest {
         assertThat(restored.responseHeaders()).isEmpty();
     }
 
-    /** 在测试内按三个生产 Lua 脚本的状态转换维护一条 Redis String。 */
+    /** 在测试内按四个生产 Lua 脚本的状态转换维护一条 Redis String。 */
     private Object executeScript(RedisScript<?> script, List<Key> keys, Object[] arguments) throws Exception {
         Key key = keys.getFirst();
         if (script.getResultType() == String.class) {
@@ -326,7 +329,7 @@ class RedisIdempotencyStoreTest {
         }
         if (arguments.length == 1) {
             storedRecords.remove(key);
-        } else {
+        } else if (arguments.length == 3) {
             storedRecords.put(key, (String) arguments[1]);
         }
         return 1L;

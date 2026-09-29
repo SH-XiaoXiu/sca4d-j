@@ -2,6 +2,7 @@ package com.sca4d.web.realtime.stomp;
 
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.call.Call;
+import com.sca4d.core.api.call.CallInvoker;
 import com.sca4d.core.api.connection.ConnectionId;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.webrealtime.WebRealtimeTarget;
@@ -41,16 +42,29 @@ public class StompInboundInterceptor implements ExecutorChannelInterceptor {
 
     private final @NotNull Clock clock;
 
+    private final @Nullable CallInvoker invoker;
+
     /** 创建 Spring STOMP 入站检查器。 */
     public StompInboundInterceptor(
             @NotNull StompRateLimits rateLimits,
             @NotNull RedisConnectionRegistry shared,
             @NotNull List<@NotNull WebRealtimeSubscriptionPolicy> subscriptionPolicies,
             @NotNull Clock clock) {
+        this(rateLimits, shared, subscriptionPolicies, clock, null);
+    }
+
+    /** 创建绑定统一生命周期执行器的 Spring STOMP 入站检查器。 */
+    public StompInboundInterceptor(
+            @NotNull StompRateLimits rateLimits,
+            @NotNull RedisConnectionRegistry shared,
+            @NotNull List<@NotNull WebRealtimeSubscriptionPolicy> subscriptionPolicies,
+            @NotNull Clock clock,
+            @Nullable CallInvoker invoker) {
         this.rateLimits = Objects.requireNonNull(rateLimits, "Web Realtime 限流策略不能为空");
         this.shared = Objects.requireNonNull(shared, "Web Realtime 共享索引不能为空");
         this.subscriptionPolicies = List.copyOf(subscriptionPolicies);
         this.clock = Objects.requireNonNull(clock, "Web Realtime 时钟不能为空");
+        this.invoker = invoker;
     }
 
     /** 在 Spring 分派命令前检查身份、STOMP 1.2、限流和动态订阅策略。 */
@@ -204,7 +218,12 @@ public class StompInboundInterceptor implements ExecutorChannelInterceptor {
             throw new IllegalArgumentException("STOMP principal-id 必须为正整数");
         }
         Principal principal = session.principalById(principalId);
-        Call call = new Call(UUID.randomUUID().toString(), clock.instant());
+        Call call = new Call(
+                invoker,
+                UUID.randomUUID().toString(),
+                clock.instant(),
+                com.sca4d.core.api.data.DataValues.builder().build(),
+                null);
         call.authenticate(session);
         call.selectPrincipal(principal);
         return call;

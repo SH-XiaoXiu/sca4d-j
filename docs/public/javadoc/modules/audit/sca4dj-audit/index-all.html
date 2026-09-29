@@ -49,7 +49,7 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1>Index</h1>
 </div>
-<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:Q">Q</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a>
+<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:Q">Q</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
 <dt><a href="com/sca4d/audit/query/AuditQuery.html#accountId()" class="member-name-link">accountId()</a> - Method in class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditQuery.html" title="class in com.sca4d.audit.query">AuditQuery</a></dt>
@@ -58,6 +58,14 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/audit/query/AuditEntry.html#actor()" class="member-name-link">actor()</a> - Method in class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditEntry.html" title="class in com.sca4d.audit.query">AuditEntry</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/audit/recording/AfterCommitAuditRecorder.html" class="type-name-link" title="class in com.sca4d.audit.recording">AfterCommitAuditRecorder</a> - Class in <a href="com/sca4d/audit/recording/package-summary.html">com.sca4d.audit.recording</a></dt>
+<dd>
+<div class="block">提交后尽力把冻结审计记录交给有界进程内执行器，不提供恢复和重试。</div>
+</dd>
+<dt><a href="com/sca4d/audit/recording/AfterCommitAuditRecorder.html#%3Cinit%3E(com.sca4d.audit.recording.AuditRepository,java.util.concurrent.Executor)" class="member-name-link">AfterCommitAuditRecorder(AuditRepository, Executor)</a> - Constructor for class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AfterCommitAuditRecorder.html" title="class in com.sca4d.audit.recording">AfterCommitAuditRecorder</a></dt>
+<dd>
+<div class="block">创建提交后尽力审计记录器。</div>
+</dd>
 <dt><a href="com/sca4d/audit/recording/AuditRepository.html#append(com.sca4d.core.api.audit.AuditRecord)" class="member-name-link">append(AuditRecord)</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditRepository.html" title="class in com.sca4d.audit.recording">AuditRepository</a></dt>
 <dd>
 <div class="block">追加一条写入后不再更新的审计行。</div>
@@ -316,6 +324,8 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:M">M</h2>
 <dl class="index">
+<dt><a href="com/sca4d/audit/recording/AfterCommitAuditRecorder.html#mode()" class="member-name-link">mode()</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AfterCommitAuditRecorder.html" title="class in com.sca4d.audit.recording">AfterCommitAuditRecorder</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/audit/recording/QueuedAuditRecorder.html#mode()" class="member-name-link">mode()</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/QueuedAuditRecorder.html" title="class in com.sca4d.audit.recording">QueuedAuditRecorder</a></dt>
 <dd>&nbsp;</dd>
 </dl>
@@ -376,6 +386,10 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:R">R</h2>
 <dl class="index">
+<dt><a href="com/sca4d/audit/recording/AfterCommitAuditRecorder.html#record(com.sca4d.core.api.audit.AuditRecord)" class="member-name-link">record(AuditRecord)</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AfterCommitAuditRecorder.html" title="class in com.sca4d.audit.recording">AfterCommitAuditRecorder</a></dt>
+<dd>
+<div class="block">在调用线程冻结和脱敏，提交后仅等待有界执行器接受任务。</div>
+</dd>
 <dt><a href="com/sca4d/audit/recording/DatabaseAuditRecorder.html#record(com.sca4d.core.api.audit.AuditRecord)" class="member-name-link">record(AuditRecord)</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/DatabaseAuditRecorder.html" title="class in com.sca4d.audit.recording">DatabaseAuditRecorder</a></dt>
 <dd>
 <div class="block">同步保存审计记录；编码或数据库写入失败时原样终止当前调用。</div>
@@ -407,7 +421,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/audit/config/AuditProperties.html#setMode(com.sca4d.core.api.annotation.Audit.Mode)" class="member-name-link">setMode(Audit.Mode)</a> - Method in class com.sca4d.audit.config.<a href="com/sca4d/audit/config/AuditProperties.html" title="class in com.sca4d.audit.config">AuditProperties</a></dt>
 <dd>
-<div class="block">QUEUED 要求安装 MessageBus，不使用内存队列降级。</div>
+<div class="block">QUEUED 要求安装 MessageBus；AFTER_COMMIT 只保证进程内尽力执行。</div>
 </dd>
 <dt><a href="com/sca4d/audit/config/AuditProperties.html#setSensitiveFields(java.util.List)" class="member-name-link">setSensitiveFields(List&lt;String&gt;)</a> - Method in class com.sca4d.audit.config.<a href="com/sca4d/audit/config/AuditProperties.html" title="class in com.sca4d.audit.config">AuditProperties</a></dt>
 <dd>
@@ -459,7 +473,14 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/audit/recording/AuditMessageCodec.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditMessageCodec.html" title="class in com.sca4d.audit.recording">AuditMessageCodec</a></dt>
 <dd>&nbsp;</dd>
 </dl>
-<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:Q">Q</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a></main>
+<h2 class="title" id="I:W">W</h2>
+<dl class="index">
+<dt><a href="com/sca4d/audit/recording/mapper/EncodedAuditEntry.html#withId(long)" class="member-name-link">withId(long)</a> - Method in class com.sca4d.audit.recording.mapper.<a href="com/sca4d/audit/recording/mapper/EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a></dt>
+<dd>
+<div class="block">为冻结的审计字段分配数据库主键，其他列保持不变。</div>
+</dd>
+</dl>
+<a href="#I:A">A</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:Q">Q</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a></main>
 </div>
 </div>
 </body>

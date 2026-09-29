@@ -11,6 +11,7 @@ import java.lang.annotation.Target;
 public @interface PluginMount {
     /** 返回扩展契约编码。 */
     String value();
+
     /** 返回 KEYED 扩展的实现编码；SINGLE 使用空字符串。 */
     String key() default "";
 }

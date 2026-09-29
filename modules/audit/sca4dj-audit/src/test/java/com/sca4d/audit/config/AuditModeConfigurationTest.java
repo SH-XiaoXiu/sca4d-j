@@ -3,11 +3,13 @@ package com.sca4d.audit.config;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
+import com.sca4d.audit.recording.AfterCommitAuditRecorder;
 import com.sca4d.audit.recording.DatabaseAuditRecorder;
 import com.sca4d.audit.recording.QueuedAuditRecorder;
 import com.sca4d.audit.recording.mapper.AuditMapper;
 import com.sca4d.core.api.audit.AuditCallInterceptor;
 import com.sca4d.core.api.audit.AuditRecorder;
+import com.sca4d.core.api.call.SPICallValueResolver;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.messaging.MessageBus;
@@ -35,13 +37,23 @@ class AuditModeConfigurationTest {
     void defaultsToDirectAndRequiresMessageBusForQueuedMode() {
         context.run(application -> {
             assertThat(application).hasNotFailed();
-            assertThat(application).hasSingleBean(AuditRecorder.class);
-            assertThat(AopUtils.getTargetClass(application.getBean(AuditRecorder.class)))
+            assertThat(AopUtils.getTargetClass(application.getBean("databaseAuditRecorder", AuditRecorder.class)))
                     .isEqualTo(DatabaseAuditRecorder.class);
+            assertThat(AopUtils.getTargetClass(application.getBean("afterCommitAuditRecorder", AuditRecorder.class)))
+                    .isEqualTo(AfterCommitAuditRecorder.class);
         });
         context.withPropertyValues("sca4dj.audit.mode=QUEUED").run(application -> {
             assertThat(application).hasFailed();
             assertThat(application.getStartupFailure()).hasRootCauseInstanceOf(IllegalStateException.class);
+        });
+    }
+
+    @Test
+    void allowsBestEffortAfterCommitWithoutMessaging() {
+        context.withPropertyValues("sca4dj.audit.mode=AFTER_COMMIT").run(application -> {
+            assertThat(application).hasNotFailed();
+            assertThat(application).hasSingleBean(AuditCallInterceptor.class);
+            assertThat(application).doesNotHaveBean("queuedAuditRecorder");
         });
     }
 
@@ -86,6 +98,11 @@ class AuditModeConfigurationTest {
     /** 明确提供装配所需基础对象，不引入数据库或 RabbitMQ 连接。 */
     @Configuration(proxyBeanMethods = false)
     static class Inputs {
+        @Bean
+        SPICallValueResolver expressionResolver() {
+            return (expression, execution) -> null;
+        }
+
         @Bean
         Clock clock() {
             return Clock.systemUTC();

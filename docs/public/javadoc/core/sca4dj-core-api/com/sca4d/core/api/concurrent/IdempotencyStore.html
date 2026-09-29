@@ -117,14 +117,21 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">仅在 token 仍拥有处理中记录时原子释放失败执行的所有权。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#succeed(com.sca4d.core.api.concurrent.IdempotencyKey,java.lang.String,java.lang.String,T,java.lang.reflect.Type,java.time.Duration)" class="member-name-link">succeed</a><wbr>(@NotNull <a href="IdempotencyKey.html" title="class in com.sca4d.core.api.concurrent">IdempotencyKey</a>&nbsp;key,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#renew(com.sca4d.core.api.concurrent.IdempotencyKey,java.lang.String,java.time.Duration)" class="member-name-link">renew</a><wbr>(@NotNull <a href="IdempotencyKey.html" title="class in com.sca4d.core.api.concurrent">IdempotencyKey</a>&nbsp;key,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;processingTtl)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">仅在 token 仍持有处理中记录时延长租约。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#succeed(com.sca4d.core.api.concurrent.IdempotencyKey,java.lang.String,java.lang.String,T,java.lang.reflect.Type,java.time.Duration)" class="member-name-link">succeed</a><wbr>(@NotNull <a href="IdempotencyKey.html" title="class in com.sca4d.core.api.concurrent">IdempotencyKey</a>&nbsp;key,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;fingerprint,
  T&nbsp;result,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;resultType,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;retention)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">仅在 token 仍拥有处理中记录时原子保存成功结果。</div>
 </div>
 </div>
@@ -196,6 +203,26 @@ loadScripts(document, 'script');</script>
 <dd><code>retention</code> - 保留时间</dd>
 <dt>Returns:</dt>
 <dd>当前 token 成功把记录推进为已完成时返回 <code>true</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="renew(com.sca4d.core.api.concurrent.IdempotencyKey,java.lang.String,java.time.Duration)">
+<h3>renew</h3>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name">renew</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="IdempotencyKey.html" title="class in com.sca4d.core.api.concurrent">IdempotencyKey</a>&nbsp;key,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;processingTtl)</span></div>
+<div class="block">仅在 token 仍持有处理中记录时延长租约。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>key</code> - 幂等键</dd>
+<dd><code>token</code> - 当前处理所有权 token</dd>
+<dd><code>processingTtl</code> - 从本次续期开始重新计算的处理租约</dd>
+<dt>Returns:</dt>
+<dd>记录仍归当前 token 所有且成功续期时为 true</dd>
 </dl>
 </section>
 </li>

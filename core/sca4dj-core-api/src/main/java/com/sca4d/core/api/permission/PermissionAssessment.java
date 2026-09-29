@@ -43,7 +43,7 @@ public class PermissionAssessment {
         if (call.principal().isEmpty()) {
             throw new IllegalStateException("权限判断前必须完成业务主体选择");
         }
-        // 资源必须由唯一策略处理，避免同一 Permission 得到相互冲突的判断结果。
+        // 一个资源只能由一个策略认领；判断只执行一次。
         List<PermissionPolicy> claimed = policies.stream()
                 .filter(policy -> policy.supports(permission.resource()))
                 .toList();

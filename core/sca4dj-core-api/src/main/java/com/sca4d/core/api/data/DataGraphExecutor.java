@@ -114,7 +114,8 @@ public class DataGraphExecutor {
                         } catch (DataAssertionException exception) {
                             return CompletableFuture.failedFuture(exception.at(operation));
                         } catch (RuntimeException exception) {
-                            return CompletableFuture.failedFuture(new DataOperationExecutionException(operation, exception));
+                            return CompletableFuture
+                                    .failedFuture(new DataOperationExecutionException(operation, exception));
                         }
                     }, executor);
             tasks.add(task);

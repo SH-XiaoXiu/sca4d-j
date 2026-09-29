@@ -19,6 +19,11 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 /** 执行 `@Idempotent` 的处理权取得、结果重放、成功保存和失败释放。 */
 public class IdempotencyCallInterceptor implements CallLifecycle.Around {
@@ -40,6 +45,10 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
 
     private final Duration retryAfter;
 
+    private final Duration defaultRetention;
+
+    private final ScheduledExecutorService renewalScheduler;
+
     /**
      * 创建幂等调用执行器。
      *
@@ -48,6 +57,7 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
      * @param fingerprints 方法实参规范化和摘要入口
      * @param processingTtl 处理中记录的租约
      * @param retryAfter 仍在处理中时建议等待的时间
+     * @param renewalScheduler 异步调用处理权续期的受管理调度器
      */
     public IdempotencyCallInterceptor(
             @NotNull IdempotencyStore idempotencyStore,
@@ -55,13 +65,37 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
             @NotNull SPICallValueResolver expressionResolver,
             @NotNull IdempotencyFingerprints fingerprints,
             @NotNull Duration processingTtl,
-            @NotNull Duration retryAfter) {
+            @NotNull Duration retryAfter,
+            @NotNull Duration defaultRetention,
+            @NotNull ScheduledExecutorService renewalScheduler) {
         this.idempotencyStore = Objects.requireNonNull(idempotencyStore, "幂等结果存储不能为空");
         this.resolverLookup = Objects.requireNonNull(resolverLookup, "调用值解析器目录不能为空");
         this.expressionResolver = Objects.requireNonNull(expressionResolver, "注解表达式解析器不能为空");
         this.fingerprints = Objects.requireNonNull(fingerprints, "幂等参数指纹入口不能为空");
         this.processingTtl = DurationUtils.requirePositive(processingTtl, "幂等处理租约");
         this.retryAfter = DurationUtils.requirePositive(retryAfter, "幂等建议重试时间");
+        this.defaultRetention = DurationUtils.requirePositive(defaultRetention, "幂等结果默认保留期");
+        this.renewalScheduler = Objects.requireNonNull(renewalScheduler, "幂等续期调度器不能为空");
+    }
+
+    /** 兼容直接组装 Core 拦截器的调用方，默认成功结果保留一天。 */
+    public IdempotencyCallInterceptor(
+            @NotNull IdempotencyStore idempotencyStore,
+            @NotNull CallValueResolverLookup resolverLookup,
+            @NotNull SPICallValueResolver expressionResolver,
+            @NotNull IdempotencyFingerprints fingerprints,
+            @NotNull Duration processingTtl,
+            @NotNull Duration retryAfter,
+            @NotNull ScheduledExecutorService renewalScheduler) {
+        this(
+                idempotencyStore,
+                resolverLookup,
+                expressionResolver,
+                fingerprints,
+                processingTtl,
+                retryAfter,
+                Duration.ofDays(1),
+                renewalScheduler);
     }
 
     @Override
@@ -85,26 +119,9 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
         }
 
         // 在执行方法之前取得处理权；只有相同方法、参数和客户端键才允许重放。
-        boolean expression = !idempotent.key().isBlank();
-        boolean customResolver = idempotent.keyResolver() != NoCallValueResolver.class;
-        if (expression && customResolver) {
-            throw new IllegalStateException("幂等 key 与 keyResolver 必须二选一");
-        }
-        Object resolvedKey;
-        if (expression) {
-            resolvedKey = expressionResolver.resolve(idempotent.key(), checked);
-        } else if (customResolver) {
-            resolvedKey = resolverLookup.resolver(idempotent.keyResolver()).resolve(checked);
-        } else {
-            resolvedKey = checked.call()
-                    .input(IdempotencyKey.INPUT)
-                    .orElseThrow(() -> new IllegalStateException("当前调用没有提供幂等键"));
-        }
-        IdempotencyKey clientKey = normalizeKey(resolvedKey);
+        IdempotencyKey clientKey = resolveKey(idempotent, checked);
         IdempotencyKey key = scopedKey(checked, clientKey);
-        Duration retention = DurationUtils.requirePositive(
-                Duration.ofSeconds(idempotent.retentionSeconds()),
-                "幂等结果保留时间");
+        Duration retention = retention(idempotent);
         String fingerprint = fingerprint(checked);
         IdempotencyBeginResult<?> begin = idempotencyStore.begin(
                 key,
@@ -116,7 +133,7 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
             LOG.trace(
                     "调用复用幂等结果 | callId={} method={}",
                     checked.call().callId(),
-                    checked.method().getName());
+                    checked.invocationName());
             return CallOutcome.replayed(begin.replayResult());
         }
         if (begin.status() == IdempotencyBeginStatus.IN_PROGRESS) {
@@ -129,7 +146,7 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
         LOG.trace(
                 "调用已取得幂等处理权 | callId={} method={}",
                 checked.call().callId(),
-                checked.method().getName());
+                checked.invocationName());
 
         CallOutcome outcome;
         try {
@@ -138,12 +155,11 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
             release(key, token, failure, checked);
             throw failure;
         }
-        if (outcome.error() != null || outcome.completionFailure() != null) {
+        if (outcome.error() != null) {
             release(
                     key,
                     token,
-                    Objects.requireNonNull(
-                            outcome.error() == null ? outcome.completionFailure() : outcome.error()),
+                    outcome.error(),
                     checked);
             return outcome;
         }
@@ -165,7 +181,7 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
         LOG.trace(
                 "调用已保存幂等结果 | callId={} method={}",
                 checked.call().callId(),
-                checked.method().getName());
+                checked.invocationName());
         return outcome;
     }
 
@@ -177,9 +193,7 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
         CallExecution checked = Objects.requireNonNull(execution, "方法执行不能为空");
         Idempotent idempotent = checked.declaration(Idempotent.class).orElseThrow();
         IdempotencyKey key = scopedKey(checked, resolveKey(idempotent, checked));
-        Duration retention = DurationUtils.requirePositive(
-                Duration.ofSeconds(idempotent.retentionSeconds()),
-                "幂等结果保留时间");
+        Duration retention = retention(idempotent);
         String fingerprint = fingerprint(checked);
         IdempotencyBeginResult<?> begin = idempotencyStore.begin(
                 key,
@@ -197,7 +211,45 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
             throw new IdempotencyKeyConflictException();
         }
         String token = Objects.requireNonNull(begin.token(), "幂等 ACQUIRED 结果缺少所有权 token");
-        return next.proceedAsync().handle((outcome, failure) -> {
+        AtomicBoolean completed = new AtomicBoolean();
+        AtomicReference<Throwable> renewalFailure = new AtomicReference<>();
+        long interval = Math.max(1L, processingTtl.toMillis() / 3L);
+        ScheduledFuture<?> heartbeat;
+        try {
+            heartbeat = renewalScheduler.scheduleAtFixedRate(() -> {
+                if (completed.get() || renewalFailure.get() != null) {
+                    return;
+                }
+                try {
+                    if (!idempotencyStore.renew(key, token, processingTtl)) {
+                        throw new IllegalStateException("异步幂等处理权已失效");
+                    }
+                } catch (RuntimeException failure) {
+                    renewalFailure.compareAndSet(null, failure);
+                    LOG.warn(
+                            "异步幂等处理权续期失败 | callId={} method={}",
+                            checked.call().callId(),
+                            checked.invocationName(),
+                            failure);
+                    throw failure;
+                }
+            }, interval, interval, TimeUnit.MILLISECONDS);
+        } catch (RuntimeException schedulingFailure) {
+            release(key, token, schedulingFailure, checked);
+            throw schedulingFailure;
+        }
+        CompletionStage<CallOutcome> inner;
+        try {
+            inner = Objects.requireNonNull(next.proceedAsync(), "异步幂等内层结果不能为空");
+        } catch (Throwable invocationFailure) {
+            completed.set(true);
+            heartbeat.cancel(false);
+            release(key, token, invocationFailure, checked);
+            return CompletableFuture.completedFuture(CallOutcome.failed(invocationFailure));
+        }
+        return inner.handle((outcome, failure) -> {
+            completed.set(true);
+            heartbeat.cancel(false);
             if (failure != null) {
                 Throwable cause = failure instanceof java.util.concurrent.CompletionException
                         ? failure.getCause()
@@ -207,10 +259,19 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
                         ? CallOutcome.denied(cause)
                         : CallOutcome.failed(cause);
             }
-            if (outcome.error() != null || outcome.completionFailure() != null) {
-                Throwable cause = outcome.error() == null ? outcome.completionFailure() : outcome.error();
-                release(key, token, Objects.requireNonNull(cause), checked);
+            if (outcome == null) {
+                IllegalStateException missing = new IllegalStateException("异步幂等内层结果不能为空");
+                release(key, token, missing, checked);
+                return CallOutcome.failed(missing);
+            }
+            if (outcome.error() != null) {
+                release(key, token, outcome.error(), checked);
                 return outcome;
+            }
+            Throwable leaseFailure = renewalFailure.get();
+            if (leaseFailure != null) {
+                release(key, token, leaseFailure, checked);
+                return outcome.withCompletionFailure(leaseFailure);
             }
             try {
                 if (!idempotencyStore.succeed(
@@ -244,8 +305,16 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
                         ? resolverLookup.resolver(idempotent.keyResolver()).resolve(execution)
                         : execution.call()
                                 .input(IdempotencyKey.INPUT)
-                                .orElseThrow(() -> new IllegalStateException("当前调用没有提供幂等键"));
+                                .orElseThrow(() -> new IllegalArgumentException("当前调用没有提供幂等键"));
         return normalizeKey(resolved);
+    }
+
+    /** 解析方法覆盖或应用默认的成功结果保留期。 */
+    private @NotNull Duration retention(@NotNull Idempotent idempotent) {
+        long seconds = idempotent.retentionSeconds();
+        return seconds == 0
+                ? defaultRetention
+                : DurationUtils.requirePositive(Duration.ofSeconds(seconds), "幂等结果保留时间");
     }
 
     /**
@@ -266,14 +335,14 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
                 LOG.warn(
                         "幂等处理中记录未由当前请求释放，将等待自动过期 | callId={} method={}",
                         execution.call().callId(),
-                        execution.method().getName());
+                        execution.invocationName());
             }
         } catch (RuntimeException releaseFailure) {
             failure.addSuppressed(releaseFailure);
             LOG.error(
                     "幂等处理中记录释放失败，将等待自动过期 | callId={} method={}",
                     execution.call().callId(),
-                    execution.method().getName(),
+                    execution.invocationName(),
                     releaseFailure);
         }
     }
@@ -286,10 +355,24 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
      * @return 包含方法范围的幂等键
      */
     private static @NotNull IdempotencyKey scopedKey(@NotNull CallExecution execution, @NotNull IdempotencyKey key) {
+        String identity = execution.call()
+                .subject()
+                .map(subject -> "subject:" + subject.subjectId())
+                .orElse("subject:anonymous");
+        identity += execution.call()
+                .account()
+                .map(account -> ":account:" + account.accountId())
+                .orElse(":account:none");
+        identity += execution.call()
+                .principal()
+                .map(principal -> ":principal:" + principal.principalId())
+                .orElse(":principal:none");
         return new IdempotencyKey(
                 "call."
                         + DigestUtil.sha256Hex(
                                 execution.methodSignature())
+                        + ":identity:"
+                        + DigestUtil.sha256Hex(identity)
                         + ":"
                         + DigestUtil.sha256Hex(key.value()));
     }
@@ -309,13 +392,11 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
 
     /** 在表达式或解析器边界把允许的幂等键输入转换为领域类型。 */
     private static @NotNull IdempotencyKey normalizeKey(@NotNull Object value) {
-        if (value instanceof IdempotencyKey key) {
-            return IdempotencyKey.fromValue(key);
+        try {
+            return IdempotencyKey.fromValue(value);
+        } catch (IllegalArgumentException failure) {
+            throw new IllegalStateException("幂等键必须是 IdempotencyKey 或非空文本", failure);
         }
-        if (value instanceof CharSequence text) {
-            return IdempotencyKey.fromValue(text);
-        }
-        throw new IllegalStateException("幂等键必须是 IdempotencyKey 或非空文本");
     }
 
 }

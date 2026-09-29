@@ -2,6 +2,8 @@ package com.sca4d.core.spring.web;
 
 import com.sca4d.core.api.audit.HttpCall;
 import com.sca4d.core.api.call.Call;
+import com.sca4d.core.api.call.CallInvoker;
+import com.sca4d.core.api.concurrent.IdempotencyKey;
 import com.sca4d.core.api.data.DataValues;
 import com.sca4d.core.spring.call.CallHolder;
 import com.sca4d.core.spring.gateway.TrustedGatewayRequest;
@@ -25,11 +27,16 @@ public class HttpCallFilter extends OncePerRequestFilter {
     /** 请求和响应使用的调用标识 Header。 */
     public static final String CALL_ID_HEADER = "X-Call-Id";
 
+    /** HTTP 调用方提供幂等键的 Header。 */
+    public static final String IDEMPOTENCY_KEY_HEADER = "Idempotency-Key";
+
     private static final String CALL_ID_MDC = "callId";
 
     private static final Pattern CALL_ID_PATTERN = Pattern.compile("[A-Za-z0-9._-]{1,128}");
 
     private final Clock clock;
+
+    private final CallInvoker invoker;
 
     /**
      * 创建请求信息过滤器。
@@ -37,7 +44,13 @@ public class HttpCallFilter extends OncePerRequestFilter {
      * @param clock 创建调用开始时间使用的时钟
      */
     public HttpCallFilter(Clock clock) {
+        this(clock, null);
+    }
+
+    /** 创建绑定统一生命周期执行器的请求过滤器。 */
+    public HttpCallFilter(Clock clock, CallInvoker invoker) {
         this.clock = Objects.requireNonNull(clock, "时钟不能为空");
+        this.invoker = invoker;
     }
 
     @Override
@@ -58,11 +71,11 @@ public class HttpCallFilter extends OncePerRequestFilter {
                                 TrustedGatewayRequest.externalPath(request),
                                 TrustedGatewayRequest.clientIp(request),
                                 request.getHeader("User-Agent")));
-        String idempotencyKey = request.getHeader(HttpIdempotencyKeyResolver.HEADER);
+        String idempotencyKey = request.getHeader(IDEMPOTENCY_KEY_HEADER);
         if (idempotencyKey != null) {
-            inputs.put(HttpIdempotencyKeyResolver.KEY, idempotencyKey);
+            inputs.put(IdempotencyKey.INPUT, idempotencyKey);
         }
-        Call call = new Call(callId, clock.instant(), inputs.build(), null);
+        Call call = new Call(invoker, callId, clock.instant(), inputs.build(), null);
         response.setHeader(CALL_ID_HEADER, callId);
         try {
             CallHolder.set(call);

@@ -34,13 +34,15 @@ public class CallInvoker {
      * @param registered 各功能和应用提供的处理；编码唯一，前置及成功校验锚点不能替换
      * @throws IllegalArgumentException 编码重复、依赖缺失、存在依赖环或替换校验锚点时抛出
      */
-    public CallInvoker(@NotNull List<? extends CallLifecycle.Around> registered) {
+    public CallInvoker(@NotNull List<? extends CallLifecycle.Participant> registered) {
         this(new CallLifecycleConfiguration(registered));
     }
 
     /** 使用已经完成内置顺序和扩展依赖配置的调用执行器。 */
     public CallInvoker(@NotNull CallLifecycleConfiguration configuration) {
-        registrations = sort(Objects.requireNonNull(configuration).registrations());
+        CallLifecycleConfiguration checked = Objects.requireNonNull(configuration);
+        checked.applyCoreOrder();
+        registrations = sort(checked.registrations());
     }
 
     /**
@@ -53,14 +55,17 @@ public class CallInvoker {
      */
     @SuppressWarnings("unchecked")
     public <T> @Nullable T execute(CallExecution execution, Callable<T> target) throws Exception {
-        Objects.requireNonNull(execution).beginExecution();
+        CallExecution checkedExecution = Objects.requireNonNull(execution);
+        List<CallLifecycleConfiguration.Registration> active = active(checkedExecution);
+        registerAfterCommit(checkedExecution, active);
+        checkedExecution.beginExecution();
         Objects.requireNonNull(target);
-        CallOutcome outcome = invoke(execution, target, 0);
-        execution.recordOutcome(outcome);
+        CallOutcome outcome = complete(execution, active, invoke(execution, target, active, 0));
+        checkedExecution.recordOutcome(outcome);
         LOG.trace(
                 "调用生命周期结束 | callId={} method={} outcome={} completionFailed={}",
                 execution.call().callId(),
-                execution.method().getName(),
+                execution.invocationName(),
                 outcome.status(),
                 outcome.completionFailure() != null);
         return (T) value(outcome);
@@ -77,28 +82,60 @@ public class CallInvoker {
     public <T> @NotNull CompletionStage<T> executeAsync(
             @NotNull CallExecution execution,
             @NotNull Supplier<? extends @NotNull CompletionStage<T>> target) {
-        Objects.requireNonNull(execution).beginExecution();
+        CallExecution checkedExecution = Objects.requireNonNull(execution);
+        List<CallLifecycleConfiguration.Registration> active = active(checkedExecution);
+        registerAfterCommit(checkedExecution, active);
+        checkedExecution.beginExecution();
         Objects.requireNonNull(target);
-        return invokeAsync(execution, target, 0)
-                .thenApply(outcome -> {
-                    execution.recordOutcome(outcome);
+        CompletionStage<CallOutcome> completed = invokeAsync(execution, target, active, 0)
+                .handle((outcome, failure) -> {
+                    CallOutcome finalOutcome = complete(
+                            execution,
+                            active,
+                            failure == null ? outcome : failure(unwrap(failure)));
+                    checkedExecution.recordOutcome(finalOutcome);
                     LOG.trace(
                             "异步调用生命周期结束 | callId={} method={} outcome={} completionFailed={}",
                             execution.call().callId(),
-                            execution.method().getName(),
-                            outcome.status(),
-                            outcome.completionFailure() != null);
-                    try {
-                        return (T) value(outcome);
-                    } catch (Exception | Error failure) {
-                        throw new CompletionException(failure);
-                    }
+                            execution.invocationName(),
+                            finalOutcome.status(),
+                            finalOutcome.completionFailure() != null);
+                    return finalOutcome;
                 });
+        return completed.thenApply(outcome -> {
+            try {
+                return (T) value(outcome);
+            } catch (Exception | Error failure) {
+                throw new CompletionException(failure);
+            }
+        });
+    }
+
+    /** 在入口线程选定参与者，完成线程不再查询线程局部状态。 */
+    private List<CallLifecycleConfiguration.Registration> active(CallExecution execution) {
+        return registrations.stream()
+                .filter(registration -> registration.interceptor().supports(execution))
+                .toList();
+    }
+
+    /** 提交后通知在方法执行前登记，由事务监听器按提交结果触发。 */
+    private void registerAfterCommit(
+            CallExecution execution,
+            List<CallLifecycleConfiguration.Registration> active) {
+        for (CallLifecycleConfiguration.Registration registration : active) {
+            if (registration.interceptor() instanceof CallLifecycle.AfterCommit callback) {
+                execution.addAfterCommit(callback);
+            }
+        }
     }
 
     /** 执行当前环绕层；Next 仅在当前线程和回调范围内有效，禁止重复执行或异步保存。 */
-    private CallOutcome invoke(CallExecution execution, Callable<?> target, int index) {
-        if (index == registrations.size()) {
+    private CallOutcome invoke(
+            CallExecution execution,
+            Callable<?> target,
+            List<CallLifecycleConfiguration.Registration> active,
+            int index) {
+        if (index == active.size()) {
             try {
                 execution.beginInvocation();
                 try {
@@ -118,11 +155,29 @@ public class CallInvoker {
                 return failure(failure);
             }
         }
-        CallLifecycle.Around around = registrations.get(index).interceptor();
-        Continuation next = new Continuation(() -> invoke(execution, target, index + 1));
+        CallLifecycle.Participant participant = active.get(index).interceptor();
+        if (participant instanceof CallLifecycle.Before before) {
+            try {
+                before.before(execution);
+                return invoke(execution, target, active, index + 1);
+            } catch (Throwable failure) {
+                return failure(failure);
+            }
+        }
+        if (participant instanceof CallLifecycle.AfterReturning
+                || participant instanceof CallLifecycle.AfterThrowing
+                || participant instanceof CallLifecycle.After
+                || participant instanceof CallLifecycle.Completion
+                || participant instanceof CallLifecycle.AfterCommit) {
+            return invoke(execution, target, active, index + 1);
+        }
+        if (!(participant instanceof CallLifecycle.Around around)) {
+            throw new IllegalStateException("不支持的调用生命周期参与者: " + participant.code());
+        }
+        Continuation next = new Continuation(() -> invoke(execution, target, active, index + 1));
         try {
             CallOutcome outcome = Objects.requireNonNull(
-                    around.supports(execution) ? around.around(execution, next) : next.proceed(),
+                    around.around(execution, next),
                     "环绕处理不能返回空结果: " + around.code());
             if (next.outcome != null && next.outcome.error() != null && outcome.error() == null) {
                 throw new IllegalStateException("环绕处理不能把内层失败改写为成功: " + around.code());
@@ -147,12 +202,48 @@ public class CallInvoker {
         }
     }
 
+    /** 所有 Around 完成后按配置顺序触发结果阶段，Completion 最后清理。 */
+    private CallOutcome complete(
+            CallExecution execution,
+            List<CallLifecycleConfiguration.Registration> active,
+            CallOutcome outcome) {
+        CallOutcome current = Objects.requireNonNull(outcome, "调用结果不能为空");
+        for (CallLifecycleConfiguration.Registration registration : active) {
+            CallLifecycle.Participant participant = registration.interceptor();
+            CallOutcome snapshot = current;
+            if (participant instanceof CallLifecycle.AfterReturning afterReturning
+                    && snapshot.error() == null
+                    && snapshot.completionFailure() == null) {
+                current = callback(snapshot, () -> afterReturning.afterReturning(execution, snapshot));
+            } else if (participant instanceof CallLifecycle.AfterThrowing afterThrowing
+                    && (snapshot.error() != null || snapshot.completionFailure() != null)) {
+                current = callback(snapshot, () -> afterThrowing.afterThrowing(execution, snapshot));
+            } else if (participant instanceof CallLifecycle.After after) {
+                current = callback(snapshot, () -> after.after(execution, snapshot));
+            } else if (participant instanceof CallLifecycle.Completion completion) {
+                current = callback(snapshot, () -> completion.complete(execution, snapshot));
+            }
+        }
+        return current;
+    }
+
+    /** 回调失败保留已经确定的业务结果。 */
+    private static CallOutcome callback(CallOutcome outcome, ThrowingAction action) {
+        try {
+            action.run();
+            return outcome;
+        } catch (Throwable failure) {
+            return outcome.withCompletionFailure(failure);
+        }
+    }
+
     /** 异步执行当前环绕层，并在最终完成时校验内层失败和成功要求。 */
     private CompletionStage<CallOutcome> invokeAsync(
             CallExecution execution,
             Supplier<? extends CompletionStage<?>> target,
+            List<CallLifecycleConfiguration.Registration> active,
             int index) {
-        if (index == registrations.size()) {
+        if (index == active.size()) {
             try {
                 execution.beginInvocation();
                 CompletionStage<?> result = Objects.requireNonNull(target.get(), "异步目标不能返回 null");
@@ -178,15 +269,32 @@ public class CallInvoker {
                 return CompletableFuture.completedFuture(failure(failure));
             }
         }
-        CallLifecycle.Around around = registrations.get(index).interceptor();
+        CallLifecycle.Participant participant = active.get(index).interceptor();
+        if (participant instanceof CallLifecycle.Before before) {
+            try {
+                before.before(execution);
+                return invokeAsync(execution, target, active, index + 1);
+            } catch (Throwable failure) {
+                return CompletableFuture.completedFuture(failure(failure));
+            }
+        }
+        if (participant instanceof CallLifecycle.AfterReturning
+                || participant instanceof CallLifecycle.AfterThrowing
+                || participant instanceof CallLifecycle.After
+                || participant instanceof CallLifecycle.Completion
+                || participant instanceof CallLifecycle.AfterCommit) {
+            return invokeAsync(execution, target, active, index + 1);
+        }
+        if (!(participant instanceof CallLifecycle.Around around)) {
+            return CompletableFuture.failedFuture(
+                    new IllegalStateException("不支持的调用生命周期参与者: " + participant.code()));
+        }
         AsyncContinuation next = new AsyncContinuation(
-                () -> invokeAsync(execution, target, index + 1));
+                () -> invokeAsync(execution, target, active, index + 1));
         CompletionStage<CallOutcome> stage;
         try {
             stage = Objects.requireNonNull(
-                    around.supports(execution)
-                            ? around.aroundAsync(execution, next)
-                            : next.proceedAsync(),
+                    around.aroundAsync(execution, next),
                     "异步环绕处理不能返回空结果: " + around.code());
         } catch (Throwable failure) {
             stage = CompletableFuture.completedFuture(failure(failure));
@@ -258,6 +366,23 @@ public class CallInvoker {
                 dependencies.get(code).add(registration.interceptor().code());
             }
         }
+        for (CallLifecycleConfiguration.Registration registration : registered) {
+            if (registration.lifecycle() == CallLifecycle.AFTER) {
+                for (CallLifecycleConfiguration.Registration candidate : registered) {
+                    if (candidate.lifecycle() == CallLifecycle.AFTER_RETURNING
+                            || candidate.lifecycle() == CallLifecycle.AFTER_THROWING) {
+                        dependencies.get(registration.interceptor().code()).add(candidate.interceptor().code());
+                    }
+                }
+            }
+            if (registration.lifecycle() == CallLifecycle.COMPLETION) {
+                for (CallLifecycleConfiguration.Registration candidate : registered) {
+                    if (candidate != registration && candidate.lifecycle() != CallLifecycle.AFTER_COMMIT) {
+                        dependencies.get(registration.interceptor().code()).add(candidate.interceptor().code());
+                    }
+                }
+            }
+        }
         for (Set<TreeCode> codes : dependencies.values()) {
             for (TreeCode code : codes) {
                 if (!remaining.containsKey(code)) {
@@ -282,6 +407,12 @@ public class CallInvoker {
             remaining.remove(next.interceptor().code());
         }
         return List.copyOf(sorted);
+    }
+
+    /** 允许生命周期回调抛出任意原始失败。 */
+    @FunctionalInterface
+    private interface ThrowingAction {
+        void run() throws Throwable;
     }
 
     /** 控制 Next 的线程、有效范围和调用次数，并保留内层结果。 */

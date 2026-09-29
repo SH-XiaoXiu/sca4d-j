@@ -13,6 +13,7 @@ import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.core.api.authentication.principalsession.PrincipalIdSet;
 import com.sca4d.core.api.call.Call;
+import com.sca4d.core.api.call.CallInvoker;
 import com.sca4d.core.api.data.DataKey;
 import com.sca4d.core.api.data.DataValues;
 import com.sca4d.core.api.identity.Account;
@@ -33,6 +34,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 @SuppressWarnings("ClassCanBeRecord")
 class CallTest {
@@ -174,6 +176,37 @@ class CallTest {
         assertTrue(call.isAuthenticationAssessed());
         assertTrue(call.isPrincipalAssessed());
         assertFalse(call.grants(new Operation("system:operation")));
+    }
+
+    @Test
+    @DisplayName("Call 直接封装同步和异步纯函数并统一转发到生命周期执行器")
+    void invokesFunctionsThroughBoundLifecycleInvoker() throws Exception {
+        CallInvoker invoker = new CallInvoker(List.of());
+        Call call = Call.system(
+                invoker,
+                "function-call",
+                STARTED_AT,
+                new SystemPrincipal(1, TreeCode.ofSegment("TEST")));
+
+        assertEquals(
+                "done",
+                call.invoke(
+                        TreeCode.ofColon("JOB:REFRESH"),
+                        new Object[] {42L},
+                        String.class,
+                        () -> "done"));
+        assertEquals(
+                "async",
+                call.invokeAsync(
+                        "JOB:REFRESH",
+                        new Object[] {42L},
+                        String.class,
+                        () -> CompletableFuture.completedFuture("async"))
+                        .toCompletableFuture()
+                        .join());
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> call.invoke("JOB/REFRESH", new Object[0], String.class, () -> "invalid"));
     }
 
     private static Session session(Identity identity, Set<Operation> operations) {

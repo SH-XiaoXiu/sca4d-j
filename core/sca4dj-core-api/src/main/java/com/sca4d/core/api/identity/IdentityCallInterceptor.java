@@ -48,9 +48,6 @@ public final class IdentityCallInterceptor implements CallLifecycle.Around {
         if (!anonymous && !onlySystemEntry && !execution.call().isAuthenticationAssessed()) {
             throw new BusinessException(CoreErrorCode.AUTHENTICATION_REQUIRED);
         }
-        if (principalRequired) {
-            execution.requirePrincipal();
-        }
         LOG.trace(
                 "调用身份前提已检查 | callId={} authenticated={} principalRequired={}",
                 execution.call().callId(),
@@ -78,9 +75,30 @@ public final class IdentityCallInterceptor implements CallLifecycle.Around {
         if (!anonymous && !onlySystemEntry && !execution.call().isAuthenticationAssessed()) {
             throw new BusinessException(CoreErrorCode.AUTHENTICATION_REQUIRED);
         }
-        if (principalRequired) {
-            execution.requirePrincipal();
-        }
         return next.proceedAsync();
+    }
+
+    /** 在主体选择之后检查权限和审计声明需要的业务主体。 */
+    public static class PrincipalRequirement implements CallLifecycle.Before {
+        /** 主体前置检查节点编码。 */
+        public static final TreeCode CODE = TreeCode.of("CALL/PRINCIPAL_REQUIREMENT");
+
+        @Override
+        public @NotNull TreeCode code() {
+            return CODE;
+        }
+
+        @Override
+        public boolean supports(@NotNull CallExecution execution) {
+            return !execution.declarations(RequirePermission.class).isEmpty()
+                    || execution.declaration(Audit.class).isPresent();
+        }
+
+        @Override
+        public void before(@NotNull CallExecution execution) {
+            if (!execution.call().isPrincipalAssessed()) {
+                throw new IllegalStateException("当前调用必须在执行前完成业务主体选择");
+            }
+        }
     }
 }

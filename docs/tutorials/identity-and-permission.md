@@ -181,7 +181,7 @@ SYSTEM 请求使用唯一 `Subject(id=1)`，Account 为空；Principal 使用启
 
 ## 注册应用调用注解
 
-应用的额外调用规则通过 `CallLifecycle.Around` 挂载；拥有注解的对象同时实现 `CallLifecycleAdvisor.Declaration<A>` 注册匹配。下面的 `ProjectRisk` 注解和 `ProjectRiskVerifier` 由应用定义，Verifier 根据已经选定的 Principal 与方法实参判断，不创建独立 Aspect。
+应用的额外调用规则通过 `CallLifecycle.Participant` 挂载；注解匹配使用 `CallLifecycleAdvisor.AnnotationBinding<A>`，非注解规则使用 `CallLifecycleAdvisor.MethodBinding`。下面的 `ProjectRisk` 注解和 `ProjectRiskVerifier` 由应用定义，Verifier 根据已经选定的 Principal 与方法实参判断，不创建独立 Aspect。
 
 ```java
 @Retention(RetentionPolicy.RUNTIME)
@@ -191,8 +191,10 @@ public @interface ProjectRisk {
 }
 
 @Component
-public class ProjectRiskCallInterceptor implements CallLifecycle.Around,
-        CallLifecycleAdvisor.Declaration<ProjectRisk> {
+public class ProjectRiskCallInterceptor implements CallLifecycle.Before,
+        CallLifecycleAdvisor.AnnotationBinding<ProjectRisk> {
+    public static final TreeCode CODE = TreeCode.of("PROJECT/RISK");
+
     private final ProjectRiskVerifier verifier;
 
     public ProjectRiskCallInterceptor(ProjectRiskVerifier verifier) {
@@ -203,13 +205,7 @@ public class ProjectRiskCallInterceptor implements CallLifecycle.Around,
     public Class<ProjectRisk> annotationType() { return ProjectRisk.class; }
 
     @Override
-    public TreeCode code() { return TreeCode.of("PROJECT/RISK"); }
-
-    @Override
-    public Set<TreeCode> after() { return Set.of(CallLifecycle.PERMISSION); }
-
-    @Override
-    public Set<TreeCode> before() { return Set.of(CallLifecycle.IDEMPOTENCY); }
+    public TreeCode code() { return CODE; }
 
     @Override
     public boolean supports(CallExecution execution) {
@@ -217,14 +213,25 @@ public class ProjectRiskCallInterceptor implements CallLifecycle.Around,
     }
 
     @Override
-    public CallOutcome around(CallExecution execution, CallLifecycle.Next next) {
+    public void before(CallExecution execution) {
         verifier.verify(execution.call().principal().orElseThrow(), execution.arguments());
-        return next.proceed();
     }
 }
 ```
 
-目标方法声明 `@ProjectRisk` 后由统一 Advisor 拦截。功能注解标记了 `@CallLifecycle.Intercepted` 却没有注册处理者时，方法执行前明确失败。业务模块不修改 Advisor 注解清单。接口方法、类型和参数声明都能通过注册进入执行范围；需要为某注解附着调用要求时，注册对象实现 `attach(execution, annotation)`。依赖排序、失败与重放规则见[注解与环绕处理](/home/permission#注解与环绕处理)。
+应用在配置类中声明相对内置节点的位置，内置节点之间的顺序保持不变：
+
+```java
+@Bean
+CallLifecycleConfiguration.Customizer projectRiskOrder() {
+    return configuration -> {
+        configuration.after(ProjectRiskCallInterceptor.CODE, PermissionCallInterceptor.CODE);
+        configuration.before(ProjectRiskCallInterceptor.CODE, IdempotencyCallInterceptor.CODE);
+    };
+}
+```
+
+目标方法声明 `@ProjectRisk` 后由统一 Advisor 拦截。功能注解标记了 `@CallLifecycle.Intercepted` 却没有注册对应 `AnnotationBinding` 时，方法执行前明确失败；功能行为仍需由 `Participant` Bean 实现。业务模块不修改 Advisor 注解清单。接口方法、类型和参数声明都能通过注册进入执行范围；需要为某注解附着预提交条件时，绑定对象实现 `attach(execution, annotation)`。依赖排序、失败与重放规则见[注解与环绕处理](/home/permission#注解与环绕处理)。
 
 ## 验收要求
 

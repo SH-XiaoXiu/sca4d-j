@@ -38,7 +38,7 @@ loadScripts(document, 'script');</script>
 <p>Summary:</p>
 <ul>
 <li>Nested</li>
-<li>Field</li>
+<li><a href="#field-summary">Field</a></li>
 <li><a href="#constructor-summary">Constr</a></li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
@@ -46,7 +46,7 @@ loadScripts(document, 'script');</script>
 <li>
 <p>Detail:</p>
 <ul>
-<li>Field</li>
+<li><a href="#field-detail">Field</a></li>
 <li><a href="#constructor-detail">Constr</a></li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -58,13 +58,13 @@ loadScripts(document, 'script');</script>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
 <ul class="sub-nav-list">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field-detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../call/CallLifecycle.Around.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a></code></dd>
+<dd><code><a href="../call/CallLifecycle.Around.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a></code>, <code><a href="../call/CallLifecycle.Participant.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Participant</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">IdempotencyCallInterceptor</span>
@@ -100,6 +100,23 @@ implements <a href="../call/CallLifecycle.Around.html" title="interface in com.s
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- =========== FIELD SUMMARY =========== -->
+<li>
+<section class="field-summary" id="field-summary">
+<h2>Field Summary</h2>
+<div class="caption"><span>Fields</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Field</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static final <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
+<div class="col-second even-row-color"><code><a href="#CODE" class="member-name-link">CODE</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">幂等处理权节点编码。</div>
+</div>
+</div>
+</section>
+</li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <li>
 <section class="constructor-summary" id="constructor-summary">
@@ -108,13 +125,26 @@ implements <a href="../call/CallLifecycle.Around.html" title="interface in com.s
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.concurrent.IdempotencyStore,com.sca4d.core.api.call.CallValueResolverLookup,com.sca4d.core.api.concurrent.IdempotencyFingerprints,java.time.Duration,java.time.Duration)" class="member-name-link">IdempotencyCallInterceptor</a><wbr>(@NotNull <a href="IdempotencyStore.html" title="interface in com.sca4d.core.api.concurrent">IdempotencyStore</a>&nbsp;idempotencyStore,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.concurrent.IdempotencyStore,com.sca4d.core.api.call.CallValueResolverLookup,com.sca4d.core.api.call.SPICallValueResolver,com.sca4d.core.api.concurrent.IdempotencyFingerprints,java.time.Duration,java.time.Duration,java.time.Duration,java.util.concurrent.ScheduledExecutorService)" class="member-name-link">IdempotencyCallInterceptor</a><wbr>(@NotNull <a href="IdempotencyStore.html" title="interface in com.sca4d.core.api.concurrent">IdempotencyStore</a>&nbsp;idempotencyStore,
  @NotNull <a href="../call/CallValueResolverLookup.html" title="interface in com.sca4d.core.api.call">CallValueResolverLookup</a>&nbsp;resolverLookup,
+ @NotNull <a href="../call/SPICallValueResolver.html" title="interface in com.sca4d.core.api.call">SPICallValueResolver</a>&nbsp;expressionResolver,
  @NotNull <a href="IdempotencyFingerprints.html" title="class in com.sca4d.core.api.concurrent">IdempotencyFingerprints</a>&nbsp;fingerprints,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;processingTtl,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;retryAfter)</code></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;retryAfter,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;defaultRetention,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/ScheduledExecutorService.html" title="class or interface in java.util.concurrent" class="external-link">ScheduledExecutorService</a>&nbsp;renewalScheduler)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建幂等调用执行器。</div>
+</div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.concurrent.IdempotencyStore,com.sca4d.core.api.call.CallValueResolverLookup,com.sca4d.core.api.call.SPICallValueResolver,com.sca4d.core.api.concurrent.IdempotencyFingerprints,java.time.Duration,java.time.Duration,java.util.concurrent.ScheduledExecutorService)" class="member-name-link">IdempotencyCallInterceptor</a><wbr>(@NotNull <a href="IdempotencyStore.html" title="interface in com.sca4d.core.api.concurrent">IdempotencyStore</a>&nbsp;idempotencyStore,
+ @NotNull <a href="../call/CallValueResolverLookup.html" title="interface in com.sca4d.core.api.call">CallValueResolverLookup</a>&nbsp;resolverLookup,
+ @NotNull <a href="../call/SPICallValueResolver.html" title="interface in com.sca4d.core.api.call">SPICallValueResolver</a>&nbsp;expressionResolver,
+ @NotNull <a href="IdempotencyFingerprints.html" title="class in com.sca4d.core.api.concurrent">IdempotencyFingerprints</a>&nbsp;fingerprints,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;processingTtl,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;retryAfter,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/ScheduledExecutorService.html" title="class or interface in java.util.concurrent" class="external-link">ScheduledExecutorService</a>&nbsp;renewalScheduler)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">兼容直接组装 Core 拦截器的调用方，默认成功结果保留一天。</div>
 </div>
 </div>
 </section>
@@ -136,15 +166,21 @@ implements <a href="../call/CallLifecycle.Around.html" title="interface in com.s
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Future 不能作为幂等重放结果；异步提交应返回持久任务标识或在工作方法声明幂等。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#code()" class="member-name-link">code</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a><wbr>&lt;<a href="../call/CallOutcome.html" title="class in com.sca4d.core.api.call">CallOutcome</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#aroundAsync(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.AsyncNext)" class="member-name-link">aroundAsync</a><wbr>(@NotNull <a href="../call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution,
+ <a href="../call/CallLifecycle.AsyncNext.html" title="interface in com.sca4d.core.api.call">CallLifecycle.AsyncNext</a>&nbsp;next)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回在生命周期内唯一的稳定编码。</div>
+<div class="block">异步持有幂等处理权直到内层 CompletionStage 最终完成。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#supports(com.sca4d.core.api.call.CallExecution)" class="member-name-link">supports</a><wbr>(@NotNull <a href="../call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#code()" class="member-name-link">code</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">当前方法是否适用；该判断也不得写入共享状态。</div>
+<div class="block">返回当前功能在生命周期配置中的稳定编码。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#supports(com.sca4d.core.api.call.CallExecution)" class="member-name-link">supports</a><wbr>(@NotNull <a href="../call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">当前方法是否适用。</div>
 </div>
 </div>
 </div>
@@ -153,32 +189,53 @@ implements <a href="../call/CallLifecycle.Around.html" title="interface in com.s
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-com.sca4d.core.api.call.CallLifecycle.Around">Methods inherited from interface&nbsp;com.sca4d.core.api.call.<a href="../call/CallLifecycle.Around.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a></h3>
-<code><a href="../call/CallLifecycle.Around.html#after()">after</a>, <a href="../call/CallLifecycle.Around.html#before()">before</a>, <a href="../call/CallLifecycle.Around.html#priority()">priority</a></code></div>
+<h3 id="methods-inherited-from-class-com.sca4d.core.api.call.CallLifecycle.Participant">Methods inherited from interface&nbsp;com.sca4d.core.api.call.<a href="../call/CallLifecycle.Participant.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Participant</a></h3>
+<code><a href="../call/CallLifecycle.Participant.html#after()">after</a>, <a href="../call/CallLifecycle.Participant.html#before()">before</a>, <a href="../call/CallLifecycle.Participant.html#priority()">priority</a></code></div>
 </section>
 </li>
 </ul>
 </section>
 <section class="details">
 <ul class="details-list">
+<!-- ============ FIELD DETAIL =========== -->
+<li>
+<section class="field-details" id="field-detail">
+<h2>Field Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="CODE">
+<h3>CODE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></span>&nbsp;<span class="element-name">CODE</span></div>
+<div class="block">幂等处理权节点编码。</div>
+</section>
+</li>
+</ul>
+</section>
+</li>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <li>
 <section class="constructor-details" id="constructor-detail">
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.concurrent.IdempotencyStore,com.sca4d.core.api.call.CallValueResolverLookup,com.sca4d.core.api.concurrent.IdempotencyFingerprints,java.time.Duration,java.time.Duration)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.concurrent.IdempotencyStore,com.sca4d.core.api.call.CallValueResolverLookup,com.sca4d.core.api.call.SPICallValueResolver,com.sca4d.core.api.concurrent.IdempotencyFingerprints,java.time.Duration,java.time.Duration,java.time.Duration,java.util.concurrent.ScheduledExecutorService)">
 <h3>IdempotencyCallInterceptor</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">IdempotencyCallInterceptor</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="IdempotencyStore.html" title="interface in com.sca4d.core.api.concurrent">IdempotencyStore</a>&nbsp;idempotencyStore,
  @NotNull
  @NotNull <a href="../call/CallValueResolverLookup.html" title="interface in com.sca4d.core.api.call">CallValueResolverLookup</a>&nbsp;resolverLookup,
  @NotNull
+ @NotNull <a href="../call/SPICallValueResolver.html" title="interface in com.sca4d.core.api.call">SPICallValueResolver</a>&nbsp;expressionResolver,
+ @NotNull
  @NotNull <a href="IdempotencyFingerprints.html" title="class in com.sca4d.core.api.concurrent">IdempotencyFingerprints</a>&nbsp;fingerprints,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;processingTtl,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;retryAfter)</span></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;retryAfter,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;defaultRetention,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/ScheduledExecutorService.html" title="class or interface in java.util.concurrent" class="external-link">ScheduledExecutorService</a>&nbsp;renewalScheduler)</span></div>
 <div class="block">创建幂等调用执行器。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -187,7 +244,28 @@ implements <a href="../call/CallLifecycle.Around.html" title="interface in com.s
 <dd><code>fingerprints</code> - 方法实参规范化和摘要入口</dd>
 <dd><code>processingTtl</code> - 处理中记录的租约</dd>
 <dd><code>retryAfter</code> - 仍在处理中时建议等待的时间</dd>
+<dd><code>renewalScheduler</code> - 异步调用处理权续期的受管理调度器</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.concurrent.IdempotencyStore,com.sca4d.core.api.call.CallValueResolverLookup,com.sca4d.core.api.call.SPICallValueResolver,com.sca4d.core.api.concurrent.IdempotencyFingerprints,java.time.Duration,java.time.Duration,java.util.concurrent.ScheduledExecutorService)">
+<h3>IdempotencyCallInterceptor</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">IdempotencyCallInterceptor</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="IdempotencyStore.html" title="interface in com.sca4d.core.api.concurrent">IdempotencyStore</a>&nbsp;idempotencyStore,
+ @NotNull
+ @NotNull <a href="../call/CallValueResolverLookup.html" title="interface in com.sca4d.core.api.call">CallValueResolverLookup</a>&nbsp;resolverLookup,
+ @NotNull
+ @NotNull <a href="../call/SPICallValueResolver.html" title="interface in com.sca4d.core.api.call">SPICallValueResolver</a>&nbsp;expressionResolver,
+ @NotNull
+ @NotNull <a href="IdempotencyFingerprints.html" title="class in com.sca4d.core.api.concurrent">IdempotencyFingerprints</a>&nbsp;fingerprints,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;processingTtl,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;retryAfter,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/ScheduledExecutorService.html" title="class or interface in java.util.concurrent" class="external-link">ScheduledExecutorService</a>&nbsp;renewalScheduler)</span></div>
+<div class="block">兼容直接组装 Core 拦截器的调用方，默认成功结果保留一天。</div>
 </section>
 </li>
 </ul>
@@ -203,11 +281,11 @@ implements <a href="../call/CallLifecycle.Around.html" title="interface in com.s
 <h3>code</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></span>&nbsp;<span class="element-name">code</span>()</div>
-<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="../call/CallLifecycle.Around.html#code()">CallLifecycle.Around</a></code></span></div>
-<div class="block">返回在生命周期内唯一的稳定编码。</div>
+<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="../call/CallLifecycle.Participant.html#code()">CallLifecycle.Participant</a></code></span></div>
+<div class="block">返回当前功能在生命周期配置中的稳定编码。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../call/CallLifecycle.Around.html#code()">code</a></code>&nbsp;in interface&nbsp;<code><a href="../call/CallLifecycle.Around.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a></code></dd>
+<dd><code><a href="../call/CallLifecycle.Participant.html#code()">code</a></code>&nbsp;in interface&nbsp;<code><a href="../call/CallLifecycle.Participant.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Participant</a></code></dd>
 </dl>
 </section>
 </li>
@@ -216,11 +294,11 @@ implements <a href="../call/CallLifecycle.Around.html" title="interface in com.s
 <h3>supports</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">supports</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution)</span></div>
-<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="../call/CallLifecycle.Around.html#supports(com.sca4d.core.api.call.CallExecution)">CallLifecycle.Around</a></code></span></div>
-<div class="block">当前方法是否适用；该判断也不得写入共享状态。</div>
+<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="../call/CallLifecycle.Participant.html#supports(com.sca4d.core.api.call.CallExecution)">CallLifecycle.Participant</a></code></span></div>
+<div class="block">当前方法是否适用。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../call/CallLifecycle.Around.html#supports(com.sca4d.core.api.call.CallExecution)">supports</a></code>&nbsp;in interface&nbsp;<code><a href="../call/CallLifecycle.Around.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a></code></dd>
+<dd><code><a href="../call/CallLifecycle.Participant.html#supports(com.sca4d.core.api.call.CallExecution)">supports</a></code>&nbsp;in interface&nbsp;<code><a href="../call/CallLifecycle.Participant.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Participant</a></code></dd>
 </dl>
 </section>
 </li>
@@ -236,6 +314,21 @@ implements <a href="../call/CallLifecycle.Around.html" title="interface in com.s
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../call/CallLifecycle.Around.html#around(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.Next)">around</a></code>&nbsp;in interface&nbsp;<code><a href="../call/CallLifecycle.Around.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="aroundAsync(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.AsyncNext)">
+<h3>aroundAsync</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;<a href="../call/CallOutcome.html" title="class in com.sca4d.core.api.call">CallOutcome</a>&gt;</span>&nbsp;<span class="element-name">aroundAsync</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution,
+ @NotNull
+ <a href="../call/CallLifecycle.AsyncNext.html" title="interface in com.sca4d.core.api.call">CallLifecycle.AsyncNext</a>&nbsp;next)</span></div>
+<div class="block">异步持有幂等处理权直到内层 CompletionStage 最终完成。</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../call/CallLifecycle.Around.html#aroundAsync(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.AsyncNext)">aroundAsync</a></code>&nbsp;in interface&nbsp;<code><a href="../call/CallLifecycle.Around.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a></code></dd>
 </dl>
 </section>
 </li>

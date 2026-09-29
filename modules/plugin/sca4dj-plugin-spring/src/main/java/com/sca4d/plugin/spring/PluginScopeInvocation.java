@@ -14,13 +14,17 @@ final class PluginScopeInvocation {
         // 事务同步已开启时保留租用到提交或回滚完成，避免事务结束前卸载插件实现。
         if (deferred) {
             TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-                @Override public void afterCompletion(int status) { lease.close(); }
+                @Override
+                public void afterCompletion(int status) {
+                    lease.close();
+                }
             });
         }
         try {
             return invocation.invoke();
         } finally {
-            if (!deferred) lease.close();
+            if (!deferred)
+                lease.close();
         }
     }
 

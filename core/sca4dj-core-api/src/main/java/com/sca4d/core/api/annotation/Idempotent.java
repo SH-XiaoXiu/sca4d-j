@@ -31,7 +31,7 @@ public @interface Idempotent {
     /**
      * 返回成功结果保留秒数。
      *
-     * @return 成功结果保留秒数
+     * @return 成功结果保留秒数；零表示使用应用默认配置
      */
-    long retentionSeconds();
+    long retentionSeconds() default 0;
 }

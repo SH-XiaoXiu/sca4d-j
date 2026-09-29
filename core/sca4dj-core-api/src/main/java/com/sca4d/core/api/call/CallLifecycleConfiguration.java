@@ -20,13 +20,20 @@ import java.util.Set;
 /** 集中登记 Call 阶段、Interceptor 和依赖关系。 */
 public final class CallLifecycleConfiguration {
 
+    /** 模块或应用在执行器构建前补充生命周期依赖。 */
+    @FunctionalInterface
+    public interface Customizer {
+        /** 只修改本次应用的节点或阶段依赖，不执行调用逻辑。 */
+        void configure(@NotNull CallLifecycleConfiguration configuration);
+    }
+
     private final Map<TreeCode, Registration> registrations = new LinkedHashMap<>();
 
     /** 从已注册的环绕处理创建默认配置；处理自身的依赖会作为初始约束。 */
-    public CallLifecycleConfiguration(@NotNull List<? extends CallLifecycle.Around> interceptors) {
-        for (CallLifecycle.Around interceptor : Objects.requireNonNull(interceptors)) {
+    public CallLifecycleConfiguration(@NotNull List<? extends CallLifecycle.Participant> interceptors) {
+        for (CallLifecycle.Participant interceptor : Objects.requireNonNull(interceptors)) {
             register(
-                    CallLifecycle.AROUND,
+                    lifecycle(interceptor),
                     interceptor,
                     interceptor.after(),
                     interceptor.before(),
@@ -37,8 +44,16 @@ public final class CallLifecycleConfiguration {
 
     /** 固定 Core 内置环绕节点顺序；可选节点不存在时保留其余顺序。 */
     public void applyCoreOrder() {
-        afterIfRegistered(IdentityCallInterceptor.CODE, AuditCallInterceptor.CODE);
+        if (registrations.containsKey(AuditCallInterceptor.CODE)) {
+            for (TreeCode code : registrations.keySet()) {
+                if (!code.equals(AuditCallInterceptor.CODE)) {
+                    after(code, AuditCallInterceptor.CODE);
+                }
+            }
+        }
         afterIfRegistered(PermissionCallInterceptor.CODE, IdentityCallInterceptor.CODE);
+        afterIfRegistered(IdentityCallInterceptor.PrincipalRequirement.CODE, IdentityCallInterceptor.CODE);
+        afterIfRegistered(PermissionCallInterceptor.CODE, IdentityCallInterceptor.PrincipalRequirement.CODE);
         afterIfRegistered(RateLimitCallInterceptor.CODE, PermissionCallInterceptor.CODE);
         afterIfRegistered(IdempotencyCallInterceptor.CODE, RateLimitCallInterceptor.CODE);
         afterIfRegistered(LockCallInterceptor.CODE, IdempotencyCallInterceptor.CODE);
@@ -47,12 +62,15 @@ public final class CallLifecycleConfiguration {
     /** 登记一个阶段参与者。 */
     public void register(
             @NotNull CallLifecycle lifecycle,
-            @NotNull CallLifecycle.Around interceptor,
+            @NotNull CallLifecycle.Participant interceptor,
             @NotNull Set<TreeCode> after,
             @NotNull Set<TreeCode> before,
             int priority) {
         CallLifecycle checkedLifecycle = Objects.requireNonNull(lifecycle, "调用阶段不能为空");
-        CallLifecycle.Around checkedInterceptor = Objects.requireNonNull(interceptor, "调用拦截器不能为空");
+        CallLifecycle.Participant checkedInterceptor = Objects.requireNonNull(interceptor, "调用拦截器不能为空");
+        if (checkedLifecycle != lifecycle(checkedInterceptor)) {
+            throw new IllegalArgumentException("调用阶段与回调类型不匹配: " + checkedLifecycle + "/" + checkedInterceptor.code());
+        }
         TreeCode code = Objects.requireNonNull(checkedInterceptor.code(), "调用拦截器编码不能为空");
         if (registrations.containsKey(code)) {
             throw new IllegalArgumentException("调用拦截器编码重复: " + code);
@@ -84,6 +102,26 @@ public final class CallLifecycleConfiguration {
         registration(code).before.add(Objects.requireNonNull(dependency, "依赖编码不能为空"));
     }
 
+    /** 当前节点必须排在指定阶段的全部节点之后。 */
+    public void after(@NotNull TreeCode code, @NotNull CallLifecycle lifecycle) {
+        Registration current = registration(code);
+        for (Registration candidate : registrations.values()) {
+            if (candidate != current && candidate.lifecycle == lifecycle) {
+                current.after.add(candidate.interceptor.code());
+            }
+        }
+    }
+
+    /** 当前节点必须排在指定阶段的全部节点之前。 */
+    public void before(@NotNull TreeCode code, @NotNull CallLifecycle lifecycle) {
+        Registration current = registration(code);
+        for (Registration candidate : registrations.values()) {
+            if (candidate != current && candidate.lifecycle == lifecycle) {
+                current.before.add(candidate.interceptor.code());
+            }
+        }
+    }
+
     /** 返回不可修改的配置快照。 */
     public @NotNull @Unmodifiable List<Registration> registrations() {
         return List.copyOf(registrations.values());
@@ -97,11 +135,41 @@ public final class CallLifecycleConfiguration {
         return registration;
     }
 
+    /** 接口类型直接确定阶段；不接受一个对象实现多个不同阶段。 */
+    private static CallLifecycle lifecycle(CallLifecycle.Participant participant) {
+        CallLifecycle selected = null;
+        if (participant instanceof CallLifecycle.Around)
+            selected = CallLifecycle.AROUND;
+        if (participant instanceof CallLifecycle.Before)
+            selected = single(selected, CallLifecycle.BEFORE);
+        if (participant instanceof CallLifecycle.AfterReturning)
+            selected = single(selected, CallLifecycle.AFTER_RETURNING);
+        if (participant instanceof CallLifecycle.AfterThrowing)
+            selected = single(selected, CallLifecycle.AFTER_THROWING);
+        if (participant instanceof CallLifecycle.After)
+            selected = single(selected, CallLifecycle.AFTER);
+        if (participant instanceof CallLifecycle.AfterCommit)
+            selected = single(selected, CallLifecycle.AFTER_COMMIT);
+        if (participant instanceof CallLifecycle.Completion)
+            selected = single(selected, CallLifecycle.COMPLETION);
+        if (selected == null) {
+            throw new IllegalArgumentException("调用参与者没有阶段回调: " + participant.code());
+        }
+        return selected;
+    }
+
+    private static CallLifecycle single(CallLifecycle previous, CallLifecycle selected) {
+        if (previous != null) {
+            throw new IllegalArgumentException("一个调用参与者只能实现一个阶段回调: " + previous + "/" + selected);
+        }
+        return selected;
+    }
+
     /** 保存一个已登记的阶段参与者及其排序约束。 */
     public static final class Registration {
         private final CallLifecycle lifecycle;
 
-        private final CallLifecycle.Around interceptor;
+        private final CallLifecycle.Participant interceptor;
 
         private final Set<TreeCode> after;
 
@@ -111,7 +179,7 @@ public final class CallLifecycleConfiguration {
 
         private Registration(
                 CallLifecycle lifecycle,
-                CallLifecycle.Around interceptor,
+                CallLifecycle.Participant interceptor,
                 Set<TreeCode> after,
                 Set<TreeCode> before,
                 int priority) {
@@ -128,7 +196,7 @@ public final class CallLifecycleConfiguration {
         }
 
         /** @return 当前环绕实现 */
-        public @NotNull CallLifecycle.Around interceptor() {
+        public @NotNull CallLifecycle.Participant interceptor() {
             return interceptor;
         }
 

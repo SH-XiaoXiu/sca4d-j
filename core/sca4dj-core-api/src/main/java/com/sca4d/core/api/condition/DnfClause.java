@@ -1,11 +1,16 @@
 package com.sca4d.core.api.condition;
 
+import com.sca4d.core.api.data.DataGraph;
+import com.sca4d.core.api.data.DataGraphExecutor;
+import com.sca4d.core.api.data.DataKey;
+import com.sca4d.core.api.data.DataOperation;
+import com.sca4d.core.api.data.DataValues;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
@@ -40,12 +45,12 @@ public class DnfClause<T, R> {
         /** 创建由调用方执行器调度的异步条件。 */
         static <T> @NotNull Condition<T> async(
                 @NotNull BiFunction<? super T, Executor, CompletionStage<Boolean>> predicate) {
-            BiFunction<? super T, Executor, CompletionStage<Boolean>> checked =
-                    Objects.requireNonNull(predicate, "异步 DNF 条件不能为空");
+            BiFunction<? super T, Executor, CompletionStage<Boolean>> checked = Objects
+                    .requireNonNull(predicate, "异步 DNF 条件不能为空");
             return new Condition<>() {
                 @Override
                 public boolean test(@NotNull T value) {
-                    return checked.apply(value, Runnable::run).toCompletableFuture().join();
+                    throw new IllegalStateException("异步 DNF 条件只能通过 matchesAsync 判断");
                 }
 
                 @Override
@@ -112,20 +117,31 @@ public class DnfClause<T, R> {
         return conditions.stream().allMatch(condition -> condition.test(value));
     }
 
-    /** 并行判断 Clause 内全部条件。 */
+    /**
+     * 并行判断 Clause 内全部条件，等全部条件完成后合并结果。
+     * false 不取消其他条件；外部读取须由调用方设置超时，取消返回阶段也不保证中断已发出的请求。
+     */
     public @NotNull CompletionStage<Boolean> matchesAsync(
             @NotNull T value,
             @NotNull Executor executor) {
         Objects.requireNonNull(value, "DNF 输入不能为空");
         Objects.requireNonNull(executor, "DNF 执行器不能为空");
-        List<CompletionStage<Boolean>> stages = conditions.stream()
-                .map(condition -> condition.testAsync(value, executor))
-                .toList();
-        CompletableFuture<?>[] futures = stages.stream()
-                .map(CompletionStage::toCompletableFuture)
-                .toArray(CompletableFuture[]::new);
-        return CompletableFuture.allOf(futures)
-                .thenApply(ignored -> stages.stream().allMatch(stage -> stage.toCompletableFuture().join()));
+        DataGraph.Builder graph = DataGraph.builder();
+        List<DataKey<Boolean>> outputs = new ArrayList<>(conditions.size());
+        for (int index = 0; index < conditions.size(); index++) {
+            String name = "condition-" + index;
+            DataKey<Boolean> output = DataKey.of(name, Boolean.class);
+            Condition<? super T> condition = conditions.get(index);
+            graph.operation(
+                    DataOperation.async(
+                            name,
+                            List.of(),
+                            output,
+                            (ignored, worker) -> condition.testAsync(value, worker)));
+            outputs.add(output);
+        }
+        return DataGraphExecutor.executeAsync(graph.build(), DataValues.builder().build(), executor)
+                .thenApply(results -> outputs.stream().allMatch(results::get));
     }
 
     private static String requireCode(String code) {

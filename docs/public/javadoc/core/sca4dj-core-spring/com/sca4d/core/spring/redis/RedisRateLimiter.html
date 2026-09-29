@@ -127,7 +127,7 @@ implements com.sca4d.core.api.concurrent.RateLimiter</span></div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.concurrent.RateLimitDecision</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tryAcquire(com.sca4d.core.api.name.Key,com.sca4d.core.api.concurrent.RateLimit)" class="member-name-link">tryAcquire</a><wbr>(@NotNull com.sca4d.core.api.name.Key&nbsp;key,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tryAcquire(com.sca4d.core.api.concurrent.RateLimitKey,com.sca4d.core.api.concurrent.RateLimit)" class="member-name-link">tryAcquire</a><wbr>(@NotNull com.sca4d.core.api.concurrent.RateLimitKey&nbsp;key,
  @NotNull com.sca4d.core.api.concurrent.RateLimit&nbsp;limit)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">按业务键、额度和窗口取得共享令牌桶，并原子消耗一个令牌。</div>
@@ -170,11 +170,11 @@ implements com.sca4d.core.api.concurrent.RateLimiter</span></div>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="tryAcquire(com.sca4d.core.api.name.Key,com.sca4d.core.api.concurrent.RateLimit)">
+<section class="detail" id="tryAcquire(com.sca4d.core.api.concurrent.RateLimitKey,com.sca4d.core.api.concurrent.RateLimit)">
 <h3>tryAcquire</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.concurrent.RateLimitDecision</span>&nbsp;<span class="element-name">tryAcquire</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.name.Key&nbsp;key,
+ @NotNull com.sca4d.core.api.concurrent.RateLimitKey&nbsp;key,
  @NotNull
  @NotNull com.sca4d.core.api.concurrent.RateLimit&nbsp;limit)</span></div>
 <div class="block">按业务键、额度和窗口取得共享令牌桶，并原子消耗一个令牌。

@@ -76,7 +76,9 @@ public class PermissionCallInterceptor implements CallLifecycle.Around {
     @Override
     public @NotNull CallOutcome around(@NotNull CallExecution execution, @NotNull CallLifecycle.Next next) {
         CallExecution checked = Objects.requireNonNull(execution, "方法执行不能为空");
-        checked.verifyPrincipal();
+        if (!checked.call().isPrincipalAssessed()) {
+            throw new IllegalStateException("权限判断前必须完成业务主体选择");
+        }
 
         // 解析并去重权限声明，同一 `Permission` 在一次调用中只执行一次策略判断。
         List<Permission> resolvedPermissions = new ArrayList<>();
@@ -118,7 +120,9 @@ public class PermissionCallInterceptor implements CallLifecycle.Around {
             @NotNull CallExecution execution,
             @NotNull CallLifecycle.AsyncNext next) {
         CallExecution checked = Objects.requireNonNull(execution, "方法执行不能为空");
-        checked.verifyPrincipal();
+        if (!checked.call().isPrincipalAssessed()) {
+            throw new IllegalStateException("权限判断前必须完成业务主体选择");
+        }
         List<Permission> resolvedPermissions = new ArrayList<>();
         Set<Permission> distinctPermissions = new LinkedHashSet<>();
         for (RequirePermission requirement : checked.declarations(RequirePermission.class)) {

@@ -31,13 +31,28 @@ public interface PipelineStage<I, O> {
             throw new IllegalStateException("异步阶段不能使用同步占位函数");
         });
         return new PipelineStage<>() {
-            @Override public @NotNull String code() { return metadata.code(); }
-            @Override public @NotNull Class<I> inputType() { return metadata.inputType(); }
-            @Override public @NotNull Class<O> outputType() { return metadata.outputType(); }
-            @Override public @NotNull O execute(@NotNull I input) {
+            @Override
+            public @NotNull String code() {
+                return metadata.code();
+            }
+
+            @Override
+            public @NotNull Class<I> inputType() {
+                return metadata.inputType();
+            }
+
+            @Override
+            public @NotNull Class<O> outputType() {
+                return metadata.outputType();
+            }
+
+            @Override
+            public @NotNull O execute(@NotNull I input) {
                 return executeAsync(input, Runnable::run).toCompletableFuture().join();
             }
-            @Override public @NotNull CompletionStage<O> executeAsync(@NotNull I input, @NotNull Executor executor) {
+
+            @Override
+            public @NotNull CompletionStage<O> executeAsync(@NotNull I input, @NotNull Executor executor) {
                 return Objects.requireNonNull(action.apply(input, executor), "异步阶段不能返回空结果");
             }
         };

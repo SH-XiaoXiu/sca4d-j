@@ -11,8 +11,10 @@ import java.lang.annotation.Target;
 public @interface PluginExtension {
     /** 返回扩展契约的稳定编码。 */
     String value();
+
     /** 返回实现选择规则。 */
     ExtensionSelection selection() default ExtensionSelection.SINGLE;
+
     /** 返回启动时是否必须存在实现。 */
     boolean required() default false;
 }

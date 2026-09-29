@@ -68,32 +68,18 @@ public class AuditRepository {
         return encode(Objects.requireNonNull(record), 0);
     }
 
+    /** 为已冻结字段分配主键并追加单条审计行。 */
+    @AffectedRows(target = "新增尽力审计记录")
+    void appendFrozen(@NotNull EncodedAuditEntry entry) {
+        mapper.insert(Objects.requireNonNull(entry, "冻结审计字段不能为空").withId(ids.nextId().value()));
+    }
+
     /** 使用消息标识幂等追加冻结记录；提交成功后消费者才允许确认消息。 */
     public void appendDelivery(long messageId, @NotNull AuditMessage message) {
         if (messageId <= 0) {
             throw new IllegalArgumentException("审计消息标识必须为正数");
         }
-        EncodedAuditEntry row = message.entry();
-        mapper.insertDelivery(
-                new EncodedAuditEntry(
-                        messageId,
-                        row.requestId(),
-                        row.subjectId(),
-                        row.accountId(),
-                        row.principalId(),
-                        row.operation(),
-                        row.targetType(),
-                        row.targetId(),
-                        row.result(),
-                        row.payloadType(),
-                        row.payloadVersion(),
-                        row.payloadJson(),
-                        row.httpMethod(),
-                        row.httpPath(),
-                        row.clientIp(),
-                        row.userAgent(),
-                        row.occurredAt(),
-                        row.instanceId()));
+        mapper.insertDelivery(message.entry().withId(messageId));
     }
 
     /**

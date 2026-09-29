@@ -7,5 +7,6 @@ import org.jetbrains.annotations.Nullable;
 @FunctionalInterface
 public interface OperationInvoker {
     /** 按声明顺序调用实际目标，void 返回 null。 */
-    @Nullable Object invoke(Object @NotNull [] arguments) throws Throwable;
+    @Nullable
+    Object invoke(Object @NotNull [] arguments) throws Throwable;
 }

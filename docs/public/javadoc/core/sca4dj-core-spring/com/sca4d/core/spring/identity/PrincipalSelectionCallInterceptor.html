@@ -38,7 +38,7 @@ loadScripts(document, 'script');</script>
 <p>Summary:</p>
 <ul>
 <li>Nested</li>
-<li>Field</li>
+<li><a href="#field-summary">Field</a></li>
 <li><a href="#constructor-summary">Constr</a></li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
@@ -46,7 +46,7 @@ loadScripts(document, 'script');</script>
 <li>
 <p>Detail:</p>
 <ul>
-<li>Field</li>
+<li><a href="#field-detail">Field</a></li>
 <li><a href="#constructor-detail">Constr</a></li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -58,13 +58,13 @@ loadScripts(document, 'script');</script>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
 <ul class="sub-nav-list">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field-detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -90,16 +90,33 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code>com.sca4d.core.api.call.CallLifecycle.Around</code>, <code><a href="../call/CallLifecycleAdvisor.Declaration.html" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.Declaration</a>&lt;<a href="../web/annotation/CurrentPrincipal.html" title="annotation interface in com.sca4d.core.spring.web.annotation">CurrentPrincipal</a>&gt;</code></dd>
+<dd><code>com.sca4d.core.api.call.CallLifecycle.Around</code>, <code>com.sca4d.core.api.call.CallLifecycle.Participant</code>, <code><a href="../call/CallLifecycleAdvisor.AnnotationBinding.html" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.AnnotationBinding</a>&lt;<a href="../web/annotation/CurrentPrincipal.html" title="annotation interface in com.sca4d.core.spring.web.annotation">CurrentPrincipal</a>&gt;</code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">PrincipalSelectionCallInterceptor</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
-implements com.sca4d.core.api.call.CallLifecycle.Around, <a href="../call/CallLifecycleAdvisor.Declaration.html" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.Declaration</a>&lt;<a href="../web/annotation/CurrentPrincipal.html" title="annotation interface in com.sca4d.core.spring.web.annotation">CurrentPrincipal</a>&gt;</span></div>
+implements com.sca4d.core.api.call.CallLifecycle.Around, <a href="../call/CallLifecycleAdvisor.AnnotationBinding.html" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.AnnotationBinding</a>&lt;<a href="../web/annotation/CurrentPrincipal.html" title="annotation interface in com.sca4d.core.spring.web.annotation">CurrentPrincipal</a>&gt;</span></div>
 <div class="block">在统一调用生命周期内执行 CurrentPrincipal 声明的主体选择。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- =========== FIELD SUMMARY =========== -->
+<li>
+<section class="field-summary" id="field-summary">
+<h2>Field Summary</h2>
+<div class="caption"><span>Fields</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Field</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static final com.sca4d.core.api.name.code.TreeCode</code></div>
+<div class="col-second even-row-color"><code><a href="#CODE" class="member-name-link">CODE</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">业务主体选择节点编码。</div>
+</div>
+</div>
+</section>
+</li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <li>
 <section class="constructor-summary" id="constructor-summary">
@@ -142,15 +159,21 @@ implements com.sca4d.core.api.call.CallLifecycle.Around, <a href="../call/CallLi
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">在权限判断前确定主体；MVC 参数绑定阶段已经选择时复用结果。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;com.sca4d.core.api.name.code.TreeCode&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#before()" class="member-name-link">before</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#code()" class="member-name-link">code</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a><wbr>&lt;com.sca4d.core.api.call.CallOutcome&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#aroundAsync(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.AsyncNext)" class="member-name-link">aroundAsync</a><wbr>(@NotNull com.sca4d.core.api.call.CallExecution&nbsp;execution,
+ com.sca4d.core.api.call.CallLifecycle.AsyncNext&nbsp;next)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">异步业务复用已经完成的主体选择，并将异步等待交给内层生命周期。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;com.sca4d.core.api.name.code.TreeCode&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#before()" class="member-name-link">before</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#supports(com.sca4d.core.api.call.CallExecution)" class="member-name-link">supports</a><wbr>(@NotNull com.sca4d.core.api.call.CallExecution&nbsp;execution)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#code()" class="member-name-link">code</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#supports(com.sca4d.core.api.call.CallExecution)" class="member-name-link">supports</a><wbr>(@NotNull com.sca4d.core.api.call.CallExecution&nbsp;execution)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -158,17 +181,32 @@ implements com.sca4d.core.api.call.CallLifecycle.Around, <a href="../call/CallLi
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-com.sca4d.core.api.call.CallLifecycle.Around">Methods inherited from interface&nbsp;com.sca4d.core.api.call.CallLifecycle.Around</h3>
+<h3 id="methods-inherited-from-class-com.sca4d.core.api.call.CallLifecycle.Participant">Methods inherited from interface&nbsp;com.sca4d.core.api.call.CallLifecycle.Participant</h3>
 <code>priority</code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-com.sca4d.core.spring.call.CallLifecycleAdvisor.Declaration">Methods inherited from interface&nbsp;com.sca4d.core.spring.call.<a href="../call/CallLifecycleAdvisor.Declaration.html" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.Declaration</a></h3>
-<code><a href="../call/CallLifecycleAdvisor.Declaration.html#attach(com.sca4d.core.api.call.CallExecution,A)">attach</a>, <a href="../call/CallLifecycleAdvisor.Declaration.html#createCall(java.lang.String,java.time.Instant,A)">createCall</a></code></div>
+<h3 id="methods-inherited-from-class-com.sca4d.core.spring.call.CallLifecycleAdvisor.AnnotationBinding">Methods inherited from interface&nbsp;com.sca4d.core.spring.call.<a href="../call/CallLifecycleAdvisor.AnnotationBinding.html" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.AnnotationBinding</a></h3>
+<code><a href="../call/CallLifecycleAdvisor.AnnotationBinding.html#attach(com.sca4d.core.api.call.CallExecution,A)">attach</a>, <a href="../call/CallLifecycleAdvisor.AnnotationBinding.html#createCall(java.lang.String,java.time.Instant,A)">createCall</a></code></div>
 </section>
 </li>
 </ul>
 </section>
 <section class="details">
 <ul class="details-list">
+<!-- ============ FIELD DETAIL =========== -->
+<li>
+<section class="field-details" id="field-detail">
+<h2>Field Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="CODE">
+<h3>CODE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">CODE</span></div>
+<div class="block">业务主体选择节点编码。</div>
+</section>
+</li>
+</ul>
+</section>
+</li>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <li>
 <section class="constructor-details" id="constructor-detail">
@@ -204,7 +242,7 @@ implements com.sca4d.core.api.call.CallLifecycle.Around, <a href="../call/CallLi
  @NotNull com.sca4d.core.api.call.CallExecution&nbsp;execution)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code>supports</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.call.CallLifecycle.Around</code></dd>
+<dd><code>supports</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.call.CallLifecycle.Participant</code></dd>
 </dl>
 </section>
 </li>
@@ -231,13 +269,28 @@ implements com.sca4d.core.api.call.CallLifecycle.Around, <a href="../call/CallLi
 </section>
 </li>
 <li>
+<section class="detail" id="aroundAsync(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.AsyncNext)">
+<h3>aroundAsync</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;com.sca4d.core.api.call.CallOutcome&gt;</span>&nbsp;<span class="element-name">aroundAsync</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.call.CallExecution&nbsp;execution,
+ @NotNull
+ com.sca4d.core.api.call.CallLifecycle.AsyncNext&nbsp;next)</span></div>
+<div class="block">异步业务复用已经完成的主体选择，并将异步等待交给内层生命周期。</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>aroundAsync</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.call.CallLifecycle.Around</code></dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="code()">
 <h3>code</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">code</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code>code</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.call.CallLifecycle.Around</code></dd>
+<dd><code>code</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.call.CallLifecycle.Participant</code></dd>
 </dl>
 </section>
 </li>
@@ -246,11 +299,11 @@ implements com.sca4d.core.api.call.CallLifecycle.Around, <a href="../call/CallLi
 <h3>annotationType</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="../web/annotation/CurrentPrincipal.html" title="annotation interface in com.sca4d.core.spring.web.annotation">CurrentPrincipal</a>&gt;</span>&nbsp;<span class="element-name">annotationType</span>()</div>
-<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="../call/CallLifecycleAdvisor.Declaration.html#annotationType()">CallLifecycleAdvisor.Declaration</a></code></span></div>
+<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="../call/CallLifecycleAdvisor.AnnotationBinding.html#annotationType()">CallLifecycleAdvisor.AnnotationBinding</a></code></span></div>
 <div class="block">返回本模块负责的运行时注解类型。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../call/CallLifecycleAdvisor.Declaration.html#annotationType()">annotationType</a></code>&nbsp;in interface&nbsp;<code><a href="../call/CallLifecycleAdvisor.Declaration.html" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.Declaration</a>&lt;<a href="../web/annotation/CurrentPrincipal.html" title="annotation interface in com.sca4d.core.spring.web.annotation">CurrentPrincipal</a>&gt;</code></dd>
+<dd><code><a href="../call/CallLifecycleAdvisor.AnnotationBinding.html#annotationType()">annotationType</a></code>&nbsp;in interface&nbsp;<code><a href="../call/CallLifecycleAdvisor.AnnotationBinding.html" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.AnnotationBinding</a>&lt;<a href="../web/annotation/CurrentPrincipal.html" title="annotation interface in com.sca4d.core.spring.web.annotation">CurrentPrincipal</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
@@ -261,7 +314,7 @@ implements com.sca4d.core.api.call.CallLifecycle.Around, <a href="../call/CallLi
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;com.sca4d.core.api.name.code.TreeCode&gt;</span>&nbsp;<span class="element-name">after</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code>after</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.call.CallLifecycle.Around</code></dd>
+<dd><code>after</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.call.CallLifecycle.Participant</code></dd>
 </dl>
 </section>
 </li>
@@ -272,7 +325,7 @@ implements com.sca4d.core.api.call.CallLifecycle.Around, <a href="../call/CallLi
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;com.sca4d.core.api.name.code.TreeCode&gt;</span>&nbsp;<span class="element-name">before</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code>before</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.call.CallLifecycle.Around</code></dd>
+<dd><code>before</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.call.CallLifecycle.Participant</code></dd>
 </dl>
 </section>
 </li>

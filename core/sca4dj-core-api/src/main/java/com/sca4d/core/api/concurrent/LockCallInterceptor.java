@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.Objects;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.atomic.AtomicReference;
 
 /** 解析 `@Locked` 的锁键，并在分布式锁内连续执行实际业务方法。 */
 public class LockCallInterceptor implements CallLifecycle.Around {
@@ -73,15 +75,65 @@ public class LockCallInterceptor implements CallLifecycle.Around {
                             + "，要求 "
                             + LockKey.class.getName());
         }
-        return distributedLock.execute(
+        AtomicReference<CallOutcome> completed = new AtomicReference<>();
+        try {
+            return distributedLock.execute(
+                    lockKey,
+                    Duration.ofMillis(locked.waitMillis()),
+                    () -> {
+                        LOG.trace(
+                                "调用已取得分布式锁 | callId={} method={}",
+                                checked.call().callId(),
+                                checked.invocationName());
+                        CallOutcome outcome = next.proceed();
+                        completed.set(outcome);
+                        return outcome;
+                    });
+        } catch (RuntimeException | Error lockFailure) {
+            CallOutcome outcome = completed.get();
+            if (outcome == null) {
+                throw lockFailure;
+            }
+            return outcome.withCompletionFailure(lockFailure);
+        }
+    }
+
+    /** 异步任务完成并释放分布式锁后才继续外层生命周期。 */
+    @Override
+    public @NotNull CompletionStage<CallOutcome> aroundAsync(
+            @NotNull CallExecution execution,
+            @NotNull CallLifecycle.AsyncNext next) {
+        Locked locked = execution.declaration(Locked.class).orElseThrow();
+        boolean expression = !locked.key().isBlank();
+        boolean customResolver = locked.keyResolver() != NoCallValueResolver.class;
+        if (expression == customResolver) {
+            throw new IllegalStateException("锁 key 与 keyResolver 必须二选一");
+        }
+        Object resolvedKey = expression
+                ? expressionResolver.resolve(locked.key(), execution)
+                : resolverLookup.resolver(locked.keyResolver()).resolve(execution);
+        if (!(resolvedKey instanceof LockKey lockKey)) {
+            throw new IllegalStateException("异步锁键解析结果必须是 LockKey");
+        }
+        AtomicReference<CallOutcome> completed = new AtomicReference<>();
+        return distributedLock.executeAsync(
                 lockKey,
                 Duration.ofMillis(locked.waitMillis()),
-                () -> {
-                    LOG.trace(
-                            "调用已取得分布式锁 | callId={} method={}",
-                            checked.call().callId(),
-                            checked.method().getName());
-                    return next.proceed();
+                () -> next.proceedAsync().thenApply(outcome -> {
+                    completed.set(outcome);
+                    return outcome;
+                }))
+                .handle((outcome, failure) -> {
+                    if (failure == null) {
+                        return outcome;
+                    }
+                    Throwable cause = failure instanceof java.util.concurrent.CompletionException
+                            && failure.getCause() != null ? failure.getCause() : failure;
+                    CallOutcome business = completed.get();
+                    if (business != null) {
+                        return business.withCompletionFailure(cause);
+                    }
+                    throw new java.util.concurrent.CompletionException(cause);
                 });
     }
 }

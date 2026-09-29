@@ -20,10 +20,10 @@ public class AuditProperties {
         return mode;
     }
 
-    /** QUEUED 要求安装 MessageBus，不使用内存队列降级。 */
+    /** QUEUED 要求安装 MessageBus；AFTER_COMMIT 只保证进程内尽力执行。 */
     public void setMode(@NotNull Audit.Mode mode) {
         if (mode == Audit.Mode.DEFAULT) {
-            throw new IllegalArgumentException("应用审计配置必须指定 DIRECT 或 QUEUED");
+            throw new IllegalArgumentException("应用审计配置不能使用 DEFAULT");
         }
         this.mode = Objects.requireNonNull(mode);
     }

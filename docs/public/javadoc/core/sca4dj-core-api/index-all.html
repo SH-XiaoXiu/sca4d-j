@@ -98,10 +98,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建认证域内的登录账号。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/concurrent/RateLimitDimension.html#ACCOUNT" class="member-name-link">ACCOUNT</a> - Enum constant in enum class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitDimension.html" title="enum class in com.sca4d.core.api.concurrent">RateLimitDimension</a></dt>
-<dd>
-<div class="block">按当前 `Account` 分别计算额度。</div>
-</dd>
+<dt><a href="com/sca4d/core/api/concurrent/RateLimit.Dim.html#ACCOUNT" class="member-name-link">ACCOUNT</a> - Enum constant in enum class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimit.Dim.html" title="enum class in com.sca4d.core.api.concurrent">RateLimit.Dim</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/webrealtime/WebRealtimeTarget.Type.html#ACCOUNT" class="member-name-link">ACCOUNT</a> - Enum constant in enum class com.sca4d.core.api.webrealtime.<a href="com/sca4d/core/api/webrealtime/WebRealtimeTarget.Type.html" title="enum class in com.sca4d.core.api.webrealtime">WebRealtimeTarget.Type</a></dt>
 <dd>
 <div class="block">匹配 Account 的全部在线浏览器连接。</div>
@@ -216,9 +214,13 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">两个 Long 都为空时返回空，否则把空值按零求和。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/call/CallExecution.html#addRequirement(com.sca4d.core.api.call.CallRequirement)" class="member-name-link">addRequirement(CallRequirement)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></dt>
+<dt><a href="com/sca4d/core/api/call/CallExecution.html#addAfterCommit(com.sca4d.core.api.call.CallLifecycle.AfterCommit)" class="member-name-link">addAfterCommit(CallLifecycle.AfterCommit)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></dt>
 <dd>
-<div class="block">登记成功前必须满足的要求。</div>
+<div class="block">登记事务提交成功后的回调；同一执行不重复登记同一实现。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallExecution.html#addPreCommit(com.sca4d.core.api.call.CallLifecycle.PreCommit)" class="member-name-link">addPreCommit(CallLifecycle.PreCommit)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></dt>
+<dd>
+<div class="block">登记业务方法成功和事务提交前必须满足的条件。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/flow/FlowEngine.html#advance(com.sca4d.core.api.flow.FlowId,com.sca4d.core.api.flow.FlowEvent,java.time.Instant)" class="member-name-link">advance(FlowId, FlowEvent, Instant)</a> - Method in class com.sca4d.core.api.flow.<a href="com/sca4d/core/api/flow/FlowEngine.html" title="class in com.sca4d.core.api.flow">FlowEngine</a></dt>
 <dd>
@@ -244,9 +246,35 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">非洲。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/call/CallLifecycle.Around.html#after()" class="member-name-link">after()</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.Around.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a></dt>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.Participant.html#after()" class="member-name-link">after()</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.Participant.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Participant</a></dt>
 <dd>
-<div class="block">返回必须位于本层之外的编码，锚点在没有对应注解时仍存在。</div>
+<div class="block">返回必须位于当前处理之外的功能编码。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycleConfiguration.Registration.html#after()" class="member-name-link">after()</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycleConfiguration.Registration.html" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration.Registration</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.After.html#after(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallOutcome)" class="member-name-link">after(CallExecution, CallOutcome)</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.After.html" title="interface in com.sca4d.core.api.call">CallLifecycle.After</a></dt>
+<dd>
+<div class="block">在目标结果确定后执行收尾逻辑。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycleConfiguration.html#after(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.call.CallLifecycle)" class="member-name-link">after(TreeCode, CallLifecycle)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycleConfiguration.html" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration</a></dt>
+<dd>
+<div class="block">当前节点必须排在指定阶段的全部节点之后。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycleConfiguration.html#after(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">after(TreeCode, TreeCode)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycleConfiguration.html" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration</a></dt>
+<dd>
+<div class="block">追加节点的后置依赖；当前节点必须排在 dependency 之后。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.html#AFTER" class="member-name-link">AFTER</a> - Enum constant in enum class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a></dt>
+<dd>
+<div class="block">无论成功失败都执行。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/annotation/Audit.Mode.html#AFTER_COMMIT" class="member-name-link">AFTER_COMMIT</a> - Enum constant in enum class com.sca4d.core.api.annotation.<a href="com/sca4d/core/api/annotation/Audit.Mode.html" title="enum class in com.sca4d.core.api.annotation">Audit.Mode</a></dt>
+<dd>
+<div class="block">主事务提交后尽力登记进程内写入任务；进程退出或队列拒绝时可能丢失。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.html#AFTER_COMMIT" class="member-name-link">AFTER_COMMIT</a> - Enum constant in enum class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a></dt>
+<dd>
+<div class="block">在事务成功提交后执行。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/messaging/DispatchPolicy.Mode.html#AFTER_COMMIT" class="member-name-link">AFTER_COMMIT</a> - Enum constant in enum class com.sca4d.core.api.messaging.<a href="com/sca4d/core/api/messaging/DispatchPolicy.Mode.html" title="enum class in com.sca4d.core.api.messaging">DispatchPolicy.Mode</a></dt>
 <dd>&nbsp;</dd>
@@ -256,11 +284,39 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/messaging/DispatchReceipt.Status.html#AFTER_COMMIT_REGISTERED" class="member-name-link">AFTER_COMMIT_REGISTERED</a> - Enum constant in enum class com.sca4d.core.api.messaging.<a href="com/sca4d/core/api/messaging/DispatchReceipt.Status.html" title="enum class in com.sca4d.core.api.messaging">DispatchReceipt.Status</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.html#AFTER_RETURNING" class="member-name-link">AFTER_RETURNING</a> - Enum constant in enum class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a></dt>
+<dd>
+<div class="block">只处理正常返回。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.html#AFTER_THROWING" class="member-name-link">AFTER_THROWING</a> - Enum constant in enum class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a></dt>
+<dd>
+<div class="block">只处理异常结果。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallExecution.html#afterCommit()" class="member-name-link">afterCommit()</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></dt>
+<dd>
+<div class="block">在事务提交成功后执行已经登记的回调，失败保留在已记录结果中并报告给调用方。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/messaging/DispatchPolicy.html#afterCommit()" class="member-name-link">afterCommit()</a> - Static method in class com.sca4d.core.api.messaging.<a href="com/sca4d/core/api/messaging/DispatchPolicy.html" title="class in com.sca4d.core.api.messaging">DispatchPolicy</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/condition/DnfClause.html#allOf(java.util.function.Predicate...)" class="member-name-link">allOf(Predicate&lt;? super T&gt;...)</a> - Static method in class com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a></dt>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.AfterCommit.html#afterCommit(com.sca4d.core.api.call.CallExecution)" class="member-name-link">afterCommit(CallExecution)</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.AfterCommit.html" title="interface in com.sca4d.core.api.call">CallLifecycle.AfterCommit</a></dt>
 <dd>
-<div class="block">创建包含指定条件的合取条件。</div>
+<div class="block">处理当前事务已经提交的事实。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycleConfiguration.html#afterIfRegistered(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">afterIfRegistered(TreeCode, TreeCode)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycleConfiguration.html" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration</a></dt>
+<dd>
+<div class="block">两个节点都已安装时追加可选依赖；可选功能未安装时不改变其余顺序。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.AfterReturning.html#afterReturning(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallOutcome)" class="member-name-link">afterReturning(CallExecution, CallOutcome)</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.AfterReturning.html" title="interface in com.sca4d.core.api.call">CallLifecycle.AfterReturning</a></dt>
+<dd>
+<div class="block">观察已经成功的调用结果。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.AfterThrowing.html#afterThrowing(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallOutcome)" class="member-name-link">afterThrowing(CallExecution, CallOutcome)</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.AfterThrowing.html" title="interface in com.sca4d.core.api.call">CallLifecycle.AfterThrowing</a></dt>
+<dd>
+<div class="block">观察调用失败，不得把失败伪装成成功。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/condition/DnfClause.html#allOf(java.lang.String,R,com.sca4d.core.api.condition.DnfClause.Condition...)" class="member-name-link">allOf(String, R, DnfClause.Condition&lt;? super T&gt;...)</a> - Static method in class com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a></dt>
+<dd>
+<div class="block">创建一个由全部条件组成的 Clause。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/concurrent/RateLimitDecision.html#allow()" class="member-name-link">allow()</a> - Static method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitDecision.html" title="class in com.sca4d.core.api.concurrent">RateLimitDecision</a></dt>
 <dd>
@@ -294,9 +350,9 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回代码字典是否明确允许数据库增加选项。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/condition/DnfExpression.html#always()" class="member-name-link">always()</a> - Static method in class com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfExpression.html" title="class in com.sca4d.core.api.condition">DnfExpression</a></dt>
+<dt><a href="com/sca4d/core/api/condition/DnfExpression.html#always(java.lang.String,R)" class="member-name-link">always(String, R)</a> - Static method in class com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfExpression.html" title="class in com.sca4d.core.api.condition">DnfExpression</a></dt>
 <dd>
-<div class="block">创建恒真表达式。</div>
+<div class="block">创建包含一个恒真 Clause 的表达式。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/utils/AnnotationUtils.html" class="type-name-link" title="class in com.sca4d.core.api.utils">AnnotationUtils</a> - Class in <a href="com/sca4d/core/api/utils/package-summary.html">com.sca4d.core.api.utils</a></dt>
 <dd>
@@ -314,9 +370,9 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">把允许影响任意行的写入转换为是否至少修改一行。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/condition/DnfExpression.html#anyOf(com.sca4d.core.api.condition.DnfClause...)" class="member-name-link">anyOf(DnfClause&lt;T&gt;...)</a> - Static method in class com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfExpression.html" title="class in com.sca4d.core.api.condition">DnfExpression</a></dt>
+<dt><a href="com/sca4d/core/api/condition/DnfExpression.html#anyOf(com.sca4d.core.api.condition.DnfClause...)" class="member-name-link">anyOf(DnfClause&lt;T, R&gt;...)</a> - Static method in class com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfExpression.html" title="class in com.sca4d.core.api.condition">DnfExpression</a></dt>
 <dd>
-<div class="block">创建包含指定 Clause 的析取表达式。</div>
+<div class="block">创建任意一个 Clause 命中即可产生结果的表达式。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/plugin/PluginDescriptor.html#api()" class="member-name-link">api()</a> - Method in class com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/PluginDescriptor.html" title="class in com.sca4d.core.api.plugin">PluginDescriptor</a></dt>
 <dd>
@@ -372,6 +428,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/concurrent/LockKey.html#append(com.sca4d.core.api.name.code.Code)" class="member-name-link">append(Code)</a> - Method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/LockKey.html" title="class in com.sca4d.core.api.concurrent">LockKey</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/concurrent/RateLimitKey.html#append(com.sca4d.core.api.name.code.Code)" class="member-name-link">append(Code)</a> - Method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitKey.html" title="class in com.sca4d.core.api.concurrent">RateLimitKey</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/gateway/GatewayCallbackCode.html#append(com.sca4d.core.api.name.code.Code)" class="member-name-link">append(Code)</a> - Method in class com.sca4d.core.api.gateway.<a href="com/sca4d/core/api/gateway/GatewayCallbackCode.html" title="class in com.sca4d.core.api.gateway">GatewayCallbackCode</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/job/JobKey.html#append(com.sca4d.core.api.name.code.Code)" class="member-name-link">append(Code)</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobKey.html" title="class in com.sca4d.core.api.job">JobKey</a></dt>
@@ -394,9 +452,13 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用应用密钥、请求签名或其他程序认证方式接入的应用程序。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/call/CallRequirement.html#appliesToReadOnlyTransaction()" class="member-name-link">appliesToReadOnlyTransaction()</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallRequirement.html" title="interface in com.sca4d.core.api.call">CallRequirement</a></dt>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.PreCommit.html#appliesToReadOnlyTransaction()" class="member-name-link">appliesToReadOnlyTransaction()</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.PreCommit.html" title="interface in com.sca4d.core.api.call">CallLifecycle.PreCommit</a></dt>
 <dd>
-<div class="block">判断只读事务提交前是否需要检查当前要求。</div>
+<div class="block">只读事务提交时是否也必须校验该条件。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycleConfiguration.html#applyCoreOrder()" class="member-name-link">applyCoreOrder()</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycleConfiguration.html" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration</a></dt>
+<dd>
+<div class="block">固定 Core 内置环绕节点顺序；可选节点不存在时保留其余顺序。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/isolation/AppIsolation.html#appName()" class="member-name-link">appName()</a> - Method in interface com.sca4d.core.api.isolation.<a href="com/sca4d/core/api/isolation/AppIsolation.html" title="interface in com.sca4d.core.api.isolation">AppIsolation</a></dt>
 <dd>
@@ -420,7 +482,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/call/CallLifecycle.Around.html#around(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.Next)" class="member-name-link">around(CallExecution, CallLifecycle.Next)</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.Around.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a></dt>
 <dd>
-<div class="block">处理本层并返回实际路径，Next 最多调用一次且不能跨线程保存。</div>
+<div class="block">处理本层并返回实际路径。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/audit/AuditCallInterceptor.html#around(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.Next)" class="member-name-link">around(CallExecution, CallLifecycle.Next)</a> - Method in class com.sca4d.core.api.audit.<a href="com/sca4d/core/api/audit/AuditCallInterceptor.html" title="class in com.sca4d.core.api.audit">AuditCallInterceptor</a></dt>
 <dd>&nbsp;</dd>
@@ -439,6 +501,38 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/permission/PermissionCallInterceptor.html#around(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.Next)" class="member-name-link">around(CallExecution, CallLifecycle.Next)</a> - Method in class com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/PermissionCallInterceptor.html" title="class in com.sca4d.core.api.permission">PermissionCallInterceptor</a></dt>
 <dd>
 <div class="block">判断当前方法声明的全部权限。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.html#AROUND" class="member-name-link">AROUND</a> - Enum constant in enum class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a></dt>
+<dd>
+<div class="block">使用 Next 包围剩余调用，可以短路或观察最终结果。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.Around.html#aroundAsync(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.AsyncNext)" class="member-name-link">aroundAsync(CallExecution, CallLifecycle.AsyncNext)</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.Around.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a></dt>
+<dd>
+<div class="block">异步处理本层；没有明确异步实现时失败，避免隐式阻塞。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/audit/AuditCallInterceptor.html#aroundAsync(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.AsyncNext)" class="member-name-link">aroundAsync(CallExecution, CallLifecycle.AsyncNext)</a> - Method in class com.sca4d.core.api.audit.<a href="com/sca4d/core/api/audit/AuditCallInterceptor.html" title="class in com.sca4d.core.api.audit">AuditCallInterceptor</a></dt>
+<dd>
+<div class="block">在异步业务完成后建立并记录最终审计结果。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/concurrent/IdempotencyCallInterceptor.html#aroundAsync(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.AsyncNext)" class="member-name-link">aroundAsync(CallExecution, CallLifecycle.AsyncNext)</a> - Method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/IdempotencyCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">IdempotencyCallInterceptor</a></dt>
+<dd>
+<div class="block">异步持有幂等处理权直到内层 CompletionStage 最终完成。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/concurrent/LockCallInterceptor.html#aroundAsync(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.AsyncNext)" class="member-name-link">aroundAsync(CallExecution, CallLifecycle.AsyncNext)</a> - Method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/LockCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">LockCallInterceptor</a></dt>
+<dd>
+<div class="block">异步任务完成并释放分布式锁后才继续外层生命周期。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/concurrent/RateLimitCallInterceptor.html#aroundAsync(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.AsyncNext)" class="member-name-link">aroundAsync(CallExecution, CallLifecycle.AsyncNext)</a> - Method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">RateLimitCallInterceptor</a></dt>
+<dd>
+<div class="block">异步业务在额度判断完成后继续使用同一 Call 生命周期。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/identity/IdentityCallInterceptor.html#aroundAsync(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.AsyncNext)" class="member-name-link">aroundAsync(CallExecution, CallLifecycle.AsyncNext)</a> - Method in class com.sca4d.core.api.identity.<a href="com/sca4d/core/api/identity/IdentityCallInterceptor.html" title="class in com.sca4d.core.api.identity">IdentityCallInterceptor</a></dt>
+<dd>
+<div class="block">异步业务完成只延后内层阶段；身份前提仍在进入业务方法前同步完成。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/permission/PermissionCallInterceptor.html#aroundAsync(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.AsyncNext)" class="member-name-link">aroundAsync(CallExecution, CallLifecycle.AsyncNext)</a> - Method in class com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/PermissionCallInterceptor.html" title="class in com.sca4d.core.api.permission">PermissionCallInterceptor</a></dt>
+<dd>
+<div class="block">异步业务只延后通过权限判断后的内层调用。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/data/DataOps.ValuePipe.html#as(java.lang.Class,java.lang.String)" class="member-name-link">as(Class&lt;R&gt;, String)</a> - Method in class com.sca4d.core.api.data.<a href="com/sca4d/core/api/data/DataOps.ValuePipe.html" title="class in com.sca4d.core.api.data">DataOps.ValuePipe</a></dt>
 <dd>
@@ -466,6 +560,18 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">执行一次权限判断。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/pipeline/PipelineStage.html#async(java.lang.String,java.lang.Class,java.lang.Class,java.util.function.BiFunction)" class="member-name-link">async(String, Class&lt;I&gt;, Class&lt;O&gt;, BiFunction&lt;? super I, Executor, ? extends CompletionStage&lt;O&gt;&gt;)</a> - Static method in interface com.sca4d.core.api.pipeline.<a href="com/sca4d/core/api/pipeline/PipelineStage.html" title="interface in com.sca4d.core.api.pipeline">PipelineStage</a></dt>
+<dd>
+<div class="block">声明返回异步结果的阶段；同步调用在原线程等待，不传播事务或 ThreadLocal。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/data/DataOperation.html#async(java.lang.String,java.util.List,com.sca4d.core.api.data.DataKey,java.util.function.BiFunction)" class="member-name-link">async(String, List&lt;DataKey&lt;?&gt;&gt;, DataKey&lt;T&gt;, BiFunction&lt;DataValues, Executor, CompletionStage&lt;T&gt;&gt;)</a> - Static method in class com.sca4d.core.api.data.<a href="com/sca4d/core/api/data/DataOperation.html" title="class in com.sca4d.core.api.data">DataOperation</a></dt>
+<dd>
+<div class="block">创建由调用方 Executor 调度的异步数据操作。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/condition/DnfClause.Condition.html#async(java.util.function.BiFunction)" class="member-name-link">async(BiFunction&lt;? super T, Executor, CompletionStage&lt;Boolean&gt;&gt;)</a> - Static method in interface com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfClause.Condition.html" title="interface in com.sca4d.core.api.condition">DnfClause.Condition</a></dt>
+<dd>
+<div class="block">创建由调用方执行器调度的异步条件。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/message/MessageContent.html#attachment(java.lang.String,byte%5B%5D,java.lang.String)" class="member-name-link">attachment(String, byte[], String)</a> - Static method in class com.sca4d.core.api.message.<a href="com/sca4d/core/api/message/MessageContent.html" title="class in com.sca4d.core.api.message">MessageContent</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/message/ContentDisposition.html#ATTACHMENT" class="member-name-link">ATTACHMENT</a> - Enum constant in enum class com.sca4d.core.api.message.<a href="com/sca4d/core/api/message/ContentDisposition.html" title="enum class in com.sca4d.core.api.message">ContentDisposition</a></dt>
@@ -488,10 +594,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">声明调用需要记录成功、拒绝或失败的审计结果。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/call/CallLifecycle.html#AUDIT" class="member-name-link">AUDIT</a> - Static variable in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.html" title="class in com.sca4d.core.api.call">CallLifecycle</a></dt>
-<dd>
-<div class="block">最外层的结果记录，必须看见所有拒绝、失败和重放。</div>
-</dd>
 <dt><a href="com/sca4d/core/api/annotation/Audit.Mode.html" class="type-name-link" title="enum class in com.sca4d.core.api.annotation">Audit.Mode</a> - Enum Class in <a href="com/sca4d/core/api/annotation/package-summary.html">com.sca4d.core.api.annotation</a></dt>
 <dd>
 <div class="block">指定审计返回前完成写入还是可靠排队；DEFAULT 只用于声明继承。</div>
@@ -508,7 +610,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">根据有效 `@Audit` 和调用结果建立审计记录，选择同步写入或可靠排队方式。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/audit/AuditCallInterceptor.html#%3Cinit%3E(java.util.List,com.sca4d.core.api.annotation.Audit.Mode,com.sca4d.core.api.audit.AuditResolverLookup,java.time.Clock)" class="member-name-link">AuditCallInterceptor(List&lt;? extends AuditRecorder&gt;, Audit.Mode, AuditResolverLookup, Clock)</a> - Constructor for class com.sca4d.core.api.audit.<a href="com/sca4d/core/api/audit/AuditCallInterceptor.html" title="class in com.sca4d.core.api.audit">AuditCallInterceptor</a></dt>
+<dt><a href="com/sca4d/core/api/audit/AuditCallInterceptor.html#%3Cinit%3E(java.util.List,com.sca4d.core.api.annotation.Audit.Mode,com.sca4d.core.api.audit.AuditResolverLookup,com.sca4d.core.api.call.SPICallValueResolver,java.time.Clock)" class="member-name-link">AuditCallInterceptor(List&lt;? extends AuditRecorder&gt;, Audit.Mode, AuditResolverLookup, SPICallValueResolver, Clock)</a> - Constructor for class com.sca4d.core.api.audit.<a href="com/sca4d/core/api/audit/AuditCallInterceptor.html" title="class in com.sca4d.core.api.audit">AuditCallInterceptor</a></dt>
 <dd>
 <div class="block">安装每种方式唯一的记录器，校验应用默认方式存在。</div>
 </dd>
@@ -558,7 +660,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/audit/AuditRecorder.html" class="type-name-link" title="interface in com.sca4d.core.api.audit">AuditRecorder</a> - Interface in <a href="com/sca4d/core/api/audit/package-summary.html">com.sca4d.core.api.audit</a></dt>
 <dd>
-<div class="block">按明确方式记录审计；同步记录返回时完成当前事务内写入，队列记录返回时完成可靠交接提交。</div>
+<div class="block">按明确方式记录审计；具体实现决定返回时完成写入、可靠交接或提交后尽力登记。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/audit/AuditResolverLookup.html" class="type-name-link" title="interface in com.sca4d.core.api.audit">AuditResolverLookup</a> - Interface in <a href="com/sca4d/core/api/audit/package-summary.html">com.sca4d.core.api.audit</a></dt>
 <dd>
@@ -733,9 +835,29 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">表示具有外部值和中文说明的业务枚举。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/call/CallLifecycle.Around.html#before()" class="member-name-link">before()</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.Around.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a></dt>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.Participant.html#before()" class="member-name-link">before()</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.Participant.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Participant</a></dt>
 <dd>
-<div class="block">返回必须位于本层之内的编码。</div>
+<div class="block">返回必须位于当前处理之内的功能编码。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycleConfiguration.Registration.html#before()" class="member-name-link">before()</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycleConfiguration.Registration.html" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration.Registration</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.Before.html#before(com.sca4d.core.api.call.CallExecution)" class="member-name-link">before(CallExecution)</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.Before.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Before</a></dt>
+<dd>
+<div class="block">执行调用前逻辑；抛出异常时后续调用不会开始。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/identity/IdentityCallInterceptor.PrincipalRequirement.html#before(com.sca4d.core.api.call.CallExecution)" class="member-name-link">before(CallExecution)</a> - Method in class com.sca4d.core.api.identity.<a href="com/sca4d/core/api/identity/IdentityCallInterceptor.PrincipalRequirement.html" title="class in com.sca4d.core.api.identity">IdentityCallInterceptor.PrincipalRequirement</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycleConfiguration.html#before(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.call.CallLifecycle)" class="member-name-link">before(TreeCode, CallLifecycle)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycleConfiguration.html" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration</a></dt>
+<dd>
+<div class="block">当前节点必须排在指定阶段的全部节点之前。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycleConfiguration.html#before(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">before(TreeCode, TreeCode)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycleConfiguration.html" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration</a></dt>
+<dd>
+<div class="block">追加节点的前置依赖；当前节点必须排在 dependency 之前。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.html#BEFORE" class="member-name-link">BEFORE</a> - Enum constant in enum class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a></dt>
+<dd>
+<div class="block">在实际方法前校验或准备。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/concurrent/IdempotencyStore.html#begin(com.sca4d.core.api.concurrent.IdempotencyKey,java.lang.String,java.lang.reflect.Type,java.time.Duration,java.time.Duration)" class="member-name-link">begin(IdempotencyKey, String, Type, Duration, Duration)</a> - Method in interface com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/IdempotencyStore.html" title="interface in com.sca4d.core.api.concurrent">IdempotencyStore</a></dt>
 <dd>
@@ -864,6 +986,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">保存入口界定的一次往返的输入快照、目标资源、身份和权限判定；不解释传输协议。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/call/Call.html#%3Cinit%3E(com.sca4d.core.api.call.CallInvoker,java.lang.String,java.time.Instant,com.sca4d.core.api.data.DataValues,com.sca4d.core.api.resource.Resource)" class="member-name-link">Call(CallInvoker, String, Instant, DataValues, Resource)</a> - Constructor for class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/Call.html" title="class in com.sca4d.core.api.call">Call</a></dt>
+<dd>
+<div class="block">创建可以直接执行生命周期的调用。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/call/Call.html#%3Cinit%3E(java.lang.String,java.time.Instant)" class="member-name-link">Call(String, Instant)</a> - Constructor for class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/Call.html" title="class in com.sca4d.core.api.call">Call</a></dt>
 <dd>
 <div class="block">创建尚未认证的调用。</div>
@@ -882,7 +1008,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/call/CallExecution.html" class="type-name-link" title="class in com.sca4d.core.api.call">CallExecution</a> - Class in <a href="com/sca4d/core/api/call/package-summary.html">com.sca4d.core.api.call</a></dt>
 <dd>
-<div class="block">保存一次被声明式调用规则包围的方法执行及其成功要求。</div>
+<div class="block">保存一次被声明式调用规则包围的方法执行、结果和预提交条件。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/call/CallExecution.html#%3Cinit%3E(com.sca4d.core.api.call.Call,java.lang.Class,java.lang.reflect.Method,java.lang.Object%5B%5D,java.lang.reflect.Type)" class="member-name-link">CallExecution(Call, Class&lt;?&gt;, Method, Object[], Type)</a> - Constructor for class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></dt>
 <dd>
@@ -890,25 +1016,85 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/call/Call.html#callId()" class="member-name-link">callId()</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/Call.html" title="class in com.sca4d.core.api.call">Call</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/call/CallLifecycle.html" class="type-name-link" title="class in com.sca4d.core.api.call">CallLifecycle</a> - Class in <a href="com/sca4d/core/api/call/package-summary.html">com.sca4d.core.api.call</a></dt>
+<dt><a href="com/sca4d/core/api/call/CallInvoker.html" class="type-name-link" title="class in com.sca4d.core.api.call">CallInvoker</a> - Class in <a href="com/sca4d/core/api/call/package-summary.html">com.sca4d.core.api.call</a></dt>
 <dd>
-<div class="block">编排方法执行的环绕处理、短路、成功要求及结果记录；入口负责建立 Call 和线程绑定。</div>
+<div class="block">执行已经配置的 Call 环绕处理；生命周期阶段由 <a href="com/sca4d/core/api/call/CallLifecycle.html" title="enum class in com.sca4d.core.api.call"><code>CallLifecycle</code></a> 表达。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/call/CallLifecycle.html#%3Cinit%3E(java.util.List)" class="member-name-link">CallLifecycle(List&lt;? extends CallLifecycle.Around&gt;)</a> - Constructor for class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.html" title="class in com.sca4d.core.api.call">CallLifecycle</a></dt>
+<dt><a href="com/sca4d/core/api/call/CallInvoker.html#%3Cinit%3E(com.sca4d.core.api.call.CallLifecycleConfiguration)" class="member-name-link">CallInvoker(CallLifecycleConfiguration)</a> - Constructor for class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallInvoker.html" title="class in com.sca4d.core.api.call">CallInvoker</a></dt>
+<dd>
+<div class="block">使用已经完成内置顺序和扩展依赖配置的调用执行器。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallInvoker.html#%3Cinit%3E(java.util.List)" class="member-name-link">CallInvoker(List&lt;? extends CallLifecycle.Participant&gt;)</a> - Constructor for class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallInvoker.html" title="class in com.sca4d.core.api.call">CallInvoker</a></dt>
 <dd>
 <div class="block">注册功能及应用的环绕处理，并补齐没有动作的排序锚点。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.html" class="type-name-link" title="enum class in com.sca4d.core.api.call">CallLifecycle</a> - Enum Class in <a href="com/sca4d/core/api/call/package-summary.html">com.sca4d.core.api.call</a></dt>
+<dd>
+<div class="block">定义 Call 参与者可以介入的通用生命周期语义。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.After.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.After</a> - Interface in <a href="com/sca4d/core/api/call/package-summary.html">com.sca4d.core.api.call</a></dt>
+<dd>
+<div class="block">无论调用成功失败都执行的 finally 语义回调。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.AfterCommit.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.AfterCommit</a> - Interface in <a href="com/sca4d/core/api/call/package-summary.html">com.sca4d.core.api.call</a></dt>
+<dd>
+<div class="block">事务成功提交后的回调；提交发生在目标方法返回前，不提供最终 CallOutcome。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.AfterReturning.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.AfterReturning</a> - Interface in <a href="com/sca4d/core/api/call/package-summary.html">com.sca4d.core.api.call</a></dt>
+<dd>
+<div class="block">只在调用成功返回后执行观察逻辑。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.AfterThrowing.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.AfterThrowing</a> - Interface in <a href="com/sca4d/core/api/call/package-summary.html">com.sca4d.core.api.call</a></dt>
+<dd>
+<div class="block">只在调用拒绝或失败后执行观察逻辑。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/call/CallLifecycle.Around.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a> - Interface in <a href="com/sca4d/core/api/call/package-summary.html">com.sca4d.core.api.call</a></dt>
 <dd>
-<div class="block">包围剩余方法执行；允许明确重放或拒绝，不能隐式吞掉内层失败。</div>
+<div class="block">使用 AOP 环绕语义介入调用。实现类的类型即表示其采用 Around 语义。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.AsyncNext.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.AsyncNext</a> - Interface in <a href="com/sca4d/core/api/call/package-summary.html">com.sca4d.core.api.call</a></dt>
+<dd>
+<div class="block">在异步生命周期中继续内层处理。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.Before.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.Before</a> - Interface in <a href="com/sca4d/core/api/call/package-summary.html">com.sca4d.core.api.call</a></dt>
+<dd>
+<div class="block">只在目标调用前执行校验或准备。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.Completion.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.Completion</a> - Interface in <a href="com/sca4d/core/api/call/package-summary.html">com.sca4d.core.api.call</a></dt>
+<dd>
+<div class="block">Call 最终结束后的清理回调。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/call/CallLifecycle.Intercepted.html" class="type-name-link" title="annotation interface in com.sca4d.core.api.call">CallLifecycle.Intercepted</a> - Annotation Interface in <a href="com/sca4d/core/api/call/package-summary.html">com.sca4d.core.api.call</a></dt>
 <dd>
-<div class="block">标记调用入口或功能注解；功能注解必须由所属功能注册，不能静默跳过。</div>
+<div class="block">标记调用入口或功能注解；功能注解必须由所属功能注册。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/call/CallLifecycle.Next.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.Next</a> - Interface in <a href="com/sca4d/core/api/call/package-summary.html">com.sca4d.core.api.call</a></dt>
 <dd>
-<div class="block">在当前线程继续内层处理，返回成功、重放、拒绝或失败，错误由结果携带。</div>
+<div class="block">在当前线程继续内层处理，返回成功、重放、拒绝或失败。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.Participant.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.Participant</a> - Interface in <a href="com/sca4d/core/api/call/package-summary.html">com.sca4d.core.api.call</a></dt>
+<dd>
+<div class="block">所有生命周期参与者共享的编码和依赖声明。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.PreCommit.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.PreCommit</a> - Interface in <a href="com/sca4d/core/api/call/package-summary.html">com.sca4d.core.api.call</a></dt>
+<dd>
+<div class="block">表示业务成功前必须在预提交阶段满足的一项条件。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycleConfiguration.html" class="type-name-link" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration</a> - Class in <a href="com/sca4d/core/api/call/package-summary.html">com.sca4d.core.api.call</a></dt>
+<dd>
+<div class="block">集中登记 Call 阶段、Interceptor 和依赖关系。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycleConfiguration.html#%3Cinit%3E(java.util.List)" class="member-name-link">CallLifecycleConfiguration(List&lt;? extends CallLifecycle.Participant&gt;)</a> - Constructor for class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycleConfiguration.html" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration</a></dt>
+<dd>
+<div class="block">从已注册的环绕处理创建默认配置；处理自身的依赖会作为初始约束。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycleConfiguration.Customizer.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycleConfiguration.Customizer</a> - Interface in <a href="com/sca4d/core/api/call/package-summary.html">com.sca4d.core.api.call</a></dt>
+<dd>
+<div class="block">模块或应用在执行器构建前补充生命周期依赖。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycleConfiguration.Registration.html" class="type-name-link" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration.Registration</a> - Class in <a href="com/sca4d/core/api/call/package-summary.html">com.sca4d.core.api.call</a></dt>
+<dd>
+<div class="block">保存一个已登记的阶段参与者及其排序约束。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/call/CallOutcome.html" class="type-name-link" title="class in com.sca4d.core.api.call">CallOutcome</a> - Class in <a href="com/sca4d/core/api/call/package-summary.html">com.sca4d.core.api.call</a></dt>
 <dd>
@@ -917,10 +1103,6 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/call/CallOutcome.Status.html" class="type-name-link" title="enum class in com.sca4d.core.api.call">CallOutcome.Status</a> - Enum Class in <a href="com/sca4d/core/api/call/package-summary.html">com.sca4d.core.api.call</a></dt>
 <dd>
 <div class="block">列出方法执行可以产生的最终结果。</div>
-</dd>
-<dt><a href="com/sca4d/core/api/call/CallRequirement.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallRequirement</a> - Interface in <a href="com/sca4d/core/api/call/package-summary.html">com.sca4d.core.api.call</a></dt>
-<dd>
-<div class="block">表示业务方法成功前必须由调用过程满足的一项要求。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/call/CallValueResolver.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallValueResolver&lt;T&gt;</a> - Interface in <a href="com/sca4d/core/api/call/package-summary.html">com.sca4d.core.api.call</a></dt>
 <dd>
@@ -937,6 +1119,11 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/concurrent/IdempotencyFingerprints.html#canonicalArguments(java.lang.Object%5B%5D)" class="member-name-link">canonicalArguments(Object[])</a> - Method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/IdempotencyFingerprints.html" title="class in com.sca4d.core.api.concurrent">IdempotencyFingerprints</a></dt>
 <dd>
 <div class="block">返回字段顺序稳定、保留数组业务顺序的参数 JSON。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/concurrent/VersionConditions.html#capture()" class="member-name-link">capture()</a> - Method in interface com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/VersionConditions.html" title="interface in com.sca4d.core.api.concurrent">VersionConditions</a></dt>
+<dd>
+<div class="block">冻结当前调用的版本条件入口，供显式传入异步工作；默认无请求状态的实现保持自身。
+ 异步工作仍须使用自己的事务，不传播当前线程的事务或 CallHolder。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/authentication/AuthErrorCode.html#category()" class="member-name-link">category()</a> - Method in enum class com.sca4d.core.api.authentication.<a href="com/sca4d/core/api/authentication/AuthErrorCode.html" title="enum class in com.sca4d.core.api.authentication">AuthErrorCode</a></dt>
 <dd>&nbsp;</dd>
@@ -1009,7 +1196,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/condition/DnfExpression.html#clauses()" class="member-name-link">clauses()</a> - Method in class com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfExpression.html" title="class in com.sca4d.core.api.condition">DnfExpression</a></dt>
 <dd>
-<div class="block">读取该表达式按登记顺序检查的全部 Clause。</div>
+<div class="block">返回保持声明顺序的 Clause。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/persistence/Patch.html#clear()" class="member-name-link">clear()</a> - Static method in class com.sca4d.core.api.persistence.<a href="com/sca4d/core/api/persistence/Patch.html" title="class in com.sca4d.core.api.persistence">Patch</a></dt>
 <dd>
@@ -1075,9 +1262,9 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回注销原因编码。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/call/CallLifecycle.Around.html#code()" class="member-name-link">code()</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.Around.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a></dt>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.Participant.html#code()" class="member-name-link">code()</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.Participant.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Participant</a></dt>
 <dd>
-<div class="block">返回在生命周期内唯一的稳定编码。</div>
+<div class="block">返回当前功能在生命周期配置中的稳定编码。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/codec/VersionedCodec.html#code()" class="member-name-link">code()</a> - Method in interface com.sca4d.core.api.codec.<a href="com/sca4d/core/api/codec/VersionedCodec.html" title="interface in com.sca4d.core.api.codec">VersionedCodec</a></dt>
 <dd>&nbsp;</dd>
@@ -1089,8 +1276,16 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/concurrent/LockCallInterceptor.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/LockCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">LockCallInterceptor</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/concurrent/RateLimit.Dim.html#code()" class="member-name-link">code()</a> - Method in enum class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimit.Dim.html" title="enum class in com.sca4d.core.api.concurrent">RateLimit.Dim</a></dt>
+<dd>
+<div class="block">返回该维度在限流键中的稳定名称。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/concurrent/RateLimitCallInterceptor.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">RateLimitCallInterceptor</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/condition/DnfClause.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a></dt>
+<dd>
+<div class="block">返回稳定 Clause 编码。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/connection/ConnectionProtocol.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.core.api.connection.<a href="com/sca4d/core/api/connection/ConnectionProtocol.html" title="class in com.sca4d.core.api.connection">ConnectionProtocol</a></dt>
 <dd>
 <div class="block">返回协议编码。</div>
@@ -1112,6 +1307,8 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/gateway/GatewayCallback.html#code()" class="member-name-link">code()</a> - Method in interface com.sca4d.core.api.gateway.<a href="com/sca4d/core/api/gateway/GatewayCallback.html" title="interface in com.sca4d.core.api.gateway">GatewayCallback</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/identity/IdentityCallInterceptor.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.core.api.identity.<a href="com/sca4d/core/api/identity/IdentityCallInterceptor.html" title="class in com.sca4d.core.api.identity">IdentityCallInterceptor</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/identity/IdentityCallInterceptor.PrincipalRequirement.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.core.api.identity.<a href="com/sca4d/core/api/identity/IdentityCallInterceptor.PrincipalRequirement.html" title="class in com.sca4d.core.api.identity">IdentityCallInterceptor.PrincipalRequirement</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/identity/SubjectType.html#code()" class="member-name-link">code()</a> - Method in enum class com.sca4d.core.api.identity.<a href="com/sca4d/core/api/identity/SubjectType.html" title="enum class in com.sca4d.core.api.identity">SubjectType</a></dt>
 <dd>&nbsp;</dd>
@@ -1196,6 +1393,34 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/name/code/Code.html#%3Cinit%3E(java.util.List)" class="member-name-link">Code(List&lt;String&gt;)</a> - Constructor for class com.sca4d.core.api.name.code.<a href="com/sca4d/core/api/name/code/Code.html" title="class in com.sca4d.core.api.name.code">Code</a></dt>
 <dd>
 <div class="block">校验并保存稳定节点；不可包含 IO 动态标识。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/audit/AuditCallInterceptor.html#CODE" class="member-name-link">CODE</a> - Static variable in class com.sca4d.core.api.audit.<a href="com/sca4d/core/api/audit/AuditCallInterceptor.html" title="class in com.sca4d.core.api.audit">AuditCallInterceptor</a></dt>
+<dd>
+<div class="block">审计环绕节点编码。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/concurrent/IdempotencyCallInterceptor.html#CODE" class="member-name-link">CODE</a> - Static variable in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/IdempotencyCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">IdempotencyCallInterceptor</a></dt>
+<dd>
+<div class="block">幂等处理权节点编码。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/concurrent/LockCallInterceptor.html#CODE" class="member-name-link">CODE</a> - Static variable in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/LockCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">LockCallInterceptor</a></dt>
+<dd>
+<div class="block">分布式锁节点编码。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/concurrent/RateLimitCallInterceptor.html#CODE" class="member-name-link">CODE</a> - Static variable in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">RateLimitCallInterceptor</a></dt>
+<dd>
+<div class="block">限流判断节点编码。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/identity/IdentityCallInterceptor.html#CODE" class="member-name-link">CODE</a> - Static variable in class com.sca4d.core.api.identity.<a href="com/sca4d/core/api/identity/IdentityCallInterceptor.html" title="class in com.sca4d.core.api.identity">IdentityCallInterceptor</a></dt>
+<dd>
+<div class="block">身份声明检查节点编码。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/identity/IdentityCallInterceptor.PrincipalRequirement.html#CODE" class="member-name-link">CODE</a> - Static variable in class com.sca4d.core.api.identity.<a href="com/sca4d/core/api/identity/IdentityCallInterceptor.PrincipalRequirement.html" title="class in com.sca4d.core.api.identity">IdentityCallInterceptor.PrincipalRequirement</a></dt>
+<dd>
+<div class="block">主体前置检查节点编码。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/permission/PermissionCallInterceptor.html#CODE" class="member-name-link">CODE</a> - Static variable in class com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/PermissionCallInterceptor.html" title="class in com.sca4d.core.api.permission">PermissionCallInterceptor</a></dt>
+<dd>
+<div class="block">权限判断节点编码。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/webrealtime/WebRealtimeMessage.html#CODE" class="member-name-link">CODE</a> - Static variable in class com.sca4d.core.api.webrealtime.<a href="com/sca4d/core/api/webrealtime/WebRealtimeMessage.html" title="class in com.sca4d.core.api.webrealtime">WebRealtimeMessage</a></dt>
 <dd>&nbsp;</dd>
@@ -1429,11 +1654,19 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">按领域类型和节点内容稳定排序，与 equals 使用相同的身份规则。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.Completion.html#complete(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallOutcome)" class="member-name-link">complete(CallExecution, CallOutcome)</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.Completion.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Completion</a></dt>
+<dd>
+<div class="block">清理当前 Call 产生的本地状态和租约。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/job/ScheduledJobRun.html#completedAt()" class="member-name-link">completedAt()</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/ScheduledJobRun.html" title="class in com.sca4d.core.api.job">ScheduledJobRun</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/storage/FileService.html#completeUpload(long,com.sca4d.core.api.identity.Principal)" class="member-name-link">completeUpload(long, Principal)</a> - Method in interface com.sca4d.core.api.storage.<a href="com/sca4d/core/api/storage/FileService.html" title="interface in com.sca4d.core.api.storage">FileService</a></dt>
 <dd>
 <div class="block">校验临时对象并把它转为可绑定文件。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.html#COMPLETION" class="member-name-link">COMPLETION</a> - Enum constant in enum class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a></dt>
+<dd>
+<div class="block">在 Call 最终结束时执行清理。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/call/CallOutcome.html#completionFailure()" class="member-name-link">completionFailure()</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallOutcome.html" title="class in com.sca4d.core.api.call">CallOutcome</a></dt>
 <dd>&nbsp;</dd>
@@ -1443,12 +1676,16 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/condition/DnfClause.html#conditions()" class="member-name-link">conditions()</a> - Method in class com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a></dt>
 <dd>
-<div class="block">读取该子句按登记顺序检查的全部条件。</div>
+<div class="block">返回按声明顺序排列的条件。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/plugin/PluginContext.html#configuration(java.lang.Class)" class="member-name-link">configuration(Class&lt;C&gt;)</a> - Method in interface com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/PluginContext.html" title="interface in com.sca4d.core.api.plugin">PluginContext</a></dt>
 <dd>
 <div class="block">返回当前代次的 App 公开配置；生成上下文使用准确类型调用此入口。
  类型不一致或代次停止后访问时失败，旧作用域在排空期间继续使用旧配置。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycleConfiguration.Customizer.html#configure(com.sca4d.core.api.call.CallLifecycleConfiguration)" class="member-name-link">configure(CallLifecycleConfiguration)</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycleConfiguration.Customizer.html" title="interface in com.sca4d.core.api.call">CallLifecycleConfiguration.Customizer</a></dt>
+<dd>
+<div class="block">只修改本次应用的节点或阶段依赖，不执行调用逻辑。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/identity/Subject.html#configureSystemId(long)" class="member-name-link">configureSystemId(long)</a> - Static method in class com.sca4d.core.api.identity.<a href="com/sca4d/core/api/identity/Subject.html" title="class in com.sca4d.core.api.identity">Subject</a></dt>
 <dd>
@@ -1711,7 +1948,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/data/DataGraphExecutor.html" class="type-name-link" title="class in com.sca4d.core.api.data">DataGraphExecutor</a> - Class in <a href="com/sca4d/core/api/data/package-summary.html">com.sca4d.core.api.data</a></dt>
 <dd>
-<div class="block">按 DataGraph 数据依赖同步或并行计算，成功后以稳定拓扑顺序返回完整结果。</div>
+<div class="block">按 DataGraph 数据依赖同步或异步计算，成功后以稳定拓扑顺序返回完整结果。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/data/DataKey.html" class="type-name-link" title="class in com.sca4d.core.api.data">DataKey&lt;T&gt;</a> - Class in <a href="com/sca4d/core/api/data/package-summary.html">com.sca4d.core.api.data</a></dt>
 <dd>
@@ -1723,7 +1960,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/data/DataOperation.html" class="type-name-link" title="class in com.sca4d.core.api.data">DataOperation&lt;T&gt;</a> - Class in <a href="com/sca4d/core/api/data/package-summary.html">com.sca4d.core.api.data</a></dt>
 <dd>
-<div class="block">声明一个只读取指定输入并产生唯一非空输出的纯数据操作。</div>
+<div class="block">声明一个只读取指定输入并产生唯一非空输出的数据操作。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/data/DataOperation.html#%3Cinit%3E(java.lang.String,java.util.List,com.sca4d.core.api.data.DataKey,java.util.function.Function)" class="member-name-link">DataOperation(String, List&lt;DataKey&lt;?&gt;&gt;, DataKey&lt;T&gt;, Function&lt;DataValues, T&gt;)</a> - Constructor for class com.sca4d.core.api.data.<a href="com/sca4d/core/api/data/DataOperation.html" title="class in com.sca4d.core.api.data">DataOperation</a></dt>
 <dd>
@@ -1804,10 +2041,6 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/call/CallExecution.html#declaration(java.lang.Class)" class="member-name-link">declaration(Class&lt;A&gt;)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></dt>
 <dd>
 <div class="block">查询有效声明；方法声明优先于类型声明。</div>
-</dd>
-<dt><a href="com/sca4d/core/api/call/CallLifecycle.html#DECLARATION" class="member-name-link">DECLARATION</a> - Static variable in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.html" title="class in com.sca4d.core.api.call">CallLifecycle</a></dt>
-<dd>
-<div class="block">检查声明组合与认证前提。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/call/CallExecution.html#declarations(java.lang.Class)" class="member-name-link">declarations(Class&lt;A&gt;)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></dt>
 <dd>
@@ -2115,21 +2348,25 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">保证相同锁键在所有参与协调的应用实例中互斥执行的分布式锁（Distributed Lock）。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/condition/DnfClause.html" class="type-name-link" title="class in com.sca4d.core.api.condition">DnfClause&lt;T&gt;</a> - Class in <a href="com/sca4d/core/api/condition/package-summary.html">com.sca4d.core.api.condition</a></dt>
+<dt><a href="com/sca4d/core/api/condition/DnfClause.html" class="type-name-link" title="class in com.sca4d.core.api.condition">DnfClause&lt;T,<wbr>R&gt;</a> - Class in <a href="com/sca4d/core/api/condition/package-summary.html">com.sca4d.core.api.condition</a></dt>
 <dd>
-<div class="block">保存析取范式中必须全部满足的一组条件。</div>
+<div class="block">保存一组必须全部满足并产生同一个结果的条件。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/condition/DnfClause.html#%3Cinit%3E(java.util.List)" class="member-name-link">DnfClause(List&lt;? extends Predicate&lt;? super T&gt;&gt;)</a> - Constructor for class com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a></dt>
+<dt><a href="com/sca4d/core/api/condition/DnfClause.html#%3Cinit%3E(java.lang.String,java.util.List,R)" class="member-name-link">DnfClause(String, List&lt;? extends DnfClause.Condition&lt;? super T&gt;&gt;, R)</a> - Constructor for class com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a></dt>
 <dd>
-<div class="block">创建按登记顺序执行的合取条件。</div>
+<div class="block">创建一个带稳定编码、条件和命中结果的 Clause。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/condition/DnfExpression.html" class="type-name-link" title="class in com.sca4d.core.api.condition">DnfExpression&lt;T&gt;</a> - Class in <a href="com/sca4d/core/api/condition/package-summary.html">com.sca4d.core.api.condition</a></dt>
+<dt><a href="com/sca4d/core/api/condition/DnfClause.Condition.html" class="type-name-link" title="interface in com.sca4d.core.api.condition">DnfClause.Condition&lt;T&gt;</a> - Interface in <a href="com/sca4d/core/api/condition/package-summary.html">com.sca4d.core.api.condition</a></dt>
 <dd>
-<div class="block">保存任意一个 Clause 满足即可通过的析取范式表达式。</div>
+<div class="block">一个可以同步或异步判断的纯条件。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/condition/DnfExpression.html#%3Cinit%3E(java.util.List)" class="member-name-link">DnfExpression(List&lt;DnfClause&lt;T&gt;&gt;)</a> - Constructor for class com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfExpression.html" title="class in com.sca4d.core.api.condition">DnfExpression</a></dt>
+<dt><a href="com/sca4d/core/api/condition/DnfExpression.html" class="type-name-link" title="class in com.sca4d.core.api.condition">DnfExpression&lt;T,<wbr>R&gt;</a> - Class in <a href="com/sca4d/core/api/condition/package-summary.html">com.sca4d.core.api.condition</a></dt>
 <dd>
-<div class="block">创建按登记顺序执行的析取表达式。</div>
+<div class="block">保存按顺序选择第一个命中 Clause 的析取规则表达式。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/condition/DnfExpression.html#%3Cinit%3E(java.util.List)" class="member-name-link">DnfExpression(List&lt;DnfClause&lt;T, R&gt;&gt;)</a> - Constructor for class com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfExpression.html" title="class in com.sca4d.core.api.condition">DnfExpression</a></dt>
+<dd>
+<div class="block">创建按登记顺序执行的析取表达式；空集合表示没有命中结果。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/name/NameFormat.html#DOT" class="member-name-link">DOT</a> - Enum constant in enum class com.sca4d.core.api.name.<a href="com/sca4d/core/api/name/NameFormat.html" title="enum class in com.sca4d.core.api.name">NameFormat</a></dt>
 <dd>
@@ -2364,6 +2601,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">欧洲。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/condition/DnfExpression.html#evaluate(T)" class="member-name-link">evaluate(T)</a> - Method in class com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfExpression.html" title="class in com.sca4d.core.api.condition">DnfExpression</a></dt>
+<dd>
+<div class="block">返回第一个命中 Clause 的结果。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/condition/DnfExpression.html#evaluateAsync(T,java.util.concurrent.Executor)" class="member-name-link">evaluateAsync(T, Executor)</a> - Method in class com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfExpression.html" title="class in com.sca4d.core.api.condition">DnfExpression</a></dt>
+<dd>
+<div class="block">并行计算条件后按 Clause 声明顺序选择第一个命中结果。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/messaging/MessageDelivery.html#event()" class="member-name-link">event()</a> - Method in class com.sca4d.core.api.messaging.<a href="com/sca4d/core/api/messaging/MessageDelivery.html" title="class in com.sca4d.core.api.messaging">MessageDelivery</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/event/Event.html" class="type-name-link" title="class in com.sca4d.core.api.event">Event&lt;T&gt;</a> - Class in <a href="com/sca4d/core/api/event/package-summary.html">com.sca4d.core.api.event</a></dt>
@@ -2410,7 +2655,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">执行一次当前任务。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/call/CallLifecycle.html#execute(com.sca4d.core.api.call.CallExecution,java.util.concurrent.Callable)" class="member-name-link">execute(CallExecution, Callable&lt;T&gt;)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.html" title="class in com.sca4d.core.api.call">CallLifecycle</a></dt>
+<dt><a href="com/sca4d/core/api/call/CallInvoker.html#execute(com.sca4d.core.api.call.CallExecution,java.util.concurrent.Callable)" class="member-name-link">execute(CallExecution, Callable&lt;T&gt;)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallInvoker.html" title="class in com.sca4d.core.api.call">CallInvoker</a></dt>
 <dd>
 <div class="block">同步完成方法执行和各环绕处理；返回 Future 只代表本次调度返回，不延伸事务或锁。</div>
 </dd>
@@ -2434,9 +2679,22 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">由 Notification 框架调用类型回调确定接收人、Locale 和区域。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/data/DataGraphExecutor.html#executeParallel(com.sca4d.core.api.data.DataGraph,com.sca4d.core.api.data.DataValues,java.util.concurrent.Executor)" class="member-name-link">executeParallel(DataGraph, DataValues, Executor)</a> - Static method in class com.sca4d.core.api.data.<a href="com/sca4d/core/api/data/DataGraphExecutor.html" title="class in com.sca4d.core.api.data">DataGraphExecutor</a></dt>
+<dt><a href="com/sca4d/core/api/call/CallInvoker.html#executeAsync(com.sca4d.core.api.call.CallExecution,java.util.function.Supplier)" class="member-name-link">executeAsync(CallExecution, Supplier&lt;? extends CompletionStage&lt;T&gt;&gt;)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallInvoker.html" title="class in com.sca4d.core.api.call">CallInvoker</a></dt>
 <dd>
-<div class="block">通过调用方提供的 Executor 并行执行无共享可变状态的数据节点。</div>
+<div class="block">异步完成方法执行和各环绕处理；完成前不保存幂等结果、释放异步锁或记录最终审计。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/concurrent/DistributedLock.html#executeAsync(com.sca4d.core.api.concurrent.LockKey,java.time.Duration,java.util.function.Supplier)" class="member-name-link">executeAsync(LockKey, Duration, Supplier&lt;? extends CompletionStage&lt;T&gt;&gt;)</a> - Method in interface com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/DistributedLock.html" title="interface in com.sca4d.core.api.concurrent">DistributedLock</a></dt>
+<dd>
+<div class="block">在调用线程等待取得锁并启动异步任务，在任务真正完成后释放锁；取消返回值不表示任务已经停止。
+ 不支持异步持锁的实现必须拒绝，不能在目标尚未完成时释放锁。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/data/DataGraphExecutor.html#executeAsync(com.sca4d.core.api.data.DataGraph,com.sca4d.core.api.data.DataValues,java.util.concurrent.Executor)" class="member-name-link">executeAsync(DataGraph, DataValues, Executor)</a> - Static method in class com.sca4d.core.api.data.<a href="com/sca4d/core/api/data/DataGraphExecutor.html" title="class in com.sca4d.core.api.data">DataGraphExecutor</a></dt>
+<dd>
+<div class="block">通过调用方提供的 Executor 异步执行无共享可变状态的数据节点。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/pipeline/PipelineStage.html#executeAsync(I,java.util.concurrent.Executor)" class="member-name-link">executeAsync(I, Executor)</a> - Method in interface com.sca4d.core.api.pipeline.<a href="com/sca4d/core/api/pipeline/PipelineStage.html" title="interface in com.sca4d.core.api.pipeline">PipelineStage</a></dt>
+<dd>
+<div class="block">在调用方执行器中执行同步阶段，异步实现覆盖此方法以直接返回完成信号。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/audit/AuditInvocation.html#execution()" class="member-name-link">execution()</a> - Method in class com.sca4d.core.api.audit.<a href="com/sca4d/core/api/audit/AuditInvocation.html" title="class in com.sca4d.core.api.audit">AuditInvocation</a></dt>
 <dd>&nbsp;</dd>
@@ -2849,9 +3107,34 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">恢复已编码逻辑节点；只供实际序列化边界使用。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/concurrent/IdempotencyKey.html#fromValue(com.sca4d.core.api.concurrent.IdempotencyKey)" class="member-name-link">fromValue(IdempotencyKey)</a> - Static method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/IdempotencyKey.html" title="class in com.sca4d.core.api.concurrent">IdempotencyKey</a></dt>
+<dd>
+<div class="block">返回已经规范化的幂等键。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/concurrent/IdempotencyKey.html#fromValue(java.lang.CharSequence)" class="member-name-link">fromValue(CharSequence)</a> - Static method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/IdempotencyKey.html" title="class in com.sca4d.core.api.concurrent">IdempotencyKey</a></dt>
+<dd>
+<div class="block">把文本输入规范化为幂等键。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/concurrent/IdempotencyKey.html#fromValue(java.lang.Object)" class="member-name-link">fromValue(Object)</a> - Static method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/IdempotencyKey.html" title="class in com.sca4d.core.api.concurrent">IdempotencyKey</a></dt>
+<dd>
+<div class="block">从动态输入归一化幂等键；只接受已经是键对象或文本值。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/resource/ResourceReference.html#fromValue(java.lang.Object,java.lang.String)" class="member-name-link">fromValue(Object, String)</a> - Static method in class com.sca4d.core.api.resource.<a href="com/sca4d/core/api/resource/ResourceReference.html" title="class in com.sca4d.core.api.resource">ResourceReference</a></dt>
+<dd>
+<div class="block">把表达式返回的资源、正整数或文本标识转换为资源引用。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/resource/ResourceReference.html#fromValue(java.lang.Object,java.lang.String,java.lang.String)" class="member-name-link">fromValue(Object, String, String)</a> - Static method in class com.sca4d.core.api.resource.<a href="com/sca4d/core/api/resource/ResourceReference.html" title="class in com.sca4d.core.api.resource">ResourceReference</a></dt>
+<dd>
+<div class="block">把表达式或参数返回的资源、正整数或文本标识转换为资源引用，并为简单标识添加前缀。
+ 已经是 <a href="com/sca4d/core/api/resource/Resource.html" title="interface in com.sca4d.core.api.resource"><code>Resource</code></a> 的值保持原资源标识，不重复添加前缀。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/enums/BaseEnum.html#fromValue(java.lang.Class,java.lang.String)" class="member-name-link">fromValue(Class&lt;E&gt;, String)</a> - Static method in interface com.sca4d.core.api.enums.<a href="com/sca4d/core/api/enums/BaseEnum.html" title="interface in com.sca4d.core.api.enums">BaseEnum</a></dt>
 <dd>
 <div class="block">按外部值查找枚举常量。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallExecution.html#function(com.sca4d.core.api.call.Call,com.sca4d.core.api.name.code.TreeCode,java.lang.Object%5B%5D,java.lang.reflect.Type)" class="member-name-link">function(Call, TreeCode, Object[], Type)</a> - Static method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></dt>
+<dd>
+<div class="block">创建纯函数执行，操作编码是函数的稳定身份。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:G">G</h2>
@@ -3018,10 +3301,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">通过 JavaBean 属性读取 SET 状态携带的非空值，供 MyBatis 等映射框架绑定参数。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/concurrent/RateLimitDimension.html#GLOBAL" class="member-name-link">GLOBAL</a> - Enum constant in enum class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitDimension.html" title="enum class in com.sca4d.core.api.concurrent">RateLimitDimension</a></dt>
-<dd>
-<div class="block">当前具体类型和完整方法签名的全部调用共享额度。</div>
-</dd>
+<dt><a href="com/sca4d/core/api/concurrent/RateLimit.Dim.html#GLOBAL" class="member-name-link">GLOBAL</a> - Enum constant in enum class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimit.Dim.html" title="enum class in com.sca4d.core.api.concurrent">RateLimit.Dim</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/permission/OperationNodeType.html#grantable()" class="member-name-link">grantable()</a> - Method in enum class com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/OperationNodeType.html" title="enum class in com.sca4d.core.api.permission">OperationNodeType</a></dt>
 <dd>
 <div class="block">返回当前节点是否可以授予 Principal。</div>
@@ -3252,10 +3533,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建正整数标识。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/call/CallLifecycle.html#IDEMPOTENCY" class="member-name-link">IDEMPOTENCY</a> - Static variable in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.html" title="class in com.sca4d.core.api.call">CallLifecycle</a></dt>
-<dd>
-<div class="block">取得幂等处理权或重放结果。</div>
-</dd>
 <dt><a href="com/sca4d/core/api/error/CoreErrorCode.html#IDEMPOTENCY_IN_PROGRESS" class="member-name-link">IDEMPOTENCY_IN_PROGRESS</a> - Enum constant in enum class com.sca4d.core.api.error.<a href="com/sca4d/core/api/error/CoreErrorCode.html" title="enum class in com.sca4d.core.api.error">CoreErrorCode</a></dt>
 <dd>
 <div class="block">同一幂等请求仍在处理中。</div>
@@ -3276,9 +3553,13 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">执行 `@Idempotent` 的处理权取得、结果重放、成功保存和失败释放。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/concurrent/IdempotencyCallInterceptor.html#%3Cinit%3E(com.sca4d.core.api.concurrent.IdempotencyStore,com.sca4d.core.api.call.CallValueResolverLookup,com.sca4d.core.api.concurrent.IdempotencyFingerprints,java.time.Duration,java.time.Duration)" class="member-name-link">IdempotencyCallInterceptor(IdempotencyStore, CallValueResolverLookup, IdempotencyFingerprints, Duration, Duration)</a> - Constructor for class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/IdempotencyCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">IdempotencyCallInterceptor</a></dt>
+<dt><a href="com/sca4d/core/api/concurrent/IdempotencyCallInterceptor.html#%3Cinit%3E(com.sca4d.core.api.concurrent.IdempotencyStore,com.sca4d.core.api.call.CallValueResolverLookup,com.sca4d.core.api.call.SPICallValueResolver,com.sca4d.core.api.concurrent.IdempotencyFingerprints,java.time.Duration,java.time.Duration,java.time.Duration,java.util.concurrent.ScheduledExecutorService)" class="member-name-link">IdempotencyCallInterceptor(IdempotencyStore, CallValueResolverLookup, SPICallValueResolver, IdempotencyFingerprints, Duration, Duration, Duration, ScheduledExecutorService)</a> - Constructor for class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/IdempotencyCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">IdempotencyCallInterceptor</a></dt>
 <dd>
 <div class="block">创建幂等调用执行器。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/concurrent/IdempotencyCallInterceptor.html#%3Cinit%3E(com.sca4d.core.api.concurrent.IdempotencyStore,com.sca4d.core.api.call.CallValueResolverLookup,com.sca4d.core.api.call.SPICallValueResolver,com.sca4d.core.api.concurrent.IdempotencyFingerprints,java.time.Duration,java.time.Duration,java.util.concurrent.ScheduledExecutorService)" class="member-name-link">IdempotencyCallInterceptor(IdempotencyStore, CallValueResolverLookup, SPICallValueResolver, IdempotencyFingerprints, Duration, Duration, ScheduledExecutorService)</a> - Constructor for class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/IdempotencyCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">IdempotencyCallInterceptor</a></dt>
+<dd>
+<div class="block">兼容直接组装 Core 拦截器的调用方，默认成功结果保留一天。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/concurrent/IdempotencyFingerprints.html" class="type-name-link" title="class in com.sca4d.core.api.concurrent">IdempotencyFingerprints</a> - Class in <a href="com/sca4d/core/api/concurrent/package-summary.html">com.sca4d.core.api.concurrent</a></dt>
 <dd>
@@ -3332,6 +3613,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/identity/IdentityCallInterceptor.html#%3Cinit%3E()" class="member-name-link">IdentityCallInterceptor()</a> - Constructor for class com.sca4d.core.api.identity.<a href="com/sca4d/core/api/identity/IdentityCallInterceptor.html" title="class in com.sca4d.core.api.identity">IdentityCallInterceptor</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/identity/IdentityCallInterceptor.PrincipalRequirement.html" class="type-name-link" title="class in com.sca4d.core.api.identity">IdentityCallInterceptor.PrincipalRequirement</a> - Class in <a href="com/sca4d/core/api/identity/package-summary.html">com.sca4d.core.api.identity</a></dt>
+<dd>
+<div class="block">在主体选择之后检查权限和审计声明需要的业务主体。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/id/IdGenerator.html" class="type-name-link" title="interface in com.sca4d.core.api.id">IdGenerator</a> - Interface in <a href="com/sca4d/core/api/id/package-summary.html">com.sca4d.core.api.id</a></dt>
 <dd>
 <div class="block">生成全局正整数标识。</div>
@@ -3404,6 +3689,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">按入口声明的键读取快照；当前入口没有提供时返回空。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/concurrent/IdempotencyKey.html#INPUT" class="member-name-link">INPUT</a> - Static variable in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/IdempotencyKey.html" title="class in com.sca4d.core.api.concurrent">IdempotencyKey</a></dt>
+<dd>
+<div class="block">Call 入口提供的原始幂等键输入；缺失时由幂等阶段报告调用方未提供键。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/call/Call.html#inputs()" class="member-name-link">inputs()</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/Call.html" title="class in com.sca4d.core.api.call">Call</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/data/DataGraph.html#inputs()" class="member-name-link">inputs()</a> - Method in class com.sca4d.core.api.data.<a href="com/sca4d/core/api/data/DataGraph.html" title="class in com.sca4d.core.api.data">DataGraph</a></dt>
@@ -3466,6 +3755,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建能力声明；能力可用性不授予调用者业务权限。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycleConfiguration.Registration.html#interceptor()" class="member-name-link">interceptor()</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycleConfiguration.Registration.html" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration.Registration</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/error/CoreErrorCode.html#INTERNAL" class="member-name-link">INTERNAL</a> - Enum constant in enum class com.sca4d.core.api.error.<a href="com/sca4d/core/api/error/CoreErrorCode.html" title="enum class in com.sca4d.core.api.error">CoreErrorCode</a></dt>
 <dd>
 <div class="block">Core 无法归类的内部失败。</div>
@@ -3504,14 +3795,32 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">在指定 Account 的 Session 失效代次增加后执行操作。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/call/CallExecution.html#invocationName()" class="member-name-link">invocationName()</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/call/Call.html#invoke(com.sca4d.core.api.call.CallExecution,java.util.concurrent.Callable)" class="member-name-link">invoke(CallExecution, Callable&lt;T&gt;)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/Call.html" title="class in com.sca4d.core.api.call">Call</a></dt>
+<dd>
+<div class="block">使用已经附着声明的执行描述进入生命周期；供 Spring 适配器和高级绑定使用。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/Call.html#invoke(com.sca4d.core.api.name.code.TreeCode,java.lang.Object%5B%5D,java.lang.reflect.Type,java.util.concurrent.Callable)" class="member-name-link">invoke(TreeCode, Object[], Type, Callable&lt;T&gt;)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/Call.html" title="class in com.sca4d.core.api.call">Call</a></dt>
+<dd>
+<div class="block">执行使用稳定 TreeCode 标识的纯函数。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/plugin/ApiInvoker.html#invoke(com.sca4d.core.api.plugin.ApiTarget,com.sca4d.core.api.name.code.TreeCode,java.lang.Object%5B%5D)" class="member-name-link">invoke(ApiTarget, TreeCode, Object[])</a> - Method in interface com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/ApiInvoker.html" title="interface in com.sca4d.core.api.plugin">ApiInvoker</a></dt>
 <dd>
 <div class="block">在当前线程调用一次公开操作，原样保留目标抛出的异常；void 操作返回 null。
  调用不自动改变身份、事务传播或数据源，不序列化参数和结果。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/call/Call.html#invoke(java.lang.String,java.lang.Object%5B%5D,java.lang.reflect.Type,java.util.concurrent.Callable)" class="member-name-link">invoke(String, Object[], Type, Callable&lt;T&gt;)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/Call.html" title="class in com.sca4d.core.api.call">Call</a></dt>
+<dd>
+<div class="block">使用冒号格式字符串解析 TreeCode 后执行纯函数。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/plugin/OperationInvoker.html#invoke(java.lang.Object%5B%5D)" class="member-name-link">invoke(Object[])</a> - Method in interface com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/OperationInvoker.html" title="interface in com.sca4d.core.api.plugin">OperationInvoker</a></dt>
 <dd>
 <div class="block">按声明顺序调用实际目标，void 返回 null。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/Call.html#invoke(java.lang.reflect.Method,java.lang.Object%5B%5D,java.util.concurrent.Callable)" class="member-name-link">invoke(Method, Object[], Callable&lt;T&gt;)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/Call.html" title="class in com.sca4d.core.api.call">Call</a></dt>
+<dd>
+<div class="block">执行带 Java Method 元数据的调用。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/permission/Action.html#INVOKE" class="member-name-link">INVOKE</a> - Static variable in class com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/Action.html" title="class in com.sca4d.core.api.permission">Action</a></dt>
 <dd>
@@ -3521,10 +3830,24 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">`INVOKE` 的稳定动作键，可用于注解参数。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/concurrent/RateLimitDimension.html#IP" class="member-name-link">IP</a> - Enum constant in enum class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitDimension.html" title="enum class in com.sca4d.core.api.concurrent">RateLimitDimension</a></dt>
+<dt><a href="com/sca4d/core/api/call/Call.html#invokeAsync(com.sca4d.core.api.call.CallExecution,java.util.function.Supplier)" class="member-name-link">invokeAsync(CallExecution, Supplier&lt;? extends CompletionStage&lt;T&gt;&gt;)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/Call.html" title="class in com.sca4d.core.api.call">Call</a></dt>
 <dd>
-<div class="block">按 HTTP 客户端 IP 分别计算额度。</div>
+<div class="block">使用已经附着声明的异步执行描述进入生命周期。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/call/Call.html#invokeAsync(com.sca4d.core.api.name.code.TreeCode,java.lang.Object%5B%5D,java.lang.reflect.Type,java.util.function.Supplier)" class="member-name-link">invokeAsync(TreeCode, Object[], Type, Supplier&lt;? extends CompletionStage&lt;T&gt;&gt;)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/Call.html" title="class in com.sca4d.core.api.call">Call</a></dt>
+<dd>
+<div class="block">执行异步纯函数调用。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/Call.html#invokeAsync(java.lang.String,java.lang.Object%5B%5D,java.lang.reflect.Type,java.util.function.Supplier)" class="member-name-link">invokeAsync(String, Object[], Type, Supplier&lt;? extends CompletionStage&lt;T&gt;&gt;)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/Call.html" title="class in com.sca4d.core.api.call">Call</a></dt>
+<dd>
+<div class="block">使用冒号格式字符串解析 TreeCode 后执行异步纯函数。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/Call.html#invokeAsync(java.lang.reflect.Method,java.lang.Object%5B%5D,java.util.function.Supplier)" class="member-name-link">invokeAsync(Method, Object[], Supplier&lt;? extends CompletionStage&lt;T&gt;&gt;)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/Call.html" title="class in com.sca4d.core.api.call">Call</a></dt>
+<dd>
+<div class="block">执行异步 Java Method 调用。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/concurrent/RateLimit.Dim.html#IP" class="member-name-link">IP</a> - Enum constant in enum class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimit.Dim.html" title="enum class in com.sca4d.core.api.concurrent">RateLimit.Dim</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/concurrent/RateLimitDecision.html#isAllowed()" class="member-name-link">isAllowed()</a> - Method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitDecision.html" title="class in com.sca4d.core.api.concurrent">RateLimitDecision</a></dt>
 <dd>
 <div class="block">返回当前调用是否取得全部额度。</div>
@@ -3579,6 +3902,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">判断当前意图是否保留数据库原值。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/call/CallExecution.html#isInvoking()" class="member-name-link">isInvoking()</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/id/Id.html#isLessThan(com.sca4d.core.api.id.Id)" class="member-name-link">isLessThan(Id)</a> - Method in class com.sca4d.core.api.id.<a href="com/sca4d/core/api/id/Id.html" title="class in com.sca4d.core.api.id">Id</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/id/Id.html#isLessThan(java.lang.Number)" class="member-name-link">isLessThan(Number)</a> - Method in class com.sca4d.core.api.id.<a href="com/sca4d/core/api/id/Id.html" title="class in com.sca4d.core.api.id">Id</a></dt>
@@ -3753,6 +4078,18 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:K">K</h2>
 <dl class="index">
+<dt><a href="com/sca4d/core/api/annotation/Idempotent.html#key()" class="member-name-link">key()</a> - Element in annotation interface com.sca4d.core.api.annotation.<a href="com/sca4d/core/api/annotation/Idempotent.html" title="annotation interface in com.sca4d.core.api.annotation">Idempotent</a></dt>
+<dd>
+<div class="block">从方法参数或返回值读取幂等键的表达式；为空时读取当前 Call 的标准输入。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/annotation/Locked.html#key()" class="member-name-link">key()</a> - Element in annotation interface com.sca4d.core.api.annotation.<a href="com/sca4d/core/api/annotation/Locked.html" title="annotation interface in com.sca4d.core.api.annotation">Locked</a></dt>
+<dd>
+<div class="block">从方法参数读取 `LockKey` 的表达式；与 `keyResolver` 二选一。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/annotation/RateLimited.html#key()" class="member-name-link">key()</a> - Element in annotation interface com.sca4d.core.api.annotation.<a href="com/sca4d/core/api/annotation/RateLimited.html" title="annotation interface in com.sca4d.core.api.annotation">RateLimited</a></dt>
+<dd>
+<div class="block">从方法参数读取自定义限流键的表达式；与 `keyResolver` 二选一。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/i18n/MessageText.html#key()" class="member-name-link">key()</a> - Method in class com.sca4d.core.api.i18n.<a href="com/sca4d/core/api/i18n/MessageText.html" title="class in com.sca4d.core.api.i18n">MessageText</a></dt>
 <dd>
 <div class="block">读取 MessageCatalog 查找模板时使用的键。</div>
@@ -3858,6 +4195,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回左分支结果。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycleConfiguration.Registration.html#lifecycle()" class="member-name-link">lifecycle()</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycleConfiguration.Registration.html" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration.Registration</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/data/DataOps.SeqPipe.html#list()" class="member-name-link">list()</a> - Method in class com.sca4d.core.api.data.<a href="com/sca4d/core/api/data/DataOps.SeqPipe.html" title="class in com.sca4d.core.api.data">DataOps.SeqPipe</a></dt>
 <dd>
 <div class="block">读取管道内部保存的元素副本；返回列表保持原顺序且不可修改。</div>
@@ -3969,15 +4308,11 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建业务国际化字段规则。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/call/CallLifecycle.html#LOCK" class="member-name-link">LOCK</a> - Static variable in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.html" title="class in com.sca4d.core.api.call">CallLifecycle</a></dt>
-<dd>
-<div class="block">取得覆盖方法及内部事务的锁。</div>
-</dd>
 <dt><a href="com/sca4d/core/api/concurrent/LockCallInterceptor.html" class="type-name-link" title="class in com.sca4d.core.api.concurrent">LockCallInterceptor</a> - Class in <a href="com/sca4d/core/api/concurrent/package-summary.html">com.sca4d.core.api.concurrent</a></dt>
 <dd>
 <div class="block">解析 `@Locked` 的锁键，并在分布式锁内连续执行实际业务方法。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/concurrent/LockCallInterceptor.html#%3Cinit%3E(com.sca4d.core.api.concurrent.DistributedLock,com.sca4d.core.api.call.CallValueResolverLookup)" class="member-name-link">LockCallInterceptor(DistributedLock, CallValueResolverLookup)</a> - Constructor for class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/LockCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">LockCallInterceptor</a></dt>
+<dt><a href="com/sca4d/core/api/concurrent/LockCallInterceptor.html#%3Cinit%3E(com.sca4d.core.api.concurrent.DistributedLock,com.sca4d.core.api.call.CallValueResolverLookup,com.sca4d.core.api.call.SPICallValueResolver)" class="member-name-link">LockCallInterceptor(DistributedLock, CallValueResolverLookup, SPICallValueResolver)</a> - Constructor for class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/LockCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">LockCallInterceptor</a></dt>
 <dd>
 <div class="block">创建分布式锁调用执行器。</div>
 </dd>
@@ -4089,6 +4424,19 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/security/SecretHasher.html#matches(java.lang.String,java.lang.String)" class="member-name-link">matches(String, String)</a> - Method in interface com.sca4d.core.api.security.<a href="com/sca4d/core/api/security/SecretHasher.html" title="interface in com.sca4d.core.api.security">SecretHasher</a></dt>
 <dd>
 <div class="block">校验原始秘密值是否与已保存摘要匹配。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/condition/DnfClause.html#matches(T)" class="member-name-link">matches(T)</a> - Method in class com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a></dt>
+<dd>
+<div class="block">同步判断 Clause 内全部条件。空 Clause 表示恒真。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/condition/DnfClause.html#matchesAsync(T,java.util.concurrent.Executor)" class="member-name-link">matchesAsync(T, Executor)</a> - Method in class com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a></dt>
+<dd>
+<div class="block">并行判断 Clause 内全部条件，等全部条件完成后合并结果。
+ false 不取消其他条件；外部读取须由调用方设置超时，取消返回阶段也不保证中断已发出的请求。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/condition/DnfExpression.html#matchingClause(T)" class="member-name-link">matchingClause(T)</a> - Method in class com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfExpression.html" title="class in com.sca4d.core.api.condition">DnfExpression</a></dt>
+<dd>
+<div class="block">返回第一个命中的 Clause。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/job/JobRetryPolicy.html#maxAttempts()" class="member-name-link">maxAttempts()</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobRetryPolicy.html" title="class in com.sca4d.core.api.job">JobRetryPolicy</a></dt>
 <dd>
@@ -4554,6 +4902,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建动态翻译文本。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/condition/DnfClause.Condition.html#of(java.util.function.Predicate)" class="member-name-link">of(Predicate&lt;? super T&gt;)</a> - Static method in interface com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfClause.Condition.html" title="interface in com.sca4d.core.api.condition">DnfClause.Condition</a></dt>
+<dd>
+<div class="block">把普通 Predicate 转为 DNF 条件。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/name/code/TreeCode.html#ofColon(java.lang.String)" class="member-name-link">ofColon(String)</a> - Static method in class com.sca4d.core.api.name.code.<a href="com/sca4d/core/api/name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></dt>
 <dd>
 <div class="block">解析冒号文本；单节点也允许，输入格式只用于校验。</div>
@@ -4624,6 +4976,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回业务操作。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/call/CallExecution.html#operation()" class="member-name-link">operation()</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/permission/OperationNode.OperationAction.html#operation()" class="member-name-link">operation()</a> - Method in class com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/OperationNode.OperationAction.html" title="class in com.sca4d.core.api.permission">OperationNode.OperationAction</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/data/DataGraph.Builder.html#operation(com.sca4d.core.api.data.DataOperation)" class="member-name-link">operation(DataOperation&lt;?&gt;)</a> - Method in class com.sca4d.core.api.data.<a href="com/sca4d/core/api/data/DataGraph.Builder.html" title="class in com.sca4d.core.api.data">DataGraph.Builder</a></dt>
@@ -4927,11 +5281,15 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/concurrent/LockKey.html#part(long)" class="member-name-link">part(long)</a> - Method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/LockKey.html" title="class in com.sca4d.core.api.concurrent">LockKey</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/concurrent/RateLimitKey.html#part(long)" class="member-name-link">part(long)</a> - Method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitKey.html" title="class in com.sca4d.core.api.concurrent">RateLimitKey</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/name/Key.html#part(long)" class="member-name-link">part(long)</a> - Method in class com.sca4d.core.api.name.<a href="com/sca4d/core/api/name/Key.html" title="class in com.sca4d.core.api.name">Key</a></dt>
 <dd>
 <div class="block">追加动态数字；固定编码中的数字节点使用转义，避免与动态数字混淆。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/concurrent/LockKey.html#part(java.lang.String)" class="member-name-link">part(String)</a> - Method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/LockKey.html" title="class in com.sca4d.core.api.concurrent">LockKey</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/concurrent/RateLimitKey.html#part(java.lang.String)" class="member-name-link">part(String)</a> - Method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitKey.html" title="class in com.sca4d.core.api.concurrent">RateLimitKey</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/name/Key.html#part(java.lang.String)" class="member-name-link">part(String)</a> - Method in class com.sca4d.core.api.name.<a href="com/sca4d/core/api/name/Key.html" title="class in com.sca4d.core.api.name">Key</a></dt>
 <dd>
@@ -4954,6 +5312,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/runtime/InstanceCapability.html#paths()" class="member-name-link">paths()</a> - Method in class com.sca4d.core.api.runtime.<a href="com/sca4d/core/api/runtime/InstanceCapability.html" title="class in com.sca4d.core.api.runtime">InstanceCapability</a></dt>
 <dd>
 <div class="block">返回声明该能力的全部 HTTP 路径前缀。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/annotation/Audit.html#payload()" class="member-name-link">payload()</a> - Element in annotation interface com.sca4d.core.api.annotation.<a href="com/sca4d/core/api/annotation/Audit.html" title="annotation interface in com.sca4d.core.api.annotation">Audit</a></dt>
+<dd>
+<div class="block">从方法参数或返回结果读取 AuditPayload 的表达式；与 `payloadFactory` 二选一。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/audit/AuditRecord.html#payload()" class="member-name-link">payload()</a> - Method in class com.sca4d.core.api.audit.<a href="com/sca4d/core/api/audit/AuditRecord.html" title="class in com.sca4d.core.api.audit">AuditRecord</a></dt>
 <dd>
@@ -4999,10 +5361,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">当前业务主体没有执行权限。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/call/CallLifecycle.html#PERMISSION" class="member-name-link">PERMISSION</a> - Static variable in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.html" title="class in com.sca4d.core.api.call">CallLifecycle</a></dt>
-<dd>
-<div class="block">解析和判断方法权限。</div>
-</dd>
 <dt><a href="com/sca4d/core/api/error/CoreErrorCode.html#PERMISSION_DENIED" class="member-name-link">PERMISSION_DENIED</a> - Enum constant in enum class com.sca4d.core.api.error.<a href="com/sca4d/core/api/error/CoreErrorCode.html" title="enum class in com.sca4d.core.api.error">CoreErrorCode</a></dt>
 <dd>
 <div class="block">当前业务主体没有目标权限。</div>
@@ -5019,7 +5377,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">解析 `@RequirePermission`，执行权限判断，并登记必须由 Repository 消费的资源范围。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/permission/PermissionCallInterceptor.html#%3Cinit%3E(com.sca4d.core.api.permission.PermissionAssessment,com.sca4d.core.api.call.CallValueResolverLookup)" class="member-name-link">PermissionCallInterceptor(PermissionAssessment, CallValueResolverLookup)</a> - Constructor for class com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/PermissionCallInterceptor.html" title="class in com.sca4d.core.api.permission">PermissionCallInterceptor</a></dt>
+<dt><a href="com/sca4d/core/api/permission/PermissionCallInterceptor.html#%3Cinit%3E(com.sca4d.core.api.permission.PermissionAssessment,com.sca4d.core.api.call.CallValueResolverLookup,com.sca4d.core.api.call.SPICallValueResolver)" class="member-name-link">PermissionCallInterceptor(PermissionAssessment, CallValueResolverLookup, SPICallValueResolver)</a> - Constructor for class com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/PermissionCallInterceptor.html" title="class in com.sca4d.core.api.permission">PermissionCallInterceptor</a></dt>
 <dd>
 <div class="block">创建权限调用评估器。</div>
 </dd>
@@ -5207,6 +5565,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">由用户持有设备或凭据产生的证明，例如 TOTP 或硬件密钥。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.html#PRE_COMMIT" class="member-name-link">PRE_COMMIT</a> - Enum constant in enum class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a></dt>
+<dd>
+<div class="block">在事务提交前检查条件。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallExecution.html#preCommitConditions(java.lang.Class)" class="member-name-link">preCommitConditions(Class&lt;C&gt;)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></dt>
+<dd>
+<div class="block">返回指定类型的预提交条件，供所属功能读取和消费；不能修改条件集合。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/concurrent/VersionCondition.html#precondition(com.sca4d.core.api.concurrent.Version)" class="member-name-link">precondition(Version)</a> - Static method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/VersionCondition.html" title="class in com.sca4d.core.api.concurrent">VersionCondition</a></dt>
 <dd>
 <div class="block">创建调用方提交的版本前置条件。</div>
@@ -5271,10 +5637,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">匹配包含 Principal 的全部在线浏览器连接。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/call/CallLifecycle.html#PRINCIPAL" class="member-name-link">PRINCIPAL</a> - Static variable in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.html" title="class in com.sca4d.core.api.call">CallLifecycle</a></dt>
-<dd>
-<div class="block">在权限判断前确认调用主体；入口可以在此锚点之前挂载主体选择。</div>
-</dd>
 <dt><a href="com/sca4d/core/api/authentication/Session.html#principalById(long)" class="member-name-link">principalById(long)</a> - Method in class com.sca4d.core.api.authentication.<a href="com/sca4d/core/api/authentication/Session.html" title="class in com.sca4d.core.api.authentication">Session</a></dt>
 <dd>
 <div class="block">返回当前 Session 中完整装载的 Principal。</div>
@@ -5313,6 +5675,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">认领 <a href="com/sca4d/core/api/authentication/SessionIdentity.html" title="class in com.sca4d.core.api.authentication"><code>SessionIdentity</code></a>，并读取建立 <a href="com/sca4d/core/api/authentication/Session.html" title="class in com.sca4d.core.api.authentication"><code>Session</code></a> 所需的 Principal。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/identity/IdentityCallInterceptor.PrincipalRequirement.html#%3Cinit%3E()" class="member-name-link">PrincipalRequirement()</a> - Constructor for class com.sca4d.core.api.identity.<a href="com/sca4d/core/api/identity/IdentityCallInterceptor.PrincipalRequirement.html" title="class in com.sca4d.core.api.identity">IdentityCallInterceptor.PrincipalRequirement</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/identity/PrincipalResolver.html" class="type-name-link" title="interface in com.sca4d.core.api.identity">PrincipalResolver&lt;P&gt;</a> - Interface in <a href="com/sca4d/core/api/identity/package-summary.html">com.sca4d.core.api.identity</a></dt>
 <dd>
 <div class="block">按标识解析业务主体（Principal）。</div>
@@ -5329,13 +5693,19 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回候选 Principal 必须精确匹配的 Java 类型。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/call/CallLifecycle.Around.html#priority()" class="member-name-link">priority()</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.Around.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a></dt>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.Participant.html#priority()" class="member-name-link">priority()</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.Participant.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Participant</a></dt>
 <dd>
-<div class="block">无依赖关系时，数值越小越先进入。</div>
+<div class="block">无硬依赖时用于稳定排序的优先级。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycleConfiguration.Registration.html#priority()" class="member-name-link">priority()</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycleConfiguration.Registration.html" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration.Registration</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/call/CallLifecycle.Next.html#proceed()" class="member-name-link">proceed()</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.Next.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Next</a></dt>
 <dd>
-<div class="block">执行剩余调用；业务异常归一化为 CallOutcome，不再次抛出。</div>
+<div class="block">执行剩余调用。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.AsyncNext.html#proceedAsync()" class="member-name-link">proceedAsync()</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.AsyncNext.html" title="interface in com.sca4d.core.api.call">CallLifecycle.AsyncNext</a></dt>
+<dd>
+<div class="block">执行剩余调用并返回最终完成阶段。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/runtime/Environment.html#PROD" class="member-name-link">PROD</a> - Enum constant in enum class com.sca4d.core.api.runtime.<a href="com/sca4d/core/api/runtime/Environment.html" title="enum class in com.sca4d.core.api.runtime">Environment</a></dt>
 <dd>
@@ -5427,10 +5797,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">调用超过入口允许的频率。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/call/CallLifecycle.html#RATE_LIMIT" class="member-name-link">RATE_LIMIT</a> - Static variable in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.html" title="class in com.sca4d.core.api.call">CallLifecycle</a></dt>
-<dd>
-<div class="block">消耗调用额度。</div>
-</dd>
 <dt><a href="com/sca4d/core/api/error/CoreErrorCode.html#RATE_LIMITED" class="member-name-link">RATE_LIMITED</a> - Enum constant in enum class com.sca4d.core.api.error.<a href="com/sca4d/core/api/error/CoreErrorCode.html" title="enum class in com.sca4d.core.api.error">CoreErrorCode</a></dt>
 <dd>
 <div class="block">调用超过允许频率。</div>
@@ -5443,21 +5809,21 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建限流要求。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/concurrent/RateLimit.Dim.html" class="type-name-link" title="enum class in com.sca4d.core.api.concurrent">RateLimit.Dim</a> - Enum Class in <a href="com/sca4d/core/api/concurrent/package-summary.html">com.sca4d.core.api.concurrent</a></dt>
+<dd>
+<div class="block">声明限流键使用的稳定维度。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/concurrent/RateLimitCallInterceptor.html" class="type-name-link" title="class in com.sca4d.core.api.concurrent">RateLimitCallInterceptor</a> - Class in <a href="com/sca4d/core/api/concurrent/package-summary.html">com.sca4d.core.api.concurrent</a></dt>
 <dd>
 <div class="block">解析 `@RateLimited` 的内置和自定义维度，并取得每个维度的限流额度。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/concurrent/RateLimitCallInterceptor.html#%3Cinit%3E(com.sca4d.core.api.concurrent.RateLimiter,com.sca4d.core.api.call.CallValueResolverLookup)" class="member-name-link">RateLimitCallInterceptor(RateLimiter, CallValueResolverLookup)</a> - Constructor for class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">RateLimitCallInterceptor</a></dt>
+<dt><a href="com/sca4d/core/api/concurrent/RateLimitCallInterceptor.html#%3Cinit%3E(com.sca4d.core.api.concurrent.RateLimiter,com.sca4d.core.api.call.CallValueResolverLookup,com.sca4d.core.api.call.SPICallValueResolver)" class="member-name-link">RateLimitCallInterceptor(RateLimiter, CallValueResolverLookup, SPICallValueResolver)</a> - Constructor for class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">RateLimitCallInterceptor</a></dt>
 <dd>
 <div class="block">创建限流调用评估器。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/concurrent/RateLimitDecision.html" class="type-name-link" title="class in com.sca4d.core.api.concurrent">RateLimitDecision</a> - Class in <a href="com/sca4d/core/api/concurrent/package-summary.html">com.sca4d.core.api.concurrent</a></dt>
 <dd>
 <div class="block">保存一次限流额度判断是否允许以及拒绝后的等待时间。</div>
-</dd>
-<dt><a href="com/sca4d/core/api/concurrent/RateLimitDimension.html" class="type-name-link" title="enum class in com.sca4d.core.api.concurrent">RateLimitDimension</a> - Enum Class in <a href="com/sca4d/core/api/concurrent/package-summary.html">com.sca4d.core.api.concurrent</a></dt>
-<dd>
-<div class="block">列出 `@RateLimited` 可以直接读取的调用限流维度。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/annotation/RateLimited.html" class="type-name-link" title="annotation interface in com.sca4d.core.api.annotation">RateLimited</a> - Annotation Interface in <a href="com/sca4d/core/api/annotation/package-summary.html">com.sca4d.core.api.annotation</a></dt>
 <dd>
@@ -5474,6 +5840,22 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/concurrent/RateLimitExceededException.html#%3Cinit%3E(java.time.Duration)" class="member-name-link">RateLimitExceededException(Duration)</a> - Constructor for exception class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitExceededException.html" title="class in com.sca4d.core.api.concurrent">RateLimitExceededException</a></dt>
 <dd>
 <div class="block">创建限流拒绝异常。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/concurrent/RateLimitKey.html" class="type-name-link" title="class in com.sca4d.core.api.concurrent">RateLimitKey</a> - Class in <a href="com/sca4d/core/api/concurrent/package-summary.html">com.sca4d.core.api.concurrent</a></dt>
+<dd>
+<div class="block">使用稳定限流编码和动态维度值组成跨实例限流键。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/concurrent/RateLimitKey.html#%3Cinit%3E(com.sca4d.core.api.name.code.Code)" class="member-name-link">RateLimitKey(Code)</a> - Constructor for class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitKey.html" title="class in com.sca4d.core.api.concurrent">RateLimitKey</a></dt>
+<dd>
+<div class="block">构造固定限流键。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/concurrent/RateLimitKey.html#%3Cinit%3E(com.sca4d.core.api.name.code.Code,long...)" class="member-name-link">RateLimitKey(Code, long...)</a> - Constructor for class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitKey.html" title="class in com.sca4d.core.api.concurrent">RateLimitKey</a></dt>
+<dd>
+<div class="block">在稳定限流编码之后保存动态数字。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/concurrent/RateLimitKey.html#%3Cinit%3E(com.sca4d.core.api.name.code.Code,java.lang.String...)" class="member-name-link">RateLimitKey(Code, String...)</a> - Constructor for class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitKey.html" title="class in com.sca4d.core.api.concurrent">RateLimitKey</a></dt>
+<dd>
+<div class="block">在稳定限流编码之后保存动态文本。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/setting/value/SettingValue.html#read(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.setting.value.SettingOwner,T,int,com.sca4d.core.api.concurrent.Version,boolean)" class="member-name-link">read(TreeCode, TreeCode, SettingOwner, T, int, Version, boolean)</a> - Static method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingValue.html" title="class in com.sca4d.core.api.setting.value">SettingValue</a></dt>
 <dd>
@@ -5555,7 +5937,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/audit/AuditRecorder.html#record(com.sca4d.core.api.audit.AuditRecord)" class="member-name-link">record(AuditRecord)</a> - Method in interface com.sca4d.core.api.audit.<a href="com/sca4d/core/api/audit/AuditRecorder.html" title="interface in com.sca4d.core.api.audit">AuditRecorder</a></dt>
 <dd>
-<div class="block">完成本实现声明的写入或可靠交接；失败时抛出异常，不静默丢弃。</div>
+<div class="block">执行本实现声明的写入或交接；尽力模式必须自行记录丢弃和后台失败。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/call/CallExecution.html#recordDeclarations(java.lang.Class,java.util.List,java.util.List)" class="member-name-link">recordDeclarations(Class&lt;A&gt;, List&lt;A&gt;, List&lt;A&gt;)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></dt>
 <dd>
@@ -5615,6 +5997,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">登记当前 Call 已批准的范围；同一方法执行中的同一 Permission 只登记一次。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycleConfiguration.html#register(com.sca4d.core.api.call.CallLifecycle,com.sca4d.core.api.call.CallLifecycle.Participant,java.util.Set,java.util.Set,int)" class="member-name-link">register(CallLifecycle, CallLifecycle.Participant, Set&lt;TreeCode&gt;, Set&lt;TreeCode&gt;, int)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycleConfiguration.html" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration</a></dt>
+<dd>
+<div class="block">登记一个阶段参与者。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/connection/ConnectionRegistry.html#register(com.sca4d.core.api.connection.Connection)" class="member-name-link">register(Connection)</a> - Method in interface com.sca4d.core.api.connection.<a href="com/sca4d/core/api/connection/ConnectionRegistry.html" title="interface in com.sca4d.core.api.connection">ConnectionRegistry</a></dt>
 <dd>
 <div class="block">登记一条新的连接信息；相同连接标识再次登记时由实现刷新当前信息。</div>
@@ -5626,6 +6012,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/gateway/GatewayHttpPaths.html#REGISTRATION_LEASE_PATTERN" class="member-name-link">REGISTRATION_LEASE_PATTERN</a> - Static variable in class com.sca4d.core.api.gateway.<a href="com/sca4d/core/api/gateway/GatewayHttpPaths.html" title="class in com.sca4d.core.api.gateway">GatewayHttpPaths</a></dt>
 <dd>
 <div class="block">Gateway 控制 API 匹配单个 Server 实例租约时使用的路径模式。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycleConfiguration.html#registrations()" class="member-name-link">registrations()</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycleConfiguration.html" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration</a></dt>
+<dd>
+<div class="block">返回不可修改的配置快照。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/gateway/GatewayHttpPaths.html#REGISTRATIONS" class="member-name-link">REGISTRATIONS</a> - Static variable in class com.sca4d.core.api.gateway.<a href="com/sca4d/core/api/gateway/GatewayHttpPaths.html" title="class in com.sca4d.core.api.gateway">GatewayHttpPaths</a></dt>
 <dd>
@@ -5679,6 +6069,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/render/Renderer.html" class="type-name-link" title="interface in com.sca4d.core.api.render">Renderer&lt;S,<wbr>R&gt;</a> - Interface in <a href="com/sca4d/core/api/render/package-summary.html">com.sca4d.core.api.render</a></dt>
 <dd>
 <div class="block">校验一种模板源，并按 Locale 和变量生成具体结果。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/concurrent/IdempotencyStore.html#renew(com.sca4d.core.api.concurrent.IdempotencyKey,java.lang.String,java.time.Duration)" class="member-name-link">renew(IdempotencyKey, String, Duration)</a> - Method in interface com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/IdempotencyStore.html" title="interface in com.sca4d.core.api.concurrent">IdempotencyStore</a></dt>
+<dd>
+<div class="block">仅在 token 仍持有处理中记录时延长租约。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/setting/access/SettingWriter.html#replace(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.setting.value.SettingOwner,W,int,boolean,com.sca4d.core.api.concurrent.Version)" class="member-name-link">replace(TreeCode, SettingOwner, W, int, boolean, Version)</a> - Method in interface com.sca4d.core.api.setting.access.<a href="com/sca4d/core/api/setting/access/SettingWriter.html" title="interface in com.sca4d.core.api.setting.access">SettingWriter</a></dt>
 <dd>
@@ -5804,14 +6198,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回指定账号执行动作前必须满足的认证要求。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/call/CallExecution.html#requirements(java.lang.Class)" class="member-name-link">requirements(Class&lt;R&gt;)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></dt>
-<dd>
-<div class="block">返回指定类型的要求，供所属功能读取和消费；不能修改要求集合。</div>
-</dd>
-<dt><a href="com/sca4d/core/api/call/CallLifecycle.html#REQUIREMENTS" class="member-name-link">REQUIREMENTS</a> - Static variable in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.html" title="class in com.sca4d.core.api.call">CallLifecycle</a></dt>
-<dd>
-<div class="block">在方法正常返回后、锁释放与幂等保存之前检查成功要求。</div>
-</dd>
 <dt><a href="com/sca4d/core/api/setting/Setting.html#requireOwner()" class="member-name-link">requireOwner()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.html" title="class in com.sca4d.core.api.setting">Setting</a></dt>
 <dd>
 <div class="block">返回明确固定的 owner，不从线程或全局身份猜测。</div>
@@ -5882,6 +6268,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">按 Session 标识重新读取仍在线且已经完成失效刷新检查的 Session。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/call/SPICallValueResolver.html#resolve(com.sca4d.core.api.call.CallExecution)" class="member-name-link">resolve(CallExecution)</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/SPICallValueResolver.html" title="interface in com.sca4d.core.api.call">SPICallValueResolver</a></dt>
+<dd>
+<div class="block">兼容按普通 CallValueResolver 调用的入口；空表达式会被解析器拒绝。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/call/CallValueResolver.html#resolve(com.sca4d.core.api.call.CallExecution)" class="member-name-link">resolve(CallExecution)</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallValueResolver.html" title="interface in com.sca4d.core.api.call">CallValueResolver</a></dt>
 <dd>
 <div class="block">解析动态值。</div>
@@ -5902,6 +6292,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">在指定认证域中按原始登录标识查找完整可用身份链对应的 Account。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/call/SPICallValueResolver.html#resolve(java.lang.String,com.sca4d.core.api.call.CallExecution)" class="member-name-link">resolve(String, CallExecution)</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/SPICallValueResolver.html" title="interface in com.sca4d.core.api.call">SPICallValueResolver</a></dt>
+<dd>
+<div class="block">解析一项注解表达式。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/i18n/LocaleCatalog.html#resolve(java.util.List)" class="member-name-link">resolve(List&lt;Locale&gt;)</a> - Method in class com.sca4d.core.api.i18n.<a href="com/sca4d/core/api/i18n/LocaleCatalog.html" title="class in com.sca4d.core.api.i18n">LocaleCatalog</a></dt>
 <dd>
 <div class="block">按请求优先级选择第一个可用 Locale。</div>
@@ -5918,6 +6312,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建最终结果，只收集读取元数据；默认值没有来源内容。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/annotation/RequirePermission.html#resolver()" class="member-name-link">resolver()</a> - Element in annotation interface com.sca4d.core.api.annotation.<a href="com/sca4d/core/api/annotation/RequirePermission.html" title="annotation interface in com.sca4d.core.api.annotation">RequirePermission</a></dt>
+<dd>
+<div class="block">返回动态业务资源集合解析器；使用固定操作时保持占位类型。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/call/CallValueResolverLookup.html#resolver(java.lang.Class)" class="member-name-link">resolver(Class&lt;? extends CallValueResolver&lt;?&gt;&gt;)</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallValueResolverLookup.html" title="interface in com.sca4d.core.api.call">CallValueResolverLookup</a></dt>
 <dd>
 <div class="block">取得指定类型的解析器实例。</div>
@@ -5925,6 +6323,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/authentication/SessionLifecycle.html#resolveToken(java.lang.String)" class="member-name-link">resolveToken(String)</a> - Method in interface com.sca4d.core.api.authentication.<a href="com/sca4d/core/api/authentication/SessionLifecycle.html" title="interface in com.sca4d.core.api.authentication">SessionLifecycle</a></dt>
 <dd>
 <div class="block">按不透明 Token 读取当前仍在线的 Session。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/annotation/RequirePermission.html#resource()" class="member-name-link">resource()</a> - Element in annotation interface com.sca4d.core.api.annotation.<a href="com/sca4d/core/api/annotation/RequirePermission.html" title="annotation interface in com.sca4d.core.api.annotation">RequirePermission</a></dt>
+<dd>
+<div class="block">从方法参数读取资源、资源标识或资源集合的表达式；与 `operation` 和 `resolver` 三选一。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/permission/Permission.html#resource()" class="member-name-link">resource()</a> - Method in class com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/Permission.html" title="class in com.sca4d.core.api.permission">Permission</a></dt>
 <dd>
@@ -6014,10 +6416,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建资源引用。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/annotation/RequirePermission.html#resourceResolver()" class="member-name-link">resourceResolver()</a> - Element in annotation interface com.sca4d.core.api.annotation.<a href="com/sca4d/core/api/annotation/RequirePermission.html" title="annotation interface in com.sca4d.core.api.annotation">RequirePermission</a></dt>
-<dd>
-<div class="block">返回动态业务资源集合解析器；使用固定操作时保持占位类型。</div>
-</dd>
 <dt><a href="com/sca4d/core/api/authentication/Session.html#resources(long)" class="member-name-link">resources(long)</a> - Method in class com.sca4d.core.api.authentication.<a href="com/sca4d/core/api/authentication/Session.html" title="class in com.sca4d.core.api.authentication">Session</a></dt>
 <dd>
 <div class="block">返回指定 Principal 的静态授权资源快照。</div>
@@ -6030,9 +6428,17 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">保存一次方法执行必须由 Repository 消费的权限资源范围。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/annotation/Audit.html#resourceType()" class="member-name-link">resourceType()</a> - Element in annotation interface com.sca4d.core.api.annotation.<a href="com/sca4d/core/api/annotation/Audit.html" title="annotation interface in com.sca4d.core.api.annotation">Audit</a></dt>
+<dd>
+<div class="block">表达式返回资源标识时使用的资源类型；表达式返回完整 Resource 时可为空。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/annotation/AuditTarget.html#resourceType()" class="member-name-link">resourceType()</a> - Element in annotation interface com.sca4d.core.api.annotation.<a href="com/sca4d/core/api/annotation/AuditTarget.html" title="annotation interface in com.sca4d.core.api.annotation">AuditTarget</a></dt>
 <dd>
 <div class="block">返回目标 Resource 类型。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/annotation/RequirePermission.html#resourceType()" class="member-name-link">resourceType()</a> - Element in annotation interface com.sca4d.core.api.annotation.<a href="com/sca4d/core/api/annotation/RequirePermission.html" title="annotation interface in com.sca4d.core.api.annotation">RequirePermission</a></dt>
+<dd>
+<div class="block">表达式返回资源标识时使用的资源类型；返回完整 Resource 时可为空。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/authentication/principalsession/ResourceIdSet.html#resourceType()" class="member-name-link">resourceType()</a> - Method in class com.sca4d.core.api.authentication.principalsession.<a href="com/sca4d/core/api/authentication/principalsession/ResourceIdSet.html" title="class in com.sca4d.core.api.authentication.principalsession">ResourceIdSet</a></dt>
 <dd>
@@ -6058,6 +6464,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/call/CallOutcome.html#result()" class="member-name-link">result()</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallOutcome.html" title="class in com.sca4d.core.api.call">CallOutcome</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/condition/DnfClause.html#result()" class="member-name-link">result()</a> - Method in class com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a></dt>
+<dd>
+<div class="block">返回 Clause 命中后产生的结果。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/job/JobExecutor.html#result(com.sca4d.core.api.id.Id,com.sca4d.core.api.job.Job)" class="member-name-link">result(Id, Job&lt;?, O&gt;)</a> - Method in interface com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobExecutor.html" title="interface in com.sca4d.core.api.job">JobExecutor</a></dt>
 <dd>
 <div class="block">读取已经成功的结果，不等待仍在执行的 run。</div>
@@ -6129,6 +6539,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/pipeline/Pipeline.html#run(I)" class="member-name-link">run(I)</a> - Method in class com.sca4d.core.api.pipeline.<a href="com/sca4d/core/api/pipeline/Pipeline.html" title="class in com.sca4d.core.api.pipeline">Pipeline</a></dt>
 <dd>
 <div class="block">从第一阶段开始同步处理输入，并返回最后一个阶段的输出。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/pipeline/Pipeline.html#runAsync(I,java.util.concurrent.Executor)" class="member-name-link">runAsync(I, Executor)</a> - Method in class com.sca4d.core.api.pipeline.<a href="com/sca4d/core/api/pipeline/Pipeline.html" title="class in com.sca4d.core.api.pipeline">Pipeline</a></dt>
+<dd>
+<div class="block">按同一阶段顺序异步转换；后一阶段只在前一阶段成功完成后执行。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/job/JobExecution.html#runId()" class="member-name-link">runId()</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobExecution.html" title="class in com.sca4d.core.api.job">JobExecution</a></dt>
 <dd>
@@ -6573,6 +6987,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">南美洲。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/call/SPICallValueResolver.html" class="type-name-link" title="interface in com.sca4d.core.api.call">SPICallValueResolver</a> - Interface in <a href="com/sca4d/core/api/call/package-summary.html">com.sca4d.core.api.call</a></dt>
+<dd>
+<div class="block">由集成层提供的默认调用值解析器，读取注解表达式中的参数、Bean 和执行结果。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/pipeline/PipelineExecutionException.html#stageCode()" class="member-name-link">stageCode()</a> - Method in exception class com.sca4d.core.api.pipeline.<a href="com/sca4d/core/api/pipeline/PipelineExecutionException.html" title="class in com.sca4d.core.api.pipeline">PipelineExecutionException</a></dt>
 <dd>
 <div class="block">返回失败阶段。</div>
@@ -6738,10 +7156,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建接入者。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/concurrent/RateLimitDimension.html#SUBJECT" class="member-name-link">SUBJECT</a> - Enum constant in enum class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitDimension.html" title="enum class in com.sca4d.core.api.concurrent">RateLimitDimension</a></dt>
-<dd>
-<div class="block">按当前 `Subject` 分别计算额度。</div>
-</dd>
+<dt><a href="com/sca4d/core/api/concurrent/RateLimit.Dim.html#SUBJECT" class="member-name-link">SUBJECT</a> - Enum constant in enum class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimit.Dim.html" title="enum class in com.sca4d.core.api.concurrent">RateLimit.Dim</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/webrealtime/WebRealtimeTarget.Type.html#SUBJECT" class="member-name-link">SUBJECT</a> - Enum constant in enum class com.sca4d.core.api.webrealtime.<a href="com/sca4d/core/api/webrealtime/WebRealtimeTarget.Type.html" title="enum class in com.sca4d.core.api.webrealtime">WebRealtimeTarget.Type</a></dt>
 <dd>
 <div class="block">匹配 Subject 的全部在线浏览器连接。</div>
@@ -6818,15 +7234,17 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/audit/AuditCallInterceptor.html#supports(com.sca4d.core.api.call.CallExecution)" class="member-name-link">supports(CallExecution)</a> - Method in class com.sca4d.core.api.audit.<a href="com/sca4d/core/api/audit/AuditCallInterceptor.html" title="class in com.sca4d.core.api.audit">AuditCallInterceptor</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/call/CallLifecycle.Around.html#supports(com.sca4d.core.api.call.CallExecution)" class="member-name-link">supports(CallExecution)</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.Around.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a></dt>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.Participant.html#supports(com.sca4d.core.api.call.CallExecution)" class="member-name-link">supports(CallExecution)</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.Participant.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Participant</a></dt>
 <dd>
-<div class="block">当前方法是否适用；该判断也不得写入共享状态。</div>
+<div class="block">当前方法是否适用。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/concurrent/IdempotencyCallInterceptor.html#supports(com.sca4d.core.api.call.CallExecution)" class="member-name-link">supports(CallExecution)</a> - Method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/IdempotencyCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">IdempotencyCallInterceptor</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/concurrent/LockCallInterceptor.html#supports(com.sca4d.core.api.call.CallExecution)" class="member-name-link">supports(CallExecution)</a> - Method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/LockCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">LockCallInterceptor</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/concurrent/RateLimitCallInterceptor.html#supports(com.sca4d.core.api.call.CallExecution)" class="member-name-link">supports(CallExecution)</a> - Method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">RateLimitCallInterceptor</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/identity/IdentityCallInterceptor.PrincipalRequirement.html#supports(com.sca4d.core.api.call.CallExecution)" class="member-name-link">supports(CallExecution)</a> - Method in class com.sca4d.core.api.identity.<a href="com/sca4d/core/api/identity/IdentityCallInterceptor.PrincipalRequirement.html" title="class in com.sca4d.core.api.identity">IdentityCallInterceptor.PrincipalRequirement</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/permission/PermissionCallInterceptor.html#supports(com.sca4d.core.api.call.CallExecution)" class="member-name-link">supports(CallExecution)</a> - Method in class com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/PermissionCallInterceptor.html" title="class in com.sca4d.core.api.permission">PermissionCallInterceptor</a></dt>
 <dd>&nbsp;</dd>
@@ -6848,6 +7266,14 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/setting/value/SettingOwner.html#system()" class="member-name-link">system()</a> - Static method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/call/Call.html#system(com.sca4d.core.api.call.CallInvoker,java.lang.String,java.time.Instant)" class="member-name-link">system(CallInvoker, String, Instant)</a> - Static method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/Call.html" title="class in com.sca4d.core.api.call">Call</a></dt>
+<dd>
+<div class="block">创建绑定生命周期执行器的系统调用。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/Call.html#system(com.sca4d.core.api.call.CallInvoker,java.lang.String,java.time.Instant,com.sca4d.core.api.identity.SystemPrincipal)" class="member-name-link">system(CallInvoker, String, Instant, SystemPrincipal)</a> - Static method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/Call.html" title="class in com.sca4d.core.api.call">Call</a></dt>
+<dd>
+<div class="block">使用已经确认的领域 Principal 建立绑定生命周期执行器的系统调用。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/call/Call.html#system(java.lang.String,java.time.Instant)" class="member-name-link">system(String, Instant)</a> - Static method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/Call.html" title="class in com.sca4d.core.api.call">Call</a></dt>
 <dd>
 <div class="block">创建使用固定系统身份的任务调用。</div>
@@ -6895,6 +7321,10 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:T">T</h2>
 <dl class="index">
+<dt><a href="com/sca4d/core/api/annotation/Audit.html#target()" class="member-name-link">target()</a> - Element in annotation interface com.sca4d.core.api.annotation.<a href="com/sca4d/core/api/annotation/Audit.html" title="annotation interface in com.sca4d.core.api.annotation">Audit</a></dt>
+<dd>
+<div class="block">从方法参数、Bean 或返回结果读取审计目标的表达式；与 `targetResolver` 和参数标记三选一。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/audit/AuditRecord.html#target()" class="member-name-link">target()</a> - Method in class com.sca4d.core.api.audit.<a href="com/sca4d/core/api/audit/AuditRecord.html" title="class in com.sca4d.core.api.audit">AuditRecord</a></dt>
 <dd>
 <div class="block">返回可选目标资源。</div>
@@ -6967,17 +7397,17 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">判断电话号码是否满足应用定义的条件。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/condition/DnfClause.html#test(T)" class="member-name-link">test(T)</a> - Method in class com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a></dt>
+<dt><a href="com/sca4d/core/api/condition/DnfClause.Condition.html#test(T)" class="member-name-link">test(T)</a> - Method in interface com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfClause.Condition.html" title="interface in com.sca4d.core.api.condition">DnfClause.Condition</a></dt>
 <dd>
-<div class="block">按登记顺序短路判断全部条件。</div>
-</dd>
-<dt><a href="com/sca4d/core/api/condition/DnfExpression.html#test(T)" class="member-name-link">test(T)</a> - Method in class com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfExpression.html" title="class in com.sca4d.core.api.condition">DnfExpression</a></dt>
-<dd>
-<div class="block">按登记顺序短路判断全部 Clause。</div>
+<div class="block">同步判断条件。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/runtime/Environment.html#TEST" class="member-name-link">TEST</a> - Enum constant in enum class com.sca4d.core.api.runtime.<a href="com/sca4d/core/api/runtime/Environment.html" title="enum class in com.sca4d.core.api.runtime">Environment</a></dt>
 <dd>
 <div class="block">自动化测试环境。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/condition/DnfClause.Condition.html#testAsync(T,java.util.concurrent.Executor)" class="member-name-link">testAsync(T, Executor)</a> - Method in interface com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfClause.Condition.html" title="interface in com.sca4d.core.api.condition">DnfClause.Condition</a></dt>
+<dd>
+<div class="block">使用调用方执行器异步判断条件；同步条件默认立即完成。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/setting/codec/SettingCodec.html#text(int)" class="member-name-link">text(int)</a> - Static method in interface com.sca4d.core.api.setting.codec.<a href="com/sca4d/core/api/setting/codec/SettingCodec.html" title="interface in com.sca4d.core.api.setting.codec">SettingCodec</a></dt>
 <dd>
@@ -7179,7 +7609,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">从已拆分的稳定节点构造编码。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/concurrent/RateLimiter.html#tryAcquire(com.sca4d.core.api.name.Key,com.sca4d.core.api.concurrent.RateLimit)" class="member-name-link">tryAcquire(Key, RateLimit)</a> - Method in interface com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimiter.html" title="interface in com.sca4d.core.api.concurrent">RateLimiter</a></dt>
+<dt><a href="com/sca4d/core/api/concurrent/RateLimiter.html#tryAcquire(com.sca4d.core.api.concurrent.RateLimitKey,com.sca4d.core.api.concurrent.RateLimit)" class="member-name-link">tryAcquire(RateLimitKey, RateLimit)</a> - Method in interface com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimiter.html" title="interface in com.sca4d.core.api.concurrent">RateLimiter</a></dt>
 <dd>
 <div class="block">尝试消耗一次调用额度。</div>
 </dd>
@@ -7263,10 +7693,8 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:U">U</h2>
 <dl class="index">
-<dt><a href="com/sca4d/core/api/concurrent/RateLimitDimension.html#UA" class="member-name-link">UA</a> - Enum constant in enum class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitDimension.html" title="enum class in com.sca4d.core.api.concurrent">RateLimitDimension</a></dt>
-<dd>
-<div class="block">按 HTTP User-Agent 分别计算额度。</div>
-</dd>
+<dt><a href="com/sca4d/core/api/concurrent/RateLimit.Dim.html#UA" class="member-name-link">UA</a> - Enum constant in enum class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimit.Dim.html" title="enum class in com.sca4d.core.api.concurrent">RateLimit.Dim</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/region/PhoneNumberType.html#UAN" class="member-name-link">UAN</a> - Enum constant in enum class com.sca4d.core.api.region.<a href="com/sca4d/core/api/region/PhoneNumberType.html" title="enum class in com.sca4d.core.api.region">PhoneNumberType</a></dt>
 <dd>
 <div class="block">通用接入号码。</div>
@@ -7547,6 +7975,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
 </dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a></dt>
+<dd>
+<div class="block">Returns the enum constant of this class with the specified name.</div>
+</dd>
 <dt><a href="com/sca4d/core/api/call/CallOutcome.Status.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallOutcome.Status.html" title="enum class in com.sca4d.core.api.call">CallOutcome.Status</a></dt>
 <dd>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
@@ -7555,7 +7987,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
 </dd>
-<dt><a href="com/sca4d/core/api/concurrent/RateLimitDimension.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitDimension.html" title="enum class in com.sca4d.core.api.concurrent">RateLimitDimension</a></dt>
+<dt><a href="com/sca4d/core/api/concurrent/RateLimit.Dim.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimit.Dim.html" title="enum class in com.sca4d.core.api.concurrent">RateLimit.Dim</a></dt>
 <dd>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
 </dd>
@@ -7688,6 +8120,11 @@ the order they are declared.</div>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
 </dd>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.html#values()" class="member-name-link">values()</a> - Static method in enum class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a></dt>
+<dd>
+<div class="block">Returns an array containing the constants of this enum class, in
+the order they are declared.</div>
+</dd>
 <dt><a href="com/sca4d/core/api/call/CallOutcome.Status.html#values()" class="member-name-link">values()</a> - Static method in enum class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallOutcome.Status.html" title="enum class in com.sca4d.core.api.call">CallOutcome.Status</a></dt>
 <dd>
 <div class="block">Returns an array containing the constants of this enum class, in
@@ -7698,7 +8135,7 @@ the order they are declared.</div>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
 </dd>
-<dt><a href="com/sca4d/core/api/concurrent/RateLimitDimension.html#values()" class="member-name-link">values()</a> - Static method in enum class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitDimension.html" title="enum class in com.sca4d.core.api.concurrent">RateLimitDimension</a></dt>
+<dt><a href="com/sca4d/core/api/concurrent/RateLimit.Dim.html#values()" class="member-name-link">values()</a> - Static method in enum class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimit.Dim.html" title="enum class in com.sca4d.core.api.concurrent">RateLimit.Dim</a></dt>
 <dd>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
@@ -7872,14 +8309,6 @@ the order they are declared.</div>
 <dd>
 <div class="block">创建认证方法完成一次成功验证后交给认证引擎的结果。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/call/CallExecution.html#verifyBeforeInvocation()" class="member-name-link">verifyBeforeInvocation()</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></dt>
-<dd>
-<div class="block">在身份选择之后、权限和执行控制之前检查已登记的前置条件。</div>
-</dd>
-<dt><a href="com/sca4d/core/api/call/CallRequirement.html#verifyBeforeInvocation()" class="member-name-link">verifyBeforeInvocation()</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallRequirement.html" title="interface in com.sca4d.core.api.call">CallRequirement</a></dt>
-<dd>
-<div class="block">校验执行前提；在身份选择后、权限和执行控制前调用，不应修改外部状态。</div>
-</dd>
 <dt><a href="com/sca4d/core/api/authentication/AuthenticationMethod.html#verifyCurrent(com.sca4d.core.api.identity.Account,com.sca4d.core.api.authentication.VerifiedAuthentication)" class="member-name-link">verifyCurrent(Account, VerifiedAuthentication)</a> - Method in interface com.sca4d.core.api.authentication.<a href="com/sca4d/core/api/authentication/AuthenticationMethod.html" title="interface in com.sca4d.core.api.authentication">AuthenticationMethod</a></dt>
 <dd>
 <div class="block">在完成动作认证前确认先前生成的证据仍然有效。</div>
@@ -7888,21 +8317,21 @@ the order they are declared.</div>
 <dd>
 <div class="block">检查当前每页数量没有超过调用方的限制。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/call/CallExecution.html#verifyPreCommit()" class="member-name-link">verifyPreCommit()</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></dt>
+<dd>
+<div class="block">校验实际业务方法成功前必须满足的全部预提交条件。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/call/CallExecution.html#verifyPreCommitBeforeCommit(boolean)" class="member-name-link">verifyPreCommitBeforeCommit(boolean)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></dt>
+<dd>
+<div class="block">在只读或读写事务提交前校验适用于该事务的预提交条件。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/plugin/PluginRuntime.html#verifyRequired()" class="member-name-link">verifyRequired()</a> - Method in interface com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/PluginRuntime.html" title="interface in com.sca4d.core.api.plugin">PluginRuntime</a></dt>
 <dd>
 <div class="block">检查必需扩展均已加载。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/call/CallExecution.html#verifyRequirements()" class="member-name-link">verifyRequirements()</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></dt>
+<dt><a href="com/sca4d/core/api/call/CallLifecycle.PreCommit.html#verifySatisfied()" class="member-name-link">verifySatisfied()</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.PreCommit.html" title="interface in com.sca4d.core.api.call">CallLifecycle.PreCommit</a></dt>
 <dd>
-<div class="block">校验实际业务方法成功前必须满足的全部要求。</div>
-</dd>
-<dt><a href="com/sca4d/core/api/call/CallExecution.html#verifyRequirementsBeforeCommit(boolean)" class="member-name-link">verifyRequirementsBeforeCommit(boolean)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></dt>
-<dd>
-<div class="block">在只读或读写事务提交前校验适用于该事务的要求。</div>
-</dd>
-<dt><a href="com/sca4d/core/api/call/CallRequirement.html#verifySatisfied()" class="member-name-link">verifySatisfied()</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallRequirement.html" title="interface in com.sca4d.core.api.call">CallRequirement</a></dt>
-<dd>
-<div class="block">校验当前要求已经满足。</div>
+<div class="block">校验条件已经被当前调用满足。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/permission/ResourceScopeRequirement.html#verifySatisfied()" class="member-name-link">verifySatisfied()</a> - Method in class com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/ResourceScopeRequirement.html" title="class in com.sca4d.core.api.permission">ResourceScopeRequirement</a></dt>
 <dd>&nbsp;</dd>
@@ -8071,6 +8500,10 @@ the order they are declared.</div>
 <dd>
 <div class="block">保留已发生的执行结果并登记外层完成失败；原始失败仍是向调用方抛出的主异常。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/call/Call.html#withInvoker(com.sca4d.core.api.call.CallInvoker)" class="member-name-link">withInvoker(CallInvoker)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/Call.html" title="class in com.sca4d.core.api.call">Call</a></dt>
+<dd>
+<div class="block">把生命周期执行器绑定到已有入口快照；身份和权限事实保持不变。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/authentication/AuthenticationActionCode.html#withNodes(java.util.List)" class="member-name-link">withNodes(List&lt;String&gt;)</a> - Method in class com.sca4d.core.api.authentication.<a href="com/sca4d/core/api/authentication/AuthenticationActionCode.html" title="class in com.sca4d.core.api.authentication">AuthenticationActionCode</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/gateway/GatewayCallbackCode.html#withNodes(java.util.List)" class="member-name-link">withNodes(List&lt;String&gt;)</a> - Method in class com.sca4d.core.api.gateway.<a href="com/sca4d/core/api/gateway/GatewayCallbackCode.html" title="class in com.sca4d.core.api.gateway">GatewayCallbackCode</a></dt>
@@ -8084,6 +8517,8 @@ the order they are declared.</div>
 <dt><a href="com/sca4d/core/api/scheduling/ScheduleKey.html#withNodes(java.util.List)" class="member-name-link">withNodes(List&lt;String&gt;)</a> - Method in class com.sca4d.core.api.scheduling.<a href="com/sca4d/core/api/scheduling/ScheduleKey.html" title="class in com.sca4d.core.api.scheduling">ScheduleKey</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/concurrent/LockKey.html#withSegments(java.util.List)" class="member-name-link">withSegments(List&lt;String&gt;)</a> - Method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/LockKey.html" title="class in com.sca4d.core.api.concurrent">LockKey</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/concurrent/RateLimitKey.html#withSegments(java.util.List)" class="member-name-link">withSegments(List&lt;String&gt;)</a> - Method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitKey.html" title="class in com.sca4d.core.api.concurrent">RateLimitKey</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/name/Key.html#withSegments(java.util.List)" class="member-name-link">withSegments(List&lt;String&gt;)</a> - Method in class com.sca4d.core.api.name.<a href="com/sca4d/core/api/name/Key.html" title="class in com.sca4d.core.api.name">Key</a></dt>
 <dd>

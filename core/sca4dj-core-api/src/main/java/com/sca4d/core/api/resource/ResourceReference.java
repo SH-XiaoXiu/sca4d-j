@@ -5,9 +5,9 @@ import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * 保存能够从数据库或消息中恢复的资源类型和资源标识。
@@ -60,6 +60,7 @@ public class ResourceReference implements Resource {
         }
         return new ResourceReference(resourceType, Objects.requireNonNull(idPrefix, "资源标识前缀不能为空") + id);
     }
+
     private final @NotNull TreeCode type;
 
     private final @NotNull String id;

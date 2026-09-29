@@ -30,7 +30,26 @@ public class IdempotencyKey {
 
     /** 把文本输入规范化为幂等键。 */
     public static @NotNull IdempotencyKey fromValue(@NotNull CharSequence value) {
-        return new IdempotencyKey(Objects.requireNonNull(value, "幂等键不能为空").toString());
+        String checked = TextUtils.requireText(
+                Objects.requireNonNull(value, "幂等键不能为空").toString(),
+                "客户端幂等键",
+                128);
+        if (checked.chars().anyMatch(Character::isISOControl)) {
+            throw new IllegalArgumentException("客户端幂等键不能包含控制字符");
+        }
+        return new IdempotencyKey(checked);
+    }
+
+    /** 从动态输入归一化幂等键；只接受已经是键对象或文本值。 */
+    public static @NotNull IdempotencyKey fromValue(@NotNull Object value) {
+        Objects.requireNonNull(value, "幂等键不能为空");
+        if (value instanceof IdempotencyKey key) {
+            return key;
+        }
+        if (value instanceof CharSequence text) {
+            return fromValue(text);
+        }
+        throw new IllegalArgumentException("幂等键必须是 IdempotencyKey 或文本值");
     }
 
     /**

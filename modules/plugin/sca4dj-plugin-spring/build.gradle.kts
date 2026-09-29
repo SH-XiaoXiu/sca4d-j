@@ -5,7 +5,13 @@ plugins {
     id("io.spring.dependency-management")
 }
 dependencyManagement {
-    imports { mavenBom(libs.spring.boot.dependencies.get().toString()) }
+    imports {
+        mavenBom(
+            libs.spring.boot.dependencies
+                .get()
+                .toString(),
+        )
+    }
 }
 dependencies {
     api(project(":core:sca4dj-core-api"))

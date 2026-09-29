@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public @interface </span><span class="element-name type-name-label">RequirePermission</span></div>
 <div class="block">声明调用必须具有一组资源权限（Required Permission）。
 
- <p><a href="#operation()"><code>operation()</code></a> 与 <a href="#resourceResolver()"><code>resourceResolver()</code></a> 必须二选一。固定操作生成 <a href="../permission/Operation.html" title="class in com.sca4d.core.api.permission"><code>Operation</code></a> 资源；动态解析器必须返回
+ <p><a href="#operation()"><code>operation()</code></a>、<a href="#resource()"><code>resource()</code></a> 与 <a href="#resolver()"><code>resolver()</code></a> 必须三选一。固定操作生成 <a href="../permission/Operation.html" title="class in com.sca4d.core.api.permission"><code>Operation</code></a> 资源；动态解析器必须返回
  非空 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link"><code>Collection</code></a><code>&lt;Resource&gt;</code>。单个资源使用只包含一个元素的集合。注解可重复，Core 会展开后逐项判断。</div>
 </section>
 <section class="summary">
@@ -114,9 +114,19 @@ loadScripts(document, 'script');</script>
 <div class="block">返回固定操作键；使用动态资源时保持空字符串。</div>
 </div>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a><wbr>&lt;? extends <a href="../call/CallValueResolver.html" title="interface in com.sca4d.core.api.call">CallValueResolver</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&gt;&gt;&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#resourceResolver()" class="member-name-link">resourceResolver</a></code></div>
+<div class="col-second even-row-color"><code><a href="#resolver()" class="member-name-link">resolver</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">返回动态业务资源集合解析器；使用固定操作时保持占位类型。</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#resource()" class="member-name-link">resource</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">从方法参数读取资源、资源标识或资源集合的表达式；与 `operation` 和 `resolver` 三选一。</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#resourceType()" class="member-name-link">resourceType</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">表达式返回资源标识时使用的资源类型；返回完整 Resource 时可为空。</div>
 </div>
 </div>
 </section>
@@ -146,9 +156,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="resourceResolver()">
-<h3>resourceResolver</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../call/CallValueResolver.html" title="interface in com.sca4d.core.api.call">CallValueResolver</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&gt;&gt;&gt;</span>&nbsp;<span class="element-name">resourceResolver</span></div>
+<section class="detail" id="resolver()">
+<h3>resolver</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../call/CallValueResolver.html" title="interface in com.sca4d.core.api.call">CallValueResolver</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&gt;&gt;&gt;</span>&nbsp;<span class="element-name">resolver</span></div>
 <div class="block">返回动态业务资源集合解析器；使用固定操作时保持占位类型。</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -157,6 +167,28 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Default:</dt>
 <dd><code>com.sca4d.core.api.call.NoCallValueResolver.class</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="resource()">
+<h3>resource</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">resource</span></div>
+<div class="block">从方法参数读取资源、资源标识或资源集合的表达式；与 `operation` 和 `resolver` 三选一。</div>
+<dl class="notes">
+<dt>Default:</dt>
+<dd><code>""</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="resourceType()">
+<h3>resourceType</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">resourceType</span></div>
+<div class="block">表达式返回资源标识时使用的资源类型；返回完整 Resource 时可为空。</div>
+<dl class="notes">
+<dt>Default:</dt>
+<dd><code>""</code></dd>
 </dl>
 </section>
 </li>

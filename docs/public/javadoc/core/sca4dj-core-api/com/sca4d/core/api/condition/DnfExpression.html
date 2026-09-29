@@ -82,25 +82,16 @@ loadScripts(document, 'script');</script>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">com.sca4d.core.api.condition</a></div>
-<h1 title="Class DnfExpression" class="title">Class DnfExpression&lt;T&gt;</h1>
+<h1 title="Class DnfExpression" class="title">Class DnfExpression&lt;T,<wbr>R&gt;</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">com.sca4d.core.api.condition.DnfExpression&lt;T&gt;</div>
+<div class="inheritance">com.sca4d.core.api.condition.DnfExpression&lt;T,<wbr>R&gt;</div>
 </div>
 <section class="class-description" id="class-description">
-<dl class="notes">
-<dt>Type Parameters:</dt>
-<dd><code>T</code> - 各 Clause 检查的输入类型</dd>
-</dl>
-<dl class="notes">
-<dt>All Implemented Interfaces:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;T&gt;</code></dd>
-</dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">DnfExpression&lt;T&gt;</span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
-implements <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;T&gt;</span></div>
-<div class="block">保存任意一个 Clause 满足即可通过的析取范式表达式。</div>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">DnfExpression&lt;T,<wbr>R&gt;</span>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="block">保存按顺序选择第一个命中 Clause 的析取规则表达式。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -112,9 +103,9 @@ implements <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.List)" class="member-name-link">DnfExpression</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a>&lt;<a href="DnfExpression.html" title="type parameter in DnfExpression">T</a>&gt;&gt;&nbsp;clauses)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.List)" class="member-name-link">DnfExpression</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a>&lt;<a href="DnfExpression.html" title="type parameter in DnfExpression">T</a>,<wbr><a href="DnfExpression.html" title="type parameter in DnfExpression">R</a>&gt;&gt;&nbsp;clauses)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建按登记顺序执行的析取表达式。</div>
+<div class="block">创建按登记顺序执行的析取表达式；空集合表示没有命中结果。</div>
 </div>
 </div>
 </section>
@@ -130,25 +121,39 @@ implements <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;@NotNull <a href="DnfExpression.html" title="class in com.sca4d.core.api.condition">DnfExpression</a><wbr>&lt;T&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#always()" class="member-name-link">always</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T,<wbr>
+R&gt;&nbsp;@NotNull <a href="DnfExpression.html" title="class in com.sca4d.core.api.condition">DnfExpression</a><wbr>&lt;T,<wbr>R&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#always(java.lang.String,R)" class="member-name-link">always</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code,
+ R&nbsp;result)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">创建恒真表达式。</div>
+<div class="block">创建包含一个恒真 Clause 的表达式。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;@NotNull <a href="DnfExpression.html" title="class in com.sca4d.core.api.condition">DnfExpression</a><wbr>&lt;T&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#anyOf(com.sca4d.core.api.condition.DnfClause...)" class="member-name-link">anyOf</a><wbr>(@NotNull <a href="DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a>&lt;T&gt;...&nbsp;clauses)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T,<wbr>
+R&gt;&nbsp;@NotNull <a href="DnfExpression.html" title="class in com.sca4d.core.api.condition">DnfExpression</a><wbr>&lt;T,<wbr>R&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#anyOf(com.sca4d.core.api.condition.DnfClause...)" class="member-name-link">anyOf</a><wbr>(@NotNull <a href="DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a>&lt;T,<wbr>R&gt;...&nbsp;clauses)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">创建包含指定 Clause 的析取表达式。</div>
+<div class="block">创建任意一个 Clause 命中即可产生结果的表达式。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Unmodifiable @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a>&lt;<a href="DnfExpression.html" title="type parameter in DnfExpression">T</a>&gt;&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Unmodifiable @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a>&lt;<a href="DnfExpression.html" title="type parameter in DnfExpression">T</a>,<wbr><a href="DnfExpression.html" title="type parameter in DnfExpression">R</a>&gt;&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#clauses()" class="member-name-link">clauses</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取该表达式按登记顺序检查的全部 Clause。</div>
+<div class="block">返回保持声明顺序的 Clause。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#test(T)" class="member-name-link">test</a><wbr>(<a href="DnfExpression.html" title="type parameter in DnfExpression">T</a>&nbsp;value)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="DnfExpression.html" title="type parameter in DnfExpression">R</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#evaluate(T)" class="member-name-link">evaluate</a><wbr>(<a href="DnfExpression.html" title="type parameter in DnfExpression">T</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">按登记顺序短路判断全部 Clause。</div>
+<div class="block">返回第一个命中 Clause 的结果。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="DnfExpression.html" title="type parameter in DnfExpression">R</a>&gt;&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#evaluateAsync(T,java.util.concurrent.Executor)" class="member-name-link">evaluateAsync</a><wbr>(<a href="DnfExpression.html" title="type parameter in DnfExpression">T</a>&nbsp;value,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Executor.html" title="class or interface in java.util.concurrent" class="external-link">Executor</a>&nbsp;executor)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">并行计算条件后按 Clause 声明顺序选择第一个命中结果。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a>&lt;<a href="DnfExpression.html" title="type parameter in DnfExpression">T</a>,<wbr><a href="DnfExpression.html" title="type parameter in DnfExpression">R</a>&gt;&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#matchingClause(T)" class="member-name-link">matchingClause</a><wbr>(<a href="DnfExpression.html" title="type parameter in DnfExpression">T</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">返回第一个命中的 Clause。</div>
 </div>
 </div>
 </div>
@@ -156,9 +161,6 @@ implements <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
-<div class="inherited-list">
-<h3 id="methods-inherited-from-class-java.util.function.Predicate">Methods inherited from interface&nbsp;java.util.function.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a></h3>
-<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Predicate.html#and(java.util.function.Predicate)" title="class or interface in java.util.function" class="external-link">and</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Predicate.html#negate()" title="class or interface in java.util.function" class="external-link">negate</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Predicate.html#or(java.util.function.Predicate)" title="class or interface in java.util.function" class="external-link">or</a></code></div>
 </section>
 </li>
 </ul>
@@ -174,12 +176,8 @@ implements <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base
 <section class="detail" id="&lt;init&gt;(java.util.List)">
 <h3>DnfExpression</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">DnfExpression</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a>&lt;<a href="DnfExpression.html" title="type parameter in DnfExpression">T</a>&gt;&gt;&nbsp;clauses)</span></div>
-<div class="block">创建按登记顺序执行的析取表达式。</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>clauses</code> - 任意一个满足即可通过的 Clause；空集合表示恒假</dd>
-</dl>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a>&lt;<a href="DnfExpression.html" title="type parameter in DnfExpression">T</a>,<wbr><a href="DnfExpression.html" title="type parameter in DnfExpression">R</a>&gt;&gt;&nbsp;clauses)</span></div>
+<div class="block">创建按登记顺序执行的析取表达式；空集合表示没有命中结果。</div>
 </section>
 </li>
 </ul>
@@ -196,60 +194,63 @@ implements <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
 @CheckReturnValue
 @NotNull
-</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="DnfExpression.html" title="class in com.sca4d.core.api.condition">DnfExpression</a>&lt;T&gt;</span>&nbsp;<span class="element-name">anyOf</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a>&lt;T&gt;...&nbsp;clauses)</span></div>
-<div class="block">创建包含指定 Clause 的析取表达式。</div>
-<dl class="notes">
-<dt>Type Parameters:</dt>
-<dd><code>T</code> - 待判断值类型</dd>
-<dt>Parameters:</dt>
-<dd><code>clauses</code> - 任意一个满足即可通过的 Clause</dd>
-<dt>Returns:</dt>
-<dd>新的析取表达式</dd>
-</dl>
+</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T,<wbr>
+R&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="DnfExpression.html" title="class in com.sca4d.core.api.condition">DnfExpression</a>&lt;T,<wbr>R&gt;</span>&nbsp;<span class="element-name">anyOf</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a>&lt;T,<wbr>R&gt;...&nbsp;clauses)</span></div>
+<div class="block">创建任意一个 Clause 命中即可产生结果的表达式。</div>
 </section>
 </li>
 <li>
-<section class="detail" id="always()">
-<h3>always</h3>
+<section class="detail" id="always(java.lang.String,R)">
+<h3 id="always(java.lang.String,java.lang.Object)">always</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
-</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="DnfExpression.html" title="class in com.sca4d.core.api.condition">DnfExpression</a>&lt;T&gt;</span>&nbsp;<span class="element-name">always</span>()</div>
-<div class="block">创建恒真表达式。</div>
-<dl class="notes">
-<dt>Type Parameters:</dt>
-<dd><code>T</code> - 待判断值类型</dd>
-<dt>Returns:</dt>
-<dd>包含一个空 Clause 的表达式</dd>
-</dl>
+</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T,<wbr>
+R&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="DnfExpression.html" title="class in com.sca4d.core.api.condition">DnfExpression</a>&lt;T,<wbr>R&gt;</span>&nbsp;<span class="element-name">always</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code,
+ @NotNull
+ R&nbsp;result)</span></div>
+<div class="block">创建包含一个恒真 Clause 的表达式。</div>
 </section>
 </li>
 <li>
 <section class="detail" id="clauses()">
 <h3>clauses</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Unmodifiable @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a>&lt;<a href="DnfExpression.html" title="type parameter in DnfExpression">T</a>&gt;&gt;</span>&nbsp;<span class="element-name">clauses</span>()</div>
-<div class="block">读取该表达式按登记顺序检查的全部 Clause。</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>保持登记顺序的不可变 Clause 列表</dd>
-</dl>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Unmodifiable @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a>&lt;<a href="DnfExpression.html" title="type parameter in DnfExpression">T</a>,<wbr><a href="DnfExpression.html" title="type parameter in DnfExpression">R</a>&gt;&gt;</span>&nbsp;<span class="element-name">clauses</span>()</div>
+<div class="block">返回保持声明顺序的 Clause。</div>
 </section>
 </li>
 <li>
-<section class="detail" id="test(T)">
-<h3 id="test(java.lang.Object)">test</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">test</span><wbr><span class="parameters">(@NotNull
+<section class="detail" id="matchingClause(T)">
+<h3 id="matchingClause(java.lang.Object)">matchingClause</h3>
+<div class="member-signature"><span class="annotations">@CheckReturnValue
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a>&lt;<a href="DnfExpression.html" title="type parameter in DnfExpression">T</a>,<wbr><a href="DnfExpression.html" title="type parameter in DnfExpression">R</a>&gt;&gt;</span>&nbsp;<span class="element-name">matchingClause</span><wbr><span class="parameters">(@NotNull
  <a href="DnfExpression.html" title="type parameter in DnfExpression">T</a>&nbsp;value)</span></div>
-<div class="block">按登记顺序短路判断全部 Clause。</div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Predicate.html#test(T)" title="class or interface in java.util.function" class="external-link">test</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="DnfExpression.html" title="type parameter in DnfExpression">T</a>&gt;</code></dd>
-<dt>Parameters:</dt>
-<dd><code>value</code> - 待判断值</dd>
-<dt>Returns:</dt>
-<dd>任意 Clause 满足时返回 <code>true</code></dd>
-</dl>
+<div class="block">返回第一个命中的 Clause。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="evaluate(T)">
+<h3 id="evaluate(java.lang.Object)">evaluate</h3>
+<div class="member-signature"><span class="annotations">@CheckReturnValue
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="DnfExpression.html" title="type parameter in DnfExpression">R</a>&gt;</span>&nbsp;<span class="element-name">evaluate</span><wbr><span class="parameters">(@NotNull
+ <a href="DnfExpression.html" title="type parameter in DnfExpression">T</a>&nbsp;value)</span></div>
+<div class="block">返回第一个命中 Clause 的结果。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="evaluateAsync(T,java.util.concurrent.Executor)">
+<h3 id="evaluateAsync(java.lang.Object,java.util.concurrent.Executor)">evaluateAsync</h3>
+<div class="member-signature"><span class="annotations">@CheckReturnValue
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="DnfExpression.html" title="type parameter in DnfExpression">R</a>&gt;&gt;</span>&nbsp;<span class="element-name">evaluateAsync</span><wbr><span class="parameters">(@NotNull
+ <a href="DnfExpression.html" title="type parameter in DnfExpression">T</a>&nbsp;value,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Executor.html" title="class or interface in java.util.concurrent" class="external-link">Executor</a>&nbsp;executor)</span></div>
+<div class="block">并行计算条件后按 Clause 声明顺序选择第一个命中结果。</div>
 </section>
 </li>
 </ul>

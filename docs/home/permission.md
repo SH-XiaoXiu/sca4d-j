@@ -231,17 +231,21 @@ Resource 的身份设计见[资源](#资源)。
 
 ## 调用生命周期
 
-`Call` 表示入口界定的一次往返，保存类型化输入快照、可选主要 Resource、Session、当前 Principal 和已经完成的权限判断。HTTP、STOMP 和任务分别采集自己的输入；Core Call 不声明 HTTP 专用字段。`CallExecution` 保存其中一次方法执行的声明、参数、成功要求和结果。
+`Call` 表示入口界定的一次往返，保存类型化输入快照、可选主要 Resource、Session、当前 Principal 和已经完成的权限判断。HTTP、STOMP 和任务分别采集自己的输入；Core Call 不声明 HTTP 专用字段。`CallExecution` 保存其中一次方法执行的声明、参数、预提交条件和结果。
 
 一个 HTTP 请求只有一个 Call。Controller、Service 等被声明式规则拦截的方法分别建立 CallExecution，并共享该 Call 中的 Session、Principal 和权限判定。
 
 | 对象 | 职责 |
 |---|---|
-| `CallLifecycle` | 排序并执行已注册的 `Around`，检查执行要求，保留实际结果和完成失败 |
-| `CallExecution` | 保存通用注解声明和要求，不解析审计、限流或权限专用规则 |
+| `CallLifecycle` | 定义 `BEFORE`、`AROUND`、结果回调、`PRE_COMMIT`、`AFTER_COMMIT` 和 `COMPLETION` 阶段 |
+| `CallLifecycleConfiguration` | 收集参与者编码、阶段、节点依赖和优先级，并接受模块或应用的依赖配置 |
+| `CallInvoker` | 排序并执行适用的参与者，保存实际结果和完成失败 |
+| `CallExecution` | 保存通用注解声明、预提交条件和结果，不解析审计、限流或权限专用规则 |
 | `PermissionCallInterceptor`、`AuditCallInterceptor` | 在各自功能包内解释声明并执行权限或审计动作 |
 | `CallLifecycleAdvisor`、`CallHolder` | 把 Spring 方法入口接入生命周期，管理线程绑定与嵌套执行 |
 | `HttpCallFilter` | 采集 HTTP 快照并建立请求 Call，HTTP 行为留在 `core.spring.web` |
+
+`CallInvoker.execute(...)` 是唯一的生命周期执行核心。`Call` 绑定一个 `CallInvoker` 后，可以通过 `call.invoke(...)` 调用 Java 方法或使用 `TreeCode` 标识的纯函数；同步和异步重载都只转发到同一个执行器。Spring AOP、HTTP、STOMP、任务和插件入口都不能各自实现另一套调用流程。字符串入口只通过 `TreeCode.ofColon(...)` 校验后转发。
 
 ```mermaid
 flowchart TD
@@ -265,7 +269,7 @@ HttpCallFilter 创建 Call
 → CallLifecycleAdvisor 根据模块注册的注解创建 CallExecution
 → 检查认证、权限、限流、幂等和锁
 → 执行业务方法
-→ 检查成功要求
+→ 检查 PreCommit 条件
 → 保存幂等结果并记录或可靠交接审计
 → 返回响应并清理 Call
 ```
@@ -278,7 +282,7 @@ sequenceDiagram
     participant Call as HttpCallFilter
     participant Auth as 认证
     participant Select as Principal 选择
-    participant Life as CallLifecycle
+    participant Life as CallInvoker
     participant Method as 业务方法
     participant Audit as 审计
     Request->>Call: 创建 Call
@@ -288,7 +292,7 @@ sequenceDiagram
     Life->>Life: 评估声明和执行条件
     Life->>Method: 执行
     Method-->>Life: 返回或抛出异常
-    Life->>Life: 检查成功要求
+    Life->>Life: 检查 PreCommit 条件
     Life->>Audit: 记录结果
 ```
 
@@ -309,22 +313,26 @@ ResourceScope、版本条件和幂等结果绑定到声明它们的方法。嵌�
 
 | 条件 | CallExecution 结果 | 后续动作 |
 |---|---|---|
-| 方法和成功要求全部通过 | `SUCCESS` | 保存幂等结果、记录审计；事务按其实际范围提交 |
+| 方法和预提交条件全部通过 | `SUCCESS` | 保存幂等结果、记录审计；事务按其实际范围提交 |
 | 命中已保存的幂等结果 | `REPLAYED` | 返回原结果，不执行方法 |
 | 业务规则拒绝 | `DENIED` | 不保存成功结果，记录拒绝 |
-| 异常或成功要求未满足 | `FAILED` | 调用失败，按事务规则回滚或恢复 |
+| 异常或预提交条件未满足 | `FAILED` | 调用失败，按事务规则回滚或恢复 |
 
-审计写入或可靠交接属于调用成功条件。失败时调用方收到异常；CallOutcome 保留原执行状态、结果和 `completionFailure`，不能把已经提交的数据或已保存的幂等结果描述为回滚。原业务异常存在时仍作为主异常，审计失败附在 suppressed 中。
+`DIRECT` 写入和 `QUEUED` 可靠交接属于调用成功条件，失败时调用方收到异常。`AFTER_COMMIT` 的进程内任务可能丢失，不作为调用成功条件。CallOutcome 保留原执行状态、结果和 `completionFailure`，不能把已经提交的数据或已保存的幂等结果描述为回滚。原业务异常存在时仍作为主异常，完成阶段失败附在 suppressed 中。
 
 ### 注解与环绕处理
 
-各模块注册 `CallLifecycleAdvisor.Declaration<A>` 说明自己负责的注解。Advisor 根据注册匹配实现方法、接口方法、类型和参数，不维护固定注解列表。注解注册只建立自主入口身份或附着执行要求；实际行为由 `CallLifecycle.Around` 执行。
+各模块注册 `CallLifecycleAdvisor.AnnotationBinding<A>` 说明自己负责的注解。Advisor 根据注册匹配实现方法、接口方法、类型和参数，不维护固定注解列表；非注解规则使用 `CallLifecycleAdvisor.MethodBinding`。绑定只建立自主入口身份或附着预提交条件，实际行为由所属模块的生命周期参与者执行。
 
-功能注解使用 `@CallLifecycle.Intercepted` 标记。声明了该功能却没有注册处理者时，Advisor 在代理匹配时拒绝执行，不静默跳过。普通注解没有该标记时，不因其存在而进入生命周期。单值声明的方法值优先于类型值；`declarations(type)` 保留方法和类型的全部声明，权限要求累加并去重。
+功能注解使用 `@CallLifecycle.Intercepted` 标记。Advisor 实际按已注册的 `AnnotationBinding` 匹配方法；标记用于在功能注解缺少对应绑定时拒绝匹配。没有标记的注解只要注册了 `AnnotationBinding`，同样可以进入生命周期。非注解规则使用 `MethodBinding`。功能行为另由 `Participant` 提供；当前注册检查只验证绑定，不能证明参与者已经安装。单值声明的方法值优先于类型值；`declarations(type)` 保留方法和类型的全部声明，权限要求累加并去重。
 
-Around 使用 `code()`、`before()`、`after()` 与 `priority()` 声明进入顺序。依赖优先于优先级，数值较小的优先级先进入；同值按编码稳定排序。`CallLifecycle.AUDIT`、`DECLARATION`、`PRINCIPAL`、`PERMISSION`、`RATE_LIMIT`、`IDEMPOTENCY`、`LOCK`、`REQUIREMENTS` 锚点在没有实际动作时仍存在。功能拦截器与应用扩展使用同一个 Around 接口，生命周期不依赖各功能实现。重复编码、未知依赖和环在装配时失败。审计始终处于扩展外层。
+`CallLifecycle` 是阶段枚举，不包含权限、限流、幂等、锁或审计编码。`CallLifecycle.Around` 取得一次性 `Next`，可以继续或明确短路；`Before` 只接收 `CallExecution` 并在目标执行前校验；`AfterReturning`、`AfterThrowing`、`After` 和 `Completion` 读取最终 `CallOutcome`。`PreCommit` 条件在方法正常返回后检查，已登记的 Spring 事务还会在提交前检查。`AfterCommit` 在真实事务成功提交时运行，提交可能早于方法结果产生，因此该回调只接收 `CallExecution`，不读取最终结果。
 
-`CallRequirement.verifyBeforeInvocation()` 在 Principal 选择后、权限及执行控制前检查前提。`verifySatisfied()` 在方法正常返回及适用事务提交前检查成功要求。资源范围由权限包的 `ResourceScopeRequirement` 登记和消费，版本条件由 HTTP 版本组件登记，执行对象只保存这些要求。
+`CallLifecycleConfiguration` 根据参与者实现的回调接口确定阶段。每个模块公开自己的稳定 `CODE`；配置使用 `after(code, dependency)`、`before(code, dependency)` 或阶段重载声明依赖。模块或应用注册 `CallLifecycleConfiguration.Customizer` Bean 补充依赖，不修改中央 Advisor。内置节点固定为 Audit、Identity、Principal 选择、Principal 前置校验、Permission、RateLimit、Idempotency、Lock；缺少可选节点时保留其余顺序。依赖先于优先级，未关联节点再按阶段、优先级和编码稳定排序；重复编码、缺失依赖和依赖环在构建执行器时失败，扩展依赖不能颠倒内置顺序。
+
+`ResourceScopeRequirement` 和 HTTP 版本状态是 `PreCommit` 条件，不是生命周期阶段。Repository 消费已批准的范围或版本条件；未消费时拒绝方法成功和适用事务提交。幂等重放没有进入实际方法，不重新要求 Repository 消费。
+
+`VersionConditions.capture()` 可以在 HTTP 入口线程冻结当前 `If-Match`，再把返回的 `VersionConditions` 显式传给独立异步工作。工作线程调用 `resolve(currentVersion)` 时不读取 Servlet ThreadLocal；同一请求条件仍只能由一个根资源写入消费。工作线程必须另开事务，不能延用原 HTTP 事务。
 
 `Next.proceed()` 返回内层 CallOutcome，最多在当前回调线程中执行一次；回调结束后失效。幂等可以不调用 Next 而返回 REPLAYED，普通处理继续 Next 后返回结果。业务异常与 Error 均由执行器转换为结果，外层不得吞掉失败或完成异常。权限和限流继续使用各自的类型化判定，不转换成没有结果的通用 Check。
 
@@ -334,15 +342,19 @@ Around 使用 `code()`、`before()`、`after()` 与 `priority()` 声明进入顺
 
 工作入口通过 `CallHolder.run` 绑定任务 Call，结束或失败后恢复该线程原绑定和 MDC。此方法不调度线程、不复制或挂起事务；同线程调用仍遵循该线程已有事务。自主任务没有父 Call 时使用 `Call.system` 或 `@SystemExecution`。普通 HTTP 方法无需手写 fork/run。每项并行工作独立使用一个 Call，输入保持不可变；等待、超时和兄弟任务取消由发起代码明确安排，不等待的工作先完成其公开契约要求的交接。
 
-返回 CompletionStage 的方法只执行到调度返回，锁和事务不延伸到 Future 完成。实际工作的执行控制放在工作方法上，不能跨线程保存 Next。`@Idempotent` 方法不能声明 Future 或 CompletionStage 返回类型；需要重放调度结果时返回持久任务标识。持久化与重试的并行任务使用 PipelineJobPlan；无共享状态的纯数据计算可以使用 DataGraphExecutor.executeParallel，它不进入调用挂载，也不传播 CallHolder 或事务，执行器由调用方提供。
+返回 `CompletionStage<T>` 的方法由 `CallInvoker.executeAsync` 等待实际完成值，再保存幂等结果、释放异步锁并记录最终审计。`@Locked` 的 Redis 实现在入口线程等待取得锁并启动目标，随后使用独立逻辑 owner ID 和 watchdog 持锁到目标阶段终止；取消返回值不会提前释放仍在运行的目标。异步幂等处理权在目标完成前按 token 续期，续期或最终保存失败会使调用失败。Spring 事务和 `CallHolder` 仍只属于原线程；异步工作若需访问 Repository，必须建立自己的事务，并显式传入所需数据。`Around` 没有实现 `aroundAsync` 时直接失败，不会隐式 `join` 阻塞入口线程。
+
+`Call.fork` 与 `CallHolder.run` 用于独立后台任务，不是 `CompletionStage` 的隐式上下文传播。持久化与重试的并行任务使用 `PipelineJobPlan`；无共享状态的独立读取使用 `DataGraphExecutor.executeAsync(graph, inputs, executor)`，它按数据依赖并行计算和汇合，不传播 CallHolder 或事务。`Pipeline.runAsync` 只处理前后相接的顺序转换，不负责并行汇合。
 
 SSE 建连方法返回 SseEmitter 后本次调用结束；持续连接、心跳及写出由 SSE 模块管理。STOMP 每条入站帧建立独立 Call，并在对应处理线程绑定与清理。
 
 ### 审计等待方式
 
-`@Audit.mode` 按方法显式值、类型显式值、`sca4dj.audit.mode` 的顺序选择方式。注解默认 `DEFAULT` 表示继续继承，应用配置必须明确为 `DIRECT` 或 `QUEUED`，默认是 `DIRECT`。操作、目标解析器和 payload 工厂按有效审计声明解释，不隐式拼接方法和类型的属性。
+`@Audit.mode` 按方法显式值、类型显式值、`sca4dj.audit.mode` 的顺序选择方式。注解默认 `DEFAULT` 表示继续继承，应用配置可选 `DIRECT`、`QUEUED` 或 `AFTER_COMMIT`，默认是 `DIRECT`。操作、目标解析器和 payload 工厂按有效审计声明解释，不隐式拼接方法和类型的属性。
 
 `DIRECT` 等待数据库写入，参与已有事务，没有事务时由记录器建立事务。`QUEUED` 在独立短事务内先冻结并脱敏审计字段，再加入 MessageBus Outbox；交接提交后返回，不等待 Broker 发布和消费。Messaging 可用时同时安装队列记录器、编码器和消费者，因此默认同步的应用也能局部声明队列方式。默认方式没有实现时启动失败，局部方式没有实现时在业务执行前失败，交接失败立即报告。消费者以消息 ID 作为审计主键去重，技术失败按 Messaging 策略重试后进入 DLQ；不得回头改写已经结束的 Call。
+
+`AFTER_COMMIT` 在调用线程冻结和脱敏审计字段；存在真实事务时，事务提交成功后才把写入任务交给容量为 1024 的进程内队列，没有事务时立即入队。任务使用独立 Call 写入单条审计记录。队列拒绝、进程退出和后台数据库失败都可能丢失记录，只记录告警或错误，不让调用方误认为它提供可靠交付。需要恢复和重试时使用 `QUEUED`。
 
 自定义 AuditRecorder 声明自己的 `mode()`，默认实现只补齐未提供的方式。同一方式注册多个自定义实现时启动失败，不按容器顺序选择。
 

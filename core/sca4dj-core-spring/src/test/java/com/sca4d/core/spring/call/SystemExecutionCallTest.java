@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.sca4d.core.api.annotation.SystemExecution;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallInvoker;
-import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.identity.IdentityCallInterceptor;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SystemPrincipal;
@@ -66,7 +65,7 @@ class SystemExecutionCallTest {
     private static AutonomousTask task() {
         AspectJProxyFactory factory = new AspectJProxyFactory(new AutonomousTask());
         CallInvoker lifecycle = new CallInvoker(List.of(new IdentityCallInterceptor()));
-        CallLifecycleAdvisor.Declaration<SystemExecution> declaration = new CallLifecycleAdvisor.Declaration<>() {
+        CallLifecycleAdvisor.AnnotationBinding<SystemExecution> declaration = new CallLifecycleAdvisor.AnnotationBinding<>() {
             @Override
             public @NonNull Class<SystemExecution> annotationType() {
                 return SystemExecution.class;

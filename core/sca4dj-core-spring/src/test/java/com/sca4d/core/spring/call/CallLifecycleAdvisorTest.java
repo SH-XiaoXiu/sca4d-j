@@ -14,7 +14,6 @@ import com.sca4d.core.api.annotation.RequirePermissions;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallExecution;
 import com.sca4d.core.api.call.CallInvoker;
-import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.identity.SystemPrincipal;
 import com.sca4d.core.api.name.code.TreeCode;
 import org.jspecify.annotations.NonNull;
@@ -28,9 +27,13 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.lang.reflect.Method;
 import java.time.Clock;
 import java.time.Instant;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /** 验证 Core 注解切面读取类级声明、重复权限声明和具体实现方法。 */
@@ -42,7 +45,7 @@ class CallLifecycleAdvisorTest {
         CallInvoker lifecycle = mock(CallInvoker.class);
         doReturn("checked").when(lifecycle).execute(any(), any());
         AtomicInteger attachments = new AtomicInteger();
-        CallLifecycleAdvisor.Declaration<Risk> registration = new CallLifecycleAdvisor.Declaration<>() {
+        CallLifecycleAdvisor.AnnotationBinding<Risk> registration = new CallLifecycleAdvisor.AnnotationBinding<>() {
             @Override
             public @NonNull Class<Risk> annotationType() {
                 return Risk.class;
@@ -72,6 +75,50 @@ class CallLifecycleAdvisorTest {
     }
 
     @Test
+    @DisplayName("异步方法把完成值类型交给幂等结果存储")
+    void recordsAsyncCompletionValueType() {
+        CallInvoker invoker = mock(CallInvoker.class);
+        doReturn(CompletableFuture.completedFuture("checked")).when(invoker).executeAsync(any(), any());
+        AspectJProxyFactory factory = new AspectJProxyFactory(new RiskService());
+        factory.addAdvisor(
+                new CallLifecycleAdvisor(
+                        invoker,
+                        List.<CallLifecycleAdvisor.AnnotationBinding<Risk>>of(() -> Risk.class),
+                        Clock.systemUTC()));
+        RiskApi service = factory.getProxy();
+
+        assertThat(service.async().toCompletableFuture().join()).isEqualTo("checked");
+        ArgumentCaptor<CallExecution> execution = ArgumentCaptor.forClass(CallExecution.class);
+        verify(invoker).executeAsync(execution.capture(), any());
+        assertThat(execution.getValue().resultType()).isEqualTo(String.class);
+        assertThat(CallHolder.currentOrNull()).isNull();
+    }
+
+    @Test
+    @DisplayName("异步方法离开入口后清理线程绑定，完成线程不继承原 Call")
+    void clearsCallHolderBeforeAsyncCompletion() throws Exception {
+        CompletableFuture<String> work = new CompletableFuture<>();
+        AspectJProxyFactory factory = new AspectJProxyFactory(new AsyncRiskService(work));
+        factory.addAdvisor(
+                new CallLifecycleAdvisor(
+                        new CallInvoker(List.of()),
+                        List.<CallLifecycleAdvisor.AnnotationBinding<Risk>>of(() -> Risk.class),
+                        Clock.systemUTC()));
+        RiskApi service = factory.getProxy();
+
+        CompletionStage<String> result = service.async();
+        assertThat(CallHolder.currentOrNull()).isNull();
+        try (var worker = Executors.newSingleThreadExecutor(Thread.ofVirtual().factory())) {
+            worker.submit(() -> {
+                assertThat(CallHolder.currentOrNull()).isNull();
+                work.complete("done");
+                assertThat(CallHolder.currentOrNull()).isNull();
+            }).get();
+        }
+        assertThat(result.toCompletableFuture().join()).isEqualTo("done");
+    }
+
+    @Test
     @DisplayName("未注册的应用注解不触发调用生命周期")
     void leavesUnregisteredAnnotationsOutsideTheAdvisor() {
         CallInvoker lifecycle = mock(CallInvoker.class);
@@ -83,11 +130,34 @@ class CallLifecycleAdvisorTest {
     }
 
     @Test
+    @DisplayName("非注解方法绑定也能进入统一 Call Advisor")
+    void matchesMethodBindingWithoutAnnotation() throws Exception {
+        CallInvoker lifecycle = mock(CallInvoker.class);
+        doReturn("bound").when(lifecycle).execute(any(), any());
+        CallLifecycleAdvisor.MethodBinding binding = new CallLifecycleAdvisor.MethodBinding() {
+            @Override
+            public boolean matches(@NonNull Method method, @NonNull Class<?> targetType) {
+                return method.getName().equals("update");
+            }
+        };
+        AspectJProxyFactory factory = new AspectJProxyFactory(new PlainService());
+        factory.addAdvisor(
+                new CallLifecycleAdvisor(
+                        lifecycle,
+                        List.of(),
+                        List.of(binding),
+                        Clock.systemUTC()));
+
+        assertThat(factory.<PlainService>getProxy().update()).isEqualTo("bound");
+        verify(lifecycle).execute(any(), any());
+    }
+
+    @Test
     @DisplayName("声明了调用功能却未注册处理者时在业务执行前拒绝")
     void rejectsMissingFeatureRegistration() {
         AspectJProxyFactory factory = new AspectJProxyFactory(new MethodPermissionService());
         factory.setProxyTargetClass(false);
-                factory.addAdvisor(new CallLifecycleAdvisor(mock(CallInvoker.class), List.of(), Clock.systemUTC()));
+        factory.addAdvisor(new CallLifecycleAdvisor(mock(CallInvoker.class), List.of(), Clock.systemUTC()));
         PermissionService service = factory.getProxy();
         assertThrows(IllegalArgumentException.class, () -> service.invoke("value"));
     }
@@ -102,6 +172,9 @@ class CallLifecycleAdvisorTest {
     private interface RiskApi {
         @Risk
         String update();
+
+        @Risk
+        CompletionStage<String> async();
     }
 
     /** 业务实现不复制接口注解。 */
@@ -109,6 +182,35 @@ class CallLifecycleAdvisorTest {
         @Override
         public String update() {
             return "actual";
+        }
+
+        @Override
+        public CompletionStage<String> async() {
+            return CompletableFuture.completedFuture("actual");
+        }
+    }
+
+    public static class PlainService {
+        public String update() {
+            return "actual";
+        }
+    }
+
+    private static class AsyncRiskService implements RiskApi {
+        private final CompletableFuture<String> work;
+
+        private AsyncRiskService(CompletableFuture<String> work) {
+            this.work = work;
+        }
+
+        @Override
+        public String update() {
+            return "actual";
+        }
+
+        @Override
+        public CompletionStage<String> async() {
+            return work;
         }
     }
 
@@ -129,7 +231,7 @@ class CallLifecycleAdvisorTest {
         factory.addAdvisor(
                 new CallLifecycleAdvisor(
                         lifecycle,
-                        List.<CallLifecycleAdvisor.Declaration<RateLimited>>of(() -> RateLimited.class),
+                        List.<CallLifecycleAdvisor.AnnotationBinding<RateLimited>>of(() -> RateLimited.class),
                         Clock.systemUTC()));
         LimitedService service = factory.getProxy();
         Call call = Call.system("class-rate-limit", Instant.EPOCH, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")));
@@ -161,8 +263,8 @@ class CallLifecycleAdvisorTest {
                 new CallLifecycleAdvisor(
                         lifecycle,
                         List.of(
-                                (CallLifecycleAdvisor.Declaration<RequirePermission>) () -> RequirePermission.class,
-                                (CallLifecycleAdvisor.Declaration<RequirePermissions>) () -> RequirePermissions.class),
+                                (CallLifecycleAdvisor.AnnotationBinding<RequirePermission>) () -> RequirePermission.class,
+                                (CallLifecycleAdvisor.AnnotationBinding<RequirePermissions>) () -> RequirePermissions.class),
                         Clock.systemUTC()));
         PermissionService service = factory.getProxy();
         CallHolder.set(
@@ -191,8 +293,8 @@ class CallLifecycleAdvisorTest {
                 new CallLifecycleAdvisor(
                         lifecycle,
                         List.of(
-                                (CallLifecycleAdvisor.Declaration<RequirePermission>) () -> RequirePermission.class,
-                                (CallLifecycleAdvisor.Declaration<RequirePermissions>) () -> RequirePermissions.class),
+                                (CallLifecycleAdvisor.AnnotationBinding<RequirePermission>) () -> RequirePermission.class,
+                                (CallLifecycleAdvisor.AnnotationBinding<RequirePermissions>) () -> RequirePermissions.class),
                         Clock.systemUTC()));
         PermissionService service = factory.getProxy();
         CallHolder.set(

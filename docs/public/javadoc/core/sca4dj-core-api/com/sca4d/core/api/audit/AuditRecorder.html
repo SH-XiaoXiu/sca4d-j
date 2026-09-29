@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">AuditRecorder</span></div>
-<div class="block">按明确方式记录审计；同步记录返回时完成当前事务内写入，队列记录返回时完成可靠交接提交。</div>
+<div class="block">按明确方式记录审计；具体实现决定返回时完成写入、可靠交接或提交后尽力登记。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -110,7 +110,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#record(com.sca4d.core.api.audit.AuditRecord)" class="member-name-link">record</a><wbr>(@NotNull <a href="AuditRecord.html" title="class in com.sca4d.core.api.audit">AuditRecord</a>&nbsp;record)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">完成本实现声明的写入或可靠交接；失败时抛出异常，不静默丢弃。</div>
+<div class="block">执行本实现声明的写入或交接；尽力模式必须自行记录丢弃和后台失败。</div>
 </div>
 </div>
 </div>
@@ -140,7 +140,7 @@ loadScripts(document, 'script');</script>
 <h3>record</h3>
 <div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">record</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="AuditRecord.html" title="class in com.sca4d.core.api.audit">AuditRecord</a>&nbsp;record)</span></div>
-<div class="block">完成本实现声明的写入或可靠交接；失败时抛出异常，不静默丢弃。</div>
+<div class="block">执行本实现声明的写入或交接；尽力模式必须自行记录丢弃和后台失败。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>record</code> - 审计记录</dd>

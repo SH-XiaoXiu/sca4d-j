@@ -17,6 +17,9 @@ public interface ApiInvoker {
      * @return 目标方法结果，空值是否允许由契约声明决定
      * @throws Throwable 目标调用抛出的异常或目标不可用、参数和结果不符合契约的失败
      */
-    @Nullable Object invoke(@NotNull ApiTarget target, @NotNull TreeCode operation,
+    @Nullable
+    Object invoke(
+            @NotNull ApiTarget target,
+            @NotNull TreeCode operation,
             Object @NotNull [] arguments) throws Throwable;
 }

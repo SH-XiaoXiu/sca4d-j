@@ -5,12 +5,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.core.api.call.CallLifecycleConfiguration;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.IdempotencyFingerprints;
 import com.sca4d.core.api.concurrent.IdempotencyStore;
 import com.sca4d.core.api.concurrent.RateLimiter;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
+import com.sca4d.core.api.identity.IdentityCallInterceptor;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.OperationCatalog;
 import com.sca4d.core.api.permission.OperationModule;
@@ -22,7 +24,6 @@ import com.sca4d.core.spring.openapi.CoreOpenApiConfiguration;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.core.spring.redis.RedisBatches;
 import com.sca4d.core.spring.web.GlobalExceptionHandler;
-import com.sca4d.core.spring.web.HttpIdempotencyKeyResolver;
 import com.sca4d.core.spring.web.MethodArgumentsIdempotencyKeyResolver;
 import com.sca4d.core.spring.web.ResponseETagContractValidator;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -99,10 +100,16 @@ class CoreSpringAutoConfigurationTest {
             assertThat(context).hasNotFailed();
             assertThat(context).hasSingleBean(GlobalExceptionHandler.class);
             assertThat(context).hasSingleBean(PrincipalSelectionCallInterceptor.class);
+            assertThat(context.getBean(CallLifecycleConfiguration.class).registrations())
+                    .filteredOn(item -> item.interceptor().code().equals(PrincipalSelectionCallInterceptor.CODE))
+                    .singleElement()
+                    .satisfies(
+                            item -> assertThat(item.before())
+                                    .contains(IdentityCallInterceptor.PrincipalRequirement.CODE));
             assertThat(context).hasSingleBean(PrincipalSelectionInterceptor.class);
             assertThat(context).hasSingleBean(OperationCatalog.class);
             assertThat(context).hasSingleBean(IdempotencyFingerprints.class);
-            assertThat(context).hasSingleBean(HttpIdempotencyKeyResolver.class);
+            assertThat(context).hasBean("callIdempotencyScheduler");
             assertThat(context).hasSingleBean(MethodArgumentsIdempotencyKeyResolver.class);
             assertThat(context).hasSingleBean(SqlBatches.class);
             assertThat(context).hasSingleBean(RedisBatches.class);

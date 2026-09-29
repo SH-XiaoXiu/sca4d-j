@@ -166,14 +166,22 @@ public class Pipeline<I, O> {
                 }
                 return output.handle((converted, failure) -> {
                     Throwable cause = failure instanceof CompletionException ? failure.getCause() : failure;
-                    if (cause instanceof Error error) { throw error; }
-                    if (cause instanceof PipelineExecutionException pipelineFailure) { throw pipelineFailure; }
+                    if (cause instanceof Error error) {
+                        throw error;
+                    }
+                    if (cause instanceof PipelineExecutionException pipelineFailure) {
+                        throw pipelineFailure;
+                    }
                     if (cause != null) {
-                        throw new PipelineExecutionException(current.code(), cause instanceof RuntimeException runtime
-                                ? runtime : new IllegalStateException(cause));
+                        throw new PipelineExecutionException(
+                                current.code(),
+                                cause instanceof RuntimeException runtime
+                                        ? runtime
+                                        : new IllegalStateException(cause));
                     }
                     if (!current.outputType().isInstance(converted)) {
-                        throw new PipelineExecutionException(current.code(),
+                        throw new PipelineExecutionException(
+                                current.code(),
                                 new IllegalStateException("Pipeline 阶段返回空值或类型不匹配"));
                     }
                     return converted;
