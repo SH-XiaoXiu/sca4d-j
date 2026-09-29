@@ -30,7 +30,7 @@ public class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, St
 
     private final PhoneNumberConditionRegistry conditionRegistry;
 
-    private DnfExpression<ParsedPhoneNumber> expression = DnfExpression.always();
+    private DnfExpression<ParsedPhoneNumber, Boolean> expression = DnfExpression.always("always", true);
 
     /** 创建不包含自定义条件的校验器，供非 Spring Bean Validation 环境使用。 */
     public PhoneNumberValidator() {
@@ -55,11 +55,11 @@ public class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, St
     @Override
     public void initialize(@NotNull PhoneNumber annotation) {
         if (annotation.anyOf().length == 0) {
-            expression = DnfExpression.always();
+            expression = DnfExpression.always("always", true);
             return;
         }
-        List<DnfClause<ParsedPhoneNumber>> clauses = Arrays.stream(annotation.anyOf())
-                .map(this::clause)
+        List<DnfClause<ParsedPhoneNumber, Boolean>> clauses = java.util.stream.IntStream.range(0, annotation.anyOf().length)
+                .mapToObj(index -> clause("phone-rule-" + index, annotation.anyOf()[index]))
                 .toList();
         expression = new DnfExpression<>(clauses);
     }
@@ -75,11 +75,11 @@ public class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, St
             return true;
         }
         ParsedPhoneNumber phoneNumber = regions.parse(value);
-        return phoneNumber != null && expression.test(phoneNumber);
+        return phoneNumber != null && expression.evaluate(phoneNumber).orElse(false);
     }
 
     /** 把一个注解 Rule 转换成按声明顺序执行的 AND 条件。 */
-    private DnfClause<ParsedPhoneNumber> clause(PhoneNumber.Rule rule) {
+    private DnfClause<ParsedPhoneNumber, Boolean> clause(String code, PhoneNumber.Rule rule) {
         List<Predicate<? super ParsedPhoneNumber>> predicates = new ArrayList<>();
 
         // 先校验并复制 Rule 声明，之后的 Predicate 不再读取可变数组。
@@ -107,7 +107,11 @@ public class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, St
             PhoneNumberCondition condition = conditionRegistry.resolve(conditionType);
             predicates.add(condition::test);
         }
-        return new DnfClause<>(predicates);
+        List<DnfClause.Condition<? super ParsedPhoneNumber>> conditions = new ArrayList<>();
+        for (Predicate<? super ParsedPhoneNumber> predicate : predicates) {
+            conditions.add(DnfClause.Condition.of(predicate));
+        }
+        return new DnfClause<>(code, conditions, true);
     }
 
     /** 添加一个值必须包含在非空集合中的条件。 */

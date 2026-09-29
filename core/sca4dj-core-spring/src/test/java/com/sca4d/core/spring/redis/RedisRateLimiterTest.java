@@ -8,8 +8,8 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import com.sca4d.core.api.concurrent.RateLimit;
+import com.sca4d.core.api.concurrent.RateLimitKey;
 import com.sca4d.core.api.isolation.AppName;
-import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
 import io.github.bucket4j.ConsumptionProbe;
 import io.github.bucket4j.distributed.BucketProxy;
@@ -36,7 +36,7 @@ class RedisRateLimiterTest {
         when(
                 proxyManager.getProxy(
                         ArgumentMatchers.eq(
-                                "SCA4D_TEST:RATE_LIMIT:V_6C6F67696E3A6163636F756E743A3432:5:60000000000"),
+                                "SCA4D_TEST:RATE_LIMIT:CALL:V_6C6F67696E3A6163636F756E743A3432:5:60000000000"),
                         any(Supplier.class)))
                 .thenReturn(bucket);
         when(bucket.tryConsumeAndReturnRemaining(1)).thenReturn(probe);
@@ -46,7 +46,7 @@ class RedisRateLimiterTest {
 
         assertTrue(
                 rateLimiter.tryAcquire(
-                        Key.of(TreeCode.of("RATE_LIMIT"), "login:account:42"),
+                        new RateLimitKey(TreeCode.of("CALL"), "login:account:42"),
                         new RateLimit(5, Duration.ofMinutes(1))).isAllowed());
     }
 
@@ -61,7 +61,7 @@ class RedisRateLimiterTest {
         assertThrows(
                 IllegalArgumentException.class,
                 () -> rateLimiter.tryAcquire(
-                        Key.of(TreeCode.of("RATE_LIMIT:*")),
+                        new RateLimitKey(TreeCode.of("*")),
                         new RateLimit(5, Duration.ofMinutes(1))));
         verifyNoInteractions(proxyManager);
     }

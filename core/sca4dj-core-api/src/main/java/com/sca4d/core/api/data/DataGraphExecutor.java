@@ -16,7 +16,7 @@ import java.util.concurrent.CompletionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/** 按 DataGraph 数据依赖同步或并行计算，成功后以稳定拓扑顺序返回完整结果。 */
+/** 按 DataGraph 数据依赖同步或异步计算，成功后以稳定拓扑顺序返回完整结果。 */
 public class DataGraphExecutor {
 
     /** 禁止创建无状态执行入口。 */
@@ -58,7 +58,7 @@ public class DataGraphExecutor {
     }
 
     /**
-     * 通过调用方提供的 Executor 并行执行无共享可变状态的数据节点。
+     * 通过调用方提供的 Executor 异步执行无共享可变状态的数据节点。
      *
      * <p>节点只在直接输入全部成功后运行；任一失败立即结束返回值并取消未完成节点。
      * 取消不能强制终止已经运行的 Java 函数，节点必须遵守纯数据操作契约。
@@ -70,7 +70,7 @@ public class DataGraphExecutor {
      * @return 可以取消的完整结果 Future，不返回部分结果
      */
     @CheckReturnValue
-    public static @NotNull CompletableFuture<DataValues> executeParallel(
+    public static @NotNull CompletableFuture<DataValues> executeAsync(
             @NotNull DataGraph graph,
             @NotNull DataValues inputs,
             @NotNull Executor executor) {
@@ -87,18 +87,34 @@ public class DataGraphExecutor {
             Map<DataKey<?>, CompletableFuture<?>> dependencies = new LinkedHashMap<>();
             operation.inputs().forEach(key -> dependencies.put(key, values.get(key)));
             CompletableFuture<?> task = CompletableFuture.allOf(dependencies.values().toArray(CompletableFuture[]::new))
-                    .thenApplyAsync(ignored -> {
+                    .thenComposeAsync(ignored -> {
                         if (stopped.get()) {
-                            throw new CancellationException("数据图已经停止");
+                            return CompletableFuture.failedFuture(new CancellationException("数据图已经停止"));
                         }
                         Map<DataKey<?>, Object> visible = new LinkedHashMap<>();
                         dependencies.forEach((key, future) -> visible.put(key, future.join()));
                         try {
-                            return operation.execute(DataValues.copyOf(visible));
+                            return operation.executeAsync(DataValues.copyOf(visible), executor)
+                                    .handle((value, failure) -> {
+                                        if (failure == null) {
+                                            return value;
+                                        }
+                                        Throwable cause = failure instanceof CompletionException
+                                                ? failure.getCause()
+                                                : failure;
+                                        if (cause instanceof DataAssertionException assertion) {
+                                            throw new CompletionException(assertion.at(operation));
+                                        }
+                                        if (cause instanceof RuntimeException runtimeException) {
+                                            throw new CompletionException(
+                                                    new DataOperationExecutionException(operation, runtimeException));
+                                        }
+                                        throw new CompletionException(cause);
+                                    });
                         } catch (DataAssertionException exception) {
-                            throw exception.at(operation);
+                            return CompletableFuture.failedFuture(exception.at(operation));
                         } catch (RuntimeException exception) {
-                            throw new DataOperationExecutionException(operation, exception);
+                            return CompletableFuture.failedFuture(new DataOperationExecutionException(operation, exception));
                         }
                     }, executor);
             tasks.add(task);

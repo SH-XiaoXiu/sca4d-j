@@ -1,7 +1,7 @@
 package com.sca4d.core.spring.web;
 
 import com.sca4d.core.api.call.CallExecution;
-import com.sca4d.core.api.call.CallRequirement;
+import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.concurrent.VersionConditions;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-/** 把当前 HTTP 请求提交的 `If-Match` 版本绑定为必须由根资源 Repository 消费的调用要求。 */
+/** 把当前 HTTP 请求提交的 `If-Match` 版本绑定为必须由根资源 Repository 消费的预提交条件。 */
 public class RequestVersionConditions implements VersionConditions, CallLifecycleAdvisor.Declaration<IfMatch> {
 
     private final ThreadLocal<State> current = new ThreadLocal<>();
@@ -55,7 +55,7 @@ public class RequestVersionConditions implements VersionConditions, CallLifecycl
             return;
         }
         state.attached = true;
-        checked.addRequirement(state);
+        checked.addPreCommit(state);
     }
 
     /**
@@ -84,20 +84,15 @@ public class RequestVersionConditions implements VersionConditions, CallLifecycl
     }
 
     /** 保存一个 `If-Match` 版本及其附着和消费状态。 */
-    private static class State implements CallRequirement {
-
+    private static class State implements CallLifecycle.PreCommit {
         private final @NotNull Version expectedVersion;
-
         private boolean attached;
-
         private boolean consumed;
 
-        /** @param expectedVersion `If-Match` 声明的预期版本 */
         private State(@NotNull Version expectedVersion) {
             this.expectedVersion = expectedVersion;
         }
 
-        /** 在业务写入成功前确认根资源 Repository 已经消费版本条件。 */
         @Override
         public void verifySatisfied() {
             if (!consumed) {
@@ -105,11 +100,6 @@ public class RequestVersionConditions implements VersionConditions, CallLifecycl
             }
         }
 
-        /**
-         * `If-Match` 只约束写入，不在无关只读事务提交时检查。
-         *
-         * @return 固定返回 {@code false}
-         */
         @Override
         public boolean appliesToReadOnlyTransaction() {
             return false;

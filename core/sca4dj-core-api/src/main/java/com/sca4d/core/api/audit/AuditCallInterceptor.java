@@ -21,10 +21,14 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletionStage;
 
 /** 根据有效 `@Audit` 和调用结果建立审计记录，选择同步写入或可靠排队方式。 */
 public class AuditCallInterceptor implements CallLifecycle.Around {
     private static final Logger LOG = LoggerFactory.getLogger(AuditCallInterceptor.class);
+
+    /** 审计环绕节点编码。 */
+    public static final TreeCode CODE = TreeCode.of("CALL/AUDIT");
 
     private final Map<Audit.Mode, AuditRecorder> recorders;
 
@@ -72,7 +76,7 @@ public class AuditCallInterceptor implements CallLifecycle.Around {
 
     @Override
     public @NotNull TreeCode code() {
-        return CallLifecycle.AUDIT;
+        return CODE;
     }
 
     @Override
@@ -83,6 +87,7 @@ public class AuditCallInterceptor implements CallLifecycle.Around {
     @Override
     public @NotNull CallOutcome around(@NotNull CallExecution execution, @NotNull CallLifecycle.Next next) {
         CallExecution checked = Objects.requireNonNull(execution, "方法执行不能为空");
+        checked.verifyPrincipal();
         Audit audit = checked.declaration(Audit.class).orElseThrow();
         Audit.Mode mode = checked.declarations(Audit.class)
                 .stream()
@@ -109,6 +114,44 @@ public class AuditCallInterceptor implements CallLifecycle.Around {
                 mode,
                 outcome.status());
         return outcome;
+    }
+
+    /** 在异步业务完成后建立并记录最终审计结果。 */
+    @Override
+    public @NotNull CompletionStage<CallOutcome> aroundAsync(
+            @NotNull CallExecution execution,
+            @NotNull CallLifecycle.AsyncNext next) {
+        CallExecution checked = Objects.requireNonNull(execution, "方法执行不能为空");
+        checked.verifyPrincipal();
+        Audit audit = checked.declaration(Audit.class).orElseThrow();
+        Audit.Mode mode = checked.declarations(Audit.class)
+                .stream()
+                .map(Audit::mode)
+                .filter(value -> value != Audit.Mode.DEFAULT)
+                .findFirst()
+                .orElse(defaultMode);
+        AuditRecorder recorder = recorders.get(mode);
+        if (recorder == null) {
+            throw new IllegalStateException("没有安装方法声明的审计记录方式: " + mode);
+        }
+        return next.proceedAsync().thenApply(outcome -> {
+            checked.recordOutcome(outcome);
+            if ((outcome.status() == CallOutcome.Status.DENIED || outcome.status() == CallOutcome.Status.FAILED)
+                    && (checked.call().subject().isEmpty() || checked.call().principal().isEmpty())) {
+                return outcome;
+            }
+            try {
+                recorder.record(auditRecord(audit, checked, auditResult(outcome)));
+                LOG.trace(
+                        "异步调用审计已完成记录或可靠交接 | callId={} mode={} outcome={}",
+                        checked.call().callId(),
+                        mode,
+                        outcome.status());
+                return outcome;
+            } catch (RuntimeException failure) {
+                return outcome.withCompletionFailure(failure);
+            }
+        });
     }
 
     /**

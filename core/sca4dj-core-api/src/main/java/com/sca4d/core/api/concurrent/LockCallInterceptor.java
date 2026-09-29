@@ -20,6 +20,9 @@ public class LockCallInterceptor implements CallLifecycle.Around {
 
     private static final Logger LOG = LoggerFactory.getLogger(LockCallInterceptor.class);
 
+    /** 分布式锁节点编码。 */
+    public static final TreeCode CODE = TreeCode.of("CALL/LOCK");
+
     private final DistributedLock distributedLock;
 
     private final CallValueResolverLookup resolverLookup;
@@ -43,7 +46,7 @@ public class LockCallInterceptor implements CallLifecycle.Around {
 
     @Override
     public @NotNull TreeCode code() {
-        return CallLifecycle.LOCK;
+        return CODE;
     }
 
     @Override

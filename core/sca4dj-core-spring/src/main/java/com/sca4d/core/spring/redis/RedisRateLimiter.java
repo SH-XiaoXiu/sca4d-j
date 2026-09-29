@@ -4,8 +4,8 @@ import static com.sca4d.core.api.name.NameFormat.COLON;
 
 import com.sca4d.core.api.concurrent.RateLimit;
 import com.sca4d.core.api.concurrent.RateLimitDecision;
+import com.sca4d.core.api.concurrent.RateLimitKey;
 import com.sca4d.core.api.concurrent.RateLimiter;
-import com.sca4d.core.api.name.Key;
 import io.github.bucket4j.BucketConfiguration;
 import io.github.bucket4j.ConsumptionProbe;
 import io.github.bucket4j.distributed.proxy.ProxyManager;
@@ -39,8 +39,8 @@ public class RedisRateLimiter implements RateLimiter {
      * @return 是否消耗令牌以及被拒绝后的精确等待时间
      */
     @Override
-    public @NotNull RateLimitDecision tryAcquire(@NotNull Key key, @NotNull RateLimit limit) {
-        Key checkedKey = Objects.requireNonNull(key, "限流键不能为空");
+    public @NotNull RateLimitDecision tryAcquire(@NotNull RateLimitKey key, @NotNull RateLimit limit) {
+        RateLimitKey checkedKey = Objects.requireNonNull(key, "限流键不能为空");
         RateLimit checkedLimit = Objects.requireNonNull(limit, "限流要求不能为空");
         BucketConfiguration configuration = BucketConfiguration.builder()
                 .addLimit(
@@ -48,7 +48,7 @@ public class RedisRateLimiter implements RateLimiter {
                                 .capacity(checkedLimit.permits())
                                 .refillGreedy(checkedLimit.permits(), checkedLimit.window()))
                 .build();
-        Key storageKey = checkedKey.part(checkedLimit.permits()).part(checkedLimit.window().toNanos());
+        RateLimitKey storageKey = checkedKey.part(checkedLimit.permits()).part(checkedLimit.window().toNanos());
         ConsumptionProbe probe = proxyManager
                 .getProxy(storageKey.format(COLON), () -> configuration)
                 .tryConsumeAndReturnRemaining(1);

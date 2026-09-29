@@ -38,12 +38,12 @@ class RequestVersionConditionsTest {
         conditions.attach(plain);
         conditions.attach(versioned);
 
-        assertThatCode(plain::verifyRequirements).doesNotThrowAnyException();
-        assertThatThrownBy(versioned::verifyRequirements)
+        assertThatCode(plain::verifyPreCommit).doesNotThrowAnyException();
+        assertThatThrownBy(versioned::verifyPreCommit)
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("Repository 没有消费版本前置条件");
         assertThat(conditions.resolve(new Version(4)).expected()).isEqualTo(new Version(3));
-        assertThatCode(versioned::verifyRequirements).doesNotThrowAnyException();
+        assertThatCode(versioned::verifyPreCommit).doesNotThrowAnyException();
     }
 
     private static CallExecution execution(Call call, Method method) {

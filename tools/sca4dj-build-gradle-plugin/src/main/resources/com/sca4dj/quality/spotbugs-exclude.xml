@@ -9,7 +9,7 @@
     <Bug pattern="CT_CONSTRUCTOR_THROW"/>
   </Match>
   <!-- 请求 Call ID 只有通过严格长度和字符白名单后才会写回响应头。 -->
-  <Match class="com.sca4d.core.spring.call.CallFilter">
+  <Match class="com.sca4d.core.spring.web.HttpCallFilter">
     <Bug pattern="HRS_REQUEST_PARAMETER_TO_HTTP_HEADER"/>
   </Match>
   <!-- Spring Bean 构造器保存注入协作者是依赖装配，不是向调用方暴露内部表示。 -->

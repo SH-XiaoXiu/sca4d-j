@@ -1,6 +1,5 @@
 package com.sca4d.core.api.concurrent;
 
-import com.sca4d.core.api.name.Key;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,5 +15,5 @@ public interface RateLimiter {
      */
     @CheckReturnValue
     @NotNull
-    RateLimitDecision tryAcquire(@NotNull Key key, @NotNull RateLimit limit);
+    RateLimitDecision tryAcquire(@NotNull RateLimitKey key, @NotNull RateLimit limit);
 }

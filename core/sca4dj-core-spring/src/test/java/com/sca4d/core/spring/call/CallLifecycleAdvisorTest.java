@@ -13,6 +13,7 @@ import com.sca4d.core.api.annotation.RequirePermission;
 import com.sca4d.core.api.annotation.RequirePermissions;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallExecution;
+import com.sca4d.core.api.call.CallInvoker;
 import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.identity.SystemPrincipal;
 import com.sca4d.core.api.name.code.TreeCode;
@@ -38,7 +39,7 @@ class CallLifecycleAdvisorTest {
     @Test
     @DisplayName("应用自行注册注解，统一 Advisor 匹配接口声明并把声明交给执行器")
     void registersApplicationOwnedAnnotation() throws Exception {
-        CallLifecycle lifecycle = mock(CallLifecycle.class);
+        CallInvoker lifecycle = mock(CallInvoker.class);
         doReturn("checked").when(lifecycle).execute(any(), any());
         AtomicInteger attachments = new AtomicInteger();
         CallLifecycleAdvisor.Declaration<Risk> registration = new CallLifecycleAdvisor.Declaration<>() {
@@ -73,7 +74,7 @@ class CallLifecycleAdvisorTest {
     @Test
     @DisplayName("未注册的应用注解不触发调用生命周期")
     void leavesUnregisteredAnnotationsOutsideTheAdvisor() {
-        CallLifecycle lifecycle = mock(CallLifecycle.class);
+        CallInvoker lifecycle = mock(CallInvoker.class);
         AspectJProxyFactory factory = new AspectJProxyFactory(new RiskService());
         factory.addAdvisor(new CallLifecycleAdvisor(lifecycle, List.of(), Clock.systemUTC()));
         RiskApi service = factory.getProxy();
@@ -86,7 +87,7 @@ class CallLifecycleAdvisorTest {
     void rejectsMissingFeatureRegistration() {
         AspectJProxyFactory factory = new AspectJProxyFactory(new MethodPermissionService());
         factory.setProxyTargetClass(false);
-        factory.addAdvisor(new CallLifecycleAdvisor(mock(CallLifecycle.class), List.of(), Clock.systemUTC()));
+                factory.addAdvisor(new CallLifecycleAdvisor(mock(CallInvoker.class), List.of(), Clock.systemUTC()));
         PermissionService service = factory.getProxy();
         assertThrows(IllegalArgumentException.class, () -> service.invoke("value"));
     }
@@ -119,7 +120,7 @@ class CallLifecycleAdvisorTest {
     @Test
     @DisplayName("Intercepts Class Level Rate Limit And Uses The Most Specific Target Method")
     void interceptsClassLevelRateLimitAndUsesTheMostSpecificTargetMethod() throws Exception {
-        CallLifecycle lifecycle = mock(CallLifecycle.class);
+        CallInvoker lifecycle = mock(CallInvoker.class);
         doReturn("checked")
                 .when(lifecycle)
                 .execute(any(), any());
@@ -150,7 +151,7 @@ class CallLifecycleAdvisorTest {
     @Test
     @DisplayName("Intercepts Repeated Method Permissions")
     void interceptsRepeatedMethodPermissions() throws Exception {
-        CallLifecycle lifecycle = mock(CallLifecycle.class);
+        CallInvoker lifecycle = mock(CallInvoker.class);
         doReturn("checked")
                 .when(lifecycle)
                 .execute(any(), any());
@@ -180,7 +181,7 @@ class CallLifecycleAdvisorTest {
     @Test
     @DisplayName("Intercepts Repeated Class Permissions")
     void interceptsRepeatedClassPermissions() throws Exception {
-        CallLifecycle lifecycle = mock(CallLifecycle.class);
+        CallInvoker lifecycle = mock(CallInvoker.class);
         doReturn("checked")
                 .when(lifecycle)
                 .execute(any(), any());

@@ -32,7 +32,7 @@ import java.time.Instant;
 /**
  * 验证 Spring 事务和嵌套方法执行会共同落实调用成功要求。
  */
-class CallRequirementIntegrationTest {
+class CallPreCommitIntegrationTest {
 
     private final RequestVersionConditions versionConditions = new RequestVersionConditions();
 
@@ -55,7 +55,7 @@ class CallRequirementIntegrationTest {
         versionConditions.attach(execution);
         TransactionExecution transaction = mock(TransactionExecution.class);
         when(transaction.isReadOnly()).thenReturn(false);
-        CallRequirementTransactionListener listener = new CallRequirementTransactionListener();
+        CallPreCommitTransactionListener listener = new CallPreCommitTransactionListener();
 
         assertThatThrownBy(() -> listener.beforeCommit(transaction))
                 .isInstanceOf(IllegalStateException.class)
@@ -82,8 +82,8 @@ class CallRequirementIntegrationTest {
         CallHolder.push(inner);
 
         assertThat(new CurrentResourceScope().scope(permission, DeviceScope.class)).isSameAs(scope);
-        assertThatCode(outer::verifyRequirements).doesNotThrowAnyException();
-        assertThatCode(inner::verifyRequirements).doesNotThrowAnyException();
+        assertThatCode(outer::verifyPreCommit).doesNotThrowAnyException();
+        assertThatCode(inner::verifyPreCommit).doesNotThrowAnyException();
     }
 
     private static CallExecution execution(Call call, Method method) {

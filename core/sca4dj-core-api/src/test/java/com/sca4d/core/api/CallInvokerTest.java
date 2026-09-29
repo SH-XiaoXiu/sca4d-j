@@ -29,6 +29,7 @@ import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallExecution;
+import com.sca4d.core.api.call.CallInvoker;
 import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.call.CallOutcome;
 import com.sca4d.core.api.call.CallValueResolver;
@@ -45,7 +46,7 @@ import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.concurrent.RateLimit;
 import com.sca4d.core.api.concurrent.RateLimitCallInterceptor;
 import com.sca4d.core.api.concurrent.RateLimitDecision;
-import com.sca4d.core.api.concurrent.RateLimitDimension;
+import com.sca4d.core.api.concurrent.RateLimit;
 import com.sca4d.core.api.concurrent.RateLimitExceededException;
 import com.sca4d.core.api.concurrent.RateLimiter;
 import com.sca4d.core.api.data.DataValues;
@@ -98,7 +99,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 @SuppressWarnings({"ClassCanBeRecord", "ExtractMethodRecommender"})
-class CallLifecycleTest {
+class CallInvokerTest {
 
     @Test
     @DisplayName("审计方法显式方式覆盖类型，类型显式方式覆盖应用默认")
@@ -117,7 +118,7 @@ class CallLifecycleTest {
         };
         for (Audit.Mode defaultMode : List.of(Audit.Mode.DIRECT, Audit.Mode.QUEUED)) {
             recorded.clear();
-            CallLifecycle lifecycle = new CallLifecycle(
+            CallInvoker lifecycle = new CallInvoker(
                     List.of(
                             new IdentityCallInterceptor(),
                             new AuditCallInterceptor(
@@ -153,7 +154,7 @@ class CallLifecycleTest {
     @DisplayName("局部审计方式未安装时在业务执行前失败")
     void rejectsUnavailableAuditModeBeforeInvocation() {
         AtomicInteger invocations = new AtomicInteger();
-        CallLifecycle lifecycle = new CallLifecycle(
+        CallInvoker lifecycle = new CallInvoker(
                 List.of(
                         new IdentityCallInterceptor(),
                         new AuditCallInterceptor(List.<AuditRecorder>of(record -> {
@@ -180,7 +181,7 @@ class CallLifecycleTest {
     void rejectsFutureIdempotencyBeforeInvocation() throws Exception {
         List<String> events = new ArrayList<>();
         AtomicInteger invocations = new AtomicInteger();
-        CallLifecycle lifecycle = new CallLifecycle(
+        CallInvoker lifecycle = new CallInvoker(
                 List.of(
                         new IdentityCallInterceptor(),
                         new IdempotencyCallInterceptor(new MemoryIdempotencyStore(events), type -> {
@@ -205,7 +206,7 @@ class CallLifecycleTest {
     @DisplayName("目标抛出 Error 时释放幂等处理权，下一次调用可以重新取得")
     void releasesIdempotencyOnError() throws Exception {
         List<String> events = new ArrayList<>();
-        CallLifecycle executor = lifecycle(
+        CallInvoker executor = lifecycle(
                 new PermissionAssessment(List.of()),
                 (key, limit) -> RateLimitDecision.allow(),
                 new MemoryIdempotencyStore(events),
@@ -246,12 +247,12 @@ class CallLifecycleTest {
     @Test
     @DisplayName("锁内扩展的重放结果经过外层仍保持 REPLAYED")
     void preservesInnerReplayThroughControls() throws Exception {
-        CallLifecycle executor = extended(
+        CallInvoker executor = extended(
                 List.of(
                         new Hook(
                                 TreeCode.of("TEST/INNER_CACHE"),
-                                Set.of(CallLifecycle.LOCK),
-                                Set.of(CallLifecycle.REQUIREMENTS),
+                                Set.of(LockCallInterceptor.CODE),
+                                Set.of(),
                                 0,
                                 next -> CallOutcome.replayed("cached"))));
         Method method = RateLimitedService.class.getDeclaredMethod("overloaded");
@@ -273,15 +274,15 @@ class CallLifecycleTest {
         List<String> events = new ArrayList<>();
         TreeCode a = TreeCode.of("TEST/A");
         TreeCode b = TreeCode.of("TEST/B");
-        CallLifecycle executor = extended(
+        CallInvoker executor = extended(
                 List.of(
-                        new Hook(b, Set.of(a), Set.of(CallLifecycle.IDEMPOTENCY), -10, next -> {
+                        new Hook(b, Set.of(a), Set.of(IdempotencyCallInterceptor.CODE), -10, next -> {
                             events.add("b-enter");
                             CallOutcome result = next.proceed();
                             events.add("b-exit");
                             return result;
                         }),
-                        new Hook(a, Set.of(CallLifecycle.PERMISSION), Set.of(b), 10, next -> {
+                        new Hook(a, Set.of(PermissionCallInterceptor.CODE), Set.of(b), 10, next -> {
                             events.add("a-enter");
                             CallOutcome result = next.proceed();
                             events.add("a-exit");
@@ -313,12 +314,12 @@ class CallLifecycleTest {
     @Test
     @DisplayName("短路必须标记重放且不得执行目标")
     void allowsExplicitReplayWithoutInvokingTarget() throws Exception {
-        CallLifecycle executor = extended(
+        CallInvoker executor = extended(
                 List.of(
                         new Hook(
                                 TreeCode.of("TEST/CACHE"),
-                                Set.of(CallLifecycle.RATE_LIMIT),
-                                Set.of(CallLifecycle.IDEMPOTENCY),
+                                Set.of(RateLimitCallInterceptor.CODE),
+                                Set.of(IdempotencyCallInterceptor.CODE),
                                 0,
                                 next -> CallOutcome.replayed("cached"))));
         assertEquals("cached", invokeExtended(executor, () -> {
@@ -330,12 +331,12 @@ class CallLifecycleTest {
     @DisplayName("Next 不能重复使用、回调结束后使用或吞掉目标失败")
     void rejectsRepeatedAndEscapedNext() {
         AtomicReference<CallLifecycle.Next> saved = new AtomicReference<>();
-        CallLifecycle executor = extended(
+        CallInvoker executor = extended(
                 List.of(
                         new Hook(
                                 TreeCode.of("TEST/ONCE"),
-                                Set.of(CallLifecycle.RATE_LIMIT),
-                                Set.of(CallLifecycle.IDEMPOTENCY),
+                                Set.of(RateLimitCallInterceptor.CODE),
+                                Set.of(IdempotencyCallInterceptor.CODE),
                                 0,
                                 next -> {
                                     saved.set(next);
@@ -349,12 +350,12 @@ class CallLifecycleTest {
         }));
         assertEquals(1, invocations.get());
         assertThrows(IllegalStateException.class, () -> saved.get().proceed());
-        CallLifecycle swallow = extended(
+        CallInvoker swallow = extended(
                 List.of(
                         new Hook(
                                 TreeCode.of("TEST/SWALLOW"),
-                                Set.of(CallLifecycle.RATE_LIMIT),
-                                Set.of(CallLifecycle.IDEMPOTENCY),
+                                Set.of(RateLimitCallInterceptor.CODE),
+                                Set.of(IdempotencyCallInterceptor.CODE),
                                 0,
                                 next -> {
                                     next.proceed();
@@ -368,7 +369,7 @@ class CallLifecycleTest {
     }
 
     /** 为扩展行为测试组装无外部存储访问的真实执行链。 */
-    private static CallLifecycle extended(List<CallLifecycle.Around> extensions) {
+    private static CallInvoker extended(List<CallLifecycle.Around> extensions) {
         CallValueResolverLookup resolvers = type -> {
             throw new AssertionError("不需要解析器");
         };
@@ -388,11 +389,11 @@ class CallLifecycleTest {
                         new AuditCallInterceptor(List.<AuditRecorder>of(record -> {
                         }), Audit.Mode.DIRECT, NO_AUDIT_RESOLVERS, NO_EXPRESSIONS, Clock.fixed(NOW, ZoneOffset.UTC))));
         registered.addAll(extensions);
-        return new CallLifecycle(registered);
+        return new CallInvoker(registered);
     }
 
     /** 在固定匿名方法范围中执行目标，复用同一组公开执行规则。 */
-    private static String invokeExtended(CallLifecycle lifecycle, Callable<String> target) throws Exception {
+    private static String invokeExtended(CallInvoker lifecycle, Callable<String> target) throws Exception {
         Method method = RateLimitedService.class.getDeclaredMethod("overloaded");
         return execute(
                 lifecycle,
@@ -482,7 +483,7 @@ class CallLifecycleTest {
     void executesPermissionRateLimitIdempotencyLockInvocationAndAuditInOrder() throws Exception {
         List<String> events = new ArrayList<>();
         MemoryIdempotencyStore idempotencyStore = new MemoryIdempotencyStore(events);
-        CallLifecycle executor = lifecycle(
+        CallInvoker executor = lifecycle(
                 new PermissionAssessment(List.of(new OperationPolicy(events))),
                 (key, limit) -> {
                     events.add("rate-limit");
@@ -581,7 +582,7 @@ class CallLifecycleTest {
                 throw new AssertionError("业务已经执行成功时不能释放幂等处理中记录");
             }
         };
-        CallLifecycle executor = lifecycle(
+        CallInvoker executor = lifecycle(
                 new PermissionAssessment(List.of()),
                 (key, limit) -> RateLimitDecision.allow(),
                 store,
@@ -615,7 +616,7 @@ class CallLifecycleTest {
     void failsWithoutRecordingAgainWhenAuditThrowsBusinessException() throws Exception {
         AtomicInteger records = new AtomicInteger();
         BusinessException auditFailure = new BusinessException(CoreErrorCode.INTERNAL);
-        CallLifecycle executor = lifecycle(
+        CallInvoker executor = lifecycle(
                 new PermissionAssessment(List.of()),
                 (key, limit) -> RateLimitDecision.allow(),
                 new MemoryIdempotencyStore(new ArrayList<>()),
@@ -654,7 +655,7 @@ class CallLifecycleTest {
     @DisplayName("从 AuditTarget 参数建立 ResourceReference")
     void resolvesSimpleAuditTargetParameter() throws Exception {
         AtomicReference<AuditRecord> recorded = new AtomicReference<>();
-        CallLifecycle executor = lifecycle(
+        CallInvoker executor = lifecycle(
                 new PermissionAssessment(List.of()),
                 (key, limit) -> RateLimitDecision.allow(),
                 new MemoryIdempotencyStore(new ArrayList<>()),
@@ -685,7 +686,7 @@ class CallLifecycleTest {
     @DisplayName("Records Business Resource Scope Without Exact Session Grant")
     void recordsBusinessResourceScopeWithoutExactSessionGrant() throws Exception {
         DeviceScope scope = new DeviceScope();
-        CallLifecycle executor = lifecycle(
+        CallInvoker executor = lifecycle(
                 new PermissionAssessment(List.of(new DevicePolicy(scope))),
                 (key, limit) -> RateLimitDecision.allow(),
                 new MemoryIdempotencyStore(new ArrayList<>()),
@@ -723,7 +724,7 @@ class CallLifecycleTest {
     @DisplayName("Rejects Successful Return When Resource Scope Was Not Consumed")
     void rejectsUnconsumedResourceScope() throws Exception {
         DeviceScope scope = new DeviceScope();
-        CallLifecycle lifecycle = lifecycle(
+        CallInvoker lifecycle = lifecycle(
                 new PermissionAssessment(List.of(new DevicePolicy(scope))),
                 (key, limit) -> RateLimitDecision.allow(),
                 new MemoryIdempotencyStore(new ArrayList<>()),
@@ -753,7 +754,7 @@ class CallLifecycleTest {
     @DisplayName("Deduplicates Permission Declarations Before Policy Execution")
     void deduplicatesPermissionDeclarationsBeforePolicyExecution() throws Exception {
         List<String> events = new ArrayList<>();
-        CallLifecycle executor = lifecycle(
+        CallInvoker executor = lifecycle(
                 new PermissionAssessment(List.of(new OperationPolicy(events))),
                 (key, limit) -> RateLimitDecision.allow(),
                 new MemoryIdempotencyStore(events),
@@ -785,7 +786,7 @@ class CallLifecycleTest {
     @DisplayName("Assesses Every Distinct Resource Resolved By One Permission Declaration")
     void assessesEveryDistinctResolvedResource() throws Exception {
         List<String> events = new ArrayList<>();
-        CallLifecycle executor = batchExecutor(events, null, new BatchResourcesResolver());
+        CallInvoker executor = batchExecutor(events, null, new BatchResourcesResolver());
         Method method = BatchService.class.getDeclaredMethod("read", List.class);
 
         String result = execute(
@@ -807,7 +808,7 @@ class CallLifecycleTest {
     @DisplayName("Stops A Resource Batch At The First Denied Permission")
     void stopsResourceBatchAtFirstDeniedPermission() throws Exception {
         List<String> events = new ArrayList<>();
-        CallLifecycle executor = batchExecutor(events, "2", new BatchResourcesResolver());
+        CallInvoker executor = batchExecutor(events, "2", new BatchResourcesResolver());
         Method method = BatchService.class.getDeclaredMethod("read", List.class);
 
         BusinessException failure = assertThrows(
@@ -830,7 +831,7 @@ class CallLifecycleTest {
     @DisplayName("Rejects Empty Or Invalid Resource Collections")
     void rejectsEmptyOrInvalidResourceCollections() throws Exception {
         Method batchMethod = BatchService.class.getDeclaredMethod("read", List.class);
-        CallLifecycle emptyExecutor = batchExecutor(
+        CallInvoker emptyExecutor = batchExecutor(
                 new ArrayList<>(),
                 null,
                 new BatchResourcesResolver());
@@ -849,7 +850,7 @@ class CallLifecycleTest {
             CallValueResolver<?> resolver = serviceType == NullResourceService.class
                     ? new NullResourceResolver()
                     : new InvalidResourceResolver();
-            CallLifecycle executor = batchExecutor(new ArrayList<>(), null, resolver);
+            CallInvoker executor = batchExecutor(new ArrayList<>(), null, resolver);
             assertThrows(
                     IllegalStateException.class,
                     () -> execute(
@@ -865,7 +866,7 @@ class CallLifecycleTest {
     /**
      * 创建批量资源权限测试使用的调用执行器。
      */
-    private static CallLifecycle batchExecutor(
+    private static CallInvoker batchExecutor(
             List<String> events,
             @Nullable String deniedId,
             CallValueResolver<?> resolver) {
@@ -887,7 +888,7 @@ class CallLifecycleTest {
     void rejectsProtectedCallsBeforePermissionAssessmentWhenPrincipalWasNotSelected()
             throws Exception {
         List<String> events = new ArrayList<>();
-        CallLifecycle executor = lifecycle(
+        CallInvoker executor = lifecycle(
                 new PermissionAssessment(List.of(new OperationPolicy(events))),
                 (key, limit) -> RateLimitDecision.allow(),
                 new MemoryIdempotencyStore(events),
@@ -949,7 +950,7 @@ class CallLifecycleTest {
             acquiredLimit.set(limit);
             return RateLimitDecision.allow();
         };
-        CallLifecycle executor = rateLimitExecutor(limiter, resolverType -> {
+        CallInvoker executor = rateLimitExecutor(limiter, resolverType -> {
             throw new AssertionError("内置限流维度不应查找自定义解析器");
         });
         Method method = RateLimitedService.class.getDeclaredMethod("allDimensions");
@@ -965,11 +966,8 @@ class CallLifecycleTest {
 
         assertEquals("done", result);
         assertEquals(5, acquisitions.get());
-        assertTrue(rateValue(acquiredKeys.get(0)).matches("global"));
-        assertTrue(rateValue(acquiredKeys.get(1)).matches("ip=[0-9a-f]{64}"));
-        assertTrue(rateValue(acquiredKeys.get(2)).matches("ua=[0-9a-f]{64}"));
-        assertTrue(rateValue(acquiredKeys.get(3)).matches("subject=[0-9a-f]{64}"));
-        assertTrue(rateValue(acquiredKeys.get(4)).matches("account=[0-9a-f]{64}"));
+        assertEquals(List.of("global", "ip", "ua", "subject", "account"),
+                acquiredKeys.stream().map(CallInvokerTest::rateValue).toList());
         assertFalse(acquiredKeys.toString().contains("192.0.2.25"));
         assertFalse(acquiredKeys.toString().contains("Client/1.0"));
         assertEquals(4, acquiredLimit.get().permits());
@@ -980,7 +978,7 @@ class CallLifecycleTest {
     @DisplayName("Uses Global By Default And Supports Custom Only Rate Limits")
     void usesGlobalByDefaultAndSupportsCustomOnlyRateLimits() throws Exception {
         List<Key> acquiredKeys = new ArrayList<>();
-        CallLifecycle executor = rateLimitExecutor(
+        CallInvoker executor = rateLimitExecutor(
                 (key, limit) -> {
                     acquiredKeys.add(key);
                     return RateLimitDecision.allow();
@@ -1003,9 +1001,8 @@ class CallLifecycleTest {
                 () -> "custom-only");
 
         assertEquals(3, acquiredKeys.size());
-        assertEquals("global", rateValue(acquiredKeys.get(0)));
-        assertTrue(rateValue(acquiredKeys.get(1)).matches("custom=[0-9a-f]{64}"));
-        assertTrue(rateValue(acquiredKeys.get(2)).matches("custom=[0-9a-f]{64}"));
+        assertEquals(List.of("global", "custom", "custom"),
+                acquiredKeys.stream().map(CallInvokerTest::rateValue).toList());
         assertFalse(acquiredKeys.toString().contains("system"));
     }
 
@@ -1013,7 +1010,7 @@ class CallLifecycleTest {
     @DisplayName("Scopes Global Rate Limits By Concrete Method Signature")
     void scopesGlobalRateLimitsByConcreteMethodSignature() throws Exception {
         List<Key> scopes = new ArrayList<>();
-        CallLifecycle executor = rateLimitExecutor(
+        CallInvoker executor = rateLimitExecutor(
                 (key, limit) -> {
                     scopes.add(key);
                     return RateLimitDecision.allow();
@@ -1044,7 +1041,7 @@ class CallLifecycleTest {
     @Test
     @DisplayName("Rejects Duplicate Or Empty Rate Limit Dimension Declarations")
     void rejectsDuplicateOrEmptyRateLimitDimensionDeclarations() {
-        CallLifecycle executor = rateLimitExecutor(
+        CallInvoker executor = rateLimitExecutor(
                 (key, limit) -> {
                     throw new AssertionError("无效限流声明不应取得额度");
                 },
@@ -1078,7 +1075,7 @@ class CallLifecycleTest {
     @Test
     @DisplayName("Rejects Rate Limit Dimensions Without Required Call Context")
     void rejectsRateLimitDimensionsWithoutRequiredCallContext() {
-        CallLifecycle executor = rateLimitExecutor(
+        CallInvoker executor = rateLimitExecutor(
                 (key, limit) -> {
                     throw new AssertionError("缺少调用上下文时不应取得额度");
                 },
@@ -1122,7 +1119,7 @@ class CallLifecycleTest {
     @Test
     @DisplayName("Rejects Blank Custom Rate Limit Keys")
     void rejectsBlankCustomRateLimitKeys() {
-        CallLifecycle executor = rateLimitExecutor(
+        CallInvoker executor = rateLimitExecutor(
                 (key, limit) -> {
                     throw new AssertionError("空白自定义键不应取得额度");
                 },
@@ -1145,7 +1142,7 @@ class CallLifecycleTest {
     @DisplayName("Reports The Longest Token Bucket Wait When A Dimension Is Denied")
     void reportsTheLongestTokenBucketWaitWhenADimensionIsDenied() {
         AtomicInteger invocations = new AtomicInteger();
-        CallLifecycle executor = rateLimitExecutor(
+        CallInvoker executor = rateLimitExecutor(
                 (key, limit) -> RateLimitDecision.deny(Duration.ofMillis(1501)),
                 resolverType -> {
                     throw new AssertionError("全局限流不应查找自定义解析器");
@@ -1172,7 +1169,7 @@ class CallLifecycleTest {
     /**
      * 创建只执行限流阶段的测试调用执行器。
      */
-    private static CallLifecycle rateLimitExecutor(
+    private static CallInvoker rateLimitExecutor(
             RateLimiter limiter,
             CallValueResolverLookup resolverLookup) {
         return lifecycle(
@@ -1234,7 +1231,7 @@ class CallLifecycleTest {
      * @param retryAfter           幂等建议重试时间
      * @return 使用真实阶段组件的 {@code CallLifecycle}
      */
-    private static CallLifecycle lifecycle(
+    private static CallInvoker lifecycle(
             PermissionAssessment permissionAssessment,
             RateLimiter rateLimiter,
             IdempotencyStore idempotencyStore,
@@ -1244,7 +1241,7 @@ class CallLifecycleTest {
             Clock clock,
             Duration processingTtl,
             Duration retryAfter) {
-        return new CallLifecycle(
+        return new CallInvoker(
                 List.of(
                         new IdentityCallInterceptor(),
                         new PermissionCallInterceptor(permissionAssessment, resolverLookup, NO_EXPRESSIONS),
@@ -1278,7 +1275,7 @@ class CallLifecycleTest {
      * @throws Exception {@code CallLifecycle} 抛出的失败
      */
     private static String execute(
-            CallLifecycle lifecycle,
+            CallInvoker lifecycle,
             Call call,
             Class<?> declaringType,
             Method method,
@@ -1295,11 +1292,11 @@ class CallLifecycleTest {
     private static class RateLimitedService {
 
         @RateLimited(dimensions = {
-                RateLimitDimension.GLOBAL,
-                RateLimitDimension.IP,
-                RateLimitDimension.UA,
-                RateLimitDimension.SUBJECT,
-                RateLimitDimension.ACCOUNT
+                RateLimit.Dim.GLOBAL,
+                RateLimit.Dim.IP,
+                RateLimit.Dim.UA,
+                RateLimit.Dim.SUBJECT,
+                RateLimit.Dim.ACCOUNT
         }, permits = 4, windowSeconds = 30)
         private String allDimensions() {
             return "unused";
@@ -1325,7 +1322,7 @@ class CallLifecycleTest {
             return value;
         }
 
-        @RateLimited(dimensions = {RateLimitDimension.IP, RateLimitDimension.IP}, permits = 2, windowSeconds = 10)
+        @RateLimited(dimensions = {RateLimit.Dim.IP, RateLimit.Dim.IP}, permits = 2, windowSeconds = 10)
         private String duplicateDimensions() {
             return "unused";
         }
@@ -1335,18 +1332,18 @@ class CallLifecycleTest {
             return "unused";
         }
 
-        @RateLimited(dimensions = RateLimitDimension.IP, permits = 2, windowSeconds = 10)
+        @RateLimited(dimensions = RateLimit.Dim.IP, permits = 2, windowSeconds = 10)
         private String byIp() {
             return "unused";
         }
 
         @AnonymousAccess
-        @RateLimited(dimensions = RateLimitDimension.SUBJECT, permits = 2, windowSeconds = 10)
+        @RateLimited(dimensions = RateLimit.Dim.SUBJECT, permits = 2, windowSeconds = 10)
         private String anonymousBySubject() {
             return "unused";
         }
 
-        @RateLimited(dimensions = RateLimitDimension.ACCOUNT, permits = 2, windowSeconds = 10)
+        @RateLimited(dimensions = RateLimit.Dim.ACCOUNT, permits = 2, windowSeconds = 10)
         private String byAccount() {
             return "unused";
         }
@@ -1462,9 +1459,7 @@ class CallLifecycleTest {
 
     /** 读取限流 Key 的动态维度值，验证调用者传给 IO 适配器的维度而非 App 前缀。 */
     private static String rateValue(Key key) {
-        return new String(
-                HexFormat.of().parseHex(key.segments().get(2).substring(2)),
-                UTF_8);
+        return key.segments().get(2).toLowerCase(java.util.Locale.ROOT);
     }
 
     private static class RateKeyResolver implements CallValueResolver<String> {

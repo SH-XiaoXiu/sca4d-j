@@ -1,7 +1,7 @@
 package com.sca4d.core.api.permission;
 
 import com.sca4d.core.api.call.CallExecution;
-import com.sca4d.core.api.call.CallRequirement;
+import com.sca4d.core.api.call.CallLifecycle;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 保存一次方法执行必须由 Repository 消费的权限资源范围。 */
-public final class ResourceScopeRequirement implements CallRequirement {
+public final class ResourceScopeRequirement implements CallLifecycle.PreCommit {
     private final Permission permission;
 
     private final ResourceScope scope;
@@ -31,10 +31,10 @@ public final class ResourceScopeRequirement implements CallRequirement {
                 .filter(PermissionDecision::isAllowed)
                 .filter(item -> item.scope().isPresent())
                 .orElseThrow(() -> new IllegalStateException("当前权限没有可登记的资源范围: " + permission));
-        if (execution.requirements(ResourceScopeRequirement.class)
+        if (execution.preCommitConditions(ResourceScopeRequirement.class)
                 .stream()
                 .noneMatch(requirement -> requirement.permission.equals(permission))) {
-            execution.addRequirement(new ResourceScopeRequirement(permission, decision.scope().orElseThrow()));
+            execution.addPreCommit(new ResourceScopeRequirement(permission, decision.scope().orElseThrow()));
         }
     }
 
@@ -47,7 +47,7 @@ public final class ResourceScopeRequirement implements CallRequirement {
         Objects.requireNonNull(execution);
         Objects.requireNonNull(permission);
         Objects.requireNonNull(scopeType);
-        for (ResourceScopeRequirement requirement : execution.requirements(ResourceScopeRequirement.class)) {
+        for (ResourceScopeRequirement requirement : execution.preCommitConditions(ResourceScopeRequirement.class)) {
             if (requirement.permission.equals(permission)) {
                 if (!scopeType.isInstance(requirement.scope)) {
                     throw new IllegalStateException(

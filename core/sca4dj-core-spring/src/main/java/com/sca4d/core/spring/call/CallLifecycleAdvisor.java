@@ -2,6 +2,7 @@ package com.sca4d.core.spring.call;
 
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallExecution;
+import com.sca4d.core.api.call.CallInvoker;
 import com.sca4d.core.api.call.CallLifecycle;
 import org.aopalliance.aop.Advice;
 import org.aopalliance.intercept.MethodInterceptor;
@@ -24,6 +25,7 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.time.Clock;
 import java.time.Instant;
+import java.util.concurrent.CompletionStage;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -39,7 +41,7 @@ import java.util.function.Supplier;
  * 按各模块注册的注解声明选择方法，建立执行范围并进入唯一 CallLifecycle。
  */
 public class CallLifecycleAdvisor extends AbstractPointcutAdvisor {
-    private final CallLifecycle lifecycle;
+    private final CallInvoker invoker;
 
     private final Clock clock;
 
@@ -58,8 +60,8 @@ public class CallLifecycleAdvisor extends AbstractPointcutAdvisor {
      * @param declarations 模块或应用提供的注解注册，不包含中央固定注解清单
      * @param clock        自主入口建立 Call 使用的时钟
      */
-    public CallLifecycleAdvisor(CallLifecycle lifecycle, List<? extends Declaration<?>> declarations, Clock clock) {
-        this.lifecycle = Objects.requireNonNull(lifecycle);
+    public CallLifecycleAdvisor(CallInvoker invoker, List<? extends Declaration<?>> declarations, Clock clock) {
+        this.invoker = Objects.requireNonNull(invoker);
         this.clock = Objects.requireNonNull(clock);
         this.declarations = List.copyOf(declarations);
         Set<Class<? extends Annotation>> types = new HashSet<>();
@@ -123,7 +125,23 @@ public class CallLifecycleAdvisor extends AbstractPointcutAdvisor {
             for (Binding binding : bindings) {
                 binding.attach.accept(execution);
             }
-            return lifecycle.execute(execution, () -> proceed(invocation));
+            if (CompletionStage.class.isAssignableFrom(method.getReturnType())) {
+                return invoker.executeAsync(execution, () -> {
+                    try {
+                        Object result = proceed(invocation);
+                        if (!(result instanceof CompletionStage<?> stage)) {
+                            return java.util.concurrent.CompletableFuture.failedFuture(
+                                    new IllegalStateException("异步方法必须返回 CompletionStage: " + method));
+                        }
+                        @SuppressWarnings("unchecked")
+                        CompletionStage<Object> typed = (CompletionStage<Object>) stage;
+                        return typed;
+                    } catch (Exception failure) {
+                        return java.util.concurrent.CompletableFuture.failedFuture(failure);
+                    }
+                });
+            }
+            return invoker.execute(execution, () -> proceed(invocation));
         } catch (WrappedThrowable failure) {
             throw failure.getCause();
         } finally {

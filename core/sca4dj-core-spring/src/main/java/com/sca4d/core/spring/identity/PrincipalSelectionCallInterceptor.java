@@ -4,8 +4,10 @@ import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallExecution;
 import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.call.CallOutcome;
+import com.sca4d.core.api.identity.IdentityCallInterceptor;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.permission.PermissionCallInterceptor;
 import com.sca4d.core.spring.call.CallLifecycleAdvisor;
 import com.sca4d.core.spring.web.annotation.CurrentPrincipal;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +20,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Set;
+import java.util.concurrent.CompletionStage;
 
 /**
  * 在统一调用生命周期内执行 CurrentPrincipal 声明的主体选择。
@@ -26,6 +29,9 @@ public class PrincipalSelectionCallInterceptor
         implements
             CallLifecycle.Around,
             CallLifecycleAdvisor.Declaration<CurrentPrincipal> {
+
+    /** 业务主体选择节点编码。 */
+    public static final TreeCode CODE = TreeCode.of("CALL/PRINCIPAL_SELECTION");
 
     private static final Logger LOG = LoggerFactory.getLogger(PrincipalSelectionCallInterceptor.class);
 
@@ -103,12 +109,22 @@ public class PrincipalSelectionCallInterceptor
             }
         }
         // Principal 已写入 Call 后才继续 Controller，权限判断不会重新选择业务身份。
+        execution.verifyPrincipal();
         return next.proceed();
+    }
+
+    /** 异步业务复用已经完成的主体选择，并将异步等待交给内层生命周期。 */
+    @Override
+    public @NotNull CompletionStage<CallOutcome> aroundAsync(
+            @NotNull CallExecution execution,
+            @NotNull CallLifecycle.AsyncNext next) {
+        around(execution, () -> CallOutcome.replayed("principal-selection"));
+        return next.proceedAsync();
     }
 
     @Override
     public @NotNull TreeCode code() {
-        return TreeCode.of("CALL/PRINCIPAL_SELECTION");
+        return CODE;
     }
 
     @Override
@@ -118,11 +134,11 @@ public class PrincipalSelectionCallInterceptor
 
     @Override
     public @NotNull Set<TreeCode> after() {
-        return Set.of(CallLifecycle.DECLARATION);
+        return Set.of(IdentityCallInterceptor.CODE);
     }
 
     @Override
     public @NotNull Set<TreeCode> before() {
-        return Set.of(CallLifecycle.PRINCIPAL);
+        return Set.of(PermissionCallInterceptor.CODE);
     }
 }

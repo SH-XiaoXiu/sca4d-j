@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-/** 保存一次被声明式调用规则包围的方法执行及其成功要求。 */
+/** 保存一次被声明式调用规则包围的方法执行、身份阶段状态和预提交条件。 */
 public class CallExecution {
 
     private final Call call;
@@ -34,11 +34,13 @@ public class CallExecution {
 
     private final Map<Class<? extends Annotation>, List<? extends Annotation>> typeDeclarations = new LinkedHashMap<>();
 
-    private final List<CallRequirement> requirements = new ArrayList<>();
+    private final List<CallLifecycle.PreCommit> preCommitConditions = new ArrayList<>();
 
     private @Nullable CallOutcome outcome;
 
     private boolean invoking;
+
+    private boolean principalRequired;
 
     private boolean started;
 
@@ -116,40 +118,44 @@ public class CallExecution {
         this.resultType = Objects.requireNonNull(resultType, "业务返回类型不能为空");
     }
 
-    /**
-     * 登记成功前必须满足的要求。
-     *
-     * @param requirement 当前执行产生的要求
-     */
-    public void addRequirement(CallRequirement requirement) {
-        requirements.add(Objects.requireNonNull(requirement, "调用要求不能为空"));
+    /** 标记当前执行必须在主体阶段完成业务主体选择。 */
+    public void requirePrincipal() {
+        principalRequired = true;
     }
 
-    /** 返回指定类型的要求，供所属功能读取和消费；不能修改要求集合。 */
+    /** 在主体阶段确认已经完成业务主体选择。 */
+    public void verifyPrincipal() {
+        if (principalRequired && !call.isPrincipalAssessed()) {
+            throw new IllegalStateException("当前调用必须在执行前完成业务主体选择");
+        }
+    }
+
+    /** 登记业务方法成功和事务提交前必须满足的条件。 */
+    public void addPreCommit(CallLifecycle.PreCommit condition) {
+        preCommitConditions.add(Objects.requireNonNull(condition, "预提交条件不能为空"));
+    }
+
+    /** 返回指定类型的预提交条件，供所属功能读取和消费；不能修改条件集合。 */
     @Contract(pure = true)
-    public <R extends CallRequirement> @NotNull @Unmodifiable List<R> requirements(@NotNull Class<R> type) {
+    public <C extends CallLifecycle.PreCommit> @NotNull @Unmodifiable List<C> preCommitConditions(
+            @NotNull Class<C> type) {
         Objects.requireNonNull(type);
-        return requirements.stream().filter(type::isInstance).map(type::cast).toList();
+        return preCommitConditions.stream().filter(type::isInstance).map(type::cast).toList();
     }
 
-    /** 在身份选择之后、权限和执行控制之前检查已登记的前置条件。 */
-    public void verifyBeforeInvocation() {
-        requirements.forEach(CallRequirement::verifyBeforeInvocation);
+    /** 校验实际业务方法成功前必须满足的全部预提交条件。 */
+    public void verifyPreCommit() {
+        preCommitConditions.forEach(CallLifecycle.PreCommit::verifySatisfied);
     }
 
-    /** 校验实际业务方法成功前必须满足的全部要求。 */
-    public void verifyRequirements() {
-        requirements.forEach(CallRequirement::verifySatisfied);
-    }
-
-    /** 在只读或读写事务提交前校验适用于该事务的要求。 */
-    public void verifyRequirementsBeforeCommit(boolean readOnly) {
+    /** 在只读或读写事务提交前校验适用于该事务的预提交条件。 */
+    public void verifyPreCommitBeforeCommit(boolean readOnly) {
         if (!invoking) {
             return;
         }
-        requirements.stream()
-                .filter(requirement -> !readOnly || requirement.appliesToReadOnlyTransaction())
-                .forEach(CallRequirement::verifySatisfied);
+        preCommitConditions.stream()
+                .filter(condition -> !readOnly || condition.appliesToReadOnlyTransaction())
+                .forEach(CallLifecycle.PreCommit::verifySatisfied);
     }
 
     /** 标记即将进入实际业务方法。 */

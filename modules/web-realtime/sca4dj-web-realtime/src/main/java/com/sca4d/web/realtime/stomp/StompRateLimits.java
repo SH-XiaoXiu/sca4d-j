@@ -2,8 +2,8 @@ package com.sca4d.web.realtime.stomp;
 
 import cn.hutool.crypto.digest.DigestUtil;
 import com.sca4d.core.api.concurrent.RateLimit;
+import com.sca4d.core.api.concurrent.RateLimitKey;
 import com.sca4d.core.api.concurrent.RateLimiter;
-import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -54,7 +54,7 @@ public class StompRateLimits {
     private boolean acquire(String scope, List<String> keys, RateLimit limit) {
         boolean allowed = true;
         for (String key : keys) {
-            if (!limiter.tryAcquire(Key.of(TreeCode.of("RATE_LIMIT:STOMP"), scope, key), limit).isAllowed()) {
+            if (!limiter.tryAcquire(new RateLimitKey(TreeCode.of("STOMP"), scope, key), limit).isAllowed()) {
                 allowed = false;
             }
         }

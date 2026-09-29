@@ -23,11 +23,15 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CompletionStage;
 
 /** 解析 `@RequirePermission`，执行权限判断，并登记必须由 Repository 消费的资源范围。 */
 public class PermissionCallInterceptor implements CallLifecycle.Around {
 
     private static final Logger LOG = LoggerFactory.getLogger(PermissionCallInterceptor.class);
+
+    /** 权限判断节点编码。 */
+    public static final TreeCode CODE = TreeCode.of("CALL/PERMISSION");
 
     private final PermissionAssessment permissionAssessment;
 
@@ -52,7 +56,7 @@ public class PermissionCallInterceptor implements CallLifecycle.Around {
 
     @Override
     public @NotNull TreeCode code() {
-        return CallLifecycle.PERMISSION;
+        return CODE;
     }
 
     @Override
@@ -72,6 +76,7 @@ public class PermissionCallInterceptor implements CallLifecycle.Around {
     @Override
     public @NotNull CallOutcome around(@NotNull CallExecution execution, @NotNull CallLifecycle.Next next) {
         CallExecution checked = Objects.requireNonNull(execution, "方法执行不能为空");
+        checked.verifyPrincipal();
 
         // 解析并去重权限声明，同一 `Permission` 在一次调用中只执行一次策略判断。
         List<Permission> resolvedPermissions = new ArrayList<>();
@@ -105,6 +110,38 @@ public class PermissionCallInterceptor implements CallLifecycle.Around {
             }
         }
         return next.proceed();
+    }
+
+    /** 异步业务只延后通过权限判断后的内层调用。 */
+    @Override
+    public @NotNull CompletionStage<CallOutcome> aroundAsync(
+            @NotNull CallExecution execution,
+            @NotNull CallLifecycle.AsyncNext next) {
+        CallExecution checked = Objects.requireNonNull(execution, "方法执行不能为空");
+        checked.verifyPrincipal();
+        List<Permission> resolvedPermissions = new ArrayList<>();
+        Set<Permission> distinctPermissions = new LinkedHashSet<>();
+        for (RequirePermission requirement : checked.declarations(RequirePermission.class)) {
+            for (Permission permission : resolvePermissions(requirement, checked)) {
+                if (distinctPermissions.add(permission)) {
+                    resolvedPermissions.add(permission);
+                }
+            }
+        }
+        for (Permission permission : resolvedPermissions) {
+            PermissionDecision decision = checked.call().permissionDecision(permission).orElseGet(() -> {
+                PermissionDecision assessed = permissionAssessment.assess(checked.call(), permission);
+                checked.call().recordPermissionDecision(permission, assessed);
+                return assessed;
+            });
+            if (!decision.isAllowed()) {
+                throw new BusinessException(CoreErrorCode.PERMISSION_DENIED);
+            }
+            if (decision.scope().isPresent()) {
+                ResourceScopeRequirement.register(checked, permission);
+            }
+        }
+        return next.proceedAsync();
     }
 
     /**

@@ -9,7 +9,6 @@ import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.call.CallOutcome;
 import com.sca4d.core.api.call.CallValueResolverLookup;
 import com.sca4d.core.api.call.SPICallValueResolver;
-import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -21,11 +20,15 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CompletionStage;
 
 /** 解析 `@RateLimited` 的内置和自定义维度，并取得每个维度的限流额度。 */
 public class RateLimitCallInterceptor implements CallLifecycle.Around {
 
     private static final Logger LOG = LoggerFactory.getLogger(RateLimitCallInterceptor.class);
+
+    /** 限流判断节点编码。 */
+    public static final TreeCode CODE = TreeCode.of("CALL/RATE_LIMIT");
 
     private final RateLimiter rateLimiter;
 
@@ -39,8 +42,10 @@ public class RateLimitCallInterceptor implements CallLifecycle.Around {
      * @param rateLimiter 多个应用实例共享的限流器
      * @param resolverLookup 自定义限流键解析器查找入口
      */
-    public RateLimitCallInterceptor(@NotNull RateLimiter rateLimiter, @NotNull CallValueResolverLookup resolverLookup,
-                                    @NotNull SPICallValueResolver expressionResolver) {
+    public RateLimitCallInterceptor(
+            @NotNull RateLimiter rateLimiter,
+            @NotNull CallValueResolverLookup resolverLookup,
+            @NotNull SPICallValueResolver expressionResolver) {
         this.rateLimiter = Objects.requireNonNull(rateLimiter, "限流器不能为空");
         this.resolverLookup = Objects.requireNonNull(resolverLookup, "调用值解析器目录不能为空");
         this.expressionResolver = Objects.requireNonNull(expressionResolver, "注解表达式解析器不能为空");
@@ -48,7 +53,7 @@ public class RateLimitCallInterceptor implements CallLifecycle.Around {
 
     @Override
     public @NotNull TreeCode code() {
-        return CallLifecycle.RATE_LIMIT;
+        return CODE;
     }
 
     @Override
@@ -70,14 +75,13 @@ public class RateLimitCallInterceptor implements CallLifecycle.Around {
         RateLimited rateLimited = checked.declaration(RateLimited.class).orElseThrow();
 
         // 每个维度使用独立令牌桶，全部维度判断完后按最长等待时间决定是否拒绝。
-        List<String> keys = rateLimitKeys(rateLimited, checked);
+        List<RateLimitKey> keys = rateLimitKeys(rateLimited, checked);
         RateLimit limit = new RateLimit(
                 rateLimited.permits(),
                 Duration.ofSeconds(rateLimited.windowSeconds()));
-        String scope = "call." + DigestUtil.sha256Hex(checked.methodSignature());
         Duration retryAfter = Duration.ZERO;
-        for (String key : keys) {
-            RateLimitDecision decision = rateLimiter.tryAcquire(Key.of(TreeCode.of("RATE_LIMIT"), scope, key), limit);
+        for (RateLimitKey key : keys) {
+            RateLimitDecision decision = rateLimiter.tryAcquire(key, limit);
             if (!decision.isAllowed() && decision.retryAfter().compareTo(retryAfter) > 0) {
                 retryAfter = decision.retryAfter();
             }
@@ -94,6 +98,28 @@ public class RateLimitCallInterceptor implements CallLifecycle.Around {
         return next.proceed();
     }
 
+    /** 异步业务在额度判断完成后继续使用同一 Call 生命周期。 */
+    @Override
+    public @NotNull CompletionStage<CallOutcome> aroundAsync(
+            @NotNull CallExecution execution,
+            @NotNull CallLifecycle.AsyncNext next) {
+        CallExecution checked = Objects.requireNonNull(execution, "方法执行不能为空");
+        RateLimited rateLimited = checked.declaration(RateLimited.class).orElseThrow();
+        List<RateLimitKey> keys = rateLimitKeys(rateLimited, checked);
+        RateLimit limit = new RateLimit(rateLimited.permits(), Duration.ofSeconds(rateLimited.windowSeconds()));
+        Duration retryAfter = Duration.ZERO;
+        for (RateLimitKey key : keys) {
+            RateLimitDecision decision = rateLimiter.tryAcquire(key, limit);
+            if (!decision.isAllowed() && decision.retryAfter().compareTo(retryAfter) > 0) {
+                retryAfter = decision.retryAfter();
+            }
+        }
+        if (!retryAfter.isZero()) {
+            throw new RateLimitExceededException(retryAfter);
+        }
+        return next.proceedAsync();
+    }
+
     /**
      * 把限流声明解析成需要分别取得额度的摘要键。
      *
@@ -101,35 +127,41 @@ public class RateLimitCallInterceptor implements CallLifecycle.Around {
      * @param execution 当前方法执行
      * @return 至少包含一个且没有重复维度的键
      */
-    private @NotNull List<@NotNull String> rateLimitKeys(
+    private @NotNull List<@NotNull RateLimitKey> rateLimitKeys(
             @NotNull RateLimited rateLimited,
             @NotNull CallExecution execution) {
-        List<RateLimitDimension> declaredDimensions = List.of(rateLimited.dimensions());
-        Set<RateLimitDimension> distinctDimensions = new LinkedHashSet<>(declaredDimensions);
+        List<RateLimit.Dim> declaredDimensions = List.of(rateLimited.dimensions());
+        Set<RateLimit.Dim> distinctDimensions = new LinkedHashSet<>(declaredDimensions);
         if (distinctDimensions.size() != declaredDimensions.size()) {
             throw new IllegalStateException("限流声明不能重复使用同一内置维度");
         }
 
-        List<String> keys = new ArrayList<>(distinctDimensions.size() + 1);
-        for (RateLimitDimension dimension : distinctDimensions) {
+        List<RateLimitKey> keys = new ArrayList<>(distinctDimensions.size() + 1);
+        for (RateLimit.Dim dimension : distinctDimensions) {
             keys.add(switch (dimension) {
-                case GLOBAL -> "global";
-                case IP -> rateLimitKey("ip", requireHttpCall(execution.call(), dimension).clientIp());
-                case UA -> rateLimitKey(
-                        "ua",
+                case GLOBAL -> methodKey(execution, dimension);
+                case IP -> dimensionKey(
+                        execution,
+                        dimension,
+                        requireHttpCall(execution.call(), dimension).clientIp());
+                case UA -> dimensionKey(
+                        execution,
+                        dimension,
                         requireHttpCall(execution.call(), dimension)
                                 .userAgent()
                                 .map(value -> "present:" + value)
                                 .orElse("absent"));
-                case SUBJECT -> rateLimitKey(
-                        "subject",
+                case SUBJECT -> dimensionKey(
+                        execution,
+                        dimension,
                         Long.toString(
                                 execution.call()
                                         .subject()
                                         .orElseThrow(() -> new IllegalStateException("SUBJECT 限流要求当前调用存在 Subject"))
                                         .subjectId()));
-                case ACCOUNT -> rateLimitKey(
-                        "account",
+                case ACCOUNT -> dimensionKey(
+                        execution,
+                        dimension,
                         Long.toString(
                                 execution.call()
                                         .account()
@@ -159,7 +191,7 @@ public class RateLimitCallInterceptor implements CallLifecycle.Around {
                         "限流键解析器不能返回空白文本: "
                                 + rateLimited.keyResolver().getName());
             }
-            keys.add(rateLimitKey("custom", customKey));
+            keys.add(dimensionKey(execution, TreeCode.ofSegment("CUSTOM"), customKey));
         }
         if (keys.isEmpty()) {
             throw new IllegalStateException("限流声明至少需要一个内置维度或自定义键解析器");
@@ -174,7 +206,7 @@ public class RateLimitCallInterceptor implements CallLifecycle.Around {
      * @param dimension 当前 HTTP 限流维度
      * @return 当前 HTTP 请求快照
      */
-    private static @NotNull HttpCall requireHttpCall(@NotNull Call call, @NotNull RateLimitDimension dimension) {
+    private static @NotNull HttpCall requireHttpCall(@NotNull Call call, @NotNull RateLimit.Dim dimension) {
         return call.input(HttpCall.KEY)
                 .orElseThrow(() -> new IllegalStateException(dimension + " 限流只适用于 HTTP 调用"));
     }
@@ -186,8 +218,31 @@ public class RateLimitCallInterceptor implements CallLifecycle.Around {
      * @param value 原始维度值
      * @return 可用于限流存储的摘要键
      */
-    private static @NotNull String rateLimitKey(@NotNull String dimension, @NotNull String value) {
-        return dimension + "=" + DigestUtil.sha256Hex(value);
+    private static @NotNull RateLimitKey methodKey(
+            @NotNull CallExecution execution,
+            @NotNull RateLimit.Dim dimension) {
+        return new RateLimitKey(
+                TreeCode.of("CALL").append(dimension.code()),
+                DigestUtil.sha256Hex(execution.methodSignature()));
+    }
+
+    /** 使用方法作用域、稳定维度和摘要后的动态值建立限流键。 */
+    private static @NotNull RateLimitKey dimensionKey(
+            @NotNull CallExecution execution,
+            @NotNull RateLimit.Dim dimension,
+            @NotNull String value) {
+        return methodKey(execution, dimension).part(DigestUtil.sha256Hex(value));
+    }
+
+    /** 使用自定义稳定维度编码和动态值建立限流键。 */
+    private static @NotNull RateLimitKey dimensionKey(
+            @NotNull CallExecution execution,
+            @NotNull TreeCode dimension,
+            @NotNull String value) {
+        return new RateLimitKey(
+                TreeCode.of("CALL").append(dimension),
+                DigestUtil.sha256Hex(execution.methodSignature()))
+                .part(DigestUtil.sha256Hex(value));
     }
 
 }

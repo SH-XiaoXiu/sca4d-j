@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Future;
 
@@ -23,6 +24,9 @@ import java.util.concurrent.Future;
 public class IdempotencyCallInterceptor implements CallLifecycle.Around {
 
     private static final Logger LOG = LoggerFactory.getLogger(IdempotencyCallInterceptor.class);
+
+    /** 幂等处理权节点编码。 */
+    public static final TreeCode CODE = TreeCode.of("CALL/IDEMPOTENCY");
 
     private final IdempotencyStore idempotencyStore;
 
@@ -62,7 +66,7 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
 
     @Override
     public @NotNull TreeCode code() {
-        return CallLifecycle.IDEMPOTENCY;
+        return CODE;
     }
 
     @Override
@@ -83,19 +87,20 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
         // 在执行方法之前取得处理权；只有相同方法、参数和客户端键才允许重放。
         boolean expression = !idempotent.key().isBlank();
         boolean customResolver = idempotent.keyResolver() != NoCallValueResolver.class;
-        if (expression == customResolver) {
+        if (expression && customResolver) {
             throw new IllegalStateException("幂等 key 与 keyResolver 必须二选一");
         }
-        Object resolvedKey = expression
-                ? expressionResolver.resolve(idempotent.key(), checked)
-                : resolverLookup.resolver(idempotent.keyResolver()).resolve(checked);
-        if (!(resolvedKey instanceof IdempotencyKey clientKey)) {
-            throw new IllegalStateException(
-                    "调用值解析器返回类型不匹配: "
-                            + idempotent.keyResolver().getName()
-                            + "，要求 "
-                            + IdempotencyKey.class.getName());
+        Object resolvedKey;
+        if (expression) {
+            resolvedKey = expressionResolver.resolve(idempotent.key(), checked);
+        } else if (customResolver) {
+            resolvedKey = resolverLookup.resolver(idempotent.keyResolver()).resolve(checked);
+        } else {
+            resolvedKey = checked.call()
+                    .input(IdempotencyKey.INPUT)
+                    .orElseThrow(() -> new IllegalStateException("当前调用没有提供幂等键"));
         }
+        IdempotencyKey clientKey = normalizeKey(resolvedKey);
         IdempotencyKey key = scopedKey(checked, clientKey);
         Duration retention = DurationUtils.requirePositive(
                 Duration.ofSeconds(idempotent.retentionSeconds()),
@@ -164,6 +169,85 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
         return outcome;
     }
 
+    /** 异步持有幂等处理权直到内层 CompletionStage 最终完成。 */
+    @Override
+    public @NotNull CompletionStage<CallOutcome> aroundAsync(
+            @NotNull CallExecution execution,
+            @NotNull CallLifecycle.AsyncNext next) {
+        CallExecution checked = Objects.requireNonNull(execution, "方法执行不能为空");
+        Idempotent idempotent = checked.declaration(Idempotent.class).orElseThrow();
+        IdempotencyKey key = scopedKey(checked, resolveKey(idempotent, checked));
+        Duration retention = DurationUtils.requirePositive(
+                Duration.ofSeconds(idempotent.retentionSeconds()),
+                "幂等结果保留时间");
+        String fingerprint = fingerprint(checked);
+        IdempotencyBeginResult<?> begin = idempotencyStore.begin(
+                key,
+                fingerprint,
+                checked.resultType(),
+                processingTtl,
+                retryAfter);
+        if (begin.status() == IdempotencyBeginStatus.REPLAY) {
+            return CompletableFuture.completedFuture(CallOutcome.replayed(begin.replayResult()));
+        }
+        if (begin.status() == IdempotencyBeginStatus.IN_PROGRESS) {
+            throw new IdempotencyInProgressException(begin.retryAfter());
+        }
+        if (begin.status() == IdempotencyBeginStatus.CONFLICT) {
+            throw new IdempotencyKeyConflictException();
+        }
+        String token = Objects.requireNonNull(begin.token(), "幂等 ACQUIRED 结果缺少所有权 token");
+        return next.proceedAsync().handle((outcome, failure) -> {
+            if (failure != null) {
+                Throwable cause = failure instanceof java.util.concurrent.CompletionException
+                        ? failure.getCause()
+                        : failure;
+                release(key, token, cause, checked);
+                return cause instanceof com.sca4d.core.api.error.BusinessException
+                        ? CallOutcome.denied(cause)
+                        : CallOutcome.failed(cause);
+            }
+            if (outcome.error() != null || outcome.completionFailure() != null) {
+                Throwable cause = outcome.error() == null ? outcome.completionFailure() : outcome.error();
+                release(key, token, Objects.requireNonNull(cause), checked);
+                return outcome;
+            }
+            try {
+                if (!idempotencyStore.succeed(
+                        key,
+                        token,
+                        fingerprint,
+                        outcome.result(),
+                        checked.resultType(),
+                        retention)) {
+                    return outcome.withCompletionFailure(
+                            new IllegalStateException("业务调用已完成，但当前请求未能保存幂等结果"));
+                }
+                return outcome;
+            } catch (RuntimeException failureToStore) {
+                return outcome.withCompletionFailure(failureToStore);
+            }
+        });
+    }
+
+    private @NotNull IdempotencyKey resolveKey(
+            @NotNull Idempotent idempotent,
+            @NotNull CallExecution execution) {
+        boolean expression = !idempotent.key().isBlank();
+        boolean customResolver = idempotent.keyResolver() != NoCallValueResolver.class;
+        if (expression && customResolver) {
+            throw new IllegalStateException("幂等 key 与 keyResolver 必须二选一");
+        }
+        Object resolved = expression
+                ? expressionResolver.resolve(idempotent.key(), execution)
+                : customResolver
+                        ? resolverLookup.resolver(idempotent.keyResolver()).resolve(execution)
+                        : execution.call()
+                                .input(IdempotencyKey.INPUT)
+                                .orElseThrow(() -> new IllegalStateException("当前调用没有提供幂等键"));
+        return normalizeKey(resolved);
+    }
+
     /**
      * 业务调用失败后只释放仍属于当前 token 的处理中记录。
      *
@@ -221,6 +305,17 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
                 execution.methodSignature()
                         + ":"
                         + fingerprints.canonicalArguments(execution.arguments()));
+    }
+
+    /** 在表达式或解析器边界把允许的幂等键输入转换为领域类型。 */
+    private static @NotNull IdempotencyKey normalizeKey(@NotNull Object value) {
+        if (value instanceof IdempotencyKey key) {
+            return IdempotencyKey.fromValue(key);
+        }
+        if (value instanceof CharSequence text) {
+            return IdempotencyKey.fromValue(text);
+        }
+        throw new IllegalStateException("幂等键必须是 IdempotencyKey 或非空文本");
     }
 
 }

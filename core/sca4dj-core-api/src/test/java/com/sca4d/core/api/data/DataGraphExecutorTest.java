@@ -48,7 +48,7 @@ class DataGraphExecutorTest {
                 .build();
         try (var executor = Executors.newFixedThreadPool(2)) {
             DataValues output = DataGraphExecutor
-                    .executeParallel(graph, DataValues.builder().put(source, "abcd").build(), executor)
+                    .executeAsync(graph, DataValues.builder().put(source, "abcd").build(), executor)
                     .get(10, TimeUnit.SECONDS);
             assertEquals(8, output.get(sum));
             assertEquals(List.of(source, left, right, sum), List.copyOf(output.asMap().keySet()));
@@ -68,11 +68,11 @@ class DataGraphExecutorTest {
                     return "bad";
                 }))
                 .build();
-        var failed = DataGraphExecutor.executeParallel(graph, DataValues.builder().build(), Runnable::run);
+        var failed = DataGraphExecutor.executeAsync(graph, DataValues.builder().build(), Runnable::run);
         assertThrows(CompletionException.class, failed::join);
         assertEquals(0, dependents.get());
         List<Runnable> queued = new java.util.ArrayList<>();
-        var cancelled = DataGraphExecutor.executeParallel(graph, DataValues.builder().build(), queued::add);
+        var cancelled = DataGraphExecutor.executeAsync(graph, DataValues.builder().build(), queued::add);
         assertTrue(cancelled.cancel(true));
         List.copyOf(queued).forEach(Runnable::run);
         assertEquals(0, dependents.get());

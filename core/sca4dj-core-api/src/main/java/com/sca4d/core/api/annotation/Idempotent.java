@@ -25,7 +25,7 @@ public @interface Idempotent {
      */
     Class<? extends CallValueResolver<?>> keyResolver() default NoCallValueResolver.class;
 
-    /** 从方法参数读取 `IdempotencyKey` 的表达式；与 `keyResolver` 二选一。 */
+    /** 从方法参数或返回值读取幂等键的表达式；为空时读取当前 Call 的标准输入。 */
     String key() default "";
 
     /**

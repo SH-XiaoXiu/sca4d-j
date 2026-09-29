@@ -9,6 +9,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.Executor;
 
 /**
  * 按固定顺序把输入传过一组类型相接的 {@link PipelineStage}。
@@ -140,6 +144,43 @@ public class Pipeline<I, O> {
             }
         }
         return (O) value;
+    }
+
+    /** 按同一阶段顺序异步转换；后一阶段只在前一阶段成功完成后执行。 */
+    @CheckReturnValue
+    @SuppressWarnings("unchecked")
+    public @NotNull CompletionStage<O> runAsync(@NotNull I input, @NotNull Executor executor) {
+        Objects.requireNonNull(executor, "Pipeline 执行器不能为空");
+        if (!inputType.isInstance(Objects.requireNonNull(input))) {
+            throw new IllegalArgumentException("Pipeline 输入类型不一致");
+        }
+        CompletionStage<Object> result = CompletableFuture.completedFuture(input);
+        for (PipelineStage<?, ?> stage : stages) {
+            PipelineStage<Object, Object> current = (PipelineStage<Object, Object>) stage;
+            result = result.thenCompose(value -> {
+                CompletionStage<Object> output;
+                try {
+                    output = current.executeAsync(value, executor);
+                } catch (Throwable failure) {
+                    output = CompletableFuture.failedFuture(failure);
+                }
+                return output.handle((converted, failure) -> {
+                    Throwable cause = failure instanceof CompletionException ? failure.getCause() : failure;
+                    if (cause instanceof Error error) { throw error; }
+                    if (cause instanceof PipelineExecutionException pipelineFailure) { throw pipelineFailure; }
+                    if (cause != null) {
+                        throw new PipelineExecutionException(current.code(), cause instanceof RuntimeException runtime
+                                ? runtime : new IllegalStateException(cause));
+                    }
+                    if (!current.outputType().isInstance(converted)) {
+                        throw new PipelineExecutionException(current.code(),
+                                new IllegalStateException("Pipeline 阶段返回空值或类型不匹配"));
+                    }
+                    return converted;
+                });
+            });
+        }
+        return result.thenApply(value -> (O) value);
     }
 
     /**

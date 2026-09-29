@@ -7,8 +7,11 @@ import com.sca4d.core.api.annotation.RateLimited;
 import com.sca4d.core.api.annotation.RequirePermission;
 import com.sca4d.core.api.annotation.RequirePermissions;
 import com.sca4d.core.api.annotation.SystemExecution;
+import com.sca4d.core.api.audit.AuditCallInterceptor;
 import com.sca4d.core.api.call.Call;
+import com.sca4d.core.api.call.CallInvoker;
 import com.sca4d.core.api.call.CallLifecycle;
+import com.sca4d.core.api.call.CallLifecycleConfiguration;
 import com.sca4d.core.api.call.CallValueResolverLookup;
 import com.sca4d.core.api.call.SPICallValueResolver;
 import com.sca4d.core.api.concurrent.DistributedLock;
@@ -34,8 +37,8 @@ import com.sca4d.core.api.permission.SessionOperationPermissionPolicy;
 import com.sca4d.core.api.region.PhoneNumberCondition;
 import com.sca4d.core.api.region.RegionCatalog;
 import com.sca4d.core.spring.call.CallLifecycleAdvisor;
-import com.sca4d.core.spring.call.CallRequirementTransactionInstaller;
-import com.sca4d.core.spring.call.CallRequirementTransactionListener;
+import com.sca4d.core.spring.call.CallPreCommitTransactionInstaller;
+import com.sca4d.core.spring.call.CallPreCommitTransactionListener;
 import com.sca4d.core.spring.call.SpringCallValueResolverLookup;
 import com.sca4d.core.spring.call.SpelCallValueResolver;
 import com.sca4d.core.spring.i18n.CatalogMessageSource;
@@ -432,19 +435,23 @@ public class CoreSpringAutoConfiguration {
         return new IdentityCallInterceptor();
     }
 
-    /** @param arounds 功能和应用注册的环绕处理 @return 已完成依赖校验的调用生命周期 */
+    /** @param arounds 功能和应用注册的环绕处理 @return 已完成依赖校验的调用执行器 */
     @Bean
-    CallLifecycle callLifecycle(List<CallLifecycle.Around> arounds) {
-        return new CallLifecycle(arounds);
+    CallInvoker callInvoker(List<CallLifecycle.Around> arounds) {
+        CallLifecycleConfiguration configuration = new CallLifecycleConfiguration(arounds);
+        configuration.afterIfRegistered(
+                PrincipalSelectionCallInterceptor.CODE,
+                IdentityCallInterceptor.CODE);
+        return new CallInvoker(configuration);
     }
 
-    /** @param lifecycle 调用生命周期 @param declarations 功能所属注解注册 @param clock 入口时钟 @return Spring AOP 桥接 */
+    /** @param invoker 调用执行器 @param declarations 功能所属注解注册 @param clock 入口时钟 @return Spring AOP 桥接 */
     @Bean
     CallLifecycleAdvisor callLifecycleAdvisor(
-            CallLifecycle lifecycle,
+            CallInvoker invoker,
             List<CallLifecycleAdvisor.Declaration<?>> declarations,
             Clock clock) {
-        return new CallLifecycleAdvisor(lifecycle, declarations, clock);
+        return new CallLifecycleAdvisor(invoker, declarations, clock);
     }
 
     /** 注册 Core 自己定义的匿名访问注解。 */
@@ -506,20 +513,20 @@ public class CoreSpringAutoConfiguration {
         };
     }
 
-    /** @return 事务提交前调用要求监听器 */
+    /** @return 事务提交前预提交条件监听器 */
     @Bean
-    CallRequirementTransactionListener callRequirementTransactionListener() {
-        return new CallRequirementTransactionListener();
+    CallPreCommitTransactionListener callPreCommitTransactionListener() {
+        return new CallPreCommitTransactionListener();
     }
 
     /**
-     * @param listener 事务提交前调用要求监听器
+     * @param listener 事务提交前预提交条件监听器
      * @return 把监听器安装到事务管理器的 Bean 后处理器
      */
     @Bean
-    static CallRequirementTransactionInstaller callRequirementTransactionInstaller(
-            CallRequirementTransactionListener listener) {
-        return new CallRequirementTransactionInstaller(listener);
+    static CallPreCommitTransactionInstaller callPreCommitTransactionInstaller(
+            CallPreCommitTransactionListener listener) {
+        return new CallPreCommitTransactionInstaller(listener);
     }
 
     /** @return HTTP 业务身份选择输入解析器 */

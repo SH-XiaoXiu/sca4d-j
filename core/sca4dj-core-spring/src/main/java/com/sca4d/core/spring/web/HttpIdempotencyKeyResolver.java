@@ -14,7 +14,7 @@ public class HttpIdempotencyKeyResolver implements CallValueResolver<Idempotency
     public static final String HEADER = "Idempotency-Key";
 
     /** HTTP 入口提供的客户端幂等键；异步工作必须显式提供自己的输入。 */
-    public static final DataKey<String> KEY = DataKey.of("httpIdempotencyKey", String.class);
+    public static final DataKey<String> KEY = IdempotencyKey.INPUT;
 
     /** 创建 HTTP 幂等键解析器。 */
     public HttpIdempotencyKeyResolver() {

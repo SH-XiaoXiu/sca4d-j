@@ -3,7 +3,7 @@ package com.sca4d.core.api.annotation;
 import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.call.CallValueResolver;
 import com.sca4d.core.api.concurrent.NoRateLimitKeyResolver;
-import com.sca4d.core.api.concurrent.RateLimitDimension;
+import com.sca4d.core.api.concurrent.RateLimit;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -25,7 +25,7 @@ public @interface RateLimited {
      *
      * @return 内置限流维度
      */
-    RateLimitDimension[] dimensions() default {RateLimitDimension.GLOBAL};
+    RateLimit.Dim[] dimensions() default {RateLimit.Dim.GLOBAL};
 
     /**
      * 返回额外自定义限流维度使用的业务键解析器。
