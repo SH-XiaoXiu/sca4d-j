@@ -17,6 +17,22 @@ public class ResourceReference implements Resource {
 
     /** 把表达式返回的资源、正整数或文本标识转换为资源引用。 */
     public static @NotNull Resource fromValue(@Nullable Object value, @NotNull String resourceType) {
+        return fromValue(value, resourceType, "");
+    }
+
+    /**
+     * 把表达式或参数返回的资源、正整数或文本标识转换为资源引用，并为简单标识添加前缀。
+     * 已经是 {@link Resource} 的值保持原资源标识，不重复添加前缀。
+     *
+     * @param value 资源对象、正整数或非空文本标识
+     * @param resourceType 资源类型；Resource 值可以为空，其他值必须提供
+     * @param idPrefix 添加到简单标识前的前缀，可以为空
+     * @return 规范化的资源引用
+     */
+    public static @NotNull Resource fromValue(
+            @Nullable Object value,
+            @NotNull String resourceType,
+            @NotNull String idPrefix) {
         if (value instanceof Resource resource) {
             if (!resourceType.isBlank() && !TreeCode.of(resourceType).equals(resource.type())) {
                 throw new IllegalStateException("资源值与声明的 resourceType 不一致");
@@ -42,7 +58,7 @@ public class ResourceReference implements Resource {
         } else {
             throw new IllegalStateException("资源值必须是 Resource、正整数或非空文本标识");
         }
-        return new ResourceReference(resourceType, id);
+        return new ResourceReference(resourceType, Objects.requireNonNull(idPrefix, "资源标识前缀不能为空") + id);
     }
     private final @NotNull TreeCode type;
 

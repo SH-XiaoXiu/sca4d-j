@@ -209,7 +209,10 @@ public class AuditCallInterceptor implements CallLifecycle.Around {
         if (markedTarget == null) {
             return null;
         }
-        return ResourceReference.fromValue(invocation.arguments()[markedIndex], markedTarget.resourceType());
+        return ResourceReference.fromValue(
+                invocation.arguments()[markedIndex],
+                markedTarget.resourceType(),
+                markedTarget.idPrefix());
     }
 
 }

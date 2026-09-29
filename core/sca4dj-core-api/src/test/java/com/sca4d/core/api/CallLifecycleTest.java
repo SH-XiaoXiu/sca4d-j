@@ -678,7 +678,7 @@ class CallLifecycleTest {
 
         assertEquals("done", result);
         Resource target = recorded.get().target().orElseThrow();
-        assertEquals(new ResourceReference(Account.RESOURCE_TYPE, "42"), target);
+        assertEquals(new ResourceReference(Account.RESOURCE_TYPE, "platform:42"), target);
     }
 
     @Test
@@ -1403,7 +1403,7 @@ class CallLifecycleTest {
     private static class TargetedService {
 
         @Audit(operation = "platform/account/status/change")
-        private String update(@AuditTarget(resourceType = Account.RESOURCE_TYPE_VALUE) long accountId) {
+        private String update(@AuditTarget(resourceType = Account.RESOURCE_TYPE_VALUE, idPrefix = "platform:") long accountId) {
             return Long.toString(accountId);
         }
     }
