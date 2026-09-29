@@ -31,6 +31,7 @@ import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallExecution;
 import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.call.CallValueResolverLookup;
+import com.sca4d.core.api.call.SPICallValueResolver;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.IdempotencyStore;
 import com.sca4d.core.api.concurrent.RateLimiter;
@@ -357,14 +358,18 @@ class PlatformFileAuditContractTest {
                 throw new IllegalArgumentException("未知测试审计 payload 工厂: " + factoryType.getName());
             }
         };
+        SPICallValueResolver expressions = (expression, execution) -> {
+            throw new AssertionError("文件审计测试不使用注解表达式");
+        };
         return new CallLifecycle(
                 List.of(
                         new IdentityCallInterceptor(),
-                        new PermissionCallInterceptor(new PermissionAssessment(List.of(applicationFiles)), resolvers),
+                        new PermissionCallInterceptor(new PermissionAssessment(List.of(applicationFiles)), resolvers, expressions),
                         new AuditCallInterceptor(
                                 List.of(records::add),
                                 Audit.Mode.DIRECT,
                                 auditResolvers,
+                                expressions,
                                 Clock.fixed(NOW, ZoneOffset.UTC))));
     }
 

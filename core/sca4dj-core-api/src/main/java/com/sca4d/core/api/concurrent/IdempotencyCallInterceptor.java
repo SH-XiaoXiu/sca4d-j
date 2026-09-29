@@ -6,6 +6,8 @@ import com.sca4d.core.api.call.CallExecution;
 import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.call.CallOutcome;
 import com.sca4d.core.api.call.CallValueResolverLookup;
+import com.sca4d.core.api.call.NoCallValueResolver;
+import com.sca4d.core.api.call.SPICallValueResolver;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.utils.DurationUtils;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +28,8 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
 
     private final CallValueResolverLookup resolverLookup;
 
+    private final SPICallValueResolver expressionResolver;
+
     private final IdempotencyFingerprints fingerprints;
 
     private final Duration processingTtl;
@@ -44,11 +48,13 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
     public IdempotencyCallInterceptor(
             @NotNull IdempotencyStore idempotencyStore,
             @NotNull CallValueResolverLookup resolverLookup,
+            @NotNull SPICallValueResolver expressionResolver,
             @NotNull IdempotencyFingerprints fingerprints,
             @NotNull Duration processingTtl,
             @NotNull Duration retryAfter) {
         this.idempotencyStore = Objects.requireNonNull(idempotencyStore, "幂等结果存储不能为空");
         this.resolverLookup = Objects.requireNonNull(resolverLookup, "调用值解析器目录不能为空");
+        this.expressionResolver = Objects.requireNonNull(expressionResolver, "注解表达式解析器不能为空");
         this.fingerprints = Objects.requireNonNull(fingerprints, "幂等参数指纹入口不能为空");
         this.processingTtl = DurationUtils.requirePositive(processingTtl, "幂等处理租约");
         this.retryAfter = DurationUtils.requirePositive(retryAfter, "幂等建议重试时间");
@@ -75,7 +81,14 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
         }
 
         // 在执行方法之前取得处理权；只有相同方法、参数和客户端键才允许重放。
-        Object resolvedKey = resolverLookup.resolver(idempotent.keyResolver()).resolve(checked);
+        boolean expression = !idempotent.key().isBlank();
+        boolean customResolver = idempotent.keyResolver() != NoCallValueResolver.class;
+        if (expression == customResolver) {
+            throw new IllegalStateException("幂等 key 与 keyResolver 必须二选一");
+        }
+        Object resolvedKey = expression
+                ? expressionResolver.resolve(idempotent.key(), checked)
+                : resolverLookup.resolver(idempotent.keyResolver()).resolve(checked);
         if (!(resolvedKey instanceof IdempotencyKey clientKey)) {
             throw new IllegalStateException(
                     "调用值解析器返回类型不匹配: "

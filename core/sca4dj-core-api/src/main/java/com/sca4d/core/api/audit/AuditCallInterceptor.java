@@ -5,6 +5,7 @@ import com.sca4d.core.api.annotation.AuditTarget;
 import com.sca4d.core.api.call.CallExecution;
 import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.call.CallOutcome;
+import com.sca4d.core.api.call.SPICallValueResolver;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.Resource;
@@ -31,6 +32,8 @@ public class AuditCallInterceptor implements CallLifecycle.Around {
 
     private final AuditResolverLookup resolverLookup;
 
+    private final SPICallValueResolver expressionResolver;
+
     private final Clock clock;
 
     /**
@@ -45,6 +48,7 @@ public class AuditCallInterceptor implements CallLifecycle.Around {
             @NotNull List<? extends @NotNull AuditRecorder> recorders,
             @NotNull Audit.Mode defaultMode,
             @NotNull AuditResolverLookup resolverLookup,
+            @NotNull SPICallValueResolver expressionResolver,
             @NotNull Clock clock) {
         this.defaultMode = Objects.requireNonNull(defaultMode);
         if (defaultMode == Audit.Mode.DEFAULT) {
@@ -62,6 +66,7 @@ public class AuditCallInterceptor implements CallLifecycle.Around {
         }
         this.recorders = Map.copyOf(installed);
         this.resolverLookup = Objects.requireNonNull(resolverLookup, "审计解析器目录不能为空");
+        this.expressionResolver = Objects.requireNonNull(expressionResolver, "注解表达式解析器不能为空");
         this.clock = Objects.requireNonNull(clock, "时钟不能为空");
     }
 
@@ -120,9 +125,21 @@ public class AuditCallInterceptor implements CallLifecycle.Around {
             AuditResult result) {
         AuditInvocation invocation = new AuditInvocation(execution, result);
         Resource target = resolveTarget(audit, invocation);
-        AuditPayload payload = audit.payloadFactory() == NoAuditPayloadFactory.class
-                ? null
-                : resolverLookup.payloadFactory(audit.payloadFactory()).create(invocation);
+        AuditPayload payload;
+        if (!audit.payload().isBlank()) {
+            if (audit.payloadFactory() != NoAuditPayloadFactory.class) {
+                throw new IllegalStateException("Audit payload 与 payloadFactory 不能同时声明");
+            }
+            Object value = expressionResolver.resolve(audit.payload(), execution);
+            if (value != null && !(value instanceof AuditPayload)) {
+                throw new IllegalStateException("Audit payload 表达式必须返回 AuditPayload 或空值");
+            }
+            payload = (AuditPayload) value;
+        } else {
+            payload = audit.payloadFactory() == NoAuditPayloadFactory.class
+                    ? null
+                    : resolverLookup.payloadFactory(audit.payloadFactory()).create(invocation);
+        }
         AuditActor actor = new AuditActor(
                 execution.call().subject().orElseThrow().subjectId(),
                 execution.call().account().map(Account::accountId).orElse(null),
@@ -177,31 +194,22 @@ public class AuditCallInterceptor implements CallLifecycle.Around {
                 }
             }
         }
-        if (resolver != null && markedTarget != null) {
-            throw new IllegalStateException("Audit 不能同时使用 targetResolver 和 @AuditTarget 参数");
+        boolean expression = !audit.target().isBlank();
+        if ((resolver != null ? 1 : 0) + (markedTarget != null ? 1 : 0) + (expression ? 1 : 0) > 1) {
+            throw new IllegalStateException("Audit 不能同时使用 target 表达式、targetResolver 和 @AuditTarget 参数");
+        }
+        if (expression) {
+            Object value = expressionResolver.resolve(audit.target(), invocation.execution());
+            return value == null ? null : ResourceReference.fromValue(value, audit.resourceType());
         }
         if (resolver != null) {
-            return resolver.resolve(invocation);
+            Resource value = resolver.resolve(invocation);
+            return value == null ? null : ResourceReference.fromValue(value, audit.resourceType());
         }
         if (markedTarget == null) {
             return null;
         }
-        Object value = invocation.arguments()[markedIndex];
-        if (value instanceof Resource resource) {
-            return resource;
-        }
-        String id;
-        if (value instanceof Number number) {
-            if (number.longValue() <= 0) {
-                throw new IllegalStateException("Audit 目标标识必须为正数");
-            }
-            id = Long.toString(number.longValue());
-        } else if (value instanceof String text && !text.isBlank()) {
-            id = text.trim();
-        } else {
-            throw new IllegalStateException("Audit 目标参数必须是 Resource、正数或非空文本");
-        }
-        return new ResourceReference(markedTarget.resourceType(), markedTarget.idPrefix() + id);
+        return ResourceReference.fromValue(invocation.arguments()[markedIndex], markedTarget.resourceType());
     }
 
 }

@@ -18,7 +18,7 @@ import java.util.Collection;
 /**
  * 声明调用必须具有一组资源权限（Required Permission）。
  *
- * <p>{@link #operation()} 与 {@link #resourceResolver()} 必须二选一。固定操作生成 {@link Operation} 资源；动态解析器必须返回
+ * <p>{@link #operation()}、{@link #resource()} 与 {@link #resolver()} 必须三选一。固定操作生成 {@link Operation} 资源；动态解析器必须返回
  * 非空 {@link Collection}{@code <Resource>}。单个资源使用只包含一个元素的集合。注解可重复，Core 会展开后逐项判断。
  */
 @Documented
@@ -40,7 +40,13 @@ public @interface RequirePermission {
      *
      * @return 动态业务资源集合解析器；使用固定操作时保持占位类型
      */
-    Class<? extends CallValueResolver<? extends Collection<Resource>>> resourceResolver() default NoCallValueResolver.class;
+    Class<? extends CallValueResolver<? extends Collection<Resource>>> resolver() default NoCallValueResolver.class;
+
+    /** 从方法参数读取资源、资源标识或资源集合的表达式；与 `operation` 和 `resolver` 三选一。 */
+    String resource() default "";
+
+    /** 表达式返回资源标识时使用的资源类型；返回完整 Resource 时可为空。 */
+    String resourceType() default "";
 
     /**
      * 返回动作键；固定操作为空时使用 {@link Action#INVOKE}，动态资源必须明确填写。

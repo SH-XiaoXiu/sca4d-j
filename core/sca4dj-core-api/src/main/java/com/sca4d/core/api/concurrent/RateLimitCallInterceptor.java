@@ -8,6 +8,7 @@ import com.sca4d.core.api.call.CallExecution;
 import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.call.CallOutcome;
 import com.sca4d.core.api.call.CallValueResolverLookup;
+import com.sca4d.core.api.call.SPICallValueResolver;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
@@ -30,15 +31,19 @@ public class RateLimitCallInterceptor implements CallLifecycle.Around {
 
     private final CallValueResolverLookup resolverLookup;
 
+    private final SPICallValueResolver expressionResolver;
+
     /**
      * 创建限流调用评估器。
      *
      * @param rateLimiter 多个应用实例共享的限流器
      * @param resolverLookup 自定义限流键解析器查找入口
      */
-    public RateLimitCallInterceptor(@NotNull RateLimiter rateLimiter, @NotNull CallValueResolverLookup resolverLookup) {
+    public RateLimitCallInterceptor(@NotNull RateLimiter rateLimiter, @NotNull CallValueResolverLookup resolverLookup,
+                                    @NotNull SPICallValueResolver expressionResolver) {
         this.rateLimiter = Objects.requireNonNull(rateLimiter, "限流器不能为空");
         this.resolverLookup = Objects.requireNonNull(resolverLookup, "调用值解析器目录不能为空");
+        this.expressionResolver = Objects.requireNonNull(expressionResolver, "注解表达式解析器不能为空");
     }
 
     @Override
@@ -133,8 +138,15 @@ public class RateLimitCallInterceptor implements CallLifecycle.Around {
             });
         }
 
-        if (rateLimited.keyResolver() != NoRateLimitKeyResolver.class) {
-            Object resolved = resolverLookup.resolver(rateLimited.keyResolver()).resolve(execution);
+        boolean expression = !rateLimited.key().isBlank();
+        boolean customResolver = rateLimited.keyResolver() != NoRateLimitKeyResolver.class;
+        if (expression && customResolver) {
+            throw new IllegalStateException("限流 key 与 keyResolver 必须二选一");
+        }
+        if (expression || customResolver) {
+            Object resolved = expression
+                    ? expressionResolver.resolve(rateLimited.key(), execution)
+                    : resolverLookup.resolver(rateLimited.keyResolver()).resolve(execution);
             if (!(resolved instanceof String customKey)) {
                 throw new IllegalStateException(
                         "调用值解析器返回类型不匹配: "

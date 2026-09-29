@@ -10,6 +10,7 @@ import com.sca4d.core.api.annotation.SystemExecution;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.call.CallValueResolverLookup;
+import com.sca4d.core.api.call.SPICallValueResolver;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.IdempotencyCallInterceptor;
 import com.sca4d.core.api.concurrent.IdempotencyFingerprints;
@@ -36,6 +37,7 @@ import com.sca4d.core.spring.call.CallLifecycleAdvisor;
 import com.sca4d.core.spring.call.CallRequirementTransactionInstaller;
 import com.sca4d.core.spring.call.CallRequirementTransactionListener;
 import com.sca4d.core.spring.call.SpringCallValueResolverLookup;
+import com.sca4d.core.spring.call.SpelCallValueResolver;
 import com.sca4d.core.spring.i18n.CatalogMessageSource;
 import com.sca4d.core.spring.i18n.ClasspathMessageCatalog;
 import com.sca4d.core.spring.i18n.I18nProperties;
@@ -299,6 +301,13 @@ public class CoreSpringAutoConfiguration {
         return new SpringCallValueResolverLookup(applicationContext);
     }
 
+    /** @param applicationContext Spring 容器 @return 默认注解表达式解析器 */
+    @Bean
+    @ConditionalOnMissingBean(SPICallValueResolver.class)
+    SPICallValueResolver spiCallValueResolver(ApplicationContext applicationContext) {
+        return new SpelCallValueResolver(applicationContext);
+    }
+
     /** @return 当前调用资源范围入口 */
     @Bean
     CurrentResourceScope currentResourceScope() {
@@ -371,16 +380,18 @@ public class CoreSpringAutoConfiguration {
     @Bean
     PermissionCallInterceptor permissionCallInterceptor(
             PermissionAssessment permissionAssessment,
-            CallValueResolverLookup resolverLookup) {
-        return new PermissionCallInterceptor(permissionAssessment, resolverLookup);
+            CallValueResolverLookup resolverLookup,
+            SPICallValueResolver expressionResolver) {
+        return new PermissionCallInterceptor(permissionAssessment, resolverLookup, expressionResolver);
     }
 
     /** @param rateLimiter 共享限流器 @param resolverLookup 调用值解析器目录 @return 限流调用前评估器 */
     @Bean
     RateLimitCallInterceptor rateLimitCallInterceptor(
             RateLimiter rateLimiter,
-            CallValueResolverLookup resolverLookup) {
-        return new RateLimitCallInterceptor(rateLimiter, resolverLookup);
+            CallValueResolverLookup resolverLookup,
+            SPICallValueResolver expressionResolver) {
+        return new RateLimitCallInterceptor(rateLimiter, resolverLookup, expressionResolver);
     }
 
     /**
@@ -394,11 +405,13 @@ public class CoreSpringAutoConfiguration {
     IdempotencyCallInterceptor idempotencyCallInterceptor(
             IdempotencyStore idempotencyStore,
             CallValueResolverLookup resolverLookup,
+            SPICallValueResolver expressionResolver,
             IdempotencyFingerprints idempotencyFingerprints,
             RedisIdempotencyProperties idempotencyProperties) {
         return new IdempotencyCallInterceptor(
                 idempotencyStore,
                 resolverLookup,
+                expressionResolver,
                 idempotencyFingerprints,
                 idempotencyProperties.getProcessingTtl(),
                 idempotencyProperties.getRetryAfter());
@@ -408,8 +421,9 @@ public class CoreSpringAutoConfiguration {
     @Bean
     LockCallInterceptor lockCallInterceptor(
             DistributedLock distributedLock,
-            CallValueResolverLookup resolverLookup) {
-        return new LockCallInterceptor(distributedLock, resolverLookup);
+            CallValueResolverLookup resolverLookup,
+            SPICallValueResolver expressionResolver) {
+        return new LockCallInterceptor(distributedLock, resolverLookup, expressionResolver);
     }
 
     /** @return 调用认证及主体前提检查 */

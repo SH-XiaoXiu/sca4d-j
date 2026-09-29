@@ -37,6 +37,9 @@ public @interface RateLimited {
      */
     Class<? extends CallValueResolver<?>> keyResolver() default NoRateLimitKeyResolver.class;
 
+    /** 从方法参数读取自定义限流键的表达式；与 `keyResolver` 二选一。 */
+    String key() default "";
+
     /**
      * 返回时间窗口内允许的调用次数。
      *

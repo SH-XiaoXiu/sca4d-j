@@ -2,6 +2,7 @@ package com.sca4d.core.api.annotation;
 
 import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.call.CallValueResolver;
+import com.sca4d.core.api.call.NoCallValueResolver;
 import com.sca4d.core.api.concurrent.IdempotencyKey;
 
 import java.lang.annotation.Documented;
@@ -22,7 +23,10 @@ public @interface Idempotent {
      *
      * @return 用于解析 {@link IdempotencyKey} 的解析器
      */
-    Class<? extends CallValueResolver<?>> keyResolver();
+    Class<? extends CallValueResolver<?>> keyResolver() default NoCallValueResolver.class;
+
+    /** 从方法参数读取 `IdempotencyKey` 的表达式；与 `keyResolver` 二选一。 */
+    String key() default "";
 
     /**
      * 返回成功结果保留秒数。

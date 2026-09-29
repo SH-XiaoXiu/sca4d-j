@@ -74,7 +74,7 @@ public class FileController {
      */
     @PostMapping("/uploads")
     @Operation(summary = "申请文件上传地址")
-    @RequirePermission(resourceResolver = PlatformUserProfileResourceResolver.class, action = Action.WRITE_VALUE)
+    @RequirePermission(resolver= PlatformUserProfileResourceResolver.class, action = Action.WRITE_VALUE)
     @Audit(operation = "STORAGE/FILE/UPLOAD/CREATE", targetResolver = PlatformUserProfileResourceResolver.class, payloadFactory = ApplicationAuditValues.FileUploadDetails.class)
     public @NotNull ApiResponse<FileUploadView> createUpload(
             @RequestBody @NotNull CreateFileUploadRequest request,
@@ -104,7 +104,7 @@ public class FileController {
      */
     @PostMapping("/uploads/{fileId}/completion")
     @Operation(summary = "完成文件上传")
-    @RequirePermission(resourceResolver = FileResourceResolver.class, action = Action.WRITE_VALUE)
+    @RequirePermission(resolver= FileResourceResolver.class, action = Action.WRITE_VALUE)
     @Audit(operation = "STORAGE/FILE/UPLOAD/COMPLETE")
     public @NotNull ApiResponse<Void> completeUpload(
             @AuditTarget(resourceType = StoredFile.RESOURCE_TYPE_VALUE) @PathVariable long fileId,
@@ -123,7 +123,7 @@ public class FileController {
      */
     @PostMapping("/access-urls")
     @Operation(summary = "批量生成文件读取地址")
-    @RequirePermission(resourceResolver = FileResourceResolver.class, action = Action.READ_VALUE)
+    @RequirePermission(resolver= FileResourceResolver.class, action = Action.READ_VALUE)
     public @NotNull ApiResponse<List<@NotNull FileAccessUrlView>> createAccessUrls(
             @RequestBody @NotNull CreateFileAccessUrlsRequest request) {
         List<Long> fileIds = request.getFileIds().stream().distinct().toList();

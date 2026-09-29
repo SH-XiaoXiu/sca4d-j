@@ -46,11 +46,20 @@ public @interface Audit {
      */
     Class<? extends AuditTargetResolver> targetResolver() default NoAuditTargetResolver.class;
 
+    /** 从方法参数、Bean 或返回结果读取审计目标的表达式；与 `targetResolver` 和参数标记三选一。 */
+    String target() default "";
+
+    /** 表达式返回资源标识时使用的资源类型；表达式返回完整 Resource 时可为空。 */
+    String resourceType() default "";
+
     /**
      * 返回可选结构化审计载荷解析器。
      *
      * @return 可选结构化审计载荷解析器
      */
     Class<? extends AuditPayloadFactory> payloadFactory() default NoAuditPayloadFactory.class;
+
+    /** 从方法参数或返回结果读取 AuditPayload 的表达式；与 `payloadFactory` 二选一。 */
+    String payload() default "";
 
 }

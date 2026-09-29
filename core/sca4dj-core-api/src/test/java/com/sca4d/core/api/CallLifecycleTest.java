@@ -33,6 +33,7 @@ import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.call.CallOutcome;
 import com.sca4d.core.api.call.CallValueResolver;
 import com.sca4d.core.api.call.CallValueResolverLookup;
+import com.sca4d.core.api.call.SPICallValueResolver;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.IdempotencyBeginResult;
 import com.sca4d.core.api.concurrent.IdempotencyCallInterceptor;
@@ -120,9 +121,10 @@ class CallLifecycleTest {
                     List.of(
                             new IdentityCallInterceptor(),
                             new AuditCallInterceptor(
-                                    List.of(record -> recorded.add(Audit.Mode.DIRECT), queued),
+                                    List.<AuditRecorder>of(record -> recorded.add(Audit.Mode.DIRECT), queued),
                                     defaultMode,
                                     NO_AUDIT_RESOLVERS,
+                                    NO_EXPRESSIONS,
                                     Clock.fixed(NOW, ZoneOffset.UTC))));
             for (Method method : List.of(
                     AuditModeService.class.getDeclaredMethod("inherited"),
@@ -154,9 +156,9 @@ class CallLifecycleTest {
         CallLifecycle lifecycle = new CallLifecycle(
                 List.of(
                         new IdentityCallInterceptor(),
-                        new AuditCallInterceptor(List.of(record -> {
+                        new AuditCallInterceptor(List.<AuditRecorder>of(record -> {
                             throw new AssertionError("未执行业务时不应记录成功审计");
-                        }), Audit.Mode.DIRECT, NO_AUDIT_RESOLVERS, Clock.fixed(NOW, ZoneOffset.UTC))));
+                        }), Audit.Mode.DIRECT, NO_AUDIT_RESOLVERS, NO_EXPRESSIONS, Clock.fixed(NOW, ZoneOffset.UTC))));
         IllegalStateException failure = assertThrows(
                 IllegalStateException.class,
                 () -> execute(
@@ -183,7 +185,7 @@ class CallLifecycleTest {
                         new IdentityCallInterceptor(),
                         new IdempotencyCallInterceptor(new MemoryIdempotencyStore(events), type -> {
                             throw new AssertionError("非法返回类型不应解析幂等键");
-                        }, IDEMPOTENCY_FINGERPRINTS, Duration.ofSeconds(30), Duration.ofSeconds(1))));
+                        }, NO_EXPRESSIONS, IDEMPOTENCY_FINGERPRINTS, Duration.ofSeconds(30), Duration.ofSeconds(1))));
         Method method = IdempotentService.class.getDeclaredMethod("submit");
         CallExecution execution = new CallExecution(
                 Call.system("future", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
@@ -373,17 +375,18 @@ class CallLifecycleTest {
         List<CallLifecycle.Around> registered = new ArrayList<>(
                 List.of(
                         new IdentityCallInterceptor(),
-                        new PermissionCallInterceptor(new PermissionAssessment(List.of()), resolvers),
-                        new RateLimitCallInterceptor((key, limit) -> RateLimitDecision.allow(), resolvers),
+                        new PermissionCallInterceptor(new PermissionAssessment(List.of()), resolvers, NO_EXPRESSIONS),
+                        new RateLimitCallInterceptor((key, limit) -> RateLimitDecision.allow(), resolvers, NO_EXPRESSIONS),
                         new IdempotencyCallInterceptor(
                                 new MemoryIdempotencyStore(new ArrayList<>()),
                                 resolvers,
+                                NO_EXPRESSIONS,
                                 IDEMPOTENCY_FINGERPRINTS,
                                 Duration.ofSeconds(30),
                                 Duration.ofSeconds(1)),
-                        new LockCallInterceptor(new RecordingDistributedLock(new ArrayList<>()), resolvers),
-                        new AuditCallInterceptor(List.of(record -> {
-                        }), Audit.Mode.DIRECT, NO_AUDIT_RESOLVERS, Clock.fixed(NOW, ZoneOffset.UTC))));
+                        new LockCallInterceptor(new RecordingDistributedLock(new ArrayList<>()), resolvers, NO_EXPRESSIONS),
+                        new AuditCallInterceptor(List.<AuditRecorder>of(record -> {
+                        }), Audit.Mode.DIRECT, NO_AUDIT_RESOLVERS, NO_EXPRESSIONS, Clock.fixed(NOW, ZoneOffset.UTC))));
         registered.addAll(extensions);
         return new CallLifecycle(registered);
     }
@@ -468,6 +471,10 @@ class CallLifecycleTest {
                 @NotNull Class<? extends AuditPayloadFactory> factoryType) {
             throw new AssertionError("当前测试不应查找审计 payload 工厂: " + factoryType.getName());
         }
+    };
+
+    private static final SPICallValueResolver NO_EXPRESSIONS = (expression, execution) -> {
+        throw new AssertionError("当前测试不应解析注解表达式: " + expression);
     };
 
     @Test
@@ -1240,19 +1247,21 @@ class CallLifecycleTest {
         return new CallLifecycle(
                 List.of(
                         new IdentityCallInterceptor(),
-                        new PermissionCallInterceptor(permissionAssessment, resolverLookup),
-                        new RateLimitCallInterceptor(rateLimiter, resolverLookup),
+                        new PermissionCallInterceptor(permissionAssessment, resolverLookup, NO_EXPRESSIONS),
+                        new RateLimitCallInterceptor(rateLimiter, resolverLookup, NO_EXPRESSIONS),
                         new IdempotencyCallInterceptor(
                                 idempotencyStore,
                                 resolverLookup,
+                                NO_EXPRESSIONS,
                                 IDEMPOTENCY_FINGERPRINTS,
                                 processingTtl,
                                 retryAfter),
-                        new LockCallInterceptor(distributedLock, resolverLookup),
+                        new LockCallInterceptor(distributedLock, resolverLookup, NO_EXPRESSIONS),
                         new AuditCallInterceptor(
                                 List.of(auditRecorder),
                                 Audit.Mode.DIRECT,
                                 NO_AUDIT_RESOLVERS,
+                                NO_EXPRESSIONS,
                                 clock)));
     }
 
@@ -1401,7 +1410,7 @@ class CallLifecycleTest {
 
     private static class DeviceService {
 
-        @RequirePermission(resourceResolver = DeviceCollectionResolver.class, action = "read")
+        @RequirePermission(resolver= DeviceCollectionResolver.class, action = "read")
         private String list() {
             return "unused";
         }
@@ -1412,7 +1421,7 @@ class CallLifecycleTest {
      */
     private static class BatchService {
 
-        @RequirePermission(resourceResolver = BatchResourcesResolver.class, action = Action.READ_VALUE)
+        @RequirePermission(resolver= BatchResourcesResolver.class, action = Action.READ_VALUE)
         private String read(List<Long> ids) {
             return ids.toString();
         }
@@ -1423,7 +1432,7 @@ class CallLifecycleTest {
      */
     private static class NullResourceService {
 
-        @RequirePermission(resourceResolver = NullResourceResolver.class, action = Action.READ_VALUE)
+        @RequirePermission(resolver= NullResourceResolver.class, action = Action.READ_VALUE)
         @SuppressWarnings("unused") // 测试通过反射读取权限声明，不直接调用该方法。
         private String read() {
             return "unused";
@@ -1435,7 +1444,7 @@ class CallLifecycleTest {
      */
     private static class InvalidResourceService {
 
-        @RequirePermission(resourceResolver = InvalidResourceResolver.class, action = Action.READ_VALUE)
+        @RequirePermission(resolver= InvalidResourceResolver.class, action = Action.READ_VALUE)
         @SuppressWarnings("unused") // 测试通过反射读取权限声明，不直接调用该方法。
         private String read() {
             return "unused";

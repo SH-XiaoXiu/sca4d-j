@@ -6,11 +6,13 @@ import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.call.CallOutcome;
 import com.sca4d.core.api.call.CallValueResolverLookup;
 import com.sca4d.core.api.call.NoCallValueResolver;
+import com.sca4d.core.api.call.SPICallValueResolver;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.Resource;
+import com.sca4d.core.api.resource.ResourceReference;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +33,8 @@ public class PermissionCallInterceptor implements CallLifecycle.Around {
 
     private final CallValueResolverLookup resolverLookup;
 
+    private final SPICallValueResolver expressionResolver;
+
     /**
      * 创建权限调用评估器。
      *
@@ -39,9 +43,11 @@ public class PermissionCallInterceptor implements CallLifecycle.Around {
      */
     public PermissionCallInterceptor(
             @NotNull PermissionAssessment permissionAssessment,
-            @NotNull CallValueResolverLookup resolverLookup) {
+            @NotNull CallValueResolverLookup resolverLookup,
+            @NotNull SPICallValueResolver expressionResolver) {
         this.permissionAssessment = Objects.requireNonNull(permissionAssessment, "权限评估器不能为空");
         this.resolverLookup = Objects.requireNonNull(resolverLookup, "调用值解析器目录不能为空");
+        this.expressionResolver = Objects.requireNonNull(expressionResolver, "注解表达式解析器不能为空");
     }
 
     @Override
@@ -112,9 +118,10 @@ public class PermissionCallInterceptor implements CallLifecycle.Around {
             @NotNull RequirePermission requirement,
             @NotNull CallExecution execution) {
         boolean fixedOperation = !requirement.operation().isBlank();
-        boolean dynamicResource = requirement.resourceResolver() != NoCallValueResolver.class;
-        if (fixedOperation == dynamicResource) {
-            throw new IllegalStateException("权限声明必须在固定操作和动态资源之间二选一");
+        boolean expression = !requirement.resource().isBlank();
+        boolean dynamicResource = requirement.resolver() != NoCallValueResolver.class;
+        if ((fixedOperation ? 1 : 0) + (expression ? 1 : 0) + (dynamicResource ? 1 : 0) != 1) {
+            throw new IllegalStateException("权限声明必须在固定操作、资源表达式和资源解析器之间三选一");
         }
         Action action;
         if (requirement.action().isBlank()) {
@@ -129,25 +136,34 @@ public class PermissionCallInterceptor implements CallLifecycle.Around {
             return List.of(new Permission(new Operation(requirement.operation()), action));
         }
 
-        Object resolved = resolverLookup.resolver(requirement.resourceResolver()).resolve(execution);
+        Object resolved = expression
+                ? expressionResolver.resolve(requirement.resource(), execution)
+                : resolverLookup.resolver(requirement.resolver()).resolve(execution);
+        if (expression && !(resolved instanceof Collection<?>)) {
+            return List.of(new Permission(ResourceReference.fromValue(resolved, requirement.resourceType()), action));
+        }
         if (!(resolved instanceof Collection<?> resources)) {
             throw new IllegalStateException(
                     "调用值解析器返回类型不匹配: "
-                            + requirement.resourceResolver().getName()
+                            + requirement.resolver().getName()
                             + "，要求 "
                             + Collection.class.getName());
         }
         if (resources.isEmpty()) {
             throw new IllegalStateException(
                     "动态资源解析器不能返回空集合: "
-                            + requirement.resourceResolver().getName());
+                            + requirement.resolver().getName());
         }
         List<Permission> permissions = new ArrayList<>(resources.size());
         for (Object value : resources) {
+            if (expression) {
+                permissions.add(new Permission(ResourceReference.fromValue(value, requirement.resourceType()), action));
+                continue;
+            }
             if (!(value instanceof Resource resource)) {
                 throw new IllegalStateException(
                         "动态资源解析器集合元素必须实现 Resource: "
-                                + requirement.resourceResolver().getName());
+                                + requirement.resolver().getName());
             }
             permissions.add(new Permission(resource, action));
         }

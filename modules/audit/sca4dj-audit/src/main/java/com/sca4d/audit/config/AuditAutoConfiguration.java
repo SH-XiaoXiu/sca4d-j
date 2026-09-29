@@ -15,6 +15,7 @@ import com.sca4d.core.api.audit.AuditCallInterceptor;
 import com.sca4d.core.api.audit.AuditPayloadCodec;
 import com.sca4d.core.api.audit.AuditRecorder;
 import com.sca4d.core.api.audit.AuditResolverLookup;
+import com.sca4d.core.api.call.SPICallValueResolver;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.spring.call.CallLifecycleAdvisor;
@@ -122,6 +123,7 @@ public class AuditAutoConfiguration {
             @Qualifier("queuedAuditRecorder") ObjectProvider<AuditRecorder> queued,
             AuditProperties properties,
             AuditResolverLookup resolvers,
+            SPICallValueResolver expressionResolver,
             Clock clock) {
         AuditRecorder directDefault = database.getIfAvailable();
         AuditRecorder queuedDefault = queued.getIfAvailable();
@@ -139,7 +141,8 @@ public class AuditAutoConfiguration {
         if (queuedDefault != null) {
             selected.putIfAbsent(queuedDefault.mode(), queuedDefault);
         }
-        return new AuditCallInterceptor(List.copyOf(selected.values()), properties.getMode(), resolvers, clock);
+        return new AuditCallInterceptor(
+                List.copyOf(selected.values()), properties.getMode(), resolvers, expressionResolver, clock);
     }
 
     @Bean
