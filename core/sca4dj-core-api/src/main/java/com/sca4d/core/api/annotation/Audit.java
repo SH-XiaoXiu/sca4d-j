@@ -4,6 +4,7 @@ import com.sca4d.core.api.audit.AuditPayloadFactory;
 import com.sca4d.core.api.audit.AuditTargetResolver;
 import com.sca4d.core.api.audit.NoAuditPayloadFactory;
 import com.sca4d.core.api.audit.NoAuditTargetResolver;
+import com.sca4d.core.api.call.CallLifecycle;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -15,7 +16,21 @@ import java.lang.annotation.Target;
 @Documented
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
+@CallLifecycle.Intercepted
 public @interface Audit {
+
+    /** 指定审计返回前完成写入还是可靠排队；DEFAULT 只用于声明继承。 */
+    enum Mode {
+        /** 继承类型声明或应用配置。 */
+        DEFAULT,
+        /** 同步写入审计，参与已有事务；没有事务时由记录器建立事务。 */
+        DIRECT,
+        /** 等待独立 Outbox 事务提交，随后由消息消费者写入审计。 */
+        QUEUED
+    }
+
+    /** 方法显式值优先于类型显式值，均为 DEFAULT 时使用应用配置。 */
+    Mode mode() default Mode.DEFAULT;
 
     /**
      * 返回用作审计操作资源的操作键。

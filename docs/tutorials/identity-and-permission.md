@@ -179,6 +179,53 @@ Call 记录本次调用的 Subject、Account、当前 Principal、该 Principal 
 
 SYSTEM 请求使用唯一 `Subject(id=1)`，Account 为空；Principal 使用启动时经数据库确认的领域身份，例如 MAIN 或 IOT。各实例共享同一身份的 Principal ID，实例 ID 单独记录执行位置。Spring 自主入口使用 `@SystemExecution("IOT")`，已有 Call 保持原身份。SYSTEM 仍然需要明确的 Operation 和 Resource Policy，见[系统、领域身份和实例](/home/identity#系统、领域身份和实例)。
 
+## 注册应用调用注解
+
+应用的额外调用规则通过 `CallLifecycle.Around` 挂载；拥有注解的对象同时实现 `CallLifecycleAdvisor.Declaration<A>` 注册匹配。下面的 `ProjectRisk` 注解和 `ProjectRiskVerifier` 由应用定义，Verifier 根据已经选定的 Principal 与方法实参判断，不创建独立 Aspect。
+
+```java
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE, ElementType.METHOD})
+@CallLifecycle.Intercepted
+public @interface ProjectRisk {
+}
+
+@Component
+public class ProjectRiskCallInterceptor implements CallLifecycle.Around,
+        CallLifecycleAdvisor.Declaration<ProjectRisk> {
+    private final ProjectRiskVerifier verifier;
+
+    public ProjectRiskCallInterceptor(ProjectRiskVerifier verifier) {
+        this.verifier = verifier;
+    }
+
+    @Override
+    public Class<ProjectRisk> annotationType() { return ProjectRisk.class; }
+
+    @Override
+    public TreeCode code() { return TreeCode.of("PROJECT/RISK"); }
+
+    @Override
+    public Set<TreeCode> after() { return Set.of(CallLifecycle.PERMISSION); }
+
+    @Override
+    public Set<TreeCode> before() { return Set.of(CallLifecycle.IDEMPOTENCY); }
+
+    @Override
+    public boolean supports(CallExecution execution) {
+        return execution.declaration(ProjectRisk.class).isPresent();
+    }
+
+    @Override
+    public CallOutcome around(CallExecution execution, CallLifecycle.Next next) {
+        verifier.verify(execution.call().principal().orElseThrow(), execution.arguments());
+        return next.proceed();
+    }
+}
+```
+
+目标方法声明 `@ProjectRisk` 后由统一 Advisor 拦截。功能注解标记了 `@CallLifecycle.Intercepted` 却没有注册处理者时，方法执行前明确失败。业务模块不修改 Advisor 注解清单。接口方法、类型和参数声明都能通过注册进入执行范围；需要为某注解附着调用要求时，注册对象实现 `attach(execution, annotation)`。依赖排序、失败与重放规则见[注解与环绕处理](/home/permission#注解与环绕处理)。
+
 ## 验收要求
 
 - Core Principal 通过 `principalId` 标识业务身份；不把 Subject、Account 或业务 Profile 数据复制到公共身份契约。

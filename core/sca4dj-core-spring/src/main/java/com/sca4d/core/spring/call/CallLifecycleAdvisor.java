@@ -1,0 +1,294 @@
+package com.sca4d.core.spring.call;
+
+import com.sca4d.core.api.call.Call;
+import com.sca4d.core.api.call.CallExecution;
+import com.sca4d.core.api.call.CallLifecycle;
+import org.aopalliance.aop.Advice;
+import org.aopalliance.intercept.MethodInterceptor;
+import org.aopalliance.intercept.MethodInvocation;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.springframework.aop.Pointcut;
+import org.springframework.aop.support.AbstractPointcutAdvisor;
+import org.springframework.aop.support.AopUtils;
+import org.springframework.aop.support.StaticMethodMatcherPointcut;
+import org.springframework.core.BridgeMethodResolver;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.AnnotatedElementUtils;
+import org.springframework.core.annotation.MergedAnnotation;
+import org.springframework.core.annotation.MergedAnnotations;
+
+import java.lang.annotation.Annotation;
+import java.lang.annotation.Repeatable;
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Method;
+import java.time.Clock;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+/**
+ * 按各模块注册的注解声明选择方法，建立执行范围并进入唯一 CallLifecycle。
+ */
+public class CallLifecycleAdvisor extends AbstractPointcutAdvisor {
+    private final CallLifecycle lifecycle;
+
+    private final Clock clock;
+
+    private final List<Declaration<?>> declarations;
+
+    private final Set<Class<? extends Annotation>> registeredTypes;
+
+    private final Pointcut pointcut;
+
+    private final Advice advice;
+
+    /**
+     * 注册注解所属模块的声明；同一个注解类型只能由一个注册认领。
+     *
+     * @param lifecycle    已校验依赖的环绕调用执行器
+     * @param declarations 模块或应用提供的注解注册，不包含中央固定注解清单
+     * @param clock        自主入口建立 Call 使用的时钟
+     */
+    public CallLifecycleAdvisor(CallLifecycle lifecycle, List<? extends Declaration<?>> declarations, Clock clock) {
+        this.lifecycle = Objects.requireNonNull(lifecycle);
+        this.clock = Objects.requireNonNull(clock);
+        this.declarations = List.copyOf(declarations);
+        Set<Class<? extends Annotation>> types = new HashSet<>();
+        for (Declaration<?> declaration : declarations) {
+            if (!types.add(Objects.requireNonNull(declaration.annotationType()))) {
+                throw new IllegalArgumentException("调用注解存在重复注册: " + declaration.annotationType().getName());
+            }
+        }
+        registeredTypes = Set.copyOf(types);
+        pointcut = new StaticMethodMatcherPointcut() {
+            @Override
+            public boolean matches(@NotNull Method method, @NotNull Class<?> targetClass) {
+                return method.getDeclaringClass() != Object.class && !bindings(method, targetClass).isEmpty();
+            }
+        };
+        advice = (MethodInterceptor) this::invoke;
+        setOrder(Ordered.HIGHEST_PRECEDENCE + 200);
+    }
+
+    @Override
+    public @NotNull Pointcut getPointcut() {
+        return pointcut;
+    }
+
+    @Override
+    public @NotNull Advice getAdvice() {
+        return advice;
+    }
+
+    /**
+     * 为匹配方法建立独立执行范围；任何声明附着或方法失败都清理本次绑定。
+     */
+    private @Nullable Object invoke(MethodInvocation invocation) throws Throwable {
+        Object target = invocation.getThis();
+        Class<?> targetType = target == null
+                ? invocation.getMethod().getDeclaringClass()
+                : AopUtils.getTargetClass(target);
+        Method method = concreteMethod(invocation.getMethod(), targetType);
+        List<Binding> bindings = bindings(invocation.getMethod(), targetType);
+        boolean ownsCall = CallHolder.currentOrNull() == null;
+        if (ownsCall) {
+            List<Call> supplied = new ArrayList<>();
+            for (Binding binding : bindings) {
+                binding.create.get().ifPresent(supplied::add);
+            }
+            if (supplied.size() > 1) {
+                throw new IllegalStateException("同一次入口不能由多个声明创建 Call");
+            }
+            CallHolder.set(
+                    supplied.isEmpty() ? new Call(UUID.randomUUID().toString(), clock.instant()) : supplied.getFirst());
+        }
+        CallExecution execution = null;
+        try {
+            execution = new CallExecution(
+                    CallHolder.current(),
+                    targetType,
+                    method,
+                    invocation.getArguments(),
+                    method.getGenericReturnType());
+            CallHolder.push(execution);
+            for (Binding binding : bindings) {
+                binding.attach.accept(execution);
+            }
+            return lifecycle.execute(execution, () -> proceed(invocation));
+        } catch (WrappedThrowable failure) {
+            throw failure.getCause();
+        } finally {
+            if (execution != null) {
+                CallHolder.pop(execution);
+            }
+            if (ownsCall) {
+                CallHolder.clear();
+            }
+        }
+    }
+
+    /**
+     * 分别读取实现方法、接口方法及类型声明，以支持 JDK/CGLIB 与桥接方法。
+     */
+    private List<Binding> bindings(Method method, Class<?> targetType) {
+        Method concrete = concreteMethod(method, targetType);
+        validateDeclarations(concrete);
+        validateDeclarations(method);
+        validateDeclarations(targetType);
+        for (var parameter : concrete.getParameters()) {
+            validateDeclarations(parameter);
+        }
+        List<Binding> matched = new ArrayList<>();
+        for (Declaration<?> declaration : declarations) {
+            bind(declaration, concrete, method, targetType).ifPresent(matched::add);
+        }
+        return matched;
+    }
+
+    /**
+     * 将类型化注解和回调固定在一次方法匹配中，不进行未经校验的泛型转换。
+     */
+    private <A extends Annotation> Optional<Binding> bind(
+            Declaration<A> declaration,
+            Method concrete,
+            Method original,
+            Class<?> targetType) {
+        Class<A> type = declaration.annotationType();
+        List<A> methods = annotations(concrete, type);
+        if (methods.isEmpty()) {
+            methods = annotations(original, type);
+        }
+        List<A> types = annotations(targetType, type);
+        if (methods.isEmpty() && types.isEmpty()) {
+            List<A> parameters = new ArrayList<>();
+            for (var parameter : concrete.getParameters()) {
+                for (A annotation : annotations(parameter, type)) {
+                    if (!parameters.contains(annotation)) {
+                        parameters.add(annotation);
+                    }
+                }
+            }
+            if (parameters.size() > 1 && !type.isAnnotationPresent(Repeatable.class)) {
+                throw new IllegalArgumentException("方法参数存在相互冲突的调用声明: " + concrete + " / " + type.getName());
+            }
+            methods = List.copyOf(parameters);
+        }
+        if (methods.isEmpty() && types.isEmpty()) {
+            return Optional.empty();
+        }
+        List<A> methodDeclarations = methods;
+        A effective = methods.isEmpty() ? types.getFirst() : methods.getFirst();
+        Set<A> attached = new LinkedHashSet<>();
+        if (type.isAnnotationPresent(Repeatable.class)) {
+            attached.addAll(methods);
+            attached.addAll(types);
+        } else {
+            attached.add(effective);
+        }
+        return Optional.of(
+                new Binding(
+                        () -> declaration.createCall(UUID.randomUUID().toString(), clock.instant(), effective),
+                        execution -> {
+                            execution.recordDeclarations(type, methodDeclarations, types);
+                            attached.forEach(annotation -> declaration.attach(execution, annotation));
+                        }));
+    }
+
+    /** 读取普通或重复声明，同时保留 Spring 的接口、继承和组合注解解析。 */
+    private static <A extends Annotation> List<A> annotations(AnnotatedElement element, Class<A> type) {
+        if (type.isAnnotationPresent(Repeatable.class)) {
+            return List.copyOf(AnnotatedElementUtils.findMergedRepeatableAnnotations(element, type));
+        }
+        A annotation = AnnotatedElementUtils.findMergedAnnotation(element, type);
+        return annotation == null ? List.of() : List.of(annotation);
+    }
+
+    /** 未注册的功能声明直接拒绝创建代理，避免删除模块后仍静默执行受保护方法。 */
+    private void validateDeclarations(AnnotatedElement element) {
+        MergedAnnotations.from(element, MergedAnnotations.SearchStrategy.TYPE_HIERARCHY)
+                .stream()
+                .map(MergedAnnotation::getType)
+                .filter(type -> type.getDeclaredAnnotation(CallLifecycle.Intercepted.class) != null)
+                .filter(type -> !registeredTypes.contains(type))
+                .findFirst()
+                .ifPresent(type -> {
+                    throw new IllegalArgumentException("调用功能注解没有注册处理者: " + type.getName() + " / " + element);
+                });
+    }
+
+    /**
+     * 消除泛型桥接方法，保证参数和返回类型来自具体实现。
+     */
+    private static Method concreteMethod(Method method, Class<?> targetType) {
+        return BridgeMethodResolver.findBridgedMethod(AopUtils.getMostSpecificMethod(method, targetType));
+    }
+
+    /**
+     * 原样传递普通异常及 Error，只包装 Callable 无法声明的其他 Throwable。
+     */
+    private static Object proceed(MethodInvocation invocation) throws Exception {
+        try {
+            return invocation.proceed();
+        } catch (Exception | Error exception) {
+            throw exception;
+        } catch (Throwable failure) {
+            throw new WrappedThrowable(failure);
+        }
+    }
+
+    /**
+     * 由注解所属模块注册匹配、入口身份与执行要求；不在注册回调中执行业务动作。
+     */
+    public interface Declaration<A extends Annotation> {
+        /**
+         * 返回本模块负责的运行时注解类型。
+         */
+        @NotNull
+        Class<A> annotationType();
+
+        /**
+         * 没有既有 Call 的自主入口可创建固定身份；普通声明返回空，不能覆盖已有身份。
+         */
+        default @NotNull Optional<Call> createCall(String callId, Instant startedAt, A annotation) {
+            return Optional.empty();
+        }
+
+        /**
+         * 向方法执行附着解析后的要求；权限、锁等实际动作由环绕处理执行。
+         */
+        default void attach(@NotNull CallExecution execution, @NotNull A annotation) {
+        }
+    }
+
+    /**
+     * 保存一次匹配的类型化回调，离开后不缓存调用状态或实参。
+     */
+    private static class Binding {
+        private final Supplier<Optional<Call>> create;
+
+        private final Consumer<CallExecution> attach;
+
+        private Binding(Supplier<Optional<Call>> create, Consumer<CallExecution> attach) {
+            this.create = create;
+            this.attach = attach;
+        }
+    }
+
+    /**
+     * 保留标准 Callable 不能声明的原始 Throwable。
+     */
+    private static class WrappedThrowable extends RuntimeException {
+        private WrappedThrowable(Throwable failure) {
+            super(failure);
+        }
+    }
+}

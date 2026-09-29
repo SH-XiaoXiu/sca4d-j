@@ -7,6 +7,7 @@ import static com.sca4d.core.api.call.CallOutcome.Status.SUCCESS;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -32,10 +33,51 @@ public class CallOutcome {
 
     private final @Nullable Throwable error;
 
+    private final @Nullable Throwable completionFailure;
+
     private CallOutcome(Status status, @Nullable Object result, @Nullable Throwable error) {
+        this(status, result, error, null);
+    }
+
+    private CallOutcome(
+            Status status,
+            @Nullable Object result,
+            @Nullable Throwable error,
+            @Nullable Throwable completionFailure) {
         this.status = Objects.requireNonNull(status, "调用结果状态不能为空");
         this.result = result;
         this.error = error;
+        this.completionFailure = completionFailure;
+    }
+
+    /** 保留已发生的执行结果并登记外层完成失败；原始失败仍是向调用方抛出的主异常。 */
+    public @NotNull CallOutcome withCompletionFailure(@NotNull Throwable failure) {
+        Objects.requireNonNull(failure, "完成失败不能为空");
+        Throwable primary = completionFailure == null ? failure : completionFailure;
+        if (primary != failure) {
+            primary.addSuppressed(failure);
+        }
+        if (error != null && error != failure && error != primary) {
+            error.addSuppressed(failure);
+        }
+        return new CallOutcome(status, result, error, primary);
+    }
+
+    /** @return 方法已取得结果后发生的失败，不改变 SUCCESS 或 REPLAYED 等执行事实 */
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "保留原始完成异常，供调用方和审计定位实际失败")
+    public @Nullable Throwable completionFailure() {
+        return completionFailure;
+    }
+
+    /** 返回结果，或原样抛出执行和完成阶段的主异常；允许声明为 void 的方法返回 null。 */
+    public @Nullable Object valueOrThrow() throws Throwable {
+        if (error != null) {
+            throw error;
+        }
+        if (completionFailure != null) {
+            throw completionFailure;
+        }
+        return result;
     }
 
     /** @param result 业务方法结果 @return 实际执行成功的结果 */

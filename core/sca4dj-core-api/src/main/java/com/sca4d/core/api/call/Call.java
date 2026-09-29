@@ -1,7 +1,8 @@
 package com.sca4d.core.api.call;
 
-import com.sca4d.core.api.audit.HttpCall;
 import com.sca4d.core.api.authentication.Session;
+import com.sca4d.core.api.data.DataKey;
+import com.sca4d.core.api.data.DataValues;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.Subject;
@@ -21,15 +22,20 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
-/** 保存一次 HTTP、消息或任务调用已经确认的信息、身份和权限判定。 */
+/** 保存入口界定的一次往返的输入快照、目标资源、身份和权限判定；不解释传输协议。 */
 public final class Call {
 
     private final String callId;
 
     private final Instant startedAt;
 
-    private final @Nullable HttpCall httpCall;
+    private final @NotNull DataValues inputs;
+
+    private final @Nullable Resource targetResource;
+
+    private @Nullable String parentCallId;
 
     private Session session;
 
@@ -52,20 +58,70 @@ public final class Call {
      * @param startedAt 调用开始时间
      */
     public Call(String callId, Instant startedAt) {
-        this(callId, startedAt, null);
+        this(callId, startedAt, DataValues.builder().build(), null);
     }
 
     /**
-     * 创建带有 HTTP 请求快照、尚未认证的调用。
+     * 创建带有类型化入口数据和可选目标资源、尚未认证的调用。
      *
      * @param callId 调用链中的调用标识
      * @param startedAt 调用开始时间
-     * @param httpCall 可选 HTTP 请求快照；消息和任务调用为空
+     * @param inputs 入口已采集的快照；所含值必须在调用期间保持不变
+     * @param targetResource 已明确的主要目标；不能从协议路径猜测
      */
-    public Call(String callId, Instant startedAt, @Nullable HttpCall httpCall) {
+    public Call(String callId, Instant startedAt, @NotNull DataValues inputs, @Nullable Resource targetResource) {
         this.callId = TextUtils.requireText(callId, "调用标识");
         this.startedAt = Objects.requireNonNull(startedAt, "调用开始时间不能为空");
-        this.httpCall = httpCall;
+        this.inputs = Objects.requireNonNull(inputs, "调用输入不能为空");
+        this.targetResource = targetResource;
+    }
+
+    /** 以独立标识和当前时间创建身份相同的任务调用，不继承输入、主要资源或权限判定。 */
+    public @NotNull Call fork() {
+        return fork(DataValues.builder().build(), null);
+    }
+
+    /** 为明确输入的任务创建独立调用，主要资源未指定。 */
+    public @NotNull Call fork(@NotNull DataValues inputs) {
+        return fork(inputs, null);
+    }
+
+    /** 为明确输入和主要资源的任务生成独立调用标识及当前开始时间。 */
+    public @NotNull Call fork(@NotNull DataValues inputs, @Nullable Resource targetResource) {
+        return fork(UUID.randomUUID().toString(), Instant.now(), inputs, targetResource);
+    }
+
+    /** 使用入口指定的标识和时间创建独立调用，不继承传输数据或目标资源。 */
+    public @NotNull Call fork(@NotNull String callId, @NotNull Instant startedAt) {
+        return fork(callId, startedAt, DataValues.builder().build(), null);
+    }
+
+    /**
+     * 为异步工作建立独立调用，复制已确认身份而不复制权限结论或传输数据。
+     *
+     * @param callId 新调用标识，必须与原调用不同
+     * @param startedAt 新调用开始时间
+     * @param inputs 异步任务明确需要的不可变输入
+     * @param targetResource 异步任务的目标资源
+     * @return 没有共享可变调用状态的新调用
+     */
+    public @NotNull Call fork(
+            @NotNull String callId,
+            @NotNull Instant startedAt,
+            @NotNull DataValues inputs,
+            @Nullable Resource targetResource) {
+        Call child = new Call(callId, startedAt, inputs, targetResource);
+        if (this.callId.equals(child.callId)) {
+            throw new IllegalArgumentException("异步调用必须使用独立调用标识");
+        }
+        child.parentCallId = this.callId;
+        child.session = session;
+        child.subject = subject;
+        child.account = account;
+        child.principal = principal;
+        child.authenticationAssessed = authenticationAssessed;
+        child.principalAssessed = principalAssessed;
+        return child;
     }
 
     /**
@@ -209,10 +265,28 @@ public final class Call {
         return startedAt;
     }
 
-    /** @return HTTP 调用返回请求快照，消息和任务调用返回空 */
+    /** @return 入口采集的类型化数据，不包含隐式传输对象 */
     @Contract(pure = true)
-    public Optional<HttpCall> httpCall() {
-        return Optional.ofNullable(httpCall);
+    public @NotNull DataValues inputs() {
+        return inputs;
+    }
+
+    /** 按入口声明的键读取快照；当前入口没有提供时返回空。 */
+    @Contract(pure = true)
+    public <T> @NotNull Optional<T> input(@NotNull DataKey<T> key) {
+        return inputs.find(key);
+    }
+
+    /** @return 已确定的主要目标，不能代替 Permission 中的资源和动作 */
+    @Contract(pure = true)
+    public @NotNull Optional<Resource> targetResource() {
+        return Optional.ofNullable(targetResource);
+    }
+
+    /** @return 异步工作发起者的标识，不持有发起者的可变 Call */
+    @Contract(pure = true)
+    public @NotNull Optional<String> parentCallId() {
+        return Optional.ofNullable(parentCallId);
     }
 
     /** @return 当前会话；匿名调用和系统调用为空 */

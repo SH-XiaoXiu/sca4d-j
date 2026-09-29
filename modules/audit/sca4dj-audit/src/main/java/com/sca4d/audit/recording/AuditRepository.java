@@ -59,7 +59,41 @@ public class AuditRepository {
      */
     @AffectedRows(target = "新增审计记录")
     public void append(@NotNull AuditRecord record) {
-        mapper.insert(encode(Objects.requireNonNull(record, "审计记录不能为空")));
+        mapper.insert(encode(Objects.requireNonNull(record, "审计记录不能为空"), ids.nextId().value()));
+    }
+
+    /** 在交接前完成编码和脱敏，快照只保存不可变列值，不引用业务 payload。 */
+    @NotNull
+    EncodedAuditEntry freeze(@NotNull AuditRecord record) {
+        return encode(Objects.requireNonNull(record), 0);
+    }
+
+    /** 使用消息标识幂等追加冻结记录；提交成功后消费者才允许确认消息。 */
+    public void appendDelivery(long messageId, @NotNull AuditMessage message) {
+        if (messageId <= 0) {
+            throw new IllegalArgumentException("审计消息标识必须为正数");
+        }
+        EncodedAuditEntry row = message.entry();
+        mapper.insertDelivery(
+                new EncodedAuditEntry(
+                        messageId,
+                        row.requestId(),
+                        row.subjectId(),
+                        row.accountId(),
+                        row.principalId(),
+                        row.operation(),
+                        row.targetType(),
+                        row.targetId(),
+                        row.result(),
+                        row.payloadType(),
+                        row.payloadVersion(),
+                        row.payloadJson(),
+                        row.httpMethod(),
+                        row.httpPath(),
+                        row.clientIp(),
+                        row.userAgent(),
+                        row.occurredAt(),
+                        row.instanceId()));
     }
 
     /**
@@ -85,12 +119,12 @@ public class AuditRepository {
     /**
      * 将待记录审计事实编码成 Mapper 使用的列值。
      */
-    private @NotNull EncodedAuditEntry encode(@NotNull AuditRecord record) {
+    private @NotNull EncodedAuditEntry encode(@NotNull AuditRecord record, long id) {
         EncodedAuditPayload payload = payloadJson.encode(record.payload().orElse(null));
         Resource target = record.target().orElse(null);
         HttpCall httpCall = record.httpCall().orElse(null);
         return new EncodedAuditEntry(
-                ids.nextId().value(),
+                id,
                 required(record.requestId(), "调用标识"),
                 record.actor().subjectId(),
                 record.actor().accountId().orElse(null),

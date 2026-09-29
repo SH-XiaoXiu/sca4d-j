@@ -1,5 +1,6 @@
 package com.sca4d.core.api.annotation;
 
+import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.call.CallValueResolver;
 import com.sca4d.core.api.concurrent.LockKey;
 
@@ -13,6 +14,7 @@ import java.lang.annotation.Target;
 @Documented
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
+@CallLifecycle.Intercepted
 public @interface Locked {
 
     /**

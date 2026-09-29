@@ -85,7 +85,7 @@ loadScripts(document, 'script');</script>
 <h1 title="Class OpenApiRequestInterceptor" class="title">Class OpenApiRequestInterceptor</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">com.sca4d.core.spring.call.CallHandlerInterceptor
+<div class="inheritance">com.sca4d.core.spring.web.HttpCallHandlerInterceptor
 <div class="inheritance">com.sca4d.openapi.web.OpenApiRequestInterceptor</div>
 </div>
 </div>
@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">OpenApiRequestInterceptor</span>
-<span class="extends-implements">extends com.sca4d.core.spring.call.CallHandlerInterceptor</span></div>
+<span class="extends-implements">extends com.sca4d.core.spring.web.HttpCallHandlerInterceptor</span></div>
 <div class="block">在普通 Spring MVC Handler 与 Core 权限切面之间检查 OpenAPI Client 身份及开放 Operation。</div>
 </section>
 <section class="summary">
@@ -139,7 +139,7 @@ loadScripts(document, 'script');</script>
 </div>
 </div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-com.sca4d.core.spring.call.CallHandlerInterceptor">Methods inherited from class&nbsp;com.sca4d.core.spring.call.CallHandlerInterceptor</h3>
+<h3 id="methods-inherited-from-class-com.sca4d.core.spring.web.HttpCallHandlerInterceptor">Methods inherited from class&nbsp;com.sca4d.core.spring.web.HttpCallHandlerInterceptor</h3>
 <code>preHandle</code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
@@ -188,7 +188,7 @@ loadScripts(document, 'script');</script>
 <div class="block">检查路由是否由有效 Application Client 调用并开放了目标 Operation。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code>preHandleWithCall</code>&nbsp;in class&nbsp;<code>com.sca4d.core.spring.call.CallHandlerInterceptor</code></dd>
+<dd><code>preHandleWithCall</code>&nbsp;in class&nbsp;<code>com.sca4d.core.spring.web.HttpCallHandlerInterceptor</code></dd>
 </dl>
 </section>
 </li>

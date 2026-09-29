@@ -1,47 +1,53 @@
 package com.sca4d.core.spring.config;
 
-import com.sca4d.core.api.audit.AuditRecorder;
-import com.sca4d.core.api.audit.AuditResolverLookup;
-import com.sca4d.core.api.call.AuditCallRecorder;
+import com.sca4d.core.api.annotation.AnonymousAccess;
+import com.sca4d.core.api.annotation.Idempotent;
+import com.sca4d.core.api.annotation.Locked;
+import com.sca4d.core.api.annotation.RateLimited;
+import com.sca4d.core.api.annotation.RequirePermission;
+import com.sca4d.core.api.annotation.RequirePermissions;
+import com.sca4d.core.api.annotation.SystemExecution;
+import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.call.CallValueResolverLookup;
-import com.sca4d.core.api.call.IdempotentCallExecutor;
-import com.sca4d.core.api.call.LockedCallExecutor;
-import com.sca4d.core.api.call.PermissionCallAssessor;
-import com.sca4d.core.api.call.RateLimitedCallAssessor;
 import com.sca4d.core.api.concurrent.DistributedLock;
+import com.sca4d.core.api.concurrent.IdempotencyCallInterceptor;
 import com.sca4d.core.api.concurrent.IdempotencyFingerprints;
 import com.sca4d.core.api.concurrent.IdempotencyStore;
+import com.sca4d.core.api.concurrent.LockCallInterceptor;
+import com.sca4d.core.api.concurrent.RateLimitCallInterceptor;
 import com.sca4d.core.api.concurrent.RateLimiter;
 import com.sca4d.core.api.i18n.LocaleCatalog;
 import com.sca4d.core.api.i18n.MessageCatalog;
 import com.sca4d.core.api.i18n.TextLocalizer;
 import com.sca4d.core.api.id.IdGenerator;
+import com.sca4d.core.api.identity.IdentityCallInterceptor;
+import com.sca4d.core.api.identity.SystemPrincipals;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.OperationCatalog;
 import com.sca4d.core.api.permission.OperationModule;
 import com.sca4d.core.api.permission.PermissionAssessment;
+import com.sca4d.core.api.permission.PermissionCallInterceptor;
 import com.sca4d.core.api.permission.PermissionPolicy;
 import com.sca4d.core.api.permission.SessionOperationPermissionPolicy;
 import com.sca4d.core.api.region.PhoneNumberCondition;
 import com.sca4d.core.api.region.RegionCatalog;
-import com.sca4d.core.spring.call.CallFilter;
-import com.sca4d.core.spring.call.CallLifecycleAspect;
+import com.sca4d.core.spring.call.CallLifecycleAdvisor;
 import com.sca4d.core.spring.call.CallRequirementTransactionInstaller;
 import com.sca4d.core.spring.call.CallRequirementTransactionListener;
-import com.sca4d.core.spring.call.SpringAuditResolverLookup;
 import com.sca4d.core.spring.call.SpringCallValueResolverLookup;
-import com.sca4d.core.spring.call.SystemExecutionAspect;
 import com.sca4d.core.spring.i18n.CatalogMessageSource;
 import com.sca4d.core.spring.i18n.ClasspathMessageCatalog;
 import com.sca4d.core.spring.i18n.I18nProperties;
 import com.sca4d.core.spring.i18n.RequestLocaleResolver;
 import com.sca4d.core.spring.id.SnowflakeIdGenerator;
-import com.sca4d.core.spring.identity.PrincipalSelectionAspect;
+import com.sca4d.core.spring.identity.PrincipalSelectionCallInterceptor;
 import com.sca4d.core.spring.identity.PrincipalSelectionInputResolver;
 import com.sca4d.core.spring.identity.PrincipalSelectionInterceptor;
 import com.sca4d.core.spring.identity.PrincipalSelectionInvoker;
 import com.sca4d.core.spring.json.Sca4djJson;
 import com.sca4d.core.spring.json.Sca4djMapper;
+import com.sca4d.core.spring.permission.CurrentResourceScope;
 import com.sca4d.core.spring.persistence.batch.SqlBatchProperties;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.core.spring.redis.RedisBatches;
@@ -50,8 +56,8 @@ import com.sca4d.core.spring.redis.RedisPipelineProperties;
 import com.sca4d.core.spring.validation.PhoneNumberConditionRegistry;
 import com.sca4d.core.spring.web.ApiResponseAdvice;
 import com.sca4d.core.spring.web.CurrentIdentityArgumentResolver;
-import com.sca4d.core.spring.web.CurrentResourceScope;
 import com.sca4d.core.spring.web.GlobalExceptionHandler;
+import com.sca4d.core.spring.web.HttpCallFilter;
 import com.sca4d.core.spring.web.HttpIdempotencyKeyResolver;
 import com.sca4d.core.spring.web.HttpInputValidationAspect;
 import com.sca4d.core.spring.web.IdentityMdcInterceptor;
@@ -67,6 +73,7 @@ import com.sca4d.core.spring.web.clientstate.ClientStateResponseAdvice;
 import com.sca4d.core.spring.web.view.BaseViewJacksonInstaller;
 import jakarta.validation.Validator;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -94,8 +101,10 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.time.Clock;
+import java.time.Instant;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 /** 注册 Core API 在 Spring MVC 中使用的 Filter、参数解析器、异常处理器和 AOP Bean。 */
 @AutoConfiguration(after = WebMvcAutoConfiguration.class)
@@ -111,12 +120,6 @@ import java.util.Locale;
         SqlBatchProperties.class
 })
 public class CoreSpringAutoConfiguration {
-
-    /** 为显式声明的系统自主入口安装身份上下文，不参与 HTTP 用户身份选择。 */
-    @Bean
-    SystemExecutionAspect systemExecutionAspect(Clock clock) {
-        return new SystemExecutionAspect(clock);
-    }
 
     /** 创建 Core Spring 自动配置。 */
     public CoreSpringAutoConfiguration() {
@@ -231,9 +234,9 @@ public class CoreSpringAutoConfiguration {
 
     /** @param clock 调用开始时间使用的时钟 @return 最外层调用过滤器 */
     @Bean
-    FilterRegistrationBean<CallFilter> callFilter(Clock clock) {
-        FilterRegistrationBean<CallFilter> registration = new FilterRegistrationBean<>(
-                new CallFilter(clock));
+    FilterRegistrationBean<HttpCallFilter> httpCallFilter(Clock clock) {
+        FilterRegistrationBean<HttpCallFilter> registration = new FilterRegistrationBean<>(
+                new HttpCallFilter(clock));
         registration.setOrder(Ordered.HIGHEST_PRECEDENCE + 10);
         return registration;
     }
@@ -296,12 +299,6 @@ public class CoreSpringAutoConfiguration {
         return new SpringCallValueResolverLookup(applicationContext);
     }
 
-    /** @param applicationContext Spring 容器 @return 按 Bean 类型查找的审计解析器目录 */
-    @Bean
-    AuditResolverLookup auditResolverLookup(ApplicationContext applicationContext) {
-        return new SpringAuditResolverLookup(applicationContext);
-    }
-
     /** @return 当前调用资源范围入口 */
     @Bean
     CurrentResourceScope currentResourceScope() {
@@ -348,15 +345,6 @@ public class CoreSpringAutoConfiguration {
         return new PermissionAssessment(policies);
     }
 
-    /** @return 使用注解但没有审计集成时明确失败的实现 */
-    @Bean
-    @ConditionalOnMissingBean
-    AuditRecorder unavailableAuditRecorder() {
-        return record -> {
-            throw new IllegalStateException("当前应用没有审计记录实现");
-        };
-    }
-
     /**
      * @param modules 各业务模块声明的 Operation 目录
      * @return 完成结构校验和排序的 Operation 目录
@@ -381,18 +369,18 @@ public class CoreSpringAutoConfiguration {
 
     /** @param permissionAssessment 权限策略入口 @param resolverLookup 调用值解析器目录 @return 权限调用前评估器 */
     @Bean
-    PermissionCallAssessor permissionCallAssessor(
+    PermissionCallInterceptor permissionCallInterceptor(
             PermissionAssessment permissionAssessment,
             CallValueResolverLookup resolverLookup) {
-        return new PermissionCallAssessor(permissionAssessment, resolverLookup);
+        return new PermissionCallInterceptor(permissionAssessment, resolverLookup);
     }
 
     /** @param rateLimiter 共享限流器 @param resolverLookup 调用值解析器目录 @return 限流调用前评估器 */
     @Bean
-    RateLimitedCallAssessor rateLimitedCallAssessor(
+    RateLimitCallInterceptor rateLimitCallInterceptor(
             RateLimiter rateLimiter,
             CallValueResolverLookup resolverLookup) {
-        return new RateLimitedCallAssessor(rateLimiter, resolverLookup);
+        return new RateLimitCallInterceptor(rateLimiter, resolverLookup);
     }
 
     /**
@@ -403,12 +391,12 @@ public class CoreSpringAutoConfiguration {
      * @return 幂等执行控制器
      */
     @Bean
-    IdempotentCallExecutor idempotentCallExecutor(
+    IdempotencyCallInterceptor idempotencyCallInterceptor(
             IdempotencyStore idempotencyStore,
             CallValueResolverLookup resolverLookup,
             IdempotencyFingerprints idempotencyFingerprints,
             RedisIdempotencyProperties idempotencyProperties) {
-        return new IdempotentCallExecutor(
+        return new IdempotencyCallInterceptor(
                 idempotencyStore,
                 resolverLookup,
                 idempotencyFingerprints,
@@ -418,55 +406,90 @@ public class CoreSpringAutoConfiguration {
 
     /** @param distributedLock 分布式锁 @param resolverLookup 调用值解析器目录 @return 锁执行控制器 */
     @Bean
-    LockedCallExecutor lockedCallExecutor(
+    LockCallInterceptor lockCallInterceptor(
             DistributedLock distributedLock,
             CallValueResolverLookup resolverLookup) {
-        return new LockedCallExecutor(distributedLock, resolverLookup);
+        return new LockCallInterceptor(distributedLock, resolverLookup);
     }
 
-    /**
-     * @param auditRecorder 审计记录存储入口
-     * @param resolverLookup 审计声明组件查找入口
-     * @param clock 审计发生时间使用的时钟
-     * @return 调用结果审计记录器
-     */
+    /** @return 调用认证及主体前提检查 */
     @Bean
-    AuditCallRecorder auditCallRecorder(
-            AuditRecorder auditRecorder,
-            AuditResolverLookup resolverLookup,
-            Clock clock) {
-        return new AuditCallRecorder(auditRecorder, resolverLookup, clock);
+    IdentityCallInterceptor identityCallInterceptor() {
+        return new IdentityCallInterceptor();
     }
 
-    /**
-     * @param permissionAssessor 权限调用前评估器
-     * @param rateLimitedAssessor 限流调用前评估器
-     * @param idempotentExecutor 幂等执行控制器
-     * @param lockedExecutor 锁执行控制器
-     * @param auditRecorder 结果审计记录器
-     * @return 固定调用生命周期
-     */
+    /** @param arounds 功能和应用注册的环绕处理 @return 已完成依赖校验的调用生命周期 */
     @Bean
-    CallLifecycle callLifecycle(
-            PermissionCallAssessor permissionAssessor,
-            RateLimitedCallAssessor rateLimitedAssessor,
-            IdempotentCallExecutor idempotentExecutor,
-            LockedCallExecutor lockedExecutor,
-            AuditCallRecorder auditRecorder) {
-        return new CallLifecycle(
-                permissionAssessor,
-                rateLimitedAssessor,
-                idempotentExecutor,
-                lockedExecutor,
-                auditRecorder);
+    CallLifecycle callLifecycle(List<CallLifecycle.Around> arounds) {
+        return new CallLifecycle(arounds);
     }
 
-    /** @param lifecycle 固定调用生命周期 @param versionConditions HTTP 版本条件 @return Spring AOP 桥接 */
+    /** @param lifecycle 调用生命周期 @param declarations 功能所属注解注册 @param clock 入口时钟 @return Spring AOP 桥接 */
     @Bean
-    CallLifecycleAspect callLifecycleAspect(
+    CallLifecycleAdvisor callLifecycleAdvisor(
             CallLifecycle lifecycle,
-            RequestVersionConditions versionConditions) {
-        return new CallLifecycleAspect(lifecycle, versionConditions);
+            List<CallLifecycleAdvisor.Declaration<?>> declarations,
+            Clock clock) {
+        return new CallLifecycleAdvisor(lifecycle, declarations, clock);
+    }
+
+    /** 注册 Core 自己定义的匿名访问注解。 */
+    @Bean
+    CallLifecycleAdvisor.Declaration<AnonymousAccess> anonymousCallDeclaration() {
+        return () -> AnonymousAccess.class;
+    }
+
+    /** 注册 Core 自己定义的权限注解。 */
+    @Bean
+    CallLifecycleAdvisor.Declaration<RequirePermission> permissionCallDeclaration() {
+        return () -> RequirePermission.class;
+    }
+
+    /** 注册 repeatable 权限注解的容器。 */
+    @Bean
+    CallLifecycleAdvisor.Declaration<RequirePermissions> permissionsCallDeclaration() {
+        return () -> RequirePermissions.class;
+    }
+
+    /** 注册 Core 自己定义的限流注解。 */
+    @Bean
+    CallLifecycleAdvisor.Declaration<RateLimited> rateLimitCallDeclaration() {
+        return () -> RateLimited.class;
+    }
+
+    /** 注册 Core 自己定义的幂等注解。 */
+    @Bean
+    CallLifecycleAdvisor.Declaration<Idempotent> idempotentCallDeclaration() {
+        return () -> Idempotent.class;
+    }
+
+    /** 注册 Core 自己定义的锁注解。 */
+    @Bean
+    CallLifecycleAdvisor.Declaration<Locked> lockedCallDeclaration() {
+        return () -> Locked.class;
+    }
+
+    /** 注册无内置注解但显式要求进入调用生命周期的方法。 */
+    @Bean
+    CallLifecycleAdvisor.Declaration<CallLifecycle.Intercepted> interceptedCallDeclaration() {
+        return () -> CallLifecycle.Intercepted.class;
+    }
+
+    /** 系统注解只负责自主入口身份，不向已有用户调用赋予额外权限。 */
+    @Bean
+    CallLifecycleAdvisor.Declaration<SystemExecution> systemCallDeclaration() {
+        return new CallLifecycleAdvisor.Declaration<>() {
+            @Override
+            public @NonNull Class<SystemExecution> annotationType() {
+                return SystemExecution.class;
+            }
+
+            @Override
+            public @NonNull Optional<Call> createCall(String callId, Instant startedAt, SystemExecution annotation) {
+                return Optional
+                        .of(Call.system(callId, startedAt, SystemPrincipals.require(TreeCode.of(annotation.value()))));
+            }
+        };
     }
 
     /** @return 事务提交前调用要求监听器 */
@@ -504,11 +527,11 @@ public class CoreSpringAutoConfiguration {
      * @return Controller 业务身份选择切面
      */
     @Bean
-    PrincipalSelectionAspect principalSelectionAspect(
+    PrincipalSelectionCallInterceptor principalSelectionCallInterceptor(
             ApplicationContext applicationContext,
             PrincipalSelectionInputResolver inputResolver,
             PrincipalSelectionInvoker invoker) {
-        return new PrincipalSelectionAspect(applicationContext, inputResolver, invoker);
+        return new PrincipalSelectionCallInterceptor(applicationContext, inputResolver, invoker);
     }
 
     /**

@@ -626,12 +626,17 @@ IotTimescale 是历史 Flyway、MyBatis 工厂和 Mapper 的 Spring Qualifier，
 
 源码：`modules/audit/sca4dj-audit/src/main/java/com/sca4d/audit/config/AuditProperties.java`
 
-AuditProperties 读取 `sca4dj.audit` 下的 payload 保存配置。
+AuditProperties 读取 `sca4dj.audit` 下的默认记录方式和 payload 保存配置。
 
 | 配置 | 默认值 | 含义 |
 |---|---:|---|
 | `max-payload-bytes` | `65536` | 单条 payload 允许保存的最大 UTF-8 字节数 |
+| `mode` | `DIRECT` | 默认记录方式；注解可覆盖。`DIRECT` 等待数据库写入，`QUEUED` 等待独立事务 Outbox 交接后返回；配置不接受 `DEFAULT` |
 | `sensitive-fields` | `password, token, secret, salt, authorization` | 不区分大小写、递归匹配的敏感字段名片段 |
+
+`@Audit(mode = Audit.Mode.QUEUED)` 可以在默认同步的应用中要求可靠排队，`DIRECT` 可以覆盖类型或应用的队列默认。注解未指定方式时继承类型显式值，再使用应用配置。Messaging 可用时安装队列记录器、Codec 和消费者，不因默认方式为 DIRECT 而省略。默认方式不可用时启动失败；方法声明的方式不可用时在业务执行前失败。
+
+队列模式在交接前完成相同脱敏和大小限制。消费者使用消息 ID 去重，最多尝试 5 次、间隔 5 秒，耗尽后由 Messaging 进入 DLQ。Outbox 派发与消费分别遵守 Messaging 配置；没有内存队列降级。调用结果与事务边界见[审计等待方式](/home/permission#审计等待方式)。
 
 `max-payload-bytes` 必须为正数。编码并脱敏后的 JSON 超过限制时，模块记录 WARN 日志并只保存以下固定对象，不保存原 payload 内容：
 

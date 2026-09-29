@@ -5,18 +5,29 @@ import com.sca4d.core.api.call.CallRequirement;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.concurrent.VersionConditions;
+import com.sca4d.core.spring.call.CallLifecycleAdvisor;
 import com.sca4d.core.spring.web.annotation.IfMatch;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 /** 把当前 HTTP 请求提交的 `If-Match` 版本绑定为必须由根资源 Repository 消费的调用要求。 */
-public class RequestVersionConditions implements VersionConditions {
+public class RequestVersionConditions implements VersionConditions, CallLifecycleAdvisor.Declaration<IfMatch> {
 
     private final ThreadLocal<State> current = new ThreadLocal<>();
 
     /** 创建 HTTP 请求版本条件入口。 */
     public RequestVersionConditions() {
+    }
+
+    @Override
+    public @NotNull Class<IfMatch> annotationType() {
+        return IfMatch.class;
+    }
+
+    @Override
+    public void attach(@NotNull CallExecution execution, @NotNull IfMatch annotation) {
+        attach(execution);
     }
 
     /**
@@ -40,7 +51,7 @@ public class RequestVersionConditions implements VersionConditions {
     public void attach(CallExecution execution) {
         State state = current.get();
         CallExecution checked = Objects.requireNonNull(execution, "方法执行不能为空");
-        if (state == null || state.attached || !checked.method().isAnnotationPresent(IfMatch.class)) {
+        if (state == null || state.attached || checked.declaration(IfMatch.class).isEmpty()) {
             return;
         }
         state.attached = true;

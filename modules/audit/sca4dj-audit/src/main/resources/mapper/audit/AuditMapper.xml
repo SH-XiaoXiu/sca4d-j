@@ -21,7 +21,7 @@
         </where>
     </sql>
 
-    <insert id="insert">
+    <sql id="insertRow">
         INSERT INTO audit_record
         (id, request_id, subject_id, account_id, principal_id, operation,
         target_type, target_id, result, payload_type, payload_version, payload_json,
@@ -31,6 +31,15 @@
         #{row.operation}, #{row.targetType}, #{row.targetId}, #{row.result},
         #{row.payloadType}, #{row.payloadVersion}, CAST(#{row.payloadJson} AS JSONB),
         #{row.httpMethod}, #{row.httpPath}, #{row.clientIp}, #{row.userAgent}, #{row.occurredAt}, #{row.instanceId})
+    </sql>
+
+    <insert id="insert">
+        <include refid="insertRow"/>
+    </insert>
+
+    <insert id="insertDelivery">
+        <include refid="insertRow"/>
+        ON CONFLICT (id) DO NOTHING
     </insert>
 
     <select id="selectById" resultType="com.sca4d.audit.recording.mapper.EncodedAuditEntry">

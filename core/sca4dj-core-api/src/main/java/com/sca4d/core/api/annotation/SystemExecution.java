@@ -1,5 +1,7 @@
 package com.sca4d.core.api.annotation;
 
+import com.sca4d.core.api.call.CallLifecycle;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,6 +12,7 @@ import java.lang.annotation.Target;
 @Documented
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
+@CallLifecycle.Intercepted
 public @interface SystemExecution {
     /** 启动时已经登记的稳定系统身份编码；不指定时使用 MAIN。 */
     String value() default "MAIN";

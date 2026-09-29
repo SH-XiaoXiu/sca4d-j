@@ -69,32 +69,40 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="package-signature">package <span class="element-name">com.sca4d.core.api.call</span></div>
 <section class="package-description" id="package-description">
-<div class="block">定义一次调用、方法执行、固定生命周期和动态声明解析所需的纯 Java 类型。</div>
+<div class="block">定义一次往返调用、方法执行、通用环绕处理、声明和执行要求。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
 <li>
 <div id="class-summary">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab3" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab3', 2)" class="table-tab">Enum Classes</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab3" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab3', 2)" class="table-tab">Enum Classes</button><button id="class-summary-tab6" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab6', 2)" class="table-tab">Annotation Interfaces</button></div>
 <div id="class-summary.tabpanel" role="tabpanel">
 <div class="summary-table two-column-summary" aria-labelledby="class-summary-tab0">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="AuditCallRecorder.html" title="class in com.sca4d.core.api.call">AuditCallRecorder</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">把 `@Audit`、调用身份和 `CallOutcome` 转换成同步审计记录。</div>
+<div class="block">保存入口界定的一次往返的输入快照、目标资源、身份和权限判定；不解释传输协议。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">保存一次 HTTP、消息或任务调用已经确认的信息、身份和权限判定。</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">保存一次被声明式调用规则包围的方法执行及其成功要求。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="CallLifecycle.html" title="class in com.sca4d.core.api.call">CallLifecycle</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">按固定生命周期执行声明解析结果、调用前评估、执行控制、成功检验和结果记录。</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="CallLifecycle.html" title="class in com.sca4d.core.api.call">CallLifecycle</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">编排方法执行的环绕处理、短路、成功要求及结果记录；入口负责建立 Call 和线程绑定。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="CallLifecycle.Around.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">包围剩余方法执行；允许明确重放或拒绝，不能隐式吞掉内层失败。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab6"><a href="CallLifecycle.Intercepted.html" title="annotation interface in com.sca4d.core.api.call">CallLifecycle.Intercepted</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab6">
+<div class="block">标记调用入口或功能注解；功能注解必须由所属功能注册，不能静默跳过。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="CallLifecycle.Next.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Next</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">在当前线程继续内层处理，返回成功、重放、拒绝或失败，错误由结果携带。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="CallOutcome.html" title="class in com.sca4d.core.api.call">CallOutcome</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
@@ -116,29 +124,9 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">按类型从外围容器取得调用值解析器。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="IdempotentCallExecutor.html" title="class in com.sca4d.core.api.call">IdempotentCallExecutor</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">执行 `@Idempotent` 的处理权取得、结果重放、成功保存和失败释放。</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="LockedCallExecutor.html" title="class in com.sca4d.core.api.call">LockedCallExecutor</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">解析 `@Locked` 的锁键，并在分布式锁内连续执行实际业务方法。</div>
-</div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="NoCallValueResolver.html" title="class in com.sca4d.core.api.call">NoCallValueResolver</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">注解用于表示未声明动态值解析器的占位类型，不应被实际调用。</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="NoRateLimitKeyResolver.html" title="class in com.sca4d.core.api.call">NoRateLimitKeyResolver</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">表示 `@RateLimited` 没有声明额外的自定义限流键解析器。</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="PermissionCallAssessor.html" title="class in com.sca4d.core.api.call">PermissionCallAssessor</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">解析 `@RequirePermission`，执行权限判断，并登记必须由 Repository 消费的资源范围。</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RateLimitedCallAssessor.html" title="class in com.sca4d.core.api.call">RateLimitedCallAssessor</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">解析 `@RateLimited` 的内置和自定义维度，并取得每个维度的限流额度。</div>
 </div>
 </div>
 </div>

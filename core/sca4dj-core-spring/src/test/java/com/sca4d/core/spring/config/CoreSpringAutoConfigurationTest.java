@@ -16,7 +16,7 @@ import com.sca4d.core.api.permission.OperationCatalog;
 import com.sca4d.core.api.permission.OperationModule;
 import com.sca4d.core.api.permission.OperationNode;
 import com.sca4d.core.spring.id.SnowflakeIdGenerator;
-import com.sca4d.core.spring.identity.PrincipalSelectionAspect;
+import com.sca4d.core.spring.identity.PrincipalSelectionCallInterceptor;
 import com.sca4d.core.spring.identity.PrincipalSelectionInterceptor;
 import com.sca4d.core.spring.openapi.CoreOpenApiConfiguration;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
@@ -98,7 +98,7 @@ class CoreSpringAutoConfigurationTest {
         contextRunner.run(context -> {
             assertThat(context).hasNotFailed();
             assertThat(context).hasSingleBean(GlobalExceptionHandler.class);
-            assertThat(context).hasSingleBean(PrincipalSelectionAspect.class);
+            assertThat(context).hasSingleBean(PrincipalSelectionCallInterceptor.class);
             assertThat(context).hasSingleBean(PrincipalSelectionInterceptor.class);
             assertThat(context).hasSingleBean(OperationCatalog.class);
             assertThat(context).hasSingleBean(IdempotencyFingerprints.class);

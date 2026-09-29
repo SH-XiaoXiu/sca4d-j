@@ -13,6 +13,8 @@ import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.core.api.authentication.principalsession.PrincipalIdSet;
 import com.sca4d.core.api.call.Call;
+import com.sca4d.core.api.data.DataKey;
+import com.sca4d.core.api.data.DataValues;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
@@ -20,7 +22,10 @@ import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
 import com.sca4d.core.api.identity.SystemPrincipal;
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.permission.Operation;
+import com.sca4d.core.api.permission.Permission;
+import com.sca4d.core.api.permission.PermissionDecision;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -31,6 +36,40 @@ import java.util.Set;
 
 @SuppressWarnings("ClassCanBeRecord")
 class CallTest {
+
+    @Test
+    @DisplayName("异步子调用复制身份并隔离输入和权限结论")
+    void forksIndependentCalls() {
+        Identity identity = new Identity(10, 20, 30);
+        Call parent = new Call("parent", STARTED_AT);
+        parent.authenticate(session(identity, Set.of()));
+        parent.selectPrincipal(identity.principal);
+        Permission read = new Permission(new Operation(TreeCode.of("TEST/READ")), Action.INVOKE);
+        parent.recordPermissionDecision(read, PermissionDecision.allow());
+        DataKey<String> task = DataKey.of("task", String.class);
+        Call child = parent.fork("child", STARTED_AT, DataValues.builder().put(task, "work").build(), read.resource());
+        assertSame(parent.session().orElseThrow(), child.session().orElseThrow());
+        assertEquals("parent", child.parentCallId().orElseThrow());
+        assertEquals("work", child.input(task).orElseThrow());
+        assertTrue(parent.input(task).isEmpty());
+        assertTrue(child.permissionDecision(read).isEmpty());
+        child.recordPermissionDecision(read, PermissionDecision.deny("任务拒绝"));
+        assertTrue(parent.permissionDecision(read).orElseThrow().isAllowed());
+        Call automatic = parent.fork();
+        assertFalse(automatic.callId().equals(parent.callId()));
+        assertEquals("parent", automatic.parentCallId().orElseThrow());
+        assertTrue(automatic.inputs().asMap().isEmpty());
+        assertTrue(automatic.targetResource().isEmpty());
+        assertTrue(automatic.permissionDecision(read).isEmpty());
+        assertEquals("work", parent.fork(DataValues.builder().put(task, "work").build()).input(task).orElseThrow());
+        assertSame(
+                read.resource(),
+                parent.fork(DataValues.builder().build(), read.resource()).targetResource().orElseThrow());
+        assertEquals(STARTED_AT, parent.fork("custom-child", STARTED_AT).startedAt());
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> parent.fork("parent", STARTED_AT, DataValues.builder().build(), null));
+    }
 
     private static final Instant STARTED_AT = Instant.parse("2026-07-20T00:00:00Z");
 

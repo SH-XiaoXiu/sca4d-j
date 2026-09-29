@@ -16,6 +16,7 @@ import com.sca4d.core.api.annotation.Idempotent;
 import com.sca4d.core.api.annotation.Locked;
 import com.sca4d.core.api.annotation.RateLimited;
 import com.sca4d.core.api.annotation.RequirePermission;
+import com.sca4d.core.api.audit.AuditCallInterceptor;
 import com.sca4d.core.api.audit.AuditPayloadFactory;
 import com.sca4d.core.api.audit.AuditRecord;
 import com.sca4d.core.api.audit.AuditRecorder;
@@ -26,31 +27,31 @@ import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
-import com.sca4d.core.api.call.AuditCallRecorder;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallExecution;
 import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.call.CallOutcome;
 import com.sca4d.core.api.call.CallValueResolver;
 import com.sca4d.core.api.call.CallValueResolverLookup;
-import com.sca4d.core.api.call.IdempotentCallExecutor;
-import com.sca4d.core.api.call.LockedCallExecutor;
-import com.sca4d.core.api.call.PermissionCallAssessor;
-import com.sca4d.core.api.call.RateLimitedCallAssessor;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.IdempotencyBeginResult;
+import com.sca4d.core.api.concurrent.IdempotencyCallInterceptor;
 import com.sca4d.core.api.concurrent.IdempotencyFingerprints;
 import com.sca4d.core.api.concurrent.IdempotencyKey;
 import com.sca4d.core.api.concurrent.IdempotencyStore;
+import com.sca4d.core.api.concurrent.LockCallInterceptor;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.concurrent.RateLimit;
+import com.sca4d.core.api.concurrent.RateLimitCallInterceptor;
 import com.sca4d.core.api.concurrent.RateLimitDecision;
 import com.sca4d.core.api.concurrent.RateLimitDimension;
 import com.sca4d.core.api.concurrent.RateLimitExceededException;
 import com.sca4d.core.api.concurrent.RateLimiter;
+import com.sca4d.core.api.data.DataValues;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.identity.Account;
+import com.sca4d.core.api.identity.IdentityCallInterceptor;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
@@ -62,9 +63,11 @@ import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.Permission;
 import com.sca4d.core.api.permission.PermissionAssessment;
+import com.sca4d.core.api.permission.PermissionCallInterceptor;
 import com.sca4d.core.api.permission.PermissionDecision;
 import com.sca4d.core.api.permission.PermissionPolicy;
 import com.sca4d.core.api.permission.ResourceScope;
+import com.sca4d.core.api.permission.ResourceScopeRequirement;
 import com.sca4d.core.api.resource.Resource;
 import com.sca4d.core.api.resource.ResourceReference;
 import org.jetbrains.annotations.NotNull;
@@ -87,12 +90,366 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 @SuppressWarnings({"ClassCanBeRecord", "ExtractMethodRecommender"})
 class CallLifecycleTest {
+
+    @Test
+    @DisplayName("审计方法显式方式覆盖类型，类型显式方式覆盖应用默认")
+    void selectsAuditModeByMethodTypeAndApplicationDefault() throws Exception {
+        List<Audit.Mode> recorded = new ArrayList<>();
+        AuditRecorder queued = new AuditRecorder() {
+            @Override
+            public @NotNull Audit.Mode mode() {
+                return Audit.Mode.QUEUED;
+            }
+
+            @Override
+            public void record(@NotNull AuditRecord record) {
+                recorded.add(Audit.Mode.QUEUED);
+            }
+        };
+        for (Audit.Mode defaultMode : List.of(Audit.Mode.DIRECT, Audit.Mode.QUEUED)) {
+            recorded.clear();
+            CallLifecycle lifecycle = new CallLifecycle(
+                    List.of(
+                            new IdentityCallInterceptor(),
+                            new AuditCallInterceptor(
+                                    List.of(record -> recorded.add(Audit.Mode.DIRECT), queued),
+                                    defaultMode,
+                                    NO_AUDIT_RESOLVERS,
+                                    Clock.fixed(NOW, ZoneOffset.UTC))));
+            for (Method method : List.of(
+                    AuditModeService.class.getDeclaredMethod("inherited"),
+                    AuditModeService.class.getDeclaredMethod("direct"),
+                    AuditModeService.class.getDeclaredMethod("queued"))) {
+                execute(
+                        lifecycle,
+                        Call.system(method.getName(), NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
+                        AuditModeService.class,
+                        method,
+                        new Object[0],
+                        () -> "done");
+            }
+            execute(
+                    lifecycle,
+                    Call.system("configured", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
+                    TargetedService.class,
+                    TargetedService.class.getDeclaredMethod("update", long.class),
+                    new Object[] {42L},
+                    () -> "done");
+            assertEquals(List.of(Audit.Mode.QUEUED, Audit.Mode.DIRECT, Audit.Mode.QUEUED, defaultMode), recorded);
+        }
+    }
+
+    @Test
+    @DisplayName("局部审计方式未安装时在业务执行前失败")
+    void rejectsUnavailableAuditModeBeforeInvocation() {
+        AtomicInteger invocations = new AtomicInteger();
+        CallLifecycle lifecycle = new CallLifecycle(
+                List.of(
+                        new IdentityCallInterceptor(),
+                        new AuditCallInterceptor(List.of(record -> {
+                            throw new AssertionError("未执行业务时不应记录成功审计");
+                        }), Audit.Mode.DIRECT, NO_AUDIT_RESOLVERS, Clock.fixed(NOW, ZoneOffset.UTC))));
+        IllegalStateException failure = assertThrows(
+                IllegalStateException.class,
+                () -> execute(
+                        lifecycle,
+                        Call.system("unavailable", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
+                        AuditModeService.class,
+                        AuditModeService.class.getDeclaredMethod("queued"),
+                        new Object[0],
+                        () -> {
+                            invocations.incrementAndGet();
+                            return "done";
+                        }));
+        assertTrue(failure.getMessage().contains("QUEUED"));
+        assertEquals(0, invocations.get());
+    }
+
+    @Test
+    @DisplayName("Future 幂等声明在业务和存储操作之前被拒绝")
+    void rejectsFutureIdempotencyBeforeInvocation() throws Exception {
+        List<String> events = new ArrayList<>();
+        AtomicInteger invocations = new AtomicInteger();
+        CallLifecycle lifecycle = new CallLifecycle(
+                List.of(
+                        new IdentityCallInterceptor(),
+                        new IdempotencyCallInterceptor(new MemoryIdempotencyStore(events), type -> {
+                            throw new AssertionError("非法返回类型不应解析幂等键");
+                        }, IDEMPOTENCY_FINGERPRINTS, Duration.ofSeconds(30), Duration.ofSeconds(1))));
+        Method method = IdempotentService.class.getDeclaredMethod("submit");
+        CallExecution execution = new CallExecution(
+                Call.system("future", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
+                IdempotentService.class,
+                method,
+                new Object[0],
+                method.getGenericReturnType());
+        assertThrows(IllegalStateException.class, () -> lifecycle.execute(execution, () -> {
+            invocations.incrementAndGet();
+            return CompletableFuture.completedFuture("done");
+        }));
+        assertEquals(0, invocations.get());
+        assertTrue(events.isEmpty());
+    }
+
+    @Test
+    @DisplayName("目标抛出 Error 时释放幂等处理权，下一次调用可以重新取得")
+    void releasesIdempotencyOnError() throws Exception {
+        List<String> events = new ArrayList<>();
+        CallLifecycle executor = lifecycle(
+                new PermissionAssessment(List.of()),
+                (key, limit) -> RateLimitDecision.allow(),
+                new MemoryIdempotencyStore(events),
+                new RecordingDistributedLock(events),
+                record -> {
+                },
+                type -> new IdempotencyKeyResolver(),
+                Clock.fixed(NOW, ZoneOffset.UTC),
+                Duration.ofSeconds(30),
+                Duration.ofSeconds(1));
+        Method method = IdempotentService.class.getDeclaredMethod("create");
+        AssertionError original = new AssertionError("target failed");
+        assertSame(
+                original,
+                assertThrows(
+                        AssertionError.class,
+                        () -> execute(
+                                executor,
+                                Call.system("error", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
+                                IdempotentService.class,
+                                method,
+                                new Object[0],
+                                () -> {
+                                    throw original;
+                                })));
+        assertEquals(
+                "done",
+                execute(
+                        executor,
+                        Call.system("retry", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
+                        IdempotentService.class,
+                        method,
+                        new Object[0],
+                        () -> "done"));
+        assertTrue(events.contains("idempotency-release"));
+    }
+
+    @Test
+    @DisplayName("锁内扩展的重放结果经过外层仍保持 REPLAYED")
+    void preservesInnerReplayThroughControls() throws Exception {
+        CallLifecycle executor = extended(
+                List.of(
+                        new Hook(
+                                TreeCode.of("TEST/INNER_CACHE"),
+                                Set.of(CallLifecycle.LOCK),
+                                Set.of(CallLifecycle.REQUIREMENTS),
+                                0,
+                                next -> CallOutcome.replayed("cached"))));
+        Method method = RateLimitedService.class.getDeclaredMethod("overloaded");
+        CallExecution execution = new CallExecution(
+                Call.system("inner-replay", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
+                RateLimitedService.class,
+                method,
+                new Object[0],
+                String.class);
+        assertEquals("cached", executor.execute(execution, () -> {
+            throw new AssertionError("不能执行目标");
+        }));
+        assertEquals(CallOutcome.Status.REPLAYED, execution.outcome().orElseThrow().status());
+    }
+
+    @Test
+    @DisplayName("扩展按依赖进入并反向退出，优先级不能越过依赖")
+    void ordersExtensionsAndUnwindsThem() throws Exception {
+        List<String> events = new ArrayList<>();
+        TreeCode a = TreeCode.of("TEST/A");
+        TreeCode b = TreeCode.of("TEST/B");
+        CallLifecycle executor = extended(
+                List.of(
+                        new Hook(b, Set.of(a), Set.of(CallLifecycle.IDEMPOTENCY), -10, next -> {
+                            events.add("b-enter");
+                            CallOutcome result = next.proceed();
+                            events.add("b-exit");
+                            return result;
+                        }),
+                        new Hook(a, Set.of(CallLifecycle.PERMISSION), Set.of(b), 10, next -> {
+                            events.add("a-enter");
+                            CallOutcome result = next.proceed();
+                            events.add("a-exit");
+                            return result;
+                        })));
+        assertEquals("done", invokeExtended(executor, () -> {
+            events.add("target");
+            return "done";
+        }));
+        assertEquals(List.of("a-enter", "b-enter", "target", "b-exit", "a-exit"), events);
+    }
+
+    @Test
+    @DisplayName("缺失依赖、重复编码和环在构建时失败")
+    void rejectsInvalidExtensionDependencies() {
+        TreeCode a = TreeCode.of("TEST/A");
+        TreeCode b = TreeCode.of("TEST/B");
+        Hook first = new Hook(a, Set.of(b), Set.of(), 0, CallLifecycle.Next::proceed);
+        assertThrows(IllegalArgumentException.class, () -> extended(List.of(first)));
+        assertThrows(IllegalArgumentException.class, () -> extended(List.of(first, first)));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> extended(
+                        List.of(
+                                first,
+                                new Hook(b, Set.of(a), Set.of(), 0, CallLifecycle.Next::proceed))));
+    }
+
+    @Test
+    @DisplayName("短路必须标记重放且不得执行目标")
+    void allowsExplicitReplayWithoutInvokingTarget() throws Exception {
+        CallLifecycle executor = extended(
+                List.of(
+                        new Hook(
+                                TreeCode.of("TEST/CACHE"),
+                                Set.of(CallLifecycle.RATE_LIMIT),
+                                Set.of(CallLifecycle.IDEMPOTENCY),
+                                0,
+                                next -> CallOutcome.replayed("cached"))));
+        assertEquals("cached", invokeExtended(executor, () -> {
+            throw new AssertionError("不应执行目标");
+        }));
+    }
+
+    @Test
+    @DisplayName("Next 不能重复使用、回调结束后使用或吞掉目标失败")
+    void rejectsRepeatedAndEscapedNext() {
+        AtomicReference<CallLifecycle.Next> saved = new AtomicReference<>();
+        CallLifecycle executor = extended(
+                List.of(
+                        new Hook(
+                                TreeCode.of("TEST/ONCE"),
+                                Set.of(CallLifecycle.RATE_LIMIT),
+                                Set.of(CallLifecycle.IDEMPOTENCY),
+                                0,
+                                next -> {
+                                    saved.set(next);
+                                    next.proceed();
+                                    return next.proceed();
+                                })));
+        AtomicInteger invocations = new AtomicInteger();
+        assertThrows(IllegalStateException.class, () -> invokeExtended(executor, () -> {
+            invocations.incrementAndGet();
+            return "done";
+        }));
+        assertEquals(1, invocations.get());
+        assertThrows(IllegalStateException.class, () -> saved.get().proceed());
+        CallLifecycle swallow = extended(
+                List.of(
+                        new Hook(
+                                TreeCode.of("TEST/SWALLOW"),
+                                Set.of(CallLifecycle.RATE_LIMIT),
+                                Set.of(CallLifecycle.IDEMPOTENCY),
+                                0,
+                                next -> {
+                                    next.proceed();
+                                    return CallOutcome.success("ignored");
+                                })));
+        IllegalStateException original = new IllegalStateException("target failure");
+        assertSame(original, assertThrows(IllegalStateException.class, () -> invokeExtended(swallow, () -> {
+            throw original;
+        })));
+        assertTrue(original.getSuppressed().length > 0);
+    }
+
+    /** 为扩展行为测试组装无外部存储访问的真实执行链。 */
+    private static CallLifecycle extended(List<CallLifecycle.Around> extensions) {
+        CallValueResolverLookup resolvers = type -> {
+            throw new AssertionError("不需要解析器");
+        };
+        List<CallLifecycle.Around> registered = new ArrayList<>(
+                List.of(
+                        new IdentityCallInterceptor(),
+                        new PermissionCallInterceptor(new PermissionAssessment(List.of()), resolvers),
+                        new RateLimitCallInterceptor((key, limit) -> RateLimitDecision.allow(), resolvers),
+                        new IdempotencyCallInterceptor(
+                                new MemoryIdempotencyStore(new ArrayList<>()),
+                                resolvers,
+                                IDEMPOTENCY_FINGERPRINTS,
+                                Duration.ofSeconds(30),
+                                Duration.ofSeconds(1)),
+                        new LockCallInterceptor(new RecordingDistributedLock(new ArrayList<>()), resolvers),
+                        new AuditCallInterceptor(List.of(record -> {
+                        }), Audit.Mode.DIRECT, NO_AUDIT_RESOLVERS, Clock.fixed(NOW, ZoneOffset.UTC))));
+        registered.addAll(extensions);
+        return new CallLifecycle(registered);
+    }
+
+    /** 在固定匿名方法范围中执行目标，复用同一组公开执行规则。 */
+    private static String invokeExtended(CallLifecycle lifecycle, Callable<String> target) throws Exception {
+        Method method = RateLimitedService.class.getDeclaredMethod("overloaded");
+        return execute(
+                lifecycle,
+                Call.system("extension", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
+                RateLimitedService.class,
+                method,
+                new Object[0],
+                target);
+    }
+
+    /** 保存测试中的环绕声明和行为，测试断言由实际调用结果表达。 */
+    private static class Hook implements CallLifecycle.Around {
+        private final TreeCode code;
+
+        private final Set<TreeCode> after;
+
+        private final Set<TreeCode> before;
+
+        private final int priority;
+
+        private final java.util.function.Function<CallLifecycle.Next, CallOutcome> action;
+
+        private Hook(
+                TreeCode code,
+                Set<TreeCode> after,
+                Set<TreeCode> before,
+                int priority,
+                java.util.function.Function<CallLifecycle.Next, CallOutcome> action) {
+            this.code = code;
+            this.after = after;
+            this.before = before;
+            this.priority = priority;
+            this.action = action;
+        }
+
+        @Override
+        public @NotNull TreeCode code() {
+            return code;
+        }
+
+        @Override
+        public @NotNull Set<TreeCode> after() {
+            return after;
+        }
+
+        @Override
+        public @NotNull Set<TreeCode> before() {
+            return before;
+        }
+
+        @Override
+        public int priority() {
+            return priority;
+        }
+
+        @Override
+        public @NotNull CallOutcome around(@NotNull CallExecution execution, @NotNull CallLifecycle.Next next) {
+            return action.apply(next);
+        }
+    }
 
     private static final Instant NOW = Instant.parse("2026-07-20T00:00:00Z");
 
@@ -281,8 +638,9 @@ class CallLifecycleTest {
         assertSame(auditFailure, thrown);
         assertEquals(1, records.get());
         CallOutcome outcome = execution.outcome().orElseThrow();
-        assertEquals(CallOutcome.Status.FAILED, outcome.status());
-        assertSame(auditFailure, outcome.error());
+        assertEquals(CallOutcome.Status.SUCCESS, outcome.status());
+        assertEquals("updated", outcome.result());
+        assertSame(auditFailure, outcome.completionFailure());
     }
 
     @Test
@@ -347,7 +705,7 @@ class CallLifecycleTest {
                 new Object[0],
                 String.class);
         String result = executor.execute(execution, () -> {
-            assertSame(scope, execution.consumeResourceScope(permission, DeviceScope.class).orElseThrow());
+            assertSame(scope, ResourceScopeRequirement.consume(execution, permission, DeviceScope.class).orElseThrow());
             return "devices";
         });
 
@@ -846,7 +1204,11 @@ class CallLifecycleTest {
                 Map.of(),
                 NOW,
                 NOW.plusSeconds(3600));
-        Call call = new Call("all-dimensions", NOW, httpCall);
+        DataValues.Builder inputs = DataValues.builder();
+        if (httpCall != null) {
+            inputs.put(HttpCall.KEY, httpCall);
+        }
+        Call call = new Call("all-dimensions", NOW, inputs.build(), null);
         call.authenticate(session);
         return call;
     }
@@ -876,16 +1238,22 @@ class CallLifecycleTest {
             Duration processingTtl,
             Duration retryAfter) {
         return new CallLifecycle(
-                new PermissionCallAssessor(permissionAssessment, resolverLookup),
-                new RateLimitedCallAssessor(rateLimiter, resolverLookup),
-                new IdempotentCallExecutor(
-                        idempotencyStore,
-                        resolverLookup,
-                        IDEMPOTENCY_FINGERPRINTS,
-                        processingTtl,
-                        retryAfter),
-                new LockedCallExecutor(distributedLock, resolverLookup),
-                new AuditCallRecorder(auditRecorder, NO_AUDIT_RESOLVERS, clock));
+                List.of(
+                        new IdentityCallInterceptor(),
+                        new PermissionCallInterceptor(permissionAssessment, resolverLookup),
+                        new RateLimitCallInterceptor(rateLimiter, resolverLookup),
+                        new IdempotencyCallInterceptor(
+                                idempotencyStore,
+                                resolverLookup,
+                                IDEMPOTENCY_FINGERPRINTS,
+                                processingTtl,
+                                retryAfter),
+                        new LockCallInterceptor(distributedLock, resolverLookup),
+                        new AuditCallInterceptor(
+                                List.of(auditRecorder),
+                                Audit.Mode.DIRECT,
+                                NO_AUDIT_RESOLVERS,
+                                clock)));
     }
 
     /**
@@ -991,6 +1359,34 @@ class CallLifecycleTest {
 
         @Idempotent(keyResolver = IdempotencyKeyResolver.class, retentionSeconds = 300)
         private String create() {
+            return "unused";
+        }
+
+        /** 声明不能作为可重放结果的异步返回值。 */
+        @Idempotent(keyResolver = IdempotencyKeyResolver.class, retentionSeconds = 300)
+        private CompletionStage<String> submit() {
+            return CompletableFuture.completedFuture("unused");
+        }
+    }
+
+    /** 声明类型级队列方式和方法级覆盖，用于验证审计默认值继承。 */
+    @Audit(operation = "TEST/TYPE", mode = Audit.Mode.QUEUED)
+    private static class AuditModeService {
+        /** 只覆盖审计操作，继续继承类型声明的方式。 */
+        @Audit(operation = "TEST/INHERITED")
+        private String inherited() {
+            return "unused";
+        }
+
+        /** 在队列类型中要求同步记录。 */
+        @Audit(operation = "TEST/DIRECT", mode = Audit.Mode.DIRECT)
+        private String direct() {
+            return "unused";
+        }
+
+        /** 明确要求可靠排队。 */
+        @Audit(operation = "TEST/QUEUED", mode = Audit.Mode.QUEUED)
+        private String queued() {
             return "unused";
         }
     }

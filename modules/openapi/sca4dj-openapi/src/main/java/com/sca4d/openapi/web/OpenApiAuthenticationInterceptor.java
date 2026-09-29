@@ -9,8 +9,8 @@ import com.sca4d.core.api.authentication.VerifiedAuthentication;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
-import com.sca4d.core.spring.call.CallHandlerInterceptor;
 import com.sca4d.core.spring.web.BearerToken;
+import com.sca4d.core.spring.web.HttpCallHandlerInterceptor;
 import com.sca4d.openapi.client.OpenApiClient;
 import com.sca4d.openapi.client.OpenApiClientService;
 import com.sca4d.openapi.oauth.OpenApiJwtTokenService;
@@ -29,7 +29,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 在通用认证拦截器前恢复 OpenAPI 独立 JWT 或验证 OpenAPI MAC 请求。 */
-public class OpenApiAuthenticationInterceptor extends CallHandlerInterceptor {
+public class OpenApiAuthenticationInterceptor extends HttpCallHandlerInterceptor {
 
     /** OpenAPI MAC Client 标识请求头。 */
     public static final String CLIENT_ID_HEADER = "X-OpenApi-Client-Id";

@@ -89,7 +89,8 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="annotations">@AutoConfiguration(before=com.sca4d.core.spring.config.CoreSpringAutoConfiguration.class)
+<div class="type-signature"><span class="annotations">@AutoConfiguration(before=com.sca4d.core.spring.config.CoreSpringAutoConfiguration.class,
+                   afterName="com.sca4d.messaging.config.MessagingAutoConfiguration")
 @MapperScan(basePackageClasses=<a href="../recording/mapper/AuditMapper.html" title="interface in com.sca4d.audit.recording.mapper">AuditMapper.class</a>)
 @EnableConfigurationProperties(<a href="AuditProperties.html" title="class in com.sca4d.audit.config">AuditProperties.class</a>)
 @EnableTransactionManagement

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallExecution;
+import com.sca4d.core.api.call.CallOutcome;
 import com.sca4d.core.api.identity.SystemPrincipal;
 import com.sca4d.core.api.name.code.TreeCode;
 import org.junit.jupiter.api.DisplayName;
@@ -56,7 +57,7 @@ class AuditInvocationTest {
                 method,
                 new Object[0],
                 Object.class);
-        execution.succeed(result);
+        execution.recordOutcome(CallOutcome.success(result));
         return new AuditInvocation(execution, AuditResult.SUCCESS);
     }
 

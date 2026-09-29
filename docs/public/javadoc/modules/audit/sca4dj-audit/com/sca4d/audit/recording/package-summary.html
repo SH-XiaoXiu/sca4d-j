@@ -92,13 +92,33 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="AuditRepository.html" title="class in com.sca4d.audit.recording">AuditRepository</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="AuditMessage.html" title="class in com.sca4d.audit.recording">AuditMessage</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">请求消费者写入已经编码、脱敏并冻结的审计事实，消息 ID 作为数据库主键。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="AuditMessageCodec.html" title="class in com.sca4d.audit.recording">AuditMessageCodec</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">将已脱敏的审计字段编解码为稳定消息 JSON；不在消息中保留业务对象或执行实例。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="AuditMessageHandler.html" title="class in com.sca4d.audit.recording">AuditMessageHandler</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">独立事务追加审计，成功提交后确认消息；技术失败由 Messaging 重试并最终进入 DLQ。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="AuditRepository.html" title="class in com.sca4d.audit.recording">AuditRepository</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">向 `audit_record` 追加审计行，并按查询条件读取审计行。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="DatabaseAuditRecorder.html" title="class in com.sca4d.audit.recording">DatabaseAuditRecorder</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="DatabaseAuditRecorder.html" title="class in com.sca4d.audit.recording">DatabaseAuditRecorder</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">把 Core AuditRecord 同步追加到 audit_record。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="QueuedAuditRecorder.html" title="class in com.sca4d.audit.recording">QueuedAuditRecorder</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">在独立事务中把审计加入 Outbox，交接提交后返回，不等待 RabbitMQ 消费或审计落库。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SpringAuditResolverLookup.html" title="class in com.sca4d.audit.recording">SpringAuditResolverLookup</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">从 Spring 容器取得 `@Audit` 声明的目标解析器和 payload 工厂。</div>
 </div>
 </div>
 </div>

@@ -37,8 +37,8 @@ loadScripts(document, 'script');</script>
 <li>
 <p>Summary:</p>
 <ul>
-<li>Nested</li>
-<li>Field</li>
+<li><a href="#nested-class-summary">Nested</a></li>
+<li><a href="#field-summary">Field</a></li>
 <li><a href="#constructor-summary">Constr</a></li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
@@ -46,7 +46,7 @@ loadScripts(document, 'script');</script>
 <li>
 <p>Detail:</p>
 <ul>
-<li>Field</li>
+<li><a href="#field-detail">Field</a></li>
 <li><a href="#constructor-detail">Constr</a></li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -57,14 +57,14 @@ loadScripts(document, 'script');</script>
 <div id="navbar-sub-list">
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#nested-class-summary">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
 <ul class="sub-nav-list">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field-detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -91,12 +91,89 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">CallLifecycle</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">按固定生命周期执行声明解析结果、调用前评估、执行控制、成功检验和结果记录。
-
- <p>`CallExecution` 在进入本类前已经完成声明解析。本类不会恢复 Session、选择 Principal 或读取业务资源。</div>
+<div class="block">编排方法执行的环绕处理、短路、成功要求及结果记录；入口负责建立 Call 和线程绑定。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<li>
+<section class="nested-class-summary" id="nested-class-summary">
+<h2>Nested Class Summary</h2>
+<div class="caption"><span>Nested Classes</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="CallLifecycle.Around.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">包围剩余方法执行；允许明确重放或拒绝，不能隐式吞掉内层失败。</div>
+</div>
+<div class="col-first odd-row-color"><code>static @interface&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="CallLifecycle.Intercepted.html" class="type-name-link" title="annotation interface in com.sca4d.core.api.call">CallLifecycle.Intercepted</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">标记调用入口或功能注解；功能注解必须由所属功能注册，不能静默跳过。</div>
+</div>
+<div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="CallLifecycle.Next.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.Next</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">在当前线程继续内层处理，返回成功、重放、拒绝或失败，错误由结果携带。</div>
+</div>
+</div>
+</section>
+</li>
+<!-- =========== FIELD SUMMARY =========== -->
+<li>
+<section class="field-summary" id="field-summary">
+<h2>Field Summary</h2>
+<div class="caption"><span>Fields</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Field</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static final <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
+<div class="col-second even-row-color"><code><a href="#AUDIT" class="member-name-link">AUDIT</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">最外层的结果记录，必须看见所有拒绝、失败和重放。</div>
+</div>
+<div class="col-first odd-row-color"><code>static final <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#DECLARATION" class="member-name-link">DECLARATION</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">检查声明组合与认证前提。</div>
+</div>
+<div class="col-first even-row-color"><code>static final <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
+<div class="col-second even-row-color"><code><a href="#IDEMPOTENCY" class="member-name-link">IDEMPOTENCY</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">取得幂等处理权或重放结果。</div>
+</div>
+<div class="col-first odd-row-color"><code>static final <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#LOCK" class="member-name-link">LOCK</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">取得覆盖方法及内部事务的锁。</div>
+</div>
+<div class="col-first even-row-color"><code>static final <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
+<div class="col-second even-row-color"><code><a href="#PERMISSION" class="member-name-link">PERMISSION</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">解析和判断方法权限。</div>
+</div>
+<div class="col-first odd-row-color"><code>static final <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#PRINCIPAL" class="member-name-link">PRINCIPAL</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">在权限判断前确认调用主体；入口可以在此锚点之前挂载主体选择。</div>
+</div>
+<div class="col-first even-row-color"><code>static final <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
+<div class="col-second even-row-color"><code><a href="#RATE_LIMIT" class="member-name-link">RATE_LIMIT</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">消耗调用额度。</div>
+</div>
+<div class="col-first odd-row-color"><code>static final <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#REQUIREMENTS" class="member-name-link">REQUIREMENTS</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">在方法正常返回后、锁释放与幂等保存之前检查成功要求。</div>
+</div>
+</div>
+</section>
+</li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <li>
 <section class="constructor-summary" id="constructor-summary">
@@ -105,13 +182,9 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.call.PermissionCallAssessor,com.sca4d.core.api.call.RateLimitedCallAssessor,com.sca4d.core.api.call.IdempotentCallExecutor,com.sca4d.core.api.call.LockedCallExecutor,com.sca4d.core.api.call.AuditCallRecorder)" class="member-name-link">CallLifecycle</a><wbr>(<a href="PermissionCallAssessor.html" title="class in com.sca4d.core.api.call">PermissionCallAssessor</a>&nbsp;permissionAssessor,
- <a href="RateLimitedCallAssessor.html" title="class in com.sca4d.core.api.call">RateLimitedCallAssessor</a>&nbsp;rateLimitedAssessor,
- <a href="IdempotentCallExecutor.html" title="class in com.sca4d.core.api.call">IdempotentCallExecutor</a>&nbsp;idempotentExecutor,
- <a href="LockedCallExecutor.html" title="class in com.sca4d.core.api.call">LockedCallExecutor</a>&nbsp;lockedExecutor,
- <a href="AuditCallRecorder.html" title="class in com.sca4d.core.api.call">AuditCallRecorder</a>&nbsp;auditRecorder)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.List)" class="member-name-link">CallLifecycle</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends @NotNull <a href="CallLifecycle.Around.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a>&gt;&nbsp;registered)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建固定调用生命周期。</div>
+<div class="block">注册功能及应用的环绕处理，并补齐没有动作的排序锚点。</div>
 </div>
 </div>
 </section>
@@ -129,9 +202,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;T</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#execute(com.sca4d.core.api.call.CallExecution,java.util.concurrent.Callable)" class="member-name-link">execute</a><wbr>(<a href="CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;invocation)</code></div>
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;target)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">执行一次已经解析声明的方法调用。</div>
+<div class="block">同步完成方法执行和各环绕处理；返回 Future 只代表本次调度返回，不延伸事务或锁。</div>
 </div>
 </div>
 </div>
@@ -145,27 +218,86 @@ loadScripts(document, 'script');</script>
 </section>
 <section class="details">
 <ul class="details-list">
+<!-- ============ FIELD DETAIL =========== -->
+<li>
+<section class="field-details" id="field-detail">
+<h2>Field Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="AUDIT">
+<h3>AUDIT</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></span>&nbsp;<span class="element-name">AUDIT</span></div>
+<div class="block">最外层的结果记录，必须看见所有拒绝、失败和重放。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="DECLARATION">
+<h3>DECLARATION</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></span>&nbsp;<span class="element-name">DECLARATION</span></div>
+<div class="block">检查声明组合与认证前提。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="PRINCIPAL">
+<h3>PRINCIPAL</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></span>&nbsp;<span class="element-name">PRINCIPAL</span></div>
+<div class="block">在权限判断前确认调用主体；入口可以在此锚点之前挂载主体选择。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="PERMISSION">
+<h3>PERMISSION</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></span>&nbsp;<span class="element-name">PERMISSION</span></div>
+<div class="block">解析和判断方法权限。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="RATE_LIMIT">
+<h3>RATE_LIMIT</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></span>&nbsp;<span class="element-name">RATE_LIMIT</span></div>
+<div class="block">消耗调用额度。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="IDEMPOTENCY">
+<h3>IDEMPOTENCY</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></span>&nbsp;<span class="element-name">IDEMPOTENCY</span></div>
+<div class="block">取得幂等处理权或重放结果。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="LOCK">
+<h3>LOCK</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></span>&nbsp;<span class="element-name">LOCK</span></div>
+<div class="block">取得覆盖方法及内部事务的锁。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="REQUIREMENTS">
+<h3>REQUIREMENTS</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></span>&nbsp;<span class="element-name">REQUIREMENTS</span></div>
+<div class="block">在方法正常返回后、锁释放与幂等保存之前检查成功要求。</div>
+</section>
+</li>
+</ul>
+</section>
+</li>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <li>
 <section class="constructor-details" id="constructor-detail">
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.call.PermissionCallAssessor,com.sca4d.core.api.call.RateLimitedCallAssessor,com.sca4d.core.api.call.IdempotentCallExecutor,com.sca4d.core.api.call.LockedCallExecutor,com.sca4d.core.api.call.AuditCallRecorder)">
+<section class="detail" id="&lt;init&gt;(java.util.List)">
 <h3>CallLifecycle</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CallLifecycle</span><wbr><span class="parameters">(<a href="PermissionCallAssessor.html" title="class in com.sca4d.core.api.call">PermissionCallAssessor</a>&nbsp;permissionAssessor,
- <a href="RateLimitedCallAssessor.html" title="class in com.sca4d.core.api.call">RateLimitedCallAssessor</a>&nbsp;rateLimitedAssessor,
- <a href="IdempotentCallExecutor.html" title="class in com.sca4d.core.api.call">IdempotentCallExecutor</a>&nbsp;idempotentExecutor,
- <a href="LockedCallExecutor.html" title="class in com.sca4d.core.api.call">LockedCallExecutor</a>&nbsp;lockedExecutor,
- <a href="AuditCallRecorder.html" title="class in com.sca4d.core.api.call">AuditCallRecorder</a>&nbsp;auditRecorder)</span></div>
-<div class="block">创建固定调用生命周期。</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CallLifecycle</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends @NotNull <a href="CallLifecycle.Around.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a>&gt;&nbsp;registered)</span></div>
+<div class="block">注册功能及应用的环绕处理，并补齐没有动作的排序锚点。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>permissionAssessor</code> - 权限调用前评估器</dd>
-<dd><code>rateLimitedAssessor</code> - 限流调用前评估器</dd>
-<dd><code>idempotentExecutor</code> - 幂等执行控制器</dd>
-<dd><code>lockedExecutor</code> - 分布式锁执行控制器</dd>
-<dd><code>auditRecorder</code> - 调用结果记录器</dd>
+<dd><code>registered</code> - 各功能和应用提供的处理；编码唯一，前置及成功校验锚点不能替换</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 编码重复、依赖缺失、存在依赖环或替换校验锚点时抛出</dd>
 </dl>
 </section>
 </li>
@@ -182,19 +314,17 @@ loadScripts(document, 'script');</script>
 <h3>execute</h3>
 <div class="member-signature"><span class="annotations">@Nullable
 </span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name">execute</span><wbr><span class="parameters">(<a href="CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;invocation)</span>
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;target)</span>
               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
-<div class="block">执行一次已经解析声明的方法调用。</div>
+<div class="block">同步完成方法执行和各环绕处理；返回 Future 只代表本次调度返回，不延伸事务或锁。</div>
 <dl class="notes">
-<dt>Type Parameters:</dt>
-<dd><code>T</code> - 业务返回类型</dd>
 <dt>Parameters:</dt>
-<dd><code>execution</code> - 当前方法执行</dd>
-<dd><code>invocation</code> - 实际业务方法</dd>
+<dd><code>execution</code> - 当前方法的独立执行范围</dd>
+<dd><code>target</code> - 实际方法；可返回 null</dd>
 <dt>Returns:</dt>
-<dd>实际业务结果或已保存的幂等结果</dd>
+<dd>实际方法或重放的结果</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - 业务方法、调用控制或成功检验报告的失败</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - 原执行异常或完成处理失败</dd>
 </dl>
 </section>
 </li>

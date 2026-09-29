@@ -1,5 +1,6 @@
 package com.sca4d.core.api.annotation;
 
+import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.call.CallValueResolver;
 import com.sca4d.core.api.call.NoCallValueResolver;
 import com.sca4d.core.api.permission.Action;
@@ -24,6 +25,7 @@ import java.util.Collection;
 @Repeatable(RequirePermissions.class)
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
+@CallLifecycle.Intercepted
 public @interface RequirePermission {
 
     /**

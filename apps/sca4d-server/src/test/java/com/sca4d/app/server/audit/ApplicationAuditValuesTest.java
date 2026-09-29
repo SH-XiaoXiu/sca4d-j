@@ -21,6 +21,7 @@ import com.sca4d.core.api.audit.AuditResult;
 import com.sca4d.core.api.audit.NoAuditPayloadFactory;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallExecution;
+import com.sca4d.core.api.call.CallOutcome;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.spring.web.ApiResponse;
@@ -134,7 +135,8 @@ class ApplicationAuditValuesTest {
                 "dictionaryInvocation",
                 CreateDictionaryRequest.class);
         CallExecution execution = execution(method, request);
-        execution.deny(new BusinessException(SystemDictionaryErrorCode.DICTIONARY_KEY_EXISTS));
+        execution.recordOutcome(
+                CallOutcome.denied(new BusinessException(SystemDictionaryErrorCode.DICTIONARY_KEY_EXISTS)));
         AuditInvocation invocation = new AuditInvocation(execution, AuditResult.DENIED);
 
         AuditDetails details = (AuditDetails) new ApplicationAuditValues.DictionaryMutationDetails()
@@ -211,11 +213,11 @@ class ApplicationAuditValuesTest {
                             Long.class);
             CallExecution execution = execution(method, arguments);
             if (auditResult == AuditResult.SUCCESS) {
-                execution.succeed(result);
+                execution.recordOutcome(CallOutcome.success(result));
             } else if (auditResult == AuditResult.DENIED) {
-                execution.deny(new IllegalStateException("测试调用被拒绝"));
+                execution.recordOutcome(CallOutcome.denied(new IllegalStateException("测试调用被拒绝")));
             } else {
-                execution.fail(new IllegalStateException("测试调用失败"));
+                execution.recordOutcome(CallOutcome.failed(new IllegalStateException("测试调用失败")));
             }
             return new AuditInvocation(execution, auditResult);
         } catch (NoSuchMethodException exception) {

@@ -1,5 +1,6 @@
 package com.sca4d.audit.config;
 
+import com.sca4d.core.api.annotation.Audit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -8,9 +9,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/** 配置审计 payload 的最大字节数和需要递归掩码的字段名片段。 */
+/** 配置默认审计记录方式、payload 最大字节数和递归掩码字段。 */
 @ConfigurationProperties("sca4dj.audit")
 public class AuditProperties {
+    /** 未被方法或类型声明覆盖时使用的记录方式。 */
+    private @NotNull Audit.Mode mode = Audit.Mode.DIRECT;
+
+    /** 返回审计记录的写入或交接方式。 */
+    public @NotNull Audit.Mode getMode() {
+        return mode;
+    }
+
+    /** QUEUED 要求安装 MessageBus，不使用内存队列降级。 */
+    public void setMode(@NotNull Audit.Mode mode) {
+        if (mode == Audit.Mode.DEFAULT) {
+            throw new IllegalArgumentException("应用审计配置必须指定 DIRECT 或 QUEUED");
+        }
+        this.mode = Objects.requireNonNull(mode);
+    }
+
     private int maxPayloadBytes = 65_536;
 
     private @NotNull List<@NotNull String> sensitiveFields = new ArrayList<>(

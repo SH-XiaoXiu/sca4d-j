@@ -85,6 +85,10 @@ loadScripts(document, 'script');</script>
 <h1 title="Interface CallRequirement" class="title">Interface CallRequirement</h1>
 </div>
 <section class="class-description" id="class-description">
+<dl class="notes">
+<dt>All Known Implementing Classes:</dt>
+<dd><code><a href="../permission/ResourceScopeRequirement.html" title="class in com.sca4d.core.api.permission">ResourceScopeRequirement</a></code></dd>
+</dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">CallRequirement</span></div>
 <div class="block">表示业务方法成功前必须由调用过程满足的一项要求。</div>
@@ -107,9 +111,14 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">判断只读事务提交前是否需要检查当前要求。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#verifySatisfied()" class="member-name-link">verifySatisfied</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#verifyBeforeInvocation()" class="member-name-link">verifyBeforeInvocation</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="block">校验执行前提；在身份选择后、权限和执行控制前调用，不应修改外部状态。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#verifySatisfied()" class="member-name-link">verifySatisfied</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">校验当前要求已经满足。</div>
 </div>
 </div>
@@ -126,6 +135,13 @@ loadScripts(document, 'script');</script>
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="verifyBeforeInvocation()">
+<h3>verifyBeforeInvocation</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">verifyBeforeInvocation</span>()</div>
+<div class="block">校验执行前提；在身份选择后、权限和执行控制前调用，不应修改外部状态。</div>
+</section>
+</li>
 <li>
 <section class="detail" id="verifySatisfied()">
 <h3>verifySatisfied</h3>

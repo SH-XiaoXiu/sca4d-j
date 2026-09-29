@@ -26,6 +26,7 @@ import com.sca4d.core.api.permission.PermissionAssessment;
 import com.sca4d.core.api.permission.PermissionDecision;
 import com.sca4d.core.api.permission.PermissionPolicy;
 import com.sca4d.core.api.permission.ResourceScope;
+import com.sca4d.core.api.permission.ResourceScopeRequirement;
 import com.sca4d.core.api.permission.SessionOperationPermissionPolicy;
 import com.sca4d.core.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
@@ -56,12 +57,12 @@ class PermissionScopeTest {
         call.recordPermissionDecision(read, PermissionDecision.allow(readScope));
         call.recordPermissionDecision(update, PermissionDecision.allow(updateScope));
         CallExecution execution = execution(call);
-        execution.registerResourceScope(read);
-        execution.registerResourceScope(update);
+        ResourceScopeRequirement.register(execution, read);
+        ResourceScopeRequirement.register(execution, update);
 
-        assertSame(readScope, execution.consumeResourceScope(read, DeviceScope.class).orElseThrow());
-        assertSame(updateScope, execution.consumeResourceScope(update, DeviceScope.class).orElseThrow());
-        assertEquals("read", execution.consumeResourceScope(read, DeviceScope.class).orElseThrow().name);
+        assertSame(readScope, ResourceScopeRequirement.consume(execution, read, DeviceScope.class).orElseThrow());
+        assertSame(updateScope, ResourceScopeRequirement.consume(execution, update, DeviceScope.class).orElseThrow());
+        assertEquals("read", ResourceScopeRequirement.consume(execution, read, DeviceScope.class).orElseThrow().name);
         assertThrows(
                 IllegalStateException.class,
                 () -> call.recordPermissionDecision(read, PermissionDecision.allow(readScope)));
@@ -75,10 +76,10 @@ class PermissionScopeTest {
         Permission accounts = new Permission(new AccountResource("collection"), Action.READ);
         CallExecution execution = execution(call);
 
-        assertThrows(IllegalStateException.class, () -> execution.registerResourceScope(devices));
+        assertThrows(IllegalStateException.class, () -> ResourceScopeRequirement.register(execution, devices));
 
         call.recordPermissionDecision(devices, PermissionDecision.deny("设备读取被拒绝"));
-        assertThrows(IllegalStateException.class, () -> execution.registerResourceScope(devices));
+        assertThrows(IllegalStateException.class, () -> ResourceScopeRequirement.register(execution, devices));
         assertThrows(
                 IllegalStateException.class,
                 () -> call.recordPermissionDecision(accounts, PermissionDecision.allow(new DeviceScope("read"))));
@@ -86,10 +87,10 @@ class PermissionScopeTest {
         Call wrongType = Call.system("wrong-type", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")));
         wrongType.recordPermissionDecision(accounts, PermissionDecision.allow(new AccountScope()));
         CallExecution wrongTypeExecution = execution(wrongType);
-        wrongTypeExecution.registerResourceScope(accounts);
+        ResourceScopeRequirement.register(wrongTypeExecution, accounts);
         assertThrows(
                 IllegalStateException.class,
-                () -> wrongTypeExecution.consumeResourceScope(accounts, DeviceScope.class));
+                () -> ResourceScopeRequirement.consume(wrongTypeExecution, accounts, DeviceScope.class));
     }
 
     @Test

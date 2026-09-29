@@ -9,7 +9,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.app.server.audit.ApplicationAuditValues;
 import com.sca4d.app.server.audit.AuditDetails;
 import com.sca4d.app.server.controllers.FileController;
@@ -18,30 +17,31 @@ import com.sca4d.app.server.files.request.CreateFileAccessUrlsRequest;
 import com.sca4d.app.server.files.request.CreateFileUploadRequest;
 import com.sca4d.app.server.platform.PlatformAccountRecord;
 import com.sca4d.app.server.service.PlatformAccountApplicationService;
+import com.sca4d.audit.config.AuditAutoConfiguration;
+import com.sca4d.audit.recording.mapper.AuditMapper;
+import com.sca4d.core.api.annotation.Audit;
+import com.sca4d.core.api.audit.AuditCallInterceptor;
 import com.sca4d.core.api.audit.AuditPayloadFactory;
 import com.sca4d.core.api.audit.AuditRecord;
+import com.sca4d.core.api.audit.AuditRecorder;
 import com.sca4d.core.api.audit.AuditResolverLookup;
 import com.sca4d.core.api.audit.AuditResult;
 import com.sca4d.core.api.audit.AuditTargetResolver;
-import com.sca4d.core.api.call.AuditCallRecorder;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallExecution;
 import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.call.CallValueResolverLookup;
-import com.sca4d.core.api.call.IdempotentCallExecutor;
-import com.sca4d.core.api.call.LockedCallExecutor;
-import com.sca4d.core.api.call.PermissionCallAssessor;
-import com.sca4d.core.api.call.RateLimitedCallAssessor;
 import com.sca4d.core.api.concurrent.DistributedLock;
-import com.sca4d.core.api.concurrent.IdempotencyFingerprints;
 import com.sca4d.core.api.concurrent.IdempotencyStore;
 import com.sca4d.core.api.concurrent.RateLimiter;
 import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.identity.IdentityCallInterceptor;
 import com.sca4d.core.api.identity.SystemPrincipal;
 import com.sca4d.core.api.identity.SystemPrincipals;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.permission.Permission;
 import com.sca4d.core.api.permission.PermissionAssessment;
+import com.sca4d.core.api.permission.PermissionCallInterceptor;
 import com.sca4d.core.api.permission.PermissionDecision;
 import com.sca4d.core.api.permission.PermissionPolicy;
 import com.sca4d.core.api.resource.Resource;
@@ -49,6 +49,10 @@ import com.sca4d.core.api.storage.FileAccessUrl;
 import com.sca4d.core.api.storage.FileErrorCode;
 import com.sca4d.core.api.storage.FileUpload;
 import com.sca4d.core.api.storage.StoredFile;
+import com.sca4d.core.spring.call.CallHolder;
+import com.sca4d.core.spring.config.CoreJacksonAutoConfiguration;
+import com.sca4d.core.spring.config.CoreSpringAutoConfiguration;
+import com.sca4d.core.spring.config.InstanceProperties;
 import com.sca4d.core.spring.web.ApiResponse;
 import com.sca4d.iam.base.PlatformAccountEntry;
 import com.sca4d.iam.identity.IdentityStatus;
@@ -57,11 +61,14 @@ import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.autoconfigure.AutoConfigurations;
+import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
+import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
 
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.time.Clock;
-import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -99,6 +106,56 @@ class PlatformFileAuditContractTest {
         accounts = mock(PlatformAccountApplicationService.class);
         controller = new FileController(files, accounts);
         lifecycle = createLifecycle(null);
+    }
+
+    @Test
+    @DisplayName("Spring 组合核心与审计模块后执行资源权限并选择应用审计实现")
+    void appliesPermissionsAndApplicationAuditThroughSpring() {
+        new WebApplicationContextRunner()
+                .withConfiguration(
+                        AutoConfigurations.of(
+                                CoreJacksonAutoConfiguration.class,
+                                JacksonAutoConfiguration.class,
+                                WebMvcAutoConfiguration.class,
+                                AuditAutoConfiguration.class,
+                                CoreSpringAutoConfiguration.class))
+                .withPropertyValues(
+                        "spring.application.name=sca4d-test",
+                        "sca4dj.i18n.supported-locales[0]=zh-CN",
+                        "sca4dj.i18n.default-locale=zh-CN")
+                .withBean("auditMapper", AuditMapper.class, () -> mock(AuditMapper.class))
+                .withBean(InstanceProperties.class, InstanceProperties::new)
+                .withBean(Clock.class, () -> Clock.fixed(NOW, ZoneOffset.UTC))
+                .withBean(RateLimiter.class, () -> mock(RateLimiter.class))
+                .withBean(IdempotencyStore.class, () -> mock(IdempotencyStore.class))
+                .withBean(DistributedLock.class, () -> mock(DistributedLock.class))
+                .withBean("applicationAudit", AuditRecorder.class, () -> records::add)
+                .withBean(FileResourceResolver.class, FileResourceResolver::new)
+                .withBean(FileController.class, () -> controller)
+                .withBean(PermissionPolicy.class, () -> new PermissionPolicy() {
+                    @Override
+                    public boolean supports(@NotNull Resource resource) {
+                        return StoredFile.RESOURCE_TYPE.equals(resource.type());
+                    }
+
+                    @Override
+                    public @NotNull PermissionDecision decide(@NotNull Call call, @NotNull Permission permission) {
+                        assessedPermissions.add(permission);
+                        return PermissionDecision.allow();
+                    }
+                })
+                .run(context -> {
+                    assertThat(context).hasNotFailed();
+                    CallHolder.run(
+                            Call.system("assembled-audit", NOW),
+                            () -> context.getBean(FileController.class).completeUpload(101L, 1L));
+                    assertThat(assessedPermissions).singleElement()
+                            .satisfies(permission -> assertThat(permission.resource().id()).isEqualTo("101"));
+                    assertThat(records).singleElement()
+                            .satisfies(
+                                    record -> assertThat(record.operation().id())
+                                            .isEqualTo("STORAGE/FILE/UPLOAD/COMPLETE"));
+                });
     }
 
     @Test
@@ -301,16 +358,14 @@ class PlatformFileAuditContractTest {
             }
         };
         return new CallLifecycle(
-                new PermissionCallAssessor(new PermissionAssessment(List.of(applicationFiles)), resolvers),
-                new RateLimitedCallAssessor(mock(RateLimiter.class), resolvers),
-                new IdempotentCallExecutor(
-                        mock(IdempotencyStore.class),
-                        resolvers,
-                        new IdempotencyFingerprints(new ObjectMapper().findAndRegisterModules()),
-                        Duration.ofMinutes(5),
-                        Duration.ofSeconds(1)),
-                new LockedCallExecutor(mock(DistributedLock.class), resolvers),
-                new AuditCallRecorder(records::add, auditResolvers, Clock.fixed(NOW, ZoneOffset.UTC)));
+                List.of(
+                        new IdentityCallInterceptor(),
+                        new PermissionCallInterceptor(new PermissionAssessment(List.of(applicationFiles)), resolvers),
+                        new AuditCallInterceptor(
+                                List.of(records::add),
+                                Audit.Mode.DIRECT,
+                                auditResolvers,
+                                Clock.fixed(NOW, ZoneOffset.UTC))));
     }
 
     /** 建立当前 Controller 方法执行并交给固定调用生命周期。 */

@@ -136,9 +136,15 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">把即将进入生命周期的方法执行压入当前线程。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#set(com.sca4d.core.api.call.Call)" class="member-name-link">set</a><wbr>(com.sca4d.core.api.call.Call&nbsp;call)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;T</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#run(com.sca4d.core.api.call.Call,java.util.concurrent.Callable)" class="member-name-link">run</a><wbr>(com.sca4d.core.api.call.Call&nbsp;call,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;task)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">在当前线程为明确提供的独立 Call 执行任务，结束后恢复原线程绑定及 MDC。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#set(com.sca4d.core.api.call.Call)" class="member-name-link">set</a><wbr>(com.sca4d.core.api.call.Call&nbsp;call)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">绑定当前线程唯一的调用。</div>
 </div>
 </div>
@@ -232,6 +238,28 @@ loadScripts(document, 'script');</script>
 <h3>clear</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">clear</span>()</div>
 <div class="block">清理当前线程的调用和方法执行栈。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="run(com.sca4d.core.api.call.Call,java.util.concurrent.Callable)">
+<h3>run</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name">run</span><wbr><span class="parameters">(com.sca4d.core.api.call.Call&nbsp;call,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;task)</span>
+                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
+<div class="block">在当前线程为明确提供的独立 Call 执行任务，结束后恢复原线程绑定及 MDC。
+
+ <p>此方法不调度线程；已有调用派生的工作使用 Call.fork，自主系统任务使用 Call.system。
+ 每项工作独立使用一个 Call，不复制事务或方法执行栈，也不改变当前线程已经存在的事务。
+ 业务方法仍通过统一生命周期切面执行。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>call</code> - 仅由当前任务使用的独立调用</dd>
+<dd><code>task</code> - 当前线程执行的完整任务</dd>
+<dt>Returns:</dt>
+<dd>任务结果</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - 原始任务异常</dd>
+</dl>
 </section>
 </li>
 </ul>

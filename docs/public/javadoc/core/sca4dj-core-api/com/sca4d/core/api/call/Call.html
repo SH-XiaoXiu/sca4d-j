@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">Call</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">保存一次 HTTP、消息或任务调用已经确认的信息、身份和权限判定。</div>
+<div class="block">保存入口界定的一次往返的输入快照、目标资源、身份和权限判定；不解释传输协议。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -108,11 +108,12 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">创建尚未认证的调用。</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.time.Instant,com.sca4d.core.api.audit.HttpCall)" class="member-name-link">Call</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callId,
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.time.Instant,com.sca4d.core.api.data.DataValues,com.sca4d.core.api.resource.Resource)" class="member-name-link">Call</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callId,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;startedAt,
- @Nullable <a href="../audit/HttpCall.html" title="class in com.sca4d.core.api.audit">HttpCall</a>&nbsp;httpCall)</code></div>
+ @NotNull <a href="../data/DataValues.html" title="class in com.sca4d.core.api.data">DataValues</a>&nbsp;inputs,
+ @Nullable <a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&nbsp;targetResource)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">创建带有 HTTP 请求快照、尚未认证的调用。</div>
+<div class="block">创建带有类型化入口数据和可选目标资源、尚未认证的调用。</div>
 </div>
 </div>
 </section>
@@ -139,18 +140,53 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#callId()" class="member-name-link">callId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#grants(com.sca4d.core.api.resource.Resource)" class="member-name-link">grants</a><wbr>(<a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&nbsp;resource)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fork()" class="member-name-link">fork</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">判断当前 Principal 的静态资源视图是否包含指定资源。</div>
+<div class="block">以独立标识和当前时间创建身份相同的任务调用，不继承输入、主要资源或权限判定。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fork(com.sca4d.core.api.data.DataValues)" class="member-name-link">fork</a><wbr>(@NotNull <a href="../data/DataValues.html" title="class in com.sca4d.core.api.data">DataValues</a>&nbsp;inputs)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">为明确输入的任务创建独立调用，主要资源未指定。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fork(com.sca4d.core.api.data.DataValues,com.sca4d.core.api.resource.Resource)" class="member-name-link">fork</a><wbr>(@NotNull <a href="../data/DataValues.html" title="class in com.sca4d.core.api.data">DataValues</a>&nbsp;inputs,
+ @Nullable <a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&nbsp;targetResource)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">为明确输入和主要资源的任务生成独立调用标识及当前开始时间。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fork(java.lang.String,java.time.Instant)" class="member-name-link">fork</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;startedAt)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">使用入口指定的标识和时间创建独立调用，不继承传输数据或目标资源。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fork(java.lang.String,java.time.Instant,com.sca4d.core.api.data.DataValues,com.sca4d.core.api.resource.Resource)" class="member-name-link">fork</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;startedAt,
+ @NotNull <a href="../data/DataValues.html" title="class in com.sca4d.core.api.data">DataValues</a>&nbsp;inputs,
+ @Nullable <a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&nbsp;targetResource)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">为异步工作建立独立调用，复制已确认身份而不复制权限结论或传输数据。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#grants(java.lang.String)" class="member-name-link">grants</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;operationCode)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#grants(com.sca4d.core.api.resource.Resource)" class="member-name-link">grants</a><wbr>(<a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&nbsp;resource)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">判断当前 Principal 的静态资源视图是否包含指定资源。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#grants(java.lang.String)" class="member-name-link">grants</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;operationCode)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">判断当前 Principal 的静态资源视图是否包含指定 Operation。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../audit/HttpCall.html" title="class in com.sca4d.core.api.audit">HttpCall</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#httpCall()" class="member-name-link">httpCall</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;T&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#input(com.sca4d.core.api.data.DataKey)" class="member-name-link">input</a><wbr>(@NotNull <a href="../data/DataKey.html" title="class in com.sca4d.core.api.data">DataKey</a>&lt;T&gt;&nbsp;key)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">按入口声明的键读取快照；当前入口没有提供时返回空。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../data/DataValues.html" title="class in com.sca4d.core.api.data">DataValues</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#inputs()" class="member-name-link">inputs</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isAuthenticationAssessed()" class="member-name-link">isAuthenticationAssessed</a>()</code></div>
@@ -158,47 +194,53 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isPrincipalAssessed()" class="member-name-link">isPrincipalAssessed</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../permission/PermissionDecision.html" title="class in com.sca4d.core.api.permission">PermissionDecision</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#permissionDecision(com.sca4d.core.api.permission.Permission)" class="member-name-link">permissionDecision</a><wbr>(<a href="../permission/Permission.html" title="class in com.sca4d.core.api.permission">Permission</a>&nbsp;permission)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parentCallId()" class="member-name-link">parentCallId</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../permission/PermissionDecision.html" title="class in com.sca4d.core.api.permission">PermissionDecision</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#permissionDecision(com.sca4d.core.api.permission.Permission)" class="member-name-link">permissionDecision</a><wbr>(<a href="../permission/Permission.html" title="class in com.sca4d.core.api.permission">Permission</a>&nbsp;permission)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">返回指定权限在当前调用中的判定。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../identity/Principal.html" title="interface in com.sca4d.core.api.identity">Principal</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#principal()" class="member-name-link">principal</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#recordPermissionDecision(com.sca4d.core.api.permission.Permission,com.sca4d.core.api.permission.PermissionDecision)" class="member-name-link">recordPermissionDecision</a><wbr>(<a href="../permission/Permission.html" title="class in com.sca4d.core.api.permission">Permission</a>&nbsp;permission,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../identity/Principal.html" title="interface in com.sca4d.core.api.identity">Principal</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#principal()" class="member-name-link">principal</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#recordPermissionDecision(com.sca4d.core.api.permission.Permission,com.sca4d.core.api.permission.PermissionDecision)" class="member-name-link">recordPermissionDecision</a><wbr>(<a href="../permission/Permission.html" title="class in com.sca4d.core.api.permission">Permission</a>&nbsp;permission,
  <a href="../permission/PermissionDecision.html" title="class in com.sca4d.core.api.permission">PermissionDecision</a>&nbsp;decision)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">保存权限策略对当前调用作出的唯一判定。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#selectPrincipal(com.sca4d.core.api.identity.Principal)" class="member-name-link">selectPrincipal</a><wbr>(<a href="../identity/Principal.html" title="interface in com.sca4d.core.api.identity">Principal</a>&nbsp;principal)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#selectPrincipal(com.sca4d.core.api.identity.Principal)" class="member-name-link">selectPrincipal</a><wbr>(<a href="../identity/Principal.html" title="interface in com.sca4d.core.api.identity">Principal</a>&nbsp;principal)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">选择本次调用使用的业务主体，并绑定 Session 中属于所选主体的静态资源。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../authentication/Session.html" title="class in com.sca4d.core.api.authentication">Session</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#session()" class="member-name-link">session</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#startedAt()" class="member-name-link">startedAt</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../authentication/Session.html" title="class in com.sca4d.core.api.authentication">Session</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#session()" class="member-name-link">session</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../identity/Subject.html" title="class in com.sca4d.core.api.identity">Subject</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#subject()" class="member-name-link">subject</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#startedAt()" class="member-name-link">startedAt</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#system(java.lang.String,java.time.Instant)" class="member-name-link">system</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callId,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../identity/Subject.html" title="class in com.sca4d.core.api.identity">Subject</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#subject()" class="member-name-link">subject</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#system(java.lang.String,java.time.Instant)" class="member-name-link">system</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callId,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;startedAt)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">创建使用固定系统身份的任务调用。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#system(java.lang.String,java.time.Instant,com.sca4d.core.api.identity.SystemPrincipal)" class="member-name-link">system</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callId,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#system(java.lang.String,java.time.Instant,com.sca4d.core.api.identity.SystemPrincipal)" class="member-name-link">system</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callId,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;startedAt,
  <a href="../identity/SystemPrincipal.html" title="class in com.sca4d.core.api.identity">SystemPrincipal</a>&nbsp;principal)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">使用已经确认的领域 Principal 建立系统调用，不赋予额外权限。</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#targetResource()" class="member-name-link">targetResource</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -230,18 +272,21 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(java.lang.String,java.time.Instant,com.sca4d.core.api.audit.HttpCall)">
+<section class="detail" id="&lt;init&gt;(java.lang.String,java.time.Instant,com.sca4d.core.api.data.DataValues,com.sca4d.core.api.resource.Resource)">
 <h3>Call</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">Call</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callId,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;startedAt,
+ @NotNull
+ @NotNull <a href="../data/DataValues.html" title="class in com.sca4d.core.api.data">DataValues</a>&nbsp;inputs,
  @Nullable
- @Nullable <a href="../audit/HttpCall.html" title="class in com.sca4d.core.api.audit">HttpCall</a>&nbsp;httpCall)</span></div>
-<div class="block">创建带有 HTTP 请求快照、尚未认证的调用。</div>
+ @Nullable <a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&nbsp;targetResource)</span></div>
+<div class="block">创建带有类型化入口数据和可选目标资源、尚未认证的调用。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>callId</code> - 调用链中的调用标识</dd>
 <dd><code>startedAt</code> - 调用开始时间</dd>
-<dd><code>httpCall</code> - 可选 HTTP 请求快照；消息和任务调用为空</dd>
+<dd><code>inputs</code> - 入口已采集的快照；所含值必须在调用期间保持不变</dd>
+<dd><code>targetResource</code> - 已明确的主要目标；不能从协议路径猜测</dd>
 </dl>
 </section>
 </li>
@@ -253,6 +298,69 @@ loadScripts(document, 'script');</script>
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="fork()">
+<h3>fork</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></span>&nbsp;<span class="element-name">fork</span>()</div>
+<div class="block">以独立标识和当前时间创建身份相同的任务调用，不继承输入、主要资源或权限判定。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="fork(com.sca4d.core.api.data.DataValues)">
+<h3>fork</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></span>&nbsp;<span class="element-name">fork</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../data/DataValues.html" title="class in com.sca4d.core.api.data">DataValues</a>&nbsp;inputs)</span></div>
+<div class="block">为明确输入的任务创建独立调用，主要资源未指定。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="fork(com.sca4d.core.api.data.DataValues,com.sca4d.core.api.resource.Resource)">
+<h3>fork</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></span>&nbsp;<span class="element-name">fork</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../data/DataValues.html" title="class in com.sca4d.core.api.data">DataValues</a>&nbsp;inputs,
+ @Nullable
+ @Nullable <a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&nbsp;targetResource)</span></div>
+<div class="block">为明确输入和主要资源的任务生成独立调用标识及当前开始时间。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="fork(java.lang.String,java.time.Instant)">
+<h3>fork</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></span>&nbsp;<span class="element-name">fork</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callId,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;startedAt)</span></div>
+<div class="block">使用入口指定的标识和时间创建独立调用，不继承传输数据或目标资源。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="fork(java.lang.String,java.time.Instant,com.sca4d.core.api.data.DataValues,com.sca4d.core.api.resource.Resource)">
+<h3>fork</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></span>&nbsp;<span class="element-name">fork</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callId,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;startedAt,
+ @NotNull
+ @NotNull <a href="../data/DataValues.html" title="class in com.sca4d.core.api.data">DataValues</a>&nbsp;inputs,
+ @Nullable
+ @Nullable <a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&nbsp;targetResource)</span></div>
+<div class="block">为异步工作建立独立调用，复制已确认身份而不复制权限结论或传输数据。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>callId</code> - 新调用标识，必须与原调用不同</dd>
+<dd><code>startedAt</code> - 新调用开始时间</dd>
+<dd><code>inputs</code> - 异步任务明确需要的不可变输入</dd>
+<dd><code>targetResource</code> - 异步任务的目标资源</dd>
+<dt>Returns:</dt>
+<dd>没有共享可变调用状态的新调用</dd>
+</dl>
+</section>
+</li>
 <li>
 <section class="detail" id="system(java.lang.String,java.time.Instant)">
 <h3>system</h3>
@@ -390,13 +498,48 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="httpCall()">
-<h3>httpCall</h3>
+<section class="detail" id="inputs()">
+<h3>inputs</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../audit/HttpCall.html" title="class in com.sca4d.core.api.audit">HttpCall</a>&gt;</span>&nbsp;<span class="element-name">httpCall</span>()</div>
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../data/DataValues.html" title="class in com.sca4d.core.api.data">DataValues</a></span>&nbsp;<span class="element-name">inputs</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>HTTP 调用返回请求快照，消息和任务调用返回空</dd>
+<dd>入口采集的类型化数据，不包含隐式传输对象</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="input(com.sca4d.core.api.data.DataKey)">
+<h3>input</h3>
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</span>&nbsp;<span class="element-name">input</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../data/DataKey.html" title="class in com.sca4d.core.api.data">DataKey</a>&lt;T&gt;&nbsp;key)</span></div>
+<div class="block">按入口声明的键读取快照；当前入口没有提供时返回空。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="targetResource()">
+<h3>targetResource</h3>
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&gt;</span>&nbsp;<span class="element-name">targetResource</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>已确定的主要目标，不能代替 Permission 中的资源和动作</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="parentCallId()">
+<h3>parentCallId</h3>
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">parentCallId</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>异步工作发起者的标识，不持有发起者的可变 Call</dd>
 </dl>
 </section>
 </li>

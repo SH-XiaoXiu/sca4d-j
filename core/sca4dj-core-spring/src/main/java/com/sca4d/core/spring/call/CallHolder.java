@@ -3,11 +3,14 @@ package com.sca4d.core.spring.call;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallExecution;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.MDC;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.Callable;
 
 /** 保存当前线程的 `Call` 以及正在执行的嵌套 `CallExecution`。 */
 public class CallHolder {
@@ -88,6 +91,46 @@ public class CallHolder {
     /** 清理当前线程的调用和方法执行栈。 */
     public static void clear() {
         CURRENT.remove();
+    }
+
+    /**
+     * 在当前线程为明确提供的独立 Call 执行任务，结束后恢复原线程绑定及 MDC。
+     *
+     * <p>此方法不调度线程；已有调用派生的工作使用 Call.fork，自主系统任务使用 Call.system。
+     * 每项工作独立使用一个 Call，不复制事务或方法执行栈，也不改变当前线程已经存在的事务。
+     * 业务方法仍通过统一生命周期切面执行。
+     *
+     * @param call 仅由当前任务使用的独立调用
+     * @param task 当前线程执行的完整任务
+     * @return 任务结果
+     * @throws Exception 原始任务异常
+     */
+    public static <T> T run(Call call, Callable<T> task) throws Exception {
+        Objects.requireNonNull(call);
+        Objects.requireNonNull(task);
+        State previous = CURRENT.get();
+        if (previous != null && previous.call == call) {
+            throw new IllegalStateException("不能把活动 Call 当作独立任务重复绑定");
+        }
+        Map<String, String> before = MDC.getCopyOfContextMap();
+        CURRENT.set(new State(call));
+        MDC.clear();
+        MDC.put("callId", call.callId());
+        call.parentCallId().ifPresent(id -> MDC.put("parentCallId", id));
+        try {
+            return task.call();
+        } finally {
+            if (previous == null) {
+                CURRENT.remove();
+            } else {
+                CURRENT.set(previous);
+            }
+            if (before == null) {
+                MDC.clear();
+            } else {
+                MDC.setContextMap(before);
+            }
+        }
     }
 
     /**

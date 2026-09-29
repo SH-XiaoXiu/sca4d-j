@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /**
- * 使用固定名称和运行时类型标识 DataGraph 中的一个值。
+ * 使用固定名称和运行时类型标识一个数据值，供 DataGraph 输入输出和 Call 入口快照使用。
  *
  * @param <T> 该键允许读写的值类型
  */

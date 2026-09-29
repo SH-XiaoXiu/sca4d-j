@@ -5,7 +5,7 @@ import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.identity.SubjectType;
 import com.sca4d.core.api.name.code.TreeCode;
-import com.sca4d.core.spring.call.CallHandlerInterceptor;
+import com.sca4d.core.spring.web.HttpCallHandlerInterceptor;
 import com.sca4d.openapi.web.annotation.OpenApiRoute;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,7 +16,7 @@ import org.springframework.web.method.HandlerMethod;
 import java.util.Objects;
 
 /** 在普通 Spring MVC Handler 与 Core 权限切面之间检查 OpenAPI Client 身份及开放 Operation。 */
-public class OpenApiRequestInterceptor extends CallHandlerInterceptor {
+public class OpenApiRequestInterceptor extends HttpCallHandlerInterceptor {
 
     private final @NotNull OpenApiClientOperationChecker checker;
 

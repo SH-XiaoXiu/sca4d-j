@@ -4,9 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.core.api.audit.HttpCall;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallExecution;
 import com.sca4d.core.api.concurrent.IdempotencyFingerprints;
+import com.sca4d.core.api.data.DataValues;
 import com.sca4d.core.api.identity.SystemPrincipal;
 import com.sca4d.core.api.name.code.TreeCode;
 import org.junit.jupiter.api.AfterEach;
@@ -23,7 +25,7 @@ import java.util.Objects;
 
 class IdempotencyKeyResolverTest {
 
-    private final Call call = Call
+    private Call call = Call
             .system("idempotency-test", Instant.EPOCH, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")));
 
     @AfterEach
@@ -37,6 +39,7 @@ class IdempotencyKeyResolverTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader(HttpIdempotencyKeyResolver.HEADER, "  create-account-1  ");
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+        bindHttpInput(request);
 
         assertEquals(
                 "create-account-1",
@@ -48,6 +51,7 @@ class IdempotencyKeyResolverTest {
     void rejectsInvalidHttpHeader() {
         MockHttpServletRequest missing = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(missing));
+        bindHttpInput(missing);
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new HttpIdempotencyKeyResolver().resolve(execution(new Object[0])));
@@ -55,6 +59,7 @@ class IdempotencyKeyResolverTest {
         MockHttpServletRequest invalid = new MockHttpServletRequest();
         invalid.addHeader(HttpIdempotencyKeyResolver.HEADER, "create\u0001account");
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(invalid));
+        bindHttpInput(invalid);
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new HttpIdempotencyKeyResolver().resolve(execution(new Object[0])));
@@ -80,6 +85,18 @@ class IdempotencyKeyResolverTest {
         } catch (NoSuchMethodException exception) {
             throw new AssertionError(exception);
         }
+    }
+
+    /** 模拟 HTTP Filter 采集不可变数据，解析器不再依赖 Servlet ThreadLocal。 */
+    private void bindHttpInput(MockHttpServletRequest request) {
+        DataValues.Builder inputs = DataValues.builder()
+                .put(HttpCall.KEY, new HttpCall("POST", "/test", "127.0.0.1", null));
+        String header = request.getHeader(HttpIdempotencyKeyResolver.HEADER);
+        if (header != null) {
+            inputs.put(HttpIdempotencyKeyResolver.KEY, header);
+        }
+        call = new Call("http-input", Instant.EPOCH, inputs.build(), null);
+        RequestContextHolder.resetRequestAttributes();
     }
 
     private void invoke(Object value) {

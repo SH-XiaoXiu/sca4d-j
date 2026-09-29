@@ -55,7 +55,7 @@
 
 `noContent()` 不写 JSON 响应体；客户端不能在 204 后继续解析 `ApiResponse.data`。
 
-`responseStatus` 和 `responseHeaders` 只用于生成 HTTP 响应，不进入 JSON。幂等存储同时保存成功结果的 HTTP 状态和响应头；重放时恢复首次执行的状态、Location 和 ETag，不把这些元数据退化成默认 200。`CallFilter` 始终为当前请求写入 `X-Call-Id`，重放结果不能用首次执行的 `callId` 覆盖它。
+`responseStatus` 和 `responseHeaders` 只用于生成 HTTP 响应，不进入 JSON。幂等存储同时保存成功结果的 HTTP 状态和响应头；重放时恢复首次执行的状态、Location 和 ETag，不把这些元数据退化成默认 200。`HttpCallFilter` 始终为当前请求写入 `X-Call-Id`，重放结果不能用首次执行的 `callId` 覆盖它。
 
 ### HTTP 缓存与代理
 
@@ -147,7 +147,7 @@ Core Spring 自己声明的 HTTP 错误如下：
 
 ## X-Call-Id
 
-客户端可以发送 `X-Call-Id`。只有匹配 `[A-Za-z0-9._-]{1,128}` 的值才会被保留；缺失或格式不正确时，CallFilter 生成 UUID。最终值同时写入：
+客户端可以发送 `X-Call-Id`。只有匹配 `[A-Za-z0-9._-]{1,128}` 的值才会被保留；缺失或格式不正确时，HttpCallFilter 生成 UUID。最终值同时写入：
 
 - HTTP 响应头 `X-Call-Id`；
 - ApiResponse 的 `callId`，发布强 ETag 的成功响应除外；
@@ -209,7 +209,7 @@ ETag: "3"
 If-Match: "3"
 ```
 
-[RFC 9110 的 If-Match](https://www.rfc-editor.org/rfc/rfc9110.html#section-13.1.1)用于避免客户端根据过期内容覆盖较新的修改。[IfMatchInterceptor](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/web/IfMatchInterceptor.html) 把一个强 ETag 绑定到 RequestVersionConditions，CallLifecycleAspect 再把它登记为对应方法执行的成功要求。根资源 Repository 读取当前对象后调用 `VersionConditions.resolve(currentVersion)`；Controller 和 Service 不声明 HTTP Version 参数。写入事务提交前会检查版本条件已经消费，业务方法正常返回后也会再次检查。写入返回稳定资源 View 时，由 View 的 `@ETag` 方法发布新版本；204 响应由 Controller 使用修改后的 `Version` 调用 `ApiResponse.noContent(version)`。
+[RFC 9110 的 If-Match](https://www.rfc-editor.org/rfc/rfc9110.html#section-13.1.1)用于避免客户端根据过期内容覆盖较新的修改。[IfMatchInterceptor](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/web/IfMatchInterceptor.html) 把一个强 ETag 绑定到 RequestVersionConditions。CallLifecycleAdvisor 使用该对象注册的 IfMatch 声明，把它登记为对应方法执行的成功要求。根资源 Repository 读取当前对象后调用 `VersionConditions.resolve(currentVersion)`；Controller 和 Service 不声明 HTTP Version 参数。写入事务提交前会检查版本条件已经消费，业务方法正常返回后也会再次检查。写入返回稳定资源 View 时，由 View 的 `@ETag` 方法发布新版本；204 响应由 Controller 使用修改后的 `Version` 调用 `ApiResponse.noContent(version)`。
 
 | 结果 | HTTP 状态 | 含义 |
 |---|---:|---|
@@ -251,4 +251,4 @@ SSE 连接建立后的事件、心跳、超时和断开方式由具体 SSE 路�
 
 ## 响应生成位置
 
-[CallFilter](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/call/CallFilter.html) 在 Controller 之前确定 `callId`。[ApiResponse](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/web/ApiResponse.html) 保存 JSON 字段和 HTTP 状态、Location、ETag；ApiResponseAdvice 将元数据写入响应。异常由 [GlobalExceptionHandler](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/web/GlobalExceptionHandler.html) 转换为失败响应，ClientStateResponseAdvice 写入当前请求登记的客户端状态响应头。请求结束后清理调用与客户端状态数据。
+[HttpCallFilter](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/web/HttpCallFilter.html) 在 Controller 之前确定 `callId`。[ApiResponse](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/web/ApiResponse.html) 保存 JSON 字段和 HTTP 状态、Location、ETag；ApiResponseAdvice 将元数据写入响应。异常由 [GlobalExceptionHandler](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/web/GlobalExceptionHandler.html) 转换为失败响应，ClientStateResponseAdvice 写入当前请求登记的客户端状态响应头。请求结束后清理调用与客户端状态数据。

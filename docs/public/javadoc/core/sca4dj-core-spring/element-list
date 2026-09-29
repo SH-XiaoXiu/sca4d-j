@@ -8,6 +8,7 @@ com.sca4d.core.spring.identity
 com.sca4d.core.spring.json
 com.sca4d.core.spring.logging
 com.sca4d.core.spring.openapi
+com.sca4d.core.spring.permission
 com.sca4d.core.spring.persistence.batch
 com.sca4d.core.spring.persistence.mybatis
 com.sca4d.core.spring.redis

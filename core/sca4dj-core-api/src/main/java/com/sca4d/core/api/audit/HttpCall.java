@@ -1,5 +1,6 @@
 package com.sca4d.core.api.audit;
 
+import com.sca4d.core.api.data.DataKey;
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +11,9 @@ import java.util.Optional;
 /** 保存审计记录需要的 HTTP 方法、请求路径、客户端地址和 User-Agent 快照。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public class HttpCall {
+    /** HTTP 入口采集的审计与限流快照键，Call 本身不解释该数据。 */
+    public static final @NotNull DataKey<HttpCall> KEY = DataKey.of("http", HttpCall.class);
+
     /** User-Agent 写入审计记录前允许保留的最大字符数。 */
     public static final int USER_AGENT_MAX_LENGTH = 512;
 
@@ -78,7 +82,7 @@ public class HttpCall {
         for (int index = 0; index < value.length() && cleaned.length() < USER_AGENT_MAX_LENGTH; index++) {
             char character = value.charAt(index);
             if (Character.isISOControl(character) || Character.isWhitespace(character)) {
-                pendingSpace = cleaned.length() > 0;
+                pendingSpace = !cleaned.isEmpty();
                 continue;
             }
             if (pendingSpace && cleaned.length() + 1 < USER_AGENT_MAX_LENGTH) {

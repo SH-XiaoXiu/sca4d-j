@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="annotations">@ConfigurationProperties("sca4dj.audit")
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">AuditProperties</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">配置审计 payload 的最大字节数和需要递归掩码的字段名片段。</div>
+<div class="block">配置默认审计记录方式、payload 最大字节数和递归掩码字段。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -125,15 +125,25 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">返回单条 payload 允许保存的最大 UTF-8 字节数。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSensitiveFields()" class="member-name-link">getSensitiveFields</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>com.sca4d.core.api.annotation.Audit.Mode</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMode()" class="member-name-link">getMode</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">返回审计记录的写入或交接方式。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSensitiveFields()" class="member-name-link">getSensitiveFields</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">返回不区分大小写匹配的敏感字段片段。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setMaxPayloadBytes(int)" class="member-name-link">setMaxPayloadBytes</a><wbr>(int&nbsp;maxPayloadBytes)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setMaxPayloadBytes(int)" class="member-name-link">setMaxPayloadBytes</a><wbr>(int&nbsp;maxPayloadBytes)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">设置单条 payload 允许保存的最大 UTF-8 字节数。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setMode(com.sca4d.core.api.annotation.Audit.Mode)" class="member-name-link">setMode</a><wbr>(com.sca4d.core.api.annotation.Audit.Mode&nbsp;mode)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">QUEUED 要求安装 MessageBus，不使用内存队列降级。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setSensitiveFields(java.util.List)" class="member-name-link">setSensitiveFields</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;sensitiveFields)</code></div>
@@ -171,6 +181,22 @@ loadScripts(document, 'script');</script>
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="getMode()">
+<h3>getMode</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.api.annotation.Audit.Mode</span>&nbsp;<span class="element-name">getMode</span>()</div>
+<div class="block">返回审计记录的写入或交接方式。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setMode(com.sca4d.core.api.annotation.Audit.Mode)">
+<h3>setMode</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setMode</span><wbr><span class="parameters">(@NotNull
+ com.sca4d.core.api.annotation.Audit.Mode&nbsp;mode)</span></div>
+<div class="block">QUEUED 要求安装 MessageBus，不使用内存队列降级。</div>
+</section>
+</li>
 <li>
 <section class="detail" id="getMaxPayloadBytes()">
 <h3>getMaxPayloadBytes</h3>

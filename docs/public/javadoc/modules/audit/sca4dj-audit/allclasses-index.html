@@ -67,45 +67,65 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">读写 `audit_record` 的审计列，并提供按条件统计、分页和单条查询。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/payload/AuditPayloadData.html" title="class in com.sca4d.audit.payload">AuditPayloadData</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/recording/AuditMessage.html" title="class in com.sca4d.audit.recording">AuditMessage</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">请求消费者写入已经编码、脱敏并冻结的审计事实，消息 ID 作为数据库主键。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/recording/AuditMessageCodec.html" title="class in com.sca4d.audit.recording">AuditMessageCodec</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">将已脱敏的审计字段编解码为稳定消息 JSON；不在消息中保留业务对象或执行实例。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/recording/AuditMessageHandler.html" title="class in com.sca4d.audit.recording">AuditMessageHandler</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">独立事务追加审计，成功提交后确认消息；技术失败由 Messaging 重试并最终进入 DLQ。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/payload/AuditPayloadData.html" title="class in com.sca4d.audit.payload">AuditPayloadData</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">返回审计 payload 的持久化类型、版本、原始 JSON 和可选强类型结果。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/payload/AuditPayloadJson.html" title="class in com.sca4d.audit.payload">AuditPayloadJson</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/payload/AuditPayloadJson.html" title="class in com.sca4d.audit.payload">AuditPayloadJson</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用 Raw JSON 或可选 Codec 编码、脱敏、限制并读取审计 payload。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/payload/AuditPayloadRegistry.html" title="class in com.sca4d.audit.payload">AuditPayloadRegistry</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/payload/AuditPayloadRegistry.html" title="class in com.sca4d.audit.payload">AuditPayloadRegistry</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">校验并索引应用注册的审计 payload Codec。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/config/AuditProperties.html" title="class in com.sca4d.audit.config">AuditProperties</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">配置审计 payload 的最大字节数和需要递归掩码的字段名片段。</div>
-</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/query/AuditQuery.html" title="class in com.sca4d.audit.query">AuditQuery</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/config/AuditProperties.html" title="class in com.sca4d.audit.config">AuditProperties</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">配置默认审计记录方式、payload 最大字节数和递归掩码字段。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/query/AuditQuery.html" title="class in com.sca4d.audit.query">AuditQuery</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存审计记录分页查询使用的可选身份、操作、结果、目标和时间条件。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/query/AuditQueryService.html" title="class in com.sca4d.audit.query">AuditQueryService</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/query/AuditQueryService.html" title="class in com.sca4d.audit.query">AuditQueryService</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">按标识或筛选条件读取 `audit_record` 中的审计记录。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/recording/AuditRepository.html" title="class in com.sca4d.audit.recording">AuditRepository</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/recording/AuditRepository.html" title="class in com.sca4d.audit.recording">AuditRepository</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">向 `audit_record` 追加审计行，并按查询条件读取审计行。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/recording/DatabaseAuditRecorder.html" title="class in com.sca4d.audit.recording">DatabaseAuditRecorder</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/recording/DatabaseAuditRecorder.html" title="class in com.sca4d.audit.recording">DatabaseAuditRecorder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">把 Core AuditRecord 同步追加到 audit_record。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/recording/mapper/EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/recording/mapper/EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存 audit_record 查询和写入使用的数据库列值。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/payload/EncodedAuditPayload.html" title="class in com.sca4d.audit.payload">EncodedAuditPayload</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/payload/EncodedAuditPayload.html" title="class in com.sca4d.audit.payload">EncodedAuditPayload</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存一份准备写入数据库的 payload 类型、版本和 JSON。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/recording/QueuedAuditRecorder.html" title="class in com.sca4d.audit.recording">QueuedAuditRecorder</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">在独立事务中把审计加入 Outbox，交接提交后返回，不等待 RabbitMQ 消费或审计落库。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/audit/recording/SpringAuditResolverLookup.html" title="class in com.sca4d.audit.recording">SpringAuditResolverLookup</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">从 Spring 容器取得 `@Audit` 声明的目标解析器和 payload 工厂。</div>
 </div>
 </div>
 </div>

@@ -12,6 +12,9 @@ public interface AuditMapper {
     /** @param row 待追加的审计列值 @return 影响行数 */
     int insert(@Param("row") @NotNull EncodedAuditEntry row);
 
+    /** 消息重投时按主键去重，不覆盖首次写入的审计事实。 */
+    int insertDelivery(@Param("row") @NotNull EncodedAuditEntry row);
+
     /** @param id 审计记录标识 @return 对应列值，不存在时为空 */
     @Nullable
     EncodedAuditEntry selectById(@Param("id") long id);

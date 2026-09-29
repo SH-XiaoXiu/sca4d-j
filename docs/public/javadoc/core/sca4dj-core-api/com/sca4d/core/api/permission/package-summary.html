@@ -132,17 +132,25 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">按唯一策略认领规则执行权限判断（Permission Assessment）。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="PermissionDecision.html" title="class in com.sca4d.core.api.permission">PermissionDecision</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="PermissionCallInterceptor.html" title="class in com.sca4d.core.api.permission">PermissionCallInterceptor</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">解析 `@RequirePermission`，执行权限判断，并登记必须由 Repository 消费的资源范围。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="PermissionDecision.html" title="class in com.sca4d.core.api.permission">PermissionDecision</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">表示权限策略作出的允许或拒绝判定（Permission Decision）。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="PermissionPolicy.html" title="interface in com.sca4d.core.api.permission">PermissionPolicy</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="PermissionPolicy.html" title="interface in com.sca4d.core.api.permission">PermissionPolicy</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">对自己认领的资源作出权限判定的策略（Permission Policy）。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="ResourceScope.html" title="interface in com.sca4d.core.api.permission">ResourceScope</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="ResourceScope.html" title="interface in com.sca4d.core.api.permission">ResourceScope</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">表示一次允许判定可以作用的业务资源子集（Resource Scope）。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ResourceScopeRequirement.html" title="class in com.sca4d.core.api.permission">ResourceScopeRequirement</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">保存一次方法执行必须由 Repository 消费的权限资源范围。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="SessionOperationPermissionPolicy.html" title="class in com.sca4d.core.api.permission">SessionOperationPermissionPolicy</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">

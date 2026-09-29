@@ -1,11 +1,17 @@
 package com.sca4d.audit;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.audit.config.AuditAutoConfiguration;
 import com.sca4d.audit.query.AuditEntry;
 import com.sca4d.audit.query.AuditQuery;
 import com.sca4d.audit.query.AuditQueryService;
+import com.sca4d.audit.recording.AuditMessageCodec;
+import com.sca4d.audit.recording.AuditMessageHandler;
+import com.sca4d.audit.recording.AuditRepository;
+import com.sca4d.audit.recording.QueuedAuditRecorder;
 import com.sca4d.core.api.audit.AuditActor;
 import com.sca4d.core.api.audit.AuditOperation;
 import com.sca4d.core.api.audit.AuditPayload;
@@ -15,16 +21,28 @@ import com.sca4d.core.api.audit.AuditResult;
 import com.sca4d.core.api.audit.HttpCall;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
+import com.sca4d.core.api.messaging.DispatchReceipt;
+import com.sca4d.core.api.messaging.IncomingMessage;
+import com.sca4d.core.api.messaging.MessageBus;
+import com.sca4d.core.api.name.Name;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.core.api.resource.ResourceReference;
+import com.sca4d.core.spring.config.InstanceProperties;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
+import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
@@ -32,21 +50,30 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.AnnotationTransactionAttributeSource;
+import org.springframework.transaction.interceptor.TransactionInterceptor;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.time.Clock;
 import java.time.Instant;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 /** 使用 PostgreSQL 17 验证审计追加、Raw JSON 和组合分页查询。 */
 @Testcontainers
-@SpringBootTest(classes = AuditPersistenceIntegrationTest.TestApplication.class, properties = "spring.autoconfigure.exclude="
-        + "com.sca4d.core.spring.config.CoreSpringAutoConfiguration,"
-        + "com.sca4d.core.spring.config.CoreJacksonAutoConfiguration,"
-        + "com.sca4d.core.spring.openapi.CoreOpenApiConfiguration")
+@SpringBootTest(classes = AuditPersistenceIntegrationTest.TestApplication.class, properties = {
+        "spring.application.name=audit-test",
+        "mybatis.mapper-locations=classpath*:mapper/audit/*.xml",
+        "spring.autoconfigure.exclude=com.sca4d.core.spring.config.CoreSpringAutoConfiguration,"
+                + "com.sca4d.core.spring.config.CoreJacksonAutoConfiguration,"
+                + "com.sca4d.core.spring.openapi.CoreOpenApiConfiguration"
+})
 @SuppressWarnings({
         "SqlNoDataSourceInspection",
         "SpringJavaInjectionPointsAutowiringInspection"
@@ -64,6 +91,12 @@ class AuditPersistenceIntegrationTest {
     @Autowired
     private JdbcTemplate jdbc;
 
+    @Autowired
+    private AuditRepository repository;
+
+    @Autowired
+    private PlatformTransactionManager transactionManager;
+
     @DynamicPropertySource
     static void databaseProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
@@ -78,6 +111,8 @@ class AuditPersistenceIntegrationTest {
         ResourceDatabasePopulator schema = new ResourceDatabasePopulator(
                 new ClassPathResource("META-INF/sca4dj/schema/audit.sql"));
         schema.execute(Objects.requireNonNull(jdbc.getDataSource()));
+        jdbc.execute("DROP TABLE IF EXISTS audit_handoff_test");
+        jdbc.execute("CREATE TABLE audit_handoff_test (id BIGINT PRIMARY KEY)");
     }
 
     @Test
@@ -86,21 +121,21 @@ class AuditPersistenceIntegrationTest {
         recorder.record(
                 record(
                         31L,
-                        "storage/file/write",
+                        "STORAGE/FILE/WRITE",
                         "101",
                         AuditResult.SUCCESS,
                         Instant.parse("2026-07-28T08:00:00Z")));
         recorder.record(
                 record(
                         31L,
-                        "storage/file/read",
+                        "STORAGE/FILE/READ",
                         "102",
                         AuditResult.DENIED,
                         Instant.parse("2026-07-28T08:01:00Z")));
         recorder.record(
                 record(
                         32L,
-                        "storage/file/read",
+                        "STORAGE/FILE/READ",
                         "103",
                         AuditResult.SUCCESS,
                         Instant.parse("2026-07-28T08:02:00Z")));
@@ -110,9 +145,9 @@ class AuditPersistenceIntegrationTest {
                         "request-102",
                         21L,
                         31L,
-                        "storage/file/read",
+                        "STORAGE/FILE/READ",
                         AuditResult.DENIED,
-                        "file",
+                        "STORAGE/FILE",
                         "102",
                         Instant.parse("2026-07-28T08:00:30Z"),
                         Instant.parse("2026-07-28T08:02:00Z"),
@@ -144,8 +179,8 @@ class AuditPersistenceIntegrationTest {
 
         assertThat(denied.getTotal()).isEqualTo(1);
         AuditEntry entry = denied.getItems().getFirst();
-        assertThat(entry.operation().id()).isEqualTo("storage/file/read");
-        assertThat(entry.target().orElseThrow().type()).isEqualTo("file");
+        assertThat(entry.operation().id()).isEqualTo("STORAGE/FILE/READ");
+        assertThat(entry.target().orElseThrow().type()).isEqualTo(TreeCode.of("STORAGE/FILE"));
         assertThat(entry.payload().orElseThrow().type()).isEqualTo("raw");
         assertThat(entry.payload().orElseThrow().json()).containsSubsequence("\"reason\"", "\"test\"");
         assertThat(entry.payload().orElseThrow().decoded()).isEmpty();
@@ -153,9 +188,59 @@ class AuditPersistenceIntegrationTest {
         assertThat(entry.httpCall().orElseThrow().path()).isEqualTo("/files/102");
         assertThat(entry.httpCall().orElseThrow().clientIp()).isEqualTo("127.0.0.1");
         assertThat(entry.httpCall().orElseThrow().userAgent()).contains("test client");
-        assertThat(firstPage.getItems().getFirst().operation().id()).isEqualTo("storage/file/read");
-        assertThat(secondPage.getItems().getFirst().operation().id()).isEqualTo("storage/file/write");
+        assertThat(firstPage.getItems().getFirst().operation().id()).isEqualTo("STORAGE/FILE/READ");
+        assertThat(secondPage.getItems().getFirst().operation().id()).isEqualTo("STORAGE/FILE/WRITE");
         assertThat(firstPage.getTotal()).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("队列交接拥有独立事务，原事务回滚仍保留已接收记录")
+    void handsOffInAnIndependentTransaction() {
+        AtomicReference<com.sca4d.audit.recording.AuditMessage> captured = new AtomicReference<>();
+        MessageBus bus = (message, policy) -> {
+            captured.set((com.sca4d.audit.recording.AuditMessage) message);
+            jdbc.update("INSERT INTO audit_handoff_test VALUES (42)");
+            return new DispatchReceipt(Id.of(42), DispatchReceipt.Status.OUTBOX_ENLISTED);
+        };
+        AuditRecorder queued = queuedRecorder(bus);
+        new TransactionTemplate(transactionManager).executeWithoutResult(status -> {
+            queued.record(record(31, "TEST/UPDATE", "101", AuditResult.SUCCESS, Instant.EPOCH));
+            status.setRollbackOnly();
+        });
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM audit_handoff_test", Integer.class)).isEqualTo(1);
+        AuditMessageHandler handler = new AuditMessageHandler(repository, new AuditMessageCodec(new ObjectMapper()));
+        IncomingMessage<com.sca4d.audit.recording.AuditMessage> incoming = new IncomingMessage<>(
+                Id.of(42),
+                captured.get(),
+                new Name("audit-test"),
+                Instant.EPOCH,
+                false,
+                1);
+        new TransactionTemplate(transactionManager).executeWithoutResult(status -> handler.handle(incoming));
+        new TransactionTemplate(transactionManager).executeWithoutResult(status -> handler.handle(incoming));
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM audit_record WHERE id = 42", Integer.class)).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("可靠交接失败回滚独立事务，不留假接收结果")
+    void rollsBackFailedHandoff() {
+        AuditRecorder queued = queuedRecorder((message, policy) -> {
+            jdbc.update("INSERT INTO audit_handoff_test VALUES (42)");
+            throw new IllegalStateException("handoff failed");
+        });
+        assertThatThrownBy(() -> queued.record(record(31, "TEST/UPDATE", "101", AuditResult.SUCCESS, Instant.EPOCH)))
+                .isInstanceOf(IllegalStateException.class);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM audit_handoff_test", Integer.class)).isZero();
+    }
+
+    /** 使用实际 Spring 事务代理验证 REQUIRES_NEW，不把普通对象调用冒充事务验证。 */
+    private AuditRecorder queuedRecorder(MessageBus bus) {
+        ProxyFactory proxy = new ProxyFactory(new QueuedAuditRecorder(repository, bus));
+        TransactionInterceptor advice = new TransactionInterceptor();
+        advice.setTransactionManager(transactionManager);
+        advice.setTransactionAttributeSource(new AnnotationTransactionAttributeSource());
+        proxy.addAdvice(advice);
+        return (AuditRecorder) proxy.getProxy();
     }
 
     private static AuditRecord record(
@@ -192,12 +277,23 @@ class AuditPersistenceIntegrationTest {
 
     /** 为 Audit 自动配置提供测试 DataSource、ObjectMapper 和标识生成器。 */
     @SpringBootConfiguration
-    @EnableAutoConfiguration
+    @ImportAutoConfiguration({DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class,
+            JdbcTemplateAutoConfiguration.class, MybatisAutoConfiguration.class, AuditAutoConfiguration.class})
     static class TestApplication {
         @Bean
+        Clock clock() {
+            return Clock.systemUTC();
+        }
+
+        @Bean
+        InstanceProperties instanceProperties() {
+            return new InstanceProperties();
+        }
+
+        @Bean
         @Sca4djJson
-        ObjectMapper sca4djObjectMapper() {
-            return new ObjectMapper();
+        Sca4djMapper sca4djObjectMapper() {
+            return new Sca4djMapper();
         }
 
         @Bean

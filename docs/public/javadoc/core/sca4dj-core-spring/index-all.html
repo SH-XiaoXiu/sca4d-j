@@ -86,6 +86,8 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/spring/persistence/mybatis/AffectedRowsInterceptor.html#%3Cinit%3E()" class="member-name-link">AffectedRowsInterceptor()</a> - Constructor for class com.sca4d.core.spring.persistence.mybatis.<a href="com/sca4d/core/spring/persistence/mybatis/AffectedRowsInterceptor.html" title="class in com.sca4d.core.spring.persistence.mybatis">AffectedRowsInterceptor</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html#after()" class="member-name-link">after()</a> - Method in class com.sca4d.core.spring.identity.<a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionCallInterceptor</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/transaction/TransactionCallbacks.html#afterCommit(java.lang.Runnable)" class="member-name-link">afterCommit(Runnable)</a> - Static method in class com.sca4d.core.spring.transaction.<a href="com/sca4d/core/spring/transaction/TransactionCallbacks.html" title="class in com.sca4d.core.spring.transaction">TransactionCallbacks</a></dt>
 <dd>
 <div class="block">在当前真实事务提交后执行动作；回滚时不执行。</div>
@@ -109,6 +111,14 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/spring/dictionary/DatabaseDictionaries.html#allowsDatabaseOptions(java.lang.String)" class="member-name-link">allowsDatabaseOptions(String)</a> - Method in class com.sca4d.core.spring.dictionary.<a href="com/sca4d/core/spring/dictionary/DatabaseDictionaries.html" title="class in com.sca4d.core.spring.dictionary">DatabaseDictionaries</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/dictionary/DictionaryRegistry.html#allowsDatabaseOptions(java.lang.String)" class="member-name-link">allowsDatabaseOptions(String)</a> - Method in class com.sca4d.core.spring.dictionary.<a href="com/sca4d/core/spring/dictionary/DictionaryRegistry.html" title="class in com.sca4d.core.spring.dictionary">DictionaryRegistry</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/call/CallLifecycleAdvisor.Declaration.html#annotationType()" class="member-name-link">annotationType()</a> - Method in interface com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallLifecycleAdvisor.Declaration.html" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.Declaration</a></dt>
+<dd>
+<div class="block">返回本模块负责的运行时注解类型。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html#annotationType()" class="member-name-link">annotationType()</a> - Method in class com.sca4d.core.spring.identity.<a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionCallInterceptor</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/web/RequestVersionConditions.html#annotationType()" class="member-name-link">annotationType()</a> - Method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/RequestVersionConditions.html" title="class in com.sca4d.core.spring.web">RequestVersionConditions</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/validation/PhoneNumber.html#anyOf()" class="member-name-link">anyOf()</a> - Element in annotation interface com.sca4d.core.spring.validation.<a href="com/sca4d/core/spring/validation/PhoneNumber.html" title="annotation interface in com.sca4d.core.spring.validation">PhoneNumber</a></dt>
 <dd>
@@ -160,10 +170,20 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">处理参数类型转换失败。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html#around(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallLifecycle.Next)" class="member-name-link">around(CallExecution, CallLifecycle.Next)</a> - Method in class com.sca4d.core.spring.identity.<a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionCallInterceptor</a></dt>
+<dd>
+<div class="block">在权限判断前确定主体；MVC 参数绑定阶段已经选择时复用结果。</div>
+</dd>
 <dt><a href="com/sca4d/core/spring/setting/SettingCatalog.html#assertRegistered(com.sca4d.core.api.setting.Setting)" class="member-name-link">assertRegistered(Setting&lt;?&gt;)</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingCatalog.html" title="class in com.sca4d.core.spring.setting">SettingCatalog</a></dt>
 <dd>
 <div class="block">校验调用方使用的是目录中注册的同一个设置对象。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/call/CallLifecycleAdvisor.Declaration.html#attach(com.sca4d.core.api.call.CallExecution,A)" class="member-name-link">attach(CallExecution, A)</a> - Method in interface com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallLifecycleAdvisor.Declaration.html" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.Declaration</a></dt>
+<dd>
+<div class="block">向方法执行附着解析后的要求；权限、锁等实际动作由环绕处理执行。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/RequestVersionConditions.html#attach(com.sca4d.core.api.call.CallExecution,com.sca4d.core.spring.web.annotation.IfMatch)" class="member-name-link">attach(CallExecution, IfMatch)</a> - Method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/RequestVersionConditions.html" title="class in com.sca4d.core.spring.web">RequestVersionConditions</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/web/RequestVersionConditions.html#attach(com.sca4d.core.api.call.CallExecution)" class="member-name-link">attach(CallExecution)</a> - Method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/RequestVersionConditions.html" title="class in com.sca4d.core.spring.web">RequestVersionConditions</a></dt>
 <dd>
 <div class="block">把尚未附着的版本条件登记到处理 `@IfMatch` 的方法执行。</div>
@@ -223,6 +243,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">解析 HTTP `Authorization` 中严格的 Bearer Token，不接受空白或其他认证方案。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html#before()" class="member-name-link">before()</a> - Method in class com.sca4d.core.spring.identity.<a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionCallInterceptor</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/web/ApiResponseAdvice.html#beforeBodyWrite(java.lang.Object,org.springframework.core.MethodParameter,org.springframework.http.MediaType,java.lang.Class,org.springframework.http.server.ServerHttpRequest,org.springframework.http.server.ServerHttpResponse)" class="member-name-link">beforeBodyWrite(Object, MethodParameter, MediaType, Class&lt;? extends HttpMessageConverter&lt;?&gt;&gt;, ServerHttpRequest, ServerHttpResponse)</a> - Method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/ApiResponseAdvice.html" title="class in com.sca4d.core.spring.web">ApiResponseAdvice</a></dt>
 <dt><a href="com/sca4d/core/spring/web/clientstate/ClientStateResponseAdvice.html#beforeBodyWrite(java.lang.Object,org.springframework.core.MethodParameter,org.springframework.http.MediaType,java.lang.Class,org.springframework.http.server.ServerHttpRequest,org.springframework.http.server.ServerHttpResponse)" class="member-name-link">beforeBodyWrite(Object, MethodParameter, MediaType, Class&lt;? extends HttpMessageConverter&lt;?&gt;&gt;, ServerHttpRequest, ServerHttpResponse)</a> - Method in class com.sca4d.core.spring.web.clientstate.<a href="com/sca4d/core/spring/web/clientstate/ClientStateResponseAdvice.html" title="class in com.sca4d.core.spring.web.clientstate">ClientStateResponseAdvice</a></dt>
 <dt><a href="com/sca4d/core/spring/call/CallRequirementTransactionListener.html#beforeCommit(org.springframework.transaction.TransactionExecution)" class="member-name-link">beforeCommit(TransactionExecution)</a> - Method in class com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallRequirementTransactionListener.html" title="class in com.sca4d.core.spring.call">CallRequirementTransactionListener</a></dt>
@@ -274,37 +296,25 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:C">C</h2>
 <dl class="index">
-<dt><a href="com/sca4d/core/spring/call/CallFilter.html#CALL_ID_HEADER" class="member-name-link">CALL_ID_HEADER</a> - Static variable in class com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallFilter.html" title="class in com.sca4d.core.spring.call">CallFilter</a></dt>
+<dt><a href="com/sca4d/core/spring/web/HttpCallFilter.html#CALL_ID_HEADER" class="member-name-link">CALL_ID_HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpCallFilter.html" title="class in com.sca4d.core.spring.web">HttpCallFilter</a></dt>
 <dd>
 <div class="block">请求和响应使用的调用标识 Header。</div>
-</dd>
-<dt><a href="com/sca4d/core/spring/call/CallFilter.html" class="type-name-link" title="class in com.sca4d.core.spring.call">CallFilter</a> - Class in <a href="com/sca4d/core/spring/call/package-summary.html">com.sca4d.core.spring.call</a></dt>
-<dd>
-<div class="block">为每次 HTTP 请求建立和清理 <code>Call</code>。</div>
-</dd>
-<dt><a href="com/sca4d/core/spring/call/CallFilter.html#%3Cinit%3E(java.time.Clock)" class="member-name-link">CallFilter(Clock)</a> - Constructor for class com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallFilter.html" title="class in com.sca4d.core.spring.call">CallFilter</a></dt>
-<dd>
-<div class="block">创建请求信息过滤器。</div>
-</dd>
-<dt><a href="com/sca4d/core/spring/call/CallHandlerInterceptor.html" class="type-name-link" title="class in com.sca4d.core.spring.call">CallHandlerInterceptor</a> - Class in <a href="com/sca4d/core/spring/call/package-summary.html">com.sca4d.core.spring.call</a></dt>
-<dd>
-<div class="block">只在当前线程已经建立 `Call` 时执行请求阶段处理，并跳过 Spring MVC 异步分派。</div>
-</dd>
-<dt><a href="com/sca4d/core/spring/call/CallHandlerInterceptor.html#%3Cinit%3E()" class="member-name-link">CallHandlerInterceptor()</a> - Constructor for class com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallHandlerInterceptor.html" title="class in com.sca4d.core.spring.call">CallHandlerInterceptor</a></dt>
-<dd>
-<div class="block">创建依赖当前 `Call` 的 Spring MVC 拦截器。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/call/CallHolder.html" class="type-name-link" title="class in com.sca4d.core.spring.call">CallHolder</a> - Class in <a href="com/sca4d/core/spring/call/package-summary.html">com.sca4d.core.spring.call</a></dt>
 <dd>
 <div class="block">保存当前线程的 `Call` 以及正在执行的嵌套 `CallExecution`。</div>
 </dd>
-<dt><a href="com/sca4d/core/spring/call/CallLifecycleAspect.html" class="type-name-link" title="class in com.sca4d.core.spring.call">CallLifecycleAspect</a> - Class in <a href="com/sca4d/core/spring/call/package-summary.html">com.sca4d.core.spring.call</a></dt>
+<dt><a href="com/sca4d/core/spring/call/CallLifecycleAdvisor.html" class="type-name-link" title="class in com.sca4d.core.spring.call">CallLifecycleAdvisor</a> - Class in <a href="com/sca4d/core/spring/call/package-summary.html">com.sca4d.core.spring.call</a></dt>
 <dd>
-<div class="block">把 Core 声明和 `@IfMatch` 方法交给固定 `CallLifecycle`。</div>
+<div class="block">按各模块注册的注解声明选择方法，建立执行范围并进入唯一 CallLifecycle。</div>
 </dd>
-<dt><a href="com/sca4d/core/spring/call/CallLifecycleAspect.html#%3Cinit%3E(com.sca4d.core.api.call.CallLifecycle,com.sca4d.core.spring.web.RequestVersionConditions)" class="member-name-link">CallLifecycleAspect(CallLifecycle, RequestVersionConditions)</a> - Constructor for class com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallLifecycleAspect.html" title="class in com.sca4d.core.spring.call">CallLifecycleAspect</a></dt>
+<dt><a href="com/sca4d/core/spring/call/CallLifecycleAdvisor.html#%3Cinit%3E(com.sca4d.core.api.call.CallLifecycle,java.util.List,java.time.Clock)" class="member-name-link">CallLifecycleAdvisor(CallLifecycle, List&lt;? extends CallLifecycleAdvisor.Declaration&lt;?&gt;&gt;, Clock)</a> - Constructor for class com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallLifecycleAdvisor.html" title="class in com.sca4d.core.spring.call">CallLifecycleAdvisor</a></dt>
 <dd>
-<div class="block">创建声明式调用生命周期切面。</div>
+<div class="block">注册注解所属模块的声明；同一个注解类型只能由一个注册认领。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/call/CallLifecycleAdvisor.Declaration.html" class="type-name-link" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.Declaration&lt;A&gt;</a> - Interface in <a href="com/sca4d/core/spring/call/package-summary.html">com.sca4d.core.spring.call</a></dt>
+<dd>
+<div class="block">由注解所属模块注册匹配、入口身份与执行要求；不在注册回调中执行业务动作。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/call/CallRequirementTransactionInstaller.html" class="type-name-link" title="class in com.sca4d.core.spring.call">CallRequirementTransactionInstaller</a> - Class in <a href="com/sca4d/core/spring/call/package-summary.html">com.sca4d.core.spring.call</a></dt>
 <dd>
@@ -388,6 +398,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">当前 HTTP 调用完成后需要客户端重新读取的状态目标。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.core.spring.identity.<a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionCallInterceptor</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/setting/DatabaseSettingStore.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/DatabaseSettingStore.html" title="class in com.sca4d.core.spring.setting">DatabaseSettingStore</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/setting/EnvSettingReader.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/EnvSettingReader.html" title="class in com.sca4d.core.spring.setting">EnvSettingReader</a></dt>
@@ -414,7 +426,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/spring/call/package-summary.html">com.sca4d.core.spring.call</a> - package com.sca4d.core.spring.call</dt>
 <dd>
-<div class="block">在 Spring Filter 和 AOP 切面中创建、保存并执行 `Call`。</div>
+<div class="block">把方法入口接入 `CallLifecycle`，管理当前线程的调用和嵌套执行。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/config/package-summary.html">com.sca4d.core.spring.config</a> - package com.sca4d.core.spring.config</dt>
 <dd>
@@ -447,6 +459,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/spring/openapi/package-summary.html">com.sca4d.core.spring.openapi</a> - package com.sca4d.core.spring.openapi</dt>
 <dd>
 <div class="block">提供 OpenAPI 基础信息和安全方案。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/permission/package-summary.html">com.sca4d.core.spring.permission</a> - package com.sca4d.core.spring.permission</dt>
+<dd>
+<div class="block">为 Repository 读取并消费当前调用已经批准的权限资源范围。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/persistence/batch/package-summary.html">com.sca4d.core.spring.persistence.batch</a> - package com.sca4d.core.spring.persistence.batch</dt>
 <dd>&nbsp;</dd>
@@ -594,6 +610,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">限制号码可以使用的国家或地区拨号前缀。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/call/CallLifecycleAdvisor.Declaration.html#createCall(java.lang.String,java.time.Instant,A)" class="member-name-link">createCall(String, Instant, A)</a> - Method in interface com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallLifecycleAdvisor.Declaration.html" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.Declaration</a></dt>
+<dd>
+<div class="block">没有既有 Call 的自主入口可创建固定身份；普通声明返回空，不能覆盖已有身份。</div>
+</dd>
 <dt><a href="com/sca4d/core/spring/web/ApiResponse.html#created(T)" class="member-name-link">created(T)</a> - Static method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/ApiResponse.html" title="class in com.sca4d.core.spring.web">ApiResponse</a></dt>
 <dd>
 <div class="block">创建 201 成功响应。</div>
@@ -640,11 +660,11 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">将当前已经选择的 <code>Principal</code> 注入 Controller 参数。</div>
 </dd>
-<dt><a href="com/sca4d/core/spring/web/CurrentResourceScope.html" class="type-name-link" title="class in com.sca4d.core.spring.web">CurrentResourceScope</a> - Class in <a href="com/sca4d/core/spring/web/package-summary.html">com.sca4d.core.spring.web</a></dt>
+<dt><a href="com/sca4d/core/spring/permission/CurrentResourceScope.html" class="type-name-link" title="class in com.sca4d.core.spring.permission">CurrentResourceScope</a> - Class in <a href="com/sca4d/core/spring/permission/package-summary.html">com.sca4d.core.spring.permission</a></dt>
 <dd>
 <div class="block">为数据仓库读取当前调用已经批准的业务资源范围。</div>
 </dd>
-<dt><a href="com/sca4d/core/spring/web/CurrentResourceScope.html#%3Cinit%3E()" class="member-name-link">CurrentResourceScope()</a> - Constructor for class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/CurrentResourceScope.html" title="class in com.sca4d.core.spring.web">CurrentResourceScope</a></dt>
+<dt><a href="com/sca4d/core/spring/permission/CurrentResourceScope.html#%3Cinit%3E()" class="member-name-link">CurrentResourceScope()</a> - Constructor for class com.sca4d.core.spring.permission.<a href="com/sca4d/core/spring/permission/CurrentResourceScope.html" title="class in com.sca4d.core.spring.permission">CurrentResourceScope</a></dt>
 <dd>
 <div class="block">创建供 Repository 读取当前资源范围的入口。</div>
 </dd>
@@ -809,7 +829,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/web/clientstate/ClientStateFilter.html#doFilterInternal(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,jakarta.servlet.FilterChain)" class="member-name-link">doFilterInternal(HttpServletRequest, HttpServletResponse, FilterChain)</a> - Method in class com.sca4d.core.spring.web.clientstate.<a href="com/sca4d/core/spring/web/clientstate/ClientStateFilter.html" title="class in com.sca4d.core.spring.web.clientstate">ClientStateFilter</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/spring/call/CallFilter.html#doFilterInternal(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,jakarta.servlet.FilterChain)" class="member-name-link">doFilterInternal(HttpServletRequest, HttpServletResponse, FilterChain)</a> - Method in class com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallFilter.html" title="class in com.sca4d.core.spring.call">CallFilter</a></dt>
+<dt><a href="com/sca4d/core/spring/web/HttpCallFilter.html#doFilterInternal(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,jakarta.servlet.FilterChain)" class="member-name-link">doFilterInternal(HttpServletRequest, HttpServletResponse, FilterChain)</a> - Method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpCallFilter.html" title="class in com.sca4d.core.spring.web">HttpCallFilter</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/dictionary/DynamicDictionary.html" class="type-name-link" title="class in com.sca4d.core.spring.dictionary">DynamicDictionary</a> - Class in <a href="com/sca4d/core/spring/dictionary/package-summary.html">com.sca4d.core.spring.dictionary</a></dt>
 <dd>
@@ -901,10 +921,6 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/spring/redis/RedisDistributedLock.html#execute(com.sca4d.core.api.concurrent.LockKey,java.time.Duration,java.util.function.Supplier)" class="member-name-link">execute(LockKey, Duration, Supplier&lt;T&gt;)</a> - Method in class com.sca4d.core.spring.redis.<a href="com/sca4d/core/spring/redis/RedisDistributedLock.html" title="class in com.sca4d.core.spring.redis">RedisDistributedLock</a></dt>
 <dd>
 <div class="block">等待取得锁后执行任务，任务执行期间由 Redisson watchdog 续租。</div>
-</dd>
-<dt><a href="com/sca4d/core/spring/call/CallLifecycleAspect.html#execute(org.aspectj.lang.ProceedingJoinPoint)" class="member-name-link">execute(ProceedingJoinPoint)</a> - Method in class com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallLifecycleAspect.html" title="class in com.sca4d.core.spring.call">CallLifecycleAspect</a></dt>
-<dd>
-<div class="block">解析具体方法，绑定执行栈并运行固定生命周期。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/call/CallHolder.html#executions()" class="member-name-link">executions()</a> - Static method in class com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallHolder.html" title="class in com.sca4d.core.spring.call">CallHolder</a></dt>
 <dd>
@@ -1022,6 +1038,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回新密文使用的 key-id。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/call/CallLifecycleAdvisor.html#getAdvice()" class="member-name-link">getAdvice()</a> - Method in class com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallLifecycleAdvisor.html" title="class in com.sca4d.core.spring.call">CallLifecycleAdvisor</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/web/ApiResponse.html#getCallId()" class="member-name-link">getCallId()</a> - Method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/ApiResponse.html" title="class in com.sca4d.core.spring.web">ApiResponse</a></dt>
 <dd>
 <div class="block">返回当前请求编号。</div>
@@ -1148,6 +1166,8 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/spring/config/CoreSpringProperties.html#getPagination()" class="member-name-link">getPagination()</a> - Method in class com.sca4d.core.spring.config.<a href="com/sca4d/core/spring/config/CoreSpringProperties.html" title="class in com.sca4d.core.spring.config">CoreSpringProperties</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/spring/call/CallLifecycleAdvisor.html#getPointcut()" class="member-name-link">getPointcut()</a> - Method in class com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallLifecycleAdvisor.html" title="class in com.sca4d.core.spring.call">CallLifecycleAdvisor</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/setting/EnvironmentPrefixProperties.html#getPrefix()" class="member-name-link">getPrefix()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/EnvironmentPrefixProperties.html" title="class in com.sca4d.core.spring.setting">EnvironmentPrefixProperties</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/redis/RedisIdempotencyProperties.html#getProcessingTtl()" class="member-name-link">getProcessingTtl()</a> - Method in class com.sca4d.core.spring.redis.<a href="com/sca4d/core/spring/redis/RedisIdempotencyProperties.html" title="class in com.sca4d.core.spring.redis">RedisIdempotencyProperties</a></dt>
@@ -1228,6 +1248,22 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/spring/web/HttpIdempotencyKeyResolver.html#HEADER" class="member-name-link">HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpIdempotencyKeyResolver.html" title="class in com.sca4d.core.spring.web">HttpIdempotencyKeyResolver</a></dt>
 <dd>
 <div class="block">HTTP 调用方提交幂等键使用的固定 Header。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/HttpCallFilter.html" class="type-name-link" title="class in com.sca4d.core.spring.web">HttpCallFilter</a> - Class in <a href="com/sca4d/core/spring/web/package-summary.html">com.sca4d.core.spring.web</a></dt>
+<dd>
+<div class="block">为每次 HTTP 请求建立和清理 <code>Call</code>。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/HttpCallFilter.html#%3Cinit%3E(java.time.Clock)" class="member-name-link">HttpCallFilter(Clock)</a> - Constructor for class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpCallFilter.html" title="class in com.sca4d.core.spring.web">HttpCallFilter</a></dt>
+<dd>
+<div class="block">创建请求信息过滤器。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/HttpCallHandlerInterceptor.html" class="type-name-link" title="class in com.sca4d.core.spring.web">HttpCallHandlerInterceptor</a> - Class in <a href="com/sca4d/core/spring/web/package-summary.html">com.sca4d.core.spring.web</a></dt>
+<dd>
+<div class="block">只在当前线程已经建立 `Call` 时执行请求阶段处理，并跳过 Spring MVC 异步分派。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/HttpCallHandlerInterceptor.html#%3Cinit%3E()" class="member-name-link">HttpCallHandlerInterceptor()</a> - Constructor for class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpCallHandlerInterceptor.html" title="class in com.sca4d.core.spring.web">HttpCallHandlerInterceptor</a></dt>
+<dd>
+<div class="block">创建依赖当前 `Call` 的 Spring MVC 拦截器。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/web/HttpErrorCode.html" class="type-name-link" title="enum class in com.sca4d.core.spring.web">HttpErrorCode</a> - Enum Class in <a href="com/sca4d/core/spring/web/package-summary.html">com.sca4d.core.spring.web</a></dt>
 <dd>
@@ -1406,10 +1442,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">在 Repository 方法执行期间建立影响行数声明。</div>
 </dd>
-<dt><a href="com/sca4d/core/spring/call/SystemExecutionAspect.html#invoke(org.aspectj.lang.ProceedingJoinPoint,com.sca4d.core.api.annotation.SystemExecution)" class="member-name-link">invoke(ProceedingJoinPoint, SystemExecution)</a> - Method in class com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/SystemExecutionAspect.html" title="class in com.sca4d.core.spring.call">SystemExecutionAspect</a></dt>
-<dd>
-<div class="block">使用已发布的系统身份执行入口；已有 Call 时沿用调用方身份，身份未登记时立即失败。</div>
-</dd>
 <dt><a href="com/sca4d/core/spring/validation/ValidationPatterns.html#isBizCode(java.lang.String)" class="member-name-link">isBizCode(String)</a> - Static method in class com.sca4d.core.spring.validation.<a href="com/sca4d/core/spring/validation/ValidationPatterns.html" title="class in com.sca4d.core.spring.validation">ValidationPatterns</a></dt>
 <dd>
 <div class="block">检查完整文本是否符合业务编码格式。</div>
@@ -1479,6 +1511,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/spring/web/view/Localize.html#key()" class="member-name-link">key()</a> - Element in annotation interface com.sca4d.core.spring.web.view.<a href="com/sca4d/core/spring/web/view/Localize.html" title="annotation interface in com.sca4d.core.spring.web.view">Localize</a></dt>
 <dd>
 <div class="block">指定 BaseViewSerializer 从当前 View 的动态国际化数据读取的字段键。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/HttpIdempotencyKeyResolver.html#KEY" class="member-name-link">KEY</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpIdempotencyKeyResolver.html" title="class in com.sca4d.core.spring.web">HttpIdempotencyKeyResolver</a></dt>
+<dd>
+<div class="block">HTTP 入口提供的客户端幂等键；异步工作必须显式提供自己的输入。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/redis/KeyRedisSerializer.html#keyBytes(org.springframework.data.redis.core.RedisTemplate,com.sca4d.core.api.name.Key)" class="member-name-link">keyBytes(RedisTemplate&lt;Key, String&gt;, Key)</a> - Static method in class com.sca4d.core.spring.redis.<a href="com/sca4d/core/spring/redis/KeyRedisSerializer.html" title="class in com.sca4d.core.spring.redis">KeyRedisSerializer</a></dt>
 <dd>
@@ -1863,8 +1899,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">请求体或上传文件超过服务端允许的大小。</div>
 </dd>
-<dt><a href="com/sca4d/core/spring/call/SpringAuditResolverLookup.html#payloadFactory(java.lang.Class)" class="member-name-link">payloadFactory(Class&lt;? extends AuditPayloadFactory&gt;)</a> - Method in class com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/SpringAuditResolverLookup.html" title="class in com.sca4d.core.spring.call">SpringAuditResolverLookup</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/validation/PhoneNumber.html" class="type-name-link" title="annotation interface in com.sca4d.core.spring.validation">PhoneNumber</a> - Annotation Interface in <a href="com/sca4d/core/spring/validation/package-summary.html">com.sca4d.core.spring.validation</a></dt>
 <dd>
 <div class="block">校验规范 E.164 电话号码及 libphonenumber 元数据，不表达号码已分配、归属或可以接通。</div>
@@ -1913,19 +1947,19 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/spring/setting/EnvironmentVariableResolver.html#prefix()" class="member-name-link">prefix()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/EnvironmentVariableResolver.html" title="class in com.sca4d.core.spring.setting">EnvironmentVariableResolver</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/spring/call/CallHandlerInterceptor.html#preHandle(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,java.lang.Object)" class="member-name-link">preHandle(HttpServletRequest, HttpServletResponse, Object)</a> - Method in class com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallHandlerInterceptor.html" title="class in com.sca4d.core.spring.call">CallHandlerInterceptor</a></dt>
+<dt><a href="com/sca4d/core/spring/web/HttpCallHandlerInterceptor.html#preHandle(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,java.lang.Object)" class="member-name-link">preHandle(HttpServletRequest, HttpServletResponse, Object)</a> - Method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpCallHandlerInterceptor.html" title="class in com.sca4d.core.spring.web">HttpCallHandlerInterceptor</a></dt>
 <dd>
 <div class="block">处理初次请求，或者允许 Spring MVC 完成异步结果和断开连接分派。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/web/IfMatchInterceptor.html#preHandle(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,java.lang.Object)" class="member-name-link">preHandle(HttpServletRequest, HttpServletResponse, Object)</a> - Method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/IfMatchInterceptor.html" title="class in com.sca4d.core.spring.web">IfMatchInterceptor</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/spring/call/CallHandlerInterceptor.html#preHandleWithCall(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,java.lang.Object,com.sca4d.core.api.call.Call)" class="member-name-link">preHandleWithCall(HttpServletRequest, HttpServletResponse, Object, Call)</a> - Method in class com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallHandlerInterceptor.html" title="class in com.sca4d.core.spring.call">CallHandlerInterceptor</a></dt>
-<dd>
-<div class="block">使用当前线程已经建立的 `Call` 执行请求阶段处理。</div>
-</dd>
 <dt><a href="com/sca4d/core/spring/identity/PrincipalSelectionInterceptor.html#preHandleWithCall(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,java.lang.Object,com.sca4d.core.api.call.Call)" class="member-name-link">preHandleWithCall(HttpServletRequest, HttpServletResponse, Object, Call)</a> - Method in class com.sca4d.core.spring.identity.<a href="com/sca4d/core/spring/identity/PrincipalSelectionInterceptor.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionInterceptor</a></dt>
 <dd>
 <div class="block">在 Controller 参数解析前完成声明为可提前执行的业务身份选择。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/HttpCallHandlerInterceptor.html#preHandleWithCall(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,java.lang.Object,com.sca4d.core.api.call.Call)" class="member-name-link">preHandleWithCall(HttpServletRequest, HttpServletResponse, Object, Call)</a> - Method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpCallHandlerInterceptor.html" title="class in com.sca4d.core.spring.web">HttpCallHandlerInterceptor</a></dt>
+<dd>
+<div class="block">使用当前线程已经建立的 `Call` 执行请求阶段处理。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/web/IdentityMdcInterceptor.html#preHandleWithCall(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,java.lang.Object,com.sca4d.core.api.call.Call)" class="member-name-link">preHandleWithCall(HttpServletRequest, HttpServletResponse, Object, Call)</a> - Method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/IdentityMdcInterceptor.html" title="class in com.sca4d.core.spring.web">IdentityMdcInterceptor</a></dt>
 <dd>
@@ -1939,13 +1973,13 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">根据当前认证身份和类型化 HTTP 输入选择业务身份。</div>
 </dd>
-<dt><a href="com/sca4d/core/spring/identity/PrincipalSelectionAspect.html" class="type-name-link" title="class in com.sca4d.core.spring.identity">PrincipalSelectionAspect</a> - Class in <a href="com/sca4d/core/spring/identity/package-summary.html">com.sca4d.core.spring.identity</a></dt>
+<dt><a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html" class="type-name-link" title="class in com.sca4d.core.spring.identity">PrincipalSelectionCallInterceptor</a> - Class in <a href="com/sca4d/core/spring/identity/package-summary.html">com.sca4d.core.spring.identity</a></dt>
 <dd>
-<div class="block">执行 <a href="com/sca4d/core/spring/web/annotation/CurrentPrincipal.html" title="annotation interface in com.sca4d.core.spring.web.annotation"><code>CurrentPrincipal</code></a> 声明的请求阶段 Principal 选择。</div>
+<div class="block">在统一调用生命周期内执行 CurrentPrincipal 声明的主体选择。</div>
 </dd>
-<dt><a href="com/sca4d/core/spring/identity/PrincipalSelectionAspect.html#%3Cinit%3E(org.springframework.context.ApplicationContext,com.sca4d.core.spring.identity.PrincipalSelectionInputResolver,com.sca4d.core.spring.identity.PrincipalSelectionInvoker)" class="member-name-link">PrincipalSelectionAspect(ApplicationContext, PrincipalSelectionInputResolver, PrincipalSelectionInvoker)</a> - Constructor for class com.sca4d.core.spring.identity.<a href="com/sca4d/core/spring/identity/PrincipalSelectionAspect.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionAspect</a></dt>
+<dt><a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html#%3Cinit%3E(org.springframework.context.ApplicationContext,com.sca4d.core.spring.identity.PrincipalSelectionInputResolver,com.sca4d.core.spring.identity.PrincipalSelectionInvoker)" class="member-name-link">PrincipalSelectionCallInterceptor(ApplicationContext, PrincipalSelectionInputResolver, PrincipalSelectionInvoker)</a> - Constructor for class com.sca4d.core.spring.identity.<a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionCallInterceptor</a></dt>
 <dd>
-<div class="block">创建业务身份选择切面。</div>
+<div class="block">创建调用中的业务身份选择处理。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/identity/PrincipalSelectionInput.html" class="type-name-link" title="class in com.sca4d.core.spring.identity">PrincipalSelectionInput</a> - Class in <a href="com/sca4d/core/spring/identity/package-summary.html">com.sca4d.core.spring.identity</a></dt>
 <dd>
@@ -2248,6 +2282,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">读取 Jackson 最终写出的可变根对象。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/call/CallHolder.html#run(com.sca4d.core.api.call.Call,java.util.concurrent.Callable)" class="member-name-link">run(Call, Callable&lt;T&gt;)</a> - Static method in class com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallHolder.html" title="class in com.sca4d.core.spring.call">CallHolder</a></dt>
+<dd>
+<div class="block">在当前线程为明确提供的独立 Call 执行任务，结束后恢复原线程绑定及 MDC。</div>
+</dd>
 </dl>
 <h2 class="title" id="I:S">S</h2>
 <dl class="index">
@@ -2305,7 +2343,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/spring/setting/StoredSetting.html#schemaVersion()" class="member-name-link">schemaVersion()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/StoredSetting.html" title="class in com.sca4d.core.spring.setting">StoredSetting</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/spring/web/CurrentResourceScope.html#scope(com.sca4d.core.api.permission.Permission,java.lang.Class)" class="member-name-link">scope(Permission, Class&lt;S&gt;)</a> - Method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/CurrentResourceScope.html" title="class in com.sca4d.core.spring.web">CurrentResourceScope</a></dt>
+<dt><a href="com/sca4d/core/spring/permission/CurrentResourceScope.html#scope(com.sca4d.core.api.permission.Permission,java.lang.Class)" class="member-name-link">scope(Permission, Class&lt;S&gt;)</a> - Method in class com.sca4d.core.spring.permission.<a href="com/sca4d/core/spring/permission/CurrentResourceScope.html" title="class in com.sca4d.core.spring.permission">CurrentResourceScope</a></dt>
 <dd>
 <div class="block">取得指定权限已经批准的资源范围。</div>
 </dd>
@@ -2344,10 +2382,6 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/spring/identity/PrincipalSelectionInvoker.html#select(com.sca4d.core.spring.identity.PrincipalSelection,com.sca4d.core.api.authentication.Session,com.sca4d.core.api.identity.Subject,com.sca4d.core.api.identity.Account,com.sca4d.core.spring.identity.PrincipalSelectionInput)" class="member-name-link">select(PrincipalSelection&lt;?&gt;, Session, Subject, Account, PrincipalSelectionInput)</a> - Method in class com.sca4d.core.spring.identity.<a href="com/sca4d/core/spring/identity/PrincipalSelectionInvoker.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionInvoker</a></dt>
 <dd>
 <div class="block">转换选择输入并调用业务身份选择器。</div>
-</dd>
-<dt><a href="com/sca4d/core/spring/identity/PrincipalSelectionAspect.html#select(org.aspectj.lang.ProceedingJoinPoint)" class="member-name-link">select(ProceedingJoinPoint)</a> - Method in class com.sca4d.core.spring.identity.<a href="com/sca4d/core/spring/identity/PrincipalSelectionAspect.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionAspect</a></dt>
-<dd>
-<div class="block">在 Controller 执行前确定当前业务身份。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/setting/SettingMapper.html#selectCanonicalOrLegacy(com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.String)" class="member-name-link">selectCanonicalOrLegacy(TreeCode, String, String)</a> - Method in interface com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingMapper.html" title="interface in com.sca4d.core.spring.setting">SettingMapper</a></dt>
 <dd>
@@ -2571,14 +2605,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">指定 BaseViewSerializer 在 HTTP 序列化时调用的文本来源方法。</div>
 </dd>
-<dt><a href="com/sca4d/core/spring/call/SpringAuditResolverLookup.html" class="type-name-link" title="class in com.sca4d.core.spring.call">SpringAuditResolverLookup</a> - Class in <a href="com/sca4d/core/spring/call/package-summary.html">com.sca4d.core.spring.call</a></dt>
-<dd>
-<div class="block">从 Spring 容器取得 `@Audit` 声明的目标解析器和 payload 工厂。</div>
-</dd>
-<dt><a href="com/sca4d/core/spring/call/SpringAuditResolverLookup.html#%3Cinit%3E(org.springframework.context.ApplicationContext)" class="member-name-link">SpringAuditResolverLookup(ApplicationContext)</a> - Constructor for class com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/SpringAuditResolverLookup.html" title="class in com.sca4d.core.spring.call">SpringAuditResolverLookup</a></dt>
-<dd>
-<div class="block">创建 Spring 审计解析器查找入口。</div>
-</dd>
 <dt><a href="com/sca4d/core/spring/call/SpringCallValueResolverLookup.html" class="type-name-link" title="class in com.sca4d.core.spring.call">SpringCallValueResolverLookup</a> - Class in <a href="com/sca4d/core/spring/call/package-summary.html">com.sca4d.core.spring.call</a></dt>
 <dd>
 <div class="block">使用 Spring Bean 类型查找调用值解析器。</div>
@@ -2627,6 +2653,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">成功响应使用的固定响应码。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html#supports(com.sca4d.core.api.call.CallExecution)" class="member-name-link">supports(CallExecution)</a> - Method in class com.sca4d.core.spring.identity.<a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionCallInterceptor</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/web/ApiResponseAdvice.html#supports(org.springframework.core.MethodParameter,java.lang.Class)" class="member-name-link">supports(MethodParameter, Class&lt;? extends HttpMessageConverter&lt;?&gt;&gt;)</a> - Method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/ApiResponseAdvice.html" title="class in com.sca4d.core.spring.web">ApiResponseAdvice</a></dt>
 <dt><a href="com/sca4d/core/spring/web/clientstate/ClientStateResponseAdvice.html#supports(org.springframework.core.MethodParameter,java.lang.Class)" class="member-name-link">supports(MethodParameter, Class&lt;? extends HttpMessageConverter&lt;?&gt;&gt;)</a> - Method in class com.sca4d.core.spring.web.clientstate.<a href="com/sca4d/core/spring/web/clientstate/ClientStateResponseAdvice.html" title="class in com.sca4d.core.spring.web.clientstate">ClientStateResponseAdvice</a></dt>
 <dt><a href="com/sca4d/core/spring/web/ListParametersArgumentResolver.html#supportsParameter(org.springframework.core.MethodParameter)" class="member-name-link">supportsParameter(MethodParameter)</a> - Method in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/ListParametersArgumentResolver.html" title="class in com.sca4d.core.spring.web">ListParametersArgumentResolver</a></dt>
@@ -2651,19 +2679,11 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">写入并标记初始化节点持续同步的 SystemSetting。</div>
 </dd>
-<dt><a href="com/sca4d/core/spring/call/SystemExecutionAspect.html" class="type-name-link" title="class in com.sca4d.core.spring.call">SystemExecutionAspect</a> - Class in <a href="com/sca4d/core/spring/call/package-summary.html">com.sca4d.core.spring.call</a></dt>
-<dd>
-<div class="block">在自主入口建立系统 Call，并在方法结束后清理当前线程；不覆盖用户或外部应用调用。</div>
-</dd>
-<dt><a href="com/sca4d/core/spring/call/SystemExecutionAspect.html#%3Cinit%3E(java.time.Clock)" class="member-name-link">SystemExecutionAspect(Clock)</a> - Constructor for class com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/SystemExecutionAspect.html" title="class in com.sca4d.core.spring.call">SystemExecutionAspect</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/setting/SettingCatalog.html#systemSettings()" class="member-name-link">systemSettings()</a> - Method in class com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingCatalog.html" title="class in com.sca4d.core.spring.setting">SettingCatalog</a></dt>
 <dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:T">T</h2>
 <dl class="index">
-<dt><a href="com/sca4d/core/spring/call/SpringAuditResolverLookup.html#targetResolver(java.lang.Class)" class="member-name-link">targetResolver(Class&lt;? extends AuditTargetResolver&gt;)</a> - Method in class com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/SpringAuditResolverLookup.html" title="class in com.sca4d.core.spring.call">SpringAuditResolverLookup</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/spring/web/clientstate/ClientState.Change.html#targets()" class="member-name-link">targets()</a> - Method in class com.sca4d.core.spring.web.clientstate.<a href="com/sca4d/core/spring/web/clientstate/ClientState.Change.html" title="class in com.sca4d.core.spring.web.clientstate">ClientState.Change</a></dt>
 <dd>
 <div class="block">返回需要客户端重新读取的状态目标。</div>

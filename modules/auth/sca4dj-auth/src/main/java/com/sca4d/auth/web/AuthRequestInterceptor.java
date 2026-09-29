@@ -6,8 +6,8 @@ import com.sca4d.core.api.authentication.RequireSessionToken;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
-import com.sca4d.core.spring.call.CallHandlerInterceptor;
 import com.sca4d.core.spring.web.BearerToken;
+import com.sca4d.core.spring.web.HttpCallHandlerInterceptor;
 import com.sca4d.core.spring.web.clientstate.ClientState;
 import com.sca4d.core.spring.web.clientstate.ClientStateTarget;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +22,7 @@ import org.springframework.web.method.HandlerMethod;
 import java.util.Objects;
 
 /** 按 Controller 注解恢复 Session，并在参数绑定前拒绝未声明匿名访问的未认证请求。 */
-public class AuthRequestInterceptor extends CallHandlerInterceptor {
+public class AuthRequestInterceptor extends HttpCallHandlerInterceptor {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthRequestInterceptor.class);
 

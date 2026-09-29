@@ -10,8 +10,73 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 class DataGraphExecutorTest {
+
+    @Test
+    @DisplayName("独立分支并行执行，汇合读取两个结果且保持拓扑顺序")
+    void executesIndependentBranchesAndMerges() throws Exception {
+        DataKey<String> source = DataKey.of("parallelSource", String.class);
+        DataKey<Integer> left = DataKey.of("left", Integer.class);
+        DataKey<Integer> right = DataKey.of("right", Integer.class);
+        DataKey<Integer> sum = DataKey.of("sum", Integer.class);
+        CountDownLatch entered = new CountDownLatch(2);
+        java.util.function.Function<DataValues, Integer> branch = values -> {
+            entered.countDown();
+            try {
+                if (!entered.await(5, TimeUnit.SECONDS)) {
+                    throw new AssertionError("两个分支必须能同时进入");
+                }
+            } catch (InterruptedException failure) {
+                Thread.currentThread().interrupt();
+                throw new IllegalStateException(failure);
+            }
+            return values.get(source).length();
+        };
+        DataGraph graph = DataGraph.builder()
+                .input(source)
+                .operation(
+                        DataOperation
+                                .of("sum", List.of(left, right), sum, values -> values.get(left) + values.get(right)))
+                .operation(DataOperation.of("left", List.of(source), left, branch))
+                .operation(DataOperation.of("right", List.of(source), right, branch))
+                .build();
+        try (var executor = Executors.newFixedThreadPool(2)) {
+            DataValues output = DataGraphExecutor
+                    .executeParallel(graph, DataValues.builder().put(source, "abcd").build(), executor)
+                    .get(10, TimeUnit.SECONDS);
+            assertEquals(8, output.get(sum));
+            assertEquals(List.of(source, left, right, sum), List.copyOf(output.asMap().keySet()));
+        }
+    }
+
+    @Test
+    @DisplayName("分支失败不运行其依赖，取消图不会启动尚未执行的节点")
+    void failsWithoutPartialResultAndCancelsQueuedNodes() {
+        AtomicInteger dependents = new AtomicInteger();
+        DataGraph graph = DataGraph.builder()
+                .operation(DataOperation.of("fail", List.of(), LENGTH, values -> {
+                    throw new IllegalStateException("failure");
+                }))
+                .operation(DataOperation.of("dependent", List.of(LENGTH), LABEL, values -> {
+                    dependents.incrementAndGet();
+                    return "bad";
+                }))
+                .build();
+        var failed = DataGraphExecutor.executeParallel(graph, DataValues.builder().build(), Runnable::run);
+        assertThrows(CompletionException.class, failed::join);
+        assertEquals(0, dependents.get());
+        List<Runnable> queued = new java.util.ArrayList<>();
+        var cancelled = DataGraphExecutor.executeParallel(graph, DataValues.builder().build(), queued::add);
+        assertTrue(cancelled.cancel(true));
+        List.copyOf(queued).forEach(Runnable::run);
+        assertEquals(0, dependents.get());
+    }
 
     private static final DataKey<String> SOURCE = DataKey.of("source", String.class);
 

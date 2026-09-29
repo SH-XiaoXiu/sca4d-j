@@ -75,8 +75,9 @@ loadScripts(document, 'script');</script>
 <ul class="summary-list">
 <li>
 <div id="class-summary">
-<div class="caption"><span>Annotation Interfaces</span></div>
-<div class="summary-table two-column-summary">
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab3" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab3', 2)" class="table-tab">Enum Classes</button><button id="class-summary-tab6" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab6', 2)" class="table-tab">Annotation Interfaces</button></div>
+<div id="class-summary.tabpanel" role="tabpanel">
+<div class="summary-table two-column-summary" aria-labelledby="class-summary-tab0">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color class-summary class-summary-tab6"><a href="AnonymousAccess.html" title="annotation interface in com.sca4d.core.api.annotation">AnonymousAccess</a></div>
@@ -87,37 +88,42 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color class-summary class-summary-tab6">
 <div class="block">声明调用需要记录成功、拒绝或失败的审计结果。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab6"><a href="AuditPayload.html" title="annotation interface in com.sca4d.core.api.annotation">AuditPayload</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab6">
+<div class="col-first even-row-color class-summary class-summary-tab3"><a href="Audit.Mode.html" title="enum class in com.sca4d.core.api.annotation">Audit.Mode</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab3">
+<div class="block">指定审计返回前完成写入还是可靠排队；DEFAULT 只用于声明继承。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab6"><a href="AuditPayload.html" title="annotation interface in com.sca4d.core.api.annotation">AuditPayload</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab6">
 <div class="block">标记方法参数作为 Audit payload 工厂的输入来源。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab6"><a href="AuditTarget.html" title="annotation interface in com.sca4d.core.api.annotation">AuditTarget</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab6">
+<div class="col-first even-row-color class-summary class-summary-tab6"><a href="AuditTarget.html" title="annotation interface in com.sca4d.core.api.annotation">AuditTarget</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab6">
 <div class="block">标记方法参数中的简单审计目标 Resource 标识。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab6"><a href="Idempotent.html" title="annotation interface in com.sca4d.core.api.annotation">Idempotent</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab6">
+<div class="col-first odd-row-color class-summary class-summary-tab6"><a href="Idempotent.html" title="annotation interface in com.sca4d.core.api.annotation">Idempotent</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab6">
 <div class="block">声明调用按动态幂等键复用首次成功结果。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab6"><a href="Locked.html" title="annotation interface in com.sca4d.core.api.annotation">Locked</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab6">
+<div class="col-first even-row-color class-summary class-summary-tab6"><a href="Locked.html" title="annotation interface in com.sca4d.core.api.annotation">Locked</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab6">
 <div class="block">声明完整业务调用必须在一项分布式锁内连续执行。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab6"><a href="RateLimited.html" title="annotation interface in com.sca4d.core.api.annotation">RateLimited</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab6">
+<div class="col-first odd-row-color class-summary class-summary-tab6"><a href="RateLimited.html" title="annotation interface in com.sca4d.core.api.annotation">RateLimited</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab6">
 <div class="block">声明调用必须先取得一个或多个业务维度的限流额度。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab6"><a href="RequirePermission.html" title="annotation interface in com.sca4d.core.api.annotation">RequirePermission</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab6">
+<div class="col-first even-row-color class-summary class-summary-tab6"><a href="RequirePermission.html" title="annotation interface in com.sca4d.core.api.annotation">RequirePermission</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab6">
 <div class="block">声明调用必须具有一组资源权限（Required Permission）。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab6"><a href="RequirePermissions.html" title="annotation interface in com.sca4d.core.api.annotation">RequirePermissions</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab6">
+<div class="col-first odd-row-color class-summary class-summary-tab6"><a href="RequirePermissions.html" title="annotation interface in com.sca4d.core.api.annotation">RequirePermissions</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab6">
 <div class="block">保存多个 <a href="RequirePermission.html" title="annotation interface in com.sca4d.core.api.annotation"><code>RequirePermission</code></a> 的重复注解容器。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab6"><a href="SystemExecution.html" title="annotation interface in com.sca4d.core.api.annotation">SystemExecution</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab6">
+<div class="col-first even-row-color class-summary class-summary-tab6"><a href="SystemExecution.html" title="annotation interface in com.sca4d.core.api.annotation">SystemExecution</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab6">
 <div class="block">为没有已有 Call 的 Spring 方法声明系统自主执行身份；已有调用保持原来的身份。</div>
+</div>
 </div>
 </div>
 </div>
