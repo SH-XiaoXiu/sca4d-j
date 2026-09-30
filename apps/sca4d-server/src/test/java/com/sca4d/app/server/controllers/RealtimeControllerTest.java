@@ -5,8 +5,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.sca4d.core.api.authentication.Session;
+import com.sca4d.core.api.setting.ConfiguredConstants;
 import com.sca4d.web.realtime.sse.WebRealtimeSseConnector;
+import com.sca4d.web.realtime.stomp.WebRealtimeProtocol;
 import com.sca4d.web.realtime.ticket.WebRealtimeTicketService;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -14,6 +17,11 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 /** 验证 Realtime HTTP 路由设置流式响应所需的缓存和代理行为。 */
 class RealtimeControllerTest {
+
+    @BeforeAll
+    static void initializeWebsocketPath() {
+        ConfiguredConstants.initialize(WebRealtimeProtocol.class, ignored -> null);
+    }
 
     @Test
     @DisplayName("SSE 连接禁止缓存和 Nginx 响应缓冲")
