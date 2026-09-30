@@ -5,7 +5,6 @@ import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.concurrent.VersionConditions;
-import com.sca4d.core.spring.call.CallLifecycleAdvisor;
 import com.sca4d.core.spring.web.annotation.IfMatch;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,22 +12,11 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /** 把当前 HTTP 请求提交的 `If-Match` 版本绑定为必须由根资源 Repository 消费的预提交条件。 */
-public class RequestVersionConditions implements VersionConditions, CallLifecycleAdvisor.AnnotationBinding<IfMatch> {
+public class RequestVersionConditions implements VersionConditions {
 
     private final ThreadLocal<State> current = new ThreadLocal<>();
 
-    /** 创建 HTTP 请求版本条件入口。 */
     public RequestVersionConditions() {
-    }
-
-    @Override
-    public @NotNull Class<IfMatch> annotationType() {
-        return IfMatch.class;
-    }
-
-    @Override
-    public void attach(@NotNull CallExecution execution, @NotNull IfMatch annotation) {
-        attach(execution);
     }
 
     /**

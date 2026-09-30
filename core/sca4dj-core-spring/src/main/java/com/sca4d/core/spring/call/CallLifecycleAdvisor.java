@@ -3,55 +3,39 @@ package com.sca4d.core.spring.call;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallExecution;
 import com.sca4d.core.api.call.CallInvoker;
-import com.sca4d.core.api.call.CallLifecycle;
 import org.aopalliance.aop.Advice;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.aop.ClassFilter;
 import org.springframework.aop.Pointcut;
 import org.springframework.aop.support.AbstractPointcutAdvisor;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.aop.support.StaticMethodMatcherPointcut;
-import org.springframework.core.BridgeMethodResolver;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.core.Ordered;
-import org.springframework.core.annotation.AnnotatedElementUtils;
-import org.springframework.core.annotation.MergedAnnotation;
-import org.springframework.core.annotation.MergedAnnotations;
 
 import java.lang.annotation.Annotation;
-import java.lang.annotation.Repeatable;
-import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.time.Clock;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.CompletionStage;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
  * 按各模块注册的注解声明选择方法，建立执行范围并进入唯一 CallLifecycle。
  */
 public class CallLifecycleAdvisor extends AbstractPointcutAdvisor {
-    private final CallInvoker invoker;
+    private final CallBindingRegistry bindings;
 
-    private final Clock clock;
-
-    private final List<AnnotationBinding<?>> declarations;
-
-    private final List<MethodBinding> methodBindings;
-
-    private final Set<Class<? extends Annotation>> registeredTypes;
+    private final Supplier<CallInvoker> invokerSource;
 
     private final Pointcut pointcut;
 
@@ -74,21 +58,41 @@ public class CallLifecycleAdvisor extends AbstractPointcutAdvisor {
             List<? extends AnnotationBinding<?>> declarations,
             List<? extends MethodBinding> methodBindings,
             Clock clock) {
-        this.invoker = Objects.requireNonNull(invoker);
-        this.clock = Objects.requireNonNull(clock);
-        this.declarations = List.copyOf(declarations);
-        this.methodBindings = List.copyOf(methodBindings);
-        Set<Class<? extends Annotation>> types = new HashSet<>();
-        for (AnnotationBinding<?> declaration : declarations) {
-            if (!types.add(Objects.requireNonNull(declaration.annotationType()))) {
-                throw new IllegalArgumentException("调用注解存在重复注册: " + declaration.annotationType().getName());
-            }
-        }
-        registeredTypes = Set.copyOf(types);
+        this(
+                () -> Objects.requireNonNull(invoker),
+                new CallBindingRegistry(declarations, methodBindings, clock));
+        bindings.initialize();
+    }
+
+    /** 使用 Spring 延迟提供者，避免 Advisor 创建时提前实例化调用基础设施。 */
+    public CallLifecycleAdvisor(
+            ObjectProvider<CallInvoker> invoker,
+            ObjectProvider<AnnotationBinding<?>> declarations,
+            ObjectProvider<MethodBinding> methodBindings,
+            ObjectProvider<Clock> clock) {
+        this(
+                invoker::getObject,
+                new CallBindingRegistry(declarations, methodBindings, clock));
+    }
+
+    private CallLifecycleAdvisor(
+            Supplier<CallInvoker> invokerSource,
+            CallBindingRegistry bindings) {
+        this.invokerSource = Objects.requireNonNull(invokerSource);
+        this.bindings = Objects.requireNonNull(bindings);
         pointcut = new StaticMethodMatcherPointcut() {
             @Override
+            public @NotNull ClassFilter getClassFilter() {
+                return targetClass -> !AnnotationBinding.class.isAssignableFrom(targetClass)
+                        && !MethodBinding.class.isAssignableFrom(targetClass);
+            }
+
+            @Override
             public boolean matches(@NotNull Method method, @NotNull Class<?> targetClass) {
-                return method.getDeclaringClass() != Object.class && !bindings(method, targetClass).isEmpty();
+                if (method.getDeclaringClass() == Object.class) {
+                    return false;
+                }
+                return bindings.matches(method, targetClass);
             }
         };
         advice = (MethodInterceptor) this::invoke;
@@ -113,25 +117,21 @@ public class CallLifecycleAdvisor extends AbstractPointcutAdvisor {
         Class<?> targetType = target == null
                 ? invocation.getMethod().getDeclaringClass()
                 : AopUtils.getTargetClass(target);
-        Method method = concreteMethod(invocation.getMethod(), targetType);
-        List<Binding> bindings = bindings(invocation.getMethod(), targetType);
+        Method method = CallBindingRegistry.concreteMethod(invocation.getMethod(), targetType);
+        List<CallBindingRegistry.Binding> matchedBindings = this.bindings.resolve(invocation.getMethod(), targetType);
+        CallInvoker invoker = invokerSource.get();
         boolean ownsCall = CallHolder.currentOrNull() == null;
         if (ownsCall) {
             List<Call> supplied = new ArrayList<>();
-            for (Binding binding : bindings) {
-                binding.create.get().ifPresent(supplied::add);
+            for (CallBindingRegistry.Binding binding : matchedBindings) {
+                binding.createCall().ifPresent(supplied::add);
             }
             if (supplied.size() > 1) {
                 throw new IllegalStateException("同一次入口不能由多个声明创建 Call");
             }
             CallHolder.set(
                     (supplied.isEmpty()
-                            ? new Call(
-                                    invoker,
-                                    UUID.randomUUID().toString(),
-                                    clock.instant(),
-                                    com.sca4d.core.api.data.DataValues.builder().build(),
-                                    null)
+                            ? this.bindings.createCall(invoker)
                             : supplied.getFirst().withInvoker(invoker)));
         }
         CallExecution execution = null;
@@ -144,8 +144,8 @@ public class CallLifecycleAdvisor extends AbstractPointcutAdvisor {
                     invocation.getArguments(),
                     resultType(method));
             CallHolder.push(execution);
-            for (Binding binding : bindings) {
-                binding.attach.accept(execution);
+            for (CallBindingRegistry.Binding binding : matchedBindings) {
+                binding.attach(execution);
             }
             CallPreCommitTransactionListener.track(execution);
             if (CompletionStage.class.isAssignableFrom(method.getReturnType())) {
@@ -190,114 +190,6 @@ public class CallLifecycleAdvisor extends AbstractPointcutAdvisor {
     }
 
     /**
-     * 分别读取实现方法、接口方法及类型声明，以支持 JDK/CGLIB 与桥接方法。
-     */
-    private List<Binding> bindings(Method method, Class<?> targetType) {
-        Method concrete = concreteMethod(method, targetType);
-        validateDeclarations(concrete);
-        validateDeclarations(method);
-        validateDeclarations(targetType);
-        for (var parameter : concrete.getParameters()) {
-            validateDeclarations(parameter);
-        }
-        List<Binding> matched = new ArrayList<>();
-        for (AnnotationBinding<?> declaration : declarations) {
-            bind(declaration, concrete, method, targetType).ifPresent(matched::add);
-        }
-        for (MethodBinding binding : methodBindings) {
-            if (binding.matches(concrete, targetType)) {
-                matched.add(
-                        new Binding(
-                                () -> binding.createCall(
-                                        UUID.randomUUID().toString(),
-                                        clock.instant(),
-                                        concrete,
-                                        targetType),
-                                binding::attach));
-            }
-        }
-        return matched;
-    }
-
-    /**
-     * 将类型化注解和回调固定在一次方法匹配中，不进行未经校验的泛型转换。
-     */
-    private <A extends Annotation> Optional<Binding> bind(
-            AnnotationBinding<A> declaration,
-            Method concrete,
-            Method original,
-            Class<?> targetType) {
-        Class<A> type = declaration.annotationType();
-        List<A> methods = annotations(concrete, type);
-        if (methods.isEmpty()) {
-            methods = annotations(original, type);
-        }
-        List<A> types = annotations(targetType, type);
-        if (methods.isEmpty() && types.isEmpty()) {
-            List<A> parameters = new ArrayList<>();
-            for (var parameter : concrete.getParameters()) {
-                for (A annotation : annotations(parameter, type)) {
-                    if (!parameters.contains(annotation)) {
-                        parameters.add(annotation);
-                    }
-                }
-            }
-            if (parameters.size() > 1 && !type.isAnnotationPresent(Repeatable.class)) {
-                throw new IllegalArgumentException("方法参数存在相互冲突的调用声明: " + concrete + " / " + type.getName());
-            }
-            methods = List.copyOf(parameters);
-        }
-        if (methods.isEmpty() && types.isEmpty()) {
-            return Optional.empty();
-        }
-        List<A> methodDeclarations = methods;
-        A effective = methods.isEmpty() ? types.getFirst() : methods.getFirst();
-        Set<A> attached = new LinkedHashSet<>();
-        if (type.isAnnotationPresent(Repeatable.class)) {
-            attached.addAll(methods);
-            attached.addAll(types);
-        } else {
-            attached.add(effective);
-        }
-        return Optional.of(
-                new Binding(
-                        () -> declaration.createCall(UUID.randomUUID().toString(), clock.instant(), effective),
-                        execution -> {
-                            execution.recordDeclarations(type, methodDeclarations, types);
-                            attached.forEach(annotation -> declaration.attach(execution, annotation));
-                        }));
-    }
-
-    /** 读取普通或重复声明，同时保留 Spring 的接口、继承和组合注解解析。 */
-    private static <A extends Annotation> List<A> annotations(AnnotatedElement element, Class<A> type) {
-        if (type.isAnnotationPresent(Repeatable.class)) {
-            return List.copyOf(AnnotatedElementUtils.findMergedRepeatableAnnotations(element, type));
-        }
-        A annotation = AnnotatedElementUtils.findMergedAnnotation(element, type);
-        return annotation == null ? List.of() : List.of(annotation);
-    }
-
-    /** 未注册的功能声明直接拒绝创建代理，避免删除模块后仍静默匹配受保护方法。 */
-    private void validateDeclarations(AnnotatedElement element) {
-        MergedAnnotations.from(element, MergedAnnotations.SearchStrategy.TYPE_HIERARCHY)
-                .stream()
-                .map(MergedAnnotation::getType)
-                .filter(type -> type.getDeclaredAnnotation(CallLifecycle.Intercepted.class) != null)
-                .filter(type -> !registeredTypes.contains(type))
-                .findFirst()
-                .ifPresent(type -> {
-                    throw new IllegalArgumentException("调用功能注解没有注册声明: " + type.getName() + " / " + element);
-                });
-    }
-
-    /**
-     * 消除泛型桥接方法，保证参数和返回类型来自具体实现。
-     */
-    private static Method concreteMethod(Method method, Class<?> targetType) {
-        return BridgeMethodResolver.findBridgedMethod(AopUtils.getMostSpecificMethod(method, targetType));
-    }
-
-    /**
      * 原样传递普通异常及 Error，只包装 Callable 无法声明的其他 Throwable。
      */
     private static Object proceed(MethodInvocation invocation) throws Exception {
@@ -336,7 +228,11 @@ public class CallLifecycleAdvisor extends AbstractPointcutAdvisor {
 
     /** 通过方法元数据进入 Call 的绑定方式；不要求任何注解。 */
     public interface MethodBinding {
-        /** 判断当前实现方法是否进入该绑定。 */
+        /**
+         * 判断当前实现方法是否进入该绑定。
+         *
+         * <p>实现必须只依赖方法和目标类型。注册表会缓存判断结果，因此不能读取参数、当前 Call、线程状态或外部存储。
+         */
         boolean matches(@NotNull Method method, @NotNull Class<?> targetType);
 
         /** 没有现有 Call 时可创建自主入口；普通方法绑定返回空。 */
@@ -350,20 +246,6 @@ public class CallLifecycleAdvisor extends AbstractPointcutAdvisor {
 
         /** 向匹配的方法执行附着声明或输入。 */
         default void attach(@NotNull CallExecution execution) {
-        }
-    }
-
-    /**
-     * 保存一次匹配的类型化回调，离开后不缓存调用状态或实参。
-     */
-    private static class Binding {
-        private final Supplier<Optional<Call>> create;
-
-        private final Consumer<CallExecution> attach;
-
-        private Binding(Supplier<Optional<Call>> create, Consumer<CallExecution> attach) {
-            this.create = create;
-            this.attach = attach;
         }
     }
 

@@ -28,12 +28,14 @@ import org.jetbrains.annotations.NotNull;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Role;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.time.Clock;
@@ -50,8 +52,8 @@ import java.util.concurrent.TimeUnit;
 @MapperScan(basePackageClasses = AuditMapper.class)
 @EnableConfigurationProperties(AuditProperties.class)
 @EnableTransactionManagement
+@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 public class AuditAutoConfiguration {
-    /** 创建 Audit 模块自动配置。 */
     public AuditAutoConfiguration() {
     }
 
@@ -135,6 +137,7 @@ public class AuditAutoConfiguration {
 
     /** Audit 自己注册调用声明，Core Spring 不维护审计注解清单。 */
     @Bean
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     CallLifecycleAdvisor.AnnotationBinding<Audit> auditCallBinding() {
         return () -> Audit.class;
     }

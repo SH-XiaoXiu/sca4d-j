@@ -8,6 +8,7 @@ import com.sca4d.core.api.annotation.RequirePermission;
 import com.sca4d.core.api.annotation.RequirePermissions;
 import com.sca4d.core.api.annotation.SystemExecution;
 import com.sca4d.core.api.call.Call;
+import com.sca4d.core.api.call.CallExecution;
 import com.sca4d.core.api.call.CallInvoker;
 import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.call.CallLifecycleConfiguration;
@@ -71,13 +72,17 @@ import com.sca4d.core.spring.web.PageRequestArgumentResolver;
 import com.sca4d.core.spring.web.RequestVersionConditionFilter;
 import com.sca4d.core.spring.web.RequestVersionConditions;
 import com.sca4d.core.spring.web.ResponseETagContractValidator;
+import com.sca4d.core.spring.web.annotation.CurrentPrincipal;
+import com.sca4d.core.spring.web.annotation.IfMatch;
 import com.sca4d.core.spring.web.clientstate.ClientStateFilter;
 import com.sca4d.core.spring.web.clientstate.ClientStateResponseAdvice;
 import com.sca4d.core.spring.web.view.BaseViewJacksonInstaller;
 import jakarta.validation.Validator;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -89,6 +94,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.Role;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -115,6 +121,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 @AutoConfiguration(after = WebMvcAutoConfiguration.class)
 @ConditionalOnClass(WebMvcConfigurer.class)
 @EnableAspectJAutoProxy
+@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 @EnableConfigurationProperties({
         CoreSpringProperties.class,
         HttpInputValidationProperties.class,
@@ -126,7 +133,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 })
 public class CoreSpringAutoConfiguration {
 
-    /** 创建 Core Spring 自动配置。 */
     public CoreSpringAutoConfiguration() {
     }
 
@@ -469,58 +475,67 @@ public class CoreSpringAutoConfiguration {
 
     /** @param invoker 调用执行器 @param declarations 功能所属注解注册 @param clock 入口时钟 @return Spring AOP 桥接 */
     @Bean
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     CallLifecycleAdvisor callLifecycleAdvisor(
-            CallInvoker invoker,
-            List<CallLifecycleAdvisor.AnnotationBinding<?>> declarations,
-            List<CallLifecycleAdvisor.MethodBinding> methodBindings,
-            Clock clock) {
+            ObjectProvider<CallInvoker> invoker,
+            ObjectProvider<CallLifecycleAdvisor.AnnotationBinding<?>> declarations,
+            ObjectProvider<CallLifecycleAdvisor.MethodBinding> methodBindings,
+            ObjectProvider<Clock> clock) {
         return new CallLifecycleAdvisor(invoker, declarations, methodBindings, clock);
     }
 
     /** 注册 Core 自己定义的匿名访问注解。 */
     @Bean
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     CallLifecycleAdvisor.AnnotationBinding<AnonymousAccess> anonymousCallBinding() {
         return () -> AnonymousAccess.class;
     }
 
     /** 注册 Core 自己定义的权限注解。 */
     @Bean
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     CallLifecycleAdvisor.AnnotationBinding<RequirePermission> permissionCallBinding() {
         return () -> RequirePermission.class;
     }
 
     /** 注册 repeatable 权限注解的容器。 */
     @Bean
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     CallLifecycleAdvisor.AnnotationBinding<RequirePermissions> permissionsCallBinding() {
         return () -> RequirePermissions.class;
     }
 
     /** 注册 Core 自己定义的限流注解。 */
     @Bean
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     CallLifecycleAdvisor.AnnotationBinding<RateLimited> rateLimitCallBinding() {
         return () -> RateLimited.class;
     }
 
     /** 注册 Core 自己定义的幂等注解。 */
     @Bean
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     CallLifecycleAdvisor.AnnotationBinding<Idempotent> idempotentCallBinding() {
         return () -> Idempotent.class;
     }
 
     /** 注册 Core 自己定义的锁注解。 */
     @Bean
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     CallLifecycleAdvisor.AnnotationBinding<Locked> lockedCallBinding() {
         return () -> Locked.class;
     }
 
     /** 注册无内置注解但显式要求进入调用生命周期的方法。 */
     @Bean
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     CallLifecycleAdvisor.AnnotationBinding<CallLifecycle.Intercepted> interceptedCallBinding() {
         return () -> CallLifecycle.Intercepted.class;
     }
 
     /** 系统注解只负责自主入口身份，不向已有用户调用赋予额外权限。 */
     @Bean
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     CallLifecycleAdvisor.AnnotationBinding<SystemExecution> systemCallBinding() {
         return new CallLifecycleAdvisor.AnnotationBinding<>() {
             @Override
@@ -547,8 +562,9 @@ public class CoreSpringAutoConfiguration {
      * @return 把监听器安装到事务管理器的 Bean 后处理器
      */
     @Bean
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     static CallPreCommitTransactionInstaller callPreCommitTransactionInstaller(
-            CallPreCommitTransactionListener listener) {
+            ObjectProvider<CallPreCommitTransactionListener> listener) {
         return new CallPreCommitTransactionInstaller(listener);
     }
 
@@ -576,6 +592,31 @@ public class CoreSpringAutoConfiguration {
             PrincipalSelectionInputResolver inputResolver,
             PrincipalSelectionInvoker invoker) {
         return new PrincipalSelectionCallInterceptor(applicationContext, inputResolver, invoker);
+    }
+
+    /** 注册业务身份选择声明；运行时选择由主体选择参与者负责。 */
+    @Bean
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
+    CallLifecycleAdvisor.AnnotationBinding<CurrentPrincipal> currentPrincipalCallBinding() {
+        return () -> CurrentPrincipal.class;
+    }
+
+    /** 注册版本条件声明，附着动作延迟到真正执行方法时获取请求状态。 */
+    @Bean
+    @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
+    CallLifecycleAdvisor.AnnotationBinding<IfMatch> ifMatchCallBinding(
+            ObjectProvider<RequestVersionConditions> conditions) {
+        return new CallLifecycleAdvisor.AnnotationBinding<>() {
+            @Override
+            public @NotNull Class<IfMatch> annotationType() {
+                return IfMatch.class;
+            }
+
+            @Override
+            public void attach(@NotNull CallExecution execution, @NotNull IfMatch annotation) {
+                conditions.getObject().attach(execution);
+            }
+        };
     }
 
     /**

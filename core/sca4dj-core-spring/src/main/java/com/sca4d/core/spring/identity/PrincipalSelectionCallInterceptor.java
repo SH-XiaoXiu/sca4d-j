@@ -8,7 +8,6 @@ import com.sca4d.core.api.identity.IdentityCallInterceptor;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.PermissionCallInterceptor;
-import com.sca4d.core.spring.call.CallLifecycleAdvisor;
 import com.sca4d.core.spring.web.annotation.CurrentPrincipal;
 import jakarta.servlet.http.HttpServletRequest;
 import org.jetbrains.annotations.NotNull;
@@ -27,8 +26,7 @@ import java.util.concurrent.CompletionStage;
  */
 public class PrincipalSelectionCallInterceptor
         implements
-            CallLifecycle.Around,
-            CallLifecycleAdvisor.AnnotationBinding<CurrentPrincipal> {
+            CallLifecycle.Around {
 
     /** 业务主体选择节点编码。 */
     public static final TreeCode CODE = TreeCode.of("CALL/PRINCIPAL_SELECTION");
@@ -124,11 +122,6 @@ public class PrincipalSelectionCallInterceptor
     @Override
     public @NotNull TreeCode code() {
         return CODE;
-    }
-
-    @Override
-    public @NotNull Class<CurrentPrincipal> annotationType() {
-        return CurrentPrincipal.class;
     }
 
     @Override

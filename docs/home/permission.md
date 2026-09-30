@@ -322,7 +322,7 @@ ResourceScope、版本条件和幂等结果绑定到声明它们的方法。嵌�
 
 ### 注解与环绕处理
 
-各模块注册 `CallLifecycleAdvisor.AnnotationBinding<A>` 说明自己负责的注解。Advisor 根据注册匹配实现方法、接口方法、类型和参数，不维护固定注解列表；非注解规则使用 `CallLifecycleAdvisor.MethodBinding`。绑定只建立自主入口身份或附着预提交条件，实际行为由所属模块的生命周期参与者执行。
+各模块注册 `CallLifecycleAdvisor.AnnotationBinding<A>` 说明自己负责的注解，注册对象只保存注解类型、Call 身份创建和声明附着规则，不注入 Repository、业务服务或其他运行依赖。Advisor 根据注册匹配实现方法、接口方法、类型和参数，不维护固定注解列表；非注解规则使用 `CallLifecycleAdvisor.MethodBinding`。绑定只建立自主入口身份或附着预提交条件，实际行为由所属模块正常装配的生命周期参与者执行。绑定匹配结果按具体方法和目标类型缓存，`MethodBinding.matches(...)` 只能读取方法元数据。
 
 功能注解使用 `@CallLifecycle.Intercepted` 标记。Advisor 实际按已注册的 `AnnotationBinding` 匹配方法；标记用于在功能注解缺少对应绑定时拒绝匹配。没有标记的注解只要注册了 `AnnotationBinding`，同样可以进入生命周期。非注解规则使用 `MethodBinding`。功能行为另由 `Participant` 提供；当前注册检查只验证绑定，不能证明参与者已经安装。单值声明的方法值优先于类型值；`declarations(type)` 保留方法和类型的全部声明，权限要求累加并去重。
 
