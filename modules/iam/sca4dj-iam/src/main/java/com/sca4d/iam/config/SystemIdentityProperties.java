@@ -1,6 +1,7 @@
 package com.sca4d.iam.config;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.LinkedHashMap;
@@ -19,14 +20,15 @@ public class SystemIdentityProperties {
         return systemSubjectId;
     }
 
+    /** SYSTEM Subject ID 必须为正数。 */
     public void setSystemSubjectId(long systemSubjectId) {
         if (systemSubjectId <= 0)
             throw new IllegalArgumentException("SYSTEM Subject ID 必须为正数");
         this.systemSubjectId = systemSubjectId;
     }
 
-    public @NotNull Map<String, Long> getSystemPrincipalIds() {
-        return systemPrincipalIds;
+    public @NotNull @Unmodifiable Map<String, Long> getSystemPrincipalIds() {
+        return Map.copyOf(systemPrincipalIds);
     }
 
     public void setSystemPrincipalIds(@NotNull Map<String, Long> systemPrincipalIds) {

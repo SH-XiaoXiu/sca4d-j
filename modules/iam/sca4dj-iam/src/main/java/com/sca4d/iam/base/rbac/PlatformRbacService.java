@@ -51,7 +51,17 @@ public class PlatformRbacService {
 
     private static final Logger LOG = LoggerFactory.getLogger(PlatformRbacService.class);
 
+    /**
+     * 新建 PlatformPrincipal 自动绑定的内置角色编码。
+     */
+    public static final @NotNull String DEFAULT = "DEFAULT";
+
     private static final int MAX_ROLE_CODE_LENGTH = 128;
+
+    /**
+     * 拥有 Operation Catalog 中全部 ACTION 的内置角色编码。
+     */
+    public static final @NotNull String ROOT = "ROOT";
 
     private static final LockKey PLATFORM_INITIALIZATION_LOCK = new LockKey(TreeCode.of("IAM:RBAC:INITIALIZATION"));
 
@@ -62,31 +72,21 @@ public class PlatformRbacService {
             Set.of("name"),
             Map.of("name", 128));
 
-    /**
-     * 拥有 Operation Catalog 中全部 ACTION 的内置角色编码。
-     */
-    public static final @NotNull String ROOT = "ROOT";
-
-    /**
-     * 新建 PlatformPrincipal 自动绑定的内置角色编码。
-     */
-    public static final @NotNull String DEFAULT = "DEFAULT";
+    private final @NotNull IdentityService identities;
 
     private final @NotNull RbacService rbac;
 
+    private final @NotNull PlatformAccountDirectoryRepository accounts;
+
     private final @NotNull PlatformRbacRepository repository;
 
-    private final @NotNull PermissionSelections permissionSelections;
+    private final @NotNull DistributedLock distributedLock;
 
     private final @NotNull IdGenerator idGenerator;
 
     private final @NotNull LocaleCatalog locales;
 
-    private final @NotNull IdentityService identities;
-
-    private final @NotNull PlatformAccountDirectoryRepository accounts;
-
-    private final @NotNull DistributedLock distributedLock;
+    private final @NotNull PermissionSelections permissionSelections;
 
     private final @NotNull TransactionTemplate transactions;
 

@@ -37,9 +37,9 @@ class PlatformAccountLifecycleServiceTest {
 
     private static final long CURRENT_ACCOUNT_ID = 20L;
 
-    private static final long SUBJECT_ID = 30L;
-
     private static final long PRINCIPAL_ID = 40L;
+
+    private static final long SUBJECT_ID = 30L;
 
     @Mock
     private PlatformAccountLifecycleRepository repository;

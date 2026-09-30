@@ -11,19 +11,19 @@ import java.util.Objects;
 @SuppressWarnings("ClassCanBeRecord")
 public class PlatformAccountEntry {
 
-    private final @NotNull Long accountId;
-
-    private final @NotNull Long subjectId;
-
-    private final @NotNull Long principalId;
-
-    private final @NotNull String username;
-
     private final @NotNull IdentityStatus status;
 
     private final @NotNull Instant createdAt;
 
     private final @NotNull Instant updatedAt;
+
+    private final @NotNull Long accountId;
+
+    private final @NotNull Long principalId;
+
+    private final @NotNull Long subjectId;
+
+    private final @NotNull String username;
 
     private final boolean protectedRoot;
 

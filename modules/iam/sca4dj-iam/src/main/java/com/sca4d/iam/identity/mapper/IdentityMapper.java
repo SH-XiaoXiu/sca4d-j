@@ -18,6 +18,10 @@ import java.util.List;
 
 /** 读写 IAM 的 `Subject`、`Account`、`Principal` 和登录标识，不装配具体 `Principal` 实现。 */
 public interface IdentityMapper {
+    /** @return 标识集合中未删除的 Subject，包括停用状态 */
+    @NotNull
+    List<Subject> selectSubjects(@Param("ids") @NotNull Collection<Long> ids);
+
     /**
      * 插入 `Subject`。
      *
@@ -77,6 +81,11 @@ public interface IdentityMapper {
             @Param("principalId") @Nullable Long principalId,
             @Param("status") @Nullable IdentityStatus status,
             @Param("subjectStatus") @Nullable IdentityStatus subjectStatus);
+
+    /** 按 Subject 标识集合批量读取 Account。 */
+    @CheckReturnValue
+    @NotNull
+    List<Account> selectAccountsBySubjectIds(@Param("subjectIds") @NotNull Collection<Long> subjectIds);
 
     /** @return 账号当前状态；不存在时为 {@code null} */
     @CheckReturnValue
@@ -206,9 +215,10 @@ public interface IdentityMapper {
             @Param("id") @Nullable Long id,
             @Param("accountId") @Nullable Long accountId);
 
-    /** 更新登录标识的展示值、规范值及生命周期字段，已删除行不可改写。 */
+    /** 按 Patch 更新登录标识并返回更新结果；目标不存在或已经删除时返回空。 */
     @CheckReturnValue
-    int updateIdentifier(
+    @Nullable
+    AccountIdentifier updateIdentifier(
             @Param("id") long id,
             @Param("value") @NotNull Patch<String> value,
             @Param("normalizedValue") @NotNull Patch<String> normalizedValue,

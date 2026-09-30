@@ -227,6 +227,13 @@ public class IdentityService {
         return repository.findAccountStatus(Objects.requireNonNull(id, "账号标识不能为空"));
     }
 
+    /** @return 按标识索引的未删除 Subject，包含停用状态；缺失标识不包含在结果中 */
+    @Transactional(readOnly = true)
+    @CheckReturnValue
+    public @NotNull Map<Long, Subject> findSubjects(@NotNull Collection<Long> subjectIds) {
+        return repository.findSubjects(List.copyOf(Objects.requireNonNull(subjectIds, "Subject 标识集合不能为空")));
+    }
+
     /**
      * 读取一个 Subject 的全部 Account。
      *
@@ -237,6 +244,14 @@ public class IdentityService {
     @CheckReturnValue
     public @NotNull @Unmodifiable List<@NotNull Account> findAccounts(@NotNull Long subjectId) {
         return repository.findAccounts(Objects.requireNonNull(subjectId, "接入者标识不能为空"));
+    }
+
+    /** 按 Subject 标识批量读取 Account。 */
+    @Transactional(readOnly = true)
+    @CheckReturnValue
+    public @NotNull @Unmodifiable Map<@NotNull Long, @NotNull List<@NotNull Account>> findAccounts(
+            @NotNull Collection<@NotNull Long> subjectIds) {
+        return repository.findAccounts(Objects.requireNonNull(subjectIds, "接入者标识集合不能为空"));
     }
 
     /**
@@ -672,14 +687,13 @@ public class IdentityService {
     public @NotNull AccountIdentifier changeIdentifierValue(long identifierId, @NotNull String rawValue) {
         AccountIdentifier current = identifierById(identifierId);
         String normalized = normalize(current.type(), rawValue);
+        AccountIdentifier updated;
         try {
-            if (!repository.updateIdentifierValue(identifierId, rawValue.trim(), normalized)) {
-                throw new BusinessException(IamErrorCode.IDENTIFIER_NOT_FOUND);
-            }
+            updated = repository.changeIdentifierValue(identifierId, rawValue.trim(), normalized)
+                    .orElseThrow(() -> new BusinessException(IamErrorCode.IDENTIFIER_NOT_FOUND));
         } catch (DuplicateKeyException exception) {
             throw new BusinessException(IamErrorCode.IDENTIFIER_EXISTS, exception);
         }
-        AccountIdentifier updated = identifierById(identifierId);
         LOG.info(
                 "Account 登录标识值已修改 | identifierId={} accountId={} type={}",
                 identifierId,

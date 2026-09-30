@@ -13,13 +13,13 @@ import java.util.Objects;
  */
 @SuppressWarnings("ClassCanBeRecord")
 public class AclEntry {
-    private final @NotNull Long principalId;
+    private final @NotNull Action action;
 
-    private final @NotNull TreeCode resourceType;
+    private final @NotNull Long principalId;
 
     private final @NotNull String resourceId;
 
-    private final @NotNull Action action;
+    private final @NotNull TreeCode resourceType;
 
     /**
      * 创建一条 ACL 授权事实。
@@ -41,7 +41,7 @@ public class AclEntry {
     }
 
     /**
-     * 返回被授权业务主体标识。
+     * 被授权业务主体标识。
      *
      * @return 业务主体标识
      */
@@ -51,7 +51,7 @@ public class AclEntry {
     }
 
     /**
-     * 返回资源类型。
+     * 资源类型。
      *
      * @return 资源类型
      */
@@ -61,7 +61,7 @@ public class AclEntry {
     }
 
     /**
-     * 返回资源标识。
+     * 资源标识。
      *
      * @return 资源标识
      */
@@ -71,7 +71,7 @@ public class AclEntry {
     }
 
     /**
-     * 返回被允许动作。
+     * 被允许动作。
      *
      * @return 动作
      */

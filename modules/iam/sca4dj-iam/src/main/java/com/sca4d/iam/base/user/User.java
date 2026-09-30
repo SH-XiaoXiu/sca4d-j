@@ -123,7 +123,7 @@ public class User implements Principal {
     }
 
     /**
-     * 读取构造 User 时保存的接入者。
+     * 构造 User 时保存的接入者。
      *
      * @return User 持有的 Subject
      */
@@ -133,7 +133,7 @@ public class User implements Principal {
     }
 
     /**
-     * 读取构造 User 时保存的登录账号。
+     * 构造 User 时保存的登录账号。
      *
      * @return User 持有的 Account
      */
@@ -150,7 +150,7 @@ public class User implements Principal {
     }
 
     /**
-     * 返回单一 Platform 用户场景使用的用户标识。
+     * 单一 Platform 用户场景使用的用户标识。
      *
      * @return USER 标识，与 {@link #principalId()} 相同
      */

@@ -10,7 +10,6 @@ import java.util.Objects;
 /** 在应用没有安装 Redis 时让 RBAC 直接读取 Repository。 */
 public class NoOpRbacPermissionCache implements RbacPermissionCache {
 
-    /** 创建不保存授权结果的缓存实现。 */
     public NoOpRbacPermissionCache() {
     }
 

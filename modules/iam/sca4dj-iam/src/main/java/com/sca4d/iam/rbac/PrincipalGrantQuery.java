@@ -17,9 +17,9 @@ import java.util.Objects;
  */
 public class PrincipalGrantQuery {
 
-    private final @NotNull @Unmodifiable List<@NotNull Long> principalIds;
-
     private final @NotNull @Unmodifiable List<@NotNull Operation> operations;
+
+    private final @NotNull @Unmodifiable List<@NotNull Long> principalIds;
 
     private final boolean allOf;
 

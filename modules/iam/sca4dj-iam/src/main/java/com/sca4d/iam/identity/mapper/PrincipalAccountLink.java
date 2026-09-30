@@ -8,9 +8,9 @@ import java.util.Objects;
 /** 批量查询 Principal 与 Account 关系的内部行。 */
 @SuppressWarnings("ClassCanBeRecord")
 public class PrincipalAccountLink {
-    private final @NotNull Long principalId;
-
     private final @NotNull Long accountId;
+
+    private final @NotNull Long principalId;
 
     /**
      * 创建关系查询结果。
@@ -24,7 +24,7 @@ public class PrincipalAccountLink {
     }
 
     /**
-     * 返回业务主体标识。
+     * 业务主体标识。
      *
      * @return 业务主体标识
      */
@@ -34,7 +34,7 @@ public class PrincipalAccountLink {
     }
 
     /**
-     * 返回账号标识。
+     * 账号标识。
      *
      * @return 账号标识
      */

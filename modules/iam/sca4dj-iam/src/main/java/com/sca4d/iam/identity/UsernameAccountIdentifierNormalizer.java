@@ -10,7 +10,6 @@ import java.util.Locale;
 
 /** IAM 内置的用户名规范化规则。 */
 public class UsernameAccountIdentifierNormalizer implements AccountIdentifierNormalizer {
-    /** 创建内置用户名规范化器。 */
     public UsernameAccountIdentifierNormalizer() {
     }
 

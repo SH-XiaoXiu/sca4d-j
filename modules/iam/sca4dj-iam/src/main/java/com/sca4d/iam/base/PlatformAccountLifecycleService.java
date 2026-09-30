@@ -22,11 +22,11 @@ public class PlatformAccountLifecycleService {
 
     private static final Logger LOG = LoggerFactory.getLogger(PlatformAccountLifecycleService.class);
 
-    private final @NotNull PlatformAccountLifecycleRepository repository;
+    private final @NotNull AclService acl;
 
     private final @NotNull PlatformRbacService rbac;
 
-    private final @NotNull AclService acl;
+    private final @NotNull PlatformAccountLifecycleRepository repository;
 
     private final @Nullable SessionControl sessions;
 

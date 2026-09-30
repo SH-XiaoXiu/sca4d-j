@@ -32,15 +32,15 @@ public class RbacService {
 
     private static final int MAX_ROLE_CODE_LENGTH = 128;
 
+    private final @NotNull PermissionSelectionRegistry permissionSelections;
+
     private final @NotNull RbacRepositoryRegistry repositories;
 
     private final @NotNull RbacSessionInvalidationRegistry invalidations;
 
-    private final @NotNull PermissionSelectionRegistry permissionSelections;
+    private final @NotNull IdGenerator idGenerator;
 
     private final @NotNull RbacPermissionCache permissionCache;
-
-    private final @NotNull IdGenerator idGenerator;
 
     /**
      * 创建通用 RBAC 服务。

@@ -52,7 +52,8 @@ public class PermissionSelector {
      */
     @Contract(pure = true)
     public @NotNull String value() {
-        return isAll() ? "*" : code.format(COLON);
+        TreeCode selected = code;
+        return selected == null ? "*" : selected.format(COLON);
     }
 
     /**

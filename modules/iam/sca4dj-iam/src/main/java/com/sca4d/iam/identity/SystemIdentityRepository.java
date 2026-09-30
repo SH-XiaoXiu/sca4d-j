@@ -28,9 +28,9 @@ public class SystemIdentityRepository {
 
     private static final PrincipalType TYPE = new PrincipalType(SystemPrincipalCodec.TYPE);
 
-    private final @NotNull SystemIdentityMapper bindings;
-
     private final @NotNull IdentityMapper identities;
+
+    private final @NotNull SystemIdentityMapper bindings;
 
     private final @NotNull SqlBatches batches;
 
@@ -51,24 +51,28 @@ public class SystemIdentityRepository {
     /**
      * 登记并校验配置中的固定系统身份。
      *
+     * @param systemSubjectId 已配置的 SYSTEM Subject ID；此处不发布运行期身份
      * @param configured 系统身份编码与固定 Principal ID
      * @return 已从数据库确认的系统身份表
      * @throws IllegalStateException 不在事务内、保留 Subject 冲突、绑定被改写或状态异常时抛出
      */
-    public @NotNull Map<TreeCode, SystemPrincipal> register(@NotNull Map<TreeCode, Long> configured) {
+    public @NotNull Map<TreeCode, SystemPrincipal> register(
+            long systemSubjectId,
+            @NotNull Map<TreeCode, Long> configured) {
         if (!TransactionSynchronizationManager.isActualTransactionActive()) {
             throw new IllegalStateException("系统身份登记必须在事务内完成");
         }
+        Subject requestedSubject = new Subject(systemSubjectId, SubjectType.SYSTEM);
         // 复用身份 Mapper 创建保留 Subject，已有记录只校验，禁止覆盖其类型和状态。
         try {
             AffectedRowCounts.requireSingle(
-                    identities.insertSubjects(List.of(Subject.SYSTEM), IdentityStatus.ACTIVE),
+                    identities.insertSubjects(List.of(requestedSubject), IdentityStatus.ACTIVE),
                     ZeroRowPolicy.ALLOW,
                     "登记 SYSTEM Subject");
         } catch (DuplicateKeyException exception) {
             throw new IllegalStateException("已有 SYSTEM Subject 与配置 ID 冲突，请人工迁移后重启", exception);
         }
-        Subject subject = identities.selectSubject(Subject.SYSTEM.subjectId(), IdentityStatus.ACTIVE);
+        Subject subject = identities.selectSubject(systemSubjectId, IdentityStatus.ACTIVE);
         if (subject == null || subject.type() != SubjectType.SYSTEM) {
             throw new IllegalStateException("SYSTEM Subject 的配置 ID 已被占用或状态异常，请人工迁移后重启");
         }

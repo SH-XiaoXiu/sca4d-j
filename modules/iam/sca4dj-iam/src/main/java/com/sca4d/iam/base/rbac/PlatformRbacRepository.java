@@ -51,13 +51,13 @@ public class PlatformRbacRepository implements RbacRepository {
 
     private final @NotNull PlatformRbacMapper mapper;
 
-    private final @NotNull VersionConditions versionConditions;
-
     private final @NotNull LocaleCatalog locales;
 
     private final @NotNull PrincipalType principalType;
 
     private final @NotNull SqlBatches sqlBatches;
+
+    private final @NotNull VersionConditions versionConditions;
 
     /**
      * 创建 Platform RBAC Repository。

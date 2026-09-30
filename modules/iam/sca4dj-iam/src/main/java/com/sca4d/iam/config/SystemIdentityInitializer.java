@@ -25,11 +25,11 @@ public class SystemIdentityInitializer implements SmartInitializingSingleton {
 
     private final @NotNull SystemIdentityRepository repository;
 
-    private final @NotNull TransactionTemplate transaction;
-
     private final @NotNull SystemIdentityProperties properties;
 
     private final @NotNull List<InstanceCapability> capabilities;
+
+    private final @NotNull TransactionTemplate transaction;
 
     /**
      * @param repository 系统身份持久化入口
@@ -55,7 +55,11 @@ public class SystemIdentityInitializer implements SmartInitializingSingleton {
      */
     @Override
     public void afterSingletonsInstantiated() {
-        Subject.configureSystemId(properties.getSystemSubjectId());
+        long systemSubjectId = properties.getSystemSubjectId();
+        long publishedSubjectId = Subject.SYSTEM.subjectId();
+        if (publishedSubjectId != 1 && publishedSubjectId != systemSubjectId) {
+            throw new IllegalStateException("SYSTEM Subject ID 不能在运行中改变");
+        }
         Map<TreeCode, Long> configured = new LinkedHashMap<>();
         configured.put(SystemPrincipals.MAIN, properties.getSystemPrincipalIds().getOrDefault("MAIN", 1L));
         properties.getSystemPrincipalIds().forEach((text, id) -> {
@@ -76,7 +80,8 @@ public class SystemIdentityInitializer implements SmartInitializingSingleton {
         }
         // execute 返回意味着提交已经成功，失败时不发布任何运行期常量。
         Map<TreeCode, SystemPrincipal> confirmed = Objects.requireNonNull(
-                transaction.execute(status -> repository.register(configured)));
+                transaction.execute(status -> repository.register(systemSubjectId, configured)));
+        Subject.configureSystemId(systemSubjectId);
         SystemPrincipals.publish(confirmed);
         LOG.info("系统身份已完成数据库确认并发布 | principalCount={}", confirmed.size());
     }

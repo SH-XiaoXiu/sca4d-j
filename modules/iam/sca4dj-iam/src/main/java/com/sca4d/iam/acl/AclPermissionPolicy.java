@@ -24,9 +24,9 @@ public class AclPermissionPolicy implements PermissionPolicy {
      */
     public static final @NotNull String COLLECTION_ID = "*";
 
-    private final @NotNull AclResourceTypes resourceTypes;
-
     private final @NotNull AclService acl;
+
+    private final @NotNull AclResourceTypes resourceTypes;
 
     /**
      * 创建 ACL 权限策略。

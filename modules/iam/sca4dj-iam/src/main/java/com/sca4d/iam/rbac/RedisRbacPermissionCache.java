@@ -44,11 +44,11 @@ public class RedisRbacPermissionCache implements RbacPermissionCache {
 
     private static final DefaultRedisScript<Long> INVALIDATE_SELECTORS = script("invalidate-selectors.lua");
 
-    private final @NotNull RedisTemplate<Key, String> redis;
+    private final @NotNull ObjectMapper objectMapper;
 
     private final @NotNull Map<@NotNull RbacDomain, @NotNull String> catalogFingerprints;
 
-    private final @NotNull ObjectMapper objectMapper;
+    private final @NotNull RedisTemplate<Key, String> redis;
 
     /**
      * 创建 Redis RBAC 权限缓存。

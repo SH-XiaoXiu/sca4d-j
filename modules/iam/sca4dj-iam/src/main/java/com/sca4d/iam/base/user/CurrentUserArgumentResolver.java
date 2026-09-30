@@ -18,7 +18,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 /** 从当前请求的 Session 注入 USER，并把 USER 唯一的 PlatformPrincipal 绑定到 `Call`。 */
 public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolver {
 
-    /** 创建无外部依赖的当前 USER 参数解析器。 */
     public CurrentUserArgumentResolver() {
     }
 

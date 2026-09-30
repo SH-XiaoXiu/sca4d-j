@@ -13,9 +13,9 @@ public class PlatformPrincipalRole {
 
     private final @NotNull Long principalId;
 
-    private final @NotNull Version rolesVersion;
-
     private final @Nullable Long roleId;
+
+    private final @NotNull Version rolesVersion;
 
     private final boolean protectedRelation;
 

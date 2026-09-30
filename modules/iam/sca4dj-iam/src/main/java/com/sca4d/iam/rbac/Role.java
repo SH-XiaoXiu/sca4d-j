@@ -15,30 +15,30 @@ import java.util.Objects;
 public class Role implements Resource {
 
     /**
-     * Role 使用的稳定 Resource 类型。
-     */
-    public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofSlash("IAM/ROLE");
-
-    /**
      * 供 Java 注解参数使用的资源类型文本。
      */
     public static final @NotNull String RESOURCE_TYPE_VALUE = "IAM/ROLE";
 
-    private final @NotNull Long id;
-
-    private final @NotNull RbacScope scope;
-
-    private final @NotNull String code;
-
-    private final @NotNull RoleStatus status;
-
-    private final boolean builtIn;
+    /**
+     * Role 使用的稳定 Resource 类型。
+     */
+    public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofSlash("IAM/ROLE");
 
     private final @NotNull Instant createdAt;
 
     private final @NotNull Instant updatedAt;
 
+    private final @NotNull Long id;
+
+    private final @NotNull RbacScope scope;
+
+    private final @NotNull RoleStatus status;
+
+    private final @NotNull String code;
+
     private final @NotNull Version version;
+
+    private final boolean builtIn;
 
     /**
      * 创建从持久化层读取的角色。
@@ -72,7 +72,7 @@ public class Role implements Resource {
     }
 
     /**
-     * 返回角色标识。
+     * 角色标识。
      *
      * @return 角色标识
      */
@@ -102,7 +102,7 @@ public class Role implements Resource {
     }
 
     /**
-     * 返回角色所属的 RBAC 范围。
+     * 角色所属的 RBAC 范围。
      *
      * @return RBAC 范围
      */
@@ -112,7 +112,7 @@ public class Role implements Resource {
     }
 
     /**
-     * 返回当前 Repository 中创建后不可修改的角色编码。
+     * 当前 Repository 中创建后不可修改的角色编码。
      *
      * @return 角色编码
      */
@@ -122,7 +122,7 @@ public class Role implements Resource {
     }
 
     /**
-     * 返回角色是否向 Principal 提供 Operation。
+     * 角色是否向 Principal 提供 Operation。
      *
      * @return 角色状态
      */
@@ -132,7 +132,7 @@ public class Role implements Resource {
     }
 
     /**
-     * 返回角色是否由 Repository 实现创建并保护。
+     * 角色是否由 Repository 实现创建并保护。
      *
      * @return {@code true} 表示内置角色
      */
@@ -142,7 +142,7 @@ public class Role implements Resource {
     }
 
     /**
-     * 返回角色创建时间。
+     * 角色创建时间。
      *
      * @return 创建时间
      */
@@ -152,7 +152,7 @@ public class Role implements Resource {
     }
 
     /**
-     * 返回角色最近更新时间。
+     * 角色最近更新时间。
      *
      * @return 最近更新时间
      */
@@ -162,7 +162,7 @@ public class Role implements Resource {
     }
 
     /**
-     * 返回名称、状态、Operation 和删除共享的当前版本。
+     * 名称、状态、Operation 和删除共享的当前版本。
      *
      * @return 当前版本
      */

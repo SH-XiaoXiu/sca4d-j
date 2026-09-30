@@ -15,13 +15,13 @@ import java.util.Objects;
 /** 描述一组已知 Principal 标识需要满足的 IAM 身份和 Account 关系条件。 */
 public class PrincipalQuery {
 
-    private final @NotNull @Unmodifiable List<@NotNull Long> principalIds;
-
     private final @Nullable Class<? extends Principal> type;
 
     private final @Nullable IdentityStatus status;
 
     private final @Nullable LinkedAccountCondition linkedAccount;
+
+    private final @NotNull @Unmodifiable List<@NotNull Long> principalIds;
 
     /** 保存 Builder 已校验的不可变查询条件。 */
     private PrincipalQuery(

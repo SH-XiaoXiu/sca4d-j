@@ -57,6 +57,15 @@ public class IdentityRepository {
         return Optional.ofNullable(mapper.selectSubject(id, null));
     }
 
+    /** @return 按标识索引的未删除 Subject；缺失标识不包含在结果中 */
+    Map<Long, Subject> findSubjects(Collection<Long> ids) {
+        Map<Long, Subject> result = new LinkedHashMap<>();
+        for (Subject subject : sqlBatches.query(new LinkedHashSet<>(ids), 1, 0, mapper::selectSubjects)) {
+            result.put(subject.subjectId(), subject);
+        }
+        return Map.copyOf(result);
+    }
+
     /** 读取 `Subject` 当前状态。 */
     @CheckReturnValue
     @NotNull
@@ -116,6 +125,28 @@ public class IdentityRepository {
     @Unmodifiable
     List<@NotNull Account> findAccounts(@NotNull Long subjectId) {
         return List.copyOf(mapper.selectAccounts(null, subjectId, null, null, null));
+    }
+
+    /** 按 Subject 标识批量读取 Account。 */
+    @CheckReturnValue
+    @NotNull
+    @Unmodifiable
+    Map<@NotNull Long, @NotNull List<@NotNull Account>> findAccounts(
+            @NotNull Collection<@NotNull Long> subjectIds) {
+        LinkedHashMap<Long, List<Account>> result = new LinkedHashMap<>();
+        LinkedHashSet<Long> selected = new LinkedHashSet<>(Objects.requireNonNull(subjectIds, "Subject 标识集合不能为空"));
+        if (selected.stream().anyMatch(Objects::isNull)) {
+            throw new NullPointerException("Subject 标识不能为空");
+        }
+        selected.forEach(id -> result.put(id, new ArrayList<>()));
+        if (selected.isEmpty()) {
+            return Map.of();
+        }
+        for (Account account : sqlBatches.query(selected, 1, 0, mapper::selectAccountsBySubjectIds)) {
+            Objects.requireNonNull(result.get(account.subjectId()), "Account 不属于请求的 Subject").add(account);
+        }
+        result.replaceAll((id, accounts) -> List.copyOf(accounts));
+        return Collections.unmodifiableMap(result);
     }
 
     /** 按标识修改账号状态。 */
@@ -322,36 +353,33 @@ public class IdentityRepository {
         return List.copyOf(mapper.selectIdentifiers(null, accountId));
     }
 
-    /** 修改登录标识的原值和规范值。 */
-    @CheckReturnValue
-    boolean updateIdentifierValue(
-            long id,
-            @NotNull String value,
-            @NotNull String normalized) {
-        return AffectedRowCounts.changed(
-                mapper.updateIdentifier(id, Patch.set(value), Patch.set(normalized), Patch.ignore(), Patch.ignore()),
-                "修改登录标识值");
+    /** 更新登录标识并直接使用数据库返回值，避免另一次查询。 */
+    @NotNull
+    Optional<AccountIdentifier> changeIdentifierValue(long id, String value, String normalizedValue) {
+        return Optional.ofNullable(
+                mapper.updateIdentifier(
+                        id,
+                        Patch.set(value),
+                        Patch.set(normalizedValue),
+                        Patch.ignore(),
+                        Patch.ignore()));
     }
 
     /** 修改登录标识状态。 */
     @CheckReturnValue
     boolean updateIdentifierStatus(long id, @NotNull IdentityStatus status) {
-        return AffectedRowCounts.changed(
-                mapper.updateIdentifier(id, Patch.ignore(), Patch.ignore(), Patch.set(status), Patch.ignore()),
-                "修改登录标识状态");
+        return mapper.updateIdentifier(id, Patch.ignore(), Patch.ignore(), Patch.set(status), Patch.ignore()) != null;
     }
 
     /** 逻辑删除登录标识。 */
     @CheckReturnValue
     boolean deleteIdentifier(long id) {
-        return AffectedRowCounts.changed(
-                mapper.updateIdentifier(
-                        id,
-                        Patch.ignore(),
-                        Patch.ignore(),
-                        Patch.set(IdentityStatus.DISABLED),
-                        Patch.set(true)),
-                "删除登录标识");
+        return mapper.updateIdentifier(
+                id,
+                Patch.ignore(),
+                Patch.ignore(),
+                Patch.set(IdentityStatus.DISABLED),
+                Patch.set(true)) != null;
     }
 
     /** 用规范化登录标识查找可用的 `Account`，同时检查 `Subject` 和登录标识状态。 */

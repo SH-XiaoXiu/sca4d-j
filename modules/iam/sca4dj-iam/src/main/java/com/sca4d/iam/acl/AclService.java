@@ -24,11 +24,11 @@ import java.util.Objects;
 public class AclService {
     private static final Logger LOG = LoggerFactory.getLogger(AclService.class);
 
+    private final @NotNull IdentityService identities;
+
     private final @NotNull AclRepositoryRegistry repositories;
 
     private final @NotNull AclResourceTypes resourceTypes;
-
-    private final @NotNull IdentityService identities;
 
     /**
      * 创建统一 ACL 服务。

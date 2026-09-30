@@ -30,13 +30,13 @@ import java.util.concurrent.ConcurrentHashMap;
 /** 验证 Redis RBAC 权限缓存的范围隔离、空授权和修订号失效行为。 */
 class RedisRbacPermissionCacheTest {
 
+    private static final long PRINCIPAL_ID = 201L;
+
     private static final RbacDomain DOMAIN = new RbacDomain("PROJECT");
 
     private static final RbacScope FIRST_SCOPE = RbacScope.of(DOMAIN, 101L);
 
     private static final RbacScope SECOND_SCOPE = RbacScope.of(DOMAIN, 102L);
-
-    private static final long PRINCIPAL_ID = 201L;
 
     private final Map<Key, String> redisValues = new ConcurrentHashMap<>();
 

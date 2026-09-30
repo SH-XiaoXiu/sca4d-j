@@ -14,9 +14,9 @@ import java.util.Objects;
  */
 @SuppressWarnings({"ClassCanBeRecord", "unused"})
 public class AclResourceScope implements ResourceScope {
-    private final @NotNull TreeCode resourceType;
-
     private final @NotNull @Unmodifiable List<@NotNull String> resourceIds;
+
+    private final @NotNull TreeCode resourceType;
 
     /**
      * 创建集合资源的可访问实例范围。
@@ -41,7 +41,7 @@ public class AclResourceScope implements ResourceScope {
     }
 
     /**
-     * 返回集合权限允许访问的实例。
+     * 集合权限允许访问的实例。
      *
      * @return 不可修改的可访问资源标识列表
      */

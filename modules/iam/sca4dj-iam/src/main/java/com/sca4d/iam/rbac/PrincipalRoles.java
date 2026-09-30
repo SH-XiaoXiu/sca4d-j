@@ -13,11 +13,11 @@ import java.util.Set;
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public class PrincipalRoles {
 
-    private final @NotNull RbacScope scope;
+    private final @NotNull @Unmodifiable List<@NotNull Role> roles;
 
     private final @NotNull Long principalId;
 
-    private final @NotNull @Unmodifiable List<@NotNull Role> roles;
+    private final @NotNull RbacScope scope;
 
     private final @NotNull @Unmodifiable Set<@NotNull Long> protectedRoleIds;
 
@@ -52,7 +52,7 @@ public class PrincipalRoles {
     }
 
     /**
-     * 返回 Principal 标识。
+     * Principal 标识。
      *
      * @return Principal 标识
      */
@@ -62,7 +62,7 @@ public class PrincipalRoles {
     }
 
     /**
-     * 返回 Principal 当前关联的角色。
+     * Principal 当前关联的角色。
      *
      * @return 不可修改的角色列表
      */
@@ -72,7 +72,7 @@ public class PrincipalRoles {
     }
 
     /**
-     * 返回普通角色替换必须保留的角色关系。
+     * 普通角色替换必须保留的角色关系。
      *
      * @return 不可修改的角色标识集合
      */

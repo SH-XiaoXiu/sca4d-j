@@ -40,6 +40,14 @@ import java.util.function.Supplier;
 
 class RbacServiceTest {
 
+    private static final long DEFAULT_ID = 11L;
+
+    private static final long PRINCIPAL_ID = 20L;
+
+    private static final long ROOT_ID = 10L;
+
+    private static final long SECOND_PRINCIPAL_ID = 21L;
+
     private static final RbacDomain PLATFORM_DOMAIN = PlatformRbacRepository.PLATFORM_DOMAIN;
 
     private static final RbacScope PLATFORM = PlatformRbacRepository.PLATFORM;
@@ -47,14 +55,6 @@ class RbacServiceTest {
     private static final RbacScope PROJECT_A = RbacScope.of(PLATFORM_DOMAIN, 101L);
 
     private static final RbacScope PROJECT_B = RbacScope.of(PLATFORM_DOMAIN, 102L);
-
-    private static final long ROOT_ID = 10L;
-
-    private static final long DEFAULT_ID = 11L;
-
-    private static final long PRINCIPAL_ID = 20L;
-
-    private static final long SECOND_PRINCIPAL_ID = 21L;
 
     private RbacRepository repository;
 
