@@ -122,7 +122,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(jakarta.servlet.http.HttpServletRequest)" class="member-name-link">OpenApiCachedBodyHttpServletRequest</a><wbr>(@NotNull jakarta.servlet.http.HttpServletRequest&nbsp;request)</code></div>
 <div class="col-last even-row-color">
-<div class="block">从原始请求读取并保存请求体。</div>
+<div class="block">从原始请求读取并保存请求体，不依赖 Content-Length 判断实际长度。</div>
 </div>
 </div>
 </section>
@@ -183,10 +183,11 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">OpenApiCachedBodyHttpServletRequest</span><wbr><span class="parameters">(@NotNull
  @NotNull jakarta.servlet.http.HttpServletRequest&nbsp;request)</span>
                                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
-<div class="block">从原始请求读取并保存请求体。</div>
+<div class="block">从原始请求读取并保存请求体，不依赖 Content-Length 判断实际长度。</div>
 <dl class="notes">
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code></dd>
+<dd><code>org.springframework.web.multipart.MaxUploadSizeExceededException</code> - 实际请求体超过 8 MiB 时抛出，最多读取上限加一字节</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - 请求流读取失败时抛出</dd>
 </dl>
 </section>
 </li>

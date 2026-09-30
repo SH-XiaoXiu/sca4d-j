@@ -127,22 +127,22 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="AuthenticationAttemptId.html" title="class in com.sca4d.core.api.authentication">AuthenticationAttemptId</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#attemptId()" class="member-name-link">attemptId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回调用方继续提交因素或消费结果时必须回传的标识。</div>
+<div class="block">调用方继续提交因素或消费结果时必须回传的标识。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#availableMethods()" class="member-name-link">availableMethods</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回下一次提交可以选择的认证方法。</div>
+<div class="block">下一次提交可以选择的认证方法。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#expiresAt()" class="member-name-link">expiresAt</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回认证引擎不再接受提交或消费请求的时刻。</div>
+<div class="block">认证引擎不再接受提交或消费请求的时刻。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#remainingFactorCount()" class="member-name-link">remainingFactorCount</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回满足要求前还需成功验证的不同因素数量。</div>
+<div class="block">满足要求前还需成功验证的不同因素数量。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#satisfied()" class="member-name-link">satisfied</a>()</code></div>
@@ -201,7 +201,11 @@ loadScripts(document, 'script');</script>
 <h3>attemptId</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="AuthenticationAttemptId.html" title="class in com.sca4d.core.api.authentication">AuthenticationAttemptId</a></span>&nbsp;<span class="element-name">attemptId</span>()</div>
-<div class="block">返回调用方继续提交因素或消费结果时必须回传的标识。</div>
+<div class="block">调用方继续提交因素或消费结果时必须回传的标识。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>调用方继续提交因素或消费结果时必须回传的标识</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -215,7 +219,11 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="remainingFactorCount()">
 <h3>remainingFactorCount</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">remainingFactorCount</span>()</div>
-<div class="block">返回满足要求前还需成功验证的不同因素数量。</div>
+<div class="block">满足要求前还需成功验证的不同因素数量。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>满足要求前还需成功验证的不同因素数量</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -223,7 +231,11 @@ loadScripts(document, 'script');</script>
 <h3>availableMethods</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&gt;</span>&nbsp;<span class="element-name">availableMethods</span>()</div>
-<div class="block">返回下一次提交可以选择的认证方法。</div>
+<div class="block">下一次提交可以选择的认证方法。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>下一次提交可以选择的认证方法</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -231,7 +243,11 @@ loadScripts(document, 'script');</script>
 <h3>expiresAt</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name">expiresAt</span>()</div>
-<div class="block">返回认证引擎不再接受提交或消费请求的时刻。</div>
+<div class="block">认证引擎不再接受提交或消费请求的时刻。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>认证引擎不再接受提交或消费请求的时刻</dd>
+</dl>
 </section>
 </li>
 </ul>

@@ -128,27 +128,27 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#code()" class="member-name-link">code</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回契约编码。</div>
+<div class="block">契约编码。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="ApiKind.html" title="enum class in com.sca4d.core.api.plugin">ApiKind</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#kind()" class="member-name-link">kind</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回契约方向。</div>
+<div class="block">契约方向。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>,<wbr><a href="ApiOperation.html" title="class in com.sca4d.core.api.plugin">ApiOperation</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#operations()" class="member-name-link">operations</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回只读操作目录。</div>
+<div class="block">只读操作目录。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#required()" class="member-name-link">required</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回启动前是否必须存在实现。</div>
+<div class="block">启动前是否必须存在实现。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="ExtensionSelection.html" title="enum class in com.sca4d.core.api.plugin">ExtensionSelection</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#selection()" class="member-name-link">selection</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回扩展实现选择规则。</div>
+<div class="block">扩展实现选择规则。</div>
 </div>
 </div>
 </div>
@@ -195,7 +195,11 @@ loadScripts(document, 'script');</script>
 <h3>code</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></span>&nbsp;<span class="element-name">code</span>()</div>
-<div class="block">返回契约编码。</div>
+<div class="block">契约编码。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>契约编码</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -203,7 +207,11 @@ loadScripts(document, 'script');</script>
 <h3>kind</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="ApiKind.html" title="enum class in com.sca4d.core.api.plugin">ApiKind</a></span>&nbsp;<span class="element-name">kind</span>()</div>
-<div class="block">返回契约方向。</div>
+<div class="block">契约方向。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>契约方向</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -211,14 +219,22 @@ loadScripts(document, 'script');</script>
 <h3>selection</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="ExtensionSelection.html" title="enum class in com.sca4d.core.api.plugin">ExtensionSelection</a></span>&nbsp;<span class="element-name">selection</span>()</div>
-<div class="block">返回扩展实现选择规则。</div>
+<div class="block">扩展实现选择规则。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>扩展实现选择规则</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="required()">
 <h3>required</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">required</span>()</div>
-<div class="block">返回启动前是否必须存在实现。</div>
+<div class="block">启动前是否必须存在实现。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>启动前是否必须存在实现</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -226,7 +242,11 @@ loadScripts(document, 'script');</script>
 <h3>operations</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>,<wbr><a href="ApiOperation.html" title="class in com.sca4d.core.api.plugin">ApiOperation</a>&gt;</span>&nbsp;<span class="element-name">operations</span>()</div>
-<div class="block">返回只读操作目录。</div>
+<div class="block">只读操作目录。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>只读操作目录</dd>
+</dl>
 </section>
 </li>
 </ul>

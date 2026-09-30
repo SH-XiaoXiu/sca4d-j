@@ -126,12 +126,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#code()" class="member-name-link">code</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回设置稳定编码。</div>
+<div class="block">设置稳定编码。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#codecVersion()" class="member-name-link">codecVersion</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回内容结构版本；原始无版本来源为零，最终结果使用当前 Codec 版本。</div>
+<div class="block">内容结构版本；原始无版本来源为零，最终结果使用当前 Codec 版本。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#locked()" class="member-name-link">locked</a>()</code></div>
@@ -146,12 +146,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="SettingValue.Origin.html" title="class in com.sca4d.core.api.setting.value">SettingValue.Origin</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#origins()" class="member-name-link">origins</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回不包含原始数据的来源说明。</div>
+<div class="block">不包含原始数据的来源说明。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#owner()" class="member-name-link">owner</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回本次请求所属；每个来源的实际所属保存在 origins。</div>
+<div class="block">本次请求所属；每个来源的实际所属保存在 origins。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#present()" class="member-name-link">present</a>()</code></div>
@@ -259,7 +259,11 @@ loadScripts(document, 'script');</script>
 <h3>code</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></span>&nbsp;<span class="element-name">code</span>()</div>
-<div class="block">返回设置稳定编码。</div>
+<div class="block">设置稳定编码。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>设置稳定编码</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -267,7 +271,11 @@ loadScripts(document, 'script');</script>
 <h3>owner</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a></span>&nbsp;<span class="element-name">owner</span>()</div>
-<div class="block">返回本次请求所属；每个来源的实际所属保存在 origins。</div>
+<div class="block">本次请求所属；每个来源的实际所属保存在 origins。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>本次请求所属；每个来源的实际所属保存在 origins</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -289,7 +297,11 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="codecVersion()">
 <h3>codecVersion</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">codecVersion</span>()</div>
-<div class="block">返回内容结构版本；原始无版本来源为零，最终结果使用当前 Codec 版本。</div>
+<div class="block">内容结构版本；原始无版本来源为零，最终结果使用当前 Codec 版本。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>内容结构版本；原始无版本来源为零，最终结果使用当前 Codec 版本</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -297,7 +309,11 @@ loadScripts(document, 'script');</script>
 <h3>origins</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="SettingValue.Origin.html" title="class in com.sca4d.core.api.setting.value">SettingValue.Origin</a>&gt;</span>&nbsp;<span class="element-name">origins</span>()</div>
-<div class="block">返回不包含原始数据的来源说明。</div>
+<div class="block">不包含原始数据的来源说明。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>不包含原始数据的来源说明</dd>
+</dl>
 </section>
 </li>
 <li>

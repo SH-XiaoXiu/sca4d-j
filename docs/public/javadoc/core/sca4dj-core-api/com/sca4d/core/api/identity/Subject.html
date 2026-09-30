@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">Subject</span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">Subject</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">表示完成认证或建立受控调用的具体接入者。</div>
 </section>
@@ -104,7 +104,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static @NotNull <a href="Subject.html" title="class in com.sca4d.core.api.identity">Subject</a></code></div>
+<div class="col-first even-row-color"><code>static final @NotNull <a href="Subject.html" title="class in com.sca4d.core.api.identity">Subject</a></code></div>
 <div class="col-second even-row-color"><code><a href="#SYSTEM" class="member-name-link">SYSTEM</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">整个业务系统唯一的 SYSTEM Subject；各实例和模块共享此身份，不对应用户 Session。启动时由 IAM 配置发布 ID。</div>
@@ -147,12 +147,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#subjectId()" class="member-name-link">subjectId</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取接入者的标识。</div>
+<div class="block">Subject 标识。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="SubjectType.html" title="enum class in com.sca4d.core.api.identity">SubjectType</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#type()" class="member-name-link">type</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取创建 Subject 时确定的接入者类型。</div>
+<div class="block">创建 Subject 时确定的接入者类型。</div>
 </div>
 </div>
 </div>
@@ -175,7 +175,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="SYSTEM">
 <h3>SYSTEM</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static volatile</span>&nbsp;<span class="return-type">@NotNull <a href="Subject.html" title="class in com.sca4d.core.api.identity">Subject</a></span>&nbsp;<span class="element-name">SYSTEM</span></div>
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull <a href="Subject.html" title="class in com.sca4d.core.api.identity">Subject</a></span>&nbsp;<span class="element-name">SYSTEM</span></div>
 <div class="block">整个业务系统唯一的 SYSTEM Subject；各实例和模块共享此身份，不对应用户 Session。启动时由 IAM 配置发布 ID。</div>
 </section>
 </li>
@@ -216,7 +216,7 @@ loadScripts(document, 'script');</script>
 <div class="block">发布启动配置确认的 SYSTEM Subject ID；只能把默认值替换为一次正数配置。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>id</code> - 数据库中已经确认或即将确认的 SYSTEM Subject ID</dd>
+<dd><code>id</code> - 数据库已确认的 SYSTEM Subject ID</dd>
 </dl>
 </section>
 </li>
@@ -225,7 +225,7 @@ loadScripts(document, 'script');</script>
 <h3>subjectId</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">subjectId</span>()</div>
-<div class="block">读取接入者的标识。</div>
+<div class="block">Subject 标识。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>Subject 标识</dd>
@@ -238,7 +238,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="SubjectType.html" title="enum class in com.sca4d.core.api.identity">SubjectType</a></span>&nbsp;<span class="element-name">type</span>()</div>
-<div class="block">读取创建 Subject 时确定的接入者类型。</div>
+<div class="block">创建 Subject 时确定的接入者类型。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>接入者使用的固定 Subject 类型</dd>

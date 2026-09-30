@@ -63,9 +63,7 @@ loadScripts(document, 'script');</script>
 <div class="block">提交后尽力把冻结审计记录交给有界进程内执行器，不提供恢复和重试。</div>
 </dd>
 <dt><a href="com/sca4d/audit/recording/AfterCommitAuditRecorder.html#%3Cinit%3E(com.sca4d.audit.recording.AuditRepository,java.util.concurrent.Executor)" class="member-name-link">AfterCommitAuditRecorder(AuditRepository, Executor)</a> - Constructor for class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AfterCommitAuditRecorder.html" title="class in com.sca4d.audit.recording">AfterCommitAuditRecorder</a></dt>
-<dd>
-<div class="block">创建提交后尽力审计记录器。</div>
-</dd>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/audit/recording/AuditRepository.html#append(com.sca4d.core.api.audit.AuditRecord)" class="member-name-link">append(AuditRecord)</a> - Method in class com.sca4d.audit.recording.<a href="com/sca4d/audit/recording/AuditRepository.html" title="class in com.sca4d.audit.recording">AuditRepository</a></dt>
 <dd>
 <div class="block">追加一条写入后不再更新的审计行。</div>
@@ -79,9 +77,7 @@ loadScripts(document, 'script');</script>
 <div class="block">自动装配通用审计编码、数据库记录器和查询服务。</div>
 </dd>
 <dt><a href="com/sca4d/audit/config/AuditAutoConfiguration.html#%3Cinit%3E()" class="member-name-link">AuditAutoConfiguration()</a> - Constructor for class com.sca4d.audit.config.<a href="com/sca4d/audit/config/AuditAutoConfiguration.html" title="class in com.sca4d.audit.config">AuditAutoConfiguration</a></dt>
-<dd>
-<div class="block">创建 Audit 模块自动配置。</div>
-</dd>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/audit/query/AuditEntry.html" class="type-name-link" title="class in com.sca4d.audit.query">AuditEntry</a> - Class in <a href="com/sca4d/audit/query/package-summary.html">com.sca4d.audit.query</a></dt>
 <dd>
 <div class="block">返回一条持久化审计记录及其原始或强类型 payload。</div>
@@ -127,9 +123,7 @@ loadScripts(document, 'script');</script>
 <div class="block">使用 Raw JSON 或可选 Codec 编码、脱敏、限制并读取审计 payload。</div>
 </dd>
 <dt><a href="com/sca4d/audit/payload/AuditPayloadJson.html#%3Cinit%3E(com.fasterxml.jackson.databind.ObjectMapper,com.sca4d.audit.payload.AuditPayloadRegistry,com.sca4d.audit.config.AuditProperties)" class="member-name-link">AuditPayloadJson(ObjectMapper, AuditPayloadRegistry, AuditProperties)</a> - Constructor for class com.sca4d.audit.payload.<a href="com/sca4d/audit/payload/AuditPayloadJson.html" title="class in com.sca4d.audit.payload">AuditPayloadJson</a></dt>
-<dd>
-<div class="block">创建使用脚手架 JSON 契约的 payload 处理器。</div>
-</dd>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/audit/payload/AuditPayloadRegistry.html" class="type-name-link" title="class in com.sca4d.audit.payload">AuditPayloadRegistry</a> - Class in <a href="com/sca4d/audit/payload/package-summary.html">com.sca4d.audit.payload</a></dt>
 <dd>
 <div class="block">校验并索引应用注册的审计 payload Codec。</div>
@@ -248,9 +242,7 @@ loadScripts(document, 'script');</script>
 <div class="block">保存一份准备写入数据库的 payload 类型、版本和 JSON。</div>
 </dd>
 <dt><a href="com/sca4d/audit/payload/EncodedAuditPayload.html#%3Cinit%3E(java.lang.String,int,java.lang.String)" class="member-name-link">EncodedAuditPayload(String, int, String)</a> - Constructor for class com.sca4d.audit.payload.<a href="com/sca4d/audit/payload/EncodedAuditPayload.html" title="class in com.sca4d.audit.payload">EncodedAuditPayload</a></dt>
-<dd>
-<div class="block">创建已经完成脱敏和长度限制的 payload。</div>
-</dd>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:F">F</h2>
 <dl class="index">
@@ -263,11 +255,11 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/audit/config/AuditProperties.html#getMaxPayloadBytes()" class="member-name-link">getMaxPayloadBytes()</a> - Method in class com.sca4d.audit.config.<a href="com/sca4d/audit/config/AuditProperties.html" title="class in com.sca4d.audit.config">AuditProperties</a></dt>
 <dd>
-<div class="block">返回单条 payload 允许保存的最大 UTF-8 字节数。</div>
+<div class="block">单条 payload 允许保存的最大 UTF-8 字节数。</div>
 </dd>
 <dt><a href="com/sca4d/audit/config/AuditProperties.html#getMode()" class="member-name-link">getMode()</a> - Method in class com.sca4d.audit.config.<a href="com/sca4d/audit/config/AuditProperties.html" title="class in com.sca4d.audit.config">AuditProperties</a></dt>
 <dd>
-<div class="block">返回审计记录的写入或交接方式。</div>
+<div class="block">审计记录的写入或交接方式。</div>
 </dd>
 <dt><a href="com/sca4d/audit/config/AuditProperties.html#getSensitiveFields()" class="member-name-link">getSensitiveFields()</a> - Method in class com.sca4d.audit.config.<a href="com/sca4d/audit/config/AuditProperties.html" title="class in com.sca4d.audit.config">AuditProperties</a></dt>
 <dd>
@@ -301,11 +293,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/audit/query/AuditEntry.html#instanceId()" class="member-name-link">instanceId()</a> - Method in class com.sca4d.audit.query.<a href="com/sca4d/audit/query/AuditEntry.html" title="class in com.sca4d.audit.query">AuditEntry</a></dt>
 <dd>
-<div class="block">返回操作实际发生的进程标识；旧审计记录为空，不属于 IAM 主体。</div>
+<div class="block">操作实际发生的进程标识；旧审计记录为空，不属于 IAM 主体。</div>
 </dd>
 <dt><a href="com/sca4d/audit/recording/mapper/EncodedAuditEntry.html#instanceId()" class="member-name-link">instanceId()</a> - Method in class com.sca4d.audit.recording.mapper.<a href="com/sca4d/audit/recording/mapper/EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a></dt>
 <dd>
-<div class="block">返回实际执行实例；旧记录没有此字段时为空。</div>
+<div class="block">实际执行实例；旧记录没有此字段时为空。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:J">J</h2>

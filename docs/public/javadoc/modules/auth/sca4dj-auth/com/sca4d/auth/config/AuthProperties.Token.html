@@ -123,11 +123,11 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>com.sca4d.core.api.authentication.AuthTokenMode</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.authentication.AuthTokenMode</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMode()" class="member-name-link">getMode</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setMode(com.sca4d.core.api.authentication.AuthTokenMode)" class="member-name-link">setMode</a><wbr>(com.sca4d.core.api.authentication.AuthTokenMode&nbsp;mode)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setMode(com.sca4d.core.api.authentication.AuthTokenMode)" class="member-name-link">setMode</a><wbr>(@Nullable com.sca4d.core.api.authentication.AuthTokenMode&nbsp;mode)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
@@ -163,13 +163,21 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMode()">
 <h3>getMode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">com.sca4d.core.api.authentication.AuthTokenMode</span>&nbsp;<span class="element-name">getMode</span>()</div>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.authentication.AuthTokenMode</span>&nbsp;<span class="element-name">getMode</span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="setMode(com.sca4d.core.api.authentication.AuthTokenMode)">
 <h3>setMode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setMode</span><wbr><span class="parameters">(com.sca4d.core.api.authentication.AuthTokenMode&nbsp;mode)</span></div>
+<div class="member-signature"><span class="annotations">@Contract(value="null -&gt; fail",
+          mutates="this")
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setMode</span><wbr><span class="parameters">(@Nullable
+ @Nullable com.sca4d.core.api.authentication.AuthTokenMode&nbsp;mode)</span></div>
+<dl class="notes">
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 模式为空时抛出</dd>
+</dl>
 </section>
 </li>
 </ul>

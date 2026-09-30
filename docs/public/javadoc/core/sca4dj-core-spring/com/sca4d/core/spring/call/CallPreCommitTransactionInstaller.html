@@ -112,6 +112,10 @@ implements org.springframework.beans.factory.config.BeanPostProcessor</span></di
 <div class="col-last even-row-color">
 <div class="block">创建预提交条件监听器安装器。</div>
 </div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.springframework.beans.factory.ObjectProvider)" class="member-name-link">CallPreCommitTransactionInstaller</a><wbr>(org.springframework.beans.factory.ObjectProvider&lt;<a href="CallPreCommitTransactionListener.html" title="class in com.sca4d.core.spring.call">CallPreCommitTransactionListener</a>&gt;&nbsp;listener)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">使用延迟提供者，避免安装器注册时提前创建事务监听器。</div>
+</div>
 </div>
 </section>
 </li>
@@ -157,6 +161,13 @@ implements org.springframework.beans.factory.config.BeanPostProcessor</span></di
 <h3>CallPreCommitTransactionInstaller</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CallPreCommitTransactionInstaller</span><wbr><span class="parameters">(<a href="CallPreCommitTransactionListener.html" title="class in com.sca4d.core.spring.call">CallPreCommitTransactionListener</a>&nbsp;listener)</span></div>
 <div class="block">创建预提交条件监听器安装器。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(org.springframework.beans.factory.ObjectProvider)">
+<h3>CallPreCommitTransactionInstaller</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CallPreCommitTransactionInstaller</span><wbr><span class="parameters">(org.springframework.beans.factory.ObjectProvider&lt;<a href="CallPreCommitTransactionListener.html" title="class in com.sca4d.core.spring.call">CallPreCommitTransactionListener</a>&gt;&nbsp;listener)</span></div>
+<div class="block">使用延迟提供者，避免安装器注册时提前创建事务监听器。</div>
 </section>
 </li>
 </ul>

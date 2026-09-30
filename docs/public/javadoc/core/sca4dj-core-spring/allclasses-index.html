@@ -209,7 +209,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/config/CoreSpringAutoConfiguration.html" title="class in com.sca4d.core.spring.config">CoreSpringAutoConfiguration</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">注册 Core API 在 Spring MVC 中使用的 Filter、参数解析器、异常处理器和 AOP Bean。</div>
+<div class="block">统一导入 Core Spring 的内部 Bean 工厂，保持自动配置条件和排除语义。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/config/CoreSpringProperties.html" title="class in com.sca4d.core.spring.config">CoreSpringProperties</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
@@ -347,372 +347,376 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">只在当前线程已经建立 `Call` 时执行请求阶段处理，并跳过 Spring MVC 异步分派。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/core/spring/web/HttpErrorCode.html" title="enum class in com.sca4d.core.spring.web">HttpErrorCode</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">保存每个 HTTP Server 进程启动时确定的自定义请求和响应 Header 名称。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/core/spring/web/HttpErrorCode.html" title="enum class in com.sca4d.core.spring.web">HttpErrorCode</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
 <div class="block">Spring HTTP 请求处理产生的固定错误码。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/openapi/HttpInputOpenApiCustomizer.html" title="class in com.sca4d.core.spring.openapi">HttpInputOpenApiCustomizer</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/openapi/HttpInputOpenApiCustomizer.html" title="class in com.sca4d.core.spring.openapi">HttpInputOpenApiCustomizer</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">把外部 HTTP 输入的类型默认校验和显式覆盖规则写入最终 OpenAPI 请求定义。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/HttpInputValidationAspect.html" title="class in com.sca4d.core.spring.web">HttpInputValidationAspect</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/HttpInputValidationAspect.html" title="class in com.sca4d.core.spring.web">HttpInputValidationAspect</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在 Controller 执行前校验外部 HTTP 输入的显式约束和按 Java 数据类型配置的默认规则。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/core/spring/web/HttpInputValidationException.html" title="class in com.sca4d.core.spring.web">HttpInputValidationException</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab5">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab5"><a href="com/sca4d/core/spring/web/HttpInputValidationException.html" title="class in com.sca4d.core.spring.web">HttpInputValidationException</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab5">
 <div class="block">保存 Controller 执行前发现的 HTTP 默认校验失败结果。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/config/HttpInputValidationProperties.html" title="class in com.sca4d.core.spring.config">HttpInputValidationProperties</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/config/HttpInputValidationProperties.html" title="class in com.sca4d.core.spring.config">HttpInputValidationProperties</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">配置外部 HTTP 输入按 Java 数据类型自动执行的默认校验。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/i18n/I18nProperties.html" title="class in com.sca4d.core.spring.i18n">I18nProperties</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/i18n/I18nProperties.html" title="class in com.sca4d.core.spring.i18n">I18nProperties</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">读取应用支持的语言标签和默认语言标签。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/IdentityMdcInterceptor.html" title="class in com.sca4d.core.spring.web">IdentityMdcInterceptor</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/IdentityMdcInterceptor.html" title="class in com.sca4d.core.spring.web">IdentityMdcInterceptor</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在 Controller 执行期间把当前会话、主体和账号标识写入日志上下文。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/config/IdProperties.html" title="class in com.sca4d.core.spring.config">IdProperties</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/config/IdProperties.html" title="class in com.sca4d.core.spring.config">IdProperties</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">配置默认雪花 ID 生成器使用的运行节点。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/web/annotation/IfMatch.html" title="annotation interface in com.sca4d.core.spring.web.annotation">IfMatch</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab6">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/web/annotation/IfMatch.html" title="annotation interface in com.sca4d.core.spring.web.annotation">IfMatch</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab6">
 <div class="block">要求 HTTP 方法提交一个强 <code>If-Match</code> ETag，并由 Repository 消费对应版本条件。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/IfMatchInterceptor.html" title="class in com.sca4d.core.spring.web">IfMatchInterceptor</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/IfMatchInterceptor.html" title="class in com.sca4d.core.spring.web">IfMatchInterceptor</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">为声明 `@IfMatch` 的 HTTP 方法解析强 ETag，并绑定独立的请求版本条件。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/config/InstanceAutoConfiguration.html" title="class in com.sca4d.core.spring.config">InstanceAutoConfiguration</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/config/InstanceAutoConfiguration.html" title="class in com.sca4d.core.spring.config">InstanceAutoConfiguration</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">校验当前进程标识并固化全部能力声明及启用选择。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/config/InstanceCapabilityCondition.html" title="class in com.sca4d.core.spring.config">InstanceCapabilityCondition</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/config/InstanceCapabilityCondition.html" title="class in com.sca4d.core.spring.config">InstanceCapabilityCondition</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在 Bean 定义阶段读取实例能力选择，防止停用功能启动消费者或监听器。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/config/InstanceCapabilityFilter.html" title="class in com.sca4d.core.spring.config">InstanceCapabilityFilter</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/config/InstanceCapabilityFilter.html" title="class in com.sca4d.core.spring.config">InstanceCapabilityFilter</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在业务 API 入口检查本实例能力，不替代认证、权限或 Gateway 回调校验。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/config/InstanceEnvironmentPostProcessor.html" title="class in com.sca4d.core.spring.config">InstanceEnvironmentPostProcessor</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/config/InstanceEnvironmentPostProcessor.html" title="class in com.sca4d.core.spring.config">InstanceEnvironmentPostProcessor</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在配置加载后、日志和 Bean 创建前固定进程标识，避免 random.uuid 被多次解析成不同值。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/config/InstanceProperties.html" title="class in com.sca4d.core.spring.config">InstanceProperties</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/config/InstanceProperties.html" title="class in com.sca4d.core.spring.config">InstanceProperties</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">配置进程执行位置和入口能力选择，不影响调用者身份或行级数据范围。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/JarSettingReader.html" title="class in com.sca4d.core.spring.setting">JarSettingReader</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/JarSettingReader.html" title="class in com.sca4d.core.spring.setting">JarSettingReader</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">只从指定 JAR 读取配置资源，避免多个插件的同名资源在全局 classpath 中混淆。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/redis/KeyRedisSerializer.html" title="class in com.sca4d.core.spring.redis">KeyRedisSerializer</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/redis/KeyRedisSerializer.html" title="class in com.sca4d.core.spring.redis">KeyRedisSerializer</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在 Redis key 字节边界应用 App 隔离及模块声明的 Cluster 同槽分组。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/list/ListDefinition.html" title="class in com.sca4d.core.spring.web.list">ListDefinition</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/list/ListDefinition.html" title="class in com.sca4d.core.spring.web.list">ListDefinition</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">声明一个 HTTP 列表接口允许的排序字段、默认排序和可选页大小上限。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/list/ListDefinition.Builder.html" title="class in com.sca4d.core.spring.web.list">ListDefinition.Builder</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/list/ListDefinition.Builder.html" title="class in com.sca4d.core.spring.web.list">ListDefinition.Builder</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">按声明顺序收集列表允许字段、默认排序和页大小限制。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/list/ListParameters.html" title="class in com.sca4d.core.spring.web.list">ListParameters</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/list/ListParameters.html" title="class in com.sca4d.core.spring.web.list">ListParameters</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">暂存 Controller 收到的分页和原始排序参数，直到列表声明完成安全字段转换。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/ListParametersArgumentResolver.html" title="class in com.sca4d.core.spring.web">ListParametersArgumentResolver</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/ListParametersArgumentResolver.html" title="class in com.sca4d.core.spring.web">ListParametersArgumentResolver</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">解析列表接口的 <code>page</code>、<code>size</code> 和重复 <code>sort</code> 查询参数。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/web/view/Localize.html" title="annotation interface in com.sca4d.core.spring.web.view">Localize</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab6">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/web/view/Localize.html" title="annotation interface in com.sca4d.core.spring.web.view">Localize</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab6">
 <div class="block">声明 String View 字段在 HTTP 序列化时由静态文本来源或动态字段键生成。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/persistence/mybatis/LocalizedFieldsTypeHandler.html" title="class in com.sca4d.core.spring.persistence.mybatis">LocalizedFieldsTypeHandler</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/persistence/mybatis/LocalizedFieldsTypeHandler.html" title="class in com.sca4d.core.spring.persistence.mybatis">LocalizedFieldsTypeHandler</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在 PostgreSQL JSONB 与 `LocalizedFields` 之间执行严格 JSON 转换。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/persistence/mybatis/LongValueTypeHandler.html" title="class in com.sca4d.core.spring.persistence.mybatis">LongValueTypeHandler&lt;T&gt;</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/persistence/mybatis/LongValueTypeHandler.html" title="class in com.sca4d.core.spring.persistence.mybatis">LongValueTypeHandler&lt;T&gt;</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">把由单一 <code>long</code> 值构造的类型映射为 SQL BIGINT。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/validation/MacAddress.html" title="annotation interface in com.sca4d.core.spring.validation">MacAddress</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab6">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/validation/MacAddress.html" title="annotation interface in com.sca4d.core.spring.validation">MacAddress</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab6">
 <div class="block">校验使用冒号分隔的 MAC 地址格式，不表达必填含义。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/validation/MacAddressValidator.html" title="class in com.sca4d.core.spring.validation">MacAddressValidator</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/validation/MacAddressValidator.html" title="class in com.sca4d.core.spring.validation">MacAddressValidator</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">执行 MacAddress 的冒号分隔格式检查。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/MethodArgumentsIdempotencyKeyResolver.html" title="class in com.sca4d.core.spring.web">MethodArgumentsIdempotencyKeyResolver</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/MethodArgumentsIdempotencyKeyResolver.html" title="class in com.sca4d.core.spring.web">MethodArgumentsIdempotencyKeyResolver</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用规范化方法参数摘要生成不暴露原始参数的幂等键。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/json/NameJacksonModule.html" title="class in com.sca4d.core.spring.json">NameJacksonModule</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/json/NameJacksonModule.html" title="class in com.sca4d.core.spring.json">NameJacksonModule</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在 JSON 字符串边界恢复名称类型；Code 保持业务编码，只有 Key 应用 App 隔离。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/validation/NoDefaultValidation.html" title="annotation interface in com.sca4d.core.spring.validation">NoDefaultValidation</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab6">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/validation/NoDefaultValidation.html" title="annotation interface in com.sca4d.core.spring.validation">NoDefaultValidation</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab6">
 <div class="block">关闭所在 HTTP 输入及其内部值按 Java 数据类型推导的默认校验，不影响显式 Bean Validation 约束。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/web/annotation/PageOptions.html" title="annotation interface in com.sca4d.core.spring.web.annotation">PageOptions</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab6">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/web/annotation/PageOptions.html" title="annotation interface in com.sca4d.core.spring.web.annotation">PageOptions</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab6">
 <div class="block">为一个 <code>PageRequest</code> Controller 参数声明比全局配置更小的每页数量上限。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/PageRequestArgumentResolver.html" title="class in com.sca4d.core.spring.web">PageRequestArgumentResolver</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/PageRequestArgumentResolver.html" title="class in com.sca4d.core.spring.web">PageRequestArgumentResolver</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">解析并校验 <code>page</code> 和 <code>size</code> 查询参数。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/validation/PhoneNumber.html" title="annotation interface in com.sca4d.core.spring.validation">PhoneNumber</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab6">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/validation/PhoneNumber.html" title="annotation interface in com.sca4d.core.spring.validation">PhoneNumber</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab6">
 <div class="block">校验规范 E.164 电话号码及 libphonenumber 元数据，不表达号码已分配、归属或可以接通。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/validation/PhoneNumber.Rule.html" title="annotation interface in com.sca4d.core.spring.validation">PhoneNumber.Rule</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab6">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/validation/PhoneNumber.Rule.html" title="annotation interface in com.sca4d.core.spring.validation">PhoneNumber.Rule</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab6">
 <div class="block">声明一个必须同时满足全部包含条件且不满足任何排除条件的号码规则。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/validation/PhoneNumberConditionRegistry.html" title="class in com.sca4d.core.spring.validation">PhoneNumberConditionRegistry</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/validation/PhoneNumberConditionRegistry.html" title="class in com.sca4d.core.spring.validation">PhoneNumberConditionRegistry</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存应用显式声明的 PhoneNumberCondition Bean，并拒绝重复实现类型。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/validation/PhoneNumberValidator.html" title="class in com.sca4d.core.spring.validation">PhoneNumberValidator</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/validation/PhoneNumberValidator.html" title="class in com.sca4d.core.spring.validation">PhoneNumberValidator</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用 libphonenumber 和 PhoneNumberCondition Bean 执行 PhoneNumber 约束。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/spring/identity/PrincipalSelection.html" title="interface in com.sca4d.core.spring.identity">PrincipalSelection&lt;P&gt;</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/spring/identity/PrincipalSelection.html" title="interface in com.sca4d.core.spring.identity">PrincipalSelection&lt;P&gt;</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">根据当前认证身份和类型化 HTTP 输入选择业务身份。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionCallInterceptor</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionCallInterceptor</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在统一调用生命周期内执行 CurrentPrincipal 声明的主体选择。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/identity/PrincipalSelectionInput.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionInput</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/identity/PrincipalSelectionInput.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionInput</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Web 适配层从当前 HTTP 请求和 Controller 参数收集的业务身份选择输入。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/identity/PrincipalSelectionInputResolver.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionInputResolver</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/identity/PrincipalSelectionInputResolver.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionInputResolver</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">从当前 HTTP 请求和已经绑定的 Controller 参数收集业务身份选择输入。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/identity/PrincipalSelectionInterceptor.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionInterceptor</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/identity/PrincipalSelectionInterceptor.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionInterceptor</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在 MVC 参数绑定前执行不依赖 request body 和方法参数的业务身份选择。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/identity/PrincipalSelectionInvoker.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionInvoker</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/identity/PrincipalSelectionInvoker.html" title="class in com.sca4d.core.spring.identity">PrincipalSelectionInvoker</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">把 Web 选择输入转换成选择器声明的参数类型并调用选择器。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/redis/RedisBatches.html" title="class in com.sca4d.core.spring.redis">RedisBatches</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/redis/RedisBatches.html" title="class in com.sca4d.core.spring.redis">RedisBatches</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">按 pipeline 命令数量限制分批执行已经确定的 Redis 操作。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/redis/RedisDistributedLock.html" title="class in com.sca4d.core.spring.redis">RedisDistributedLock</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/redis/RedisDistributedLock.html" title="class in com.sca4d.core.spring.redis">RedisDistributedLock</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用 Redisson watchdog 在多个应用实例之间互斥执行同一业务键的任务。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/redis/RedisHashTag.html" title="class in com.sca4d.core.spring.redis">RedisHashTag</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/redis/RedisHashTag.html" title="class in com.sca4d.core.spring.redis">RedisHashTag</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">声明需要在 Redis Cluster 中共同参与 Lua 操作的一组逻辑 key。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/redis/RedisIdempotencyProperties.html" title="class in com.sca4d.core.spring.redis">RedisIdempotencyProperties</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/redis/RedisIdempotencyProperties.html" title="class in com.sca4d.core.spring.redis">RedisIdempotencyProperties</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">配置 Redis 幂等处理中记录的租约和调用方重试时间。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/redis/RedisIdempotencyStore.html" title="class in com.sca4d.core.spring.redis">RedisIdempotencyStore</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/redis/RedisIdempotencyStore.html" title="class in com.sca4d.core.spring.redis">RedisIdempotencyStore</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用 Redis Lua 原子维护幂等处理所有权和成功结果。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/redis/RedisPipelineProperties.html" title="class in com.sca4d.core.spring.redis">RedisPipelineProperties</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/redis/RedisPipelineProperties.html" title="class in com.sca4d.core.spring.redis">RedisPipelineProperties</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">配置一次 Redis pipeline 允许提交的最大命令数量。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/redis/RedisRateLimiter.html" title="class in com.sca4d.core.spring.redis">RedisRateLimiter</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/redis/RedisRateLimiter.html" title="class in com.sca4d.core.spring.redis">RedisRateLimiter</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用 Redis CAS 原子消耗多个应用实例共享的令牌桶额度。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/redis/RedisRateLimitProperties.html" title="class in com.sca4d.core.spring.redis">RedisRateLimitProperties</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/redis/RedisRateLimitProperties.html" title="class in com.sca4d.core.spring.redis">RedisRateLimitProperties</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">配置 Redis 限流状态在额度完全恢复后的额外保留时间。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/validation/Req.html" title="class in com.sca4d.core.spring.validation">Req</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/validation/Req.html" title="class in com.sca4d.core.spring.validation">Req</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">为运行时输入提供必填 Bean Validation 约束，避免与 JetBrains 空值注解混用。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/validation/Req.NotBlank.html" title="annotation interface in com.sca4d.core.spring.validation">Req.NotBlank</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab6">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/validation/Req.NotBlank.html" title="annotation interface in com.sca4d.core.spring.validation">Req.NotBlank</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab6">
 <div class="block">要求输入文本存在且至少包含一个非空白字符。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/validation/Req.NotEmpty.html" title="annotation interface in com.sca4d.core.spring.validation">Req.NotEmpty</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab6">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/validation/Req.NotEmpty.html" title="annotation interface in com.sca4d.core.spring.validation">Req.NotEmpty</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab6">
 <div class="block">要求输入值存在且文本、集合、Map 或数组长度大于零。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/validation/Req.NotNull.html" title="annotation interface in com.sca4d.core.spring.validation">Req.NotNull</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab6">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/validation/Req.NotNull.html" title="annotation interface in com.sca4d.core.spring.validation">Req.NotNull</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab6">
 <div class="block">要求输入值存在，允许空字符串和空集合。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/i18n/RequestLocaleResolver.html" title="class in com.sca4d.core.spring.i18n">RequestLocaleResolver</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/i18n/RequestLocaleResolver.html" title="class in com.sca4d.core.spring.i18n">RequestLocaleResolver</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保留 `Accept-Language` 请求 Locale，让动态数据可以使用静态消息目录之外的语言。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/RequestVersionConditionFilter.html" title="class in com.sca4d.core.spring.web">RequestVersionConditionFilter</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/RequestVersionConditionFilter.html" title="class in com.sca4d.core.spring.web">RequestVersionConditionFilter</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在每次 HTTP 请求结束后清理当前线程保存的版本前置条件。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/RequestVersionConditions.html" title="class in com.sca4d.core.spring.web">RequestVersionConditions</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/RequestVersionConditions.html" title="class in com.sca4d.core.spring.web">RequestVersionConditions</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">把当前 HTTP 请求提交的 `If-Match` 版本绑定为必须由根资源 Repository 消费的预提交条件。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/ResponseETagContractValidator.html" title="class in com.sca4d.core.spring.web">ResponseETagContractValidator</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/ResponseETagContractValidator.html" title="class in com.sca4d.core.spring.web">ResponseETagContractValidator</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在应用启动时校验 Controller 返回的顶层响应数据 ETag 声明。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/validation/SafeText.html" title="annotation interface in com.sca4d.core.spring.validation">SafeText</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab6">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/validation/SafeText.html" title="annotation interface in com.sca4d.core.spring.validation">SafeText</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab6">
 <div class="block">校验备注、描述等普通文本的长度和控制字符，不检查业务敏感词。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/validation/SafeTextValidator.html" title="class in com.sca4d.core.spring.validation">SafeTextValidator</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/validation/SafeTextValidator.html" title="class in com.sca4d.core.spring.validation">SafeTextValidator</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">执行 SafeText 声明的长度和控制字符检查。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/json/Sca4djJson.html" title="annotation interface in com.sca4d.core.spring.json">Sca4djJson</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab6">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/json/Sca4djJson.html" title="annotation interface in com.sca4d.core.spring.json">Sca4djJson</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab6">
 <div class="block">限定脚手架内部持久化、Session wire 和消息使用的 `ObjectMapper` Bean。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/json/Sca4djMapper.html" title="class in com.sca4d.core.spring.json">Sca4djMapper</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/json/Sca4djMapper.html" title="class in com.sca4d.core.spring.json">Sca4djMapper</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">脚手架持久化、Session 和内部消息使用的映射器；业务和客户端协议使用各自的 ObjectMapper。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/redis/Sca4djRedis.html" title="annotation interface in com.sca4d.core.spring.redis">Sca4djRedis</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab6">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab6"><a href="com/sca4d/core/spring/redis/Sca4djRedis.html" title="annotation interface in com.sca4d.core.spring.redis">Sca4djRedis</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab6">
 <div class="block">限定脚手架内部状态、索引和消息使用的 <code>RedisTemplate&lt;Key, String&gt;</code> Bean。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/security/SecretHasherAutoConfiguration.html" title="class in com.sca4d.core.spring.security">SecretHasherAutoConfiguration</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/security/SecretHasherAutoConfiguration.html" title="class in com.sca4d.core.spring.security">SecretHasherAutoConfiguration</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">为需要保存不可逆秘密值摘要的模块提供默认 Argon2id 实现。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/security/SecretKeyringAutoConfiguration.html" title="class in com.sca4d.core.spring.security">SecretKeyringAutoConfiguration</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/security/SecretKeyringAutoConfiguration.html" title="class in com.sca4d.core.spring.security">SecretKeyringAutoConfiguration</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在应用声明 active key 后提供可轮换的 AES-256-GCM 密钥环。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/security/SecretKeyringProperties.html" title="class in com.sca4d.core.spring.security">SecretKeyringProperties</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/security/SecretKeyringProperties.html" title="class in com.sca4d.core.spring.security">SecretKeyringProperties</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">配置新密文使用的 active key 与仍可读取旧密文的 AES-256 key。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/SettingBootstrap.html" title="class in com.sca4d.core.spring.setting">SettingBootstrap</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/SettingBootstrap.html" title="class in com.sca4d.core.spring.setting">SettingBootstrap</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">由指定初始化节点按每个设置的 INIT 或 SYNC 标记更新数据库。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/SettingCatalog.html" title="class in com.sca4d.core.spring.setting">SettingCatalog</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/SettingCatalog.html" title="class in com.sca4d.core.spring.setting">SettingCatalog</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">校验并保存当前应用注册的全部 Setting 定义。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/spring/setting/SettingMapper.html" title="interface in com.sca4d.core.spring.setting">SettingMapper</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/core/spring/setting/SettingMapper.html" title="interface in com.sca4d.core.spring.setting">SettingMapper</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">定义统一 `sys_setting` 表的最小查询、条件写入和初始化锁 SQL。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/SettingRepository.html" title="class in com.sca4d.core.spring.setting">SettingRepository</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/SettingRepository.html" title="class in com.sca4d.core.spring.setting">SettingRepository</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">隔离 Settings 对 MyBatis、影响行数、条件写入和初始化锁 SQL 的依赖。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/SettingsAutoConfiguration.html" title="class in com.sca4d.core.spring.setting">SettingsAutoConfiguration</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/SettingsAutoConfiguration.html" title="class in com.sca4d.core.spring.setting">SettingsAutoConfiguration</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">自动装配设置目录、数据库读写、密钥保护和指定初始化节点。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/SettingsBootstrapProperties.html" title="class in com.sca4d.core.spring.setting">SettingsBootstrapProperties</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/SettingsBootstrapProperties.html" title="class in com.sca4d.core.spring.setting">SettingsBootstrapProperties</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">控制当前节点是否负责把设置 ENV 初始化或同步到数据库。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/SettingSecretCodecAdapter.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecAdapter</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/SettingSecretCodecAdapter.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecAdapter</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">读取设置编码迁移前的密文用途，写入始终使用当前设置编码；不迁移密钥材料。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/SettingSecretCodecCatalog.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecCatalog</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/SettingSecretCodecCatalog.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecCatalog</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">为一个设置所属和稳定编码建立 V1/V2 密文 Codec 目录，并把 V2 作为当前写入版本。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV1</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV1</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用旧的 Setting key 上下文读取版本一敏感设置密文，供历史数据和显式迁移使用。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV2</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV2</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用 owner、Setting key 和长度分隔上下文读写当前版本二敏感设置密文。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/SettingSecretEncryptionMigrator.html" title="class in com.sca4d.core.spring.setting">SettingSecretEncryptionMigrator</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/SettingSecretEncryptionMigrator.html" title="class in com.sca4d.core.spring.setting">SettingSecretEncryptionMigrator</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">手工把一个 Setting 密文从指定版本转换到另一个版本，不读取或修改数据库。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/id/SnowflakeIdGenerator.html" title="class in com.sca4d.core.spring.id">SnowflakeIdGenerator</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/id/SnowflakeIdGenerator.html" title="class in com.sca4d.core.spring.id">SnowflakeIdGenerator</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用 Hutool 雪花算法生成全局正整数标识（Snowflake ID Generator）。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/call/SpelCallValueResolver.html" title="class in com.sca4d.core.spring.call">SpelCallValueResolver</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/call/SpelCallValueResolver.html" title="class in com.sca4d.core.spring.call">SpelCallValueResolver</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用 SpEL 从调用注解读取参数和执行结果，只缓存表达式，不缓存调用数据。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/call/SpringCallValueResolverLookup.html" title="class in com.sca4d.core.spring.call">SpringCallValueResolverLookup</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/call/SpringCallValueResolverLookup.html" title="class in com.sca4d.core.spring.call">SpringCallValueResolverLookup</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用 Spring Bean 类型查找调用值解析器。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/persistence/batch/SqlBatches.html" title="class in com.sca4d.core.spring.persistence.batch">SqlBatches</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/persistence/batch/SqlBatches.html" title="class in com.sca4d.core.spring.persistence.batch">SqlBatches</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">按 SQL 条目和绑定参数限制分批执行 Repository 已经确定的数据库操作。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/persistence/batch/SqlBatchProperties.html" title="class in com.sca4d.core.spring.persistence.batch">SqlBatchProperties</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/persistence/batch/SqlBatchProperties.html" title="class in com.sca4d.core.spring.persistence.batch">SqlBatchProperties</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">配置单条 SQL 批量操作的条目数和绑定参数保护上限。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/StoredSetting.html" title="class in com.sca4d.core.spring.setting">StoredSetting</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/StoredSetting.html" title="class in com.sca4d.core.spring.setting">StoredSetting</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存 Repository 从 `sys_setting` 读取的 owner、结构版本、值和行版本。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/persistence/mybatis/StringValueTypeHandler.html" title="class in com.sca4d.core.spring.persistence.mybatis">StringValueTypeHandler&lt;T&gt;</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/persistence/mybatis/StringValueTypeHandler.html" title="class in com.sca4d.core.spring.persistence.mybatis">StringValueTypeHandler&lt;T&gt;</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">把由单一字符串值构造的类型映射为 SQL VARCHAR。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/transaction/TransactionCallbacks.html" title="class in com.sca4d.core.spring.transaction">TransactionCallbacks</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/transaction/TransactionCallbacks.html" title="class in com.sca4d.core.spring.transaction">TransactionCallbacks</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">把当前事务登记的进程内动作按顺序放到成功提交之后执行。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/logging/TransactionLogTurboFilter.html" title="class in com.sca4d.core.spring.logging">TransactionLogTurboFilter</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/logging/TransactionLogTurboFilter.html" title="class in com.sca4d.core.spring.logging">TransactionLogTurboFilter</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">把带 <code>LogMark.AFTER_COMMIT</code> 的 INFO 交给当前事务，并在提交后按原 logger 输出。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/persistence/mybatis/TreeCodeTypeHandler.html" title="class in com.sca4d.core.spring.persistence.mybatis">TreeCodeTypeHandler</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/persistence/mybatis/TreeCodeTypeHandler.html" title="class in com.sca4d.core.spring.persistence.mybatis">TreeCodeTypeHandler</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在 SQL VARCHAR 边界读写稳定 TreeCode，资源分类默认输出斜杠格式。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/persistence/mybatis/TreeCodeTypeHandler.Colon.html" title="class in com.sca4d.core.spring.persistence.mybatis">TreeCodeTypeHandler.Colon</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/persistence/mybatis/TreeCodeTypeHandler.Colon.html" title="class in com.sca4d.core.spring.persistence.mybatis">TreeCodeTypeHandler.Colon</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">为系统身份编码等明确声明的数据库列输出冒号格式。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/gateway/TrustedGatewayRequest.html" title="class in com.sca4d.core.spring.gateway">TrustedGatewayRequest</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/gateway/TrustedGatewayRequest.html" title="class in com.sca4d.core.spring.gateway">TrustedGatewayRequest</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">读取已经由 `TrustedGatewayRequestFilter` 验证的外部请求路径和客户端地址。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/gateway/TrustedGatewayRequestFilter.html" title="class in com.sca4d.core.spring.gateway">TrustedGatewayRequestFilter</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/gateway/TrustedGatewayRequestFilter.html" title="class in com.sca4d.core.spring.gateway">TrustedGatewayRequestFilter</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">验证 Gateway 控制 Secret，采用可信转发信息并对后续处理隐藏控制 Header。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/validation/ValidationPatterns.html" title="class in com.sca4d.core.spring.validation">ValidationPatterns</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/validation/ValidationPatterns.html" title="class in com.sca4d.core.spring.validation">ValidationPatterns</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存跨业务固定复用的文本格式规则。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/view/ViewJson.html" title="class in com.sca4d.core.spring.web.view">ViewJson</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/web/view/ViewJson.html" title="class in com.sca4d.core.spring.web.view">ViewJson</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用当前 HTTP ObjectMapper 和 DataOps 定制 BaseView 的最终 JSON。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/YamlCodec.html" title="class in com.sca4d.core.spring.setting">YamlCodec&lt;T&gt;</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/core/spring/setting/YamlCodec.html" title="class in com.sca4d.core.spring.setting">YamlCodec&lt;T&gt;</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">用独立 YAML 解析器与领域 JsonCodec 转换内容，不访问文件或启用 Java 多态类型。</div>
 </div>
 </div>

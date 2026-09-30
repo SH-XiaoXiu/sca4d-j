@@ -109,27 +109,27 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="Continent.html" title="enum class in com.sca4d.core.api.region">Continent</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#continent()" class="member-name-link">continent</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取地区代码对应的洲别。</div>
+<div class="block">地区代码对应的洲别。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#countryCallingCode()" class="member-name-link">countryCallingCode</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取 E.164 号码中的国家或地区拨号前缀。</div>
+<div class="block">E.164 号码中的国家或地区拨号前缀。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="Region.html" title="class in com.sca4d.core.api.region">Region</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#region()" class="member-name-link">region</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取 libphonenumber 从号码确定的地区。</div>
+<div class="block">libphonenumber 从号码确定的地区。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="PhoneNumberType.html" title="enum class in com.sca4d.core.api.region">PhoneNumberType</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#type()" class="member-name-link">type</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取 libphonenumber 判断的号码用途。</div>
+<div class="block">libphonenumber 判断的号码用途。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#value()" class="member-name-link">value</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取已经通过有效性和格式检查的号码。</div>
+<div class="block">已经通过有效性和格式检查的号码。</div>
 </div>
 </div>
 </div>
@@ -153,7 +153,7 @@ loadScripts(document, 'script');</script>
 <h3>value</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">value</span>()</div>
-<div class="block">读取已经通过有效性和格式检查的号码。</div>
+<div class="block">已经通过有效性和格式检查的号码。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>E.164 格式电话号码</dd>
@@ -165,7 +165,7 @@ loadScripts(document, 'script');</script>
 <h3>region</h3>
 <div class="member-signature"><span class="annotations">@Nullable
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="Region.html" title="class in com.sca4d.core.api.region">Region</a></span>&nbsp;<span class="element-name">region</span>()</div>
-<div class="block">读取 libphonenumber 从号码确定的地区。</div>
+<div class="block">libphonenumber 从号码确定的地区。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>两位地区代码对应的 `Region`；非地理号码为 `Region("001")`，无法确定时为空</dd>
@@ -177,7 +177,7 @@ loadScripts(document, 'script');</script>
 <h3>continent</h3>
 <div class="member-signature"><span class="annotations">@Nullable
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="Continent.html" title="enum class in com.sca4d.core.api.region">Continent</a></span>&nbsp;<span class="element-name">continent</span>()</div>
-<div class="block">读取地区代码对应的洲别。</div>
+<div class="block">地区代码对应的洲别。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>地理号码所属洲别；非地理号码或无法确定时为空</dd>
@@ -188,7 +188,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="countryCallingCode()">
 <h3>countryCallingCode</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">countryCallingCode</span>()</div>
-<div class="block">读取 E.164 号码中的国家或地区拨号前缀。</div>
+<div class="block">E.164 号码中的国家或地区拨号前缀。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>正整数国际电话代码</dd>
@@ -200,7 +200,7 @@ loadScripts(document, 'script');</script>
 <h3>type</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="PhoneNumberType.html" title="enum class in com.sca4d.core.api.region">PhoneNumberType</a></span>&nbsp;<span class="element-name">type</span>()</div>
-<div class="block">读取 libphonenumber 判断的号码用途。</div>
+<div class="block">libphonenumber 判断的号码用途。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>固话、移动电话等电话号码类型</dd>

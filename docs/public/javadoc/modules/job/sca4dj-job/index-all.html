@@ -62,7 +62,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/job/persistence/NodeClaim.html#attempt()" class="member-name-link">attempt()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/NodeClaim.html" title="class in com.sca4d.job.persistence">NodeClaim</a></dt>
 <dd>
-<div class="block">返回当前租约对应的尝试次数。</div>
+<div class="block">当前租约对应的尝试次数。</div>
 </dd>
 <dt><a href="com/sca4d/job/persistence/NodeClaim.html#attemptStatus()" class="member-name-link">attemptStatus()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/NodeClaim.html" title="class in com.sca4d.job.persistence">NodeClaim</a></dt>
 <dd>&nbsp;</dd>
@@ -133,9 +133,7 @@ loadScripts(document, 'script');</script>
 <div class="block">使用当前 App 隔离名称的 Job Repository 返回类型化调度历史。</div>
 </dd>
 <dt><a href="com/sca4d/job/runtime/DefaultJobHistory.html#%3Cinit%3E(com.sca4d.job.persistence.JobRepository,com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">DefaultJobHistory(JobRepository, ObjectMapper)</a> - Constructor for class com.sca4d.job.runtime.<a href="com/sca4d/job/runtime/DefaultJobHistory.html" title="class in com.sca4d.job.runtime">DefaultJobHistory</a></dt>
-<dd>
-<div class="block">创建使用脚手架 JSON 映射器恢复节点输出的 Job 历史查询。</div>
-</dd>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/job/runtime/JobCatalog.html#definitionVersions()" class="member-name-link">definitionVersions()</a> - Method in class com.sca4d.job.runtime.<a href="com/sca4d/job/runtime/JobCatalog.html" title="class in com.sca4d.job.runtime">JobCatalog</a></dt>
 <dd>
 <div class="block">返回本实例能够执行的 Job key 和精确版本，供数据库领取时筛选。</div>
@@ -275,11 +273,11 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/job/persistence/RunRecord.html#id()" class="member-name-link">id()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/RunRecord.html" title="class in com.sca4d.job.persistence">RunRecord</a></dt>
 <dd>
-<div class="block">返回根运行主键。</div>
+<div class="block">根运行主键。</div>
 </dd>
 <dt><a href="com/sca4d/job/persistence/NodeClaim.html#inputJson()" class="member-name-link">inputJson()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/NodeClaim.html" title="class in com.sca4d.job.persistence">NodeClaim</a></dt>
 <dd>
-<div class="block">返回节点领取前已经准备的输入 JSON。</div>
+<div class="block">节点领取前已经准备的输入 JSON。</div>
 </dd>
 <dt><a href="com/sca4d/job/persistence/JobMapper.html#insertDependencies(long,java.util.Map)" class="member-name-link">insertDependencies(long, Map&lt;Long, Map&lt;Integer, Long&gt;&gt;)</a> - Method in interface com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobMapper.html" title="interface in com.sca4d.job.persistence">JobMapper</a></dt>
 <dd>
@@ -320,11 +318,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/job/persistence/NodeClaim.html#jobDefinitionVersion()" class="member-name-link">jobDefinitionVersion()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/NodeClaim.html" title="class in com.sca4d.job.persistence">NodeClaim</a></dt>
 <dd>
-<div class="block">返回提交根运行时保存的 Job 定义版本。</div>
+<div class="block">提交根运行时保存的 Job 定义版本。</div>
 </dd>
 <dt><a href="com/sca4d/job/persistence/RunRecord.html#jobDefinitionVersion()" class="member-name-link">jobDefinitionVersion()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/RunRecord.html" title="class in com.sca4d.job.persistence">RunRecord</a></dt>
 <dd>
-<div class="block">返回提交根运行时保存的 Job 定义版本。</div>
+<div class="block">提交根运行时保存的 Job 定义版本。</div>
 </dd>
 <dt><a href="com/sca4d/job/runtime/JobHistoryCleanupTask.html" class="type-name-link" title="class in com.sca4d.job.runtime">JobHistoryCleanupTask</a> - Class in <a href="com/sca4d/job/runtime/package-summary.html">com.sca4d.job.runtime</a></dt>
 <dd>
@@ -344,15 +342,15 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/job/persistence/NodeClaim.html#jobKey()" class="member-name-link">jobKey()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/NodeClaim.html" title="class in com.sca4d.job.persistence">NodeClaim</a></dt>
 <dd>
-<div class="block">返回恢复代码定义使用的 Job key。</div>
+<div class="block">恢复 Job 定义使用的 Job key。</div>
 </dd>
 <dt><a href="com/sca4d/job/persistence/RunRecord.html#jobKey()" class="member-name-link">jobKey()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/RunRecord.html" title="class in com.sca4d.job.persistence">RunRecord</a></dt>
 <dd>
-<div class="block">返回提交根运行时保存的 Job key。</div>
+<div class="block">提交根运行时保存的 Job key。</div>
 </dd>
 <dt><a href="com/sca4d/job/persistence/NodeClaim.html#jobKind()" class="member-name-link">jobKind()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/NodeClaim.html" title="class in com.sca4d.job.persistence">NodeClaim</a></dt>
 <dd>
-<div class="block">返回根运行采用的 Job 种类。</div>
+<div class="block">根运行采用的 Job 种类。</div>
 </dd>
 <dt><a href="com/sca4d/job/persistence/JobMapper.html" class="type-name-link" title="interface in com.sca4d.job.persistence">JobMapper</a> - Interface in <a href="com/sca4d/job/persistence/package-summary.html">com.sca4d.job.persistence</a></dt>
 <dd>
@@ -406,7 +404,7 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/job/persistence/NodeClaim.html#maxAttempts()" class="member-name-link">maxAttempts()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/NodeClaim.html" title="class in com.sca4d.job.persistence">NodeClaim</a></dt>
 <dd>
-<div class="block">返回当前节点允许的最大尝试次数。</div>
+<div class="block">当前节点允许的最大尝试次数。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:N">N</h2>
@@ -421,11 +419,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/job/persistence/NodeClaim.html#nodeId()" class="member-name-link">nodeId()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/NodeClaim.html" title="class in com.sca4d.job.persistence">NodeClaim</a></dt>
 <dd>
-<div class="block">返回已经领取的节点主键。</div>
+<div class="block">已经领取的节点主键。</div>
 </dd>
 <dt><a href="com/sca4d/job/persistence/NodeClaim.html#nodeKey()" class="member-name-link">nodeKey()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/NodeClaim.html" title="class in com.sca4d.job.persistence">NodeClaim</a></dt>
 <dd>
-<div class="block">返回当前节点在 Job 定义内的稳定名称。</div>
+<div class="block">当前节点在 Job 定义内的稳定名称。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:O">O</h2>
@@ -434,7 +432,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/job/persistence/RunRecord.html#outputJson()" class="member-name-link">outputJson()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/RunRecord.html" title="class in com.sca4d.job.persistence">RunRecord</a></dt>
 <dd>
-<div class="block">返回根运行成功后保存的输出 JSON。</div>
+<div class="block">根运行成功后保存的输出 JSON。</div>
 </dd>
 <dt><a href="com/sca4d/job/persistence/ScheduledRunRecord.html#outputJson()" class="member-name-link">outputJson()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/ScheduledRunRecord.html" title="class in com.sca4d.job.persistence">ScheduledRunRecord</a></dt>
 <dd>&nbsp;</dd>
@@ -463,13 +461,13 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/job/persistence/NodeClaim.html#retryDelayMillis()" class="member-name-link">retryDelayMillis()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/NodeClaim.html" title="class in com.sca4d.job.persistence">NodeClaim</a></dt>
 <dd>
-<div class="block">返回当前节点失败后的固定重试间隔。</div>
+<div class="block">当前节点失败后的固定重试间隔。</div>
 </dd>
 <dt><a href="com/sca4d/job/runtime/DefaultJobExecutor.html#run(com.sca4d.core.api.job.Job,I,java.time.Duration)" class="member-name-link">run(Job&lt;I, O&gt;, I, Duration)</a> - Method in class com.sca4d.job.runtime.<a href="com/sca4d/job/runtime/DefaultJobExecutor.html" title="class in com.sca4d.job.runtime">DefaultJobExecutor</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/job/persistence/NodeClaim.html#runId()" class="member-name-link">runId()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/NodeClaim.html" title="class in com.sca4d.job.persistence">NodeClaim</a></dt>
 <dd>
-<div class="block">返回当前节点所属的根运行主键。</div>
+<div class="block">当前节点所属的根运行主键。</div>
 </dd>
 <dt><a href="com/sca4d/job/persistence/ScheduledRunRecord.html#runId()" class="member-name-link">runId()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/ScheduledRunRecord.html" title="class in com.sca4d.job.persistence">ScheduledRunRecord</a></dt>
 <dd>&nbsp;</dd>
@@ -507,9 +505,7 @@ loadScripts(document, 'script');</script>
 <div class="block">保存定时 Job 历史查询从根运行和目标节点读取的数据库列。</div>
 </dd>
 <dt><a href="com/sca4d/job/persistence/ScheduledRunRecord.html#%3Cinit%3E(long,java.time.Instant,com.sca4d.core.api.job.JobRunStatus,java.time.Instant,java.lang.String)" class="member-name-link">ScheduledRunRecord(long, Instant, JobRunStatus, Instant, String)</a> - Constructor for class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/ScheduledRunRecord.html" title="class in com.sca4d.job.persistence">ScheduledRunRecord</a></dt>
-<dd>
-<div class="block">创建一条尚未向公共 API 转换的定时运行查询结果。</div>
-</dd>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/job/persistence/JobMapper.html#selectDependencyOutputs(long)" class="member-name-link">selectDependencyOutputs(long)</a> - Method in interface com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/JobMapper.html" title="interface in com.sca4d.job.persistence">JobMapper</a></dt>
 <dd>
 <div class="block">查询节点直接依赖的输出列。</div>
@@ -570,7 +566,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/job/persistence/RunRecord.html#status()" class="member-name-link">status()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/RunRecord.html" title="class in com.sca4d.job.persistence">RunRecord</a></dt>
 <dd>
-<div class="block">返回当前根运行状态。</div>
+<div class="block">当前根运行状态。</div>
 </dd>
 <dt><a href="com/sca4d/job/persistence/ScheduledRunRecord.html#status()" class="member-name-link">status()</a> - Method in class com.sca4d.job.persistence.<a href="com/sca4d/job/persistence/ScheduledRunRecord.html" title="class in com.sca4d.job.persistence">ScheduledRunRecord</a></dt>
 <dd>&nbsp;</dd>

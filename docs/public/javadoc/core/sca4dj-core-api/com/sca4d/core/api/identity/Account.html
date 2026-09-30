@@ -153,7 +153,7 @@ implements <a href="../resource/Resource.html" title="interface in com.sca4d.cor
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#accountId()" class="member-name-link">accountId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取登录账号的标识。</div>
+<div class="block">登录账号标识。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#id()" class="member-name-link">id</a>()</code></div>
@@ -163,12 +163,12 @@ implements <a href="../resource/Resource.html" title="interface in com.sca4d.cor
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="RealmKey.html" title="class in com.sca4d.core.api.identity">RealmKey</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#realmKey()" class="member-name-link">realmKey</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取认证和账号查询必须使用的域。</div>
+<div class="block">认证和账号查询使用的域。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#subjectId()" class="member-name-link">subjectId</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取拥有当前登录账号的接入者标识。</div>
+<div class="block">登录账号所属的 Subject 标识。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#type()" class="member-name-link">type</a>()</code></div>
@@ -193,14 +193,6 @@ implements <a href="../resource/Resource.html" title="interface in com.sca4d.cor
 <h2>Field Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="RESOURCE_TYPE">
-<h3>RESOURCE_TYPE</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></span>&nbsp;<span class="element-name">RESOURCE_TYPE</span></div>
-<div class="block">Account 使用的稳定 Resource 类型。</div>
-</section>
-</li>
-<li>
 <section class="detail" id="RESOURCE_TYPE_VALUE">
 <h3>RESOURCE_TYPE_VALUE</h3>
 <div class="member-signature"><span class="annotations">@NotNull
@@ -214,6 +206,14 @@ implements <a href="../resource/Resource.html" title="interface in com.sca4d.cor
 </ul>
 </dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="RESOURCE_TYPE">
+<h3>RESOURCE_TYPE</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></span>&nbsp;<span class="element-name">RESOURCE_TYPE</span></div>
+<div class="block">Account 使用的稳定 Resource 类型。</div>
 </section>
 </li>
 </ul>
@@ -253,7 +253,7 @@ implements <a href="../resource/Resource.html" title="interface in com.sca4d.cor
 <h3>accountId</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">accountId</span>()</div>
-<div class="block">读取登录账号的标识。</div>
+<div class="block">登录账号标识。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>Account 标识</dd>
@@ -295,7 +295,7 @@ implements <a href="../resource/Resource.html" title="interface in com.sca4d.cor
 <h3>subjectId</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">subjectId</span>()</div>
-<div class="block">读取拥有当前登录账号的接入者标识。</div>
+<div class="block">登录账号所属的 Subject 标识。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>所属 Subject 标识</dd>
@@ -308,7 +308,7 @@ implements <a href="../resource/Resource.html" title="interface in com.sca4d.cor
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="RealmKey.html" title="class in com.sca4d.core.api.identity">RealmKey</a></span>&nbsp;<span class="element-name">realmKey</span>()</div>
-<div class="block">读取认证和账号查询必须使用的域。</div>
+<div class="block">认证和账号查询使用的域。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>账号创建后保持不变的认证域</dd>

@@ -146,7 +146,9 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;method,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;targetType)</span></div>
-<div class="block">判断当前实现方法是否进入该绑定。</div>
+<div class="block">判断当前实现方法是否进入该绑定。
+
+ <p>实现必须只依赖方法和目标类型。注册表会缓存判断结果，因此不能读取参数、当前 Call、线程状态或外部存储。</div>
 </section>
 </li>
 <li>

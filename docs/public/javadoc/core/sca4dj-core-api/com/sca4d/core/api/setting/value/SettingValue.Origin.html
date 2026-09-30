@@ -113,27 +113,25 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#codecVersion()" class="member-name-link">codecVersion</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回原始内容声明的版本。</div>
+<div class="block">原始内容声明的版本。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#locked()" class="member-name-link">locked</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回来源内容是否被同步锁定。</div>
+<div class="block">来源内容是否被同步锁定。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#owner()" class="member-name-link">owner</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回实际读取所属。</div>
-</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#present()" class="member-name-link">present</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回来源是否包含覆盖内容。</div>
+<div class="block">来源是否包含覆盖内容。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#reader()" class="member-name-link">reader</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回读写实现编码。</div>
+<div class="block">读写实现编码。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../../concurrent/Version.html" title="class in com.sca4d.core.api.concurrent">Version</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#revision()" class="member-name-link">revision</a>()</code></div>
@@ -162,7 +160,11 @@ loadScripts(document, 'script');</script>
 <h3>reader</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></span>&nbsp;<span class="element-name">reader</span>()</div>
-<div class="block">返回读写实现编码。</div>
+<div class="block">读写实现编码。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>读写实现编码</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -170,14 +172,21 @@ loadScripts(document, 'script');</script>
 <h3>owner</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a></span>&nbsp;<span class="element-name">owner</span>()</div>
-<div class="block">返回实际读取所属。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>实际读取的设置归属者</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="codecVersion()">
 <h3>codecVersion</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">codecVersion</span>()</div>
-<div class="block">返回原始内容声明的版本。</div>
+<div class="block">原始内容声明的版本。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>原始内容声明的版本</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -192,14 +201,22 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="present()">
 <h3>present</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">present</span>()</div>
-<div class="block">返回来源是否包含覆盖内容。</div>
+<div class="block">来源是否包含覆盖内容。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>来源是否包含覆盖内容</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="locked()">
 <h3>locked</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">locked</span>()</div>
-<div class="block">返回来源内容是否被同步锁定。</div>
+<div class="block">来源内容是否被同步锁定。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>来源内容是否被同步锁定</dd>
+</dl>
 </section>
 </li>
 </ul>

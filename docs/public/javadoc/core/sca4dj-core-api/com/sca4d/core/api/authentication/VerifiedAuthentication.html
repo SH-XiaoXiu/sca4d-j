@@ -128,17 +128,17 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../identity/Account.html" title="class in com.sca4d.core.api.identity">Account</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#account()" class="member-name-link">account</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取认证方法从 Proof 确认的账号。</div>
+<div class="block">认证方法从 Proof 确认的账号。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Authentication.html" title="class in com.sca4d.core.api.authentication">Authentication</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#authentication()" class="member-name-link">authentication</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取满足要求后可以用于动作判断或建立 Session 的认证记录。</div>
+<div class="block">满足要求后可以用于动作判断或建立 Session 的认证记录。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#reference()" class="member-name-link">reference</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取认证方法重新定位 Credential 或外部身份所需的值。</div>
+<div class="block">认证方法重新定位 Credential 或外部身份所需的引用。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#validUntil()" class="member-name-link">validUntil</a>()</code></div>
@@ -148,7 +148,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../concurrent/Version.html" title="class in com.sca4d.core.api.concurrent">Version</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#version()" class="member-name-link">version</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取认证成功时对应的 Credential 或外部身份版本。</div>
+<div class="block">认证成功时对应的 Credential 或外部身份版本。</div>
 </div>
 </div>
 </div>
@@ -207,7 +207,7 @@ loadScripts(document, 'script');</script>
 <h3>account</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../identity/Account.html" title="class in com.sca4d.core.api.identity">Account</a></span>&nbsp;<span class="element-name">account</span>()</div>
-<div class="block">读取认证方法从 Proof 确认的账号。</div>
+<div class="block">认证方法从 Proof 确认的账号。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>已验证 Account</dd>
@@ -219,7 +219,7 @@ loadScripts(document, 'script');</script>
 <h3>authentication</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="Authentication.html" title="class in com.sca4d.core.api.authentication">Authentication</a></span>&nbsp;<span class="element-name">authentication</span>()</div>
-<div class="block">读取满足要求后可以用于动作判断或建立 Session 的认证记录。</div>
+<div class="block">满足要求后可以用于动作判断或建立 Session 的认证记录。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>Account 标识与认证账号一致的记录</dd>
@@ -231,7 +231,7 @@ loadScripts(document, 'script');</script>
 <h3>reference</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">reference</span>()</div>
-<div class="block">读取认证方法重新定位 Credential 或外部身份所需的值。</div>
+<div class="block">认证方法重新定位 Credential 或外部身份所需的引用。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>不包含密码、验证码、密钥或令牌的引用</dd>
@@ -243,7 +243,7 @@ loadScripts(document, 'script');</script>
 <h3>version</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../concurrent/Version.html" title="class in com.sca4d.core.api.concurrent">Version</a></span>&nbsp;<span class="element-name">version</span>()</div>
-<div class="block">读取认证成功时对应的 Credential 或外部身份版本。</div>
+<div class="block">认证成功时对应的 Credential 或外部身份版本。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>完成认证前必须保持有效的版本</dd>

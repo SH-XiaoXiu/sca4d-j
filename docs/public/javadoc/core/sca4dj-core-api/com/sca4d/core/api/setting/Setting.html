@@ -159,12 +159,12 @@ W&gt;&nbsp;@NotNull <a href="Setting.Builder.html" title="class in com.sca4d.cor
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#code()" class="member-name-link">code</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回设置身份，序列化格式不参与身份判断。</div>
+<div class="block">设置身份，序列化格式不参与身份判断。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../codec/VersionedCodec.html" title="interface in com.sca4d.core.api.codec">VersionedCodec</a><wbr>&lt;<a href="Setting.html" title="type parameter in Setting">T</a>,<wbr>?&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#codec()" class="member-name-link">codec</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回当前写入 Codec，版本与 Java 类型不在 Setting 中重复声明。</div>
+<div class="block">当前写入 Codec，版本与 Java 类型不在 Setting 中重复声明。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Setting.html" title="type parameter in Setting">T</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#defaultValue()" class="member-name-link">defaultValue</a>()</code></div>
@@ -204,7 +204,7 @@ W&gt;&nbsp;@NotNull <a href="Setting.Builder.html" title="class in com.sca4d.cor
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#secret()" class="member-name-link">secret</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回是否要求持久化实现加密保存。</div>
+<div class="block">是否要求持久化实现加密保存。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="Setting.html" title="type parameter in Setting">T</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#validate(T)" class="member-name-link">validate</a><wbr>(<a href="Setting.html" title="type parameter in Setting">T</a>&nbsp;value)</code></div>
@@ -261,7 +261,11 @@ W&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="Setting.Builder.ht
 <h3>code</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></span>&nbsp;<span class="element-name">code</span>()</div>
-<div class="block">返回设置身份，序列化格式不参与身份判断。</div>
+<div class="block">设置身份，序列化格式不参与身份判断。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>设置身份，序列化格式不参与身份判断</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -269,14 +273,22 @@ W&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="Setting.Builder.ht
 <h3>codec</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../codec/VersionedCodec.html" title="interface in com.sca4d.core.api.codec">VersionedCodec</a>&lt;<a href="Setting.html" title="type parameter in Setting">T</a>,<wbr>?&gt;</span>&nbsp;<span class="element-name">codec</span>()</div>
-<div class="block">返回当前写入 Codec，版本与 Java 类型不在 Setting 中重复声明。</div>
+<div class="block">当前写入 Codec，版本与 Java 类型不在 Setting 中重复声明。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>当前写入 Codec，版本与 Java 类型不在 Setting 中重复声明</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="secret()">
 <h3>secret</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">secret</span>()</div>
-<div class="block">返回是否要求持久化实现加密保存。</div>
+<div class="block">是否要求持久化实现加密保存。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>是否要求持久化实现加密保存</dd>
+</dl>
 </section>
 </li>
 <li>

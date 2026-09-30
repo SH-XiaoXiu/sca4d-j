@@ -125,12 +125,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#delay()" class="member-name-link">delay</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回失败后的固定等待间隔。</div>
+<div class="block">失败后的固定等待间隔。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#maxAttempts()" class="member-name-link">maxAttempts</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回最大尝试次数。</div>
+<div class="block">最大尝试次数。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="JobRetryPolicy.html" title="class in com.sca4d.core.api.job">JobRetryPolicy</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#once()" class="member-name-link">once</a>()</code></div>
@@ -198,7 +198,7 @@ loadScripts(document, 'script');</script>
 <h3>maxAttempts</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">maxAttempts</span>()</div>
-<div class="block">返回最大尝试次数。</div>
+<div class="block">最大尝试次数。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>包含首次执行的总尝试次数</dd>
@@ -211,7 +211,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name">delay</span>()</div>
-<div class="block">返回失败后的固定等待间隔。</div>
+<div class="block">失败后的固定等待间隔。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>两次尝试之间的非负间隔</dd>

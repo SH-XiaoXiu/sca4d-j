@@ -68,28 +68,16 @@ loadScripts(document, 'script');</script>
 <pre>org.aopalliance.aop.Advice advice</pre>
 </li>
 <li class="block-list">
-<h5>clock</h5>
-<pre><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a> clock</pre>
+<h5>bindings</h5>
+<pre>com.sca4d.core.spring.call.CallBindingRegistry bindings</pre>
 </li>
 <li class="block-list">
-<h5>declarations</h5>
-<pre><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="com/sca4d/core/spring/call/CallLifecycleAdvisor.AnnotationBinding.html" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.AnnotationBinding</a>&lt;?&gt;&gt; declarations</pre>
-</li>
-<li class="block-list">
-<h5>invoker</h5>
-<pre>com.sca4d.core.api.call.CallInvoker invoker</pre>
-</li>
-<li class="block-list">
-<h5>methodBindings</h5>
-<pre><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="com/sca4d/core/spring/call/CallLifecycleAdvisor.MethodBinding.html" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.MethodBinding</a>&gt; methodBindings</pre>
+<h5>invokerSource</h5>
+<pre><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;com.sca4d.core.api.call.CallInvoker&gt; invokerSource</pre>
 </li>
 <li class="block-list">
 <h5>pointcut</h5>
 <pre>org.springframework.aop.Pointcut pointcut</pre>
-</li>
-<li class="block-list">
-<h5>registeredTypes</h5>
-<pre><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;&gt; registeredTypes</pre>
 </li>
 </ul>
 </section>

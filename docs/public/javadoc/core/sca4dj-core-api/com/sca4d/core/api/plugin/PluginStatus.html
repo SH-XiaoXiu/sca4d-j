@@ -143,34 +143,22 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="PluginDescriptor.html" title="class in com.sca4d.core.api.plugin">PluginDescriptor</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#descriptor()" class="member-name-link">descriptor</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回插件交付描述。</div>
-</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#digest()" class="member-name-link">digest</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回交付物 SHA-256。</div>
-</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#failure()" class="member-name-link">failure</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回失败类型；没有失败时为空，不包含秘密和原始异常。</div>
-</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#generation()" class="member-name-link">generation</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回当前实例的运行代次。</div>
-</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="PluginStatus.State.html" title="enum class in com.sca4d.core.api.plugin">PluginStatus.State</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#state()" class="member-name-link">state</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回实际运行阶段。</div>
-</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#uses()" class="member-name-link">uses</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回当前代次仍被操作持有的数量。</div>
-</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -216,14 +204,20 @@ loadScripts(document, 'script');</script>
 <h3>descriptor</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="PluginDescriptor.html" title="class in com.sca4d.core.api.plugin">PluginDescriptor</a></span>&nbsp;<span class="element-name">descriptor</span>()</div>
-<div class="block">返回插件交付描述。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>插件交付描述</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="generation()">
 <h3>generation</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">generation</span>()</div>
-<div class="block">返回当前实例的运行代次。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>当前实例的运行代次</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -231,14 +225,20 @@ loadScripts(document, 'script');</script>
 <h3>state</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="PluginStatus.State.html" title="enum class in com.sca4d.core.api.plugin">PluginStatus.State</a></span>&nbsp;<span class="element-name">state</span>()</div>
-<div class="block">返回实际运行阶段。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>运行阶段</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="uses()">
 <h3>uses</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">uses</span>()</div>
-<div class="block">返回当前代次仍被操作持有的数量。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>持有当前代次的操作数</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -246,7 +246,10 @@ loadScripts(document, 'script');</script>
 <h3>digest</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">digest</span>()</div>
-<div class="block">返回交付物 SHA-256。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>交付物 SHA-256</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -254,7 +257,10 @@ loadScripts(document, 'script');</script>
 <h3>failure</h3>
 <div class="member-signature"><span class="annotations">@Nullable
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">failure</span>()</div>
-<div class="block">返回失败类型；没有失败时为空，不包含秘密和原始异常。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>失败异常的类名；没有失败时为空</dd>
+</dl>
 </section>
 </li>
 </ul>

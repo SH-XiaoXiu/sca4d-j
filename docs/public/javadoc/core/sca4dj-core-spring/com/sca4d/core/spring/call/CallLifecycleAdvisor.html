@@ -164,6 +164,13 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">注册注解绑定和非注解方法绑定。</div>
 </div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.beans.factory.ObjectProvider,org.springframework.beans.factory.ObjectProvider,org.springframework.beans.factory.ObjectProvider,org.springframework.beans.factory.ObjectProvider)" class="member-name-link">CallLifecycleAdvisor</a><wbr>(org.springframework.beans.factory.ObjectProvider&lt;com.sca4d.core.api.call.CallInvoker&gt;&nbsp;invoker,
+ org.springframework.beans.factory.ObjectProvider&lt;<a href="CallLifecycleAdvisor.AnnotationBinding.html" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.AnnotationBinding</a>&lt;?&gt;&gt;&nbsp;declarations,
+ org.springframework.beans.factory.ObjectProvider&lt;<a href="CallLifecycleAdvisor.MethodBinding.html" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.MethodBinding</a>&gt;&nbsp;methodBindings,
+ org.springframework.beans.factory.ObjectProvider&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&gt;&nbsp;clock)</code></div>
+<div class="col-last even-row-color">
+<div class="block">使用 Spring 延迟提供者，避免 Advisor 创建时提前实例化调用基础设施。</div>
+</div>
 </div>
 </section>
 </li>
@@ -230,6 +237,16 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="CallLifecycleAdvisor.MethodBinding.html" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.MethodBinding</a>&gt;&nbsp;methodBindings,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</span></div>
 <div class="block">注册注解绑定和非注解方法绑定。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(org.springframework.beans.factory.ObjectProvider,org.springframework.beans.factory.ObjectProvider,org.springframework.beans.factory.ObjectProvider,org.springframework.beans.factory.ObjectProvider)">
+<h3>CallLifecycleAdvisor</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CallLifecycleAdvisor</span><wbr><span class="parameters">(org.springframework.beans.factory.ObjectProvider&lt;com.sca4d.core.api.call.CallInvoker&gt;&nbsp;invoker,
+ org.springframework.beans.factory.ObjectProvider&lt;<a href="CallLifecycleAdvisor.AnnotationBinding.html" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.AnnotationBinding</a>&lt;?&gt;&gt;&nbsp;declarations,
+ org.springframework.beans.factory.ObjectProvider&lt;<a href="CallLifecycleAdvisor.MethodBinding.html" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.MethodBinding</a>&gt;&nbsp;methodBindings,
+ org.springframework.beans.factory.ObjectProvider&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&gt;&nbsp;clock)</span></div>
+<div class="block">使用 Spring 延迟提供者，避免 Advisor 创建时提前实例化调用基础设施。</div>
 </section>
 </li>
 </ul>

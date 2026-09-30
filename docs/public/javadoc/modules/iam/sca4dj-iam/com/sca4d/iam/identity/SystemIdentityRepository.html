@@ -122,7 +122,8 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;com.sca4d.core.api.name.code.TreeCode,<wbr>com.sca4d.core.api.identity.SystemPrincipal&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#register(java.util.Map)" class="member-name-link">register</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;com.sca4d.core.api.name.code.TreeCode,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;configured)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#register(long,java.util.Map)" class="member-name-link">register</a><wbr>(long&nbsp;systemSubjectId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;com.sca4d.core.api.name.code.TreeCode,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;configured)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">登记并校验配置中的固定系统身份。</div>
 </div>
@@ -169,14 +170,16 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="register(java.util.Map)">
+<section class="detail" id="register(long,java.util.Map)">
 <h3>register</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;com.sca4d.core.api.name.code.TreeCode,<wbr>com.sca4d.core.api.identity.SystemPrincipal&gt;</span>&nbsp;<span class="element-name">register</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;com.sca4d.core.api.name.code.TreeCode,<wbr>com.sca4d.core.api.identity.SystemPrincipal&gt;</span>&nbsp;<span class="element-name">register</span><wbr><span class="parameters">(long&nbsp;systemSubjectId,
+ @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;com.sca4d.core.api.name.code.TreeCode,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;configured)</span></div>
 <div class="block">登记并校验配置中的固定系统身份。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
+<dd><code>systemSubjectId</code> - 已配置的 SYSTEM Subject ID；此处不发布运行期身份</dd>
 <dd><code>configured</code> - 系统身份编码与固定 Principal ID</dd>
 <dt>Returns:</dt>
 <dd>已从数据库确认的系统身份表</dd>

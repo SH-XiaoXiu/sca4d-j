@@ -109,7 +109,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="RateLimitDecision.html" title="class in com.sca4d.core.api.concurrent">RateLimitDecision</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#allow()" class="member-name-link">allow</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">返回允许当前调用的结果。</div>
+<div class="block">允许当前调用的结果。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="RateLimitDecision.html" title="class in com.sca4d.core.api.concurrent">RateLimitDecision</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#deny(java.time.Duration)" class="member-name-link">deny</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;retryAfter)</code></div>
@@ -119,12 +119,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isAllowed()" class="member-name-link">isAllowed</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回当前调用是否取得全部额度。</div>
+<div class="block">当前调用是否取得全部额度。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#retryAfter()" class="member-name-link">retryAfter</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回拒绝后的等待时间。</div>
+<div class="block">拒绝后的等待时间。</div>
 </div>
 </div>
 </div>
@@ -149,7 +149,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="RateLimitDecision.html" title="class in com.sca4d.core.api.concurrent">RateLimitDecision</a></span>&nbsp;<span class="element-name">allow</span>()</div>
-<div class="block">返回允许当前调用的结果。</div>
+<div class="block">允许当前调用的结果。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>不要求等待的允许结果</dd>
@@ -178,7 +178,7 @@ loadScripts(document, 'script');</script>
 <h3>isAllowed</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isAllowed</span>()</div>
-<div class="block">返回当前调用是否取得全部额度。</div>
+<div class="block">当前调用是否取得全部额度。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>允许调用时返回 `true`</dd>
@@ -191,7 +191,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name">retryAfter</span>()</div>
-<div class="block">返回拒绝后的等待时间。</div>
+<div class="block">拒绝后的等待时间。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>拒绝时为正数等待时间，允许时为零</dd>

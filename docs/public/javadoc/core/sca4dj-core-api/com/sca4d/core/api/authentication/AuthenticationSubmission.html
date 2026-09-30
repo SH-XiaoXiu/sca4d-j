@@ -130,17 +130,17 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#methodCode()" class="member-name-link">methodCode</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取认证引擎应选择的认证方法。</div>
+<div class="block">认证引擎应选择的认证方法。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="AuthenticationSubmission.html" title="type parameter in AuthenticationSubmission">P</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#proof()" class="member-name-link">proof</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取本次认证方法调用使用的证明材料。</div>
+<div class="block">本次认证方法调用使用的证明材料。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a><wbr>&lt;<a href="AuthenticationSubmission.html" title="type parameter in AuthenticationSubmission">P</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#proofType()" class="member-name-link">proofType</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取认证引擎调用认证方法前必须核对的类型。</div>
+<div class="block">认证引擎调用认证方法前必须核对的 Proof 类型。</div>
 </div>
 </div>
 </div>
@@ -189,7 +189,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="methodCode()">
 <h3>methodCode</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></span>&nbsp;<span class="element-name">methodCode</span>()</div>
-<div class="block">读取认证引擎应选择的认证方法。</div>
+<div class="block">认证引擎应选择的认证方法。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>目标认证方法编码</dd>
@@ -200,7 +200,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="proofType()">
 <h3>proofType</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="AuthenticationSubmission.html" title="type parameter in AuthenticationSubmission">P</a>&gt;</span>&nbsp;<span class="element-name">proofType</span>()</div>
-<div class="block">读取认证引擎调用认证方法前必须核对的类型。</div>
+<div class="block">认证引擎调用认证方法前必须核对的 Proof 类型。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>Proof 精确类型</dd>
@@ -211,7 +211,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="proof()">
 <h3>proof</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AuthenticationSubmission.html" title="type parameter in AuthenticationSubmission">P</a></span>&nbsp;<span class="element-name">proof</span>()</div>
-<div class="block">读取本次认证方法调用使用的证明材料。</div>
+<div class="block">本次认证方法调用使用的证明材料。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>Proof；调用方和认证引擎都不得持久化或记录此值</dd>

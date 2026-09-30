@@ -110,7 +110,9 @@ implements com.sca4d.core.api.setting.access.SettingReader&lt;byte[]&gt;</span><
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.nio.file.Path,java.util.function.BiFunction)" class="member-name-link">FileSettingReader</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;root,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/BiFunction.html" title="class or interface in java.util.function" class="external-link">BiFunction</a>&lt;com.sca4d.core.api.name.code.TreeCode,<wbr>com.sca4d.core.api.setting.value.SettingOwner,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&gt;&nbsp;location)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">location 按设置及归属定位文件；读取时拒绝根目录外的路径和符号链接。</div>
+</div>
 </div>
 </section>
 </li>
@@ -156,6 +158,7 @@ implements com.sca4d.core.api.setting.access.SettingReader&lt;byte[]&gt;</span><
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;root,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/BiFunction.html" title="class or interface in java.util.function" class="external-link">BiFunction</a>&lt;com.sca4d.core.api.name.code.TreeCode,<wbr>com.sca4d.core.api.setting.value.SettingOwner,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&gt;&nbsp;location)</span></div>
+<div class="block">location 按设置及归属定位文件；读取时拒绝根目录外的路径和符号链接。</div>
 </section>
 </li>
 </ul>

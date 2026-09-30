@@ -133,12 +133,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../identity/Account.html" title="class in com.sca4d.core.api.identity">Account</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#account()" class="member-name-link">account</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取建立当前 Session 的登录账号。</div>
+<div class="block">建立当前 Session 的登录账号。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="Authentication.html" title="class in com.sca4d.core.api.authentication">Authentication</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#authentications()" class="member-name-link">authentications</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取建立 Session 时用于满足认证要求的记录。</div>
+<div class="block">建立 Session 时用于满足认证要求的记录。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#containsPrincipal(java.lang.Class,long)" class="member-name-link">containsPrincipal</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../identity/Principal.html" title="interface in com.sca4d.core.api.identity">Principal</a>&gt;&nbsp;principalType,
@@ -149,7 +149,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#expiresAt()" class="member-name-link">expiresAt</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取当前 Session 不再有效的时刻。</div>
+<div class="block">当前 Session 不再有效的时刻。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#grants(long,com.sca4d.core.api.resource.Resource)" class="member-name-link">grants</a><wbr>(long&nbsp;principalId,
@@ -160,12 +160,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SessionId.html" title="class in com.sca4d.core.api.authentication">SessionId</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#id()" class="member-name-link">id</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取当前会话的标识。</div>
+<div class="block">Session 标识。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#issuedAt()" class="member-name-link">issuedAt</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取当前 Session 开始生效的时刻。</div>
+<div class="block">当前 Session 开始生效的时刻。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../identity/Principal.html" title="interface in com.sca4d.core.api.identity">Principal</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#principal(long)" class="member-name-link">principal</a><wbr>(long&nbsp;principalId)</code></div>
@@ -185,12 +185,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="principalsession/PrincipalIdSet.html" title="class in com.sca4d.core.api.authentication.principalsession">PrincipalIdSet</a>&lt;?&gt;&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#principalIdSets()" class="member-name-link">principalIdSets</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取建立 Session 时只保存标识的可选 Principal。</div>
+<div class="block">建立 Session 时保存的 Principal 标识。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../identity/Principal.html" title="interface in com.sca4d.core.api.identity">Principal</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#principals()" class="member-name-link">principals</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取建立 Session 时完整保存的可选业务主体快照。</div>
+<div class="block">建立 Session 时完整保存的可选业务主体快照。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="principalsession/ResourceIdSet.html" title="class in com.sca4d.core.api.authentication.principalsession">ResourceIdSet</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resourceIdSets(long)" class="member-name-link">resourceIdSets</a><wbr>(long&nbsp;principalId)</code></div>
@@ -205,7 +205,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../identity/Subject.html" title="class in com.sca4d.core.api.identity">Subject</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#subject()" class="member-name-link">subject</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取建立当前 Session 的接入者。</div>
+<div class="block">建立当前 Session 的接入者。</div>
 </div>
 </div>
 </div>
@@ -268,7 +268,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="id()">
 <h3>id</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SessionId.html" title="class in com.sca4d.core.api.authentication">SessionId</a></span>&nbsp;<span class="element-name">id</span>()</div>
-<div class="block">读取当前会话的标识。</div>
+<div class="block">Session 标识。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>Session 标识</dd>
@@ -279,7 +279,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="subject()">
 <h3>subject</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../identity/Subject.html" title="class in com.sca4d.core.api.identity">Subject</a></span>&nbsp;<span class="element-name">subject</span>()</div>
-<div class="block">读取建立当前 Session 的接入者。</div>
+<div class="block">建立当前 Session 的接入者。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>完成认证的 Subject</dd>
@@ -290,7 +290,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="account()">
 <h3>account</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../identity/Account.html" title="class in com.sca4d.core.api.identity">Account</a></span>&nbsp;<span class="element-name">account</span>()</div>
-<div class="block">读取建立当前 Session 的登录账号。</div>
+<div class="block">建立当前 Session 的登录账号。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>完成认证且属于当前 Subject 的 Account</dd>
@@ -301,7 +301,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="principals()">
 <h3>principals</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">@Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../identity/Principal.html" title="interface in com.sca4d.core.api.identity">Principal</a>&gt;</span>&nbsp;<span class="element-name">principals</span>()</div>
-<div class="block">读取建立 Session 时完整保存的可选业务主体快照。</div>
+<div class="block">建立 Session 时完整保存的可选业务主体快照。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>当前 Account 可直接使用的不可修改完整 Principal 列表</dd>
@@ -312,7 +312,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="principalIdSets()">
 <h3>principalIdSets</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">@Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="principalsession/PrincipalIdSet.html" title="class in com.sca4d.core.api.authentication.principalsession">PrincipalIdSet</a>&lt;?&gt;&gt;</span>&nbsp;<span class="element-name">principalIdSets</span>()</div>
-<div class="block">读取建立 Session 时只保存标识的可选 Principal。</div>
+<div class="block">建立 Session 时保存的 Principal 标识。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>按装载顺序保存的不可修改 Principal 标识集合</dd>
@@ -384,7 +384,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="authentications()">
 <h3>authentications</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">@Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Authentication.html" title="class in com.sca4d.core.api.authentication">Authentication</a>&gt;</span>&nbsp;<span class="element-name">authentications</span>()</div>
-<div class="block">读取建立 Session 时用于满足认证要求的记录。</div>
+<div class="block">建立 Session 时用于满足认证要求的记录。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>按输入顺序保存的不可修改成功认证列表</dd>
@@ -442,7 +442,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="issuedAt()">
 <h3>issuedAt</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name">issuedAt</span>()</div>
-<div class="block">读取当前 Session 开始生效的时刻。</div>
+<div class="block">当前 Session 开始生效的时刻。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>Session 签发时间</dd>
@@ -453,7 +453,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="expiresAt()">
 <h3>expiresAt</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name">expiresAt</span>()</div>
-<div class="block">读取当前 Session 不再有效的时刻。</div>
+<div class="block">当前 Session 不再有效的时刻。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>晚于签发时间的 Session 过期时间</dd>

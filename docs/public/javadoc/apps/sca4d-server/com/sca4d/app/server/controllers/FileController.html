@@ -185,7 +185,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="createUpload(com.sca4d.app.server.files.request.CreateFileUploadRequest,java.lang.Long)">
 <h3>createUpload</h3>
 <div class="member-signature"><span class="annotations">@PostMapping("/uploads")
-@RequirePermission(resourceResolver=<a href="../files/PlatformUserProfileResourceResolver.html" title="class in com.sca4d.app.server.files">PlatformUserProfileResourceResolver.class</a>,
+@RequirePermission(resolver=<a href="../files/PlatformUserProfileResourceResolver.html" title="class in com.sca4d.app.server.files">PlatformUserProfileResourceResolver.class</a>,
                    action="WRITE")
 @Audit(operation="STORAGE/FILE/UPLOAD/CREATE",
        targetResolver=<a href="../files/PlatformUserProfileResourceResolver.html" title="class in com.sca4d.app.server.files">PlatformUserProfileResourceResolver.class</a>,
@@ -209,7 +209,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="completeUpload(long,java.lang.Long)">
 <h3>completeUpload</h3>
 <div class="member-signature"><span class="annotations">@PostMapping("/uploads/{fileId}/completion")
-@RequirePermission(resourceResolver=<a href="../files/FileResourceResolver.html" title="class in com.sca4d.app.server.files">FileResourceResolver.class</a>,
+@RequirePermission(resolver=<a href="../files/FileResourceResolver.html" title="class in com.sca4d.app.server.files">FileResourceResolver.class</a>,
                    action="WRITE")
 @Audit(operation="STORAGE/FILE/UPLOAD/COMPLETE")
 @NotNull
@@ -231,7 +231,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="createAccessUrls(com.sca4d.app.server.files.request.CreateFileAccessUrlsRequest)">
 <h3>createAccessUrls</h3>
 <div class="member-signature"><span class="annotations">@PostMapping("/access-urls")
-@RequirePermission(resourceResolver=<a href="../files/FileResourceResolver.html" title="class in com.sca4d.app.server.files">FileResourceResolver.class</a>,
+@RequirePermission(resolver=<a href="../files/FileResourceResolver.html" title="class in com.sca4d.app.server.files">FileResourceResolver.class</a>,
                    action="READ")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="../files/view/FileAccessUrlView.html" title="class in com.sca4d.app.server.files.view">FileAccessUrlView</a>&gt;&gt;</span>&nbsp;<span class="element-name">createAccessUrls</span><wbr><span class="parameters">(@RequestBody @NotNull

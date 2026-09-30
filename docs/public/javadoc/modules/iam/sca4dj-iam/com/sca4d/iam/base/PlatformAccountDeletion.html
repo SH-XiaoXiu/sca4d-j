@@ -108,9 +108,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
  boolean&nbsp;principalDeleted,
  boolean&nbsp;subjectDeleted)</code></div>
-<div class="col-last even-row-color">
-<div class="block">创建已经完成 IAM 隔离的删除结果。</div>
-</div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -128,27 +126,27 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#accountId()" class="member-name-link">accountId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回已删除的 Account 标识。</div>
+<div class="block">已删除的 Account 标识。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#principalDeleted()" class="member-name-link">principalDeleted</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回 PlatformPrincipal 是否因没有其他 Account 使用而被逻辑删除。</div>
+<div class="block">PlatformPrincipal 是否因没有其他 Account 使用而被逻辑删除。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#principalId()" class="member-name-link">principalId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回删除前与 Account 关联的 PlatformPrincipal 标识。</div>
+<div class="block">删除前与 Account 关联的 PlatformPrincipal 标识。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#subjectDeleted()" class="member-name-link">subjectDeleted</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回 Subject 是否因没有其他 Account 而被逻辑删除。</div>
+<div class="block">Subject 是否因没有其他 Account 而被逻辑删除。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#subjectId()" class="member-name-link">subjectId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回 Account 所属 Subject 标识。</div>
+<div class="block">Account 所属 Subject 标识。</div>
 </div>
 </div>
 </div>
@@ -178,7 +176,6 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
  boolean&nbsp;principalDeleted,
  boolean&nbsp;subjectDeleted)</span></div>
-<div class="block">创建已经完成 IAM 隔离的删除结果。</div>
 </section>
 </li>
 </ul>
@@ -195,7 +192,11 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name">accountId</span>()</div>
-<div class="block">返回已删除的 Account 标识。</div>
+<div class="block">已删除的 Account 标识。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>已删除的 Account 标识</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -204,7 +205,11 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name">subjectId</span>()</div>
-<div class="block">返回 Account 所属 Subject 标识。</div>
+<div class="block">Account 所属 Subject 标识。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>Account 所属 Subject 标识</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -213,7 +218,11 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name">principalId</span>()</div>
-<div class="block">返回删除前与 Account 关联的 PlatformPrincipal 标识。</div>
+<div class="block">删除前与 Account 关联的 PlatformPrincipal 标识。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>删除前与 Account 关联的 PlatformPrincipal 标识</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -221,7 +230,11 @@ loadScripts(document, 'script');</script>
 <h3>principalDeleted</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">principalDeleted</span>()</div>
-<div class="block">返回 PlatformPrincipal 是否因没有其他 Account 使用而被逻辑删除。</div>
+<div class="block">PlatformPrincipal 是否因没有其他 Account 使用而被逻辑删除。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>PlatformPrincipal 是否因没有其他 Account 使用而被逻辑删除</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -229,7 +242,11 @@ loadScripts(document, 'script');</script>
 <h3>subjectDeleted</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">subjectDeleted</span>()</div>
-<div class="block">返回 Subject 是否因没有其他 Account 而被逻辑删除。</div>
+<div class="block">Subject 是否因没有其他 Account 而被逻辑删除。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>Subject 是否因没有其他 Account 而被逻辑删除</dd>
+</dl>
 </section>
 </li>
 </ul>
