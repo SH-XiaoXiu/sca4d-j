@@ -68,6 +68,10 @@ public final class Sca4djJavaPlugin implements Plugin<Project> {
         });
         configureIntegrationTest(project);
         SourceSetContainer sourceSets = project.getExtensions().getByType(SourceSetContainer.class);
+        Sca4djJavaExtension javaRules = project.getExtensions()
+                .create(
+                        "sca4djJava",
+                        Sca4djJavaExtension.class);
 
         project.getPluginManager().apply("com.diffplug.spotless");
         SpotlessExtension spotless = project.getExtensions().getByType(SpotlessExtension.class);
@@ -75,10 +79,13 @@ public final class Sca4djJavaPlugin implements Plugin<Project> {
             java.target(sourceSets.stream().map(SourceSet::getAllJava).toList());
             java.importOrder("", "java", "javax");
             java.removeUnusedImports();
+        });
+        project.afterEvaluate(ignored -> spotless.java(java -> {
+            java.addStep(JavaMemberOrderStep.create(javaRules.getMemberOrderGroups().get()));
             java.eclipse().configProperties(eclipseFormatterProperties());
             java.trimTrailingWhitespace();
             java.endWithNewline();
-        });
+        }));
         spotless.format("sql", format -> {
             format.target(
                     sourceSets.stream()

@@ -3,11 +3,17 @@ package com.sca4dj.build;
 /** 保存一条可以定位到源码或配置的审计结果。 */
 public class AuditFinding {
     private final String projectPath;
+
     private final String qualityLevel;
+
     private final String ruleId;
+
     private final String severity;
+
     private final String path;
+
     private final int line;
+
     private final String message;
 
     /**
@@ -23,7 +29,6 @@ public class AuditFinding {
         this("", "", ruleId, severity, path, line, message);
     }
 
-    /** 创建包含所属项目和有效质量级别的审计结果。 */
     public AuditFinding(
             String projectPath,
             String qualityLevel,

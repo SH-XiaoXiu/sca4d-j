@@ -1,4 +1,5 @@
 import org.gradle.api.plugins.quality.Checkstyle
+import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.javadoc.Javadoc
 import org.gradle.external.javadoc.StandardJavadocDocletOptions
 
@@ -117,4 +118,41 @@ tasks.withType<Javadoc>().configureEach {
         addBooleanOption("Xdoclint:all,-missing", true)
         addBooleanOption("Werror", true)
     }
+}
+
+val selfMemberOrderApply =
+    tasks.register<JavaExec>("selfMemberOrderApply") {
+        group = "formatting"
+        description = "按脚手架固定规则整理构建插件自己的 Java 字段"
+        dependsOn(tasks.named("classes"))
+        classpath = sourceSets.main.get().runtimeClasspath
+        mainClass.set("com.sca4dj.build.JavaMemberOrderTool")
+        args(
+            "apply",
+            layout.projectDirectory
+                .dir("src")
+                .asFile.absolutePath,
+        )
+    }
+
+val selfMemberOrderCheck =
+    tasks.register<JavaExec>("selfMemberOrderCheck") {
+        group = "verification"
+        description = "检查构建插件自己的 Java 字段顺序"
+        dependsOn(tasks.named("classes"))
+        classpath = sourceSets.main.get().runtimeClasspath
+        mainClass.set("com.sca4dj.build.JavaMemberOrderTool")
+        args(
+            "check",
+            layout.projectDirectory
+                .dir("src")
+                .asFile.absolutePath,
+        )
+    }
+
+tasks.named("spotlessJavaApply") {
+    dependsOn(selfMemberOrderApply)
+}
+tasks.named("spotlessJavaCheck") {
+    dependsOn(selfMemberOrderCheck)
 }

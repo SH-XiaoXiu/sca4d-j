@@ -1,5 +1,6 @@
 package com.sca4dj.gradle.app;
 
+import groovy.util.Node;
 import org.gradle.api.GradleException;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -7,15 +8,13 @@ import org.gradle.api.artifacts.Configuration;
 import org.gradle.api.attributes.Category;
 import org.gradle.api.attributes.LibraryElements;
 import org.gradle.api.attributes.Usage;
-import org.gradle.api.plugins.JavaPluginExtension;
+import org.gradle.api.publish.PublishingExtension;
+import org.gradle.api.publish.maven.MavenPublication;
 import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.SourceSetContainer;
 import org.gradle.api.tasks.compile.JavaCompile;
 import org.gradle.jvm.tasks.Jar;
 import org.gradle.plugins.ide.idea.model.IdeaModel;
-import org.gradle.api.publish.PublishingExtension;
-import org.gradle.api.publish.maven.MavenPublication;
-import groovy.util.Node;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -63,29 +62,47 @@ public final class PluginApiGradlePlugin implements Plugin<Project> {
                     Set<String> names = new TreeSet<>();
                     for (var directory : main.getOutput().getClassesDirs()) {
                         Path root = directory.toPath();
-                        if (!Files.exists(root)) continue;
+                        if (!Files.exists(root))
+                            continue;
                         Set<String> exported = exports(root);
                         try (var paths = Files.walk(root)) {
                             paths.filter(path -> path.toString().endsWith(".class")).forEach(path -> {
                                 String name = root.relativize(path).toString().replace(java.io.File.separatorChar, '.');
                                 name = name.substring(0, name.length() - 6);
-                                if (matches(name, exported)) names.add(name);
+                                if (matches(name, exported))
+                                    names.add(name);
                             });
                         }
                     }
                     for (var file : shared) {
                         try (JarFile jar = new JarFile(file)) {
-                            jar.stream().map(entry -> entry.getName()).filter(name -> name.endsWith(".class")
-                                    && !name.equals("module-info.class") && !name.startsWith("META-INF/"))
+                            jar.stream()
+                                    .map(entry -> entry.getName())
+                                    .filter(
+                                            name -> name.endsWith(".class")
+                                                    && !name.equals("module-info.class")
+                                                    && !name.startsWith("META-INF/"))
                                     .map(name -> name.substring(0, name.length() - 6).replace('/', '.'))
                                     .forEach(names::add);
                         }
                     }
-                    Path output = project.getLayout().getBuildDirectory().dir("generated/plugin-api-index")
-                            .get().getAsFile().toPath().resolve("META-INF/sca4dj/api-shared-"
-                                    + extension.getId().get().replace(':', '_').replace('/', '_').replace('.', '_')
-                                    .toUpperCase(java.util.Locale.ROOT) + ".list");
-                    Files.createDirectories(output.getParent());
+                    Path outputDirectory = project.getLayout()
+                            .getBuildDirectory()
+                            .dir("generated/plugin-api-index")
+                            .get()
+                            .getAsFile()
+                            .toPath()
+                            .resolve("META-INF/sca4dj");
+                    Path output = outputDirectory.resolve(
+                            "api-shared-"
+                                    + extension.getId()
+                                            .get()
+                                            .replace(':', '_')
+                                            .replace('/', '_')
+                                            .replace('.', '_')
+                                            .toUpperCase(java.util.Locale.ROOT)
+                                    + ".list");
+                    Files.createDirectories(outputDirectory);
                     Files.write(output, names);
                 } catch (IOException failure) {
                     throw new GradleException("App API 共享类索引生成失败", failure);
@@ -97,13 +114,17 @@ public final class PluginApiGradlePlugin implements Plugin<Project> {
             task.dependsOn(index);
             task.getArchiveClassifier().set("plugin-api");
             task.from(main.getOutput().getClassesDirs(), copy -> copy.include(details -> {
-                if (details.isDirectory()) return true;
+                if (details.isDirectory())
+                    return true;
                 String path = details.getPath();
-                if (path.startsWith("META-INF/sca4dj/api")) return true;
-                if (!path.endsWith(".class")) return false;
+                if (path.startsWith("META-INF/sca4dj/api"))
+                    return true;
+                if (!path.endsWith(".class"))
+                    return false;
                 String name = path.substring(0, path.length() - 6).replace('/', '.');
                 for (var directory : main.getOutput().getClassesDirs()) {
-                    if (matches(name, exports(directory.toPath()))) return true;
+                    if (matches(name, exports(directory.toPath())))
+                        return true;
                 }
                 return false;
             }));
@@ -113,10 +134,14 @@ public final class PluginApiGradlePlugin implements Plugin<Project> {
         elements.setCanBeResolved(false);
         elements.setCanBeConsumed(true);
         elements.extendsFrom(shared);
-        elements.getAttributes().attribute(Usage.USAGE_ATTRIBUTE, project.getObjects().named(Usage.class, Usage.JAVA_API));
-        elements.getAttributes().attribute(Category.CATEGORY_ATTRIBUTE, project.getObjects().named(Category.class, Category.LIBRARY));
-        elements.getAttributes().attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE,
-                project.getObjects().named(LibraryElements.class, LibraryElements.JAR));
+        elements.getAttributes()
+                .attribute(Usage.USAGE_ATTRIBUTE, project.getObjects().named(Usage.class, Usage.JAVA_API));
+        elements.getAttributes()
+                .attribute(Category.CATEGORY_ATTRIBUTE, project.getObjects().named(Category.class, Category.LIBRARY));
+        elements.getAttributes()
+                .attribute(
+                        LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE,
+                        project.getObjects().named(LibraryElements.class, LibraryElements.JAR));
         elements.getOutgoing().artifact(apiJar);
         var sources = project.getTasks().register("pluginApiSourcesJar", Jar.class, task -> {
             task.dependsOn(compile);
@@ -124,11 +149,16 @@ public final class PluginApiGradlePlugin implements Plugin<Project> {
             task.from(main.getAllJava());
             task.from(generated);
             task.include(details -> {
-                if (details.isDirectory()) return true;
+                if (details.isDirectory())
+                    return true;
                 String path = details.getPath();
-                if (!path.endsWith(".java")) return false;
+                if (!path.endsWith(".java"))
+                    return false;
                 String name = path.substring(0, path.length() - 5).replace('/', '.');
-                return main.getOutput().getClassesDirs().getFiles().stream()
+                return main.getOutput()
+                        .getClassesDirs()
+                        .getFiles()
+                        .stream()
                         .anyMatch(directory -> matches(name, exports(directory.toPath())));
             });
         });
@@ -157,7 +187,8 @@ public final class PluginApiGradlePlugin implements Plugin<Project> {
                 repository.setUrl(project.getRootProject().getLayout().getBuildDirectory().dir("repository"));
             });
         });
-        project.getTasks().named("processResources", org.gradle.language.jvm.tasks.ProcessResources.class)
+        project.getTasks()
+                .named("processResources", org.gradle.language.jvm.tasks.ProcessResources.class)
                 .configure(task -> {
                     task.dependsOn(index);
                     task.from(project.getLayout().getBuildDirectory().dir("generated/plugin-api-index"));
@@ -168,7 +199,8 @@ public final class PluginApiGradlePlugin implements Plugin<Project> {
     /** 从编译器描述读取导出类，禁止把整个 App 输出当作 API。 */
     private static Set<String> exports(Path root) {
         Path index = root.resolve("META-INF/sca4dj/api-classes.list");
-        if (!Files.exists(index)) return Set.of();
+        if (!Files.exists(index))
+            return Set.of();
         try {
             return Set.copyOf(Files.readAllLines(index));
         } catch (IOException failure) {

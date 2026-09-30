@@ -11,12 +11,17 @@
       <property name="excludeScope" value="private"/>
       <property name="allowUnknownTags" value="true"/>
     </module>
-    <!-- 属性访问器和纯 Override 不要求重复接口或字段已有的说明。 -->
+    <!-- 属性访问器、纯 Override 和 Operation 不重复已有说明。 -->
     <module name="MissingJavadocMethod">
       <property name="scope" value="protected"/>
       <property name="excludeScope" value="private"/>
       <property name="allowMissingPropertyJavadoc" value="true"/>
-      <property name="allowedAnnotations" value="Override"/>
+      <property name="allowedAnnotations" value="Override, Operation"/>
+    </module>
+    <!-- 字段赋值和 requireNonNull 不重复字段说明；含校验、转换或副作用的构造器仍须说明。 -->
+    <module name="SuppressionXpathSingleFilter">
+      <property name="checks" value="MissingJavadocMethod"/>
+      <property name="query" value="//CTOR_DEF[not(SLIST/*[not(self::EXPR or self::SEMI or self::RCURLY)]) and not(SLIST/EXPR[not(ASSIGN/DOT/LITERAL_THIS)]) and not(SLIST/EXPR/ASSIGN[not(IDENT or METHOD_CALL[DOT/IDENT[@text = 'Objects'] and DOT/IDENT[@text = 'requireNonNull'] and ELIST/EXPR[1]/IDENT])])]"/>
     </module>
     <module name="JavadocStyle">
       <!-- 只有 @param 或 @return 的简短说明也是有效文档，文档语言不作为检查条件。 -->
