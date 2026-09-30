@@ -24,7 +24,6 @@ public class StompRateLimits {
 
     private final @NotNull RateLimiter limiter;
 
-    /** 创建使用脚手架共享令牌桶限流器的 Web Realtime 策略。 */
     public StompRateLimits(@NotNull RateLimiter limiter) {
         this.limiter = Objects.requireNonNull(limiter, "令牌桶限流器不能为空");
     }

@@ -45,13 +45,13 @@ public final class RabbitNodeRouter implements NodeRouter, SmartLifecycle {
 
     private final @NotNull Key queueName;
 
-    private final @NotNull RabbitTemplate rabbit;
-
-    private final @NotNull NodeMessageCodec codec;
-
     private final @NotNull LocalConnectionRegistry localConnections;
 
     private final @NotNull WebRealtimeProperties properties;
+
+    private final @NotNull NodeMessageCodec codec;
+
+    private final @NotNull RabbitTemplate rabbit;
 
     private final @NotNull SimpleMessageListenerContainer listener;
 

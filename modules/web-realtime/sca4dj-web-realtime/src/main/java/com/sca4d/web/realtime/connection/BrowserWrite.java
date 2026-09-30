@@ -13,7 +13,6 @@ public class BrowserWrite {
 
     private final boolean closeAfter;
 
-    /** 创建本机连接待写出内容。 */
     public BrowserWrite(@NotNull BrowserEnvelope envelope, boolean closeAfter) {
         this.envelope = Objects.requireNonNull(envelope, "浏览器信封不能为空");
         this.closeAfter = closeAfter;

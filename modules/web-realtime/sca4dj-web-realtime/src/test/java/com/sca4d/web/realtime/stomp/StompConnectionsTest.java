@@ -21,6 +21,7 @@ import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.setting.ConfiguredConstants;
 import com.sca4d.web.realtime.connection.BrowserEnvelope;
 import com.sca4d.web.realtime.connection.BrowserWrite;
 import com.sca4d.web.realtime.connection.LocalConnection;
@@ -28,6 +29,7 @@ import com.sca4d.web.realtime.connection.LocalConnectionRegistry;
 import com.sca4d.web.realtime.connection.NodeRouter;
 import com.sca4d.web.realtime.connection.RedisConnectionRegistry;
 import com.sca4d.web.realtime.ticket.TicketHandshakeInterceptor;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
@@ -49,6 +51,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * 验证 STOMP 连接不依赖 Spring Principal，并按 Spring Session 精确投递。
  */
 class StompConnectionsTest {
+
+    @BeforeAll
+    static void initializeProtocol() {
+        ConfiguredConstants.initialize(WebRealtimeProtocol.class, ignored -> null);
+    }
 
     @Test
     void ignoresConnectedEventAfterWebSocketHasClosed() {

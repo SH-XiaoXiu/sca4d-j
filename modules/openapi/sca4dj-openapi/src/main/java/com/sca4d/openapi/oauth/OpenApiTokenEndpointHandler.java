@@ -38,15 +38,15 @@ public class OpenApiTokenEndpointHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(OpenApiTokenEndpointHandler.class);
 
-    private final @NotNull OpenApiClientService clients;
-
     private final @NotNull IdentityService identities;
 
-    private final @NotNull SharedSecretAuthenticationMethod sharedSecrets;
+    private final @NotNull OpenApiClientService clients;
+
+    private final @NotNull OpenApiJwtTokenService jwtTokens;
 
     private final @NotNull SessionService sessions;
 
-    private final @NotNull OpenApiJwtTokenService jwtTokens;
+    private final @NotNull SharedSecretAuthenticationMethod sharedSecrets;
 
     /**
      * 创建使用现有 Client、IAM、Shared Secret、Session 和 OpenAPI JWT 服务的端点 Handler。

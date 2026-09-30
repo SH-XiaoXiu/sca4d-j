@@ -1,6 +1,7 @@
 package com.sca4d.gateway.registration;
 
 import com.sca4d.core.api.gateway.GatewayCallbackCode;
+import com.sca4d.core.api.gateway.GatewayConstants;
 import com.sca4d.core.api.gateway.GatewayRegistrationRequest;
 import com.sca4d.core.api.identity.SystemPrincipals;
 import com.sca4d.core.api.name.code.TreeCode;
@@ -37,9 +38,9 @@ public class GatewayInstanceRegistry {
 
     private static final Pattern INSTANCE_ID = Pattern.compile("[A-Za-z0-9._-]{1,128}");
 
-    private final @NotNull Duration leaseTtl;
-
     private final @NotNull Clock clock;
+
+    private final @NotNull Duration leaseTtl;
 
     private final @NotNull Map<String, GatewayInstance> instances = new ConcurrentHashMap<>();
 
@@ -181,7 +182,10 @@ public class GatewayInstanceRegistry {
     /** @return 轮询选择一个可处理普通 `/api/**` 请求的健康实例 */
     @CheckReturnValue
     public @Nullable GatewayInstance selectApi(@NotNull String path) {
-        String serverPath = path.startsWith("/api/") ? path.substring(4) : path;
+        String apiPrefix = GatewayConstants.API_PREFIX;
+        String serverPath = path.equals(apiPrefix)
+                ? "/"
+                : path.startsWith(apiPrefix + "/") ? path.substring(apiPrefix.length()) : path;
         int longest = -1;
         Set<TreeCode> required = Set.of();
         for (Map.Entry<String, Set<TreeCode>> entry : apiRequirements.entrySet()) {

@@ -8,13 +8,13 @@ import java.util.Objects;
 /** 保存第三方 Client 与 IAM APPLICATION Account 的稳定绑定。 */
 public class OpenApiClient {
 
-    private final @NotNull String clientId;
+    private final @NotNull OpenApiClientStatus status;
 
-    private final long accountId;
+    private final @NotNull String clientId;
 
     private final @NotNull String displayName;
 
-    private final @NotNull OpenApiClientStatus status;
+    private final long accountId;
 
     /** 创建 Client 事实。 */
     public OpenApiClient(

@@ -27,13 +27,13 @@ public class RedisTicketService implements WebRealtimeTicketService {
 
     private static final DefaultRedisScript<String> CONSUME = consumeScript();
 
-    private final @NotNull RedisTemplate<Key, String> redis;
-
-    private final @NotNull SessionLifecycle sessions;
-
     private final @NotNull WebRealtimeProperties properties;
 
     private final @NotNull Clock clock;
+
+    private final @NotNull RedisTemplate<Key, String> redis;
+
+    private final @NotNull SessionLifecycle sessions;
 
     private final @NotNull SecureRandom random;
 

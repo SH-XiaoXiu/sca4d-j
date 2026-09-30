@@ -39,7 +39,6 @@ public class WebRealtimeProperties {
 
     private final Stomp stomp = new Stomp();
 
-    /** 创建使用方案默认值的 Web Realtime 配置。 */
     public WebRealtimeProperties() {
     }
 

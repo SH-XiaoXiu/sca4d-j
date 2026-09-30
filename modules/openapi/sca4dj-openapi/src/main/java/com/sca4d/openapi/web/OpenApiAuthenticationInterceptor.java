@@ -31,27 +31,14 @@ import java.util.Optional;
 /** 在通用认证拦截器前恢复 OpenAPI 独立 JWT 或验证 OpenAPI MAC 请求。 */
 public class OpenApiAuthenticationInterceptor extends HttpCallHandlerInterceptor {
 
-    /** OpenAPI MAC Client 标识请求头。 */
-    public static final String CLIENT_ID_HEADER = "X-OpenApi-Client-Id";
-
-    /** OpenAPI MAC Unix 秒请求头。 */
-    public static final String TIMESTAMP_HEADER = "X-OpenApi-Timestamp";
-
-    /** OpenAPI MAC 一次性随机数请求头。 */
-    public static final String NONCE_HEADER = "X-OpenApi-Nonce";
-
-    /** OpenAPI MAC 无填充 Base64URL 签名请求头。 */
-    public static final String SIGNATURE_HEADER = "X-OpenApi-Signature";
+    private final @NotNull OpenApiClientService clients;
 
     private final @NotNull OpenApiJwtTokenService jwtTokens;
 
-    private final @NotNull OpenApiClientService clients;
+    private final @NotNull SessionService sessions;
 
     private final @NotNull HmacAuthenticationMethod hmac;
 
-    private final @NotNull SessionService sessions;
-
-    /** 创建 OpenAPI 认证拦截器。 */
     public OpenApiAuthenticationInterceptor(
             @NotNull OpenApiJwtTokenService jwtTokens,
             @NotNull OpenApiClientService clients,
@@ -87,10 +74,10 @@ public class OpenApiAuthenticationInterceptor extends HttpCallHandlerInterceptor
     }
 
     private void authenticateHmac(HttpServletRequest request, Call call) {
-        String clientId = requireHeader(request, CLIENT_ID_HEADER);
-        String timestampValue = requireHeader(request, TIMESTAMP_HEADER);
-        String nonce = requireHeader(request, NONCE_HEADER);
-        String signature = requireHeader(request, SIGNATURE_HEADER);
+        String clientId = requireHeader(request, OpenApiConstants.CLIENT_ID_HEADER);
+        String timestampValue = requireHeader(request, OpenApiConstants.TIMESTAMP_HEADER);
+        String nonce = requireHeader(request, OpenApiConstants.NONCE_HEADER);
+        String signature = requireHeader(request, OpenApiConstants.SIGNATURE_HEADER);
         long epochSeconds;
         try {
             epochSeconds = Long.parseLong(timestampValue);
@@ -141,10 +128,10 @@ public class OpenApiAuthenticationInterceptor extends HttpCallHandlerInterceptor
     }
 
     private static boolean hasHmacHeader(HttpServletRequest request) {
-        return request.getHeader(CLIENT_ID_HEADER) != null
-                || request.getHeader(TIMESTAMP_HEADER) != null
-                || request.getHeader(NONCE_HEADER) != null
-                || request.getHeader(SIGNATURE_HEADER) != null;
+        return request.getHeader(OpenApiConstants.CLIENT_ID_HEADER) != null
+                || request.getHeader(OpenApiConstants.TIMESTAMP_HEADER) != null
+                || request.getHeader(OpenApiConstants.NONCE_HEADER) != null
+                || request.getHeader(OpenApiConstants.SIGNATURE_HEADER) != null;
     }
 
     private static String requireHeader(HttpServletRequest request, String name) {
@@ -158,7 +145,7 @@ public class OpenApiAuthenticationInterceptor extends HttpCallHandlerInterceptor
     private static String requestPath(HttpServletRequest request) {
         String contextPath = request.getContextPath();
         String path = request.getRequestURI().substring(contextPath.length());
-        if (!path.startsWith("/openapi/")) {
+        if (!path.startsWith(OpenApiConstants.PATH_PREFIX + "/")) {
             throw new BusinessException(AuthErrorCode.AUTHENTICATION_FAILED);
         }
         return path;

@@ -136,15 +136,15 @@ public class OpenApiRouteDefinition {
         return values[0];
     }
 
-    /** 校验并返回以 {@code /openapi/} 开头的唯一公开路径。 */
+    /** 校验并返回位于配置的 OpenAPI 路径前缀之下的唯一公开路径。 */
     private static @NotNull String requirePath(String @NotNull [] values) {
         Objects.requireNonNull(values, "OpenAPI 路径不能为空");
         if (values.length != 1) {
             throw new IllegalArgumentException("OpenAPI 路由必须声明一个路径");
         }
         String path = requireText(values[0], "OpenAPI 路径");
-        if (!path.startsWith("/openapi/")) {
-            throw new IllegalArgumentException("OpenAPI 路径必须以 /openapi/ 开头: " + path);
+        if (!path.startsWith(OpenApiConstants.PATH_PREFIX + "/")) {
+            throw new IllegalArgumentException("OpenAPI 路径必须以 " + OpenApiConstants.PATH_PREFIX + "/ 开头: " + path);
         }
         if (path.contains("//") || path.contains("?") || path.contains("#")) {
             throw new IllegalArgumentException("OpenAPI 路径不能包含重复斜杠、查询参数或片段: " + path);

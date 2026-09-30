@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 @ApiStatus.Internal
 public class WebRealtimeInfrastructureNames {
 
-    /** 创建 Web Realtime 基础设施的逻辑名称目录。 */
     public WebRealtimeInfrastructureNames() {
     }
 

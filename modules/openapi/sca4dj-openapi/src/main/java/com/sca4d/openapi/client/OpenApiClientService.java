@@ -34,15 +34,15 @@ public class OpenApiClientService {
 
     private final @NotNull IdentityService identities;
 
-    private final @NotNull OperationCatalog operations;
+    private final @NotNull OpenApiClientRepository clients;
+
+    private final @NotNull HmacAuthenticationMethod hmac;
 
     private final @NotNull OpenApiRouteCatalog routes;
 
-    private final @NotNull OpenApiClientRepository clients;
+    private final @NotNull OperationCatalog operations;
 
     private final @NotNull SharedSecretAuthenticationMethod sharedSecrets;
-
-    private final @NotNull HmacAuthenticationMethod hmac;
 
     /**
      * 创建 OpenAPI Client 应用服务。

@@ -20,7 +20,6 @@ public class StompRelayPortCheck implements SmartInitializingSingleton {
 
     private final @NotNull WebRealtimeProperties properties;
 
-    /** 创建 relay 启动可用性检查。 */
     public StompRelayPortCheck(@NotNull WebRealtimeProperties properties) {
         this.properties = Objects.requireNonNull(properties, "Web Realtime 配置不能为空");
     }

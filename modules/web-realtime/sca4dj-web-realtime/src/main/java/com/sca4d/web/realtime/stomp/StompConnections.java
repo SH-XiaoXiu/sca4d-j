@@ -34,9 +34,9 @@ public class StompConnections {
 
     private static final Logger LOG = LoggerFactory.getLogger(StompConnections.class);
 
-    private final @NotNull RedisConnectionRegistry shared;
-
     private final @NotNull LocalConnectionRegistry local;
+
+    private final @NotNull RedisConnectionRegistry shared;
 
     private final @NotNull NodeRouter transport;
 
@@ -46,7 +46,6 @@ public class StompConnections {
 
     private final Map<String, StompConnection> connections = new ConcurrentHashMap<>();
 
-    /** 创建 Spring STOMP 生命周期到 Web Realtime 连接索引的桥接。 */
     public StompConnections(
             @NotNull RedisConnectionRegistry shared,
             @NotNull LocalConnectionRegistry local,

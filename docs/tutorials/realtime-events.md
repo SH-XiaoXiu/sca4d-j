@@ -6,6 +6,8 @@
 
 使用在线 Session Token 请求 `GET /api/events`，并设置 `Accept: text/event-stream` 与 Bearer Authorization，即可通过 Gateway 建立 SSE。原生 EventSource 不能设置任意 Authorization 头，客户端应使用支持请求头的流式 HTTP 实现。
 
+默认管理端在 `_app.config.js` 中通过 `VITE_GLOB_HTTP_CLIENT_STATE_REFRESH_HEADER` 与 `VITE_GLOB_REALTIME_SSE_PATH` 覆盖客户端状态响应头和 SSE 应用内路径；未配置时分别使用 `X-Client-State-Refresh` 与 `/events`。修改 Server 的启动配置时，管理端和 Gateway 长连接路由也必须使用对应有效值。
+
 需要双向消息时，先带在线 Session Token 请求 `POST /api/events/ws/tickets`，取得一次性票据，再连接 Gateway 的 `/api/events/ws`。票据用于 Upgrade，不能把 Session Token 放进 URL。握手完成后使用 STOMP 1.2 连接，并订阅 `/user/queue/events`。
 
 每个 SUBSCRIBE 和 SEND 都带一个属于当前 Session 的 `principal-id`。需要动态 Resource 或 Topic 订阅时，应用实现 `WebRealtimeSubscriptionPolicy`；没有授权策略的目标无法订阅。
@@ -18,7 +20,7 @@
 
 `modules/web-realtime/sca4dj-web-realtime` 在一个 Gradle 项目内实现 SSE 和原生 WebSocket/STOMP。模块使用 Redis 保存共享连接索引和一次性票据，使用 Core [RateLimiter](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/concurrent/RateLimiter.html) 执行跨节点令牌桶限流，并在 App 节点内维护连接和有界写出缓冲。本节点连接始终直接投递；[NodeRouterMode](/javadoc/modules/web-realtime/sca4dj-web-realtime/com/sca4d/web/realtime/config/NodeRouterMode.html) 可以只允许单实例本地投递，或使用 RabbitMQ 临时节点队列投递其他 App 实例的连接。
 
-模块不注册 HTTP Controller；具体应用调用 `WebRealtimeSseConnector` 建立自己的 SSE 路由，并通过 `WebRealtimeTicketService` 签发 Upgrade 票据。模块使用 Spring `@EnableWebSocketMessageBroker` 固定注册 `/events/ws` 原生 STOMP 入口，不启用 SockJS。模块不注册具体业务 destination；具体应用使用 Spring `@MessageMapping("/invoices")` 之类的方法处理浏览器发往 `/app/invoices` 的消息。
+模块不注册 HTTP Controller；具体应用调用 `WebRealtimeSseConnector` 建立自己的 SSE 路由，并通过 `WebRealtimeTicketService` 签发 Upgrade 票据。模块使用 Spring `@EnableWebSocketMessageBroker` 注册默认 `/events/ws` 的原生 STOMP 入口，不启用 SockJS。模块不注册具体业务 destination；具体应用使用 Spring `@MessageMapping("/invoices")` 之类的方法处理浏览器发往默认 `/app/invoices` 的消息。
 
 ## 包结构
 
@@ -93,7 +95,7 @@ sequenceDiagram
 
 `NODE_ROUTED` 使用每个 App 实例内的 Spring simple broker。`RABBIT` 节点传输模式下，跨实例通知先由 Redis 找到连接所在节点，再通过 RabbitNodeTransport 定向投递；simple broker 只处理已经到达本机的 STOMP 连接。`BROKER_RELAY` 把 `/queue` 和 `/topic` broker destination 交给 RabbitMQ STOMP plugin，但 Web Realtime 的节点传输模式和允许丢失语义不变。
 
-`/events/ws`、`/app`、`/user`、`/queue`、`/topic`、`/user/queue/events` 和 `principal-id` 都由 WebRealtimeProtocol 集中声明。STOMP 标准定义命令和帧格式，不规定这些 destination 或业务 header；`/app` 与 `/user` 是 Spring 配置约定，`/queue` 与 `/topic` 是本模块选择的 broker 前缀，`/events/ws` 和 `principal-id` 是 Sca4d-J 固定协议。
+`/events/ws`、`/app`、`/user`、`/queue`、`/topic`、`/user/queue/events` 和 `principal-id` 是 WebRealtimeProtocol 的默认值。STOMP 标准定义命令和帧格式，不规定这些 destination 或业务 header；启动时可通过 `sca4dj.web-realtime.protocol.*` 配置这些名称，具体应用和 Gateway 的公开路由必须采用同一组有效路径。
 
 ## 基础设施命名
 
@@ -106,7 +108,7 @@ Web Realtime 的 Redis Lua 会在一次调用中同时修改连接、订阅和�
 - `WebRealtimeTicketService` 由 App 的认证 HTTP 路由调用，签发绑定 Session 与 WebSocket 路径的短期一次性票据。
 - `WebRealtimeSseConnector` 使用已认证 Session 建立 SSE 连接。
 - `WebRealtimeSubscriptionPolicy` 授权 Resource 或 Topic 动态订阅。
-- WebSocket Upgrade 固定进入 `/events/ws`。浏览器先从 App HTTP 路由取得票据，握手阶段完成 Origin、票据和 Session 检查；STOMP 帧由 Spring 处理。
+- WebSocket Upgrade 默认进入 `/events/ws`，可由 `sca4dj.web-realtime.protocol.websocket-endpoint` 覆盖。浏览器先从 App HTTP 路由取得票据，握手阶段完成 Origin、票据和 Session 检查；STOMP 帧由 Spring 处理。
 - App 使用 Spring `@MessageMapping` 声明去掉 `/app` 前缀后的处理路径；浏览器仍向 `/app/**` 发送，并用 `principal-id` 选择本次业务调用代表的 Principal。每个 `SEND` 的 Call 由模块入站拦截器创建、绑定和清理。
 
 每个 `SUBSCRIBE` 和 `SEND` 都使用独立 `Call`，并且已经绑定该帧选择的 Principal。Spring 负责解析帧并按 Session 发送 user destination；模块负责连接状态、限流、业务身份选择和订阅授权；具体业务规则由 App 的订阅策略或 `@MessageMapping` 方法执行。
@@ -119,7 +121,7 @@ Web Realtime 的 Redis Lua 会在一次调用中同时修改连接、订阅和�
 
 源码：`modules/web-realtime/sca4dj-web-realtime/src/main/java/com/sca4d/web/realtime/stomp/WebRealtimeProtocol.java`
 
-WebRealtimeProtocol 集中保存浏览器、具体 App 和模块必须逐字一致的 STOMP 字面量。模块通过 Spring `@EnableWebSocketMessageBroker` 注册 `/events/ws` 原生 WebSocket 入口，固定只接受 STOMP `1.2`，不注册 SockJS。
+WebRealtimeProtocol 集中保存浏览器、具体 App 和模块必须逐字一致的 STOMP 名称。进程启动时从 `sca4dj.web-realtime.protocol.*` 读取覆盖值，未配置时使用下列默认值；模块固定只接受 STOMP `1.2`，不注册 SockJS。
 
 WebRealtimeProtocol 分别声明 `/app` 应用 destination 前缀、`/user` 用户前缀以及 `/queue`、`/topic` broker 前缀。STOMP 标准不规定这些路径；它们是 Spring 配置和本模块协议的一部分，不能散落为配置类中的重复字面量。
 

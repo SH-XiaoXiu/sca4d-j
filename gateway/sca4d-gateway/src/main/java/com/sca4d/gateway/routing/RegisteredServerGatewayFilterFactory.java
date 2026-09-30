@@ -3,7 +3,7 @@ package com.sca4d.gateway.routing;
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR;
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.addOriginalRequestUrl;
 
-import com.sca4d.core.api.gateway.GatewayHttpHeaders;
+import com.sca4d.core.api.gateway.GatewayConstants;
 import com.sca4d.gateway.config.GatewayProperties;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,9 +29,9 @@ public class RegisteredServerGatewayFilterFactory
 
     private static final String EXTERNAL_PREFIX = "externalPrefix";
 
-    private final @NotNull String secret;
-
     private final @NotNull String backendServiceId;
+
+    private final @NotNull String secret;
 
     /** @param properties 已校验的 Gateway 运行配置 */
     public RegisteredServerGatewayFilterFactory(@NotNull GatewayProperties properties) {
@@ -72,13 +72,13 @@ public class RegisteredServerGatewayFilterFactory
         }
         builder.headers(headers -> {
             removeInternalHeaders(headers);
-            headers.set(GatewayHttpHeaders.SECRET, secret);
+            headers.set(GatewayConstants.SECRET_HEADER, secret);
             String clientAddress = clientAddress(request.getRemoteAddress());
             if (clientAddress != null) {
-                headers.set(GatewayHttpHeaders.CLIENT_IP, clientAddress);
+                headers.set(GatewayConstants.CLIENT_IP_HEADER, clientAddress);
             }
             if (externalPrefix != null) {
-                headers.set(GatewayHttpHeaders.EXTERNAL_PREFIX, externalPrefix);
+                headers.set(GatewayConstants.EXTERNAL_PREFIX_HEADER, externalPrefix);
             }
         });
         return builder.build();
@@ -115,14 +115,14 @@ public class RegisteredServerGatewayFilterFactory
     /** 删除转发给 Server 前不应保留的外部代理与内部控制 Header。 */
     private static void removeInternalHeaders(@NotNull HttpHeaders headers) {
         for (String name : new ArrayList<>(headers.keySet())) {
-            if (name.regionMatches(true, 0, GatewayHttpHeaders.PREFIX, 0, GatewayHttpHeaders.PREFIX.length())
+            if (name.regionMatches(true, 0, GatewayConstants.HEADER_PREFIX, 0, GatewayConstants.HEADER_PREFIX.length())
                     || name.regionMatches(
                             true,
                             0,
-                            GatewayHttpHeaders.FORWARDED_PREFIX,
+                            GatewayConstants.FORWARDED_HEADER_PREFIX,
                             0,
-                            GatewayHttpHeaders.FORWARDED_PREFIX.length())
-                    || GatewayHttpHeaders.FORWARDED.equalsIgnoreCase(name)) {
+                            GatewayConstants.FORWARDED_HEADER_PREFIX.length())
+                    || GatewayConstants.FORWARDED_HEADER.equalsIgnoreCase(name)) {
                 headers.remove(name);
             }
         }

@@ -28,6 +28,7 @@ import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.Name;
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.setting.ConfiguredConstants;
 import com.sca4d.core.api.webrealtime.WebRealtimeMessage;
 import com.sca4d.core.api.webrealtime.WebRealtimePublisher;
 import com.sca4d.core.api.webrealtime.WebRealtimeTarget;
@@ -162,6 +163,7 @@ class WebRealtimeInfrastructureIntegrationTest {
 
     @BeforeAll
     static void connectInfrastructure() {
+        ConfiguredConstants.initialize(WebRealtimeProtocol.class, ignored -> null);
         PROPERTIES.setLeaseDuration(Duration.ofSeconds(5));
         PROPERTIES.setTicketTtl(Duration.ofSeconds(10));
 

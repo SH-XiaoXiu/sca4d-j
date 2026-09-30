@@ -26,11 +26,11 @@ public class DefaultWebRealtimePublisher implements WebRealtimePublisher, Sessio
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultWebRealtimePublisher.class);
 
-    private final @NotNull MessageBus messages;
-
     private final @NotNull WebRealtimeProperties properties;
 
     private final @NotNull Clock clock;
+
+    private final @NotNull MessageBus messages;
 
     /**
      * @param messages Web Realtime 消息总线

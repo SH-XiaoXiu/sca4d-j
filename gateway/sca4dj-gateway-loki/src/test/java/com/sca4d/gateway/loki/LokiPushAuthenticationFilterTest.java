@@ -2,6 +2,9 @@ package com.sca4d.gateway.loki;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.sca4d.core.api.gateway.GatewayConstants;
+import com.sca4d.core.api.setting.ConfiguredConstants;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +20,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /** 验证 Loki 写入路由只接受独立凭据且不会转发认证信息。 */
 class LokiPushAuthenticationFilterTest {
 
+    @BeforeAll
+    static void initializeGatewayConstants() {
+        ConfiguredConstants.initialize(GatewayConstants.class, ignored -> null);
+    }
+
     @Test
     @DisplayName("正确 Basic Auth 继续转发并删除 Authorization 和 Gateway Header")
     void forwardsWithoutSensitiveHeadersForValidCredential() {
@@ -24,14 +32,14 @@ class LokiPushAuthenticationFilterTest {
         MockServerWebExchange exchange = MockServerWebExchange.from(
                 MockServerHttpRequest.post("/internal/logging/push")
                         .header(HttpHeaders.AUTHORIZATION, basic("alloy", "logging-secret"))
-                        .header("X-Gateway-Secret", "gateway-secret")
+                        .header(GatewayConstants.SECRET_HEADER, "gateway-secret")
                         .build());
         AtomicBoolean forwarded = new AtomicBoolean();
 
         filter.filter(exchange, current -> {
             forwarded.set(true);
             assertThat(current.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION)).isNull();
-            assertThat(current.getRequest().getHeaders().get("X-Gateway-Secret")).isNull();
+            assertThat(current.getRequest().getHeaders().get(GatewayConstants.SECRET_HEADER)).isNull();
             return Mono.empty();
         }).block();
 

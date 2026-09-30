@@ -581,6 +581,7 @@ Server 返回以 `/` 开头且不含 scheme/host 的 `Location` 时，普通 `/a
 | `SCA4DJ_GATEWAY_LEASE_TTL` | `PT30S` | 未续租注册的保留时长 |
 | `SCA4DJ_GATEWAY_HEALTH_INTERVAL` | `PT5S` | readiness 扫描间隔 |
 | `SCA4DJ_GATEWAY_HEALTH_TIMEOUT` | `PT3S` | 单次 readiness 请求超时 |
+| `SCA4DJ_GATEWAY_HEALTH_CONCURRENCY` | `8` | 同一轮 readiness 检查的最大并发请求数，必须为正整数 |
 | `SCA4DJ_GATEWAY_CONNECT_TIMEOUT_MILLIS` | `3000` | 转发连接超时，单位毫秒 |
 | `SCA4DJ_GATEWAY_RESPONSE_TIMEOUT` | `PT30S` | 普通 HTTP 转发响应超时 |
 | `SCA4DJ_GATEWAY_LOGGING_ENABLED` | `false` | 是否注册 Loki 日志写入路由 |
@@ -592,6 +593,8 @@ Server 返回以 `/` 开头且不含 scheme/host 的 `Location` 时，普通 `/a
 | `SCA4DJ_ENVIRONMENT` | 活动 profile 或 `default` | ECS service environment |
 
 Secret 为空，或租约与 readiness 检查时长不是正数时，Gateway 启动失败。日志写入启用后，Loki Origin、写入用户名和写入密码也必须完整有效；写入凭据不能复用注册 Secret。Server 的续租间隔必须小于租约 TTL，Gateway 按 UTC 时间判断租约是否过期。
+
+readiness 请求按并发上限执行，每个实例独立超时。某个实例失败不会取消其他实例的检查；一轮结束后等待扫描间隔，再开始下一轮。结果只更新请求发起时的租约，已替换的租约不会被旧响应覆盖。
 
 Gateway 默认启用 `local` profile。本地配置从仓库根目录 `.env/application.env` 和 `.env/logging.env` 读取注册 Secret、监听端口与日志写入参数；部署环境通过进程环境变量覆盖这些值，不依赖仓库内的本机配置文件。
 

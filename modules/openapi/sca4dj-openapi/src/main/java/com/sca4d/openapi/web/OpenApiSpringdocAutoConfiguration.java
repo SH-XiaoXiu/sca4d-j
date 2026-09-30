@@ -75,10 +75,11 @@ public class OpenApiSpringdocAutoConfiguration {
                     new SecurityScheme()
                             .type(SecurityScheme.Type.APIKEY)
                             .in(SecurityScheme.In.HEADER)
-                            .name(OpenApiAuthenticationInterceptor.SIGNATURE_HEADER)
+                            .name(OpenApiConstants.SIGNATURE_HEADER)
                             .description(
-                                    "OpenAPI HMAC 请求签名；同时提交 X-OpenApi-Client-Id、"
-                                            + "X-OpenApi-Timestamp 和 X-OpenApi-Nonce。"));
+                                    "OpenAPI HMAC 请求签名；同时提交 " + OpenApiConstants.CLIENT_ID_HEADER + "、"
+                                            + OpenApiConstants.TIMESTAMP_HEADER + " 和 "
+                                            + OpenApiConstants.NONCE_HEADER + "。"));
             components.addSecuritySchemes(
                     "openApiClientBasic",
                     new SecurityScheme()

@@ -4,8 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR;
 
-import com.sca4d.core.api.gateway.GatewayHttpHeaders;
+import com.sca4d.core.api.gateway.GatewayConstants;
+import com.sca4d.core.api.setting.ConfiguredConstants;
 import com.sca4d.gateway.config.GatewayProperties;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.cloud.gateway.route.Route;
@@ -19,6 +21,11 @@ import java.net.InetSocketAddress;
 /** 验证只有注册 Server 路由能够获得可信 Header 和路径恢复。 */
 class RegisteredServerGatewayFilterFactoryTest {
 
+    @BeforeAll
+    static void initializeGatewayConstants() {
+        ConfiguredConstants.initialize(GatewayConstants.class, ignored -> null);
+    }
+
     @Test
     @DisplayName("注册 Server 路由剥离前缀并写入可信值")
     void preparesTrustedServerRequest() {
@@ -29,11 +36,11 @@ class RegisteredServerGatewayFilterFactoryTest {
 
         factory.apply(config).filter(exchange, forwarded -> {
             assertThat(forwarded.getRequest().getPath().value()).isEqualTo("/resource");
-            assertThat(forwarded.getRequest().getHeaders().getFirst(GatewayHttpHeaders.SECRET))
+            assertThat(forwarded.getRequest().getHeaders().getFirst(GatewayConstants.SECRET_HEADER))
                     .isEqualTo("trusted-secret");
-            assertThat(forwarded.getRequest().getHeaders().getFirst(GatewayHttpHeaders.CLIENT_IP))
+            assertThat(forwarded.getRequest().getHeaders().getFirst(GatewayConstants.CLIENT_IP_HEADER))
                     .isEqualTo("203.0.113.8");
-            assertThat(forwarded.getRequest().getHeaders().getFirst(GatewayHttpHeaders.EXTERNAL_PREFIX))
+            assertThat(forwarded.getRequest().getHeaders().getFirst(GatewayConstants.EXTERNAL_PREFIX_HEADER))
                     .isEqualTo("/api");
             assertThat(forwarded.getRequest().getHeaders().getFirst("X-Forwarded-For")).isNull();
             forwarded.getResponse().getHeaders().set(HttpHeaders.LOCATION, "/target");
@@ -64,7 +71,7 @@ class RegisteredServerGatewayFilterFactoryTest {
 
         factory.apply(new RegisteredServerGatewayFilterFactory.Config())
                 .filter(exchange, forwarded -> {
-                    assertThat(forwarded.getRequest().getHeaders().getFirst(GatewayHttpHeaders.SECRET))
+                    assertThat(forwarded.getRequest().getHeaders().getFirst(GatewayConstants.SECRET_HEADER))
                             .isEqualTo("trusted-secret");
                     return Mono.empty();
                 })
@@ -76,7 +83,7 @@ class RegisteredServerGatewayFilterFactoryTest {
         MockServerWebExchange exchange = MockServerWebExchange.from(
                 MockServerHttpRequest.get(path)
                         .remoteAddress(new InetSocketAddress("203.0.113.8", 12345))
-                        .header(GatewayHttpHeaders.SECRET, "forged")
+                        .header(GatewayConstants.SECRET_HEADER, "forged")
                         .header("X-Forwarded-For", "198.51.100.9")
                         .build());
         exchange.getAttributes()

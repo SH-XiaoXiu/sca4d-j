@@ -27,7 +27,7 @@ public @interface OpenApiRoute {
     @AliasFor(annotation = RequestMapping.class, attribute = "method")
     RequestMethod[] method();
 
-    /** @return 完整的公开路径，必须以 {@code /openapi/} 开头 */
+    /** @return 完整的公开路径，必须位于配置的 {@code sca4dj.openapi.path-prefix} 之下 */
     @AliasFor(annotation = RequestMapping.class, attribute = "path")
     String[] path();
 

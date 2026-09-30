@@ -4,8 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.sca4d.core.api.gateway.GatewayCallbackCode;
+import com.sca4d.core.api.gateway.GatewayConstants;
 import com.sca4d.core.api.gateway.GatewayRegistrationRequest;
+import com.sca4d.core.api.setting.ConfiguredConstants;
 import com.sca4d.gateway.config.GatewayProperties;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -20,6 +23,11 @@ import java.util.Set;
 /** 验证 Gateway 租约替换保护和回调编码筛选。 */
 class GatewayInstanceRegistryTest {
 
+    @BeforeAll
+    static void initializeGatewayConstants() {
+        ConfiguredConstants.initialize(GatewayConstants.class, ignored -> null);
+    }
+
     private static final Instant NOW = Instant.parse("2026-08-13T00:00:00Z");
 
     @Test
@@ -31,6 +39,7 @@ class GatewayInstanceRegistryTest {
                         "main",
                         URI.create("http://localhost:8081"),
                         "/ready",
+                        GatewayConstants.FINGERPRINT,
                         Set.of(),
                         Set.of("MAIN:API"),
                         requirements));
@@ -39,6 +48,7 @@ class GatewayInstanceRegistryTest {
                         "iot",
                         URI.create("http://localhost:8082"),
                         "/ready",
+                        GatewayConstants.FINGERPRINT,
                         Set.of(),
                         Set.of("IOT:API"),
                         requirements));
@@ -85,6 +95,7 @@ class GatewayInstanceRegistryTest {
                 validRequest.getInstanceId(),
                 URI.create("http://localhost:8081/server-root"),
                 validRequest.getReadinessPath(),
+                validRequest.getProtocolFingerprint(),
                 validRequest.getCallbackCodes(),
                 Set.of(),
                 Map.of());
@@ -107,6 +118,7 @@ class GatewayInstanceRegistryTest {
                 instanceId,
                 URI.create("http://localhost:" + port),
                 "/actuator/health/readiness",
+                GatewayConstants.FINGERPRINT,
                 Set.of(callbackCode),
                 Set.of(),
                 Map.of());

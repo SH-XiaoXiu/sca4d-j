@@ -7,7 +7,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.sca4d.core.api.gateway.GatewayCallbackCode;
+import com.sca4d.core.api.gateway.GatewayConstants;
+import com.sca4d.core.api.setting.ConfiguredConstants;
 import com.sca4d.gateway.registration.GatewayInstanceRegistry;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.cloud.client.loadbalancer.DefaultRequest;
@@ -22,6 +25,11 @@ import java.util.Map;
 
 /** 验证回调请求不会回退到普通 API 实例。 */
 class GatewayLoadBalancerTest {
+
+    @BeforeAll
+    static void initializeGatewayConstants() {
+        ConfiguredConstants.initialize(GatewayConstants.class, ignored -> null);
+    }
 
     @Test
     @DisplayName("回调没有匹配实例时返回空选择")

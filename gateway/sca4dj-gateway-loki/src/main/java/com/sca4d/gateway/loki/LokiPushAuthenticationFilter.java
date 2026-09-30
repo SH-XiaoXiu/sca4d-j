@@ -1,5 +1,6 @@
 package com.sca4d.gateway.loki;
 
+import com.sca4d.core.api.gateway.GatewayConstants;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,8 +21,6 @@ import java.util.List;
 public class LokiPushAuthenticationFilter implements GatewayFilter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LokiPushAuthenticationFilter.class);
-
-    private static final String GATEWAY_HEADER_PREFIX = "X-Gateway-";
 
     private final byte @NotNull [] expectedCredential;
 
@@ -54,9 +53,9 @@ public class LokiPushAuthenticationFilter implements GatewayFilter {
                                 if (name.regionMatches(
                                         true,
                                         0,
-                                        GATEWAY_HEADER_PREFIX,
+                                        GatewayConstants.HEADER_PREFIX,
                                         0,
-                                        GATEWAY_HEADER_PREFIX.length())) {
+                                        GatewayConstants.HEADER_PREFIX.length())) {
                                     headers.remove(name);
                                 }
                             }

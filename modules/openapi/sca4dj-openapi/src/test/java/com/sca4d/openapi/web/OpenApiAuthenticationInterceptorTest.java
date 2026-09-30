@@ -16,6 +16,7 @@ import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.RealmKey;
+import com.sca4d.core.api.setting.ConfiguredConstants;
 import com.sca4d.core.spring.call.CallHolder;
 import com.sca4d.openapi.client.OpenApiClient;
 import com.sca4d.openapi.client.OpenApiClientService;
@@ -25,6 +26,7 @@ import com.sca4d.openapi.web.annotation.OpenApiRoute;
 import jakarta.servlet.http.HttpServletRequest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -39,6 +41,11 @@ import java.time.Instant;
 
 /** 验证 OpenAPI MAC 请求头的缺失、签名失败和 nonce 委托行为。 */
 class OpenApiAuthenticationInterceptorTest {
+
+    @BeforeAll
+    static void initializeOpenApiConstants() {
+        ConfiguredConstants.initialize(OpenApiConstants.class, ignored -> null);
+    }
 
     private final HmacAuthenticationMethod hmac = mock(HmacAuthenticationMethod.class);
 
@@ -59,7 +66,7 @@ class OpenApiAuthenticationInterceptorTest {
     @DisplayName("缺少任一 HMAC 请求头时统一返回认证失败")
     void rejectsMissingHeader() {
         MockHttpServletRequest request = request();
-        request.addHeader(OpenApiAuthenticationInterceptor.CLIENT_ID_HEADER, "client-1");
+        request.addHeader(OpenApiConstants.CLIENT_ID_HEADER, "client-1");
 
         assertThatThrownBy(() -> invoke(request))
                 .isInstanceOf(BusinessException.class)
@@ -114,10 +121,10 @@ class OpenApiAuthenticationInterceptorTest {
 
     private static MockHttpServletRequest signedRequest(String signature) {
         MockHttpServletRequest request = request();
-        request.addHeader(OpenApiAuthenticationInterceptor.CLIENT_ID_HEADER, "client-1");
-        request.addHeader(OpenApiAuthenticationInterceptor.TIMESTAMP_HEADER, "1786665600");
-        request.addHeader(OpenApiAuthenticationInterceptor.NONCE_HEADER, "0123456789abcdef");
-        request.addHeader(OpenApiAuthenticationInterceptor.SIGNATURE_HEADER, signature);
+        request.addHeader(OpenApiConstants.CLIENT_ID_HEADER, "client-1");
+        request.addHeader(OpenApiConstants.TIMESTAMP_HEADER, "1786665600");
+        request.addHeader(OpenApiConstants.NONCE_HEADER, "0123456789abcdef");
+        request.addHeader(OpenApiConstants.SIGNATURE_HEADER, signature);
         request.setContent("{}".getBytes(StandardCharsets.UTF_8));
         return request;
     }

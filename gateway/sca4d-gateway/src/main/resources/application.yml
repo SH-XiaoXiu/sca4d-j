@@ -23,32 +23,32 @@ spring:
               order: -300
               uri: lb:ws://${sca4dj.gateway.backend-service-id}
               predicates:
-                - Path=${SCA4DJ_GATEWAY_API_PREFIX:/api}/events/ws
+                - Path=${sca4dj.gateway.protocol.api-prefix}${sca4dj.gateway.routes.websocket-path}
               filters:
-                - RegisteredServer=${SCA4DJ_GATEWAY_API_PREFIX:/api}
+                - RegisteredServer=${sca4dj.gateway.protocol.api-prefix}
             - id: sca4d-events-sse
               order: -200
               uri: lb://${sca4dj.gateway.backend-service-id}
               predicates:
-                - Path=${SCA4DJ_GATEWAY_API_PREFIX:/api}/events
+                - Path=${sca4dj.gateway.protocol.api-prefix}${sca4dj.gateway.routes.sse-path}
               filters:
-                - RegisteredServer=${SCA4DJ_GATEWAY_API_PREFIX:/api}
+                - RegisteredServer=${sca4dj.gateway.protocol.api-prefix}
               metadata:
                 response-timeout: -1
             - id: sca4d-callbacks
               order: -100
               uri: lb://${sca4dj.gateway.backend-service-id}
               predicates:
-                - Path=/callbacks/{code}
+                - Path=${sca4dj.gateway.protocol.callback-path}/{code}
                 - Method=POST
               filters:
                 - RegisteredServer
             - id: sca4d-api
               uri: lb://${sca4dj.gateway.backend-service-id}
               predicates:
-                - Path=${SCA4DJ_GATEWAY_API_PREFIX:/api}/**
+                - Path=${sca4dj.gateway.protocol.api-prefix}/**
               filters:
-                - RegisteredServer=${SCA4DJ_GATEWAY_API_PREFIX:/api}
+                - RegisteredServer=${sca4dj.gateway.protocol.api-prefix}
 
 logging:
   file:
@@ -87,6 +87,7 @@ sca4dj:
     lease-ttl: ${SCA4DJ_GATEWAY_LEASE_TTL:PT30S}
     health-interval: ${SCA4DJ_GATEWAY_HEALTH_INTERVAL:PT5S}
     health-timeout: ${SCA4DJ_GATEWAY_HEALTH_TIMEOUT:PT3S}
+    health-concurrency: ${SCA4DJ_GATEWAY_HEALTH_CONCURRENCY:8}
     logging:
       enabled: ${SCA4DJ_GATEWAY_LOGGING_ENABLED:false}
       loki-origin: ${SCA4DJ_GATEWAY_LOKI_ORIGIN:}

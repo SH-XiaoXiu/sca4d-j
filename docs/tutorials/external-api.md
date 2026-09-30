@@ -140,6 +140,8 @@ grant_type=client_credentials
 
 使用 HMAC Client 时，每个开放 API 请求都提交以下请求头：
 
+下表是默认名称。部署环境可使用 `sca4dj.openapi.hmac.headers.client-id`、`timestamp`、`nonce`、`signature` 分别配置名称；`sca4dj.openapi.path-prefix` 默认 `/openapi`，实际路由仍由每个 `@OpenApiRoute` 声明。调用方与 Server 必须使用同一组启动时生效的名称和路径。
+
 | 请求头 | 内容 |
 | --- | --- |
 | `X-OpenApi-Client-Id` | Client ID |

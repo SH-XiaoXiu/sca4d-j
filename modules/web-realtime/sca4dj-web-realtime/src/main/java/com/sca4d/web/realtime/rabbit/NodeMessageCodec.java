@@ -37,7 +37,6 @@ public class NodeMessageCodec {
 
     private final @NotNull ObjectMapper objectMapper;
 
-    /** 创建直接使用脚手架固定 `@Sca4djJson` 映射器的节点消息编解码器。 */
     public NodeMessageCodec(@NotNull ObjectMapper objectMapper) {
         this.objectMapper = Objects.requireNonNull(objectMapper, "ObjectMapper 不能为空");
     }
@@ -165,9 +164,9 @@ public class NodeMessageCodec {
     /** 保存一个节点需要投递的连接列表和浏览器内容。 */
     @SuppressWarnings("ClassCanBeRecord")
     static class NodeDelivery {
-        private final @NotNull List<@NotNull ConnectionId> connections;
-
         private final @NotNull BrowserWrite delivery;
+
+        private final @NotNull List<@NotNull ConnectionId> connections;
 
         /** 创建已完成字段校验的节点投递。 */
         NodeDelivery(

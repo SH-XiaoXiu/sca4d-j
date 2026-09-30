@@ -12,19 +12,19 @@ import java.util.Objects;
 /** 按 OpenAPI Client 的固定字段顺序生成 MAC canonical request。 */
 public class OpenApiHmacCanonicalRequest {
 
+    private final @NotNull Instant timestamp;
+
+    private final @NotNull String canonicalQuery;
+
     private final @NotNull String clientId;
 
     private final @NotNull String method;
 
+    private final @NotNull String nonce;
+
     private final @NotNull String path;
 
-    private final @NotNull String canonicalQuery;
-
     private final byte @NotNull [] body;
-
-    private final @NotNull Instant timestamp;
-
-    private final @NotNull String nonce;
 
     /** 创建已经规范化的 OpenAPI MAC 请求。 */
     public OpenApiHmacCanonicalRequest(
@@ -42,7 +42,8 @@ public class OpenApiHmacCanonicalRequest {
         this.body = Objects.requireNonNull(body, "OpenAPI HMAC body 不能为空").clone();
         this.timestamp = Objects.requireNonNull(timestamp, "OpenAPI HMAC timestamp 不能为空");
         this.nonce = TextUtils.requireText(nonce, "OpenAPI HMAC nonce");
-        if (!this.path.startsWith("/openapi/")
+        if (!this.path.startsWith("/")
+                || this.path.contains("//")
                 || this.path.indexOf('\n') >= 0
                 || this.canonicalQuery.indexOf('\n') >= 0
                 || this.nonce.length() < 16

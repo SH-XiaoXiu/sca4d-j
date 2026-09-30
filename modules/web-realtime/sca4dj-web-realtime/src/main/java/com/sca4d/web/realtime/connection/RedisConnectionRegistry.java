@@ -47,17 +47,16 @@ public class RedisConnectionRegistry implements ConnectionRegistry {
 
     private static final DefaultRedisScript<Long> UNSUBSCRIBE = script("registry-unsubscribe.lua");
 
-    private final @NotNull RedisTemplate<Key, String> redis;
-
-    private final @NotNull WebRealtimeInfrastructureNames names;
-
     private final @NotNull WebRealtimeProperties properties;
 
     private final @NotNull Clock clock;
 
     private final @NotNull RedisBatches redisBatches;
 
-    /** 创建使用当前 App 隔离名称的共享连接索引。 */
+    private final @NotNull RedisTemplate<Key, String> redis;
+
+    private final @NotNull WebRealtimeInfrastructureNames names;
+
     public RedisConnectionRegistry(
             @NotNull RedisTemplate<Key, String> redis,
             @NotNull WebRealtimeInfrastructureNames names,

@@ -34,15 +34,15 @@ public class StompInboundInterceptor implements ExecutorChannelInterceptor {
 
     private static final String CALL_HEADER = StompInboundInterceptor.class.getName() + ".call";
 
-    private final @NotNull StompRateLimits rateLimits;
-
     private final @NotNull RedisConnectionRegistry shared;
 
-    private final @NotNull List<@NotNull WebRealtimeSubscriptionPolicy> subscriptionPolicies;
+    private final @Nullable CallInvoker invoker;
 
     private final @NotNull Clock clock;
 
-    private final @Nullable CallInvoker invoker;
+    private final @NotNull List<@NotNull WebRealtimeSubscriptionPolicy> subscriptionPolicies;
+
+    private final @NotNull StompRateLimits rateLimits;
 
     /** 创建 Spring STOMP 入站检查器。 */
     public StompInboundInterceptor(

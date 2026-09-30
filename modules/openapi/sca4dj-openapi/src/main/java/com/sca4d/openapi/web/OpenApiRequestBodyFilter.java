@@ -38,6 +38,6 @@ public class OpenApiRequestBodyFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(@NotNull HttpServletRequest request) {
         String path = request.getRequestURI().substring(request.getContextPath().length());
-        return !path.startsWith("/openapi/");
+        return !path.startsWith(OpenApiConstants.PATH_PREFIX + "/");
     }
 }

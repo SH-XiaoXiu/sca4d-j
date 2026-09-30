@@ -36,13 +36,13 @@ public class SseConnections implements WebRealtimeSseConnector {
 
     private static final Object HEARTBEAT = new Object();
 
-    private final @NotNull RedisConnectionRegistry shared;
-
     private final @NotNull LocalConnectionRegistry local;
 
-    private final @NotNull NodeRouter nodeTransport;
+    private final @NotNull RedisConnectionRegistry shared;
 
     private final @NotNull WebRealtimeProperties properties;
+
+    private final @NotNull NodeRouter nodeTransport;
 
     private final ExecutorService writers = Executors.newVirtualThreadPerTaskExecutor();
 

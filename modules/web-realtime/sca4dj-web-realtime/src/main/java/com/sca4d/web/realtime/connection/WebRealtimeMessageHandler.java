@@ -29,15 +29,15 @@ public class WebRealtimeMessageHandler implements MessageHandler<WebRealtimeMess
 
     private static final TreeCode CODE = TreeCode.of("WEB_REALTIME/DELIVERY");
 
-    private final @NotNull RedisConnectionRegistry registry;
+    private final @NotNull ObjectMapper json;
 
-    private final @NotNull NodeRouter nodeRouter;
+    private final @NotNull RedisConnectionRegistry registry;
 
     private final @NotNull WebRealtimeProperties properties;
 
     private final @NotNull Clock clock;
 
-    private final @NotNull ObjectMapper json;
+    private final @NotNull NodeRouter nodeRouter;
 
     private final @NotNull WebRealtimeMessageCodec codec;
 

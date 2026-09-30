@@ -22,11 +22,13 @@ import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.setting.ConfiguredConstants;
 import com.sca4d.core.api.webrealtime.WebRealtimeTarget;
 import com.sca4d.core.spring.call.CallHolder;
 import com.sca4d.web.realtime.connection.RedisConnectionRegistry;
 import com.sca4d.web.realtime.ticket.TicketHandshakeInterceptor;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -50,6 +52,11 @@ import java.util.concurrent.atomic.AtomicReference;
  * 验证 Spring STOMP 入站命令的协议、订阅处理和 Call 绑定。
  */
 class StompInboundInterceptorTest {
+
+    @BeforeAll
+    static void initializeProtocol() {
+        ConfiguredConstants.initialize(WebRealtimeProtocol.class, ignored -> null);
+    }
 
     private static final Instant NOW = Instant.parse("2026-07-29T00:00:00Z");
 

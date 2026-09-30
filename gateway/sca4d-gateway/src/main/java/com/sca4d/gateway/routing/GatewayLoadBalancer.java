@@ -1,7 +1,7 @@
 package com.sca4d.gateway.routing;
 
 import com.sca4d.core.api.gateway.GatewayCallbackCode;
-import com.sca4d.core.api.gateway.GatewayHttpPaths;
+import com.sca4d.core.api.gateway.GatewayConstants;
 import com.sca4d.gateway.registration.GatewayInstance;
 import com.sca4d.gateway.registration.GatewayInstanceRegistry;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -59,7 +59,7 @@ public class GatewayLoadBalancer implements ReactorServiceInstanceLoadBalancer {
             return Optional.empty();
         }
         String path = requestContext.getClientRequest().getUrl().getPath();
-        String prefix = GatewayHttpPaths.CALLBACK_PREFIX;
+        String prefix = GatewayConstants.CALLBACK_PATH + "/";
         if (!path.startsWith(prefix) || path.length() == prefix.length()) {
             return Optional.empty();
         }

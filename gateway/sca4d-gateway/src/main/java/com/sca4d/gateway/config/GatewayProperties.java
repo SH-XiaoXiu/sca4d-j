@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 /** 保存 Gateway 注册控制、Server readiness 检查和注册后端标识。 */
 @ConfigurationProperties("sca4dj.gateway")
 public class GatewayProperties {
+    private int healthConcurrency = 8;
 
     private static final Pattern SERVICE_ID = Pattern.compile("[A-Za-z0-9][A-Za-z0-9._-]{0,127}");
 
@@ -32,6 +33,16 @@ public class GatewayProperties {
     /** @param secret 不得转发给外部调用方或写入日志的 Gateway Secret */
     public void setSecret(@Nullable String secret) {
         this.secret = secret;
+    }
+
+    /** @return 同一轮 readiness 检查的最大并发请求数 */
+    public int getHealthConcurrency() {
+        return healthConcurrency;
+    }
+
+    /** @param healthConcurrency 正数并发上限 */
+    public void setHealthConcurrency(int healthConcurrency) {
+        this.healthConcurrency = healthConcurrency;
     }
 
     /** @return Spring Cloud LoadBalancer 中表示当前注册 Server 集群的 service ID */
@@ -103,6 +114,9 @@ public class GatewayProperties {
         positive(leaseTtl, "sca4dj.gateway.lease-ttl");
         positive(healthInterval, "sca4dj.gateway.health-interval");
         positive(healthTimeout, "sca4dj.gateway.health-timeout");
+        if (healthConcurrency < 1) {
+            throw new IllegalStateException("sca4dj.gateway.health-concurrency 必须为正数");
+        }
         backendServiceId = validatedBackendServiceId();
     }
 

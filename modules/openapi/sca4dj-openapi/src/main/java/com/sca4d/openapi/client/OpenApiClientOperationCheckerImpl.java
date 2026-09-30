@@ -15,7 +15,6 @@ public class OpenApiClientOperationCheckerImpl implements OpenApiClientOperation
 
     private final @NotNull OpenApiClientService clients;
 
-    /** 创建 Client Operation 检查器。 */
     public OpenApiClientOperationCheckerImpl(@NotNull OpenApiClientService clients) {
         this.clients = Objects.requireNonNull(clients, "OpenAPI Client 服务不能为空");
     }

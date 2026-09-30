@@ -4,7 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.setting.ConfiguredConstants;
 import com.sca4d.openapi.web.annotation.OpenApiRoute;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +16,11 @@ import java.lang.reflect.Method;
 
 /** 验证 OpenAPI 路由定义对公开路径和稳定标识的约束。 */
 class OpenApiRouteDefinitionTest {
+
+    @BeforeAll
+    static void initializeOpenApiConstants() {
+        ConfiguredConstants.initialize(OpenApiConstants.class, ignored -> null);
+    }
 
     @Test
     @DisplayName("保留合法路由声明的 HTTP 方法路径和 Operation")

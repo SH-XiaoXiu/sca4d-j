@@ -49,11 +49,11 @@ sequenceDiagram
     Gateway->>Loki: POST /loki/api/v1/push
 ```
 
-Server 注册实例标识、Gateway 可访问的 HTTP(S) Origin、readiness 路径和当前实例实际声明的回调编码。Origin 不能包含基础路径，因为 Spring Cloud LoadBalancer 只替换目标 scheme、host 和 port。新租约初始不可路由；Gateway 至少完成一次成功的 readiness 请求后才会选择它。相同实例标识重新注册会获得新租约 ID，旧租约不能续租或删除替换后的注册。
+Server 注册实例标识、Gateway 可访问的 HTTP(S) Origin、readiness 路径、当前实例实际声明的回调编码及 `GatewayConstants.FINGERPRINT`。Origin 不能包含基础路径，因为 Spring Cloud LoadBalancer 只替换目标 scheme、host 和 port。Gateway 在认证后比较双方公开协议名称的摘要；不一致返回 409 且不建立租约。新租约初始不可路由；Gateway 至少完成一次成功的 readiness 请求后才会选择它。相同实例标识重新注册会获得新租约 ID，旧租约不能续租或删除替换后的注册。
 
 ## 路由与外部路径
 
-默认 `/api/**` 是普通应用入口。Gateway 在转发前移除 `/api`，并用 [GatewayHttpHeaders](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/gateway/GatewayHttpHeaders.html) 告诉 Server 被移除的前缀。SSE `/api/events` 和 WebSocket `/api/events/ws` 使用专门路由，长连接建立后固定在已经选择的实例。路由定义来自 `spring.cloud.gateway.server.webflux.routes`；外部 YAML 可以替换完整列表。转发到注册 Server 的路由必须保留 `RegisteredServer` Filter。
+默认 `/api/**` 是普通应用入口。`sca4dj.gateway.protocol.api-prefix` 可以在 Gateway 与 Server 的部署配置中统一覆盖该前缀；Gateway 转发前移除它，并通过 [GatewayConstants](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/gateway/GatewayConstants.html) 声明的 Header 告诉 Server。SSE `/api/events` 和 WebSocket `/api/events/ws` 是默认专用路由；应用内路径分别由 `sca4dj.gateway.routes.sse-path` 与 `websocket-path` 配置，并须与 Server 的有效路由一致。长连接建立后固定在已经选择的实例。路由定义来自 `spring.cloud.gateway.server.webflux.routes`；外部 YAML 可以替换完整列表。转发到注册 Server 的路由必须保留 `RegisteredServer` Filter。
 
 `/callbacks/{code}` 保留完整路径转发，并且只选择注册了该回调编码的健康实例。回调编码由 [GatewayCallbackCode](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/gateway/GatewayCallbackCode.html) 限制为稳定的小写命名空间。一个实例没有安装某项可选功能时，不登记对应回调编码，也不会收到该类回调。外部 YAML 使用其他 callback 入口时，先通过 `RewritePath` 恢复内部 `/callbacks/{code}`，再执行 `RegisteredServer`。
 
@@ -63,7 +63,9 @@ Server 返回站内绝对路径形式的相对 `Location` 时，Gateway 为普�
 
 ## 信任边界
 
-注册控制 API 和 Gateway 到 Server 的可信转发共同使用 `X-Gateway-Secret`。Gateway 对全部路由删除调用方提交的 `X-Gateway-*`。`RegisteredServer` 只允许配置的 backend service ID，并在转发前删除 `Forwarded` 和 `X-Forwarded-*`，再写入自己的 Secret、客户端地址和公开路径前缀。Server 只有在 Secret 固定时间比较成功后才采用这些值；Core Spring 随后对 Controller 隐藏控制 Header。
+注册控制 API 和 Gateway 到 Server 的可信转发默认使用 `X-Gateway-Secret`。`sca4dj.gateway.protocol.header-prefix`、`secret-header`、`client-ip-header` 和 `external-prefix-header` 在两个进程中必须一致；启动时拒绝重复、非法或不属于控制前缀的 Header 名称。Gateway 对全部路由删除调用方提交的控制前缀 Header。`RegisteredServer` 只允许配置的 backend service ID，并在转发前删除 `Forwarded` 和 `X-Forwarded-*`，再写入自己的 Secret、客户端地址和公开路径前缀。Server 只有在 Secret 固定时间比较成功后才采用这些值；Core Spring 随后对 Controller 隐藏控制 Header。
+
+`sca4dj.gateway.protocol.callback-path` 和 `registration-path` 分别确定回调及租约控制 API 的根路径，默认是 `/callbacks` 与 `/internal/gateway/registrations`。修改任一名称时，Gateway、Server 和外部回调调用方要一起改；同一进程中的代码不接受新旧名称并存。需要动态调整的业务设置使用 Setting，这些跨进程路径只在启动时读取。
 
 Gateway Secret 只证明请求经过配置相同 Secret 的 Gateway，不代替回调自己的认证。EMQX 回调继续校验独立的 `X-Iot-Emqx-Secret`，设备 HMAC 请求继续校验 Device 自己的凭据。Gateway 不读取或改写这些应用协议 Header。
 

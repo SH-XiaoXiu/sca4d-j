@@ -20,7 +20,6 @@ public class OpenApiRequestInterceptor extends HttpCallHandlerInterceptor {
 
     private final @NotNull OpenApiClientOperationChecker checker;
 
-    /** 创建 OpenAPI 请求拦截器。 */
     public OpenApiRequestInterceptor(@NotNull OpenApiClientOperationChecker checker) {
         this.checker = Objects.requireNonNull(checker, "OpenAPI Client Operation 检查器不能为空");
     }

@@ -21,6 +21,7 @@ dependencyManagement {
 }
 
 dependencies {
+    implementation(project(":core:sca4dj-core-api"))
     implementation(libs.slf4j.api)
     implementation(libs.spring.boot.autoconfigure)
     implementation(libs.spring.cloud.starter.gateway.server.webflux)

@@ -26,21 +26,21 @@ import java.util.Objects;
 @ApiStatus.Internal
 public class StompConfiguration implements WebSocketMessageBrokerConfigurer {
 
+    private final @NotNull ObjectMapper objectMapper;
+
     private final @NotNull WebRealtimeProperties properties;
 
-    private final @NotNull TicketHandshakeInterceptor handshakeInterceptor;
+    private final @NotNull StompChannelDispatcher inboundDispatcher;
 
-    private final @NotNull WebSocketSessions sockets;
+    private final @NotNull StompChannelDispatcher outboundDispatcher;
 
     private final @NotNull StompInboundInterceptor inboundInterceptor;
 
     private final @NotNull StompOutboundInterceptor outboundInterceptor;
 
-    private final @NotNull ObjectMapper objectMapper;
+    private final @NotNull TicketHandshakeInterceptor handshakeInterceptor;
 
-    private final @NotNull StompChannelDispatcher inboundDispatcher;
-
-    private final @NotNull StompChannelDispatcher outboundDispatcher;
+    private final @NotNull WebSocketSessions sockets;
 
     /** 创建 Spring STOMP 基础设施配置。 */
     public StompConfiguration(

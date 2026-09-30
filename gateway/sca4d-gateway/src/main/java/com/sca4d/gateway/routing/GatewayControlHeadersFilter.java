@@ -1,6 +1,6 @@
 package com.sca4d.gateway.routing;
 
-import com.sca4d.core.api.gateway.GatewayHttpHeaders;
+import com.sca4d.core.api.gateway.GatewayConstants;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -43,9 +43,9 @@ public class GatewayControlHeadersFilter implements GlobalFilter, Ordered {
             if (name.regionMatches(
                     true,
                     0,
-                    GatewayHttpHeaders.PREFIX,
+                    GatewayConstants.HEADER_PREFIX,
                     0,
-                    GatewayHttpHeaders.PREFIX.length())) {
+                    GatewayConstants.HEADER_PREFIX.length())) {
                 headers.remove(name);
             }
         }

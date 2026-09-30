@@ -9,11 +9,10 @@ import java.util.Objects;
 /** 返回给浏览器的一次性 WebSocket 握手票据和到期时间。 */
 public class WebRealtimeTicket {
 
-    private final @NotNull String value;
-
     private final @NotNull Instant expiresAt;
 
-    /** 创建已经写入共享票据存储的结果。 */
+    private final @NotNull String value;
+
     public WebRealtimeTicket(@NotNull String value, @NotNull Instant expiresAt) {
         this.value = Objects.requireNonNull(value, "Web Realtime 票据不能为空");
         this.expiresAt = Objects.requireNonNull(expiresAt, "Web Realtime 票据到期时间不能为空");

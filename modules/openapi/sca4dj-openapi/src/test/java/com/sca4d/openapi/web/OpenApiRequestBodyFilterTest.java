@@ -2,9 +2,11 @@ package com.sca4d.openapi.web;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.sca4d.core.api.setting.ConfiguredConstants;
 import jakarta.servlet.ReadListener;
 import jakarta.servlet.ServletInputStream;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -15,6 +17,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /** 验证已知和未知长度的 OpenAPI 请求体都受实际字节上限约束。 */
 class OpenApiRequestBodyFilterTest {
+
+    @BeforeAll
+    static void initializeOpenApiConstants() {
+        ConfiguredConstants.initialize(OpenApiConstants.class, ignored -> null);
+    }
 
     @ParameterizedTest
     @ValueSource(ints = {0, 32, OpenApiCachedBodyHttpServletRequest.MAX_BODY_BYTES})

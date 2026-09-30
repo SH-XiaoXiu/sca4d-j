@@ -66,9 +66,9 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 @AutoConfigureMockMvc
 class OpenApiSpringdocRuntimeTest {
 
-    private final MockMvc mvc;
-
     private final ObjectMapper objectMapper;
+
+    private final MockMvc mvc;
 
     @Autowired
     OpenApiSpringdocRuntimeTest(MockMvc mvc, ObjectMapper objectMapper) {

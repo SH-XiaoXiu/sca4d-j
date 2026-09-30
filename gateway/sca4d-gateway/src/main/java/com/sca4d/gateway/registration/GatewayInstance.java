@@ -16,19 +16,19 @@ import java.util.Set;
 /** 保存一个 Server 实例当前租约、地址、回调声明和 readiness 状态。 */
 public class GatewayInstance {
 
-    private final @NotNull String instanceId;
-
-    private final @NotNull String leaseId;
-
-    private final @NotNull URI baseUrl;
-
-    private final @NotNull String readinessPath;
+    private final @NotNull Map<String, Set<TreeCode>> apiRequirements;
 
     private final @NotNull Set<GatewayCallbackCode> callbackCodes;
 
     private final @NotNull Set<TreeCode> capabilities;
 
-    private final @NotNull Map<String, Set<TreeCode>> apiRequirements;
+    private final @NotNull String instanceId;
+
+    private final @NotNull String leaseId;
+
+    private final @NotNull String readinessPath;
+
+    private final @NotNull URI baseUrl;
 
     private volatile @NotNull Instant leaseExpiresAt;
 
@@ -79,12 +79,20 @@ public class GatewayInstance {
         return callbackCodes;
     }
 
-    /** 返回当前实例实际启用的能力。 */
+    /**
+     * 当前实例实际启用的能力。
+     *
+     * @return 当前实例实际启用的能力
+     */
     public @NotNull @Unmodifiable Set<TreeCode> capabilities() {
         return capabilities;
     }
 
-    /** 返回该代码版本声明的全部路径要求。 */
+    /**
+     * 该代码版本声明的全部路径要求。
+     *
+     * @return 该代码版本声明的全部路径要求
+     */
     public @NotNull @Unmodifiable Map<String, Set<TreeCode>> apiRequirements() {
         return apiRequirements;
     }

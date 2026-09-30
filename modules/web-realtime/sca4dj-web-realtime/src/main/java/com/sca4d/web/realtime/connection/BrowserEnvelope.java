@@ -14,15 +14,14 @@ import java.util.Objects;
 @ApiStatus.Internal
 public class BrowserEnvelope {
 
-    private final @NotNull TreeCode eventCode;
-
-    private final int protocolVersion;
-
     private final @NotNull Instant occurredAt;
 
     private final @NotNull JsonNode payload;
 
-    /** 创建不包含内部目标、业务键和 RabbitMQ 元数据的浏览器信封。 */
+    private final @NotNull TreeCode eventCode;
+
+    private final int protocolVersion;
+
     public BrowserEnvelope(
             @NotNull TreeCode eventCode,
             int protocolVersion,
