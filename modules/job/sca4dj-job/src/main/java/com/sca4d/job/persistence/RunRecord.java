@@ -8,15 +8,15 @@ import org.jetbrains.annotations.Nullable;
 /** 保存 JobExecutor 查询状态和结果需要的根运行列值。 */
 public class RunRecord {
 
-    private final long id;
-
     private final @NotNull JobKey jobKey;
 
-    private final int jobDefinitionVersion;
+    private final @NotNull JobRunStatus status;
 
     private final @Nullable String outputJson;
 
-    private final @NotNull JobRunStatus status;
+    private final int jobDefinitionVersion;
+
+    private final long id;
 
     /**
      * 创建根运行查询结果。
@@ -41,7 +41,7 @@ public class RunRecord {
     }
 
     /**
-     * 返回根运行主键。
+     * 根运行主键。
      *
      * @return 根运行主键
      */
@@ -50,7 +50,7 @@ public class RunRecord {
     }
 
     /**
-     * 返回提交根运行时保存的 Job key。
+     * 提交根运行时保存的 Job key。
      *
      * @return 提交时的 Job key
      */
@@ -59,7 +59,7 @@ public class RunRecord {
     }
 
     /**
-     * 返回提交根运行时保存的 Job 定义版本。
+     * 提交根运行时保存的 Job 定义版本。
      *
      * @return 提交时的 Job 定义版本
      */
@@ -68,7 +68,7 @@ public class RunRecord {
     }
 
     /**
-     * 返回根运行成功后保存的输出 JSON。
+     * 根运行成功后保存的输出 JSON。
      *
      * @return 成功输出 JSON；未成功或 Void 输出时为空
      */
@@ -77,7 +77,7 @@ public class RunRecord {
     }
 
     /**
-     * 返回当前根运行状态。
+     * 当前根运行状态。
      *
      * @return 当前根运行状态
      */

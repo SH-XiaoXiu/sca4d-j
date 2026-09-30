@@ -76,9 +76,9 @@ public class HttpInputValidationAspect {
 
     private final @NotNull Validator validator;
 
-    private final @NotNull TextLocalizer localizer;
-
     private final @NotNull HttpInputValidationProperties properties;
+
+    private final @NotNull TextLocalizer localizer;
 
     /**
      * 创建使用共享 Bean Validation 和 Core 国际化目录的 HTTP 输入校验器。

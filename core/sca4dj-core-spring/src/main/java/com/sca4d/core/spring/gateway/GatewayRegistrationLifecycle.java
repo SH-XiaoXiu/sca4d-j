@@ -6,8 +6,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 import com.sca4d.core.api.gateway.GatewayCallback;
 import com.sca4d.core.api.gateway.GatewayCallbackCode;
-import com.sca4d.core.api.gateway.GatewayHttpHeaders;
-import com.sca4d.core.api.gateway.GatewayHttpPaths;
+import com.sca4d.core.api.gateway.GatewayConstants;
 import com.sca4d.core.api.gateway.GatewayRegistrationRequest;
 import com.sca4d.core.api.gateway.GatewayRegistrationResponse;
 import com.sca4d.core.api.runtime.InstanceCapabilities;
@@ -43,21 +42,21 @@ public class GatewayRegistrationLifecycle {
 
     private final @NotNull RestClient client;
 
-    private final @NotNull String instanceId;
+    private final @NotNull Duration renewInterval;
 
-    private final @NotNull URI serverBaseUrl;
+    private final @NotNull String instanceId;
 
     private final @NotNull String readinessPath;
 
     private final @NotNull String secret;
 
-    private final @NotNull Duration renewInterval;
+    private final @NotNull URI serverBaseUrl;
 
     private final @NotNull URI registrationsUri;
 
-    private final @NotNull Set<GatewayCallbackCode> callbackCodes;
-
     private final @NotNull InstanceCapabilities capabilities;
+
+    private final @NotNull Set<GatewayCallbackCode> callbackCodes;
 
     private final @NotNull ScheduledExecutorService scheduler;
 
@@ -94,7 +93,7 @@ public class GatewayRegistrationLifecycle {
         }
         this.instanceId = instanceProperties.getId();
         this.capabilities = Objects.requireNonNull(capabilities);
-        this.registrationsUri = endpoint(gatewayBaseUrl, GatewayHttpPaths.REGISTRATIONS);
+        this.registrationsUri = endpoint(gatewayBaseUrl, GatewayConstants.REGISTRATION_PATH);
         this.callbackCodes = callbacks.stream()
                 .map(callback -> Objects.requireNonNull(callback, "Gateway 回调不能为空"))
                 .map(GatewayCallback::code)
@@ -128,7 +127,7 @@ public class GatewayRegistrationLifecycle {
             try {
                 client.delete()
                         .uri(leaseUri(currentLeaseId))
-                        .header(GatewayHttpHeaders.SECRET, secret)
+                        .header(GatewayConstants.SECRET_HEADER, secret)
                         .retrieve()
                         .toBodilessEntity();
                 LOGGER.info("Server 实例已向 Gateway 注销 | instanceId={}", instanceId);
@@ -171,6 +170,7 @@ public class GatewayRegistrationLifecycle {
                 instanceId,
                 serverBaseUrl,
                 readinessPath,
+                GatewayConstants.FINGERPRINT,
                 callbackCodes.stream().map(code -> code.format(DOT)).collect(Collectors.toUnmodifiableSet()),
                 capabilities.enabledCodes()
                         .stream()
@@ -188,7 +188,7 @@ public class GatewayRegistrationLifecycle {
                                                 .collect(Collectors.toUnmodifiableSet()))));
         GatewayRegistrationResponse response = client.post()
                 .uri(registrationsUri)
-                .header(GatewayHttpHeaders.SECRET, secret)
+                .header(GatewayConstants.SECRET_HEADER, secret)
                 .contentType(APPLICATION_JSON)
                 .body(registration)
                 .retrieve()
@@ -205,7 +205,7 @@ public class GatewayRegistrationLifecycle {
     private void renew(@NotNull String currentLeaseId) {
         client.put()
                 .uri(leaseUri(currentLeaseId))
-                .header(GatewayHttpHeaders.SECRET, secret)
+                .header(GatewayConstants.SECRET_HEADER, secret)
                 .retrieve()
                 .toBodilessEntity();
         LOGGER.trace("Server 实例已续租 | instanceId={}", instanceId);

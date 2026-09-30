@@ -127,9 +127,9 @@ class CallLifecyclePhasesTest {
     }
 
     private static class AroundHook implements CallLifecycle.Around {
-        private final TreeCode code;
-
         private final List<String> events;
+
+        private final TreeCode code;
 
         private AroundHook(String code, List<String> events) {
             this.code = TreeCode.of(code);
@@ -162,9 +162,9 @@ class CallLifecyclePhasesTest {
     }
 
     private static class BeforeHook implements CallLifecycle.Before {
-        private final TreeCode code;
-
         private final List<String> events;
+
+        private final TreeCode code;
 
         private BeforeHook(String code, List<String> events) {
             this.code = TreeCode.of(code);
@@ -183,9 +183,9 @@ class CallLifecyclePhasesTest {
     }
 
     private static class ReturningHook implements CallLifecycle.AfterReturning {
-        private final TreeCode code;
-
         private final List<String> events;
+
+        private final TreeCode code;
 
         private ReturningHook(String code, List<String> events) {
             this.code = TreeCode.of(code);
@@ -204,9 +204,9 @@ class CallLifecyclePhasesTest {
     }
 
     private static class AfterHook implements CallLifecycle.After {
-        private final TreeCode code;
-
         private final List<String> events;
+
+        private final TreeCode code;
 
         private AfterHook(String code, List<String> events) {
             this.code = TreeCode.of(code);
@@ -225,9 +225,9 @@ class CallLifecyclePhasesTest {
     }
 
     private static class ThrowingHook implements CallLifecycle.AfterThrowing {
-        private final TreeCode code;
-
         private final List<String> events;
+
+        private final TreeCode code;
 
         private ThrowingHook(String code, List<String> events) {
             this.code = TreeCode.of(code);
@@ -246,9 +246,9 @@ class CallLifecyclePhasesTest {
     }
 
     private static class CompletionHook implements CallLifecycle.Completion {
-        private final TreeCode code;
-
         private final List<String> events;
+
+        private final TreeCode code;
 
         private CompletionHook(String code, List<String> events) {
             this.code = TreeCode.of(code);

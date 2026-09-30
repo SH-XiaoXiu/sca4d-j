@@ -17,13 +17,13 @@ import java.util.Objects;
  */
 public class NotificationMessageHandler implements MessageHandler<NotificationMessage> {
 
-    private final @NotNull TreeCode channel;
-
     private final @NotNull HandlingPolicy handlingPolicy;
 
     private final @NotNull NotificationDeliveryRouter deliveries;
 
     private final @NotNull NotificationMessageCodec codec;
+
+    private final @NotNull TreeCode channel;
 
     /**
      * @param delivery 当前 Handler 负责的通知渠道

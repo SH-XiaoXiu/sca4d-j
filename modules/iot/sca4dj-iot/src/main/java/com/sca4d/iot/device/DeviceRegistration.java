@@ -16,23 +16,23 @@ import java.util.Set;
  */
 public class DeviceRegistration {
 
+    private final @Nullable DeviceConnectionBinding connection;
+
     private final @NotNull ProductSelector product;
+
+    private final @NotNull Set<DeviceAccessMethod> accessMethods;
 
     private final @NotNull String code;
 
-    private final @Nullable String serialNumber;
-
     private final @NotNull String displayName;
-
-    private final @Nullable String remark;
-
-    private final int thingModelVersion;
 
     private final @NotNull String protocolCode;
 
-    private final @Nullable DeviceConnectionBinding connection;
+    private final @Nullable String remark;
 
-    private final @NotNull Set<DeviceAccessMethod> accessMethods;
+    private final @Nullable String serialNumber;
+
+    private final int thingModelVersion;
 
     /** 创建完整 Device 登记数据。 */
     @SuppressWarnings("ParameterNumber")

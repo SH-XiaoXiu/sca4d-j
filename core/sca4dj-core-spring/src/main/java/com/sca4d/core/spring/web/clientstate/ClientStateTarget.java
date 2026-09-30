@@ -40,7 +40,7 @@ public class ClientStateTarget {
     }
 
     /**
-     * 返回写入响应头的目标编码。
+     * 写入响应头的目标编码。
      *
      * @return 写入响应头的状态编码
      */

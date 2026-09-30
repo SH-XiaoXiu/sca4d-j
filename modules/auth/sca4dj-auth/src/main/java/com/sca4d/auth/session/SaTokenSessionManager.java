@@ -27,27 +27,27 @@ public class SaTokenSessionManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(SaTokenSessionManager.class);
 
-    static final String SESSION_ATTRIBUTE = "sca4dj.session";
-
     static final String INVALIDATION_GENERATION_ATTRIBUTE = "sca4dj.session.invalidation-generation";
 
     static final String LOADED_GENERATION_ATTRIBUTE = "sca4dj.session.loaded-generation";
 
     static final String OPERATION_CATALOG_FINGERPRINT_ATTRIBUTE = "sca4dj.session.operation-catalog-fingerprint";
 
-    private final SessionCodec codec;
+    static final String SESSION_ATTRIBUTE = "sca4dj.session";
 
     private final SessionRefreshService refresh;
 
-    private final RedisSessionGeneration generations;
+    private final Clock clock;
 
-    private final @NotNull String operationCatalogFingerprint;
+    private final RedisSessionGeneration generations;
 
     private final RedisSessionTokenIndex tokenIndex;
 
+    private final SessionCodec codec;
+
     private final StpLogic stpLogic;
 
-    private final Clock clock;
+    private final @NotNull String operationCatalogFingerprint;
 
     /**
      * 创建 Sa-Token Session 管理器。

@@ -16,11 +16,11 @@ import java.util.Base64;
 
 class SettingSecretCodecTest {
 
+    private static final String KEY = "auth.key";
+
     private static final SettingOwner OWNER = new SettingOwner(
             TreeCode.of("IAM/ACCOUNT"),
             "123");
-
-    private static final String KEY = "auth.key";
 
     @Test
     @DisplayName("V1 保持旧 Setting key 加密上下文")

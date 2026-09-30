@@ -16,7 +16,6 @@ public class EmailNotificationProperties {
 
     private long maxAttachmentBytes = 20L * 1024 * 1024;
 
-    /** 创建默认 SMTP 超时配置。 */
     public EmailNotificationProperties() {
     }
 

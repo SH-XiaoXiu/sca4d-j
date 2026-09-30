@@ -34,17 +34,17 @@ public class FederatedAuthenticationMethod implements AuthenticationMethod<Feder
 
     private static final Set<AuthenticationFactorKind> FACTORS = Set.of(AuthenticationFactorKind.POSSESSION);
 
-    private final FederatedAuthorizationStore authorizations;
+    private final FederatedIdentityService identityBindings;
 
     private final FederatedProviderService providers;
-
-    private final FederatedAccountResolver accounts;
-
-    private final FederatedIdentityService identityBindings;
 
     private final FederatedIdentityRepository identityRepository;
 
     private final Clock clock;
+
+    private final FederatedAccountResolver accounts;
+
+    private final FederatedAuthorizationStore authorizations;
 
     /**
      * 创建联邦认证方法。

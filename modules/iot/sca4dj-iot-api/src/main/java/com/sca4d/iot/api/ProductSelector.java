@@ -8,9 +8,9 @@ import org.jetbrains.annotations.Nullable;
 /** 表示创建 Device 时对数据库 Product 标识或代码 Product code 的选择。 */
 public class ProductSelector {
 
-    private final @NotNull ProductSource source;
-
     private final @Nullable Long databaseProductId;
+
+    private final @NotNull ProductSource source;
 
     private final @Nullable String codeProductCode;
 

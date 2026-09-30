@@ -30,9 +30,9 @@ public class SmtpEmailGateway implements EmailGateway {
 
     private static final Logger LOG = LoggerFactory.getLogger(SmtpEmailGateway.class);
 
-    private final @NotNull SecretKeyring keyring;
-
     private final @NotNull EmailNotificationProperties properties;
+
+    private final @NotNull SecretKeyring keyring;
 
     /** @param keyring 解密 SMTP 密码的密钥环 @param properties SMTP 超时配置 */
     public SmtpEmailGateway(

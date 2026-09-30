@@ -55,9 +55,9 @@ public class RedisIdempotencyStore implements IdempotencyStore {
             "redis/idempotency/renew.lua",
             Long.class);
 
-    private final RedisTemplate<Key, String> redis;
-
     private final ObjectMapper objectMapper;
+
+    private final RedisTemplate<Key, String> redis;
 
     /**
      * 创建使用脚手架 Redis 模板和内部稳定 JSON 契约的幂等存储。

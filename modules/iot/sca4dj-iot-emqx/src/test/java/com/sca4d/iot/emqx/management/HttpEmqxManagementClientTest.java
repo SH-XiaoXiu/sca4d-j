@@ -31,11 +31,11 @@ import java.util.concurrent.atomic.AtomicReference;
 /** 使用本地 HTTP 服务验证 EMQX Management API 的路径、认证和二进制发布契约。 */
 class HttpEmqxManagementClientTest {
 
-    private static final ObjectMapper JSON = new ObjectMapper();
-
     private static final String API_KEY = "test-api-key";
 
     private static final String API_SECRET = "test-api-secret";
+
+    private static final ObjectMapper JSON = new ObjectMapper();
 
     private final AtomicReference<String> authorization = new AtomicReference<>();
 

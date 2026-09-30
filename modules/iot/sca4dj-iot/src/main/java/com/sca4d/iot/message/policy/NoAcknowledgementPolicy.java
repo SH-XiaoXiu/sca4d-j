@@ -14,7 +14,6 @@ public class NoAcknowledgementPolicy implements AcknowledgementPolicy {
 
     public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/ACK/NONE");
 
-    /** 创建无业务 ACK 策略。 */
     public NoAcknowledgementPolicy() {
     }
 

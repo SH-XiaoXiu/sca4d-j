@@ -15,7 +15,11 @@ public class PasskeyCeremonyId {
         this.value = TextUtils.requireText(value, "Passkey ceremony 标识");
     }
 
-    /** 返回调用方需要原样回传的值。 */
+    /**
+     * 调用方需要原样回传的值。
+     *
+     * @return 调用方需要原样回传的值
+     */
     public String value() {
         return value;
     }

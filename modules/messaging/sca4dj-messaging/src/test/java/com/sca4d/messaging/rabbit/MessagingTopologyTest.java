@@ -95,11 +95,11 @@ class RabbitMessageTopologyTest {
 
     /** 测试使用的稳定 EventHandler 契约。 */
     private static class TestHandler implements EventHandler<String> {
-        private final TreeCode code;
+        private final HandlingPolicy policy;
 
         private final EventType<String> eventType;
 
-        private final HandlingPolicy policy;
+        private final TreeCode code;
 
         private TestHandler(String code, String eventCode, HandlingPolicy policy) {
             this.code = TreeCode.of(code);

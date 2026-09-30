@@ -45,9 +45,9 @@ public class DeviceAcknowledgementService {
 
     private final @NotNull DeviceDeliveryScheduler downlinkMessages;
 
-    private final @NotNull MessageBus messages;
-
     private final @NotNull DistributedLock distributedLock;
+
+    private final @NotNull MessageBus messages;
 
     private final @NotNull TransactionTemplate transactions;
 

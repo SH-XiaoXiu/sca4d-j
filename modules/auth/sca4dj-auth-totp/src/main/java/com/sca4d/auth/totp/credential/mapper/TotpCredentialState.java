@@ -13,11 +13,11 @@ public class TotpCredentialState {
 
     private final String secretKeyId;
 
+    private final Version version;
+
     private final byte[] secretCiphertext;
 
     private final long lastAcceptedStep;
-
-    private final Version version;
 
     /**
      * 创建 TOTP 凭据的持久化状态。
@@ -42,7 +42,7 @@ public class TotpCredentialState {
     }
 
     /**
-     * 返回 Account 标识。
+     * Account 标识。
      *
      * @return Account 标识
      */
@@ -51,7 +51,7 @@ public class TotpCredentialState {
     }
 
     /**
-     * 返回加密密钥标识。
+     * 加密密钥标识。
      *
      * @return Secret key-id
      */
@@ -69,7 +69,7 @@ public class TotpCredentialState {
     }
 
     /**
-     * 返回已接受的 TOTP 时间步下限。
+     * 已接受的 TOTP 时间步下限。
      *
      * @return 最近一次接受的 TOTP 时间步
      */
@@ -78,7 +78,7 @@ public class TotpCredentialState {
     }
 
     /**
-     * 返回凭据版本。
+     * 凭据版本。
      *
      * @return 凭据版本
      */

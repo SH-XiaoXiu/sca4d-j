@@ -17,7 +17,7 @@ public class FlowId {
     }
 
     /**
-     * 返回原始标识。
+     * 原始标识。
      *
      * @return 原始标识
      */

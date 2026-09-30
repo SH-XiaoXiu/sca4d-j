@@ -14,11 +14,11 @@ public class IncomingMessage<M extends Message> {
 
     private final @NotNull Id messageId;
 
+    private final @NotNull Instant publishedAt;
+
     private final @NotNull M message;
 
     private final @NotNull Name sourceApplication;
-
-    private final @NotNull Instant publishedAt;
 
     private final boolean redelivered;
 

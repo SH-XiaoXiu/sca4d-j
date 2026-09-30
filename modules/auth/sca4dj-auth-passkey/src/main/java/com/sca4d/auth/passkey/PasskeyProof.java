@@ -24,12 +24,20 @@ public class PasskeyProof {
         this.responseJson = TextUtils.requireText(responseJson, "Passkey assertion 响应");
     }
 
-    /** 返回 assertion ceremony 标识。 */
+    /**
+     * assertion ceremony 标识。
+     *
+     * @return assertion ceremony 标识
+     */
     public @NotNull PasskeyCeremonyId ceremonyId() {
         return ceremonyId;
     }
 
-    /** 返回浏览器提供且不得持久化或记录的 WebAuthn assertion JSON。 */
+    /**
+     * 浏览器提供且不得持久化或记录的 WebAuthn assertion JSON。
+     *
+     * @return 浏览器提供且不得持久化或记录的 WebAuthn assertion JSON
+     */
     public @NotNull String responseJson() {
         return responseJson;
     }

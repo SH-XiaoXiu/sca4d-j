@@ -19,7 +19,6 @@ public class ApiResponseAdvice implements ResponseBodyAdvice<Object> {
 
     private final ResponseETagResolver etags = new ResponseETagResolver();
 
-    /** 创建 `ApiResponse` HTTP 元数据写出组件。 */
     public ApiResponseAdvice() {
     }
 

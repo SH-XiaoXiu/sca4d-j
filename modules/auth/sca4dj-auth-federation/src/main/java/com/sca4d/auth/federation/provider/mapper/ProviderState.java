@@ -13,27 +13,27 @@ import java.util.Objects;
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public class ProviderState {
 
-    private final long id;
-
-    private final @NotNull String code;
-
     private final @NotNull FederatedProviderProtocol protocol;
 
     private final @NotNull FederatedProviderStatus status;
 
-    private final boolean loginPageVisible;
-
-    private final int displayOrder;
-
     private final @NotNull FederatedUnlinkedIdentityAction unlinkedIdentityAction;
 
-    private final boolean autoLinkVerifiedEmail;
+    private final @NotNull String code;
 
     private final @NotNull String i18n;
 
     private final @Nullable String iconReference;
 
     private final @NotNull Version version;
+
+    private final boolean autoLinkVerifiedEmail;
+
+    private final boolean loginPageVisible;
+
+    private final int displayOrder;
+
+    private final long id;
 
     /** 创建 Provider 持久化状态。 */
     public ProviderState(

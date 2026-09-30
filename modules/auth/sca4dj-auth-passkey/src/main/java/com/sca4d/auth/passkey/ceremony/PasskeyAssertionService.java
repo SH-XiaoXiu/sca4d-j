@@ -35,13 +35,13 @@ public class PasskeyAssertionService {
 
     private static final int BACKED_UP_FLAG = 0x10;
 
-    private final RelyingParty relyingParty;
-
-    private final PasskeyCeremonyStore ceremonies;
-
     private final PasskeyCredentialRepository credentials;
 
     private final Clock clock;
+
+    private final PasskeyCeremonyStore ceremonies;
+
+    private final RelyingParty relyingParty;
 
     /**
      * 创建 Passkey assertion 服务。

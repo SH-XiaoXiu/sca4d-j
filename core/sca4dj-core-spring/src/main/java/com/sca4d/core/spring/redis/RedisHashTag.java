@@ -10,12 +10,15 @@ public class RedisHashTag {
 
     private final @NotNull TreeCode root;
 
-    /** 创建同槽 key 的根编码。 */
     public RedisHashTag(@NotNull TreeCode root) {
         this.root = Objects.requireNonNull(root, "同槽根编码不能为空");
     }
 
-    /** 返回需要共享 Cluster hash tag 的编码根。 */
+    /**
+     * 需要共享 Cluster hash tag 的编码根。
+     *
+     * @return 需要共享 Cluster hash tag 的编码根
+     */
     public @NotNull TreeCode root() {
         return root;
     }

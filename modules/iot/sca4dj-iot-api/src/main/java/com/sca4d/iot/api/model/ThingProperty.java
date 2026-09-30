@@ -13,15 +13,15 @@ import java.util.Optional;
 /** 定义一个稳定 code 的设备属性及其 desired 策略。 */
 public class ThingProperty {
 
-    private final @NotNull String code;
-
-    private final @NotNull ThingValueType valueType;
-
-    private final @NotNull ThingPropertyAccess access;
-
     private final @Nullable AcknowledgementPolicy acknowledgementPolicy;
 
     private final @Nullable RetryPolicy retryPolicy;
+
+    private final @NotNull String code;
+
+    private final @NotNull ThingPropertyAccess access;
+
+    private final @NotNull ThingValueType valueType;
 
     private final boolean telemetry;
 

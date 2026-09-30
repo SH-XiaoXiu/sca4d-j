@@ -19,7 +19,7 @@ public class FieldViolation {
     }
 
     /**
-     * 返回输入字段名称。
+     * 输入字段名称。
      *
      * @return 输入字段名称
      */
@@ -28,7 +28,7 @@ public class FieldViolation {
     }
 
     /**
-     * 返回当前语言的拒绝原因。
+     * 当前语言的拒绝原因。
      *
      * @return 当前语言的拒绝原因
      */

@@ -11,13 +11,13 @@ import java.util.Objects;
 /** 保存 EMQX Management API 返回的一条当前 MQTT Client Connection。 */
 public class EmqxClientConnection {
 
-    private final @NotNull String clientId;
-
-    private final @NotNull String brokerNode;
-
     private final @NotNull Instant connectedAt;
 
     private final @NotNull Map<String, String> clientAttributes;
+
+    private final @NotNull String brokerNode;
+
+    private final @NotNull String clientId;
 
     /** 创建用于连接对账的 Broker 当前连接信息。 */
     public EmqxClientConnection(

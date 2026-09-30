@@ -31,7 +31,7 @@ public class ValidationResult {
     }
 
     /**
-     * 返回不可变校验问题集合。
+     * 不可变校验问题集合。
      *
      * @return 不可变校验问题集合
      */

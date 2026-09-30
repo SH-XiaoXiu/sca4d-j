@@ -25,17 +25,17 @@ import javax.sql.DataSource;
 /** 使用公共 MyBatis 配置为一个明确的数据源创建资源隔离的附加 `SqlSessionFactory`，不负责运行时数据源路由。 */
 public class AdditionalMyBatisSessionFactoryBuilder {
 
+    private final @Nullable DatabaseIdProvider databaseIdProvider;
+
     private final @NotNull MybatisProperties properties;
+
+    private final @NotNull List<@NotNull ConfigurationCustomizer> configurationCustomizers;
 
     private final @NotNull List<@NotNull Interceptor> interceptors;
 
-    private final @NotNull List<@NotNull TypeHandler<?>> typeHandlers;
-
     private final @NotNull List<@NotNull LanguageDriver> languageDrivers;
 
-    private final @Nullable DatabaseIdProvider databaseIdProvider;
-
-    private final @NotNull List<@NotNull ConfigurationCustomizer> configurationCustomizers;
+    private final @NotNull List<@NotNull TypeHandler<?>> typeHandlers;
 
     /**
      * 保存默认会话工厂与附加会话工厂可以共享的 MyBatis 配置组成。

@@ -13,20 +13,20 @@ import java.util.Objects;
 public class Account implements Resource {
 
     /**
-     * Account 使用的稳定 Resource 类型。
-     */
-    public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofSlash("IAM/ACCOUNT");
-
-    /**
      * 供 Java 注解参数使用的资源类型文本。
      */
     public static final @NotNull String RESOURCE_TYPE_VALUE = "IAM/ACCOUNT";
 
+    /**
+     * Account 使用的稳定 Resource 类型。
+     */
+    public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofSlash("IAM/ACCOUNT");
+
+    private final @NotNull RealmKey realmKey;
+
     private final long id;
 
     private final long subjectId;
-
-    private final @NotNull RealmKey realmKey;
 
     /**
      * 创建认证域内的登录账号。
@@ -48,7 +48,7 @@ public class Account implements Resource {
     }
 
     /**
-     * 读取登录账号的标识。
+     * 登录账号标识。
      *
      * @return Account 标识
      */
@@ -76,7 +76,7 @@ public class Account implements Resource {
     }
 
     /**
-     * 读取拥有当前登录账号的接入者标识。
+     * 登录账号所属的 Subject 标识。
      *
      * @return 所属 Subject 标识
      */
@@ -86,7 +86,7 @@ public class Account implements Resource {
     }
 
     /**
-     * 读取认证和账号查询必须使用的域。
+     * 认证和账号查询使用的域。
      *
      * @return 账号创建后保持不变的认证域
      */

@@ -43,9 +43,9 @@ class TotpEnrollmentServiceTest {
 
     private static final long ACCOUNT_ID = 10L;
 
-    private static final Instant NOW = Instant.parse("2026-07-26T06:00:00Z");
-
     private static final String SECRET = "JBSWY3DPEHPK3PXP";
+
+    private static final Instant NOW = Instant.parse("2026-07-26T06:00:00Z");
 
     @Test
     @DisplayName("创建加密 enrollment 并返回临时配置 URI")
@@ -215,15 +215,15 @@ class TotpEnrollmentServiceTest {
     private static class Fixture {
         private final TotpEnrollmentService service;
 
-        private final RedisTotpEnrollmentStore enrollments;
-
         private final TotpCredentialRepository credentials;
 
-        private final TotpCodeVerifier verifier;
+        private final RedisTotpEnrollmentStore enrollments;
+
+        private final SecretKeyring keyring;
 
         private final SessionControl sessions;
 
-        private final SecretKeyring keyring;
+        private final TotpCodeVerifier verifier;
 
         private Fixture(
                 TotpEnrollmentService service,

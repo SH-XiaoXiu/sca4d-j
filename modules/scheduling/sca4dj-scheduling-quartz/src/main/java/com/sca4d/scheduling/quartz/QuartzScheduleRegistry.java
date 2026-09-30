@@ -13,7 +13,6 @@ public class QuartzScheduleRegistry {
 
     private final AtomicReference<Map<ScheduleKey, JobSchedule<?, ?>>> schedules = new AtomicReference<>(Map.of());
 
-    /** 创建尚未包含代码计划的进程内目录。 */
     public QuartzScheduleRegistry() {
     }
 

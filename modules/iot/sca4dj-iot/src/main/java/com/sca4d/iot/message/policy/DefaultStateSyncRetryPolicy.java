@@ -20,7 +20,6 @@ public class DefaultStateSyncRetryPolicy implements RetryPolicy {
             Duration.ofSeconds(1), Duration.ofSeconds(5), Duration.ofSeconds(30), Duration.ofMinutes(2)
     };
 
-    /** 创建默认 desired 状态同步重试策略。 */
     public DefaultStateSyncRetryPolicy() {
     }
 

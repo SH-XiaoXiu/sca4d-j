@@ -22,12 +22,11 @@ public class FileProperties {
 
     private @NotNull Duration deleteRetryDelay = Duration.ofMinutes(10);
 
-    /** 创建使用本地开发默认值的文件配置。 */
     public FileProperties() {
     }
 
     /**
-     * 返回新文件使用的默认存储实现标识。
+     * 新文件使用的默认存储实现标识。
      * @return 默认存储实现标识
      */
     public @NotNull String getDefaultBackend() {
@@ -48,7 +47,7 @@ public class FileProperties {
     }
 
     /**
-     * 返回 App 文件传输路由的公开根地址。
+     * App 文件传输路由的公开根地址。
      * @return 绝对公开根地址
      */
     public @NotNull URI getTransferBaseUrl() {
@@ -73,7 +72,7 @@ public class FileProperties {
     }
 
     /**
-     * 返回文件清理任务固定延迟。
+     * 文件清理任务固定延迟。
      * @return 正数清理间隔
      */
     public @NotNull Duration getCleanupInterval() {
@@ -89,7 +88,7 @@ public class FileProperties {
     }
 
     /**
-     * 返回文件删除租约时间。
+     * 文件删除租约时间。
      * @return 正数租约时间
      */
     public @NotNull Duration getDeleteLease() {
@@ -105,7 +104,7 @@ public class FileProperties {
     }
 
     /**
-     * 返回删除失败后的重试间隔。
+     * 删除失败后的重试间隔。
      * @return 正数重试间隔
      */
     public @NotNull Duration getDeleteRetryDelay() {

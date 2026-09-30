@@ -19,15 +19,15 @@ public class MqttUplinkDefinition {
 
     private final @NotNull MqttUplinkKind kind;
 
-    private final @Nullable Pipeline<byte[], DataValues> reportedPipeline;
+    private final @NotNull List<DataKey<?>> keys;
 
     private final @Nullable Pipeline<byte[], DecodedMqttAcknowledgement> acknowledgementPipeline;
 
-    private final @Nullable String groupCode;
+    private final @Nullable Pipeline<byte[], DataValues> reportedPipeline;
 
     private final @Nullable ReportedMergeMode mergeMode;
 
-    private final @NotNull List<DataKey<?>> keys;
+    private final @Nullable String groupCode;
 
     /** 创建 reported state 上行定义。 */
     MqttUplinkDefinition(
@@ -54,7 +54,7 @@ public class MqttUplinkDefinition {
     }
 
     /**
-     * 返回当前上行消息产生的业务结果类型。
+     * 当前上行消息产生的业务结果类型。
      *
      * @return reported state 或业务 ACK
      */
@@ -63,7 +63,7 @@ public class MqttUplinkDefinition {
     }
 
     /**
-     * 返回 reported 转换结果中允许写入的字段。
+     * reported 转换结果中允许写入的字段。
      *
      * @return 业务 ACK 返回空列表
      */

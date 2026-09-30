@@ -22,7 +22,6 @@ public class StandardDeviceUplinkDispatcher implements DeviceUplinkDispatcher {
 
     private final @NotNull DeviceUplinkReceiver receiver;
 
-    /** 创建不依赖具体传输方式的 Device 上行分发器。 */
     public StandardDeviceUplinkDispatcher(
             @NotNull DeviceProtocolCatalog protocols,
             @NotNull DeviceUplinkReceiver receiver) {

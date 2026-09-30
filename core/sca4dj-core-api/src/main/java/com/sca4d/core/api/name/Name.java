@@ -56,7 +56,11 @@ public class Name implements AppIsolation<Name> {
         return Objects.hash(getClass(), value);
     }
 
-    /** 返回名称原文供日志定位；实际协议边界显式使用 format。 */
+    /**
+     * 名称原文供日志定位；实际协议边界显式使用 format。
+     *
+     * @return 名称原文供日志定位；实际协议边界显式使用 format
+     */
     @Override
     public @NotNull String toString() {
         return value;

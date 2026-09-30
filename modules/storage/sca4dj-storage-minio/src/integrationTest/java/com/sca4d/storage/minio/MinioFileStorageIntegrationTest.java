@@ -33,9 +33,9 @@ class MinioFileStorageIntegrationTest extends FileStorageContract {
 
     private static final String ACCESS_KEY = "sca4dj-test";
 
-    private static final String SECRET_KEY = "sca4dj-test-secret";
-
     private static final String BUCKET = "sca4dj-files";
+
+    private static final String SECRET_KEY = "sca4dj-test-secret";
 
     private static final Network NETWORK = Network.newNetwork();
 

@@ -14,21 +14,21 @@ public class EmailCodeChallengeState {
 
     private final @NotNull EmailCodeChallengeId challengeId;
 
-    private final long accountId;
-
-    private final @NotNull String codeHash;
-
-    private final @NotNull String maskedRecipient;
+    private final @NotNull EmailCodeChallengeStatus status;
 
     private final @NotNull Instant expiresAt;
 
     private final @NotNull Instant resendAt;
 
-    private final int attemptCount;
+    private final @NotNull String codeHash;
 
-    private final @NotNull EmailCodeChallengeStatus status;
+    private final @NotNull String maskedRecipient;
 
     private final @NotNull Version version;
+
+    private final int attemptCount;
+
+    private final long accountId;
 
     /**
      * @param challengeId Challenge 标识

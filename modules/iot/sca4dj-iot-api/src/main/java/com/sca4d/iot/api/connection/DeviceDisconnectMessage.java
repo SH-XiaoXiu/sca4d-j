@@ -12,11 +12,9 @@ import java.util.Objects;
 /** 请求一种设备接入实现终止一个明确连接代次。 */
 public class DeviceDisconnectMessage extends Message {
 
-    public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DEVICE/DISCONNECT");
-
     public static final int PROTOCOL_VERSION = 1;
 
-    private final long deviceId;
+    public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DEVICE/DISCONNECT");
 
     private final @NotNull DeviceConnectionId connectionId;
 
@@ -25,6 +23,8 @@ public class DeviceDisconnectMessage extends Message {
     private final @NotNull String reason;
 
     private final int attempt;
+
+    private final long deviceId;
 
     /** 创建可由通用 Messaging 可靠传递的断连请求。 */
     @JsonCreator

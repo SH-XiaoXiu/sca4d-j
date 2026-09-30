@@ -14,7 +14,6 @@ public class ReportedEqualsDesiredAcknowledgementPolicy implements Acknowledgeme
 
     public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/ACK/REPORTED/EQUALS/DESIRED");
 
-    /** 创建等待 reported 收敛的 ACK 策略。 */
     public ReportedEqualsDesiredAcknowledgementPolicy() {
     }
 

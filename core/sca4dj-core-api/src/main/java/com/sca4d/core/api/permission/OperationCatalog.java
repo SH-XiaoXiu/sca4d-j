@@ -112,7 +112,7 @@ public class OperationCatalog {
     }
 
     /**
-     * 返回具体 Operation 编码集合的稳定指纹。
+     * 具体 Operation 编码集合的稳定指纹。
      *
      * <p>显示名称、翻译键、排序值和模块登记顺序不参与计算；新增、删除或修改具体 Operation 编码会改变结果。
      *

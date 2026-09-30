@@ -6,11 +6,11 @@ import java.util.Objects;
 
 /** 保存 Email 模板的主题、纯文本正文和 HTML 正文源码。 */
 public class EmailTemplateSource {
+    private final @NotNull String html;
+
     private final @NotNull String subject;
 
     private final @NotNull String text;
-
-    private final @NotNull String html;
 
     /**
      * @param subject 邮件主题模板

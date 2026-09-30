@@ -18,7 +18,6 @@ public class DynamicDictionary {
 
     private final long version;
 
-    /** 创建动态字典配置。 */
     public DynamicDictionary(
             @NotNull String key,
             @NotNull String label,

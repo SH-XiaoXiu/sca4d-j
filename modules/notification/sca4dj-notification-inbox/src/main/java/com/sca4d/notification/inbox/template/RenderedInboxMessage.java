@@ -14,7 +14,6 @@ public class RenderedInboxMessage {
 
     private final @NotNull String html;
 
-    /** 创建已经完成变量替换与 HTML 转义的渲染结果。 */
     public RenderedInboxMessage(@NotNull String title, @NotNull String text, @NotNull String html) {
         this.title = Objects.requireNonNull(title, "站内信标题不能为空");
         this.text = Objects.requireNonNull(text, "站内信纯文本正文不能为空");

@@ -23,15 +23,15 @@ import java.util.function.Function;
  */
 public class DataOperation<T> {
 
-    private final String name;
-
-    private final List<DataKey<?>> inputs;
+    private final BiFunction<DataValues, Executor, CompletionStage<T>> asyncAction;
 
     private final DataKey<T> output;
 
     private final Function<DataValues, T> action;
 
-    private final BiFunction<DataValues, Executor, CompletionStage<T>> asyncAction;
+    private final List<DataKey<?>> inputs;
+
+    private final String name;
 
     /**
      * 创建数据操作。
@@ -103,7 +103,7 @@ public class DataOperation<T> {
     }
 
     /**
-     * 读取诊断和执行结果使用的节点名称。
+     * 诊断和执行结果使用的节点名称。
      *
      * @return DataGraph 内唯一节点名称
      */
@@ -112,7 +112,7 @@ public class DataOperation<T> {
     }
 
     /**
-     * 读取执行该节点前必须已经存在的输入键。
+     * 执行该节点前必须已经存在的输入键。
      *
      * @return 保持声明顺序的不可变输入键列表
      */
@@ -121,7 +121,7 @@ public class DataOperation<T> {
     }
 
     /**
-     * 读取该节点计算完成后写入的键。
+     * 该节点计算完成后写入的键。
      *
      * @return 节点唯一输出键
      */

@@ -9,29 +9,29 @@ import java.util.Objects;
 /** 保存 OIDC 或 OAuth2 Provider 的协议端点、作用域和资料映射。 */
 public class FederatedProviderConfiguration {
 
+    private final FederatedClientAuthentication clientAuthentication;
+
     private final FederatedProviderProtocol protocol;
 
-    private final String issuer;
+    private final List<String> scopes;
+
+    private final Map<String, String> authorizationParameters;
+
+    private final Map<String, String> profileMapping;
+
+    private final String authorizationEndpoint;
 
     private final String clientId;
 
     private final String clientSecret;
 
-    private final String authorizationEndpoint;
+    private final String issuer;
+
+    private final String jwksEndpoint;
 
     private final String tokenEndpoint;
 
     private final String userInfoEndpoint;
-
-    private final String jwksEndpoint;
-
-    private final FederatedClientAuthentication clientAuthentication;
-
-    private final List<String> scopes;
-
-    private final Map<String, String> profileMapping;
-
-    private final Map<String, String> authorizationParameters;
 
     private boolean clientSecretConfigured;
 

@@ -9,19 +9,18 @@ import java.time.Instant;
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public class EncodedDesiredProperty {
 
-    private final long deviceId;
-
-    private final long bindingGeneration;
+    private final @Nullable Instant convergedAt;
 
     private final @NotNull String propertyCode;
 
-    private final long desiredSequence;
-
     private final @NotNull String valueJson;
 
-    private final @Nullable Instant convergedAt;
+    private final long bindingGeneration;
 
-    /** 创建已经完成 JSON 编码的 desired property。 */
+    private final long desiredSequence;
+
+    private final long deviceId;
+
     public EncodedDesiredProperty(
             long deviceId,
             long bindingGeneration,

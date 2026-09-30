@@ -54,21 +54,21 @@ public class PasskeyRegistrationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(PasskeyRegistrationService.class);
 
-    private static final int BACKUP_ELIGIBLE_FLAG = 0x08;
-
     private static final int BACKED_UP_FLAG = 0x10;
+
+    private static final int BACKUP_ELIGIBLE_FLAG = 0x08;
 
     private static final int USER_HANDLE_BYTES = 32;
 
-    private final RelyingParty relyingParty;
+    private final PasskeyCredentialRepository credentials;
+
+    private final Clock clock;
 
     private final PasskeyCeremonyStore ceremonies;
 
-    private final PasskeyCredentialRepository credentials;
-
     private final PasskeySettings settings;
 
-    private final Clock clock;
+    private final RelyingParty relyingParty;
 
     private final SecureRandom secureRandom;
 

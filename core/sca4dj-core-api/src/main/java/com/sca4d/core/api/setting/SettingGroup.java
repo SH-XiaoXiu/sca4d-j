@@ -8,9 +8,9 @@ import org.jetbrains.annotations.NotNull;
 /** 标识管理端中一起展示的一组设置。 */
 public class SettingGroup {
 
-    private final TreeCode code;
-
     private final String labelKey;
+
+    private final TreeCode code;
 
     private final int sortOrder;
 

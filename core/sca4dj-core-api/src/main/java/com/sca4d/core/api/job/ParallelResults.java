@@ -31,7 +31,7 @@ public class ParallelResults<L, R> {
     }
 
     /**
-     * 返回左分支结果。
+     * 左分支结果。
      *
      * @return {@code parallel(...)} 中先声明的分支输出
      */
@@ -41,7 +41,7 @@ public class ParallelResults<L, R> {
     }
 
     /**
-     * 返回右分支结果。
+     * 右分支结果。
      *
      * @return {@code parallel(...)} 中后声明的分支输出
      */

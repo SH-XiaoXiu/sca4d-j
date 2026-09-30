@@ -16,11 +16,11 @@ public class Connection {
 
     private final @NotNull ConnectionProtocol protocol;
 
-    private final @Nullable SessionId sessionId;
-
     private final @NotNull Instant connectedAt;
 
     private final @NotNull Instant lastActivityAt;
+
+    private final @Nullable SessionId sessionId;
 
     private final @NotNull String nodeId;
 
@@ -44,7 +44,7 @@ public class Connection {
     }
 
     /**
-     * 返回当前连接的代次标识。
+     * 当前连接的代次标识。
      *
      * @return 不透明连接标识；不同连接代次不能复用同一个值
      */

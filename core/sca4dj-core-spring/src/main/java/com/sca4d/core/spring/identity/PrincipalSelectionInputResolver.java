@@ -23,7 +23,6 @@ public class PrincipalSelectionInputResolver {
 
     private final ParameterNameDiscoverer parameterNames = new DefaultParameterNameDiscoverer();
 
-    /** 创建使用 Java 方法参数名的选择输入解析器。 */
     public PrincipalSelectionInputResolver() {
     }
 

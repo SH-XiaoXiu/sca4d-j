@@ -11,17 +11,17 @@ import java.util.Objects;
 /** 请求 Web Realtime 把一个浏览器事件交给当前匹配目标的在线连接。 */
 public class WebRealtimeMessage extends Message {
 
-    public static final @NotNull TreeCode CODE = TreeCode.of("WEB_REALTIME/PUBLISH");
-
     public static final int PROTOCOL_VERSION = 1;
 
-    private final @NotNull WebRealtimeTarget target;
+    public static final @NotNull TreeCode CODE = TreeCode.of("WEB_REALTIME/PUBLISH");
 
     private final @NotNull Event<?> browserEvent;
 
-    private final boolean closeAfter;
-
     private final @NotNull Instant expiresAt;
+
+    private final @NotNull WebRealtimeTarget target;
+
+    private final boolean closeAfter;
 
     /** 创建交给实时消息处理器的浏览器事件投递请求。 */
     public WebRealtimeMessage(

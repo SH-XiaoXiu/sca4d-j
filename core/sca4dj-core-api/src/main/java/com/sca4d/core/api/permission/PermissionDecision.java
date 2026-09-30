@@ -18,11 +18,11 @@ public class PermissionDecision {
 
     private static final PermissionDecision ALLOWED = new PermissionDecision(true, null, null);
 
-    private final boolean allowed;
+    private final @Nullable ResourceScope scope;
 
     private final @Nullable String reason;
 
-    private final @Nullable ResourceScope scope;
+    private final boolean allowed;
 
     private PermissionDecision(boolean allowed, @Nullable String reason, @Nullable ResourceScope scope) {
         this.allowed = allowed;
@@ -31,7 +31,7 @@ public class PermissionDecision {
     }
 
     /**
-     * 返回允许执行的权限判定。
+     * 允许执行的权限判定。
      *
      * @return 允许执行的权限判定
      */
@@ -69,7 +69,7 @@ public class PermissionDecision {
     }
 
     /**
-     * 返回允许执行时返回 {@code true}。
+     * 是否允许执行。
      *
      * @return 允许执行时返回 {@code true}
      */

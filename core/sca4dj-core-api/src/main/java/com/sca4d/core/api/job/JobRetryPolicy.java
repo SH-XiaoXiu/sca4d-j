@@ -46,7 +46,7 @@ public class JobRetryPolicy {
     }
 
     /**
-     * 返回最大尝试次数。
+     * 最大尝试次数。
      *
      * @return 包含首次执行的总尝试次数
      */
@@ -56,7 +56,7 @@ public class JobRetryPolicy {
     }
 
     /**
-     * 返回失败后的固定等待间隔。
+     * 失败后的固定等待间隔。
      *
      * @return 两次尝试之间的非负间隔
      */

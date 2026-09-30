@@ -50,7 +50,7 @@ public class LongIdSet {
     }
 
     /**
-     * 返回集合中的标识数量。
+     * 集合中的标识数量。
      *
      * @return 标识数量
      */

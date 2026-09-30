@@ -34,7 +34,6 @@ public class AuditPayloadJson {
 
     private final @NotNull AuditProperties properties;
 
-    /** 创建使用脚手架 JSON 契约的 payload 处理器。 */
     public AuditPayloadJson(
             @NotNull ObjectMapper objectMapper,
             @NotNull AuditPayloadRegistry registry,

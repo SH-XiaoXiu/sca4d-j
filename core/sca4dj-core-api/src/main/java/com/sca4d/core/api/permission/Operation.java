@@ -16,14 +16,14 @@ import java.util.Objects;
 public class Operation implements Resource {
 
     /**
-     * 操作资源使用的资源类型。
-     */
-    public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofSlash("CORE/OPERATIONS");
-
-    /**
      * 供 Java 注解参数使用的资源类型文本。
      */
     public static final @NotNull String RESOURCE_TYPE_VALUE = "CORE/OPERATIONS";
+
+    /**
+     * 操作资源使用的资源类型。
+     */
+    public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofSlash("CORE/OPERATIONS");
 
     private final @NotNull TreeCode code;
 
@@ -54,7 +54,7 @@ public class Operation implements Resource {
     }
 
     /**
-     * 返回操作资源类型。
+     * 操作资源类型。
      *
      * @return 固定的 {@link #RESOURCE_TYPE} 类型
      */

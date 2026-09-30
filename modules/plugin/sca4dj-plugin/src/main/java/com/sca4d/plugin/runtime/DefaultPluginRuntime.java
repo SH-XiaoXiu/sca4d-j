@@ -23,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
@@ -50,21 +51,21 @@ import java.util.concurrent.locks.ReentrantLock;
 public class DefaultPluginRuntime<C> implements PluginRuntime {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultPluginRuntime.class);
 
-    private final TreeCode api;
-
-    private final String apiVersion;
+    private final Class<C> configurationType;
 
     private final Class<? extends PluginEntrypoint> entryBase;
-
-    private final Set<String> sharedClasses;
-
-    private final PluginLoader loader;
 
     private final Path cache;
 
     private final PluginConfiguration<C> configuration;
 
-    private final Class<C> configurationType;
+    private final PluginLoader loader;
+
+    private final Set<String> sharedClasses;
+
+    private final String apiVersion;
+
+    private final TreeCode api;
 
     private final ReentrantLock management = new ReentrantLock();
 
@@ -273,10 +274,7 @@ public class DefaultPluginRuntime<C> implements PluginRuntime {
                 }
                 throw new IllegalStateException("插件候选加载失败: " + failure.getClass().getSimpleName(), failure);
             }
-        } catch (Exception failure) {
-            if (failure instanceof RuntimeException runtime) {
-                throw runtime;
-            }
+        } catch (IOException failure) {
             throw new IllegalStateException("插件交付物读取失败", failure);
         } finally {
             management.unlock();

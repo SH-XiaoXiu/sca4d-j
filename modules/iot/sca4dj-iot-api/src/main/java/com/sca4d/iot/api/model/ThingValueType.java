@@ -22,29 +22,29 @@ import java.util.regex.PatternSyntaxException;
 /** 使用一个不可变递归对象表达物模型允许的值及其约束。 */
 public class ThingValueType {
 
-    private final @NotNull ThingValueKind kind;
-
-    private final @Nullable String minimum;
-
-    private final @Nullable String maximum;
-
-    private final @Nullable Integer scale;
-
-    private final @Nullable String unit;
+    private final @Nullable Integer maximumItems;
 
     private final @Nullable Integer maximumLength;
 
-    private final @Nullable String pattern;
+    private final @Nullable Integer scale;
 
-    private final @Nullable Pattern compiledPattern;
-
-    private final @Nullable Integer maximumItems;
-
-    private final @NotNull Set<String> enumValues;
+    private final @NotNull Map<String, ThingValueType> optionalFields;
 
     private final @NotNull Map<String, ThingValueType> requiredFields;
 
-    private final @NotNull Map<String, ThingValueType> optionalFields;
+    private final @Nullable Pattern compiledPattern;
+
+    private final @NotNull Set<String> enumValues;
+
+    private final @Nullable String maximum;
+
+    private final @Nullable String minimum;
+
+    private final @Nullable String pattern;
+
+    private final @Nullable String unit;
+
+    private final @NotNull ThingValueKind kind;
 
     private final @Nullable ThingValueType elementType;
 

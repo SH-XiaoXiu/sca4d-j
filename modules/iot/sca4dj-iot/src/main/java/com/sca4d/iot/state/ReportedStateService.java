@@ -56,27 +56,27 @@ public class ReportedStateService {
 
     private final @NotNull DeviceRepository devices;
 
-    private final @NotNull ProductDefinitionCatalog products;
-
-    private final @NotNull ReportedStateStore reportedStates;
-
     private final @NotNull DownlinkRepository downlinks;
 
     private final @NotNull ThingModelRepository models;
 
     private final @NotNull ThingValueValidator validator;
 
-    private final @NotNull IdGenerator ids;
-
-    private final @NotNull MessageBus messages;
-
     private final @NotNull Clock clock;
 
     private final @NotNull DeviceChangeNotifier changes;
 
-    private final int maxReportedProperties;
+    private final @NotNull IdGenerator ids;
+
+    private final @NotNull MessageBus messages;
+
+    private final @NotNull ProductDefinitionCatalog products;
+
+    private final @NotNull ReportedStateStore reportedStates;
 
     private final int maxEventsPerMessage;
+
+    private final int maxReportedProperties;
 
     /** 创建 reported 主事务服务。 */
     @SuppressWarnings("ParameterNumber")

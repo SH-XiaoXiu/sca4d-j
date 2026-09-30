@@ -43,15 +43,15 @@ public class DownlinkRepository {
             DeviceDownlinkStatus.SENDING,
             DeviceDownlinkStatus.WAITING_ACK);
 
-    private final @NotNull DeviceDownlinkMapper messages;
-
     private final @NotNull DesiredPropertyMapper desired;
 
-    private final @NotNull ThingDataJsonCodec json;
+    private final @NotNull DeviceDownlinkMapper messages;
 
     private final @NotNull DevicePolicyCatalog policies;
 
     private final @NotNull SqlBatches sqlBatches;
+
+    private final @NotNull ThingDataJsonCodec json;
 
     /**
      * @param messages 下行消息 SQL Mapper

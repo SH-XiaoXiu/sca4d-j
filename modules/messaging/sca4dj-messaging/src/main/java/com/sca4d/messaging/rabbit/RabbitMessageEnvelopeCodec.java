@@ -223,11 +223,11 @@ public class RabbitMessageEnvelopeCodec {
 
         private final @NotNull Instant publishedAt;
 
-        private final int protocolVersion;
-
         private final @NotNull Name sourceApplication;
 
         private final byte @NotNull [] payload;
+
+        private final int protocolVersion;
 
         private Envelope(
                 @NotNull Id messageId,

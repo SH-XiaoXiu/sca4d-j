@@ -229,9 +229,9 @@ class CallTest {
     }
 
     private static class Identity {
-        private final Subject subject;
-
         private final Account account;
+
+        private final Subject subject;
 
         private final TestPrincipal principal;
 

@@ -25,7 +25,7 @@ public class EncryptedSecret {
     }
 
     /**
-     * 返回加密所用密钥标识。
+     * 加密所用密钥标识。
      *
      * @return 加密所用密钥标识
      */

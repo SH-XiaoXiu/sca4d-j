@@ -193,7 +193,7 @@ public class EmqxProperties {
     }
 
     /**
-     * 返回 CONNECT 声明的 MQTT 5 Receive Maximum。
+     * CONNECT 声明的 MQTT 5 Receive Maximum。
      *
      * <p>全部未确认消息可能属于同一个 Topic。每个分片除等待队列外还会处理一条消息，因此当前值等于
      * 等待容量时，ACK 后立即补发的消息仍有一个队列位置。

@@ -14,9 +14,9 @@ import java.util.Objects;
 @SuppressWarnings("ClassCanBeRecord") // 项目禁止使用 Java record，保留普通不可变类型。
 public class ResourceIdSet {
 
-    private final @NotNull TreeCode resourceType;
-
     private final @NotNull LongIdSet ids;
+
+    private final @NotNull TreeCode resourceType;
 
     /**
      * 创建一种 Resource 类型的非空可信标识集合。
@@ -37,7 +37,7 @@ public class ResourceIdSet {
     }
 
     /**
-     * 返回当前集合对应的 Resource 类型。
+     * 当前集合对应的 Resource 类型。
      *
      * @return Resource 类型
      */
@@ -47,7 +47,7 @@ public class ResourceIdSet {
     }
 
     /**
-     * 返回建立 Session 时确认的数字 Resource 标识。
+     * 建立 Session 时确认的数字 Resource 标识。
      *
      * @return 不可变标识集合
      */

@@ -80,21 +80,21 @@ public class DefaultFileService implements FileService {
      */
     private static final Duration FILE_OPERATION_LOCK_WAIT = Duration.ofSeconds(10);
 
+    private final @NotNull TransferTokenService transferTokens;
+
     private final @NotNull FileRepository repository;
 
     private final @NotNull StorageRegistry storages;
 
-    private final @NotNull IdGenerator ids;
-
     private final @NotNull FileProperties properties;
-
-    private final @NotNull FileSettings settings;
-
-    private final @NotNull TransferTokenService transferTokens;
 
     private final @NotNull Clock clock;
 
     private final @NotNull DistributedLock distributedLock;
+
+    private final @NotNull FileSettings settings;
+
+    private final @NotNull IdGenerator ids;
 
     private final @NotNull TransactionTemplate transactions;
 

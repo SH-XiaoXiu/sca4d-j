@@ -32,15 +32,15 @@ public class HmacCredential {
         }
     }
 
-    private final long accountId;
-
     private final @NotNull EncryptedSecret encryptedKey;
+
+    private final @NotNull Instant updatedAt;
 
     private final @NotNull Status status;
 
     private final @NotNull Version version;
 
-    private final @NotNull Instant updatedAt;
+    private final long accountId;
 
     /** 创建从数据库读取的 MAC Credential。 */
     public HmacCredential(

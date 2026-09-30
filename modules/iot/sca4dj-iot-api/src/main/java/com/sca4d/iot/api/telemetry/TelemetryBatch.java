@@ -12,11 +12,11 @@ import java.util.Objects;
 @SuppressWarnings("ClassCanBeRecord")
 public class TelemetryBatch {
 
-    private final long deviceId;
+    private final @NotNull List<TelemetrySample> samples;
 
     private final long bindingGeneration;
 
-    private final @NotNull List<TelemetrySample> samples;
+    private final long deviceId;
 
     /**
      * @param deviceId Device 标识

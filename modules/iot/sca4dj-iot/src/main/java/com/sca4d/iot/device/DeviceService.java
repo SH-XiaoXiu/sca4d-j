@@ -45,21 +45,21 @@ public class DeviceService {
 
     private final @NotNull DeviceRepository devices;
 
-    private final @NotNull ProductDefinitionCatalog products;
-
     private final @NotNull DownlinkRepository downlinks;
 
-    private final @NotNull ReportedStateStore reportedStates;
-
     private final @NotNull ThingModelRepository models;
-
-    private final @NotNull DeviceProtocolCatalog protocols;
 
     private final @NotNull Clock clock;
 
     private final @NotNull DeviceChangeNotifier changes;
 
+    private final @NotNull DeviceProtocolCatalog protocols;
+
     private final @NotNull DistributedLock distributedLock;
+
+    private final @NotNull ProductDefinitionCatalog products;
+
+    private final @NotNull ReportedStateStore reportedStates;
 
     private final @NotNull TransactionTemplate transactions;
 

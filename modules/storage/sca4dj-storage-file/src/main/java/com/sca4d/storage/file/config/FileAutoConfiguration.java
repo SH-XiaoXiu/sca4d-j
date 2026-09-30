@@ -49,7 +49,6 @@ public class FileAutoConfiguration {
         return new FileSettings(reader, writer);
     }
 
-    /** 创建文件模块自动配置。 */
     public FileAutoConfiguration() {
     }
 

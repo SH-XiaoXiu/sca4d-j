@@ -29,19 +29,19 @@ public class TotpEnrollmentService {
 
     private static final Logger LOG = LoggerFactory.getLogger(TotpEnrollmentService.class);
 
+    private final TotpCredentialRepository credentials;
+
+    private final Clock clock;
+
     private final RedisTotpEnrollmentStore enrollments;
 
-    private final TotpCredentialRepository credentials;
+    private final SessionControl sessions;
 
     private final TotpCodeVerifier verifier;
 
     private final TotpSecretCryptography secrets;
 
-    private final SessionControl sessions;
-
     private final TotpSettings settings;
-
-    private final Clock clock;
 
     /**
      * 创建 TOTP 凭据生命周期服务。

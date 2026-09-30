@@ -10,15 +10,15 @@ import java.util.Objects;
  * Email 模板 Mapper 读取的数据库状态。
  */
 public class EmailTemplateState {
-    private final long templateId;
+    private final @NotNull String localesJson;
 
     private final @NotNull TreeCode code;
 
-    private final @NotNull String localesJson;
+    private final @NotNull Version version;
 
     private final boolean enabled;
 
-    private final @NotNull Version version;
+    private final long templateId;
 
     /**
      * @param templateId 模板数据库标识

@@ -3,6 +3,7 @@ package com.sca4d.plugin.spring;
 import com.sca4d.core.api.plugin.PluginRuntime;
 import com.sca4d.core.api.plugin.PluginScope;
 import org.aopalliance.intercept.MethodInterceptor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -23,11 +24,13 @@ final class PluginScopedBeans implements BeanPostProcessor, Ordered {
     }
 
     @Override
-    public Object postProcessAfterInitialization(Object bean, String name) {
+    public @NotNull Object postProcessAfterInitialization(@NotNull Object bean, @NotNull String name) {
         if (!factory.containsBeanDefinition(name)
-                || !(factory.getBeanDefinition(name) instanceof RootBeanDefinition definition)
-                || definition.getResolvedFactoryMethod() == null
-                || !AnnotatedElementUtils.hasAnnotation(definition.getResolvedFactoryMethod(), PluginScope.class)) {
+                || !(factory.getBeanDefinition(name) instanceof RootBeanDefinition definition)) {
+            return bean;
+        }
+        var factoryMethod = definition.getResolvedFactoryMethod();
+        if (factoryMethod == null || !AnnotatedElementUtils.hasAnnotation(factoryMethod, PluginScope.class)) {
             return bean;
         }
         ProxyFactory proxy = new ProxyFactory(bean);

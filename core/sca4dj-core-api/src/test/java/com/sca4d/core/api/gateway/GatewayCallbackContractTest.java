@@ -59,6 +59,7 @@ class GatewayCallbackContractTest {
                 "server-1",
                 URI.create("http://localhost:8080"),
                 "/actuator/health/readiness",
+                "test-fingerprint",
                 Set.of("iot.emqx.authenticate"),
                 Set.of(),
                 Map.of());
@@ -72,6 +73,7 @@ class GatewayCallbackContractTest {
 
         assertEquals("server-1", decoded.getInstanceId());
         assertEquals(URI.create("http://localhost:8080"), decoded.getBaseUrl());
+        assertEquals("test-fingerprint", decoded.getProtocolFingerprint());
         assertEquals(Set.of("iot.emqx.authenticate"), decoded.getCallbackCodes());
         assertEquals("lease-1", response.getLeaseId());
     }

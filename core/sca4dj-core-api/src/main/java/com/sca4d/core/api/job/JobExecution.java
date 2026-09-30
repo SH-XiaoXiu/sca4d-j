@@ -13,9 +13,9 @@ public class JobExecution {
 
     private final @NotNull Id runId;
 
-    private final int attempt;
-
     private final @NotNull Instant startedAt;
+
+    private final int attempt;
 
     /**
      * 创建一次节点尝试的执行事实。
@@ -39,7 +39,7 @@ public class JobExecution {
     }
 
     /**
-     * 返回所属持久化 run。
+     * 所属持久化 run。
      *
      * @return 当前尝试所属的 run 标识
      */
@@ -49,7 +49,7 @@ public class JobExecution {
     }
 
     /**
-     * 返回当前尝试序号。
+     * 当前尝试序号。
      *
      * @return 从 1 开始的尝试次数
      */
@@ -59,7 +59,7 @@ public class JobExecution {
     }
 
     /**
-     * 返回当前尝试开始时间。
+     * 当前尝试开始时间。
      *
      * @return Job runtime 开始本次尝试时使用的时间
      */

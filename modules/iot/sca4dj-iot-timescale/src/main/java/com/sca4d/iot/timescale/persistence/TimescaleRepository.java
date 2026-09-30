@@ -31,9 +31,9 @@ public class TimescaleRepository {
     private static final TypeReference<Map<String, Object>> MAP_TYPE = new TypeReference<>() {
     };
 
-    private final @NotNull TimescaleMapper mapper;
-
     private final @NotNull ObjectMapper json;
+
+    private final @NotNull TimescaleMapper mapper;
 
     private final @NotNull SqlBatches sqlBatches;
 

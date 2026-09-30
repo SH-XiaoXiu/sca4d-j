@@ -65,11 +65,11 @@ public class DnfClause<T, R> {
         }
     }
 
-    private final String code;
-
     private final List<Condition<? super T>> conditions;
 
     private final R result;
+
+    private final String code;
 
     /** 创建一个带稳定编码、条件和命中结果的 Clause。 */
     public DnfClause(
@@ -96,17 +96,29 @@ public class DnfClause<T, R> {
         return new DnfClause<>(code, values, result);
     }
 
-    /** 返回稳定 Clause 编码。 */
+    /**
+     * 稳定 Clause 编码。
+     *
+     * @return 稳定 Clause 编码
+     */
     public @NotNull String code() {
         return code;
     }
 
-    /** 返回按声明顺序排列的条件。 */
+    /**
+     * 按声明顺序排列的条件。
+     *
+     * @return 按声明顺序排列的条件
+     */
     public @Unmodifiable @NotNull List<Condition<? super T>> conditions() {
         return conditions;
     }
 
-    /** 返回 Clause 命中后产生的结果。 */
+    /**
+     * Clause 命中后产生的结果。
+     *
+     * @return Clause 命中后产生的结果
+     */
     public @NotNull R result() {
         return result;
     }

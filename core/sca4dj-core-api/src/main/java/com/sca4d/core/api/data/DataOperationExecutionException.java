@@ -24,7 +24,7 @@ public class DataOperationExecutionException extends RuntimeException {
     }
 
     /**
-     * 读取抛出原始异常的节点名称。
+     * 抛出原始异常的节点名称。
      *
      * @return 失败节点名称
      */
@@ -33,7 +33,7 @@ public class DataOperationExecutionException extends RuntimeException {
     }
 
     /**
-     * 读取失败节点原本应写入的键。
+     * 失败节点原本应写入的键。
      *
      * @return 失败节点的输出键名称
      */

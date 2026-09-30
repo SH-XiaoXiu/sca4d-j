@@ -11,6 +11,7 @@ import com.sca4d.core.api.call.SPICallValueResolver;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.utils.DurationUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,21 +34,21 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
     /** 幂等处理权节点编码。 */
     public static final TreeCode CODE = TreeCode.of("CALL/IDEMPOTENCY");
 
-    private final IdempotencyStore idempotencyStore;
+    private final ScheduledExecutorService renewalScheduler;
 
     private final CallValueResolverLookup resolverLookup;
 
-    private final SPICallValueResolver expressionResolver;
-
-    private final IdempotencyFingerprints fingerprints;
+    private final Duration defaultRetention;
 
     private final Duration processingTtl;
 
     private final Duration retryAfter;
 
-    private final Duration defaultRetention;
+    private final IdempotencyFingerprints fingerprints;
 
-    private final ScheduledExecutorService renewalScheduler;
+    private final IdempotencyStore idempotencyStore;
+
+    private final SPICallValueResolver expressionResolver;
 
     /**
      * 创建幂等调用执行器。
@@ -150,16 +151,17 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
 
         CallOutcome outcome;
         try {
-            outcome = next.proceed();
+            outcome = Objects.requireNonNull(next.proceed(), "幂等内层结果不能为空");
         } catch (RuntimeException | Error failure) {
             release(key, token, failure, checked);
             throw failure;
         }
-        if (outcome.error() != null) {
+        Throwable executionFailure = outcome.error();
+        if (executionFailure != null) {
             release(
                     key,
                     token,
-                    outcome.error(),
+                    executionFailure,
                     checked);
             return outcome;
         }
@@ -264,8 +266,9 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
                 release(key, token, missing, checked);
                 return CallOutcome.failed(missing);
             }
-            if (outcome.error() != null) {
-                release(key, token, outcome.error(), checked);
+            Throwable executionFailure = outcome.error();
+            if (executionFailure != null) {
+                release(key, token, executionFailure, checked);
                 return outcome;
             }
             Throwable leaseFailure = renewalFailure.get();
@@ -391,7 +394,10 @@ public class IdempotencyCallInterceptor implements CallLifecycle.Around {
     }
 
     /** 在表达式或解析器边界把允许的幂等键输入转换为领域类型。 */
-    private static @NotNull IdempotencyKey normalizeKey(@NotNull Object value) {
+    private static @NotNull IdempotencyKey normalizeKey(@Nullable Object value) {
+        if (value == null) {
+            throw new IllegalStateException("幂等键不能为空");
+        }
         try {
             return IdempotencyKey.fromValue(value);
         } catch (IllegalArgumentException failure) {

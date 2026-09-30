@@ -15,41 +15,41 @@ import java.util.Objects;
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 @ApiStatus.Internal
 public class FileRecord {
-    private final long id;
+    private final @NotNull FileStatus status;
 
-    private final long uploaderPrincipalId;
+    private final @Nullable Instant readyExpiresAt;
 
-    private final @NotNull String scene;
+    private final @NotNull Instant uploadExpiresAt;
 
-    private final @NotNull TreeCode targetResourceType;
-
-    private final @NotNull String targetResourceId;
+    private final @Nullable Long sizeBytes;
 
     private final @NotNull String backendId;
 
     private final @NotNull String containerName;
 
-    private final @NotNull String uploadObjectKey;
-
-    private final @Nullable String objectKey;
-
-    private final @NotNull String filename;
+    private final @Nullable String contentType;
 
     private final @NotNull String declaredContentType;
 
-    private final long declaredSizeBytes;
+    private final @NotNull String filename;
 
-    private final @Nullable String contentType;
+    private final @Nullable String objectKey;
 
-    private final @Nullable Long sizeBytes;
+    private final @NotNull String scene;
 
-    private final @NotNull FileStatus status;
+    private final @NotNull String targetResourceId;
 
-    private final @NotNull Instant uploadExpiresAt;
+    private final @NotNull String uploadObjectKey;
 
-    private final @Nullable Instant readyExpiresAt;
+    private final @NotNull TreeCode targetResourceType;
 
     private final boolean uploadObjectCleaned;
+
+    private final long declaredSizeBytes;
+
+    private final long id;
+
+    private final long uploaderPrincipalId;
 
     /**
      * 创建包含上传、存储和状态信息的文件记录。

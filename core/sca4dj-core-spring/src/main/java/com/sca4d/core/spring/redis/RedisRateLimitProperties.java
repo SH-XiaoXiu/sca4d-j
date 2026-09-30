@@ -12,7 +12,7 @@ public class RedisRateLimitProperties {
     private Duration keepAfterRefill = Duration.ofHours(1);
 
     /**
-     * 返回额度完全恢复后的额外保留时间。
+     * 额度完全恢复后的额外保留时间。
      *
      * @return 正数保留时间
      */

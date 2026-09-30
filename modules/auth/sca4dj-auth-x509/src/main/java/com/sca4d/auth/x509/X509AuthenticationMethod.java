@@ -43,11 +43,11 @@ public class X509AuthenticationMethod implements AuthenticationMethod<X509Transp
 
     private final @NotNull AccountDirectory accounts;
 
-    private final @NotNull SessionControl sessions;
+    private final @NotNull Clock clock;
 
     private final @NotNull IdGenerator ids;
 
-    private final @NotNull Clock clock;
+    private final @NotNull SessionControl sessions;
 
     /**
      * 创建从证书指纹识别 Account 的 X.509 认证方法。

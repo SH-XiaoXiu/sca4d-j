@@ -15,12 +15,11 @@ public class SecretKeyringProperties {
 
     private Map<String, String> keys = new LinkedHashMap<>();
 
-    /** 创建供配置绑定填充的空密钥环配置。 */
     public SecretKeyringProperties() {
     }
 
     /**
-     * 返回新密文使用的 key-id。
+     * 新密文使用的 key-id。
      *
      * @return 新密文使用的 key-id
      */

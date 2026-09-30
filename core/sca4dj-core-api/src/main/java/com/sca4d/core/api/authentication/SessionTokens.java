@@ -12,17 +12,17 @@ public class SessionTokens {
 
     private final AuthTokenMode tokenMode;
 
-    private final String tokenType;
+    private final Instant accessTokenExpiresAt;
+
+    private final Instant sessionExpiresAt;
 
     private final String accessToken;
 
-    private final Instant accessTokenExpiresAt;
+    private final String sessionId;
 
     private final @Nullable String sessionToken;
 
-    private final String sessionId;
-
-    private final Instant sessionExpiresAt;
+    private final String tokenType;
 
     /**
      * 创建一次 Token 交付结果。

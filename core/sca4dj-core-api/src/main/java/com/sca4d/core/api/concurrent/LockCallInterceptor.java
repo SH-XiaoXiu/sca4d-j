@@ -25,9 +25,9 @@ public class LockCallInterceptor implements CallLifecycle.Around {
     /** 分布式锁节点编码。 */
     public static final TreeCode CODE = TreeCode.of("CALL/LOCK");
 
-    private final DistributedLock distributedLock;
-
     private final CallValueResolverLookup resolverLookup;
+
+    private final DistributedLock distributedLock;
 
     private final SPICallValueResolver expressionResolver;
 

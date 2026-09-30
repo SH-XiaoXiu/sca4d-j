@@ -21,7 +21,7 @@ public class ConnectionProtocol {
     }
 
     /**
-     * 返回协议编码。
+     * 协议编码。
      *
      * @return 不包含空白的稳定协议编码
      */

@@ -23,15 +23,15 @@ public class AuditEntry {
 
     private final @NotNull AuditOperation operation;
 
-    private final @Nullable Resource target;
+    private final @Nullable AuditPayloadData payload;
 
     private final @NotNull AuditResult result;
-
-    private final @Nullable AuditPayloadData payload;
 
     private final @Nullable HttpCall httpCall;
 
     private final @NotNull Instant occurredAt;
+
+    private final @Nullable Resource target;
 
     private final @Nullable String instanceId;
 
@@ -125,7 +125,11 @@ public class AuditEntry {
         return occurredAt;
     }
 
-    /** 返回操作实际发生的进程标识；旧审计记录为空，不属于 IAM 主体。 */
+    /**
+     * 操作实际发生的进程标识；旧审计记录为空，不属于 IAM 主体。
+     *
+     * @return 操作实际发生的进程标识；旧审计记录为空，不属于 IAM 主体
+     */
     public @Nullable String instanceId() {
         return instanceId;
     }

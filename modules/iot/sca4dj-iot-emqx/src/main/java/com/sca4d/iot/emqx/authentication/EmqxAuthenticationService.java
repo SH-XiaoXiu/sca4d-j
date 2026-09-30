@@ -19,13 +19,12 @@ public class EmqxAuthenticationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(EmqxAuthenticationService.class);
 
+    private final @NotNull MqttAuthorizationService authorization;
+
     private final @NotNull EmqxDeviceConnectionRequestFactory requests;
 
     private final @NotNull DeviceConnectionAdmission admission;
 
-    private final @NotNull MqttAuthorizationService authorization;
-
-    /** 创建不允许认证方式自动降级的 EMQX HTTP Authenticator 服务。 */
     public EmqxAuthenticationService(
             @NotNull EmqxDeviceConnectionRequestFactory requests,
             @NotNull DeviceConnectionAdmission admission,

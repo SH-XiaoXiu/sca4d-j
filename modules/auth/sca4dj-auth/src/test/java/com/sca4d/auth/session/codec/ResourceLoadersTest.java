@@ -122,9 +122,9 @@ class ResourceLoadersTest {
     }
 
     private static class TestResource implements Resource {
-        private final TreeCode type;
-
         private final String id;
+
+        private final TreeCode type;
 
         private TestResource(String type, String id) {
             this.type = TreeCode.ofSegment(type);

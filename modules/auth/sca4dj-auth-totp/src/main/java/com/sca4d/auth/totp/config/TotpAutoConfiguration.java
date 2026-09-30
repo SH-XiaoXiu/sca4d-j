@@ -34,7 +34,6 @@ public class TotpAutoConfiguration {
         return new TotpSettings(reader, writer);
     }
 
-    /** 创建 TOTP 自动配置。 */
     public TotpAutoConfiguration() {
     }
 

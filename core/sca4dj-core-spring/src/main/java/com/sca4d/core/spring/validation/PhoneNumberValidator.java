@@ -26,9 +26,9 @@ import java.util.function.Predicate;
 /** 使用 libphonenumber 和 PhoneNumberCondition Bean 执行 PhoneNumber 约束。 */
 public class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, String> {
 
-    private final RegionCatalog regions;
-
     private final PhoneNumberConditionRegistry conditionRegistry;
+
+    private final RegionCatalog regions;
 
     private DnfExpression<ParsedPhoneNumber, Boolean> expression = DnfExpression.always("always", true);
 

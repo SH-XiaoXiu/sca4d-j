@@ -28,9 +28,9 @@ public class EmailSenderService {
 
     private final @NotNull EmailGateway transport;
 
-    private final @NotNull SecretKeyring keyring;
-
     private final @NotNull IdGenerator ids;
+
+    private final @NotNull SecretKeyring keyring;
 
     /** @param senders SMTP 配置持久化语义 @param transport SMTP 操作 @param keyring 密码加密密钥环 @param ids 全局标识生成器 */
     public EmailSenderService(
@@ -226,17 +226,17 @@ public class EmailSenderService {
 
     /** 保存已经规范化但尚未持久化的 SMTP 文本字段。 */
     private static class CheckedSender {
-        private final @NotNull String name;
-
-        private final @NotNull String host;
-
-        private final @Nullable String username;
-
         private final @NotNull String fromAddress;
 
         private final @Nullable String fromName;
 
+        private final @NotNull String host;
+
+        private final @NotNull String name;
+
         private final @Nullable String replyTo;
+
+        private final @Nullable String username;
 
         /** @param name 名称 @param host 主机 @param username 用户名 @param fromAddress 发件邮箱 @param fromName 发件名 @param replyTo 回复邮箱 */
         private CheckedSender(

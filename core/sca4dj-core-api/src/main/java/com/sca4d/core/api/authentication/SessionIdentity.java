@@ -9,9 +9,9 @@ import java.util.Objects;
 @SuppressWarnings("ClassCanBeRecord")
 public class SessionIdentity {
 
-    private final Subject subject;
-
     private final Account account;
+
+    private final Subject subject;
 
     /**
      * 创建建立 Session 所需的身份快照。
@@ -30,7 +30,7 @@ public class SessionIdentity {
     }
 
     /**
-     * 读取登录账号所属的接入者。
+     * 登录账号所属的接入者。
      *
      * @return 建立 Session 时恢复出的 Subject
      */
@@ -39,7 +39,7 @@ public class SessionIdentity {
     }
 
     /**
-     * 读取本次建立 Session 使用的登录账号。
+     * 本次建立 Session 使用的登录账号。
      *
      * @return 建立 Session 时恢复出的 Account
      */

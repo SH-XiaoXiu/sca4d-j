@@ -10,9 +10,6 @@ import java.util.Set;
 /** 收集当前 HTTP 调用对客户端本地状态产生的变化。 */
 public class ClientState {
 
-    /** 客户端应重新读取的状态目标响应头。 */
-    public static final String REFRESH_HEADER = "X-Client-State-Refresh";
-
     private static final ThreadLocal<@Nullable Change> CURRENT = new ThreadLocal<>();
 
     private ClientState() {

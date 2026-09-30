@@ -26,9 +26,9 @@ public class RedisEmailCodeChallengeStore {
 
     private static final DefaultRedisScript<Long> VERIFY = verifyScript();
 
-    private final @NotNull RedisTemplate<Key, String> redis;
-
     private final @NotNull Clock clock;
+
+    private final @NotNull RedisTemplate<Key, String> redis;
 
     private final @NotNull Key challengePrefix;
 

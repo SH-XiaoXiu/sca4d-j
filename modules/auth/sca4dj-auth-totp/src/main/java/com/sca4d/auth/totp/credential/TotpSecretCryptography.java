@@ -15,7 +15,6 @@ public class TotpSecretCryptography {
 
     private final @NotNull SecretKeyring keyring;
 
-    /** 创建使用当前应用 SecretKeyring 的 TOTP Secret 加解密器。 */
     public TotpSecretCryptography(@NotNull SecretKeyring keyring) {
         this.keyring = Objects.requireNonNull(keyring, "Secret keyring 不能为空");
     }

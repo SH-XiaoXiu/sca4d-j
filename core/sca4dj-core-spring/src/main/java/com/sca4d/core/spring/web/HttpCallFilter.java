@@ -24,19 +24,13 @@ import java.util.regex.Pattern;
 /** 为每次 HTTP 请求建立和清理 {@link Call}。 */
 public class HttpCallFilter extends OncePerRequestFilter {
 
-    /** 请求和响应使用的调用标识 Header。 */
-    public static final String CALL_ID_HEADER = "X-Call-Id";
-
-    /** HTTP 调用方提供幂等键的 Header。 */
-    public static final String IDEMPOTENCY_KEY_HEADER = "Idempotency-Key";
-
     private static final String CALL_ID_MDC = "callId";
 
     private static final Pattern CALL_ID_PATTERN = Pattern.compile("[A-Za-z0-9._-]{1,128}");
 
-    private final Clock clock;
-
     private final CallInvoker invoker;
+
+    private final Clock clock;
 
     /**
      * 创建请求信息过滤器。
@@ -47,7 +41,6 @@ public class HttpCallFilter extends OncePerRequestFilter {
         this(clock, null);
     }
 
-    /** 创建绑定统一生命周期执行器的请求过滤器。 */
     public HttpCallFilter(Clock clock, CallInvoker invoker) {
         this.clock = Objects.requireNonNull(clock, "时钟不能为空");
         this.invoker = invoker;
@@ -59,7 +52,7 @@ public class HttpCallFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain)
             throws ServletException, IOException {
-        String requestedCallId = request.getHeader(CALL_ID_HEADER);
+        String requestedCallId = request.getHeader(HttpConstants.CALL_ID_HEADER);
         String callId = requestedCallId != null && CALL_ID_PATTERN.matcher(requestedCallId).matches()
                 ? requestedCallId
                 : UUID.randomUUID().toString();
@@ -71,12 +64,12 @@ public class HttpCallFilter extends OncePerRequestFilter {
                                 TrustedGatewayRequest.externalPath(request),
                                 TrustedGatewayRequest.clientIp(request),
                                 request.getHeader("User-Agent")));
-        String idempotencyKey = request.getHeader(IDEMPOTENCY_KEY_HEADER);
+        String idempotencyKey = request.getHeader(HttpConstants.IDEMPOTENCY_KEY_HEADER);
         if (idempotencyKey != null) {
             inputs.put(IdempotencyKey.INPUT, idempotencyKey);
         }
         Call call = new Call(invoker, callId, clock.instant(), inputs.build(), null);
-        response.setHeader(CALL_ID_HEADER, callId);
+        response.setHeader(HttpConstants.CALL_ID_HEADER, callId);
         try {
             CallHolder.set(call);
             MDC.put(CALL_ID_MDC, callId);

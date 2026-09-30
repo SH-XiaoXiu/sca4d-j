@@ -17,13 +17,12 @@ public class QuartzClusterTaskJob implements Job {
     /** Quartz SchedulerContext 中保存集群任务目录的键。 */
     public static final String REGISTRY_CONTEXT_KEY = "sca4djClusterTaskRegistry";
 
-    /** JobDataMap 中保存集群任务 key 的键。 */
-    public static final String TASK_KEY = "taskKey";
-
     /** JobDataMap 中保存集群任务定义版本的键。 */
     public static final String TASK_DEFINITION_VERSION = "taskDefinitionVersion";
 
-    /** 创建无状态 Quartz 集群任务入口。 */
+    /** JobDataMap 中保存集群任务 key 的键。 */
+    public static final String TASK_KEY = "taskKey";
+
     public QuartzClusterTaskJob() {
     }
 

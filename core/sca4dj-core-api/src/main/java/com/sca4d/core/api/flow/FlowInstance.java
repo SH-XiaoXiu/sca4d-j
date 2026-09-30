@@ -18,21 +18,21 @@ public class FlowInstance {
 
     private final FlowId id;
 
-    private final String definitionName;
-
-    private final int definitionVersion;
-
-    private final String currentNodeId;
-
-    private final Map<String, Object> data;
+    private final Instant expiresAt;
 
     private final Instant startedAt;
 
-    private final Instant expiresAt;
+    private final Map<String, Object> data;
+
+    private final String currentNodeId;
+
+    private final String definitionName;
 
     private final Version version;
 
     private final boolean consumed;
+
+    private final int definitionVersion;
 
     /**
      * 创建实例快照。
@@ -75,7 +75,7 @@ public class FlowInstance {
     }
 
     /**
-     * 返回实例标识。
+     * 实例标识。
      *
      * @return 实例标识
      */
@@ -84,7 +84,7 @@ public class FlowInstance {
     }
 
     /**
-     * 返回定义名称。
+     * 定义名称。
      *
      * @return 定义名称
      */
@@ -93,7 +93,7 @@ public class FlowInstance {
     }
 
     /**
-     * 返回定义版本。
+     * 定义版本。
      *
      * @return 定义版本
      */
@@ -102,7 +102,7 @@ public class FlowInstance {
     }
 
     /**
-     * 返回当前节点标识。
+     * 当前节点标识。
      *
      * @return 当前节点标识
      */
@@ -111,7 +111,7 @@ public class FlowInstance {
     }
 
     /**
-     * 返回不可变数据。
+     * 不可变数据。
      *
      * @return 不可变数据
      */
@@ -120,7 +120,7 @@ public class FlowInstance {
     }
 
     /**
-     * 返回创建时间。
+     * 创建时间。
      *
      * @return 创建时间
      */
@@ -129,7 +129,7 @@ public class FlowInstance {
     }
 
     /**
-     * 返回过期时间。
+     * 过期时间。
      *
      * @return 过期时间
      */
@@ -138,7 +138,7 @@ public class FlowInstance {
     }
 
     /**
-     * 返回当前乐观版本。
+     * 当前乐观版本。
      *
      * @return 当前乐观版本
      */
@@ -147,7 +147,7 @@ public class FlowInstance {
     }
 
     /**
-     * 返回终态结果已经消费时返回 {@code true}。
+     * 终态结果是否已消费。
      *
      * @return 终态结果已经消费时返回 {@code true}
      */

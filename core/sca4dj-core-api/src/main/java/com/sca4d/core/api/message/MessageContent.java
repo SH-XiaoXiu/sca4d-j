@@ -12,11 +12,11 @@ import java.util.Objects;
 /** 保存 Message 携带的媒体内容及使用方式。 */
 public class MessageContent {
 
-    private final @NotNull String mediaType;
+    private final @NotNull ContentBody body;
 
     private final @NotNull ContentDisposition disposition;
 
-    private final @NotNull ContentBody body;
+    private final @NotNull String mediaType;
 
     private final @Nullable String name;
 

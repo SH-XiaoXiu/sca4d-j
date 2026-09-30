@@ -14,7 +14,6 @@ public class NoRetryPolicy implements RetryPolicy {
 
     public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/RETRY/NONE");
 
-    /** 创建不重试策略。 */
     public NoRetryPolicy() {
     }
 

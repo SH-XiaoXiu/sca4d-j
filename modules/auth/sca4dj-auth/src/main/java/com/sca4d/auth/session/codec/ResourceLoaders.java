@@ -9,11 +9,9 @@ import com.sca4d.core.api.data.DataOperationExecutionException;
 import com.sca4d.core.api.data.DataValues;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.resource.Resource;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -33,9 +31,9 @@ public class ResourceLoaders {
     @SuppressWarnings("rawtypes")
     private static final DataKey<Map> MERGED = DataKey.of("mergedResources", Map.class);
 
-    private final List<ResourceLoader> loaders;
-
     private final Executor executor;
+
+    private final List<ResourceLoader> loaders;
 
     private final DataGraph graph;
 
@@ -92,15 +90,16 @@ public class ResourceLoaders {
             @SuppressWarnings("rawtypes")
             DataKey<Map> output = DataKey.of("resourceLoader" + index, Map.class);
             loaderOutputs.add(output);
-            builder.operation(DataOperation.async(
-                    "resource-loader-" + index,
-                    List.of(PRINCIPALS),
-                    output,
-                    (values, ignored) -> java.util.concurrent.CompletableFuture.supplyAsync(
-                            () -> Objects.requireNonNull(
-                                    loader.load(values.get(PRINCIPALS)),
-                                    "ResourceLoader 不能返回 null"),
-                            ignored)));
+            builder.operation(
+                    DataOperation.async(
+                            "resource-loader-" + index,
+                            List.of(PRINCIPALS),
+                            output,
+                            (values, ignored) -> java.util.concurrent.CompletableFuture.supplyAsync(
+                                    () -> Objects.requireNonNull(
+                                            loader.load(values.get(PRINCIPALS)),
+                                            "ResourceLoader 不能返回 null"),
+                                    ignored)));
         }
         List<DataKey<?>> mergeInputs = new ArrayList<>();
         mergeInputs.add(PRINCIPALS);
@@ -136,8 +135,8 @@ public class ResourceLoaders {
         for (int index = 0; index < loaders.size(); index++) {
             @SuppressWarnings("rawtypes")
             DataKey<Map> output = DataKey.of("resourceLoader" + index, Map.class);
-            Map<Long, ? extends Collection<? extends Resource>> loaded =
-                    (Map<Long, ? extends Collection<? extends Resource>>) values.get(output);
+            Map<Long, ? extends Collection<? extends Resource>> loaded = (Map<Long, ? extends Collection<? extends Resource>>) values
+                    .get(output);
             if (!principalIds.containsAll(loaded.keySet())) {
                 throw new IllegalStateException("ResourceLoader 返回了输入外的 Principal");
             }

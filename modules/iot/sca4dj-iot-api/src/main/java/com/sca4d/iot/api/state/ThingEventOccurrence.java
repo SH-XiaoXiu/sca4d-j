@@ -13,13 +13,13 @@ import java.util.Optional;
 /** 保存协议 Pipeline 输出的一次离散 ThingEvent 事实。 */
 public class ThingEventOccurrence {
 
-    private final @NotNull String eventCode;
-
-    private final @Nullable String sourceEventId;
+    private final @Nullable Instant occurredAt;
 
     private final @NotNull Map<String, Object> outputs;
 
-    private final @Nullable Instant occurredAt;
+    private final @NotNull String eventCode;
+
+    private final @Nullable String sourceEventId;
 
     /** @param eventCode 事件 code @param sourceEventId 设备稳定事实键 @param outputs 完整输出 @param occurredAt 设备发生时间 */
     public ThingEventOccurrence(

@@ -37,11 +37,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 /** 轮询可执行节点，在有界线程池中执行并为每个运行中的节点续租。 */
 public final class JobWorker implements SmartLifecycle {
 
-    private static final Logger log = LoggerFactory.getLogger(JobWorker.class);
-
     private static final int MAX_ERROR_LENGTH = 1000;
 
-    private final @NotNull JobCatalog catalog;
+    private static final Logger log = LoggerFactory.getLogger(JobWorker.class);
 
     private final @NotNull JobRunService runs;
 
@@ -50,6 +48,8 @@ public final class JobWorker implements SmartLifecycle {
     private final @NotNull JobProperties properties;
 
     private final @NotNull Clock clock;
+
+    private final @NotNull JobCatalog catalog;
 
     private final @NotNull Name applicationId;
 

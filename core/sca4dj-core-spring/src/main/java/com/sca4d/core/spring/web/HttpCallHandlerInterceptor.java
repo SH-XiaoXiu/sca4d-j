@@ -11,7 +11,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 /** 只在当前线程已经建立 `Call` 时执行请求阶段处理，并跳过 Spring MVC 异步分派。 */
 public abstract class HttpCallHandlerInterceptor implements HandlerInterceptor {
 
-    /** 创建依赖当前 `Call` 的 Spring MVC 拦截器。 */
     protected HttpCallHandlerInterceptor() {
     }
 

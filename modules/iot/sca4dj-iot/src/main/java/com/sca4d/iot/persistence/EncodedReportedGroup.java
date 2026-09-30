@@ -8,21 +8,20 @@ import java.time.Instant;
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public class EncodedReportedGroup {
 
+    private final @NotNull Instant observedAt;
+
+    private final @NotNull Instant receivedAt;
+
+    private final @NotNull String contentHash;
+
     private final @NotNull String orderScope;
 
     private final @NotNull String orderValue;
-
-    private final @NotNull String contentHash;
 
     private final @NotNull String stateJson;
 
     private final long version;
 
-    private final @NotNull Instant observedAt;
-
-    private final @NotNull Instant receivedAt;
-
-    /** 创建已经完成 JSON 编码的 reported group 状态。 */
     public EncodedReportedGroup(
             @NotNull String orderScope,
             @NotNull String orderValue,

@@ -24,11 +24,11 @@ public class RedisTotpEnrollmentStore {
 
     private static final DefaultRedisScript<Long> CONSUME = consumeScript();
 
+    private final Clock clock;
+
     private final RedisTemplate<Key, String> redis;
 
     private final TotpEnrollmentCodec codec;
-
-    private final Clock clock;
 
     private static final TreeCode ENROLLMENT = TreeCode.ofColon("AUTH:TOTP_ENROLLMENT");
 

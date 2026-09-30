@@ -32,17 +32,17 @@ import java.util.stream.Collectors;
  */
 class DefaultNotificationExecution<T> implements NotificationExecution {
 
-    private final @NotNull NotificationType<T> type;
-
-    private final @NotNull T value;
-
-    private final @NotNull NotificationSettings settings;
+    private final @NotNull NotificationDeliveryRouter deliveries;
 
     private final @NotNull NotificationLocaleResolver locales;
 
     private final @NotNull NotificationRegionResolver regions;
 
-    private final @NotNull NotificationDeliveryRouter deliveries;
+    private final @NotNull NotificationSettings settings;
+
+    private final @NotNull NotificationType<T> type;
+
+    private final @NotNull T value;
 
     private @Nullable Locale explicitLocale;
 

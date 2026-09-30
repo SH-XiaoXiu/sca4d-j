@@ -11,19 +11,19 @@ import java.util.OptionalLong;
 /** 保存一次设备定时计划时间对应的下行生成结果。 */
 public class DeviceScheduleExecution {
 
-    private final long executionId;
-
-    private final long scheduleId;
+    private final @NotNull DeviceScheduleExecutionStatus status;
 
     private final @NotNull Instant plannedAt;
 
     private final @NotNull Instant triggeredAt;
 
-    private final @NotNull DeviceScheduleExecutionStatus status;
-
     private final @Nullable Long messageId;
 
     private final @Nullable String failureCode;
+
+    private final long executionId;
+
+    private final long scheduleId;
 
     /** 创建一条幂等设备定时执行记录。 */
     @SuppressWarnings("ParameterNumber")

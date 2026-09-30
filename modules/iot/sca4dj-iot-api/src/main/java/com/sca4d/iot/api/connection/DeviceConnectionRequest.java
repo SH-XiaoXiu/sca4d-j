@@ -14,11 +14,11 @@ import java.util.Optional;
 /** 保存一次协议无关 Device 连接准入所需的公开身份和一种互斥认证输入。 */
 public class DeviceConnectionRequest {
 
-    private final @NotNull DeviceConnectionBinding connection;
+    private final @Nullable AuthenticationSubmission<?> authentication;
 
     private final @NotNull DeviceAccessMethod accessMethod;
 
-    private final @Nullable AuthenticationSubmission<?> authentication;
+    private final @NotNull DeviceConnectionBinding connection;
 
     private final @Nullable String sessionToken;
 

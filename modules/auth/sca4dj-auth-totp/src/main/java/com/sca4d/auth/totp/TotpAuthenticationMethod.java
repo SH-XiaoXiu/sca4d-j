@@ -42,13 +42,13 @@ public class TotpAuthenticationMethod implements AuthenticationMethod<TotpProof>
 
     private final TotpCredentialRepository credentials;
 
+    private final Clock clock;
+
     private final RedisTotpEnrollmentStore enrollments;
 
     private final TotpCodeVerifier verifier;
 
     private final TotpSecretCryptography secrets;
-
-    private final Clock clock;
 
     /**
      * 创建 TOTP 认证方法。

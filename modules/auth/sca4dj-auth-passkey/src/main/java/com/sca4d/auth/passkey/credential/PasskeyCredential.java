@@ -15,31 +15,31 @@ import java.util.Set;
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public class PasskeyCredential {
 
-    private final long id;
+    private final Instant createdAt;
 
-    private final long accountId;
+    private final @Nullable Instant lastUsedAt;
 
-    private final byte[] userHandle;
+    private final Set<String> transports;
+
+    private final String name;
+
+    private final Version version;
+
+    private final boolean backedUp;
+
+    private final boolean backupEligible;
 
     private final byte[] credentialId;
 
     private final byte[] publicKeyCose;
 
+    private final byte[] userHandle;
+
+    private final long accountId;
+
+    private final long id;
+
     private final long signatureCount;
-
-    private final Set<String> transports;
-
-    private final boolean backupEligible;
-
-    private final boolean backedUp;
-
-    private final String name;
-
-    private final Instant createdAt;
-
-    private final @Nullable Instant lastUsedAt;
-
-    private final Version version;
 
     /**
      * 创建数据库已保存的 Passkey Credential。
@@ -79,14 +79,18 @@ public class PasskeyCredential {
     }
 
     /**
-     * 返回模块内部 Credential 标识；registration 校验后尚未写入数据库时为 0。
+     * 模块内部 Credential 标识；registration 校验后尚未写入数据库时为 0。
+     *
+     * @return 模块内部 Credential 标识；registration 校验后尚未写入数据库时为 0
      */
     public long id() {
         return id;
     }
 
     /**
-     * 返回 Credential 所属账号。
+     * Credential 所属账号。
+     *
+     * @return Credential 所属账号
      */
     public long accountId() {
         return accountId;
@@ -114,56 +118,68 @@ public class PasskeyCredential {
     }
 
     /**
-     * 返回最近一次成功 assertion 保存的签名计数器。
+     * 最近一次成功 assertion 保存的签名计数器。
+     *
+     * @return 最近一次成功 assertion 保存的签名计数器
      */
     public long signatureCount() {
         return signatureCount;
     }
 
     /**
-     * 返回浏览器报告的不可修改 authenticator transport 集合。
+     * 浏览器报告的不可修改 authenticator transport 集合。
+     *
+     * @return 浏览器报告的不可修改 authenticator transport 集合
      */
     public @NotNull @Unmodifiable Set<String> transports() {
         return transports;
     }
 
     /**
-     * 返回 Credential 是否允许同步备份。
+     * Credential 是否允许同步备份。
+     *
+     * @return Credential 是否允许同步备份
      */
     public boolean backupEligible() {
         return backupEligible;
     }
 
     /**
-     * 返回 Credential 最近一次 assertion 是否来自已备份状态。
+     * Credential 最近一次 assertion 是否来自已备份状态。
+     *
+     * @return Credential 最近一次 assertion 是否来自已备份状态
      */
     public boolean backedUp() {
         return backedUp;
     }
 
     /**
-     * 返回用户为 Credential 设置的名称。
+     * 用户为 Credential 设置的名称。
+     *
+     * @return 用户为 Credential 设置的名称
      */
     public @NotNull String name() {
         return name;
     }
 
     /**
-     * 返回 Credential 创建时间。
+     * Credential 创建时间。
+     *
+     * @return Credential 创建时间
      */
     public @NotNull Instant createdAt() {
         return createdAt;
     }
 
-    /**
-     * 返回 Credential 最近一次成功使用时间；从未使用时为 {@code null}。
-     */
+    /** @return Credential 最近一次成功使用时间；从未使用时为 {@code null} */
     public @Nullable Instant lastUsedAt() {
         return lastUsedAt;
     }
 
     /**
-     * 返回 Credential 当前乐观版本。
+     * Credential 当前乐观版本。
+     *
+     * @return Credential 当前乐观版本
      */
     public @NotNull Version version() {
         return version;

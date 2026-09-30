@@ -6,9 +6,9 @@ import org.jetbrains.annotations.Contract;
 /** 表示一个输入位置没有满足规则的校验问题（Validation Violation）。 */
 public class Violation {
 
-    private final String path;
-
     private final String messageKey;
+
+    private final String path;
 
     /**
      * 创建校验问题。
@@ -22,7 +22,7 @@ public class Violation {
     }
 
     /**
-     * 返回出现问题的输入位置。
+     * 出现问题的输入位置。
      *
      * @return 出现问题的输入位置
      */
@@ -32,7 +32,7 @@ public class Violation {
     }
 
     /**
-     * 返回国际化消息键。
+     * 国际化消息键。
      *
      * @return 国际化消息键
      */

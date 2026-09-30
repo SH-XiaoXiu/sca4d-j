@@ -31,19 +31,19 @@ public class ThingModelService {
 
     private static final Duration LOCK_WAIT = Duration.ofSeconds(10);
 
+    private final @NotNull ProductRepository products;
+
     private final @NotNull ThingModelRepository models;
 
-    private final @NotNull ProductRepository products;
+    private final @NotNull ThingModelI18nValidator i18nValidator;
 
     private final @NotNull DevicePolicyCatalog policies;
 
     private final @NotNull DeviceProtocolCatalog protocols;
 
-    private final @NotNull ThingModelJsonCodec codec;
-
-    private final @NotNull ThingModelI18nValidator i18nValidator;
-
     private final @NotNull DistributedLock distributedLock;
+
+    private final @NotNull ThingModelJsonCodec codec;
 
     private final @NotNull TransactionTemplate transactions;
 

@@ -36,7 +36,7 @@ public class FileAccessUrl {
     }
 
     /**
-     * 返回文件标识。
+     * 文件标识。
      *
      * @return 正数文件标识
      */
@@ -45,7 +45,7 @@ public class FileAccessUrl {
     }
 
     /**
-     * 返回客户端可以访问的短期地址。
+     * 客户端可以访问的短期地址。
      *
      * @return 绝对读取地址
      */
@@ -54,7 +54,7 @@ public class FileAccessUrl {
     }
 
     /**
-     * 返回读取地址失效时间。
+     * 读取地址失效时间。
      *
      * @return 地址失效时间
      */

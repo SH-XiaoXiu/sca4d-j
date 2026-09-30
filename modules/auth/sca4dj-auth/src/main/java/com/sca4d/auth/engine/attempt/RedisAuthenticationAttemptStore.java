@@ -21,13 +21,13 @@ public class RedisAuthenticationAttemptStore {
 
     private static final Duration ACQUIRE_TIMEOUT = Duration.ofSeconds(2);
 
-    private final RedisTemplate<Key, String> redis;
-
     private final AuthenticationAttemptCodec codec;
 
     private final Clock clock;
 
     private final DistributedLock distributedLock;
+
+    private final RedisTemplate<Key, String> redis;
 
     private static final TreeCode ATTEMPT = TreeCode.ofColon("AUTHENTICATION:ATTEMPT");
 

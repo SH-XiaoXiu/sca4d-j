@@ -18,36 +18,36 @@ import java.util.stream.Collectors;
 public class FederatedProvider {
 
     /**
-     * Provider 管理接口和审计记录使用的资源类型。
-     */
-    public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofSlash("AUTH/FEDERATED_PROVIDER");
-
-    /**
      * 供 Java 注解参数使用的资源类型文本。
      */
     public static final @NotNull String RESOURCE_TYPE_VALUE = "AUTH/FEDERATED_PROVIDER";
 
-    private final long id;
-
-    private final @NotNull String code;
+    /**
+     * Provider 管理接口和审计记录使用的资源类型。
+     */
+    public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofSlash("AUTH/FEDERATED_PROVIDER");
 
     private final @NotNull FederatedProviderProtocol protocol;
 
     private final @NotNull FederatedProviderStatus status;
 
-    private final boolean loginPageVisible;
-
-    private final int displayOrder;
-
     private final @NotNull FederatedUnlinkedIdentityAction unlinkedIdentityAction;
 
-    private final boolean autoLinkVerifiedEmail;
-
     private final @NotNull Map<String, Map<String, String>> i18n;
+
+    private final @NotNull String code;
 
     private final @Nullable String iconReference;
 
     private final @NotNull Version version;
+
+    private final boolean autoLinkVerifiedEmail;
+
+    private final boolean loginPageVisible;
+
+    private final int displayOrder;
+
+    private final long id;
 
     /**
      * 创建外部登录 Provider。

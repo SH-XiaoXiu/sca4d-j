@@ -17,11 +17,14 @@ public class PasskeyProperties {
 
     private Set<String> origins = new LinkedHashSet<>(Set.of("http://localhost:5173"));
 
-    /** 创建使用本地开发默认值的 Passkey 配置。 */
     public PasskeyProperties() {
     }
 
-    /** 返回 WebAuthn RP ID。 */
+    /**
+     * WebAuthn RP ID。
+     *
+     * @return WebAuthn RP ID
+     */
     public @NotNull String getRelyingPartyId() {
         return relyingPartyId;
     }
@@ -31,7 +34,11 @@ public class PasskeyProperties {
         this.relyingPartyId = TextUtils.requireText(relyingPartyId, "Passkey RP ID");
     }
 
-    /** 返回浏览器展示的 Relying Party 名称。 */
+    /**
+     * 浏览器展示的 Relying Party 名称。
+     *
+     * @return 浏览器展示的 Relying Party 名称
+     */
     public @NotNull String getRelyingPartyName() {
         return relyingPartyName;
     }

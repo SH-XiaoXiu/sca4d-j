@@ -29,7 +29,7 @@ public class DeviceDetailsUpdate {
     }
 
     /**
-     * 读取展示名称的字段更新意图。
+     * 展示名称的字段更新意图。
      *
      * @return 展示名称 Patch
      */
@@ -49,7 +49,7 @@ public class DeviceDetailsUpdate {
     }
 
     /**
-     * 读取备注的字段更新意图。
+     * 备注的字段更新意图。
      *
      * @return 备注 Patch
      */

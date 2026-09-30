@@ -24,13 +24,13 @@ public class DeviceUplink {
         REPORTED_AND_ACKNOWLEDGEMENT
     }
 
-    private final @NotNull Kind kind;
+    private final @Nullable DeviceAcknowledgement acknowledgement;
 
-    private final @Nullable ReportedStateUpdate reportedState;
+    private final @NotNull Kind kind;
 
     private final @NotNull List<ThingEventOccurrence> events;
 
-    private final @Nullable DeviceAcknowledgement acknowledgement;
+    private final @Nullable ReportedStateUpdate reportedState;
 
     private DeviceUplink(
             @NotNull Kind kind,

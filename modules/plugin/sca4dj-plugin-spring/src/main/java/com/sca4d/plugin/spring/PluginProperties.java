@@ -1,9 +1,10 @@
 package com.sca4d.plugin.spring;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
 
 /** 配置一个 App 的插件交付位置和旧代次停止等待时间。 */
@@ -16,7 +17,7 @@ public final class PluginProperties {
     private String cacheDirectory = "build/plugin-cache";
 
     /** 启动时必须加载的插件 JAR 路径。 */
-    private List<String> artifacts = new ArrayList<>();
+    private @NotNull List<String> artifacts = List.of();
 
     /** 关闭或替换时等待正在执行操作的最大时间。 */
     private Duration drainTimeout = Duration.ofSeconds(30);
@@ -37,11 +38,11 @@ public final class PluginProperties {
         this.cacheDirectory = cacheDirectory;
     }
 
-    public List<String> getArtifacts() {
+    public @NotNull @Unmodifiable List<String> getArtifacts() {
         return artifacts;
     }
 
-    public void setArtifacts(List<String> artifacts) {
+    public void setArtifacts(@NotNull List<String> artifacts) {
         this.artifacts = List.copyOf(artifacts);
     }
 

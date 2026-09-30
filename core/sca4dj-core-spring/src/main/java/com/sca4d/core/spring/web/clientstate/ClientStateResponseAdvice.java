@@ -14,7 +14,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 @ControllerAdvice
 public class ClientStateResponseAdvice implements ResponseBodyAdvice<Object> {
 
-    /** 创建 ClientState 响应头写出组件。 */
     public ClientStateResponseAdvice() {
     }
 

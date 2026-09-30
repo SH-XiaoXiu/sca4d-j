@@ -57,11 +57,11 @@ public class DeviceConnectionRepository implements DeviceConnectionReceiver, Dev
         FIND_BY_DEVICE = script;
     }
 
-    private final @NotNull RedisTemplate<Key, String> redis;
-
     private final @NotNull Clock clock;
 
     private final @NotNull Duration ttl;
+
+    private final @NotNull RedisTemplate<Key, String> redis;
 
     private final @NotNull Key connectionPrefix;
 

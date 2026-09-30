@@ -9,13 +9,13 @@ import java.util.Objects;
 @SuppressWarnings("ClassCanBeRecord") // 状态对象沿用普通 class，便于显式表达状态转换。
 class TotpEnrollmentState {
 
-    private final String id;
-
-    private final Long accountId;
-
     private final EncryptedSecret secret;
 
     private final Instant expiresAt;
+
+    private final Long accountId;
+
+    private final String id;
 
     private final TotpEnrollmentStatus status;
 

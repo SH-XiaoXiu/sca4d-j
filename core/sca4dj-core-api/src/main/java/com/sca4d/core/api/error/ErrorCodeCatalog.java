@@ -74,7 +74,7 @@ public class ErrorCodeCatalog {
     }
 
     /**
-     * 返回按编码索引的不可变错误码映射。
+     * 按编码索引的不可变错误码映射。
      *
      * @return 按编码索引的不可变错误码映射
      */

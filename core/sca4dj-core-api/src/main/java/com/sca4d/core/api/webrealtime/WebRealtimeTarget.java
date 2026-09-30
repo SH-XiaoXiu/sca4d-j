@@ -51,11 +51,11 @@ public class WebRealtimeTarget {
         CONNECTION
     }
 
-    private final @NotNull Type type;
+    private final @NotNull String id;
 
     private final @Nullable String qualifier;
 
-    private final @NotNull String id;
+    private final @NotNull Type type;
 
     private WebRealtimeTarget(@NotNull Type type, @Nullable String qualifier, @NotNull String id) {
         this.type = Objects.requireNonNull(type, "Web Realtime 目标类型不能为空");

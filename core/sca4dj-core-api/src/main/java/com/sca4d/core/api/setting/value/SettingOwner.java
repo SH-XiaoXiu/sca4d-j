@@ -17,9 +17,9 @@ import java.util.Objects;
 @SuppressWarnings("ClassCanBeRecord") // 项目禁止使用 Java record。
 public final class SettingOwner {
 
-    private final TreeCode type;
-
     private final String id;
+
+    private final TreeCode type;
 
     /**
      * 创建设置 owner。

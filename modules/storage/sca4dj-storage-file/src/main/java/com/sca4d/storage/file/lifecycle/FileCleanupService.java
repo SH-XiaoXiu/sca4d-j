@@ -29,11 +29,11 @@ public class FileCleanupService {
 
     private final @NotNull StorageRegistry storages;
 
-    private final @NotNull TransactionTemplate transactions;
+    private final @NotNull FileProperties properties;
 
     private final @NotNull Clock clock;
 
-    private final @NotNull FileProperties properties;
+    private final @NotNull TransactionTemplate transactions;
 
     private final @NotNull String owner = UUID.randomUUID().toString();
 

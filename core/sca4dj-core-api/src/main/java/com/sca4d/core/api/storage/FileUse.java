@@ -33,7 +33,7 @@ public class FileUse {
     }
 
     /**
-     * 返回 App 定义的文件业务场景。
+     * App 定义的文件业务场景。
      *
      * @return 业务场景编码
      */
@@ -42,7 +42,7 @@ public class FileUse {
     }
 
     /**
-     * 返回文件准备绑定的目标业务资源。
+     * 文件准备绑定的目标业务资源。
      *
      * @return 目标业务资源
      */

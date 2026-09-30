@@ -44,21 +44,21 @@ public class SessionService implements SessionLifecycle {
 
     private final SessionIdentityLoadService identities;
 
-    private final PrincipalLoaders principals;
-
-    private final PrincipalIdLoaders principalIds;
-
-    private final ResourceLoaders resources;
-
-    private final ResourceIdLoaders resourceIds;
-
-    private final SaTokenSessionManager sessions;
-
-    private final JwtSessionProjection tokenProjection;
-
     private final AuthSettings settings;
 
     private final Clock clock;
+
+    private final JwtSessionProjection tokenProjection;
+
+    private final PrincipalIdLoaders principalIds;
+
+    private final PrincipalLoaders principals;
+
+    private final ResourceIdLoaders resourceIds;
+
+    private final ResourceLoaders resources;
+
+    private final SaTokenSessionManager sessions;
 
     /**
      * 创建 Session 服务。

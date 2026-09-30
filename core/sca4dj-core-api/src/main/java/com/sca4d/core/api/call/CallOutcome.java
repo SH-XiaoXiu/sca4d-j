@@ -27,13 +27,13 @@ public class CallOutcome {
         FAILED
     }
 
-    private final Status status;
-
     private final @Nullable Object result;
 
-    private final @Nullable Throwable error;
+    private final Status status;
 
     private final @Nullable Throwable completionFailure;
+
+    private final @Nullable Throwable error;
 
     private CallOutcome(Status status, @Nullable Object result, @Nullable Throwable error) {
         this(status, result, error, null);

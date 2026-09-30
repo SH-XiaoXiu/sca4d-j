@@ -44,15 +44,15 @@ public class MqttDeviceProtocol implements DeviceUplinkProtocol {
         }
     };
 
-    private final @NotNull String code;
-
-    private final @NotNull Map<String, MqttUplinkDefinition> uplinks;
-
-    private final @NotNull Map<String, MqttUplinkRoute> uplinkRoutes;
+    private final @NotNull MqttTopicIdentityMapper topicIdentityMapper;
 
     private final @NotNull Map<String, DownlinkDefinition> downlinks;
 
-    private final @NotNull MqttTopicIdentityMapper topicIdentityMapper;
+    private final @NotNull Map<String, MqttUplinkRoute> uplinkRoutes;
+
+    private final @NotNull Map<String, MqttUplinkDefinition> uplinks;
+
+    private final @NotNull String code;
 
     private MqttDeviceProtocol(@NotNull Builder builder) {
         this.code = builder.code;
@@ -407,11 +407,11 @@ public class MqttDeviceProtocol implements DeviceUplinkProtocol {
     @SuppressWarnings("ClassCanBeRecord") // 协议内部类型遵守项目禁用 record 的规则。
     private static class DownlinkDefinition {
 
+        private final List<DataKey<?>> keys;
+
         private final MqttDownlinkRoute route;
 
         private final Pipeline<MqttDownlinkFrame, byte[]> pipeline;
-
-        private final List<DataKey<?>> keys;
 
         private DownlinkDefinition(
                 MqttDownlinkRoute route,

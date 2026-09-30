@@ -20,15 +20,14 @@ public class ScheduledJobRun<T> {
 
     private final @NotNull Id runId;
 
+    private final @Nullable Instant completedAt;
+
     private final @NotNull Instant scheduledAt;
 
     private final @NotNull JobRunStatus status;
 
-    private final @Nullable Instant completedAt;
-
     private final @Nullable T output;
 
-    /** 创建一条已经完成 App 隔离名称、Job 定义和计划范围检查的历史记录。 */
     public ScheduledJobRun(
             @NotNull Id runId,
             @NotNull Instant scheduledAt,

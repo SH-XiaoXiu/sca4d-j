@@ -19,9 +19,9 @@ import java.util.TreeSet;
 /** 聚合 Java 枚举和数据库动态项，并拒绝数据库扩展封闭代码字典。 */
 public class DatabaseDictionaries implements Dictionaries {
 
-    private final DictionaryRegistry registry;
-
     private final DictionaryRepository repository;
+
+    private final DictionaryRegistry registry;
 
     /** 创建聚合字典查询入口。 */
     public DatabaseDictionaries(

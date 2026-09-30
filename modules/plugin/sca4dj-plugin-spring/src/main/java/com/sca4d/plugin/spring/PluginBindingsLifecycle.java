@@ -17,11 +17,11 @@ import java.nio.file.Path;
 final class PluginBindingsLifecycle implements SmartLifecycle {
     private static final Logger LOG = LoggerFactory.getLogger(PluginBindingsLifecycle.class);
 
-    private final PluginHost host;
+    private final ConfigurableListableBeanFactory factory;
 
     private final PluginProperties properties;
 
-    private final ConfigurableListableBeanFactory factory;
+    private final PluginHost host;
 
     private boolean running;
 
@@ -32,7 +32,7 @@ final class PluginBindingsLifecycle implements SmartLifecycle {
     }
 
     @Override
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({"rawtypes", "unchecked", "resource"})
     public void start() {
         try {
             // 绑定 Spring 已完成代理的单例，插件调用仍经过原有事务和权限代理。
@@ -43,10 +43,11 @@ final class PluginBindingsLifecycle implements SmartLifecycle {
                 PluginBinding binding = AnnotatedElementUtils
                         .findMergedAnnotation(AopUtils.getTargetClass(bean), PluginBinding.class);
                 if (binding == null
-                        && factory.getBeanDefinition(name) instanceof RootBeanDefinition definition
-                        && definition.getResolvedFactoryMethod() != null) {
-                    binding = AnnotatedElementUtils
-                            .findMergedAnnotation(definition.getResolvedFactoryMethod(), PluginBinding.class);
+                        && factory.getBeanDefinition(name) instanceof RootBeanDefinition definition) {
+                    var factoryMethod = definition.getResolvedFactoryMethod();
+                    if (factoryMethod != null) {
+                        binding = AnnotatedElementUtils.findMergedAnnotation(factoryMethod, PluginBinding.class);
+                    }
                 }
                 if (binding == null)
                     continue;
@@ -70,7 +71,7 @@ final class PluginBindingsLifecycle implements SmartLifecycle {
             host.runtime().verifyRequired();
             running = true;
             LOG.info("App 插件已启动 | artifactCount={}", properties.getArtifacts().size());
-        } catch (Exception failure) {
+        } catch (ReflectiveOperationException | RuntimeException failure) {
             host.runtime().close();
             throw new IllegalStateException("App 必需插件装配失败", failure);
         }

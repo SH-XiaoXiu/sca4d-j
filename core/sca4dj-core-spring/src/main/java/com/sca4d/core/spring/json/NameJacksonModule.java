@@ -73,9 +73,9 @@ public class NameJacksonModule extends SimpleModule {
     private static class NameDeserializer<T extends Name> extends StdDeserializer<T> {
         private static final long serialVersionUID = 1L;
 
-        private final Function<String, T> factory;
-
         private final Class<T> type;
+
+        private final Function<String, T> factory;
 
         private NameDeserializer(Class<T> type, Function<String, T> factory) {
             super(type);

@@ -10,11 +10,11 @@ import java.util.Objects;
 /** 声明实例可启用的入口和工作线程能力、自主执行身份及 HTTP 路径前缀。 */
 public class InstanceCapability {
 
+    private final @NotNull List<String> paths;
+
     private final @NotNull TreeCode code;
 
     private final @NotNull TreeCode systemIdentity;
-
-    private final @NotNull List<String> paths;
 
     /** 创建能力声明；能力可用性不授予调用者业务权限。 */
     public InstanceCapability(
@@ -38,17 +38,29 @@ public class InstanceCapability {
         }
     }
 
-    /** 返回固定能力编码。 */
+    /**
+     * 固定能力编码。
+     *
+     * @return 固定能力编码
+     */
     public @NotNull TreeCode code() {
         return code;
     }
 
-    /** 返回系统自主工作使用的领域身份编码。 */
+    /**
+     * 系统自主工作使用的领域身份编码。
+     *
+     * @return 系统自主工作使用的领域身份编码
+     */
     public @NotNull TreeCode systemIdentity() {
         return systemIdentity;
     }
 
-    /** 返回声明该能力的全部 HTTP 路径前缀。 */
+    /**
+     * 声明该能力的全部 HTTP 路径前缀。
+     *
+     * @return 声明该能力的全部 HTTP 路径前缀
+     */
     public @NotNull @Unmodifiable List<String> paths() {
         return paths;
     }

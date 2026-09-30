@@ -5,13 +5,12 @@ import java.util.Objects;
 /** 回调完成后交给认证方法的一次性外部资料。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public class FederatedCompletedAuthorization {
-    private final String providerCode;
-
     private final FederatedAuthorizationPurpose purpose;
 
     private final FederatedProfile profile;
 
-    /** 创建完成结果。 */
+    private final String providerCode;
+
     public FederatedCompletedAuthorization(
             String providerCode,
             FederatedAuthorizationPurpose purpose,

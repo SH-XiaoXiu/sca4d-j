@@ -22,9 +22,9 @@ public class RateLimit {
         }
     }
 
-    private final long permits;
-
     private final Duration window;
+
+    private final long permits;
 
     /**
      * 创建限流要求。
@@ -41,7 +41,7 @@ public class RateLimit {
     }
 
     /**
-     * 返回窗口内允许次数。
+     * 窗口内允许次数。
      *
      * @return 窗口内允许次数
      */
@@ -50,7 +50,7 @@ public class RateLimit {
     }
 
     /**
-     * 返回时间窗口。
+     * 时间窗口。
      *
      * @return 时间窗口
      */

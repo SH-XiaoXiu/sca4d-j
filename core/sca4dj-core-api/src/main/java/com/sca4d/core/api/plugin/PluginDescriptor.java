@@ -7,16 +7,17 @@ import java.util.Objects;
 
 /** 保存交付物声明的插件、App API 身份及入口类。 */
 public final class PluginDescriptor {
-    private final @NotNull TreeCode id;
+    private final @NotNull String entry;
+
+    private final @NotNull String requiresApi;
 
     private final @NotNull String version;
 
     private final @NotNull TreeCode api;
 
-    private final @NotNull String requiresApi;
+    private final @NotNull TreeCode id;
 
-    private final @NotNull String entry;
-
+    /** 版本、API 版本范围和入口完整类名必须包含非空白字符。 */
     public PluginDescriptor(
             @NotNull TreeCode id,
             @NotNull String version,
@@ -33,27 +34,27 @@ public final class PluginDescriptor {
         }
     }
 
-    /** 返回稳定插件编码。 */
+    /** @return 稳定插件编码 */
     public @NotNull TreeCode id() {
         return id;
     }
 
-    /** 返回交付版本。 */
+    /** @return 交付版本 */
     public @NotNull String version() {
         return version;
     }
 
-    /** 返回所需 App API 编码。 */
+    /** @return 所需 App API 编码 */
     public @NotNull TreeCode api() {
         return api;
     }
 
-    /** 返回 API 版本范围。 */
+    /** @return API 版本范围 */
     public @NotNull String requiresApi() {
         return requiresApi;
     }
 
-    /** 返回入口完整类名。 */
+    /** @return 插件入口的全限定类名 */
     public @NotNull String entry() {
         return entry;
     }

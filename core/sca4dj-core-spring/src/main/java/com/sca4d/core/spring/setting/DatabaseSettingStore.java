@@ -29,7 +29,6 @@ public class DatabaseSettingStore implements SettingReader<String>, SettingWrite
 
     private final VersionConditions versionConditions;
 
-    /** 创建数据库读写实现，HTTP 条件版本由已有 VersionConditions 解释。 */
     public DatabaseSettingStore(
             @NotNull SettingRepository repository,
             @Nullable SecretKeyring keyring,
@@ -137,14 +136,16 @@ public class DatabaseSettingStore implements SettingReader<String>, SettingWrite
 
     /** 使用数据库保存的原始编码和加密上下文版本解密，不借用当前 Codec 结构版本。 */
     String decrypt(SettingOwner owner, StoredSetting stored) {
-        if (keyring == null || stored.valueKeyId() == null || stored.encryptionContextVersion() == null) {
+        String keyId = stored.valueKeyId();
+        Integer contextVersion = stored.encryptionContextVersion();
+        if (keyring == null || keyId == null || contextVersion == null) {
             throw new IllegalStateException("敏感设置缺少解密信息");
         }
-        SecretCipher cipher = keyring.findCipher(stored.valueKeyId())
+        SecretCipher cipher = keyring.findCipher(keyId)
                 .orElseThrow(() -> new IllegalStateException("敏感设置引用未知密钥"));
         return new String(
-                new SettingSecretCodecCatalog(cipher, owner, stored.key()).select(stored.encryptionContextVersion())
-                        .decode(new EncryptedSecret(stored.valueKeyId(), stored.valueCiphertext())),
+                new SettingSecretCodecCatalog(cipher, owner, stored.key()).select(contextVersion)
+                        .decode(new EncryptedSecret(keyId, stored.valueCiphertext())),
                 StandardCharsets.UTF_8);
     }
 
@@ -153,13 +154,13 @@ public class DatabaseSettingStore implements SettingReader<String>, SettingWrite
      */
     @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
     static final class EncodedSetting {
-        private final String text;
+        private final Integer encryptionContextVersion;
 
         private final String keyId;
 
-        private final byte[] ciphertext;
+        private final String text;
 
-        private final Integer encryptionContextVersion;
+        private final byte[] ciphertext;
 
         /**
          * 创建已编码设置。

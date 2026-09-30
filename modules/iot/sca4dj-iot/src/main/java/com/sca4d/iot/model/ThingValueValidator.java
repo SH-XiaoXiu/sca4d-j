@@ -16,7 +16,6 @@ import java.util.Objects;
 /** 把结构化输入转换成物模型声明的精确 Java 类型并递归检查约束。 */
 public class ThingValueValidator {
 
-    /** 创建无状态物模型值校验器。 */
     public ThingValueValidator() {
     }
 

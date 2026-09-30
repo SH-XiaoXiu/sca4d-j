@@ -9,11 +9,10 @@ import java.util.Objects;
 /** 把标准下行消息元数据和已按 `DataKey` 整理的值交给协议 Pipeline。 */
 public class MqttDownlinkFrame {
 
-    private final @NotNull DeviceDownlink message;
-
     private final @NotNull DataValues values;
 
-    /** 创建只供协议 encoder 读取的下行帧输入。 */
+    private final @NotNull DeviceDownlink message;
+
     public MqttDownlinkFrame(
             @NotNull DeviceDownlink message,
             @NotNull DataValues values) {

@@ -21,9 +21,9 @@ public class DatabaseThingModelRepository implements ThingModelRepository {
 
     private final @NotNull ThingModelMapper mapper;
 
-    private final @NotNull ThingModelJsonCodec codec;
-
     private final @NotNull Clock clock;
+
+    private final @NotNull ThingModelJsonCodec codec;
 
     /**
      * @param mapper 物模型 SQL Mapper

@@ -10,11 +10,11 @@ import java.util.Objects;
 /** 表明调用方等待时间结束，持久化 Job run 仍继续执行。 */
 public class JobWaitTimeoutException extends RuntimeException {
 
-    /** 等待结束时仍未完成的运行标识。 */
-    private final @NotNull Id runId;
-
     /** 触发当前异常的等待上限。 */
     private final @NotNull Duration timeout;
+
+    /** 等待结束时仍未完成的运行标识。 */
+    private final @NotNull Id runId;
 
     /**
      * 创建不取消后台运行的等待超时异常。
@@ -30,7 +30,7 @@ public class JobWaitTimeoutException extends RuntimeException {
     }
 
     /**
-     * 返回尚未完成的 run。
+     * 尚未完成的 run。
      *
      * @return 等待超时时仍可继续查询的运行标识
      */
@@ -40,7 +40,7 @@ public class JobWaitTimeoutException extends RuntimeException {
     }
 
     /**
-     * 返回本次等待上限。
+     * 本次等待上限。
      *
      * @return 触发该异常的等待时长
      */

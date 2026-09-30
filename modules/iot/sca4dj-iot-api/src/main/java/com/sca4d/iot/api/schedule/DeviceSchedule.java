@@ -11,19 +11,19 @@ import java.util.Optional;
 /** 保存一个持续负责生成设备 command 下行的定时规则。 */
 public class DeviceSchedule {
 
-    private final long scheduleId;
-
-    private final long deviceId;
-
-    private final @NotNull DeviceScheduledCommand command;
+    private final @NotNull DeviceScheduleStatus status;
 
     private final @NotNull DeviceScheduleTrigger trigger;
 
+    private final @NotNull DeviceScheduledCommand command;
+
     private final @NotNull Duration validFor;
 
-    private final @NotNull DeviceScheduleStatus status;
-
     private final @Nullable Instant nextFireAt;
+
+    private final long deviceId;
+
+    private final long scheduleId;
 
     private final long version;
 

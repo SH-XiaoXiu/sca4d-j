@@ -34,9 +34,9 @@ public class AuditRepository {
 
     private final @NotNull AuditMapper mapper;
 
-    private final @NotNull IdGenerator ids;
-
     private final @NotNull AuditPayloadJson payloadJson;
+
+    private final @NotNull IdGenerator ids;
 
     private final @NotNull String instanceId;
 

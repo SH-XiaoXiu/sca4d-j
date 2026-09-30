@@ -19,15 +19,15 @@ public final class PluginStatus {
 
     private final @NotNull PluginDescriptor descriptor;
 
-    private final long generation;
-
     private final @NotNull State state;
-
-    private final int uses;
 
     private final @NotNull String digest;
 
     private final @Nullable String failure;
+
+    private final int uses;
+
+    private final long generation;
 
     public PluginStatus(
             @NotNull PluginDescriptor descriptor,
@@ -44,32 +44,32 @@ public final class PluginStatus {
         this.failure = failure;
     }
 
-    /** 返回插件交付描述。 */
+    /** @return 插件交付描述 */
     public @NotNull PluginDescriptor descriptor() {
         return descriptor;
     }
 
-    /** 返回当前实例的运行代次。 */
+    /** @return 当前实例的运行代次 */
     public long generation() {
         return generation;
     }
 
-    /** 返回实际运行阶段。 */
+    /** @return 运行阶段 */
     public @NotNull State state() {
         return state;
     }
 
-    /** 返回当前代次仍被操作持有的数量。 */
+    /** @return 持有当前代次的操作数 */
     public int uses() {
         return uses;
     }
 
-    /** 返回交付物 SHA-256。 */
+    /** @return 交付物 SHA-256 */
     public @NotNull String digest() {
         return digest;
     }
 
-    /** 返回失败类型；没有失败时为空，不包含秘密和原始异常。 */
+    /** @return 失败异常的类名；没有失败时为空 */
     public @Nullable String failure() {
         return failure;
     }

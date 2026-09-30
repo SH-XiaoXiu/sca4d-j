@@ -33,17 +33,17 @@ public class DeviceDisconnectHandler implements MessageHandler<DeviceDisconnectM
 
     private static final int MAX_ATTEMPTS = 20;
 
-    private final @NotNull MessageCodec<DeviceDisconnectMessage> codec;
-
-    private final @NotNull DeviceConnectionTerminatorRouter terminators;
-
-    private final @NotNull DeviceConnectionReceiver connections;
-
-    private final @NotNull MessageBus messages;
+    private final @Nullable ConnectionRegistry commonConnections;
 
     private final @NotNull Clock clock;
 
-    private final @Nullable ConnectionRegistry commonConnections;
+    private final @NotNull DeviceConnectionReceiver connections;
+
+    private final @NotNull DeviceConnectionTerminatorRouter terminators;
+
+    private final @NotNull MessageBus messages;
+
+    private final @NotNull MessageCodec<DeviceDisconnectMessage> codec;
 
     /**
      * 创建使用通用 Messaging 重试、不保存 IoT 断连任务表的 Consumer。

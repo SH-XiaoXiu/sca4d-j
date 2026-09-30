@@ -32,7 +32,7 @@ public class FlowEvent {
     }
 
     /**
-     * 返回事件类型。
+     * 事件类型。
      *
      * @return 事件类型
      */
@@ -41,7 +41,7 @@ public class FlowEvent {
     }
 
     /**
-     * 返回不可变事件属性。
+     * 不可变事件属性。
      *
      * @return 不可变事件属性
      */

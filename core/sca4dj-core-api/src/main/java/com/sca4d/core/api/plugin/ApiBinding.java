@@ -31,17 +31,29 @@ public final class ApiBinding {
         }
     }
 
-    /** 返回绑定契约。 */
+    /**
+     * 绑定契约。
+     *
+     * @return 绑定契约
+     */
     public @NotNull ApiDefinition definition() {
         return definition;
     }
 
-    /** 返回调用目标。 */
+    /**
+     * 调用目标。
+     *
+     * @return 调用目标
+     */
     public @NotNull ApiTarget target() {
         return target;
     }
 
-    /** 返回只读的直接调用分发器。 */
+    /**
+     * 只读的直接调用分发器。
+     *
+     * @return 只读的直接调用分发器
+     */
     public @NotNull Map<TreeCode, OperationInvoker> operations() {
         return operations;
     }

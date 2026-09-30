@@ -7,6 +7,7 @@ import com.sca4d.core.api.plugin.PluginEntrypoint;
 import com.sca4d.core.api.plugin.PluginRuntime;
 import com.sca4d.plugin.pf4j.Pf4jPluginLoader;
 import com.sca4d.plugin.runtime.DefaultPluginRuntime;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
@@ -93,7 +94,8 @@ final class PluginHost {
         contracts = Map.copyOf(declarations);
     }
 
-    /** 返回 Core 接口，不对 App 暴露具体运行实现。 */
+    /** 由 PluginBindingsLifecycle 管理关闭的共享运行对象。 */
+    @Contract(pure = true)
     @NotNull
     PluginRuntime runtime() {
         return runtime;

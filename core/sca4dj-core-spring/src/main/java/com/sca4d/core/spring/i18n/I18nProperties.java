@@ -14,7 +14,6 @@ public class I18nProperties {
 
     private String defaultLocale = "";
 
-    /** 创建等待 Spring 绑定 {@code sca4dj.i18n} 配置的对象。 */
     public I18nProperties() {
     }
 
@@ -37,7 +36,7 @@ public class I18nProperties {
     }
 
     /**
-     * 读取请求语言均不受支持时使用的标签。
+     * 请求语言均不受支持时使用的标签。
      *
      * @return 应用默认 BCP 47 语言标签
      */

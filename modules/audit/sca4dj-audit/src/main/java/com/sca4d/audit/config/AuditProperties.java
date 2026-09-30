@@ -15,7 +15,11 @@ public class AuditProperties {
     /** 未被方法或类型声明覆盖时使用的记录方式。 */
     private @NotNull Audit.Mode mode = Audit.Mode.DIRECT;
 
-    /** 返回审计记录的写入或交接方式。 */
+    /**
+     * 审计记录的写入或交接方式。
+     *
+     * @return 审计记录的写入或交接方式
+     */
     public @NotNull Audit.Mode getMode() {
         return mode;
     }
@@ -34,7 +38,7 @@ public class AuditProperties {
             List.of("password", "token", "secret", "salt", "authorization"));
 
     /**
-     * 返回单条 payload 允许保存的最大 UTF-8 字节数。
+     * 单条 payload 允许保存的最大 UTF-8 字节数。
      *
      * @return 正数字节数
      */

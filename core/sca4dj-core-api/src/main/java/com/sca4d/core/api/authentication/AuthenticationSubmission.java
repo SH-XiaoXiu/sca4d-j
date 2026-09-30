@@ -12,11 +12,11 @@ import java.util.Objects;
 @SuppressWarnings("ClassCanBeRecord")
 public class AuthenticationSubmission<P> {
 
-    private final TreeCode methodCode;
-
     private final Class<P> proofType;
 
     private final P proof;
+
+    private final TreeCode methodCode;
 
     /**
      * 创建一次只能交给目标认证方法使用的 Proof 提交。
@@ -37,7 +37,7 @@ public class AuthenticationSubmission<P> {
     }
 
     /**
-     * 读取认证引擎应选择的认证方法。
+     * 认证引擎应选择的认证方法。
      *
      * @return 目标认证方法编码
      */
@@ -46,7 +46,7 @@ public class AuthenticationSubmission<P> {
     }
 
     /**
-     * 读取认证引擎调用认证方法前必须核对的类型。
+     * 认证引擎调用认证方法前必须核对的 Proof 类型。
      *
      * @return Proof 精确类型
      */
@@ -55,7 +55,7 @@ public class AuthenticationSubmission<P> {
     }
 
     /**
-     * 读取本次认证方法调用使用的证明材料。
+     * 本次认证方法调用使用的证明材料。
      *
      * @return Proof；调用方和认证引擎都不得持久化或记录此值
      */

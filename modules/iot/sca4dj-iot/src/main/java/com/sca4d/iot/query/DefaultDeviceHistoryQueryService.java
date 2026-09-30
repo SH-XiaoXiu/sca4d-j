@@ -32,7 +32,6 @@ public class DefaultDeviceHistoryQueryService implements DeviceHistoryQueryServi
 
     private final @NotNull ObjectProvider<DeviceHistoryStore> history;
 
-    /** 创建明确区分主库历史与可选高频历史的查询服务。 */
     public DefaultDeviceHistoryQueryService(
             @NotNull DeviceRepository devices,
             @NotNull DownlinkRepository downlinks,

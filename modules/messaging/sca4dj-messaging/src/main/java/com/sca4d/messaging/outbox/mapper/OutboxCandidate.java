@@ -10,13 +10,13 @@ import java.util.Objects;
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public class OutboxCandidate {
 
-    private final long messageId;
-
     private final @NotNull TreeCode messageCode;
 
     private final byte @NotNull [] envelope;
 
     private final int attemptCount;
+
+    private final long messageId;
 
     private final long version;
 

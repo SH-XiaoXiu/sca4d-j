@@ -36,7 +36,6 @@ public class CoreOpenApiConfiguration {
                 .addJavaTypeToIgnore(ListParameters.class);
     }
 
-    /** 创建可由应用覆盖的 OpenAPI 基础自动配置。 */
     public CoreOpenApiConfiguration() {
     }
 

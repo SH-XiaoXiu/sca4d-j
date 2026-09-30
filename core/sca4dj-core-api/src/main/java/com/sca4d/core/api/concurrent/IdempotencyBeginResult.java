@@ -10,13 +10,13 @@ import java.util.Objects;
 /** 保存一次幂等处理权竞争的状态以及对应状态允许读取的数据。 */
 public class IdempotencyBeginResult<T> {
 
+    private final @NotNull Duration retryAfter;
+
     private final @NotNull IdempotencyBeginStatus status;
 
     private final @Nullable String token;
 
     private final @Nullable T replayResult;
-
-    private final @NotNull Duration retryAfter;
 
     private IdempotencyBeginResult(
             @NotNull IdempotencyBeginStatus status,
@@ -74,7 +74,7 @@ public class IdempotencyBeginResult<T> {
     }
 
     /**
-     * 返回成功重放的结果。
+     * 成功重放的结果。
      *
      * @return 仅 {@link IdempotencyBeginStatus#REPLAY} 状态可读取；首次结果可以明确为 {@code null}
      */

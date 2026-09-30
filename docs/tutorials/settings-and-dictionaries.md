@@ -2,6 +2,21 @@
 
 Dictionary 管理供业务选择的选项，Setting 直接读取某个系统、账号或业务身份的一项类型化配置。Setting 在构造时声明读取器、Codec、所属、继承和写入目标；数据库、ENV、文件和 JAR 资源是不同的读取或写入实现。
 
+## 启动期配置常量
+
+`ConfiguredConstants` 处理需要从部署配置确定、进程运行期间不再改变的公开协议名称。声明字段时提供配置键和代码默认值；Spring 加载配置后、创建 Bean 前读取外部覆盖值，并通过 Setting 的文本 Codec 校验。调用代码直接读取 `static final` 字段，不需要注入配置对象：
+
+```java
+public static final String SECRET_HEADER = ConfiguredConstants.text(
+        "sca4dj.gateway.protocol.secret-header", "X-Gateway-Secret");
+
+request.getHeader(GatewayConstants.SECRET_HEADER);
+```
+
+常量类在配置来源就绪前被初始化会使进程启动失败；修改部署配置后必须重启。该字段在 Java 中不是编译期常量，因此路由注解使用同一个配置键的 Spring 占位符。`ConfiguredConstants` 不读写 `sys_setting`，也不参加系统设置管理接口；产品名称等可在线调整的值继续使用 `SystemSetting`。Gateway、Core HTTP、OpenAPI 和 Web Realtime 的准确配置键分别由各自协议类和运行配置参考说明。
+
+配置可以使用规范属性键，也可以在进程环境或本地 Properties 格式的 `.env` 文件中使用对应的大写下划线名称，例如 `SCA4DJ_GATEWAY_PROTOCOL_SECRET_HEADER`。两种名称同时出现且值不一致时启动失败；它们表示同一项配置，不是新旧配置别名。
+
 ## 修改产品名称
 
 Sca4d Server 的 `ProductSettings.DISPLAY_NAME` 声明了 `PRODUCT:DISPLAY_NAME`，默认值为 `Sca4d-J`，最多 100 个字符。该定义通过 Spring Bean 注册到 SettingCatalog。

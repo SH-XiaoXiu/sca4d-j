@@ -27,9 +27,9 @@ public class ClasspathMessageCatalog implements MessageCatalog {
 
     private static final Logger LOG = LoggerFactory.getLogger(ClasspathMessageCatalog.class);
 
-    private static final String RESOURCE_PATTERN = "classpath*:META-INF/sca4dj/i18n/*/*.properties";
-
     private static final int MISSING_WARNING_LIMIT = 256;
+
+    private static final String RESOURCE_PATTERN = "classpath*:META-INF/sca4dj/i18n/*/*.properties";
 
     private final Locale defaultLocale;
 

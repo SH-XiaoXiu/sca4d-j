@@ -11,13 +11,13 @@ import java.util.Optional;
 /** 保存一个 desired 属性当前持续期望的值和收敛状态。 */
 public class DesiredStateSnapshot {
 
-    private final @NotNull String propertyCode;
-
-    private final long desiredSequence;
+    private final @Nullable Instant convergedAt;
 
     private final @NotNull Object value;
 
-    private final @Nullable Instant convergedAt;
+    private final @NotNull String propertyCode;
+
+    private final long desiredSequence;
 
     /** 创建 desired 属性查询快照。 */
     public DesiredStateSnapshot(

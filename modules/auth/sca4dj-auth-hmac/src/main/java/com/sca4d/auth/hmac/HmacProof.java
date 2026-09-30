@@ -10,19 +10,19 @@ import java.util.Objects;
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public class HmacProof {
 
+    private static final int HMAC_SHA256_BASE64URL_LENGTH = 43;
+
     private static final int MAX_NONCE_LENGTH = 128;
 
     private static final int MAX_CANONICAL_BYTES = 64 * 1024;
-
-    private static final int HMAC_SHA256_BASE64URL_LENGTH = 43;
 
     private final @NotNull Instant timestamp;
 
     private final @NotNull String nonce;
 
-    private final byte @NotNull [] canonicalBytes;
-
     private final @NotNull String signature;
+
+    private final byte @NotNull [] canonicalBytes;
 
     /** 创建具体协议已经规范化的 MAC Proof。 */
     public HmacProof(

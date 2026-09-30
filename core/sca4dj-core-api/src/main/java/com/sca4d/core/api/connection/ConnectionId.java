@@ -17,7 +17,7 @@ public class ConnectionId {
     }
 
     /**
-     * 返回不透明连接标识文本。
+     * 不透明连接标识文本。
      *
      * @return 已去除首尾空白且不为空的连接标识
      */

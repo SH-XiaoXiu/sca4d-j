@@ -14,38 +14,38 @@ import java.util.Objects;
 public class EmailSender {
 
     /**
-     * Email Sender 审计使用的稳定资源类型。
-     */
-    public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofSlash("NOTIFICATION/EMAIL/SENDERS");
-
-    /**
      * 供 Java 注解参数使用的资源类型文本。
      */
     public static final @NotNull String RESOURCE_TYPE_VALUE = "NOTIFICATION/EMAIL/SENDERS";
 
-    private final long senderId;
-
-    private final @NotNull String name;
-
-    private final @NotNull String host;
-
-    private final int port;
+    /**
+     * Email Sender 审计使用的稳定资源类型。
+     */
+    public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofSlash("NOTIFICATION/EMAIL/SENDERS");
 
     private final @NotNull SmtpSecurity security;
-
-    private final @Nullable String username;
-
-    private final boolean passwordConfigured;
 
     private final @NotNull String fromAddress;
 
     private final @Nullable String fromName;
 
+    private final @NotNull String host;
+
+    private final @NotNull String name;
+
     private final @Nullable String replyTo;
+
+    private final @Nullable String username;
+
+    private final @NotNull Version version;
 
     private final boolean enabled;
 
-    private final @NotNull Version version;
+    private final boolean passwordConfigured;
+
+    private final int port;
+
+    private final long senderId;
 
     /**
      * @param senderId           SMTP 配置标识

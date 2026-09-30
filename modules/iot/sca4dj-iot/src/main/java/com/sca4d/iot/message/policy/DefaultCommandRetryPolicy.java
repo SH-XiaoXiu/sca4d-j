@@ -19,7 +19,6 @@ public class DefaultCommandRetryPolicy implements RetryPolicy {
             Duration.ofSeconds(1), Duration.ofSeconds(5), Duration.ofSeconds(30), Duration.ofMinutes(2)
     };
 
-    /** 创建默认命令重试策略。 */
     public DefaultCommandRetryPolicy() {
     }
 

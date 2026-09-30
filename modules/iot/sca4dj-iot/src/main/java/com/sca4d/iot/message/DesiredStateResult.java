@@ -10,9 +10,9 @@ import java.util.Objects;
 /** 返回 desired 写入后的 Device desiredSequence 和实际生成的状态同步消息。 */
 public class DesiredStateResult {
 
-    private final long desiredSequence;
-
     private final @NotNull List<DeviceDownlink> messages;
+
+    private final long desiredSequence;
 
     /** @param desiredSequence Device 当前 desired sequence @param messages 本次实际变化生成的消息 */
     public DesiredStateResult(long desiredSequence, @NotNull List<DeviceDownlink> messages) {

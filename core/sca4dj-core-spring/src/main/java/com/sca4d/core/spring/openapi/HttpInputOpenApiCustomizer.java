@@ -66,11 +66,11 @@ public class HttpInputOpenApiCustomizer
             OperationCustomizer,
             OpenApiCustomizer {
 
-    static final String INTEGRAL = "x-sca4dj-http-input-integral";
-
     private static final String EXPLICIT_RANGE = "x-sca4dj-http-input-explicit-range";
 
     private static final String EXPLICIT_SIZE = "x-sca4dj-http-input-explicit-size";
+
+    static final String INTEGRAL = "x-sca4dj-http-input-integral";
 
     private static final String NO_DEFAULT = "x-sca4dj-http-input-no-default";
 
@@ -94,9 +94,9 @@ public class HttpInputOpenApiCustomizer
             EXPLICIT_SIZE,
             NO_DEFAULT);
 
-    private final @NotNull HttpInputValidationProperties properties;
-
     private final @NotNull CoreSpringProperties coreProperties;
+
+    private final @NotNull HttpInputValidationProperties properties;
 
     /**
      * 创建与运行时 HTTP 输入默认校验共用同一份配置的 OpenAPI 定制器。

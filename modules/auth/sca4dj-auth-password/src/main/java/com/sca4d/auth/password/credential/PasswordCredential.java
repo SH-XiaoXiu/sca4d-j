@@ -44,15 +44,15 @@ public class PasswordCredential {
         }
     }
 
+    private final @NotNull Instant updatedAt;
+
     private final Long accountId;
+
+    private final @NotNull Status status;
 
     private final String passwordHash;
 
     private final Version version;
-
-    private final @NotNull Instant updatedAt;
-
-    private final @NotNull Status status;
 
     /**
      * 创建账号的密码凭据。
@@ -87,7 +87,7 @@ public class PasswordCredential {
     }
 
     /**
-     * 返回密码凭据所属账号。
+     * 密码凭据所属账号。
      *
      * @return 密码凭据所属账号
      */
@@ -95,7 +95,11 @@ public class PasswordCredential {
         return accountId;
     }
 
-    /** 仅供 Password 认证方法校验，不得返回给 Controller 或日志。 */
+    /**
+     * 仅供 Password 认证方法校验，不得返回给 Controller 或日志。
+     *
+     * @return 密码摘要
+     */
     @ApiStatus.Internal
     @NotNull
     public String passwordHash() {
@@ -103,7 +107,7 @@ public class PasswordCredential {
     }
 
     /**
-     * 返回密码凭据最近更新时间。
+     * 密码凭据最近更新时间。
      *
      * @return 最近一次设置密码的时间
      */
@@ -112,7 +116,7 @@ public class PasswordCredential {
     }
 
     /**
-     * 返回密码凭据版本。
+     * 密码凭据版本。
      *
      * @return 密码凭据版本
      */

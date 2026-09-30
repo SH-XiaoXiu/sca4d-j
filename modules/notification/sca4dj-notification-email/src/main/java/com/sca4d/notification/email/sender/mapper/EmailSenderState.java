@@ -10,31 +10,31 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public class EmailSenderState {
 
-    private final long senderId;
-
-    private final @NotNull String name;
-
-    private final @NotNull String host;
-
-    private final int port;
-
     private final @NotNull SmtpSecurity security;
-
-    private final @Nullable String username;
-
-    private final @Nullable String passwordKeyId;
-
-    private final byte @Nullable [] passwordCiphertext;
 
     private final @NotNull String fromAddress;
 
     private final @Nullable String fromName;
 
+    private final @NotNull String host;
+
+    private final @NotNull String name;
+
+    private final @Nullable String passwordKeyId;
+
     private final @Nullable String replyTo;
+
+    private final @Nullable String username;
+
+    private final @NotNull Version version;
 
     private final boolean enabled;
 
-    private final @NotNull Version version;
+    private final byte @Nullable [] passwordCiphertext;
+
+    private final int port;
+
+    private final long senderId;
 
     /**
      * @param senderId SMTP 配置标识

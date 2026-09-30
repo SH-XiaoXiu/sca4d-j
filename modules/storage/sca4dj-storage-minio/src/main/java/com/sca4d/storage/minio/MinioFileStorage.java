@@ -38,11 +38,11 @@ import java.util.concurrent.TimeUnit;
 public class MinioFileStorage implements FileStorage {
     private static final Logger LOG = LoggerFactory.getLogger(MinioFileStorage.class);
 
-    private final @NotNull MinioStorageProperties properties;
-
     private final @NotNull MinioClient client;
 
     private final @NotNull MinioClient publicClient;
+
+    private final @NotNull MinioStorageProperties properties;
 
     private final @NotNull Clock clock;
 

@@ -7,7 +7,6 @@ import java.util.Collection;
 /** 注解用于表示未声明动态值解析器的占位类型，不应被实际调用。 */
 public class NoCallValueResolver implements CallValueResolver<Collection<Resource>> {
 
-    /** 创建占位解析器。 */
     public NoCallValueResolver() {
     }
 

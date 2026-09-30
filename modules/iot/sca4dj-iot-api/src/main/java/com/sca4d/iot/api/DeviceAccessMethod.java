@@ -24,9 +24,9 @@ public class DeviceAccessMethod {
      */
     public static final @NotNull String SESSION_CODE = "SESSION";
 
-    private final @NotNull TreeCode code;
-
     private final @Nullable TreeCode authenticationMethodCode;
+
+    private final @NotNull TreeCode code;
 
     private DeviceAccessMethod(
             @NotNull TreeCode code,

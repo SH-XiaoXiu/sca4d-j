@@ -7,13 +7,13 @@ import java.util.Objects;
 /** 记录 {@link FlowGraph} 在事件满足条件时从一个节点转到另一个节点的规则。 */
 public class FlowTransition {
 
-    private final String from;
-
-    private final String to;
+    private final FlowCondition condition;
 
     private final String eventType;
 
-    private final FlowCondition condition;
+    private final String from;
+
+    private final String to;
 
     /**
      * 创建无附加条件的转换。
@@ -42,7 +42,7 @@ public class FlowTransition {
     }
 
     /**
-     * 返回起始节点标识。
+     * 起始节点标识。
      *
      * @return 起始节点标识
      */
@@ -51,7 +51,7 @@ public class FlowTransition {
     }
 
     /**
-     * 返回目标节点标识。
+     * 目标节点标识。
      *
      * @return 目标节点标识
      */
@@ -60,7 +60,7 @@ public class FlowTransition {
     }
 
     /**
-     * 返回触发事件类型。
+     * 触发事件类型。
      *
      * @return 触发事件类型
      */
@@ -69,7 +69,7 @@ public class FlowTransition {
     }
 
     /**
-     * 返回转换条件。
+     * 转换条件。
      *
      * @return 转换条件
      */

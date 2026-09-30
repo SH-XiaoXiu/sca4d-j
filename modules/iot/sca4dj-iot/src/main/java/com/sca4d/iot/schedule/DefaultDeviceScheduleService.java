@@ -57,25 +57,25 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
 
     private static final Duration LOCK_WAIT = Duration.ofSeconds(10);
 
-    private final @NotNull DeviceScheduleRepository schedules;
+    private final @NotNull DeviceCommandService commands;
 
     private final @NotNull DeviceRepository devices;
 
-    private final @NotNull DeviceCommandService commands;
+    private final @NotNull DeviceScheduleRepository schedules;
 
-    private final @NotNull IdGenerator ids;
+    private final @NotNull ObjectProvider<DeviceHistoryStore> history;
+
+    private final @NotNull IotProperties properties;
 
     private final @NotNull Clock clock;
 
     private final @NotNull DeviceChangeNotifier changes;
 
-    private final @NotNull IotProperties properties;
+    private final @NotNull DistributedLock distributedLock;
+
+    private final @NotNull IdGenerator ids;
 
     private final @NotNull MessageBus messages;
-
-    private final @NotNull ObjectProvider<DeviceHistoryStore> history;
-
-    private final @NotNull DistributedLock distributedLock;
 
     private final @NotNull TransactionTemplate transactions;
 

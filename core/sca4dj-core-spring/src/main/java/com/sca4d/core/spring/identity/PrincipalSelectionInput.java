@@ -22,7 +22,7 @@ public class PrincipalSelectionInput {
     }
 
     /**
-     * 返回用于转换成选择器参数类型的输入。
+     * 用于转换成选择器参数类型的输入。
      *
      * @return 保持登记顺序的不可变输入
      */

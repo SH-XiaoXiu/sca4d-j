@@ -9,9 +9,9 @@ import java.util.Objects;
 /** 表示系统以某个稳定领域身份自主执行操作，不随实例启停改变。 */
 public class SystemPrincipal implements Principal {
 
-    private final long id;
-
     private final @NotNull TreeCode code;
+
+    private final long id;
 
     /** 创建数据库已经确认的系统领域身份；数字 ID 不表达权限等级。 */
     public SystemPrincipal(long id, @NotNull TreeCode code) {
@@ -27,7 +27,11 @@ public class SystemPrincipal implements Principal {
         return id;
     }
 
-    /** 返回代码声明的稳定领域编码。 */
+    /**
+     * 代码声明的稳定领域编码。
+     *
+     * @return 代码声明的稳定领域编码
+     */
     @Contract(pure = true)
     public @NotNull TreeCode code() {
         return code;

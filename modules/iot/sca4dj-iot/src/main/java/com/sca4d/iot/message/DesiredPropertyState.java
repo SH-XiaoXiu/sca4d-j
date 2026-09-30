@@ -9,15 +9,14 @@ import java.util.Objects;
 /** 表示 Device 当前保存的一个 desired property 业务值。 */
 public class DesiredPropertyState {
 
+    private final @Nullable Instant convergedAt;
+
+    private final @NotNull Object value;
+
     private final @NotNull String propertyCode;
 
     private final long desiredSequence;
 
-    private final @NotNull Object value;
-
-    private final @Nullable Instant convergedAt;
-
-    /** 创建已经从数据库 JSON 解码的 desired property 状态。 */
     public DesiredPropertyState(
             @NotNull String propertyCode,
             long desiredSequence,

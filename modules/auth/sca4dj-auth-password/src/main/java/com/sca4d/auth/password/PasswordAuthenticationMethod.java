@@ -39,19 +39,19 @@ public class PasswordAuthenticationMethod implements AuthenticationMethod<Passwo
      */
     public static final TreeCode CODE = TreeCode.ofSlash("AUTHENTICATION/PASSWORD");
 
+    private final PasswordCredentialRepository credentials;
+
     private final AccountDirectory accounts;
 
-    private final RealmKey accountRealm;
+    private final Clock clock;
 
     private final List<AccountIdentifierType> loginIdentifierTypes;
 
-    private final PasswordCredentialRepository credentials;
+    private final RealmKey accountRealm;
 
     private final SecretHasher hasher;
 
     private final SessionControl sessions;
-
-    private final Clock clock;
 
     /**
      * 创建 Password 认证方法。

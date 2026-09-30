@@ -1,6 +1,9 @@
 package com.sca4d.core.spring.config;
 
+import com.sca4d.core.api.gateway.GatewayConstants;
 import com.sca4d.core.api.isolation.AppName;
+import com.sca4d.core.api.setting.ConfiguredConstants;
+import com.sca4d.core.spring.web.HttpConstants;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.config.ConfigDataEnvironmentPostProcessor;
@@ -9,6 +12,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -22,6 +26,20 @@ public class InstanceEnvironmentPostProcessor implements EnvironmentPostProcesso
             @NotNull ConfigurableEnvironment environment,
             @NotNull SpringApplication application) {
         AppName.publish(environment.getRequiredProperty("spring.application.name"));
+        Map<String, String> gatewayProtocol = ConfiguredConstants.initialize(
+                GatewayConstants.class,
+                environment::getProperty);
+        GatewayConstants.validate();
+        environment.getPropertySources()
+                .addFirst(
+                        new MapPropertySource(
+                                "sca4djConfiguredGatewayProtocol",
+                                new HashMap<String, Object>(gatewayProtocol)));
+        Map<String, String> httpHeaders = ConfiguredConstants.initialize(HttpConstants.class, environment::getProperty);
+        HttpConstants.validate();
+        environment.getPropertySources()
+                .addFirst(
+                        new MapPropertySource("sca4djConfiguredHttpHeaders", new HashMap<String, Object>(httpHeaders)));
         if (environment.getPropertySources().contains(SOURCE)) {
             return;
         }

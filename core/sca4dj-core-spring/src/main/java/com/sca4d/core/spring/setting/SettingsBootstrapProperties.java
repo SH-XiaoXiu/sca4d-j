@@ -8,7 +8,6 @@ public class SettingsBootstrapProperties {
 
     private boolean enabled;
 
-    /** 创建默认关闭设置初始化的配置。 */
     public SettingsBootstrapProperties() {
     }
 

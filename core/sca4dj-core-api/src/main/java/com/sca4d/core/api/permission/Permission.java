@@ -11,9 +11,9 @@ import java.util.Objects;
  */
 public class Permission {
 
-    private final Resource resource;
-
     private final Action action;
+
+    private final Resource resource;
 
     /**
      * 创建权限。
@@ -29,7 +29,7 @@ public class Permission {
     }
 
     /**
-     * 返回受保护资源。
+     * 受保护资源。
      *
      * @return 受保护资源
      */
@@ -38,7 +38,7 @@ public class Permission {
     }
 
     /**
-     * 返回对资源执行的动作。
+     * 对资源执行的动作。
      *
      * @return 对资源执行的动作
      */

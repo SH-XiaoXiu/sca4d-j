@@ -26,7 +26,7 @@ public class StorageObjectMetadata {
     }
 
     /**
-     * 返回存储对象的媒体类型。
+     * 存储对象的媒体类型。
      *
      * @return 实际媒体类型
      */
@@ -35,7 +35,7 @@ public class StorageObjectMetadata {
     }
 
     /**
-     * 返回存储对象的字节数。
+     * 存储对象的字节数。
      *
      * @return 实际正数字节数
      */

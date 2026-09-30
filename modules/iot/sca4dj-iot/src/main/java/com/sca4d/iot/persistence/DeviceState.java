@@ -7,35 +7,34 @@ import org.jetbrains.annotations.Nullable;
 /** 保存 Mapper 查询得到的 Device 公共 Profile 标量字段。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public class DeviceState {
-    private final long id;
+    private final @Nullable Long productId;
 
     private final @NotNull ProductSource productSource;
 
-    private final @NotNull String productCode;
-
-    private final @Nullable Long productId;
-
     private final @NotNull String code;
-
-    private final @Nullable String serialNumber;
-
-    private final @NotNull String displayName;
-
-    private final @Nullable String remark;
-
-    private final int thingModelVersion;
-
-    private final long bindingGeneration;
-
-    private final @NotNull String protocolCode;
-
-    private final @Nullable String connectionProtocol;
 
     private final @Nullable String connectionIdentifierType;
 
     private final @Nullable String connectionIdentifierValue;
 
-    /** 创建完整 Device 持久化状态。 */
+    private final @Nullable String connectionProtocol;
+
+    private final @NotNull String displayName;
+
+    private final @NotNull String productCode;
+
+    private final @NotNull String protocolCode;
+
+    private final @Nullable String remark;
+
+    private final @Nullable String serialNumber;
+
+    private final int thingModelVersion;
+
+    private final long bindingGeneration;
+
+    private final long id;
+
     @SuppressWarnings("ParameterNumber")
     public DeviceState(
             long id,

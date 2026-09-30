@@ -9,13 +9,13 @@ import org.jetbrains.annotations.NotNull;
 /** 请求发送一个标准 Device 下行消息的指定尝试。 */
 public class DeviceDispatchMessage extends Message {
 
-    public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/DISPATCH");
-
     public static final int PROTOCOL_VERSION = 1;
 
-    private final long messageId;
+    public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/DISPATCH");
 
     private final int attempt;
+
+    private final long messageId;
 
     /** @param messageId `iot_downlink_message` 标识 @param attempt 从 1 开始的发送尝试序号 */
     @JsonCreator

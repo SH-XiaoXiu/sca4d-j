@@ -16,15 +16,15 @@ public class ThingModel {
     /** 当前 JSON 格式版本。 */
     public static final int FORMAT_VERSION = 1;
 
-    private final @NotNull String productCode;
-
-    private final int version;
-
-    private final @NotNull Map<String, ThingProperty> properties;
+    private final @NotNull Map<String, ThingCommand> commands;
 
     private final @NotNull Map<String, ThingEvent> events;
 
-    private final @NotNull Map<String, ThingCommand> commands;
+    private final @NotNull Map<String, ThingProperty> properties;
+
+    private final @NotNull String productCode;
+
+    private final int version;
 
     private ThingModel(@NotNull Builder builder) {
         this.productCode = builder.productCode;

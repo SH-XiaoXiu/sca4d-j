@@ -12,7 +12,6 @@ public class IssuedSharedSecret {
 
     private final @NotNull String secret;
 
-    /** 创建一次性签发结果。 */
     public IssuedSharedSecret(
             @NotNull SharedSecretCredential credential,
             @NotNull String secret) {

@@ -18,15 +18,15 @@ import java.util.Objects;
 /** 定义一个稳定 code 的设备命令、输入和业务确认策略。 */
 public class ThingCommand {
 
-    private final @NotNull String code;
-
-    private final @NotNull Map<String, ThingValueType> inputs;
-
-    private final @NotNull Map<String, DataKey<?>> inputKeys;
-
     private final @NotNull AcknowledgementPolicy acknowledgementPolicy;
 
     private final @NotNull RetryPolicy retryPolicy;
+
+    private final @NotNull Map<String, DataKey<?>> inputKeys;
+
+    private final @NotNull Map<String, ThingValueType> inputs;
+
+    private final @NotNull String code;
 
     private ThingCommand(@NotNull Builder builder) {
         this.code = builder.code;

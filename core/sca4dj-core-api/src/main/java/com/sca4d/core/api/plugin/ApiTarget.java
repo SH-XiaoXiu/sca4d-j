@@ -12,6 +12,7 @@ public final class ApiTarget {
 
     private final @Nullable TreeCode key;
 
+    /** 契约编码和实现编码均不允许通配符；服务或单实现契约的 key 为空。 */
     public ApiTarget(@NotNull TreeCode code, @Nullable TreeCode key) {
         this.code = Objects.requireNonNull(code);
         this.key = key;
@@ -21,12 +22,12 @@ public final class ApiTarget {
         }
     }
 
-    /** 返回契约编码。 */
+    /** @return 契约编码 */
     public @NotNull TreeCode code() {
         return code;
     }
 
-    /** 返回按编码选择的实现；单实现与服务没有此值。 */
+    /** @return 实现编码；单实现与服务没有此值 */
     public @Nullable TreeCode key() {
         return key;
     }

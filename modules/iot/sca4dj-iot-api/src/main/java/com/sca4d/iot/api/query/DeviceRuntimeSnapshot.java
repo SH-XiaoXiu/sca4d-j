@@ -13,9 +13,9 @@ public class DeviceRuntimeSnapshot {
 
     private final @NotNull List<DeviceConnection> connections;
 
-    private final @NotNull List<ReportedStateSnapshot> reported;
-
     private final @NotNull List<DesiredStateSnapshot> desired;
+
+    private final @NotNull List<ReportedStateSnapshot> reported;
 
     /**
      * 创建不可修改的 Device 运行态快照。

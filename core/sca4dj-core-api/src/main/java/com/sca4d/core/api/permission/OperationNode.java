@@ -26,11 +26,11 @@ public abstract class OperationNode {
             .comparingInt(OperationNode::sortOrder)
             .thenComparing(OperationNode::code);
 
+    private final @NotNull String nameKey;
+
     private final @NotNull TreeCode code;
 
     private final @Nullable TreeCode parentCode;
-
-    private final @NotNull String nameKey;
 
     private final int sortOrder;
 
@@ -188,13 +188,13 @@ public abstract class OperationNode {
      */
     public static class ResourceDeclaration {
 
-        private final @NotNull TreeCode segment;
+        private final @NotNull List<@NotNull ActionDeclaration> actions;
 
         private final @NotNull String nameKey;
 
-        private final int sortOrder;
+        private final @NotNull TreeCode segment;
 
-        private final @NotNull List<@NotNull ActionDeclaration> actions;
+        private final int sortOrder;
 
         private ResourceDeclaration(
                 @NotNull TreeCode segment,
@@ -213,9 +213,9 @@ public abstract class OperationNode {
      */
     public static class ActionDeclaration {
 
-        private final @NotNull TreeCode segment;
-
         private final @NotNull String nameKey;
+
+        private final @NotNull TreeCode segment;
 
         private final int sortOrder;
 

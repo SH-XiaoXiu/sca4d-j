@@ -21,11 +21,11 @@ public final class SystemSetting<T> extends WritableSetting<T> {
 
     private final SettingGroup group;
 
-    private final String labelKey;
-
     private final String descriptionKey;
 
     private final String environmentVariableSuffix;
+
+    private final String labelKey;
 
     private final int sortOrder;
 

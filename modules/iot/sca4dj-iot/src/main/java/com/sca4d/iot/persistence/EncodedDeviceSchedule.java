@@ -10,31 +10,30 @@ import java.time.Instant;
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public class EncodedDeviceSchedule {
 
-    private final long scheduleId;
+    private final @NotNull DeviceScheduleStatus status;
 
-    private final long deviceId;
+    private final @Nullable Instant executeAt;
+
+    private final @Nullable Instant nextFireAt;
 
     private final @NotNull String commandCode;
 
     private final @NotNull String commandInputsJson;
 
-    private final @NotNull String triggerType;
-
-    private final @Nullable Instant executeAt;
-
     private final @Nullable String cronExpression;
+
+    private final @NotNull String triggerType;
 
     private final @Nullable String zoneId;
 
+    private final long deviceId;
+
+    private final long scheduleId;
+
     private final long validForMillis;
-
-    private final @NotNull DeviceScheduleStatus status;
-
-    private final @Nullable Instant nextFireAt;
 
     private final long version;
 
-    /** 创建完整设备定时规则查询结果。 */
     @SuppressWarnings("ParameterNumber")
     public EncodedDeviceSchedule(
             long scheduleId,

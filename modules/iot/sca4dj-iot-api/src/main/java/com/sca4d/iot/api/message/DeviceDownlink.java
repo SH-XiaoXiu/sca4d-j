@@ -15,37 +15,37 @@ import java.util.OptionalLong;
 /** 保存 desired 或 command 共用的标准下行消息快照。 */
 public class DeviceDownlink {
 
-    private final long messageId;
+    private final @NotNull AcknowledgementPolicy acknowledgementPolicy;
 
-    private final long deviceId;
-
-    private final long bindingGeneration;
+    private final @NotNull RetryPolicy retryPolicy;
 
     private final @NotNull DeviceDownlinkKind kind;
 
-    private final @NotNull String targetCode;
+    private final @NotNull DeviceDownlinkStatus status;
+
+    private final @NotNull Duration acknowledgementTimeout;
+
+    private final @NotNull Instant createdAt;
+
+    private final @Nullable Instant expiresAt;
+
+    private final @Nullable Instant scheduledAt;
 
     private final @Nullable Long desiredSequence;
 
     private final @Nullable Long scheduleId;
 
-    private final @Nullable Instant scheduledAt;
-
     private final @NotNull Map<String, Object> data;
 
-    private final @NotNull AcknowledgementPolicy acknowledgementPolicy;
-
-    private final @NotNull Duration acknowledgementTimeout;
-
-    private final @NotNull RetryPolicy retryPolicy;
-
-    private final @NotNull DeviceDownlinkStatus status;
+    private final @NotNull String targetCode;
 
     private final int attemptCount;
 
-    private final @Nullable Instant expiresAt;
+    private final long bindingGeneration;
 
-    private final @NotNull Instant createdAt;
+    private final long deviceId;
+
+    private final long messageId;
 
     /** 创建由 Repository 恢复或 Service 新建的标准下行消息。 */
     @SuppressWarnings("ParameterNumber")

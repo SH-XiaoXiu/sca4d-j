@@ -7,13 +7,12 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 @ApiStatus.Internal
 public class EncodedAuditPayload {
+    private final @NotNull String json;
+
     private final @NotNull String type;
 
     private final int version;
 
-    private final @NotNull String json;
-
-    /** 创建已经完成脱敏和长度限制的 payload。 */
     public EncodedAuditPayload(@NotNull String type, int version, @NotNull String json) {
         this.type = type;
         this.version = version;

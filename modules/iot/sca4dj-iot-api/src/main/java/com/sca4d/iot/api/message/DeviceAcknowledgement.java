@@ -16,23 +16,23 @@ import java.util.Objects;
 /** 保存显式回执或 reported 推导结果共用的业务确认事实。 */
 public class DeviceAcknowledgement extends Message {
 
-    public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/ACK/PROCESS");
-
     public static final int PROTOCOL_VERSION = 1;
 
-    private final long messageId;
+    public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/ACK/PROCESS");
 
-    private final @NotNull String ackCode;
+    private final @NotNull Instant acknowledgedAt;
+
+    private final @NotNull Instant receivedAt;
 
     private final @NotNull Map<String, Object> data;
+
+    private final @NotNull String ackCode;
 
     private final @NotNull String source;
 
     private final @Nullable String sourceAcknowledgementId;
 
-    private final @NotNull Instant acknowledgedAt;
-
-    private final @NotNull Instant receivedAt;
+    private final long messageId;
 
     /** 创建一条由设备接入实现解析、尚未分配数据库标识的业务确认。 */
     @JsonCreator

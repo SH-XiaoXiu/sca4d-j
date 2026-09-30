@@ -90,9 +90,9 @@ class AuditPayloadJsonTest {
     /** 提供未注册 Codec 时直接转换的测试 payload。 */
     @SuppressWarnings({"ClassCanBeRecord", "unused"}) // Jackson 通过反射读取 getter，项目禁止使用 Java record。
     private static class RawPayload implements AuditPayload {
-        private final String name;
-
         private final Map<String, Object> details;
+
+        private final String name;
 
         private RawPayload(String name, Map<String, Object> details) {
             this.name = name;

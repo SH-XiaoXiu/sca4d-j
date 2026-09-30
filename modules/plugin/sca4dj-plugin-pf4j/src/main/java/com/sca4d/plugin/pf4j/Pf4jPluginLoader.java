@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Set;
@@ -26,6 +25,7 @@ import java.util.jar.JarFile;
 /** 使用 PF4J 的加载器隔离实现与私有依赖，只共享宿主明确公开的类。 */
 public final class Pf4jPluginLoader implements PluginLoader {
     private static final Logger LOG = LoggerFactory.getLogger(Pf4jPluginLoader.class);
+
     private final DefaultVersionManager versions = new DefaultVersionManager();
 
     @Override
@@ -34,7 +34,9 @@ public final class Pf4jPluginLoader implements PluginLoader {
     }
 
     @Override
-    public @NotNull LoadedPlugin load(@NotNull Path artifact, @NotNull PluginDescriptor descriptor,
+    public @NotNull LoadedPlugin load(
+            @NotNull Path artifact,
+            @NotNull PluginDescriptor descriptor,
             @NotNull Class<? extends PluginEntrypoint> entryBase,
             @NotNull Set<String> sharedClasses) throws Exception {
         Set<String> shared = Set.copyOf(sharedClasses);
@@ -47,7 +49,8 @@ public final class Pf4jPluginLoader implements PluginLoader {
             while (entries.hasMoreElements()) {
                 String name = entries.nextElement().getName();
                 String className = name.endsWith(".class")
-                        ? name.substring(0, name.length() - 6).replace('/', '.') : "";
+                        ? name.substring(0, name.length() - 6).replace('/', '.')
+                        : "";
                 if (shared.contains(className)) {
                     throw new IllegalArgumentException("插件重复打包共享类: " + className);
                 }
@@ -59,10 +62,18 @@ public final class Pf4jPluginLoader implements PluginLoader {
         // 每个代次创建独立加载器，私有依赖只从本插件读取，共享类使用宿主定义。
         ClassLoader host = entryBase.getClassLoader();
         DefaultPluginDescriptor pf4jDescriptor = new DefaultPluginDescriptor(
-                descriptor.id().format(NameFormat.COLON), "", descriptor.entry(),
-                descriptor.version(), "*", "", "");
+                descriptor.id().format(NameFormat.COLON),
+                "",
+                descriptor.entry(),
+                descriptor.version(),
+                "*",
+                "",
+                "");
         IsolatedClassLoader classLoader = new IsolatedClassLoader(
-                new DefaultPluginManager(List.of()), pf4jDescriptor, host, shared);
+                new DefaultPluginManager(List.of()),
+                pf4jDescriptor,
+                host,
+                shared);
         try {
             classLoader.addURL(artifact.toUri().toURL());
             // 入口必须继承 App 生成的基类，并通过公开无参构造方法实例化。
@@ -84,11 +95,18 @@ public final class Pf4jPluginLoader implements PluginLoader {
     /** 限定平台、共享及私有来源，避免 PF4J 默认的宿主回退。 */
     private static final class IsolatedClassLoader extends PluginClassLoader {
         private final ClassLoader host;
+
         private final Set<String> shared;
 
-        private IsolatedClassLoader(DefaultPluginManager manager, DefaultPluginDescriptor descriptor,
-                ClassLoader host, Set<String> shared) {
-            super(manager, descriptor, ClassLoader.getPlatformClassLoader(),
+        private IsolatedClassLoader(
+                DefaultPluginManager manager,
+                DefaultPluginDescriptor descriptor,
+                ClassLoader host,
+                Set<String> shared) {
+            super(
+                    manager,
+                    descriptor,
+                    ClassLoader.getPlatformClassLoader(),
                     new ClassLoadingStrategy(List.of(ClassLoadingStrategy.Source.PLUGIN)));
             this.host = host;
             this.shared = shared;
@@ -133,16 +151,30 @@ public final class Pf4jPluginLoader implements PluginLoader {
     /** 保存入口及 PF4J 加载器，并在释放时解除入口引用。 */
     private static final class Loaded implements LoadedPlugin {
         private PluginEntrypoint entry;
+
         private final IsolatedClassLoader loader;
+
         private Loaded(PluginEntrypoint entry, IsolatedClassLoader loader) {
             this.entry = entry;
             this.loader = loader;
         }
-        @Override public @NotNull PluginEntrypoint entrypoint() {
-            if (entry == null) throw new IllegalStateException("加载资源已经关闭");
+
+        @Override
+        public @NotNull PluginEntrypoint entrypoint() {
+            if (entry == null)
+                throw new IllegalStateException("加载资源已经关闭");
             return entry;
         }
-        @Override public @NotNull ClassLoader classLoader() { return loader; }
-        @Override public void close() throws IOException { loader.close(); entry = null; }
+
+        @Override
+        public @NotNull ClassLoader classLoader() {
+            return loader;
+        }
+
+        @Override
+        public void close() throws IOException {
+            loader.close();
+            entry = null;
+        }
     }
 }

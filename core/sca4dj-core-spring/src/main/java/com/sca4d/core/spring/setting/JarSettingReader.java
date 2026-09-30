@@ -15,9 +15,9 @@ import java.util.jar.JarFile;
 public final class JarSettingReader implements SettingReader<byte[]> {
     private final Path artifact;
 
-    private final String resource;
-
     private final SettingOwner owner;
+
+    private final String resource;
 
     /** 固定不可变构件、资源路径和所属；读取其他 owner 时失败。 */
     public JarSettingReader(@NotNull Path artifact, @NotNull String resource, @NotNull SettingOwner owner) {

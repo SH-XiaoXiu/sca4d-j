@@ -17,13 +17,13 @@ import javax.crypto.spec.SecretKeySpec;
 /** 使用 AES-256-GCM 和用途绑定加密秘密值。 */
 public class AesGcmSecretCipher implements SecretCipher {
 
-    private static final String TRANSFORMATION = "AES/GCM/NoPadding";
-
     private static final int KEY_BYTES = 32;
 
     private static final int NONCE_BYTES = 12;
 
     private static final int TAG_BITS = 128;
+
+    private static final String TRANSFORMATION = "AES/GCM/NoPadding";
 
     private final String keyId;
 

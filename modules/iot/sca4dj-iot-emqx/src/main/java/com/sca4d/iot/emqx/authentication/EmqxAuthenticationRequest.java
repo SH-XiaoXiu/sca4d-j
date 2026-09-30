@@ -12,15 +12,14 @@ import java.util.Objects;
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public class EmqxAuthenticationRequest {
 
-    private final @NotNull String clientId;
+    private final @Nullable String certificatePem;
 
-    private final @Nullable String username;
+    private final @NotNull String clientId;
 
     private final @Nullable String password;
 
-    private final @Nullable String certificatePem;
+    private final @Nullable String username;
 
-    /** 创建不解释凭据内容的 EMQX 认证请求。 */
     @JsonCreator
     public EmqxAuthenticationRequest(
             @JsonProperty("clientid") @NotNull String clientId,

@@ -13,9 +13,9 @@ public class EventType<T> {
 
     private final @NotNull TreeCode code;
 
-    private final int protocolVersion;
-
     private final @NotNull Class<T> payloadType;
+
+    private final int protocolVersion;
 
     /**
      * 创建跨发布端和消费端共用的事件类型。

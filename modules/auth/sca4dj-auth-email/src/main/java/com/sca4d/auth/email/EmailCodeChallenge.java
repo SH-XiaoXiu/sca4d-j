@@ -11,11 +11,11 @@ public class EmailCodeChallenge {
 
     private final @NotNull EmailCodeChallengeId challengeId;
 
-    private final @NotNull String maskedRecipient;
-
     private final @NotNull Instant expiresAt;
 
     private final @NotNull Instant resendAt;
+
+    private final @NotNull String maskedRecipient;
 
     /**
      * @param challengeId Challenge 标识

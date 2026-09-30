@@ -37,7 +37,6 @@ public class AliyunSmsProviderClient implements SmsProviderClient {
 
     private final Map<String, Client> clients = new ConcurrentHashMap<>();
 
-    /** 创建阿里云 SMS Transport。 */
     public AliyunSmsProviderClient(@NotNull AliyunSmsProperties properties, @NotNull ObjectMapper objectMapper) {
         this.properties = Objects.requireNonNull(properties, "阿里云 SMS 配置不能为空");
         this.objectMapper = Objects.requireNonNull(objectMapper, "ObjectMapper 不能为空");

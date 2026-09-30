@@ -13,7 +13,6 @@ import java.io.IOException;
 /** 为无响应体和异常响应补充客户端状态响应头。 */
 public class ClientStateFilter extends OncePerRequestFilter {
 
-    /** 创建为无响应体请求补写客户端状态 Header 的过滤器。 */
     public ClientStateFilter() {
     }
 

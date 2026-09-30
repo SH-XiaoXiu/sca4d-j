@@ -36,11 +36,11 @@ public final class RabbitHandlerContainers implements SmartLifecycle {
 
     private static final TreeCode ATTEMPT = TreeCode.ofColon("HANDLER:ATTEMPT");
 
+    private final @NotNull RabbitPublisher publisher;
+
     private final @NotNull RabbitMessageEnvelopeCodec codec;
 
     private final @NotNull RabbitMessageTopology topology;
-
-    private final @NotNull RabbitPublisher publisher;
 
     private final @NotNull List<@NotNull SimpleMessageListenerContainer> containers;
 

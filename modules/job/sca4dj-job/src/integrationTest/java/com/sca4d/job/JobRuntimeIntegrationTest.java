@@ -75,10 +75,10 @@ import javax.sql.DataSource;
 @Testcontainers(disabledWithoutDocker = true)
 class JobRuntimeIntegrationTest {
 
+    private static final String APPLICATION_NAME = "JOB_TEST";
+
     @Container
     private static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:17-alpine");
-
-    private static final String APPLICATION_NAME = "JOB_TEST";
 
     static {
         AppName.publish(APPLICATION_NAME);

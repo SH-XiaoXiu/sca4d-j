@@ -46,17 +46,16 @@ public class FederatedAuthorizationService {
 
     private final FederatedProviderService providers;
 
-    private final FederatedAuthorizationStore store;
-
     private final ObjectMapper mapper;
 
     private final RestClient restClient;
 
     private final Clock clock;
 
+    private final FederatedAuthorizationStore store;
+
     private final SecureRandom random = new SecureRandom();
 
-    /** 创建授权服务。 */
     public FederatedAuthorizationService(
             FederatedProviderService providers,
             FederatedAuthorizationStore store,
@@ -381,11 +380,11 @@ public class FederatedAuthorizationService {
     private static class Discovery {
         private final String authorizationEndpoint;
 
+        private final String jwksEndpoint;
+
         private final String tokenEndpoint;
 
         private final String userInfoEndpoint;
-
-        private final String jwksEndpoint;
 
         private Discovery(
                 String authorizationEndpoint,

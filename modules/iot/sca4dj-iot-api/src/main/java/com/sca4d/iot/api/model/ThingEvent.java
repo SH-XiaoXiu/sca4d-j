@@ -13,9 +13,9 @@ import java.util.Objects;
 /** 定义一个稳定 code 的设备离散事件及其输出字段。 */
 public class ThingEvent {
 
-    private final @NotNull String code;
-
     private final @NotNull Map<String, ThingValueType> outputs;
+
+    private final @NotNull String code;
 
     private final @NotNull ThingEventDelivery delivery;
 

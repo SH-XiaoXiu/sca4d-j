@@ -19,15 +19,15 @@ import java.util.Objects;
  */
 public class EmailNotificationDelivery implements NotificationDelivery {
 
-    private final @NotNull EmailRecipientResolver recipients;
-
     private final @NotNull EmailSenderRepository senders;
 
     private final @NotNull EmailTemplateRepository templates;
 
-    private final @NotNull EmailRenderer renderer;
-
     private final @NotNull EmailGateway transport;
+
+    private final @NotNull EmailRecipientResolver recipients;
+
+    private final @NotNull EmailRenderer renderer;
 
     /**
      * @param recipients 收件邮箱解析器

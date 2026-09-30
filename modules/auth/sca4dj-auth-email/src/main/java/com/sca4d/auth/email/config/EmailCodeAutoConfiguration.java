@@ -34,7 +34,6 @@ public class EmailCodeAutoConfiguration {
         return new EmailCodeSettings(reader, writer);
     }
 
-    /** 创建 Email Code 自动配置。 */
     public EmailCodeAutoConfiguration() {
     }
 

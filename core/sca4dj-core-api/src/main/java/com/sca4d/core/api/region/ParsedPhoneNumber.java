@@ -8,15 +8,15 @@ import java.util.Objects;
 /** 保存已经确认有效且使用规范 E.164 表示的电话号码及其地区元数据。 */
 public class ParsedPhoneNumber {
 
-    private final String value;
+    private final @Nullable Continent continent;
+
+    private final PhoneNumberType type;
 
     private final @Nullable Region region;
 
-    private final @Nullable Continent continent;
+    private final String value;
 
     private final int countryCallingCode;
-
-    private final PhoneNumberType type;
 
     /** 创建只由 RegionCatalog 返回的已解析号码。 */
     ParsedPhoneNumber(
@@ -33,7 +33,7 @@ public class ParsedPhoneNumber {
     }
 
     /**
-     * 读取已经通过有效性和格式检查的号码。
+     * 已经通过有效性和格式检查的号码。
      *
      * @return E.164 格式电话号码
      */
@@ -42,7 +42,7 @@ public class ParsedPhoneNumber {
     }
 
     /**
-     * 读取 libphonenumber 从号码确定的地区。
+     * libphonenumber 从号码确定的地区。
      *
      * @return 两位地区代码对应的 `Region`；非地理号码为 `Region("001")`，无法确定时为空
      */
@@ -51,7 +51,7 @@ public class ParsedPhoneNumber {
     }
 
     /**
-     * 读取地区代码对应的洲别。
+     * 地区代码对应的洲别。
      *
      * @return 地理号码所属洲别；非地理号码或无法确定时为空
      */
@@ -60,7 +60,7 @@ public class ParsedPhoneNumber {
     }
 
     /**
-     * 读取 E.164 号码中的国家或地区拨号前缀。
+     * E.164 号码中的国家或地区拨号前缀。
      *
      * @return 正整数国际电话代码
      */
@@ -69,7 +69,7 @@ public class ParsedPhoneNumber {
     }
 
     /**
-     * 读取 libphonenumber 判断的号码用途。
+     * libphonenumber 判断的号码用途。
      *
      * @return 固话、移动电话等电话号码类型
      */

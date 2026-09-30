@@ -32,13 +32,13 @@ public class AuditCallInterceptor implements CallLifecycle.Around {
 
     private final Map<Audit.Mode, AuditRecorder> recorders;
 
-    private final Audit.Mode defaultMode;
-
     private final AuditResolverLookup resolverLookup;
 
-    private final SPICallValueResolver expressionResolver;
-
     private final Clock clock;
+
+    private final Audit.Mode defaultMode;
+
+    private final SPICallValueResolver expressionResolver;
 
     /**
      * 安装每种方式唯一的记录器，校验应用默认方式存在。

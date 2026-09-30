@@ -16,9 +16,9 @@ public class FileUpload {
 
     private final @NotNull URI url;
 
-    private final @NotNull Map<@NotNull String, @NotNull String> headers;
-
     private final @NotNull Instant expiresAt;
+
+    private final @NotNull Map<@NotNull String, @NotNull String> headers;
 
     /**
      * 创建客户端必须原样执行的上传请求。
@@ -53,7 +53,7 @@ public class FileUpload {
     }
 
     /**
-     * 返回文件标识。
+     * 文件标识。
      *
      * @return 正数文件标识
      */
@@ -62,7 +62,7 @@ public class FileUpload {
     }
 
     /**
-     * 返回上传使用的 HTTP 方法。
+     * 上传使用的 HTTP 方法。
      *
      * @return 非空白 HTTP 方法
      */
@@ -71,7 +71,7 @@ public class FileUpload {
     }
 
     /**
-     * 返回客户端可以访问的上传地址。
+     * 客户端可以访问的上传地址。
      *
      * @return 绝对上传地址
      */
@@ -80,7 +80,7 @@ public class FileUpload {
     }
 
     /**
-     * 返回客户端必须原样发送的请求头。
+     * 客户端必须原样发送的请求头。
      *
      * @return 不可修改的请求头
      */
@@ -89,7 +89,7 @@ public class FileUpload {
     }
 
     /**
-     * 返回上传地址失效时间。
+     * 上传地址失效时间。
      *
      * @return 地址失效时间
      */

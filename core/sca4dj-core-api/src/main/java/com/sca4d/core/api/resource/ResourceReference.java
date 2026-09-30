@@ -61,9 +61,9 @@ public class ResourceReference implements Resource {
         return new ResourceReference(resourceType, Objects.requireNonNull(idPrefix, "资源标识前缀不能为空") + id);
     }
 
-    private final @NotNull TreeCode type;
-
     private final @NotNull String id;
+
+    private final @NotNull TreeCode type;
 
     /**
      * 创建资源引用。

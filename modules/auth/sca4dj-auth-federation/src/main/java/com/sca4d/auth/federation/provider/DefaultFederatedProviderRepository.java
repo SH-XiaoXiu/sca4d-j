@@ -36,9 +36,9 @@ import java.util.stream.Collectors;
 /** 使用 `ProviderMapper` 保存联邦 Provider 和协议配置。 */
 public class DefaultFederatedProviderRepository implements FederatedProviderRepository {
 
-    private final @NotNull ProviderMapper mapper;
-
     private final @NotNull ObjectMapper objectMapper;
+
+    private final @NotNull ProviderMapper mapper;
 
     private final @NotNull FederatedSecretCryptography secrets;
 

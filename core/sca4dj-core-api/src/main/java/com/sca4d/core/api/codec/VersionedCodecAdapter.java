@@ -6,9 +6,9 @@ import org.jetbrains.annotations.NotNull;
 /** 把多个版本 Codec 适配为一个运行时 Codec，编码使用当前版本，解码按 wire 版本选择策略。 */
 public class VersionedCodecAdapter<V, W> implements VersionedCodec<V, W> {
 
-    private final @NotNull VersionedCodecCatalog<V, W> catalog;
-
     private final @NotNull CodecVersionSelector<W> selector;
+
+    private final @NotNull VersionedCodecCatalog<V, W> catalog;
 
     /**
      * 创建自描述 wire 的版本适配器。

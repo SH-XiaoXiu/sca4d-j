@@ -13,12 +13,11 @@ public class CoreSpringProperties {
 
     private final OpenApi openapi = new OpenApi();
 
-    /** 创建使用默认分页和 OpenAPI 设置的配置。 */
     public CoreSpringProperties() {
     }
 
     /**
-     * 返回默认每页数量。
+     * 默认每页数量。
      *
      * @return 分页查询未指定数量时使用的默认值
      */
@@ -36,7 +35,7 @@ public class CoreSpringProperties {
     }
 
     /**
-     * 返回单次分页查询允许的最大数量。
+     * 单次分页查询允许的最大数量。
      *
      * @return 单次分页查询允许的最大数量
      */
@@ -54,7 +53,7 @@ public class CoreSpringProperties {
     }
 
     /**
-     * 返回一个列表请求允许的最大排序字段数量。
+     * 一个列表请求允许的最大排序字段数量。
      *
      * @return 1 到 20 的排序字段数量上限
      */

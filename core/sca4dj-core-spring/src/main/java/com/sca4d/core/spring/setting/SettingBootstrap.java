@@ -42,15 +42,15 @@ public class SettingBootstrap {
         DISABLED
     }
 
-    private final SettingCatalog catalog;
-
     private final SettingRepository repository;
-
-    private final SecretKeyring keyring;
 
     private final Environment environment;
 
     private final EnvironmentVariableResolver variables;
+
+    private final SecretKeyring keyring;
+
+    private final SettingCatalog catalog;
 
     /**
      * 创建 Settings ENV 初始化器。

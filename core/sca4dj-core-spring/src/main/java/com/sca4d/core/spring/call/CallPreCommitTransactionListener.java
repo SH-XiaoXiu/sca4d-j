@@ -10,7 +10,6 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 /** 在 Spring 事务提交前检查当前方法登记的预提交条件。 */
 public class CallPreCommitTransactionListener implements TransactionExecutionListener {
 
-    /** 创建事务提交前预提交条件监听器。 */
     public CallPreCommitTransactionListener() {
     }
 

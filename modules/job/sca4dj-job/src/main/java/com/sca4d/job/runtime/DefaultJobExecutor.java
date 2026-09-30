@@ -25,11 +25,11 @@ public class DefaultJobExecutor implements JobExecutor {
 
     private static final long RESULT_POLL_NANOS = Duration.ofMillis(50).toNanos();
 
-    private final @NotNull JobCatalog catalog;
-
     private final @NotNull JobRunService runs;
 
     private final @NotNull ObjectMapper objectMapper;
+
+    private final @NotNull JobCatalog catalog;
 
     /**
      * 创建使用当前应用 Job 目录和 PostgreSQL Repository 的执行器。

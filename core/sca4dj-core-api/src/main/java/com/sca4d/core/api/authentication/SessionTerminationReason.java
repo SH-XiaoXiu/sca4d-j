@@ -30,7 +30,7 @@ public class SessionTerminationReason {
     }
 
     /**
-     * 返回注销原因编码。
+     * 注销原因编码。
      *
      * @return 注销原因编码
      */

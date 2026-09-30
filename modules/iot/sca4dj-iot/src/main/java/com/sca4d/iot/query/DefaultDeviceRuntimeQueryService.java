@@ -21,15 +21,14 @@ import java.util.Objects;
 /** 从主库和 Redis 读取 Device 当前运行投影。 */
 public class DefaultDeviceRuntimeQueryService implements DeviceRuntimeQueryService {
 
-    private final @NotNull DeviceRepository devices;
-
     private final @NotNull DeviceConnectionQueryService connections;
 
-    private final @NotNull ReportedStateStore reported;
+    private final @NotNull DeviceRepository devices;
 
     private final @NotNull DownlinkRepository downlinks;
 
-    /** 创建不把 Redis 连接信息与主库状态互相覆盖的查询服务。 */
+    private final @NotNull ReportedStateStore reported;
+
     public DefaultDeviceRuntimeQueryService(
             @NotNull DeviceRepository devices,
             @NotNull DeviceConnectionQueryService connections,

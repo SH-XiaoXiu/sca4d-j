@@ -7,7 +7,6 @@ import com.sca4d.core.api.gateway.GatewayCallback;
 import com.sca4d.core.api.gateway.GatewayCallbackCode;
 import com.sca4d.core.api.gateway.GatewayCallbackRequest;
 import com.sca4d.core.api.gateway.GatewayCallbackResponse;
-import com.sca4d.core.api.gateway.GatewayHttpPaths;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +31,7 @@ import java.util.Objects;
 @RestController
 @AnonymousAccess
 @Hidden
-@RequestMapping(GatewayHttpPaths.CALLBACKS)
+@RequestMapping("${sca4dj.gateway.protocol.callback-path}")
 public class GatewayCallbackDispatcher {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GatewayCallbackDispatcher.class);

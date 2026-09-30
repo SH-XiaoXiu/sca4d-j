@@ -18,7 +18,6 @@ public class HttpInputValidationProperties {
 
     private int maxContainerSize = 1000;
 
-    /** 创建启用全部 HTTP 输入默认校验的配置。 */
     public HttpInputValidationProperties() {
     }
 

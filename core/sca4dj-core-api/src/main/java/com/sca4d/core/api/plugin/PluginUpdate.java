@@ -14,12 +14,12 @@ public final class PluginUpdate {
         this.previous = previous;
     }
 
-    /** 返回已经生效的新代次。 */
+    /** @return 已经生效的新代次 */
     public @NotNull PluginStatus current() {
         return current;
     }
 
-    /** 返回旧代次的实际清理状态；首次加载为空。 */
+    /** @return 旧代次的清理状态；首次加载为空 */
     public @Nullable PluginStatus previous() {
         return previous;
     }

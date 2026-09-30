@@ -12,13 +12,13 @@ import java.util.Objects;
 /** 使用项目统一 ObjectMapper 编解码一个具有固定 TreeCode 和版本的 Message 类型。 */
 public class JacksonMessageCodec<M extends Message> implements MessageCodec<M> {
 
-    private final @NotNull TreeCode code;
-
-    private final int version;
+    private final @NotNull ObjectMapper json;
 
     private final @NotNull Class<M> valueType;
 
-    private final @NotNull ObjectMapper json;
+    private final @NotNull TreeCode code;
+
+    private final int version;
 
     /** 创建使用指定 JSON 映射器的消息编解码器。 */
     public JacksonMessageCodec(

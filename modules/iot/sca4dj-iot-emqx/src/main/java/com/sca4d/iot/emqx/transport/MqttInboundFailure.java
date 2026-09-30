@@ -8,9 +8,9 @@ import java.util.Objects;
 /** 保存 MQTT 上行达到处理次数上限后的原始消息、处理次数和异常类型。 */
 public class MqttInboundFailure {
 
-    private final @NotNull String deliveryId;
-
     private final @NotNull MqttMessage message;
+
+    private final @NotNull String deliveryId;
 
     private final int attempts;
 

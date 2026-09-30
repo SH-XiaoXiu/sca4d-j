@@ -35,9 +35,9 @@ public class ResourceIdLoaders {
     @SuppressWarnings("rawtypes")
     private static final DataKey<Map> MERGED = DataKey.of("mergedResourceIds", Map.class);
 
-    private final List<ResourceIdLoader> loaders;
-
     private final Executor executor;
+
+    private final List<ResourceIdLoader> loaders;
 
     private final DataGraph graph;
 
@@ -90,15 +90,16 @@ public class ResourceIdLoaders {
             @SuppressWarnings("rawtypes")
             DataKey<Map> output = DataKey.of("resourceIdLoader" + index, Map.class);
             outputs.add(output);
-            builder.operation(DataOperation.async(
-                    "resource-id-loader-" + index,
-                    List.of(PRINCIPALS),
-                    output,
-                    (values, ignored) -> java.util.concurrent.CompletableFuture.supplyAsync(
-                            () -> Objects.requireNonNull(
-                                    loader.load(values.get(PRINCIPALS)),
-                                    "ResourceIdLoader 不能返回 null"),
-                            ignored)));
+            builder.operation(
+                    DataOperation.async(
+                            "resource-id-loader-" + index,
+                            List.of(PRINCIPALS),
+                            output,
+                            (values, ignored) -> java.util.concurrent.CompletableFuture.supplyAsync(
+                                    () -> Objects.requireNonNull(
+                                            loader.load(values.get(PRINCIPALS)),
+                                            "ResourceIdLoader 不能返回 null"),
+                                    ignored)));
         }
         List<DataKey<?>> mergeInputs = new ArrayList<>();
         mergeInputs.add(PRINCIPALS);
@@ -134,14 +135,15 @@ public class ResourceIdLoaders {
         for (int index = 0; index < loaders.size(); index++) {
             @SuppressWarnings("rawtypes")
             DataKey<Map> output = DataKey.of("resourceIdLoader" + index, Map.class);
-            Map<Long, ? extends Collection<ResourceIdSet>> loaded =
-                    (Map<Long, ? extends Collection<ResourceIdSet>>) values.get(output);
+            Map<Long, ? extends Collection<ResourceIdSet>> loaded = (Map<Long, ? extends Collection<ResourceIdSet>>) values
+                    .get(output);
             if (!principalIds.containsAll(loaded.keySet())) {
                 throw new IllegalStateException("ResourceIdLoader 返回了输入外的 Principal");
             }
             for (Map.Entry<Long, ? extends Collection<ResourceIdSet>> entry : loaded.entrySet()) {
                 for (ResourceIdSet resourceIdSet : Objects.requireNonNull(
-                        entry.getValue(), "Principal 数字 Resource 标识不能为空")) {
+                        entry.getValue(),
+                        "Principal 数字 Resource 标识不能为空")) {
                     ResourceIdSet checked = Objects.requireNonNull(
                             resourceIdSet,
                             "ResourceIdLoader 不能返回 null ResourceIdSet");

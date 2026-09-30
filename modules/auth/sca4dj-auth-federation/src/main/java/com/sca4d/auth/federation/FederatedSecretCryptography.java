@@ -12,7 +12,6 @@ public class FederatedSecretCryptography {
 
     private final @NotNull SecretKeyring keyring;
 
-    /** 创建外部 Provider Secret 加密器。 */
     public FederatedSecretCryptography(@NotNull SecretKeyring keyring) {
         this.keyring = Objects.requireNonNull(keyring, "SecretKeyring 不能为空");
     }

@@ -7,9 +7,9 @@ import java.util.Objects;
 /** 保存批量查询返回的 Product 标识和兼容协议编码。 */
 public class ProductProtocolState {
 
-    private final long productId;
-
     private final @NotNull String protocolCode;
+
+    private final long productId;
 
     /** @param productId Product 标识 @param protocolCode Product 兼容的协议编码 */
     public ProductProtocolState(long productId, @NotNull String protocolCode) {

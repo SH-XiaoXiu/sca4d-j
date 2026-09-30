@@ -21,19 +21,19 @@ import java.util.Set;
  */
 public class DefaultNotifications implements Notifications {
 
-    private final @NotNull NotificationTypeCatalog types;
+    private final @NotNull IdGenerator ids;
 
-    private final @NotNull NotificationSettings settings;
+    private final @NotNull MessageBus messages;
+
+    private final @NotNull NotificationDeliveryRouter deliveries;
 
     private final @NotNull NotificationLocaleResolver locales;
 
     private final @NotNull NotificationRegionResolver regions;
 
-    private final @NotNull NotificationDeliveryRouter deliveries;
+    private final @NotNull NotificationSettings settings;
 
-    private final @NotNull MessageBus messages;
-
-    private final @NotNull IdGenerator ids;
+    private final @NotNull NotificationTypeCatalog types;
 
     /**
      * 创建类型化通知发布入口。

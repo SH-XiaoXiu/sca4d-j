@@ -11,9 +11,9 @@ import java.util.Objects;
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public class DeviceScheduledCommand {
 
-    private final @NotNull String commandCode;
-
     private final @NotNull Map<String, Object> inputs;
+
+    private final @NotNull String commandCode;
 
     /** 创建由当前物模型在每次触发时重新校验的 command。 */
     public DeviceScheduledCommand(

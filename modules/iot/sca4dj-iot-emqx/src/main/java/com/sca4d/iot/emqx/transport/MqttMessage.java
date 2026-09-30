@@ -11,15 +11,15 @@ import java.util.Objects;
 @SuppressWarnings("ClassCanBeRecord") // Payload 需要防御性复制，且项目禁止使用 record。
 public class MqttMessage {
 
+    private final @NotNull Instant observedAt;
+
     private final @NotNull String topic;
+
+    private final boolean retained;
 
     private final byte @NotNull [] payload;
 
-    private final @NotNull Instant observedAt;
-
     private final int qos;
-
-    private final boolean retained;
 
     /**
      * 创建一条不可变 MQTT 上行消息，并复制 Payload。

@@ -12,17 +12,16 @@ import java.util.Objects;
 @SuppressWarnings("ClassCanBeRecord") // MyBatis 构造映射遵守项目禁用 record 的规则。
 public class ScheduledRunRecord {
 
-    private final long runId;
+    private final @Nullable Instant completedAt;
 
     private final @NotNull Instant scheduledAt;
 
     private final @NotNull JobRunStatus status;
 
-    private final @Nullable Instant completedAt;
-
     private final @Nullable String outputJson;
 
-    /** 创建一条尚未向公共 API 转换的定时运行查询结果。 */
+    private final long runId;
+
     public ScheduledRunRecord(
             long runId,
             @NotNull Instant scheduledAt,

@@ -44,13 +44,13 @@ public class SharedSecretAuthenticationMethod implements AuthenticationMethod<Sh
 
     private final @NotNull SharedSecretCredentialRepository credentials;
 
-    private final @NotNull SecretHasher hasher;
+    private final @NotNull Clock clock;
 
-    private final @NotNull SessionControl sessions;
+    private final @NotNull SecretHasher hasher;
 
     private final @NotNull SecureRandom random;
 
-    private final @NotNull Clock clock;
+    private final @NotNull SessionControl sessions;
 
     /**
      * 创建只接受已确定 Account 的 Shared Secret 认证方法。

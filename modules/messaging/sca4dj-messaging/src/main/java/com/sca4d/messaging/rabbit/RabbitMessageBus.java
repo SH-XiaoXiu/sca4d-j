@@ -32,15 +32,15 @@ public class RabbitMessageBus implements MessageBus {
 
     private static final Logger LOG = LoggerFactory.getLogger(RabbitMessageBus.class);
 
-    private final @NotNull IdGenerator ids;
-
-    private final @NotNull RabbitMessageEnvelopeCodec codec;
+    private final @NotNull MessageOutboxRepository outbox;
 
     private final @NotNull RabbitPublisher publisher;
 
-    private final @NotNull MessageOutboxRepository outbox;
-
     private final @NotNull Clock clock;
+
+    private final @NotNull IdGenerator ids;
+
+    private final @NotNull RabbitMessageEnvelopeCodec codec;
 
     private final @NotNull Name sourceApplication;
 

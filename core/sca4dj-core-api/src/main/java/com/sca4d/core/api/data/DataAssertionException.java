@@ -88,7 +88,7 @@ public class DataAssertionException extends RuntimeException {
     }
 
     /**
-     * 读取触发断言的输入或 JSON 字段。
+     * 触发断言的输入或 JSON 字段。
      *
      * @return 失败字段；无法定位时为空
      */
@@ -97,7 +97,7 @@ public class DataAssertionException extends RuntimeException {
     }
 
     /**
-     * 读取执行器附加的失败节点名称。
+     * 执行器附加的失败节点名称。
      *
      * @return 失败节点名称；执行节点前失败时为空
      */
@@ -106,7 +106,7 @@ public class DataAssertionException extends RuntimeException {
     }
 
     /**
-     * 读取执行器附加的失败节点输出键。
+     * 执行器附加的失败节点输出键。
      *
      * @return 失败节点的输出键；执行节点前失败时为空
      */
@@ -115,7 +115,7 @@ public class DataAssertionException extends RuntimeException {
     }
 
     /**
-     * 读取允许写入诊断信息的脱敏样本。
+     * 允许写入诊断信息的脱敏样本。
      *
      * @return 调用方显式提供的已脱敏样本；没有时为空
      */

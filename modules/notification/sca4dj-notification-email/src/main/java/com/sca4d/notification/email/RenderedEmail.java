@@ -14,9 +14,9 @@ public class RenderedEmail {
 
     private final @NotNull String subject;
 
-    private final @NotNull String text;
-
     private final @Nullable String html;
+
+    private final @NotNull String text;
 
     /**
      * @param subject 不含回车换行的主题

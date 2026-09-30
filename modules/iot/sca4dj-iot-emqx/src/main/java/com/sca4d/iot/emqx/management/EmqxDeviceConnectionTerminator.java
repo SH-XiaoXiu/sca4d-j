@@ -16,9 +16,9 @@ public class EmqxDeviceConnectionTerminator implements DeviceConnectionTerminato
 
     private static final Logger LOG = LoggerFactory.getLogger(EmqxDeviceConnectionTerminator.class);
 
-    private final @NotNull EmqxManagementClient client;
-
     private final @NotNull EmqxConnectionRepository connections;
+
+    private final @NotNull EmqxManagementClient client;
 
     /**
      * @param client EMQX Management API 客户端

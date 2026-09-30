@@ -82,15 +82,15 @@ import javax.sql.DataSource;
 })
 class MessagingInfrastructureIntegrationTest {
 
-    private static final TreeCode EVENT_CODE = TreeCode.of("INVOICE/CREATED");
-
-    private static final EventType<Map> EVENT_TYPE = new EventType<>(EVENT_CODE, 1, Map.class);
-
-    private static final String SUCCESS_QUEUE = "messaging-test:sca4dj:messaging:consumer:invoice-primary";
-
     private static final String COPY_QUEUE = "messaging-test:sca4dj:messaging:consumer:invoice-copy";
 
     private static final String FAILURE_QUEUE = "messaging-test:sca4dj:messaging:consumer:invoice-failure";
+
+    private static final String SUCCESS_QUEUE = "messaging-test:sca4dj:messaging:consumer:invoice-primary";
+
+    private static final TreeCode EVENT_CODE = TreeCode.of("INVOICE/CREATED");
+
+    private static final EventType<Map> EVENT_TYPE = new EventType<>(EVENT_CODE, 1, Map.class);
 
     private static final String FAILURE_DLQ = FAILURE_QUEUE + ":dead-letter";
 

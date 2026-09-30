@@ -7,9 +7,9 @@ import java.util.Objects;
 /** 保存需要由具体组件按 scheme 解析的外部内容引用。 */
 public final class ReferencedContent implements ContentBody {
 
-    private final @NotNull String scheme;
-
     private final @NotNull String key;
+
+    private final @NotNull String scheme;
 
     /** 创建外部内容引用。 */
     public ReferencedContent(@NotNull String scheme, @NotNull String key) {

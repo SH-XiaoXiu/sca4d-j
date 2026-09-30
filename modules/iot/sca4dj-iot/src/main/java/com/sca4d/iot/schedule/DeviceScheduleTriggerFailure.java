@@ -9,13 +9,13 @@ import java.util.Objects;
 /** 标识一个到期规则生成 command 时发生的业务失败，供新事务保存 FAILED 结果。 */
 public class DeviceScheduleTriggerFailure extends RuntimeException {
 
-    private final long scheduleId;
-
-    private final long scheduleVersion;
-
     private final @NotNull Instant plannedAt;
 
     private final @NotNull String failureCode;
+
+    private final long scheduleId;
+
+    private final long scheduleVersion;
 
     /** 创建能够重新定位同版本到期规则的业务失败。 */
     public DeviceScheduleTriggerFailure(

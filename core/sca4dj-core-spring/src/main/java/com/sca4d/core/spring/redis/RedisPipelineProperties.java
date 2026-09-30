@@ -8,7 +8,6 @@ public class RedisPipelineProperties {
 
     private int maxCommands = 1_000;
 
-    /** 创建使用默认命令上限的配置。 */
     public RedisPipelineProperties() {
     }
 

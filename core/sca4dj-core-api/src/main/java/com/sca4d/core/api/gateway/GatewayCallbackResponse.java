@@ -21,11 +21,11 @@ import java.util.TreeMap;
  */
 public class GatewayCallbackResponse<O> {
 
-    private final int status;
-
     private final @NotNull Map<String, List<String>> headers;
 
     private final @Nullable O body;
+
+    private final int status;
 
     /**
      * 创建回调响应。

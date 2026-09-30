@@ -12,11 +12,11 @@ import java.util.Objects;
 /** 把 MessageContent 编解码为稳定 JSON 结构。 */
 public class MessageContentCodec implements JsonCodec<MessageContent> {
 
-    private static final String TEXT = "text";
-
     private static final String BINARY = "binary";
 
     private static final String REFERENCE = "reference";
+
+    private static final String TEXT = "text";
 
     @Override
     public @NotNull JsonNode encode(@NotNull MessageContent value) {

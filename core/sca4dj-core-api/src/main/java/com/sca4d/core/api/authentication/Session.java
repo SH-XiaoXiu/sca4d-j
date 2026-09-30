@@ -28,11 +28,11 @@ import java.util.Set;
  */
 public class Session {
 
+    private final Account account;
+
     private final SessionId id;
 
     private final Subject subject;
-
-    private final Account account;
 
     private final List<Principal> principals;
 
@@ -44,15 +44,15 @@ public class Session {
 
     private final List<Authentication> authentications;
 
-    private final Map<Long, List<Resource>> resourcesByPrincipal;
-
     private final Map<Long, List<ResourceIdSet>> resourceIdSetsByPrincipal;
+
+    private final Map<Long, List<Resource>> resourcesByPrincipal;
 
     private final Map<Long, Map<TreeCode, LongIdSet>> resourceIdsByPrincipal;
 
-    private final Instant issuedAt;
-
     private final Instant expiresAt;
+
+    private final Instant issuedAt;
 
     /**
      * 创建完整的 Session 快照，并校验身份、认证、Principal、资源和有效时间之间的关系。
@@ -117,8 +117,7 @@ public class Session {
         this.resourcesByPrincipal = normalizeResources(resourcesByPrincipal, principalIndex.keySet());
         this.resourceIdSetsByPrincipal = normalizeResourceIds(
                 resourceIdSetsByPrincipal,
-                principalIndex.keySet(),
-                this.resourcesByPrincipal);
+                principalIndex.keySet());
         this.resourceIdsByPrincipal = indexResourceIds(this.resourceIdSetsByPrincipal);
     }
 
@@ -182,8 +181,7 @@ public class Session {
      */
     private static Map<Long, List<ResourceIdSet>> normalizeResourceIds(
             Map<Long, ? extends Collection<ResourceIdSet>> resourceIdSetsByPrincipal,
-            Set<Long> principalIds,
-            Map<Long, List<Resource>> resourcesByPrincipal) {
+            Set<Long> principalIds) {
         Map<Long, ? extends Collection<ResourceIdSet>> checked = Objects
                 .requireNonNull(resourceIdSetsByPrincipal, "Session 数字 Resource 标识不能为空");
         if (!principalIds.containsAll(checked.keySet())) {
@@ -202,9 +200,6 @@ public class Session {
                 if (byType.putIfAbsent(checkedSet.resourceType(), checkedSet) != null) {
                     throw new IllegalArgumentException(
                             "Session 包含重复数字 Resource 类型: " + checkedSet.resourceType());
-                }
-                for (Resource resource : resourcesByPrincipal.get(principalId)) {
-                    resource.type();
                 }
             }
             normalized.put(principalId, List.copyOf(byType.values()));
@@ -229,7 +224,7 @@ public class Session {
     }
 
     /**
-     * 读取当前会话的标识。
+     * Session 标识。
      *
      * @return Session 标识
      */
@@ -238,7 +233,7 @@ public class Session {
     }
 
     /**
-     * 读取建立当前 Session 的接入者。
+     * 建立当前 Session 的接入者。
      *
      * @return 完成认证的 Subject
      */
@@ -247,7 +242,7 @@ public class Session {
     }
 
     /**
-     * 读取建立当前 Session 的登录账号。
+     * 建立当前 Session 的登录账号。
      *
      * @return 完成认证且属于当前 Subject 的 Account
      */
@@ -256,7 +251,7 @@ public class Session {
     }
 
     /**
-     * 读取建立 Session 时完整保存的可选业务主体快照。
+     * 建立 Session 时完整保存的可选业务主体快照。
      *
      * @return 当前 Account 可直接使用的不可修改完整 Principal 列表
      */
@@ -265,7 +260,7 @@ public class Session {
     }
 
     /**
-     * 读取建立 Session 时只保存标识的可选 Principal。
+     * 建立 Session 时保存的 Principal 标识。
      *
      * @return 按装载顺序保存的不可修改 Principal 标识集合
      */
@@ -347,7 +342,7 @@ public class Session {
     }
 
     /**
-     * 读取建立 Session 时用于满足认证要求的记录。
+     * 建立 Session 时用于满足认证要求的记录。
      *
      * @return 按输入顺序保存的不可修改成功认证列表
      */
@@ -459,7 +454,7 @@ public class Session {
     }
 
     /**
-     * 读取当前 Session 开始生效的时刻。
+     * 当前 Session 开始生效的时刻。
      *
      * @return Session 签发时间
      */
@@ -468,7 +463,7 @@ public class Session {
     }
 
     /**
-     * 读取当前 Session 不再有效的时刻。
+     * 当前 Session 不再有效的时刻。
      *
      * @return 晚于签发时间的 Session 过期时间
      */

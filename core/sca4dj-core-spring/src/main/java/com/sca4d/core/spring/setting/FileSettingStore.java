@@ -33,13 +33,13 @@ import java.util.function.BiFunction;
 public final class FileSettingStore implements SettingReader<JsonNode>, SettingWriter<JsonNode> {
     private static final Logger LOG = LoggerFactory.getLogger(FileSettingStore.class);
 
-    private final Path root;
-
     private final BiFunction<TreeCode, SettingOwner, Path> location;
 
     private final Codec<JsonNode, byte[]> format;
 
     private final DistributedLock lock;
+
+    private final Path root;
 
     private final SecretKeyring keyring;
 
@@ -155,6 +155,7 @@ public final class FileSettingStore implements SettingReader<JsonNode>, SettingW
                     if (!read(setting, owner).revision().orElseThrow().equals(expected))
                         throw new OptimisticLockException("设置文件 " + setting);
                     Path target = path(setting, owner);
+                    Path parent = Objects.requireNonNull(target.getParent(), "设置文件必须位于声明根目录内");
                     Path temporary = null;
                     try {
                         ObjectNode document = JsonNodeFactory.instance.objectNode();
@@ -183,9 +184,9 @@ public final class FileSettingStore implements SettingReader<JsonNode>, SettingW
                         if (encoded.length > 1_048_576)
                             throw new IllegalArgumentException("设置文件超过 1 MiB");
                         // 文件系统不支持原子替换时直接失败，不退回可能留下半份文件的覆盖写入。
-                        Files.createDirectories(target.getParent());
+                        Files.createDirectories(parent);
                         FileSettingReader.checkedPath(root, target);
-                        temporary = Files.createTempFile(target.getParent(), ".setting-", ".tmp");
+                        temporary = Files.createTempFile(parent, ".setting-", ".tmp");
                         Files.write(temporary, encoded);
                         Files.move(
                                 temporary,

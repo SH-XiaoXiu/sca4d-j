@@ -20,9 +20,9 @@ public class DispatchPolicy {
         OUTBOX
     }
 
-    private final @NotNull Mode mode;
-
     private final @Nullable Instant notBefore;
+
+    private final @NotNull Mode mode;
 
     /** 创建消息分发策略。 */
     private DispatchPolicy(@NotNull Mode mode, @Nullable Instant notBefore) {

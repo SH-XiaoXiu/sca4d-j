@@ -14,24 +14,24 @@ import java.util.Objects;
 public class EmailTemplate {
 
     /**
-     * Email Template 审计使用的稳定资源类型。
-     */
-    public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofSlash("NOTIFICATION/EMAIL/TEMPLATES");
-
-    /**
      * 供 Java 注解参数使用的资源类型文本。
      */
     public static final @NotNull String RESOURCE_TYPE_VALUE = "NOTIFICATION/EMAIL/TEMPLATES";
 
-    private final long templateId;
-
-    private final @NotNull TreeCode code;
+    /**
+     * Email Template 审计使用的稳定资源类型。
+     */
+    public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofSlash("NOTIFICATION/EMAIL/TEMPLATES");
 
     private final @NotNull Map<@NotNull String, @NotNull EmailTemplateSource> locales;
 
-    private final boolean enabled;
+    private final @NotNull TreeCode code;
 
     private final @NotNull Version version;
+
+    private final boolean enabled;
+
+    private final long templateId;
 
     /**
      * @param templateId 模板数据库标识，必须为正数

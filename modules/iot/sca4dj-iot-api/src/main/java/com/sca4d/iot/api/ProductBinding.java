@@ -11,11 +11,11 @@ import java.util.OptionalLong;
 /** 保存 Device 对已解析 Product 来源、稳定 code 和可选数据库标识的绑定。 */
 public class ProductBinding {
 
+    private final @Nullable Long databaseProductId;
+
     private final @NotNull ProductSource source;
 
     private final @NotNull String code;
-
-    private final @Nullable Long databaseProductId;
 
     /** 创建已经解析且满足来源约束的 Product 绑定。 */
     private ProductBinding(

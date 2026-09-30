@@ -37,7 +37,6 @@ public class InboxTemplateRenderer {
 
     private final @NotNull LocaleCatalog locales;
 
-    /** 创建使用应用 Locale 目录选择模板语言的站内信渲染器。 */
     public InboxTemplateRenderer(@NotNull LocaleCatalog locales) {
         this.locales = Objects.requireNonNull(locales, "LocaleCatalog 不能为空");
     }

@@ -18,13 +18,12 @@ import java.util.Optional;
 /** 按 Product code 把只读代码物模型和数据库物模型组合为唯一读写入口。 */
 public class CompositeThingModelRepository implements ThingModelRepository {
 
-    private final @NotNull ProductDefinitionCatalog products;
+    private final @NotNull DatabaseThingModelRepository databaseModels;
 
     private final @NotNull StaticThingModelRepository codeModels;
 
-    private final @NotNull DatabaseThingModelRepository databaseModels;
+    private final @NotNull ProductDefinitionCatalog products;
 
-    /** 创建不允许代码 Product 运行时发布模型的组合 Repository。 */
     public CompositeThingModelRepository(
             @NotNull ProductDefinitionCatalog products,
             @NotNull StaticThingModelRepository codeModels,

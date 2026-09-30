@@ -22,7 +22,6 @@ public class PrincipalSelectionInvoker {
 
     private static final Logger LOG = LoggerFactory.getLogger(PrincipalSelectionInvoker.class);
 
-    /** 创建使用 Spring JavaBean 绑定的业务身份选择调用器。 */
     public PrincipalSelectionInvoker() {
     }
 

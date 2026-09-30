@@ -14,9 +14,9 @@ import java.util.Objects;
 @SuppressWarnings("ClassCanBeRecord")
 public class DataKey<T> {
 
-    private final String name;
-
     private final Class<T> type;
+
+    private final String name;
 
     /**
      * 创建类型化数据键。
@@ -46,7 +46,7 @@ public class DataKey<T> {
     }
 
     /**
-     * 读取该键在 DataGraph 中的名称。
+     * 该键在 DataGraph 中的名称。
      *
      * @return DataGraph 内唯一名称
      */
@@ -55,7 +55,7 @@ public class DataKey<T> {
     }
 
     /**
-     * 读取执行器校验输入和节点输出时使用的类型。
+     * 执行器校验输入和节点输出时使用的类型。
      *
      * @return 该键接受的运行时类型
      */

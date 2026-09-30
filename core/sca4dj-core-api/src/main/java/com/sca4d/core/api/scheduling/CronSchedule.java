@@ -28,7 +28,7 @@ public class CronSchedule implements ScheduleTiming {
     }
 
     /**
-     * 返回 Cron 表达式。
+     * Cron 表达式。
      *
      * @return 由 Scheduler 实现校验的 Quartz Cron 文本
      */
@@ -38,7 +38,7 @@ public class CronSchedule implements ScheduleTiming {
     }
 
     /**
-     * 返回 Cron 时区。
+     * Cron 时区。
      *
      * @return 解释表达式使用的显式时区
      */

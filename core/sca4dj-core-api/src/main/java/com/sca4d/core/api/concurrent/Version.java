@@ -18,7 +18,7 @@ public class Version {
     }
 
     /**
-     * 返回版本值。
+     * 版本值。
      *
      * @return 版本值
      */

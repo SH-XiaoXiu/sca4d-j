@@ -29,9 +29,13 @@ public class X509Credential {
         }
     }
 
-    private final long id;
+    private final @NotNull Instant notAfter;
 
-    private final long accountId;
+    private final @NotNull Instant notBefore;
+
+    private final @NotNull Instant updatedAt;
+
+    private final @NotNull Status status;
 
     private final @NotNull String fingerprintSha256;
 
@@ -39,15 +43,11 @@ public class X509Credential {
 
     private final @NotNull String subjectDn;
 
-    private final @NotNull Instant notBefore;
-
-    private final @NotNull Instant notAfter;
-
-    private final @NotNull Status status;
-
     private final @NotNull Version version;
 
-    private final @NotNull Instant updatedAt;
+    private final long accountId;
+
+    private final long id;
 
     /** 创建从数据库读取的 X.509 Credential。 */
     public X509Credential(

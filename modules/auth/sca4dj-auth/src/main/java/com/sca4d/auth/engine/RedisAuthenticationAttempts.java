@@ -37,15 +37,15 @@ public class RedisAuthenticationAttempts implements AuthenticationAttempts {
 
     private static final Logger LOG = LoggerFactory.getLogger(RedisAuthenticationAttempts.class);
 
-    private final AuthenticationMethods methods;
-
-    private final RedisAuthenticationAttemptStore attempts;
-
     private final AuthenticationPolicy policy;
 
     private final AuthSettings settings;
 
+    private final AuthenticationMethods methods;
+
     private final Clock clock;
+
+    private final RedisAuthenticationAttemptStore attempts;
 
     /**
      * 创建默认认证引擎。

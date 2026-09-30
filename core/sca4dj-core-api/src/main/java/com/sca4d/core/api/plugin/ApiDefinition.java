@@ -10,11 +10,11 @@ import java.util.Objects;
 
 /** 保存 App 公开契约及其可调用操作，不持有实际业务对象。 */
 public final class ApiDefinition {
-    private final @NotNull TreeCode code;
-
     private final @NotNull ApiKind kind;
 
     private final @NotNull ExtensionSelection selection;
+
+    private final @NotNull TreeCode code;
 
     private final boolean required;
 
@@ -40,27 +40,47 @@ public final class ApiDefinition {
         this.operations = Map.copyOf(indexed);
     }
 
-    /** 返回契约编码。 */
+    /**
+     * 契约编码。
+     *
+     * @return 契约编码
+     */
     public @NotNull TreeCode code() {
         return code;
     }
 
-    /** 返回契约方向。 */
+    /**
+     * 契约方向。
+     *
+     * @return 契约方向
+     */
     public @NotNull ApiKind kind() {
         return kind;
     }
 
-    /** 返回扩展实现选择规则。 */
+    /**
+     * 扩展实现选择规则。
+     *
+     * @return 扩展实现选择规则
+     */
     public @NotNull ExtensionSelection selection() {
         return selection;
     }
 
-    /** 返回启动前是否必须存在实现。 */
+    /**
+     * 启动前是否必须存在实现。
+     *
+     * @return 启动前是否必须存在实现
+     */
     public boolean required() {
         return required;
     }
 
-    /** 返回只读操作目录。 */
+    /**
+     * 只读操作目录。
+     *
+     * @return 只读操作目录
+     */
     public @NotNull Map<TreeCode, ApiOperation> operations() {
         return operations;
     }

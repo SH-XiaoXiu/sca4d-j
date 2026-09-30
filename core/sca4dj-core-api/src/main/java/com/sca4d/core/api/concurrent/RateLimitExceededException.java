@@ -29,7 +29,7 @@ public class RateLimitExceededException extends BusinessException {
     }
 
     /**
-     * 返回可直接写入 HTTP `Retry-After` 的等待秒数。
+     * 可直接写入 HTTP `Retry-After` 的等待秒数。
      *
      * @return 向上取整后的正整数秒数
      */

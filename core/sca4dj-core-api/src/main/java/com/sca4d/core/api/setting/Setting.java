@@ -57,17 +57,29 @@ public class Setting<T> {
         return new Builder<>(code, codec);
     }
 
-    /** 返回设置身份，序列化格式不参与身份判断。 */
+    /**
+     * 设置身份，序列化格式不参与身份判断。
+     *
+     * @return 设置身份，序列化格式不参与身份判断
+     */
     public @NotNull TreeCode code() {
         return code;
     }
 
-    /** 返回当前写入 Codec，版本与 Java 类型不在 Setting 中重复声明。 */
+    /**
+     * 当前写入 Codec，版本与 Java 类型不在 Setting 中重复声明。
+     *
+     * @return 当前写入 Codec，版本与 Java 类型不在 Setting 中重复声明
+     */
     public @NotNull VersionedCodec<T, ?> codec() {
         return codec;
     }
 
-    /** 返回是否要求持久化实现加密保存。 */
+    /**
+     * 是否要求持久化实现加密保存。
+     *
+     * @return 是否要求持久化实现加密保存
+     */
     public boolean secret() {
         return secret;
     }

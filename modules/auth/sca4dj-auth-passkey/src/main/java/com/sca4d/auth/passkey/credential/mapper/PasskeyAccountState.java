@@ -8,11 +8,11 @@ import com.sca4d.core.api.concurrent.Version;
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public class PasskeyAccountState {
 
-    private final long accountId;
+    private final Version version;
 
     private final byte[] userHandle;
 
-    private final Version version;
+    private final long accountId;
 
     /**
      * 创建 MyBatis 查询结果。
@@ -24,7 +24,9 @@ public class PasskeyAccountState {
     }
 
     /**
-     * 返回锚点所属 Account 标识。
+     * 锚点所属 Account 标识。
+     *
+     * @return 锚点所属 Account 标识
      */
     public long accountId() {
         return accountId;
@@ -38,7 +40,9 @@ public class PasskeyAccountState {
     }
 
     /**
-     * 返回账号锚点的乐观版本。
+     * 账号锚点的乐观版本。
+     *
+     * @return 账号锚点的乐观版本
      */
     public Version version() {
         return version;

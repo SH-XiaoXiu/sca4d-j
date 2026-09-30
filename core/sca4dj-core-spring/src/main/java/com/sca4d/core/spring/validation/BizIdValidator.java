@@ -25,7 +25,6 @@ public class BizIdValidator implements ConstraintValidator<BizId, Object> {
 
     private Pattern pattern;
 
-    /** 创建等待 Bean Validation Provider 初始化约束参数的校验器。 */
     public BizIdValidator() {
     }
 

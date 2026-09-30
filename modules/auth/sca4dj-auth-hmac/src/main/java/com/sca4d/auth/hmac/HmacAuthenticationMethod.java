@@ -49,17 +49,17 @@ public class HmacAuthenticationMethod implements AuthenticationMethod<HmacProof>
 
     private final @NotNull HmacCredentialRepository credentials;
 
-    private final @NotNull HmacKeyCryptography cryptography;
-
-    private final @NotNull SessionControl sessions;
-
-    private final @NotNull SecureRandom random;
-
-    private final @NotNull HmacAuthenticationAttemptStore attempts;
+    private final @NotNull HmacProperties properties;
 
     private final @NotNull Clock clock;
 
-    private final @NotNull HmacProperties properties;
+    private final @NotNull HmacAuthenticationAttemptStore attempts;
+
+    private final @NotNull HmacKeyCryptography cryptography;
+
+    private final @NotNull SecureRandom random;
+
+    private final @NotNull SessionControl sessions;
 
     /**
      * 创建 Account 级 MAC 认证方法。

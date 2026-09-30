@@ -1,6 +1,6 @@
 package com.sca4d.core.spring.gateway;
 
-import com.sca4d.core.api.gateway.GatewayHttpHeaders;
+import com.sca4d.core.api.gateway.GatewayConstants;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,10 +42,10 @@ public class TrustedGatewayRequestFilter extends OncePerRequestFilter {
             @NotNull HttpServletResponse response,
             @NotNull FilterChain filterChain)
             throws ServletException, IOException {
-        if (matches(request.getHeader(GatewayHttpHeaders.SECRET))) {
-            String clientIp = firstForwardedAddress(request.getHeader(GatewayHttpHeaders.CLIENT_IP));
+        if (matches(request.getHeader(GatewayConstants.SECRET_HEADER))) {
+            String clientIp = firstForwardedAddress(request.getHeader(GatewayConstants.CLIENT_IP_HEADER));
             String externalPath = externalPath(
-                    request.getHeader(GatewayHttpHeaders.EXTERNAL_PREFIX),
+                    request.getHeader(GatewayConstants.EXTERNAL_PREFIX_HEADER),
                     request.getRequestURI());
             if (clientIp != null) {
                 request.setAttribute(TrustedGatewayRequest.CLIENT_IP_ATTRIBUTE, clientIp);
@@ -126,14 +126,15 @@ public class TrustedGatewayRequestFilter extends OncePerRequestFilter {
 
         /** 判断 Header 是否只允许可信 Gateway 在过滤器内部使用。 */
         private static boolean hidden(@NotNull String name) {
-            return name.regionMatches(true, 0, GatewayHttpHeaders.PREFIX, 0, GatewayHttpHeaders.PREFIX.length())
+            return name
+                    .regionMatches(true, 0, GatewayConstants.HEADER_PREFIX, 0, GatewayConstants.HEADER_PREFIX.length())
                     || name.regionMatches(
                             true,
                             0,
-                            GatewayHttpHeaders.FORWARDED_PREFIX,
+                            GatewayConstants.FORWARDED_HEADER_PREFIX,
                             0,
-                            GatewayHttpHeaders.FORWARDED_PREFIX.length())
-                    || GatewayHttpHeaders.FORWARDED.equalsIgnoreCase(name);
+                            GatewayConstants.FORWARDED_HEADER_PREFIX.length())
+                    || GatewayConstants.FORWARDED_HEADER.equalsIgnoreCase(name);
         }
     }
 }

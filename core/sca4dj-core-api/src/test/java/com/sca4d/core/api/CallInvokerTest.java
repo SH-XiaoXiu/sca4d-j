@@ -219,6 +219,30 @@ class CallInvokerTest {
     }
 
     @Test
+    @DisplayName("幂等内层未返回结果时释放处理权")
+    void releasesIdempotencyWhenInnerOutcomeIsNull() throws Exception {
+        List<String> events = new ArrayList<>();
+        IdempotencyCallInterceptor interceptor = new IdempotencyCallInterceptor(
+                new MemoryIdempotencyStore(events),
+                type -> new IdempotencyKeyResolver(),
+                NO_EXPRESSIONS,
+                IDEMPOTENCY_FINGERPRINTS,
+                Duration.ofSeconds(30),
+                Duration.ofSeconds(1),
+                RENEWAL_SCHEDULER);
+        Method method = IdempotentService.class.getDeclaredMethod("create");
+        CallExecution execution = new CallExecution(
+                Call.system("missing-outcome", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
+                IdempotentService.class,
+                method,
+                new Object[0],
+                method.getGenericReturnType());
+
+        assertThrows(NullPointerException.class, () -> interceptor.around(execution, () -> null));
+        assertEquals(List.of("idempotency-begin", "idempotency-release"), events);
+    }
+
+    @Test
     @DisplayName("目标抛出 Error 时释放幂等处理权，下一次调用可以重新取得")
     void releasesIdempotencyOnError() throws Exception {
         List<String> events = new ArrayList<>();
@@ -560,15 +584,15 @@ class CallInvokerTest {
 
     /** 保存测试中的环绕声明和行为，测试断言由实际调用结果表达。 */
     private static class Hook implements CallLifecycle.Around {
-        private final TreeCode code;
+        private final java.util.function.Function<CallLifecycle.Next, CallOutcome> action;
 
         private final Set<TreeCode> after;
 
         private final Set<TreeCode> before;
 
-        private final int priority;
+        private final TreeCode code;
 
-        private final java.util.function.Function<CallLifecycle.Next, CallOutcome> action;
+        private final int priority;
 
         private Hook(
                 TreeCode code,

@@ -28,11 +28,11 @@ import java.util.Set;
  */
 public class ListDefinition {
 
-    private final @NotNull @Unmodifiable Map<@NotNull String, @NotNull Sort> fields;
+    private final @Nullable Integer maxSize;
 
     private final @NotNull @Unmodifiable List<@NotNull SortOrder> defaultSort;
 
-    private final @Nullable Integer maxSize;
+    private final @NotNull @Unmodifiable Map<@NotNull String, @NotNull Sort> fields;
 
     /** 使用构造器已经收集的字段、默认排序和页大小限制创建不可修改声明。 */
     private ListDefinition(@NotNull Builder builder) {

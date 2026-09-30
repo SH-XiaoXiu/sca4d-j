@@ -53,7 +53,7 @@ public class IdempotencyKey {
     }
 
     /**
-     * 返回幂等键值。
+     * 幂等键值。
      *
      * @return 幂等键值
      */

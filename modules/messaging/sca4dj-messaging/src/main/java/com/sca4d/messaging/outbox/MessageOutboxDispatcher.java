@@ -27,11 +27,11 @@ public class MessageOutboxDispatcher {
 
     private final @NotNull RabbitPublisher sender;
 
-    private final @NotNull TransactionTemplate transactions;
-
     private final @NotNull MessagingProperties properties;
 
     private final @NotNull Clock clock;
+
+    private final @NotNull TransactionTemplate transactions;
 
     /**
      * 创建保留消息级租约、退避和分批清理语义的 Outbox 操作。

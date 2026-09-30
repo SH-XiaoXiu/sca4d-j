@@ -21,9 +21,9 @@ public class SaTokenSessionControl implements SessionControl {
 
     private final @NotNull RedisSessionGeneration generations;
 
-    private final @NotNull StpLogic stpLogic;
-
     private final @NotNull RedisSessionTokenIndex tokenIndex;
+
+    private final @NotNull StpLogic stpLogic;
 
     /**
      * 创建不依赖身份、Principal 或 Resource Loader 的 Account Session 控制器。

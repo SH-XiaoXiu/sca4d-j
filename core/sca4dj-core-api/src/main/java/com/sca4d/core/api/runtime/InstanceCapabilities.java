@@ -44,12 +44,20 @@ public class InstanceCapabilities {
         return enabled.contains(code);
     }
 
-    /** 返回全部能力声明；停用能力的路由要求仍须向 Gateway 声明。 */
+    /**
+     * 全部能力声明；停用能力的路由要求仍须向 Gateway 声明。
+     *
+     * @return 全部能力声明；停用能力的路由要求仍须向 Gateway 声明
+     */
     public @NotNull @Unmodifiable Map<TreeCode, InstanceCapability> definitions() {
         return definitions;
     }
 
-    /** 返回已经启用的稳定能力编码。 */
+    /**
+     * 已经启用的稳定能力编码。
+     *
+     * @return 已经启用的稳定能力编码
+     */
     public @NotNull @Unmodifiable Set<TreeCode> enabledCodes() {
         return enabled;
     }

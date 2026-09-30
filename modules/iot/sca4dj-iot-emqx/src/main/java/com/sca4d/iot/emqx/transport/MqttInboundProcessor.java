@@ -28,19 +28,19 @@ final class MqttInboundProcessor implements AutoCloseable {
 
     private final @NotNull Consumer<MqttMessage> router;
 
-    private final @NotNull List<MqttMessageObserver> receptionObservers;
-
     private final @NotNull List<MqttMessageProcessingObserver> processingObservers;
+
+    private final @NotNull List<MqttMessageObserver> receptionObservers;
 
     private final @Nullable MqttInboundFailureStore failureStore;
 
     private final @NotNull List<ThreadPoolExecutor> workers;
 
-    private final int maximumAttempts;
-
     private final @NotNull Duration retryDelay;
 
     private final @NotNull Duration shutdownTimeout;
+
+    private final int maximumAttempts;
 
     private final AtomicInteger pending = new AtomicInteger();
 

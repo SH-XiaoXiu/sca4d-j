@@ -14,13 +14,13 @@ class OutboxClaim {
 
     private final @NotNull Id messageId;
 
+    private final @NotNull String leaseId;
+
     private final @NotNull TreeCode messageCode;
 
     private final byte @NotNull [] envelope;
 
     private final int attemptCount;
-
-    private final @NotNull String leaseId;
 
     private final long version;
 

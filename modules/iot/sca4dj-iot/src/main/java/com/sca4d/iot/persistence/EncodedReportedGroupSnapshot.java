@@ -8,19 +8,18 @@ import java.time.Instant;
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public class EncodedReportedGroupSnapshot {
 
-    private final long deviceId;
+    private final @NotNull Instant observedAt;
+
+    private final @NotNull Instant receivedAt;
 
     private final @NotNull String groupCode;
 
     private final @NotNull String stateJson;
 
+    private final long deviceId;
+
     private final long version;
 
-    private final @NotNull Instant observedAt;
-
-    private final @NotNull Instant receivedAt;
-
-    /** 创建 reported 查询结果。 */
     public EncodedReportedGroupSnapshot(
             long deviceId,
             @NotNull String groupCode,

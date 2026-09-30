@@ -19,7 +19,6 @@ public class DispatchReceipt {
 
     private final @NotNull Status status;
 
-    /** 创建消息分发结果。 */
     public DispatchReceipt(@NotNull Id messageId, @NotNull Status status) {
         this.messageId = Objects.requireNonNull(messageId, "消息标识不能为空");
         this.status = Objects.requireNonNull(status, "分发结果不能为空");

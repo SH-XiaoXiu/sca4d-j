@@ -28,7 +28,6 @@ import java.time.Clock;
 @EnableConfigurationProperties(PasswordProperties.class)
 public class PasswordAutoConfiguration {
 
-    /** 创建 Password 模块自动配置。 */
     public PasswordAutoConfiguration() {
     }
 

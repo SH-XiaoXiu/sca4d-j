@@ -60,39 +60,39 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /** 对账代码声明的持久化 Job 计划和基础设施集群任务，并在对账成功后启动 Quartz。 */
 public final class QuartzJobScheduler implements JobScheduler, ClusterTaskScheduler, SmartLifecycle {
 
-    private static final Logger log = LoggerFactory.getLogger(QuartzJobScheduler.class);
-
-    private static final String GROUP = "sca4dj-code";
-
     private static final String CLUSTER_TASK_GROUP = "sca4dj-cluster-task";
+
+    private static final String CONTRACT = "scheduleContract";
 
     private static final String FINGERPRINT = "scheduleFingerprint";
 
-    private static final String CONTRACT = "scheduleContract";
+    private static final String GROUP = "sca4dj-code";
+
+    private static final Logger log = LoggerFactory.getLogger(QuartzJobScheduler.class);
 
     private static final LockKey RECONCILE_LOCK = new LockKey(TreeCode.of("SCHEDULING:QUARTZ:RECONCILE"));
 
     private static final Duration LOCK_WAIT = Duration.ofSeconds(10);
 
-    private final @NotNull Scheduler scheduler;
-
-    private final @NotNull QuartzScheduleRegistry registry;
-
-    private final @NotNull QuartzClusterTaskRegistry clusterTaskRegistry;
-
-    private final @NotNull DistributedLock distributedLock;
-
-    private final @NotNull TransactionTemplate transactions;
-
     private final @NotNull ObjectMapper objectMapper;
-
-    private final @NotNull Clock clock;
-
-    private final @NotNull ObjectProvider<JobSchedule<?, ?>> initialSchedules;
 
     private final @NotNull ObjectProvider<ClusterTaskSchedule> initialClusterTasks;
 
+    private final @NotNull ObjectProvider<JobSchedule<?, ?>> initialSchedules;
+
+    private final @NotNull QuartzClusterTaskRegistry clusterTaskRegistry;
+
+    private final @NotNull QuartzScheduleRegistry registry;
+
+    private final @NotNull Clock clock;
+
+    private final @NotNull DistributedLock distributedLock;
+
     private final @NotNull Key schedulerName;
+
+    private final @NotNull Scheduler scheduler;
+
+    private final @NotNull TransactionTemplate transactions;
 
     private final @NotNull AtomicBoolean running = new AtomicBoolean();
 

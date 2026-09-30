@@ -33,19 +33,19 @@ public class DeviceDispatchHandler implements MessageHandler<DeviceDispatchMessa
 
     private static final Duration LOCK_WAIT = Duration.ofSeconds(10);
 
-    private final @NotNull MessageCodec<DeviceDispatchMessage> codec;
-
     private final @NotNull DownlinkRepository downlinks;
-
-    private final @NotNull DeviceTransportRouter router;
-
-    private final @NotNull DeviceDeliveryScheduler messages;
 
     private final @NotNull Clock clock;
 
     private final @NotNull DeviceChangeNotifier changes;
 
+    private final @NotNull DeviceDeliveryScheduler messages;
+
+    private final @NotNull DeviceTransportRouter router;
+
     private final @NotNull DistributedLock distributedLock;
+
+    private final @NotNull MessageCodec<DeviceDispatchMessage> codec;
 
     private final @NotNull TransactionTemplate transactions;
 

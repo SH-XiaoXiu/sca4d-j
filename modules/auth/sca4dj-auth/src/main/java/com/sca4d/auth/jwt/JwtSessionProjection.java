@@ -29,13 +29,13 @@ import java.util.Optional;
 /** 使用独立 HS256 密钥把完整 Core Session 编码为短效 JWS 投影，并在请求中离线恢复。 */
 public class JwtSessionProjection {
 
-    static final String TOKEN_TYPE = "Bearer";
-
     static final String JWT_TYPE = "session+jwt";
 
     static final String SESSION_CLAIM = "session";
 
     static final String SESSION_ID_CLAIM = "sid";
+
+    static final String TOKEN_TYPE = "Bearer";
 
     private final SessionCodec codec;
 

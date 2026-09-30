@@ -19,13 +19,13 @@ public class SessionRefreshService {
 
     private final SessionIdentityLoadService identities;
 
-    private final PrincipalLoaders principals;
-
     private final PrincipalIdLoaders principalIds;
 
-    private final ResourceLoaders resources;
+    private final PrincipalLoaders principals;
 
     private final ResourceIdLoaders resourceIds;
+
+    private final ResourceLoaders resources;
 
     /**
      * 创建 Session 刷新服务。

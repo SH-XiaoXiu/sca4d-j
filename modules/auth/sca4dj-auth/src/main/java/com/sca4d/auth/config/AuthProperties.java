@@ -2,7 +2,9 @@ package com.sca4d.auth.config;
 
 import com.sca4d.core.api.authentication.AuthTokenMode;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -20,12 +22,8 @@ public class AuthProperties {
 
     private final Jwt jwt = new Jwt();
 
-    /** 创建使用 SESSION 模式的部署配置对象。 */
-    public AuthProperties() {
-    }
-
     /**
-     * 读取普通 HTTP 请求默认使用的 Token 模式。
+     * 普通 HTTP 请求默认使用的 Token 模式。
      *
      * @return 默认 SESSION 模式
      */
@@ -48,7 +46,7 @@ public class AuthProperties {
     }
 
     /**
-     * 读取不进入认证拦截器的 Spring MVC 路径模式。
+     * 不进入认证拦截器的 Spring MVC 路径模式。
      *
      * @return 不可修改的路径模式列表，默认没有排除项
      */
@@ -70,7 +68,7 @@ public class AuthProperties {
     }
 
     /**
-     * 读取 JWT 签发和验证配置。
+     * JWT 签发和验证配置。
      *
      * @return 可由 Spring Boot 绑定的 JWT 配置
      */
@@ -82,13 +80,15 @@ public class AuthProperties {
     /** 配置普通请求使用的认证 Token 模式。 */
     public static class Token {
 
-        private AuthTokenMode mode = AuthTokenMode.SESSION;
+        private @NotNull AuthTokenMode mode = AuthTokenMode.SESSION;
 
-        public AuthTokenMode getMode() {
+        public @NotNull AuthTokenMode getMode() {
             return mode;
         }
 
-        public void setMode(AuthTokenMode mode) {
+        /** @throws IllegalArgumentException 模式为空时抛出 */
+        @Contract(value = "null -> fail", mutates = "this")
+        public void setMode(@Nullable AuthTokenMode mode) {
             if (mode == null) {
                 throw new IllegalArgumentException("Token 模式不能为空");
             }
@@ -109,10 +109,6 @@ public class AuthProperties {
 
         private int maxTokenLength = 6144;
 
-        /** 创建使用五分钟 access Token 和 6144 字符上限的 JWT 配置。 */
-        public Jwt() {
-        }
-
         /** @return 当前签发 JWT 使用的密钥标识 */
         public String getActiveKeyId() {
             return activeKeyId;
@@ -124,7 +120,7 @@ public class AuthProperties {
         }
 
         /**
-         * 读取验证密钥表。
+         * 验证密钥表。
          *
         * @return key id 到 Base64 编码 HS256 密钥的可绑定 Map
         */

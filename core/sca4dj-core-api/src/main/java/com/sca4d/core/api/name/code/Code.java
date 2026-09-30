@@ -54,7 +54,11 @@ public abstract class Code extends Name implements Comparable<Code> {
         return List.copyOf(values);
     }
 
-    /** 返回节点数量，不依赖输出分隔符。 */
+    /**
+     * 节点数量，不依赖输出分隔符。
+     *
+     * @return 节点数量，不依赖输出分隔符
+     */
     @Contract(pure = true)
     public final int size() {
         return size;
@@ -115,9 +119,9 @@ public abstract class Code extends Name implements Comparable<Code> {
 
     /** 保存一个稳定节点及其后继，不保存任何序列化分隔符。 */
     private static class Node {
-        private final @NotNull String value;
-
         private final @Nullable Node next;
+
+        private final @NotNull String value;
 
         private Node(@NotNull String value, @Nullable Node next) {
             this.value = value;

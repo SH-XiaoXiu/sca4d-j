@@ -36,9 +36,9 @@ public final class Call {
 
     private @Nullable CallInvoker invoker;
 
-    private final Instant startedAt;
-
     private final @NotNull DataValues inputs;
+
+    private final Instant startedAt;
 
     private final @Nullable Resource targetResource;
 

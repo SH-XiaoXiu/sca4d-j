@@ -12,7 +12,6 @@ public class SafeTextValidator implements ConstraintValidator<SafeText, String> 
 
     private int max;
 
-    /** 创建等待 Bean Validation Provider 初始化最大长度的校验器。 */
     public SafeTextValidator() {
     }
 

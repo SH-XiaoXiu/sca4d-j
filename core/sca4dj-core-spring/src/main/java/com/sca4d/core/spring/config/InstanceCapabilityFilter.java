@@ -1,6 +1,6 @@
 package com.sca4d.core.spring.config;
 
-import com.sca4d.core.api.gateway.GatewayHttpPaths;
+import com.sca4d.core.api.gateway.GatewayConstants;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.runtime.InstanceCapabilities;
 import jakarta.servlet.FilterChain;
@@ -48,7 +48,7 @@ public class InstanceCapabilityFilter extends OncePerRequestFilter {
         }
         if (path.equals("/actuator")
                 || path.startsWith("/actuator/")
-                || path.startsWith(GatewayHttpPaths.CALLBACK_PREFIX)) {
+                || path.startsWith(GatewayConstants.CALLBACK_PATH + "/")) {
             chain.doFilter(request, response);
             return;
         }

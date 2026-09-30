@@ -34,6 +34,8 @@ import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.core.Ordered;
 import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -119,6 +121,19 @@ class CoreSpringAutoConfigurationTest {
             assertThat(context).hasSingleBean(IdGenerator.class);
             assertThat(context.getBean(IdGenerator.class)).isInstanceOf(SnowflakeIdGenerator.class);
             assertThat(context.getBean(OpenAPI.class).getInfo().getTitle()).isEqualTo("sca4d-test API");
+        });
+    }
+
+    @Test
+    @DisplayName("Preserves Core HTTP filter order")
+    void preservesCoreHttpFilterOrder() {
+        contextRunner.run(context -> {
+            assertThat(context.getBean("httpCallFilter", FilterRegistrationBean.class).getOrder())
+                    .isEqualTo(Ordered.HIGHEST_PRECEDENCE + 10);
+            assertThat(context.getBean("requestVersionConditionFilter", FilterRegistrationBean.class).getOrder())
+                    .isEqualTo(Ordered.HIGHEST_PRECEDENCE + 15);
+            assertThat(context.getBean("clientStateFilter", FilterRegistrationBean.class).getOrder())
+                    .isEqualTo(Ordered.HIGHEST_PRECEDENCE + 20);
         });
     }
 

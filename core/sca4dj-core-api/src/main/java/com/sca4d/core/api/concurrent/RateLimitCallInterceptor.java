@@ -30,9 +30,9 @@ public class RateLimitCallInterceptor implements CallLifecycle.Around {
     /** 限流判断节点编码。 */
     public static final TreeCode CODE = TreeCode.of("CALL/RATE_LIMIT");
 
-    private final RateLimiter rateLimiter;
-
     private final CallValueResolverLookup resolverLookup;
+
+    private final RateLimiter rateLimiter;
 
     private final SPICallValueResolver expressionResolver;
 

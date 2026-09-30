@@ -14,27 +14,27 @@ import java.util.Set;
 /** 保存 DEVICE Subject 对应的公共 IoT Profile。 */
 public class Device {
 
-    private final long id;
+    private final @Nullable DeviceConnectionBinding connection;
 
     private final @NotNull ProductBinding product;
 
-    private final @NotNull String code;
+    private final @NotNull Set<DeviceAccessMethod> accessMethods;
 
-    private final @Nullable String serialNumber;
+    private final @NotNull String code;
 
     private final @NotNull String displayName;
 
+    private final @NotNull String protocolCode;
+
     private final @Nullable String remark;
+
+    private final @Nullable String serialNumber;
 
     private final int thingModelVersion;
 
     private final long bindingGeneration;
 
-    private final @NotNull String protocolCode;
-
-    private final @Nullable DeviceConnectionBinding connection;
-
-    private final @NotNull Set<DeviceAccessMethod> accessMethods;
+    private final long id;
 
     /** 创建已经通过 Product 约束校验的 Device 快照。 */
     @SuppressWarnings("ParameterNumber")

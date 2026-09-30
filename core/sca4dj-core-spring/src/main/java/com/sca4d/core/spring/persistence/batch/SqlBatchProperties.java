@@ -10,7 +10,6 @@ public class SqlBatchProperties {
 
     private int maxBindParameters = 30_000;
 
-    /** 创建使用保守 PostgreSQL 批次默认值的配置。 */
     public SqlBatchProperties() {
     }
 

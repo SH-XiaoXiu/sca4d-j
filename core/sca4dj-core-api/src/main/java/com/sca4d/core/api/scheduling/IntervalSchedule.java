@@ -35,7 +35,7 @@ public class IntervalSchedule implements ScheduleTiming {
     }
 
     /**
-     * 返回固定触发间隔。
+     * 固定触发间隔。
      *
      * @return 两次原定触发之间的正数间隔
      */
@@ -45,7 +45,7 @@ public class IntervalSchedule implements ScheduleTiming {
     }
 
     /**
-     * 返回首次触发延迟。
+     * 首次触发延迟。
      *
      * @return 完成计划登记后的非负延迟
      */

@@ -13,15 +13,15 @@ import java.util.Optional;
 /** 保存厂商 ACK decoder 已解析、尚未分配平台标识的业务回执。 */
 public class DecodedMqttAcknowledgement {
 
-    private final long messageId;
-
-    private final @NotNull String ackCode;
+    private final @Nullable Instant acknowledgedAt;
 
     private final @NotNull Map<String, Object> data;
 
+    private final @NotNull String ackCode;
+
     private final @Nullable String sourceAcknowledgementId;
 
-    private final @Nullable Instant acknowledgedAt;
+    private final long messageId;
 
     /**
      * @param messageId 下行消息携带给设备并由设备原样返回的标识

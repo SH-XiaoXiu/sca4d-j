@@ -25,7 +25,6 @@ public class AfterCommitAuditRecorder implements AuditRecorder {
 
     private final Executor executor;
 
-    /** 创建提交后尽力审计记录器。 */
     public AfterCommitAuditRecorder(@NotNull AuditRepository repository, @NotNull Executor executor) {
         this.repository = Objects.requireNonNull(repository, "审计 Repository 不能为空");
         this.executor = Objects.requireNonNull(executor, "尽力审计执行器不能为空");

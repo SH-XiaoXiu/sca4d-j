@@ -51,13 +51,13 @@ import java.util.function.Function;
  */
 public class SessionCodec implements VersionedCodec<Session, String> {
 
-    private static final @NotNull TreeCode CODE = TreeCode.of("AUTH/SESSION");
-
     private static final int FORMAT_VERSION = 1;
 
     private static final String ID_SET_ENCODING = "roaring64-portable";
 
     private static final int ID_SET_VERSION = 1;
+
+    private static final @NotNull TreeCode CODE = TreeCode.of("AUTH/SESSION");
 
     private final @NotNull ObjectMapper objectMapper;
 

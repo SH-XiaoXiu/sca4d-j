@@ -8,7 +8,6 @@ public class EmailCodeProperties {
 
     private String accountRealm = "platform";
 
-    /** 创建使用 platform 认证域的默认配置。 */
     public EmailCodeProperties() {
     }
 

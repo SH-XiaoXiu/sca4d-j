@@ -14,9 +14,9 @@ import java.util.Objects;
 /** 把 MessageCatalog 接入 Spring 和 Bean Validation 使用的 MessageSource 契约。 */
 public class CatalogMessageSource implements MessageSource {
 
-    private final MessageCatalog messages;
-
     private final LocaleCatalog locales;
+
+    private final MessageCatalog messages;
 
     /**
      * 创建委托给模块消息目录的 Spring MessageSource。

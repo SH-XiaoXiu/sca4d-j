@@ -24,9 +24,9 @@ public class DeviceConnectionService {
 
     private final @NotNull DeviceConnectionQueryService connections;
 
-    private final @NotNull MessageBus messages;
-
     private final @Nullable ConnectionRegistry commonConnections;
+
+    private final @NotNull MessageBus messages;
 
     /** 创建设备连接操作服务。 */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "ConnectionRegistry 是注入的共享协作接口，服务不拥有或修改其内部表示")

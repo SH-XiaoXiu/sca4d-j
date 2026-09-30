@@ -25,13 +25,13 @@ public class DictionaryOption {
             Set.of("label"),
             Map.of("label", 160));
 
-    private final String value;
-
-    private final String labelKey;
+    private final LocalizedFields i18n;
 
     private final String label;
 
-    private final LocalizedFields i18n;
+    private final String labelKey;
+
+    private final String value;
 
     private final boolean codeDefined;
 

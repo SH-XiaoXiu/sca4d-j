@@ -14,29 +14,29 @@ import java.util.Objects;
 @SuppressWarnings("ClassCanBeRecord") // 项目禁止使用 Java record，保留普通 class。
 public class Action {
 
-    /** `INVOKE` 的稳定动作键，可用于注解参数。 */
-    public static final @NotNull String INVOKE_VALUE = "INVOKE";
-
     /** `CREATE` 的稳定动作键，可用于注解参数。 */
     public static final @NotNull String CREATE_VALUE = "CREATE";
 
-    /** `READ` 的稳定动作键，可用于注解参数。 */
-    public static final @NotNull String READ_VALUE = "READ";
-
-    /** `WRITE` 的稳定动作键，可用于注解参数。 */
-    public static final @NotNull String WRITE_VALUE = "WRITE";
-
-    /** `UPDATE` 的稳定动作键，可用于注解参数。 */
-    public static final @NotNull String UPDATE_VALUE = "UPDATE";
-
     /** `DELETE` 的稳定动作键，可用于注解参数。 */
     public static final @NotNull String DELETE_VALUE = "DELETE";
+
+    /** `INVOKE` 的稳定动作键，可用于注解参数。 */
+    public static final @NotNull String INVOKE_VALUE = "INVOKE";
 
     /** `MANAGE` 的稳定动作键，可用于 Operation 目录和业务动作。 */
     public static final @NotNull String MANAGE_VALUE = "MANAGE";
 
     /** `OPERATE` 的稳定动作键，可用于 Operation 目录和业务动作。 */
     public static final @NotNull String OPERATE_VALUE = "OPERATE";
+
+    /** `READ` 的稳定动作键，可用于注解参数。 */
+    public static final @NotNull String READ_VALUE = "READ";
+
+    /** `UPDATE` 的稳定动作键，可用于注解参数。 */
+    public static final @NotNull String UPDATE_VALUE = "UPDATE";
+
+    /** `WRITE` 的稳定动作键，可用于注解参数。 */
+    public static final @NotNull String WRITE_VALUE = "WRITE";
 
     /** 调用固定业务入口。 */
     public static final @NotNull Action INVOKE = new Action(INVOKE_VALUE);

@@ -22,7 +22,6 @@ public class DefaultJobHistory implements JobHistory {
 
     private final @NotNull ObjectMapper objectMapper;
 
-    /** 创建使用脚手架 JSON 映射器恢复节点输出的 Job 历史查询。 */
     public DefaultJobHistory(
             @NotNull JobRepository repository,
             @NotNull ObjectMapper objectMapper) {

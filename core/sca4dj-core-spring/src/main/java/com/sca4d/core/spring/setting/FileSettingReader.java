@@ -14,10 +14,11 @@ import java.util.function.BiFunction;
 
 /** 按明确所属读取手工维护的文件字节；格式由构造 Setting 时选择的 Codec 解释。 */
 public final class FileSettingReader implements SettingReader<byte[]> {
-    private final Path root;
-
     private final BiFunction<TreeCode, SettingOwner, Path> location;
 
+    private final Path root;
+
+    /** location 按设置及归属定位文件；读取时拒绝根目录外的路径和符号链接。 */
     public FileSettingReader(@NotNull Path root, @NotNull BiFunction<TreeCode, SettingOwner, Path> location) {
         this.root = root.toAbsolutePath().normalize();
         this.location = Objects.requireNonNull(location);

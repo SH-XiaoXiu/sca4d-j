@@ -13,15 +13,15 @@ import java.util.Objects;
 /** 统一 EventHandler 与普通 MessageHandler 的 RabbitMQ 拓扑字段。 */
 class RabbitHandlerDescriptor {
 
-    private final @NotNull TreeCode code;
-
-    private final @NotNull TreeCode messageCode;
-
     private final @NotNull HandlingPolicy handlingPolicy;
 
     private final EventHandler<?> eventHandler;
 
     private final MessageHandler<?> messageHandler;
+
+    private final @NotNull TreeCode code;
+
+    private final @NotNull TreeCode messageCode;
 
     private RabbitHandlerDescriptor(
             @NotNull TreeCode code,

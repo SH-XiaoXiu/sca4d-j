@@ -25,7 +25,7 @@ public class PipelineExecutionException extends RuntimeException {
     }
 
     /**
-     * 返回失败阶段。
+     * 失败阶段。
      *
      * @return 发生失败的稳定阶段名称
      */

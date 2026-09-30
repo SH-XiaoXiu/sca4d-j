@@ -24,13 +24,13 @@ import java.util.concurrent.Executor;
  */
 public class Pipeline<I, O> {
 
-    private final @NotNull List<@NotNull PipelineStage<?, ?>> stages;
-
-    private final @NotNull Set<@NotNull String> stageCodes;
-
     private final @NotNull Class<I> inputType;
 
     private final @NotNull Class<O> outputType;
+
+    private final @NotNull List<@NotNull PipelineStage<?, ?>> stages;
+
+    private final @NotNull Set<@NotNull String> stageCodes;
 
     private Pipeline(
             @NotNull List<@NotNull PipelineStage<?, ?>> stages,
@@ -192,7 +192,7 @@ public class Pipeline<I, O> {
     }
 
     /**
-     * 返回整条 Pipeline 的输入类型。
+     * 整条 Pipeline 的输入类型。
      *
      * @return 第一阶段要求的具体输入类型
      */
@@ -202,7 +202,7 @@ public class Pipeline<I, O> {
     }
 
     /**
-     * 返回整条 Pipeline 的输出类型。
+     * 整条 Pipeline 的输出类型。
      *
      * @return 最后阶段产生的具体输出类型
      */

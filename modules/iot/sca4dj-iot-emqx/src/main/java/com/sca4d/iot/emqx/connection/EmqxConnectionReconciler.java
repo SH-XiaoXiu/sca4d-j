@@ -48,21 +48,21 @@ public class EmqxConnectionReconciler implements ClusterTask {
 
     private static final Duration LOCK_WAIT = Duration.ZERO;
 
-    private final @NotNull EmqxManagementClient management;
-
-    private final @NotNull DeviceConnectionResolver devices;
-
-    private final @NotNull DeviceConnectionReceiver connections;
+    private final @NotNull MqttAuthorizationService authorization;
 
     private final @NotNull EmqxConnectionRepository emqxConnections;
 
-    private final @NotNull MqttAuthorizationService authorization;
+    private final @NotNull EmqxManagementClient management;
 
-    private final @NotNull DistributedLock distributedLock;
+    private final @Nullable ConnectionRegistry commonConnections;
 
     private final @NotNull Clock clock;
 
-    private final @Nullable ConnectionRegistry commonConnections;
+    private final @NotNull DeviceConnectionReceiver connections;
+
+    private final @NotNull DeviceConnectionResolver devices;
+
+    private final @NotNull DistributedLock distributedLock;
 
     /** 创建集群中单执行者的 EMQX 连接对账服务。 */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "ConnectionRegistry 是注入的共享协作接口，对账服务不拥有或修改其内部表示")

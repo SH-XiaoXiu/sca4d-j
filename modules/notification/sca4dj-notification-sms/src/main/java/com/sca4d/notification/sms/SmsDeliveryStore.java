@@ -16,7 +16,6 @@ public class SmsDeliveryStore {
 
     private final IdGenerator ids;
 
-    /** 创建 SMS 投递状态存储。 */
     public SmsDeliveryStore(@NotNull SmsDeliveryMapper mapper, @NotNull IdGenerator ids) {
         this.mapper = Objects.requireNonNull(mapper, "SmsDeliveryMapper 不能为空");
         this.ids = Objects.requireNonNull(ids, "IdGenerator 不能为空");

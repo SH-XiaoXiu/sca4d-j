@@ -8,13 +8,13 @@ import java.util.Objects;
 
 /** 保存一次公开调用的参数与返回类型，供动态入口检查。 */
 public final class ApiOperation {
-    private final @NotNull TreeCode code;
-
-    private final @NotNull List<Class<?>> parameters;
-
     private final @NotNull Class<?> resultType;
 
     private final @NotNull List<Boolean> nullableParameters;
+
+    private final @NotNull List<Class<?>> parameters;
+
+    private final @NotNull TreeCode code;
 
     private final boolean nullableResult;
 
@@ -35,27 +35,47 @@ public final class ApiOperation {
         }
     }
 
-    /** 返回稳定操作编码。 */
+    /**
+     * 稳定操作编码。
+     *
+     * @return 稳定操作编码
+     */
     public @NotNull TreeCode code() {
         return code;
     }
 
-    /** 返回按声明顺序排列的参数类型。 */
+    /**
+     * 按声明顺序排列的参数类型。
+     *
+     * @return 按声明顺序排列的参数类型
+     */
     public @NotNull List<Class<?>> parameters() {
         return parameters;
     }
 
-    /** 返回结果类型，void 表示没有结果。 */
+    /**
+     * 结果类型，void 表示没有结果。
+     *
+     * @return 结果类型，void 表示没有结果
+     */
     public @NotNull Class<?> resultType() {
         return resultType;
     }
 
-    /** 返回各参数是否允许为空。 */
+    /**
+     * 各参数是否允许为空。
+     *
+     * @return 各参数是否允许为空
+     */
     public @NotNull List<Boolean> nullableParameters() {
         return nullableParameters;
     }
 
-    /** 返回是否允许空结果。 */
+    /**
+     * 是否允许空结果。
+     *
+     * @return 是否允许空结果
+     */
     public boolean nullableResult() {
         return nullableResult;
     }

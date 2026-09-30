@@ -12,7 +12,6 @@ public class IssuedHmacKey {
 
     private final @NotNull String key;
 
-    /** 创建一次性 MAC Key 签发结果。 */
     public IssuedHmacKey(@NotNull HmacCredential credential, @NotNull String key) {
         this.credential = Objects.requireNonNull(credential, "HMAC Credential 不能为空");
         this.key = Objects.requireNonNull(key, "HMAC Key 不能为空");

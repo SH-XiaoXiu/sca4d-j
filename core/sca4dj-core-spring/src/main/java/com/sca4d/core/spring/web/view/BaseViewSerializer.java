@@ -39,10 +39,10 @@ import java.util.Set;
 /** 在 Jackson 默认 Bean 序列化后应用本地化和 ViewJson 定制。 */
 public class BaseViewSerializer extends StdSerializer<BaseView> {
 
+    private static final Logger LOG = LoggerFactory.getLogger(BaseViewSerializer.class);
+
     @Serial
     private static final long serialVersionUID = 1L;
-
-    private static final Logger LOG = LoggerFactory.getLogger(BaseViewSerializer.class);
 
     /** Jackson 已为具体 View 类型创建的默认 Bean 序列化器。 */
     private final JsonSerializer<Object> delegate;
@@ -304,11 +304,11 @@ public class BaseViewSerializer extends StdSerializer<BaseView> {
     @SuppressWarnings("ClassCanBeRecord")
     private static class Localization {
 
-        private final String target;
-
         private final @Nullable Method source;
 
         private final @Nullable String key;
+
+        private final String target;
 
         private Localization(
                 @NotNull String target,

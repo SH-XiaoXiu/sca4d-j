@@ -18,11 +18,11 @@ public class EmqxAuthenticationResponse {
 
     private final boolean superuser;
 
-    private final @NotNull Map<String, String> clientAttributes;
-
     private final @NotNull List<EmqxAclRule> acl;
 
     private final @Nullable Long expireAt;
+
+    private final @NotNull Map<String, String> clientAttributes;
 
     private EmqxAuthenticationResponse(
             @NotNull String result,

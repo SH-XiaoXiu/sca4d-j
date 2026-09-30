@@ -9,13 +9,13 @@ import org.jetbrains.annotations.NotNull;
 /** 请求检查一个标准 Device 下行消息的指定发送尝试是否等待 ACK 超时。 */
 public class DeviceAcknowledgementCheck extends Message {
 
-    public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/ACK/CHECK");
-
     public static final int PROTOCOL_VERSION = 1;
 
-    private final long messageId;
+    public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/ACK/CHECK");
 
     private final int attempt;
+
+    private final long messageId;
 
     /** @param messageId `iot_downlink_message` 标识 @param attempt 需要检查的发送尝试序号 */
     @JsonCreator

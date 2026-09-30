@@ -9,41 +9,41 @@ import java.time.Instant;
 /** 保存 audit_record 查询和写入使用的数据库列值。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public class EncodedAuditEntry {
-    private final long id;
-
-    private final @NotNull String requestId;
-
-    private final long subjectId;
-
-    private final @Nullable Long accountId;
-
-    private final long principalId;
-
-    private final @NotNull String operation;
-
-    private final @Nullable String targetType;
-
-    private final @Nullable String targetId;
-
     private final @NotNull AuditResult result;
 
-    private final @Nullable String payloadType;
+    private final @NotNull Instant occurredAt;
 
     private final @Nullable Integer payloadVersion;
 
-    private final @Nullable String payloadJson;
+    private final @Nullable Long accountId;
+
+    private final @Nullable String clientIp;
 
     private final @Nullable String httpMethod;
 
     private final @Nullable String httpPath;
 
-    private final @Nullable String clientIp;
+    private final @Nullable String instanceId;
+
+    private final @NotNull String operation;
+
+    private final @Nullable String payloadJson;
+
+    private final @Nullable String payloadType;
+
+    private final @NotNull String requestId;
+
+    private final @Nullable String targetId;
+
+    private final @Nullable String targetType;
 
     private final @Nullable String userAgent;
 
-    private final @NotNull Instant occurredAt;
+    private final long id;
 
-    private final @Nullable String instanceId;
+    private final long principalId;
+
+    private final long subjectId;
 
     /**
      * 创建已经完成 JSON 编码的审计字段。
@@ -213,7 +213,11 @@ public class EncodedAuditEntry {
         return occurredAt;
     }
 
-    /** 返回实际执行实例；旧记录没有此字段时为空。 */
+    /**
+     * 实际执行实例；旧记录没有此字段时为空。
+     *
+     * @return 实际执行实例；旧记录没有此字段时为空
+     */
     public @Nullable String instanceId() {
         return instanceId;
     }

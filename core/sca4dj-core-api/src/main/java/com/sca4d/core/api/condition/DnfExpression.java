@@ -46,7 +46,11 @@ public class DnfExpression<T, R> {
         return new DnfExpression<>(List.of(DnfClause.allOf(code, result)));
     }
 
-    /** 返回保持声明顺序的 Clause。 */
+    /**
+     * 保持声明顺序的 Clause。
+     *
+     * @return 保持声明顺序的 Clause
+     */
     public @Unmodifiable @NotNull List<DnfClause<T, R>> clauses() {
         return clauses;
     }

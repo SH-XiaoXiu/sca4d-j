@@ -12,26 +12,26 @@ import java.util.Objects;
 public class FederatedIdentity {
 
     /**
+     * 供 Java 注解参数使用的资源类型文本。
+     */
+    public static final String RESOURCE_TYPE_VALUE = "AUTH/FEDERATED_IDENTITY";
+
+    /**
      * 外部身份绑定接口和审计记录使用的资源类型。
      */
     public static final TreeCode RESOURCE_TYPE = TreeCode.ofSlash("AUTH/FEDERATED_IDENTITY");
 
-    /**
-     * 供 Java 注解参数使用的资源类型文本。
-     */
-    public static final String RESOURCE_TYPE_VALUE = "AUTH/FEDERATED_IDENTITY";
+    private final FederatedProfile profile;
+
+    private final Instant linkedAt;
+
+    private final long accountId;
 
     private final long id;
 
     private final long providerId;
 
-    private final long accountId;
-
-    private final FederatedProfile profile;
-
     private final long version;
-
-    private final Instant linkedAt;
 
     /**
      * 创建外部身份绑定。

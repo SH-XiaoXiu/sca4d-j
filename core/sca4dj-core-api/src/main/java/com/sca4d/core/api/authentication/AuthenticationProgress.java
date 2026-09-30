@@ -16,11 +16,11 @@ public class AuthenticationProgress {
 
     private final AuthenticationAttemptId attemptId;
 
-    private final int remainingFactorCount;
+    private final Instant expiresAt;
 
     private final List<TreeCode> availableMethods;
 
-    private final Instant expiresAt;
+    private final int remainingFactorCount;
 
     /**
      * 创建不暴露账号和认证材料的尝试进度。
@@ -48,7 +48,9 @@ public class AuthenticationProgress {
     }
 
     /**
-     * 返回调用方继续提交因素或消费结果时必须回传的标识。
+     * 调用方继续提交因素或消费结果时必须回传的标识。
+     *
+     * @return 调用方继续提交因素或消费结果时必须回传的标识
      */
     public @NotNull AuthenticationAttemptId attemptId() {
         return attemptId;
@@ -62,21 +64,27 @@ public class AuthenticationProgress {
     }
 
     /**
-     * 返回满足要求前还需成功验证的不同因素数量。
+     * 满足要求前还需成功验证的不同因素数量。
+     *
+     * @return 满足要求前还需成功验证的不同因素数量
      */
     public int remainingFactorCount() {
         return remainingFactorCount;
     }
 
     /**
-     * 返回下一次提交可以选择的认证方法。
+     * 下一次提交可以选择的认证方法。
+     *
+     * @return 下一次提交可以选择的认证方法
      */
     public @NotNull @Unmodifiable List<TreeCode> availableMethods() {
         return availableMethods;
     }
 
     /**
-     * 返回认证引擎不再接受提交或消费请求的时刻。
+     * 认证引擎不再接受提交或消费请求的时刻。
+     *
+     * @return 认证引擎不再接受提交或消费请求的时刻
      */
     public @NotNull Instant expiresAt() {
         return expiresAt;

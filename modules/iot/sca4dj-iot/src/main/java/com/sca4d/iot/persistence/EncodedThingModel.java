@@ -8,13 +8,13 @@ import org.jetbrains.annotations.NotNull;
  */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public class EncodedThingModel {
-    private final int version;
-
-    private final @NotNull String modelJson;
+    private final @NotNull LocalizedFields i18n;
 
     private final @NotNull String contentHash;
 
-    private final @NotNull LocalizedFields i18n;
+    private final @NotNull String modelJson;
+
+    private final int version;
 
     /**
      * 创建一个已经完成 JSON 编码的物模型版本。

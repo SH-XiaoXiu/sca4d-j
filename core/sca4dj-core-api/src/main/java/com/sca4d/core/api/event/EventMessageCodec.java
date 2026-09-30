@@ -15,11 +15,10 @@ import java.util.Objects;
 /** 使用固定 ObjectMapper 编解码一种 EventType 的业务键、发生时间和 payload。 */
 public class EventMessageCodec<T> implements MessageCodec<Event<T>> {
 
-    private final @NotNull EventType<T> type;
-
     private final @NotNull ObjectMapper json;
 
-    /** 创建指定事件类型的 JSON 编解码器。 */
+    private final @NotNull EventType<T> type;
+
     public EventMessageCodec(@NotNull EventType<T> type, @NotNull ObjectMapper json) {
         this.type = Objects.requireNonNull(type, "EventType 不能为空");
         this.json = Objects.requireNonNull(json, "ObjectMapper 不能为空");

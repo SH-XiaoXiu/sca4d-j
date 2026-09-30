@@ -44,7 +44,7 @@ public class FileUploadIntent {
     }
 
     /**
-     * 返回文件准备绑定的业务用途。
+     * 文件准备绑定的业务用途。
      *
      * @return 文件用途
      */
@@ -53,7 +53,7 @@ public class FileUploadIntent {
     }
 
     /**
-     * 返回调用方提供、只作为元数据保存的原始文件名。
+     * 调用方提供、只作为元数据保存的原始文件名。
      *
      * @return 原始文件名
      */
@@ -62,7 +62,7 @@ public class FileUploadIntent {
     }
 
     /**
-     * 返回调用方声明并规范为小写的媒体类型。
+     * 调用方声明并规范为小写的媒体类型。
      *
      * @return 声明媒体类型
      */
@@ -71,7 +71,7 @@ public class FileUploadIntent {
     }
 
     /**
-     * 返回申请上传的精确字节数。
+     * 申请上传的精确字节数。
      *
      * @return 正数字节数
      */

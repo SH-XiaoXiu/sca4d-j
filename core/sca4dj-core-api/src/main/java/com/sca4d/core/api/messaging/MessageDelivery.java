@@ -13,13 +13,13 @@ import java.util.Objects;
 @SuppressWarnings({"ClassCanBeRecord", "unused"})
 public class MessageDelivery<T> {
 
-    private final @NotNull Id messageId;
-
     private final @NotNull Event<T> event;
 
-    private final @NotNull String sourceApplication;
+    private final @NotNull Id messageId;
 
     private final @NotNull Instant publishedAt;
+
+    private final @NotNull String sourceApplication;
 
     private final boolean redelivered;
 

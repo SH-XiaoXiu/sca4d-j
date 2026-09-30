@@ -39,9 +39,9 @@ public final class EmqxMqttRuntime implements SmartLifecycle {
 
     private final @NotNull EmqxProperties properties;
 
-    private final @NotNull MqttMessageRouter router;
-
     private final @NotNull Clock clock;
+
+    private final @NotNull EmqxConnectionReconciler connectionReconciler;
 
     private final @NotNull List<MqttMessageObserver> observers;
 
@@ -49,7 +49,7 @@ public final class EmqxMqttRuntime implements SmartLifecycle {
 
     private final @Nullable MqttInboundFailureStore failureStore;
 
-    private final @NotNull EmqxConnectionReconciler connectionReconciler;
+    private final @NotNull MqttMessageRouter router;
 
     private final @NotNull Mqtt5AsyncClient client;
 

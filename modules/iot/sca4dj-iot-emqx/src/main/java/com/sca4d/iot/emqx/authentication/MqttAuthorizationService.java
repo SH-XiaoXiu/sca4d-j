@@ -27,9 +27,9 @@ public class MqttAuthorizationService {
     /** EMQX `client_attrs` 中保存的当前 MQTT ACL 指纹。 */
     public static final String FINGERPRINT_ATTRIBUTE = "authz_fingerprint";
 
-    private final @NotNull MqttProtocolCatalog protocols;
-
     private final @NotNull List<MqttAuthorizationPolicy> policies;
+
+    private final @NotNull MqttProtocolCatalog protocols;
 
     private final @NotNull Key fingerprintSchema;
 

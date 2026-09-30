@@ -17,7 +17,7 @@ public class SessionId {
     }
 
     /**
-     * 返回原始标识值。
+     * 原始标识值。
      *
      * @return 原始标识值
      */

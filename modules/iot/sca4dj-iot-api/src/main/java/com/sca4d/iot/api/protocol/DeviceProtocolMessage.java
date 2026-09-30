@@ -12,11 +12,11 @@ public class DeviceProtocolMessage {
 
     private final @NotNull Device device;
 
+    private final @NotNull Instant observedAt;
+
     private final @NotNull String code;
 
     private final byte @NotNull [] payload;
-
-    private final @NotNull Instant observedAt;
 
     /**
      * @param device 传输路由已经定位并完整读取的 Device

@@ -13,25 +13,25 @@ import java.util.Objects;
  */
 public class StoredSetting {
 
+    private final Integer encryptionContextVersion;
+
     private final SettingOwner owner;
 
     private final String key;
 
-    private final int schemaVersion;
-
-    private final boolean hasValue;
+    private final String valueKeyId;
 
     private final String valueText;
 
-    private final String valueKeyId;
+    private final Version version;
 
-    private final byte[] valueCiphertext;
-
-    private final Integer encryptionContextVersion;
+    private final boolean hasValue;
 
     private final boolean synchronizedFromEnvironment;
 
-    private final Version version;
+    private final byte[] valueCiphertext;
+
+    private final int schemaVersion;
 
     /**
      * 创建数据库设置行并校验 tombstone、文本和密文形状。

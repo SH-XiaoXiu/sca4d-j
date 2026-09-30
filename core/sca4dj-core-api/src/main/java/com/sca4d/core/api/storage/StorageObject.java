@@ -24,7 +24,7 @@ public class StorageObject {
     }
 
     /**
-     * 返回对象所在容器。
+     * 对象所在容器。
      *
      * @return Bucket 或本地命名空间
      */
@@ -33,7 +33,7 @@ public class StorageObject {
     }
 
     /**
-     * 返回容器内的对象键。
+     * 容器内的对象键。
      *
      * @return 由文件模块生成的对象键
      */

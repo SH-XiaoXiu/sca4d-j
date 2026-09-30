@@ -45,7 +45,7 @@ public class LocaleCatalog {
     }
 
     /**
-     * 读取应用接受的 Locale 及同语言回退次序。
+     * 应用接受的 Locale 及同语言回退次序。
      *
      * @return 保持配置顺序的不可变支持列表
      */
@@ -54,7 +54,7 @@ public class LocaleCatalog {
     }
 
     /**
-     * 读取所有请求语言都不受支持时使用的 Locale。
+     * 所有请求语言都不受支持时使用的 Locale。
      *
      * @return 支持列表中包含的应用默认 Locale
      */

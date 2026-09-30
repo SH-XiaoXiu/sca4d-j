@@ -18,9 +18,9 @@ public class DeviceConnectionAccess {
 
     private final @NotNull DeviceAccessMethod accessMethod;
 
-    private final @Nullable SessionId sessionId;
-
     private final @Nullable Instant expiresAt;
+
+    private final @Nullable SessionId sessionId;
 
     /**
      * 创建已经由 IoT 认证实现校验完成的连接接入结果。

@@ -159,13 +159,13 @@ public class MqttMessageRouter {
     @SuppressWarnings("ClassCanBeRecord") // 路由适配类型遵守项目禁用 record 的规则。
     private static class MqttDeviceProtocolRoute implements MqttMessageRoute {
 
-        private final MqttDeviceProtocol protocol;
-
-        private final MqttUplinkRoute route;
-
         private final DeviceConnectionResolver devices;
 
         private final DeviceUplinkDispatcher uplinks;
+
+        private final MqttDeviceProtocol protocol;
+
+        private final MqttUplinkRoute route;
 
         private MqttDeviceProtocolRoute(
                 MqttDeviceProtocol protocol,

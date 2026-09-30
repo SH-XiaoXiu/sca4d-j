@@ -24,7 +24,6 @@ import java.util.List;
 @EnableConfigurationProperties({SettingsBootstrapProperties.class, EnvironmentPrefixProperties.class})
 public class SettingsAutoConfiguration {
 
-    /** 创建设置自动配置。 */
     public SettingsAutoConfiguration() {
     }
 

@@ -21,17 +21,17 @@ import java.util.Objects;
 @ApiStatus.Internal
 public class AuthenticationAttemptState {
 
-    private final AuthenticationAttemptId id;
-
     private final Account account;
 
     private final AuthenticationActionCode actionCode;
 
+    private final AuthenticationAttemptId id;
+
+    private final Instant expiresAt;
+
     private final List<Authentication> reusableAuthentications;
 
     private final List<VerifiedAuthentication> verifications;
-
-    private final Instant expiresAt;
 
     private boolean satisfied;
 
@@ -73,28 +73,36 @@ public class AuthenticationAttemptState {
     }
 
     /**
-     * 返回认证尝试标识。
+     * 认证尝试标识。
+     *
+     * @return 认证尝试标识
      */
     public @NotNull AuthenticationAttemptId id() {
         return id;
     }
 
     /**
-     * 返回要执行动作的账号。
+     * 要执行动作的账号。
+     *
+     * @return 要执行动作的账号
      */
     public @NotNull Account account() {
         return account;
     }
 
     /**
-     * 返回认证完成后允许执行的动作。
+     * 认证完成后允许执行的动作。
+     *
+     * @return 认证完成后允许执行的动作
      */
     public @NotNull AuthenticationActionCode actionCode() {
         return actionCode;
     }
 
     /**
-     * 返回调用方提供的不可修改已有认证列表。
+     * 调用方提供的不可修改已有认证列表。
+     *
+     * @return 调用方提供的不可修改已有认证列表
      */
     public @NotNull @Unmodifiable List<Authentication> reusableAuthentications() {
         return reusableAuthentications;
@@ -108,14 +116,18 @@ public class AuthenticationAttemptState {
     }
 
     /**
-     * 返回认证尝试的过期时间。
+     * 认证尝试的过期时间。
+     *
+     * @return 认证尝试的过期时间
      */
     public @NotNull Instant expiresAt() {
         return expiresAt;
     }
 
     /**
-     * 返回最近一次策略评估是否已经满足。
+     * 最近一次策略评估是否已经满足。
+     *
+     * @return 最近一次策略评估是否已经满足
      */
     public boolean satisfied() {
         return satisfied;

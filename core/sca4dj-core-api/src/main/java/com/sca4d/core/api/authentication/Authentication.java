@@ -14,13 +14,13 @@ import java.util.Set;
 @SuppressWarnings("ClassCanBeRecord")
 public class Authentication {
 
-    private final long accountId;
-
-    private final TreeCode methodCode;
+    private final Instant authenticatedAt;
 
     private final Set<AuthenticationFactorKind> factorKinds;
 
-    private final Instant authenticatedAt;
+    private final TreeCode methodCode;
+
+    private final long accountId;
 
     /**
      * 创建认证证据。
@@ -45,7 +45,7 @@ public class Authentication {
     }
 
     /**
-     * 返回已验证的 Account 标识。
+     * 已验证的 Account 标识。
      *
      * @return 已验证的 Account 标识
      */
@@ -54,7 +54,7 @@ public class Authentication {
     }
 
     /**
-     * 返回完成验证的认证方式编码。
+     * 完成验证的认证方式编码。
      *
      * @return 完成验证的认证方式编码
      */
@@ -63,7 +63,7 @@ public class Authentication {
     }
 
     /**
-     * 返回本次成功认证确认的因素类别。
+     * 本次成功认证确认的因素类别。
      *
      * @return 创建认证记录时复制的不可修改因素集合
      */
@@ -72,7 +72,7 @@ public class Authentication {
     }
 
     /**
-     * 返回验证完成时间。
+     * 验证完成时间。
      *
      * @return 验证完成时间
      */

@@ -16,12 +16,11 @@ public class PasswordProperties {
 
     private List<String> loginIdentifierTypes = List.of("USERNAME");
 
-    /** 创建使用默认 bootstrap 设置的 Password 配置。 */
     public PasswordProperties() {
     }
 
     /**
-     * 返回是否在启动时初始化密码凭据。
+     * 是否在启动时初始化密码凭据。
      *
      * @return 启动时初始化密码凭据时为 {@code true}
      */
@@ -39,7 +38,7 @@ public class PasswordProperties {
     }
 
     /**
-     * 返回用户名登录和 bootstrap 查找 Account 使用的认证域。
+     * 用户名登录和 bootstrap 查找 Account 使用的认证域。
      *
      * @return 认证域，默认为 {@code platform}
      */
@@ -60,7 +59,7 @@ public class PasswordProperties {
     }
 
     /**
-     * 返回 Password 登录依次尝试的开放标识类型。
+     * Password 登录依次尝试的开放标识类型。
      *
      * @return 至少包含一个且不重复的稳定类型值
      */
@@ -88,7 +87,7 @@ public class PasswordProperties {
     }
 
     /**
-     * 返回 bootstrap 账号用户名。
+     * bootstrap 账号用户名。
      *
      * @return bootstrap 账号用户名
      */
@@ -106,7 +105,7 @@ public class PasswordProperties {
     }
 
     /**
-     * 返回 bootstrap 原始密码。
+     * bootstrap 原始密码。
      *
      * @return bootstrap 原始密码；未配置时为 {@code null}
      */

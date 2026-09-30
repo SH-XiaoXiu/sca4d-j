@@ -37,7 +37,6 @@ public class NotificationAutoConfiguration {
         return new NotificationSettings(reader, writer);
     }
 
-    /** 创建 Notification 模块自动配置。 */
     public NotificationAutoConfiguration() {
     }
 

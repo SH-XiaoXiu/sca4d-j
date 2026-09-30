@@ -33,7 +33,7 @@ public class JobRunFailedException extends RuntimeException {
     }
 
     /**
-     * 返回失败的 run。
+     * 失败的 run。
      *
      * @return 进入 FAILED 的运行标识
      */
@@ -43,7 +43,7 @@ public class JobRunFailedException extends RuntimeException {
     }
 
     /**
-     * 返回异常表示的终态。
+     * 异常表示的终态。
      *
      * @return 固定为 FAILED
      */

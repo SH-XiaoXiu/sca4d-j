@@ -15,7 +15,6 @@ public class DeviceResultAcknowledgementPolicy implements AcknowledgementPolicy 
 
     public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/ACK/DEVICE/RESULT");
 
-    /** 创建解释设备显式结果的 ACK 策略。 */
     public DeviceResultAcknowledgementPolicy() {
     }
 

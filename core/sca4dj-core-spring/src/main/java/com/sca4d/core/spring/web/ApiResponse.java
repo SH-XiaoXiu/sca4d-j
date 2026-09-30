@@ -37,19 +37,19 @@ public class ApiResponse<T> {
     /** 成功响应使用的固定响应码。 */
     public static final String SUCCESS_CODE = "0";
 
-    private final String code;
-
-    private final @Nullable String messageKey;
+    private final Instant timestamp;
 
     private final List<Object> messageArgs;
 
-    private final @Nullable String message;
-
-    private final @Nullable T data;
-
     private final @Nullable String callId;
 
-    private final Instant timestamp;
+    private final String code;
+
+    private final @Nullable String message;
+
+    private final @Nullable String messageKey;
+
+    private final @Nullable T data;
 
     private boolean dynamicMetadataVisible = true;
 
@@ -266,7 +266,7 @@ public class ApiResponse<T> {
     }
 
     /**
-     * 返回显式 HTTP 状态。
+     * 显式 HTTP 状态。
      *
      * @return 显式 HTTP 状态；未指定时为空并由 Spring 使用默认状态
      */
@@ -301,7 +301,7 @@ public class ApiResponse<T> {
     }
 
     /**
-     * 返回响应码。
+     * 响应码。
      *
      * @return 响应码
      */
@@ -310,7 +310,7 @@ public class ApiResponse<T> {
     }
 
     /**
-     * 返回固定消息键。
+     * 固定消息键。
      *
      * @return 固定消息键；成功响应没有消息时为空
      */
@@ -319,7 +319,7 @@ public class ApiResponse<T> {
     }
 
     /**
-     * 返回消息模板参数。
+     * 消息模板参数。
      *
      * @return 保持模板顺序的消息参数
      */
@@ -328,7 +328,7 @@ public class ApiResponse<T> {
     }
 
     /**
-     * 返回当前语言的安全展示文案。
+     * 当前语言的安全展示文案。
      *
      * @return 当前语言的安全展示文案；成功响应没有消息时为空
      */
@@ -337,7 +337,7 @@ public class ApiResponse<T> {
     }
 
     /**
-     * 返回响应数据。
+     * 响应数据。
      *
      * @return 响应数据；没有数据时为空
      */

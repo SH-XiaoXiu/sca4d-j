@@ -39,21 +39,21 @@ public class ProductService {
             Set.of("displayName"),
             Map.of("displayName", 128));
 
+    private final @NotNull DeviceRepository devices;
+
     private final @NotNull ProductRepository products;
 
-    private final @NotNull ProductDefinitionCatalog definitions;
-
-    private final @NotNull DeviceRepository devices;
+    private final @NotNull ThingModelRepository models;
 
     private final @NotNull DeviceProtocolCatalog protocols;
 
-    private final @NotNull ThingModelRepository models;
+    private final @NotNull DistributedLock distributedLock;
 
     private final @NotNull IdGenerator ids;
 
     private final @NotNull LocaleCatalog locales;
 
-    private final @NotNull DistributedLock distributedLock;
+    private final @NotNull ProductDefinitionCatalog definitions;
 
     private final @NotNull TransactionTemplate transactions;
 

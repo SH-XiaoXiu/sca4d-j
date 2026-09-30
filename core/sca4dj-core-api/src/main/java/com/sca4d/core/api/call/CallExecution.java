@@ -27,9 +27,9 @@ public class CallExecution {
 
     private final Method method;
 
-    private final TreeCode operation;
-
     private final Object[] arguments;
+
+    private final TreeCode operation;
 
     private final Type resultType;
 
@@ -183,8 +183,9 @@ public class CallExecution {
             }
         }
         if (primary != null) {
-            if (outcome != null) {
-                outcome = outcome.withCompletionFailure(primary);
+            CallOutcome recorded = outcome;
+            if (recorded != null) {
+                outcome = recorded.withCompletionFailure(primary);
             }
             if (primary instanceof Error error) {
                 throw error;

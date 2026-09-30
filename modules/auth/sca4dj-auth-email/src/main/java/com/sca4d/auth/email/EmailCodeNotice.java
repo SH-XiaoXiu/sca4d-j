@@ -23,9 +23,9 @@ public class EmailCodeNotice {
             },
             (notice, execution) -> execution.sendToAccount(notice.accountId()));
 
-    private final long accountId;
-
     private final @NotNull String code;
+
+    private final long accountId;
 
     private final long expiresInMinutes;
 

@@ -11,11 +11,11 @@ import java.util.Set;
 /** 保存一次已经提交的 Device 数据变化及其发生时间。 */
 public class DeviceChange {
 
-    private final long deviceId;
+    private final @NotNull Instant occurredAt;
 
     private final @NotNull Set<DeviceChangeArea> areas;
 
-    private final @NotNull Instant occurredAt;
+    private final long deviceId;
 
     /** 创建至少包含一个变化区域的 Device 变化通知。 */
     public DeviceChange(

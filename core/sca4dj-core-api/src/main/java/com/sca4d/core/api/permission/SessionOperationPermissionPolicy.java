@@ -11,7 +11,6 @@ import com.sca4d.core.api.resource.Resource;
  */
 public class SessionOperationPermissionPolicy implements PermissionPolicy {
 
-    /** 创建使用当前 Session 静态资源判断固定操作的权限策略。 */
     public SessionOperationPermissionPolicy() {
     }
 

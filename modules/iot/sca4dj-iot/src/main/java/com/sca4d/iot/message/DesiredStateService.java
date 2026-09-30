@@ -47,23 +47,23 @@ public class DesiredStateService {
 
     private final @NotNull DeviceRepository devices;
 
-    private final @NotNull ProductDefinitionCatalog products;
-
     private final @NotNull DownlinkRepository downlinks;
 
     private final @NotNull ThingModelRepository models;
 
     private final @NotNull ThingValueValidator validator;
 
-    private final @NotNull IdGenerator ids;
-
     private final @NotNull Clock clock;
 
     private final @NotNull DeviceChangeNotifier changes;
 
-    private final @NotNull ThingDataJsonCodec json;
-
     private final @NotNull DeviceDeliveryScheduler messagePublisher;
+
+    private final @NotNull IdGenerator ids;
+
+    private final @NotNull ProductDefinitionCatalog products;
+
+    private final @NotNull ThingDataJsonCodec json;
 
     private final int maxProperties;
 

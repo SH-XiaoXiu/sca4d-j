@@ -313,13 +313,13 @@ class RedisAuthenticationAttemptsTest {
      */
     @SuppressWarnings("ClassCanBeRecord") // 项目禁止使用 Java record，保留普通测试类型。
     private static class Method implements AuthenticationMethod<String> {
-        private final TreeCode code;
-
         private final AuthenticationFactorKind kind;
 
-        private final boolean identifiesAccount;
-
         private final Instant authenticatedAt;
+
+        private final TreeCode code;
+
+        private final boolean identifiesAccount;
 
         private Method(String code, AuthenticationFactorKind kind, boolean identifiesAccount) {
             this(code, kind, identifiesAccount, NOW);

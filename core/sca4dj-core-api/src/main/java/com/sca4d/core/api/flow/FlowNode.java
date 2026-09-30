@@ -7,9 +7,9 @@ import java.util.Objects;
 /** 表示 {@link FlowGraph} 中的一个节点。 */
 public class FlowNode {
 
-    private final String id;
-
     private final FlowNodeType type;
+
+    private final String id;
 
     /**
      * 创建节点。
@@ -23,7 +23,7 @@ public class FlowNode {
     }
 
     /**
-     * 返回节点标识。
+     * 节点标识。
      *
      * @return 节点标识
      */
@@ -32,7 +32,7 @@ public class FlowNode {
     }
 
     /**
-     * 返回节点类型。
+     * 节点类型。
      *
      * @return 节点类型
      */

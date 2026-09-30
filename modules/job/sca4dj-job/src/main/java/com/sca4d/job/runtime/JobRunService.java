@@ -32,11 +32,11 @@ public class JobRunService {
 
     private final @NotNull JobRepository repository;
 
-    private final @NotNull TransactionTemplate transactions;
-
     private final @NotNull Clock clock;
 
     private final @NotNull DistributedLock distributedLock;
+
+    private final @NotNull TransactionTemplate transactions;
 
     /** 创建使用指定 Job Repository 和时钟的运行服务。 */
     public JobRunService(

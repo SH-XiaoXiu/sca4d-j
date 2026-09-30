@@ -7,23 +7,22 @@ import java.util.Objects;
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public class FederatedAuthorization {
 
-    private final String id;
-
-    private final String providerCode;
-
     private final FederatedAuthorizationPurpose purpose;
-
-    private final String browserBinding;
-
-    private final String nonce;
-
-    private final String codeVerifier;
-
-    private final String redirectUri;
 
     private final Instant expiresAt;
 
-    /** 创建授权状态。 */
+    private final String browserBinding;
+
+    private final String codeVerifier;
+
+    private final String id;
+
+    private final String nonce;
+
+    private final String providerCode;
+
+    private final String redirectUri;
+
     public FederatedAuthorization(
             String id,
             String providerCode,

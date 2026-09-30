@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 判断、校验和规范化普通文本输入。 */
-public class TextUtils {
+public final class TextUtils {
 
     private TextUtils() {
     }
@@ -86,7 +86,7 @@ public class TextUtils {
      */
     @Contract(value = "null -> null", pure = true)
     public static @Nullable String optionalText(@Nullable String value) {
-        if (!hasText(value)) {
+        if (value == null || value.isBlank()) {
             return null;
         }
         return value.strip();

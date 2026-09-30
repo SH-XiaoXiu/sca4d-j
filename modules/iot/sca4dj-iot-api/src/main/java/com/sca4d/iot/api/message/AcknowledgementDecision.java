@@ -16,9 +16,9 @@ public class AcknowledgementDecision {
         FAIL
     }
 
-    private final @NotNull Outcome outcome;
-
     private final @Nullable IotFailureCode failure;
+
+    private final @NotNull Outcome outcome;
 
     private AcknowledgementDecision(@NotNull Outcome outcome, @Nullable IotFailureCode failure) {
         this.outcome = outcome;

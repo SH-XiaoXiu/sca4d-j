@@ -45,17 +45,17 @@ public class EmailCodeChallengeService {
 
     private final @NotNull AccountDirectory accounts;
 
-    private final @NotNull RealmKey accountRealm;
+    private final @NotNull Clock clock;
+
+    private final @NotNull EmailCodeSettings settings;
 
     private final @NotNull Notifications notifications;
+
+    private final @NotNull RealmKey accountRealm;
 
     private final @NotNull RedisEmailCodeChallengeStore store;
 
     private final @NotNull SecretHasher hasher;
-
-    private final @NotNull EmailCodeSettings settings;
-
-    private final @NotNull Clock clock;
 
     private final @NotNull SecureRandom random;
 

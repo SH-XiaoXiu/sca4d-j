@@ -12,15 +12,15 @@ import java.util.function.Function;
 
 /** 保存原始或已解码的读取结果；元数据不持有其他来源的原始内容。 */
 public final class SettingValue<T> {
-    private final TreeCode code;
+    private final List<Origin> origins;
 
     private final SettingOwner owner;
 
     private final T value;
 
-    private final int codecVersion;
+    private final TreeCode code;
 
-    private final List<Origin> origins;
+    private final int codecVersion;
 
     private SettingValue(TreeCode code, SettingOwner owner, T value, int codecVersion, List<Origin> origins) {
         this.code = Objects.requireNonNull(code);
@@ -74,12 +74,20 @@ public final class SettingValue<T> {
                 origins);
     }
 
-    /** 返回设置稳定编码。 */
+    /**
+     * 设置稳定编码。
+     *
+     * @return 设置稳定编码
+     */
     public @NotNull TreeCode code() {
         return code;
     }
 
-    /** 返回本次请求所属；每个来源的实际所属保存在 origins。 */
+    /**
+     * 本次请求所属；每个来源的实际所属保存在 origins。
+     *
+     * @return 本次请求所属；每个来源的实际所属保存在 origins
+     */
     public @NotNull SettingOwner owner() {
         return owner;
     }
@@ -94,12 +102,20 @@ public final class SettingValue<T> {
         return value != null;
     }
 
-    /** 返回内容结构版本；原始无版本来源为零，最终结果使用当前 Codec 版本。 */
+    /**
+     * 内容结构版本；原始无版本来源为零，最终结果使用当前 Codec 版本。
+     *
+     * @return 内容结构版本；原始无版本来源为零，最终结果使用当前 Codec 版本
+     */
     public int codecVersion() {
         return codecVersion;
     }
 
-    /** 返回不包含原始数据的来源说明。 */
+    /**
+     * 不包含原始数据的来源说明。
+     *
+     * @return 不包含原始数据的来源说明
+     */
     public @NotNull List<Origin> origins() {
         return origins;
     }
@@ -121,17 +137,17 @@ public final class SettingValue<T> {
 
     /** 记录一次实际读取的元数据；IO 身份与请求所属分别保留。 */
     public static final class Origin {
-        private final TreeCode reader;
-
         private final SettingOwner owner;
 
-        private final int codecVersion;
+        private final TreeCode reader;
 
         private final Version revision;
 
+        private final boolean locked;
+
         private final boolean present;
 
-        private final boolean locked;
+        private final int codecVersion;
 
         private Origin(
                 TreeCode reader,
@@ -148,17 +164,25 @@ public final class SettingValue<T> {
             this.locked = locked;
         }
 
-        /** 返回读写实现编码。 */
+        /**
+         * 读写实现编码。
+         *
+         * @return 读写实现编码
+         */
         public @NotNull TreeCode reader() {
             return reader;
         }
 
-        /** 返回实际读取所属。 */
+        /** @return 实际读取的设置归属者 */
         public @NotNull SettingOwner owner() {
             return owner;
         }
 
-        /** 返回原始内容声明的版本。 */
+        /**
+         * 原始内容声明的版本。
+         *
+         * @return 原始内容声明的版本
+         */
         public int codecVersion() {
             return codecVersion;
         }
@@ -168,12 +192,20 @@ public final class SettingValue<T> {
             return Optional.ofNullable(revision);
         }
 
-        /** 返回来源是否包含覆盖内容。 */
+        /**
+         * 来源是否包含覆盖内容。
+         *
+         * @return 来源是否包含覆盖内容
+         */
         public boolean present() {
             return present;
         }
 
-        /** 返回来源内容是否被同步锁定。 */
+        /**
+         * 来源内容是否被同步锁定。
+         *
+         * @return 来源内容是否被同步锁定
+         */
         public boolean locked() {
             return locked;
         }

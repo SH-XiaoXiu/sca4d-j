@@ -19,21 +19,20 @@ import java.util.Optional;
 /** 把一次 Quartz fire 转换成同一原定时间的持久化 Job run 提交。 */
 public class QuartzDispatchJob implements Job {
 
-    private static final Logger log = LoggerFactory.getLogger(QuartzDispatchJob.class);
-
     /** Quartz SchedulerContext 中保存 JobExecutor 的键。 */
     public static final String EXECUTOR_CONTEXT_KEY = "sca4djJobExecutor";
 
     /** Quartz SchedulerContext 中保存计划目录的键。 */
     public static final String REGISTRY_CONTEXT_KEY = "sca4djScheduleRegistry";
 
-    /** JobDataMap 中保存稳定计划 key 的键。 */
-    public static final String SCHEDULE_KEY = "scheduleKey";
-
     /** JobDataMap 中保存计划定义版本的键。 */
     public static final String SCHEDULE_DEFINITION_VERSION = "scheduleDefinitionVersion";
 
-    /** 创建无状态 Quartz 触发入口。 */
+    /** JobDataMap 中保存稳定计划 key 的键。 */
+    public static final String SCHEDULE_KEY = "scheduleKey";
+
+    private static final Logger log = LoggerFactory.getLogger(QuartzDispatchJob.class);
+
     public QuartzDispatchJob() {
     }
 

@@ -12,15 +12,15 @@ import java.util.Objects;
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 public class ReportedStateSnapshot {
 
-    private final @NotNull String groupCode;
-
-    private final @NotNull Map<String, Object> values;
-
-    private final long version;
-
     private final @NotNull Instant observedAt;
 
     private final @NotNull Instant receivedAt;
+
+    private final @NotNull Map<String, Object> values;
+
+    private final @NotNull String groupCode;
+
+    private final long version;
 
     /** 创建 reported 字段组查询快照。 */
     public ReportedStateSnapshot(

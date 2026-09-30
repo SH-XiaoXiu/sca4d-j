@@ -55,7 +55,7 @@ public class FlowGraph {
     }
 
     /**
-     * 返回起始节点标识。
+     * 起始节点标识。
      *
      * @return 起始节点标识
      */
@@ -79,7 +79,7 @@ public class FlowGraph {
     }
 
     /**
-     * 返回不可变节点映射。
+     * 不可变节点映射。
      *
      * @return 不可变节点映射
      */
@@ -88,7 +88,7 @@ public class FlowGraph {
     }
 
     /**
-     * 返回不可变转换列表。
+     * 不可变转换列表。
      *
      * @return 不可变转换列表
      */

@@ -45,7 +45,7 @@ public class SnowflakeIdGenerator implements IdGenerator {
     }
 
     /**
-     * 返回当前生成器的节点编号。
+     * 当前生成器的节点编号。
      *
      * @return 节点编号
      */

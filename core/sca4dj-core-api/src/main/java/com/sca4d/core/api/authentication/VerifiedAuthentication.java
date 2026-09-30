@@ -18,11 +18,11 @@ public class VerifiedAuthentication {
 
     private final Authentication authentication;
 
+    private final Instant validUntil;
+
     private final String reference;
 
     private final Version version;
-
-    private final Instant validUntil;
 
     /**
      * 创建认证方法完成一次成功验证后交给认证引擎的结果。
@@ -55,7 +55,7 @@ public class VerifiedAuthentication {
     }
 
     /**
-     * 读取认证方法从 Proof 确认的账号。
+     * 认证方法从 Proof 确认的账号。
      *
      * @return 已验证 Account
      */
@@ -64,7 +64,7 @@ public class VerifiedAuthentication {
     }
 
     /**
-     * 读取满足要求后可以用于动作判断或建立 Session 的认证记录。
+     * 满足要求后可以用于动作判断或建立 Session 的认证记录。
      *
      * @return Account 标识与认证账号一致的记录
      */
@@ -73,7 +73,7 @@ public class VerifiedAuthentication {
     }
 
     /**
-     * 读取认证方法重新定位 Credential 或外部身份所需的值。
+     * 认证方法重新定位 Credential 或外部身份所需的引用。
      *
      * @return 不包含密码、验证码、密钥或令牌的引用
      */
@@ -82,7 +82,7 @@ public class VerifiedAuthentication {
     }
 
     /**
-     * 读取认证成功时对应的 Credential 或外部身份版本。
+     * 认证成功时对应的 Credential 或外部身份版本。
      *
      * @return 完成认证前必须保持有效的版本
      */

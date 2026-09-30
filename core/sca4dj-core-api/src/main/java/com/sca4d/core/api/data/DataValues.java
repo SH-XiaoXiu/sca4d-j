@@ -61,7 +61,7 @@ public class DataValues {
     }
 
     /**
-     * 读取当前输入和节点结果的只读快照。
+     * 当前输入和节点结果的只读快照。
      *
      * @return 保持登记顺序的不可变值映射
      */
@@ -79,7 +79,6 @@ public class DataValues {
 
         private final Map<DataKey<?>, Object> values = new LinkedHashMap<>();
 
-        /** 创建空构建器。 */
         public Builder() {
         }
 

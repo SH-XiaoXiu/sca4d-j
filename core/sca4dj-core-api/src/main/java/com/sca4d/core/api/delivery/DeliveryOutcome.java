@@ -24,9 +24,9 @@ public class DeliveryOutcome {
         UNKNOWN
     }
 
-    private final @NotNull Status status;
-
     private final @Nullable Instant nextActionAt;
+
+    private final @NotNull Status status;
 
     private final @Nullable String externalRequestId;
 

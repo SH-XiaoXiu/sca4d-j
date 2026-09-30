@@ -15,7 +15,6 @@ public class SmsProviderResult {
 
     private final @Nullable String failureCode;
 
-    /** 创建一次 Provider 请求结果。 */
     public SmsProviderResult(
             @NotNull SmsDeliveryStatus status,
             @Nullable String requestId,

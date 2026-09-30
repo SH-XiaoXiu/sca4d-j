@@ -11,19 +11,18 @@ public class MqttInboundStatus {
 
     private final int retrying;
 
-    private final long processed;
-
-    private final long rejected;
-
-    private final long quarantined;
-
-    private final long unacknowledged;
+    private final long acknowledgementFailures;
 
     private final long overloaded;
 
-    private final long acknowledgementFailures;
+    private final long processed;
 
-    /** 创建一份不可变的 MQTT 上行处理状态快照。 */
+    private final long quarantined;
+
+    private final long rejected;
+
+    private final long unacknowledged;
+
     public MqttInboundStatus(
             int pending,
             int retrying,

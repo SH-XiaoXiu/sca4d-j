@@ -1,6 +1,7 @@
 package com.sca4d.core.spring.config;
 
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.List;
@@ -24,11 +25,11 @@ public class InstanceProperties {
         this.id = id;
     }
 
-    public @Nullable List<String> getCapabilities() {
+    public @Nullable @Unmodifiable List<String> getCapabilities() {
         return capabilities;
     }
 
     public void setCapabilities(@Nullable List<String> capabilities) {
-        this.capabilities = capabilities;
+        this.capabilities = capabilities == null ? null : List.copyOf(capabilities);
     }
 }

@@ -32,15 +32,15 @@ public class SharedSecretCredential {
         }
     }
 
-    private final long accountId;
-
-    private final @NotNull String secretHash;
+    private final @NotNull Instant updatedAt;
 
     private final @NotNull Status status;
 
+    private final @NotNull String secretHash;
+
     private final @NotNull Version version;
 
-    private final @NotNull Instant updatedAt;
+    private final long accountId;
 
     /** 创建从数据库读取的 Shared Secret 凭据。 */
     public SharedSecretCredential(

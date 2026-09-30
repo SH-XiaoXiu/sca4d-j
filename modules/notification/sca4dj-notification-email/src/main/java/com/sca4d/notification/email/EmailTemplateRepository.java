@@ -36,9 +36,9 @@ public class EmailTemplateRepository {
 
     private final @NotNull EmailTemplateMapper mapper;
 
-    private final @NotNull VersionConditions versions;
-
     private final @NotNull ObjectMapper json;
+
+    private final @NotNull VersionConditions versions;
 
     /**
      * @param mapper Email 模板 Mapper

@@ -33,9 +33,9 @@ public class PermissionCallInterceptor implements CallLifecycle.Around {
     /** 权限判断节点编码。 */
     public static final TreeCode CODE = TreeCode.of("CALL/PERMISSION");
 
-    private final PermissionAssessment permissionAssessment;
-
     private final CallValueResolverLookup resolverLookup;
+
+    private final PermissionAssessment permissionAssessment;
 
     private final SPICallValueResolver expressionResolver;
 

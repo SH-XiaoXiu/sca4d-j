@@ -21,9 +21,9 @@ public class EmailMessageService {
 
     private final @NotNull EmailTemplateRepository templates;
 
-    private final @NotNull EmailRenderer renderer;
-
     private final @NotNull EmailGateway transport;
+
+    private final @NotNull EmailRenderer renderer;
 
     private final long maxAttachmentBytes;
 

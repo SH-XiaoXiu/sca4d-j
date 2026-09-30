@@ -9,21 +9,21 @@ import java.util.Optional;
 /** 保存一次操作的行为主体、目标资源、结果和发生时间。 */
 public class AuditRecord {
 
-    private final String requestId;
-
     private final AuditActor actor;
 
     private final AuditOperation operation;
 
-    private final Resource target;
+    private final AuditPayload payload;
 
     private final AuditResult result;
-
-    private final AuditPayload payload;
 
     private final HttpCall httpCall;
 
     private final Instant occurredAt;
+
+    private final Resource target;
+
+    private final String requestId;
 
     /**
      * 创建审计记录。
@@ -57,7 +57,7 @@ public class AuditRecord {
     }
 
     /**
-     * 返回调用链标识。
+     * 调用链标识。
      *
      * @return 调用链标识
      */
@@ -66,7 +66,7 @@ public class AuditRecord {
     }
 
     /**
-     * 返回行为主体。
+     * 行为主体。
      *
      * @return 行为主体
      */
@@ -75,7 +75,7 @@ public class AuditRecord {
     }
 
     /**
-     * 返回业务操作。
+     * 业务操作。
      *
      * @return 业务操作
      */
@@ -93,7 +93,7 @@ public class AuditRecord {
     }
 
     /**
-     * 返回操作结果。
+     * 操作结果。
      *
      * @return 操作结果
      */
@@ -120,7 +120,7 @@ public class AuditRecord {
     }
 
     /**
-     * 返回事件发生时间。
+     * 事件发生时间。
      *
      * @return 事件发生时间
      */

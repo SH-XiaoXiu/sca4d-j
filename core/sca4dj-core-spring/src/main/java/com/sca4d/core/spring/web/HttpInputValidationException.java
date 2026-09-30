@@ -24,7 +24,7 @@ public class HttpInputValidationException extends RuntimeException {
     }
 
     /**
-     * 返回客户端能够定位的全部字段失败结果。
+     * 客户端能够定位的全部字段失败结果。
      *
      * @return 不可修改的字段失败结果
      */

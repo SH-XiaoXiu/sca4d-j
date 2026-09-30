@@ -149,9 +149,9 @@ public class SessionTestFixture {
      * 测试使用的 Principal。
      */
     public static class TestPrincipal implements Principal {
-        private final long id;
-
         private final String field;
+
+        private final long id;
 
         /**
          * 使用指定标识和测试字段创建 Principal。
@@ -178,11 +178,11 @@ public class SessionTestFixture {
      * 测试使用的 Resource。
      */
     public static class TestResource implements Resource {
-        private final TreeCode type;
+        private final String field;
 
         private final String id;
 
-        private final String field;
+        private final TreeCode type;
 
         /**
          * 使用指定类型、标识和测试字段创建 Resource。

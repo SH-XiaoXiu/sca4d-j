@@ -19,9 +19,9 @@ public class ReportedStateKeyMigration {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReportedStateKeyMigration.class);
 
-    private final StringRedisTemplate legacy;
-
     private final RedisTemplate<Key, String> target;
+
+    private final StringRedisTemplate legacy;
 
     /** 使用同一基础设施的旧字符串模板和实际安装 Key 序列化器的新模板。 */
     public ReportedStateKeyMigration(@NotNull StringRedisTemplate legacy, @NotNull RedisTemplate<Key, String> target) {

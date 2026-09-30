@@ -9,11 +9,11 @@ public class AffectedRowsMismatchException extends IllegalStateException {
 
     private final @NotNull String target;
 
-    private final int minimum;
+    private final int actual;
 
     private final int maximum;
 
-    private final int actual;
+    private final int minimum;
 
     /**
      * 创建影响行数范围异常。

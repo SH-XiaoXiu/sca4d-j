@@ -29,7 +29,7 @@ public class StorageUpload {
     }
 
     /**
-     * 返回客户端可以访问的上传地址。
+     * 客户端可以访问的上传地址。
      *
      * @return 绝对上传地址
      */
@@ -38,7 +38,7 @@ public class StorageUpload {
     }
 
     /**
-     * 返回客户端必须原样发送的请求头。
+     * 客户端必须原样发送的请求头。
      *
      * @return 不可修改的请求头
      */

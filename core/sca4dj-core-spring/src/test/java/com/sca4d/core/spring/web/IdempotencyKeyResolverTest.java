@@ -12,7 +12,9 @@ import com.sca4d.core.api.concurrent.IdempotencyKey;
 import com.sca4d.core.api.data.DataValues;
 import com.sca4d.core.api.identity.SystemPrincipal;
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.setting.ConfiguredConstants;
 import com.sca4d.core.spring.call.CallHolder;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -27,6 +29,11 @@ import java.util.Objects;
 
 class IdempotencyKeyResolverTest {
 
+    @BeforeAll
+    static void initializeHttpConstants() {
+        ConfiguredConstants.initialize(HttpConstants.class, ignored -> null);
+    }
+
     private Call call = Call
             .system("idempotency-test", Instant.EPOCH, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")));
 
@@ -34,7 +41,7 @@ class IdempotencyKeyResolverTest {
     @DisplayName("标准 Call 输入校验并去除客户端幂等键首尾空白")
     void resolvesHttpHeader() {
         MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader(HttpCallFilter.IDEMPOTENCY_KEY_HEADER, "  create-account-1  ");
+        request.addHeader(HttpConstants.IDEMPOTENCY_KEY_HEADER, "  create-account-1  ");
         bindHttpInput(request);
 
         assertEquals(
@@ -53,7 +60,7 @@ class IdempotencyKeyResolverTest {
                         .orElseThrow(() -> new IllegalArgumentException("当前调用没有提供幂等键")));
 
         MockHttpServletRequest invalid = new MockHttpServletRequest();
-        invalid.addHeader(HttpCallFilter.IDEMPOTENCY_KEY_HEADER, "create\u0001account");
+        invalid.addHeader(HttpConstants.IDEMPOTENCY_KEY_HEADER, "create\u0001account");
         bindHttpInput(invalid);
         assertThrows(
                 IllegalArgumentException.class,
@@ -66,7 +73,7 @@ class IdempotencyKeyResolverTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setMethod("POST");
         request.setRequestURI("/test");
-        request.addHeader(HttpCallFilter.IDEMPOTENCY_KEY_HEADER, "key-1");
+        request.addHeader(HttpConstants.IDEMPOTENCY_KEY_HEADER, "key-1");
         MockHttpServletResponse response = new MockHttpServletResponse();
 
         new HttpCallFilter(Clock.fixed(Instant.EPOCH, ZoneOffset.UTC)).doFilter(
@@ -104,7 +111,7 @@ class IdempotencyKeyResolverTest {
     private void bindHttpInput(MockHttpServletRequest request) {
         DataValues.Builder inputs = DataValues.builder()
                 .put(HttpCall.KEY, new HttpCall("POST", "/test", "127.0.0.1", null));
-        String header = request.getHeader(HttpCallFilter.IDEMPOTENCY_KEY_HEADER);
+        String header = request.getHeader(HttpConstants.IDEMPOTENCY_KEY_HEADER);
         if (header != null) {
             inputs.put(IdempotencyKey.INPUT, header);
         }

@@ -26,13 +26,13 @@ import java.util.UUID;
  */
 public class PasskeyCeremonyStore {
 
-    private final RedisTemplate<Key, String> redis;
-
     private final ObjectMapper objectMapper;
 
     private final Clock clock;
 
     private final PasskeySettings settings;
+
+    private final RedisTemplate<Key, String> redis;
 
     private static final TreeCode REGISTRATION = TreeCode.ofColon("PASSKEY:REGISTRATION");
 
@@ -160,9 +160,9 @@ public class PasskeyCeremonyStore {
      * 保存 ceremony 后返回不透明标识和过期时间。
      */
     public static class StoredCeremony {
-        private final PasskeyCeremonyId id;
-
         private final Instant expiresAt;
+
+        private final PasskeyCeremonyId id;
 
         StoredCeremony(PasskeyCeremonyId id, Instant expiresAt) {
             this.id = id;
@@ -170,14 +170,18 @@ public class PasskeyCeremonyStore {
         }
 
         /**
-         * 返回浏览器完成 ceremony 时必须提交的不透明标识。
+         * 浏览器完成 ceremony 时必须提交的不透明标识。
+         *
+         * @return 浏览器完成 ceremony 时必须提交的不透明标识
          */
         public PasskeyCeremonyId id() {
             return id;
         }
 
         /**
-         * 返回 ceremony 失效时间。
+         * ceremony 失效时间。
+         *
+         * @return ceremony 失效时间
          */
         public Instant expiresAt() {
             return expiresAt;
@@ -188,9 +192,9 @@ public class PasskeyCeremonyStore {
      * 原子消费后恢复的 registration 账号和 Yubico request。
      */
     public static class RegistrationCeremony {
-        private final long accountId;
-
         private final String requestJson;
+
+        private final long accountId;
 
         RegistrationCeremony(long accountId, String requestJson) {
             this.accountId = accountId;
@@ -198,14 +202,18 @@ public class PasskeyCeremonyStore {
         }
 
         /**
-         * 返回开始 registration 时绑定的账号标识。
+         * 开始 registration 时绑定的账号标识。
+         *
+         * @return 开始 registration 时绑定的账号标识
          */
         public long accountId() {
             return accountId;
         }
 
         /**
-         * 返回 Yubico 完成 registration 所需的原始 request JSON。
+         * Yubico 完成 registration 所需的原始 request JSON。
+         *
+         * @return Yubico 完成 registration 所需的原始 request JSON
          */
         public String requestJson() {
             return requestJson;
