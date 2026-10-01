@@ -6,8 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sca4d.core.api.connection.ConnectionId;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.web.realtime.connection.BrowserEnvelope;
-import com.sca4d.web.realtime.connection.ConnectionDelivery;
+import com.sca4d.web.realtime.connection.BrowserWrite;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +22,7 @@ import java.util.Set;
 
 /** 编解码 RabbitMQ 节点队列使用的连接列表和浏览器事件信封。 */
 @ApiStatus.Internal
-public final class NodeMessageCodec {
+public class NodeMessageCodec {
 
     private static final int DELIVERY_VERSION = 1;
 
@@ -36,16 +37,15 @@ public final class NodeMessageCodec {
 
     private final @NotNull ObjectMapper objectMapper;
 
-    /** 创建直接使用脚手架固定 `@Sca4djJson` 映射器的节点消息编解码器。 */
     public NodeMessageCodec(@NotNull ObjectMapper objectMapper) {
         this.objectMapper = Objects.requireNonNull(objectMapper, "ObjectMapper 不能为空");
     }
 
-    /** 编码不包含内部目标、业务键、`MessageId` 和 RabbitMQ 元数据的临时节点消息。 */
+    /** 编码不包含内部目标、业务键、`Id` 和 RabbitMQ 元数据的临时节点消息。 */
     byte @NotNull [] encode(
             @NotNull List<@NotNull ConnectionId> connectionIds,
-            @NotNull ConnectionDelivery delivery) {
-        ConnectionDelivery checked = Objects.requireNonNull(delivery, "连接投递不能为空");
+            @NotNull BrowserWrite delivery) {
+        BrowserWrite checked = Objects.requireNonNull(delivery, "连接投递不能为空");
         BrowserEnvelope envelope = checked.envelope();
         if (connectionIds.isEmpty()) {
             throw new IllegalArgumentException("Web Realtime 节点投递至少需要一个 ConnectionId");
@@ -103,13 +103,13 @@ public final class NodeMessageCodec {
                 throw new IllegalArgumentException("节点消息字段不能为 null: payload");
             }
             BrowserEnvelope envelope = new BrowserEnvelope(
-                    requiredText(root, "eventCode"),
+                    TreeCode.of(requiredText(root, "eventCode")),
                     requiredInt(root, "protocolVersion"),
                     Instant.parse(requiredText(root, "occurredAt")),
                     payload);
             return new NodeDelivery(
                     List.copyOf(connections),
-                    new ConnectionDelivery(envelope, closeAfter.booleanValue()));
+                    new BrowserWrite(envelope, closeAfter.booleanValue()));
         } catch (IOException | RuntimeException exception) {
             if (exception instanceof IllegalArgumentException illegalArgumentException) {
                 throw illegalArgumentException;
@@ -162,15 +162,16 @@ public final class NodeMessageCodec {
     }
 
     /** 保存一个节点需要投递的连接列表和浏览器内容。 */
-    static final class NodeDelivery {
-        private final @NotNull List<@NotNull ConnectionId> connections;
+    @SuppressWarnings("ClassCanBeRecord")
+    static class NodeDelivery {
+        private final @NotNull BrowserWrite delivery;
 
-        private final @NotNull ConnectionDelivery delivery;
+        private final @NotNull List<@NotNull ConnectionId> connections;
 
         /** 创建已完成字段校验的节点投递。 */
         NodeDelivery(
                 @NotNull List<@NotNull ConnectionId> connections,
-                @NotNull ConnectionDelivery delivery) {
+                @NotNull BrowserWrite delivery) {
             this.connections = connections;
             this.delivery = delivery;
         }
@@ -183,7 +184,7 @@ public final class NodeMessageCodec {
 
         /** @return 每个连接收到的相同投递 */
         @NotNull
-        ConnectionDelivery delivery() {
+        BrowserWrite delivery() {
             return delivery;
         }
     }

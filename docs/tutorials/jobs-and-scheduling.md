@@ -1,6 +1,6 @@
 # 执行和调度任务
 
-需要在请求返回后继续执行、保存结果或失败后恢复的业务工作，定义为 Job，通过 `JobExecutor` 提交。只在当前线程中完成数据转换时，直接使用 Pipeline。
+当前线程内的数据转换用 Pipeline，需要异步执行和失败恢复的工作用 Job，需要按时间触发 Job 时再加 JobSchedule。先把业务动作注册为 Job，再通过 `JobExecutor.submit(...)` 提交并查询结果；任务可能重复执行，业务必须幂等。
 
 ## 提交一个后台任务
 
@@ -9,7 +9,7 @@
 输入保存执行需要的业务标识和参数，不保存当前线程、Session 或数据库连接。`JobExecutor.submit(job, input)` 不继承调用方事务；需要与业务提交保持顺序时，先明确业务事务成功后如何可靠提交任务。
 
 ```java
-JobRunId runId = jobExecutor.submit(job, input);
+Id runId = jobExecutor.submit(job, input);
 JobRunStatus status = jobExecutor.status(runId);
 Optional<Output> output = jobExecutor.result(runId, job);
 ```
@@ -17,6 +17,8 @@ Optional<Output> output = jobExecutor.result(runId, job);
 这里的 `job` 是应用已注册的 Job，`input` 和 `Output` 分别对应它声明的输入、输出类型。`result` 不等待执行完成；尚未成功时返回空，失败时抛出 `JobRunFailedException`。Void 输出即使成功也为空，应同时检查 status。
 
 需要定时执行同一个 Job 时，再注册 `JobSchedule`，声明稳定 key、固定输入、Cron 或间隔、misfire 与重叠策略。修改定义时递增 `definitionVersion`。运行后检查 run 状态和业务结果，并用重复执行验证幂等规则。
+
+Quartz 计划的稳定身份由 `ScheduleKey`、`definitionVersion`、时间定义、misfire/overlap 策略和固定输入组成。`JobSchedule` 或 `ClusterTaskSchedule` 的实现类、包名和模块目录不属于计划定义；移动任务类不需要递增 `definitionVersion`。Quartz 的持久化对账由脚手架完成；当前记录缺少调度契约或同一版本的稳定定义发生变化时，Scheduler 拒绝启动。历史 Quartz 数据迁移属于发布和运维步骤，不由运行时调度机制自动放行。
 
 Pipeline、Job 和 Scheduler 解决三个不同问题。类型化处理线（[Pipeline](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/pipeline/Pipeline.html)）在调用线程中直接执行固定的输入输出转换；持久化工作（[Job](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/job/Job.html)）描述一个可独立提交和恢复的执行单元；JobScheduler 在时间到达时提交 Job，[ClusterTaskScheduler](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/scheduling/ClusterTaskScheduler.html) 则直接执行不需要业务运行历史的基础设施任务。
 
@@ -125,16 +127,16 @@ JobExecutor 的 `run(...)` 和 `await(...)` 都要求正数超时。超时只结
 
 每次 Quartz fire 使用 ScheduleKey 和 Quartz 原定触发时间去重。OverlapPolicy.SKIP_IF_RUNNING 在同一计划仍有 QUEUED 或 RUNNING run 时不创建新 run；OverlapPolicy.ALLOW 允许不同 fire 同时存在。MisfirePolicy 只决定 Scheduler 恢复后是否补一次触发，不改变 Job 重试策略。两类策略都不能把外部副作用变成仅一次。
 
-## Namespace 与共享 PostgreSQL
+## App 隔离与共享 PostgreSQL
 
-具体应用必须配置 `spring.application.name`。Core Spring 用它创建 RuntimeNamespace；Job 和 Quartz 使用同一个实例隔离共享基础设施：
+具体应用必须配置 `spring.application.name`。Core Spring 在配置加载后固定 App 名；Job 和 Quartz 使用同一 App 隔离名称，多个实例共享资源：
 
-- `job.job_run.runtime_namespace` 保存应用技术 ID；状态查询、定时去重、活动 run 判断、worker 领取和过期租约处理都限制在该值内；
-- 同一计划创建 run 前取得 `<app-id>:sca4dj:job:schedule:<schedule-key>` Redis 分布式锁，再在数据库事务中检查重复触发和重叠策略；
-- Quartz `sched_name` 固定为 `<app-id>:sca4dj:scheduling:quartz`，不能另行配置；
+- `job.job_run.app_name` 保存 App 隔离名称；状态查询、定时去重、活动 run 判断、worker 领取和过期租约处理都限制在该值内；
+- 同一计划创建 run 前取得 `<APP_NAME>:LOCK:JOB:SCHEDULE:<SCHEDULE_KEY>` Redis 分布式锁，再在数据库事务中检查重复触发和重叠策略；
+- Quartz `sched_name` 固定为 `<APP_NAME>:SCHEDULING:QUARTZ`，不能另行配置；
 - Quartz 的 JobDetail、Trigger、fire、集群节点和锁都由 `sched_name` 隔离。
 
-因此多个具体应用可以使用同一个 PostgreSQL 实例、同一个 `job` schema 和同一个 `quartz` schema，但必须使用不同的 `spring.application.name`。同一具体应用的多个实例必须使用相同名称，才能共同领取 Job 节点并组成同一个 Quartz 集群。改变已经运行应用的名称会形成新的运行时命名空间，旧 run 和旧 Quartz trigger 不会自动迁移。
+因此多个具体应用可以使用同一个 PostgreSQL 实例、同一个 `job` schema 和同一个 `quartz` schema，但必须使用不同的 `spring.application.name`。同一具体应用的多个实例必须使用相同名称，才能共同领取 Job 节点并组成同一个 Quartz 集群。改变已经运行应用的名称会形成新的 App 隔离名称，旧 run 和旧 Quartz trigger 不会自动迁移。
 
 ## 数据归属与未实现范围
 

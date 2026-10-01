@@ -16,7 +16,7 @@ import java.util.Objects;
 
 /** 返回一个计划时间生成下行、过期或失败的结果。 */
 @SuppressWarnings("unused")
-public final class IotDeviceScheduleExecutionView {
+public class IotDeviceScheduleExecutionView {
 
     private final long executionId;
 
@@ -81,13 +81,13 @@ public final class IotDeviceScheduleExecutionView {
         return messageId;
     }
 
-    /** @return 稳定失败 code 及其当前请求 Locale 消息；成功或过期时为空 */
+    /** @return 稳定失败 code 及当前请求 Locale 的消息；成功或过期时为空 */
     public @Nullable Failure getFailure() {
         return failure;
     }
 
     /** 返回调度执行的稳定失败 code 和本地化消息。 */
-    public static final class Failure extends BaseView {
+    public static class Failure extends BaseView {
 
         private final @NotNull String code;
 

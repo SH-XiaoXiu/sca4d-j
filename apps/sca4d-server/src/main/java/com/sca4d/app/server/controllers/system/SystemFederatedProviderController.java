@@ -51,7 +51,7 @@ public class SystemFederatedProviderController {
 
     /** 查询全部未删除 Provider。 */
     @GetMapping
-    @RequirePermission(operation = PlatformOperations.ACCOUNTS_READ)
+    @RequirePermission(operation = PlatformOperations.ACCOUNTS_READ_VALUE)
     @Operation(summary = "查询联邦登录 Provider")
     public @NotNull ApiResponse<List<FederatedProviderView>> findAll() {
         return ApiResponse.ok(providers.findAll().stream().map(FederatedProviderView::from).toList());
@@ -59,18 +59,18 @@ public class SystemFederatedProviderController {
 
     /** 查询一个 Provider 的基本信息。 */
     @GetMapping("/{code}")
-    @RequirePermission(operation = PlatformOperations.ACCOUNTS_READ)
+    @RequirePermission(operation = PlatformOperations.ACCOUNTS_READ_VALUE)
     @Operation(summary = "查询联邦 Provider 详情")
     public @NotNull ApiResponse<FederatedProviderView> find(
-            @PathVariable @AuditTarget(resourceType = FederatedProvider.RESOURCE_TYPE) @NotNull String code) {
+            @PathVariable @AuditTarget(resourceType = FederatedProvider.RESOURCE_TYPE_VALUE) @NotNull String code) {
         FederatedProvider provider = providers.loadByCode(code);
         return ApiResponse.ok(FederatedProviderView.from(provider));
     }
 
     /** 创建默认停用的 Provider。 */
     @PostMapping
-    @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE)
-    @Audit(operation = "system/authentication/federated-provider/create")
+    @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE_VALUE)
+    @Audit(operation = "SYSTEM/AUTHENTICATION/FEDERATED_PROVIDER/CREATE")
     @Operation(summary = "创建联邦 Provider")
     public @NotNull ApiResponse<FederatedProviderView> create(
             @RequestBody @Valid @AuditPayload @NotNull CreateProviderRequest request) {
@@ -91,11 +91,11 @@ public class SystemFederatedProviderController {
     /** 按 If-Match 替换停用 Provider 的展示和绑定策略。 */
     @PutMapping("/{code}")
     @IfMatch
-    @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE)
-    @Audit(operation = "system/authentication/federated-provider/replace")
+    @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE_VALUE)
+    @Audit(operation = "SYSTEM/AUTHENTICATION/FEDERATED_PROVIDER/REPLACE")
     @Operation(summary = "替换联邦 Provider")
     public @NotNull ApiResponse<FederatedProviderView> replace(
-            @PathVariable @AuditTarget(resourceType = FederatedProvider.RESOURCE_TYPE) @NotNull String code,
+            @PathVariable @AuditTarget(resourceType = FederatedProvider.RESOURCE_TYPE_VALUE) @NotNull String code,
             @RequestBody @Valid @AuditPayload @NotNull ReplaceProviderRequest request) {
         FederatedProvider updated = providers.replace(
                 code,
@@ -110,10 +110,10 @@ public class SystemFederatedProviderController {
 
     /** 查询协议配置摘要，不返回 Client Secret。 */
     @GetMapping("/{code}/settings")
-    @RequirePermission(operation = PlatformOperations.ACCOUNTS_READ)
+    @RequirePermission(operation = PlatformOperations.ACCOUNTS_READ_VALUE)
     @Operation(summary = "查询联邦 Provider 协议配置")
     public @NotNull ApiResponse<FederatedProviderSettingsView> settings(
-            @PathVariable @AuditTarget(resourceType = FederatedProvider.RESOURCE_TYPE) @NotNull String code) {
+            @PathVariable @AuditTarget(resourceType = FederatedProvider.RESOURCE_TYPE_VALUE) @NotNull String code) {
         FederatedProvider provider = providers.loadByCode(code);
         return ApiResponse.ok(
                 FederatedProviderSettingsView.from(
@@ -124,11 +124,11 @@ public class SystemFederatedProviderController {
     /** 按 If-Match 替换停用 Provider 的协议配置；空 Secret 保留原值。 */
     @PutMapping("/{code}/settings")
     @IfMatch
-    @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE)
-    @Audit(operation = "system/authentication/federated-provider/settings/replace")
+    @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE_VALUE)
+    @Audit(operation = "SYSTEM/AUTHENTICATION/FEDERATED_PROVIDER/SETTINGS/REPLACE")
     @Operation(summary = "替换联邦 Provider 协议配置")
     public @NotNull ApiResponse<Void> replaceSettings(
-            @PathVariable @AuditTarget(resourceType = FederatedProvider.RESOURCE_TYPE) @NotNull String code,
+            @PathVariable @AuditTarget(resourceType = FederatedProvider.RESOURCE_TYPE_VALUE) @NotNull String code,
             @RequestBody @Valid @NotNull ProviderSettingsRequest request) {
         FederatedProvider current = providers.loadByCode(code);
         FederatedProvider updated = providers.replaceConfiguration(
@@ -140,11 +140,11 @@ public class SystemFederatedProviderController {
     /** 按 If-Match 修改 Provider 状态。 */
     @PatchMapping("/{code}/status")
     @IfMatch
-    @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE)
-    @Audit(operation = "system/authentication/federated-provider/status/replace")
+    @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE_VALUE)
+    @Audit(operation = "SYSTEM/AUTHENTICATION/FEDERATED_PROVIDER/STATUS/REPLACE")
     @Operation(summary = "修改联邦 Provider 状态")
     public @NotNull ApiResponse<FederatedProviderView> replaceStatus(
-            @PathVariable @AuditTarget(resourceType = FederatedProvider.RESOURCE_TYPE) @NotNull String code,
+            @PathVariable @AuditTarget(resourceType = FederatedProvider.RESOURCE_TYPE_VALUE) @NotNull String code,
             @RequestBody @Valid @NotNull ProviderStatusRequest request) {
         FederatedProvider updated = providers.changeStatus(code, request.getStatus());
         return ApiResponse.ok(FederatedProviderView.from(updated));
@@ -153,11 +153,11 @@ public class SystemFederatedProviderController {
     /** 按 If-Match 删除停用且没有身份绑定的 Provider。 */
     @DeleteMapping("/{code}")
     @IfMatch
-    @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE)
-    @Audit(operation = "system/authentication/federated-provider/delete")
+    @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE_VALUE)
+    @Audit(operation = "SYSTEM/AUTHENTICATION/FEDERATED_PROVIDER/DELETE")
     @Operation(summary = "删除联邦 Provider")
     public @NotNull ApiResponse<Void> delete(
-            @PathVariable @AuditTarget(resourceType = FederatedProvider.RESOURCE_TYPE) @NotNull String code) {
+            @PathVariable @AuditTarget(resourceType = FederatedProvider.RESOURCE_TYPE_VALUE) @NotNull String code) {
         providers.delete(code);
         return ApiResponse.noContent();
     }

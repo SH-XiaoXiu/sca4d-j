@@ -23,7 +23,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 使用独立 HS256 密钥签发和恢复 OpenAPI access JWT，不改变浏览器 Session 的 Token 模式。 */
-public final class OpenApiJwtTokenService {
+public class OpenApiJwtTokenService {
 
     private static final String JWT_TYPE = "openapi+jwt";
 
@@ -31,13 +31,13 @@ public final class OpenApiJwtTokenService {
 
     private static final String SESSION_ID_CLAIM = "sid";
 
-    private final @NotNull SessionCodec codec;
+    private final @NotNull Clock clock;
 
     private final @NotNull OpenApiProperties.Jwt properties;
 
-    private final @NotNull Clock clock;
-
     private final @NotNull Map<String, JWTSigner> signers;
+
+    private final @NotNull SessionCodec codec;
 
     /** 创建 OpenAPI JWT 服务；未启用时不要求配置密钥。 */
     public OpenApiJwtTokenService(
@@ -191,13 +191,12 @@ public final class OpenApiJwtTokenService {
     }
 
     /** 保存一次性返回给 OAuth 调用方的 OpenAPI JWT 和过期时间。 */
-    public static final class IssuedOpenApiJwt {
-
-        private final @NotNull String token;
+    public static class IssuedOpenApiJwt {
 
         private final @NotNull Instant expiresAt;
 
-        /** 创建签发结果。 */
+        private final @NotNull String token;
+
         public IssuedOpenApiJwt(@NotNull String token, @NotNull Instant expiresAt) {
             this.token = Objects.requireNonNull(token, "OpenAPI JWT 不能为空");
             this.expiresAt = Objects.requireNonNull(expiresAt, "OpenAPI JWT 过期时间不能为空");

@@ -1,7 +1,10 @@
 package com.sca4d.auth.federation;
 
+import cn.hutool.crypto.digest.DigestUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.proc.BadJOSEException;
@@ -33,7 +36,7 @@ import java.util.Base64;
 import java.util.Objects;
 
 /** 执行 OIDC/OAuth2 授权码、PKCE、Token 交换和用户资料标准化。 */
-public final class FederatedAuthorizationService {
+public class FederatedAuthorizationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(FederatedAuthorizationService.class);
 
@@ -43,17 +46,16 @@ public final class FederatedAuthorizationService {
 
     private final FederatedProviderService providers;
 
-    private final FederatedAuthorizationStore store;
-
     private final ObjectMapper mapper;
 
     private final RestClient restClient;
 
     private final Clock clock;
 
+    private final FederatedAuthorizationStore store;
+
     private final SecureRandom random = new SecureRandom();
 
-    /** 创建授权服务。 */
     public FederatedAuthorizationService(
             FederatedProviderService providers,
             FederatedAuthorizationStore store,
@@ -91,7 +93,9 @@ public final class FederatedAuthorizationService {
                         redirectUri.toString(),
                         clock.instant().plus(AUTHORIZATION_TTL)),
                 AUTHORIZATION_TTL);
-        String challenge = Base64.getUrlEncoder().withoutPadding().encodeToString(sha256(verifier));
+        String challenge = Base64.getUrlEncoder()
+                .withoutPadding()
+                .encodeToString(DigestUtil.sha256(verifier.getBytes(StandardCharsets.US_ASCII)));
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(discovery.authorizationEndpoint)
                 .queryParam("response_type", "code")
                 .queryParam("client_id", configured.clientId())
@@ -257,7 +261,7 @@ public final class FederatedAuthorizationService {
             return oidcProfile(config.issuer(), profile);
         } catch (BusinessException exception) {
             throw exception;
-        } catch (ParseException | BadJOSEException | com.nimbusds.jose.JOSEException exception) {
+        } catch (ParseException | BadJOSEException | JOSEException exception) {
             throw new BusinessException(FederatedErrorCode.PROFILE_INVALID, exception);
         } catch (Exception exception) {
             throw new BusinessException(FederatedErrorCode.UPSTREAM_FAILED, exception);
@@ -327,7 +331,7 @@ public final class FederatedAuthorizationService {
 
     /** 合并 UserInfo 到 ID Token，保留 ID Token 中未被外部资料覆盖的字段。 */
     private JsonNode mergeProfile(Object idToken, JsonNode userInfo) {
-        com.fasterxml.jackson.databind.node.ObjectNode merged = mapper.valueToTree(idToken);
+        ObjectNode merged = mapper.valueToTree(idToken);
         userInfo.properties().forEach(entry -> {
             if (entry.getValue() != null && !entry.getValue().isNull() && !entry.getValue().isMissingNode()) {
                 merged.set(entry.getKey(), entry.getValue());
@@ -364,15 +368,6 @@ public final class FederatedAuthorizationService {
         return node.asText();
     }
 
-    /** 计算 PKCE S256 挑战值。 */
-    private static byte[] sha256(String value) {
-        try {
-            return java.security.MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.US_ASCII));
-        } catch (java.security.NoSuchAlgorithmException exception) {
-            throw new IllegalStateException(exception);
-        }
-    }
-
     /** 创建用于 state、nonce、PKCE 和完成结果的随机 URL 安全标识。 */
     private String randomToken() {
         byte[] bytes = new byte[32];
@@ -382,14 +377,14 @@ public final class FederatedAuthorizationService {
 
     /** 已解析的 Discovery 端点。 */
     @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-    private static final class Discovery {
+    private static class Discovery {
         private final String authorizationEndpoint;
+
+        private final String jwksEndpoint;
 
         private final String tokenEndpoint;
 
         private final String userInfoEndpoint;
-
-        private final String jwksEndpoint;
 
         private Discovery(
                 String authorizationEndpoint,

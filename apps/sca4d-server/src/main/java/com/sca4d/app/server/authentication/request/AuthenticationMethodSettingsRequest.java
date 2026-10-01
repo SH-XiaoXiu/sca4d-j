@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 接收一个认证方法在登录首步、后续因素和敏感动作中的开关。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean setter 反序列化请求。
-public final class AuthenticationMethodSettingsRequest {
+public class AuthenticationMethodSettingsRequest {
 
     @NotBlank
     @Size(max = 64)

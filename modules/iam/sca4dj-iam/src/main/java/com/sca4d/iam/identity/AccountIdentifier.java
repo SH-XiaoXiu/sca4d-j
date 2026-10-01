@@ -9,21 +9,21 @@ import java.util.Objects;
 
 /** 保存账号的一种登录标识及其稳定查询值。 */
 @SuppressWarnings("ClassCanBeRecord")
-public final class AccountIdentifier {
+public class AccountIdentifier {
 
     private final long id;
+
+    private final @NotNull AccountIdentifierType type;
+
+    private final @NotNull IdentityStatus status;
 
     private final @NotNull Long accountId;
 
     private final @NotNull RealmKey realmKey;
 
-    private final @NotNull AccountIdentifierType type;
-
-    private final @NotNull String value;
-
     private final @NotNull String normalizedValue;
 
-    private final @NotNull IdentityStatus status;
+    private final @NotNull String value;
 
     /**
      * 创建账号登录标识。
@@ -58,7 +58,7 @@ public final class AccountIdentifier {
     }
 
     /**
-     * 返回登录标识主键。
+     * 登录标识主键。
      *
      * @return 登录标识主键
      */
@@ -68,7 +68,7 @@ public final class AccountIdentifier {
     }
 
     /**
-     * 返回登录标识所属账号。
+     * 登录标识所属账号。
      *
      * @return 所属账号
      */
@@ -78,7 +78,7 @@ public final class AccountIdentifier {
     }
 
     /**
-     * 返回登录标识所属认证域。
+     * 登录标识所属认证域。
      *
      * @return 认证域
      */
@@ -88,7 +88,7 @@ public final class AccountIdentifier {
     }
 
     /**
-     * 返回登录标识类型。
+     * 登录标识类型。
      *
      * @return 标识类型
      */
@@ -98,7 +98,7 @@ public final class AccountIdentifier {
     }
 
     /**
-     * 返回保留用于展示的用户输入值。
+     * 保留用于展示的用户输入值。
      *
      * @return 展示原值
      */
@@ -108,7 +108,7 @@ public final class AccountIdentifier {
     }
 
     /**
-     * 返回查找账号和唯一约束使用的规范值。
+     * 查找账号和唯一约束使用的规范值。
      *
      * @return 查询规范值
      */
@@ -118,7 +118,7 @@ public final class AccountIdentifier {
     }
 
     /**
-     * 返回登录标识当前是否可用。
+     * 登录标识当前是否可用。
      *
      * @return 当前状态
      */

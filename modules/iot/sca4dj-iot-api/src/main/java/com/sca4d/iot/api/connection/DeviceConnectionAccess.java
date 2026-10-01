@@ -12,15 +12,15 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 保存设备连接完成识别或认证后允许接入的 Device、接入方式和有效期。 */
-public final class DeviceConnectionAccess {
+public class DeviceConnectionAccess {
 
     private final @NotNull Device device;
 
     private final @NotNull DeviceAccessMethod accessMethod;
 
-    private final @Nullable SessionId sessionId;
-
     private final @Nullable Instant expiresAt;
+
+    private final @Nullable SessionId sessionId;
 
     /**
      * 创建已经由 IoT 认证实现校验完成的连接接入结果。

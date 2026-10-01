@@ -1,5 +1,6 @@
 package com.sca4d.iot.product;
 
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.core.api.persistence.AffectedRows;
 import com.sca4d.core.api.persistence.AffectedRowsMismatchException;
@@ -54,7 +55,7 @@ public class ProductRepository {
     }
 
     /**
-     * 保存 Product 及其允许接入方式和兼容协议。
+     * 保存 Product 以及允许接入方式和兼容协议。
      *
      * @param product 待保存的完整 Product
      * @throws AffectedRowsMismatchException 任一必要写入没有准确影响预期行数时抛出
@@ -65,7 +66,7 @@ public class ProductRepository {
                 mapper.insertProduct(checked.id(), checked.code(), checked.i18n()),
                 ZeroRowPolicy.ERROR,
                 "新增 Product");
-        List<String> accessMethods = checked.accessMethods().stream().map(DeviceAccessMethod::code).toList();
+        List<TreeCode> accessMethods = checked.accessMethods().stream().map(DeviceAccessMethod::code).toList();
         sqlBatches.forEach(
                 accessMethods,
                 2,
@@ -134,7 +135,7 @@ public class ProductRepository {
      */
     @CheckReturnValue
     public @NotNull Page<Product> findPage(@NotNull PageRequest page) {
-        PageRequest checked = Objects.requireNonNull(page, "Product 分页要求不能为空").requireMaxSize(100);
+        PageRequest checked = Objects.requireNonNull(page, "Product 分页要求不能为空").verifyMaxSize(100);
         long total = mapper.countProducts();
         List<ProductState> rows = total == 0
                 ? List.of()
@@ -177,7 +178,7 @@ public class ProductRepository {
                 ZeroRowPolicy.ERROR,
                 "推进 Product 更新时间");
         mapper.deleteProductAccessMethods(checked.id());
-        List<String> accessMethods = checked.accessMethods().stream().map(DeviceAccessMethod::code).toList();
+        List<TreeCode> accessMethods = checked.accessMethods().stream().map(DeviceAccessMethod::code).toList();
         sqlBatches.forEach(
                 accessMethods,
                 2,
@@ -213,7 +214,7 @@ public class ProductRepository {
                 1,
                 0,
                 mapper::selectProductAccessMethodsBatch)) {
-            accessMethods.computeIfAbsent(state.productId(), ignored -> new java.util.ArrayList<>())
+            accessMethods.computeIfAbsent(state.productId(), ignored -> new ArrayList<>())
                     .add(DeviceAccessMethod.parse(state.methodCode()));
         }
         Map<Long, List<String>> protocols = new LinkedHashMap<>();
@@ -222,7 +223,7 @@ public class ProductRepository {
                 1,
                 0,
                 mapper::selectProductProtocolsBatch)) {
-            protocols.computeIfAbsent(state.productId(), ignored -> new java.util.ArrayList<>())
+            protocols.computeIfAbsent(state.productId(), ignored -> new ArrayList<>())
                     .add(state.protocolCode());
         }
         // 按标量查询的原顺序组装 Product，缺少关联行时使用空集合。

@@ -6,7 +6,7 @@ import java.util.Objects;
 
 /** 使用容器名称和对象键定位存储中的一个对象。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class StorageObject {
+public class StorageObject {
     private final @NotNull String container;
 
     private final @NotNull String objectKey;
@@ -24,7 +24,7 @@ public final class StorageObject {
     }
 
     /**
-     * 返回对象所在容器。
+     * 对象所在容器。
      *
      * @return Bucket 或本地命名空间
      */
@@ -33,7 +33,7 @@ public final class StorageObject {
     }
 
     /**
-     * 返回容器内的对象键。
+     * 容器内的对象键。
      *
      * @return 由文件模块生成的对象键
      */

@@ -38,7 +38,7 @@ loadScripts(document, 'script');</script>
 <p>Package:</p>
 <ul>
 <li><a href="#package-description">Description</a></li>
-<li>Related Packages</li>
+<li><a href="#related-package-summary">Related Packages</a></li>
 <li><a href="#class-summary">Classes and Interfaces</a></li>
 </ul>
 </li>
@@ -49,7 +49,7 @@ loadScripts(document, 'script');</script>
 <ul class="sub-nav-list">
 <li>Package:&nbsp;</li>
 <li><a href="#package-description">Description</a>&nbsp;|&nbsp;</li>
-<li>Related Packages&nbsp;|&nbsp;</li>
+<li><a href="#related-package-summary">Related Packages</a>&nbsp;|&nbsp;</li>
 <li><a href="#class-summary">Classes and Interfaces</a></li>
 </ul>
 </div>
@@ -74,68 +74,59 @@ loadScripts(document, 'script');</script>
 <section class="summary">
 <ul class="summary-list">
 <li>
+<div id="related-package-summary">
+<div class="caption"><span>Related Packages</span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Package</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="access/package-summary.html">com.sca4d.core.api.setting.access</a></div>
+<div class="col-last even-row-color">
+<div class="block">定义设置读取和条件写入的边界。</div>
+</div>
+<div class="col-first odd-row-color"><a href="codec/package-summary.html">com.sca4d.core.api.setting.codec</a></div>
+<div class="col-last odd-row-color">
+<div class="block">定义设置内容的结构化编解码契约。</div>
+</div>
+<div class="col-first even-row-color"><a href="definition/package-summary.html">com.sca4d.core.api.setting.definition</a></div>
+<div class="col-last even-row-color">
+<div class="block">定义系统、业务和个人设置的管理入口及所属约束。</div>
+</div>
+<div class="col-first odd-row-color"><a href="exception/package-summary.html">com.sca4d.core.api.setting.exception</a></div>
+<div class="col-last odd-row-color">
+<div class="block">定义设置读取、写入和结构校验失败。</div>
+</div>
+<div class="col-first even-row-color"><a href="value/package-summary.html">com.sca4d.core.api.setting.value</a></div>
+<div class="col-last even-row-color">
+<div class="block">保存设置所属和一次读取结果的值对象。</div>
+</div>
+</div>
+</div>
+</li>
+<li>
 <div id="class-summary">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab5" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab5', 2)" class="table-tab">Exception Classes</button></div>
-<div id="class-summary.tabpanel" role="tabpanel">
-<div class="summary-table two-column-summary" aria-labelledby="class-summary-tab0">
+<div class="caption"><span>Classes</span></div>
+<div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="LogicSetting.html" title="class in com.sca4d.core.api.setting">LogicSetting</a>&lt;T&gt;</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ConfiguredConstants.html" title="class in com.sca4d.core.api.setting">ConfiguredConstants</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">定义由后端领域 Service 类型化读取和修改的 owner 设置。</div>
+<div class="block">在配置加载后初始化一组不再改变的 Java 静态字段。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="PersonalSetting.html" title="class in com.sca4d.core.api.setting">PersonalSetting</a>&lt;T&gt;</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="Setting.html" title="class in com.sca4d.core.api.setting">Setting</a>&lt;T&gt;</div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">定义需要调用方明确提供 Account、Principal 或 Resource owner 的设置。</div>
+<div class="block">直接读取一项类型化设置，按构造声明选择所属、版本 Codec、继承及覆盖规则。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="PreferenceSetting.html" title="class in com.sca4d.core.api.setting">PreferenceSetting</a>&lt;T&gt;</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="Setting.Builder.html" title="class in com.sca4d.core.api.setting">Setting.Builder</a>&lt;T,<wbr>D&gt;</div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">定义由前端完整读取和替换、后端不解释具体展示字段的个人偏好。</div>
+<div class="block">在构造阶段声明 IO 与解码顺序；构造后只通过 Setting 访问。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="PreferenceSettings.html" title="interface in com.sca4d.core.api.setting">PreferenceSettings</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
-<div class="block">提供个人偏好完整读取、替换、恢复默认值和 owner 删除清理。</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="Setting.html" title="class in com.sca4d.core.api.setting">Setting</a>&lt;T&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">定义一个由 Java Bean 声明并按 owner 保存完整类型化值的设置。</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="SettingCodec.html" title="interface in com.sca4d.core.api.setting">SettingCodec</a>&lt;T&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
-<div class="block">负责一个设置值与数据库文本之间的双向转换和校验。</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SettingGroup.html" title="class in com.sca4d.core.api.setting">SettingGroup</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SettingGroup.html" title="class in com.sca4d.core.api.setting">SettingGroup</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">标识管理端中一起展示的一组设置。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SettingOwner.html" title="class in com.sca4d.core.api.setting">SettingOwner</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">保存设置归属者使用的稳定类型和该类型内唯一标识。</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab5"><a href="SettingReadOnlyException.html" title="class in com.sca4d.core.api.setting">SettingReadOnlyException</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab5">
-<div class="block">表示管理端尝试修改仍由初始化节点 ENV 持续同步的设置。</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="Settings.html" title="interface in com.sca4d.core.api.setting">Settings</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
-<div class="block">提供不带进程缓存的类型化设置读取和数据库修改。</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab5"><a href="SettingSchemaVersionException.html" title="class in com.sca4d.core.api.setting">SettingSchemaVersionException</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab5">
-<div class="block">表示数据库设置值结构版本与当前 Java 定义不一致且没有声明转换规则。</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SettingValue.html" title="class in com.sca4d.core.api.setting">SettingValue</a>&lt;T&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">保存一次数据库查询得到的设置值及其维护来源。</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SettingValues.html" title="class in com.sca4d.core.api.setting">SettingValues</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="WritableSetting.html" title="class in com.sca4d.core.api.setting">WritableSetting</a>&lt;T&gt;</div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">保存一次批量查询得到的不可变设置快照。</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SystemSetting.html" title="class in com.sca4d.core.api.setting">SystemSetting</a>&lt;T&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">定义固定属于 `Subject.SYSTEM` 且可以由系统设置管理接口维护的设置。</div>
-</div>
+<div class="block">直接在明确目标中替换或清除当前 owner 的覆盖值，不修改继承 owner。</div>
 </div>
 </div>
 </div>

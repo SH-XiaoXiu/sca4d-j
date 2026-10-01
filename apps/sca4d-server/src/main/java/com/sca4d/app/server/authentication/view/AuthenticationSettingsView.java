@@ -1,11 +1,14 @@
 package com.sca4d.app.server.authentication.view;
 
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+
 import com.sca4d.app.server.authentication.AccountAuthenticationSettings;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.setting.SettingValue;
+import com.sca4d.core.api.setting.value.SettingValue;
 import com.sca4d.core.spring.web.annotation.ETag;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -13,7 +16,7 @@ import java.util.Objects;
  * 返回当前账号的动作认证因素数量和认证方法开关。
  */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
-public final class AuthenticationSettingsView {
+public class AuthenticationSettingsView {
 
     private final int loginFactorCount;
 
@@ -33,10 +36,10 @@ public final class AuthenticationSettingsView {
         this.methods = settings.methods()
                 .values()
                 .stream()
-                .sorted(java.util.Comparator.comparing(item -> item.methodCode().value()))
+                .sorted(Comparator.comparing(item -> item.methodCode().format(SLASH)))
                 .map(AuthenticationMethodSettingsView::from)
                 .toList();
-        this.revision = setting.version();
+        this.revision = setting.revision().orElseThrow();
     }
 
     /**

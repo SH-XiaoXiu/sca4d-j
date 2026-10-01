@@ -84,33 +84,41 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">保存 SSE 与 STOMP 共同发送给浏览器的事件编码、版本、发生时间和 payload。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ConnectionDelivery.html" title="class in com.sca4d.web.realtime.connection">ConnectionDelivery</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="BrowserWrite.html" title="class in com.sca4d.web.realtime.connection">BrowserWrite</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">保存发送给本机连接的浏览器信封以及发送后是否关闭连接。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="LocalConnection.html" title="interface in com.sca4d.web.realtime.connection">LocalConnection</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="DefaultWebRealtimePublisher.html" title="class in com.sca4d.web.realtime.connection">DefaultWebRealtimePublisher</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">把应用实时事件转换成 WebRealtimeMessage 并交给固定 MessageBus。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="LocalConnection.html" title="interface in com.sca4d.web.realtime.connection">LocalConnection</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">表示当前 JVM 无法迁移的一个 SSE 或 WebSocket 句柄。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="LocalConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">LocalConnectionRegistry</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="LocalConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">LocalConnectionRegistry</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">保存当前节点的实际连接句柄，并定时续租对应 Redis 共享索引。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="LocalNodeTransport.html" title="class in com.sca4d.web.realtime.connection">LocalNodeTransport</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="LocalNodeRouter.html" title="class in com.sca4d.web.realtime.connection">LocalNodeRouter</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">在单个 JVM 内把 Web Realtime 事件直接交给本机连接。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="NodeTransport.html" title="interface in com.sca4d.web.realtime.connection">NodeTransport</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="NodeRouter.html" title="interface in com.sca4d.web.realtime.connection">NodeRouter</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">标识当前 Web Realtime 节点，并把浏览器事件交给持有目标连接的节点。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">使用 Redis Hash、Set 和按租约到期时间排序的 ZSET 保存所有 Web Realtime 共享索引。</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TargetPublisher.html" title="class in com.sca4d.web.realtime.connection">TargetPublisher</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">使用 Redis 解析目标连接，并通过当前节点传输发送 Web Realtime 消息。</div>
+<div class="block">使用 Redis Hash、Set 和按租约到期时间排序的 SET 保存所有 Web Realtime 共享索引。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="WebRealtimeMessageCodec.html" title="class in com.sca4d.web.realtime.connection">WebRealtimeMessageCodec</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">把 WebRealtimeMessage 编解码为 RabbitMQ 与 Outbox 使用的稳定 JSON payload。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="WebRealtimeMessageHandler.html" title="class in com.sca4d.web.realtime.connection">WebRealtimeMessageHandler</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">消费 WebRealtimeMessage，并通过共享索引和 NodeRouter 写入目标浏览器连接缓冲。</div>
 </div>
 </div>
 </div>

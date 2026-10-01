@@ -19,6 +19,8 @@ import com.sca4d.core.spring.web.clientstate.ClientStateTarget;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -39,7 +41,7 @@ class AuthRequestInterceptorTest {
     @Test
     @DisplayName("Uses The Default Token Mode For An Unannotated Handler")
     void usesTheDefaultTokenModeForAnUnannotatedHandler() throws Exception {
-        SessionService coordinator = org.mockito.Mockito.mock(SessionService.class);
+        SessionService coordinator = Mockito.mock(SessionService.class);
         when(coordinator.currentSession("access-token", false))
                 .thenReturn(
                         Optional.of(
@@ -60,7 +62,7 @@ class AuthRequestInterceptorTest {
     @Test
     @DisplayName("Forces A Session Token For A Method Annotation Without Falling Back")
     void forcesASessionTokenForAMethodAnnotationWithoutFallingBack() throws Exception {
-        SessionService coordinator = org.mockito.Mockito.mock(SessionService.class);
+        SessionService coordinator = Mockito.mock(SessionService.class);
         when(coordinator.currentSession("opaque-token", true))
                 .thenReturn(
                         Optional.of(
@@ -80,7 +82,7 @@ class AuthRequestInterceptorTest {
     @Test
     @DisplayName("Forces A Session Token For A Controller Annotation")
     void forcesASessionTokenForAControllerAnnotation() throws Exception {
-        SessionService coordinator = org.mockito.Mockito.mock(SessionService.class);
+        SessionService coordinator = Mockito.mock(SessionService.class);
         when(coordinator.currentSession("opaque-token", true))
                 .thenReturn(
                         Optional.of(
@@ -99,7 +101,7 @@ class AuthRequestInterceptorTest {
     @Test
     @DisplayName("Allows An Anonymous Handler With A Malformed Authorization Header")
     void allowsAnAnonymousHandlerWithAMalformedAuthorizationHeader() throws Exception {
-        SessionService coordinator = org.mockito.Mockito.mock(SessionService.class);
+        SessionService coordinator = Mockito.mock(SessionService.class);
         AuthRequestInterceptor interceptor = new AuthRequestInterceptor(coordinator);
 
         interceptor.preHandle(
@@ -108,14 +110,14 @@ class AuthRequestInterceptorTest {
                 handler("anonymous"));
 
         verify(coordinator, never())
-                .currentSession(org.mockito.ArgumentMatchers.anyString(), org.mockito.ArgumentMatchers.anyBoolean());
+                .currentSession(ArgumentMatchers.anyString(), ArgumentMatchers.anyBoolean());
         assertThat(ClientState.currentOrNull()).isNull();
     }
 
     @Test
     @DisplayName("Rejects An Unauthenticated Protected Handler Before Argument Binding")
     void rejectsAnUnauthenticatedProtectedHandlerBeforeArgumentBinding() {
-        SessionService coordinator = org.mockito.Mockito.mock(SessionService.class);
+        SessionService coordinator = Mockito.mock(SessionService.class);
         AuthRequestInterceptor interceptor = new AuthRequestInterceptor(coordinator);
 
         assertThatThrownBy(
@@ -129,7 +131,7 @@ class AuthRequestInterceptorTest {
                                 .isEqualTo(CoreErrorCode.AUTHENTICATION_REQUIRED));
 
         verify(coordinator, never())
-                .currentSession(org.mockito.ArgumentMatchers.anyString(), org.mockito.ArgumentMatchers.anyBoolean());
+                .currentSession(ArgumentMatchers.anyString(), ArgumentMatchers.anyBoolean());
         assertThat(Objects.requireNonNull(ClientState.currentOrNull()).targets())
                 .extracting(ClientStateTarget::value)
                 .containsExactly("authentication.session");
@@ -155,7 +157,7 @@ class AuthRequestInterceptorTest {
     }
 
     @SuppressWarnings("unused") // 测试通过反射取得 Controller 方法。
-    private static final class TestController {
+    private static class TestController {
         public void ordinary() {
         }
 
@@ -170,7 +172,7 @@ class AuthRequestInterceptorTest {
 
     @RequireSessionToken
     @SuppressWarnings("unused") // 测试通过反射取得 Controller 方法。
-    private static final class AnnotatedTestController {
+    private static class AnnotatedTestController {
         public void ordinary() {
         }
     }

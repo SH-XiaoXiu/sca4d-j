@@ -46,7 +46,7 @@ class ResponseETagResolverTest {
     }
 
     /** 提供一个合法版本声明。 */
-    static final class VersionedBody {
+    static class VersionedBody {
 
         /** @return 固定测试版本 */
         @ETag
@@ -56,7 +56,7 @@ class ResponseETagResolverTest {
     }
 
     /** 提供重复版本声明。 */
-    static final class MultipleVersions {
+    static class MultipleVersions {
 
         /** @return 第一个测试版本 */
         @ETag
@@ -72,7 +72,7 @@ class ResponseETagResolverTest {
     }
 
     /** 提供非公开版本声明。 */
-    static final class NonPublicVersion {
+    static class NonPublicVersion {
 
         /** @return 固定测试版本 */
         @ETag
@@ -82,7 +82,7 @@ class ResponseETagResolverTest {
     }
 
     /** 提供返回类型错误的版本声明。 */
-    static final class InvalidVersion {
+    static class InvalidVersion {
 
         /** @return 非法字符串版本 */
         @ETag
@@ -92,7 +92,7 @@ class ResponseETagResolverTest {
     }
 
     /** 提供没有稳定版本的动态响应实例。 */
-    static final class DynamicBody {
+    static class DynamicBody {
 
         /** @return 动态实例不发布 ETag */
         @ETag

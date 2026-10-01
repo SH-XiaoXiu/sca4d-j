@@ -21,7 +21,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 统一解析数据库 Product 与应用提供的只读代码 Product。 */
-public final class ProductDefinitionCatalog {
+public class ProductDefinitionCatalog {
 
     private final @NotNull ProductRepository database;
 
@@ -155,7 +155,7 @@ public final class ProductDefinitionCatalog {
     @CheckReturnValue
     public @NotNull Page<ProductResolution> findPage(@NotNull PageRequest page) {
         // 先校验统一分页边界并计算双来源总数，越过末页时不执行数据库窗口查询。
-        PageRequest checked = Objects.requireNonNull(page, "Product 目录分页要求不能为空").requireMaxSize(100);
+        PageRequest checked = Objects.requireNonNull(page, "Product 目录分页要求不能为空").verifyMaxSize(100);
         long databaseTotal = database.count();
         long total = Math.addExact(databaseTotal, codeDefinitions.size());
         long offset = checked.offset();

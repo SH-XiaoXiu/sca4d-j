@@ -1,18 +1,26 @@
 package com.sca4d.iot.telemetry;
 
-import com.sca4d.core.api.messaging.MessageConsumer;
-import com.sca4d.core.api.messaging.MessageDelivery;
+import com.baomidou.dynamic.datasource.annotation.DS;
+import com.sca4d.core.api.annotation.SystemExecution;
+import com.sca4d.core.api.event.Event;
+import com.sca4d.core.api.event.EventType;
+import com.sca4d.core.api.messaging.EventHandler;
+import com.sca4d.core.api.messaging.HandlingDecision;
+import com.sca4d.core.api.messaging.IncomingMessage;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.iot.api.IotCapabilities;
 import com.sca4d.iot.api.message.IotMessageTypes;
 import com.sca4d.iot.api.telemetry.TelemetryBatch;
 import com.sca4d.iot.config.IotTimescale;
 import com.sca4d.iot.timescale.persistence.TimescaleRepository;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
-/** 消费 reported Telemetry 消息并按 MessageId 幂等写入 TimescaleDB。 */
-public class TimescaleTelemetryConsumer implements MessageConsumer<TelemetryBatch> {
+/** 消费 reported Telemetry 消息并按 Id 幂等写入 TimescaleDB。 */
+public class TimescaleTelemetryConsumer implements EventHandler<TelemetryBatch> {
 
     private final @NotNull TimescaleRepository repository;
 
@@ -22,20 +30,31 @@ public class TimescaleTelemetryConsumer implements MessageConsumer<TelemetryBatc
     }
 
     @Override
-    public @NotNull String consumerCode() {
-        return "iot.timescale.telemetry-store";
+    public @NotNull TreeCode code() {
+        return TreeCode.of("IOT/TIMESCALE/TELEMETRY/HANDLER");
     }
 
     @Override
-    public @NotNull com.sca4d.core.api.event.EventType<TelemetryBatch> eventType() {
+    public @NotNull EventType<TelemetryBatch> eventType() {
         return IotMessageTypes.TELEMETRY_REPORTED;
     }
 
-    /** 同一 MessageId 的 RabbitMQ 重复投递不会产生重复样本。 */
+    /** 同一 Id 的 RabbitMQ 重复投递不会产生重复样本。 */
     @Override
-    @Transactional(transactionManager = IotTimescale.TRANSACTION_MANAGER)
-    public void consume(@NotNull MessageDelivery<TelemetryBatch> delivery) {
-        MessageDelivery<TelemetryBatch> checked = Objects.requireNonNull(delivery, "Telemetry 投递不能为空");
-        repository.addTelemetry(checked.messageId().value(), checked.event().payload());
+    @DS(IotTimescale.DATASOURCE)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @SystemExecution(IotCapabilities.SYSTEM_IDENTITY_VALUE)
+    public void handleEvent(@NotNull IncomingMessage<Event<TelemetryBatch>> delivery) {
+        IncomingMessage<Event<TelemetryBatch>> checked = Objects.requireNonNull(delivery, "Telemetry 投递不能为空");
+        repository.addTelemetry(checked.messageId().value(), checked.message().payload());
+    }
+
+    /** RabbitMQ 调用的入口先选择历史库，再开启事务；提交后才能确认消息。 */
+    @Override
+    @DS(IotTimescale.DATASOURCE)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @SystemExecution(IotCapabilities.SYSTEM_IDENTITY_VALUE)
+    public @NotNull HandlingDecision handle(@NotNull IncomingMessage<Event<TelemetryBatch>> delivery) throws Exception {
+        return EventHandler.super.handle(delivery);
     }
 }

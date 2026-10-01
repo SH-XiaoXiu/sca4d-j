@@ -4,23 +4,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import com.sca4d.core.api.error.BusinessException;
-import com.sca4d.core.api.event.Event;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
-import com.sca4d.core.api.messaging.MessageId;
-import com.sca4d.core.api.messaging.MessagePublisher;
+import com.sca4d.core.api.messaging.DispatchPolicy;
+import com.sca4d.core.api.messaging.DispatchReceipt;
+import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.ProductBinding;
 import com.sca4d.iot.api.ProductDefinition;
 import com.sca4d.iot.api.change.DeviceChangeArea;
 import com.sca4d.iot.api.message.DeviceAcknowledgement;
-import com.sca4d.iot.api.message.IotMessageTypes;
 import com.sca4d.iot.api.model.ThingModel;
 import com.sca4d.iot.api.model.ThingModelPresentation;
 import com.sca4d.iot.api.model.ThingModelRepository;
@@ -66,7 +67,7 @@ class ReportedStateServiceTest {
                 mock(DownlinkRepository.class),
                 mock(ThingModelRepository.class),
                 mock(ThingValueValidator.class),
-                mock(MessagePublisher.class),
+                mock(MessageBus.class),
                 mock(DeviceChangeNotifier.class),
                 1);
         ReportedStateUpdate update = new ReportedStateUpdate(
@@ -88,7 +89,6 @@ class ReportedStateServiceTest {
 
     @Test
     @DisplayName("reported 收敛通过可靠事件请求 ACK 状态转换")
-    @SuppressWarnings("unchecked")
     void publishesReliableAcknowledgementRequestForConvergence() {
         Device device = device();
         DeviceRepository devices = mock(DeviceRepository.class);
@@ -115,8 +115,9 @@ class ReportedStateServiceTest {
         DownlinkRepository downlinks = mock(DownlinkRepository.class);
         when(downlinks.convergeDesired(anyLong(), anyLong(), any(), any()))
                 .thenReturn(List.of(new DesiredConvergence("power", 99)));
-        MessagePublisher messages = mock(MessagePublisher.class);
-        when(messages.publishReliably(any())).thenReturn(new MessageId(1000));
+        MessageBus messages = mock(MessageBus.class);
+        when(messages.dispatch(any(), any()))
+                .thenReturn(new DispatchReceipt(Id.of(1000), DispatchReceipt.Status.OUTBOX_ENLISTED));
         DeviceChangeNotifier changes = mock(DeviceChangeNotifier.class);
         ReportedStateService service = service(
                 devices,
@@ -140,12 +141,11 @@ class ReportedStateServiceTest {
         ReportedStateResult result = service.accept(device, update, List.of());
 
         assertThat(result.outcome()).isEqualTo(ReportedStateResult.Outcome.ACCEPTED);
-        ArgumentCaptor<Event<DeviceAcknowledgement>> event = ArgumentCaptor.forClass(Event.class);
-        verify(messages).publishReliably(event.capture());
-        assertThat(event.getValue().type()).isSameAs(IotMessageTypes.ACKNOWLEDGEMENT_REQUESTED);
-        assertThat(event.getValue().businessKey()).startsWith("reported-ack:99:");
-        assertThat(event.getValue().payload().messageId()).isEqualTo(99);
-        assertThat(event.getValue().payload().source()).isEqualTo("REPORTED");
+        ArgumentCaptor<DeviceAcknowledgement> message = ArgumentCaptor.forClass(DeviceAcknowledgement.class);
+        verify(messages).dispatch(message.capture(), argThat(policy -> policy.mode() == DispatchPolicy.Mode.OUTBOX));
+        assertThat(message.getValue().code()).isEqualTo(DeviceAcknowledgement.CODE);
+        assertThat(message.getValue().messageId()).isEqualTo(99);
+        assertThat(message.getValue().source()).isEqualTo("REPORTED");
         verify(changes).changed(device.id(), EnumSet.of(DeviceChangeArea.REPORTED), NOW);
     }
 
@@ -157,7 +157,7 @@ class ReportedStateServiceTest {
             DownlinkRepository downlinks,
             ThingModelRepository models,
             ThingValueValidator validator,
-            MessagePublisher messages,
+            MessageBus messages,
             DeviceChangeNotifier changes,
             int maxReportedProperties) {
         return new ReportedStateService(

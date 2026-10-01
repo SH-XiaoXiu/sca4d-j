@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /** 使用开放 code 标识设备建立连接时采用的应用协议。 */
-public final class DeviceConnectionProtocol {
+public class DeviceConnectionProtocol {
 
     /** MQTT；MQTT over TCP 和 MQTT over WebSocket 使用同一个协议值。 */
     public static final @NotNull DeviceConnectionProtocol MQTT = new DeviceConnectionProtocol("mqtt");

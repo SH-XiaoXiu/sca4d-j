@@ -18,20 +18,20 @@ import java.util.Set;
 
 /** 保存字典查询返回的一个代码选项或数据库选项。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class DictionaryOption {
+public class DictionaryOption {
 
     private static final LocalizedFieldsSchema I18N_SCHEMA = new LocalizedFieldsSchema(
             Set.of("label"),
             Set.of("label"),
             Map.of("label", 160));
 
-    private final String value;
-
-    private final String labelKey;
+    private final LocalizedFields i18n;
 
     private final String label;
 
-    private final LocalizedFields i18n;
+    private final String labelKey;
+
+    private final String value;
 
     private final boolean codeDefined;
 

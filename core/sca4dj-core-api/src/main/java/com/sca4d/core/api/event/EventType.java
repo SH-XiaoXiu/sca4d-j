@@ -1,23 +1,21 @@
 package com.sca4d.core.api.event;
 
-import com.sca4d.core.api.utils.TextUtils;
+import com.sca4d.core.api.name.NameFormat;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 /** 使用稳定编码、协议版本和 payload 类型声明一种业务事件。 */
-public final class EventType<T> {
+public class EventType<T> {
 
-    private static final Pattern CODE = Pattern.compile("[A-Za-z0-9][A-Za-z0-9._-]{0,127}");
-
-    private final @NotNull String code;
-
-    private final int protocolVersion;
+    private final @NotNull TreeCode code;
 
     private final @NotNull Class<T> payloadType;
+
+    private final int protocolVersion;
 
     /**
      * 创建跨发布端和消费端共用的事件类型。
@@ -28,9 +26,14 @@ public final class EventType<T> {
      * @throws IllegalArgumentException 编码或协议版本无效时抛出
      */
     public EventType(@NotNull String code, int protocolVersion, @NotNull Class<T> payloadType) {
-        String checkedCode = TextUtils.requireText(code, "事件编码");
-        if (!CODE.matcher(checkedCode).matches()) {
-            throw new IllegalArgumentException("事件编码只能包含字母、数字、点、下划线和连字符");
+        this(TreeCode.of(code), protocolVersion, payloadType);
+    }
+
+    /** 创建已经规范化的事件类型。 */
+    public EventType(@NotNull TreeCode code, int protocolVersion, @NotNull Class<T> payloadType) {
+        TreeCode checkedCode = Objects.requireNonNull(code, "事件编码不能为空");
+        if (checkedCode.hasNode(TreeCode.ofSegment("*")) || checkedCode.format(NameFormat.SLASH).length() > 128) {
+            throw new IllegalArgumentException("事件编码不能含通配符或超过 128 个字符");
         }
         if (protocolVersion <= 0) {
             throw new IllegalArgumentException("事件协议版本必须为正数");
@@ -42,7 +45,7 @@ public final class EventType<T> {
 
     /** @return 跨发布端和消费端保持稳定的事件编码 */
     @Contract(pure = true)
-    public @NotNull String code() {
+    public @NotNull TreeCode code() {
         return code;
     }
 
@@ -80,6 +83,6 @@ public final class EventType<T> {
     @Override
     @Contract(pure = true)
     public @NotNull String toString() {
-        return code + '@' + protocolVersion;
+        return code + "@" + protocolVersion;
     }
 }

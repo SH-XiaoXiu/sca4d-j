@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.annotation.AnonymousAccess;
 import com.sca4d.core.api.gateway.GatewayCallback;
+import com.sca4d.core.api.gateway.GatewayCallbackCode;
 import com.sca4d.core.api.gateway.GatewayCallbackRequest;
 import com.sca4d.core.api.gateway.GatewayCallbackResponse;
-import com.sca4d.core.api.gateway.GatewayHttpPaths;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
@@ -31,12 +31,12 @@ import java.util.Objects;
 @RestController
 @AnonymousAccess
 @Hidden
-@RequestMapping(GatewayHttpPaths.CALLBACKS)
+@RequestMapping("${sca4dj.gateway.protocol.callback-path}")
 public class GatewayCallbackDispatcher {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GatewayCallbackDispatcher.class);
 
-    private final @NotNull Map<String, GatewayCallback<?, ?>> callbacks;
+    private final @NotNull Map<GatewayCallbackCode, GatewayCallback<?, ?>> callbacks;
 
     private final @NotNull ObjectMapper objectMapper;
 
@@ -50,10 +50,10 @@ public class GatewayCallbackDispatcher {
     public GatewayCallbackDispatcher(
             @NotNull List<@NotNull GatewayCallback<?, ?>> callbacks,
             @NotNull ObjectMapper objectMapper) {
-        LinkedHashMap<String, GatewayCallback<?, ?>> indexed = new LinkedHashMap<>();
+        LinkedHashMap<GatewayCallbackCode, GatewayCallback<?, ?>> indexed = new LinkedHashMap<>();
         for (GatewayCallback<?, ?> callback : callbacks) {
             GatewayCallback<?, ?> checked = Objects.requireNonNull(callback, "Gateway 回调不能为空");
-            String code = checked.code().value();
+            GatewayCallbackCode code = checked.code();
             if (indexed.putIfAbsent(code, checked) != null) {
                 throw new IllegalStateException("Gateway 回调编码重复: " + code);
             }
@@ -76,7 +76,7 @@ public class GatewayCallbackDispatcher {
             @PathVariable @NotNull String code,
             @RequestHeader @NotNull HttpHeaders headers,
             @RequestBody(required = false) @Nullable JsonNode body) {
-        GatewayCallback<?, ?> callback = callbacks.get(code);
+        GatewayCallback<?, ?> callback = callbacks.get(new GatewayCallbackCode(code));
         if (callback == null) {
             return ResponseEntity.notFound().build();
         }

@@ -1,5 +1,7 @@
 package com.sca4d.app.server.authentication.view;
 
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+
 import com.sca4d.app.server.authentication.AuthenticationMethodSettings;
 import org.jetbrains.annotations.NotNull;
 
@@ -7,7 +9,7 @@ import java.util.Objects;
 
 /** 返回一个认证方法在登录和敏感动作中的开关。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
-public final class AuthenticationMethodSettingsView {
+public class AuthenticationMethodSettingsView {
 
     private final String methodCode;
 
@@ -18,7 +20,7 @@ public final class AuthenticationMethodSettingsView {
     private final boolean sensitiveActionEnabled;
 
     private AuthenticationMethodSettingsView(AuthenticationMethodSettings settings) {
-        this.methodCode = settings.methodCode().value();
+        this.methodCode = settings.methodCode().format(SLASH);
         this.loginStartEnabled = settings.loginStartEnabled();
         this.loginAdditionalEnabled = settings.loginAdditionalEnabled();
         this.sensitiveActionEnabled = settings.sensitiveActionEnabled();

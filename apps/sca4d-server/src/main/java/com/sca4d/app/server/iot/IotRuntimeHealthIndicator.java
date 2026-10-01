@@ -1,5 +1,7 @@
 package com.sca4d.app.server.iot;
 
+import com.sca4d.core.spring.config.ConditionalOnCapability;
+import com.sca4d.iot.api.IotCapabilities;
 import com.sca4d.iot.emqx.transport.EmqxMqttRuntime;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.actuate.health.Health;
@@ -11,6 +13,7 @@ import java.util.Objects;
 
 /** 把启用 EMQX 的 IoT 实例 MQTT 运行状态加入 Actuator readiness。 */
 @Component("iotRuntimeHealthIndicator")
+@ConditionalOnCapability(IotCapabilities.TRANSPORT)
 @ConditionalOnProperty(prefix = "sca4dj.iot.emqx", name = "enabled", havingValue = "true")
 public class IotRuntimeHealthIndicator implements HealthIndicator {
 

@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">SmsProviderState</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">SmsProviderState</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">保存 SMS Provider Mapper 返回的数据库状态。</div>
 </section>
@@ -110,9 +110,7 @@ loadScripts(document, 'script');</script>
  int&nbsp;priority,
  boolean&nbsp;enabled,
  @NotNull com.sca4d.core.api.concurrent.Version&nbsp;version)</code></div>
-<div class="col-last even-row-color">
-<div class="block">创建 Provider 数据库状态。</div>
-</div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -179,7 +177,16 @@ loadScripts(document, 'script');</script>
  boolean&nbsp;enabled,
  @NotNull
  @NotNull com.sca4d.core.api.concurrent.Version&nbsp;version)</span></div>
-<div class="block">创建 Provider 数据库状态。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>providerId</code> - Provider 数据库标识</dd>
+<dd><code>code</code> - Provider 配置编码</dd>
+<dd><code>type</code> - Provider 类型</dd>
+<dd><code>credentialRef</code> - 凭据引用</dd>
+<dd><code>priority</code> - 路由优先级</dd>
+<dd><code>enabled</code> - 是否允许投递</dd>
+<dd><code>version</code> - Provider 配置版本</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -194,6 +201,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="providerId()">
 <h3>providerId</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">providerId</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>Provider 数据库标识</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -201,6 +212,10 @@ loadScripts(document, 'script');</script>
 <h3>code</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">code</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>Provider 编码</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -208,6 +223,10 @@ loadScripts(document, 'script');</script>
 <h3>type</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">type</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>Provider 类型</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -215,18 +234,30 @@ loadScripts(document, 'script');</script>
 <h3>credentialRef</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">credentialRef</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>凭据引用</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="priority()">
 <h3>priority</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">priority</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>路由优先级</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="enabled()">
 <h3>enabled</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">enabled</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>是否允许投递</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -234,6 +265,10 @@ loadScripts(document, 'script');</script>
 <h3>version</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.concurrent.Version</span>&nbsp;<span class="element-name">version</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>Provider 配置版本</dd>
+</dl>
 </section>
 </li>
 </ul>

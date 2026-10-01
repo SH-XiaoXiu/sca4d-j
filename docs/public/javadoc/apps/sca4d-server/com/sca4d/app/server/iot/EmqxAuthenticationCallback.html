@@ -94,8 +94,11 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="annotations">@Component
-@ConditionalOnProperty(prefix="app.iot.capabilities",name="transport",havingValue="true",matchIfMissing=true) @ConditionalOnProperty(prefix="sca4dj.iot.emqx",name="enabled",havingValue="true")
-</span><span class="modifiers">public final class </span><span class="element-name type-name-label">EmqxAuthenticationCallback</span>
+@ConditionalOnCapability("IOT:TRANSPORT")
+@ConditionalOnProperty(prefix="sca4dj.iot.emqx",
+                       name="enabled",
+                       havingValue="true")
+</span><span class="modifiers">public class </span><span class="element-name type-name-label">EmqxAuthenticationCallback</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.core.api.gateway.GatewayCallback&lt;com.sca4d.iot.emqx.authentication.EmqxAuthenticationRequest,<wbr>com.sca4d.iot.emqx.authentication.EmqxAuthenticationResponse&gt;</span></div>
 <div class="block">验证 EMQX HTTP Authenticator 提交的共享 Secret，并执行 MQTT CONNECT 认证。</div>
@@ -187,7 +190,7 @@ implements com.sca4d.core.api.gateway.GatewayCallback&lt;com.sca4d.iot.emqx.auth
 <dt>Specified by:</dt>
 <dd><code>code</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.gateway.GatewayCallback&lt;com.sca4d.iot.emqx.authentication.EmqxAuthenticationRequest,<wbr>com.sca4d.iot.emqx.authentication.EmqxAuthenticationResponse&gt;</code></dd>
 <dt>Returns:</dt>
-<dd>`iot.emqx.authenticate`</dd>
+<dd>`IOT.EMQX.AUTHENTICATE`</dd>
 </dl>
 </section>
 </li>

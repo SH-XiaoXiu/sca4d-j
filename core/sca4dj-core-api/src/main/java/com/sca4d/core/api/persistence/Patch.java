@@ -17,7 +17,7 @@ import java.util.function.Supplier;
  *
  * @param <T> 字段写入值的 Java 类型
  */
-public final class Patch<T> {
+public class Patch<T> {
 
     private static final Patch<?> IGNORE = new Patch<>(State.IGNORE, null);
 
@@ -49,7 +49,7 @@ public final class Patch<T> {
      *
      * @param value 要写入的值；数值零、{@code false}、空字符串和空集合不会转成忽略或清除
      * @param <T> 字段值类型
-     * @return 包含该值的写入意图
+     * @return 包含指定值的写入意图
      * @throws NullPointerException value 为 {@code null} 时抛出；写入数据库 {@code NULL} 应使用 {@link #clear()}
      */
     @CheckReturnValue
@@ -73,7 +73,7 @@ public final class Patch<T> {
     /**
      * 使用回调把业务处理结果解析成字段写入意图。
      *
-     * <p>source 可以为 {@code null}，回调必须明确决定此时返回忽略、写入还是清除。该方法不校验 HTTP
+     * <p>source 可以为 {@code null}，回调必须明确决定此时返回忽略、写入还是清除。当前方法不校验 HTTP
      * Request、实体字段或业务规则。
      *
      * @param source 回调需要读取的业务处理结果
@@ -104,7 +104,7 @@ public final class Patch<T> {
     }
 
     /**
-     * 判断该意图是否保留数据库原值。
+     * 判断当前意图是否保留数据库原值。
      *
      * @return 保留数据库原值时为 {@code true}
      */
@@ -114,7 +114,7 @@ public final class Patch<T> {
     }
 
     /**
-     * 判断该意图是否写入一个非空值。
+     * 判断当前意图是否写入一个非空值。
      *
      * @return 写入非空值时为 {@code true}
      */
@@ -124,7 +124,7 @@ public final class Patch<T> {
     }
 
     /**
-     * 判断该意图是否把数据库字段写为 {@code NULL}。
+     * 判断当前意图是否把数据库字段写为 {@code NULL}。
      *
      * @return 写入数据库 {@code NULL} 时为 {@code true}
      */
@@ -203,7 +203,7 @@ public final class Patch<T> {
      *
      * @param <T> 字段值类型
      */
-    public static final class Choice<T> {
+    public static class Choice<T> {
 
         private @Nullable Supplier<Patch<T>> selected;
 
@@ -213,10 +213,10 @@ public final class Patch<T> {
         /**
          * 条件命中时选择写入给定非空值。
          *
-         * @param condition 是否选择该值
+         * @param condition 是否选择当前值
          * @param value 条件唯一命中时写入的值
          * @return 当前构造器
-         * @throws IllegalStateException 已有其他条件命中时抛出
+         * @throws IllegalStateException 已有另一个条件命中时抛出
          * @throws NullPointerException value 为 {@code null} 时抛出
          */
         @Contract(value = "_, _ -> this", mutates = "this")
@@ -228,10 +228,10 @@ public final class Patch<T> {
         /**
          * 条件命中时延迟计算并写入非空值。
          *
-         * @param condition 是否选择该值
+         * @param condition 是否选择当前值
          * @param value 条件唯一命中时才执行的值 Supplier
          * @return 当前构造器
-         * @throws IllegalStateException 已有其他条件命中时抛出
+         * @throws IllegalStateException 已有另一个条件命中时抛出
          * @throws NullPointerException value 或 Supplier 结果为 {@code null} 时抛出
          */
         @Contract(value = "_, _ -> this", mutates = "this")
@@ -314,7 +314,7 @@ public final class Patch<T> {
             return this;
         }
 
-        /** 执行唯一命中的分支；没有分支命中时执行调用方明确给出的兜底。 */
+        /** 执行唯一命中的分支；没有分支命中时执行调用方明确给出的默认分支。 */
         private @NotNull Patch<T> finish(@NotNull Supplier<Patch<T>> fallback) {
             Supplier<Patch<T>> result = selected == null ? fallback : selected;
             return Objects.requireNonNull(result.get(), "Patch 条件分支不能返回空值");

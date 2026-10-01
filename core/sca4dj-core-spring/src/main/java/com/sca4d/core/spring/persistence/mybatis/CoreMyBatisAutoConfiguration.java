@@ -1,14 +1,22 @@
 package com.sca4d.core.spring.persistence.mybatis;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
+import com.sca4d.core.api.authentication.AuthenticationActionCode;
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.gateway.GatewayCallbackCode;
 import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.identity.RealmKey;
-import com.sca4d.core.api.notification.NotificationCode;
+import com.sca4d.core.api.job.JobKey;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.Name;
+import com.sca4d.core.api.name.NameFormat;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Action;
+import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.spring.config.CoreJacksonAutoConfiguration;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.scripting.LanguageDriver;
@@ -28,7 +36,9 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import java.io.IOException;
 
-/** 注册 Core 标识、版本、认证域和枚举在 MyBatis 中使用的类型处理器。 */
+/**
+ * 注册 Core 标识、版本、认证域和枚举在 MyBatis 中使用的类型处理器。
+ */
 @AutoConfiguration(after = CoreJacksonAutoConfiguration.class, afterName = "org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration")
 @ConditionalOnClass(name = "org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration")
 @EnableAspectJAutoProxy
@@ -36,17 +46,23 @@ public class CoreMyBatisAutoConfiguration {
 
     private static final String DEFAULT_MAPPER_LOCATIONS = "classpath*:/mapper/**/*.xml";
 
-    /** 创建 MyBatis 自动配置。 */
+    /**
+     * 创建 MyBatis 自动配置。
+     */
     public CoreMyBatisAutoConfiguration() {
     }
 
-    /** @return 执行 Repository 影响行数声明的切面 */
+    /**
+     * @return 执行 Repository 影响行数声明的切面
+     */
     @Bean
     AffectedRowsAspect affectedRowsAspect() {
         return new AffectedRowsAspect();
     }
 
-    /** @return 捕获 MyBatis DML 真实影响行数的插件 */
+    /**
+     * @return 捕获 MyBatis DML 真实影响行数的插件
+     */
     @Bean
     AffectedRowsInterceptor affectedRowsInterceptor() {
         return new AffectedRowsInterceptor();
@@ -69,11 +85,11 @@ public class CoreMyBatisAutoConfiguration {
     /**
      * 创建只继承公共 MyBatis 行为、不继承默认 Mapper 资源的附加会话工厂构建器。
      *
-     * @param properties MyBatis 公共配置
-     * @param interceptors MyBatis 插件
-     * @param typeHandlers 容器注册的类型处理器
-     * @param languageDrivers 脚本语言实现
-     * @param databaseIdProvider 可选数据库标识提供器
+     * @param properties               MyBatis 公共配置
+     * @param interceptors             MyBatis 插件
+     * @param typeHandlers             容器注册的类型处理器
+     * @param languageDrivers          脚本语言实现
+     * @param databaseIdProvider       可选数据库标识提供器
      * @param configurationCustomizers MyBatis Configuration 定制器
      * @return 附加数据源使用的会话工厂构建器
      */
@@ -119,7 +135,7 @@ public class CoreMyBatisAutoConfiguration {
      * @return MyBatis 配置定制器
      */
     @Bean
-    ConfigurationCustomizer coreTypeHandlerCustomizer(@Sca4djJson ObjectMapper objectMapper) {
+    ConfigurationCustomizer coreTypeHandlerCustomizer(@Sca4djJson Sca4djMapper objectMapper) {
         return configuration -> {
             configuration.setMapUnderscoreToCamelCase(true);
             configuration.setArgNameBasedConstructorAutoMapping(true);
@@ -138,19 +154,46 @@ public class CoreMyBatisAutoConfiguration {
                     .register(
                             Action.class,
                             JdbcType.VARCHAR,
-                            new StringValueTypeHandler<>(Action::new, Action::value));
+                            new StringValueTypeHandler<>(Action::new, action -> action.code().format(COLON)));
             configuration.getTypeHandlerRegistry()
                     .register(
-                            AuthenticationMethodCode.class,
+                            TreeCode.class,
+                            JdbcType.VARCHAR,
+                            new TreeCodeTypeHandler());
+            configuration.getTypeHandlerRegistry()
+                    .register(
+                            Name.class,
+                            JdbcType.VARCHAR,
+                            new StringValueTypeHandler<>(Name::new, value -> value.format(COLON)));
+            configuration.getTypeHandlerRegistry()
+                    .register(
+                            Key.class,
+                            JdbcType.VARCHAR,
+                            new StringValueTypeHandler<>(text -> Key.parse(text, COLON), value -> value.format(COLON)));
+            configuration.getTypeHandlerRegistry()
+                    .register(
+                            JobKey.class,
+                            JdbcType.VARCHAR,
+                            new StringValueTypeHandler<>(JobKey::new, value -> value.format(NameFormat.SLASH)));
+            configuration.getTypeHandlerRegistry()
+                    .register(
+                            ScheduleKey.class,
+                            JdbcType.VARCHAR,
+                            new StringValueTypeHandler<>(ScheduleKey::new, value -> value.format(NameFormat.SLASH)));
+            configuration.getTypeHandlerRegistry()
+                    .register(
+                            GatewayCallbackCode.class,
                             JdbcType.VARCHAR,
                             new StringValueTypeHandler<>(
-                                    AuthenticationMethodCode::new,
-                                    AuthenticationMethodCode::value));
+                                    GatewayCallbackCode::new,
+                                    value -> value.format(NameFormat.DOT)));
             configuration.getTypeHandlerRegistry()
                     .register(
-                            NotificationCode.class,
+                            AuthenticationActionCode.class,
                             JdbcType.VARCHAR,
-                            new StringValueTypeHandler<>(NotificationCode::new, NotificationCode::value));
+                            new StringValueTypeHandler<>(
+                                    AuthenticationActionCode::new,
+                                    value -> value.format(NameFormat.DOT)));
             configuration.getTypeHandlerRegistry()
                     .register(
                             LocalizedFields.class,

@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationActionCode;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.AuthenticationPolicy;
 import com.sca4d.core.api.authentication.AuthenticationRequirement;
 import com.sca4d.core.api.authentication.Session;
@@ -23,6 +22,7 @@ import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.OperationCatalog;
@@ -83,12 +83,13 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Testcontainers
 @Sql(statements = "TRUNCATE TABLE auth_password_secret, auth_password_credential, platform_principal_role, iam_account_identifier, iam_account_principal, iam_principal, iam_account, iam_subject CASCADE", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @SpringBootTest(classes = IdentityLayeringExtensionIntegrationTest.TestApplication.class, properties = {
         "sca4dj.iam.bootstrap.enabled=false",
-        "sca4dj.auth.password.bootstrap-enabled=false",
+        "sca4dj.auth.password.bootstrap.enabled=false",
         "spring.autoconfigure.exclude=com.sca4d.messaging.config.MessagingAutoConfiguration,com.sca4d.web.realtime.config.WebRealtimeAutoConfiguration,com.sca4d.notification.config.NotificationAutoConfiguration,com.sca4d.notification.email.config.EmailNotificationAutoConfiguration,com.sca4d.auth.email.config.EmailCodeAutoConfiguration,com.sca4d.iot.config.IotAutoConfiguration,com.sca4d.iot.config.IotWorkerAutoConfiguration,com.sca4d.iot.emqx.config.EmqxAutoConfiguration,com.sca4d.iot.config.TimescaleIotAutoConfiguration"
 })
 @SuppressWarnings({
@@ -109,9 +110,9 @@ class IdentityLayeringExtensionIntegrationTest {
 
     private static final RbacScope DELIVERY_ROLES = RbacScope.global(DELIVERY_RBAC);
 
-    private static final String DELIVERY_ORDER = "delivery-order";
+    private static final TreeCode DELIVERY_ORDER = TreeCode.ofSlash("DELIVERY/ORDER");
 
-    private static final String STORE_REPORT = "store-report";
+    private static final TreeCode STORE_REPORT = TreeCode.ofSlash("DELIVERY/STORE_REPORT");
 
     private static final Instant NOW = Instant.parse("2026-07-25T00:00:00Z");
 
@@ -132,11 +133,11 @@ class IdentityLayeringExtensionIntegrationTest {
                 }
 
                 @Override
-                public @NotNull Set<AuthenticationMethodCode> allowedMethods(
+                public @NotNull Set<TreeCode> allowedMethods(
                         @NotNull Account account,
                         @NotNull AuthenticationActionCode actionCode,
                         @NotNull List<Authentication> completedAuthentications) {
-                    return Set.of(new AuthenticationMethodCode("password"));
+                    return Set.of(TreeCode.ofSlash("AUTHENTICATION/PASSWORD"));
                 }
             };
         }
@@ -250,11 +251,11 @@ class IdentityLayeringExtensionIntegrationTest {
                 Map.of("principalId", rider.principalId()));
         assertThat(selected).isInstanceOf(Rider.class);
 
-        String operationCode = operations.actions().getFirst().operation().value();
+        TreeCode operationCode = operations.actions().getFirst().operation().code();
         Role role = rbac.createRole(DELIVERY_ROLES, "DISPATCHER", List.of(operationCode)).role();
         rbac.bindRole(DELIVERY_ROLES, rider.principalId(), role.code(), false);
         assertThat(rbac.findGrantedOperations(DELIVERY_ROLES, List.of(rider.principalId())).get(rider.principalId()))
-                .extracting(Operation::value)
+                .extracting(Operation::code)
                 .containsExactly(operationCode);
 
         Call call = new Call("extension-call", NOW);
@@ -290,7 +291,7 @@ class IdentityLayeringExtensionIntegrationTest {
                 List.of(
                         new Authentication(
                                 accountId,
-                                new AuthenticationMethodCode("phone-test"),
+                                TreeCode.ofSlash("AUTHENTICATION/PHONE_TEST"),
                                 Set.of(AuthenticationFactorKind.POSSESSION),
                                 NOW)),
                 resources,
@@ -300,7 +301,7 @@ class IdentityLayeringExtensionIntegrationTest {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    private static final class Rider implements Principal {
+    private static class Rider implements Principal {
         private final long id;
 
         private Rider(long id) {
@@ -314,7 +315,7 @@ class IdentityLayeringExtensionIntegrationTest {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    private static final class Customer implements Principal {
+    private static class Customer implements Principal {
         private final long id;
 
         private Customer(long id) {
@@ -327,7 +328,7 @@ class IdentityLayeringExtensionIntegrationTest {
         }
     }
 
-    private static final class PhoneNormalizer implements AccountIdentifierNormalizer {
+    private static class PhoneNormalizer implements AccountIdentifierNormalizer {
         @Override
         public @NonNull AccountIdentifierType type() {
             return PHONE;
@@ -344,7 +345,7 @@ class IdentityLayeringExtensionIntegrationTest {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    private static final class PrincipalIdCodec<P extends Principal> implements PrincipalCodec<P> {
+    private static class PrincipalIdCodec<P extends Principal> implements PrincipalCodec<P> {
         private final String type;
 
         private final Class<P> valueType;
@@ -358,8 +359,8 @@ class IdentityLayeringExtensionIntegrationTest {
         }
 
         @Override
-        public @NotNull String type() {
-            return type;
+        public @NotNull TreeCode type() {
+            return TreeCode.of(type);
         }
 
         @Override
@@ -382,7 +383,7 @@ class IdentityLayeringExtensionIntegrationTest {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    private static final class DeliverySessionIdentityLoader implements SessionIdentityLoader {
+    private static class DeliverySessionIdentityLoader implements SessionIdentityLoader {
         private final IdentityService identities;
 
         private DeliverySessionIdentityLoader(IdentityService identities) {
@@ -403,7 +404,7 @@ class IdentityLayeringExtensionIntegrationTest {
     }
 
     @SuppressWarnings("ClassCanBeRecord") // 项目禁止使用 Java record，保留普通测试类型。
-    private static final class DeliveryPrincipalLoader implements PrincipalLoader {
+    private static class DeliveryPrincipalLoader implements PrincipalLoader {
         private final IdentityService identities;
 
         private DeliveryPrincipalLoader(IdentityService identities) {
@@ -430,7 +431,7 @@ class IdentityLayeringExtensionIntegrationTest {
         }
     }
 
-    private static final class DeliveryPrincipalSelection
+    private static class DeliveryPrincipalSelection
             implements
                 PrincipalSelection<Map<String, @Nullable Object>> {
         @Override
@@ -457,18 +458,18 @@ class IdentityLayeringExtensionIntegrationTest {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    private static final class SimpleResource implements Resource {
-        private final String type;
+    private static class SimpleResource implements Resource {
+        private final TreeCode type;
 
         private final String id;
 
-        private SimpleResource(String type, String id) {
+        private SimpleResource(TreeCode type, String id) {
             this.type = type;
             this.id = id;
         }
 
         @Override
-        public @NotNull String type() {
+        public @NotNull TreeCode type() {
             return type;
         }
 
@@ -479,7 +480,7 @@ class IdentityLayeringExtensionIntegrationTest {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    private static final class StoreAttributePolicy implements PermissionPolicy {
+    private static class StoreAttributePolicy implements PermissionPolicy {
         private final Map<Long, String> stores;
 
         private StoreAttributePolicy(Map<Long, String> stores) {
@@ -506,7 +507,7 @@ class IdentityLayeringExtensionIntegrationTest {
         }
     }
 
-    private static final class NoOpDeliverySessionInvalidation implements RbacSessionInvalidation {
+    private static class NoOpDeliverySessionInvalidation implements RbacSessionInvalidation {
         @Override
         public @NotNull RbacDomain domain() {
             return DELIVERY_RBAC;
@@ -523,7 +524,7 @@ class IdentityLayeringExtensionIntegrationTest {
         }
     }
 
-    private static final class InMemoryDeliveryAclRepository implements AclRepository {
+    private static class InMemoryDeliveryAclRepository implements AclRepository {
         private final Set<AclEntry> entries = new LinkedHashSet<>();
 
         @Override
@@ -534,14 +535,14 @@ class IdentityLayeringExtensionIntegrationTest {
 
         @Override
         @CheckReturnValue
-        public @NotNull @Unmodifiable Set<@NotNull String> resourceTypes() {
+        public @NotNull @Unmodifiable Set<@NotNull TreeCode> resourceTypes() {
             return Set.of(DELIVERY_ORDER);
         }
 
         @Override
         public void grant(
                 @NotNull Long principalId,
-                @NotNull String resourceType,
+                @NotNull TreeCode resourceType,
                 @NotNull String resourceId,
                 @NotNull Action action) {
             if (!allows(principalId, resourceType, resourceId, action)) {
@@ -552,7 +553,7 @@ class IdentityLayeringExtensionIntegrationTest {
         @Override
         public void revoke(
                 @NotNull Long principalId,
-                @NotNull String resourceType,
+                @NotNull TreeCode resourceType,
                 @NotNull String resourceId,
                 @NotNull Action action) {
             entries.removeIf(entry -> matches(entry, principalId, resourceType, resourceId, action));
@@ -562,7 +563,7 @@ class IdentityLayeringExtensionIntegrationTest {
         @CheckReturnValue
         public boolean allows(
                 @NotNull Long principalId,
-                @NotNull String resourceType,
+                @NotNull TreeCode resourceType,
                 @NotNull String resourceId,
                 @NotNull Action action) {
             return entries.stream().anyMatch(entry -> matches(entry, principalId, resourceType, resourceId, action));
@@ -572,7 +573,7 @@ class IdentityLayeringExtensionIntegrationTest {
         @CheckReturnValue
         public @NotNull @Unmodifiable List<@NotNull String> findAllowedResourceIds(
                 @NotNull Long principalId,
-                @NotNull String resourceType,
+                @NotNull TreeCode resourceType,
                 @NotNull Action action) {
             return entries.stream()
                     .filter(
@@ -588,7 +589,7 @@ class IdentityLayeringExtensionIntegrationTest {
         @CheckReturnValue
         public @NotNull @Unmodifiable List<@NotNull AclEntry> findEntries(
                 @NotNull Long principalId,
-                @NotNull String resourceType) {
+                @NotNull TreeCode resourceType) {
             return entries.stream()
                     .filter(
                             entry -> entry.principalId().equals(principalId)
@@ -602,7 +603,7 @@ class IdentityLayeringExtensionIntegrationTest {
         }
 
         @Override
-        public void revokeByResource(@NotNull String resourceType, @NotNull String resourceId) {
+        public void revokeByResource(@NotNull TreeCode resourceType, @NotNull String resourceId) {
             entries.removeIf(
                     entry -> entry.resourceType().equals(resourceType)
                             && entry.resourceId().equals(resourceId));
@@ -611,7 +612,7 @@ class IdentityLayeringExtensionIntegrationTest {
         private static boolean matches(
                 AclEntry entry,
                 Long principalId,
-                String resourceType,
+                TreeCode resourceType,
                 String resourceId,
                 Action action) {
             return entry.principalId().equals(principalId)
@@ -621,7 +622,7 @@ class IdentityLayeringExtensionIntegrationTest {
         }
     }
 
-    private static final class InMemoryDeliveryRbacRepository implements RbacRepository {
+    private static class InMemoryDeliveryRbacRepository implements RbacRepository {
         private final Map<Long, Role> roles = new LinkedHashMap<>();
 
         private final Map<Long, List<PermissionSelector>> permissions = new LinkedHashMap<>();
@@ -765,7 +766,7 @@ class IdentityLayeringExtensionIntegrationTest {
                     .stream()
                     .filter(Map.Entry::getValue)
                     .map(Map.Entry::getKey)
-                    .collect(java.util.stream.Collectors.toUnmodifiableSet());
+                    .collect(Collectors.toUnmodifiableSet());
             return new PrincipalRoles(
                     scope,
                     principalId,

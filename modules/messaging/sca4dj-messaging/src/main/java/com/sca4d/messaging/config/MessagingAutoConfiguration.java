@@ -1,25 +1,26 @@
 package com.sca4d.messaging.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.id.IdGenerator;
-import com.sca4d.core.api.messaging.MessageConsumer;
-import com.sca4d.core.api.messaging.MessagePublisher;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.messaging.EventHandler;
+import com.sca4d.core.api.messaging.MessageBus;
+import com.sca4d.core.api.messaging.MessageCodec;
+import com.sca4d.core.api.messaging.MessageHandler;
 import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
 import com.sca4d.core.api.scheduling.IntervalSchedule;
 import com.sca4d.core.api.scheduling.MisfirePolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
+import com.sca4d.messaging.outbox.MessageOutboxDispatcher;
+import com.sca4d.messaging.outbox.MessageOutboxRepository;
 import com.sca4d.messaging.outbox.OutboxCleanupTask;
 import com.sca4d.messaging.outbox.OutboxDispatchTask;
-import com.sca4d.messaging.outbox.OutboxDispatcher;
-import com.sca4d.messaging.outbox.OutboxRepository;
 import com.sca4d.messaging.outbox.mapper.OutboxMapper;
-import com.sca4d.messaging.rabbit.ConsumerContainers;
-import com.sca4d.messaging.rabbit.MessagingEnvelopeCodec;
-import com.sca4d.messaging.rabbit.MessagingTopology;
-import com.sca4d.messaging.rabbit.RabbitMessagePublisher;
-import com.sca4d.messaging.rabbit.RabbitMessageSender;
+import com.sca4d.messaging.rabbit.RabbitHandlerContainers;
+import com.sca4d.messaging.rabbit.RabbitMessageBus;
+import com.sca4d.messaging.rabbit.RabbitMessageEnvelopeCodec;
+import com.sca4d.messaging.rabbit.RabbitMessageTopology;
+import com.sca4d.messaging.rabbit.RabbitPublisher;
 import org.jetbrains.annotations.NotNull;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.amqp.core.Declarables;
@@ -50,28 +51,31 @@ public class MessagingAutoConfiguration {
 
     /** @return 确定当前应用 RabbitMQ exchange 和 Consumer 队列名称的拓扑 */
     @Bean
-    MessagingTopology messagingTopology(@NotNull RuntimeNamespace runtimeNamespace) {
-        return new MessagingTopology(runtimeNamespace);
+    RabbitMessageTopology messagingTopology() {
+        return new RabbitMessageTopology();
     }
 
     /** @return 业务 exchange、Consumer 队列和各自 DLQ 的持久声明 */
     @Bean
     Declarables messagingDeclarables(
-            @NotNull MessagingTopology topology,
-            @NotNull List<@NotNull MessageConsumer<?>> consumers) {
-        return topology.declarables(consumers);
+            @NotNull RabbitMessageTopology topology,
+            @NotNull List<@NotNull EventHandler<?>> eventHandlers,
+            @NotNull List<@NotNull MessageHandler<?>> messageHandlers) {
+        return topology.declarables(eventHandlers, messageHandlers);
     }
 
     /** @return 与应用 JSON 配置隔离的业务消息信封编解码器 */
     @Bean
-    MessagingEnvelopeCodec messagingEnvelopeCodec(@Sca4djJson @NotNull ObjectMapper objectMapper) {
-        return new MessagingEnvelopeCodec(objectMapper);
+    RabbitMessageEnvelopeCodec messagingEnvelopeCodec(
+            @Sca4djJson @NotNull Sca4djMapper objectMapper,
+            @NotNull List<@NotNull MessageCodec<?>> messageCodecs) {
+        return new RabbitMessageEnvelopeCodec(objectMapper, messageCodecs);
     }
 
     /** @return Outbox 持久化语义 */
     @Bean
-    OutboxRepository outboxRepository(@NotNull OutboxMapper mapper) {
-        return new OutboxRepository(mapper);
+    MessageOutboxRepository outboxRepository(@NotNull OutboxMapper mapper) {
+        return new MessageOutboxRepository(mapper);
     }
 
     /**
@@ -80,9 +84,9 @@ public class MessagingAutoConfiguration {
      * @throws IllegalStateException ConnectionFactory 不是 Spring Boot 默认缓存实现时抛出
      */
     @Bean
-    RabbitMessageSender rabbitMessageSender(
+    RabbitPublisher rabbitMessageSender(
             @NotNull ConnectionFactory connectionFactory,
-            @NotNull MessagingTopology topology,
+            @NotNull RabbitMessageTopology topology,
             @NotNull MessagingProperties properties) {
         if (!(connectionFactory instanceof CachingConnectionFactory caching)) {
             throw new IllegalStateException("Messaging 要求使用 CachingConnectionFactory 支持发布确认");
@@ -90,40 +94,49 @@ public class MessagingAutoConfiguration {
         caching.setPublisherConfirmType(CachingConnectionFactory.ConfirmType.CORRELATED);
         caching.setPublisherReturns(true);
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        return new RabbitMessageSender(rabbitTemplate, topology, properties);
+        return new RabbitPublisher(rabbitTemplate, topology, properties);
     }
 
-    /** @return 支持立即、提交后和 Outbox 发布的公共 MessagePublisher */
+    /** @return 支持立即、提交后和 Outbox 发布的公共 MessageBus */
     @Bean
-    MessagePublisher messagePublisher(
+    MessageBus messageBus(
             @NotNull IdGenerator ids,
-            @NotNull MessagingEnvelopeCodec codec,
-            @NotNull RabbitMessageSender sender,
-            @NotNull OutboxRepository outbox,
-            @NotNull Clock clock,
-            @NotNull RuntimeNamespace runtimeNamespace) {
-        return new RabbitMessagePublisher(ids, codec, sender, outbox, clock, runtimeNamespace);
+            @NotNull RabbitMessageEnvelopeCodec codec,
+            @NotNull RabbitPublisher sender,
+            @NotNull MessageOutboxRepository outbox,
+            @NotNull Clock clock) {
+        return new RabbitMessageBus(ids, codec, sender, outbox, clock);
     }
 
-    /** @return 每个 MessageConsumer 对应的竞争消费容器 */
+    /** @return 每个 EventHandler 和 MessageHandler 对应的竞争消费容器 */
     @Bean
-    ConsumerContainers messagingConsumerContainers(
+    RabbitHandlerContainers messagingRabbitHandlerContainers(
             @NotNull ConnectionFactory connectionFactory,
-            @NotNull MessagingTopology topology,
-            @NotNull MessagingEnvelopeCodec codec,
-            @NotNull List<@NotNull MessageConsumer<?>> consumers) {
-        return new ConsumerContainers(connectionFactory, topology, codec, consumers);
+            @NotNull RabbitMessageTopology topology,
+            @NotNull RabbitMessageEnvelopeCodec codec,
+            @NotNull MessagingProperties properties,
+            @NotNull RabbitPublisher publisher,
+            @NotNull List<@NotNull EventHandler<?>> eventHandlers,
+            @NotNull List<@NotNull MessageHandler<?>> messageHandlers) {
+        return new RabbitHandlerContainers(
+                connectionFactory,
+                topology,
+                codec,
+                properties,
+                publisher,
+                eventHandlers,
+                messageHandlers);
     }
 
     /** @return 负责租约领取、发布结果写回和 SENT 清理的 Outbox 任务 */
     @Bean
-    OutboxDispatcher outboxDispatcher(
-            @NotNull OutboxRepository repository,
-            @NotNull RabbitMessageSender sender,
+    MessageOutboxDispatcher outboxDispatcher(
+            @NotNull MessageOutboxRepository repository,
+            @NotNull RabbitPublisher sender,
             @NotNull PlatformTransactionManager transactionManager,
             @NotNull MessagingProperties properties,
             @NotNull Clock clock) {
-        return new OutboxDispatcher(
+        return new MessageOutboxDispatcher(
                 repository,
                 sender,
                 new TransactionTemplate(transactionManager),
@@ -135,10 +148,10 @@ public class MessagingAutoConfiguration {
      * 创建执行一次到期消息派发的基础设施任务。
      *
      * @param dispatcher 保留消息级租约和退避语义的 Outbox 派发器
-     * @return 使用 OutboxDispatcher 逐条派发到期消息的集群任务
+     * @return 使用 MessageOutboxDispatcher 逐条派发到期消息的集群任务
      */
     @Bean
-    OutboxDispatchTask outboxDispatchTask(@NotNull OutboxDispatcher dispatcher) {
+    OutboxDispatchTask outboxDispatchTask(@NotNull MessageOutboxDispatcher dispatcher) {
         return new OutboxDispatchTask(dispatcher);
     }
 
@@ -146,10 +159,10 @@ public class MessagingAutoConfiguration {
      * 创建执行一次过期 SENT 记录清理的基础设施任务。
      *
      * @param dispatcher 按保留期分批删除 SENT 记录的 Outbox 派发器
-     * @return 使用 OutboxDispatcher 分批删除过期 SENT 记录的集群任务
+     * @return 使用 MessageOutboxDispatcher 分批删除过期 SENT 记录的集群任务
      */
     @Bean
-    OutboxCleanupTask outboxCleanupTask(@NotNull OutboxDispatcher dispatcher) {
+    OutboxCleanupTask outboxCleanupTask(@NotNull MessageOutboxDispatcher dispatcher) {
         return new OutboxCleanupTask(dispatcher);
     }
 
@@ -165,7 +178,7 @@ public class MessagingAutoConfiguration {
             @NotNull OutboxDispatchTask task,
             @NotNull MessagingProperties properties) {
         return new ClusterTaskSchedule(
-                new ScheduleKey("messaging.outbox.dispatch"),
+                new ScheduleKey("MESSAGING/OUTBOX/DISPATCH"),
                 1,
                 task,
                 new IntervalSchedule(properties.getDispatchInterval(), properties.getDispatchInterval()),
@@ -184,7 +197,7 @@ public class MessagingAutoConfiguration {
             @NotNull OutboxCleanupTask task,
             @NotNull MessagingProperties properties) {
         return new ClusterTaskSchedule(
-                new ScheduleKey("messaging.outbox.cleanup"),
+                new ScheduleKey("MESSAGING/OUTBOX/CLEANUP"),
                 1,
                 task,
                 new IntervalSchedule(properties.getCleanupInterval(), properties.getCleanupInterval()),

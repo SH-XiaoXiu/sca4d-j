@@ -166,7 +166,7 @@ public abstract class MqttDeviceSimulator implements AutoCloseable {
         }
     }
 
-    /** 隔离周期任务异常，单次构包或发布失败不会取消后续上报。 */
+    /** 隔离周期任务异常，单次构包或发布失败不会取消下一次上报。 */
     private void publishReportedSafely() {
         try {
             publishReported();

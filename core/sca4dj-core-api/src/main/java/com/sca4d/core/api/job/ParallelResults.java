@@ -12,7 +12,7 @@ import java.util.Objects;
  * @param <L> 左分支输出类型
  * @param <R> 右分支输出类型
  */
-public final class ParallelResults<L, R> {
+public class ParallelResults<L, R> {
 
     private final @NotNull L left;
 
@@ -31,7 +31,7 @@ public final class ParallelResults<L, R> {
     }
 
     /**
-     * 返回左分支结果。
+     * 左分支结果。
      *
      * @return {@code parallel(...)} 中先声明的分支输出
      */
@@ -41,7 +41,7 @@ public final class ParallelResults<L, R> {
     }
 
     /**
-     * 返回右分支结果。
+     * 右分支结果。
      *
      * @return {@code parallel(...)} 中后声明的分支输出
      */

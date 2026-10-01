@@ -1,5 +1,7 @@
 package com.sca4d.gateway.registration;
 
+import com.sca4d.core.api.gateway.GatewayCallbackCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -7,21 +9,26 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.net.URI;
 import java.time.Instant;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
 /** 保存一个 Server 实例当前租约、地址、回调声明和 readiness 状态。 */
-public final class GatewayInstance {
+public class GatewayInstance {
+
+    private final @NotNull Map<String, Set<TreeCode>> apiRequirements;
+
+    private final @NotNull Set<GatewayCallbackCode> callbackCodes;
+
+    private final @NotNull Set<TreeCode> capabilities;
 
     private final @NotNull String instanceId;
 
     private final @NotNull String leaseId;
 
-    private final @NotNull URI baseUrl;
-
     private final @NotNull String readinessPath;
 
-    private final @NotNull Set<@NotNull String> callbackCodes;
+    private final @NotNull URI baseUrl;
 
     private volatile @NotNull Instant leaseExpiresAt;
 
@@ -33,13 +40,17 @@ public final class GatewayInstance {
             @NotNull String leaseId,
             @NotNull URI baseUrl,
             @NotNull String readinessPath,
-            @NotNull Set<@NotNull String> callbackCodes,
+            @NotNull Set<GatewayCallbackCode> callbackCodes,
+            @NotNull Set<TreeCode> capabilities,
+            @NotNull Map<String, Set<TreeCode>> apiRequirements,
             @NotNull Instant leaseExpiresAt) {
         this.instanceId = instanceId;
         this.leaseId = leaseId;
         this.baseUrl = baseUrl;
         this.readinessPath = readinessPath;
         this.callbackCodes = Set.copyOf(callbackCodes);
+        this.capabilities = Set.copyOf(capabilities);
+        this.apiRequirements = Map.copyOf(apiRequirements);
         this.leaseExpiresAt = leaseExpiresAt;
     }
 
@@ -64,8 +75,26 @@ public final class GatewayInstance {
     }
 
     /** @return 当前实例声明的不可修改回调编码集合 */
-    public @NotNull @Unmodifiable Set<@NotNull String> callbackCodes() {
+    public @NotNull @Unmodifiable Set<GatewayCallbackCode> callbackCodes() {
         return callbackCodes;
+    }
+
+    /**
+     * 当前实例实际启用的能力。
+     *
+     * @return 当前实例实际启用的能力
+     */
+    public @NotNull @Unmodifiable Set<TreeCode> capabilities() {
+        return capabilities;
+    }
+
+    /**
+     * 该代码版本声明的全部路径要求。
+     *
+     * @return 该代码版本声明的全部路径要求
+     */
+    public @NotNull @Unmodifiable Map<String, Set<TreeCode>> apiRequirements() {
+        return apiRequirements;
     }
 
     /** @return 最后一次成功注册或续租计算出的过期时间 */

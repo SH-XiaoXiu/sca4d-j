@@ -1,6 +1,8 @@
 # 开放 API
 
-开放 API 让第三方程序以独立的 `APPLICATION Subject` 和 `Account` 调用具体应用明确公开的业务操作。它复用 IAM 的 Principal、Operation 和权限判断，不建立第二套角色或权限表。
+开放 API 让第三方程序通过自己的 Client 凭据调用明确公开的业务接口。应用先声明认证端点和 `@OpenApiRoute`，再创建 Client 并授予允许的 Operation；调用方选择 Bearer Token 或 HMAC 签名，最终仍接受 Principal 权限检查。
+
+每个 Client 使用独立的 APPLICATION Subject 和 Account，复用 IAM 的身份与授权关系。下面按声明接口、创建 Client、发起请求的顺序接入。
 
 ## 声明认证端点
 
@@ -15,7 +17,7 @@ OpenApiAuthenticationEndpoint openApiAuthenticationEndpoint() {
 
 这个 Bean 会注册一个接受 `POST application/x-www-form-urlencoded`、返回 JSON 的认证端点。路径必须是非根绝对路径，不能以斜杠结尾，也不能包含重复斜杠、查询字符串或片段。具体应用没有声明这个 Bean 时，模块不公开认证端点。
 
-具体应用不编写 Token Controller，也不调用模块内部 Handler。认证端点的运行时 Swagger 说明由模块根据同一个 Bean 生成，因此修改 Bean 中的路径会同时修改实际路由和“开放 API”文档中的路径。
+具体应用不编写 Token Controller，也不调用模块内部 Handler。认证端点的运行时 Swagger 说明由模块根据同一个 Bean 生成，因此修改 Bean 中的路径会同时修改实际路由和「开放 API」文档中的路径。
 
 ## 声明业务路由
 
@@ -91,19 +93,19 @@ Spring MVC 直接注册这个组合映射。OpenAPI 模块在单例初始化完�
 
 ## 运行时 Swagger
 
-Springdoc 存在且文档端点启用时，Swagger UI 的文档选择器显示独立的“开放 API”分组。这个分组只包含：
+Springdoc 存在且文档端点启用时，Swagger UI 的文档选择器显示独立的「开放 API」分组。这个分组只包含：
 
 - 具体应用显式标记为 `@OpenApiRoute` 的业务方法；
 - 具体应用通过 `OpenApiAuthenticationEndpoint` Bean 选择的认证端点。
 
 普通管理接口不会混入这个分组。模块自动添加 `openApiBearer`、`openApiHmac` 和认证端点使用的 `openApiClientBasic` security scheme，并给开放业务方法补充 Bearer 与 HMAC 二选一的安全要求。
 
-开发环境直接打开 Swagger UI，在文档选择器中选择“开放 API”。Swagger UI 从运行时 JSON 数据源读取当前 Controller、类型和认证端点声明：
+开发环境直接打开 Swagger UI，在文档选择器中选择「开放 API」。Swagger UI 从运行时 JSON 数据源读取当前 Controller、类型和认证端点声明：
 
 | 地址 | 内容 |
 | --- | --- |
-| `/swagger-ui/index.html` | Swagger UI；在文档选择器中选择“开放 API” |
-| `/v3/api-docs/openapi` | Swagger UI 使用的“开放 API”分组运行时数据源 |
+| `/swagger-ui/index.html` | Swagger UI；在文档选择器中选择「开放 API」 |
+| `/v3/api-docs/openapi` | Swagger UI 使用的「开放 API」分组运行时数据源 |
 
 仓库不生成或提交静态 OpenAPI 文件。
 
@@ -137,6 +139,8 @@ grant_type=client_credentials
 ## HMAC 请求
 
 使用 HMAC Client 时，每个开放 API 请求都提交以下请求头：
+
+下表是默认名称。部署环境可使用 `sca4dj.openapi.hmac.headers.client-id`、`timestamp`、`nonce`、`signature` 分别配置名称；`sca4dj.openapi.path-prefix` 默认 `/openapi`，实际路由仍由每个 `@OpenApiRoute` 声明。调用方与 Server 必须使用同一组启动时生效的名称和路径。
 
 | 请求头 | 内容 |
 | --- | --- |

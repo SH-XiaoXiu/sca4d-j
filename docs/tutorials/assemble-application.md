@@ -1,6 +1,8 @@
 # 组装应用
 
-`apps/sca4d-server` 把身份认证、账号与角色、Email 通知、文件、审计、IoT、后台任务和浏览器通知组成一个可运行的后台应用。App 定义 HTTP 路由、permission、产品规则和跨模块事务；各模块保存自己负责的数据并执行公共规则。
+组装应用就是选择模块、配置依赖，再由 App 补上 HTTP 接口、业务规则和跨模块事务。以 `apps/sca4d-server` 为起点，按下面的顺序删减功能、初始化数据库并验证启动；后面的功能清单用于确认删减时还要处理哪些调用。
+
+Sca4d Server 组合身份认证、账号角色、通知、文件、审计、IoT、后台任务和浏览器通知。各模块维护自己的数据和公共规则，具体应用维护自己的资料、流程与对外契约。
 
 ## 选择模块并初始化数据库
 
@@ -8,7 +10,7 @@
 
 给应用设置稳定的 `spring.application.name`。同一应用的多个实例使用相同名称，不同应用使用不同名称；Job、Quartz、Redis 和 RabbitMQ 的运行命名依赖它。
 
-新 App 尚无任何 Flyway 迁移时，应用 `com.sca4dj.app` 插件，配置 `sca4djApp.migrationName`，需要应用表时再配置 `schemaFragment`，然后运行该 App 的 `initFlyway`。任务从运行依赖收集结构片段，生成 `src/main/resources/db/migration/V1__init_<migrationName>.sql`。具体配置见[App Gradle 插件](/standards/gradle-plugins#app-gradle-插件)。
+新 App 尚无任何 Flyway 迁移时，应用 `com.sca4dj.app` 插件，配置 `sca4djApp.migrationName`，需要应用表时再配置 `schemaFragment`，然后运行该 App 的 `initFlyway`。任务从运行依赖收集结构片段，生成 `src/main/resources/db/migration/V1__init_<migrationName>.sql`。具体配置见[App Gradle 插件](/reference/build-plugins#app-gradle-插件)。
 
 已有数据库通过新的 Flyway 迁移修改结构。删减依赖不会自动删除数据库表，也不能通过重建 V1 更新已经运行的数据库。
 
@@ -94,7 +96,7 @@ Email Code 可以使用邮箱开始登录，也可以为已经确定 Account 的
 
 敏感动作使用独立 verification。verification 绑定当前 Session、Account 和动作编码，只证明这一次动作已经满足认证要求；proof 成功不会自动改密码、修改认证设置或删除账号。最终业务请求通过 `X-Verification` 消费它一次。
 
-Auth 使用 Redis 保存在线 Session 和失效代次。默认 `SESSION` 模式直接使用不透明 Session Token；`JWT` 模式另发短效 access Token，但改密、注销、账号删除等标明“强制 Session Token”的动作仍要求在线 Session Token。账号停用、Credential 替换或删除等流程调用 SessionControl 终止该账号的全部 Session；已签发的离线 JWT 不逐请求查询 Redis，只能等待其短 TTL 到期。
+Auth 使用 Redis 保存在线 Session 和失效代次。默认 `SESSION` 模式直接使用不透明 Session Token；`JWT` 模式另发短效 access Token，但改密、注销、账号删除等标明「强制 Session Token」的动作仍要求在线 Session Token。账号停用、Credential 替换或删除等流程调用 SessionControl 终止该账号的全部 Session；已签发的离线 JWT 不逐请求查询 Redis，只能等待其短 TTL 到期。
 
 ## 账号、角色与资料
 
@@ -124,7 +126,7 @@ IAM 成功隔离 Account 后，App 在同一数据库事务中同步处理关联
 
 ## 文件与头像
 
-文件模块只管理文件状态、backend 和短期传输授权；“谁能把哪个文件作为谁的头像”由 App 决定。头像流程如下：
+文件模块只管理文件状态、backend 和短期传输授权；「谁能把哪个文件作为谁的头像」由 App 决定。头像流程如下：
 
 ```mermaid
 sequenceDiagram
@@ -155,7 +157,7 @@ Audit 模块保存 `audit_record`。OperationLogService 只在查询时补充仍
 
 系统字典聚合 Java 代码项、动态字典和允许扩展的数据库项；系统 Setting 只管理 Spring 容器已经注册的 Setting，不能创建任意键。准确字段与并发限制见[系统管理](/reference/http/sca4d-server)。
 
-App 使用 `system:email:read` 和 `system:email:manage` 管理 SMTP 配置与统一通知模板。SMTP 密码只在创建或明确替换时进入请求，响应只返回 `passwordConfigured`；模板预览返回同一内容的纯文本和安全 HTML 结果。
+App 使用 `system:email:read` 和 `system:email:manage` 管理 SMTP 配置与 Email 模板。SMTP 密码只在创建或明确替换时进入请求，响应只返回 `passwordConfigured`；模板预览返回同一内容的纯文本和安全 HTML 结果。
 
 ## IoT 业务流程
 
@@ -169,7 +171,7 @@ Device 创建要求 `Idempotency-Key`。App 在十分钟窗口内保存请求摘
 
 App 提供 Device HTTP HMAC Session 路由、运行投影与历史查询、设备定时管理接口。DeviceCredentialService 管理 Device Account 以及 Shared Secret、HMAC 和 X.509 Credential；Sca4dDeviceConnectionAdmission 实现统一 DeviceConnectionAdmission，并把直接 Account 认证交给 AuthenticationMethods；DeviceSessionService 通过 HMAC AuthenticationSubmission 建立通用 Session；Sca4dEmqxDeviceConnectionRequestFactory 只把 EMQX 字段转换成统一连接请求。IotDeviceSessionIdentityLoader 独立读取 Device Session 身份，IotDeviceSessionInvalidationListener 独立登记 Session 失效后的可靠断连消息。HTTP 请求头、Request/View 和路由留在 App，DeviceService 不依赖 Auth 或 IAM。
 
-EMQX 回调只在 `sca4dj.iot.emqx.enabled=true` 时存在。App 只声明 `iot.emqx.authenticate`，Server 注册时把回调编码交给 Gateway。EMQX 使用独立 Webhook Secret 调用 Gateway 回调，设备不能使用该 Secret。HTTP Authenticator 返回准入结果、`client_attrs` 和 ACL；内部 MQTT Runtime 订阅 `$SYS` 连接事件并用单 Client Management API 查询实时刷新在线状态，完整快照只负责启动和周期修复。需要 Session 的接入方式绑定 Auth Session，其他认证方式不伪造 Session。
+EMQX 回调只在 `sca4dj.iot.emqx.enabled=true` 时存在。App 只声明 `IOT.EMQX.AUTHENTICATE`，Server 注册时把回调编码交给 Gateway。EMQX 使用独立 Webhook Secret 调用 Gateway 回调，设备不能使用该 Secret。HTTP Authenticator 返回准入结果、`client_attrs` 和 ACL；内部 MQTT Runtime 订阅 `$SYS` 连接事件并用单 Client Management API 查询实时刷新在线状态，完整快照只负责启动和周期修复。需要 Session 的接入方式绑定 Auth Session，其他认证方式不伪造 Session。
 
 `sca4dj-iot-timescale` 只保存 `iot_telemetry_sample` 和 `iot_event`。Telemetry 在 reported 主事务提交后直接发布，不写 Outbox；物模型 `RELIABLE` 事件、ACK 阶段、设备定时执行和断连使用通用 Messaging Outbox。主 PostgreSQL 保存 Product、ThingModel、Device、可选 latest reported、desired、下行状态、最新 ACK 和设备定时规则，不保存 IoT 私有 Secret/Certificate、遥测历史、事件历史、ACK 历史或定时执行历史表。
 
@@ -177,7 +179,7 @@ App 把模块提交后的 Device 数据区域变化发布到 `iot.device.<device
 
 ## 可靠业务消息
 
-Messaging 在业务事务中写入 PostgreSQL Outbox，事务提交后再向 RabbitMQ 发布。它用于需要被其他业务 Consumer 处理的消息；发布失败会重试，Consumer 失败进入各自的 DLQ。Outbox 派发和清理由 ClusterTaskSchedule 触发，不创建 Job run。
+Messaging 在业务事务中写入 PostgreSQL Outbox，事务提交后再向 RabbitMQ 发布。它用于需要被其他业务 Consumer 处理的消息；发布失败会重试，Consumer 按自己的 HandlingPolicy 重试或进入 DLQ。Outbox 派发和清理由 ClusterTaskSchedule 触发，不创建 Job run。
 
 ## 后台 Job
 

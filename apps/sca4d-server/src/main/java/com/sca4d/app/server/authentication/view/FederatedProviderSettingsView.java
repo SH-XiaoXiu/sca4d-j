@@ -12,7 +12,7 @@ import java.util.Map;
 
 /** 返回联邦 Provider 协议配置摘要，永远不返回 Client Secret。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
-public final class FederatedProviderSettingsView {
+public class FederatedProviderSettingsView {
     private final String issuer;
 
     private final String clientId;

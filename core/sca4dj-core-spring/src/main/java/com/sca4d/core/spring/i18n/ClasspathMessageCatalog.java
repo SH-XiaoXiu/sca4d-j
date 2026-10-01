@@ -23,13 +23,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /** 从所有模块的标准资源目录读取消息，并拒绝同一 Locale 的重复键。 */
-public final class ClasspathMessageCatalog implements MessageCatalog {
+public class ClasspathMessageCatalog implements MessageCatalog {
 
     private static final Logger LOG = LoggerFactory.getLogger(ClasspathMessageCatalog.class);
 
-    private static final String RESOURCE_PATTERN = "classpath*:META-INF/sca4dj/i18n/*/*.properties";
-
     private static final int MISSING_WARNING_LIMIT = 256;
+
+    private static final String RESOURCE_PATTERN = "classpath*:META-INF/sca4dj/i18n/*/*.properties";
 
     private final Locale defaultLocale;
 

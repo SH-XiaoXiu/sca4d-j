@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /** 返回 Device 快照、可选 Account 和只在当前响应中显示的设备认证凭据。 */
 @SuppressWarnings("unused")
-public final class IotDeviceCredentialView {
+public class IotDeviceCredentialView {
 
     private final @NotNull IotDeviceView device;
 
@@ -62,7 +62,7 @@ public final class IotDeviceCredentialView {
         return sharedSecret;
     }
 
-    /** @return 只允许管理端显示一次的可选 HMAC Key */
+    /** @return 只允许管理端显示一次的可选 MAC Key */
     public @Nullable String getHmacKey() {
         return hmacKey;
     }

@@ -9,7 +9,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 保存 Account 登记的 X.509 公钥证书身份、有效期、状态和乐观版本。 */
-public final class X509Credential {
+public class X509Credential {
 
     /** 公钥证书凭据的有限生命周期状态。 */
     public enum Status implements BaseEnum {
@@ -29,9 +29,13 @@ public final class X509Credential {
         }
     }
 
-    private final long id;
+    private final @NotNull Instant notAfter;
 
-    private final long accountId;
+    private final @NotNull Instant notBefore;
+
+    private final @NotNull Instant updatedAt;
+
+    private final @NotNull Status status;
 
     private final @NotNull String fingerprintSha256;
 
@@ -39,15 +43,11 @@ public final class X509Credential {
 
     private final @NotNull String subjectDn;
 
-    private final @NotNull Instant notBefore;
-
-    private final @NotNull Instant notAfter;
-
-    private final @NotNull Status status;
-
     private final @NotNull Version version;
 
-    private final @NotNull Instant updatedAt;
+    private final long accountId;
+
+    private final long id;
 
     /** 创建从数据库读取的 X.509 Credential。 */
     public X509Credential(

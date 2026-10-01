@@ -163,7 +163,7 @@ COMMENT ON COLUMN iot_product.updated_at IS 'Product 最近更新时间，由数
 
 COMMENT ON TABLE iot_product_access_method IS '记录数据库 Product 允许 Device 采用的认证接入方式';
 COMMENT ON COLUMN iot_product_access_method.product_id IS '接入方式所属数据库 Product 标识';
-COMMENT ON COLUMN iot_product_access_method.method_code IS 'Product 允许的接入方式编码，例如 anonymous、session 或 account:shared-secret';
+COMMENT ON COLUMN iot_product_access_method.method_code IS 'Product 允许的接入方式编码，例如 ANONYMOUS、SESSION 或 ACCOUNT:AUTHENTICATION/SHARED_SECRET';
 COMMENT ON COLUMN iot_product_access_method.created_at IS 'Product 接入方式关系创建时间';
 
 COMMENT ON TABLE iot_product_protocol IS '记录数据库 Product 允许 Device 绑定的协议实现';
@@ -200,7 +200,7 @@ COMMENT ON COLUMN iot_device.updated_at IS 'Device 最近更新时间，由数�
 
 COMMENT ON TABLE iot_device_access_method IS '记录 Device 当前启用的认证接入方式';
 COMMENT ON COLUMN iot_device_access_method.device_id IS '接入方式所属 Device 标识';
-COMMENT ON COLUMN iot_device_access_method.method_code IS 'Device 当前启用的接入方式编码，例如 anonymous、session 或 account:shared-secret';
+COMMENT ON COLUMN iot_device_access_method.method_code IS 'Device 当前启用的接入方式编码，例如 ANONYMOUS、SESSION 或 ACCOUNT:AUTHENTICATION/SHARED_SECRET';
 COMMENT ON COLUMN iot_device_access_method.created_at IS 'Device 接入方式关系创建时间';
 
 COMMENT ON TABLE iot_reported_group IS '保存每个 reported 字段组最后接受的顺序和值';

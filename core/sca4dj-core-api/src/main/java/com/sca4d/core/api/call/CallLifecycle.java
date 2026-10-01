@@ -1,188 +1,144 @@
 package com.sca4d.core.api.call;
 
-import com.sca4d.core.api.error.BusinessException;
-import com.sca4d.core.api.error.CoreErrorCode;
-import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.sca4d.core.api.name.code.TreeCode;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-import java.util.concurrent.Callable;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
-/**
- * 按固定生命周期执行声明解析结果、调用前评估、执行控制、成功检验和结果记录。
- *
- * <p>`CallExecution` 在进入本类前已经完成声明解析。本类不会恢复 Session、选择 Principal 或读取业务资源。
- */
-public final class CallLifecycle {
+/** 定义 Call 参与者可以介入的通用生命周期语义。 */
+public enum CallLifecycle {
+    /** 在实际方法前校验或准备。 */
+    BEFORE,
+    /** 使用 Next 包围剩余调用，可以短路或观察最终结果。 */
+    AROUND,
+    /** 只处理正常返回。 */
+    AFTER_RETURNING,
+    /** 只处理异常结果。 */
+    AFTER_THROWING,
+    /** 无论成功失败都执行。 */
+    AFTER,
+    /** 在事务提交前检查条件。 */
+    PRE_COMMIT,
+    /** 在事务成功提交后执行。 */
+    AFTER_COMMIT,
+    /** 在 Call 最终结束时执行清理。 */
+    COMPLETION;
 
-    private static final Logger LOG = LoggerFactory.getLogger(CallLifecycle.class);
-
-    private final PermissionCallAssessor permissionAssessor;
-
-    private final RateLimitedCallAssessor rateLimitedAssessor;
-
-    private final IdempotentCallExecutor idempotentExecutor;
-
-    private final LockedCallExecutor lockedExecutor;
-
-    private final AuditCallRecorder auditRecorder;
-
-    /**
-     * 创建固定调用生命周期。
-     *
-     * @param permissionAssessor 权限调用前评估器
-     * @param rateLimitedAssessor 限流调用前评估器
-     * @param idempotentExecutor 幂等执行控制器
-     * @param lockedExecutor 分布式锁执行控制器
-     * @param auditRecorder 调用结果记录器
-     */
-    public CallLifecycle(
-            PermissionCallAssessor permissionAssessor,
-            RateLimitedCallAssessor rateLimitedAssessor,
-            IdempotentCallExecutor idempotentExecutor,
-            LockedCallExecutor lockedExecutor,
-            AuditCallRecorder auditRecorder) {
-        this.permissionAssessor = Objects.requireNonNull(permissionAssessor, "权限调用评估器不能为空");
-        this.rateLimitedAssessor = Objects.requireNonNull(rateLimitedAssessor, "限流调用评估器不能为空");
-        this.idempotentExecutor = Objects.requireNonNull(idempotentExecutor, "幂等调用执行器不能为空");
-        this.lockedExecutor = Objects.requireNonNull(lockedExecutor, "锁调用执行器不能为空");
-        this.auditRecorder = Objects.requireNonNull(auditRecorder, "调用结果记录器不能为空");
+    /** 标记调用入口或功能注解；功能注解必须由所属功能注册。 */
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.TYPE, ElementType.METHOD, ElementType.ANNOTATION_TYPE})
+    public @interface Intercepted {
     }
 
-    /**
-     * 执行一次已经解析声明的方法调用。
-     *
-     * @param execution 当前方法执行
-     * @param invocation 实际业务方法
-     * @param <T> 业务返回类型
-     * @return 实际业务结果或已保存的幂等结果
-     * @throws Exception 业务方法、调用控制或成功检验报告的失败
-     */
-    public <T> @Nullable T execute(CallExecution execution, Callable<T> invocation) throws Exception {
-        CallExecution checked = Objects.requireNonNull(execution, "方法执行不能为空");
-        Callable<T> checkedInvocation = Objects.requireNonNull(invocation, "业务调用不能为空");
+    /** 表示业务成功前必须在预提交阶段满足的一项条件。 */
+    public interface PreCommit {
+        /** 校验条件已经被当前调用满足。 */
+        void verifySatisfied();
 
-        // 声明解析阶段已经完成；这里检查不同声明组合需要满足的身份前提。
-        validateDeclaration(checked);
-        boolean recordingOutcome = false;
-        try {
-            // 调用前评估只读取已经准备好的调用身份、资源和方法实参。
-            verifyPrincipal(checked);
-            permissionAssessor.assess(checked);
-            rateLimitedAssessor.assess(checked);
-
-            // 幂等处理权先于分布式锁取得，锁包围实际业务方法及其内部事务。
-            T result = idempotentExecutor.execute(
-                    checked,
-                    () -> lockedExecutor.execute(checked, () -> invokeAndVerify(checked, checkedInvocation)));
-            if (checked.outcome().isEmpty()) {
-                checked.succeed(result);
-            }
-
-            // 成功或幂等重放结果同步写入审计记录。
-            recordingOutcome = true;
-            auditRecorder.record(checked);
-            LOG.trace(
-                    "调用生命周期完成 | callId={} method={} outcome={}",
-                    checked.call().callId(),
-                    checked.method().getName(),
-                    checked.outcome().orElseThrow().status());
-            return result;
-        } catch (BusinessException exception) {
-            if (recordingOutcome) {
-                checked.fail(exception);
-                LOG.trace(
-                        "调用结果记录失败 | callId={} method={}",
-                        checked.call().callId(),
-                        checked.method().getName(),
-                        exception);
-                throw exception;
-            }
-            checked.deny(exception);
-            recordFailure(checked, exception);
-            LOG.trace(
-                    "调用生命周期被拒绝 | callId={} method={} errorCode={}",
-                    checked.call().callId(),
-                    checked.method().getName(),
-                    exception.errorCode().code());
-            throw exception;
-        } catch (Exception exception) {
-            checked.fail(exception);
-            if (!recordingOutcome) {
-                recordFailure(checked, exception);
-            }
-            LOG.trace(
-                    "调用生命周期失败 | callId={} method={}",
-                    checked.call().callId(),
-                    checked.method().getName(),
-                    exception);
-            throw exception;
+        /** 只读事务提交时是否也必须校验该条件。 */
+        default boolean appliesToReadOnlyTransaction() {
+            return true;
         }
     }
 
-    /**
-     * 检查匿名、权限、审计和认证声明之间的固定约束。
-     *
-     * @param execution 当前方法执行
-     */
-    private static void validateDeclaration(CallExecution execution) {
-        if (execution.anonymous() && !execution.requiredPermissions().isEmpty()) {
-            throw new IllegalStateException("匿名访问不能同时声明权限要求");
+    /** 所有生命周期参与者共享的编码和依赖声明。 */
+    public interface Participant {
+        /** 返回当前功能在生命周期配置中的稳定编码。 */
+        @NotNull
+        TreeCode code();
+
+        /** 返回必须位于当前处理之外的功能编码。 */
+        default @NotNull Set<TreeCode> after() {
+            return Set.of();
         }
-        if (execution.anonymous() && execution.audit().isPresent()) {
-            throw new IllegalStateException("匿名访问不能声明需要身份的审计记录");
+
+        /** 返回必须位于当前处理之内的功能编码。 */
+        default @NotNull Set<TreeCode> before() {
+            return Set.of();
         }
-        if (!execution.anonymous() && !execution.call().isAuthenticationAssessed()) {
-            throw new BusinessException(CoreErrorCode.AUTHENTICATION_REQUIRED);
+
+        /** 无硬依赖时用于稳定排序的优先级。 */
+        default int priority() {
+            return 0;
+        }
+
+        /** 当前方法是否适用。 */
+        default boolean supports(@NotNull CallExecution execution) {
+            return true;
         }
     }
 
-    /**
-     * 检查权限和审计需要的 Principal 已经由外围选择。
-     *
-     * @param execution 当前方法执行
-     */
-    private static void verifyPrincipal(CallExecution execution) {
-        boolean principalRequired = !execution.requiredPermissions().isEmpty() || execution.audit().isPresent();
-        if (principalRequired && !execution.call().isPrincipalAssessed()) {
-            throw new IllegalStateException("当前调用必须在执行前完成业务主体选择");
+    /** 使用 AOP 环绕语义介入调用。实现类的类型即表示其采用 Around 语义。 */
+    public interface Around extends Participant {
+        /** 处理本层并返回实际路径。 */
+        @NotNull
+        CallOutcome around(@NotNull CallExecution execution, @NotNull Next next) throws Throwable;
+
+        /** 异步处理本层；没有明确异步实现时失败，避免隐式阻塞。 */
+        default @NotNull CompletionStage<CallOutcome> aroundAsync(
+                @NotNull CallExecution execution,
+                @NotNull AsyncNext next) throws Throwable {
+            return CompletableFuture.failedFuture(
+                    new IllegalStateException(
+                            "环绕处理没有定义异步语义: " + code()));
         }
     }
 
-    /**
-     * 执行业务方法，并在其成功结果离开生命周期前检查全部调用要求。
-     *
-     * @param execution 当前方法执行
-     * @param invocation 实际业务方法
-     * @param <T> 业务返回类型
-     * @return 经过成功检验的业务结果
-     * @throws Exception 业务方法或成功检验报告的失败
-     */
-    private <T> @Nullable T invokeAndVerify(
-            CallExecution execution,
-            Callable<T> invocation) throws Exception {
-        execution.beginInvocation();
-        try {
-            T result = invocation.call();
-            execution.verifyRequirements();
-            return result;
-        } finally {
-            execution.endInvocation();
-        }
+    /** 只在目标调用前执行校验或准备。 */
+    public interface Before extends Participant {
+        /** 执行调用前逻辑；抛出异常时后续调用不会开始。 */
+        void before(@NotNull CallExecution execution) throws Throwable;
     }
 
-    /**
-     * 记录拒绝或失败结果，记录失败不会替换原始调用异常。
-     *
-     * @param execution 已写入拒绝或失败结果的方法执行
-     * @param original 原始调用异常
-     */
-    private void recordFailure(CallExecution execution, Exception original) {
-        try {
-            auditRecorder.record(execution);
-        } catch (RuntimeException auditFailure) {
-            original.addSuppressed(auditFailure);
-        }
+    /** 只在调用成功返回后执行观察逻辑。 */
+    public interface AfterReturning extends Participant {
+        /** 观察已经成功的调用结果。 */
+        void afterReturning(@NotNull CallExecution execution, @NotNull CallOutcome outcome) throws Throwable;
+    }
+
+    /** 只在调用拒绝或失败后执行观察逻辑。 */
+    public interface AfterThrowing extends Participant {
+        /** 观察调用失败，不得把失败伪装成成功。 */
+        void afterThrowing(@NotNull CallExecution execution, @NotNull CallOutcome outcome) throws Throwable;
+    }
+
+    /** 无论调用成功失败都执行的 finally 语义回调。 */
+    public interface After extends Participant {
+        /** 在目标结果确定后执行收尾逻辑。 */
+        void after(@NotNull CallExecution execution, @NotNull CallOutcome outcome) throws Throwable;
+    }
+
+    /** Call 最终结束后的清理回调。 */
+    public interface Completion extends Participant {
+        /** 清理当前 Call 产生的本地状态和租约。 */
+        void complete(@NotNull CallExecution execution, @NotNull CallOutcome outcome) throws Throwable;
+    }
+
+    /** 事务成功提交后的回调；提交发生在目标方法返回前，不提供最终 CallOutcome。 */
+    public interface AfterCommit extends Participant {
+        /** 处理当前事务已经提交的事实。 */
+        void afterCommit(@NotNull CallExecution execution) throws Throwable;
+    }
+
+    /** 在当前线程继续内层处理，返回成功、重放、拒绝或失败。 */
+    @FunctionalInterface
+    public interface Next {
+        /** 执行剩余调用。 */
+        @NotNull
+        CallOutcome proceed();
+    }
+
+    /** 在异步生命周期中继续内层处理。 */
+    @FunctionalInterface
+    public interface AsyncNext {
+        /** 执行剩余调用并返回最终完成阶段。 */
+        @NotNull
+        CompletionStage<CallOutcome> proceedAsync();
     }
 }

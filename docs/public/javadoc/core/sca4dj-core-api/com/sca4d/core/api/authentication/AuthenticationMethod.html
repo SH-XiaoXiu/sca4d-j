@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">AuthenticationMethod&lt;P&gt;</span></div>
-<div class="block">认证引擎可以发现并调用的一种认证方法；该方法不判断登录、动作或因素组合策略。</div>
+<div class="block">认证引擎可以发现并调用的一种认证方法；认证方法不判断登录、动作或因素组合策略。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -120,9 +120,9 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#canIdentifyAccount()" class="member-name-link">canIdentifyAccount</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">判断该方法是否可以从 Proof 中确定账号。</div>
+<div class="block">判断当前认证方法是否可以从 Proof 中确定账号。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="AuthenticationMethodCode.html" title="class in com.sca4d.core.api.authentication">AuthenticationMethodCode</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#code()" class="member-name-link">code</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">读取配置、提交和证据共同使用的认证方法编码。</div>
@@ -166,7 +166,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="code()">
 <h3>code</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="return-type">@NotNull <a href="AuthenticationMethodCode.html" title="class in com.sca4d.core.api.authentication">AuthenticationMethodCode</a></span>&nbsp;<span class="element-name">code</span>()</div>
+</span><span class="return-type">@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></span>&nbsp;<span class="element-name">code</span>()</div>
 <div class="block">读取配置、提交和证据共同使用的认证方法编码。</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -202,7 +202,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="canIdentifyAccount()">
 <h3>canIdentifyAccount</h3>
 <div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name">canIdentifyAccount</span>()</div>
-<div class="block">判断该方法是否可以从 Proof 中确定账号。</div>
+<div class="block">判断当前认证方法是否可以从 Proof 中确定账号。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>可以在尚未确定 Account 时执行认证则为 <code>true</code></dd>
@@ -262,7 +262,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">eraseAccount</span><wbr><span class="parameters">(long&nbsp;accountId)</span></div>
 <div class="block">永久删除指定 Account 由本方法负责的 Credential 和认证状态。
 
- <p>Account 删除流程可以重复调用该方法；目标数据已经不存在时必须直接返回。实现不得删除其他认证方法或身份模块负责的数据。</div>
+ <p>Account 删除流程可以重复调用当前方法；目标数据已经不存在时必须直接返回。实现不得删除其他认证方法或身份模块负责的数据。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>accountId</code> - 要清理的 Account 标识</dd>

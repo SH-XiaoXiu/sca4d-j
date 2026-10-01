@@ -13,7 +13,7 @@
     <select id="countScheduledRuns" resultType="long">
         SELECT count(*)
         FROM job.job_run
-        WHERE runtime_namespace = #{runtimeNamespace}
+        WHERE app_name = #{appName}
           AND schedule_key = #{scheduleKey}
           AND job_key = #{jobKey}
           AND job_definition_version = #{definitionVersion}
@@ -29,7 +29,7 @@
           ON node.run_id = run.id
          AND node.node_key = #{nodeKey}
          AND node.status = 'SUCCEEDED'
-        WHERE run.runtime_namespace = #{runtimeNamespace}
+        WHERE run.app_name = #{appName}
           AND run.schedule_key = #{scheduleKey}
           AND run.job_key = #{jobKey}
           AND run.job_definition_version = #{definitionVersion}
@@ -38,15 +38,15 @@
     </select>
     <select id="insertRun" resultType="long">
         INSERT INTO job.job_run (
-            runtime_namespace, job_key, job_definition_version, job_kind, input_json, status,
+            app_name, job_key, job_definition_version, job_kind, input_json, status,
             schedule_key, scheduled_fire_time)
-        VALUES (#{runtimeNamespace}, #{jobKey}, #{definitionVersion}, #{kind},
+        VALUES (#{appName}, #{jobKey}, #{definitionVersion}, #{kind},
                 CAST(#{inputJson} AS jsonb), 'QUEUED', #{scheduleKey}, #{scheduledAt})
         RETURNING id
     </select>
     <select id="selectScheduledRun" resultType="long">
         SELECT id FROM job.job_run
-        WHERE runtime_namespace = #{runtimeNamespace}
+        WHERE app_name = #{appName}
           AND schedule_key = #{scheduleKey}
         <if test="scheduledAt != null">AND scheduled_fire_time = #{scheduledAt}</if>
         <if test="statuses != null">
@@ -75,7 +75,7 @@
     <select id="selectRun" resultType="com.sca4d.job.persistence.RunRecord">
         SELECT id, job_key, job_definition_version, output_json::text AS output_json, status
         FROM job.job_run
-        WHERE runtime_namespace = #{runtimeNamespace} AND id = #{runId}
+        WHERE app_name = #{appName} AND id = #{runId}
     </select>
     <select id="updateClaimableNode" resultType="com.sca4d.job.persistence.NodeClaim">
         WITH candidate AS MATERIALIZED (
@@ -85,7 +85,10 @@
                    n.max_attempts, n.retry_delay_millis
             FROM job.job_run_node n
             JOIN job.job_run r ON r.id = n.run_id
-            WHERE r.runtime_namespace = #{runtimeNamespace}
+            WHERE r.app_name = #{appName}
+              AND <foreach collection="definitions" index="jobKey" item="version" open="(" separator=" OR " close=")">
+                (r.job_key = #{jobKey} AND r.job_definition_version = #{version})
+              </foreach>
               AND r.status IN ('QUEUED', 'RUNNING')
               AND n.attempt_count &lt; n.max_attempts
               AND ((n.status = 'READY' AND n.available_at &lt;= #{now})
@@ -222,7 +225,7 @@
         WITH RECURSIVE exhausted AS MATERIALIZED (
             SELECT n.id, n.run_id FROM job.job_run_node n
             JOIN job.job_run r ON r.id = n.run_id
-            WHERE r.runtime_namespace = #{runtimeNamespace} AND n.status = 'RUNNING'
+            WHERE r.app_name = #{appName} AND n.status = 'RUNNING'
               AND n.lease_until &lt; #{now} AND n.attempt_count &gt;= n.max_attempts
         ), failed AS (
             UPDATE job.job_run_node n
@@ -251,7 +254,7 @@
     <sql id="runIds"><foreach collection="runIds" item="runId" open="(" separator="," close=")">#{runId}</foreach></sql>
     <select id="selectExpiredRunIdsForUpdate" resultType="long">
         SELECT id FROM job.job_run
-        WHERE runtime_namespace = #{runtimeNamespace} AND status = 'SUCCEEDED' AND completed_at &lt; #{completedBefore}
+        WHERE app_name = #{appName} AND status = 'SUCCEEDED' AND completed_at &lt; #{completedBefore}
         ORDER BY completed_at, id LIMIT #{limit}
         FOR UPDATE SKIP LOCKED
     </select>
@@ -267,6 +270,6 @@
     </delete>
     <delete id="deleteRuns">
         DELETE FROM job.job_run
-        WHERE runtime_namespace = #{runtimeNamespace} AND status = 'SUCCEEDED' AND id IN <include refid="runIds"/>
+        WHERE app_name = #{appName} AND status = 'SUCCEEDED' AND id IN <include refid="runIds"/>
     </delete>
 </mapper>

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 /** 启动规范 JSON 设备和旧式二进制设备，并持续连接真实 EMQX。 */
-public final class IotDeviceSimulatorApplication {
+public class IotDeviceSimulatorApplication {
 
     private static final Logger LOG = LoggerFactory.getLogger(IotDeviceSimulatorApplication.class);
 

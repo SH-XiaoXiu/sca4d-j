@@ -22,11 +22,12 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/me/notification-settings")
 @CurrentPrincipal(selection = PlatformPrincipalSelection.class)
-public final class NotificationSettingsController {
+public class NotificationSettingsController {
     private final NotificationSettingsService settings;
 
     private final NotificationTypeCatalog notificationTypes;
 
+    /** 创建当前 Account 通知设置控制器。 */
     public NotificationSettingsController(
             @NotNull NotificationSettingsService settings,
             @NotNull NotificationTypeCatalog notificationTypes) {

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeMap;
 
@@ -18,13 +19,13 @@ import java.util.TreeMap;
  *
  * @param <O> JSON 响应体类型
  */
-public final class GatewayCallbackResponse<O> {
-
-    private final int status;
+public class GatewayCallbackResponse<O> {
 
     private final @NotNull Map<String, List<String>> headers;
 
     private final @Nullable O body;
+
+    private final int status;
 
     /**
      * 创建回调响应。
@@ -81,7 +82,7 @@ public final class GatewayCallbackResponse<O> {
         source.forEach((name, values) -> {
             ArrayList<String> copiedValues = new ArrayList<>(values.size());
             for (String value : values) {
-                copiedValues.add(java.util.Objects.requireNonNull(value, "Gateway 回调 Header 值不能为空"));
+                copiedValues.add(Objects.requireNonNull(value, "Gateway 回调 Header 值不能为空"));
             }
             copied.put(name, List.copyOf(copiedValues));
         });

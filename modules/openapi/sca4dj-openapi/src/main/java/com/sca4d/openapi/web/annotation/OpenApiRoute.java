@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 /**
  * 声明一条由具体应用明确公开的 OpenAPI Tool 路由。
  *
- * <p>该注解组合 Spring MVC {@link RequestMapping}。具体应用只声明一次 HTTP 方法和路径，Spring MVC 负责注册路由，OpenAPI
+ * <p>`OpenApiRoute` 组合 Spring MVC {@link RequestMapping}。具体应用只声明一次 HTTP 方法和路径，Spring MVC 负责注册路由，OpenAPI
  * 模块负责校验 Operation、执行 Client 认证和生成独立的运行时文档分组。
  */
 @Documented
@@ -23,11 +23,11 @@ import java.lang.annotation.Target;
 @RequestMapping
 public @interface OpenApiRoute {
 
-    /** @return 该路由接受的唯一 HTTP 方法 */
+    /** @return 当前路由接受的唯一 HTTP 方法 */
     @AliasFor(annotation = RequestMapping.class, attribute = "method")
     RequestMethod[] method();
 
-    /** @return 完整的公开路径，必须以 {@code /openapi/} 开头 */
+    /** @return 完整的公开路径，必须位于配置的 {@code sca4dj.openapi.path-prefix} 之下 */
     @AliasFor(annotation = RequestMapping.class, attribute = "path")
     String[] path();
 

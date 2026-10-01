@@ -8,7 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Objects;
 
 /** 使用 Spring Security 的 Argon2id 参数生成并校验秘密值摘要。 */
-public final class Argon2SecretHasher implements SecretHasher {
+public class Argon2SecretHasher implements SecretHasher {
 
     private final @NotNull PasswordEncoder encoder;
 

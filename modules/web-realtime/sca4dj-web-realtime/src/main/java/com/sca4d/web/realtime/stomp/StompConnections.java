@@ -2,10 +2,10 @@ package com.sca4d.web.realtime.stomp;
 
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.connection.ConnectionId;
-import com.sca4d.web.realtime.connection.ConnectionDelivery;
+import com.sca4d.web.realtime.connection.BrowserWrite;
 import com.sca4d.web.realtime.connection.LocalConnection;
 import com.sca4d.web.realtime.connection.LocalConnectionRegistry;
-import com.sca4d.web.realtime.connection.NodeTransport;
+import com.sca4d.web.realtime.connection.NodeRouter;
 import com.sca4d.web.realtime.connection.RedisConnectionRegistry;
 import com.sca4d.web.realtime.ticket.TicketHandshakeInterceptor;
 import org.jetbrains.annotations.ApiStatus;
@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /** 把 Spring STOMP Session 生命周期接入 ConnectionId、Redis 路由和本机连接句柄。 */
 @ApiStatus.Internal
-public final class StompConnections {
+public class StompConnections {
 
     static final String CONNECTION_ATTRIBUTE = StompConnections.class.getName() + ".connection";
 
@@ -34,11 +34,11 @@ public final class StompConnections {
 
     private static final Logger LOG = LoggerFactory.getLogger(StompConnections.class);
 
-    private final @NotNull RedisConnectionRegistry shared;
-
     private final @NotNull LocalConnectionRegistry local;
 
-    private final @NotNull NodeTransport transport;
+    private final @NotNull RedisConnectionRegistry shared;
+
+    private final @NotNull NodeRouter transport;
 
     private final @NotNull SimpMessagingTemplate messaging;
 
@@ -46,11 +46,10 @@ public final class StompConnections {
 
     private final Map<String, StompConnection> connections = new ConcurrentHashMap<>();
 
-    /** 创建 Spring STOMP 生命周期到 Web Realtime 连接索引的桥接。 */
     public StompConnections(
             @NotNull RedisConnectionRegistry shared,
             @NotNull LocalConnectionRegistry local,
-            @NotNull NodeTransport transport,
+            @NotNull NodeRouter transport,
             @NotNull SimpMessagingTemplate messaging,
             @NotNull WebSocketSessions sockets) {
         this.shared = Objects.requireNonNull(shared, "Web Realtime 共享索引不能为空");
@@ -66,7 +65,8 @@ public final class StompConnections {
         // 只接受由一次性票据握手创建且包含可写 Session 属性的 Spring STOMP 连接。
         SimpMessageHeaderAccessor headers = SimpMessageHeaderAccessor.wrap(event.getMessage());
         String simpSessionId = headers.getSessionId();
-        Map<String, Object> attributes = headers.getSessionAttributes();
+        // 延迟到达的 CONNECTED 不能让已断开的 WebSocket 重新登记本机和 Redis 连接。
+        Map<String, Object> attributes = simpSessionId == null ? null : sockets.attributes(simpSessionId);
         Object sessionValue = attributes == null
                 ? null
                 : attributes.get(TicketHandshakeInterceptor.SESSION_ATTRIBUTE);
@@ -86,10 +86,16 @@ public final class StompConnections {
             return;
         }
         try {
-            // 先登记本机句柄，再写入 Redis 自动身份目标，成功后让后续帧读取 ConnectionId。
+            // 先登记本机句柄，再写入 Redis 自动身份目标；写入成功后，后面的帧才能读取 ConnectionId。
             local.add(connection);
             shared.register(connectionId, transport.nodeId(), session);
             attributes.put(CONNECTION_ATTRIBUTE, connectionId);
+            if (!sockets.accepts(simpSessionId)) {
+                // 断连事件可能先于 Redis 登记完成，补偿删除刚写入的本机和共享索引。
+                connections.remove(simpSessionId, connection);
+                local.remove(connectionId);
+                return;
+            }
             LOG.debug(
                     "Spring STOMP 连接已登记 | connectionId={} sessionId={} accountId={}",
                     connectionId,
@@ -129,7 +135,7 @@ public final class StompConnections {
     }
 
     /** 按 Spring STOMP Session 发送浏览器信封，写出完成后可请求关闭实际连接。 */
-    private final class StompConnection implements LocalConnection {
+    private class StompConnection implements LocalConnection {
 
         private final @NotNull ConnectionId id;
 
@@ -151,11 +157,15 @@ public final class StompConnections {
 
         /** 用 Spring Session 定向 user destination 投递浏览器信封，不自行编码 STOMP MESSAGE 帧。 */
         @Override
-        public void offer(@NotNull ConnectionDelivery delivery) {
-            ConnectionDelivery checked = Objects.requireNonNull(delivery, "连接投递不能为空");
+        public void offer(@NotNull BrowserWrite delivery) {
+            BrowserWrite checked = Objects.requireNonNull(delivery, "连接投递不能为空");
             SimpMessageHeaderAccessor headers = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
             headers.setSessionId(simpSessionId);
             headers.setHeader(CLOSE_AFTER_HEADER, checked.closeAfter());
+            if (checked.closeAfter()) {
+                // Relay 只往返 STOMP native headers；写出前由出站拦截器移除此内部标记。
+                headers.setNativeHeader(CLOSE_AFTER_HEADER, "true");
+            }
             headers.setLeaveMutable(true);
             messaging.convertAndSendToUser(
                     simpSessionId,

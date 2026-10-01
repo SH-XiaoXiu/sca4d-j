@@ -22,9 +22,8 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 /** 将当前请求已经确认的会话、主体、账号和业务身份注入 Controller 参数。 */
-public final class CurrentIdentityArgumentResolver implements HandlerMethodArgumentResolver {
+public class CurrentIdentityArgumentResolver implements HandlerMethodArgumentResolver {
 
-    /** 创建当前身份 Controller 参数解析器。 */
     public CurrentIdentityArgumentResolver() {
     }
 
@@ -98,7 +97,7 @@ public final class CurrentIdentityArgumentResolver implements HandlerMethodArgum
     }
 
     /**
-     * 解析当前 Subject 或其数值标识参数。
+     * 解析当前 Subject 或 Subject 的数值标识参数。
      *
      * @param parameter Controller 方法参数
      * @param call 当前调用
@@ -126,7 +125,7 @@ public final class CurrentIdentityArgumentResolver implements HandlerMethodArgum
     }
 
     /**
-     * 解析当前 Account 或其数值标识参数。
+     * 解析当前 Account 或 Account 的数值标识参数。
      *
      * @param parameter Controller 方法参数
      * @param call 当前调用
@@ -154,7 +153,7 @@ public final class CurrentIdentityArgumentResolver implements HandlerMethodArgum
     }
 
     /**
-     * 解析当前 Principal、具体 Principal 实现或其数值标识参数。
+     * 解析当前 Principal、具体 Principal 实现或 Principal 的数值标识参数。
      *
      * @param parameter Controller 方法参数
      * @param call 当前调用

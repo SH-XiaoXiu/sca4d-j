@@ -14,13 +14,12 @@ import java.util.Objects;
 
 /** 在 `BROKER_RELAY` 模式启动完成前确认 RabbitMQ STOMP plugin TCP 端口可连接。 */
 @ApiStatus.Internal
-public final class StompRelayPortCheck implements SmartInitializingSingleton {
+public class StompRelayPortCheck implements SmartInitializingSingleton {
 
     private static final Logger LOG = LoggerFactory.getLogger(StompRelayPortCheck.class);
 
     private final @NotNull WebRealtimeProperties properties;
 
-    /** 创建 relay 启动可用性检查。 */
     public StompRelayPortCheck(@NotNull WebRealtimeProperties properties) {
         this.properties = Objects.requireNonNull(properties, "Web Realtime 配置不能为空");
     }

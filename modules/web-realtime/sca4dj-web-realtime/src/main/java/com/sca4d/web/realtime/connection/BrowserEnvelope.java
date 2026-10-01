@@ -1,6 +1,9 @@
 package com.sca4d.web.realtime.connection;
 
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+
 import com.fasterxml.jackson.databind.JsonNode;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,19 +12,18 @@ import java.util.Objects;
 
 /** 保存 SSE 与 STOMP 共同发送给浏览器的事件编码、版本、发生时间和 payload。 */
 @ApiStatus.Internal
-public final class BrowserEnvelope {
-
-    private final @NotNull String eventCode;
-
-    private final int protocolVersion;
+public class BrowserEnvelope {
 
     private final @NotNull Instant occurredAt;
 
     private final @NotNull JsonNode payload;
 
-    /** 创建不包含内部目标、业务键和 RabbitMQ 元数据的浏览器信封。 */
+    private final @NotNull TreeCode eventCode;
+
+    private final int protocolVersion;
+
     public BrowserEnvelope(
-            @NotNull String eventCode,
+            @NotNull TreeCode eventCode,
             int protocolVersion,
             @NotNull Instant occurredAt,
             @NotNull JsonNode payload) {
@@ -33,7 +35,7 @@ public final class BrowserEnvelope {
 
     /** @return 浏览器事件编码 */
     public @NotNull String getEventCode() {
-        return eventCode;
+        return eventCode.format(SLASH);
     }
 
     /** @return 浏览器事件协议版本 */

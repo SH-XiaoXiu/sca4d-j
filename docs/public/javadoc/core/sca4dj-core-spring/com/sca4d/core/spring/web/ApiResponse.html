@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 <dd><code>T</code> - 响应数据类型</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">ApiResponse&lt;T&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">ApiResponse&lt;T&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">HTTP 接口返回的固定字段响应。
 
@@ -160,7 +160,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#accepted(T,java.net.URI)" class="member-name-link">accepted</a><wbr>(T&nbsp;data,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;location)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">创建携带后续查询地址的 202 成功响应。</div>
+<div class="block">创建携带状态查询地址的 202 成功响应。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;<a href="ApiResponse.html" title="class in com.sca4d.core.spring.web">ApiResponse</a><wbr>&lt;T&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#created(T)" class="member-name-link">created</a><wbr>(T&nbsp;data)</code></div>
@@ -198,27 +198,27 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getCode()" class="member-name-link">getCode</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回响应码。</div>
+<div class="block">响应码。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ApiResponse.html" title="type parameter in ApiResponse">T</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getData()" class="member-name-link">getData</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回响应数据。</div>
+<div class="block">响应数据。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMessage()" class="member-name-link">getMessage</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回当前语言的安全展示文案。</div>
+<div class="block">当前语言的安全展示文案。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMessageArgs()" class="member-name-link">getMessageArgs</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回消息模板参数。</div>
+<div class="block">消息模板参数。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMessageKey()" class="member-name-link">getMessageKey</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回固定消息键。</div>
+<div class="block">固定消息键。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTimestamp()" class="member-name-link">getTimestamp</a>()</code></div>
@@ -258,7 +258,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable org.springframework.http.HttpStatus</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#responseStatus()" class="member-name-link">responseStatus</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回显式 HTTP 状态。</div>
+<div class="block">显式 HTTP 状态。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#restoreResponse(org.springframework.http.HttpStatus,org.springframework.http.HttpHeaders)" class="member-name-link">restoreResponse</a><wbr>(@Nullable org.springframework.http.HttpStatus&nbsp;status,
@@ -461,13 +461,13 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="ApiResponse.html" title="class in com.sca4d.core.spring.web">ApiResponse</a>&lt;T&gt;</span>&nbsp;<span class="element-name">accepted</span><wbr><span class="parameters">(@Nullable
  T&nbsp;data,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;location)</span></div>
-<div class="block">创建携带后续查询地址的 202 成功响应。</div>
+<div class="block">创建携带状态查询地址的 202 成功响应。</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - 响应数据类型</dd>
 <dt>Parameters:</dt>
 <dd><code>data</code> - 已接受处理的资源</dd>
-<dd><code>location</code> - 后续查询地址</dd>
+<dd><code>location</code> - 状态查询地址</dd>
 <dt>Returns:</dt>
 <dd>携带 Location 的 202 成功响应</dd>
 </dl>
@@ -556,7 +556,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @Nullable
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable org.springframework.http.HttpStatus</span>&nbsp;<span class="element-name">responseStatus</span>()</div>
-<div class="block">返回显式 HTTP 状态。</div>
+<div class="block">显式 HTTP 状态。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>显式 HTTP 状态；未指定时为空并由 Spring 使用默认状态</dd>
@@ -595,7 +595,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getCode()">
 <h3>getCode</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getCode</span>()</div>
-<div class="block">返回响应码。</div>
+<div class="block">响应码。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>响应码</dd>
@@ -607,7 +607,7 @@ loadScripts(document, 'script');</script>
 <h3>getMessageKey</h3>
 <div class="member-signature"><span class="annotations">@Nullable
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getMessageKey</span>()</div>
-<div class="block">返回固定消息键。</div>
+<div class="block">固定消息键。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>固定消息键；成功响应没有消息时为空</dd>
@@ -618,7 +618,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getMessageArgs()">
 <h3>getMessageArgs</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">@Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name">getMessageArgs</span>()</div>
-<div class="block">返回消息模板参数。</div>
+<div class="block">消息模板参数。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>保持模板顺序的消息参数</dd>
@@ -630,7 +630,7 @@ loadScripts(document, 'script');</script>
 <h3>getMessage</h3>
 <div class="member-signature"><span class="annotations">@Nullable
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getMessage</span>()</div>
-<div class="block">返回当前语言的安全展示文案。</div>
+<div class="block">当前语言的安全展示文案。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>当前语言的安全展示文案；成功响应没有消息时为空</dd>
@@ -642,7 +642,7 @@ loadScripts(document, 'script');</script>
 <h3>getData</h3>
 <div class="member-signature"><span class="annotations">@Nullable
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ApiResponse.html" title="type parameter in ApiResponse">T</a></span>&nbsp;<span class="element-name">getData</span>()</div>
-<div class="block">返回响应数据。</div>
+<div class="block">响应数据。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>响应数据；没有数据时为空</dd>

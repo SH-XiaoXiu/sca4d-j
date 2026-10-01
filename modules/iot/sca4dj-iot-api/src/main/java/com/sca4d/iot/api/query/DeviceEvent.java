@@ -10,19 +10,19 @@ import java.util.Objects;
 
 /** 保存一条已经持久化的离散设备事件。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class DeviceEvent {
-
-    private final long eventId;
-
-    private final long deviceId;
-
-    private final @NotNull String eventCode;
-
-    private final @NotNull Map<String, Object> outputs;
+public class DeviceEvent {
 
     private final @NotNull Instant occurredAt;
 
     private final @NotNull Instant receivedAt;
+
+    private final @NotNull Map<String, Object> outputs;
+
+    private final @NotNull String eventCode;
+
+    private final long deviceId;
+
+    private final long eventId;
 
     /** 创建设备事件查询结果。 */
     public DeviceEvent(

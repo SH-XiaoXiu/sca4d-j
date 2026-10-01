@@ -114,7 +114,7 @@ implements <a href="../../acl/AclRepository.html" title="interface in com.sca4d.
 <div class="col-last even-row-color">
 <div class="block">Platform ACL 的领域范围。</div>
 </div>
-<div class="col-first odd-row-color"><code>static final @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-first odd-row-color"><code>static final @NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
 <div class="col-second odd-row-color"><code><a href="#RESOURCE_TYPE" class="member-name-link">RESOURCE_TYPE</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">内置 Platform ACL 示例认领的资源类型。</div>
@@ -149,42 +149,42 @@ implements <a href="../../acl/AclRepository.html" title="interface in com.sca4d.
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#allows(java.lang.Long,java.lang.String,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">allows</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#allows(java.lang.Long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">allows</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;type,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  @NotNull com.sca4d.core.api.permission.Action&nbsp;action)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">判断一项直接权限是否存在。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findAllowedResourceIds(java.lang.Long,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">findAllowedResourceIds</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findAllowedResourceIds(java.lang.Long,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.permission.Action)" class="member-name-link">findAllowedResourceIds</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;type,
  @NotNull com.sca4d.core.api.permission.Action&nbsp;action)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">查找业务主体可执行指定动作的资源实例。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="../../acl/AclEntry.html" title="class in com.sca4d.iam.acl">AclEntry</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findEntries(java.lang.Long,java.lang.String)" class="member-name-link">findEntries</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findEntries(java.lang.Long,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">findEntries</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;type)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">查找业务主体在一种资源类型下的全部授权。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#grant(java.lang.Long,java.lang.String,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">grant</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#grant(java.lang.Long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">grant</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;type,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  @NotNull com.sca4d.core.api.permission.Action&nbsp;action)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">幂等授予一项直接权限。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;@NotNull com.sca4d.core.api.name.code.TreeCode&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resourceTypes()" class="member-name-link">resourceTypes</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">返回当前领域独占认领的资源类型。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#revoke(java.lang.Long,java.lang.String,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">revoke</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#revoke(java.lang.Long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">revoke</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;type,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  @NotNull com.sca4d.core.api.permission.Action&nbsp;action)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -196,7 +196,7 @@ implements <a href="../../acl/AclRepository.html" title="interface in com.sca4d.
 <div class="block">清理业务主体的全部 ACL。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#revokeByResource(java.lang.String,java.lang.String)" class="member-name-link">revokeByResource</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#revokeByResource(com.sca4d.core.api.name.code.TreeCode,java.lang.String)" class="member-name-link">revokeByResource</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;type,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">清理资源实例的全部 ACL。</div>
@@ -235,16 +235,8 @@ implements <a href="../../acl/AclRepository.html" title="interface in com.sca4d.
 <section class="detail" id="RESOURCE_TYPE">
 <h3>RESOURCE_TYPE</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">RESOURCE_TYPE</span></div>
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">RESOURCE_TYPE</span></div>
 <div class="block">内置 Platform ACL 示例认领的资源类型。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.iam.base.acl.PlatformAclRepository.RESOURCE_TYPE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
 </ul>
@@ -295,7 +287,7 @@ implements <a href="../../acl/AclRepository.html" title="interface in com.sca4d.
 <h3>resourceTypes</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">resourceTypes</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;@NotNull com.sca4d.core.api.name.code.TreeCode&gt;</span>&nbsp;<span class="element-name">resourceTypes</span>()</div>
 <div class="block">返回当前领域独占认领的资源类型。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -306,14 +298,14 @@ implements <a href="../../acl/AclRepository.html" title="interface in com.sca4d.
 </section>
 </li>
 <li>
-<section class="detail" id="grant(java.lang.Long,java.lang.String,java.lang.String,com.sca4d.core.api.permission.Action)">
+<section class="detail" id="grant(java.lang.Long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,com.sca4d.core.api.permission.Action)">
 <h3>grant</h3>
 <div class="member-signature"><span class="annotations">@AffectedRows(target="Platform ACL",
               whenZero=ALLOW)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">grant</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;type,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  @NotNull
@@ -321,7 +313,7 @@ implements <a href="../../acl/AclRepository.html" title="interface in com.sca4d.
 <div class="block">幂等授予一项直接权限。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../acl/AclRepository.html#grant(java.lang.Long,java.lang.String,java.lang.String,com.sca4d.core.api.permission.Action)">grant</a></code>&nbsp;in interface&nbsp;<code><a href="../../acl/AclRepository.html" title="interface in com.sca4d.iam.acl">AclRepository</a></code></dd>
+<dd><code><a href="../../acl/AclRepository.html#grant(java.lang.Long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,com.sca4d.core.api.permission.Action)">grant</a></code>&nbsp;in interface&nbsp;<code><a href="../../acl/AclRepository.html" title="interface in com.sca4d.iam.acl">AclRepository</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>principalId</code> - 业务主体标识</dd>
 <dd><code>type</code> - 资源类型</dd>
@@ -331,14 +323,14 @@ implements <a href="../../acl/AclRepository.html" title="interface in com.sca4d.
 </section>
 </li>
 <li>
-<section class="detail" id="revoke(java.lang.Long,java.lang.String,java.lang.String,com.sca4d.core.api.permission.Action)">
+<section class="detail" id="revoke(java.lang.Long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,com.sca4d.core.api.permission.Action)">
 <h3>revoke</h3>
 <div class="member-signature"><span class="annotations">@AffectedRows(target="Platform ACL",
               whenZero=ALLOW)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">revoke</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;type,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  @NotNull
@@ -346,7 +338,7 @@ implements <a href="../../acl/AclRepository.html" title="interface in com.sca4d.
 <div class="block">幂等撤销一项直接权限。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../acl/AclRepository.html#revoke(java.lang.Long,java.lang.String,java.lang.String,com.sca4d.core.api.permission.Action)">revoke</a></code>&nbsp;in interface&nbsp;<code><a href="../../acl/AclRepository.html" title="interface in com.sca4d.iam.acl">AclRepository</a></code></dd>
+<dd><code><a href="../../acl/AclRepository.html#revoke(java.lang.Long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,com.sca4d.core.api.permission.Action)">revoke</a></code>&nbsp;in interface&nbsp;<code><a href="../../acl/AclRepository.html" title="interface in com.sca4d.iam.acl">AclRepository</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>principalId</code> - 业务主体标识</dd>
 <dd><code>type</code> - 资源类型</dd>
@@ -356,13 +348,13 @@ implements <a href="../../acl/AclRepository.html" title="interface in com.sca4d.
 </section>
 </li>
 <li>
-<section class="detail" id="allows(java.lang.Long,java.lang.String,java.lang.String,com.sca4d.core.api.permission.Action)">
+<section class="detail" id="allows(java.lang.Long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,com.sca4d.core.api.permission.Action)">
 <h3>allows</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">allows</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;type,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  @NotNull
@@ -370,7 +362,7 @@ implements <a href="../../acl/AclRepository.html" title="interface in com.sca4d.
 <div class="block">判断一项直接权限是否存在。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../acl/AclRepository.html#allows(java.lang.Long,java.lang.String,java.lang.String,com.sca4d.core.api.permission.Action)">allows</a></code>&nbsp;in interface&nbsp;<code><a href="../../acl/AclRepository.html" title="interface in com.sca4d.iam.acl">AclRepository</a></code></dd>
+<dd><code><a href="../../acl/AclRepository.html#allows(java.lang.Long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,com.sca4d.core.api.permission.Action)">allows</a></code>&nbsp;in interface&nbsp;<code><a href="../../acl/AclRepository.html" title="interface in com.sca4d.iam.acl">AclRepository</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>principalId</code> - 业务主体标识</dd>
 <dd><code>type</code> - 资源类型</dd>
@@ -382,20 +374,20 @@ implements <a href="../../acl/AclRepository.html" title="interface in com.sca4d.
 </section>
 </li>
 <li>
-<section class="detail" id="findAllowedResourceIds(java.lang.Long,java.lang.String,com.sca4d.core.api.permission.Action)">
+<section class="detail" id="findAllowedResourceIds(java.lang.Long,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.permission.Action)">
 <h3>findAllowedResourceIds</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">findAllowedResourceIds</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;type,
  @NotNull
  @NotNull com.sca4d.core.api.permission.Action&nbsp;action)</span></div>
 <div class="block">查找业务主体可执行指定动作的资源实例。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../acl/AclRepository.html#findAllowedResourceIds(java.lang.Long,java.lang.String,com.sca4d.core.api.permission.Action)">findAllowedResourceIds</a></code>&nbsp;in interface&nbsp;<code><a href="../../acl/AclRepository.html" title="interface in com.sca4d.iam.acl">AclRepository</a></code></dd>
+<dd><code><a href="../../acl/AclRepository.html#findAllowedResourceIds(java.lang.Long,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.permission.Action)">findAllowedResourceIds</a></code>&nbsp;in interface&nbsp;<code><a href="../../acl/AclRepository.html" title="interface in com.sca4d.iam.acl">AclRepository</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>principalId</code> - 业务主体标识</dd>
 <dd><code>type</code> - 资源类型</dd>
@@ -406,18 +398,18 @@ implements <a href="../../acl/AclRepository.html" title="interface in com.sca4d.
 </section>
 </li>
 <li>
-<section class="detail" id="findEntries(java.lang.Long,java.lang.String)">
+<section class="detail" id="findEntries(java.lang.Long,com.sca4d.core.api.name.code.TreeCode)">
 <h3>findEntries</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="../../acl/AclEntry.html" title="class in com.sca4d.iam.acl">AclEntry</a>&gt;</span>&nbsp;<span class="element-name">findEntries</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type)</span></div>
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;type)</span></div>
 <div class="block">查找业务主体在一种资源类型下的全部授权。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../acl/AclRepository.html#findEntries(java.lang.Long,java.lang.String)">findEntries</a></code>&nbsp;in interface&nbsp;<code><a href="../../acl/AclRepository.html" title="interface in com.sca4d.iam.acl">AclRepository</a></code></dd>
+<dd><code><a href="../../acl/AclRepository.html#findEntries(java.lang.Long,com.sca4d.core.api.name.code.TreeCode)">findEntries</a></code>&nbsp;in interface&nbsp;<code><a href="../../acl/AclRepository.html" title="interface in com.sca4d.iam.acl">AclRepository</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>principalId</code> - 业务主体标识</dd>
 <dd><code>type</code> - 资源类型</dd>
@@ -441,16 +433,16 @@ implements <a href="../../acl/AclRepository.html" title="interface in com.sca4d.
 </section>
 </li>
 <li>
-<section class="detail" id="revokeByResource(java.lang.String,java.lang.String)">
+<section class="detail" id="revokeByResource(com.sca4d.core.api.name.code.TreeCode,java.lang.String)">
 <h3>revokeByResource</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">revokeByResource</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;type,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
 <div class="block">清理资源实例的全部 ACL。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../../acl/AclRepository.html#revokeByResource(java.lang.String,java.lang.String)">revokeByResource</a></code>&nbsp;in interface&nbsp;<code><a href="../../acl/AclRepository.html" title="interface in com.sca4d.iam.acl">AclRepository</a></code></dd>
+<dd><code><a href="../../acl/AclRepository.html#revokeByResource(com.sca4d.core.api.name.code.TreeCode,java.lang.String)">revokeByResource</a></code>&nbsp;in interface&nbsp;<code><a href="../../acl/AclRepository.html" title="interface in com.sca4d.iam.acl">AclRepository</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>type</code> - 资源类型</dd>
 <dd><code>id</code> - 资源标识</dd>

@@ -7,6 +7,7 @@ import com.sca4d.core.api.authentication.AuthenticationProgress;
 import com.sca4d.core.api.authentication.AuthenticationResult;
 import com.sca4d.core.api.authentication.AuthenticationSubmission;
 import com.sca4d.core.api.authentication.Session;
+import com.sca4d.core.api.plugin.PluginScope;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.Objects;
 
 /** 为当前 Session 开始、推进并单次消费登录后动作认证。 */
 @Service
+@PluginScope
 public class ActionAuthenticationService {
 
     private final AuthenticationAttempts authentication;

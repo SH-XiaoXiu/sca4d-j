@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">IotMessageTypes</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">IotMessageTypes</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">声明 IoT 模块发布和消费的稳定消息类型。</div>
 </section>
@@ -104,30 +104,10 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.event.EventType<wbr>&lt;<a href="DeviceAcknowledgement.html" title="class in com.sca4d.iot.api.message">DeviceAcknowledgement</a>&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#ACKNOWLEDGEMENT_REQUESTED" class="member-name-link">ACKNOWLEDGEMENT_REQUESTED</a></code></div>
+<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.event.EventType<wbr>&lt;<a href="../history/DeviceEventMessage.html" title="class in com.sca4d.iot.api.history">DeviceEventMessage</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#DEVICE_EVENT_OCCURRED" class="member-name-link">DEVICE_EVENT_OCCURRED</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">请求在来源事务提交后执行一次业务 ACK 状态转换。</div>
-</div>
-<div class="col-first odd-row-color"><code>static final @NotNull com.sca4d.core.api.event.EventType<wbr>&lt;<a href="DeviceAcknowledgementTimeout.html" title="class in com.sca4d.iot.api.message">DeviceAcknowledgementTimeout</a>&gt;</code></div>
-<div class="col-second odd-row-color"><code><a href="#ACKNOWLEDGEMENT_TIMEOUT" class="member-name-link">ACKNOWLEDGEMENT_TIMEOUT</a></code></div>
-<div class="col-last odd-row-color">
-<div class="block">检查一次已经发布的标准 Device 下行是否等待 ACK 超时。</div>
-</div>
-<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.event.EventType<wbr>&lt;<a href="../connection/DeviceDisconnectMessage.html" title="class in com.sca4d.iot.api.connection">DeviceDisconnectMessage</a>&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#DEVICE_DISCONNECT" class="member-name-link">DEVICE_DISCONNECT</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">请求协议实现终止一个明确的 Device 连接代次。</div>
-</div>
-<div class="col-first odd-row-color"><code>static final @NotNull com.sca4d.core.api.event.EventType<wbr>&lt;<a href="../history/DeviceEventMessage.html" title="class in com.sca4d.iot.api.history">DeviceEventMessage</a>&gt;</code></div>
-<div class="col-second odd-row-color"><code><a href="#DEVICE_EVENT_OCCURRED" class="member-name-link">DEVICE_EVENT_OCCURRED</a></code></div>
-<div class="col-last odd-row-color">
 <div class="block">物模型或 IoT 状态机产生的离散 Device 事件。</div>
-</div>
-<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.event.EventType<wbr>&lt;<a href="DeviceDownlinkDispatch.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkDispatch</a>&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#DOWNLINK_DISPATCH" class="member-name-link">DOWNLINK_DISPATCH</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">请求协议实现执行一次标准 Device 下行发送。</div>
 </div>
 <div class="col-first odd-row-color"><code>static final @NotNull com.sca4d.core.api.event.EventType<wbr>&lt;<a href="../telemetry/TelemetryBatch.html" title="class in com.sca4d.iot.api.telemetry">TelemetryBatch</a>&gt;</code></div>
 <div class="col-second odd-row-color"><code><a href="#TELEMETRY_REPORTED" class="member-name-link">TELEMETRY_REPORTED</a></code></div>
@@ -169,38 +149,6 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.event.EventType&lt;<a href="../history/DeviceEventMessage.html" title="class in com.sca4d.iot.api.history">DeviceEventMessage</a>&gt;</span>&nbsp;<span class="element-name">DEVICE_EVENT_OCCURRED</span></div>
 <div class="block">物模型或 IoT 状态机产生的离散 Device 事件。</div>
-</section>
-</li>
-<li>
-<section class="detail" id="DOWNLINK_DISPATCH">
-<h3>DOWNLINK_DISPATCH</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.event.EventType&lt;<a href="DeviceDownlinkDispatch.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkDispatch</a>&gt;</span>&nbsp;<span class="element-name">DOWNLINK_DISPATCH</span></div>
-<div class="block">请求协议实现执行一次标准 Device 下行发送。</div>
-</section>
-</li>
-<li>
-<section class="detail" id="ACKNOWLEDGEMENT_TIMEOUT">
-<h3>ACKNOWLEDGEMENT_TIMEOUT</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.event.EventType&lt;<a href="DeviceAcknowledgementTimeout.html" title="class in com.sca4d.iot.api.message">DeviceAcknowledgementTimeout</a>&gt;</span>&nbsp;<span class="element-name">ACKNOWLEDGEMENT_TIMEOUT</span></div>
-<div class="block">检查一次已经发布的标准 Device 下行是否等待 ACK 超时。</div>
-</section>
-</li>
-<li>
-<section class="detail" id="ACKNOWLEDGEMENT_REQUESTED">
-<h3>ACKNOWLEDGEMENT_REQUESTED</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.event.EventType&lt;<a href="DeviceAcknowledgement.html" title="class in com.sca4d.iot.api.message">DeviceAcknowledgement</a>&gt;</span>&nbsp;<span class="element-name">ACKNOWLEDGEMENT_REQUESTED</span></div>
-<div class="block">请求在来源事务提交后执行一次业务 ACK 状态转换。</div>
-</section>
-</li>
-<li>
-<section class="detail" id="DEVICE_DISCONNECT">
-<h3>DEVICE_DISCONNECT</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.event.EventType&lt;<a href="../connection/DeviceDisconnectMessage.html" title="class in com.sca4d.iot.api.connection">DeviceDisconnectMessage</a>&gt;</span>&nbsp;<span class="element-name">DEVICE_DISCONNECT</span></div>
-<div class="block">请求协议实现终止一个明确的 Device 连接代次。</div>
 </section>
 </li>
 </ul>

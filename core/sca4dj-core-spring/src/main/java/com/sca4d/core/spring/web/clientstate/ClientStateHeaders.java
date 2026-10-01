@@ -1,11 +1,12 @@
 package com.sca4d.core.spring.web.clientstate;
 
+import com.sca4d.core.spring.web.HttpConstants;
 import org.springframework.http.HttpHeaders;
 
 import java.util.stream.Collectors;
 
 /** 将当前调用收集的 {@link ClientState} 写入 HTTP 响应头。 */
-public final class ClientStateHeaders {
+public class ClientStateHeaders {
 
     private ClientStateHeaders() {
     }
@@ -22,7 +23,7 @@ public final class ClientStateHeaders {
         }
         if (!change.targets().isEmpty()) {
             headers.set(
-                    ClientState.REFRESH_HEADER,
+                    HttpConstants.CLIENT_STATE_REFRESH_HEADER,
                     change.targets()
                             .stream()
                             .map(ClientStateTarget::value)

@@ -33,6 +33,7 @@ class AccountAuthenticationSettingsCodecTest {
         AccountAuthenticationSettings decoded = codec.decodeJson(json);
 
         assertThat(json.has("accountId")).isFalse();
+        assertThat(json.path("methods").get(0).path("methodCode").asText()).isEqualTo("AUTHENTICATION/PASSWORD");
         assertThat(decoded.loginFactorCount()).isEqualTo(2);
         assertThat(decoded.sensitiveActionFactorCount()).isOne();
         assertThat(decoded.reusableAuthenticationMaximumAge()).isEqualTo(Duration.ofSeconds(600));
@@ -45,6 +46,26 @@ class AccountAuthenticationSettingsCodecTest {
     }
 
     @Test
+    @DisplayName("账号认证设置拒绝未经迁移的短方法编码")
+    void rejectsUnmigratedMethodCode() {
+        assertThatThrownBy(() -> codec.decode("""
+                {
+                  "loginFactorCount": 1,
+                  "sensitiveActionFactorCount": 1,
+                  "reusableAuthenticationMaximumAgeSeconds": 300,
+                  "methods": [{
+                    "methodCode": "password",
+                    "loginStartEnabled": true,
+                    "loginAdditionalEnabled": true,
+                    "sensitiveActionEnabled": true
+                  }]
+                }
+                """))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("AUTHENTICATION");
+    }
+
+    @Test
     @DisplayName("账号认证设置拒绝未知字段和错误字段类型")
     void rejectsUnknownFieldsAndWrongTypes() {
         assertThatThrownBy(() -> codec.decode("""
@@ -53,7 +74,7 @@ class AccountAuthenticationSettingsCodecTest {
                   "sensitiveActionFactorCount": 1,
                   "reusableAuthenticationMaximumAgeSeconds": 300,
                   "methods": [{
-                    "methodCode": "password",
+                    "methodCode": "AUTHENTICATION/PASSWORD",
                     "loginStartEnabled": true,
                     "loginAdditionalEnabled": true,
                     "sensitiveActionEnabled": true
@@ -69,7 +90,7 @@ class AccountAuthenticationSettingsCodecTest {
                   "sensitiveActionFactorCount": 1,
                   "reusableAuthenticationMaximumAgeSeconds": 300,
                   "methods": [{
-                    "methodCode": "password",
+                    "methodCode": "AUTHENTICATION/PASSWORD",
                     "loginStartEnabled": true,
                     "loginAdditionalEnabled": true,
                     "sensitiveActionEnabled": true
@@ -90,13 +111,13 @@ class AccountAuthenticationSettingsCodecTest {
                   "reusableAuthenticationMaximumAgeSeconds": 300,
                   "methods": [
                     {
-                      "methodCode": "password",
+                      "methodCode": "AUTHENTICATION/PASSWORD",
                       "loginStartEnabled": true,
                       "loginAdditionalEnabled": true,
                       "sensitiveActionEnabled": true
                     },
                     {
-                      "methodCode": "password",
+                      "methodCode": "AUTHENTICATION/PASSWORD",
                       "loginStartEnabled": false,
                       "loginAdditionalEnabled": true,
                       "sensitiveActionEnabled": true

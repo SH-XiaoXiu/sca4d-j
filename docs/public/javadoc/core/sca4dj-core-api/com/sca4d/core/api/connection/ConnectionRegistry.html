@@ -110,12 +110,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#register(com.sca4d.core.api.connection.Connection)" class="member-name-link">register</a><wbr>(@NotNull <a href="Connection.html" title="class in com.sca4d.core.api.connection">Connection</a>&nbsp;connection)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">登记一条新的连接事实；相同连接标识再次登记时由实现刷新当前事实。</div>
+<div class="block">登记一条新的连接信息；相同连接标识再次登记时由实现刷新当前信息。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#remove(com.sca4d.core.api.connection.ConnectionId)" class="member-name-link">remove</a><wbr>(@NotNull <a href="ConnectionId.html" title="class in com.sca4d.core.api.connection">ConnectionId</a>&nbsp;connectionId)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">删除连接事实；连接不存在和重复删除都必须幂等。</div>
+<div class="block">删除连接信息；连接不存在和重复删除都必须幂等。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#terminateBySession(com.sca4d.core.api.authentication.SessionId,java.lang.String)" class="member-name-link">terminateBySession</a><wbr>(@NotNull <a href="../authentication/SessionId.html" title="class in com.sca4d.core.api.authentication">SessionId</a>&nbsp;sessionId,
@@ -148,10 +148,10 @@ loadScripts(document, 'script');</script>
 <h3>register</h3>
 <div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">register</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="Connection.html" title="class in com.sca4d.core.api.connection">Connection</a>&nbsp;connection)</span></div>
-<div class="block">登记一条新的连接事实；相同连接标识再次登记时由实现刷新当前事实。</div>
+<div class="block">登记一条新的连接信息；相同连接标识再次登记时由实现刷新当前信息。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>connection</code> - 已建立的连接事实</dd>
+<dd><code>connection</code> - 已建立的连接信息</dd>
 </dl>
 </section>
 </li>
@@ -175,7 +175,7 @@ loadScripts(document, 'script');</script>
 <h3>remove</h3>
 <div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">remove</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="ConnectionId.html" title="class in com.sca4d.core.api.connection">ConnectionId</a>&nbsp;connectionId)</span></div>
-<div class="block">删除连接事实；连接不存在和重复删除都必须幂等。</div>
+<div class="block">删除连接信息；连接不存在和重复删除都必须幂等。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>connectionId</code> - 待删除的连接标识</dd>
@@ -206,7 +206,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;reason)</span></div>
 <div class="block">终止当前 Session 关联的全部连接。
 
- <p>实现至少删除共享连接事实；如果实现能够定位协议句柄，还必须把稳定原因传给持有句柄的节点并请求断开。
+ <p>实现至少删除共享连接信息；如果实现能够定位协议句柄，还必须把稳定原因传给持有句柄的节点并请求断开。
  调用应幂等，已不存在的连接不构成失败。</p></div>
 <dl class="notes">
 <dt>Parameters:</dt>

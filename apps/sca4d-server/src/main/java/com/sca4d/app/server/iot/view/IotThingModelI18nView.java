@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 返回一个已发布 ThingModel 版本可独立编辑的完整多语言字段。 */
 @SuppressWarnings("unused")
-public final class IotThingModelI18nView {
+public class IotThingModelI18nView {
 
     private final @NotNull String productCode;
 

@@ -32,7 +32,7 @@ class ValidationAnnotationsTest {
     }
 
     /** 保存公共格式校验测试输入。 */
-    private static final class Input {
+    private static class Input {
 
         @BizId
         private String bizId;

@@ -49,12 +49,12 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1>Index</h1>
 </div>
-<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a>
+<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
 <dt><a href="com/sca4d/openapi/client/OpenApiClientService.html#account(long)" class="member-name-link">account(long)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientService.html" title="class in com.sca4d.openapi.client">OpenApiClientService</a></dt>
 <dd>
-<div class="block">读取仍然启用的 Client Account，供 HMAC 认证提交给认证方法。</div>
+<div class="block">读取仍然启用的 Client Account，供 MAC 认证提交给认证方法。</div>
 </dd>
 <dt><a href="com/sca4d/openapi/client/OpenApiClient.html#accountId()" class="member-name-link">accountId()</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClient.html" title="class in com.sca4d.openapi.client">OpenApiClient</a></dt>
 <dd>&nbsp;</dd>
@@ -72,7 +72,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">在 Spring 完成全部单例创建后扫描并校验 OpenAPI 路由。</div>
 </dd>
-<dt><a href="com/sca4d/openapi/client/OpenApiClientService.html#allows(java.lang.String,java.lang.String)" class="member-name-link">allows(String, String)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientService.html" title="class in com.sca4d.openapi.client">OpenApiClientService</a></dt>
+<dt><a href="com/sca4d/openapi/client/OpenApiClientService.html#allows(java.lang.String,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">allows(String, TreeCode)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientService.html" title="class in com.sca4d.openapi.client">OpenApiClientService</a></dt>
 <dd>
 <div class="block">判断 Client 是否有效且已经开放指定 Operation。</div>
 </dd>
@@ -92,9 +92,9 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/openapi/client/OpenApiClientCredentials.html#client()" class="member-name-link">client()</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientCredentials.html" title="class in com.sca4d.openapi.client">OpenApiClientCredentials</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/openapi/web/OpenApiAuthenticationInterceptor.html#CLIENT_ID_HEADER" class="member-name-link">CLIENT_ID_HEADER</a> - Static variable in class com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiAuthenticationInterceptor.html" title="class in com.sca4d.openapi.web">OpenApiAuthenticationInterceptor</a></dt>
+<dt><a href="com/sca4d/openapi/web/OpenApiConstants.html#CLIENT_ID_HEADER" class="member-name-link">CLIENT_ID_HEADER</a> - Static variable in class com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiConstants.html" title="class in com.sca4d.openapi.web">OpenApiConstants</a></dt>
 <dd>
-<div class="block">OpenAPI HMAC Client 标识请求头。</div>
+<div class="block">HMAC Client 标识请求头。</div>
 </dd>
 <dt><a href="com/sca4d/openapi/oauth/OpenApiAuthenticationEndpoint.html#clientCredentials(java.lang.String)" class="member-name-link">clientCredentials(String)</a> - Static method in class com.sca4d.openapi.oauth.<a href="com/sca4d/openapi/oauth/OpenApiAuthenticationEndpoint.html" title="class in com.sca4d.openapi.oauth">OpenApiAuthenticationEndpoint</a></dt>
 <dd>
@@ -124,7 +124,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">根据当前 Session 创建 Application Client。</div>
 </dd>
-<dt><a href="com/sca4d/openapi/client/OpenApiClientRepository.html#create(com.sca4d.openapi.client.OpenApiClient,java.util.Collection)" class="member-name-link">create(OpenApiClient, Collection&lt;String&gt;)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientRepository.html" title="class in com.sca4d.openapi.client">OpenApiClientRepository</a></dt>
+<dt><a href="com/sca4d/openapi/client/OpenApiClientRepository.html#create(com.sca4d.openapi.client.OpenApiClient,java.util.Collection)" class="member-name-link">create(OpenApiClient, Collection&lt;TreeCode&gt;)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientRepository.html" title="class in com.sca4d.openapi.client">OpenApiClientRepository</a></dt>
 <dd>
 <div class="block">原子保存 Client 及完整 Operation 选择，关系写入失败时 Client 也回滚。</div>
 </dd>
@@ -198,6 +198,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/openapi/config/OpenApiProperties.Jwt.html#getMaxTokenLength()" class="member-name-link">getMaxTokenLength()</a> - Method in class com.sca4d.openapi.config.<a href="com/sca4d/openapi/config/OpenApiProperties.Jwt.html" title="class in com.sca4d.openapi.config">OpenApiProperties.Jwt</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/openapi/config/OpenApiEnvironmentPostProcessor.html#getOrder()" class="member-name-link">getOrder()</a> - Method in class com.sca4d.openapi.config.<a href="com/sca4d/openapi/config/OpenApiEnvironmentPostProcessor.html" title="class in com.sca4d.openapi.config">OpenApiEnvironmentPostProcessor</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/openapi/web/OpenApiCachedBodyHttpServletRequest.html#getReader()" class="member-name-link">getReader()</a> - Method in class com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiCachedBodyHttpServletRequest.html" title="class in com.sca4d.openapi.web">OpenApiCachedBodyHttpServletRequest</a></dt>
 <dd>
 <div class="block">按请求字符集返回新的 Reader。</div>
@@ -209,7 +211,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:H">H</h2>
 <dl class="index">
-<dt><a href="com/sca4d/openapi/client/OpenApiClientRepository.html#hasOperation(java.lang.String,java.lang.String)" class="member-name-link">hasOperation(String, String)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientRepository.html" title="class in com.sca4d.openapi.client">OpenApiClientRepository</a></dt>
+<dt><a href="com/sca4d/openapi/client/OpenApiClientRepository.html#hasOperation(java.lang.String,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">hasOperation(String, TreeCode)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientRepository.html" title="class in com.sca4d.openapi.client">OpenApiClientRepository</a></dt>
 <dd>
 <div class="block">判断 Client 是否开放一个 Operation。</div>
 </dd>
@@ -224,7 +226,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">插入 Client 与 IAM Account 的稳定绑定。</div>
 </dd>
-<dt><a href="com/sca4d/openapi/client/mapper/OpenApiClientMapper.html#insertOperations(java.lang.String,java.util.List)" class="member-name-link">insertOperations(String, List&lt;String&gt;)</a> - Method in interface com.sca4d.openapi.client.mapper.<a href="com/sca4d/openapi/client/mapper/OpenApiClientMapper.html" title="interface in com.sca4d.openapi.client.mapper">OpenApiClientMapper</a></dt>
+<dt><a href="com/sca4d/openapi/client/mapper/OpenApiClientMapper.html#insertOperations(java.lang.String,java.util.List)" class="member-name-link">insertOperations(String, List&lt;TreeCode&gt;)</a> - Method in interface com.sca4d.openapi.client.mapper.<a href="com/sca4d/openapi/client/mapper/OpenApiClientMapper.html" title="interface in com.sca4d.openapi.client.mapper">OpenApiClientMapper</a></dt>
 <dd>
 <div class="block">插入一个非空批次的 Operation 关系，返回实际新增数。</div>
 </dd>
@@ -235,9 +237,7 @@ loadScripts(document, 'script');</script>
 <div class="block">为已经建立的 Session 签发独立 OpenAPI access JWT。</div>
 </dd>
 <dt><a href="com/sca4d/openapi/oauth/OpenApiJwtTokenService.IssuedOpenApiJwt.html#%3Cinit%3E(java.lang.String,java.time.Instant)" class="member-name-link">IssuedOpenApiJwt(String, Instant)</a> - Constructor for class com.sca4d.openapi.oauth.<a href="com/sca4d/openapi/oauth/OpenApiJwtTokenService.IssuedOpenApiJwt.html" title="class in com.sca4d.openapi.oauth">OpenApiJwtTokenService.IssuedOpenApiJwt</a></dt>
-<dd>
-<div class="block">创建签发结果。</div>
-</dd>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:J">J</h2>
 <dl class="index">
@@ -264,9 +264,9 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/openapi/web/OpenApiHmacCanonicalRequest.html#nonce()" class="member-name-link">nonce()</a> - Method in class com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiHmacCanonicalRequest.html" title="class in com.sca4d.openapi.web">OpenApiHmacCanonicalRequest</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/openapi/web/OpenApiAuthenticationInterceptor.html#NONCE_HEADER" class="member-name-link">NONCE_HEADER</a> - Static variable in class com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiAuthenticationInterceptor.html" title="class in com.sca4d.openapi.web">OpenApiAuthenticationInterceptor</a></dt>
+<dt><a href="com/sca4d/openapi/web/OpenApiConstants.html#NONCE_HEADER" class="member-name-link">NONCE_HEADER</a> - Static variable in class com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiConstants.html" title="class in com.sca4d.openapi.web">OpenApiConstants</a></dt>
 <dd>
-<div class="block">OpenAPI HMAC 一次性随机数请求头。</div>
+<div class="block">HMAC 一次性随机数请求头。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:O">O</h2>
@@ -285,12 +285,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/openapi/web/OpenApiAuthenticationInterceptor.html" class="type-name-link" title="class in com.sca4d.openapi.web">OpenApiAuthenticationInterceptor</a> - Class in <a href="com/sca4d/openapi/web/package-summary.html">com.sca4d.openapi.web</a></dt>
 <dd>
-<div class="block">在通用认证拦截器前恢复 OpenAPI 独立 JWT 或验证 OpenAPI HMAC 请求。</div>
+<div class="block">在通用认证拦截器前恢复 OpenAPI 独立 JWT 或验证 OpenAPI MAC 请求。</div>
 </dd>
 <dt><a href="com/sca4d/openapi/web/OpenApiAuthenticationInterceptor.html#%3Cinit%3E(com.sca4d.openapi.oauth.OpenApiJwtTokenService,com.sca4d.openapi.client.OpenApiClientService,com.sca4d.auth.hmac.HmacAuthenticationMethod,com.sca4d.auth.session.SessionService)" class="member-name-link">OpenApiAuthenticationInterceptor(OpenApiJwtTokenService, OpenApiClientService, HmacAuthenticationMethod, SessionService)</a> - Constructor for class com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiAuthenticationInterceptor.html" title="class in com.sca4d.openapi.web">OpenApiAuthenticationInterceptor</a></dt>
-<dd>
-<div class="block">创建 OpenAPI 认证拦截器。</div>
-</dd>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/openapi/web/OpenApiAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.openapi.web">OpenApiAutoConfiguration</a> - Class in <a href="com/sca4d/openapi/web/package-summary.html">com.sca4d.openapi.web</a></dt>
 <dd>
 <div class="block">自动装配 OpenAPI 路由校验、认证端点和 Client Operation 请求检查。</div>
@@ -299,11 +297,11 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/openapi/web/OpenApiCachedBodyHttpServletRequest.html" class="type-name-link" title="class in com.sca4d.openapi.web">OpenApiCachedBodyHttpServletRequest</a> - Class in <a href="com/sca4d/openapi/web/package-summary.html">com.sca4d.openapi.web</a></dt>
 <dd>
-<div class="block">保存 OpenAPI 请求体，使 HMAC 校验读取后 Spring 仍能绑定同一份请求体。</div>
+<div class="block">保存 OpenAPI 请求体，使 MAC 校验读取后 Spring 仍能绑定同一份请求体。</div>
 </dd>
 <dt><a href="com/sca4d/openapi/web/OpenApiCachedBodyHttpServletRequest.html#%3Cinit%3E(jakarta.servlet.http.HttpServletRequest)" class="member-name-link">OpenApiCachedBodyHttpServletRequest(HttpServletRequest)</a> - Constructor for class com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiCachedBodyHttpServletRequest.html" title="class in com.sca4d.openapi.web">OpenApiCachedBodyHttpServletRequest</a></dt>
 <dd>
-<div class="block">从原始请求读取并保存请求体。</div>
+<div class="block">从原始请求读取并保存请求体，不依赖 Content-Length 判断实际长度。</div>
 </dd>
 <dt><a href="com/sca4d/openapi/client/OpenApiClient.html" class="type-name-link" title="class in com.sca4d.openapi.client">OpenApiClient</a> - Class in <a href="com/sca4d/openapi/client/package-summary.html">com.sca4d.openapi.client</a></dt>
 <dd>
@@ -334,9 +332,7 @@ loadScripts(document, 'script');</script>
 <div class="block">使用 OpenAPI Client 表和 Operation 关系检查当前调用。</div>
 </dd>
 <dt><a href="com/sca4d/openapi/client/OpenApiClientOperationCheckerImpl.html#%3Cinit%3E(com.sca4d.openapi.client.OpenApiClientService)" class="member-name-link">OpenApiClientOperationCheckerImpl(OpenApiClientService)</a> - Constructor for class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientOperationCheckerImpl.html" title="class in com.sca4d.openapi.client">OpenApiClientOperationCheckerImpl</a></dt>
-<dd>
-<div class="block">创建 Client Operation 检查器。</div>
-</dd>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/openapi/client/OpenApiClientRepository.html" class="type-name-link" title="class in com.sca4d.openapi.client">OpenApiClientRepository</a> - Class in <a href="com/sca4d/openapi/client/package-summary.html">com.sca4d.openapi.client</a></dt>
 <dd>
 <div class="block">隔离 OpenAPI Client 表和 Operation 关系表的 SQL 与影响行数。</div>
@@ -357,13 +353,23 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">表示 OpenAPI Client 是否允许继续认证和调用。</div>
 </dd>
+<dt><a href="com/sca4d/openapi/web/OpenApiConstants.html" class="type-name-link" title="class in com.sca4d.openapi.web">OpenApiConstants</a> - Class in <a href="com/sca4d/openapi/web/package-summary.html">com.sca4d.openapi.web</a></dt>
+<dd>
+<div class="block">保存 OpenAPI 路由与 HMAC 请求在进程启动时固定的公开名称。</div>
+</dd>
+<dt><a href="com/sca4d/openapi/config/OpenApiEnvironmentPostProcessor.html" class="type-name-link" title="class in com.sca4d.openapi.config">OpenApiEnvironmentPostProcessor</a> - Class in <a href="com/sca4d/openapi/config/package-summary.html">com.sca4d.openapi.config</a></dt>
+<dd>
+<div class="block">在 OpenAPI 路由和认证 Bean 创建前固定公开路径与 HMAC Header。</div>
+</dd>
+<dt><a href="com/sca4d/openapi/config/OpenApiEnvironmentPostProcessor.html#%3Cinit%3E()" class="member-name-link">OpenApiEnvironmentPostProcessor()</a> - Constructor for class com.sca4d.openapi.config.<a href="com/sca4d/openapi/config/OpenApiEnvironmentPostProcessor.html" title="class in com.sca4d.openapi.config">OpenApiEnvironmentPostProcessor</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/openapi/web/OpenApiHmacCanonicalRequest.html" class="type-name-link" title="class in com.sca4d.openapi.web">OpenApiHmacCanonicalRequest</a> - Class in <a href="com/sca4d/openapi/web/package-summary.html">com.sca4d.openapi.web</a></dt>
 <dd>
-<div class="block">按 OpenAPI Client 的固定字段顺序生成 HMAC canonical request。</div>
+<div class="block">按 OpenAPI Client 的固定字段顺序生成 MAC canonical request。</div>
 </dd>
 <dt><a href="com/sca4d/openapi/web/OpenApiHmacCanonicalRequest.html#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.lang.String,byte%5B%5D,java.time.Instant,java.lang.String)" class="member-name-link">OpenApiHmacCanonicalRequest(String, String, String, String, byte[], Instant, String)</a> - Constructor for class com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiHmacCanonicalRequest.html" title="class in com.sca4d.openapi.web">OpenApiHmacCanonicalRequest</a></dt>
 <dd>
-<div class="block">创建已经规范化的 OpenAPI HMAC 请求。</div>
+<div class="block">创建已经规范化的 OpenAPI MAC 请求。</div>
 </dd>
 <dt><a href="com/sca4d/openapi/oauth/OpenApiJwtTokenService.html" class="type-name-link" title="class in com.sca4d.openapi.oauth">OpenApiJwtTokenService</a> - Class in <a href="com/sca4d/openapi/oauth/package-summary.html">com.sca4d.openapi.oauth</a></dt>
 <dd>
@@ -393,7 +399,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/openapi/web/OpenApiRequestBodyFilter.html" class="type-name-link" title="class in com.sca4d.openapi.web">OpenApiRequestBodyFilter</a> - Class in <a href="com/sca4d/openapi/web/package-summary.html">com.sca4d.openapi.web</a></dt>
 <dd>
-<div class="block">只为 OpenAPI 路由缓存请求体，供 HMAC 校验和 Controller 参数绑定共同读取。</div>
+<div class="block">只为 OpenAPI 路由缓存请求体，供 MAC 校验和 Controller 参数绑定共同读取。</div>
 </dd>
 <dt><a href="com/sca4d/openapi/web/OpenApiRequestBodyFilter.html#%3Cinit%3E()" class="member-name-link">OpenApiRequestBodyFilter()</a> - Constructor for class com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiRequestBodyFilter.html" title="class in com.sca4d.openapi.web">OpenApiRequestBodyFilter</a></dt>
 <dd>&nbsp;</dd>
@@ -402,9 +408,7 @@ loadScripts(document, 'script');</script>
 <div class="block">在普通 Spring MVC Handler 与 Core 权限切面之间检查 OpenAPI Client 身份及开放 Operation。</div>
 </dd>
 <dt><a href="com/sca4d/openapi/web/OpenApiRequestInterceptor.html#%3Cinit%3E(com.sca4d.openapi.web.OpenApiClientOperationChecker)" class="member-name-link">OpenApiRequestInterceptor(OpenApiClientOperationChecker)</a> - Constructor for class com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiRequestInterceptor.html" title="class in com.sca4d.openapi.web">OpenApiRequestInterceptor</a></dt>
-<dd>
-<div class="block">创建 OpenAPI 请求拦截器。</div>
-</dd>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/openapi/web/annotation/OpenApiRoute.html" class="type-name-link" title="annotation interface in com.sca4d.openapi.web.annotation">OpenApiRoute</a> - Annotation Interface in <a href="com/sca4d/openapi/web/annotation/package-summary.html">com.sca4d.openapi.web.annotation</a></dt>
 <dd>
 <div class="block">声明一条由具体应用明确公开的 OpenAPI Tool 路由。</div>
@@ -419,7 +423,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/openapi/web/OpenApiRouteDefinition.html" class="type-name-link" title="class in com.sca4d.openapi.web">OpenApiRouteDefinition</a> - Class in <a href="com/sca4d/openapi/web/package-summary.html">com.sca4d.openapi.web</a></dt>
 <dd>
-<div class="block">保存已经校验的 OpenAPI 路由标识及其 Client Operation 约束。</div>
+<div class="block">保存已经校验的 OpenAPI 路由标识和 Client Operation 约束。</div>
 </dd>
 <dt><a href="com/sca4d/openapi/web/OpenApiRouteDefinition.html#%3Cinit%3E(com.sca4d.openapi.web.annotation.OpenApiRoute)" class="member-name-link">OpenApiRouteDefinition(OpenApiRoute)</a> - Constructor for class com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiRouteDefinition.html" title="class in com.sca4d.openapi.web">OpenApiRouteDefinition</a></dt>
 <dd>
@@ -464,9 +468,15 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/openapi/web/OpenApiRouteDefinition.html#path()" class="member-name-link">path()</a> - Method in class com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiRouteDefinition.html" title="class in com.sca4d.openapi.web">OpenApiRouteDefinition</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/openapi/web/OpenApiConstants.html#PATH_PREFIX" class="member-name-link">PATH_PREFIX</a> - Static variable in class com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiConstants.html" title="class in com.sca4d.openapi.web">OpenApiConstants</a></dt>
+<dd>
+<div class="block"><code>@OpenApiRoute</code> 声明的公开路径必须位于此路径之下。</div>
+</dd>
+<dt><a href="com/sca4d/openapi/config/OpenApiEnvironmentPostProcessor.html#postProcessEnvironment(org.springframework.core.env.ConfigurableEnvironment,org.springframework.boot.SpringApplication)" class="member-name-link">postProcessEnvironment(ConfigurableEnvironment, SpringApplication)</a> - Method in class com.sca4d.openapi.config.<a href="com/sca4d/openapi/config/OpenApiEnvironmentPostProcessor.html" title="class in com.sca4d.openapi.config">OpenApiEnvironmentPostProcessor</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/openapi/web/OpenApiAuthenticationInterceptor.html#preHandleWithCall(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,java.lang.Object,com.sca4d.core.api.call.Call)" class="member-name-link">preHandleWithCall(HttpServletRequest, HttpServletResponse, Object, Call)</a> - Method in class com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiAuthenticationInterceptor.html" title="class in com.sca4d.openapi.web">OpenApiAuthenticationInterceptor</a></dt>
 <dd>
-<div class="block">恢复 OpenAPI JWT 或将 HMAC Proof 转换为当前调用的 Session。</div>
+<div class="block">恢复 OpenAPI JWT 或将 MAC Proof 转换为当前调用的 Session。</div>
 </dd>
 <dt><a href="com/sca4d/openapi/web/OpenApiRequestInterceptor.html#preHandleWithCall(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,java.lang.Object,com.sca4d.core.api.call.Call)" class="member-name-link">preHandleWithCall(HttpServletRequest, HttpServletResponse, Object, Call)</a> - Method in class com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiRequestInterceptor.html" title="class in com.sca4d.openapi.web">OpenApiRequestInterceptor</a></dt>
 <dd>
@@ -481,7 +491,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">替换 Client 的 Operation 列表，仍要求当前 Session 拥有目标权限。</div>
 </dd>
-<dt><a href="com/sca4d/openapi/client/OpenApiClientRepository.html#replaceOperations(java.lang.String,java.util.Collection)" class="member-name-link">replaceOperations(String, Collection&lt;String&gt;)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientRepository.html" title="class in com.sca4d.openapi.client">OpenApiClientRepository</a></dt>
+<dt><a href="com/sca4d/openapi/client/OpenApiClientRepository.html#replaceOperations(java.lang.String,java.util.Collection)" class="member-name-link">replaceOperations(String, Collection&lt;TreeCode&gt;)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientRepository.html" title="class in com.sca4d.openapi.client">OpenApiClientRepository</a></dt>
 <dd>
 <div class="block">锁定 Client 后原子替换完整 Operation 列表；空集合清空，失败保留原关系。</div>
 </dd>
@@ -498,7 +508,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/openapi/client/mapper/OpenApiClientMapper.html#selectClient(java.lang.String,java.lang.Long,boolean)" class="member-name-link">selectClient(String, Long, boolean)</a> - Method in interface com.sca4d.openapi.client.mapper.<a href="com/sca4d/openapi/client/mapper/OpenApiClientMapper.html" title="interface in com.sca4d.openapi.client.mapper">OpenApiClientMapper</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/openapi/client/mapper/OpenApiClientMapper.html#selectOperations(java.lang.String,java.lang.String)" class="member-name-link">selectOperations(String, String)</a> - Method in interface com.sca4d.openapi.client.mapper.<a href="com/sca4d/openapi/client/mapper/OpenApiClientMapper.html" title="interface in com.sca4d.openapi.client.mapper">OpenApiClientMapper</a></dt>
+<dt><a href="com/sca4d/openapi/client/mapper/OpenApiClientMapper.html#selectOperations(java.lang.String,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">selectOperations(String, TreeCode)</a> - Method in interface com.sca4d.openapi.client.mapper.<a href="com/sca4d/openapi/client/mapper/OpenApiClientMapper.html" title="interface in com.sca4d.openapi.client.mapper">OpenApiClientMapper</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/openapi/config/OpenApiProperties.Jwt.html#setAccessTtl(java.time.Duration)" class="member-name-link">setAccessTtl(Duration)</a> - Method in class com.sca4d.openapi.config.<a href="com/sca4d/openapi/config/OpenApiProperties.Jwt.html" title="class in com.sca4d.openapi.config">OpenApiProperties.Jwt</a></dt>
 <dd>&nbsp;</dd>
@@ -516,9 +526,9 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">认证 Token 端点也需要表单绑定，因此所有 OpenAPI 路径都使用同一包装。</div>
 </dd>
-<dt><a href="com/sca4d/openapi/web/OpenApiAuthenticationInterceptor.html#SIGNATURE_HEADER" class="member-name-link">SIGNATURE_HEADER</a> - Static variable in class com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiAuthenticationInterceptor.html" title="class in com.sca4d.openapi.web">OpenApiAuthenticationInterceptor</a></dt>
+<dt><a href="com/sca4d/openapi/web/OpenApiConstants.html#SIGNATURE_HEADER" class="member-name-link">SIGNATURE_HEADER</a> - Static variable in class com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiConstants.html" title="class in com.sca4d.openapi.web">OpenApiConstants</a></dt>
 <dd>
-<div class="block">OpenAPI HMAC 无填充 Base64URL 签名请求头。</div>
+<div class="block">HMAC 无填充 Base64URL 签名请求头。</div>
 </dd>
 <dt><a href="com/sca4d/openapi/client/OpenApiClient.html#status()" class="member-name-link">status()</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClient.html" title="class in com.sca4d.openapi.client">OpenApiClient</a></dt>
 <dd>&nbsp;</dd>
@@ -527,9 +537,9 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/openapi/web/OpenApiHmacCanonicalRequest.html#timestamp()" class="member-name-link">timestamp()</a> - Method in class com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiHmacCanonicalRequest.html" title="class in com.sca4d.openapi.web">OpenApiHmacCanonicalRequest</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/openapi/web/OpenApiAuthenticationInterceptor.html#TIMESTAMP_HEADER" class="member-name-link">TIMESTAMP_HEADER</a> - Static variable in class com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiAuthenticationInterceptor.html" title="class in com.sca4d.openapi.web">OpenApiAuthenticationInterceptor</a></dt>
+<dt><a href="com/sca4d/openapi/web/OpenApiConstants.html#TIMESTAMP_HEADER" class="member-name-link">TIMESTAMP_HEADER</a> - Static variable in class com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiConstants.html" title="class in com.sca4d.openapi.web">OpenApiConstants</a></dt>
 <dd>
-<div class="block">OpenAPI HMAC Unix 秒请求头。</div>
+<div class="block">HMAC Unix 秒请求头。</div>
 </dd>
 <dt><a href="com/sca4d/openapi/oauth/OpenApiJwtTokenService.IssuedOpenApiJwt.html#token()" class="member-name-link">token()</a> - Method in class com.sca4d.openapi.oauth.<a href="com/sca4d/openapi/oauth/OpenApiJwtTokenService.IssuedOpenApiJwt.html" title="class in com.sca4d.openapi.oauth">OpenApiJwtTokenService.IssuedOpenApiJwt</a></dt>
 <dd>&nbsp;</dd>
@@ -559,6 +569,10 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:V">V</h2>
 <dl class="index">
+<dt><a href="com/sca4d/openapi/web/OpenApiConstants.html#validate()" class="member-name-link">validate()</a> - Static method in class com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiConstants.html" title="class in com.sca4d.openapi.web">OpenApiConstants</a></dt>
+<dd>
+<div class="block">校验 OpenAPI 路径和全部 HMAC Header 名称。</div>
+</dd>
 <dt><a href="com/sca4d/openapi/client/OpenApiClientStatus.html#value()" class="member-name-link">value()</a> - Method in enum class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientStatus.html" title="enum class in com.sca4d.openapi.client">OpenApiClientStatus</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/openapi/client/OpenApiClientStatus.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientStatus.html" title="enum class in com.sca4d.openapi.client">OpenApiClientStatus</a></dt>
@@ -570,16 +584,16 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
 </dd>
-<dt><a href="com/sca4d/openapi/client/OpenApiClientOperationCheckerImpl.html#verifyAllowed(com.sca4d.core.api.call.Call,java.lang.String)" class="member-name-link">verifyAllowed(Call, String)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientOperationCheckerImpl.html" title="class in com.sca4d.openapi.client">OpenApiClientOperationCheckerImpl</a></dt>
+<dt><a href="com/sca4d/openapi/client/OpenApiClientOperationCheckerImpl.html#verifyAllowed(com.sca4d.core.api.call.Call,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">verifyAllowed(Call, TreeCode)</a> - Method in class com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientOperationCheckerImpl.html" title="class in com.sca4d.openapi.client">OpenApiClientOperationCheckerImpl</a></dt>
 <dd>
 <div class="block">拒绝停用、未知或未开放目标 Operation 的 Client。</div>
 </dd>
-<dt><a href="com/sca4d/openapi/web/OpenApiClientOperationChecker.html#verifyAllowed(com.sca4d.core.api.call.Call,java.lang.String)" class="member-name-link">verifyAllowed(Call, String)</a> - Method in interface com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiClientOperationChecker.html" title="interface in com.sca4d.openapi.web">OpenApiClientOperationChecker</a></dt>
+<dt><a href="com/sca4d/openapi/web/OpenApiClientOperationChecker.html#verifyAllowed(com.sca4d.core.api.call.Call,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">verifyAllowed(Call, TreeCode)</a> - Method in interface com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiClientOperationChecker.html" title="interface in com.sca4d.openapi.web">OpenApiClientOperationChecker</a></dt>
 <dd>
 <div class="block">检查一次 OpenAPI 调用。</div>
 </dd>
 </dl>
-<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a></main>
+<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:J">J</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a></main>
 </div>
 </div>
 </body>

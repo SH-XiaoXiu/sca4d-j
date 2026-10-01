@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">AcknowledgementDecision</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">AcknowledgementDecision</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">表示 ACK 策略对当前下行消息给出的无副作用判断。</div>
 </section>
@@ -163,7 +163,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="AcknowledgementDecision.html" title="class in com.sca4d.iot.api.message">AcknowledgementDecision</a></span>&nbsp;<span class="element-name">waitForMore</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>继续等待其他 ACK 的结果</dd>
+<dd>继续等待其他 ACK 的决定</dd>
 </dl>
 </section>
 </li>
@@ -210,7 +210,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="IotFailureCode.html" title="class in com.sca4d.iot.api.message">IotFailureCode</a></span>&nbsp;<span class="element-name">failure</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>FAIL 的稳定失败 code；其他结果为空</dd>
+<dd>FAIL 的稳定失败 code；非 FAIL 结果为空</dd>
 </dl>
 </section>
 </li>

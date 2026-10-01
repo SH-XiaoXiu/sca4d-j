@@ -9,11 +9,10 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 /** 保存完成 Quartz 对账的集群任务计划，供 Quartz fire 恢复任务定义。 */
-public final class QuartzClusterTaskRegistry {
+public class QuartzClusterTaskRegistry {
 
     private final AtomicReference<Map<ScheduleKey, ClusterTaskSchedule>> schedules = new AtomicReference<>(Map.of());
 
-    /** 创建尚未包含集群任务计划的目录。 */
     public QuartzClusterTaskRegistry() {
     }
 

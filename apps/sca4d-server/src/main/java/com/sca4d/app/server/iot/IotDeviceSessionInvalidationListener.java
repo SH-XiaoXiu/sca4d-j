@@ -11,7 +11,7 @@ import java.util.Objects;
 
 /** 在 Device Account 的 Session 失效后可靠登记当前 Device 连接的断开消息。 */
 @Component
-public final class IotDeviceSessionInvalidationListener implements SessionInvalidationListener {
+public class IotDeviceSessionInvalidationListener implements SessionInvalidationListener {
 
     private final @NotNull IdentityService identities;
 

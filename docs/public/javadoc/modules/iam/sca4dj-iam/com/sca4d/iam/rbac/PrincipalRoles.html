@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">PrincipalRoles</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">PrincipalRoles</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">保存 Principal 当前角色以及不能由普通替换移除的角色关系。</div>
 </section>
@@ -128,17 +128,17 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#principalId()" class="member-name-link">principalId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回 Principal 标识。</div>
+<div class="block">Principal 标识。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#protectedRoleIds()" class="member-name-link">protectedRoleIds</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回普通角色替换必须保留的角色关系。</div>
+<div class="block">普通角色替换必须保留的角色关系。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="Role.html" title="class in com.sca4d.iam.rbac">Role</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#roles()" class="member-name-link">roles</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回 Principal 当前关联的角色。</div>
+<div class="block">Principal 当前关联的角色。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="RbacScope.html" title="class in com.sca4d.iam.rbac">RbacScope</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#scope()" class="member-name-link">scope</a>()</code></div>
@@ -213,7 +213,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name">principalId</span>()</div>
-<div class="block">返回 Principal 标识。</div>
+<div class="block">Principal 标识。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>Principal 标识</dd>
@@ -226,7 +226,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="Role.html" title="class in com.sca4d.iam.rbac">Role</a>&gt;</span>&nbsp;<span class="element-name">roles</span>()</div>
-<div class="block">返回 Principal 当前关联的角色。</div>
+<div class="block">Principal 当前关联的角色。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>不可修改的角色列表</dd>
@@ -239,7 +239,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</span>&nbsp;<span class="element-name">protectedRoleIds</span>()</div>
-<div class="block">返回普通角色替换必须保留的角色关系。</div>
+<div class="block">普通角色替换必须保留的角色关系。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>不可修改的角色标识集合</dd>

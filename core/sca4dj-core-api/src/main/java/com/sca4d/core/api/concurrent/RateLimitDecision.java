@@ -7,13 +7,13 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Duration;
 
 /** 保存一次限流额度判断是否允许以及拒绝后的等待时间。 */
-public final class RateLimitDecision {
+public class RateLimitDecision {
 
     private static final RateLimitDecision ALLOWED = new RateLimitDecision(true, Duration.ZERO);
 
-    private final boolean allowed;
-
     private final @NotNull Duration retryAfter;
+
+    private final boolean allowed;
 
     private RateLimitDecision(boolean allowed, @NotNull Duration retryAfter) {
         this.allowed = allowed;
@@ -21,7 +21,7 @@ public final class RateLimitDecision {
     }
 
     /**
-     * 返回允许当前调用的结果。
+     * 允许当前调用的结果。
      *
      * @return 不要求等待的允许结果
      */
@@ -44,7 +44,7 @@ public final class RateLimitDecision {
     }
 
     /**
-     * 返回当前调用是否取得全部额度。
+     * 当前调用是否取得全部额度。
      *
      * @return 允许调用时返回 `true`
      */
@@ -54,7 +54,7 @@ public final class RateLimitDecision {
     }
 
     /**
-     * 返回拒绝后的等待时间。
+     * 拒绝后的等待时间。
      *
      * @return 拒绝时为正数等待时间，允许时为零
      */

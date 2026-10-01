@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存显式回执或 reported 推导结果共用的业务确认事实。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/message/DeviceAcknowledgementTimeout.html" title="class in com.sca4d.iot.api.message">DeviceAcknowledgementTimeout</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/message/DeviceAcknowledgementCheck.html" title="class in com.sca4d.iot.api.message">DeviceAcknowledgementCheck</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">请求检查一个标准 Device 下行消息的指定发送尝试是否等待 ACK 超时。</div>
 </div>
@@ -101,7 +101,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/connection/DeviceConnection.html" title="class in com.sca4d.iot.api.connection">DeviceConnection</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">保存设备接入实现观测到的一条连接事实，不把它等同于 `Session` 或在线状态。</div>
+<div class="block">保存设备接入实现观测到的一条连接数据，不把它等同于 `Session` 或在线状态。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/connection/DeviceConnectionAccess.html" title="class in com.sca4d.iot.api.connection">DeviceConnectionAccess</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
@@ -129,7 +129,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/api/connection/DeviceConnectionQueryService.html" title="interface in com.sca4d.iot.api.connection">DeviceConnectionQueryService</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab1">
-<div class="block">批量读取 Device 当前连接事实，不解释业务在线状态。</div>
+<div class="block">批量读取 Device 当前连接信息，不解释业务在线状态。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/api/connection/DeviceConnectionReceiver.html" title="interface in com.sca4d.iot.api.connection">DeviceConnectionReceiver</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
@@ -151,93 +151,93 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">请求一种设备接入实现终止一个明确连接代次。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/message/DeviceDownlinkDispatch.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkDispatch</a></div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/message/DeviceDispatchMessage.html" title="class in com.sca4d.iot.api.message">DeviceDispatchMessage</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">请求发送一个标准 Device 下行消息的指定尝试。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iot/api/message/DeviceDownlinkKind.html" title="enum class in com.sca4d.iot.api.message">DeviceDownlinkKind</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
-<div class="block">区分标准下行消息代表持续 desired 还是一次性 command。</div>
-</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkMessage</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/message/DeviceDownlink.html" title="class in com.sca4d.iot.api.message">DeviceDownlink</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存 desired 或 command 共用的标准下行消息快照。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/api/message/DeviceDownlinkPublisher.html" title="interface in com.sca4d.iot.api.message">DeviceDownlinkPublisher&lt;P&gt;</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
-<div class="block">使用一种具体协议类型编码并发布标准设备下行消息。</div>
-</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iot/api/message/DeviceDownlinkStatus.html" title="enum class in com.sca4d.iot.api.message">DeviceDownlinkStatus</a></div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iot/api/message/DeviceDownlinkKind.html" title="enum class in com.sca4d.iot.api.message">DeviceDownlinkKind</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="block">区分标准下行消息代表持续 desired 还是一次性 command。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iot/api/message/DeviceDownlinkStatus.html" title="enum class in com.sca4d.iot.api.message">DeviceDownlinkStatus</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
 <div class="block">表示标准设备下行消息的持久化生命周期。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/query/DeviceEvent.html" title="class in com.sca4d.iot.api.query">DeviceEvent</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/query/DeviceEvent.html" title="class in com.sca4d.iot.api.query">DeviceEvent</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存一条已经持久化的离散设备事件。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/history/DeviceEventMessage.html" title="class in com.sca4d.iot.api.history">DeviceEventMessage</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">保存已经通过物模型校验、准备由 `MessagePublisher` 发布的一次 Device 事件。</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/history/DeviceEventMessage.html" title="class in com.sca4d.iot.api.history">DeviceEventMessage</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">保存已经通过物模型校验、准备由 `MessageBus` 发布的一次 Device 事件。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/api/query/DeviceHistoryQueryService.html" title="interface in com.sca4d.iot.api.query">DeviceHistoryQueryService</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/api/query/DeviceHistoryQueryService.html" title="interface in com.sca4d.iot.api.query">DeviceHistoryQueryService</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">分页读取 Device 下行、回执、事件和 Telemetry 历史。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/api/history/DeviceHistoryStore.html" title="interface in com.sca4d.iot.api.history">DeviceHistoryStore</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/api/history/DeviceHistoryStore.html" title="interface in com.sca4d.iot.api.history">DeviceHistoryStore</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">从具体应用选择的历史存储读取 Device 事件、ACK、定时结果和 Telemetry。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/api/connection/DeviceOnlinePolicy.html" title="interface in com.sca4d.iot.api.connection">DeviceOnlinePolicy</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
-<div class="block">根据具体应用已经选择的当前连接事实判断 Device 是否在线。</div>
-</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/api/protocol/DeviceProtocol.html" title="interface in com.sca4d.iot.api.protocol">DeviceProtocol</a></div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/api/connection/DeviceOnlinePolicy.html" title="interface in com.sca4d.iot.api.connection">DeviceOnlinePolicy</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="block">根据具体应用已经选择的当前连接信息判断 Device 是否在线。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/api/protocol/DeviceProtocol.html" title="interface in com.sca4d.iot.api.protocol">DeviceProtocol</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">声明一个稳定 code 的设备协议并验证它与物模型成员的映射。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/protocol/DeviceProtocolMessage.html" title="class in com.sca4d.iot.api.protocol">DeviceProtocolMessage</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/protocol/DeviceProtocolMessage.html" title="class in com.sca4d.iot.api.protocol">DeviceProtocolMessage</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存传输路由已经定位 Device 后交给其协议解码的一条原始上行消息。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/api/query/DeviceRuntimeQueryService.html" title="interface in com.sca4d.iot.api.query">DeviceRuntimeQueryService</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/api/query/DeviceRuntimeQueryService.html" title="interface in com.sca4d.iot.api.query">DeviceRuntimeQueryService</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">读取 Device 当前连接、reported 和 desired 投影。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/query/DeviceRuntimeSnapshot.html" title="class in com.sca4d.iot.api.query">DeviceRuntimeSnapshot</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/query/DeviceRuntimeSnapshot.html" title="class in com.sca4d.iot.api.query">DeviceRuntimeSnapshot</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存同一 Device 当前连接、reported 和 desired 的一次查询结果。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/schedule/DeviceSchedule.html" title="class in com.sca4d.iot.api.schedule">DeviceSchedule</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/schedule/DeviceSchedule.html" title="class in com.sca4d.iot.api.schedule">DeviceSchedule</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存一个持续负责生成设备 command 下行的定时规则。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/schedule/DeviceScheduledCommand.html" title="class in com.sca4d.iot.api.schedule">DeviceScheduledCommand</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/schedule/DeviceScheduledCommand.html" title="class in com.sca4d.iot.api.schedule">DeviceScheduledCommand</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存设备定时触发后需要提交的物模型 command 和输入。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/schedule/DeviceScheduleExecution.html" title="class in com.sca4d.iot.api.schedule">DeviceScheduleExecution</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/schedule/DeviceScheduleExecution.html" title="class in com.sca4d.iot.api.schedule">DeviceScheduleExecution</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存一次设备定时计划时间对应的下行生成结果。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iot/api/schedule/DeviceScheduleExecutionStatus.html" title="enum class in com.sca4d.iot.api.schedule">DeviceScheduleExecutionStatus</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iot/api/schedule/DeviceScheduleExecutionStatus.html" title="enum class in com.sca4d.iot.api.schedule">DeviceScheduleExecutionStatus</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
 <div class="block">表示一次计划时间生成设备下行的结果。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/api/schedule/DeviceScheduleQueryService.html" title="interface in com.sca4d.iot.api.schedule">DeviceScheduleQueryService</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/api/schedule/DeviceScheduleQueryService.html" title="interface in com.sca4d.iot.api.schedule">DeviceScheduleQueryService</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">查询 Device 定时规则和每次计划时间的下行生成结果。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/api/schedule/DeviceScheduleService.html" title="interface in com.sca4d.iot.api.schedule">DeviceScheduleService</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/api/schedule/DeviceScheduleService.html" title="interface in com.sca4d.iot.api.schedule">DeviceScheduleService</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">创建、替换、暂停和取消负责生成设备 command 下行的定时规则。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iot/api/schedule/DeviceScheduleStatus.html" title="enum class in com.sca4d.iot.api.schedule">DeviceScheduleStatus</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iot/api/schedule/DeviceScheduleStatus.html" title="enum class in com.sca4d.iot.api.schedule">DeviceScheduleStatus</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
 <div class="block">表示设备定时规则是否继续产生新的设备下行。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/schedule/DeviceScheduleTrigger.html" title="class in com.sca4d.iot.api.schedule">DeviceScheduleTrigger</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/schedule/DeviceScheduleTrigger.html" title="class in com.sca4d.iot.api.schedule">DeviceScheduleTrigger</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用单次绝对时间或带时区的六字段 Cron 表达设备下行触发时间。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/api/message/DeviceTransport.html" title="interface in com.sca4d.iot.api.message">DeviceTransport&lt;P&gt;</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="block">使用一种具体协议类型编码并发布标准设备下行消息。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/message/DeviceUplink.html" title="class in com.sca4d.iot.api.message">DeviceUplink</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
@@ -259,144 +259,148 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">接收设备协议已经转换为 IoT 标准对象的上行结果。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/message/IotFailureCode.html" title="class in com.sca4d.iot.api.message">IotFailureCode</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/IotCapabilities.html" title="class in com.sca4d.iot.api">IotCapabilities</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">声明 IoT 管理 API、设备接入能力及其共同系统身份。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/message/IotFailureCode.html" title="class in com.sca4d.iot.api.message">IotFailureCode</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存可持久化的 IoT 处理失败 code 及其静态消息键。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/message/IotMessageTypes.html" title="class in com.sca4d.iot.api.message">IotMessageTypes</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/message/IotMessageTypes.html" title="class in com.sca4d.iot.api.message">IotMessageTypes</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">声明 IoT 模块发布和消费的稳定消息类型。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/Product.html" title="class in com.sca4d.iot.api">Product</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/Product.html" title="class in com.sca4d.iot.api">Product</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">定义一类设备允许采用的接入方式和 Java 协议实现。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/ProductBinding.html" title="class in com.sca4d.iot.api">ProductBinding</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/ProductBinding.html" title="class in com.sca4d.iot.api">ProductBinding</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存 Device 对已解析 Product 来源、稳定 code 和可选数据库标识的绑定。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/ProductDefinition.html" title="class in com.sca4d.iot.api">ProductDefinition</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/ProductDefinition.html" title="class in com.sca4d.iot.api">ProductDefinition</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">定义数据库或代码 Product 共同使用的只读技术能力。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/ProductSelector.html" title="class in com.sca4d.iot.api">ProductSelector</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/ProductSelector.html" title="class in com.sca4d.iot.api">ProductSelector</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">表示创建 Device 时对数据库 Product 标识或代码 Product code 的选择。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iot/api/ProductSource.html" title="enum class in com.sca4d.iot.api">ProductSource</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iot/api/ProductSource.html" title="enum class in com.sca4d.iot.api">ProductSource</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
 <div class="block">标识 Device 所属 Product 定义来自数据库还是应用代码。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iot/api/state/ReportedMergeMode.html" title="enum class in com.sca4d.iot.api.state">ReportedMergeMode</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iot/api/state/ReportedMergeMode.html" title="enum class in com.sca4d.iot.api.state">ReportedMergeMode</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
 <div class="block">决定 reported 字段组缺失成员是清除还是保留。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/query/ReportedStateSnapshot.html" title="class in com.sca4d.iot.api.query">ReportedStateSnapshot</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/query/ReportedStateSnapshot.html" title="class in com.sca4d.iot.api.query">ReportedStateSnapshot</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存一个 reported 字段组当前已经接受的值和观测时间。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/api/state/ReportedStateStore.html" title="interface in com.sca4d.iot.api.state">ReportedStateStore</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/api/state/ReportedStateStore.html" title="interface in com.sca4d.iot.api.state">ReportedStateStore</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">原子维护 Device 每个字段组的 latest reported 投影，并允许具体应用替换存储产品。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/state/ReportedStateUpdate.html" title="class in com.sca4d.iot.api.state">ReportedStateUpdate</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/state/ReportedStateUpdate.html" title="class in com.sca4d.iot.api.state">ReportedStateUpdate</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存协议 Pipeline 输出的一次 reported 字段组更新。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/state/ReportedStateWriteResult.html" title="class in com.sca4d.iot.api.state">ReportedStateWriteResult</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/state/ReportedStateWriteResult.html" title="class in com.sca4d.iot.api.state">ReportedStateWriteResult</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">返回 reported 更新是否改变 latest 投影以及更新后的版本。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iot/api/state/ReportedStateWriteResult.Outcome.html" title="enum class in com.sca4d.iot.api.state">ReportedStateWriteResult.Outcome</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iot/api/state/ReportedStateWriteResult.Outcome.html" title="enum class in com.sca4d.iot.api.state">ReportedStateWriteResult.Outcome</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
 <div class="block">reported 顺序和内容比较结果。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/message/RetryDecision.html" title="class in com.sca4d.iot.api.message">RetryDecision</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/message/RetryDecision.html" title="class in com.sca4d.iot.api.message">RetryDecision</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">表示 retry 策略要求停止或在明确时刻再次发送。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/api/message/RetryPolicy.html" title="interface in com.sca4d.iot.api.message">RetryPolicy</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/api/message/RetryPolicy.html" title="interface in com.sca4d.iot.api.message">RetryPolicy</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">根据设备消息业务失败决定是否以及何时再次发送。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/telemetry/TelemetryBatch.html" title="class in com.sca4d.iot.api.telemetry">TelemetryBatch</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/telemetry/TelemetryBatch.html" title="class in com.sca4d.iot.api.telemetry">TelemetryBatch</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存一次 reported 报文中需要发布到消息代理的一批 Telemetry 样本。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/telemetry/TelemetrySample.html" title="class in com.sca4d.iot.api.telemetry">TelemetrySample</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/telemetry/TelemetrySample.html" title="class in com.sca4d.iot.api.telemetry">TelemetrySample</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存一个物模型属性在明确采样时间产生的时序值。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingArrayValue.html" title="class in com.sca4d.iot.api.model">ThingArrayValue</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingArrayValue.html" title="class in com.sca4d.iot.api.model">ThingArrayValue</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存已经按 array 物模型定义校验的不可修改元素值。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingCommand.html" title="class in com.sca4d.iot.api.model">ThingCommand</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingCommand.html" title="class in com.sca4d.iot.api.model">ThingCommand</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">定义一个稳定 code 的设备命令、输入和业务确认策略。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingCommand.Builder.html" title="class in com.sca4d.iot.api.model">ThingCommand.Builder</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingCommand.Builder.html" title="class in com.sca4d.iot.api.model">ThingCommand.Builder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">构造一个命令定义。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingEvent.html" title="class in com.sca4d.iot.api.model">ThingEvent</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingEvent.html" title="class in com.sca4d.iot.api.model">ThingEvent</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">定义一个稳定 code 的设备离散事件及其输出字段。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingEvent.Builder.html" title="class in com.sca4d.iot.api.model">ThingEvent.Builder</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingEvent.Builder.html" title="class in com.sca4d.iot.api.model">ThingEvent.Builder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">构造事件输出定义。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iot/api/model/ThingEventDelivery.html" title="enum class in com.sca4d.iot.api.model">ThingEventDelivery</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
-<div class="block">声明 ThingEvent 通过通用 `MessagePublisher` 发布时是否使用 Outbox。</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iot/api/model/ThingEventDelivery.html" title="enum class in com.sca4d.iot.api.model">ThingEventDelivery</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="block">声明 ThingEvent 通过通用 `MessageBus` 发布时是否使用 Outbox。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/state/ThingEventOccurrence.html" title="class in com.sca4d.iot.api.state">ThingEventOccurrence</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/state/ThingEventOccurrence.html" title="class in com.sca4d.iot.api.state">ThingEventOccurrence</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存协议 Pipeline 输出的一次离散 ThingEvent 事实。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingModel.html" title="class in com.sca4d.iot.api.model">ThingModel</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingModel.html" title="class in com.sca4d.iot.api.model">ThingModel</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存 Product 下一个不可修改且已经发布的物模型版本。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingModel.Builder.html" title="class in com.sca4d.iot.api.model">ThingModel.Builder</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingModel.Builder.html" title="class in com.sca4d.iot.api.model">ThingModel.Builder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">构造一个完整物模型版本。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingModelPresentation.html" title="class in com.sca4d.iot.api.model">ThingModelPresentation</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingModelPresentation.html" title="class in com.sca4d.iot.api.model">ThingModelPresentation</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">把不可变物模型技术定义与按稳定路径索引的展示文本组合成读取结果。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/api/model/ThingModelRepository.html" title="interface in com.sca4d.iot.api.model">ThingModelRepository</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iot/api/model/ThingModelRepository.html" title="interface in com.sca4d.iot.api.model">ThingModelRepository</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">读取和发布一个 App 唯一选择的物模型来源。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingObjectValue.html" title="class in com.sca4d.iot.api.model">ThingObjectValue</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingObjectValue.html" title="class in com.sca4d.iot.api.model">ThingObjectValue</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存已经按 object 物模型定义校验的不可修改字段值。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingProperty.html" title="class in com.sca4d.iot.api.model">ThingProperty</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingProperty.html" title="class in com.sca4d.iot.api.model">ThingProperty</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">定义一个稳定 code 的设备属性及其 desired 策略。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingProperty.Builder.html" title="class in com.sca4d.iot.api.model">ThingProperty.Builder</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingProperty.Builder.html" title="class in com.sca4d.iot.api.model">ThingProperty.Builder</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">构造一个设备属性定义。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iot/api/model/ThingPropertyAccess.html" title="enum class in com.sca4d.iot.api.model">ThingPropertyAccess</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iot/api/model/ThingPropertyAccess.html" title="enum class in com.sca4d.iot.api.model">ThingPropertyAccess</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
 <div class="block">表示设备属性允许的平台读写方向。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iot/api/model/ThingValueKind.html" title="enum class in com.sca4d.iot.api.model">ThingValueKind</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iot/api/model/ThingValueKind.html" title="enum class in com.sca4d.iot.api.model">ThingValueKind</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
 <div class="block">标识物模型递归值类型的固定种类。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingValueType.html" title="class in com.sca4d.iot.api.model">ThingValueType</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingValueType.html" title="class in com.sca4d.iot.api.model">ThingValueType</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用一个不可变递归对象表达物模型允许的值及其约束。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingValueType.Builder.html" title="class in com.sca4d.iot.api.model">ThingValueType.Builder</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iot/api/model/ThingValueType.Builder.html" title="class in com.sca4d.iot.api.model">ThingValueType.Builder</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">逐项构造一个递归物模型值类型。</div>
 </div>
 </div>

@@ -7,29 +7,30 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.id.Id;
+import com.sca4d.core.api.messaging.MessageBus;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.Notification;
-import com.sca4d.core.api.notification.NotificationChannel;
-import com.sca4d.core.api.notification.NotificationCode;
 import com.sca4d.core.api.notification.NotificationRecipient;
 import com.sca4d.core.api.region.ParsedPhoneNumber;
 import com.sca4d.core.api.region.Region;
 import com.sca4d.core.api.region.RegionCatalog;
-import com.sca4d.notification.template.NotificationTemplate;
-import com.sca4d.notification.template.NotificationTemplateRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.springframework.transaction.PlatformTransactionManager;
 
+import java.time.Clock;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-/** 验证 SMS 公共投递器不内置国家分区，并向应用路由策略提供类型化事实。 */
+/**
+ * 验证 SMS 公共投递器不内置国家分区，并向应用路由策略提供类型化事实。
+ */
 class SmsNotificationDeliveryTest {
 
     @Test
@@ -40,14 +41,14 @@ class SmsNotificationDeliveryTest {
         SmsProviderSelector selector = mock(SmsProviderSelector.class);
         SmsRepository repository = mock(SmsRepository.class);
         SmsDeliveryStore deliveries = mock(SmsDeliveryStore.class);
-        SmsTransport transport = mock(SmsTransport.class);
-        NotificationTemplateRepository templates = mock(NotificationTemplateRepository.class);
+        SmsProviderClient transport = mock(SmsProviderClient.class);
+        MessageBus messages = mock(MessageBus.class);
         SmsRoute route = new SmsRoute("east-asia-primary");
         SmsProvider provider = new SmsProvider(11, "aliyun-primary", "ALIYUN", "primary", 10, true, new Version(0));
         SmsProviderBinding binding = new SmsProviderBinding(
                 12,
                 provider.providerId(),
-                new NotificationCode("authentication.sms-code"),
+                TreeCode.of("AUTHENTICATION/SMS_CODE"),
                 route,
                 "zh-CN",
                 "Sca4d",
@@ -61,7 +62,7 @@ class SmsNotificationDeliveryTest {
                 Locale.SIMPLIFIED_CHINESE,
                 Map.of("code", "123456"),
                 new Region("tenant-east"),
-                Set.of(NotificationChannel.SMS));
+                Set.of(SmsChannels.SMS));
 
         when(recipients.resolve(notification.recipient())).thenReturn(Optional.of("+8613800138000"));
         when(routes.resolve(any(), any(), any(), any())).thenReturn(route);
@@ -71,15 +72,7 @@ class SmsNotificationDeliveryTest {
         when(deliveries.begin(any(), eq(provider), eq(route), any(), any())).thenReturn(true);
         when(transport.providerType()).thenReturn("ALIYUN");
         when(transport.send(eq(provider), eq(binding), any(), eq(Map.of("code", "123456"))))
-                .thenReturn(new SmsTransportResult(SmsDeliveryStatus.ACCEPTED, "request-1", "biz-1", null));
-        when(templates.findEnabled(notification.code())).thenReturn(
-                Optional.of(
-                        new NotificationTemplate(
-                                13,
-                                notification.code(),
-                                new ObjectMapper().createObjectNode(),
-                                true,
-                                new Version(0))));
+                .thenReturn(new SmsProviderResult(SmsDeliveryStatus.DELIVERED, "request-1", "biz-1", null));
 
         SmsNotificationDelivery delivery = new SmsNotificationDelivery(
                 recipients,
@@ -89,8 +82,10 @@ class SmsNotificationDeliveryTest {
                 repository,
                 deliveries,
                 List.of(transport),
-                templates);
-        delivery.deliver(new MessageId(21), notification);
+                Clock.systemUTC(),
+                messages,
+                mock(PlatformTransactionManager.class));
+        delivery.deliver(Id.of(21), notification);
 
         ArgumentCaptor<ParsedPhoneNumber> routeDestination = ArgumentCaptor.forClass(ParsedPhoneNumber.class);
         verify(routes).resolve(

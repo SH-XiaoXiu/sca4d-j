@@ -5,6 +5,7 @@ import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.event.EventType;
+import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.Permission;
@@ -23,14 +24,14 @@ import java.util.Objects;
 
 /** 把 IoT 模块失效通知发布到 App Web Realtime，并授权 Device Topic 订阅。 */
 @Component
-public final class AppIotRealtime implements DeviceChangePublisher, WebRealtimeSubscriptionPolicy {
+public class AppIotRealtime implements DeviceChangePublisher, WebRealtimeSubscriptionPolicy {
 
     private static final String TOPIC_PREFIX = "iot.device.";
 
     private static final String DESTINATION_PREFIX = WebRealtimeProtocol.TOPIC_DESTINATION_PREFIX + "/" + TOPIC_PREFIX;
 
     private static final EventType<IotDeviceInvalidation> DEVICE_CHANGED = new EventType<>(
-            "iot.device.changed",
+            "IOT/DEVICE/CHANGED",
             1,
             IotDeviceInvalidation.class);
 
@@ -54,13 +55,14 @@ public final class AppIotRealtime implements DeviceChangePublisher, WebRealtimeS
     @Override
     public void publish(@NotNull DeviceChange change) {
         DeviceChange checked = Objects.requireNonNull(change, "Device 变化不能为空");
-        realtime.publishNow(
+        realtime.publish(
                 WebRealtimeTarget.topic(topic(checked.deviceId())),
                 new Event<>(
                         DEVICE_CHANGED,
                         Long.toString(checked.deviceId()),
                         checked.occurredAt(),
-                        new IotDeviceInvalidation(checked)));
+                        new IotDeviceInvalidation(checked)),
+                DispatchPolicy.immediate());
     }
 
     /** 只处理 {@code /topic/iot.device.<deviceId>} 格式的 STOMP destination。 */

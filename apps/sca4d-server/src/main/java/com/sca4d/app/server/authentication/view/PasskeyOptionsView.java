@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 返回浏览器原生 WebAuthn JSON API 所需的 options 和 ceremony 标识。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
-public final class PasskeyOptionsView {
+public class PasskeyOptionsView {
 
     private final String ceremonyId;
 

@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 /** 保存可持久化的 IoT 处理失败 code 及其静态消息键。 */
-public final class IotFailureCode {
+public class IotFailureCode {
 
     private static final Pattern CODE = Pattern.compile("[A-Z][A-Z0-9_]{0,127}");
 

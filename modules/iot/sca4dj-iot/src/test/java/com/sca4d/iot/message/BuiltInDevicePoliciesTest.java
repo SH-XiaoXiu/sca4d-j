@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.sca4d.iot.api.message.AcknowledgementDecision;
 import com.sca4d.iot.api.message.AcknowledgementPolicy;
 import com.sca4d.iot.api.message.DeviceAcknowledgement;
+import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.message.DeviceDownlinkKind;
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
 import com.sca4d.iot.api.message.IotFailureCode;
 import com.sca4d.iot.api.message.RetryDecision;
@@ -29,7 +29,7 @@ class BuiltInDevicePoliciesTest {
     @DisplayName("device-result 区分成功失败和继续等待")
     void interpretsOpenDeviceResultAcknowledgements() {
         AcknowledgementPolicy policy = new DeviceResultAcknowledgementPolicy();
-        DeviceDownlinkMessage message = command(1);
+        DeviceDownlink message = command(1);
 
         assertThat(policy.evaluate(message, deviceAcknowledgement("success"), NOW).outcome())
                 .isEqualTo(AcknowledgementDecision.Outcome.SUCCEED);
@@ -56,8 +56,8 @@ class BuiltInDevicePoliciesTest {
         return new DeviceAcknowledgement(1, code, Map.of(), "DEVICE", "ack-1", NOW, NOW);
     }
 
-    private static DeviceDownlinkMessage command(int attemptCount) {
-        return new DeviceDownlinkMessage(
+    private static DeviceDownlink command(int attemptCount) {
+        return new DeviceDownlink(
                 1,
                 1,
                 1,

@@ -21,7 +21,7 @@ import java.util.Objects;
 
 /** 使用 Raw JSON 或可选 Codec 编码、脱敏、限制并读取审计 payload。 */
 @ApiStatus.Internal
-public final class AuditPayloadJson {
+public class AuditPayloadJson {
     private static final Logger LOG = LoggerFactory.getLogger(AuditPayloadJson.class);
 
     static final String RAW_TYPE = "raw";
@@ -34,7 +34,6 @@ public final class AuditPayloadJson {
 
     private final @NotNull AuditProperties properties;
 
-    /** 创建使用脚手架 JSON 契约的 payload 处理器。 */
     public AuditPayloadJson(
             @NotNull ObjectMapper objectMapper,
             @NotNull AuditPayloadRegistry registry,
@@ -52,7 +51,7 @@ public final class AuditPayloadJson {
         }
         AuditPayloadCodec<?> codec = registry.find(payload);
         String type = codec == null ? RAW_TYPE : codec.payloadType();
-        int version = codec == null ? RAW_VERSION : codec.payloadVersion();
+        int version = codec == null ? RAW_VERSION : codec.version();
         LOG.trace(
                 "审计载荷编码方式已选择 | payloadType={} payloadVersion={} codecRegistered={}",
                 type,

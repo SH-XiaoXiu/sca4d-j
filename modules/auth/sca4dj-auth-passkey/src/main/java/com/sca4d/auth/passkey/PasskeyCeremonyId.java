@@ -6,7 +6,7 @@ import java.util.Objects;
 
 /** 保存调用方在完成 WebAuthn ceremony 时必须原样回传的不透明标识。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class PasskeyCeremonyId {
+public class PasskeyCeremonyId {
 
     private final String value;
 
@@ -15,7 +15,11 @@ public final class PasskeyCeremonyId {
         this.value = TextUtils.requireText(value, "Passkey ceremony 标识");
     }
 
-    /** 返回调用方需要原样回传的值。 */
+    /**
+     * 调用方需要原样回传的值。
+     *
+     * @return 调用方需要原样回传的值
+     */
     public String value() {
         return value;
     }

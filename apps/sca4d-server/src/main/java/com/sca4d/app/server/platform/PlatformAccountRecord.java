@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 组合 IAM Platform Account 目录项与示例 App 用户资料。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class PlatformAccountRecord {
+public class PlatformAccountRecord {
 
     private final @NotNull PlatformAccountEntry account;
 

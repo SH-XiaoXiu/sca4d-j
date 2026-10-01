@@ -48,7 +48,7 @@ loadScripts(document, 'script');</script>
 <ul>
 <li><a href="#field-detail">Field</a></li>
 <li>Constr</li>
-<li>Method</li>
+<li><a href="#method-detail">Method</a></li>
 </ul>
 </li>
 </ul>
@@ -66,7 +66,7 @@ loadScripts(document, 'script');</script>
 <li>Detail:&nbsp;</li>
 <li><a href="#field-detail">Field</a>&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method-detail">Method</a></li>
 </ul>
 </div>
 <div class="nav-list-search"><a href="../../../../../search.html">SEARCH</a>
@@ -89,9 +89,9 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">WebRealtimeProtocol</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">WebRealtimeProtocol</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">集中声明浏览器、具体应用和 Web Realtime 模块共同遵守的固定协议值。</div>
+<div class="block">集中声明浏览器、具体应用和 Web Realtime 模块共同遵守的协议值。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -161,6 +161,21 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
+<div id="method-summary-table">
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div id="method-summary-table.tabpanel" role="tabpanel">
+<div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#validate()" class="member-name-link">validate</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">校验公开 destination 不重叠，且用户事件订阅与 broker 目标一致。</div>
+</div>
+</div>
+</div>
+</div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
@@ -176,105 +191,15 @@ loadScripts(document, 'script');</script>
 <h2>Field Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="WEBSOCKET_ENDPOINT">
-<h3>WEBSOCKET_ENDPOINT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">WEBSOCKET_ENDPOINT</span></div>
-<div class="block">原生 WebSocket 上的 Spring STOMP 入口。</div>
+<section class="detail" id="AUTHENTICATION_SESSION_CHANGED_EVENT">
+<h3>AUTHENTICATION_SESSION_CHANGED_EVENT</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">AUTHENTICATION_SESSION_CHANGED_EVENT</span></div>
+<div class="block">Session 变化后要求浏览器重新读取当前 Session 的事件编码。</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
 <ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.web.realtime.stomp.WebRealtimeProtocol.WEBSOCKET_ENDPOINT">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="APPLICATION_DESTINATION_PREFIX">
-<h3>APPLICATION_DESTINATION_PREFIX</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">APPLICATION_DESTINATION_PREFIX</span></div>
-<div class="block">由具体应用 `@MessageMapping` 处理的 destination 前缀。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.web.realtime.stomp.WebRealtimeProtocol.APPLICATION_DESTINATION_PREFIX">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="USER_DESTINATION_PREFIX">
-<h3>USER_DESTINATION_PREFIX</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">USER_DESTINATION_PREFIX</span></div>
-<div class="block">Spring 解析当前 WebSocket 连接 destination 使用的前缀。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.web.realtime.stomp.WebRealtimeProtocol.USER_DESTINATION_PREFIX">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="QUEUE_DESTINATION_PREFIX">
-<h3>QUEUE_DESTINATION_PREFIX</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">QUEUE_DESTINATION_PREFIX</span></div>
-<div class="block">Spring broker 处理点对点 destination 使用的前缀。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.web.realtime.stomp.WebRealtimeProtocol.QUEUE_DESTINATION_PREFIX">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="TOPIC_DESTINATION_PREFIX">
-<h3>TOPIC_DESTINATION_PREFIX</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">TOPIC_DESTINATION_PREFIX</span></div>
-<div class="block">Spring broker 处理广播 destination 使用的前缀。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.web.realtime.stomp.WebRealtimeProtocol.TOPIC_DESTINATION_PREFIX">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="USER_EVENT_DESTINATION">
-<h3>USER_EVENT_DESTINATION</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">USER_EVENT_DESTINATION</span></div>
-<div class="block">浏览器订阅当前连接事件的用户 destination。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.web.realtime.stomp.WebRealtimeProtocol.USER_EVENT_DESTINATION">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="USER_EVENT_BROKER_DESTINATION">
-<h3>USER_EVENT_BROKER_DESTINATION</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">USER_EVENT_BROKER_DESTINATION</span></div>
-<div class="block">服务端向当前 Spring STOMP Session 发送事件时使用的 broker destination。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.web.realtime.stomp.WebRealtimeProtocol.USER_EVENT_BROKER_DESTINATION">Constant Field Values</a></li>
+<li><a href="../../../../../constant-values.html#com.sca4d.web.realtime.stomp.WebRealtimeProtocol.AUTHENTICATION_SESSION_CHANGED_EVENT">Constant Field Values</a></li>
 </ul>
 </dd>
 </dl>
@@ -296,33 +221,74 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="WEBSOCKET_ENDPOINT">
+<h3>WEBSOCKET_ENDPOINT</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">WEBSOCKET_ENDPOINT</span></div>
+<div class="block">原生 WebSocket 上的 Spring STOMP 入口。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="APPLICATION_DESTINATION_PREFIX">
+<h3>APPLICATION_DESTINATION_PREFIX</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">APPLICATION_DESTINATION_PREFIX</span></div>
+<div class="block">由具体应用 `@MessageMapping` 处理的 destination 前缀。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="USER_DESTINATION_PREFIX">
+<h3>USER_DESTINATION_PREFIX</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">USER_DESTINATION_PREFIX</span></div>
+<div class="block">Spring 解析当前 WebSocket 连接 destination 使用的前缀。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="QUEUE_DESTINATION_PREFIX">
+<h3>QUEUE_DESTINATION_PREFIX</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">QUEUE_DESTINATION_PREFIX</span></div>
+<div class="block">Spring broker 处理点对点 destination 使用的前缀。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="TOPIC_DESTINATION_PREFIX">
+<h3>TOPIC_DESTINATION_PREFIX</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">TOPIC_DESTINATION_PREFIX</span></div>
+<div class="block">Spring broker 处理广播 destination 使用的前缀。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="USER_EVENT_DESTINATION">
+<h3>USER_EVENT_DESTINATION</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">USER_EVENT_DESTINATION</span></div>
+<div class="block">浏览器订阅当前连接事件的用户 destination。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="USER_EVENT_BROKER_DESTINATION">
+<h3>USER_EVENT_BROKER_DESTINATION</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">USER_EVENT_BROKER_DESTINATION</span></div>
+<div class="block">服务端向当前 Spring STOMP Session 发送事件时使用的 broker destination。</div>
+</section>
+</li>
+<li>
 <section class="detail" id="PRINCIPAL_ID_HEADER">
 <h3>PRINCIPAL_ID_HEADER</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">PRINCIPAL_ID_HEADER</span></div>
 <div class="block">`SEND` 和 `SUBSCRIBE` 选择当前业务主体使用的 STOMP native header。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.web.realtime.stomp.WebRealtimeProtocol.PRINCIPAL_ID_HEADER">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
 </section>
 </li>
-<li>
-<section class="detail" id="AUTHENTICATION_SESSION_CHANGED_EVENT">
-<h3>AUTHENTICATION_SESSION_CHANGED_EVENT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">AUTHENTICATION_SESSION_CHANGED_EVENT</span></div>
-<div class="block">Session 变化后要求浏览器重新读取当前 Session 的事件编码。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.web.realtime.stomp.WebRealtimeProtocol.AUTHENTICATION_SESSION_CHANGED_EVENT">Constant Field Values</a></li>
 </ul>
-</dd>
-</dl>
+</section>
+</li>
+<!-- ============ METHOD DETAIL ========== -->
+<li>
+<section class="method-details" id="method-detail">
+<h2>Method Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="validate()">
+<h3>validate</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">validate</span>()</div>
+<div class="block">校验公开 destination 不重叠，且用户事件订阅与 broker 目标一致。</div>
 </section>
 </li>
 </ul>

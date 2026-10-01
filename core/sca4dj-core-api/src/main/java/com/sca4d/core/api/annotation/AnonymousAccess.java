@@ -1,5 +1,7 @@
 package com.sca4d.core.api.annotation;
 
+import com.sca4d.core.api.call.CallLifecycle;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,5 +12,6 @@ import java.lang.annotation.Target;
 @Documented
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
+@CallLifecycle.Intercepted
 public @interface AnonymousAccess {
 }

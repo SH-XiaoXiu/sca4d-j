@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">SmsBindingState</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">SmsBindingState</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">保存 SMS Provider Binding Mapper 返回的参数映射 JSON 文本。</div>
 </section>
@@ -103,9 +103,9 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(long,long,com.sca4d.core.api.notification.NotificationCode,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean,com.sca4d.core.api.concurrent.Version)" class="member-name-link">SmsBindingState</a><wbr>(long&nbsp;bindingId,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(long,long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean,com.sca4d.core.api.concurrent.Version)" class="member-name-link">SmsBindingState</a><wbr>(long&nbsp;bindingId,
  long&nbsp;providerId,
- @NotNull com.sca4d.core.api.notification.NotificationCode&nbsp;code,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;code,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;route,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;languageTag,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;signName,
@@ -113,9 +113,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;parameterMappingJson,
  boolean&nbsp;enabled,
  @NotNull com.sca4d.core.api.concurrent.Version&nbsp;version)</code></div>
-<div class="col-last even-row-color">
-<div class="block">创建供应商模板绑定数据库状态。</div>
-</div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -133,7 +131,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#bindingId()" class="member-name-link">bindingId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.notification.NotificationCode</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#code()" class="member-name-link">code</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
@@ -178,12 +176,12 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(long,long,com.sca4d.core.api.notification.NotificationCode,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean,com.sca4d.core.api.concurrent.Version)">
+<section class="detail" id="&lt;init&gt;(long,long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean,com.sca4d.core.api.concurrent.Version)">
 <h3>SmsBindingState</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">SmsBindingState</span><wbr><span class="parameters">(long&nbsp;bindingId,
  long&nbsp;providerId,
  @NotNull
- @NotNull com.sca4d.core.api.notification.NotificationCode&nbsp;code,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;code,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;route,
  @NotNull
@@ -197,7 +195,19 @@ loadScripts(document, 'script');</script>
  boolean&nbsp;enabled,
  @NotNull
  @NotNull com.sca4d.core.api.concurrent.Version&nbsp;version)</span></div>
-<div class="block">创建供应商模板绑定数据库状态。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>bindingId</code> - 绑定数据库标识</dd>
+<dd><code>providerId</code> - Provider 标识</dd>
+<dd><code>code</code> - 通知编码</dd>
+<dd><code>route</code> - SMS 路由</dd>
+<dd><code>languageTag</code> - Locale 标签</dd>
+<dd><code>signName</code> - 短信签名</dd>
+<dd><code>providerTemplateCode</code> - Provider 模板编码</dd>
+<dd><code>parameterMappingJson</code> - 参数映射 JSON</dd>
+<dd><code>enabled</code> - 是否允许投递</dd>
+<dd><code>version</code> - 绑定版本</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -212,19 +222,31 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="bindingId()">
 <h3>bindingId</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">bindingId</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>绑定数据库标识</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="providerId()">
 <h3>providerId</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">providerId</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>Provider 标识</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="code()">
 <h3>code</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.notification.NotificationCode</span>&nbsp;<span class="element-name">code</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">code</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>通知编码</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -232,6 +254,10 @@ loadScripts(document, 'script');</script>
 <h3>route</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">route</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>SMS 路由</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -239,6 +265,10 @@ loadScripts(document, 'script');</script>
 <h3>languageTag</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">languageTag</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>Locale 标签</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -246,6 +276,10 @@ loadScripts(document, 'script');</script>
 <h3>signName</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">signName</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>短信签名</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -253,6 +287,10 @@ loadScripts(document, 'script');</script>
 <h3>providerTemplateCode</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">providerTemplateCode</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>Provider 模板编码</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -260,12 +298,20 @@ loadScripts(document, 'script');</script>
 <h3>parameterMappingJson</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">parameterMappingJson</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>参数映射 JSON</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="enabled()">
 <h3>enabled</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">enabled</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>是否允许投递</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -273,6 +319,10 @@ loadScripts(document, 'script');</script>
 <h3>version</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.concurrent.Version</span>&nbsp;<span class="element-name">version</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>绑定版本</dd>
+</dl>
 </section>
 </li>
 </ul>

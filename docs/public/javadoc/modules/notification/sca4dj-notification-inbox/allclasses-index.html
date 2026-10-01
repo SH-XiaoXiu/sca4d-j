@@ -59,29 +59,57 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">通知在线浏览器重新读取指定 Account 收件箱。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/inbox/InboxMessage.html" title="class in com.sca4d.notification.inbox">InboxMessage</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/inbox/InboxChannels.html" title="class in com.sca4d.notification.inbox">InboxChannels</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Inbox 模块声明的通知渠道。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/inbox/InboxMessage.html" title="class in com.sca4d.notification.inbox">InboxMessage</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存 Account 收件箱中一项不会随模板修改而变化的通知快照。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/notification/inbox/mapper/InboxMessageMapper.html" title="interface in com.sca4d.notification.inbox.mapper">InboxMessageMapper</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
-<div class="block">读写 Account 站内信快照的最小 SQL 形状。</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/notification/inbox/mapper/InboxMessageMapper.html" title="interface in com.sca4d.notification.inbox.mapper">InboxMessageMapper</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="block">读写 Account 站内信快照，并处理未读计数和已读状态。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/inbox/config/InboxNotificationAutoConfiguration.html" title="class in com.sca4d.notification.inbox.config">InboxNotificationAutoConfiguration</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">自动装配站内信持久化、查询、Realtime 提示和独立消息 Consumer。</div>
-</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/inbox/InboxNotificationDelivery.html" title="class in com.sca4d.notification.inbox">InboxNotificationDelivery</a></div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/inbox/config/InboxNotificationAutoConfiguration.html" title="class in com.sca4d.notification.inbox.config">InboxNotificationAutoConfiguration</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">把统一通知模板渲染成持久站内信快照。</div>
+<div class="block">自动装配站内信模板、消息快照、Realtime 提示和独立消息 Handler。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/inbox/InboxRepository.html" title="class in com.sca4d.notification.inbox">InboxRepository</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/inbox/InboxNotificationDelivery.html" title="class in com.sca4d.notification.inbox">InboxNotificationDelivery</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">把站内信模板渲染成持久站内信快照。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/inbox/InboxRepository.html" title="class in com.sca4d.notification.inbox">InboxRepository</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">隐藏站内信 Mapper、游标分页和幂等新增语义。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/inbox/InboxService.html" title="class in com.sca4d.notification.inbox">InboxService</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/inbox/InboxService.html" title="class in com.sca4d.notification.inbox">InboxService</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">查询和修改 Account 站内信，并在提交后提示在线客户端刷新。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/inbox/template/InboxTemplate.html" title="class in com.sca4d.notification.inbox.template">InboxTemplate</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">保存一种站内信的完整多语言 Tiptap JSON 模板、状态和版本。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/notification/inbox/template/mapper/InboxTemplateMapper.html" title="interface in com.sca4d.notification.inbox.template.mapper">InboxTemplateMapper</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="block">读写站内信模板，并按版本条件执行修改和逻辑删除。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/inbox/template/InboxTemplateRenderer.html" title="class in com.sca4d.notification.inbox.template">InboxTemplateRenderer</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">校验站内信 Tiptap 模板，并生成持久化所需的纯文本和安全 HTML。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/inbox/template/InboxTemplateRepository.html" title="class in com.sca4d.notification.inbox.template">InboxTemplateRepository</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">隐藏站内信模板的 JSONB、Mapper 和影响行数语义。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/inbox/template/mapper/InboxTemplateState.html" title="class in com.sca4d.notification.inbox.template.mapper">InboxTemplateState</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">保存 Inbox Template Mapper 从数据库读取的 JSON 文本状态。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/inbox/template/RenderedInboxMessage.html" title="class in com.sca4d.notification.inbox.template">RenderedInboxMessage</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">保存站内信模板生成的纯文本标题、纯文本正文和安全 HTML 正文。</div>
 </div>
 </div>
 </div>

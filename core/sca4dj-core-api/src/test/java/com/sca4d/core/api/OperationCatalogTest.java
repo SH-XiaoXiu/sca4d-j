@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.OperationCatalog;
@@ -25,12 +26,16 @@ class OperationCatalogTest {
                         module("account", 10)));
 
         assertEquals(
-                List.of("account", "platform"),
+                List.of(TreeCode.ofSegment("ACCOUNT"), TreeCode.ofSegment("PLATFORM")),
                 catalog.tree().stream().map(OperationNode::code).toList());
         assertEquals(
-                List.of("account:items:read", "account:items:manage", "platform:items:read", "platform:items:manage"),
+                List.of(
+                        TreeCode.ofColon("ACCOUNT:ITEMS:READ"),
+                        TreeCode.ofColon("ACCOUNT:ITEMS:MANAGE"),
+                        TreeCode.ofColon("PLATFORM:ITEMS:READ"),
+                        TreeCode.ofColon("PLATFORM:ITEMS:MANAGE")),
                 catalog.actions().stream().map(OperationNode::code).toList());
-        assertEquals("platform:items", catalog.actionByCode("platform:items:read").parentCode());
+        assertEquals(TreeCode.ofColon("PLATFORM:ITEMS"), catalog.actionByCode("platform:items:read").parentCode());
     }
 
     @Test
@@ -46,12 +51,14 @@ class OperationCatalogTest {
                         new Operation("account:items:manage"),
                         new Operation("platform:items:read")));
 
-        assertEquals(List.of("account", "platform"), projected.stream().map(OperationNode::code).toList());
         assertEquals(
-                List.of("account:items:manage"),
+                List.of(TreeCode.ofSegment("ACCOUNT"), TreeCode.ofSegment("PLATFORM")),
+                projected.stream().map(OperationNode::code).toList());
+        assertEquals(
+                List.of(TreeCode.ofColon("ACCOUNT:ITEMS:MANAGE")),
                 projected.get(0).children().getFirst().children().stream().map(OperationNode::code).toList());
         assertEquals(
-                List.of("platform:items:read"),
+                List.of(TreeCode.ofColon("PLATFORM:ITEMS:READ")),
                 projected.get(1).children().getFirst().children().stream().map(OperationNode::code).toList());
     }
 
@@ -65,10 +72,10 @@ class OperationCatalogTest {
 
         assertEquals(
                 List.of(
-                        "project:items:read",
-                        "project:items:manage",
-                        "inventory:items:read",
-                        "inventory:items:manage"),
+                        TreeCode.ofColon("PROJECT:ITEMS:READ"),
+                        TreeCode.ofColon("PROJECT:ITEMS:MANAGE"),
+                        TreeCode.ofColon("INVENTORY:ITEMS:READ"),
+                        TreeCode.ofColon("INVENTORY:ITEMS:MANAGE")),
                 catalog.actions().stream().map(OperationNode::code).toList());
     }
 
@@ -80,27 +87,27 @@ class OperationCatalogTest {
                 () -> new OperationCatalog(List.of(module("platform", 10), module("platform", 20))));
         assertThrows(
                 IllegalArgumentException.class,
-                () -> OperationNode.module(" ", "operation.invalid", 10));
+                () -> OperationNode.module(TreeCode.ofSegment(" "), "operation.invalid", 10));
         assertThrows(
                 IllegalArgumentException.class,
                 () -> OperationNode.module(
-                        "platform",
+                        TreeCode.ofSegment("PLATFORM"),
                         "operation.platform",
                         10,
-                        OperationNode.resource("roles", "roles", 10),
-                        OperationNode.resource("roles", "duplicate", 20)));
+                        OperationNode.resource(TreeCode.ofSegment("ROLES"), "roles", 10),
+                        OperationNode.resource(TreeCode.ofSegment("ROLES"), "duplicate", 20)));
         assertThrows(
                 IllegalArgumentException.class,
                 () -> OperationNode.module(
-                        "platform",
+                        TreeCode.ofSegment("PLATFORM"),
                         "operation.platform",
                         10,
                         OperationNode.resource(
-                                "roles",
+                                TreeCode.ofSegment("ROLES"),
                                 "roles",
                                 10,
-                                OperationNode.action(Action.READ_VALUE, "read", 10),
-                                OperationNode.action(Action.READ_VALUE, "duplicate", 20))));
+                                OperationNode.action(Action.READ.code(), "read", 10),
+                                OperationNode.action(Action.READ.code(), "duplicate", 20))));
     }
 
     @Test
@@ -135,14 +142,14 @@ class OperationCatalogTest {
     /** @return 声明具有相同局部资源动作的测试 Operation 模块 */
     private static OperationModule module(String anchor, int sortOrder) {
         return () -> OperationNode.module(
-                anchor,
+                TreeCode.ofSegment(anchor),
                 "operation." + anchor,
                 sortOrder,
                 OperationNode.resource(
-                        "items",
+                        TreeCode.ofSegment("ITEMS"),
                         "operation." + anchor + ".items",
                         10,
-                        OperationNode.action(Action.READ_VALUE, "operation." + anchor + ".items.read", 10),
-                        OperationNode.action(Action.MANAGE_VALUE, "operation." + anchor + ".items.manage", 20)));
+                        OperationNode.action(Action.READ.code(), "operation." + anchor + ".items.read", 10),
+                        OperationNode.action(Action.MANAGE.code(), "operation." + anchor + ".items.manage", 20)));
     }
 }

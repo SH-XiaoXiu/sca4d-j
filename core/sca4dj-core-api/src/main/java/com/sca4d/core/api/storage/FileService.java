@@ -1,6 +1,8 @@
 package com.sca4d.core.api.storage;
 
+import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Principal;
+import com.sca4d.core.api.identity.SystemPrincipals;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -29,11 +31,11 @@ public interface FileService {
     /**
      * 把服务端持有的内容流写入存储并转为可绑定文件。
      *
-     * <p>本方法先保存等待上传的文件记录，再把内容写入该记录选定的存储实现。实际媒体类型和字节数通过核验后，
+     * <p>本方法先保存等待上传的文件记录，再把内容写入记录选定的存储实现。实际媒体类型和字节数通过核验后，
      * 文件转为 {@link FileStatus#READY}。调用方仍需在自己的业务事务中调用 {@link #bind(long, FileUse)}。
      *
      * @param uploader 创建文件的 Principal；系统任务使用
-     *     {@link com.sca4d.core.api.identity.SystemPrincipal#INSTANCE}
+     *     {@link SystemPrincipals#mainPrincipal()}
      * @param intent 已由 App 校验业务规则的上传意图
      * @param content 文件内容流；本方法不关闭调用方提供的流
      * @return 处于 {@link FileStatus#READY} 的文件信息
@@ -89,7 +91,7 @@ public interface FileService {
      *
      * @param fileId 正数文件标识
      * @param use 上传申请时声明的文件用途
-     * @throws com.sca4d.core.api.error.BusinessException 文件不存在、用途不匹配或已经绑定时抛出
+     * @throws BusinessException 文件不存在、用途不匹配或已经绑定时抛出
      */
     void discard(long fileId, @NotNull FileUse use);
 
@@ -153,7 +155,7 @@ public interface FileService {
      *
      * @param fileId 正数文件标识
      * @return 文件媒体类型、字节数和需要调用方关闭的内容流
-     * @throws com.sca4d.core.api.error.BusinessException 文件不存在、状态不可读或 READY 已经过期时抛出
+     * @throws BusinessException 文件不存在、状态不可读或 READY 已经过期时抛出
      * @throws IOException 存储实现无法打开正式对象时抛出
      */
     @NotNull

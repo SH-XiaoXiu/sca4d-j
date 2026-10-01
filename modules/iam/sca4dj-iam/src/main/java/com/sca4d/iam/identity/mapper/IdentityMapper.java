@@ -4,7 +4,6 @@ import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountIdentifierType;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
-import com.sca4d.core.api.identity.SubjectType;
 import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.iam.identity.AccountIdentifier;
 import com.sca4d.iam.identity.IdentityStatus;
@@ -19,18 +18,20 @@ import java.util.List;
 
 /** 读写 IAM 的 `Subject`、`Account`、`Principal` 和登录标识，不装配具体 `Principal` 实现。 */
 public interface IdentityMapper {
+    /** @return 标识集合中未删除的 Subject，包括停用状态 */
+    @NotNull
+    List<Subject> selectSubjects(@Param("ids") @NotNull Collection<Long> ids);
+
     /**
      * 插入 `Subject`。
      *
-     * @param id `Subject` 标识
-     * @param type `Subject` 类型
+     * @param subjects 非空 Subject 集合；标识已经去重，主键冲突时不覆盖
      * @param status 身份状态
      * @return 新增行数
      */
     @CheckReturnValue
-    int insertSubject(
-            @Param("id") @NotNull Long id,
-            @Param("type") @NotNull SubjectType type,
+    int insertSubjects(
+            @Param("subjects") @NotNull Collection<Subject> subjects,
             @Param("status") @NotNull IdentityStatus status);
 
     /** 按标识和可选状态读取未删除 Subject。 */
@@ -80,6 +81,11 @@ public interface IdentityMapper {
             @Param("principalId") @Nullable Long principalId,
             @Param("status") @Nullable IdentityStatus status,
             @Param("subjectStatus") @Nullable IdentityStatus subjectStatus);
+
+    /** 按 Subject 标识集合批量读取 Account。 */
+    @CheckReturnValue
+    @NotNull
+    List<Account> selectAccountsBySubjectIds(@Param("subjectIds") @NotNull Collection<Long> subjectIds);
 
     /** @return 账号当前状态；不存在时为 {@code null} */
     @CheckReturnValue
@@ -209,9 +215,10 @@ public interface IdentityMapper {
             @Param("id") @Nullable Long id,
             @Param("accountId") @Nullable Long accountId);
 
-    /** 更新登录标识的展示值、规范值及生命周期字段，已删除行不可改写。 */
+    /** 按 Patch 更新登录标识并返回更新结果；目标不存在或已经删除时返回空。 */
     @CheckReturnValue
-    int updateIdentifier(
+    @Nullable
+    AccountIdentifier updateIdentifier(
             @Param("id") long id,
             @Param("value") @NotNull Patch<String> value,
             @Param("normalizedValue") @NotNull Patch<String> normalizedValue,

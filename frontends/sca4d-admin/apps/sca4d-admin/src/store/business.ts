@@ -538,9 +538,9 @@ export const useAdminStore = defineStore('admin', () => {
     await businessApplication.emailSenders.delete(senderId);
   }
 
-  /** 同时读取 Email 模板和应用 Locale。 */
-  async function loadEmailTemplates(): Promise<void> {
-    await businessApplication.emailTemplates.load();
+  /** 同时读取指定 Email 模板页和应用 Locale。 */
+  async function loadEmailTemplates(page?: number, size?: number): Promise<void> {
+    await businessApplication.emailTemplates.load(page, size);
   }
 
   /** 创建默认停用的多语言 Email 模板。 */

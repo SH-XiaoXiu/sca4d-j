@@ -1,7 +1,7 @@
 package com.sca4d.scheduling.quartz;
 
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.job.JobExecutor;
-import com.sca4d.core.api.job.JobRunId;
 import com.sca4d.core.api.scheduling.JobSchedule;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import org.jetbrains.annotations.NotNull;
@@ -17,9 +17,7 @@ import java.time.Instant;
 import java.util.Optional;
 
 /** 把一次 Quartz fire 转换成同一原定时间的持久化 Job run 提交。 */
-public final class QuartzDispatchJob implements Job {
-
-    private static final Logger log = LoggerFactory.getLogger(QuartzDispatchJob.class);
+public class QuartzDispatchJob implements Job {
 
     /** Quartz SchedulerContext 中保存 JobExecutor 的键。 */
     public static final String EXECUTOR_CONTEXT_KEY = "sca4djJobExecutor";
@@ -27,13 +25,14 @@ public final class QuartzDispatchJob implements Job {
     /** Quartz SchedulerContext 中保存计划目录的键。 */
     public static final String REGISTRY_CONTEXT_KEY = "sca4djScheduleRegistry";
 
-    /** JobDataMap 中保存稳定计划 key 的键。 */
-    public static final String SCHEDULE_KEY = "scheduleKey";
-
     /** JobDataMap 中保存计划定义版本的键。 */
     public static final String SCHEDULE_DEFINITION_VERSION = "scheduleDefinitionVersion";
 
-    /** 创建无状态 Quartz 触发入口。 */
+    /** JobDataMap 中保存稳定计划 key 的键。 */
+    public static final String SCHEDULE_KEY = "scheduleKey";
+
+    private static final Logger log = LoggerFactory.getLogger(QuartzDispatchJob.class);
+
     public QuartzDispatchJob() {
     }
 
@@ -51,7 +50,7 @@ public final class QuartzDispatchJob implements Job {
             JobSchedule<?, ?> schedule = registry.loadByKeyAndVersion(key, definitionVersion);
             Instant scheduledAt = context.getScheduledFireTime().toInstant();
             // 使用 Quartz 原定触发时间去重；禁止重叠时空结果表示本次触发按计划跳过。
-            Optional<JobRunId> runId = submit(executor, schedule, scheduledAt);
+            Optional<Id> runId = submit(executor, schedule, scheduledAt);
             if (runId.isPresent()) {
                 log.trace(
                         "Quartz fire 已提交 Job run | schedulerName={} scheduleKey={} definitionVersion={} scheduledAt={} runId={}",
@@ -74,7 +73,7 @@ public final class QuartzDispatchJob implements Job {
     }
 
     /** 保留计划泛型关系地调用 JobExecutor。 */
-    private static <I, O> @NotNull Optional<JobRunId> submit(
+    private static <I, O> @NotNull Optional<Id> submit(
             @NotNull JobExecutor executor,
             @NotNull JobSchedule<I, O> schedule,
             @NotNull Instant scheduledAt) {

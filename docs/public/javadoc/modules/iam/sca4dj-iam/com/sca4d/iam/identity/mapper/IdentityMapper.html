@@ -141,8 +141,7 @@ loadScripts(document, 'script');</script>
 <div class="block">插入 `Principal`。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insertSubject(java.lang.Long,com.sca4d.core.api.identity.SubjectType,com.sca4d.iam.identity.IdentityStatus)" class="member-name-link">insertSubject</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;id,
- @NotNull com.sca4d.core.api.identity.SubjectType&nbsp;type,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insertSubjects(java.util.Collection,com.sca4d.iam.identity.IdentityStatus)" class="member-name-link">insertSubjects</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;com.sca4d.core.api.identity.Subject&gt;&nbsp;subjects,
  @NotNull <a href="../IdentityStatus.html" title="enum class in com.sca4d.iam.identity">IdentityStatus</a>&nbsp;status)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">插入 `Subject`。</div>
@@ -163,43 +162,51 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">按账号、Subject 或关联 Principal 读取账号，可独立约束账号与 Subject 状态；必须提供一个标识范围。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="../IdentityStatus.html" title="enum class in com.sca4d.iam.identity">IdentityStatus</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectAccountStatus(java.lang.Long)" class="member-name-link">selectAccountStatus</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;id)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../AccountIdentifier.html" title="class in com.sca4d.iam.identity">AccountIdentifier</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectIdentifiers(java.lang.Long,java.lang.Long)" class="member-name-link">selectIdentifiers</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;id,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;com.sca4d.core.api.identity.Account&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectAccountsBySubjectIds(java.util.Collection)" class="member-name-link">selectAccountsBySubjectIds</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;subjectIds)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">按 Subject 标识集合批量读取 Account。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="../IdentityStatus.html" title="enum class in com.sca4d.iam.identity">IdentityStatus</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectAccountStatus(java.lang.Long)" class="member-name-link">selectAccountStatus</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;id)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../AccountIdentifier.html" title="class in com.sca4d.iam.identity">AccountIdentifier</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectIdentifiers(java.lang.Long,java.lang.Long)" class="member-name-link">selectIdentifiers</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;id,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;accountId)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">按登录标识主键或账号读取未删除标识；必须提供其中一个范围。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectLinkedPrincipalIds(java.lang.Long,com.sca4d.iam.identity.PrincipalType,com.sca4d.iam.identity.IdentityStatus)" class="member-name-link">selectLinkedPrincipalIds</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;accountId,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectLinkedPrincipalIds(java.lang.Long,com.sca4d.iam.identity.PrincipalType,com.sca4d.iam.identity.IdentityStatus)" class="member-name-link">selectLinkedPrincipalIds</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;accountId,
  @Nullable <a href="../PrincipalType.html" title="class in com.sca4d.iam.identity">PrincipalType</a>&nbsp;principalType,
  @Nullable <a href="../IdentityStatus.html" title="enum class in com.sca4d.iam.identity">IdentityStatus</a>&nbsp;status)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">读取账号关联的未删除主体标识，并按可选类型、状态过滤。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="PrincipalAccountLink.html" title="class in com.sca4d.iam.identity.mapper">PrincipalAccountLink</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectPrincipalAccountLinks(java.util.Collection)" class="member-name-link">selectPrincipalAccountLinks</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;principalIds)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="PrincipalAccountLink.html" title="class in com.sca4d.iam.identity.mapper">PrincipalAccountLink</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectPrincipalAccountLinks(java.util.Collection)" class="member-name-link">selectPrincipalAccountLinks</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;principalIds)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">批量查询业务主体与账号关系。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectPrincipalIds(java.util.Collection,com.sca4d.iam.identity.PrincipalType,com.sca4d.iam.identity.IdentityStatus,com.sca4d.core.api.identity.RealmKey)" class="member-name-link">selectPrincipalIds</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;ids,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectPrincipalIds(java.util.Collection,com.sca4d.iam.identity.PrincipalType,com.sca4d.iam.identity.IdentityStatus,com.sca4d.core.api.identity.RealmKey)" class="member-name-link">selectPrincipalIds</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;ids,
  @Nullable <a href="../PrincipalType.html" title="class in com.sca4d.iam.identity">PrincipalType</a>&nbsp;principalType,
  @Nullable <a href="../IdentityStatus.html" title="enum class in com.sca4d.iam.identity">IdentityStatus</a>&nbsp;status,
  @Nullable com.sca4d.core.api.identity.RealmKey&nbsp;linkedAccountRealm)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="../IdentityStatus.html" title="enum class in com.sca4d.iam.identity">IdentityStatus</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectPrincipalStatus(java.lang.Long,com.sca4d.iam.identity.PrincipalType)" class="member-name-link">selectPrincipalStatus</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;id,
- @NotNull <a href="../PrincipalType.html" title="class in com.sca4d.iam.identity">PrincipalType</a>&nbsp;principalType)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable com.sca4d.core.api.identity.Subject</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectSubject(java.lang.Long,com.sca4d.iam.identity.IdentityStatus)" class="member-name-link">selectSubject</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;id,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="../IdentityStatus.html" title="enum class in com.sca4d.iam.identity">IdentityStatus</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectPrincipalStatus(java.lang.Long,com.sca4d.iam.identity.PrincipalType)" class="member-name-link">selectPrincipalStatus</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;id,
+ @NotNull <a href="../PrincipalType.html" title="class in com.sca4d.iam.identity">PrincipalType</a>&nbsp;principalType)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable com.sca4d.core.api.identity.Subject</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectSubject(java.lang.Long,com.sca4d.iam.identity.IdentityStatus)" class="member-name-link">selectSubject</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;id,
  @Nullable <a href="../IdentityStatus.html" title="enum class in com.sca4d.iam.identity">IdentityStatus</a>&nbsp;status)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">按标识和可选状态读取未删除 Subject。</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;com.sca4d.core.api.identity.Subject&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectSubjects(java.util.Collection)" class="member-name-link">selectSubjects</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;ids)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="../IdentityStatus.html" title="enum class in com.sca4d.iam.identity">IdentityStatus</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectSubjectStatus(java.lang.Long)" class="member-name-link">selectSubjectStatus</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;id)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
@@ -209,14 +216,14 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">按标识修改账号状态。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="../AccountIdentifier.html" title="class in com.sca4d.iam.identity">AccountIdentifier</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateIdentifier(long,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch)" class="member-name-link">updateIdentifier</a><wbr>(long&nbsp;id,
  @NotNull com.sca4d.core.api.persistence.Patch&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value,
  @NotNull com.sca4d.core.api.persistence.Patch&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;normalizedValue,
  @NotNull com.sca4d.core.api.persistence.Patch&lt;<a href="../IdentityStatus.html" title="enum class in com.sca4d.iam.identity">IdentityStatus</a>&gt;&nbsp;status,
  @NotNull com.sca4d.core.api.persistence.Patch&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&gt;&nbsp;deleted)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">更新登录标识的展示值、规范值及生命周期字段，已删除行不可改写。</div>
+<div class="block">按 Patch 更新登录标识并返回更新结果；目标不存在或已经删除时返回空。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updatePrincipals(java.util.Collection,com.sca4d.iam.identity.PrincipalType,boolean,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch)" class="member-name-link">updatePrincipals</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;ids,
@@ -248,20 +255,29 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="insertSubject(java.lang.Long,com.sca4d.core.api.identity.SubjectType,com.sca4d.iam.identity.IdentityStatus)">
-<h3>insertSubject</h3>
+<section class="detail" id="selectSubjects(java.util.Collection)">
+<h3>selectSubjects</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.core.api.identity.Subject&gt;</span>&nbsp;<span class="element-name">selectSubjects</span><wbr><span class="parameters">(@Param("ids") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;ids)</span></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>标识集合中未删除的 Subject，包括停用状态</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="insertSubjects(java.util.Collection,com.sca4d.iam.identity.IdentityStatus)">
+<h3>insertSubjects</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
-</span><span class="return-type">int</span>&nbsp;<span class="element-name">insertSubject</span><wbr><span class="parameters">(@Param("id") @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;id,
- @Param("type") @NotNull
- @NotNull com.sca4d.core.api.identity.SubjectType&nbsp;type,
+</span><span class="return-type">int</span>&nbsp;<span class="element-name">insertSubjects</span><wbr><span class="parameters">(@Param("subjects") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;com.sca4d.core.api.identity.Subject&gt;&nbsp;subjects,
  @Param("status") @NotNull
  @NotNull <a href="../IdentityStatus.html" title="enum class in com.sca4d.iam.identity">IdentityStatus</a>&nbsp;status)</span></div>
 <div class="block">插入 `Subject`。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>id</code> - `Subject` 标识</dd>
-<dd><code>type</code> - `Subject` 类型</dd>
+<dd><code>subjects</code> - 非空 Subject 集合；标识已经去重，主键冲突时不覆盖</dd>
 <dd><code>status</code> - 身份状态</dd>
 <dt>Returns:</dt>
 <dd>新增行数</dd>
@@ -351,6 +367,16 @@ loadScripts(document, 'script');</script>
  @Param("subjectStatus") @Nullable
  @Nullable <a href="../IdentityStatus.html" title="enum class in com.sca4d.iam.identity">IdentityStatus</a>&nbsp;subjectStatus)</span></div>
 <div class="block">按账号、Subject 或关联 Principal 读取账号，可独立约束账号与 Subject 状态；必须提供一个标识范围。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="selectAccountsBySubjectIds(java.util.Collection)">
+<h3>selectAccountsBySubjectIds</h3>
+<div class="member-signature"><span class="annotations">@CheckReturnValue
+@NotNull
+</span><span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.core.api.identity.Account&gt;</span>&nbsp;<span class="element-name">selectAccountsBySubjectIds</span><wbr><span class="parameters">(@Param("subjectIds") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;subjectIds)</span></div>
+<div class="block">按 Subject 标识集合批量读取 Account。</div>
 </section>
 </li>
 <li>
@@ -571,7 +597,8 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="updateIdentifier(long,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch)">
 <h3>updateIdentifier</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
-</span><span class="return-type">int</span>&nbsp;<span class="element-name">updateIdentifier</span><wbr><span class="parameters">(@Param("id")
+@Nullable
+</span><span class="return-type">@Nullable <a href="../AccountIdentifier.html" title="class in com.sca4d.iam.identity">AccountIdentifier</a></span>&nbsp;<span class="element-name">updateIdentifier</span><wbr><span class="parameters">(@Param("id")
  long&nbsp;id,
  @Param("value") @NotNull
  @NotNull com.sca4d.core.api.persistence.Patch&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value,
@@ -581,7 +608,7 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.core.api.persistence.Patch&lt;<a href="../IdentityStatus.html" title="enum class in com.sca4d.iam.identity">IdentityStatus</a>&gt;&nbsp;status,
  @Param("deleted") @NotNull
  @NotNull com.sca4d.core.api.persistence.Patch&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&gt;&nbsp;deleted)</span></div>
-<div class="block">更新登录标识的展示值、规范值及生命周期字段，已删除行不可改写。</div>
+<div class="block">按 Patch 更新登录标识并返回更新结果；目标不存在或已经删除时返回空。</div>
 </section>
 </li>
 <li>

@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 class SettingsAutoConfigurationTest {
 
     private final ApplicationContextRunner runner = new ApplicationContextRunner()
+            .withPropertyValues("spring.application.name=settings-test")
             .withConfiguration(AutoConfigurations.of(SettingsAutoConfiguration.class))
             .withBean("settingMapper", SettingMapper.class, () -> mock(SettingMapper.class))
             .withBean(SqlBatches.class, () -> new SqlBatches(new SqlBatchProperties()));
@@ -27,6 +28,6 @@ class SettingsAutoConfigurationTest {
     @Test
     void installsSettingsWithExplicitVersionConditions() {
         runner.withBean(VersionConditions.class, () -> VersionCondition::optimistic)
-                .run(context -> assertThat(context).hasNotFailed().hasSingleBean(DatabaseSettings.class));
+                .run(context -> assertThat(context).hasNotFailed().hasSingleBean(DatabaseSettingStore.class));
     }
 }

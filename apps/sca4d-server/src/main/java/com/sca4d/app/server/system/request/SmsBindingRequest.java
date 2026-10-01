@@ -11,7 +11,7 @@ import java.util.Objects;
 
 /** 接收统一通知到一个 SMS Provider 已审核模板的完整绑定。 */
 @SuppressWarnings("unused")
-public final class SmsBindingRequest {
+public class SmsBindingRequest {
 
     @NotBlank
     @Size(max = 128)

@@ -11,15 +11,15 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 定义一类设备允许采用的接入方式和 Java 协议实现。 */
-public final class Product {
-
-    private final long id;
-
-    private final @NotNull String code;
+public class Product {
 
     private final @NotNull LocalizedFields i18n;
 
     private final @NotNull Set<DeviceAccessMethod> accessMethods;
+
+    private final @NotNull String code;
+
+    private final long id;
 
     private final @NotNull Set<String> protocolCodes;
 

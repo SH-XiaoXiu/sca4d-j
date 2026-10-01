@@ -11,14 +11,15 @@ import com.sca4d.core.api.data.DataKey;
 import com.sca4d.core.api.data.DataValues;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.i18n.MessageText;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.ProductBinding;
 import com.sca4d.iot.api.ProductDefinition;
 import com.sca4d.iot.api.change.DeviceChangeArea;
+import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.message.DeviceDownlinkKind;
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
 import com.sca4d.iot.api.model.ThingCommand;
 import com.sca4d.iot.api.model.ThingModel;
@@ -71,7 +72,7 @@ class DeviceCommandServiceTest {
 
     private final DeviceChangeNotifier changes = mock(DeviceChangeNotifier.class);
 
-    private final DeviceDownlinkMessagePublisher publisher = mock(DeviceDownlinkMessagePublisher.class);
+    private final DeviceDeliveryScheduler publisher = mock(DeviceDeliveryScheduler.class);
 
     private final DeviceCommandService service = new DeviceCommandService(
             devices,
@@ -87,10 +88,10 @@ class DeviceCommandServiceTest {
     @Test
     void submitsTypedCommandUsingBoundThingModel() {
         prepareDevice();
-        when(ids.nextId()).thenReturn(91L);
+        when(ids.nextId()).thenReturn(Id.of(91L));
         Duration timeout = Duration.ofSeconds(30);
 
-        DeviceDownlinkMessage result = service.submit(
+        DeviceDownlink result = service.submit(
                 81L,
                 SET_NET_ID,
                 DataValues.builder().put(NET_ID, "12af").build(),
@@ -141,7 +142,7 @@ class DeviceCommandServiceTest {
 
     @Test
     void cancelsOnlyUnfinishedCommands() {
-        DeviceDownlinkMessage message = mock(DeviceDownlinkMessage.class);
+        DeviceDownlink message = mock(DeviceDownlink.class);
         when(message.kind()).thenReturn(DeviceDownlinkKind.COMMAND);
         when(message.status()).thenReturn(DeviceDownlinkStatus.PENDING);
         when(message.deviceId()).thenReturn(81L);

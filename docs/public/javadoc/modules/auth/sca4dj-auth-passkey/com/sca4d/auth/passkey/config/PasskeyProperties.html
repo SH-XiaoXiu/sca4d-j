@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="annotations">@ConfigurationProperties("sca4dj.auth.passkey")
-</span><span class="modifiers">public final class </span><span class="element-name type-name-label">PasskeyProperties</span>
+</span><span class="modifiers">public class </span><span class="element-name type-name-label">PasskeyProperties</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">配置 WebAuthn Relying Party 和允许完成 ceremony 的 Origin。</div>
 </section>
@@ -105,9 +105,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">PasskeyProperties</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">创建使用本地开发默认值的 Passkey 配置。</div>
-</div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -130,12 +128,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRelyingPartyId()" class="member-name-link">getRelyingPartyId</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回 WebAuthn RP ID。</div>
+<div class="block">WebAuthn RP ID。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRelyingPartyName()" class="member-name-link">getRelyingPartyName</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回浏览器展示的 Relying Party 名称。</div>
+<div class="block">浏览器展示的 Relying Party 名称。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setOrigins(java.util.Set)" class="member-name-link">setOrigins</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;origins)</code></div>
@@ -173,7 +171,6 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="&lt;init&gt;()">
 <h3>PasskeyProperties</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">PasskeyProperties</span>()</div>
-<div class="block">创建使用本地开发默认值的 Passkey 配置。</div>
 </section>
 </li>
 </ul>
@@ -189,7 +186,11 @@ loadScripts(document, 'script');</script>
 <h3>getRelyingPartyId</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getRelyingPartyId</span>()</div>
-<div class="block">返回 WebAuthn RP ID。</div>
+<div class="block">WebAuthn RP ID。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>WebAuthn RP ID</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -204,7 +205,11 @@ loadScripts(document, 'script');</script>
 <h3>getRelyingPartyName</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getRelyingPartyName</span>()</div>
-<div class="block">返回浏览器展示的 Relying Party 名称。</div>
+<div class="block">浏览器展示的 Relying Party 名称。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>浏览器展示的 Relying Party 名称</dd>
+</dl>
 </section>
 </li>
 <li>

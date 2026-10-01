@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 /**
  * 把 Passkey 模块的 Credential Repository 接入 Yubico WebAuthn 校验器。
  */
-public final class YubicoCredentialRepository implements CredentialRepository {
+public class YubicoCredentialRepository implements CredentialRepository {
 
     private final PasskeyCredentialRepository credentials;
 

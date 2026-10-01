@@ -61,7 +61,7 @@ class AuditPayloadJsonTest {
         AuditPayloadData decoded = json.decode(encoded.type(), encoded.version(), encoded.json());
 
         assertThat(encoded.type()).isEqualTo("platform.profile");
-        assertThat(encoded.version()).isEqualTo(2);
+        assertThat(encoded.version()).isEqualTo(1);
         assertThat(decoded.decoded()).containsInstanceOf(TypedPayload.class);
         assertThat(((TypedPayload) decoded.decoded().orElseThrow()).value()).isEqualTo("changed");
     }
@@ -89,10 +89,10 @@ class AuditPayloadJsonTest {
 
     /** 提供未注册 Codec 时直接转换的测试 payload。 */
     @SuppressWarnings({"ClassCanBeRecord", "unused"}) // Jackson 通过反射读取 getter，项目禁止使用 Java record。
-    private static final class RawPayload implements AuditPayload {
-        private final String name;
-
+    private static class RawPayload implements AuditPayload {
         private final Map<String, Object> details;
+
+        private final String name;
 
         private RawPayload(String name, Map<String, Object> details) {
             this.name = name;
@@ -112,7 +112,7 @@ class AuditPayloadJsonTest {
 
     /** 提供版本化 Codec 往返的测试 payload。 */
     @SuppressWarnings("ClassCanBeRecord") // 项目禁止使用 Java record，保留普通测试类型。
-    private static final class TypedPayload implements AuditPayload {
+    private static class TypedPayload implements AuditPayload {
         private final String value;
 
         private TypedPayload(String value) {
@@ -125,8 +125,8 @@ class AuditPayloadJsonTest {
         }
     }
 
-    /** 把 `TypedPayload` 编码为稳定的 platform.profile 版本 2 JSON。 */
-    private static final class TypedPayloadCodec implements AuditPayloadCodec<TypedPayload> {
+    /** 把 `TypedPayload` 编码为稳定的 platform.profile V1 JSON。 */
+    private static class TypedPayloadCodec implements AuditPayloadCodec<TypedPayload> {
         /** {@inheritDoc} */
         @Override
         public @NotNull String payloadType() {
@@ -135,8 +135,8 @@ class AuditPayloadJsonTest {
 
         /** {@inheritDoc} */
         @Override
-        public int payloadVersion() {
-            return 2;
+        public int version() {
+            return 1;
         }
 
         /** {@inheritDoc} */

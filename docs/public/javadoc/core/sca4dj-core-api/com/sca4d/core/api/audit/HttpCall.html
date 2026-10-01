@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">HttpCall</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">HttpCall</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">保存审计记录需要的 HTTP 方法、请求路径、客户端地址和 User-Agent 快照。</div>
 </section>
@@ -104,9 +104,14 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final int</code></div>
-<div class="col-second even-row-color"><code><a href="#USER_AGENT_MAX_LENGTH" class="member-name-link">USER_AGENT_MAX_LENGTH</a></code></div>
+<div class="col-first even-row-color"><code>static final @NotNull <a href="../data/DataKey.html" title="class in com.sca4d.core.api.data">DataKey</a><wbr>&lt;<a href="HttpCall.html" title="class in com.sca4d.core.api.audit">HttpCall</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#KEY" class="member-name-link">KEY</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">HTTP 入口采集的审计与限流快照键，Call 本身不解释该数据。</div>
+</div>
+<div class="col-first odd-row-color"><code>static final int</code></div>
+<div class="col-second odd-row-color"><code><a href="#USER_AGENT_MAX_LENGTH" class="member-name-link">USER_AGENT_MAX_LENGTH</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">User-Agent 写入审计记录前允许保留的最大字符数。</div>
 </div>
 </div>
@@ -183,6 +188,14 @@ loadScripts(document, 'script');</script>
 </ul>
 </dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="KEY">
+<h3>KEY</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull <a href="../data/DataKey.html" title="class in com.sca4d.core.api.data">DataKey</a>&lt;<a href="HttpCall.html" title="class in com.sca4d.core.api.audit">HttpCall</a>&gt;</span>&nbsp;<span class="element-name">KEY</span></div>
+<div class="block">HTTP 入口采集的审计与限流快照键，Call 本身不解释该数据。</div>
 </section>
 </li>
 </ul>

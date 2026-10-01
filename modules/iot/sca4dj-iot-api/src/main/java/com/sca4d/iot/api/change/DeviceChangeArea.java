@@ -4,7 +4,7 @@ package com.sca4d.iot.api.change;
 public enum DeviceChangeArea {
     /** Device 基础资料、绑定、接入方式或具体应用合并展示的 Device Profile。 */
     DEVICE,
-    /** 当前设备连接事实。 */
+    /** 当前设备连接信息。 */
     CONNECTION,
     /** 当前 reported state。 */
     REPORTED,

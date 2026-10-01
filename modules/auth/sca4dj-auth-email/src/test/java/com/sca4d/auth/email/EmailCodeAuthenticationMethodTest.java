@@ -34,7 +34,7 @@ class EmailCodeAuthenticationMethodTest {
 
         var verification = method.authenticate(null, proof);
 
-        assertThat(EmailCodeAuthenticationMethod.EMAIL_IDENTIFIER_TYPE.value()).isEqualTo("EMAIL");
+        assertThat(EmailCodeAuthenticationMethod.EMAIL_IDENTIFIER_TYPE.toString()).isEqualTo("EMAIL");
         assertThat(verification.account()).isEqualTo(account);
         assertThat(verification.authentication().factorKinds()).containsExactly(AuthenticationFactorKind.POSSESSION);
         assertThat(verification.reference()).isEqualTo(challengeId.value());

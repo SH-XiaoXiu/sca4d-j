@@ -1,13 +1,16 @@
 package com.sca4d.iot.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
 import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
 import com.sca4d.core.api.scheduling.IntervalSchedule;
 import com.sca4d.core.api.scheduling.MisfirePolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
+import com.sca4d.core.spring.config.ConditionalOnCapability;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.core.spring.persistence.mybatis.AdditionalMyBatisSessionFactoryBuilder;
+import com.sca4d.iot.api.IotCapabilities;
 import com.sca4d.iot.api.history.DeviceHistoryStore;
 import com.sca4d.iot.telemetry.TimescaleDeviceHistoryStore;
 import com.sca4d.iot.telemetry.TimescaleEventConsumer;
@@ -23,13 +26,10 @@ import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.transaction.PlatformTransactionManager;
 
 import java.time.Clock;
 import java.util.Arrays;
@@ -46,26 +46,18 @@ public class TimescaleIotAutoConfiguration {
 
     private static final String MAPPER_LOCATIONS = "classpath*:META-INF/sca4dj/mybatis/iot-history/*.xml";
 
-    /** @return 使用模块配置创建的独立 TimescaleDB DataSource */
-    @Bean(defaultCandidate = false)
-    @IotTimescale
-    DataSource iotTimescaleDataSource(@NotNull IotTimescaleProperties properties) {
-        IotTimescaleProperties checked = Objects.requireNonNull(properties, "IoT Timescale 配置不能为空");
-        checked.validate();
-        DataSourceProperties dataSourceProperties = new DataSourceProperties();
-        dataSourceProperties.setUrl(checked.getUrl());
-        dataSourceProperties.setUsername(checked.getUsername());
-        dataSourceProperties.setPassword(checked.getPassword());
-        dataSourceProperties.setDriverClassName(checked.getDriverClassName());
-        return dataSourceProperties.initializeDataSourceBuilder().build();
-    }
-
     /** @return 只迁移 IoT 模块版本化高频表资源的独立 Flyway */
     @Bean(initMethod = "migrate", defaultCandidate = false)
     @IotTimescale
-    Flyway iotTimescaleFlyway(@IotTimescale @NotNull DataSource dataSource) {
+    Flyway iotTimescaleFlyway(@NotNull DataSource dataSource) {
+        if (!(dataSource instanceof DynamicRoutingDataSource routing)) {
+            throw new IllegalStateException("IoT 历史存储必须使用动态数据源");
+        }
+        if (!routing.getDataSources().containsKey(IotTimescale.DATASOURCE)) {
+            throw new IllegalStateException("启用 IoT 历史存储必须配置 spring.datasource.dynamic.datasource.iot-history");
+        }
         return Flyway.configure()
-                .dataSource(Objects.requireNonNull(dataSource, "IoT Timescale DataSource 不能为空"))
+                .dataSource(routing.getDataSource(IotTimescale.DATASOURCE))
                 .locations("classpath:META-INF/sca4dj/timescale/migration")
                 .load();
     }
@@ -74,7 +66,7 @@ public class TimescaleIotAutoConfiguration {
     @Bean(defaultCandidate = false)
     @IotTimescale
     SqlSessionFactory iotTimescaleSqlSessionFactory(
-            @IotTimescale @NotNull DataSource dataSource,
+            @NotNull DataSource dataSource,
             @IotTimescale @NotNull Flyway migration,
             @NotNull AdditionalMyBatisSessionFactoryBuilder builder) throws Exception {
         Objects.requireNonNull(migration, "IoT Timescale Flyway 不能为空");
@@ -96,15 +88,6 @@ public class TimescaleIotAutoConfiguration {
         return new SqlSessionTemplate(Objects.requireNonNull(factory, "IoT Timescale SqlSessionFactory 不能为空"));
     }
 
-    /** @return TimescaleDB 写入和 drop_chunks 使用的独立事务管理器 */
-    @Bean(defaultCandidate = false)
-    @IotTimescale
-    PlatformTransactionManager iotTimescaleTransactionManager(
-            @IotTimescale @NotNull DataSource dataSource) {
-        return new DataSourceTransactionManager(
-                Objects.requireNonNull(dataSource, "IoT Timescale DataSource 不能为空"));
-    }
-
     /** @return 只通过 TimescaleDB SqlSessionTemplate 执行 SQL 的 Mapper */
     @Bean(defaultCandidate = false)
     @IotTimescale
@@ -117,7 +100,7 @@ public class TimescaleIotAutoConfiguration {
     @Bean
     TimescaleRepository timescaleRepository(
             @IotTimescale @NotNull TimescaleMapper mapper,
-            @Sca4djJson @NotNull ObjectMapper objectMapper,
+            @Sca4djJson @NotNull Sca4djMapper objectMapper,
             @NotNull SqlBatches sqlBatches,
             @NotNull IotTimescaleProperties properties) {
         properties.validate();
@@ -126,17 +109,19 @@ public class TimescaleIotAutoConfiguration {
 
     /** @return 消费 reported Telemetry 并直接写入 TimescaleDB 的 Consumer */
     @Bean
+    @ConditionalOnCapability(IotCapabilities.TRANSPORT)
     TimescaleTelemetryConsumer timescaleTelemetryConsumer(@NotNull TimescaleRepository repository) {
         return new TimescaleTelemetryConsumer(repository);
     }
 
     /** @return 消费物模型和 IoT 状态机事件并直接写入 TimescaleDB 的 Consumer */
     @Bean
+    @ConditionalOnCapability(IotCapabilities.TRANSPORT)
     TimescaleEventConsumer timescaleEventConsumer(@NotNull TimescaleRepository repository) {
         return new TimescaleEventConsumer(repository);
     }
 
-    /** @return 默认 Device 历史查询存储；应用提供其他存储时保留应用选择 */
+    /** @return 默认 Device 历史查询存储；应用提供其他存储 Bean 时保留应用 Bean */
     @Bean
     @ConditionalOnMissingBean(DeviceHistoryStore.class)
     DeviceHistoryStore timescaleDeviceHistoryStore(@NotNull TimescaleRepository repository) {
@@ -163,7 +148,7 @@ public class TimescaleIotAutoConfiguration {
             @NotNull TimescaleRetentionTask task,
             @NotNull IotTimescaleProperties properties) {
         return new ClusterTaskSchedule(
-                new ScheduleKey("iot.timescale.retention"),
+                new ScheduleKey("IOT/TIMESCALE/RETENTION"),
                 1,
                 task,
                 new IntervalSchedule(properties.getCleanupInterval(), properties.getCleanupInterval()),

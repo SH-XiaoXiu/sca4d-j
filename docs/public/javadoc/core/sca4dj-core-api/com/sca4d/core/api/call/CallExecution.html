@@ -89,9 +89,9 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">CallExecution</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">CallExecution</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">保存一次被声明式调用规则包围的方法执行及其成功要求。</div>
+<div class="block">保存一次被声明式调用规则包围的方法执行、结果和预提交条件。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -109,7 +109,7 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>[]&nbsp;arguments,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;resultType)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建一次方法执行，并立即解析类型和方法上的调用声明。</div>
+<div class="block">创建一次方法执行；入口可以补充接口方法及组合注解的声明。</div>
 </div>
 </div>
 </section>
@@ -119,97 +119,120 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addRequirement(com.sca4d.core.api.call.CallRequirement)" class="member-name-link">addRequirement</a><wbr>(<a href="CallRequirement.html" title="interface in com.sca4d.core.api.call">CallRequirement</a>&nbsp;requirement)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addAfterCommit(com.sca4d.core.api.call.CallLifecycle.AfterCommit)" class="member-name-link">addAfterCommit</a><wbr>(<a href="CallLifecycle.AfterCommit.html" title="interface in com.sca4d.core.api.call">CallLifecycle.AfterCommit</a>&nbsp;callback)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">登记成功前必须满足的要求。</div>
+<div class="block">登记事务提交成功后的回调；同一执行不重复登记同一实现。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#anonymous()" class="member-name-link">anonymous</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>[]</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#arguments()" class="member-name-link">arguments</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../annotation/Audit.html" title="annotation interface in com.sca4d.core.api.annotation">Audit</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#audit()" class="member-name-link">audit</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addPreCommit(com.sca4d.core.api.call.CallLifecycle.PreCommit)" class="member-name-link">addPreCommit</a><wbr>(<a href="CallLifecycle.PreCommit.html" title="interface in com.sca4d.core.api.call">CallLifecycle.PreCommit</a>&nbsp;condition)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">登记业务方法成功和事务提交前必须满足的条件。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#afterCommit()" class="member-name-link">afterCommit</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">在事务提交成功后执行已经登记的回调，失败保留在已记录结果中并报告给调用方。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>[]</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#arguments()" class="member-name-link">arguments</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#beginInvocation()" class="member-name-link">beginInvocation</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#beginExecution()" class="member-name-link">beginExecution</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">拒绝同一方法执行被生命周期重复使用。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#beginInvocation()" class="member-name-link">beginInvocation</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">标记即将进入实际业务方法。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#call()" class="member-name-link">call</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;S extends <a href="../permission/ResourceScope.html" title="interface in com.sca4d.core.api.permission">ResourceScope</a>&gt;<br><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;S&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#consumeResourceScope(com.sca4d.core.api.permission.Permission,java.lang.Class)" class="member-name-link">consumeResourceScope</a><wbr>(<a href="../permission/Permission.html" title="class in com.sca4d.core.api.permission">Permission</a>&nbsp;permission,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;S&gt;&nbsp;scopeType)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#call()" class="member-name-link">call</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;A extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;<br>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;A&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#declaration(java.lang.Class)" class="member-name-link">declaration</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">查询有效声明；方法声明优先于类型声明。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;A extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;<br>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;A&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#declarations(java.lang.Class)" class="member-name-link">declarations</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">消费当前执行为指定权限登记的资源范围。</div>
+<div class="block">返回从方法到类型排列的全部声明，包括重复注解；相同声明只保留一次。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a><wbr>&lt;?&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#declaringType()" class="member-name-link">declaringType</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#deny(java.lang.Throwable)" class="member-name-link">deny</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;error)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#endInvocation()" class="member-name-link">endInvocation</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#endInvocation()" class="member-name-link">endInvocation</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">标记实际业务方法已经离开。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fail(java.lang.Throwable)" class="member-name-link">fail</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;error)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#function(com.sca4d.core.api.call.Call,com.sca4d.core.api.name.code.TreeCode,java.lang.Object%5B%5D,java.lang.reflect.Type)" class="member-name-link">function</a><wbr>(@NotNull <a href="Call.html" title="class in com.sca4d.core.api.call">Call</a>&nbsp;call,
+ @NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;operation,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a> @NotNull []&nbsp;arguments,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;resultType)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">创建纯函数执行，操作编码是函数的稳定身份。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invocationName()" class="member-name-link">invocationName</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../annotation/Idempotent.html" title="annotation interface in com.sca4d.core.api.annotation">Idempotent</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#idempotent()" class="member-name-link">idempotent</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isInvoking()" class="member-name-link">isInvoking</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../annotation/Locked.html" title="annotation interface in com.sca4d.core.api.annotation">Locked</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#locked()" class="member-name-link">locked</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#method()" class="member-name-link">method</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#method()" class="member-name-link">method</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="CallOutcome.html" title="class in com.sca4d.core.api.call">CallOutcome</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#outcome()" class="member-name-link">outcome</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#methodSignature()" class="member-name-link">methodSignature</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">返回具体类型和完整参数类型组成的稳定签名，供限流范围及幂等指纹使用。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#operation()" class="member-name-link">operation</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="CallOutcome.html" title="class in com.sca4d.core.api.call">CallOutcome</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#outcome()" class="member-name-link">outcome</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">返回当前方法执行结果。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../annotation/RateLimited.html" title="annotation interface in com.sca4d.core.api.annotation">RateLimited</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#rateLimited()" class="member-name-link">rateLimited</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#registerResourceScope(com.sca4d.core.api.permission.Permission)" class="member-name-link">registerResourceScope</a><wbr>(<a href="../permission/Permission.html" title="class in com.sca4d.core.api.permission">Permission</a>&nbsp;permission)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;C extends <a href="CallLifecycle.PreCommit.html" title="interface in com.sca4d.core.api.call">CallLifecycle.PreCommit</a>&gt;<br>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;C&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#preCommitConditions(java.lang.Class)" class="member-name-link">preCommitConditions</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;C&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">登记权限判定携带的 Repository 资源范围。</div>
+<div class="block">返回指定类型的预提交条件，供所属功能读取和消费；不能修改条件集合。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#replay(java.lang.Object)" class="member-name-link">replay</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;result)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../annotation/RequirePermission.html" title="annotation interface in com.sca4d.core.api.annotation">RequirePermission</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#requiredPermissions()" class="member-name-link">requiredPermissions</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;A extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;<br>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#recordDeclarations(java.lang.Class,java.util.List,java.util.List)" class="member-name-link">recordDeclarations</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;A&gt;&nbsp;methods,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;A&gt;&nbsp;types)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">保存入口解析的声明，保留方法与类型的优先顺序；同一注解类型只能登记一次。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#recordOutcome(com.sca4d.core.api.call.CallOutcome)" class="member-name-link">recordOutcome</a><wbr>(<a href="CallOutcome.html" title="class in com.sca4d.core.api.call">CallOutcome</a>&nbsp;outcome)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">保存执行链返回的结果；生命周期负责唯一写入，审计读取同一结果。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resultType()" class="member-name-link">resultType</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#succeed(java.lang.Object)" class="member-name-link">succeed</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;result)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#verifyRequirements()" class="member-name-link">verifyRequirements</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">校验实际业务方法成功前必须满足的全部要求。</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#verifyRequirementsBeforeCommit(boolean)" class="member-name-link">verifyRequirementsBeforeCommit</a><wbr>(boolean&nbsp;readOnly)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#verifyPreCommit()" class="member-name-link">verifyPreCommit</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">在只读或读写事务提交前校验适用于该事务的要求。</div>
+<div class="block">校验实际业务方法成功前必须满足的全部预提交条件。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#verifyPreCommitBeforeCommit(boolean)" class="member-name-link">verifyPreCommitBeforeCommit</a><wbr>(boolean&nbsp;readOnly)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">在只读或读写事务提交前校验适用于该事务的预提交条件。</div>
 </div>
 </div>
 </div>
@@ -236,10 +259,10 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;method,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>[]&nbsp;arguments,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;resultType)</span></div>
-<div class="block">创建一次方法执行，并立即解析类型和方法上的调用声明。</div>
+<div class="block">创建一次方法执行；入口可以补充接口方法及组合注解的声明。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>call</code> - 当前传输调用</dd>
+<dd><code>call</code> - 当前往返调用</dd>
 <dd><code>declaringType</code> - 声明业务方法的具体类型</dd>
 <dd><code>method</code> - 被调用方法</dd>
 <dd><code>arguments</code> - 方法实参</dd>
@@ -256,56 +279,111 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="addRequirement(com.sca4d.core.api.call.CallRequirement)">
-<h3>addRequirement</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addRequirement</span><wbr><span class="parameters">(<a href="CallRequirement.html" title="interface in com.sca4d.core.api.call">CallRequirement</a>&nbsp;requirement)</span></div>
-<div class="block">登记成功前必须满足的要求。</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>requirement</code> - 当前执行产生的要求</dd>
-</dl>
+<section class="detail" id="beginExecution()">
+<h3>beginExecution</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">beginExecution</span>()</div>
+<div class="block">拒绝同一方法执行被生命周期重复使用。</div>
 </section>
 </li>
 <li>
-<section class="detail" id="registerResourceScope(com.sca4d.core.api.permission.Permission)">
-<h3>registerResourceScope</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">registerResourceScope</span><wbr><span class="parameters">(<a href="../permission/Permission.html" title="class in com.sca4d.core.api.permission">Permission</a>&nbsp;permission)</span></div>
-<div class="block">登记权限判定携带的 Repository 资源范围。</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>permission</code> - 携带范围的完整权限</dd>
-</dl>
+<section class="detail" id="recordOutcome(com.sca4d.core.api.call.CallOutcome)">
+<h3>recordOutcome</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">recordOutcome</span><wbr><span class="parameters">(<a href="CallOutcome.html" title="class in com.sca4d.core.api.call">CallOutcome</a>&nbsp;outcome)</span></div>
+<div class="block">保存执行链返回的结果；生命周期负责唯一写入，审计读取同一结果。</div>
 </section>
 </li>
 <li>
-<section class="detail" id="consumeResourceScope(com.sca4d.core.api.permission.Permission,java.lang.Class)">
-<h3>consumeResourceScope</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;S extends <a href="../permission/ResourceScope.html" title="interface in com.sca4d.core.api.permission">ResourceScope</a>&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;S&gt;</span>&nbsp;<span class="element-name">consumeResourceScope</span><wbr><span class="parameters">(<a href="../permission/Permission.html" title="class in com.sca4d.core.api.permission">Permission</a>&nbsp;permission,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;S&gt;&nbsp;scopeType)</span></div>
-<div class="block">消费当前执行为指定权限登记的资源范围。</div>
-<dl class="notes">
-<dt>Type Parameters:</dt>
-<dd><code>S</code> - 资源范围类型</dd>
-<dt>Parameters:</dt>
-<dd><code>permission</code> - Repository 正在执行的完整权限</dd>
-<dd><code>scopeType</code> - 业务模块定义的资源范围类型</dd>
-<dt>Returns:</dt>
-<dd>当前执行没有登记该权限时为空，否则返回已消费的范围</dd>
-</dl>
+<section class="detail" id="declaration(java.lang.Class)">
+<h3>declaration</h3>
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;A&gt;</span>&nbsp;<span class="element-name">declaration</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type)</span></div>
+<div class="block">查询有效声明；方法声明优先于类型声明。</div>
 </section>
 </li>
 <li>
-<section class="detail" id="verifyRequirements()">
-<h3>verifyRequirements</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">verifyRequirements</span>()</div>
-<div class="block">校验实际业务方法成功前必须满足的全部要求。</div>
+<section class="detail" id="declarations(java.lang.Class)">
+<h3>declarations</h3>
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>
+<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;A&gt;</span>&nbsp;<span class="element-name">declarations</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type)</span></div>
+<div class="block">返回从方法到类型排列的全部声明，包括重复注解；相同声明只保留一次。</div>
 </section>
 </li>
 <li>
-<section class="detail" id="verifyRequirementsBeforeCommit(boolean)">
-<h3>verifyRequirementsBeforeCommit</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">verifyRequirementsBeforeCommit</span><wbr><span class="parameters">(boolean&nbsp;readOnly)</span></div>
-<div class="block">在只读或读写事务提交前校验适用于该事务的要求。</div>
+<section class="detail" id="recordDeclarations(java.lang.Class,java.util.List,java.util.List)">
+<h3>recordDeclarations</h3>
+<div class="member-signature"><span class="annotations">@Contract(mutates="this")
+</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">recordDeclarations</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;A&gt;&nbsp;methods,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;A&gt;&nbsp;types)</span></div>
+<div class="block">保存入口解析的声明，保留方法与类型的优先顺序；同一注解类型只能登记一次。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="function(com.sca4d.core.api.call.Call,com.sca4d.core.api.name.code.TreeCode,java.lang.Object[],java.lang.reflect.Type)">
+<h3>function</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></span>&nbsp;<span class="element-name">function</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Call.html" title="class in com.sca4d.core.api.call">Call</a>&nbsp;call,
+ @NotNull
+ @NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;operation,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a> @NotNull []&nbsp;arguments,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;resultType)</span></div>
+<div class="block">创建纯函数执行，操作编码是函数的稳定身份。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="addPreCommit(com.sca4d.core.api.call.CallLifecycle.PreCommit)">
+<h3>addPreCommit</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addPreCommit</span><wbr><span class="parameters">(<a href="CallLifecycle.PreCommit.html" title="interface in com.sca4d.core.api.call">CallLifecycle.PreCommit</a>&nbsp;condition)</span></div>
+<div class="block">登记业务方法成功和事务提交前必须满足的条件。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="addAfterCommit(com.sca4d.core.api.call.CallLifecycle.AfterCommit)">
+<h3>addAfterCommit</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addAfterCommit</span><wbr><span class="parameters">(<a href="CallLifecycle.AfterCommit.html" title="interface in com.sca4d.core.api.call">CallLifecycle.AfterCommit</a>&nbsp;callback)</span></div>
+<div class="block">登记事务提交成功后的回调；同一执行不重复登记同一实现。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="afterCommit()">
+<h3>afterCommit</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">afterCommit</span>()</div>
+<div class="block">在事务提交成功后执行已经登记的回调，失败保留在已记录结果中并报告给调用方。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="preCommitConditions(java.lang.Class)">
+<h3>preCommitConditions</h3>
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;C extends <a href="CallLifecycle.PreCommit.html" title="interface in com.sca4d.core.api.call">CallLifecycle.PreCommit</a>&gt;</span>
+<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;C&gt;</span>&nbsp;<span class="element-name">preCommitConditions</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;C&gt;&nbsp;type)</span></div>
+<div class="block">返回指定类型的预提交条件，供所属功能读取和消费；不能修改条件集合。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="verifyPreCommit()">
+<h3>verifyPreCommit</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">verifyPreCommit</span>()</div>
+<div class="block">校验实际业务方法成功前必须满足的全部预提交条件。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="verifyPreCommitBeforeCommit(boolean)">
+<h3>verifyPreCommitBeforeCommit</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">verifyPreCommitBeforeCommit</span><wbr><span class="parameters">(boolean&nbsp;readOnly)</span></div>
+<div class="block">在只读或读写事务提交前校验适用于该事务的预提交条件。</div>
 </section>
 </li>
 <li>
@@ -323,44 +401,12 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="succeed(java.lang.Object)">
-<h3>succeed</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">succeed</span><wbr><span class="parameters">(@Nullable
- @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;result)</span></div>
+<section class="detail" id="isInvoking()">
+<h3>isInvoking</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isInvoking</span>()</div>
 <dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>result</code> - 实际业务结果</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="replay(java.lang.Object)">
-<h3>replay</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">replay</span><wbr><span class="parameters">(@Nullable
- @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;result)</span></div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>result</code> - 已保存的幂等结果</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="deny(java.lang.Throwable)">
-<h3>deny</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">deny</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;error)</span></div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>error</code> - 拒绝调用的业务异常</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="fail(java.lang.Throwable)">
-<h3>fail</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">fail</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;error)</span></div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>error</code> - 导致调用失败的异常</dd>
+<dt>Returns:</dt>
+<dd>实际方法仍在执行或等待 CompletionStage 完成时为 true</dd>
 </dl>
 </section>
 </li>
@@ -371,7 +417,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Call.html" title="class in com.sca4d.core.api.call">Call</a></span>&nbsp;<span class="element-name">call</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>当前传输调用</dd>
+<dd>当前往返调用</dd>
 </dl>
 </section>
 </li>
@@ -398,6 +444,30 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="operation()">
+<h3>operation</h3>
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&gt;</span>&nbsp;<span class="element-name">operation</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>纯函数操作编码；Java 方法执行为空</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="invocationName()">
+<h3>invocationName</h3>
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">invocationName</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>用于日志、指纹和限流范围的稳定执行标识</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="arguments()">
 <h3>arguments</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
@@ -420,69 +490,10 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="anonymous()">
-<h3>anonymous</h3>
-<div class="member-signature"><span class="annotations">@Contract(pure=true)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">anonymous</span>()</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>当前方法允许匿名访问时返回 <code>true</code></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="requiredPermissions()">
-<h3>requiredPermissions</h3>
-<div class="member-signature"><span class="annotations">@Contract(pure=true)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../annotation/RequirePermission.html" title="annotation interface in com.sca4d.core.api.annotation">RequirePermission</a>&gt;</span>&nbsp;<span class="element-name">requiredPermissions</span>()</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>类型和方法声明的权限要求</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="audit()">
-<h3>audit</h3>
-<div class="member-signature"><span class="annotations">@Contract(pure=true)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../annotation/Audit.html" title="annotation interface in com.sca4d.core.api.annotation">Audit</a>&gt;</span>&nbsp;<span class="element-name">audit</span>()</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>当前审计声明；未声明时为空</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="idempotent()">
-<h3>idempotent</h3>
-<div class="member-signature"><span class="annotations">@Contract(pure=true)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../annotation/Idempotent.html" title="annotation interface in com.sca4d.core.api.annotation">Idempotent</a>&gt;</span>&nbsp;<span class="element-name">idempotent</span>()</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>当前幂等声明；未声明时为空</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="locked()">
-<h3>locked</h3>
-<div class="member-signature"><span class="annotations">@Contract(pure=true)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../annotation/Locked.html" title="annotation interface in com.sca4d.core.api.annotation">Locked</a>&gt;</span>&nbsp;<span class="element-name">locked</span>()</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>当前分布式锁声明；未声明时为空</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="rateLimited()">
-<h3>rateLimited</h3>
-<div class="member-signature"><span class="annotations">@Contract(pure=true)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../annotation/RateLimited.html" title="annotation interface in com.sca4d.core.api.annotation">RateLimited</a>&gt;</span>&nbsp;<span class="element-name">rateLimited</span>()</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>当前限流声明；未声明时为空</dd>
-</dl>
+<section class="detail" id="methodSignature()">
+<h3>methodSignature</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">methodSignature</span>()</div>
+<div class="block">返回具体类型和完整参数类型组成的稳定签名，供限流范围及幂等指纹使用。</div>
 </section>
 </li>
 <li>

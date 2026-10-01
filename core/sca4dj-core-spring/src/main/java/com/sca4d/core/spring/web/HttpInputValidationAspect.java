@@ -44,6 +44,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
+import java.lang.reflect.Type;
 import java.math.BigInteger;
 import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
@@ -61,7 +62,7 @@ import java.util.UUID;
 /** 在 Controller 执行前校验外部 HTTP 输入的显式约束和按 Java 数据类型配置的默认规则。 */
 @Aspect
 @Order(Ordered.HIGHEST_PRECEDENCE + 50)
-public final class HttpInputValidationAspect {
+public class HttpInputValidationAspect {
 
     private static final Set<Class<? extends Annotation>> NUMERIC_RANGE_ANNOTATIONS = Set.of(
             DecimalMax.class,
@@ -75,9 +76,9 @@ public final class HttpInputValidationAspect {
 
     private final @NotNull Validator validator;
 
-    private final @NotNull TextLocalizer localizer;
-
     private final @NotNull HttpInputValidationProperties properties;
+
+    private final @NotNull TextLocalizer localizer;
 
     /**
      * 创建使用共享 Bean Validation 和 Core 国际化目录的 HTTP 输入校验器。
@@ -347,12 +348,12 @@ public final class HttpInputValidationAspect {
         return !hasAnnotation(declaration, Size.class) && !hasAnnotation(annotatedType, Size.class);
     }
 
-    /** @return 声明或其组合注解中是否包含显式数值范围注解 */
+    /** @return 声明或组合注解中是否包含显式数值范围注解 */
     private boolean hasNumericRangeAnnotation(@NotNull AnnotatedElement element) {
         return NUMERIC_RANGE_ANNOTATIONS.stream().anyMatch(type -> hasAnnotation(element, type));
     }
 
-    /** @return 声明或其组合注解中是否包含目标注解 */
+    /** @return 声明或组合注解中是否包含目标注解 */
     private boolean hasAnnotation(
             @NotNull AnnotatedElement element,
             @NotNull Class<? extends Annotation> annotationType) {
@@ -454,12 +455,12 @@ public final class HttpInputValidationAspect {
     }
 
     /** 提供反射无法解析泛型元素时使用的无注解 Object 类型。 */
-    private static final class ObjectType implements AnnotatedType {
+    private static class ObjectType implements AnnotatedType {
 
         private static final ObjectType INSTANCE = new ObjectType();
 
         @Override
-        public java.lang.reflect.Type getType() {
+        public Type getType() {
             return Object.class;
         }
 

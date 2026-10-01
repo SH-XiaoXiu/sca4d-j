@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">AccountIdentifier</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">AccountIdentifier</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">保存账号的一种登录标识及其稳定查询值。</div>
 </section>
@@ -130,37 +130,37 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#accountId()" class="member-name-link">accountId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回登录标识所属账号。</div>
+<div class="block">登录标识所属账号。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#id()" class="member-name-link">id</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回登录标识主键。</div>
+<div class="block">登录标识主键。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#normalizedValue()" class="member-name-link">normalizedValue</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回查找账号和唯一约束使用的规范值。</div>
+<div class="block">查找账号和唯一约束使用的规范值。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.identity.RealmKey</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#realmKey()" class="member-name-link">realmKey</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回登录标识所属认证域。</div>
+<div class="block">登录标识所属认证域。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="IdentityStatus.html" title="enum class in com.sca4d.iam.identity">IdentityStatus</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#status()" class="member-name-link">status</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回登录标识当前是否可用。</div>
+<div class="block">登录标识当前是否可用。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.identity.AccountIdentifierType</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#type()" class="member-name-link">type</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回登录标识类型。</div>
+<div class="block">登录标识类型。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#value()" class="member-name-link">value</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回保留用于展示的用户输入值。</div>
+<div class="block">保留用于展示的用户输入值。</div>
 </div>
 </div>
 </div>
@@ -222,7 +222,7 @@ loadScripts(document, 'script');</script>
 <h3>id</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">id</span>()</div>
-<div class="block">返回登录标识主键。</div>
+<div class="block">登录标识主键。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>登录标识主键</dd>
@@ -235,7 +235,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name">accountId</span>()</div>
-<div class="block">返回登录标识所属账号。</div>
+<div class="block">登录标识所属账号。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>所属账号</dd>
@@ -248,7 +248,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.identity.RealmKey</span>&nbsp;<span class="element-name">realmKey</span>()</div>
-<div class="block">返回登录标识所属认证域。</div>
+<div class="block">登录标识所属认证域。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>认证域</dd>
@@ -261,7 +261,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.identity.AccountIdentifierType</span>&nbsp;<span class="element-name">type</span>()</div>
-<div class="block">返回登录标识类型。</div>
+<div class="block">登录标识类型。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>标识类型</dd>
@@ -274,7 +274,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">value</span>()</div>
-<div class="block">返回保留用于展示的用户输入值。</div>
+<div class="block">保留用于展示的用户输入值。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>展示原值</dd>
@@ -287,7 +287,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">normalizedValue</span>()</div>
-<div class="block">返回查找账号和唯一约束使用的规范值。</div>
+<div class="block">查找账号和唯一约束使用的规范值。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>查询规范值</dd>
@@ -300,7 +300,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="IdentityStatus.html" title="enum class in com.sca4d.iam.identity">IdentityStatus</a></span>&nbsp;<span class="element-name">status</span>()</div>
-<div class="block">返回登录标识当前是否可用。</div>
+<div class="block">登录标识当前是否可用。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>当前状态</dd>

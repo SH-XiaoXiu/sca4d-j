@@ -8,7 +8,7 @@ import java.util.Objects;
 
 /** 返回一个文件的短期读取地址。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class FileAccessUrl {
+public class FileAccessUrl {
     private final long fileId;
 
     private final @NotNull URI url;
@@ -36,7 +36,7 @@ public final class FileAccessUrl {
     }
 
     /**
-     * 返回文件标识。
+     * 文件标识。
      *
      * @return 正数文件标识
      */
@@ -45,7 +45,7 @@ public final class FileAccessUrl {
     }
 
     /**
-     * 返回客户端可以访问的短期地址。
+     * 客户端可以访问的短期地址。
      *
      * @return 绝对读取地址
      */
@@ -54,7 +54,7 @@ public final class FileAccessUrl {
     }
 
     /**
-     * 返回读取地址失效时间。
+     * 读取地址失效时间。
      *
      * @return 地址失效时间
      */

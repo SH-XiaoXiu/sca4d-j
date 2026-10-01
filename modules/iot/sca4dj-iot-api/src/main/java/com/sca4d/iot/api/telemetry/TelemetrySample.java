@@ -9,15 +9,15 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 保存一个物模型属性在明确采样时间产生的时序值。 */
-public final class TelemetrySample {
-
-    private final @NotNull String propertyCode;
-
-    private final @NotNull Object value;
+public class TelemetrySample {
 
     private final @NotNull Instant observedAt;
 
     private final @NotNull Instant receivedAt;
+
+    private final @NotNull Object value;
+
+    private final @NotNull String propertyCode;
 
     /** @param propertyCode 属性 code @param value 已按物模型校验的值 @param observedAt 设备或平台观测时间 @param receivedAt 平台接收时间 */
     @JsonCreator

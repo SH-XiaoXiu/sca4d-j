@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="annotations">@Internal
-</span><span class="modifiers">public final class </span><span class="element-name type-name-label">FileRecord</span>
+</span><span class="modifiers">public class </span><span class="element-name type-name-label">FileRecord</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">保存一个文件的上传 Principal、业务用途、存储位置、内容信息和当前状态。</div>
 </section>
@@ -104,10 +104,10 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(long,long,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,long,java.lang.String,java.lang.Long,com.sca4d.core.api.storage.FileStatus,java.time.Instant,java.time.Instant,boolean)" class="member-name-link">FileRecord</a><wbr>(long&nbsp;id,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(long,long,java.lang.String,com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,long,java.lang.String,java.lang.Long,com.sca4d.core.api.storage.FileStatus,java.time.Instant,java.time.Instant,boolean)" class="member-name-link">FileRecord</a><wbr>(long&nbsp;id,
  long&nbsp;uploaderPrincipalId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;scene,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetResourceType,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;targetResourceType,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetResourceId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;backendId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;containerName,
@@ -186,7 +186,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#targetResourceId()" class="member-name-link">targetResourceId</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#targetResourceType()" class="member-name-link">targetResourceType</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
@@ -224,14 +224,14 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(long,long,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,long,java.lang.String,java.lang.Long,com.sca4d.core.api.storage.FileStatus,java.time.Instant,java.time.Instant,boolean)">
+<section class="detail" id="&lt;init&gt;(long,long,java.lang.String,com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,long,java.lang.String,java.lang.Long,com.sca4d.core.api.storage.FileStatus,java.time.Instant,java.time.Instant,boolean)">
 <h3>FileRecord</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">FileRecord</span><wbr><span class="parameters">(long&nbsp;id,
  long&nbsp;uploaderPrincipalId,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;scene,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetResourceType,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;targetResourceType,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetResourceId,
  @NotNull
@@ -304,7 +304,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="targetResourceType()">
 <h3>targetResourceType</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">targetResourceType</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">targetResourceType</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>文件关联的目标 Resource 类型</dd>

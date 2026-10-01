@@ -1,8 +1,19 @@
 # IoT 对象模型
 
-Sca4d-J 用 Product 定义产品，用 ThingModel 定义属性、事件和命令，用 Device 登记具体设备。设备上报值保存在 reported 中，平台期望值保存在 desired 中，一次性操作通过 command 下发。
+Product 定义一类产品，ThingModel 规定它能上报哪些属性、产生哪些事件、执行哪些命令，Device 登记一台具体设备。接入时先定义产品和物模型，再登记设备及协议绑定；运行时读取 reported 查看实际值，修改 desired 设置持续期望值，发送 command 执行一次性动作。
 
 设备接入从[产品定义与设备登记](#从产品定义到设备实例)开始；判断设备是否在线，查看 [Connection](#device、account、session-与-connection)；确认指令执行结果，查看 [ACK](#ack)。实际接入步骤见[接入第一台设备](/tutorials/iot-device-access)。
+
+## 怎样选择状态与命令
+
+| 任务 | 使用什么 | 怎样确认结果 |
+|---|---|---|
+| 查看设备实际温度 | reported | 读取设备最近上报的值 |
+| 持续要求电源开启 | desired | 按物模型确认策略检查 ACK 或 reported 是否与期望一致 |
+| 执行一次重启 | command | 查询这条下行消息的业务 ACK 和最终状态 |
+| 查询过去的温度 | Telemetry 历史 | 配置历史存储后按时间范围查询 |
+
+设备有连接、Broker 接受消息、设备完成动作是三个不同结果。只有对应确认策略完成，才能把下行视为成功。
 
 ## 从产品定义到设备实例
 
@@ -60,11 +71,11 @@ Page<Device> firstPage = devices.find(
 四个对象分别解决不同问题：
 
 - **Device** 是产品、物模型和设备协议组成的设备台账；只有直接连接时才包含 DeviceConnectionBinding 和 DeviceAccessMethod。
-- **Account** 是 Device Subject 在 `iot-device` Realm 中使用的认证账号。`anonymous` 可以没有 Account；`session` 或 `account:<method>` 必须有 Account。
+- **Account** 是 Device Subject 在 `iot-device` Realm 中使用的认证账号。`ANONYMOUS` 可以没有 Account；`SESSION` 或 `ACCOUNT:AUTHENTICATION:<method>` 必须有 Account。
 - **Session** 保存 HMAC 等登录认证的结果。Shared Secret 和 X.509 可以直接验证连接，无需建立 Session。
 - **Connection** 是 Broker 当前观测到的一代协议连接，包含不透明连接代次、Device、协议、接入方式和可选 Session ID。
 
-Shared Secret、HMAC 与 X.509 都实现通用 AuthenticationMethod。Sca4d Server 的 Sca4dEmqxDeviceConnectionRequestFactory 把 EMQX 字段转换为 DeviceConnectionRequest；Sca4dDeviceConnectionAdmission 查找 Device，并把 Account 认证交给 AuthenticationMethods，把 `session` 交给 SessionLifecycle。
+Shared Secret、HMAC 与 X.509 都实现通用 AuthenticationMethod。Sca4d Server 的 Sca4dEmqxDeviceConnectionRequestFactory 把 EMQX 字段转换为 DeviceConnectionRequest；Sca4dDeviceConnectionAdmission 查找 Device，并把 Account 认证交给 AuthenticationMethods，把 `SESSION` 交给 SessionLifecycle。
 
 DeviceCredentialService 管理 Credential，DeviceSessionService 使用 HMAC AuthenticationSubmission 建立 Session。IotDeviceSessionIdentityLoader 读取设备身份，IotDeviceSessionInvalidationListener 登记 Session 失效后的可靠断连消息。设备数据与认证数据分别由 IoT 和 Auth 模块管理。
 
@@ -172,7 +183,7 @@ sequenceDiagram
     Route-->>Broker: 确认上行消息
 ```
 
-Telemetry 是 reported 中标记为历史样本的属性。它在主事务提交后调用 `publishAfterCommit(...)`，不写 Outbox。消息代理或 TimescaleDB 失败不会回滚 latest reported，但提交后发布失败可能丢失历史样本。
+Telemetry 是 reported 中标记为历史样本的属性。它在主事务中调用 `MessageBus.dispatch(message, DispatchPolicy.afterCommit())` 登记提交后发布，不写 Outbox。消息代理或 TimescaleDB 失败不会回滚 latest reported，但提交后发布失败可能丢失历史样本。
 
 物模型事件按 delivery 声明处理。`RELIABLE` 事件要求来源事件 ID 和来源发生时间，并在主事务写通用 `messaging_outbox`；普通事件提交后直接发布。reported 推导 ACK 先写 Outbox，再由独立 Consumer 执行消息级状态转换，因此来源事务回滚时不会留下已经确认的下行。ACK 阶段、设备定时执行和断连属于必须恢复的状态变化，始终使用通用 Outbox。
 

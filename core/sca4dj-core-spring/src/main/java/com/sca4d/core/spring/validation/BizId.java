@@ -1,5 +1,7 @@
 package com.sca4d.core.spring.validation;
 
+import static com.sca4d.core.spring.validation.BizIdMode.CODE;
+
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -42,7 +44,7 @@ public @interface BizId {
      *
      * @return 业务标识格式，默认为 CODE
      */
-    BizIdMode mode() default BizIdMode.CODE;
+    BizIdMode mode() default CODE;
 
     /**
      * 限制字符串形式包含的最少字符数。

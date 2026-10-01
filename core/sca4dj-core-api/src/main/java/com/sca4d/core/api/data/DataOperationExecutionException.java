@@ -3,7 +3,7 @@ package com.sca4d.core.api.data;
 import org.jetbrains.annotations.NotNull;
 
 /** 表示 DataOperation 代码或其依赖在执行时发生了非数据契约异常。 */
-public final class DataOperationExecutionException extends RuntimeException {
+public class DataOperationExecutionException extends RuntimeException {
 
     /** 抛出原始异常的节点名称。 */
     private final String operationName;
@@ -24,7 +24,7 @@ public final class DataOperationExecutionException extends RuntimeException {
     }
 
     /**
-     * 读取抛出原始异常的节点名称。
+     * 抛出原始异常的节点名称。
      *
      * @return 失败节点名称
      */
@@ -33,7 +33,7 @@ public final class DataOperationExecutionException extends RuntimeException {
     }
 
     /**
-     * 读取失败节点原本应写入的键。
+     * 失败节点原本应写入的键。
      *
      * @return 失败节点的输出键名称
      */

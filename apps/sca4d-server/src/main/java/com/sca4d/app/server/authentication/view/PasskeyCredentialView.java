@@ -12,7 +12,7 @@ import java.util.Objects;
  * 返回不包含公钥和 user handle 的 Passkey Credential 管理信息。
  */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
-public final class PasskeyCredentialView {
+public class PasskeyCredentialView {
 
     private final long id;
 

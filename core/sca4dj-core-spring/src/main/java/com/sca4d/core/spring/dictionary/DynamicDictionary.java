@@ -6,7 +6,7 @@ import java.util.Objects;
 
 /** 保存数据库动态字典的管理配置。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class DynamicDictionary {
+public class DynamicDictionary {
 
     private final String key;
 
@@ -18,7 +18,6 @@ public final class DynamicDictionary {
 
     private final long version;
 
-    /** 创建动态字典配置。 */
     public DynamicDictionary(
             @NotNull String key,
             @NotNull String label,

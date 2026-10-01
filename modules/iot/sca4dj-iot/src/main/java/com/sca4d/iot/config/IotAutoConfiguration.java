@@ -1,16 +1,18 @@
 package com.sca4d.iot.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.connection.ConnectionRegistry;
 import com.sca4d.core.api.i18n.LocaleCatalog;
 import com.sca4d.core.api.id.IdGenerator;
-import com.sca4d.core.api.messaging.MessagePublisher;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.messaging.MessageBus;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.core.spring.persistence.mybatis.StringValueTypeHandler;
 import com.sca4d.core.spring.redis.RedisBatches;
+import com.sca4d.core.spring.redis.RedisHashTag;
 import com.sca4d.core.spring.redis.Sca4djRedis;
 import com.sca4d.iot.api.ProductDefinition;
 import com.sca4d.iot.api.change.DeviceChangePublisher;
@@ -40,7 +42,7 @@ import com.sca4d.iot.message.BuiltInDevicePolicies;
 import com.sca4d.iot.message.DesiredStateService;
 import com.sca4d.iot.message.DeviceAcknowledgementService;
 import com.sca4d.iot.message.DeviceCommandService;
-import com.sca4d.iot.message.DeviceDownlinkMessagePublisher;
+import com.sca4d.iot.message.DeviceDeliveryScheduler;
 import com.sca4d.iot.message.DevicePolicyCatalog;
 import com.sca4d.iot.message.DownlinkRepository;
 import com.sca4d.iot.message.StandardDeviceUplinkReceiver;
@@ -82,7 +84,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -95,6 +97,12 @@ import java.util.stream.Stream;
 @MapperScan(basePackageClasses = ProductMapper.class)
 @EnableConfigurationProperties(IotProperties.class)
 public class IotAutoConfiguration {
+
+    /** IoT 连接反向索引和 reported 投影由多 key Lua 原子修改。 */
+    @Bean
+    RedisHashTag iotRedisHashTag() {
+        return new RedisHashTag(TreeCode.ofSegment("IOT"));
+    }
 
     /** @return IoT 开放连接值类型的 MyBatis 字符串映射 */
     @Bean
@@ -164,16 +172,15 @@ public class IotAutoConfiguration {
 
     /** @return 在业务事务中登记下行发送和 ACK 超时消息的发布器 */
     @Bean
-    DeviceDownlinkMessagePublisher deviceDownlinkMessagePublisher(
-            MessagePublisher messages,
-            Clock clock) {
-        return new DeviceDownlinkMessagePublisher(messages, clock);
+    DeviceDeliveryScheduler deviceDeliveryScheduler(
+            MessageBus messages) {
+        return new DeviceDeliveryScheduler(messages);
     }
 
     /** @return 默认使用 PostgreSQL 保存 latest reported 投影 */
     @Bean
     @ConditionalOnMissingBean(ReportedStateStore.class)
-    @ConditionalOnProperty(prefix = "sca4dj.iot", name = "reported-store", havingValue = "postgresql", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = "sca4dj.iot.reported", name = "store", havingValue = "POSTGRESQL", matchIfMissing = true)
     ReportedStateStore postgresqlReportedStateStore(
             ReportedStateMapper mapper,
             ThingDataJsonCodec json,
@@ -184,13 +191,12 @@ public class IotAutoConfiguration {
     /** @return 具体应用选择 Redis 时使用 Lua 原子保存 latest reported 投影 */
     @Bean
     @ConditionalOnMissingBean(ReportedStateStore.class)
-    @ConditionalOnProperty(prefix = "sca4dj.iot", name = "reported-store", havingValue = "redis")
+    @ConditionalOnProperty(prefix = "sca4dj.iot.reported", name = "store", havingValue = "REDIS")
     ReportedStateStore redisReportedStateStore(
-            @Sca4djRedis StringRedisTemplate redis,
+            @Sca4djRedis RedisTemplate<Key, String> redis,
             ThingDataJsonCodec json,
-            RuntimeNamespace namespace,
             RedisBatches redisBatches) {
-        return new RedisReportedStateStore(redis, json, namespace, redisBatches);
+        return new RedisReportedStateStore(redis, json, redisBatches);
     }
 
     /** @return 设备定时规则和执行结果的主库持久化入口 */
@@ -204,14 +210,14 @@ public class IotAutoConfiguration {
     /** @param objectMapper App 统一 JSON 映射器 @return 严格物模型 JSON 编解码器 */
     @Bean
     ThingModelJsonCodec thingModelJsonCodec(
-            @Sca4djJson ObjectMapper objectMapper,
+            @Sca4djJson Sca4djMapper objectMapper,
             DevicePolicyCatalog policies) {
         return new ThingModelJsonCodec(objectMapper, policies);
     }
 
     /** @param objectMapper App 统一 JSON 映射器 @return 标准 Thing data JSON 编解码器 */
     @Bean
-    ThingDataJsonCodec thingDataJsonCodec(@Sca4djJson ObjectMapper objectMapper) {
+    ThingDataJsonCodec thingDataJsonCodec(@Sca4djJson Sca4djMapper objectMapper) {
         return new ThingDataJsonCodec(objectMapper);
     }
 
@@ -322,13 +328,12 @@ public class IotAutoConfiguration {
                 new TransactionTemplate(transactionManager));
     }
 
-    /** @return 连接事实的 Redis Repository 和设备接入事件接收入口 */
+    /** @return 连接信息的 Redis Repository 和设备接入事件接收入口 */
     @Bean
     DeviceConnectionRepository deviceConnectionRepository(
-            @Sca4djRedis StringRedisTemplate redis,
+            @Sca4djRedis RedisTemplate<Key, String> redis,
             Clock clock,
             IotProperties properties,
-            RuntimeNamespace namespace,
             DeviceChangeNotifier changes,
             RedisBatches redisBatches) {
         properties.validate();
@@ -336,7 +341,6 @@ public class IotAutoConfiguration {
                 redis,
                 clock,
                 properties.getConnectionTtl(),
-                namespace,
                 changes,
                 redisBatches);
     }
@@ -352,13 +356,11 @@ public class IotAutoConfiguration {
     @Bean
     DeviceConnectionService deviceConnectionService(
             DeviceConnectionQueryService connections,
-            MessagePublisher messages,
-            Clock clock,
+            MessageBus messages,
             ObjectProvider<ConnectionRegistry> commonConnections) {
         return new DeviceConnectionService(
                 connections,
                 messages,
-                clock,
                 commonConnections.getIfAvailable());
     }
 
@@ -400,7 +402,7 @@ public class IotAutoConfiguration {
             Clock clock,
             DeviceChangeNotifier changes,
             ThingDataJsonCodec json,
-            DeviceDownlinkMessagePublisher messagePublisher,
+            DeviceDeliveryScheduler messagePublisher,
             IotProperties properties) {
         properties.validate();
         return new DesiredStateService(
@@ -428,7 +430,7 @@ public class IotAutoConfiguration {
             IdGenerator ids,
             Clock clock,
             DeviceChangeNotifier changes,
-            DeviceDownlinkMessagePublisher messagePublisher) {
+            DeviceDeliveryScheduler messagePublisher) {
         return new DeviceCommandService(
                 devices,
                 products,
@@ -447,8 +449,8 @@ public class IotAutoConfiguration {
             DownlinkRepository downlinks,
             Clock clock,
             DeviceChangeNotifier changes,
-            DeviceDownlinkMessagePublisher downlinkMessages,
-            MessagePublisher messages,
+            DeviceDeliveryScheduler downlinkMessages,
+            MessageBus messages,
             DistributedLock distributedLock,
             PlatformTransactionManager transactionManager) {
         return new DeviceAcknowledgementService(
@@ -471,7 +473,7 @@ public class IotAutoConfiguration {
             Clock clock,
             DeviceChangeNotifier changes,
             IotProperties properties,
-            MessagePublisher messages,
+            MessageBus messages,
             ObjectProvider<DeviceHistoryStore> history,
             DistributedLock distributedLock,
             PlatformTransactionManager transactionManager) {
@@ -518,7 +520,7 @@ public class IotAutoConfiguration {
             ThingModelRepository models,
             ThingValueValidator validator,
             IdGenerator ids,
-            MessagePublisher messages,
+            MessageBus messages,
             Clock clock,
             DeviceChangeNotifier changes,
             IotProperties properties) {

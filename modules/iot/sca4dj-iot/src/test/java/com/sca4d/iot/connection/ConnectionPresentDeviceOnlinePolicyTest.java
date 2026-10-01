@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.time.Instant;
 import java.util.List;
 
-/** 验证默认在线策略只依赖仍有效的当前连接事实。 */
+/** 验证默认在线策略只依赖仍有效的当前连接信息。 */
 class ConnectionPresentDeviceOnlinePolicyTest {
 
     private final ConnectionPresentDeviceOnlinePolicy policy = new ConnectionPresentDeviceOnlinePolicy();
@@ -23,7 +23,7 @@ class ConnectionPresentDeviceOnlinePolicyTest {
                 7,
                 DeviceConnectionProtocol.MQTT,
                 null,
-                DeviceAccessMethod.parse("account:shared-secret"),
+                DeviceAccessMethod.parse("ACCOUNT:AUTHENTICATION/SHARED_SECRET"),
                 Instant.parse("2026-08-10T00:00:00Z"));
 
         assertThat(policy.isOnline(List.of())).isFalse();

@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.sca4d.core.api.messaging.MessagePublisher;
+import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.storage.FileErrorCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,9 +41,9 @@ import java.util.Objects;
 @SpringBootTest(classes = Sca4dApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
         "sca4dj.iam.bootstrap.enabled=true",
         "sca4dj.iam.bootstrap.username=admin",
-        "sca4dj.auth.password.bootstrap-enabled=true",
-        "sca4dj.auth.password.bootstrap-username=admin",
-        "sca4dj.auth.password.bootstrap-password=admin@123",
+        "sca4dj.auth.password.bootstrap.enabled=true",
+        "sca4dj.auth.password.bootstrap.username=admin",
+        "sca4dj.auth.password.bootstrap.password=admin@123",
         "sca4dj.auth.session-ttl=PT1H",
         "sca4dj.storage.transfer-base-url=http://localhost",
         "spring.autoconfigure.exclude=com.sca4d.messaging.config.MessagingAutoConfiguration"
@@ -85,8 +85,8 @@ class ProfileAvatarWorkflowIntegrationTest {
 
         /** @return 头像流程不会调用的消息发布接口 */
         @Bean
-        MessagePublisher messagePublisher() {
-            return mock(MessagePublisher.class);
+        MessageBus messagePublisher() {
+            return mock(MessageBus.class);
         }
     }
 

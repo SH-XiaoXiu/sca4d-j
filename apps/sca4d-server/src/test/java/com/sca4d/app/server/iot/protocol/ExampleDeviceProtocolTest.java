@@ -4,13 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import com.sca4d.core.api.data.DataOps;
-import com.sca4d.core.api.pipeline.PipelineExecutionException;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.DeviceAccessMethod;
 import com.sca4d.iot.api.ProductBinding;
 import com.sca4d.iot.api.message.DeviceAcknowledgement;
+import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.message.DeviceDownlinkKind;
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
 import com.sca4d.iot.api.message.DeviceUplink;
 import com.sca4d.iot.api.protocol.DeviceProtocolMessage;
@@ -19,6 +18,8 @@ import com.sca4d.iot.api.state.ReportedStateUpdate;
 import com.sca4d.iot.emqx.connection.MqttDeviceConnection;
 import com.sca4d.iot.emqx.protocol.EncodedMqttMessage;
 import com.sca4d.iot.emqx.protocol.MqttDeviceProtocol;
+import com.sca4d.iot.emqx.transport.MqttMessageRejectedException;
+import com.sca4d.iot.emqx.transport.MqttMessageRejectionReason;
 import com.sca4d.iot.message.policy.DefaultCommandRetryPolicy;
 import com.sca4d.iot.message.policy.DefaultStateSyncRetryPolicy;
 import com.sca4d.iot.message.policy.DeviceResultAcknowledgementPolicy;
@@ -189,12 +190,12 @@ class ExampleDeviceProtocolTest {
     }
 
     @Test
-    @DisplayName("旧冷柜坏帧报告失败的 Core Pipeline 阶段")
+    @DisplayName("旧冷柜坏帧按 MQTT Payload 错误拒绝")
     void reportsLegacyPipelineStageForMalformedFrame() {
         MqttDeviceProtocol protocol = LegacyFreezerDeviceProtocol.protocol();
         Device device = device(protocol, "freezer-1");
 
-        assertThatExceptionOfType(PipelineExecutionException.class)
+        assertThatExceptionOfType(MqttMessageRejectedException.class)
                 .isThrownBy(
                         () -> protocol
                                 .decode(
@@ -205,8 +206,8 @@ class ExampleDeviceProtocolTest {
                                                 new byte[] {0, 0, 0, 0, 0},
                                                 NOW)))
                 .satisfies(
-                        failure -> assertThat(failure.stageCode())
-                                .isEqualTo("decode-legacy-reported-frame"));
+                        failure -> assertThat(failure.reason())
+                                .isEqualTo(MqttMessageRejectionReason.MESSAGE_INVALID));
     }
 
     /** 使用传输路由已经定位的 Device 和消息类型调用设备协议。 */
@@ -238,8 +239,8 @@ class ExampleDeviceProtocolTest {
     }
 
     /** 创建一个等待发送的 desired 属性消息。 */
-    private static DeviceDownlinkMessage desiredMessage() {
-        return new DeviceDownlinkMessage(
+    private static DeviceDownlink desiredMessage() {
+        return new DeviceDownlink(
                 101,
                 1,
                 1,
@@ -259,8 +260,8 @@ class ExampleDeviceProtocolTest {
     }
 
     /** 创建一个等待发送的 set-mode command。 */
-    private static DeviceDownlinkMessage commandMessage(long messageId, String mode) {
-        return new DeviceDownlinkMessage(
+    private static DeviceDownlink commandMessage(long messageId, String mode) {
+        return new DeviceDownlink(
                 messageId,
                 1,
                 1,

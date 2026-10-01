@@ -98,11 +98,11 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab1"><a href="JobHistory.html" title="interface in com.sca4d.core.api.job">JobHistory</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab1">
-<div class="block">只读查询当前应用运行时命名空间中的持久化 Job 历史，不提交或推进 Job。</div>
+<div class="block">只读查询当前 App 隔离名称中的持久化 Job 历史，不提交或推进 Job。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JobKey.html" title="class in com.sca4d.core.api.job">JobKey</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">标识代码中长期存在的一种 Job，不使用 Bean 名或 Java 类名。</div>
+<div class="block">使用稳定节点链标识 Job 定义，并保留独立领域类型。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="JobNodeOutput.html" title="class in com.sca4d.core.api.job">JobNodeOutput</a>&lt;T&gt;</div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
@@ -116,40 +116,36 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color class-summary class-summary-tab5">
 <div class="block">表明调用方等待的 Job run 已失败，错误详情保存在对应运行记录中。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JobRunId.html" title="class in com.sca4d.core.api.job">JobRunId</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">标识当前应用运行时命名空间内一次已经持久化的 Job 运行。</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab3"><a href="JobRunStatus.html" title="enum class in com.sca4d.core.api.job">JobRunStatus</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab3">
+<div class="col-first odd-row-color class-summary class-summary-tab3"><a href="JobRunStatus.html" title="enum class in com.sca4d.core.api.job">JobRunStatus</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab3">
 <div class="block">表示持久化 Job run 是否排队、运行或已经结束。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab5"><a href="JobWaitTimeoutException.html" title="class in com.sca4d.core.api.job">JobWaitTimeoutException</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab5">
+<div class="col-first even-row-color class-summary class-summary-tab5"><a href="JobWaitTimeoutException.html" title="class in com.sca4d.core.api.job">JobWaitTimeoutException</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab5">
 <div class="block">表明调用方等待时间结束，持久化 Job run 仍继续执行。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ParallelResults.html" title="class in com.sca4d.core.api.job">ParallelResults</a>&lt;L,<wbr>R&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ParallelResults.html" title="class in com.sca4d.core.api.job">ParallelResults</a>&lt;L,<wbr>R&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">保存 JobPlan 两个并发分支均成功后产生的类型化结果。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="PipelineJob.html" title="class in com.sca4d.core.api.job">PipelineJob</a>&lt;I,<wbr>O&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="PipelineJob.html" title="class in com.sca4d.core.api.job">PipelineJob</a>&lt;I,<wbr>O&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">把多条 Pipeline 编排为顺序、二路并发和合并节点的 Job。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="PipelineJobPlan.html" title="class in com.sca4d.core.api.job">PipelineJobPlan</a>&lt;I,<wbr>O&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="PipelineJobPlan.html" title="class in com.sca4d.core.api.job">PipelineJobPlan</a>&lt;I,<wbr>O&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">保存 PipelineJob 中已经类型校验的顺序、二路并发和合并关系。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="PipelineJobPlan.Node.html" title="class in com.sca4d.core.api.job">PipelineJobPlan.Node</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="PipelineJobPlan.Node.html" title="class in com.sca4d.core.api.job">PipelineJobPlan.Node</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">保存一个可独立重试的 Pipeline 节点及其直接依赖。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="PipelineJobPlan.Parallel.html" title="class in com.sca4d.core.api.job">PipelineJobPlan.Parallel</a>&lt;I,<wbr>L,<wbr>R&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="PipelineJobPlan.Parallel.html" title="class in com.sca4d.core.api.job">PipelineJobPlan.Parallel</a>&lt;I,<wbr>L,<wbr>R&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">保存尚未合并的两个并发 Pipeline，只有 merge 能返回新的完整计划。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ScheduledJobRun.html" title="class in com.sca4d.core.api.job">ScheduledJobRun</a>&lt;T&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ScheduledJobRun.html" title="class in com.sca4d.core.api.job">ScheduledJobRun</a>&lt;T&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">返回一次定时 Job run 的状态和调用方选择的类型化节点输出。</div>
 </div>
 </div>

@@ -9,27 +9,27 @@ import java.util.Objects;
  *
  * <p>权限严格由资源（Resource，{@link Resource}）和动作（Action，{@link Action}）组成，不额外维护接口权限键。
  */
-public final class Permission {
-
-    private final Resource resource;
+public class Permission {
 
     private final Action action;
+
+    private final Resource resource;
 
     /**
      * 创建权限。
      *
      * @param resource 受保护资源
-     * @param action 对资源执行的动作
+     * @param action   对资源执行的动作
      */
     public Permission(Resource resource, Action action) {
         this.resource = Objects.requireNonNull(resource, "权限资源不能为空");
         this.action = Objects.requireNonNull(action, "权限动作不能为空");
-        requireText(resource.type(), "资源类型");
+        Objects.requireNonNull(resource.type(), "资源类型不能为空");
         requireText(resource.id(), "资源标识");
     }
 
     /**
-     * 返回受保护资源。
+     * 受保护资源。
      *
      * @return 受保护资源
      */
@@ -38,7 +38,7 @@ public final class Permission {
     }
 
     /**
-     * 返回对资源执行的动作。
+     * 对资源执行的动作。
      *
      * @return 对资源执行的动作
      */
@@ -62,7 +62,7 @@ public final class Permission {
 
     @Override
     public String toString() {
-        return resource.type() + ":" + resource.id() + ":" + action.value();
+        return resource.type() + ":" + resource.id() + ":" + action.code();
     }
 
     private static void requireText(String value, String name) {

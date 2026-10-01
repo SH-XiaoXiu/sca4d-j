@@ -9,19 +9,19 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 /** 保存一次通过 EMQX Management API 发布的 MQTT Topic、原始 payload、QoS 和 Retain。 */
-public final class MqttPublication {
-
-    private static final int MAX_TOPIC_BYTES = 65_535;
+public class MqttPublication {
 
     private static final int MAX_PAYLOAD_BYTES = 268_435_455;
+
+    private static final int MAX_TOPIC_BYTES = 65_535;
 
     private final @NotNull String topic;
 
     private final byte @NotNull [] payload;
 
-    private final int qos;
-
     private final boolean retain;
+
+    private final int qos;
 
     /**
      * 创建 MQTT 发布内容。

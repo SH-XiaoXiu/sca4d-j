@@ -9,6 +9,7 @@ import com.sca4d.core.spring.persistence.mybatis.AffectedRowsAspect;
 import com.sca4d.core.spring.persistence.mybatis.AffectedRowsInterceptor;
 import com.sca4d.core.spring.persistence.mybatis.CoreEnumTypeHandler;
 import com.sca4d.core.spring.persistence.mybatis.LongValueTypeHandler;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.type.JdbcType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,7 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -29,6 +29,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+
+import java.time.Instant;
+import java.util.Objects;
 
 /** 用隔离 PostgreSQL 验证凭据版本、状态及所属账号边界。 */
 @Testcontainers
@@ -43,7 +46,7 @@ class X509CredentialPersistenceIntegrationTest {
     private static JdbcTemplate jdbc;
 
     /** 启用 Repository 的实际事务和影响行数检查。 */
-    @Configuration(proxyBeanMethods = false)
+    @org.springframework.context.annotation.Configuration(proxyBeanMethods = false)
     @EnableTransactionManagement
     @EnableAspectJAutoProxy
     static class Transactions {
@@ -64,7 +67,7 @@ class X509CredentialPersistenceIntegrationTest {
         jdbc = new JdbcTemplate(source);
         SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
         factory.setDataSource(source);
-        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
+        Configuration configuration = new Configuration();
         configuration.setMapUnderscoreToCamelCase(true);
         configuration.setDefaultEnumTypeHandler(CoreEnumTypeHandler.class);
         configuration.getTypeHandlerRegistry()
@@ -72,7 +75,7 @@ class X509CredentialPersistenceIntegrationTest {
         factory.setConfiguration(configuration);
         factory.setPlugins(new AffectedRowsInterceptor());
         factory.setMapperLocations(new ClassPathResource("mapper/auth/X509CredentialMapper.xml"));
-        SqlSessionTemplate template = new SqlSessionTemplate(java.util.Objects.requireNonNull(factory.getObject()));
+        SqlSessionTemplate template = new SqlSessionTemplate(Objects.requireNonNull(factory.getObject()));
         context = new AnnotationConfigApplicationContext();
         context.register(Transactions.class);
         context.registerBean(DataSourceTransactionManager.class, () -> new DataSourceTransactionManager(source));
@@ -95,7 +98,7 @@ class X509CredentialPersistenceIntegrationTest {
     @Test
     @DisplayName("证书有效期边界、批量撤销及旧版本保护保持一致")
     void preservesValidityAndRevocationScope() {
-        java.time.Instant now = java.time.Instant.parse("2026-09-15T00:00:00Z");
+        Instant now = Instant.parse("2026-09-15T00:00:00Z");
         X509Credential first = new X509Credential(
                 1,
                 101,

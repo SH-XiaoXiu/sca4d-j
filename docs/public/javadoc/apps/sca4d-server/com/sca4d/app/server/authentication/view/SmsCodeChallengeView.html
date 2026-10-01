@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">SmsCodeChallengeView</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">SmsCodeChallengeView</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">返回不包含完整手机号和验证码的 SMS Challenge。</div>
 </section>
@@ -144,30 +144,50 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="SmsCodeChallengeView.html" title="class in com.sca4d.app.server.authentication.view">SmsCodeChallengeView</a></span>&nbsp;<span class="element-name">from</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.auth.sms.SmsCodeChallenge&nbsp;challenge)</span></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>challenge</code> - SMS Challenge @return 脱敏后的响应视图</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getChallengeId()">
 <h3>getChallengeId</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getChallengeId</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>Challenge 标识</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getMaskedRecipient()">
 <h3>getMaskedRecipient</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getMaskedRecipient</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>脱敏后的接收方</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getExpiresAt()">
 <h3>getExpiresAt</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name">getExpiresAt</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>到期时间</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getResendAt()">
 <h3>getResendAt</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name">getResendAt</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>允许重新发送的时间</dd>
+</dl>
 </section>
 </li>
 </ul>

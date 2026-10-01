@@ -14,25 +14,25 @@ import java.util.Set;
 /**
  * 保存创建 Device 时总是一起校验和写入的公共 Profile 数据。
  */
-public final class DeviceRegistration {
-
-    private final @NotNull ProductSelector product;
-
-    private final @NotNull String code;
-
-    private final @Nullable String serialNumber;
-
-    private final @NotNull String displayName;
-
-    private final @Nullable String remark;
-
-    private final int thingModelVersion;
-
-    private final @NotNull String protocolCode;
+public class DeviceRegistration {
 
     private final @Nullable DeviceConnectionBinding connection;
 
+    private final @NotNull ProductSelector product;
+
     private final @NotNull Set<DeviceAccessMethod> accessMethods;
+
+    private final @NotNull String code;
+
+    private final @NotNull String displayName;
+
+    private final @NotNull String protocolCode;
+
+    private final @Nullable String remark;
+
+    private final @Nullable String serialNumber;
+
+    private final int thingModelVersion;
 
     /** 创建完整 Device 登记数据。 */
     @SuppressWarnings("ParameterNumber")

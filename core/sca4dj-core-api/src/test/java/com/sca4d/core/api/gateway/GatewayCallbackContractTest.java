@@ -1,9 +1,11 @@
 package com.sca4d.core.api.gateway;
 
+import static com.sca4d.core.api.name.NameFormat.DOT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -17,10 +19,10 @@ import java.util.Set;
 class GatewayCallbackContractTest {
 
     @Test
-    @DisplayName("回调编码只接受稳定的小写 namespace")
+    @DisplayName("回调编码复用稳定名称规则并输出大写点式编码")
     void validatesCallbackCode() {
-        assertEquals("iot.emqx.authenticate", new GatewayCallbackCode("iot.emqx.authenticate").value());
-        assertThrows(IllegalArgumentException.class, () -> new GatewayCallbackCode("IoT/Authenticate"));
+        assertEquals("IOT.EMQX.AUTHENTICATE", new GatewayCallbackCode("iot.emqx.authenticate").format(DOT));
+        assertThrows(IllegalArgumentException.class, () -> new GatewayCallbackCode("IOT//AUTHENTICATE"));
     }
 
     @Test
@@ -52,12 +54,15 @@ class GatewayCallbackContractTest {
     @Test
     @DisplayName("实例注册请求和响应使用同一份 JSON 契约")
     void serializesRegistrationContract() throws Exception {
-        com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();
         GatewayRegistrationRequest request = new GatewayRegistrationRequest(
                 "server-1",
                 URI.create("http://localhost:8080"),
                 "/actuator/health/readiness",
-                Set.of("iot.emqx.authenticate"));
+                "test-fingerprint",
+                Set.of("iot.emqx.authenticate"),
+                Set.of(),
+                Map.of());
 
         GatewayRegistrationRequest decoded = mapper.readValue(
                 mapper.writeValueAsBytes(request),
@@ -68,6 +73,7 @@ class GatewayCallbackContractTest {
 
         assertEquals("server-1", decoded.getInstanceId());
         assertEquals(URI.create("http://localhost:8080"), decoded.getBaseUrl());
+        assertEquals("test-fingerprint", decoded.getProtocolFingerprint());
         assertEquals(Set.of("iot.emqx.authenticate"), decoded.getCallbackCodes());
         assertEquals("lease-1", response.getLeaseId());
     }

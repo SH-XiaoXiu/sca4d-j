@@ -97,7 +97,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="DataOps.html" title="class in com.sca4d.core.api.data">DataOps</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static final class </span><span class="element-name type-name-label">DataOps.SeqPipe&lt;T&gt;</span>
+<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name type-name-label">DataOps.SeqPipe&lt;T&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">不可变集合处理对象。</div>
 </section>
@@ -122,7 +122,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Unmodifiable @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="DataOps.SeqPipe.html" title="type parameter in DataOps.SeqPipe">T</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#list()" class="member-name-link">list</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取创建当前对象时复制的元素。</div>
+<div class="block">管道内部保存的元素副本；返回列表保持原顺序且不可修改。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;R&gt;&nbsp;@NotNull <a href="DataOps.SeqPipe.html" title="class in com.sca4d.core.api.data">DataOps.SeqPipe</a><wbr>&lt;R&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#map(java.util.function.Function)" class="member-name-link">map</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;? super <a href="DataOps.SeqPipe.html" title="type parameter in DataOps.SeqPipe">T</a>,<wbr>? extends R&gt;&nbsp;mapper)</code></div>
@@ -210,7 +210,7 @@ loadScripts(document, 'script');</script>
 <h3>list</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Unmodifiable @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="DataOps.SeqPipe.html" title="type parameter in DataOps.SeqPipe">T</a>&gt;</span>&nbsp;<span class="element-name">list</span>()</div>
-<div class="block">读取创建当前对象时复制的元素。</div>
+<div class="block">管道内部保存的元素副本；返回列表保持原顺序且不可修改。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>保持顺序的不可修改列表</dd>

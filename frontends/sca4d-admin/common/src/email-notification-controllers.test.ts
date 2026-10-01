@@ -96,7 +96,7 @@ describe('Email notification controllers', () => {
       version: '2',
     });
     const responses: HttpResponse[] = [
-      ok([current]),
+      ok({ items: [current], page: 1, size: 20, total: 1 }),
       ok({
         defaultLocale: 'zh-CN',
         supportedLocales: ['zh-CN', 'en-US'],
@@ -118,6 +118,8 @@ describe('Email notification controllers', () => {
       variables: { code: '123456', expiresInMinutes: '5' },
     });
 
+    expect(requests[0]?.query).toEqual({ page: 1, size: 20 });
+    expect(controller.state.total).toBe(1);
     expect(controller.state.localeCatalog?.supportedLocales).toEqual([
       'zh-CN',
       'en-US',
@@ -131,7 +133,11 @@ describe('Email notification controllers', () => {
     ).toBe('Code ');
     expect(controller.state.preview?.subject).toBe('验证码');
     expect(requests[3]?.body).toEqual({
-      content: current.content,
+      source: {
+        html: '验证码 {{code}}',
+        subject: '验证码 {{code}}',
+        text: '验证码 {{code}}',
+      },
       languageTag: 'zh-CN',
       variables: { code: '123456', expiresInMinutes: '5' },
     });

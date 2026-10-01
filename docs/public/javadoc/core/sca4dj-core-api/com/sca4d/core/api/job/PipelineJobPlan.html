@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 <dd><code>O</code> - 当前终点输出类型</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">PipelineJobPlan&lt;I,<wbr>O&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">PipelineJobPlan&lt;I,<wbr>O&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">保存 PipelineJob 中已经类型校验的顺序、二路并发和合并关系。
 
@@ -112,12 +112,12 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final class&nbsp;</code></div>
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="PipelineJobPlan.Node.html" class="type-name-link" title="class in com.sca4d.core.api.job">PipelineJobPlan.Node</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">保存一个可独立重试的 Pipeline 节点及其直接依赖。</div>
 </div>
-<div class="col-first odd-row-color"><code>static final class&nbsp;</code></div>
+<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
 <div class="col-second odd-row-color"><code><a href="PipelineJobPlan.Parallel.html" class="type-name-link" title="class in com.sca4d.core.api.job">PipelineJobPlan.Parallel</a>&lt;<a href="PipelineJobPlan.Parallel.html" title="type parameter in PipelineJobPlan.Parallel">I</a>,<wbr><a href="PipelineJobPlan.Parallel.html" title="type parameter in PipelineJobPlan.Parallel">L</a>,<wbr><a href="PipelineJobPlan.Parallel.html" title="type parameter in PipelineJobPlan.Parallel">R</a>&gt;</code></div>
 <div class="col-last odd-row-color">
 <div class="block">保存尚未合并的两个并发 Pipeline，只有 merge 能返回新的完整计划。</div>
@@ -144,17 +144,17 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a><wbr>&lt;<a href="PipelineJobPlan.html" title="type parameter in PipelineJobPlan">I</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#inputType()" class="member-name-link">inputType</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回根输入类型。</div>
+<div class="block">根输入类型。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Unmodifiable @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="PipelineJobPlan.Node.html" title="class in com.sca4d.core.api.job">PipelineJobPlan.Node</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#nodes()" class="member-name-link">nodes</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回已经声明的节点。</div>
+<div class="block">已经声明的节点。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a><wbr>&lt;<a href="PipelineJobPlan.html" title="type parameter in PipelineJobPlan">O</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#outputType()" class="member-name-link">outputType</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回当前终点输出类型。</div>
+<div class="block">当前终点输出类型。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;L,<wbr>
 R&gt;&nbsp;@NotNull <a href="PipelineJobPlan.Parallel.html" title="class in com.sca4d.core.api.job">PipelineJobPlan.Parallel</a><wbr>&lt;<a href="PipelineJobPlan.html" title="type parameter in PipelineJobPlan">I</a>,<wbr>L,<wbr>R&gt;</code></div>
@@ -286,7 +286,7 @@ R&gt;</span>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="PipelineJobPlan.html" title="type parameter in PipelineJobPlan">I</a>&gt;</span>&nbsp;<span class="element-name">inputType</span>()</div>
-<div class="block">返回根输入类型。</div>
+<div class="block">根输入类型。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>创建计划时声明的具体类型</dd>
@@ -299,7 +299,7 @@ R&gt;</span>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="PipelineJobPlan.html" title="type parameter in PipelineJobPlan">O</a>&gt;</span>&nbsp;<span class="element-name">outputType</span>()</div>
-<div class="block">返回当前终点输出类型。</div>
+<div class="block">当前终点输出类型。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>最后一个顺序或合并节点的输出类型</dd>
@@ -312,7 +312,7 @@ R&gt;</span>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Unmodifiable @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="PipelineJobPlan.Node.html" title="class in com.sca4d.core.api.job">PipelineJobPlan.Node</a>&gt;</span>&nbsp;<span class="element-name">nodes</span>()</div>
-<div class="block">返回已经声明的节点。</div>
+<div class="block">已经声明的节点。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>按声明顺序排列的不可修改列表</dd>

@@ -37,9 +37,9 @@ class PlatformAccountLifecycleServiceTest {
 
     private static final long CURRENT_ACCOUNT_ID = 20L;
 
-    private static final long SUBJECT_ID = 30L;
-
     private static final long PRINCIPAL_ID = 40L;
+
+    private static final long SUBJECT_ID = 30L;
 
     @Mock
     private PlatformAccountLifecycleRepository repository;
@@ -63,8 +63,11 @@ class PlatformAccountLifecycleServiceTest {
     @AfterEach
     void clearTransactionSynchronization() {
         if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.getSynchronizations()
+                    .forEach(callback -> callback.afterCompletion(TransactionSynchronization.STATUS_ROLLED_BACK));
             TransactionSynchronizationManager.clearSynchronization();
         }
+        TransactionSynchronizationManager.setActualTransactionActive(false);
     }
 
     @Test
@@ -91,6 +94,7 @@ class PlatformAccountLifecycleServiceTest {
         when(repository.find(ACCOUNT_ID)).thenReturn(Optional.of(account(false)));
         when(repository.hasOtherSubjectAccount(SUBJECT_ID, ACCOUNT_ID)).thenReturn(true);
         when(repository.hasOtherPrincipalAccount(PRINCIPAL_ID, ACCOUNT_ID)).thenReturn(true);
+        beginTransaction();
 
         PlatformAccountDeletion deletion = lifecycle.delete(ACCOUNT_ID, CURRENT_ACCOUNT_ID);
 
@@ -107,7 +111,7 @@ class PlatformAccountLifecycleServiceTest {
     @DisplayName("Deletes Exclusive Identities And Terminates Again Only After Commit")
     void deletesExclusiveIdentitiesAndTerminatesAgainOnlyAfterCommit() {
         when(repository.find(ACCOUNT_ID)).thenReturn(Optional.of(account(false)));
-        TransactionSynchronizationManager.initSynchronization();
+        beginTransaction();
 
         PlatformAccountDeletion deletion = lifecycle.delete(ACCOUNT_ID, CURRENT_ACCOUNT_ID);
 
@@ -123,6 +127,12 @@ class PlatformAccountLifecycleServiceTest {
                 .forEach(TransactionSynchronization::afterCommit);
         verify(sessions, times(2))
                 .terminateAccount(ACCOUNT_ID, SessionTerminationReason.IDENTITY_UNAVAILABLE);
+    }
+
+    /** 建立带同步的真实事务标记。 */
+    private static void beginTransaction() {
+        TransactionSynchronizationManager.setActualTransactionActive(true);
+        TransactionSynchronizationManager.initSynchronization();
     }
 
     /** 创建指定 ROOT 保护状态的测试目录项。 */

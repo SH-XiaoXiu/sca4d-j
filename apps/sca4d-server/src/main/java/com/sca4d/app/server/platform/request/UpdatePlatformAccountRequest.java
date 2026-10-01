@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 接收 Platform Account 可以修改的状态字段。 */
-public final class UpdatePlatformAccountRequest {
+public class UpdatePlatformAccountRequest {
 
     @Req.NotNull
     private @Nullable IdentityStatus status;

@@ -10,13 +10,13 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 校验一种业务数据允许保存的国际化字段、必填项和最大长度。 */
-public final class LocalizedFieldsSchema {
+public class LocalizedFieldsSchema {
+
+    private final Map<String, Integer> maximumLengths;
 
     private final Set<String> allowedKeys;
 
     private final Set<String> requiredKeys;
-
-    private final Map<String, Integer> maximumLengths;
 
     /**
      * 创建业务国际化字段规则。

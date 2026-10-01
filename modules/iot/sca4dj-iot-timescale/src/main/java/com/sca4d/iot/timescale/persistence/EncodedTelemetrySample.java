@@ -7,17 +7,16 @@ import java.util.Objects;
 
 /** 映射一条 TimescaleDB Telemetry 查询结果。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class EncodedTelemetrySample {
-
-    private final @NotNull String propertyCode;
-
-    private final @NotNull String valueJson;
+public class EncodedTelemetrySample {
 
     private final @NotNull Instant observedAt;
 
     private final @NotNull Instant receivedAt;
 
-    /** 创建 Telemetry 查询结果。 */
+    private final @NotNull String propertyCode;
+
+    private final @NotNull String valueJson;
+
     public EncodedTelemetrySample(
             @NotNull String propertyCode,
             @NotNull String valueJson,

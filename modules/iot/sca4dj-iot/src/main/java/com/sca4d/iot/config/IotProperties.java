@@ -6,7 +6,7 @@ import java.time.Duration;
 
 /** 保存具体应用为 IoT 连接、设备定时、ACK 和 reported 存储选择的运行参数。 */
 @ConfigurationProperties("sca4dj.iot")
-public final class IotProperties {
+public class IotProperties {
 
     private Duration connectionTtl = Duration.ofMinutes(30);
 
@@ -18,7 +18,7 @@ public final class IotProperties {
 
     private Duration downlinkCleanupInterval = Duration.ofHours(1);
 
-    private String reportedStore = "postgresql";
+    private final Reported reported = new Reported();
 
     private int maxReportedProperties = 100;
 
@@ -32,12 +32,12 @@ public final class IotProperties {
 
     private int downlinkCleanupBatchSize = 10_000;
 
-    /** @return Broker 连接事实未续期时的保留时间 */
+    /** @return Broker 连接信息未续期时的保留时间 */
     public Duration getConnectionTtl() {
         return connectionTtl;
     }
 
-    /** @param connectionTtl Broker 连接事实未续期时的保留时间 */
+    /** @param connectionTtl Broker 连接信息未续期时的保留时间 */
     public void setConnectionTtl(Duration connectionTtl) {
         this.connectionTtl = connectionTtl;
     }
@@ -83,13 +83,18 @@ public final class IotProperties {
     }
 
     /** @return latest reported 使用 `postgresql` 还是 `redis` */
-    public String getReportedStore() {
-        return reportedStore;
+    public ReportedStore getReportedStore() {
+        return reported.store;
     }
 
     /** @param reportedStore latest reported 内置存储编码 */
-    public void setReportedStore(String reportedStore) {
-        this.reportedStore = reportedStore;
+    public void setReportedStore(ReportedStore reportedStore) {
+        reported.store = reportedStore;
+    }
+
+    /** @return latest reported 投影资源配置 */
+    public Reported getReported() {
+        return reported;
     }
 
     /** @return 单条 reported 允许覆盖的最大属性数量 */
@@ -162,8 +167,8 @@ public final class IotProperties {
         if (acknowledgementTimeout.toMillis() < 1) {
             throw new IllegalStateException("sca4dj.iot.acknowledgement-timeout 必须至少为 1 毫秒");
         }
-        if (!"postgresql".equals(reportedStore) && !"redis".equals(reportedStore)) {
-            throw new IllegalStateException("sca4dj.iot.reported-store 只能是 postgresql 或 redis");
+        if (reported.store == null) {
+            throw new IllegalStateException("sca4dj.iot.reported.store 不能为空");
         }
         requireLimit(maxReportedProperties, "sca4dj.iot.max-reported-properties");
         requireLimit(maxDesiredProperties, "sca4dj.iot.max-desired-properties");
@@ -191,6 +196,22 @@ public final class IotProperties {
     private static void requireBatchSize(int value, String property) {
         if (value < 1 || value > 10_000) {
             throw new IllegalStateException(property + " 必须在 1 到 10000 之间");
+        }
+    }
+
+    /** 配置 latest reported 投影的存储选择。 */
+    public static class Reported {
+
+        private ReportedStore store = ReportedStore.POSTGRESQL;
+
+        /** @return latest reported 投影使用的存储 */
+        public ReportedStore getStore() {
+            return store;
+        }
+
+        /** @param store latest reported 投影使用的存储 */
+        public void setStore(ReportedStore store) {
+            this.store = store;
         }
     }
 }

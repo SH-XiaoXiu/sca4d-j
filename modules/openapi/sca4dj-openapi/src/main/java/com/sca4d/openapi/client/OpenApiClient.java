@@ -1,19 +1,20 @@
 package com.sca4d.openapi.client;
 
+import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 /** 保存第三方 Client 与 IAM APPLICATION Account 的稳定绑定。 */
-public final class OpenApiClient {
+public class OpenApiClient {
+
+    private final @NotNull OpenApiClientStatus status;
 
     private final @NotNull String clientId;
 
-    private final long accountId;
-
     private final @NotNull String displayName;
 
-    private final @NotNull OpenApiClientStatus status;
+    private final long accountId;
 
     /** 创建 Client 事实。 */
     public OpenApiClient(
@@ -21,12 +22,12 @@ public final class OpenApiClient {
             long accountId,
             @NotNull String displayName,
             @NotNull OpenApiClientStatus status) {
-        this.clientId = requireText(clientId, "Client ID");
+        this.clientId = TextUtils.requireText(clientId, "Client ID");
         if (accountId <= 0) {
             throw new IllegalArgumentException("Client Account 标识必须为正数");
         }
         this.accountId = accountId;
-        this.displayName = requireText(displayName, "Client 名称");
+        this.displayName = TextUtils.requireText(displayName, "Client 名称");
         this.status = Objects.requireNonNull(status, "Client 状态不能为空");
     }
 
@@ -55,12 +56,4 @@ public final class OpenApiClient {
         return status == OpenApiClientStatus.ACTIVE;
     }
 
-    private static String requireText(String value, String name) {
-        Objects.requireNonNull(value, name + "不能为空");
-        String checked = value.trim();
-        if (checked.isEmpty()) {
-            throw new IllegalArgumentException(name + "不能为空");
-        }
-        return checked;
-    }
 }

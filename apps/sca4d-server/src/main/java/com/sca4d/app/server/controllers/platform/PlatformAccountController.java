@@ -78,7 +78,7 @@ public class PlatformAccountController {
      */
     @GetMapping
     @Operation(summary = "查询 Platform Account")
-    @RequirePermission(operation = PlatformOperations.ACCOUNTS_READ)
+    @RequirePermission(operation = PlatformOperations.ACCOUNTS_READ_VALUE)
     public @NotNull ApiResponse<Page<PlatformAccountView>> find(
             @RequestParam(required = false) @Nullable String search,
             @RequestParam(required = false) @Nullable IdentityStatus status,
@@ -96,8 +96,8 @@ public class PlatformAccountController {
      */
     @PostMapping
     @Operation(summary = "创建 Platform Account")
-    @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE)
-    @Audit(operation = "platform/account/create", payloadFactory = ApplicationAuditValues.MutationDetails.class)
+    @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE_VALUE)
+    @Audit(operation = "PLATFORM/ACCOUNT/CREATE", payloadFactory = ApplicationAuditValues.MutationDetails.class)
     public @NotNull ApiResponse<PlatformAccountView> create(
             @RequestBody @NotNull @AuditPayload CreatePlatformAccountRequest request) {
         PlatformAccountRecord created = accounts.create(
@@ -120,7 +120,7 @@ public class PlatformAccountController {
      */
     @GetMapping("/{accountId}")
     @Operation(summary = "查询 Platform Account 详情")
-    @RequirePermission(operation = PlatformOperations.ACCOUNTS_READ)
+    @RequirePermission(operation = PlatformOperations.ACCOUNTS_READ_VALUE)
     public @NotNull ApiResponse<PlatformAccountView> get(@PathVariable long accountId) {
         PlatformAccountRecord result = accounts.loadByAccountId(accountId);
         return ApiResponse.ok(PlatformAccountView.from(result));
@@ -136,10 +136,10 @@ public class PlatformAccountController {
      */
     @PatchMapping("/{accountId}")
     @Operation(summary = "修改 Platform Account")
-    @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE)
-    @Audit(operation = "platform/account/status/change", payloadFactory = ApplicationAuditValues.MutationDetails.class)
+    @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE_VALUE)
+    @Audit(operation = "PLATFORM/ACCOUNT/STATUS/CHANGE", payloadFactory = ApplicationAuditValues.MutationDetails.class)
     public @NotNull ApiResponse<PlatformAccountView> update(
-            @PathVariable @AuditTarget(resourceType = Account.RESOURCE_TYPE) long accountId,
+            @PathVariable @AuditTarget(resourceType = Account.RESOURCE_TYPE_VALUE) long accountId,
             @RequestBody @NotNull @AuditPayload UpdatePlatformAccountRequest request,
             @CurrentAccount @NotNull Long currentAccountId) {
         PlatformAccountRecord updated = accounts.changeStatus(
@@ -157,7 +157,7 @@ public class PlatformAccountController {
      */
     @GetMapping("/{accountId}/roles")
     @Operation(summary = "查询 Platform Account 角色")
-    @RequirePermission(operation = PlatformOperations.ACCOUNTS_READ)
+    @RequirePermission(operation = PlatformOperations.ACCOUNTS_READ_VALUE)
     public @NotNull ApiResponse<AccountRolesView> findRoles(@PathVariable long accountId) {
         PrincipalRoles result = accounts.findRoles(accountId);
         return ApiResponse.ok(AccountRolesView.from(accountId, result));
@@ -173,10 +173,10 @@ public class PlatformAccountController {
     @PutMapping("/{accountId}/roles")
     @IfMatch
     @Operation(summary = "替换 Platform Account 角色")
-    @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE)
-    @Audit(operation = "platform/account/roles/replace", payloadFactory = ApplicationAuditValues.MutationDetails.class)
+    @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE_VALUE)
+    @Audit(operation = "PLATFORM/ACCOUNT/ROLES/REPLACE", payloadFactory = ApplicationAuditValues.MutationDetails.class)
     public @NotNull ApiResponse<AccountRolesView> replaceRoles(
-            @PathVariable @AuditTarget(resourceType = Account.RESOURCE_TYPE) long accountId,
+            @PathVariable @AuditTarget(resourceType = Account.RESOURCE_TYPE_VALUE) long accountId,
             @RequestBody @NotNull @AuditPayload ReplaceAccountRolesRequest request) {
         PrincipalRoles result = accounts.replaceRoles(
                 accountId,
@@ -194,10 +194,10 @@ public class PlatformAccountController {
      */
     @PutMapping("/{accountId}/profile/avatar")
     @Operation(summary = "替换 Platform Account 头像")
-    @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE)
-    @Audit(operation = "platform/account/avatar/replace", payloadFactory = ApplicationAuditValues.MutationDetails.class)
+    @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE_VALUE)
+    @Audit(operation = "PLATFORM/ACCOUNT/AVATAR/REPLACE", payloadFactory = ApplicationAuditValues.MutationDetails.class)
     public @NotNull ApiResponse<PlatformAccountView> replaceAvatar(
-            @PathVariable @AuditTarget(resourceType = Account.RESOURCE_TYPE) long accountId,
+            @PathVariable @AuditTarget(resourceType = Account.RESOURCE_TYPE_VALUE) long accountId,
             @RequestBody @NotNull @AuditPayload ReplaceAvatarRequest request,
             @CurrentPrincipal @NotNull Long currentPrincipalId) {
         PlatformAccountRecord updated = accounts.replaceAvatar(
@@ -215,10 +215,10 @@ public class PlatformAccountController {
      */
     @DeleteMapping("/{accountId}/profile/avatar")
     @Operation(summary = "删除 Platform Account 头像")
-    @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE)
-    @Audit(operation = "platform/account/avatar/delete")
+    @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE_VALUE)
+    @Audit(operation = "PLATFORM/ACCOUNT/AVATAR/DELETE")
     public @NotNull ApiResponse<PlatformAccountView> deleteAvatar(
-            @PathVariable @AuditTarget(resourceType = Account.RESOURCE_TYPE) long accountId) {
+            @PathVariable @AuditTarget(resourceType = Account.RESOURCE_TYPE_VALUE) long accountId) {
         PlatformAccountRecord updated = accounts.deleteAvatar(accountId);
         return ApiResponse.ok(PlatformAccountView.from(updated));
     }
@@ -234,10 +234,10 @@ public class PlatformAccountController {
     @RequireSessionToken
     @RequireAuthentication(AuthenticationActions.ACCOUNT_DELETE_CODE)
     @Operation(summary = "删除 Platform Account")
-    @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE)
-    @Audit(operation = "platform/account/delete")
+    @RequirePermission(operation = PlatformOperations.ACCOUNTS_MANAGE_VALUE)
+    @Audit(operation = "PLATFORM/ACCOUNT/DELETE")
     public @NotNull ApiResponse<Void> delete(
-            @PathVariable @AuditTarget(resourceType = Account.RESOURCE_TYPE) long accountId,
+            @PathVariable @AuditTarget(resourceType = Account.RESOURCE_TYPE_VALUE) long accountId,
             @CurrentSession @NotNull Session session) {
         accounts.delete(accountId, session.account().accountId());
         return ApiResponse.noContent();

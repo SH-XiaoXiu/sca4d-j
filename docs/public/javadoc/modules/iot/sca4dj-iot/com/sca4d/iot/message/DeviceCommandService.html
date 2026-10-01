@@ -103,7 +103,7 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.iot.device.DeviceRepository,com.sca4d.iot.product.ProductDefinitionCatalog,com.sca4d.iot.message.DownlinkRepository,com.sca4d.iot.api.model.ThingModelRepository,com.sca4d.iot.model.ThingValueValidator,com.sca4d.core.api.id.IdGenerator,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.iot.message.DeviceDownlinkMessagePublisher)" class="member-name-link">DeviceCommandService</a><wbr>(@NotNull <a href="../device/DeviceRepository.html" title="class in com.sca4d.iot.device">DeviceRepository</a>&nbsp;devices,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.iot.device.DeviceRepository,com.sca4d.iot.product.ProductDefinitionCatalog,com.sca4d.iot.message.DownlinkRepository,com.sca4d.iot.api.model.ThingModelRepository,com.sca4d.iot.model.ThingValueValidator,com.sca4d.core.api.id.IdGenerator,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.iot.message.DeviceDeliveryScheduler)" class="member-name-link">DeviceCommandService</a><wbr>(@NotNull <a href="../device/DeviceRepository.html" title="class in com.sca4d.iot.device">DeviceRepository</a>&nbsp;devices,
  @NotNull <a href="../product/ProductDefinitionCatalog.html" title="class in com.sca4d.iot.product">ProductDefinitionCatalog</a>&nbsp;products,
  @NotNull <a href="DownlinkRepository.html" title="class in com.sca4d.iot.message">DownlinkRepository</a>&nbsp;downlinks,
  @NotNull com.sca4d.iot.api.model.ThingModelRepository&nbsp;models,
@@ -111,7 +111,7 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.core.api.id.IdGenerator&nbsp;ids,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
  @NotNull <a href="../change/DeviceChangeNotifier.html" title="class in com.sca4d.iot.change">DeviceChangeNotifier</a>&nbsp;changes,
- @NotNull <a href="DeviceDownlinkMessagePublisher.html" title="class in com.sca4d.iot.message">DeviceDownlinkMessagePublisher</a>&nbsp;messagePublisher)</code></div>
+ @NotNull <a href="DeviceDeliveryScheduler.html" title="class in com.sca4d.iot.message">DeviceDeliveryScheduler</a>&nbsp;messagePublisher)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建 command 事务服务。</div>
 </div>
@@ -132,9 +132,9 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#cancel(long)" class="member-name-link">cancel</a><wbr>(long&nbsp;messageId)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">取消仍未结束的 command，并阻止后续发送或重试。</div>
+<div class="block">取消仍未结束的 command，并阻止之后的发送或重试。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.message.DeviceDownlinkMessage</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.message.DeviceDownlink</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#submit(long,com.sca4d.iot.api.model.ThingCommand,com.sca4d.core.api.data.DataValues,java.time.Instant,java.time.Duration)" class="member-name-link">submit</a><wbr>(long&nbsp;deviceId,
  @NotNull com.sca4d.iot.api.model.ThingCommand&nbsp;command,
  @NotNull com.sca4d.core.api.data.DataValues&nbsp;inputs,
@@ -143,14 +143,14 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">使用代码物模型声明的类型化命令和完整输入创建可靠下行消息。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.message.DeviceDownlinkMessage</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.message.DeviceDownlink</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#submit(long,java.lang.String,java.util.Map,java.time.Instant,java.time.Duration)" class="member-name-link">submit</a><wbr>(long&nbsp;deviceId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;commandCode,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>?&gt;&nbsp;inputs,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;expiresAt,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;acknowledgementTimeout)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.message.DeviceDownlinkMessage</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.message.DeviceDownlink</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#submitScheduled(long,java.lang.String,java.util.Map,java.time.Instant,java.time.Duration,long,java.time.Instant)" class="member-name-link">submitScheduled</a><wbr>(long&nbsp;deviceId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;commandCode,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>?&gt;&nbsp;inputs,
@@ -179,7 +179,7 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.iot.device.DeviceRepository,com.sca4d.iot.product.ProductDefinitionCatalog,com.sca4d.iot.message.DownlinkRepository,com.sca4d.iot.api.model.ThingModelRepository,com.sca4d.iot.model.ThingValueValidator,com.sca4d.core.api.id.IdGenerator,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.iot.message.DeviceDownlinkMessagePublisher)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.iot.device.DeviceRepository,com.sca4d.iot.product.ProductDefinitionCatalog,com.sca4d.iot.message.DownlinkRepository,com.sca4d.iot.api.model.ThingModelRepository,com.sca4d.iot.model.ThingValueValidator,com.sca4d.core.api.id.IdGenerator,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.iot.message.DeviceDeliveryScheduler)">
 <h3>DeviceCommandService</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">DeviceCommandService</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../device/DeviceRepository.html" title="class in com.sca4d.iot.device">DeviceRepository</a>&nbsp;devices,
@@ -198,7 +198,7 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull <a href="../change/DeviceChangeNotifier.html" title="class in com.sca4d.iot.change">DeviceChangeNotifier</a>&nbsp;changes,
  @NotNull
- @NotNull <a href="DeviceDownlinkMessagePublisher.html" title="class in com.sca4d.iot.message">DeviceDownlinkMessagePublisher</a>&nbsp;messagePublisher)</span></div>
+ @NotNull <a href="DeviceDeliveryScheduler.html" title="class in com.sca4d.iot.message">DeviceDeliveryScheduler</a>&nbsp;messagePublisher)</span></div>
 <div class="block">创建 command 事务服务。</div>
 </section>
 </li>
@@ -216,7 +216,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Transactional
 @CheckReturnValue
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.iot.api.message.DeviceDownlinkMessage</span>&nbsp;<span class="element-name">submit</span><wbr><span class="parameters">(long&nbsp;deviceId,
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.iot.api.message.DeviceDownlink</span>&nbsp;<span class="element-name">submit</span><wbr><span class="parameters">(long&nbsp;deviceId,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;commandCode,
  @NotNull
@@ -243,7 +243,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Transactional
 @CheckReturnValue
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.iot.api.message.DeviceDownlinkMessage</span>&nbsp;<span class="element-name">submit</span><wbr><span class="parameters">(long&nbsp;deviceId,
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.iot.api.message.DeviceDownlink</span>&nbsp;<span class="element-name">submit</span><wbr><span class="parameters">(long&nbsp;deviceId,
  @NotNull
  @NotNull com.sca4d.iot.api.model.ThingCommand&nbsp;command,
  @NotNull
@@ -259,7 +259,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>deviceId</code> - Device 标识</dd>
 <dd><code>command</code> - 代码物模型声明并由调用方直接引用的命令</dd>
-<dd><code>inputs</code> - 使用该命令 `DataKey` 构造的完整输入</dd>
+<dd><code>inputs</code> - 使用当前命令 `DataKey` 构造的完整输入</dd>
 <dd><code>expiresAt</code> - 首次成功发布的最晚时间；普通即时命令为空</dd>
 <dd><code>acknowledgementTimeout</code> - 本条消息发送成功后等待 Device 业务 ACK 的时间</dd>
 <dt>Returns:</dt>
@@ -275,7 +275,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Transactional
 @CheckReturnValue
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.iot.api.message.DeviceDownlinkMessage</span>&nbsp;<span class="element-name">submitScheduled</span><wbr><span class="parameters">(long&nbsp;deviceId,
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.iot.api.message.DeviceDownlink</span>&nbsp;<span class="element-name">submitScheduled</span><wbr><span class="parameters">(long&nbsp;deviceId,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;commandCode,
  @NotNull
@@ -296,7 +296,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Transactional
 @CheckReturnValue
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">cancel</span><wbr><span class="parameters">(long&nbsp;messageId)</span></div>
-<div class="block">取消仍未结束的 command，并阻止后续发送或重试。
+<div class="block">取消仍未结束的 command，并阻止之后的发送或重试。
 
  <p>与调用方的业务写入使用同一事务；已经进入协议发布的命令可能送达，具体应用负责补偿。</div>
 <dl class="notes">

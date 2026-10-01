@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 <dd><code>R</code> - 右分支输出类型</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">ParallelResults&lt;L,<wbr>R&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">ParallelResults&lt;L,<wbr>R&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">保存 JobPlan 两个并发分支均成功后产生的类型化结果。</div>
 </section>
@@ -130,12 +130,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ParallelResults.html" title="type parameter in ParallelResults">L</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#left()" class="member-name-link">left</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回左分支结果。</div>
+<div class="block">左分支结果。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ParallelResults.html" title="type parameter in ParallelResults">R</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#right()" class="member-name-link">right</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回右分支结果。</div>
+<div class="block">右分支结果。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;L,<wbr>
 R&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a><wbr>&lt;<a href="ParallelResults.html" title="class in com.sca4d.core.api.job">ParallelResults</a>&lt;L,<wbr>R&gt;&gt;</code></div>
@@ -191,7 +191,7 @@ R&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParallelResults.html" title="type parameter in ParallelResults">L</a></span>&nbsp;<span class="element-name">left</span>()</div>
-<div class="block">返回左分支结果。</div>
+<div class="block">左分支结果。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd><code>parallel(...)</code> 中先声明的分支输出</dd>
@@ -204,7 +204,7 @@ R&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParallelResults.html" title="type parameter in ParallelResults">R</a></span>&nbsp;<span class="element-name">right</span>()</div>
-<div class="block">返回右分支结果。</div>
+<div class="block">右分支结果。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd><code>parallel(...)</code> 中后声明的分支输出</dd>

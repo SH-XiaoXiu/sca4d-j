@@ -1,6 +1,6 @@
 package com.sca4d.core.spring.gateway;
 
-import com.sca4d.core.api.gateway.GatewayHttpHeaders;
+import com.sca4d.core.api.gateway.GatewayConstants;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,7 +19,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 /** 验证 Gateway 控制 Secret，采用可信转发信息并对后续处理隐藏控制 Header。 */
-public final class TrustedGatewayRequestFilter extends OncePerRequestFilter {
+public class TrustedGatewayRequestFilter extends OncePerRequestFilter {
 
     private final byte @NotNull [] expectedSecret;
 
@@ -42,10 +42,10 @@ public final class TrustedGatewayRequestFilter extends OncePerRequestFilter {
             @NotNull HttpServletResponse response,
             @NotNull FilterChain filterChain)
             throws ServletException, IOException {
-        if (matches(request.getHeader(GatewayHttpHeaders.SECRET))) {
-            String clientIp = firstForwardedAddress(request.getHeader(GatewayHttpHeaders.CLIENT_IP));
+        if (matches(request.getHeader(GatewayConstants.SECRET_HEADER))) {
+            String clientIp = firstForwardedAddress(request.getHeader(GatewayConstants.CLIENT_IP_HEADER));
             String externalPath = externalPath(
-                    request.getHeader(GatewayHttpHeaders.EXTERNAL_PREFIX),
+                    request.getHeader(GatewayConstants.EXTERNAL_PREFIX_HEADER),
                     request.getRequestURI());
             if (clientIp != null) {
                 request.setAttribute(TrustedGatewayRequest.CLIENT_IP_ATTRIBUTE, clientIp);
@@ -92,7 +92,7 @@ public final class TrustedGatewayRequestFilter extends OncePerRequestFilter {
     }
 
     /** 对业务代码隐藏 Gateway 控制 Secret 和所有客户端不可声明的转发 Header。 */
-    private static final class HiddenGatewayHeadersRequest extends HttpServletRequestWrapper {
+    private static class HiddenGatewayHeadersRequest extends HttpServletRequestWrapper {
 
         HiddenGatewayHeadersRequest(@NotNull HttpServletRequest request) {
             super(request);
@@ -126,14 +126,15 @@ public final class TrustedGatewayRequestFilter extends OncePerRequestFilter {
 
         /** 判断 Header 是否只允许可信 Gateway 在过滤器内部使用。 */
         private static boolean hidden(@NotNull String name) {
-            return name.regionMatches(true, 0, GatewayHttpHeaders.PREFIX, 0, GatewayHttpHeaders.PREFIX.length())
+            return name
+                    .regionMatches(true, 0, GatewayConstants.HEADER_PREFIX, 0, GatewayConstants.HEADER_PREFIX.length())
                     || name.regionMatches(
                             true,
                             0,
-                            GatewayHttpHeaders.FORWARDED_PREFIX,
+                            GatewayConstants.FORWARDED_HEADER_PREFIX,
                             0,
-                            GatewayHttpHeaders.FORWARDED_PREFIX.length())
-                    || GatewayHttpHeaders.FORWARDED.equalsIgnoreCase(name);
+                            GatewayConstants.FORWARDED_HEADER_PREFIX.length())
+                    || GatewayConstants.FORWARDED_HEADER.equalsIgnoreCase(name);
         }
     }
 }

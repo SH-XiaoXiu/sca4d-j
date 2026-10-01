@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">SmsCodeProofRequest</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">SmsCodeProofRequest</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">接收 SMS Challenge 标识和只在当前认证调用中使用的六位验证码。</div>
 </section>
@@ -104,7 +104,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">SmsCodeProofRequest</a>()</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">创建空的请求对象，供 JSON 绑定使用。</div>
+</div>
 </div>
 </section>
 </li>
@@ -155,6 +157,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="&lt;init&gt;()">
 <h3>SmsCodeProofRequest</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">SmsCodeProofRequest</span>()</div>
+<div class="block">创建空的请求对象，供 JSON 绑定使用。</div>
 </section>
 </li>
 </ul>
@@ -170,6 +173,10 @@ loadScripts(document, 'script');</script>
 <h3>challengeId</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.auth.sms.SmsCodeChallengeId</span>&nbsp;<span class="element-name">challengeId</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>Challenge 标识</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -177,6 +184,10 @@ loadScripts(document, 'script');</script>
 <h3>setChallengeId</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setChallengeId</span><wbr><span class="parameters">(@Nullable
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;challengeId)</span></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>challengeId</code> - Challenge 标识</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -184,6 +195,10 @@ loadScripts(document, 'script');</script>
 <h3>getCode</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getCode</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>六位验证码</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -191,6 +206,10 @@ loadScripts(document, 'script');</script>
 <h3>setCode</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setCode</span><wbr><span class="parameters">(@Nullable
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code)</span></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>code</code> - 六位验证码</dd>
+</dl>
 </section>
 </li>
 <li>

@@ -129,11 +129,11 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.identity.Account</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#account(long)" class="member-name-link">account</a><wbr>(long&nbsp;accountId)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取仍然启用的 Client Account，供 HMAC 认证提交给认证方法。</div>
+<div class="block">读取仍然启用的 Client Account，供 MAC 认证提交给认证方法。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#allows(java.lang.String,java.lang.String)" class="member-name-link">allows</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;clientId,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;operation)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#allows(java.lang.String,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">allows</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;clientId,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;operation)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">判断 Client 是否有效且已经开放指定 Operation。</div>
 </div>
@@ -161,7 +161,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">读取指定 Client。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull com.sca4d.core.api.name.code.TreeCode&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#operations(java.lang.String)" class="member-name-link">operations</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;clientId)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">读取 Client 当前返回给 OAuth scope 的 Operation 列表。</div>
@@ -269,17 +269,17 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Transactional(readOnly=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.identity.Account</span>&nbsp;<span class="element-name">account</span><wbr><span class="parameters">(long&nbsp;accountId)</span></div>
-<div class="block">读取仍然启用的 Client Account，供 HMAC 认证提交给认证方法。</div>
+<div class="block">读取仍然启用的 Client Account，供 MAC 认证提交给认证方法。</div>
 </section>
 </li>
 <li>
-<section class="detail" id="allows(java.lang.String,java.lang.String)">
+<section class="detail" id="allows(java.lang.String,com.sca4d.core.api.name.code.TreeCode)">
 <h3>allows</h3>
 <div class="member-signature"><span class="annotations">@Transactional(readOnly=true)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">allows</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;clientId,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;operation)</span></div>
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;operation)</span></div>
 <div class="block">判断 Client 是否有效且已经开放指定 Operation。</div>
 </section>
 </li>
@@ -289,7 +289,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Transactional(readOnly=true)
 @CheckReturnValue
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">operations</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull com.sca4d.core.api.name.code.TreeCode&gt;</span>&nbsp;<span class="element-name">operations</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;clientId)</span></div>
 <div class="block">读取 Client 当前返回给 OAuth scope 的 Operation 列表。</div>
 </section>

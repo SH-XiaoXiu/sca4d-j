@@ -11,13 +11,14 @@ import com.sca4d.app.server.service.IotDeviceRuntimeService;
 import com.sca4d.core.api.annotation.RequirePermission;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
+import com.sca4d.core.spring.config.ConditionalOnCapability;
 import com.sca4d.core.spring.web.ApiResponse;
 import com.sca4d.core.spring.web.annotation.CurrentPrincipal;
+import com.sca4d.iot.api.IotCapabilities;
 import com.sca4d.iot.api.query.DeviceHistoryQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +32,7 @@ import java.util.Objects;
 
 /** 提供 Sca4d Server 的 Device 当前投影、业务历史和可选高频历史查询接口。 */
 @RestController
-@ConditionalOnProperty(prefix = "app.iot.capabilities", name = "api", havingValue = "true", matchIfMissing = true)
+@ConditionalOnCapability(IotCapabilities.API)
 @RequestMapping("/iot/devices/{deviceId}")
 @Tag(name = "IoT Device Data")
 @CurrentPrincipal(selection = PlatformPrincipalSelection.class)
@@ -52,7 +53,7 @@ public class IotDeviceDataController {
     /** @return Device 当前连接、reported 和 desired 权威投影 */
     @GetMapping("/runtime")
     @Operation(summary = "查询 Device 当前运行投影")
-    @RequirePermission(operation = IotOperations.DEVICES_READ)
+    @RequirePermission(operation = IotOperations.DEVICES_READ_VALUE)
     public @NotNull ApiResponse<IotDeviceRuntimeView> runtime(@PathVariable long deviceId) {
         return ApiResponse.ok(IotDeviceRuntimeView.from(runtime.read(deviceId)));
     }
@@ -60,7 +61,7 @@ public class IotDeviceDataController {
     /** @return Device 下行消息页 */
     @GetMapping("/downlinks")
     @Operation(summary = "查询 Device 下行历史")
-    @RequirePermission(operation = IotOperations.DEVICES_READ)
+    @RequirePermission(operation = IotOperations.DEVICES_READ_VALUE)
     public @NotNull ApiResponse<Page<IotDownlinkMessageView>> downlinks(
             @PathVariable long deviceId,
             @NotNull PageRequest page) {
@@ -70,7 +71,7 @@ public class IotDeviceDataController {
     /** @return Device 业务 ACK 页 */
     @GetMapping("/acknowledgements")
     @Operation(summary = "查询 Device ACK 历史")
-    @RequirePermission(operation = IotOperations.DEVICES_READ)
+    @RequirePermission(operation = IotOperations.DEVICES_READ_VALUE)
     public @NotNull ApiResponse<Page<IotAcknowledgementView>> acknowledgements(
             @PathVariable long deviceId,
             @NotNull PageRequest page) {
@@ -80,7 +81,7 @@ public class IotDeviceDataController {
     /** @return Device 离散事件页 */
     @GetMapping("/events")
     @Operation(summary = "查询 Device 事件历史")
-    @RequirePermission(operation = IotOperations.DEVICES_READ)
+    @RequirePermission(operation = IotOperations.DEVICES_READ_VALUE)
     public @NotNull ApiResponse<Page<IotDeviceEventView>> events(
             @PathVariable long deviceId,
             @NotNull PageRequest page) {
@@ -90,7 +91,7 @@ public class IotDeviceDataController {
     /** @return 半开时间范围内的属性 Telemetry */
     @GetMapping("/telemetry")
     @Operation(summary = "查询 Device Telemetry")
-    @RequirePermission(operation = IotOperations.DEVICES_READ)
+    @RequirePermission(operation = IotOperations.DEVICES_READ_VALUE)
     public @NotNull ApiResponse<List<IotTelemetryView>> telemetry(
             @PathVariable long deviceId,
             @RequestParam @NotNull String propertyCode,

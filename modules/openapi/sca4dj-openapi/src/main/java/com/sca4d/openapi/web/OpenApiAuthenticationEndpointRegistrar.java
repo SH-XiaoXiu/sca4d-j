@@ -19,11 +19,11 @@ public final class OpenApiAuthenticationEndpointRegistrar implements Initializin
 
     private static final Logger LOG = LoggerFactory.getLogger(OpenApiAuthenticationEndpointRegistrar.class);
 
-    private final @NotNull RequestMappingHandlerMapping mappings;
-
     private final @NotNull OpenApiAuthenticationEndpoint endpoint;
 
     private final @NotNull OpenApiTokenEndpointHandler handler;
+
+    private final @NotNull RequestMappingHandlerMapping mappings;
 
     /**
      * 创建认证端点注册器。

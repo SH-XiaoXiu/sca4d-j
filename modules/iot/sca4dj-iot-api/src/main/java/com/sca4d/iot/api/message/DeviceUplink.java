@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 保存 DeviceProtocol 解码后的一次标准 reported、acknowledgement 或两者兼有的上行结果。 */
-public final class DeviceUplink {
+public class DeviceUplink {
 
     /** 标准上行结果类型。 */
     public enum Kind {
@@ -24,13 +24,13 @@ public final class DeviceUplink {
         REPORTED_AND_ACKNOWLEDGEMENT
     }
 
-    private final @NotNull Kind kind;
+    private final @Nullable DeviceAcknowledgement acknowledgement;
 
-    private final @Nullable ReportedStateUpdate reportedState;
+    private final @NotNull Kind kind;
 
     private final @NotNull List<ThingEventOccurrence> events;
 
-    private final @Nullable DeviceAcknowledgement acknowledgement;
+    private final @Nullable ReportedStateUpdate reportedState;
 
     private DeviceUplink(
             @NotNull Kind kind,

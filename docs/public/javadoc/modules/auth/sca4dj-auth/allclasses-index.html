@@ -74,53 +74,61 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">配置 HS256 JWT 的密钥轮换、受众、有效期和长度限制。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/web/AuthRequestInterceptor.html" title="class in com.sca4d.auth.web">AuthRequestInterceptor</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/config/AuthProperties.Token.html" title="class in com.sca4d.auth.config">AuthProperties.Token</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">配置普通请求使用的认证 Token 模式。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/web/AuthRequestInterceptor.html" title="class in com.sca4d.auth.web">AuthRequestInterceptor</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">按 Controller 注解恢复 Session，并在参数绑定前拒绝未声明匿名访问的未认证请求。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/config/AuthSettings.html" title="class in com.sca4d.auth.config">AuthSettings</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/config/AuthSettings.html" title="class in com.sca4d.auth.config">AuthSettings</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">声明认证模块可以由客户管理的会话、尝试和 JWT 有效期。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/jwt/JwtSessionProjection.html" title="class in com.sca4d.auth.jwt">JwtSessionProjection</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/jwt/JwtSessionProjection.html" title="class in com.sca4d.auth.jwt">JwtSessionProjection</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用独立 HS256 密钥把完整 Core Session 编码为短效 JWS 投影，并在请求中离线恢复。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/session/codec/OperationResourceCodec.html" title="class in com.sca4d.auth.session.codec">OperationResourceCodec</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/session/codec/OperationResourceCodec.html" title="class in com.sca4d.auth.session.codec">OperationResourceCodec</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在 Session wire 中编解码 <code>Operation</code> 标识。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/session/codec/PrincipalIdLoaders.html" title="class in com.sca4d.auth.session.codec">PrincipalIdLoaders</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/session/codec/PrincipalIdLoaders.html" title="class in com.sca4d.auth.session.codec">PrincipalIdLoaders</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">调用当前身份支持的 PrincipalIdLoader，并校验每种 Principal 类型只有一个标识来源。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/session/codec/PrincipalLoaders.html" title="class in com.sca4d.auth.session.codec">PrincipalLoaders</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/session/codec/PrincipalLoaders.html" title="class in com.sca4d.auth.session.codec">PrincipalLoaders</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">选择唯一负责当前身份的 <code>PrincipalLoader</code>，并校验建立 Session 所需的 Principal。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/engine/RedisAuthenticationAttempts.html" title="class in com.sca4d.auth.engine">RedisAuthenticationAttempts</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/engine/RedisAuthenticationAttempts.html" title="class in com.sca4d.auth.engine">RedisAuthenticationAttempts</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用认证方法目录、Redis 尝试和应用动作策略编排零到三因素认证。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/engine/attempt/RedisAuthenticationAttemptStore.html" title="class in com.sca4d.auth.engine.attempt">RedisAuthenticationAttemptStore</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/engine/attempt/RedisAuthenticationAttemptStore.html" title="class in com.sca4d.auth.engine.attempt">RedisAuthenticationAttemptStore</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用 Redis TTL 保存认证尝试，并以自动续租的分布式锁串行修改同一尝试。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/session/RedisSessionGeneration.html" title="class in com.sca4d.auth.session">RedisSessionGeneration</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/session/RedisSessionGeneration.html" title="class in com.sca4d.auth.session">RedisSessionGeneration</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">在 Redis 中保存每个 Account 的 Session 失效代次。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/session/RedisSessionTokenIndex.html" title="class in com.sca4d.auth.session">RedisSessionTokenIndex</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/session/RedisSessionTokenIndex.html" title="class in com.sca4d.auth.session">RedisSessionTokenIndex</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存 SessionId 到 Sa-Token 不透明 Token 的短期索引，使 JWT 恢复的 Session 可以注销权威状态。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/session/codec/ResourceIdLoaders.html" title="class in com.sca4d.auth.session.codec">ResourceIdLoaders</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">并发合并所有 ResourceIdLoader 为完整 Principal 贡献的数字 Resource 标识。</div>
-</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/session/codec/ResourceLoaders.html" title="class in com.sca4d.auth.session.codec">ResourceLoaders</a></div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/session/codec/ResourceIdLoaders.html" title="class in com.sca4d.auth.session.codec">ResourceIdLoaders</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">并发合并所有 ResourceLoader 的静态资源贡献。</div>
+<div class="block">使用 DataGraph 并发装载并合并 Principal 的数字 Resource 标识。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/session/codec/ResourceLoaders.html" title="class in com.sca4d.auth.session.codec">ResourceLoaders</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">使用 DataGraph 并发装载并合并所有 ResourceLoader 的静态资源贡献。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/session/SaTokenRedisSerialization.html" title="class in com.sca4d.auth.session">SaTokenRedisSerialization</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">为官方 Sa-Token DAO 的独立 Redis 模板安装服务器 key 序列化，不修改 Token 或客户端协议。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/auth/session/SaTokenSessionControl.html" title="class in com.sca4d.auth.session">SaTokenSessionControl</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">

@@ -5,10 +5,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
+import java.util.Objects;
 import java.util.Optional;
 
 /** 表示 retry 策略要求停止或在明确时刻再次发送。 */
-public final class RetryDecision {
+public class RetryDecision {
 
     private final @Nullable Instant retryAt;
 
@@ -28,7 +29,7 @@ public final class RetryDecision {
     /** @param failure 停止重试的稳定失败 code @return 停止结果 */
     @CheckReturnValue
     public static @NotNull RetryDecision stop(@NotNull IotFailureCode failure) {
-        return new RetryDecision(null, java.util.Objects.requireNonNull(failure, "停止重试失败 code 不能为空"));
+        return new RetryDecision(null, Objects.requireNonNull(failure, "停止重试失败 code 不能为空"));
     }
 
     /** @return 下一次尝试时间；停止时为空 */

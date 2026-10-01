@@ -49,7 +49,7 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1>Index</h1>
 </div>
-<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:Q">Q</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a>
+<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:Q">Q</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
 <dt><a href="com/sca4d/web/realtime/connection/LocalConnectionRegistry.html#add(com.sca4d.web.realtime.connection.LocalConnection)" class="member-name-link">add(LocalConnection)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/LocalConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">LocalConnectionRegistry</a></dt>
@@ -67,6 +67,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/web/realtime/stomp/StompOutboundInterceptor.html#afterMessageHandled(org.springframework.messaging.Message,org.springframework.messaging.MessageChannel,org.springframework.messaging.MessageHandler,java.lang.Exception)" class="member-name-link">afterMessageHandled(Message&lt;?&gt;, MessageChannel, MessageHandler, Exception)</a> - Method in class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompOutboundInterceptor.html" title="class in com.sca4d.web.realtime.stomp">StompOutboundInterceptor</a></dt>
 <dd>
 <div class="block">在 Spring WebSocket transport 处理完浏览器事件后执行关闭。</div>
+</dd>
+<dt><a href="com/sca4d/web/realtime/stomp/StompChannelDispatcher.html#afterSendCompletion(org.springframework.messaging.Message,org.springframework.messaging.MessageChannel,boolean,java.lang.Exception)" class="member-name-link">afterSendCompletion(Message&lt;?&gt;, MessageChannel, boolean, Exception)</a> - Method in class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompChannelDispatcher.html" title="class in com.sca4d.web.realtime.stomp">StompChannelDispatcher</a></dt>
+<dd>
+<div class="block">恢复嵌套调用的提交上下文，成功时使消息可执行，失败时归还预留容量。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/stomp/StompRelayPortCheck.html#afterSingletonsInstantiated()" class="member-name-link">afterSingletonsInstantiated()</a> - Method in class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompRelayPortCheck.html" title="class in com.sca4d.web.realtime.stomp">StompRelayPortCheck</a></dt>
 <dd>
@@ -103,10 +107,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">保存 SSE 与 STOMP 共同发送给浏览器的事件编码、版本、发生时间和 payload。</div>
 </dd>
-<dt><a href="com/sca4d/web/realtime/connection/BrowserEnvelope.html#%3Cinit%3E(java.lang.String,int,java.time.Instant,com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">BrowserEnvelope(String, int, Instant, JsonNode)</a> - Constructor for class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/BrowserEnvelope.html" title="class in com.sca4d.web.realtime.connection">BrowserEnvelope</a></dt>
+<dt><a href="com/sca4d/web/realtime/connection/BrowserEnvelope.html#%3Cinit%3E(com.sca4d.core.api.name.code.TreeCode,int,java.time.Instant,com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">BrowserEnvelope(TreeCode, int, Instant, JsonNode)</a> - Constructor for class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/BrowserEnvelope.html" title="class in com.sca4d.web.realtime.connection">BrowserEnvelope</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/connection/BrowserWrite.html" class="type-name-link" title="class in com.sca4d.web.realtime.connection">BrowserWrite</a> - Class in <a href="com/sca4d/web/realtime/connection/package-summary.html">com.sca4d.web.realtime.connection</a></dt>
 <dd>
-<div class="block">创建不包含内部目标、业务键和 RabbitMQ 元数据的浏览器信封。</div>
+<div class="block">保存发送给本机连接的浏览器信封以及发送后是否关闭连接。</div>
 </dd>
+<dt><a href="com/sca4d/web/realtime/connection/BrowserWrite.html#%3Cinit%3E(com.sca4d.web.realtime.connection.BrowserEnvelope,boolean)" class="member-name-link">BrowserWrite(BrowserEnvelope, boolean)</a> - Constructor for class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/BrowserWrite.html" title="class in com.sca4d.web.realtime.connection">BrowserWrite</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:C">C</h2>
 <dl class="index">
@@ -126,7 +134,17 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">关闭当前进程的全部 SSE 连接、心跳和写出任务。</div>
 </dd>
-<dt><a href="com/sca4d/web/realtime/connection/ConnectionDelivery.html#closeAfter()" class="member-name-link">closeAfter()</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/ConnectionDelivery.html" title="class in com.sca4d.web.realtime.connection">ConnectionDelivery</a></dt>
+<dt><a href="com/sca4d/web/realtime/stomp/StompChannelDispatcher.html#close()" class="member-name-link">close()</a> - Method in class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompChannelDispatcher.html" title="class in com.sca4d.web.realtime.stomp">StompChannelDispatcher</a></dt>
+<dd>
+<div class="block">停止接受消息，释放排队引用并中断工作线程。</div>
+</dd>
+<dt><a href="com/sca4d/web/realtime/connection/BrowserWrite.html#closeAfter()" class="member-name-link">closeAfter()</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/BrowserWrite.html" title="class in com.sca4d.web.realtime.connection">BrowserWrite</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/connection/WebRealtimeMessageCodec.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/WebRealtimeMessageCodec.html" title="class in com.sca4d.web.realtime.connection">WebRealtimeMessageCodec</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/connection/WebRealtimeMessageHandler.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/WebRealtimeMessageHandler.html" title="class in com.sca4d.web.realtime.connection">WebRealtimeMessageHandler</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/connection/WebRealtimeMessageHandler.html#codec()" class="member-name-link">codec()</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/WebRealtimeMessageHandler.html" title="class in com.sca4d.web.realtime.connection">WebRealtimeMessageHandler</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/package-summary.html">com.sca4d.web.realtime.config</a> - package com.sca4d.web.realtime.config</dt>
 <dd>
@@ -186,14 +204,6 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html#connection(com.sca4d.core.api.connection.ConnectionId)" class="member-name-link">connection(ConnectionId)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html" title="class in com.sca4d.web.realtime.config">WebRealtimeInfrastructureNames</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/web/realtime/connection/ConnectionDelivery.html" class="type-name-link" title="class in com.sca4d.web.realtime.connection">ConnectionDelivery</a> - Class in <a href="com/sca4d/web/realtime/connection/package-summary.html">com.sca4d.web.realtime.connection</a></dt>
-<dd>
-<div class="block">保存发送给本机连接的浏览器信封以及发送后是否关闭连接。</div>
-</dd>
-<dt><a href="com/sca4d/web/realtime/connection/ConnectionDelivery.html#%3Cinit%3E(com.sca4d.web.realtime.connection.BrowserEnvelope,boolean)" class="member-name-link">ConnectionDelivery(BrowserEnvelope, boolean)</a> - Constructor for class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/ConnectionDelivery.html" title="class in com.sca4d.web.realtime.connection">ConnectionDelivery</a></dt>
-<dd>
-<div class="block">创建本机连接待写出内容。</div>
-</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html#connectionSubscriptions(com.sca4d.core.api.connection.ConnectionId)" class="member-name-link">connectionSubscriptions(ConnectionId)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html" title="class in com.sca4d.web.realtime.config">WebRealtimeInfrastructureNames</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html#connectionTargets(com.sca4d.core.api.connection.ConnectionId)" class="member-name-link">connectionTargets(ConnectionId)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html" title="class in com.sca4d.web.realtime.config">WebRealtimeInfrastructureNames</a></dt>
@@ -201,13 +211,21 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:D">D</h2>
 <dl class="index">
-<dt><a href="com/sca4d/web/realtime/rabbit/RabbitNodeTransport.html#declarables()" class="member-name-link">declarables()</a> - Method in class com.sca4d.web.realtime.rabbit.<a href="com/sca4d/web/realtime/rabbit/RabbitNodeTransport.html" title="class in com.sca4d.web.realtime.rabbit">RabbitNodeTransport</a></dt>
+<dt><a href="com/sca4d/web/realtime/rabbit/RabbitNodeRouter.html#declarables()" class="member-name-link">declarables()</a> - Method in class com.sca4d.web.realtime.rabbit.<a href="com/sca4d/web/realtime/rabbit/RabbitNodeRouter.html" title="class in com.sca4d.web.realtime.rabbit">RabbitNodeRouter</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/connection/WebRealtimeMessageCodec.html#decode(byte%5B%5D)" class="member-name-link">decode(byte[])</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/WebRealtimeMessageCodec.html" title="class in com.sca4d.web.realtime.connection">WebRealtimeMessageCodec</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/stomp/WebSocketSessions.html#decorate(org.springframework.web.socket.WebSocketHandler)" class="member-name-link">decorate(WebSocketHandler)</a> - Method in class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/WebSocketSessions.html" title="class in com.sca4d.web.realtime.stomp">WebSocketSessions</a></dt>
 <dd>
 <div class="block">为 Spring 协议处理器增加连接句柄登记和清理。</div>
 </dd>
-<dt><a href="com/sca4d/web/realtime/connection/LocalConnectionRegistry.html#deliver(com.sca4d.core.api.connection.ConnectionId,com.sca4d.web.realtime.connection.ConnectionDelivery)" class="member-name-link">deliver(ConnectionId, ConnectionDelivery)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/LocalConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">LocalConnectionRegistry</a></dt>
+<dt><a href="com/sca4d/web/realtime/connection/DefaultWebRealtimePublisher.html" class="type-name-link" title="class in com.sca4d.web.realtime.connection">DefaultWebRealtimePublisher</a> - Class in <a href="com/sca4d/web/realtime/connection/package-summary.html">com.sca4d.web.realtime.connection</a></dt>
+<dd>
+<div class="block">把应用实时事件转换成 WebRealtimeMessage 并交给固定 MessageBus。</div>
+</dd>
+<dt><a href="com/sca4d/web/realtime/connection/DefaultWebRealtimePublisher.html#%3Cinit%3E(com.sca4d.core.api.messaging.MessageBus,com.sca4d.web.realtime.config.WebRealtimeProperties,java.time.Clock)" class="member-name-link">DefaultWebRealtimePublisher(MessageBus, WebRealtimeProperties, Clock)</a> - Constructor for class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/DefaultWebRealtimePublisher.html" title="class in com.sca4d.web.realtime.connection">DefaultWebRealtimePublisher</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/connection/LocalConnectionRegistry.html#deliver(com.sca4d.core.api.connection.ConnectionId,com.sca4d.web.realtime.connection.BrowserWrite)" class="member-name-link">deliver(ConnectionId, BrowserWrite)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/LocalConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">LocalConnectionRegistry</a></dt>
 <dd>
 <div class="block">把 RabbitMQ 节点消息投递给当前仍存在的本机连接。</div>
 </dd>
@@ -218,8 +236,14 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:E">E</h2>
 <dl class="index">
-<dt><a href="com/sca4d/web/realtime/connection/ConnectionDelivery.html#envelope()" class="member-name-link">envelope()</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/ConnectionDelivery.html" title="class in com.sca4d.web.realtime.connection">ConnectionDelivery</a></dt>
+<dt><a href="com/sca4d/web/realtime/connection/WebRealtimeMessageCodec.html#encode(com.sca4d.core.api.webrealtime.WebRealtimeMessage)" class="member-name-link">encode(WebRealtimeMessage)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/WebRealtimeMessageCodec.html" title="class in com.sca4d.web.realtime.connection">WebRealtimeMessageCodec</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/connection/BrowserWrite.html#envelope()" class="member-name-link">envelope()</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/BrowserWrite.html" title="class in com.sca4d.web.realtime.connection">BrowserWrite</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/stomp/StompChannelDispatcher.html#execute(java.lang.Runnable)" class="member-name-link">execute(Runnable)</a> - Method in class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompChannelDispatcher.html" title="class in com.sca4d.web.realtime.stomp">StompChannelDispatcher</a></dt>
+<dd>
+<div class="block">收集 Spring 为当前消息创建的处理任务，等待所有 preSend 检查及任务提交完成。</div>
+</dd>
 <dt><a href="com/sca4d/web/realtime/ticket/WebRealtimeTicket.html#expiresAt()" class="member-name-link">expiresAt()</a> - Method in class com.sca4d.web.realtime.ticket.<a href="com/sca4d/web/realtime/ticket/WebRealtimeTicket.html" title="class in com.sca4d.web.realtime.ticket">WebRealtimeTicket</a></dt>
 <dd>&nbsp;</dd>
 </dl>
@@ -227,18 +251,28 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html#findBySession(com.sca4d.core.api.authentication.SessionId)" class="member-name-link">findBySession(SessionId)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a></dt>
 <dd>
-<div class="block">读取当前 Session 关联的公共连接事实。</div>
+<div class="block">读取当前 Session 关联的公共连接信息。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:G">G</h2>
 <dl class="index">
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html#getAllowedOrigins()" class="member-name-link">getAllowedOrigins()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html#getChannelQueueCapacity()" class="member-name-link">getChannelQueueCapacity()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Stomp</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html#getChannelQueueMaxBytes()" class="member-name-link">getChannelQueueMaxBytes()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Stomp</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html#getChannelWorkerCount()" class="member-name-link">getChannelWorkerCount()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Stomp</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Relay.html#getClientLogin()" class="member-name-link">getClientLogin()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Relay.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Relay</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Relay.html#getClientPasscode()" class="member-name-link">getClientPasscode()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Relay.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Relay</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html#getConnectionQueueCapacity()" class="member-name-link">getConnectionQueueCapacity()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html#getConnectionQueueCapacity()" class="member-name-link">getConnectionQueueCapacity()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Stomp</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html#getConnectionQueueMaxBytes()" class="member-name-link">getConnectionQueueMaxBytes()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Stomp</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/connection/BrowserEnvelope.html#getEventCode()" class="member-name-link">getEventCode()</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/BrowserEnvelope.html" title="class in com.sca4d.web.realtime.connection">BrowserEnvelope</a></dt>
 <dd>&nbsp;</dd>
@@ -254,15 +288,19 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html#getMode()" class="member-name-link">getMode()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Stomp</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html#getNode()" class="member-name-link">getNode()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html#getNodeMessageTtl()" class="member-name-link">getNodeMessageTtl()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html#getNodeTransport()" class="member-name-link">getNodeTransport()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/connection/BrowserEnvelope.html#getOccurredAt()" class="member-name-link">getOccurredAt()</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/BrowserEnvelope.html" title="class in com.sca4d.web.realtime.connection">BrowserEnvelope</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeEnvironmentPostProcessor.html#getOrder()" class="member-name-link">getOrder()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeEnvironmentPostProcessor.html" title="class in com.sca4d.web.realtime.config">WebRealtimeEnvironmentPostProcessor</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/connection/BrowserEnvelope.html#getPayload()" class="member-name-link">getPayload()</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/BrowserEnvelope.html" title="class in com.sca4d.web.realtime.connection">BrowserEnvelope</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/web/realtime/rabbit/RabbitNodeTransport.html#getPhase()" class="member-name-link">getPhase()</a> - Method in class com.sca4d.web.realtime.rabbit.<a href="com/sca4d/web/realtime/rabbit/RabbitNodeTransport.html" title="class in com.sca4d.web.realtime.rabbit">RabbitNodeTransport</a></dt>
+<dt><a href="com/sca4d/web/realtime/rabbit/RabbitNodeRouter.html#getPhase()" class="member-name-link">getPhase()</a> - Method in class com.sca4d.web.realtime.rabbit.<a href="com/sca4d/web/realtime/rabbit/RabbitNodeRouter.html" title="class in com.sca4d.web.realtime.rabbit">RabbitNodeRouter</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Relay.html#getPort()" class="member-name-link">getPort()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Relay.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Relay</a></dt>
 <dd>&nbsp;</dd>
@@ -290,24 +328,29 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html#getTicketTtl()" class="member-name-link">getTicketTtl()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Node.html#getTransport()" class="member-name-link">getTransport()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Node.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Node</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Relay.html#getVirtualHost()" class="member-name-link">getVirtualHost()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Relay.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Relay</a></dt>
+<dd>&nbsp;</dd>
+</dl>
+<h2 class="title" id="I:H">H</h2>
+<dl class="index">
+<dt><a href="com/sca4d/web/realtime/connection/WebRealtimeMessageHandler.html#handle(com.sca4d.core.api.messaging.IncomingMessage)" class="member-name-link">handle(IncomingMessage&lt;WebRealtimeMessage&gt;)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/WebRealtimeMessageHandler.html" title="class in com.sca4d.web.realtime.connection">WebRealtimeMessageHandler</a></dt>
 <dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:I">I</h2>
 <dl class="index">
 <dt><a href="com/sca4d/web/realtime/connection/LocalConnection.html#id()" class="member-name-link">id()</a> - Method in interface com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/LocalConnection.html" title="interface in com.sca4d.web.realtime.connection">LocalConnection</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/web/realtime/connection/TargetPublisher.html#invalidated(long)" class="member-name-link">invalidated(long)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/TargetPublisher.html" title="class in com.sca4d.web.realtime.connection">TargetPublisher</a></dt>
-<dd>
-<div class="block">在事务提交后通知相关浏览器重新读取 Session，并在写出后关闭连接。</div>
-</dd>
+<dt><a href="com/sca4d/web/realtime/connection/DefaultWebRealtimePublisher.html#invalidated(long)" class="member-name-link">invalidated(long)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/DefaultWebRealtimePublisher.html" title="class in com.sca4d.web.realtime.connection">DefaultWebRealtimePublisher</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/ticket/TicketHandshakeInterceptor.html#IP_ATTRIBUTE" class="member-name-link">IP_ATTRIBUTE</a> - Static variable in class com.sca4d.web.realtime.ticket.<a href="com/sca4d/web/realtime/ticket/TicketHandshakeInterceptor.html" title="class in com.sca4d.web.realtime.ticket">TicketHandshakeInterceptor</a></dt>
 <dd>
 <div class="block">握手完成后保存远端 IP 的属性键。</div>
 </dd>
-<dt><a href="com/sca4d/web/realtime/rabbit/RabbitNodeTransport.html#isAutoStartup()" class="member-name-link">isAutoStartup()</a> - Method in class com.sca4d.web.realtime.rabbit.<a href="com/sca4d/web/realtime/rabbit/RabbitNodeTransport.html" title="class in com.sca4d.web.realtime.rabbit">RabbitNodeTransport</a></dt>
+<dt><a href="com/sca4d/web/realtime/rabbit/RabbitNodeRouter.html#isAutoStartup()" class="member-name-link">isAutoStartup()</a> - Method in class com.sca4d.web.realtime.rabbit.<a href="com/sca4d/web/realtime/rabbit/RabbitNodeRouter.html" title="class in com.sca4d.web.realtime.rabbit">RabbitNodeRouter</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/web/realtime/rabbit/RabbitNodeTransport.html#isRunning()" class="member-name-link">isRunning()</a> - Method in class com.sca4d.web.realtime.rabbit.<a href="com/sca4d/web/realtime/rabbit/RabbitNodeTransport.html" title="class in com.sca4d.web.realtime.rabbit">RabbitNodeTransport</a></dt>
+<dt><a href="com/sca4d/web/realtime/rabbit/RabbitNodeRouter.html#isRunning()" class="member-name-link">isRunning()</a> - Method in class com.sca4d.web.realtime.rabbit.<a href="com/sca4d/web/realtime/rabbit/RabbitNodeRouter.html" title="class in com.sca4d.web.realtime.rabbit">RabbitNodeRouter</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/ticket/RedisTicketService.html#issue(com.sca4d.core.api.authentication.Session,java.lang.String)" class="member-name-link">issue(Session, String)</a> - Method in class com.sca4d.web.realtime.ticket.<a href="com/sca4d/web/realtime/ticket/RedisTicketService.html" title="class in com.sca4d.web.realtime.ticket">RedisTicketService</a></dt>
 <dd>
@@ -320,7 +363,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:L">L</h2>
 <dl class="index">
-<dt><a href="com/sca4d/web/realtime/config/NodeTransportMode.html#LOCAL" class="member-name-link">LOCAL</a> - Enum constant in enum class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/NodeTransportMode.html" title="enum class in com.sca4d.web.realtime.config">NodeTransportMode</a></dt>
+<dt><a href="com/sca4d/web/realtime/config/NodeRouterMode.html#LOCAL" class="member-name-link">LOCAL</a> - Enum constant in enum class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/NodeRouterMode.html" title="enum class in com.sca4d.web.realtime.config">NodeRouterMode</a></dt>
 <dd>
 <div class="block">只投递当前 JVM 持有的连接，适用于单实例运行。</div>
 </dd>
@@ -336,72 +379,76 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建本机连接句柄注册表。</div>
 </dd>
-<dt><a href="com/sca4d/web/realtime/connection/LocalNodeTransport.html" class="type-name-link" title="class in com.sca4d.web.realtime.connection">LocalNodeTransport</a> - Class in <a href="com/sca4d/web/realtime/connection/package-summary.html">com.sca4d.web.realtime.connection</a></dt>
+<dt><a href="com/sca4d/web/realtime/connection/LocalNodeRouter.html" class="type-name-link" title="class in com.sca4d.web.realtime.connection">LocalNodeRouter</a> - Class in <a href="com/sca4d/web/realtime/connection/package-summary.html">com.sca4d.web.realtime.connection</a></dt>
 <dd>
 <div class="block">在单个 JVM 内把 Web Realtime 事件直接交给本机连接。</div>
 </dd>
-<dt><a href="com/sca4d/web/realtime/connection/LocalNodeTransport.html#%3Cinit%3E(com.sca4d.web.realtime.connection.LocalConnectionRegistry)" class="member-name-link">LocalNodeTransport(LocalConnectionRegistry)</a> - Constructor for class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/LocalNodeTransport.html" title="class in com.sca4d.web.realtime.connection">LocalNodeTransport</a></dt>
+<dt><a href="com/sca4d/web/realtime/connection/LocalNodeRouter.html#%3Cinit%3E(com.sca4d.web.realtime.connection.LocalConnectionRegistry)" class="member-name-link">LocalNodeRouter(LocalConnectionRegistry)</a> - Constructor for class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/LocalNodeRouter.html" title="class in com.sca4d.web.realtime.connection">LocalNodeRouter</a></dt>
 <dd>
 <div class="block">创建不依赖外部消息代理的本机节点传输。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:N">N</h2>
 <dl class="index">
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Node.html#%3Cinit%3E()" class="member-name-link">Node()</a> - Constructor for class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Node.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Node</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/stomp/StompBrokerMode.html#NODE_ROUTED" class="member-name-link">NODE_ROUTED</a> - Enum constant in enum class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompBrokerMode.html" title="enum class in com.sca4d.web.realtime.stomp">StompBrokerMode</a></dt>
 <dd>
 <div class="block">当前节点使用 Spring simple broker，跨节点事件仍由 Web Realtime 的 RabbitMQ 节点传输负责。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html#nodeExchange()" class="member-name-link">nodeExchange()</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html" title="class in com.sca4d.web.realtime.config">WebRealtimeInfrastructureNames</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/web/realtime/connection/LocalNodeTransport.html#nodeId()" class="member-name-link">nodeId()</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/LocalNodeTransport.html" title="class in com.sca4d.web.realtime.connection">LocalNodeTransport</a></dt>
-<dt><a href="com/sca4d/web/realtime/connection/NodeTransport.html#nodeId()" class="member-name-link">nodeId()</a> - Method in interface com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/NodeTransport.html" title="interface in com.sca4d.web.realtime.connection">NodeTransport</a></dt>
+<dt><a href="com/sca4d/web/realtime/connection/LocalNodeRouter.html#nodeId()" class="member-name-link">nodeId()</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/LocalNodeRouter.html" title="class in com.sca4d.web.realtime.connection">LocalNodeRouter</a></dt>
+<dt><a href="com/sca4d/web/realtime/connection/NodeRouter.html#nodeId()" class="member-name-link">nodeId()</a> - Method in interface com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/NodeRouter.html" title="interface in com.sca4d.web.realtime.connection">NodeRouter</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/web/realtime/rabbit/RabbitNodeTransport.html#nodeId()" class="member-name-link">nodeId()</a> - Method in class com.sca4d.web.realtime.rabbit.<a href="com/sca4d/web/realtime/rabbit/RabbitNodeTransport.html" title="class in com.sca4d.web.realtime.rabbit">RabbitNodeTransport</a></dt>
+<dt><a href="com/sca4d/web/realtime/rabbit/RabbitNodeRouter.html#nodeId()" class="member-name-link">nodeId()</a> - Method in class com.sca4d.web.realtime.rabbit.<a href="com/sca4d/web/realtime/rabbit/RabbitNodeRouter.html" title="class in com.sca4d.web.realtime.rabbit">RabbitNodeRouter</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/rabbit/NodeMessageCodec.html" class="type-name-link" title="class in com.sca4d.web.realtime.rabbit">NodeMessageCodec</a> - Class in <a href="com/sca4d/web/realtime/rabbit/package-summary.html">com.sca4d.web.realtime.rabbit</a></dt>
 <dd>
 <div class="block">编解码 RabbitMQ 节点队列使用的连接列表和浏览器事件信封。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/rabbit/NodeMessageCodec.html#%3Cinit%3E(com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">NodeMessageCodec(ObjectMapper)</a> - Constructor for class com.sca4d.web.realtime.rabbit.<a href="com/sca4d/web/realtime/rabbit/NodeMessageCodec.html" title="class in com.sca4d.web.realtime.rabbit">NodeMessageCodec</a></dt>
-<dd>
-<div class="block">创建直接使用脚手架固定 `@Sca4djJson` 映射器的节点消息编解码器。</div>
-</dd>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html#nodeQueue(java.lang.String)" class="member-name-link">nodeQueue(String)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html" title="class in com.sca4d.web.realtime.config">WebRealtimeInfrastructureNames</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/web/realtime/connection/NodeTransport.html" class="type-name-link" title="interface in com.sca4d.web.realtime.connection">NodeTransport</a> - Interface in <a href="com/sca4d/web/realtime/connection/package-summary.html">com.sca4d.web.realtime.connection</a></dt>
+<dt><a href="com/sca4d/web/realtime/connection/NodeRouter.html" class="type-name-link" title="interface in com.sca4d.web.realtime.connection">NodeRouter</a> - Interface in <a href="com/sca4d/web/realtime/connection/package-summary.html">com.sca4d.web.realtime.connection</a></dt>
 <dd>
 <div class="block">标识当前 Web Realtime 节点，并把浏览器事件交给持有目标连接的节点。</div>
 </dd>
-<dt><a href="com/sca4d/web/realtime/config/NodeTransportMode.html" class="type-name-link" title="enum class in com.sca4d.web.realtime.config">NodeTransportMode</a> - Enum Class in <a href="com/sca4d/web/realtime/config/package-summary.html">com.sca4d.web.realtime.config</a></dt>
+<dt><a href="com/sca4d/web/realtime/config/NodeRouterMode.html" class="type-name-link" title="enum class in com.sca4d.web.realtime.config">NodeRouterMode</a> - Enum Class in <a href="com/sca4d/web/realtime/config/package-summary.html">com.sca4d.web.realtime.config</a></dt>
 <dd>
 <div class="block">选择 Web Realtime 在单个 JVM 内投递，或通过 RabbitMQ 支持跨节点投递。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:O">O</h2>
 <dl class="index">
-<dt><a href="com/sca4d/web/realtime/connection/LocalConnection.html#offer(com.sca4d.web.realtime.connection.ConnectionDelivery)" class="member-name-link">offer(ConnectionDelivery)</a> - Method in interface com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/LocalConnection.html" title="interface in com.sca4d.web.realtime.connection">LocalConnection</a></dt>
+<dt><a href="com/sca4d/web/realtime/connection/LocalConnection.html#offer(com.sca4d.web.realtime.connection.BrowserWrite)" class="member-name-link">offer(BrowserWrite)</a> - Method in interface com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/LocalConnection.html" title="interface in com.sca4d.web.realtime.connection">LocalConnection</a></dt>
 <dd>
 <div class="block">把一次投递加入有界写出缓冲；缓冲已满时实现关闭连接。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:P">P</h2>
 <dl class="index">
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeEnvironmentPostProcessor.html#postProcessEnvironment(org.springframework.core.env.ConfigurableEnvironment,org.springframework.boot.SpringApplication)" class="member-name-link">postProcessEnvironment(ConfigurableEnvironment, SpringApplication)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeEnvironmentPostProcessor.html" title="class in com.sca4d.web.realtime.config">WebRealtimeEnvironmentPostProcessor</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/stomp/StompChannelDispatcher.html#preSend(org.springframework.messaging.Message,org.springframework.messaging.MessageChannel)" class="member-name-link">preSend(Message&lt;?&gt;, MessageChannel)</a> - Method in class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompChannelDispatcher.html" title="class in com.sca4d.web.realtime.stomp">StompChannelDispatcher</a></dt>
+<dd>
+<div class="block">在任何业务拦截器和执行器提交之前占用预算，失败时不创建排队任务。</div>
+</dd>
 <dt><a href="com/sca4d/web/realtime/stomp/StompInboundInterceptor.html#preSend(org.springframework.messaging.Message,org.springframework.messaging.MessageChannel)" class="member-name-link">preSend(Message&lt;?&gt;, MessageChannel)</a> - Method in class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompInboundInterceptor.html" title="class in com.sca4d.web.realtime.stomp">StompInboundInterceptor</a></dt>
 <dd>
 <div class="block">在 Spring 分派命令前检查身份、STOMP 1.2、限流和动态订阅策略。</div>
+</dd>
+<dt><a href="com/sca4d/web/realtime/stomp/StompOutboundInterceptor.html#preSend(org.springframework.messaging.Message,org.springframework.messaging.MessageChannel)" class="member-name-link">preSend(Message&lt;?&gt;, MessageChannel)</a> - Method in class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompOutboundInterceptor.html" title="class in com.sca4d.web.realtime.stomp">StompOutboundInterceptor</a></dt>
+<dd>
+<div class="block">恢复经过 broker relay 返回的关闭标记，并在编码浏览器帧之前删除内部 native header。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/stomp/WebRealtimeProtocol.html#PRINCIPAL_ID_HEADER" class="member-name-link">PRINCIPAL_ID_HEADER</a> - Static variable in class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/WebRealtimeProtocol.html" title="class in com.sca4d.web.realtime.stomp">WebRealtimeProtocol</a></dt>
 <dd>
 <div class="block">`SEND` 和 `SUBSCRIBE` 选择当前业务主体使用的 STOMP native header。</div>
 </dd>
-<dt><a href="com/sca4d/web/realtime/connection/TargetPublisher.html#publish(com.sca4d.core.api.webrealtime.WebRealtimeTarget,com.sca4d.core.api.event.Event)" class="member-name-link">publish(WebRealtimeTarget, Event&lt;?&gt;)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/TargetPublisher.html" title="class in com.sca4d.web.realtime.connection">TargetPublisher</a></dt>
-<dd>
-<div class="block">活跃事务提交后发布；没有事务时立即发布。</div>
-</dd>
-<dt><a href="com/sca4d/web/realtime/connection/TargetPublisher.html#publishNow(com.sca4d.core.api.webrealtime.WebRealtimeTarget,com.sca4d.core.api.event.Event)" class="member-name-link">publishNow(WebRealtimeTarget, Event&lt;?&gt;)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/TargetPublisher.html" title="class in com.sca4d.web.realtime.connection">TargetPublisher</a></dt>
-<dd>
-<div class="block">立即解析目标并发送节点消息。</div>
-</dd>
+<dt><a href="com/sca4d/web/realtime/connection/DefaultWebRealtimePublisher.html#publish(com.sca4d.core.api.webrealtime.WebRealtimeTarget,com.sca4d.core.api.event.Event,com.sca4d.core.api.messaging.DispatchPolicy)" class="member-name-link">publish(WebRealtimeTarget, Event&lt;?&gt;, DispatchPolicy)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/DefaultWebRealtimePublisher.html" title="class in com.sca4d.web.realtime.connection">DefaultWebRealtimePublisher</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:Q">Q</h2>
 <dl class="index">
@@ -412,37 +459,35 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:R">R</h2>
 <dl class="index">
-<dt><a href="com/sca4d/web/realtime/config/NodeTransportMode.html#RABBIT" class="member-name-link">RABBIT</a> - Enum constant in enum class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/NodeTransportMode.html" title="enum class in com.sca4d.web.realtime.config">NodeTransportMode</a></dt>
+<dt><a href="com/sca4d/web/realtime/config/NodeRouterMode.html#RABBIT" class="member-name-link">RABBIT</a> - Enum constant in enum class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/NodeRouterMode.html" title="enum class in com.sca4d.web.realtime.config">NodeRouterMode</a></dt>
 <dd>
 <div class="block">当前 JVM 直接投递本机连接，并通过 RabbitMQ 临时队列投递其他节点的连接。</div>
 </dd>
-<dt><a href="com/sca4d/web/realtime/rabbit/RabbitNodeTransport.html" class="type-name-link" title="class in com.sca4d.web.realtime.rabbit">RabbitNodeTransport</a> - Class in <a href="com/sca4d/web/realtime/rabbit/package-summary.html">com.sca4d.web.realtime.rabbit</a></dt>
+<dt><a href="com/sca4d/web/realtime/rabbit/RabbitNodeRouter.html" class="type-name-link" title="class in com.sca4d.web.realtime.rabbit">RabbitNodeRouter</a> - Class in <a href="com/sca4d/web/realtime/rabbit/package-summary.html">com.sca4d.web.realtime.rabbit</a></dt>
 <dd>
 <div class="block">通过当前节点的临时 RabbitMQ 队列收发允许丢失的 Web Realtime 投递。</div>
 </dd>
-<dt><a href="com/sca4d/web/realtime/rabbit/RabbitNodeTransport.html#%3Cinit%3E(com.sca4d.web.realtime.config.WebRealtimeInfrastructureNames,org.springframework.amqp.rabbit.core.RabbitTemplate,org.springframework.amqp.rabbit.connection.ConnectionFactory,com.sca4d.web.realtime.rabbit.NodeMessageCodec,com.sca4d.web.realtime.connection.LocalConnectionRegistry,com.sca4d.web.realtime.config.WebRealtimeProperties)" class="member-name-link">RabbitNodeTransport(WebRealtimeInfrastructureNames, RabbitTemplate, ConnectionFactory, NodeMessageCodec, LocalConnectionRegistry, WebRealtimeProperties)</a> - Constructor for class com.sca4d.web.realtime.rabbit.<a href="com/sca4d/web/realtime/rabbit/RabbitNodeTransport.html" title="class in com.sca4d.web.realtime.rabbit">RabbitNodeTransport</a></dt>
+<dt><a href="com/sca4d/web/realtime/rabbit/RabbitNodeRouter.html#%3Cinit%3E(com.sca4d.web.realtime.config.WebRealtimeInfrastructureNames,org.springframework.amqp.rabbit.core.RabbitTemplate,org.springframework.amqp.rabbit.connection.ConnectionFactory,com.sca4d.web.realtime.rabbit.NodeMessageCodec,com.sca4d.web.realtime.connection.LocalConnectionRegistry,com.sca4d.web.realtime.config.WebRealtimeProperties)" class="member-name-link">RabbitNodeRouter(WebRealtimeInfrastructureNames, RabbitTemplate, ConnectionFactory, NodeMessageCodec, LocalConnectionRegistry, WebRealtimeProperties)</a> - Constructor for class com.sca4d.web.realtime.rabbit.<a href="com/sca4d/web/realtime/rabbit/RabbitNodeRouter.html" title="class in com.sca4d.web.realtime.rabbit">RabbitNodeRouter</a></dt>
 <dd>
 <div class="block">创建当前 JVM 唯一的节点路由和临时消息监听器。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html" class="type-name-link" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a> - Class in <a href="com/sca4d/web/realtime/connection/package-summary.html">com.sca4d.web.realtime.connection</a></dt>
 <dd>
-<div class="block">使用 Redis Hash、Set 和按租约到期时间排序的 ZSET 保存所有 Web Realtime 共享索引。</div>
+<div class="block">使用 Redis Hash、Set 和按租约到期时间排序的 SET 保存所有 Web Realtime 共享索引。</div>
 </dd>
-<dt><a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,com.sca4d.web.realtime.config.WebRealtimeInfrastructureNames,com.sca4d.web.realtime.config.WebRealtimeProperties,java.time.Clock,com.sca4d.core.spring.redis.RedisBatches)" class="member-name-link">RedisConnectionRegistry(StringRedisTemplate, WebRealtimeInfrastructureNames, WebRealtimeProperties, Clock, RedisBatches)</a> - Constructor for class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a></dt>
-<dd>
-<div class="block">创建使用当前 App 命名空间的共享连接索引。</div>
-</dd>
+<dt><a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,com.sca4d.web.realtime.config.WebRealtimeInfrastructureNames,com.sca4d.web.realtime.config.WebRealtimeProperties,java.time.Clock,com.sca4d.core.spring.redis.RedisBatches)" class="member-name-link">RedisConnectionRegistry(RedisTemplate&lt;Key, String&gt;, WebRealtimeInfrastructureNames, WebRealtimeProperties, Clock, RedisBatches)</a> - Constructor for class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/ticket/RedisTicketService.html" class="type-name-link" title="class in com.sca4d.web.realtime.ticket">RedisTicketService</a> - Class in <a href="com/sca4d/web/realtime/ticket/package-summary.html">com.sca4d.web.realtime.ticket</a></dt>
 <dd>
 <div class="block">把短期一次性 WebSocket 票据保存到 Redis，并在握手时原子读取和删除。</div>
 </dd>
-<dt><a href="com/sca4d/web/realtime/ticket/RedisTicketService.html#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,com.sca4d.core.api.authentication.SessionLifecycle,com.sca4d.web.realtime.config.WebRealtimeInfrastructureNames,com.sca4d.web.realtime.config.WebRealtimeProperties,java.time.Clock)" class="member-name-link">RedisTicketService(StringRedisTemplate, SessionLifecycle, WebRealtimeInfrastructureNames, WebRealtimeProperties, Clock)</a> - Constructor for class com.sca4d.web.realtime.ticket.<a href="com/sca4d/web/realtime/ticket/RedisTicketService.html" title="class in com.sca4d.web.realtime.ticket">RedisTicketService</a></dt>
+<dt><a href="com/sca4d/web/realtime/ticket/RedisTicketService.html#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,com.sca4d.core.api.authentication.SessionLifecycle,com.sca4d.web.realtime.config.WebRealtimeInfrastructureNames,com.sca4d.web.realtime.config.WebRealtimeProperties,java.time.Clock)" class="member-name-link">RedisTicketService(RedisTemplate&lt;Key, String&gt;, SessionLifecycle, WebRealtimeInfrastructureNames, WebRealtimeProperties, Clock)</a> - Constructor for class com.sca4d.web.realtime.ticket.<a href="com/sca4d/web/realtime/ticket/RedisTicketService.html" title="class in com.sca4d.web.realtime.ticket">RedisTicketService</a></dt>
 <dd>
 <div class="block">创建一次性票据签发和消费服务。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html#register(com.sca4d.core.api.connection.Connection)" class="member-name-link">register(Connection)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a></dt>
 <dd>
-<div class="block">登记不包含身份展开信息的公共连接事实。</div>
+<div class="block">登记不包含身份展开信息的公共连接信息。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html#register(com.sca4d.core.api.connection.ConnectionId,java.lang.String,com.sca4d.core.api.authentication.Session)" class="member-name-link">register(ConnectionId, String, Session)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a></dt>
 <dd>
@@ -460,7 +505,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html#remove(com.sca4d.core.api.connection.ConnectionId)" class="member-name-link">remove(ConnectionId)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a></dt>
 <dd>
-<div class="block">删除公共连接事实。</div>
+<div class="block">删除公共连接信息。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/connection/LocalConnectionRegistry.html#renew()" class="member-name-link">renew()</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/LocalConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">LocalConnectionRegistry</a></dt>
 <dd>
@@ -477,15 +522,15 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:S">S</h2>
 <dl class="index">
-<dt><a href="com/sca4d/web/realtime/connection/LocalNodeTransport.html#send(java.lang.String,java.util.List,com.sca4d.web.realtime.connection.ConnectionDelivery)" class="member-name-link">send(String, List&lt;ConnectionId&gt;, ConnectionDelivery)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/LocalNodeTransport.html" title="class in com.sca4d.web.realtime.connection">LocalNodeTransport</a></dt>
+<dt><a href="com/sca4d/web/realtime/connection/LocalNodeRouter.html#send(java.lang.String,java.util.List,com.sca4d.web.realtime.connection.BrowserWrite)" class="member-name-link">send(String, List&lt;ConnectionId&gt;, BrowserWrite)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/LocalNodeRouter.html" title="class in com.sca4d.web.realtime.connection">LocalNodeRouter</a></dt>
 <dd>
-<div class="block">只投递当前 JVM 持有的连接；其他节点的租约等待 Redis 自动清理。</div>
+<div class="block">只投递当前 JVM 持有的连接；其他节点的连接由 Redis 按租约自动清理。</div>
 </dd>
-<dt><a href="com/sca4d/web/realtime/connection/NodeTransport.html#send(java.lang.String,java.util.List,com.sca4d.web.realtime.connection.ConnectionDelivery)" class="member-name-link">send(String, List&lt;ConnectionId&gt;, ConnectionDelivery)</a> - Method in interface com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/NodeTransport.html" title="interface in com.sca4d.web.realtime.connection">NodeTransport</a></dt>
+<dt><a href="com/sca4d/web/realtime/connection/NodeRouter.html#send(java.lang.String,java.util.List,com.sca4d.web.realtime.connection.BrowserWrite)" class="member-name-link">send(String, List&lt;ConnectionId&gt;, BrowserWrite)</a> - Method in interface com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/NodeRouter.html" title="interface in com.sca4d.web.realtime.connection">NodeRouter</a></dt>
 <dd>
 <div class="block">把同一浏览器事件发送给指定节点持有的连接。</div>
 </dd>
-<dt><a href="com/sca4d/web/realtime/rabbit/RabbitNodeTransport.html#send(java.lang.String,java.util.List,com.sca4d.web.realtime.connection.ConnectionDelivery)" class="member-name-link">send(String, List&lt;ConnectionId&gt;, ConnectionDelivery)</a> - Method in class com.sca4d.web.realtime.rabbit.<a href="com/sca4d/web/realtime/rabbit/RabbitNodeTransport.html" title="class in com.sca4d.web.realtime.rabbit">RabbitNodeTransport</a></dt>
+<dt><a href="com/sca4d/web/realtime/rabbit/RabbitNodeRouter.html#send(java.lang.String,java.util.List,com.sca4d.web.realtime.connection.BrowserWrite)" class="member-name-link">send(String, List&lt;ConnectionId&gt;, BrowserWrite)</a> - Method in class com.sca4d.web.realtime.rabbit.<a href="com/sca4d/web/realtime/rabbit/RabbitNodeRouter.html" title="class in com.sca4d.web.realtime.rabbit">RabbitNodeRouter</a></dt>
 <dd>
 <div class="block">向持有指定连接的节点发送一条非持久、短 TTL 事件。</div>
 </dd>
@@ -495,11 +540,21 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html#setAllowedOrigins(java.util.List)" class="member-name-link">setAllowedOrigins(List&lt;String&gt;)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html#setChannelQueueCapacity(int)" class="member-name-link">setChannelQueueCapacity(int)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Stomp</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html#setChannelQueueMaxBytes(int)" class="member-name-link">setChannelQueueMaxBytes(int)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Stomp</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html#setChannelWorkerCount(int)" class="member-name-link">setChannelWorkerCount(int)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Stomp</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Relay.html#setClientLogin(java.lang.String)" class="member-name-link">setClientLogin(String)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Relay.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Relay</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Relay.html#setClientPasscode(java.lang.String)" class="member-name-link">setClientPasscode(String)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Relay.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Relay</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html#setConnectionQueueCapacity(int)" class="member-name-link">setConnectionQueueCapacity(int)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html#setConnectionQueueCapacity(int)" class="member-name-link">setConnectionQueueCapacity(int)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Stomp</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html#setConnectionQueueMaxBytes(int)" class="member-name-link">setConnectionQueueMaxBytes(int)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Stomp.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Stomp</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html#setHeartbeatInterval(java.time.Duration)" class="member-name-link">setHeartbeatInterval(Duration)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a></dt>
 <dd>&nbsp;</dd>
@@ -515,7 +570,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html#setNodeMessageTtl(java.time.Duration)" class="member-name-link">setNodeMessageTtl(Duration)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html#setNodeTransport(com.sca4d.web.realtime.config.NodeTransportMode)" class="member-name-link">setNodeTransport(NodeTransportMode)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a></dt>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html#setNodeTransport(com.sca4d.web.realtime.config.NodeRouterMode)" class="member-name-link">setNodeTransport(NodeRouterMode)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Relay.html#setPort(int)" class="member-name-link">setPort(int)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Relay.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Relay</a></dt>
 <dd>&nbsp;</dd>
@@ -537,17 +592,19 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html#setTicketTtl(java.time.Duration)" class="member-name-link">setTicketTtl(Duration)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Node.html#setTransport(com.sca4d.web.realtime.config.NodeRouterMode)" class="member-name-link">setTransport(NodeRouterMode)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Node.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Node</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Relay.html#setVirtualHost(java.lang.String)" class="member-name-link">setVirtualHost(String)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Relay.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Relay</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/sse/SseConnections.html" class="type-name-link" title="class in com.sca4d.web.realtime.sse">SseConnections</a> - Class in <a href="com/sca4d/web/realtime/sse/package-summary.html">com.sca4d.web.realtime.sse</a></dt>
 <dd>
 <div class="block">建立 SSE 连接，并用有界队列串行写出浏览器信封和心跳。</div>
 </dd>
-<dt><a href="com/sca4d/web/realtime/sse/SseConnections.html#%3Cinit%3E(com.sca4d.web.realtime.connection.RedisConnectionRegistry,com.sca4d.web.realtime.connection.LocalConnectionRegistry,com.sca4d.web.realtime.connection.NodeTransport,com.sca4d.web.realtime.config.WebRealtimeProperties)" class="member-name-link">SseConnections(RedisConnectionRegistry, LocalConnectionRegistry, NodeTransport, WebRealtimeProperties)</a> - Constructor for class com.sca4d.web.realtime.sse.<a href="com/sca4d/web/realtime/sse/SseConnections.html" title="class in com.sca4d.web.realtime.sse">SseConnections</a></dt>
+<dt><a href="com/sca4d/web/realtime/sse/SseConnections.html#%3Cinit%3E(com.sca4d.web.realtime.connection.RedisConnectionRegistry,com.sca4d.web.realtime.connection.LocalConnectionRegistry,com.sca4d.web.realtime.connection.NodeRouter,com.sca4d.web.realtime.config.WebRealtimeProperties)" class="member-name-link">SseConnections(RedisConnectionRegistry, LocalConnectionRegistry, NodeRouter, WebRealtimeProperties)</a> - Constructor for class com.sca4d.web.realtime.sse.<a href="com/sca4d/web/realtime/sse/SseConnections.html" title="class in com.sca4d.web.realtime.sse">SseConnections</a></dt>
 <dd>
 <div class="block">创建使用共享索引和当前节点临时传输的 SSE 连接入口。</div>
 </dd>
-<dt><a href="com/sca4d/web/realtime/rabbit/RabbitNodeTransport.html#start()" class="member-name-link">start()</a> - Method in class com.sca4d.web.realtime.rabbit.<a href="com/sca4d/web/realtime/rabbit/RabbitNodeTransport.html" title="class in com.sca4d.web.realtime.rabbit">RabbitNodeTransport</a></dt>
+<dt><a href="com/sca4d/web/realtime/rabbit/RabbitNodeRouter.html#start()" class="member-name-link">start()</a> - Method in class com.sca4d.web.realtime.rabbit.<a href="com/sca4d/web/realtime/rabbit/RabbitNodeRouter.html" title="class in com.sca4d.web.realtime.rabbit">RabbitNodeRouter</a></dt>
 <dd>
 <div class="block">启动当前节点临时队列的监听。</div>
 </dd>
@@ -561,11 +618,19 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">选择 Spring STOMP destination 由当前节点还是 RabbitMQ STOMP 插件代理。</div>
 </dd>
+<dt><a href="com/sca4d/web/realtime/stomp/StompChannelDispatcher.html" class="type-name-link" title="class in com.sca4d.web.realtime.stomp">StompChannelDispatcher</a> - Class in <a href="com/sca4d/web/realtime/stomp/package-summary.html">com.sca4d.web.realtime.stomp</a></dt>
+<dd>
+<div class="block">在 Spring 通道分派前预留容量，按连接串行执行一条消息的全部订阅处理器。</div>
+</dd>
+<dt><a href="com/sca4d/web/realtime/stomp/StompChannelDispatcher.html#%3Cinit%3E(java.lang.String,com.sca4d.web.realtime.config.WebRealtimeProperties.Stomp,com.sca4d.web.realtime.stomp.WebSocketSessions)" class="member-name-link">StompChannelDispatcher(String, WebRealtimeProperties.Stomp, WebSocketSessions)</a> - Constructor for class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompChannelDispatcher.html" title="class in com.sca4d.web.realtime.stomp">StompChannelDispatcher</a></dt>
+<dd>
+<div class="block">创建某一方向独立的容量预算、固定工作线程和断连清理监听。</div>
+</dd>
 <dt><a href="com/sca4d/web/realtime/stomp/StompConfiguration.html" class="type-name-link" title="class in com.sca4d.web.realtime.stomp">StompConfiguration</a> - Class in <a href="com/sca4d/web/realtime/stomp/package-summary.html">com.sca4d.web.realtime.stomp</a></dt>
 <dd>
 <div class="block">使用 Spring STOMP 配置 WebSocket 端点、broker 模式和入出站拦截器。</div>
 </dd>
-<dt><a href="com/sca4d/web/realtime/stomp/StompConfiguration.html#%3Cinit%3E(com.sca4d.web.realtime.config.WebRealtimeProperties,com.sca4d.web.realtime.ticket.TicketHandshakeInterceptor,com.sca4d.web.realtime.stomp.WebSocketSessions,com.sca4d.web.realtime.stomp.StompInboundInterceptor,com.sca4d.web.realtime.stomp.StompOutboundInterceptor,com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">StompConfiguration(WebRealtimeProperties, TicketHandshakeInterceptor, WebSocketSessions, StompInboundInterceptor, StompOutboundInterceptor, ObjectMapper)</a> - Constructor for class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompConfiguration.html" title="class in com.sca4d.web.realtime.stomp">StompConfiguration</a></dt>
+<dt><a href="com/sca4d/web/realtime/stomp/StompConfiguration.html#%3Cinit%3E(com.sca4d.web.realtime.config.WebRealtimeProperties,com.sca4d.web.realtime.ticket.TicketHandshakeInterceptor,com.sca4d.web.realtime.stomp.WebSocketSessions,com.sca4d.web.realtime.stomp.StompInboundInterceptor,com.sca4d.web.realtime.stomp.StompOutboundInterceptor,com.fasterxml.jackson.databind.ObjectMapper,com.sca4d.web.realtime.stomp.StompChannelDispatcher,com.sca4d.web.realtime.stomp.StompChannelDispatcher)" class="member-name-link">StompConfiguration(WebRealtimeProperties, TicketHandshakeInterceptor, WebSocketSessions, StompInboundInterceptor, StompOutboundInterceptor, ObjectMapper, StompChannelDispatcher, StompChannelDispatcher)</a> - Constructor for class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompConfiguration.html" title="class in com.sca4d.web.realtime.stomp">StompConfiguration</a></dt>
 <dd>
 <div class="block">创建 Spring STOMP 基础设施配置。</div>
 </dd>
@@ -573,10 +638,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">把 Spring STOMP Session 生命周期接入 ConnectionId、Redis 路由和本机连接句柄。</div>
 </dd>
-<dt><a href="com/sca4d/web/realtime/stomp/StompConnections.html#%3Cinit%3E(com.sca4d.web.realtime.connection.RedisConnectionRegistry,com.sca4d.web.realtime.connection.LocalConnectionRegistry,com.sca4d.web.realtime.connection.NodeTransport,org.springframework.messaging.simp.SimpMessagingTemplate,com.sca4d.web.realtime.stomp.WebSocketSessions)" class="member-name-link">StompConnections(RedisConnectionRegistry, LocalConnectionRegistry, NodeTransport, SimpMessagingTemplate, WebSocketSessions)</a> - Constructor for class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompConnections.html" title="class in com.sca4d.web.realtime.stomp">StompConnections</a></dt>
-<dd>
-<div class="block">创建 Spring STOMP 生命周期到 Web Realtime 连接索引的桥接。</div>
-</dd>
+<dt><a href="com/sca4d/web/realtime/stomp/StompConnections.html#%3Cinit%3E(com.sca4d.web.realtime.connection.RedisConnectionRegistry,com.sca4d.web.realtime.connection.LocalConnectionRegistry,com.sca4d.web.realtime.connection.NodeRouter,org.springframework.messaging.simp.SimpMessagingTemplate,com.sca4d.web.realtime.stomp.WebSocketSessions)" class="member-name-link">StompConnections(RedisConnectionRegistry, LocalConnectionRegistry, NodeRouter, SimpMessagingTemplate, WebSocketSessions)</a> - Constructor for class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompConnections.html" title="class in com.sca4d.web.realtime.stomp">StompConnections</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/stomp/StompInboundInterceptor.html" class="type-name-link" title="class in com.sca4d.web.realtime.stomp">StompInboundInterceptor</a> - Class in <a href="com/sca4d/web/realtime/stomp/package-summary.html">com.sca4d.web.realtime.stomp</a></dt>
 <dd>
 <div class="block">校验 Spring STOMP 入站命令，并在 SUBSCRIBE、SEND 处理期间绑定独立 Call。</div>
@@ -585,31 +648,29 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建 Spring STOMP 入站检查器。</div>
 </dd>
+<dt><a href="com/sca4d/web/realtime/stomp/StompInboundInterceptor.html#%3Cinit%3E(com.sca4d.web.realtime.stomp.StompRateLimits,com.sca4d.web.realtime.connection.RedisConnectionRegistry,java.util.List,java.time.Clock,com.sca4d.core.api.call.CallInvoker)" class="member-name-link">StompInboundInterceptor(StompRateLimits, RedisConnectionRegistry, List&lt;WebRealtimeSubscriptionPolicy&gt;, Clock, CallInvoker)</a> - Constructor for class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompInboundInterceptor.html" title="class in com.sca4d.web.realtime.stomp">StompInboundInterceptor</a></dt>
+<dd>
+<div class="block">创建绑定统一生命周期执行器的 Spring STOMP 入站检查器。</div>
+</dd>
 <dt><a href="com/sca4d/web/realtime/stomp/StompOutboundInterceptor.html" class="type-name-link" title="class in com.sca4d.web.realtime.stomp">StompOutboundInterceptor</a> - Class in <a href="com/sca4d/web/realtime/stomp/package-summary.html">com.sca4d.web.realtime.stomp</a></dt>
 <dd>
 <div class="block">在 Spring 已写出会话失效事件后关闭对应 WebSocket。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/stomp/StompOutboundInterceptor.html#%3Cinit%3E(com.sca4d.web.realtime.stomp.WebSocketSessions)" class="member-name-link">StompOutboundInterceptor(WebSocketSessions)</a> - Constructor for class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompOutboundInterceptor.html" title="class in com.sca4d.web.realtime.stomp">StompOutboundInterceptor</a></dt>
-<dd>
-<div class="block">创建写出完成后的定向关闭处理器。</div>
-</dd>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/stomp/StompRateLimits.html" class="type-name-link" title="class in com.sca4d.web.realtime.stomp">StompRateLimits</a> - Class in <a href="com/sca4d/web/realtime/stomp/package-summary.html">com.sca4d.web.realtime.stomp</a></dt>
 <dd>
 <div class="block">声明 Web Realtime STOMP 各命令的限流额度和业务维度。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/stomp/StompRateLimits.html#%3Cinit%3E(com.sca4d.core.api.concurrent.RateLimiter)" class="member-name-link">StompRateLimits(RateLimiter)</a> - Constructor for class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompRateLimits.html" title="class in com.sca4d.web.realtime.stomp">StompRateLimits</a></dt>
-<dd>
-<div class="block">创建使用脚手架共享令牌桶限流器的 Web Realtime 策略。</div>
-</dd>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/stomp/StompRelayPortCheck.html" class="type-name-link" title="class in com.sca4d.web.realtime.stomp">StompRelayPortCheck</a> - Class in <a href="com/sca4d/web/realtime/stomp/package-summary.html">com.sca4d.web.realtime.stomp</a></dt>
 <dd>
 <div class="block">在 `BROKER_RELAY` 模式启动完成前确认 RabbitMQ STOMP plugin TCP 端口可连接。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/stomp/StompRelayPortCheck.html#%3Cinit%3E(com.sca4d.web.realtime.config.WebRealtimeProperties)" class="member-name-link">StompRelayPortCheck(WebRealtimeProperties)</a> - Constructor for class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/StompRelayPortCheck.html" title="class in com.sca4d.web.realtime.stomp">StompRelayPortCheck</a></dt>
-<dd>
-<div class="block">创建 relay 启动可用性检查。</div>
-</dd>
-<dt><a href="com/sca4d/web/realtime/rabbit/RabbitNodeTransport.html#stop()" class="member-name-link">stop()</a> - Method in class com.sca4d.web.realtime.rabbit.<a href="com/sca4d/web/realtime/rabbit/RabbitNodeTransport.html" title="class in com.sca4d.web.realtime.rabbit">RabbitNodeTransport</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/rabbit/RabbitNodeRouter.html#stop()" class="member-name-link">stop()</a> - Method in class com.sca4d.web.realtime.rabbit.<a href="com/sca4d/web/realtime/rabbit/RabbitNodeRouter.html" title="class in com.sca4d.web.realtime.rabbit">RabbitNodeRouter</a></dt>
 <dd>
 <div class="block">停止当前节点临时队列的监听。</div>
 </dd>
@@ -624,17 +685,9 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html#target(com.sca4d.core.api.webrealtime.WebRealtimeTarget)" class="member-name-link">target(WebRealtimeTarget)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html" title="class in com.sca4d.web.realtime.config">WebRealtimeInfrastructureNames</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/web/realtime/connection/TargetPublisher.html" class="type-name-link" title="class in com.sca4d.web.realtime.connection">TargetPublisher</a> - Class in <a href="com/sca4d/web/realtime/connection/package-summary.html">com.sca4d.web.realtime.connection</a></dt>
-<dd>
-<div class="block">使用 Redis 解析目标连接，并通过当前节点传输发送 Web Realtime 消息。</div>
-</dd>
-<dt><a href="com/sca4d/web/realtime/connection/TargetPublisher.html#%3Cinit%3E(com.sca4d.web.realtime.connection.RedisConnectionRegistry,com.sca4d.web.realtime.connection.NodeTransport,com.sca4d.web.realtime.config.WebRealtimeProperties,java.time.Clock,com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">TargetPublisher(RedisConnectionRegistry, NodeTransport, WebRealtimeProperties, Clock, ObjectMapper)</a> - Constructor for class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/TargetPublisher.html" title="class in com.sca4d.web.realtime.connection">TargetPublisher</a></dt>
-<dd>
-<div class="block">创建浏览器实时消息发布器。</div>
-</dd>
 <dt><a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html#terminateBySession(com.sca4d.core.api.authentication.SessionId,java.lang.String)" class="member-name-link">terminateBySession(SessionId, String)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a></dt>
 <dd>
-<div class="block">删除当前 Session 的全部共享连接事实。</div>
+<div class="block">删除当前 Session 的全部共享连接信息。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html#ticket(java.lang.String)" class="member-name-link">ticket(String)</a> - Method in class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html" title="class in com.sca4d.web.realtime.config">WebRealtimeInfrastructureNames</a></dt>
 <dd>&nbsp;</dd>
@@ -652,14 +705,14 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html#touch(com.sca4d.core.api.connection.ConnectionId,java.time.Instant)" class="member-name-link">touch(ConnectionId, Instant)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a></dt>
 <dd>
-<div class="block">更新公共连接事实的最近活动时间。</div>
+<div class="block">更新公共连接信息的最近活动时间。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:U">U</h2>
 <dl class="index">
 <dt><a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html#unregister(com.sca4d.core.api.connection.ConnectionId)" class="member-name-link">unregister(ConnectionId)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a></dt>
 <dd>
-<div class="block">从全部目标 ZSET 和连接元数据中删除指定连接。</div>
+<div class="block">从全部目标 SET 和连接元数据中删除指定连接。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html#unsubscribe(com.sca4d.core.api.connection.ConnectionId,java.lang.String)" class="member-name-link">unsubscribe(ConnectionId, String)</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/RedisConnectionRegistry.html" title="class in com.sca4d.web.realtime.connection">RedisConnectionRegistry</a></dt>
 <dd>
@@ -680,9 +733,13 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:V">V</h2>
 <dl class="index">
+<dt><a href="com/sca4d/web/realtime/stomp/WebRealtimeProtocol.html#validate()" class="member-name-link">validate()</a> - Static method in class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/WebRealtimeProtocol.html" title="class in com.sca4d.web.realtime.stomp">WebRealtimeProtocol</a></dt>
+<dd>
+<div class="block">校验公开 destination 不重叠，且用户事件订阅与 broker 目标一致。</div>
+</dd>
 <dt><a href="com/sca4d/web/realtime/ticket/WebRealtimeTicket.html#value()" class="member-name-link">value()</a> - Method in class com.sca4d.web.realtime.ticket.<a href="com/sca4d/web/realtime/ticket/WebRealtimeTicket.html" title="class in com.sca4d.web.realtime.ticket">WebRealtimeTicket</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/web/realtime/config/NodeTransportMode.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/NodeTransportMode.html" title="enum class in com.sca4d.web.realtime.config">NodeTransportMode</a></dt>
+<dt><a href="com/sca4d/web/realtime/config/NodeRouterMode.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/NodeRouterMode.html" title="enum class in com.sca4d.web.realtime.config">NodeRouterMode</a></dt>
 <dd>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
 </dd>
@@ -690,7 +747,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
 </dd>
-<dt><a href="com/sca4d/web/realtime/config/NodeTransportMode.html#values()" class="member-name-link">values()</a> - Static method in enum class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/NodeTransportMode.html" title="enum class in com.sca4d.web.realtime.config">NodeTransportMode</a></dt>
+<dt><a href="com/sca4d/web/realtime/config/NodeRouterMode.html#values()" class="member-name-link">values()</a> - Static method in enum class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/NodeRouterMode.html" title="enum class in com.sca4d.web.realtime.config">NodeRouterMode</a></dt>
 <dd>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
@@ -700,6 +757,10 @@ the order they are declared.</div>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
 </dd>
+<dt><a href="com/sca4d/web/realtime/connection/WebRealtimeMessageCodec.html#valueType()" class="member-name-link">valueType()</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/WebRealtimeMessageCodec.html" title="class in com.sca4d.web.realtime.connection">WebRealtimeMessageCodec</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/connection/WebRealtimeMessageCodec.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/WebRealtimeMessageCodec.html" title="class in com.sca4d.web.realtime.connection">WebRealtimeMessageCodec</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:W">W</h2>
 <dl class="index">
@@ -709,21 +770,39 @@ the order they are declared.</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeAutoConfiguration.html#%3Cinit%3E()" class="member-name-link">WebRealtimeAutoConfiguration()</a> - Constructor for class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeAutoConfiguration.html" title="class in com.sca4d.web.realtime.config">WebRealtimeAutoConfiguration</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeEnvironmentPostProcessor.html" class="type-name-link" title="class in com.sca4d.web.realtime.config">WebRealtimeEnvironmentPostProcessor</a> - Class in <a href="com/sca4d/web/realtime/config/package-summary.html">com.sca4d.web.realtime.config</a></dt>
+<dd>
+<div class="block">在 WebSocket 与 STOMP Bean 创建前固定客户端协议路径。</div>
+</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeEnvironmentPostProcessor.html#%3Cinit%3E()" class="member-name-link">WebRealtimeEnvironmentPostProcessor()</a> - Constructor for class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeEnvironmentPostProcessor.html" title="class in com.sca4d.web.realtime.config">WebRealtimeEnvironmentPostProcessor</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html" class="type-name-link" title="class in com.sca4d.web.realtime.config">WebRealtimeInfrastructureNames</a> - Class in <a href="com/sca4d/web/realtime/config/package-summary.html">com.sca4d.web.realtime.config</a></dt>
 <dd>
 <div class="block">为 Web Realtime 的 Redis 键和 RabbitMQ 对象生成无歧义运行时名称。</div>
 </dd>
-<dt><a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html#%3Cinit%3E(com.sca4d.core.api.runtime.RuntimeNamespace)" class="member-name-link">WebRealtimeInfrastructureNames(RuntimeNamespace)</a> - Constructor for class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html" title="class in com.sca4d.web.realtime.config">WebRealtimeInfrastructureNames</a></dt>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html#%3Cinit%3E()" class="member-name-link">WebRealtimeInfrastructureNames()</a> - Constructor for class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeInfrastructureNames.html" title="class in com.sca4d.web.realtime.config">WebRealtimeInfrastructureNames</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/connection/WebRealtimeMessageCodec.html" class="type-name-link" title="class in com.sca4d.web.realtime.connection">WebRealtimeMessageCodec</a> - Class in <a href="com/sca4d/web/realtime/connection/package-summary.html">com.sca4d.web.realtime.connection</a></dt>
 <dd>
-<div class="block">创建仅使用当前应用 `RuntimeNamespace` 的基础设施命名对象。</div>
+<div class="block">把 WebRealtimeMessage 编解码为 RabbitMQ 与 Outbox 使用的稳定 JSON payload。</div>
 </dd>
+<dt><a href="com/sca4d/web/realtime/connection/WebRealtimeMessageCodec.html#%3Cinit%3E(com.fasterxml.jackson.databind.ObjectMapper)" class="member-name-link">WebRealtimeMessageCodec(ObjectMapper)</a> - Constructor for class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/WebRealtimeMessageCodec.html" title="class in com.sca4d.web.realtime.connection">WebRealtimeMessageCodec</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/connection/WebRealtimeMessageHandler.html" class="type-name-link" title="class in com.sca4d.web.realtime.connection">WebRealtimeMessageHandler</a> - Class in <a href="com/sca4d/web/realtime/connection/package-summary.html">com.sca4d.web.realtime.connection</a></dt>
+<dd>
+<div class="block">消费 WebRealtimeMessage，并通过共享索引和 NodeRouter 写入目标浏览器连接缓冲。</div>
+</dd>
+<dt><a href="com/sca4d/web/realtime/connection/WebRealtimeMessageHandler.html#%3Cinit%3E(com.sca4d.web.realtime.connection.RedisConnectionRegistry,com.sca4d.web.realtime.connection.NodeRouter,com.sca4d.web.realtime.config.WebRealtimeProperties,java.time.Clock,com.fasterxml.jackson.databind.ObjectMapper,com.sca4d.web.realtime.connection.WebRealtimeMessageCodec)" class="member-name-link">WebRealtimeMessageHandler(RedisConnectionRegistry, NodeRouter, WebRealtimeProperties, Clock, ObjectMapper, WebRealtimeMessageCodec)</a> - Constructor for class com.sca4d.web.realtime.connection.<a href="com/sca4d/web/realtime/connection/WebRealtimeMessageHandler.html" title="class in com.sca4d.web.realtime.connection">WebRealtimeMessageHandler</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html" class="type-name-link" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a> - Class in <a href="com/sca4d/web/realtime/config/package-summary.html">com.sca4d.web.realtime.config</a></dt>
 <dd>
 <div class="block">配置 Web Realtime 节点传输、租约、SSE、WebSocket 票据、帧限制和 Origin。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html#%3Cinit%3E()" class="member-name-link">WebRealtimeProperties()</a> - Constructor for class com.sca4d.web.realtime.config.<a href="com/sca4d/web/realtime/config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Node.html" class="type-name-link" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Node</a> - Class in <a href="com/sca4d/web/realtime/config/package-summary.html">com.sca4d.web.realtime.config</a></dt>
 <dd>
-<div class="block">创建使用方案默认值的 Web Realtime 配置。</div>
+<div class="block">配置单实例或 RabbitMQ 节点投递方式。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/config/WebRealtimeProperties.Relay.html" class="type-name-link" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Relay</a> - Class in <a href="com/sca4d/web/realtime/config/package-summary.html">com.sca4d.web.realtime.config</a></dt>
 <dd>
@@ -735,7 +814,7 @@ the order they are declared.</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/stomp/WebRealtimeProtocol.html" class="type-name-link" title="class in com.sca4d.web.realtime.stomp">WebRealtimeProtocol</a> - Class in <a href="com/sca4d/web/realtime/stomp/package-summary.html">com.sca4d.web.realtime.stomp</a></dt>
 <dd>
-<div class="block">集中声明浏览器、具体应用和 Web Realtime 模块共同遵守的固定协议值。</div>
+<div class="block">集中声明浏览器、具体应用和 Web Realtime 模块共同遵守的协议值。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/sse/WebRealtimeSseConnector.html" class="type-name-link" title="interface in com.sca4d.web.realtime.sse">WebRealtimeSseConnector</a> - Interface in <a href="com/sca4d/web/realtime/sse/package-summary.html">com.sca4d.web.realtime.sse</a></dt>
 <dd>
@@ -750,9 +829,7 @@ the order they are declared.</div>
 <div class="block">返回给浏览器的一次性 WebSocket 握手票据和到期时间。</div>
 </dd>
 <dt><a href="com/sca4d/web/realtime/ticket/WebRealtimeTicket.html#%3Cinit%3E(java.lang.String,java.time.Instant)" class="member-name-link">WebRealtimeTicket(String, Instant)</a> - Constructor for class com.sca4d.web.realtime.ticket.<a href="com/sca4d/web/realtime/ticket/WebRealtimeTicket.html" title="class in com.sca4d.web.realtime.ticket">WebRealtimeTicket</a></dt>
-<dd>
-<div class="block">创建已经写入共享票据存储的结果。</div>
-</dd>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/web/realtime/ticket/WebRealtimeTicketService.html" class="type-name-link" title="interface in com.sca4d.web.realtime.ticket">WebRealtimeTicketService</a> - Interface in <a href="com/sca4d/web/realtime/ticket/package-summary.html">com.sca4d.web.realtime.ticket</a></dt>
 <dd>
 <div class="block">为已认证 HTTP 请求签发短期且只能消费一次的 WebSocket 握手票据。</div>
@@ -768,7 +845,7 @@ the order they are declared.</div>
 <dt><a href="com/sca4d/web/realtime/stomp/WebSocketSessions.html#%3Cinit%3E()" class="member-name-link">WebSocketSessions()</a> - Constructor for class com.sca4d.web.realtime.stomp.<a href="com/sca4d/web/realtime/stomp/WebSocketSessions.html" title="class in com.sca4d.web.realtime.stomp">WebSocketSessions</a></dt>
 <dd>&nbsp;</dd>
 </dl>
-<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:Q">Q</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a></main>
+<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:Q">Q</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a></main>
 </div>
 </div>
 </body>

@@ -3,19 +3,19 @@ package com.sca4d.auth.federation;
 import org.jetbrains.annotations.Nullable;
 
 /** 外部 Provider 返回的标准化用户资料，不包含 Access Token。 */
-public final class FederatedProfile {
+public class FederatedProfile {
 
-    private final String issuer;
-
-    private final String subject;
+    private final String avatarUrl;
 
     private final String displayName;
 
     private final String email;
 
-    private final boolean emailVerified;
+    private final String issuer;
 
-    private final String avatarUrl;
+    private final String subject;
+
+    private final boolean emailVerified;
 
     /** 创建标准化外部用户资料。 */
     public FederatedProfile(

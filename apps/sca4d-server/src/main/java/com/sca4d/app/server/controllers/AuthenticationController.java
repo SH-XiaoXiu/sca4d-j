@@ -11,7 +11,7 @@ import com.sca4d.auth.password.PasswordProof;
 import com.sca4d.core.api.annotation.AnonymousAccess;
 import com.sca4d.core.api.annotation.RateLimited;
 import com.sca4d.core.api.authentication.AuthenticationSubmission;
-import com.sca4d.core.api.concurrent.RateLimitDimension;
+import com.sca4d.core.api.concurrent.RateLimit;
 import com.sca4d.core.spring.web.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,7 +41,7 @@ public class AuthenticationController {
     /** 使用 Sca4d Server 已配置的账号标识和密码开始登录。 */
     @PostMapping
     @AnonymousAccess
-    @RateLimited(dimensions = RateLimitDimension.IP, permits = 10, windowSeconds = 300)
+@RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
     @Operation(summary = "使用密码开始登录")
     public @NotNull ApiResponse<LoginResultView> password(
             @RequestBody @Valid @NotNull PasswordLoginRequest request) {
@@ -59,7 +59,7 @@ public class AuthenticationController {
     /** 使用 discoverable Passkey assertion 开始登录。 */
     @PostMapping("/passkey")
     @AnonymousAccess
-    @RateLimited(dimensions = RateLimitDimension.IP, permits = 10, windowSeconds = 300)
+@RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
     @Operation(summary = "使用 Passkey 开始登录")
     public @NotNull ApiResponse<LoginResultView> passkey(
             @RequestBody @Valid @NotNull PasskeyProofRequest request) {

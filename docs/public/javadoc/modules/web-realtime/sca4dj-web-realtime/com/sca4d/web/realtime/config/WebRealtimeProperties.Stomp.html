@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static final class </span><span class="element-name type-name-label">WebRealtimeProperties.Stomp</span>
+<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name type-name-label">WebRealtimeProperties.Stomp</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">配置 Spring STOMP broker 模式、写出缓冲和 RabbitMQ STOMP relay。</div>
 </section>
@@ -123,17 +123,47 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../stomp/StompBrokerMode.html" title="enum class in com.sca4d.web.realtime.stomp">StompBrokerMode</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMode()" class="member-name-link">getMode</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getChannelQueueCapacity()" class="member-name-link">getChannelQueueCapacity</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="WebRealtimeProperties.Relay.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Relay</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRelay()" class="member-name-link">getRelay</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getChannelQueueMaxBytes()" class="member-name-link">getChannelQueueMaxBytes</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSendBufferMaxBytes()" class="member-name-link">getSendBufferMaxBytes</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getChannelWorkerCount()" class="member-name-link">getChannelWorkerCount</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSendTimeLimit()" class="member-name-link">getSendTimeLimit</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getConnectionQueueCapacity()" class="member-name-link">getConnectionQueueCapacity</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getConnectionQueueMaxBytes()" class="member-name-link">getConnectionQueueMaxBytes</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../stomp/StompBrokerMode.html" title="enum class in com.sca4d.web.realtime.stomp">StompBrokerMode</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMode()" class="member-name-link">getMode</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="WebRealtimeProperties.Relay.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties.Relay</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRelay()" class="member-name-link">getRelay</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSendBufferMaxBytes()" class="member-name-link">getSendBufferMaxBytes</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSendTimeLimit()" class="member-name-link">getSendTimeLimit</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setChannelQueueCapacity(int)" class="member-name-link">setChannelQueueCapacity</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setChannelQueueMaxBytes(int)" class="member-name-link">setChannelQueueMaxBytes</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setChannelWorkerCount(int)" class="member-name-link">setChannelWorkerCount</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setConnectionQueueCapacity(int)" class="member-name-link">setConnectionQueueCapacity</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setConnectionQueueMaxBytes(int)" class="member-name-link">setConnectionQueueMaxBytes</a><wbr>(int&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setMode(com.sca4d.web.realtime.stomp.StompBrokerMode)" class="member-name-link">setMode</a><wbr>(<a href="../stomp/StompBrokerMode.html" title="enum class in com.sca4d.web.realtime.stomp">StompBrokerMode</a>&nbsp;value)</code></div>
@@ -232,6 +262,86 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - 正数 WebSocket 发送时间限制</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getChannelWorkerCount()">
+<h3>getChannelWorkerCount</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getChannelWorkerCount</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setChannelWorkerCount(int)">
+<h3>setChannelWorkerCount</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setChannelWorkerCount</span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - 1 到 64 个工作线程，入站和出站分别使用独立线程池</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getChannelQueueCapacity()">
+<h3>getChannelQueueCapacity</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getChannelQueueCapacity</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setChannelQueueCapacity(int)">
+<h3>setChannelQueueCapacity</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setChannelQueueCapacity</span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - 1 到 65536 条尚未完成的消息，包含正在执行的消息</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getChannelQueueMaxBytes()">
+<h3>getChannelQueueMaxBytes</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getChannelQueueMaxBytes</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setChannelQueueMaxBytes(int)">
+<h3>setChannelQueueMaxBytes</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setChannelQueueMaxBytes</span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - 1 字节到 1 GiB 的通道载荷预算</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getConnectionQueueCapacity()">
+<h3>getConnectionQueueCapacity</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getConnectionQueueCapacity</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setConnectionQueueCapacity(int)">
+<h3>setConnectionQueueCapacity</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setConnectionQueueCapacity</span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - 1 到 65536 条单连接尚未完成的消息，同时受通道总容量限制</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getConnectionQueueMaxBytes()">
+<h3>getConnectionQueueMaxBytes</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getConnectionQueueMaxBytes</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setConnectionQueueMaxBytes(int)">
+<h3>setConnectionQueueMaxBytes</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setConnectionQueueMaxBytes</span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - 1 字节到 1 GiB 的单连接载荷预算，同时受通道总预算限制</dd>
 </dl>
 </section>
 </li>

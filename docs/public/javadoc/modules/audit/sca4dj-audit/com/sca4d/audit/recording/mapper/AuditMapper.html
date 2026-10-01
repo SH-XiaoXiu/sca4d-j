@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">AuditMapper</span></div>
-<div class="block">追加和查询 audit_record 的最小 SQL 形状。</div>
+<div class="block">读写 `audit_record` 的审计列，并提供按条件统计、分页和单条查询。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -108,12 +108,17 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insert(com.sca4d.audit.recording.mapper.EncodedAuditEntry)" class="member-name-link">insert</a><wbr>(@NotNull <a href="EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a>&nbsp;row)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectById(long)" class="member-name-link">selectById</a><wbr>(long&nbsp;id)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectPage(com.sca4d.audit.query.AuditQuery)" class="member-name-link">selectPage</a><wbr>(@NotNull <a href="../../query/AuditQuery.html" title="class in com.sca4d.audit.query">AuditQuery</a>&nbsp;query)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insertDelivery(com.sca4d.audit.recording.mapper.EncodedAuditEntry)" class="member-name-link">insertDelivery</a><wbr>(@NotNull <a href="EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a>&nbsp;row)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">消息重投时按主键去重，不覆盖首次写入的审计事实。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectById(long)" class="member-name-link">selectById</a><wbr>(long&nbsp;id)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectPage(com.sca4d.audit.query.AuditQuery)" class="member-name-link">selectPage</a><wbr>(@NotNull <a href="../../query/AuditQuery.html" title="class in com.sca4d.audit.query">AuditQuery</a>&nbsp;query)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -137,6 +142,14 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>row</code> - 待追加的审计列值 @return 影响行数</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="insertDelivery(com.sca4d.audit.recording.mapper.EncodedAuditEntry)">
+<h3>insertDelivery</h3>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">insertDelivery</span><wbr><span class="parameters">(@Param("row") @NotNull
+ @NotNull <a href="EncodedAuditEntry.html" title="class in com.sca4d.audit.recording.mapper">EncodedAuditEntry</a>&nbsp;row)</span></div>
+<div class="block">消息重投时按主键去重，不覆盖首次写入的审计事实。</div>
 </section>
 </li>
 <li>

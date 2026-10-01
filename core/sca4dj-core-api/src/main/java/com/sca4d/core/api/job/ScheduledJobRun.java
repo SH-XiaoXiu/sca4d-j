@@ -1,5 +1,6 @@
 package com.sca4d.core.api.job;
 
+import com.sca4d.core.api.id.Id;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,21 +16,20 @@ import java.util.Objects;
  * @param <T> 查询选择的节点输出类型
  */
 @SuppressWarnings("ClassCanBeRecord") // 公共类型遵守项目禁用 record 的兼容规则。
-public final class ScheduledJobRun<T> {
+public class ScheduledJobRun<T> {
 
-    private final @NotNull JobRunId runId;
+    private final @NotNull Id runId;
+
+    private final @Nullable Instant completedAt;
 
     private final @NotNull Instant scheduledAt;
 
     private final @NotNull JobRunStatus status;
 
-    private final @Nullable Instant completedAt;
-
     private final @Nullable T output;
 
-    /** 创建一条已经完成命名空间、Job 定义和计划范围检查的历史记录。 */
     public ScheduledJobRun(
-            @NotNull JobRunId runId,
+            @NotNull Id runId,
             @NotNull Instant scheduledAt,
             @NotNull JobRunStatus status,
             @Nullable Instant completedAt,
@@ -43,7 +43,7 @@ public final class ScheduledJobRun<T> {
 
     /** @return Job run 标识 */
     @Contract(pure = true)
-    public @NotNull JobRunId runId() {
+    public @NotNull Id runId() {
         return runId;
     }
 

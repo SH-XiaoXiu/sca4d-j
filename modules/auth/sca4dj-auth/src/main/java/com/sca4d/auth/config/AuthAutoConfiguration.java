@@ -1,13 +1,15 @@
 package com.sca4d.auth.config;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import cn.dev33.satoken.stp.StpLogic;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.auth.engine.AuthenticationMethods;
 import com.sca4d.auth.engine.RedisAuthenticationAttempts;
 import com.sca4d.auth.engine.attempt.RedisAuthenticationAttemptStore;
 import com.sca4d.auth.jwt.JwtSessionProjection;
 import com.sca4d.auth.session.RedisSessionGeneration;
 import com.sca4d.auth.session.RedisSessionTokenIndex;
+import com.sca4d.auth.session.SaTokenRedisSerialization;
 import com.sca4d.auth.session.SaTokenSessionControl;
 import com.sca4d.auth.session.SaTokenSessionManager;
 import com.sca4d.auth.session.SessionIdentityLoadService;
@@ -25,16 +27,21 @@ import com.sca4d.core.api.authentication.AuthenticationMethod;
 import com.sca4d.core.api.authentication.AuthenticationPolicy;
 import com.sca4d.core.api.authentication.SessionIdentityLoader;
 import com.sca4d.core.api.authentication.SessionInvalidationListener;
+import com.sca4d.core.api.authentication.principalsession.PrincipalCodec;
 import com.sca4d.core.api.authentication.principalsession.PrincipalIdLoader;
 import com.sca4d.core.api.authentication.principalsession.PrincipalLoader;
+import com.sca4d.core.api.authentication.principalsession.ResourceCodec;
 import com.sca4d.core.api.authentication.principalsession.ResourceIdLoader;
 import com.sca4d.core.api.authentication.principalsession.ResourceLoader;
 import com.sca4d.core.api.concurrent.DistributedLock;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.OperationCatalog;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
-import com.sca4d.core.api.setting.Settings;
-import com.sca4d.core.api.setting.SystemSetting;
+import com.sca4d.core.api.setting.access.SettingReader;
+import com.sca4d.core.api.setting.access.SettingWriter;
+import com.sca4d.core.api.setting.definition.SystemSetting;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.core.spring.redis.Sca4djRedis;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.ObjectProvider;
@@ -44,11 +51,12 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.time.Clock;
+import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -58,63 +66,77 @@ import java.util.concurrent.Executors;
 @EnableConfigurationProperties(AuthProperties.class)
 public class AuthAutoConfiguration {
 
+    /** 创建本应用上下文的模块设置，来源由 Spring 显式注入。 */
+    @Bean
+    AuthSettings authSettings(SettingReader<String> reader, SettingWriter<String> writer) {
+        return new AuthSettings(reader, writer);
+    }
+
+    /** 只在官方 Sa-Token Redis DAO 初始化完成后安装内部资源 Key 的序列化器。 */
+    @Bean
+    static SaTokenRedisSerialization saTokenRedisSerialization() {
+        return new SaTokenRedisSerialization();
+    }
+
     /** @return Session 有效期设置 */
     @Bean
-    SystemSetting<java.time.Duration> authSessionTtlSetting() {
-        return AuthSettings.SESSION_TTL;
+    SystemSetting<Duration> authSessionTtlSetting(AuthSettings settings) {
+        return settings.SESSION_TTL;
     }
 
     /** @return 认证尝试有效期设置 */
     @Bean
-    SystemSetting<java.time.Duration> authenticationAttemptTtlSetting() {
-        return AuthSettings.ATTEMPT_TTL;
+    SystemSetting<Duration> authenticationAttemptTtlSetting(AuthSettings settings) {
+        return settings.ATTEMPT_TTL;
     }
 
     /** @return JWT access 有效期设置 */
     @Bean
-    SystemSetting<java.time.Duration> jwtAccessTtlSetting() {
-        return AuthSettings.JWT_ACCESS_TTL;
+    SystemSetting<Duration> jwtAccessTtlSetting(AuthSettings settings) {
+        return settings.JWT_ACCESS_TTL;
     }
 
     @Bean
     SessionCodec sessionCodec(
-            @Sca4djJson ObjectMapper objectMapper,
-            List<com.sca4d.core.api.authentication.principalsession.PrincipalCodec<?>> principalCodecs,
-            List<com.sca4d.core.api.authentication.principalsession.ResourceCodec<?>> resourceCodecs) {
+            @Sca4djJson Sca4djMapper objectMapper,
+            List<PrincipalCodec<?>> principalCodecs,
+            List<ResourceCodec<?>> resourceCodecs) {
         return new SessionCodec(objectMapper, principalCodecs, resourceCodecs);
     }
 
     @Bean
-    OperationResourceCodec operationSessionCodec(@Sca4djJson ObjectMapper objectMapper) {
+    OperationResourceCodec operationSessionCodec(@Sca4djJson Sca4djMapper objectMapper) {
         return new OperationResourceCodec(objectMapper);
     }
 
     @Bean
     RedisSessionGeneration redisSessionGeneration(
-            @Sca4djRedis StringRedisTemplate redis,
-            ObjectProvider<SessionInvalidationListener> listeners,
-            RuntimeNamespace runtimeNamespace) {
+            @Sca4djRedis RedisTemplate<Key, String> redis,
+            ObjectProvider<SessionInvalidationListener> listeners) {
         return new RedisSessionGeneration(
                 redis,
-                () -> listeners.orderedStream().toList(),
-                runtimeNamespace);
-    }
-
-    /** @param redis Redis 字符串操作 @param runtimeNamespace 当前应用的运行时命名空间 @return SessionId 到不透明 Token 的索引 */
-    @Bean
-    RedisSessionTokenIndex redisSessionTokenIndex(
-            @Sca4djRedis StringRedisTemplate redis,
-            RuntimeNamespace runtimeNamespace) {
-        return new RedisSessionTokenIndex(redis, runtimeNamespace);
+                () -> listeners.orderedStream().toList());
     }
 
     /**
-     * @param runtimeNamespace 当前应用的运行时命名空间
+     * 创建 SessionId 到不透明 Token 的索引。
+     *
+     * @param redis Redis 字符串操作
+     * @param resourceNames 当前 App 隔离名称下的资源名称
+     * @return SessionId 到不透明 Token 的索引
+     */
+    @Bean
+    RedisSessionTokenIndex redisSessionTokenIndex(
+            @Sca4djRedis RedisTemplate<Key, String> redis) {
+        return new RedisSessionTokenIndex(redis);
+    }
+
+    /**
      * @return 保留 HTTP Token 名称并按应用隔离 Redis 数据的 Sa-Token 逻辑
      */
     @Bean
-    StpLogic sca4djStpLogic(RuntimeNamespace runtimeNamespace) {
-        return new StpLogic(runtimeNamespace.sca4dj("auth"));
+    StpLogic sca4djStpLogic() {
+        return new StpLogic(Key.of(TreeCode.ofSegment("AUTH")).format(COLON));
     }
 
     /**
@@ -213,7 +235,7 @@ public class AuthAutoConfiguration {
     JwtSessionProjection jwtSessionProjection(
             SessionCodec codec,
             AuthProperties properties,
-            Settings settings,
+            AuthSettings settings,
             Clock clock) {
         return new JwtSessionProjection(codec, properties, settings, clock);
     }
@@ -225,12 +247,11 @@ public class AuthAutoConfiguration {
 
     @Bean
     RedisAuthenticationAttemptStore redisAuthenticationAttemptStore(
-            @Sca4djRedis StringRedisTemplate redis,
-            @Sca4djJson ObjectMapper objectMapper,
+            @Sca4djRedis RedisTemplate<Key, String> redis,
+            @Sca4djJson Sca4djMapper objectMapper,
             Clock clock,
-            RuntimeNamespace runtimeNamespace,
             DistributedLock distributedLock) {
-        return new RedisAuthenticationAttemptStore(redis, objectMapper, clock, runtimeNamespace, distributedLock);
+        return new RedisAuthenticationAttemptStore(redis, objectMapper, clock, distributedLock);
     }
 
     @Bean
@@ -239,7 +260,7 @@ public class AuthAutoConfiguration {
             AuthenticationMethods methods,
             RedisAuthenticationAttemptStore attempts,
             AuthenticationPolicy policy,
-            Settings settings,
+            AuthSettings settings,
             Clock clock) {
         return new RedisAuthenticationAttempts(
                 methods,
@@ -258,7 +279,7 @@ public class AuthAutoConfiguration {
             ResourceIdLoaders resourceIds,
             SaTokenSessionManager sessions,
             JwtSessionProjection tokenProjection,
-            Settings settings,
+            AuthSettings settings,
             Clock clock) {
         return new SessionService(
                 identities,

@@ -7,15 +7,15 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 返回匿名调用方可以安全读取的 Challenge 标识、脱敏提示和时间边界。 */
-public final class EmailCodeChallenge {
+public class EmailCodeChallenge {
 
     private final @NotNull EmailCodeChallengeId challengeId;
-
-    private final @NotNull String maskedRecipient;
 
     private final @NotNull Instant expiresAt;
 
     private final @NotNull Instant resendAt;
+
+    private final @NotNull String maskedRecipient;
 
     /**
      * @param challengeId Challenge 标识

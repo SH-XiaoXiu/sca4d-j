@@ -1,6 +1,10 @@
 # 认证与会话
 
-认证确认调用者可以使用哪个 Account。登录所需的验证完成后，应用建立 Session，后续请求使用 Token 恢复登录状态、选择业务身份并检查权限。修改密码等敏感操作可以再次要求认证，验证通过后执行对应动作。
+认证验证调用者能否使用某个 Account，Session 保存登录结果，Token 用于后续请求恢复这份结果。接入登录时，用 `AuthenticationAttempts` 完成所需验证，再用 `SessionLifecycle` 建立 Session；业务请求仍须选择 Principal 并检查权限。
+
+修改密码等敏感操作可以再次要求认证。认证通过只证明满足验证要求，目标业务动作仍由应用执行；实际请求顺序见[认证与 Session 教程](/tutorials/authentication-and-session)。
+
+## 认证组件怎样协作
 
 应用通过 AuthenticationPolicy 决定需要哪些认证因素；`sca4dj-auth` 组织认证尝试并管理 Session；Password、TOTP、Passkey、验证码和联邦登录等模块验证各自的认证材料。
 
@@ -51,7 +55,7 @@ flowchart LR
     Online[Session Token 请求] --> Backing
 ```
 
-`sca4dj.auth.token-mode` 默认为 `SESSION`。JWT 模式需要具体应用提供 issuer、audience 和独立 HS256 密钥。普通 JWT 请求不在线检查注销、账号停用、权限变化或 Operation 目录变化；旧 JWT 最多继续有效到自身过期。要求在线状态的接口使用 [RequireSessionToken](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/authentication/RequireSessionToken.html)。
+`sca4dj.auth.token.mode` 默认为 `SESSION`。JWT 模式需要具体应用提供 issuer、audience 和独立 HS256 密钥。普通 JWT 请求不在线检查注销、账号停用、权限变化或 Operation 目录变化；旧 JWT 最多继续有效到自身过期。要求在线状态的接口使用 [RequireSessionToken](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/authentication/RequireSessionToken.html)。
 
 ## Session 生命周期与账号控制
 
@@ -67,7 +71,7 @@ Session 变化后，Auth 调用 [SessionInvalidationListener](/javadoc/core/sca4
 
 ## Session JSON
 
-[SessionCodec](/javadoc/modules/auth/sca4dj-auth/com/sca4d/auth/session/codec/SessionCodec.html) 保存格式版本、Session 标识、Subject、Account、Authentication、时间和每个完整 Principal/Resource 的 type/Base64 payload。紧凑 Principal ID 按 Principal Codec type 保存，数字 Resource ID 按 Resource type 保存；两者都使用 Base64 包装的 Roaring64 portable payload。开放类型字段由各模块 Codec 或业务 Resource 类型负责，Auth 不依赖 IAM 或 IoT 实现类。
+[SessionCodec](/javadoc/modules/auth/sca4dj-auth/com/sca4d/auth/session/codec/SessionCodec.html) 保存 V1 格式版本、Session 标识、Subject、Account、Authentication、时间和每个完整 Principal/Resource 的 type、payload version 与 Base64 payload。紧凑 Principal ID 按 Principal Codec type 和 version 保存，数字 Resource ID 按 Resource type 和 version 保存；两者都使用 V1 的 Base64 包装 Roaring64 portable payload。未来结构变化由版本 Codec 和手工迁移链处理，正常读取不会改写旧数据。开放类型字段由各模块 Codec 或业务 Resource 类型负责，Auth 不依赖 IAM 或 IoT 实现类。
 
 解码失败时不返回部分 Session。HTTP View、前端字段或本地化不能直接改变 Session wire。
 

@@ -14,8 +14,8 @@ class ResourceReferenceTest {
     @Test
     @DisplayName("相同类型和标识的资源引用相等")
     void referencesWithTheSameTypeAndIdAreEqual() {
-        ResourceReference first = new ResourceReference("file", "12");
-        ResourceReference second = new ResourceReference("file", "12");
+        ResourceReference first = new ResourceReference("FILE/RESOURCE", "12");
+        ResourceReference second = new ResourceReference("FILE/RESOURCE", "12");
 
         assertEquals(first, second);
         assertEquals(first.hashCode(), second.hashCode());
@@ -24,7 +24,7 @@ class ResourceReferenceTest {
     @Test
     @DisplayName("资源引用不与其他 Resource 实现跨类型相等")
     void doesNotCompareEqualToAnotherResourceImplementation() {
-        Object reference = new ResourceReference("account", "12");
+        Object reference = new ResourceReference("ACCOUNT/RESOURCE", "12");
         Object file = new Account(12L, 13L, new RealmKey("test"));
 
         assertNotEquals(reference, file);

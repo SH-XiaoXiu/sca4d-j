@@ -5,8 +5,12 @@ import type {
   EmailSender,
   EmailTemplate,
   EmailTemplateInput,
+  EmailTemplateSource,
+  EmailTemplatePage,
   Int64String,
   LocaleCatalog,
+  NotificationRichTextNode,
+  NotificationTemplateContent,
   PreviewEmailTemplateInput,
   RenderedEmail,
   ReplaceEmailSenderInput,
@@ -31,9 +35,12 @@ export interface EmailTemplatesState {
   readonly detailEtag: null | string;
   readonly error: AdminError | null;
   readonly localeCatalog: LocaleCatalog | null;
+  readonly page: number;
   readonly phase: ResourcePhase;
   readonly preview: RenderedEmail | null;
+  readonly size: number;
   readonly templates: readonly EmailTemplate[];
+  readonly total: number;
 }
 
 /** 管理 SMTP 配置、密码修改语义、启用状态和连接测试。 */
@@ -210,9 +217,12 @@ export class EmailTemplatesController extends ObservableController<EmailTemplate
       detailEtag: null,
       error: null,
       localeCatalog: null,
+      page: 1,
       phase: 'idle',
       preview: null,
+      size: 20,
       templates: Object.freeze([]),
+      total: 0,
     });
   }
 
@@ -236,9 +246,9 @@ export class EmailTemplatesController extends ObservableController<EmailTemplate
     try {
       const result = await this.api.post<EmailTemplate>(
         '/system/email/templates',
-        input,
+        normalizeTemplateInput(input),
       );
-      await this.load();
+      await this.load(1, this.state.size);
       return freezeTemplate(result.data);
     } catch (error) {
       this.mutationFailed(error);
@@ -261,20 +271,34 @@ export class EmailTemplatesController extends ObservableController<EmailTemplate
     }
   }
 
-  /** 同时读取模板列表和应用 Locale；空列表仍允许创建模板。 */
-  async load(): Promise<void> {
+  /** 同时读取指定模板页和应用 Locale；空列表仍允许创建模板。 */
+  async load(page = this.state.page, size = this.state.size): Promise<void> {
     this.publish({ ...this.state, error: null, phase: 'loading' });
     try {
       const [templates, locales] = await Promise.all([
-        this.api.get<readonly EmailTemplate[]>('/system/email/templates'),
+        this.api.get<EmailTemplatePage>('/system/email/templates', {
+          page,
+          size,
+        }),
         this.api.get<LocaleCatalog>('/system/locales'),
       ]);
+      if (
+        templates.data.items.length === 0 &&
+        templates.data.total > 0 &&
+        page > 1
+      ) {
+        await this.load(page - 1, size);
+        return;
+      }
       this.publish({
         ...this.state,
         error: null,
         localeCatalog: freezeLocaleCatalog(locales.data),
+        page: templates.data.page,
         phase: 'ready',
-        templates: Object.freeze(templates.data.map(freezeTemplate)),
+        size: templates.data.size,
+        templates: Object.freeze(templates.data.items.map(freezeTemplate)),
+        total: templates.data.total,
       });
     } catch (error) {
       this.loadFailed(error);
@@ -287,7 +311,7 @@ export class EmailTemplatesController extends ObservableController<EmailTemplate
     try {
       const result = await this.api.post<RenderedEmail>(
         '/system/email/templates/previews',
-        input,
+        normalizePreviewInput(input),
       );
       const preview = Object.freeze({ ...result.data });
       this.publish({ ...this.state, error: null, preview });
@@ -325,7 +349,7 @@ export class EmailTemplatesController extends ObservableController<EmailTemplate
     try {
       const result = await this.api.put<EmailTemplate>(
         templatePath(detail.templateId),
-        input,
+        normalizeTemplateInput(input),
         { 'If-Match': etag },
       );
       if (!result.etag) throw new Error('Email template response has no ETag');
@@ -395,11 +419,78 @@ function freezeSender(sender: EmailSender): EmailSender {
 
 /** 冻结模板、多语言富文本和变量集合。 */
 function freezeTemplate(template: EmailTemplate): EmailTemplate {
+  const content = template.content ?? contentFromLocales(template.locales ?? {});
+  const locales = template.locales ?? sourcesFromContent(content);
   return Object.freeze({
     ...template,
-    content: freezeTemplateContent(template.content),
+    content: freezeTemplateContent(content),
+    locales: Object.freeze({ ...locales }),
     variables: Object.freeze([...template.variables]),
   });
+}
+
+function normalizeTemplateInput(input: EmailTemplateInput) {
+  if (input.locales) return input;
+  if (!input.content) throw new Error('Email template content is missing');
+  return { notificationCode: input.notificationCode, locales: sourcesFromContent(input.content) };
+}
+
+function normalizePreviewInput(input: PreviewEmailTemplateInput) {
+  if (input.source) {
+    return { source: input.source, languageTag: input.languageTag, variables: input.variables };
+  }
+  if (!input.content) throw new Error('Email preview content is missing');
+  const source = sourcesFromContent(input.content)[input.languageTag];
+  if (!source) throw new Error(`Email preview locale is missing: ${input.languageTag}`);
+  return { source, languageTag: input.languageTag, variables: input.variables };
+}
+
+function sourcesFromContent(
+  content: NotificationTemplateContent,
+): Readonly<Record<string, EmailTemplateSource>> {
+  return Object.fromEntries(
+    Object.entries(content).map(([locale, value]) => [
+      locale,
+      {
+        html: htmlFromNode(value.body),
+        subject: textFromNode(value.title),
+        text: textFromNode(value.body),
+      },
+    ]),
+  );
+}
+
+function contentFromLocales(
+  locales: Readonly<Record<string, EmailTemplateSource>>,
+): NotificationTemplateContent {
+  return Object.fromEntries(
+    Object.entries(locales).map(([locale, source]) => [
+      locale,
+      { body: documentFromText(source.text), title: documentFromText(source.subject) },
+    ]),
+  );
+}
+
+function documentFromText(text: string): NotificationRichTextNode {
+  return {
+    content: [{ content: [{ text, type: 'text' }], type: 'paragraph' }],
+    type: 'doc',
+  };
+}
+
+function textFromNode(node: NotificationRichTextNode): string {
+  if (node.type === 'text') return node.text ?? '';
+  if (node.type === 'notificationVariable') return `{{${String(node.attrs?.name ?? '')}}}`;
+  if (node.type === 'hardBreak') return '\n';
+  return (node.content ?? []).map(textFromNode).join('');
+}
+
+function htmlFromNode(node: NotificationRichTextNode): string {
+  return textFromNode(node)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('\n', '<br>');
 }
 
 /** 递归冻结统一通知模板，避免页面改写 Controller 状态。 */

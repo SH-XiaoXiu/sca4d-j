@@ -13,7 +13,7 @@ import java.util.Objects;
  *
  * <p>没有策略认领或多个策略同时认领都属于配置错误，不能默认允许，也不能按未定义的先后顺序选择策略。
  */
-public final class PermissionAssessment {
+public class PermissionAssessment {
 
     private static final Logger LOG = LoggerFactory.getLogger(PermissionAssessment.class);
 
@@ -43,7 +43,7 @@ public final class PermissionAssessment {
         if (call.principal().isEmpty()) {
             throw new IllegalStateException("权限判断前必须完成业务主体选择");
         }
-        // 资源必须由唯一策略处理，避免同一 Permission 得到相互冲突的判断结果。
+        // 一个资源只能由一个策略认领；判断只执行一次。
         List<PermissionPolicy> claimed = policies.stream()
                 .filter(policy -> policy.supports(permission.resource()))
                 .toList();

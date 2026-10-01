@@ -65,7 +65,9 @@ async function mockAuthenticationApi(
           json: success({
             authentication: {
               attemptId: 'attempt-1',
-              availableMethods: options.requireTotp ? ['totp'] : [],
+              availableMethods: options.requireTotp
+                ? ['AUTHENTICATION/TOTP']
+                : [],
               expiresAt: '2099-01-01T01:05:00.000Z',
               remainingFactorCount: options.requireTotp ? 1 : 0,
               status: options.requireTotp ? 'FACTOR_REQUIRED' : 'SATISFIED',
@@ -328,9 +330,9 @@ async function mockPasskeyLifecycleApi(page: Page): Promise<void> {
           json: success({
             loginFactorCount: 2,
             methods: [
-              methodSettings('password'),
-              methodSettings('totp'),
-              methodSettings('passkey'),
+              methodSettings('AUTHENTICATION/PASSWORD'),
+              methodSettings('AUTHENTICATION/TOTP'),
+              methodSettings('AUTHENTICATION/PASSKEY'),
             ],
             reusableAuthenticationMaximumAgeSeconds: '1',
             sensitiveActionFactorCount: 2,
@@ -381,8 +383,8 @@ async function mockPasskeyLifecycleApi(page: Page): Promise<void> {
           ? 'verification-register'
           : 'verification-delete';
         const methods = actionCode.endsWith('.register')
-          ? ['password']
-          : ['password'];
+          ? ['AUTHENTICATION/PASSWORD']
+          : ['AUTHENTICATION/PASSWORD'];
         await route.fulfill({
           contentType: 'application/json',
           json: success(

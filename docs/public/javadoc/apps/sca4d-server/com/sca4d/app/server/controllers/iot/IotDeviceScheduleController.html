@@ -90,10 +90,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="annotations">@RestController
-@ConditionalOnProperty(prefix="app.iot.capabilities",
-                       name="api",
-                       havingValue="true",
-                       matchIfMissing=true)
+@ConditionalOnCapability("IOT:API")
 @RequestMapping("/iot/devices/{deviceId}/schedules")
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">IotDeviceScheduleController</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
@@ -201,7 +198,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="create(long,com.sca4d.app.server.iot.request.IotDeviceScheduleRequest)">
 <h3>create</h3>
 <div class="member-signature"><span class="annotations">@PostMapping
-@RequirePermission(operation="iot:devices:operate")
+@RequirePermission(operation="IOT:DEVICES:OPERATE")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../iot/view/IotDeviceScheduleView.html" title="class in com.sca4d.app.server.iot.view">IotDeviceScheduleView</a>&gt;</span>&nbsp;<span class="element-name">create</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;deviceId,
@@ -217,7 +214,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="findAll(long,com.sca4d.core.api.query.PageRequest)">
 <h3>findAll</h3>
 <div class="member-signature"><span class="annotations">@GetMapping
-@RequirePermission(operation="iot:devices:read")
+@RequirePermission(operation="IOT:DEVICES:READ")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;com.sca4d.core.api.query.Page&lt;<a href="../../iot/view/IotDeviceScheduleView.html" title="class in com.sca4d.app.server.iot.view">IotDeviceScheduleView</a>&gt;&gt;</span>&nbsp;<span class="element-name">findAll</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;deviceId,
@@ -233,7 +230,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="get(long,long)">
 <h3>get</h3>
 <div class="member-signature"><span class="annotations">@GetMapping("/{scheduleId}")
-@RequirePermission(operation="iot:devices:read")
+@RequirePermission(operation="IOT:DEVICES:READ")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../iot/view/IotDeviceScheduleView.html" title="class in com.sca4d.app.server.iot.view">IotDeviceScheduleView</a>&gt;</span>&nbsp;<span class="element-name">get</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;deviceId,
@@ -249,7 +246,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="replace(long,long,com.sca4d.app.server.iot.request.IotDeviceScheduleRequest)">
 <h3>replace</h3>
 <div class="member-signature"><span class="annotations">@PutMapping("/{scheduleId}")
-@RequirePermission(operation="iot:devices:operate")
+@RequirePermission(operation="IOT:DEVICES:OPERATE")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../iot/view/IotDeviceScheduleView.html" title="class in com.sca4d.app.server.iot.view">IotDeviceScheduleView</a>&gt;</span>&nbsp;<span class="element-name">replace</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;deviceId,
@@ -267,7 +264,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="changeStatus(long,long,com.sca4d.app.server.iot.request.IotDeviceScheduleStatusRequest)">
 <h3>changeStatus</h3>
 <div class="member-signature"><span class="annotations">@PatchMapping("/{scheduleId}/status")
-@RequirePermission(operation="iot:devices:operate")
+@RequirePermission(operation="IOT:DEVICES:OPERATE")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../iot/view/IotDeviceScheduleView.html" title="class in com.sca4d.app.server.iot.view">IotDeviceScheduleView</a>&gt;</span>&nbsp;<span class="element-name">changeStatus</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;deviceId,
@@ -285,7 +282,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="cancel(long,long,long)">
 <h3>cancel</h3>
 <div class="member-signature"><span class="annotations">@DeleteMapping("/{scheduleId}")
-@RequirePermission(operation="iot:devices:operate")
+@RequirePermission(operation="IOT:DEVICES:OPERATE")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">cancel</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;deviceId,
@@ -300,7 +297,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="executions(long,long,com.sca4d.core.api.query.PageRequest)">
 <h3>executions</h3>
 <div class="member-signature"><span class="annotations">@GetMapping("/{scheduleId}/executions")
-@RequirePermission(operation="iot:devices:read")
+@RequirePermission(operation="IOT:DEVICES:READ")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;com.sca4d.core.api.query.Page&lt;<a href="../../iot/view/IotDeviceScheduleExecutionView.html" title="class in com.sca4d.app.server.iot.view">IotDeviceScheduleExecutionView</a>&gt;&gt;</span>&nbsp;<span class="element-name">executions</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;deviceId,

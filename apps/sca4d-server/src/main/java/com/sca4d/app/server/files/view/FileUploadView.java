@@ -11,7 +11,7 @@ import java.util.Objects;
 
 /** 返回客户端必须原样执行的短期上传请求。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
-public final class FileUploadView {
+public class FileUploadView {
 
     private final long fileId;
 

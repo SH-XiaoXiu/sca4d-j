@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /** 保存一次 Passkey assertion ceremony 标识和浏览器返回的 WebAuthn JSON。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class PasskeyProof {
+public class PasskeyProof {
 
     private final PasskeyCeremonyId ceremonyId;
 
@@ -24,12 +24,20 @@ public final class PasskeyProof {
         this.responseJson = TextUtils.requireText(responseJson, "Passkey assertion 响应");
     }
 
-    /** 返回 assertion ceremony 标识。 */
+    /**
+     * assertion ceremony 标识。
+     *
+     * @return assertion ceremony 标识
+     */
     public @NotNull PasskeyCeremonyId ceremonyId() {
         return ceremonyId;
     }
 
-    /** 返回浏览器提供且不得持久化或记录的 WebAuthn assertion JSON。 */
+    /**
+     * 浏览器提供且不得持久化或记录的 WebAuthn assertion JSON。
+     *
+     * @return 浏览器提供且不得持久化或记录的 WebAuthn assertion JSON
+     */
     public @NotNull String responseJson() {
         return responseJson;
     }

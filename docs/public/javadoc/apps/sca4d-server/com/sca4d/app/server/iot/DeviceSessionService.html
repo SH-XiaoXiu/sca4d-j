@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="annotations">@Service
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">DeviceSessionService</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">使用 Device HMAC 认证结果建立 Sca4d Server 的通用 Session。</div>
+<div class="block">使用 Device MAC 认证结果建立 Sca4d Server 的通用 Session。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -109,7 +109,7 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.auth.engine.AuthenticationMethods&nbsp;authenticationMethods,
  @NotNull com.sca4d.core.api.authentication.SessionLifecycle&nbsp;sessions)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建 Device HMAC Session 服务。</div>
+<div class="block">创建 Device MAC Session 服务。</div>
 </div>
 </div>
 </section>
@@ -129,7 +129,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#establish(com.sca4d.app.server.iot.HmacCanonicalRequest,java.lang.String)" class="member-name-link">establish</a><wbr>(@NotNull <a href="HmacCanonicalRequest.html" title="class in com.sca4d.app.server.iot">HmacCanonicalRequest</a>&nbsp;request,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;signature)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">验证 Device HTTP HMAC canonical request 并建立 Session。</div>
+<div class="block">验证 Device HTTP MAC canonical request 并建立 Session。</div>
 </div>
 </div>
 </div>
@@ -159,7 +159,7 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.auth.engine.AuthenticationMethods&nbsp;authenticationMethods,
  @NotNull
  @NotNull com.sca4d.core.api.authentication.SessionLifecycle&nbsp;sessions)</span></div>
-<div class="block">创建 Device HMAC Session 服务。</div>
+<div class="block">创建 Device MAC Session 服务。</div>
 </section>
 </li>
 </ul>
@@ -179,11 +179,11 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="HmacCanonicalRequest.html" title="class in com.sca4d.app.server.iot">HmacCanonicalRequest</a>&nbsp;request,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;signature)</span></div>
-<div class="block">验证 Device HTTP HMAC canonical request 并建立 Session。</div>
+<div class="block">验证 Device HTTP MAC canonical request 并建立 Session。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>request</code> - 已按 Sca4d Server HTTP 规则规范化的请求</dd>
-<dd><code>signature</code> - 无填充 Base64URL HMAC-SHA256</dd>
+<dd><code>signature</code> - 无填充 Base64URL MAC-SHA256</dd>
 <dt>Returns:</dt>
 <dd>新建 Session 和仅返回一次的 Token</dd>
 </dl>

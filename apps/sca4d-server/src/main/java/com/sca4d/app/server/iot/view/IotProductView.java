@@ -1,5 +1,7 @@
 package com.sca4d.app.server.iot.view;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import com.sca4d.app.server.iot.IotProductDetails;
 import com.sca4d.app.server.iot.IotProductProfile;
 import com.sca4d.app.server.iot.IotProfileStatus;
@@ -16,7 +18,7 @@ import java.util.Objects;
 
 /** 返回 Sca4d Server 管理 Product 所需的公共定义和 App 启停状态。 */
 @SuppressWarnings("unused")
-public final class IotProductView extends BaseView {
+public class IotProductView extends BaseView {
 
     private final long id;
 
@@ -43,7 +45,7 @@ public final class IotProductView extends BaseView {
         this.displayName = product.code();
         this.accessMethods = product.accessMethods()
                 .stream()
-                .map(com.sca4d.iot.api.DeviceAccessMethod::code)
+                .map(method -> method.code().format(COLON))
                 .sorted()
                 .toList();
         this.protocolCodes = product.protocolCodes().stream().sorted().toList();

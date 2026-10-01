@@ -15,7 +15,7 @@ import java.util.Map;
 
 /** 接收创建或完整替换 Device 定时规则的 command、触发时间和有效期。 */
 @SuppressWarnings("unused") // Jackson 通过 setter 绑定 HTTP 请求字段。
-public final class IotDeviceScheduleRequest {
+public class IotDeviceScheduleRequest {
 
     private long version;
 

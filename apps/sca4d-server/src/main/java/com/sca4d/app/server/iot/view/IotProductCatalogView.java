@@ -1,5 +1,7 @@
 package com.sca4d.app.server.iot.view;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sca4d.app.server.iot.IotProductCatalogItem;
 import com.sca4d.app.server.iot.IotProductProfile;
@@ -25,7 +27,7 @@ import java.util.Objects;
 
 /** 返回双来源 Product 目录和创建表单允许使用的技术选项。 */
 @SuppressWarnings("unused")
-public final class IotProductCatalogView {
+public class IotProductCatalogView {
 
     private final @NotNull List<ProductItem> products;
 
@@ -45,7 +47,7 @@ public final class IotProductCatalogView {
             @NotNull Collection<DeviceAccessMethod> accessMethods,
             @NotNull Collection<DeviceProtocol> protocols) {
         this.products = products.getItems().stream().map(ProductItem::from).toList();
-        this.accessMethods = accessMethods.stream().map(DeviceAccessMethod::code).sorted().toList();
+        this.accessMethods = accessMethods.stream().map(method -> method.code().format(COLON)).sorted().toList();
         this.protocolCodes = protocols.stream().map(DeviceProtocol::code).sorted().toList();
         this.page = products.getPage();
         this.size = products.getSize();
@@ -95,7 +97,7 @@ public final class IotProductCatalogView {
     }
 
     /** 返回一个数据库或代码 Product 的本地化管理投影。 */
-    public static final class ProductItem extends BaseView {
+    public static class ProductItem extends BaseView {
 
         @JsonInclude(JsonInclude.Include.ALWAYS)
         private final @Nullable Long id;
@@ -136,7 +138,7 @@ public final class IotProductCatalogView {
             this.localizedDisplayName = definition.displayName();
             this.accessMethods = definition.accessMethods()
                     .stream()
-                    .map(DeviceAccessMethod::code)
+                    .map(method -> method.code().format(COLON))
                     .sorted()
                     .toList();
             this.protocolCodes = definition.protocolCodes().stream().sorted().toList();

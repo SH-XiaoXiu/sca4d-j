@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * <p>只依赖 logger 名，不读取 Logback 调用栈或运行时上下文；具体应用可以传入自己的根包，复用同一套规则。
  */
-public final class LogSourceFormatter {
+public class LogSourceFormatter {
 
     private LogSourceFormatter() {
     }

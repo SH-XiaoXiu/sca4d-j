@@ -1,6 +1,7 @@
 package com.sca4d.app.server.platform.request;
 
 import com.sca4d.core.api.i18n.LocalizedFields;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.spring.validation.Req;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -16,7 +17,7 @@ import java.util.Objects;
 /** 接收完整示例 App 创建 Platform 角色及初始 ACTION 的请求。 */
 @Schema(name = "CreatePlatformRoleRequest")
 @SuppressWarnings("unused") // Jackson 通过 JavaBean setter 反序列化请求。
-public final class CreateRoleRequest {
+public class CreateRoleRequest {
 
     @NotBlank
     @Size(max = 128)
@@ -70,6 +71,11 @@ public final class CreateRoleRequest {
      */
     public @NotNull @Unmodifiable List<@NotNull String> getPermissionCodes() {
         return List.copyOf(Objects.requireNonNull(permissionCodes, "权限编码不能为空"));
+    }
+
+    /** @return 已校验并规范化的初始 ACTION 编码 */
+    public @NotNull @Unmodifiable List<@NotNull TreeCode> getPermissionCodeTrees() {
+        return getPermissionCodes().stream().map(TreeCode::ofColon).toList();
     }
 
     /**

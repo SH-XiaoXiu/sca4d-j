@@ -7,7 +7,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 返回调用方可以安全读取的 SMS Challenge 标识、脱敏提示和时间边界。 */
-public final class SmsCodeChallenge {
+public class SmsCodeChallenge {
     private final @NotNull SmsCodeChallengeId challengeId;
 
     private final @NotNull String maskedRecipient;
@@ -16,7 +16,12 @@ public final class SmsCodeChallenge {
 
     private final @NotNull Instant resendAt;
 
-    /** 创建安全 Challenge 响应。 */
+    /**
+     * @param challengeId 短期 Challenge 标识
+     * @param maskedRecipient 脱敏后的接收目标
+     * @param expiresAt Challenge 到期时间
+     * @param resendAt 允许再次发送验证码的时间
+     */
     public SmsCodeChallenge(
             @NotNull SmsCodeChallengeId challengeId,
             @NotNull String maskedRecipient,
@@ -28,21 +33,25 @@ public final class SmsCodeChallenge {
         this.resendAt = Objects.requireNonNull(resendAt, "重发时间不能为空");
     }
 
+    /** @return 短期 Challenge 标识 */
     @Contract(pure = true)
     public @NotNull SmsCodeChallengeId challengeId() {
         return challengeId;
     }
 
+    /** @return 脱敏后的接收目标 */
     @Contract(pure = true)
     public @NotNull String maskedRecipient() {
         return maskedRecipient;
     }
 
+    /** @return Challenge 到期时间 */
     @Contract(pure = true)
     public @NotNull Instant expiresAt() {
         return expiresAt;
     }
 
+    /** @return 允许再次发送验证码的时间 */
     @Contract(pure = true)
     public @NotNull Instant resendAt() {
         return resendAt;

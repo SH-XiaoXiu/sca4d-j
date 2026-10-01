@@ -1,3 +1,5 @@
 com.sca4d.notification.inbox
 com.sca4d.notification.inbox.config
 com.sca4d.notification.inbox.mapper
+com.sca4d.notification.inbox.template
+com.sca4d.notification.inbox.template.mapper

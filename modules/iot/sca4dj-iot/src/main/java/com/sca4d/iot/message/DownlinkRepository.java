@@ -9,7 +9,8 @@ import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.iot.api.message.DeviceAcknowledgement;
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
+import com.sca4d.iot.api.message.DeviceDownlink;
+import com.sca4d.iot.api.message.DeviceDownlinkKind;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
 import com.sca4d.iot.api.query.DesiredStateSnapshot;
 import com.sca4d.iot.model.ThingDataJsonCodec;
@@ -42,15 +43,15 @@ public class DownlinkRepository {
             DeviceDownlinkStatus.SENDING,
             DeviceDownlinkStatus.WAITING_ACK);
 
-    private final @NotNull DeviceDownlinkMapper messages;
-
     private final @NotNull DesiredPropertyMapper desired;
 
-    private final @NotNull ThingDataJsonCodec json;
+    private final @NotNull DeviceDownlinkMapper messages;
 
     private final @NotNull DevicePolicyCatalog policies;
 
     private final @NotNull SqlBatches sqlBatches;
+
+    private final @NotNull ThingDataJsonCodec json;
 
     /**
      * @param messages 下行消息 SQL Mapper
@@ -105,7 +106,7 @@ public class DownlinkRepository {
                                     json.decodeValue(value.valueJson()),
                                     value.convergedAt())));
         }
-        return java.util.Collections.unmodifiableMap(result);
+        return Collections.unmodifiableMap(result);
     }
 
     /** 当 desired sequence 仍等于预期值时更新它。 */
@@ -162,7 +163,7 @@ public class DownlinkRepository {
                 null,
                 deviceId,
                 bindingGeneration,
-                com.sca4d.iot.api.message.DeviceDownlinkKind.DESIRED,
+                DeviceDownlinkKind.DESIRED,
                 propertyCode,
                 ACTIVE_STATUSES,
                 null,
@@ -176,8 +177,8 @@ public class DownlinkRepository {
 
     /** 保存一条标准下行消息。 */
     @AffectedRows(target = "新增下行消息")
-    public void add(@NotNull DeviceDownlinkMessage message) {
-        DeviceDownlinkMessage checked = Objects.requireNonNull(message, "下行消息不能为空");
+    public void add(@NotNull DeviceDownlink message) {
+        DeviceDownlink checked = Objects.requireNonNull(message, "下行消息不能为空");
         messages.insertDownlinkMessage(
                 checked.messageId(),
                 checked.deviceId(),
@@ -196,8 +197,26 @@ public class DownlinkRepository {
 
     /** 按标识查询标准下行消息。 */
     @CheckReturnValue
-    public @NotNull Optional<DeviceDownlinkMessage> find(long messageId) {
+    public @NotNull Optional<DeviceDownlink> find(long messageId) {
         return messages.selectDownlinkMessages(List.of(messageId)).stream().findFirst().map(this::toMessage);
+    }
+
+    /** 分页读取主库保存的指定下行 ACK 投影；主库最多返回一条。 */
+    @CheckReturnValue
+    public @NotNull Page<DeviceAcknowledgement> findAcknowledgementsByMessageId(
+            long messageId,
+            @NotNull PageRequest page) {
+        if (messageId <= 0) {
+            throw new IllegalArgumentException("下行消息标识必须为正数");
+        }
+        PageRequest checked = Objects.requireNonNull(page, "业务回执分页要求不能为空").verifyMaxSize(100);
+        if (checked.page() != 1) {
+            return Page.empty(checked);
+        }
+        EncodedDeviceAcknowledgement row = messages.selectAcknowledgementByMessageId(messageId);
+        return row == null
+                ? Page.empty(checked)
+                : new Page<>(List.of(toAcknowledgement(row)), checked, 1);
     }
 
     /**
@@ -207,7 +226,7 @@ public class DownlinkRepository {
      * @return 不可修改映射；不存在的消息不进入结果
      */
     @CheckReturnValue
-    public @NotNull @Unmodifiable Map<@NotNull Long, @NotNull DeviceDownlinkMessage> findAll(
+    public @NotNull @Unmodifiable Map<@NotNull Long, @NotNull DeviceDownlink> findAll(
             @NotNull Collection<@NotNull Long> messageIds) {
         LinkedHashSet<Long> uniqueIds = new LinkedHashSet<>();
         Objects.requireNonNull(messageIds, "下行消息标识不能为空")
@@ -215,7 +234,7 @@ public class DownlinkRepository {
         if (uniqueIds.isEmpty()) {
             return Map.of();
         }
-        LinkedHashMap<Long, DeviceDownlinkMessage> result = new LinkedHashMap<>();
+        LinkedHashMap<Long, DeviceDownlink> result = new LinkedHashMap<>();
         sqlBatches.query(uniqueIds, 1, 0, messages::selectDownlinkMessages)
                 .stream()
                 .map(this::toMessage)
@@ -239,12 +258,12 @@ public class DownlinkRepository {
 
     /** 分页读取 Device 下行消息。 */
     @CheckReturnValue
-    public @NotNull Page<DeviceDownlinkMessage> findDownlinks(
+    public @NotNull Page<DeviceDownlink> findDownlinks(
             long deviceId,
             @NotNull PageRequest page) {
-        PageRequest checked = Objects.requireNonNull(page, "下行分页要求不能为空").requireMaxSize(100);
+        PageRequest checked = Objects.requireNonNull(page, "下行分页要求不能为空").verifyMaxSize(100);
         long total = messages.countDeviceDownlinks(deviceId);
-        List<DeviceDownlinkMessage> items = total == 0
+        List<DeviceDownlink> items = total == 0
                 ? List.of()
                 : messages.selectDeviceDownlinks(deviceId, checked.offset(), checked.size())
                         .stream()
@@ -258,7 +277,7 @@ public class DownlinkRepository {
     public @NotNull Page<DeviceAcknowledgement> findAcknowledgements(
             long deviceId,
             @NotNull PageRequest page) {
-        PageRequest checked = Objects.requireNonNull(page, "业务回执分页要求不能为空").requireMaxSize(100);
+        PageRequest checked = Objects.requireNonNull(page, "业务回执分页要求不能为空").verifyMaxSize(100);
         long total = messages.countLatestAcknowledgements(deviceId);
         List<DeviceAcknowledgement> items = total == 0
                 ? List.of()
@@ -456,9 +475,9 @@ public class DownlinkRepository {
     }
 
     /** 将下行消息查询结果转换成包含具体策略实例的领域消息。 */
-    private DeviceDownlinkMessage toMessage(EncodedDownlinkMessage row) {
+    private DeviceDownlink toMessage(EncodedDownlinkMessage row) {
         Long desiredSequence = row.desiredSequence();
-        return new DeviceDownlinkMessage(
+        return new DeviceDownlink(
                 row.messageId(),
                 row.deviceId(),
                 row.bindingGeneration(),

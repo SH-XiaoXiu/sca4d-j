@@ -77,6 +77,8 @@ loadScripts(document, 'script');</script>
 <li><a href="com/sca4d/app/server/platform/package-tree.html">com.sca4d.app.server.platform</a>, </li>
 <li><a href="com/sca4d/app/server/platform/request/package-tree.html">com.sca4d.app.server.platform.request</a>, </li>
 <li><a href="com/sca4d/app/server/platform/view/package-tree.html">com.sca4d.app.server.platform.view</a>, </li>
+<li><a href="com/sca4d/app/server/plugin/package-tree.html">com.sca4d.app.server.plugin</a>, </li>
+<li><a href="com/sca4d/app/server/plugin/mfa/package-tree.html">com.sca4d.app.server.plugin.mfa</a>, </li>
 <li><a href="com/sca4d/app/server/preference/package-tree.html">com.sca4d.app.server.preference</a>, </li>
 <li><a href="com/sca4d/app/server/preference/request/package-tree.html">com.sca4d.app.server.preference.request</a>, </li>
 <li><a href="com/sca4d/app/server/preference/view/package-tree.html">com.sca4d.app.server.preference.view</a>, </li>
@@ -84,7 +86,8 @@ loadScripts(document, 'script');</script>
 <li><a href="com/sca4d/app/server/service/package-tree.html">com.sca4d.app.server.service</a>, </li>
 <li><a href="com/sca4d/app/server/system/package-tree.html">com.sca4d.app.server.system</a>, </li>
 <li><a href="com/sca4d/app/server/system/request/package-tree.html">com.sca4d.app.server.system.request</a>, </li>
-<li><a href="com/sca4d/app/server/system/view/package-tree.html">com.sca4d.app.server.system.view</a></li>
+<li><a href="com/sca4d/app/server/system/view/package-tree.html">com.sca4d.app.server.system.view</a>, </li>
+<li><a href="db/migration/package-tree.html">db.migration</a></li>
 </ul>
 <section class="hierarchy">
 <h2 title="Class Hierarchy">Class Hierarchy</h2>
@@ -93,13 +96,14 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingConfiguration.html" class="type-name-link" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettingConfiguration</a></li>
 <li class="circle">com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AccountAuthenticationSettings.html" class="type-name-link" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a></li>
-<li class="circle">com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingsCodec.html" class="type-name-link" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettingsCodec</a> (implements com.sca4d.core.api.setting.SettingCodec&lt;T&gt;)</li>
+<li class="circle">com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingsCodec.html" class="type-name-link" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettingsCodec</a> (implements com.sca4d.core.api.setting.codec.SettingCodec&lt;T&gt;)</li>
 <li class="circle">com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/AccountAuthenticationSettingsController.html" class="type-name-link" title="class in com.sca4d.app.server.controllers">AccountAuthenticationSettingsController</a></li>
 <li class="circle">com.sca4d.app.server.platform.view.<a href="com/sca4d/app/server/platform/view/AccountRolesView.html" class="type-name-link" title="class in com.sca4d.app.server.platform.view">AccountRolesView</a></li>
 <li class="circle">com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/ActionAuthenticationService.html" class="type-name-link" title="class in com.sca4d.app.server.service">ActionAuthenticationService</a></li>
 <li class="circle">com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/ActionAuthenticationWebConfiguration.html" class="type-name-link" title="class in com.sca4d.app.server.authentication">ActionAuthenticationWebConfiguration</a></li>
 <li class="circle">com.sca4d.app.server.preference.<a href="com/sca4d/app/server/preference/AdminPreferenceConfiguration.html" class="type-name-link" title="class in com.sca4d.app.server.preference">AdminPreferenceConfiguration</a></li>
 <li class="circle">com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/AppIotProperties.html" class="type-name-link" title="class in com.sca4d.app.server.iot">AppIotProperties</a></li>
+<li class="circle">com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/AppIotProperties.Emqx.html" class="type-name-link" title="class in com.sca4d.app.server.iot">AppIotProperties.Emqx</a></li>
 <li class="circle">com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/AppIotRealtime.html" class="type-name-link" title="class in com.sca4d.app.server.iot">AppIotRealtime</a> (implements com.sca4d.iot.api.change.DeviceChangePublisher, com.sca4d.web.realtime.stomp.WebRealtimeSubscriptionPolicy)</li>
 <li class="circle">com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/ApplicationAuditValues.html" class="type-name-link" title="class in com.sca4d.app.server.audit">ApplicationAuditValues</a></li>
 <li class="circle">com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/ApplicationAuditValues.DictionaryMutationDetails.html" class="type-name-link" title="class in com.sca4d.app.server.audit">ApplicationAuditValues.DictionaryMutationDetails</a> (implements com.sca4d.core.api.audit.AuditPayloadFactory)</li>
@@ -115,6 +119,11 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.app.server.authentication.view.<a href="com/sca4d/app/server/authentication/view/AuthenticationMethodSettingsView.html" class="type-name-link" title="class in com.sca4d.app.server.authentication.view">AuthenticationMethodSettingsView</a></li>
 <li class="circle">com.sca4d.app.server.authentication.view.<a href="com/sca4d/app/server/authentication/view/AuthenticationProgressView.html" class="type-name-link" title="class in com.sca4d.app.server.authentication.view">AuthenticationProgressView</a></li>
 <li class="circle">com.sca4d.app.server.authentication.view.<a href="com/sca4d/app/server/authentication/view/AuthenticationSettingsView.html" class="type-name-link" title="class in com.sca4d.app.server.authentication.view">AuthenticationSettingsView</a></li>
+<li class="circle">org.flywaydb.core.api.migration.BaseJavaMigration (implements org.flywaydb.core.api.migration.JavaMigration)
+<ul>
+<li class="circle">db.migration.<a href="db/migration/V13__normalize_setting_codes.html" class="type-name-link" title="class in db.migration">V13__normalize_setting_codes</a></li>
+</ul>
+</li>
 <li class="circle">com.sca4d.core.spring.web.view.BaseView
 <ul>
 <li class="circle">com.sca4d.app.server.system.view.<a href="com/sca4d/app/server/system/view/DictionarySelectionView.Option.html" class="type-name-link" title="class in com.sca4d.app.server.system.view">DictionarySelectionView.Option</a></li>
@@ -133,11 +142,6 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.app.server.system.view.<a href="com/sca4d/app/server/system/view/SystemDictionariesView.Option.html" class="type-name-link" title="class in com.sca4d.app.server.system.view">SystemDictionariesView.Option</a></li>
 <li class="circle">com.sca4d.app.server.system.view.<a href="com/sca4d/app/server/system/view/SystemSettingsView.Group.html" class="type-name-link" title="class in com.sca4d.app.server.system.view">SystemSettingsView.Group</a></li>
 <li class="circle">com.sca4d.app.server.system.view.<a href="com/sca4d/app/server/system/view/SystemSettingsView.Item.html" class="type-name-link" title="class in com.sca4d.app.server.system.view">SystemSettingsView.Item</a></li>
-</ul>
-</li>
-<li class="circle">com.sca4d.core.spring.call.CallHandlerInterceptor (implements org.springframework.web.servlet.HandlerInterceptor)
-<ul>
-<li class="circle">com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/ActionAuthenticationInterceptor.html" class="type-name-link" title="class in com.sca4d.app.server.authentication">ActionAuthenticationInterceptor</a></li>
 </ul>
 </li>
 <li class="circle">com.sca4d.app.server.platform.request.<a href="com/sca4d/app/server/platform/request/ChangeRoleAccountsRequest.html" class="type-name-link" title="class in com.sca4d.app.server.platform.request">ChangeRoleAccountsRequest</a></li>
@@ -184,7 +188,9 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.app.server.controllers.system.<a href="com/sca4d/app/server/controllers/system/EmailSenderController.html" class="type-name-link" title="class in com.sca4d.app.server.controllers.system">EmailSenderController</a></li>
 <li class="circle">com.sca4d.app.server.system.view.<a href="com/sca4d/app/server/system/view/EmailSenderView.html" class="type-name-link" title="class in com.sca4d.app.server.system.view">EmailSenderView</a></li>
 <li class="circle">com.sca4d.app.server.controllers.system.<a href="com/sca4d/app/server/controllers/system/EmailTemplateController.html" class="type-name-link" title="class in com.sca4d.app.server.controllers.system">EmailTemplateController</a></li>
+<li class="circle">com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/EmailTemplateManagementService.html" class="type-name-link" title="class in com.sca4d.app.server.system">EmailTemplateManagementService</a></li>
 <li class="circle">com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/EmailTemplateRequest.html" class="type-name-link" title="class in com.sca4d.app.server.system.request">EmailTemplateRequest</a></li>
+<li class="circle">com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/EmailTemplateSourceRequest.html" class="type-name-link" title="class in com.sca4d.app.server.system.request">EmailTemplateSourceRequest</a></li>
 <li class="circle">com.sca4d.app.server.system.view.<a href="com/sca4d/app/server/system/view/EmailTemplateView.html" class="type-name-link" title="class in com.sca4d.app.server.system.view">EmailTemplateView</a></li>
 <li class="circle">com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/EmqxAuthenticationCallback.html" class="type-name-link" title="class in com.sca4d.app.server.iot">EmqxAuthenticationCallback</a> (implements com.sca4d.core.api.gateway.GatewayCallback&lt;I,<wbr>O&gt;)</li>
 <li class="circle">com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/EmqxCallbackAuthenticator.html" class="type-name-link" title="class in com.sca4d.app.server.iot">EmqxCallbackAuthenticator</a></li>
@@ -203,6 +209,11 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.app.server.files.<a href="com/sca4d/app/server/files/FileResourceResolver.html" class="type-name-link" title="class in com.sca4d.app.server.files">FileResourceResolver</a> (implements com.sca4d.core.api.call.CallValueResolver&lt;T&gt;)</li>
 <li class="circle">com.sca4d.app.server.files.view.<a href="com/sca4d/app/server/files/view/FileUploadView.html" class="type-name-link" title="class in com.sca4d.app.server.files.view">FileUploadView</a></li>
 <li class="circle">com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/HmacCanonicalRequest.html" class="type-name-link" title="class in com.sca4d.app.server.iot">HmacCanonicalRequest</a></li>
+<li class="circle">com.sca4d.core.spring.web.HttpCallHandlerInterceptor (implements org.springframework.web.servlet.HandlerInterceptor)
+<ul>
+<li class="circle">com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/ActionAuthenticationInterceptor.html" class="type-name-link" title="class in com.sca4d.app.server.authentication">ActionAuthenticationInterceptor</a></li>
+</ul>
+</li>
 <li class="circle">com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/InboxController.html" class="type-name-link" title="class in com.sca4d.app.server.controllers">InboxController</a></li>
 <li class="circle">com.sca4d.app.server.notification.view.<a href="com/sca4d/app/server/notification/view/InboxMessageView.html" class="type-name-link" title="class in com.sca4d.app.server.notification.view">InboxMessageView</a></li>
 <li class="circle">com.sca4d.app.server.notification.view.<a href="com/sca4d/app/server/notification/view/InboxPageView.html" class="type-name-link" title="class in com.sca4d.app.server.notification.view">InboxPageView</a></li>
@@ -269,6 +280,9 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/ManagedDictionaryOption.html" class="type-name-link" title="class in com.sca4d.app.server.system">ManagedDictionaryOption</a></li>
 <li class="circle">com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/ManagedSetting.html" class="type-name-link" title="class in com.sca4d.app.server.system">ManagedSetting</a></li>
 <li class="circle">com.sca4d.app.server.notification.request.<a href="com/sca4d/app/server/notification/request/MarkInboxReadRequest.html" class="type-name-link" title="class in com.sca4d.app.server.notification.request">MarkInboxReadRequest</a></li>
+<li class="circle">com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaFactsService.html" class="type-name-link" title="class in com.sca4d.app.server.plugin.mfa">MfaFactsService</a> (implements com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaFacts.html" title="interface in com.sca4d.app.server.plugin.mfa">MfaFacts</a>)</li>
+<li class="circle">com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaMethodFacts.html" class="type-name-link" title="class in com.sca4d.app.server.plugin.mfa">MfaMethodFacts</a></li>
+<li class="circle">com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaSettings.html" class="type-name-link" title="class in com.sca4d.app.server.plugin.mfa">MfaSettings</a></li>
 <li class="circle">com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/NotificationSettingsController.html" class="type-name-link" title="class in com.sca4d.app.server.controllers">NotificationSettingsController</a></li>
 <li class="circle">com.sca4d.app.server.notification.<a href="com/sca4d/app/server/notification/NotificationSettingsService.html" class="type-name-link" title="class in com.sca4d.app.server.notification">NotificationSettingsService</a></li>
 <li class="circle">com.sca4d.app.server.notification.<a href="com/sca4d/app/server/notification/NotificationSettingsSnapshot.html" class="type-name-link" title="class in com.sca4d.app.server.notification">NotificationSettingsSnapshot</a></li>
@@ -314,6 +328,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.app.server.repository.<a href="com/sca4d/app/server/repository/PlatformUserProfileRepository.html" class="type-name-link" title="class in com.sca4d.app.server.repository">PlatformUserProfileRepository</a></li>
 <li class="circle">com.sca4d.app.server.files.<a href="com/sca4d/app/server/files/PlatformUserProfileResourceResolver.html" class="type-name-link" title="class in com.sca4d.app.server.files">PlatformUserProfileResourceResolver</a> (implements com.sca4d.core.api.audit.AuditTargetResolver, com.sca4d.core.api.call.CallValueResolver&lt;T&gt;)</li>
 <li class="circle">com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformUserProfileService.html" class="type-name-link" title="class in com.sca4d.app.server.service">PlatformUserProfileService</a></li>
+<li class="circle">com.sca4d.app.server.plugin.<a href="com/sca4d/app/server/plugin/PluginAuthenticationConfiguration.html" class="type-name-link" title="class in com.sca4d.app.server.plugin">PluginAuthenticationConfiguration</a></li>
 <li class="circle">com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/PreferenceController.html" class="type-name-link" title="class in com.sca4d.app.server.controllers">PreferenceController</a></li>
 <li class="circle">com.sca4d.app.server.preference.<a href="com/sca4d/app/server/preference/PreferenceService.html" class="type-name-link" title="class in com.sca4d.app.server.preference">PreferenceService</a></li>
 <li class="circle">com.sca4d.app.server.preference.view.<a href="com/sca4d/app/server/preference/view/PreferenceView.html" class="type-name-link" title="class in com.sca4d.app.server.preference.view">PreferenceView</a></li>
@@ -343,7 +358,10 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/Sca4dDeviceConnectionAdmission.html" class="type-name-link" title="class in com.sca4d.app.server.iot">Sca4dDeviceConnectionAdmission</a> (implements com.sca4d.iot.api.connection.DeviceConnectionAdmission)</li>
 <li class="circle">com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/Sca4dEmqxDeviceConnectionRequestFactory.html" class="type-name-link" title="class in com.sca4d.app.server.iot">Sca4dEmqxDeviceConnectionRequestFactory</a> (implements com.sca4d.iot.emqx.authentication.EmqxDeviceConnectionRequestFactory)</li>
 <li class="circle">com.sca4d.app.server.<a href="com/sca4d/app/server/Sca4dOpenApiConfiguration.html" class="type-name-link" title="class in com.sca4d.app.server">Sca4dOpenApiConfiguration</a></li>
+<li class="circle">com.sca4d.app.server.plugin.<a href="com/sca4d/app/server/plugin/Sca4dServerPluginConfiguration.html" class="type-name-link" title="class in com.sca4d.app.server.plugin">Sca4dServerPluginConfiguration</a> (implements com.sca4d.core.api.plugin.PluginConfiguration&lt;C&gt;)</li>
+<li class="circle">com.sca4d.app.server.plugin.<a href="com/sca4d/app/server/plugin/Sca4dServerPluginSettings.html" class="type-name-link" title="class in com.sca4d.app.server.plugin">Sca4dServerPluginSettings</a></li>
 <li class="circle">com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/SendTestEmailRequest.html" class="type-name-link" title="class in com.sca4d.app.server.system.request">SendTestEmailRequest</a></li>
+<li class="circle">com.sca4d.app.server.<a href="com/sca4d/app/server/ServerRuntimeConfiguration.html" class="type-name-link" title="class in com.sca4d.app.server">ServerRuntimeConfiguration</a></li>
 <li class="circle">com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/SessionController.html" class="type-name-link" title="class in com.sca4d.app.server.controllers">SessionController</a></li>
 <li class="circle">com.sca4d.app.server.authentication.view.<a href="com/sca4d/app/server/authentication/view/SessionTokensView.html" class="type-name-link" title="class in com.sca4d.app.server.authentication.view">SessionTokensView</a></li>
 <li class="circle">com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/SmsBindingRequest.html" class="type-name-link" title="class in com.sca4d.app.server.system.request">SmsBindingRequest</a></li>
@@ -387,6 +405,8 @@ loadScripts(document, 'script');</script>
 <h2 title="Interface Hierarchy">Interface Hierarchy</h2>
 <ul>
 <li class="circle">com.sca4d.app.server.mapper.<a href="com/sca4d/app/server/mapper/IotApplicationMapper.html" class="type-name-link" title="interface in com.sca4d.app.server.mapper">IotApplicationMapper</a></li>
+<li class="circle">com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaFacts.html" class="type-name-link" title="interface in com.sca4d.app.server.plugin.mfa">MfaFacts</a></li>
+<li class="circle">com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaPolicy.html" class="type-name-link" title="interface in com.sca4d.app.server.plugin.mfa">MfaPolicy</a></li>
 <li class="circle">com.sca4d.app.server.mapper.<a href="com/sca4d/app/server/mapper/PlatformUserProfileMapper.html" class="type-name-link" title="interface in com.sca4d.app.server.mapper">PlatformUserProfileMapper</a></li>
 </ul>
 </section>

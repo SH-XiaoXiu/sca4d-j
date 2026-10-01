@@ -1,11 +1,10 @@
 package com.sca4d.core.spring.config;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.sca4d.core.spring.json.NameJacksonModule;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -23,6 +22,12 @@ public class CoreJacksonAutoConfiguration {
     public CoreJacksonAutoConfiguration() {
     }
 
+    /** 为业务 HTTP Mapper 安装公共名称值类型，不引入 Sca4djMapper 的内部协议配置。 */
+    @Bean
+    public @NotNull NameJacksonModule nameJacksonModule() {
+        return new NameJacksonModule();
+    }
+
     /**
      * 创建脚手架内部 Session wire、Redis 状态和消息共用的 JSON 映射器。
      *
@@ -31,11 +36,8 @@ public class CoreJacksonAutoConfiguration {
     @Bean(name = "sca4djObjectMapper", defaultCandidate = false)
     @Sca4djJson
     @ConditionalOnMissingBean(annotation = Sca4djJson.class)
-    public @NotNull ObjectMapper sca4djObjectMapper() {
-        return new ObjectMapper()
-                .registerModule(new JavaTimeModule())
-                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+    public @NotNull Sca4djMapper sca4djObjectMapper() {
+        return new Sca4djMapper();
     }
 
     /**

@@ -40,7 +40,7 @@ class IotThingModelRequestTest {
     /** 创建包含固定默认翻译和指定 Product code 的发布请求。 */
     private static IotThingModelRequest request(String productCode) {
         ObjectNode model = JsonNodeFactory.instance.objectNode();
-        model.put("formatVersion", 2);
+        model.put("formatVersion", 1);
         model.put("productCode", productCode);
         model.put("version", 1);
         model.putArray("properties");

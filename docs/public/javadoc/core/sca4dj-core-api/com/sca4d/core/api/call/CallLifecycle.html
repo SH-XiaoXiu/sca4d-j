@@ -5,7 +5,7 @@
 <title>CallLifecycle (sca4dj-core-api 0.0.1-alpha API)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="declaration: package: com.sca4d.core.api.call, class: CallLifecycle">
+<meta name="description" content="declaration: package: com.sca4d.core.api.call, enum: CallLifecycle">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../../script-dir/jquery-ui.min.css" title="Style">
@@ -37,17 +37,17 @@ loadScripts(document, 'script');</script>
 <li>
 <p>Summary:</p>
 <ul>
-<li>Nested</li>
+<li><a href="#nested-class-summary">Nested</a></li>
+<li><a href="#enum-constant-summary">Enum Constants</a></li>
 <li>Field</li>
-<li><a href="#constructor-summary">Constr</a></li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
 </li>
 <li>
 <p>Detail:</p>
 <ul>
+<li><a href="#enum-constant-detail">Enum Constants</a></li>
 <li>Field</li>
-<li><a href="#constructor-detail">Constr</a></li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
 </li>
@@ -57,15 +57,15 @@ loadScripts(document, 'script');</script>
 <div id="navbar-sub-list">
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested-class-summary">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#enum-constant-summary">Enum Constants</a>&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
 <ul class="sub-nav-list">
 <li>Detail:&nbsp;</li>
+<li><a href="#enum-constant-detail">Enum Constants</a>&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
 </div>
@@ -82,36 +82,139 @@ loadScripts(document, 'script');</script>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">com.sca4d.core.api.call</a></div>
-<h1 title="Class CallLifecycle" class="title">Class CallLifecycle</h1>
+<h1 title="Enum Class CallLifecycle" class="title">Enum Class CallLifecycle</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
+<div class="inheritance"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">java.lang.Enum</a>&lt;<a href="CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a>&gt;
 <div class="inheritance">com.sca4d.core.api.call.CallLifecycle</div>
 </div>
+</div>
 <section class="class-description" id="class-description">
+<dl class="notes">
+<dt>All Implemented Interfaces:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;<a href="CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/constant/Constable.html" title="class or interface in java.lang.constant" class="external-link">Constable</a></code></dd>
+</dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">CallLifecycle</span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">按固定生命周期执行声明解析结果、调用前评估、执行控制、成功检验和结果记录。
-
- <p>`CallExecution` 在进入本类前已经完成声明解析。本类不会恢复 Session、选择 Principal 或读取业务资源。</div>
+<div class="type-signature"><span class="modifiers">public enum </span><span class="element-name type-name-label">CallLifecycle</span>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;<a href="CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a>&gt;</span></div>
+<div class="block">定义 Call 参与者可以介入的通用生命周期语义。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
-<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<!-- ======== NESTED CLASS SUMMARY ======== -->
 <li>
-<section class="constructor-summary" id="constructor-summary">
-<h2>Constructor Summary</h2>
-<div class="caption"><span>Constructors</span></div>
-<div class="summary-table two-column-summary">
-<div class="table-header col-first">Constructor</div>
+<section class="nested-class-summary" id="nested-class-summary">
+<h2>Nested Class Summary</h2>
+<div class="caption"><span>Nested Classes</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.call.PermissionCallAssessor,com.sca4d.core.api.call.RateLimitedCallAssessor,com.sca4d.core.api.call.IdempotentCallExecutor,com.sca4d.core.api.call.LockedCallExecutor,com.sca4d.core.api.call.AuditCallRecorder)" class="member-name-link">CallLifecycle</a><wbr>(<a href="PermissionCallAssessor.html" title="class in com.sca4d.core.api.call">PermissionCallAssessor</a>&nbsp;permissionAssessor,
- <a href="RateLimitedCallAssessor.html" title="class in com.sca4d.core.api.call">RateLimitedCallAssessor</a>&nbsp;rateLimitedAssessor,
- <a href="IdempotentCallExecutor.html" title="class in com.sca4d.core.api.call">IdempotentCallExecutor</a>&nbsp;idempotentExecutor,
- <a href="LockedCallExecutor.html" title="class in com.sca4d.core.api.call">LockedCallExecutor</a>&nbsp;lockedExecutor,
- <a href="AuditCallRecorder.html" title="class in com.sca4d.core.api.call">AuditCallRecorder</a>&nbsp;auditRecorder)</code></div>
+<div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="CallLifecycle.After.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.After</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">创建固定调用生命周期。</div>
+<div class="block">无论调用成功失败都执行的 finally 语义回调。</div>
+</div>
+<div class="col-first odd-row-color"><code>static interface&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="CallLifecycle.AfterCommit.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.AfterCommit</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">事务成功提交后的回调；提交发生在目标方法返回前，不提供最终 CallOutcome。</div>
+</div>
+<div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="CallLifecycle.AfterReturning.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.AfterReturning</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">只在调用成功返回后执行观察逻辑。</div>
+</div>
+<div class="col-first odd-row-color"><code>static interface&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="CallLifecycle.AfterThrowing.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.AfterThrowing</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">只在调用拒绝或失败后执行观察逻辑。</div>
+</div>
+<div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="CallLifecycle.Around.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">使用 AOP 环绕语义介入调用。实现类的类型即表示其采用 Around 语义。</div>
+</div>
+<div class="col-first odd-row-color"><code>static interface&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="CallLifecycle.AsyncNext.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.AsyncNext</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">在异步生命周期中继续内层处理。</div>
+</div>
+<div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="CallLifecycle.Before.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.Before</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">只在目标调用前执行校验或准备。</div>
+</div>
+<div class="col-first odd-row-color"><code>static interface&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="CallLifecycle.Completion.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.Completion</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Call 最终结束后的清理回调。</div>
+</div>
+<div class="col-first even-row-color"><code>static @interface&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="CallLifecycle.Intercepted.html" class="type-name-link" title="annotation interface in com.sca4d.core.api.call">CallLifecycle.Intercepted</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">标记调用入口或功能注解；功能注解必须由所属功能注册。</div>
+</div>
+<div class="col-first odd-row-color"><code>static interface&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="CallLifecycle.Next.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.Next</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">在当前线程继续内层处理，返回成功、重放、拒绝或失败。</div>
+</div>
+<div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="CallLifecycle.Participant.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.Participant</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">所有生命周期参与者共享的编码和依赖声明。</div>
+</div>
+<div class="col-first odd-row-color"><code>static interface&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="CallLifecycle.PreCommit.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.PreCommit</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">表示业务成功前必须在预提交阶段满足的一项条件。</div>
+</div>
+</div>
+<div class="inherited-list">
+<h2 id="nested-classes-inherited-from-class-java.lang.Enum">Nested classes/interfaces inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a></h2>
+<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.EnumDesc.html" title="class or interface in java.lang" class="external-link">Enum.EnumDesc</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.EnumDesc.html" title="class or interface in java.lang" class="external-link">E</a> extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.EnumDesc.html" title="class or interface in java.lang" class="external-link">E</a>&gt;&gt;</code></div>
+</section>
+</li>
+<!-- =========== ENUM CONSTANT SUMMARY =========== -->
+<li>
+<section class="constants-summary" id="enum-constant-summary">
+<h2>Enum Constant Summary</h2>
+<div class="caption"><span>Enum Constants</span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Enum Constant</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="#AFTER" class="member-name-link">AFTER</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">无论成功失败都执行。</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="#AFTER_COMMIT" class="member-name-link">AFTER_COMMIT</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">在事务成功提交后执行。</div>
+</div>
+<div class="col-first even-row-color"><code><a href="#AFTER_RETURNING" class="member-name-link">AFTER_RETURNING</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">只处理正常返回。</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="#AFTER_THROWING" class="member-name-link">AFTER_THROWING</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">只处理异常结果。</div>
+</div>
+<div class="col-first even-row-color"><code><a href="#AROUND" class="member-name-link">AROUND</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">使用 Next 包围剩余调用，可以短路或观察最终结果。</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="#BEFORE" class="member-name-link">BEFORE</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">在实际方法前校验或准备。</div>
+</div>
+<div class="col-first even-row-color"><code><a href="#COMPLETION" class="member-name-link">COMPLETION</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">在 Call 最终结束时执行清理。</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="#PRE_COMMIT" class="member-name-link">PRE_COMMIT</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">在事务提交前检查条件。</div>
 </div>
 </div>
 </section>
@@ -121,52 +224,97 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#execute(com.sca4d.core.api.call.CallExecution,java.util.concurrent.Callable)" class="member-name-link">execute</a><wbr>(<a href="CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;invocation)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">执行一次已经解析声明的方法调用。</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#valueOf(java.lang.String)" class="member-name-link">valueOf</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Returns the enum constant of this class with the specified name.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a>[]</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#values()" class="member-name-link">values</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Returns an array containing the constants of this enum class, in
+the order they are declared.</div>
 </div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
+<h3 id="methods-inherited-from-class-java.lang.Enum">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a></h3>
+<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html#compareTo(E)" title="class or interface in java.lang" class="external-link">compareTo</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html#describeConstable()" title="class or interface in java.lang" class="external-link">describeConstable</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html#getDeclaringClass()" title="class or interface in java.lang" class="external-link">getDeclaringClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html#name()" title="class or interface in java.lang" class="external-link">name</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html#ordinal()" title="class or interface in java.lang" class="external-link">ordinal</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html#valueOf(java.lang.Class,java.lang.String)" title="class or interface in java.lang" class="external-link">valueOf</a></code></div>
+<div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
-<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
+<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 </section>
 </li>
 </ul>
 </section>
 <section class="details">
 <ul class="details-list">
-<!-- ========= CONSTRUCTOR DETAIL ======== -->
+<!-- ============ ENUM CONSTANT DETAIL =========== -->
 <li>
-<section class="constructor-details" id="constructor-detail">
-<h2>Constructor Details</h2>
+<section class="constant-details" id="enum-constant-detail">
+<h2>Enum Constant Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.call.PermissionCallAssessor,com.sca4d.core.api.call.RateLimitedCallAssessor,com.sca4d.core.api.call.IdempotentCallExecutor,com.sca4d.core.api.call.LockedCallExecutor,com.sca4d.core.api.call.AuditCallRecorder)">
-<h3>CallLifecycle</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CallLifecycle</span><wbr><span class="parameters">(<a href="PermissionCallAssessor.html" title="class in com.sca4d.core.api.call">PermissionCallAssessor</a>&nbsp;permissionAssessor,
- <a href="RateLimitedCallAssessor.html" title="class in com.sca4d.core.api.call">RateLimitedCallAssessor</a>&nbsp;rateLimitedAssessor,
- <a href="IdempotentCallExecutor.html" title="class in com.sca4d.core.api.call">IdempotentCallExecutor</a>&nbsp;idempotentExecutor,
- <a href="LockedCallExecutor.html" title="class in com.sca4d.core.api.call">LockedCallExecutor</a>&nbsp;lockedExecutor,
- <a href="AuditCallRecorder.html" title="class in com.sca4d.core.api.call">AuditCallRecorder</a>&nbsp;auditRecorder)</span></div>
-<div class="block">创建固定调用生命周期。</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>permissionAssessor</code> - 权限调用前评估器</dd>
-<dd><code>rateLimitedAssessor</code> - 限流调用前评估器</dd>
-<dd><code>idempotentExecutor</code> - 幂等执行控制器</dd>
-<dd><code>lockedExecutor</code> - 分布式锁执行控制器</dd>
-<dd><code>auditRecorder</code> - 调用结果记录器</dd>
-</dl>
+<section class="detail" id="BEFORE">
+<h3>BEFORE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a></span>&nbsp;<span class="element-name">BEFORE</span></div>
+<div class="block">在实际方法前校验或准备。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="AROUND">
+<h3>AROUND</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a></span>&nbsp;<span class="element-name">AROUND</span></div>
+<div class="block">使用 Next 包围剩余调用，可以短路或观察最终结果。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="AFTER_RETURNING">
+<h3>AFTER_RETURNING</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a></span>&nbsp;<span class="element-name">AFTER_RETURNING</span></div>
+<div class="block">只处理正常返回。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="AFTER_THROWING">
+<h3>AFTER_THROWING</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a></span>&nbsp;<span class="element-name">AFTER_THROWING</span></div>
+<div class="block">只处理异常结果。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="AFTER">
+<h3>AFTER</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a></span>&nbsp;<span class="element-name">AFTER</span></div>
+<div class="block">无论成功失败都执行。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="PRE_COMMIT">
+<h3>PRE_COMMIT</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a></span>&nbsp;<span class="element-name">PRE_COMMIT</span></div>
+<div class="block">在事务提交前检查条件。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="AFTER_COMMIT">
+<h3>AFTER_COMMIT</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a></span>&nbsp;<span class="element-name">AFTER_COMMIT</span></div>
+<div class="block">在事务成功提交后执行。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="COMPLETION">
+<h3>COMPLETION</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a></span>&nbsp;<span class="element-name">COMPLETION</span></div>
+<div class="block">在 Call 最终结束时执行清理。</div>
 </section>
 </li>
 </ul>
@@ -178,23 +326,33 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="execute(com.sca4d.core.api.call.CallExecution,java.util.concurrent.Callable)">
-<h3>execute</h3>
-<div class="member-signature"><span class="annotations">@Nullable
-</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name">execute</span><wbr><span class="parameters">(<a href="CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a>&nbsp;execution,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Callable.html" title="class or interface in java.util.concurrent" class="external-link">Callable</a>&lt;T&gt;&nbsp;invocation)</span>
-              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
-<div class="block">执行一次已经解析声明的方法调用。</div>
+<section class="detail" id="values()">
+<h3>values</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a>[]</span>&nbsp;<span class="element-name">values</span>()</div>
+<div class="block">Returns an array containing the constants of this enum class, in
+the order they are declared.</div>
 <dl class="notes">
-<dt>Type Parameters:</dt>
-<dd><code>T</code> - 业务返回类型</dd>
-<dt>Parameters:</dt>
-<dd><code>execution</code> - 当前方法执行</dd>
-<dd><code>invocation</code> - 实际业务方法</dd>
 <dt>Returns:</dt>
-<dd>实际业务结果或已保存的幂等结果</dd>
+<dd>an array containing the constants of this enum class, in the order they are declared</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="valueOf(java.lang.String)">
+<h3>valueOf</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CallLifecycle.html" title="enum class in com.sca4d.core.api.call">CallLifecycle</a></span>&nbsp;<span class="element-name">valueOf</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="block">Returns the enum constant of this class with the specified name.
+The string must match <i>exactly</i> an identifier used to declare an
+enum constant in this class.  (Extraneous whitespace characters are 
+not permitted.)</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>name</code> - the name of the enum constant to be returned.</dd>
+<dt>Returns:</dt>
+<dd>the enum constant with the specified name</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - 业务方法、调用控制或成功检验报告的失败</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - if this enum class has no constant with the specified name</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/NullPointerException.html" title="class or interface in java.lang" class="external-link">NullPointerException</a></code> - if the argument is null</dd>
 </dl>
 </section>
 </li>

@@ -1,5 +1,7 @@
 package com.sca4d.storage.file.lifecycle;
 
+import static java.lang.Boolean.TRUE;
+
 import com.sca4d.core.api.storage.FileStatus;
 import com.sca4d.core.api.storage.FileStorage;
 import com.sca4d.core.api.storage.StorageObject;
@@ -20,18 +22,18 @@ import java.util.Objects;
 import java.util.UUID;
 
 /** 抢占过期或已释放文件，在事务外幂等删除存储对象并写回结果。 */
-public final class FileCleanupService {
+public class FileCleanupService {
     private static final Logger LOG = LoggerFactory.getLogger(FileCleanupService.class);
 
     private final @NotNull FileRepository repository;
 
     private final @NotNull StorageRegistry storages;
 
-    private final @NotNull TransactionTemplate transactions;
+    private final @NotNull FileProperties properties;
 
     private final @NotNull Clock clock;
 
-    private final @NotNull FileProperties properties;
+    private final @NotNull TransactionTemplate transactions;
 
     private final @NotNull String owner = UUID.randomUUID().toString();
 
@@ -111,7 +113,7 @@ public final class FileCleanupService {
             if (objectKey != null) {
                 storage.delete(new StorageObject(record.containerName(), objectKey));
             }
-            boolean recorded = Boolean.TRUE.equals(
+            boolean recorded = TRUE.equals(
                     transactions.execute(
                             status -> repository.saveDeletionResult(record.id(), owner, FileStatus.DELETED, null)));
             if (recorded) {
@@ -124,7 +126,7 @@ public final class FileCleanupService {
             }
         } catch (RuntimeException exception) {
             Instant retryAt = clock.instant().plus(properties.getDeleteRetryDelay());
-            boolean recorded = Boolean.TRUE.equals(
+            boolean recorded = TRUE.equals(
                     transactions.execute(
                             status -> repository
                                     .saveDeletionResult(record.id(), owner, FileStatus.DELETE_FAILED, retryAt)));

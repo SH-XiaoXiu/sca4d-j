@@ -1,5 +1,6 @@
 package com.sca4d.iot.emqx.connection;
 
+import com.sca4d.core.api.annotation.SystemExecution;
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
@@ -7,10 +8,14 @@ import com.sca4d.core.api.connection.Connection;
 import com.sca4d.core.api.connection.ConnectionId;
 import com.sca4d.core.api.connection.ConnectionProtocol;
 import com.sca4d.core.api.connection.ConnectionRegistry;
+import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.scheduling.ClusterTask;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.DeviceAccessMethod;
+import com.sca4d.iot.api.IotCapabilities;
 import com.sca4d.iot.api.connection.DeviceConnection;
+import com.sca4d.iot.api.connection.DeviceConnectionBinding;
 import com.sca4d.iot.api.connection.DeviceConnectionId;
 import com.sca4d.iot.api.connection.DeviceConnectionProtocol;
 import com.sca4d.iot.api.connection.DeviceConnectionReceiver;
@@ -35,29 +40,29 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /** 用单 Client 当前状态实时刷新连接，并在 watchdog 分布式锁内使用完整快照修复遗漏事件。 */
-public final class EmqxConnectionReconciler implements ClusterTask {
+public class EmqxConnectionReconciler implements ClusterTask {
 
     private static final Logger LOG = LoggerFactory.getLogger(EmqxConnectionReconciler.class);
 
-    private static final LockKey RECONCILIATION_LOCK = new LockKey("iot", "emqx-reconciliation");
+    private static final LockKey RECONCILIATION_LOCK = new LockKey(TreeCode.of("IOT:EMQX_RECONCILIATION"));
 
     private static final Duration LOCK_WAIT = Duration.ZERO;
 
-    private final @NotNull EmqxManagementClient management;
-
-    private final @NotNull DeviceConnectionResolver devices;
-
-    private final @NotNull DeviceConnectionReceiver connections;
+    private final @NotNull MqttAuthorizationService authorization;
 
     private final @NotNull EmqxConnectionRepository emqxConnections;
 
-    private final @NotNull MqttAuthorizationService authorization;
+    private final @NotNull EmqxManagementClient management;
 
-    private final @NotNull DistributedLock distributedLock;
+    private final @Nullable ConnectionRegistry commonConnections;
 
     private final @NotNull Clock clock;
 
-    private final @Nullable ConnectionRegistry commonConnections;
+    private final @NotNull DeviceConnectionReceiver connections;
+
+    private final @NotNull DeviceConnectionResolver devices;
+
+    private final @NotNull DistributedLock distributedLock;
 
     /** 创建集群中单执行者的 EMQX 连接对账服务。 */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "ConnectionRegistry 是注入的共享协作接口，对账服务不拥有或修改其内部表示")
@@ -81,7 +86,7 @@ public final class EmqxConnectionReconciler implements ClusterTask {
     }
 
     /**
-     * 取得租约时对账一次，其他实例同时调用直接返回 false。
+     * 取得租约时对账一次，其他实例同时调用直接返回 {@code false}。
      *
      * @return 当前实例是否取得并执行对账
      */
@@ -93,7 +98,7 @@ public final class EmqxConnectionReconciler implements ClusterTask {
                 reconcile();
                 return true;
             });
-        } catch (com.sca4d.core.api.error.BusinessException exception) {
+        } catch (BusinessException exception) {
             if (!started.get()) {
                 return false;
             }
@@ -106,11 +111,11 @@ public final class EmqxConnectionReconciler implements ClusterTask {
         // 读取同一时点的 Broker 快照，并把全部 Client ID 一次批量解析成当前 Device。
         Instant observedAt = clock.instant();
         List<EmqxClientConnection> brokerClients = management.findClients();
-        LinkedHashMap<String, com.sca4d.iot.api.connection.DeviceConnectionBinding> bindings = new LinkedHashMap<>();
+        LinkedHashMap<String, DeviceConnectionBinding> bindings = new LinkedHashMap<>();
         for (EmqxClientConnection managed : brokerClients) {
             bindings.put(managed.clientId(), MqttDeviceConnection.clientId(managed.clientId()));
         }
-        Map<com.sca4d.iot.api.connection.DeviceConnectionBinding, Device> resolvedDevices = devices
+        Map<DeviceConnectionBinding, Device> resolvedDevices = devices
                 .findDevices(bindings.values());
 
         // 校验连接属性和当前授权，只保留能够形成标准 DeviceConnection 的 Broker 连接。
@@ -160,6 +165,7 @@ public final class EmqxConnectionReconciler implements ClusterTask {
 
     /** 取得集群分布式锁后使用 EMQX 当前连接列表修正 Connection 投影。 */
     @Override
+    @SystemExecution(IotCapabilities.SYSTEM_IDENTITY_VALUE)
     public void execute() {
         runOnce();
     }
@@ -167,7 +173,7 @@ public final class EmqxConnectionReconciler implements ClusterTask {
     /**
      * 查询一个 MQTT Client 的 Broker 当前状态并立即刷新连接投影。
      *
-     * <p>方法只处理已登记 Device 或已有 EMQX 投影的 Client ID。查询时间早于后续连接事件时，
+     * <p>方法只处理已登记 Device 或已有 EMQX 投影的 Client ID。查询时间早于之后的连接事件时，
      * Redis 观察时间会阻止旧结果覆盖新连接代次。</p>
      *
      * @param clientId `$SYS` 连接或断线事件中的 MQTT Client ID
@@ -204,7 +210,7 @@ public final class EmqxConnectionReconciler implements ClusterTask {
                 connection.id().value());
     }
 
-    /** 把带有 Sca4d-J 认证属性的 Management API 连接转换为通用连接事实。 */
+    /** 把带有 Sca4d-J 认证属性的 Management API 连接转换为通用连接信息。 */
     private DeviceConnection deviceConnection(EmqxClientConnection managed, @Nullable Device device) {
         Map<String, String> attributes = managed.clientAttributes();
         if (!attributes.containsKey("device_id") && device == null) {

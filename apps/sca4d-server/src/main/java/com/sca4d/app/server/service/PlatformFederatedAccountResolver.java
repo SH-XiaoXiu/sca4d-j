@@ -1,5 +1,6 @@
 package com.sca4d.app.server.service;
 
+import cn.hutool.crypto.digest.DigestUtil;
 import com.sca4d.app.server.entity.PlatformUserProfile;
 import com.sca4d.auth.email.EmailCodeAuthenticationMethod;
 import com.sca4d.auth.federation.FederatedAccountResolution;
@@ -14,6 +15,7 @@ import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iam.base.PlatformIdentityService;
 import com.sca4d.iam.base.PlatformPrincipal;
 import com.sca4d.iam.base.rbac.PlatformRbacService;
@@ -27,10 +29,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.time.Duration;
-import java.util.HexFormat;
 import java.util.List;
 import java.util.Objects;
 
@@ -201,23 +200,14 @@ public class PlatformFederatedAccountResolver implements FederatedAccountResolve
             @NotNull FederatedProfile profile) {
         FederatedProvider checkedProvider = Objects.requireNonNull(provider, "联邦 Provider 不能为空");
         FederatedProfile checkedProfile = Objects.requireNonNull(profile, "联邦 Profile 不能为空");
-        return new LockKey("federated-identity", checkedProvider.code(), subjectKey(checkedProfile));
+        return new LockKey(TreeCode.of("FEDERATED_IDENTITY"), checkedProvider.code(), subjectKey(checkedProfile));
     }
 
     /**
      * 使用 issuer 与 subject 计算不暴露外部身份原文的分布式锁键。
      */
     private String subjectKey(FederatedProfile profile) {
-        try {
-            return HexFormat.of()
-                    .formatHex(
-                            MessageDigest.getInstance("SHA-256")
-                                    .digest(
-                                            (Objects.toString(profile.issuer(), "") + "\u0000" + profile.subject())
-                                                    .getBytes(StandardCharsets.UTF_8)))
-                    .substring(0, 32);
-        } catch (Exception exception) {
-            throw new IllegalStateException("无法计算外部身份锁键", exception);
-        }
+        return DigestUtil.sha256Hex(Objects.toString(profile.issuer(), "") + "\u0000" + profile.subject())
+                .substring(0, 32);
     }
 }

@@ -1,15 +1,16 @@
 package com.sca4d.auth.session;
 
 import com.sca4d.core.api.authentication.SessionInvalidationListener;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.spring.redis.KeyRedisSerializer;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisCallback;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -17,31 +18,27 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 /** 在 Redis 中保存每个 Account 的 Session 失效代次。 */
-public final class RedisSessionGeneration {
+public class RedisSessionGeneration {
 
     private static final Logger LOG = LoggerFactory.getLogger(RedisSessionGeneration.class);
 
-    private final @NotNull StringRedisTemplate redis;
+    private final @NotNull RedisTemplate<Key, String> redis;
 
     private final @NotNull Supplier<@NotNull List<@NotNull SessionInvalidationListener>> listeners;
 
-    private final @NotNull String keyPrefix;
+    private static final @NotNull Key KEY = Key.of(TreeCode.ofColon("AUTH:SESSION_GENERATION"));
 
     /**
      * 创建 Redis Session 代次存储。
      *
      * @param redis Redis 字符串操作
      * @param listeners 代次增加后读取当前已安装监听器的来源
-     * @param runtimeNamespace 当前应用的运行时命名空间
      */
     public RedisSessionGeneration(
-            @NotNull StringRedisTemplate redis,
-            @NotNull Supplier<@NotNull List<@NotNull SessionInvalidationListener>> listeners,
-            @NotNull RuntimeNamespace runtimeNamespace) {
+            @NotNull RedisTemplate<Key, String> redis,
+            @NotNull Supplier<@NotNull List<@NotNull SessionInvalidationListener>> listeners) {
         this.redis = Objects.requireNonNull(redis, "Redis 操作不能为空");
         this.listeners = Objects.requireNonNull(listeners, "Session 失效监听器来源不能为空");
-        this.keyPrefix = Objects.requireNonNull(runtimeNamespace, "运行时命名空间不能为空")
-                .sca4dj("auth", "session-generation") + ':';
     }
 
     /**
@@ -126,7 +123,7 @@ public final class RedisSessionGeneration {
 
         List<Object> results = redis.executePipelined((RedisCallback<Object>) connection -> {
             for (Long accountId : unique) {
-                connection.stringCommands().incr(key(accountId).getBytes(StandardCharsets.UTF_8));
+                connection.stringCommands().incr(KeyRedisSerializer.keyBytes(redis, key(accountId)));
             }
             return null;
         });
@@ -163,7 +160,7 @@ public final class RedisSessionGeneration {
      * @param accountId Account 标识
      * @return Session 失效代次键
      */
-    private @NotNull String key(long accountId) {
-        return keyPrefix + accountId;
+    private @NotNull Key key(long accountId) {
+        return KEY.part(accountId);
     }
 }

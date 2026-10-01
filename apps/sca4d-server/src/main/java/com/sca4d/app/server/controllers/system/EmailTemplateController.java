@@ -2,20 +2,26 @@ package com.sca4d.app.server.controllers.system;
 
 import com.sca4d.app.server.audit.SystemOperations;
 import com.sca4d.app.server.platform.PlatformPrincipalSelection;
+import com.sca4d.app.server.system.EmailTemplateManagementService;
 import com.sca4d.app.server.system.request.EmailResourceStatusRequest;
 import com.sca4d.app.server.system.request.EmailTemplateRequest;
+import com.sca4d.app.server.system.request.EmailTemplateSourceRequest;
 import com.sca4d.app.server.system.request.PreviewEmailTemplateRequest;
 import com.sca4d.app.server.system.view.EmailTemplateView;
 import com.sca4d.app.server.system.view.RenderedEmailView;
 import com.sca4d.core.api.annotation.Audit;
 import com.sca4d.core.api.annotation.AuditTarget;
 import com.sca4d.core.api.annotation.RequirePermission;
-import com.sca4d.core.api.notification.NotificationCode;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.query.Page;
+import com.sca4d.core.api.query.Sort;
 import com.sca4d.core.spring.web.ApiResponse;
 import com.sca4d.core.spring.web.annotation.CurrentPrincipal;
 import com.sca4d.core.spring.web.annotation.IfMatch;
-import com.sca4d.notification.template.NotificationTemplate;
-import com.sca4d.notification.template.NotificationTemplateService;
+import com.sca4d.core.spring.web.list.ListDefinition;
+import com.sca4d.core.spring.web.list.ListParameters;
+import com.sca4d.notification.email.EmailTemplate;
+import com.sca4d.notification.email.EmailTemplateSource;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -31,7 +37,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /** 管理多语言 Email 模板，并提供草稿预览和真实测试发送。 */
@@ -41,33 +48,39 @@ import java.util.Objects;
 @CurrentPrincipal(selection = PlatformPrincipalSelection.class)
 public class EmailTemplateController {
 
-    private static final String RESOURCE_TYPE = "notification:email:template";
+    private static final Sort NOTIFICATION_CODE = Sort.of("NOTIFICATION_CODE");
 
-    private final @NotNull NotificationTemplateService templates;
+    private static final ListDefinition LIST = ListDefinition.builder()
+            .fields(NOTIFICATION_CODE, Sort.SERIAL)
+            .defaultSort(NOTIFICATION_CODE.asc(), Sort.SERIAL.asc())
+            .maxSize(100)
+            .build();
+
+    private final @NotNull EmailTemplateManagementService templates;
 
     /** @param templates Email 模板管理、预览和测试发送服务 */
-    public EmailTemplateController(@NotNull NotificationTemplateService templates) {
+    public EmailTemplateController(@NotNull EmailTemplateManagementService templates) {
         this.templates = Objects.requireNonNull(templates, "Email Template 服务不能为空");
     }
 
-    /** @return 全部未删除模板及其变量集合 */
+    /** @return 按分页和安全排序要求读取的模板以及模板变量集合 */
     @GetMapping
     @Operation(summary = "查询 Email 模板")
-    @RequirePermission(operation = SystemOperations.EMAIL_READ)
-    public @NotNull ApiResponse<List<EmailTemplateView>> findAll() {
-        return ApiResponse.ok(templates.findAll().stream().map(this::view).toList());
+    @RequirePermission(operation = SystemOperations.EMAIL_READ_VALUE)
+    public @NotNull ApiResponse<Page<EmailTemplateView>> find(@NotNull ListParameters parameters) {
+        return ApiResponse.ok(templates.find(parameters.resolve(LIST)).map(this::view));
     }
 
     /** 创建默认停用的完整多语言 Email 模板。 */
     @PostMapping
     @Operation(summary = "创建 Email 模板")
-    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE)
-    @Audit(operation = "system/email/template/create")
+    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE_VALUE)
+    @Audit(operation = "SYSTEM/EMAIL/TEMPLATE/CREATE")
     public @NotNull ApiResponse<EmailTemplateView> create(
             @RequestBody @Valid @NotNull EmailTemplateRequest request) {
-        NotificationTemplate created = templates.create(
-                new NotificationCode(request.getNotificationCode()),
-                request.getContent());
+        EmailTemplate created = templates.create(
+                TreeCode.of(request.getNotificationCode()),
+                sources(request.getLocales()));
         return ApiResponse.created(
                 view(created),
                 URI.create("/system/email/templates/" + created.templateId()));
@@ -76,9 +89,9 @@ public class EmailTemplateController {
     /** 读取一个完整 Email 模板，并发布 ETag。 */
     @GetMapping("/{templateId}")
     @Operation(summary = "查询 Email 模板详情")
-    @RequirePermission(operation = SystemOperations.EMAIL_READ)
+    @RequirePermission(operation = SystemOperations.EMAIL_READ_VALUE)
     public @NotNull ApiResponse<EmailTemplateView> get(@PathVariable long templateId) {
-        NotificationTemplate template = templates.loadById(templateId);
+        EmailTemplate template = templates.loadById(templateId);
         return ApiResponse.ok(view(template));
     }
 
@@ -86,15 +99,15 @@ public class EmailTemplateController {
     @PutMapping("/{templateId}")
     @IfMatch
     @Operation(summary = "替换 Email 模板")
-    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE)
-    @Audit(operation = "system/email/template/replace")
+    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE_VALUE)
+    @Audit(operation = "SYSTEM/EMAIL/TEMPLATE/REPLACE")
     public @NotNull ApiResponse<EmailTemplateView> replace(
-            @PathVariable @AuditTarget(resourceType = RESOURCE_TYPE) long templateId,
+            @PathVariable @AuditTarget(resourceType = EmailTemplate.RESOURCE_TYPE_VALUE) long templateId,
             @RequestBody @Valid @NotNull EmailTemplateRequest request) {
-        NotificationTemplate updated = templates.replace(
+        EmailTemplate updated = templates.replace(
                 templateId,
-                new NotificationCode(request.getNotificationCode()),
-                request.getContent());
+                TreeCode.of(request.getNotificationCode()),
+                sources(request.getLocales()));
         return ApiResponse.ok(view(updated));
     }
 
@@ -102,25 +115,25 @@ public class EmailTemplateController {
     @PatchMapping("/{templateId}/status")
     @IfMatch
     @Operation(summary = "修改 Email 模板状态")
-    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE)
-    @Audit(operation = "system/email/template/status/change")
+    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE_VALUE)
+    @Audit(operation = "SYSTEM/EMAIL/TEMPLATE/STATUS/CHANGE")
     public @NotNull ApiResponse<EmailTemplateView> setEnabled(
-            @PathVariable @AuditTarget(resourceType = RESOURCE_TYPE) long templateId,
+            @PathVariable @AuditTarget(resourceType = EmailTemplate.RESOURCE_TYPE_VALUE) long templateId,
             @RequestBody @Valid @NotNull EmailResourceStatusRequest request) {
-        NotificationTemplate updated = templates.setEnabled(templateId, request.isEnabled());
+        EmailTemplate updated = templates.setEnabled(templateId, request.isEnabled());
         return ApiResponse.ok(view(updated));
     }
 
     /** 渲染未保存草稿，并返回完成主题检查与 HTML 清洗的内容。 */
     @PostMapping("/previews")
     @Operation(summary = "预览 Email 模板")
-    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE)
+    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE_VALUE)
     public @NotNull ApiResponse<RenderedEmailView> preview(
             @RequestBody @Valid @NotNull PreviewEmailTemplateRequest request) {
         return ApiResponse.ok(
                 RenderedEmailView.from(
                         templates.preview(
-                                request.getContent(),
+                                request.getSource().source(),
                                 request.locale(),
                                 request.variables())));
     }
@@ -129,17 +142,24 @@ public class EmailTemplateController {
     @DeleteMapping("/{templateId}")
     @IfMatch
     @Operation(summary = "删除 Email 模板")
-    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE)
-    @Audit(operation = "system/email/template/delete")
+    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE_VALUE)
+    @Audit(operation = "SYSTEM/EMAIL/TEMPLATE/DELETE")
     public @NotNull ApiResponse<Void> delete(
-            @PathVariable @AuditTarget(resourceType = RESOURCE_TYPE) long templateId) {
+            @PathVariable @AuditTarget(resourceType = EmailTemplate.RESOURCE_TYPE_VALUE) long templateId) {
         templates.delete(templateId);
         return ApiResponse.noContent();
     }
 
     /** 组合模板持久化结果和库无关解析器发现的变量集合。 */
-    private @NotNull EmailTemplateView view(@NotNull NotificationTemplate template) {
-        NotificationTemplate checked = Objects.requireNonNull(template, "通知模板不能为空");
-        return EmailTemplateView.from(checked, templates.variables(checked.content()));
+    private @NotNull EmailTemplateView view(@NotNull EmailTemplate template) {
+        EmailTemplate checked = Objects.requireNonNull(template, "Email 模板不能为空");
+        return EmailTemplateView.from(checked, templates.variables(checked.locales()));
+    }
+
+    private static @NotNull Map<String, EmailTemplateSource> sources(
+            @NotNull Map<String, EmailTemplateSourceRequest> requests) {
+        Map<String, EmailTemplateSource> result = new LinkedHashMap<>();
+        requests.forEach((locale, source) -> result.put(locale, source.source()));
+        return Map.copyOf(result);
     }
 }

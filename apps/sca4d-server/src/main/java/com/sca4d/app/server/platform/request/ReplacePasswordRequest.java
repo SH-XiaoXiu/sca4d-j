@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 接收当前账号的新原始密码。 */
-public final class ReplacePasswordRequest {
+public class ReplacePasswordRequest {
 
     @NotBlank
     @Size(min = 8, max = 128)

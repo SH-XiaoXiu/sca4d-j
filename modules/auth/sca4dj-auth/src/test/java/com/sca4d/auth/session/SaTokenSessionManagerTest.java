@@ -22,12 +22,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Clock;
 import java.time.Duration;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 class SaTokenSessionManagerTest {
@@ -109,7 +111,7 @@ class SaTokenSessionManagerTest {
         assertThat(sessions.current()).isEmpty();
         verify(stpLogic).logout();
 
-        org.mockito.Mockito.reset(codec, stpLogic);
+        Mockito.reset(codec, stpLogic);
         Session expired = SessionTestFixture.session(
                 SessionTestFixture.NOW.plusSeconds(3600));
         sessions = new SaTokenSessionManager(
@@ -128,7 +130,7 @@ class SaTokenSessionManagerTest {
         assertThat(sessions.current()).isEmpty();
         verify(stpLogic).logout();
 
-        org.mockito.Mockito.reset(codec, stpLogic);
+        Mockito.reset(codec, stpLogic);
         sessions = new SaTokenSessionManager(
                 codec,
                 refresh,
@@ -156,13 +158,13 @@ class SaTokenSessionManagerTest {
         assertThat(sessions.current()).isEmpty();
         verify(stpLogic, never()).logout();
 
-        org.mockito.Mockito.reset(stpLogic);
+        Mockito.reset(stpLogic);
         when(stpLogic.isLogin()).thenReturn(false);
         when(stpLogic.getTokenValue()).thenReturn("invalid-token");
         assertThat(sessions.current()).isEmpty();
         verify(stpLogic).logout();
 
-        org.mockito.Mockito.reset(stpLogic);
+        Mockito.reset(stpLogic);
         when(stpLogic.isLogin()).thenReturn(true);
         when(stpLogic.getTokenSession()).thenThrow(
                 new NotLoginException(
@@ -315,8 +317,8 @@ class SaTokenSessionManagerTest {
         Session session = SessionTestFixture.session(
                 SessionTestFixture.NOW.plusSeconds(3600));
         when(tokenIndex.find(session.id()))
-                .thenReturn(java.util.Optional.of("token-value"))
-                .thenReturn(java.util.Optional.empty());
+                .thenReturn(Optional.of("token-value"))
+                .thenReturn(Optional.empty());
 
         sessions.terminate(session.id(), SessionTerminationReason.USER_REQUESTED);
         sessions.terminate(session.id(), SessionTerminationReason.USER_REQUESTED);

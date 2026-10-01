@@ -8,21 +8,21 @@ import java.util.Objects;
 
 /** 保存客户端访问当前 Session 所需的 access Token 和可选在线 Session Token。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class SessionTokens {
+public class SessionTokens {
 
     private final AuthTokenMode tokenMode;
 
-    private final String tokenType;
+    private final Instant accessTokenExpiresAt;
+
+    private final Instant sessionExpiresAt;
 
     private final String accessToken;
 
-    private final Instant accessTokenExpiresAt;
+    private final String sessionId;
 
     private final @Nullable String sessionToken;
 
-    private final String sessionId;
-
-    private final Instant sessionExpiresAt;
+    private final String tokenType;
 
     /**
      * 创建一次 Token 交付结果。

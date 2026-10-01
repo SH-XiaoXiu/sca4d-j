@@ -85,7 +85,7 @@ loadScripts(document, 'script');</script>
 <h1 title="Class IdentityMdcInterceptor" class="title">Class IdentityMdcInterceptor</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance"><a href="../call/CallHandlerInterceptor.html" title="class in com.sca4d.core.spring.call">com.sca4d.core.spring.call.CallHandlerInterceptor</a>
+<div class="inheritance"><a href="HttpCallHandlerInterceptor.html" title="class in com.sca4d.core.spring.web">com.sca4d.core.spring.web.HttpCallHandlerInterceptor</a>
 <div class="inheritance">com.sca4d.core.spring.web.IdentityMdcInterceptor</div>
 </div>
 </div>
@@ -95,8 +95,8 @@ loadScripts(document, 'script');</script>
 <dd><code>org.springframework.web.servlet.HandlerInterceptor</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">IdentityMdcInterceptor</span>
-<span class="extends-implements">extends <a href="../call/CallHandlerInterceptor.html" title="class in com.sca4d.core.spring.call">CallHandlerInterceptor</a></span></div>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">IdentityMdcInterceptor</span>
+<span class="extends-implements">extends <a href="HttpCallHandlerInterceptor.html" title="class in com.sca4d.core.spring.web">HttpCallHandlerInterceptor</a></span></div>
 <div class="block">在 Controller 执行期间把当前会话、主体和账号标识写入日志上下文。</div>
 </section>
 <section class="summary">
@@ -110,9 +110,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">IdentityMdcInterceptor</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">创建当前身份日志上下文拦截器。</div>
-</div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -147,8 +145,8 @@ loadScripts(document, 'script');</script>
 </div>
 </div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-com.sca4d.core.spring.call.CallHandlerInterceptor">Methods inherited from class&nbsp;com.sca4d.core.spring.call.<a href="../call/CallHandlerInterceptor.html" title="class in com.sca4d.core.spring.call">CallHandlerInterceptor</a></h3>
-<code><a href="../call/CallHandlerInterceptor.html#preHandle(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,java.lang.Object)">preHandle</a></code></div>
+<h3 id="methods-inherited-from-class-com.sca4d.core.spring.web.HttpCallHandlerInterceptor">Methods inherited from class&nbsp;com.sca4d.core.spring.web.<a href="HttpCallHandlerInterceptor.html" title="class in com.sca4d.core.spring.web">HttpCallHandlerInterceptor</a></h3>
+<code><a href="HttpCallHandlerInterceptor.html#preHandle(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,java.lang.Object)">preHandle</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
@@ -170,7 +168,6 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="&lt;init&gt;()">
 <h3>IdentityMdcInterceptor</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">IdentityMdcInterceptor</span>()</div>
-<div class="block">创建当前身份日志上下文拦截器。</div>
 </section>
 </li>
 </ul>
@@ -195,7 +192,7 @@ loadScripts(document, 'script');</script>
 <div class="block">写入认证阶段已经确认的身份标识。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../call/CallHandlerInterceptor.html#preHandleWithCall(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,java.lang.Object,com.sca4d.core.api.call.Call)">preHandleWithCall</a></code>&nbsp;in class&nbsp;<code><a href="../call/CallHandlerInterceptor.html" title="class in com.sca4d.core.spring.call">CallHandlerInterceptor</a></code></dd>
+<dd><code><a href="HttpCallHandlerInterceptor.html#preHandleWithCall(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,java.lang.Object,com.sca4d.core.api.call.Call)">preHandleWithCall</a></code>&nbsp;in class&nbsp;<code><a href="HttpCallHandlerInterceptor.html" title="class in com.sca4d.core.spring.web">HttpCallHandlerInterceptor</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>request</code> - 当前 HTTP 请求</dd>
 <dd><code>response</code> - 当前 HTTP 响应</dd>

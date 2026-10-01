@@ -6,11 +6,11 @@ import com.sca4d.auth.passkey.credential.PasskeyCredentialRepository;
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.AuthenticationMethod;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountDirectory;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.yubico.webauthn.data.ByteArray;
 import com.yubico.webauthn.data.exception.Base64UrlException;
 import org.jetbrains.annotations.NotNull;
@@ -23,13 +23,17 @@ import java.time.Clock;
 import java.util.Objects;
 import java.util.Set;
 
-/** 使用 discoverable WebAuthn assertion 验证账号，并且只贡献 POSSESSION 因素。 */
+/**
+ * 使用 discoverable WebAuthn assertion 验证账号，并且只贡献 POSSESSION 因素。
+ */
 public class PasskeyAuthenticationMethod implements AuthenticationMethod<PasskeyProof> {
 
     private static final Logger LOG = LoggerFactory.getLogger(PasskeyAuthenticationMethod.class);
 
-    /** Passkey 方法稳定编码。 */
-    public static final AuthenticationMethodCode CODE = new AuthenticationMethodCode("passkey");
+    /**
+     * Passkey 方法稳定编码。
+     */
+    public static final TreeCode CODE = TreeCode.ofSlash("AUTHENTICATION/PASSKEY");
 
     private static final Set<AuthenticationFactorKind> FACTOR_KINDS = Set.of(AuthenticationFactorKind.POSSESSION);
 
@@ -41,7 +45,9 @@ public class PasskeyAuthenticationMethod implements AuthenticationMethod<Passkey
 
     private final Clock clock;
 
-    /** 创建 Passkey 认证方法。 */
+    /**
+     * 创建 Passkey 认证方法。
+     */
     public PasskeyAuthenticationMethod(
             @NotNull PasskeyAssertionService assertions,
             @NotNull PasskeyCredentialRepository credentials,
@@ -54,7 +60,7 @@ public class PasskeyAuthenticationMethod implements AuthenticationMethod<Passkey
     }
 
     @Override
-    public @NotNull AuthenticationMethodCode code() {
+    public @NotNull TreeCode code() {
         return CODE;
     }
 
@@ -118,7 +124,9 @@ public class PasskeyAuthenticationMethod implements AuthenticationMethod<Passkey
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional
     public void eraseAccount(long accountId) {

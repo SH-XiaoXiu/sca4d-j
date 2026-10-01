@@ -2,6 +2,7 @@ package com.sca4d.app.server;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import cn.hutool.crypto.digest.DigestUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.iot.message.BuiltInDevicePolicies;
@@ -18,9 +19,6 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.util.HexFormat;
 import java.util.Map;
 
 /** 验证主库和 TimescaleDB 能够把 V1 数据迁移到当前结构。 */
@@ -152,7 +150,7 @@ class IotI18nMigrationIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode migratedModel = objectMapper.readTree((String) modelRow.get("model_json"));
         JsonNode migratedI18n = objectMapper.readTree((String) modelRow.get("i18n")).path("zh-CN");
-        assertThat(migratedModel.path("formatVersion").intValue()).isEqualTo(2);
+        assertThat(migratedModel.path("formatVersion").intValue()).isEqualTo(1);
         assertThat(migratedModel.findValues("displayName")).isEmpty();
         assertThat(migratedI18n.path("/displayName").textValue()).isEqualTo("迁移温控器");
         assertThat(migratedI18n.path("/properties/power/displayName").textValue()).isEqualTo("电源");
@@ -170,9 +168,7 @@ class IotI18nMigrationIntegrationTest {
                         BuiltInDevicePolicies.acknowledgements(),
                         BuiltInDevicePolicies.retries()));
         String canonical = codec.encode(codec.decode((String) modelRow.get("model_json")));
-        String expectedHash = HexFormat.of()
-                .formatHex(
-                        MessageDigest.getInstance("SHA-256").digest(canonical.getBytes(StandardCharsets.UTF_8)));
+        String expectedHash = DigestUtil.sha256Hex(canonical);
         assertThat(modelRow.get("content_hash")).isEqualTo(expectedHash);
 
         assertThat(

@@ -1,13 +1,14 @@
 package com.sca4d.core.spring.validation;
 
+import static com.sca4d.core.spring.validation.ValidationPatterns.MAC_ADDRESS;
+
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.jetbrains.annotations.Nullable;
 
 /** 执行 MacAddress 的冒号分隔格式检查。 */
-public final class MacAddressValidator implements ConstraintValidator<MacAddress, String> {
+public class MacAddressValidator implements ConstraintValidator<MacAddress, String> {
 
-    /** 创建无配置参数的 MAC 地址校验器。 */
     public MacAddressValidator() {
     }
 
@@ -20,6 +21,6 @@ public final class MacAddressValidator implements ConstraintValidator<MacAddress
      */
     @Override
     public boolean isValid(@Nullable String value, @Nullable ConstraintValidatorContext context) {
-        return value == null || value.isBlank() || value.matches(ValidationPatterns.MAC_ADDRESS);
+        return value == null || value.isBlank() || value.matches(MAC_ADDRESS);
     }
 }

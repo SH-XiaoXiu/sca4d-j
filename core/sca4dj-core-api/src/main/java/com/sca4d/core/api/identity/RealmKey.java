@@ -3,7 +3,7 @@ package com.sca4d.core.api.identity;
 import com.sca4d.core.api.utils.TextUtils;
 
 /** 保存账号所属认证域的键。 */
-public final class RealmKey {
+public class RealmKey {
 
     private final String value;
 
@@ -17,7 +17,7 @@ public final class RealmKey {
     }
 
     /**
-     * 返回清除首尾空白后的键值。
+     * 清除首尾空白后的键值。
      *
      * @return 清除首尾空白后的键值
      */

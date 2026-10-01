@@ -7,21 +7,21 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 保存 Repository 锁定后返回给 Service 的 reported group 当前投影。 */
-public final class ReportedGroupState {
+public class ReportedGroupState {
+
+    private final @NotNull Instant observedAt;
+
+    private final @NotNull Instant receivedAt;
+
+    private final @NotNull Map<String, Object> values;
+
+    private final @NotNull String contentHash;
 
     private final @NotNull String orderScope;
 
     private final @NotNull String orderValue;
 
-    private final @NotNull String contentHash;
-
-    private final @NotNull Map<String, Object> values;
-
     private final long version;
-
-    private final @NotNull Instant observedAt;
-
-    private final @NotNull Instant receivedAt;
 
     /** 创建完整 current projection。 */
     @SuppressWarnings("ParameterNumber")

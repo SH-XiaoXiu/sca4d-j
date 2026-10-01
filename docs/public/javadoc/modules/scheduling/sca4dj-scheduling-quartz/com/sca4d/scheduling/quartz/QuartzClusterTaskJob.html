@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="annotations">@DisallowConcurrentExecution
-</span><span class="modifiers">public final class </span><span class="element-name type-name-label">QuartzClusterTaskJob</span>
+</span><span class="modifiers">public class </span><span class="element-name type-name-label">QuartzClusterTaskJob</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements org.quartz.Job</span></div>
 <div class="block">由 Quartz 集群直接执行基础设施任务，不创建持久化 Job run。</div>
@@ -136,9 +136,7 @@ implements org.quartz.Job</span></div>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">QuartzClusterTaskJob</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">创建无状态 Quartz 集群任务入口。</div>
-</div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -189,21 +187,6 @@ implements org.quartz.Job</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="TASK_KEY">
-<h3>TASK_KEY</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">TASK_KEY</span></div>
-<div class="block">JobDataMap 中保存集群任务 key 的键。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../constant-values.html#com.sca4d.scheduling.quartz.QuartzClusterTaskJob.TASK_KEY">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="TASK_DEFINITION_VERSION">
 <h3>TASK_DEFINITION_VERSION</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">TASK_DEFINITION_VERSION</span></div>
@@ -213,6 +196,21 @@ implements org.quartz.Job</span></div>
 <dd>
 <ul class="tag-list">
 <li><a href="../../../../constant-values.html#com.sca4d.scheduling.quartz.QuartzClusterTaskJob.TASK_DEFINITION_VERSION">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="TASK_KEY">
+<h3>TASK_KEY</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">TASK_KEY</span></div>
+<div class="block">JobDataMap 中保存集群任务 key 的键。</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../constant-values.html#com.sca4d.scheduling.quartz.QuartzClusterTaskJob.TASK_KEY">Constant Field Values</a></li>
 </ul>
 </dd>
 </dl>
@@ -230,7 +228,6 @@ implements org.quartz.Job</span></div>
 <section class="detail" id="&lt;init&gt;()">
 <h3>QuartzClusterTaskJob</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">QuartzClusterTaskJob</span>()</div>
-<div class="block">创建无状态 Quartz 集群任务入口。</div>
 </section>
 </li>
 </ul>

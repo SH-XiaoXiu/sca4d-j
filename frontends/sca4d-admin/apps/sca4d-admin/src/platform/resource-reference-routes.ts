@@ -10,10 +10,10 @@ import { resourceReferenceId } from '@sca4d/admin';
 
 /** 日志可以直接定位的应用资源类型。 */
 export type RoutableResourceType =
-  | 'account'
-  | 'notification:email:sender'
-  | 'notification:email:template'
-  | 'role';
+  | 'IAM/ACCOUNT'
+  | 'NOTIFICATION/EMAIL/SENDERS'
+  | 'NOTIFICATION/EMAIL/TEMPLATES'
+  | 'IAM/ROLE';
 
 /** 当前 Session 可以访问的资源管理页面。 */
 export interface ResourceReferenceRouteAccess {
@@ -35,16 +35,16 @@ export function resourceReferenceRoute(
   ) {
     return null;
   }
-  if (reference.resourceType === 'account') {
+  if (reference.resourceType === 'IAM/ACCOUNT') {
     if (!access.accounts) return null;
     return { path: '/sca4d-server/accounts', query: { accountId: id } };
   }
-  if (reference.resourceType === 'role') {
+  if (reference.resourceType === 'IAM/ROLE') {
     if (!access.roles) return null;
     return { path: '/sca4d-server/roles', query: { roleId: id } };
   }
   if (!access.email) return null;
-  if (reference.resourceType === 'notification:email:sender') {
+  if (reference.resourceType === 'NOTIFICATION/EMAIL/SENDERS') {
     return {
       path: '/sca4d-server/email',
       query: { senderId: id, tab: 'senders' },
@@ -82,9 +82,9 @@ function isRoutableResourceType(
   value: null | string,
 ): value is RoutableResourceType {
   return (
-    value === 'account' ||
-    value === 'role' ||
-    value === 'notification:email:sender' ||
-    value === 'notification:email:template'
+    value === 'IAM/ACCOUNT' ||
+    value === 'IAM/ROLE' ||
+    value === 'NOTIFICATION/EMAIL/SENDERS' ||
+    value === 'NOTIFICATION/EMAIL/TEMPLATES'
   );
 }

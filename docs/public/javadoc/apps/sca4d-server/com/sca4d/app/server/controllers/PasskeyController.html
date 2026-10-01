@@ -226,9 +226,9 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="register(com.sca4d.core.api.identity.Account,com.sca4d.app.server.authentication.request.PasskeyRegistrationRequest)">
 <h3>register</h3>
 <div class="member-signature"><span class="annotations">@PostMapping("/me/passkeys")
-@Audit(operation="authentication/account/passkey/register")
+@Audit(operation="AUTHENTICATION/ACCOUNT/PASSKEY/REGISTER")
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../authentication/view/PasskeyCredentialView.html" title="class in com.sca4d.app.server.authentication.view">PasskeyCredentialView</a>&gt;</span>&nbsp;<span class="element-name">register</span><wbr><span class="parameters">(@AuditTarget(resourceType="account") @NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../authentication/view/PasskeyCredentialView.html" title="class in com.sca4d.app.server.authentication.view">PasskeyCredentialView</a>&gt;</span>&nbsp;<span class="element-name">register</span><wbr><span class="parameters">(@AuditTarget(resourceType="IAM/ACCOUNT") @NotNull
  @NotNull com.sca4d.core.api.identity.Account&nbsp;account,
  @RequestBody @Valid @NotNull
  @Valid @NotNull <a href="../authentication/request/PasskeyRegistrationRequest.html" title="class in com.sca4d.app.server.authentication.request">PasskeyRegistrationRequest</a>&nbsp;request)</span></div>
@@ -239,11 +239,11 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="delete(com.sca4d.core.api.identity.Account,long)">
 <h3>delete</h3>
 <div class="member-signature"><span class="annotations">@DeleteMapping("/me/passkeys/{credentialId}")
-@Audit(operation="authentication/account/passkey/delete")
+@Audit(operation="AUTHENTICATION/ACCOUNT/PASSKEY/DELETE")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">delete</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.identity.Account&nbsp;account,
- @PathVariable @AuditTarget(resourceType="passkey:credential")
+ @PathVariable @AuditTarget(resourceType="AUTHENTICATION/PASSKEY/CREDENTIALS")
  long&nbsp;credentialId)</span></div>
 <div class="block">删除已经通过动作认证的当前账号 Passkey Credential。</div>
 </section>

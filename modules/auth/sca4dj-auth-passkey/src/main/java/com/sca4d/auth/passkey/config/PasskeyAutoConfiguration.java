@@ -1,6 +1,5 @@
 package com.sca4d.auth.passkey.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.auth.passkey.PasskeyAuthenticationMethod;
 import com.sca4d.auth.passkey.ceremony.PasskeyAssertionService;
 import com.sca4d.auth.passkey.ceremony.PasskeyCeremonyStore;
@@ -9,10 +8,12 @@ import com.sca4d.auth.passkey.credential.YubicoCredentialRepository;
 import com.sca4d.auth.passkey.credential.mapper.PasskeyCredentialMapper;
 import com.sca4d.auth.passkey.registration.PasskeyRegistrationService;
 import com.sca4d.core.api.identity.AccountDirectory;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
-import com.sca4d.core.api.setting.Settings;
-import com.sca4d.core.api.setting.SystemSetting;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.setting.access.SettingReader;
+import com.sca4d.core.api.setting.access.SettingWriter;
+import com.sca4d.core.api.setting.definition.SystemSetting;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.core.spring.redis.Sca4djRedis;
 import com.yubico.webauthn.RelyingParty;
 import com.yubico.webauthn.data.AttestationConveyancePreference;
@@ -22,10 +23,11 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.security.SecureRandom;
 import java.time.Clock;
+import java.time.Duration;
 
 /**
  * 自动装配 Passkey Credential、Redis ceremony 和 Yubico WebAuthn 校验。
@@ -35,6 +37,12 @@ import java.time.Clock;
 @EnableConfigurationProperties(PasskeyProperties.class)
 public class PasskeyAutoConfiguration {
 
+    /** 创建本应用上下文的模块设置，来源由 Spring 显式注入。 */
+    @Bean
+    PasskeySettings passkeySettings(SettingReader<String> reader, SettingWriter<String> writer) {
+        return new PasskeySettings(reader, writer);
+    }
+
     /**
      * 创建 Passkey 自动配置。
      */
@@ -43,14 +51,14 @@ public class PasskeyAutoConfiguration {
 
     /** @return Passkey ceremony 有效期设置 */
     @Bean
-    SystemSetting<java.time.Duration> passkeyCeremonyTtlSetting() {
-        return PasskeySettings.CEREMONY_TTL;
+    SystemSetting<Duration> passkeyCeremonyTtlSetting(PasskeySettings settings) {
+        return settings.CEREMONY_TTL;
     }
 
     /** @return 每个账号的 Passkey Credential 数量上限设置 */
     @Bean
-    SystemSetting<Integer> passkeyMaximumCredentialsSetting() {
-        return PasskeySettings.MAXIMUM_CREDENTIALS;
+    SystemSetting<Integer> passkeyMaximumCredentialsSetting(PasskeySettings settings) {
+        return settings.MAXIMUM_CREDENTIALS;
     }
 
     /**
@@ -98,17 +106,15 @@ public class PasskeyAutoConfiguration {
      */
     @Bean
     PasskeyCeremonyStore passkeyCeremonyStore(
-            @Sca4djRedis StringRedisTemplate redis,
-            @Sca4djJson ObjectMapper objectMapper,
+            @Sca4djRedis RedisTemplate<Key, String> redis,
+            @Sca4djJson Sca4djMapper objectMapper,
             Clock clock,
-            Settings settings,
-            RuntimeNamespace runtimeNamespace) {
+            PasskeySettings settings) {
         return new PasskeyCeremonyStore(
                 redis,
                 objectMapper,
                 clock,
-                settings,
-                runtimeNamespace);
+                settings);
     }
 
     /**
@@ -131,7 +137,7 @@ public class PasskeyAutoConfiguration {
             RelyingParty relyingParty,
             PasskeyCeremonyStore ceremonies,
             PasskeyCredentialRepository credentials,
-            Settings settings,
+            PasskeySettings settings,
             Clock clock) {
         return new PasskeyRegistrationService(
                 relyingParty,

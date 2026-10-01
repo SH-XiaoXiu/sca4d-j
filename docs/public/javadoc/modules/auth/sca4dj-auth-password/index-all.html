@@ -54,7 +54,13 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/auth/password/credential/PasswordCredential.html#accountId()" class="member-name-link">accountId()</a> - Method in class com.sca4d.auth.password.credential.<a href="com/sca4d/auth/password/credential/PasswordCredential.html" title="class in com.sca4d.auth.password.credential">PasswordCredential</a></dt>
 <dd>
-<div class="block">返回密码凭据所属账号。</div>
+<div class="block">密码凭据所属账号。</div>
+</dd>
+<dt><a href="com/sca4d/auth/password/credential/PasswordCredential.html#active()" class="member-name-link">active()</a> - Method in class com.sca4d.auth.password.credential.<a href="com/sca4d/auth/password/credential/PasswordCredential.html" title="class in com.sca4d.auth.password.credential">PasswordCredential</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/password/credential/PasswordCredential.Status.html#ACTIVE" class="member-name-link">ACTIVE</a> - Enum constant in enum class com.sca4d.auth.password.credential.<a href="com/sca4d/auth/password/credential/PasswordCredential.Status.html" title="enum class in com.sca4d.auth.password.credential">PasswordCredential.Status</a></dt>
+<dd>
+<div class="block">当前允许密码认证。</div>
 </dd>
 <dt><a href="com/sca4d/auth/password/PasswordAuthenticationMethod.html#authenticate(com.sca4d.core.api.identity.Account,com.sca4d.auth.password.PasswordProof)" class="member-name-link">authenticate(Account, PasswordProof)</a> - Method in class com.sca4d.auth.password.<a href="com/sca4d/auth/password/PasswordAuthenticationMethod.html" title="class in com.sca4d.auth.password">PasswordAuthenticationMethod</a></dt>
 <dd>&nbsp;</dd>
@@ -67,6 +73,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">仅在目标账号不存在 Password Credential 时写入初始密码摘要。</div>
 </dd>
+<dt><a href="com/sca4d/auth/password/config/PasswordProperties.Bootstrap.html#%3Cinit%3E()" class="member-name-link">Bootstrap()</a> - Constructor for class com.sca4d.auth.password.config.<a href="com/sca4d/auth/password/config/PasswordProperties.Bootstrap.html" title="class in com.sca4d.auth.password.config">PasswordProperties.Bootstrap</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:C">C</h2>
 <dl class="index">
@@ -74,6 +82,14 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/password/PasswordErrorCode.html#category()" class="member-name-link">category()</a> - Method in enum class com.sca4d.auth.password.<a href="com/sca4d/auth/password/PasswordErrorCode.html" title="enum class in com.sca4d.auth.password">PasswordErrorCode</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/password/PasswordAuthenticationMethod.html#changeStatus(long,com.sca4d.auth.password.credential.PasswordCredential.Status,com.sca4d.auth.password.credential.PasswordCredential.Status)" class="member-name-link">changeStatus(long, PasswordCredential.Status, PasswordCredential.Status)</a> - Method in class com.sca4d.auth.password.<a href="com/sca4d/auth/password/PasswordAuthenticationMethod.html" title="class in com.sca4d.auth.password">PasswordAuthenticationMethod</a></dt>
+<dd>
+<div class="block">按乐观版本变更 Password Credential 状态，并终止当前 Account 的全部旧 Session。</div>
+</dd>
+<dt><a href="com/sca4d/auth/password/credential/PasswordCredentialRepository.html#changeStatus(com.sca4d.auth.password.credential.PasswordCredential,com.sca4d.auth.password.credential.PasswordCredential.Status)" class="member-name-link">changeStatus(PasswordCredential, PasswordCredential.Status)</a> - Method in class com.sca4d.auth.password.credential.<a href="com/sca4d/auth/password/credential/PasswordCredentialRepository.html" title="class in com.sca4d.auth.password.credential">PasswordCredentialRepository</a></dt>
+<dd>
+<div class="block">按乐观版本和当前状态切换密码凭据状态。</div>
+</dd>
 <dt><a href="com/sca4d/auth/password/PasswordAuthenticationMethod.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.auth.password.<a href="com/sca4d/auth/password/PasswordAuthenticationMethod.html" title="class in com.sca4d.auth.password">PasswordAuthenticationMethod</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/password/PasswordErrorCode.html#code()" class="member-name-link">code()</a> - Method in enum class com.sca4d.auth.password.<a href="com/sca4d/auth/password/PasswordErrorCode.html" title="enum class in com.sca4d.auth.password">PasswordErrorCode</a></dt>
@@ -115,6 +131,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">删除账号保存的密码摘要。</div>
 </dd>
+<dt><a href="com/sca4d/auth/password/credential/PasswordCredential.Status.html#description()" class="member-name-link">description()</a> - Method in enum class com.sca4d.auth.password.credential.<a href="com/sca4d/auth/password/credential/PasswordCredential.Status.html" title="enum class in com.sca4d.auth.password.credential">PasswordCredential.Status</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/password/credential/PasswordCredential.Status.html#DISABLED" class="member-name-link">DISABLED</a> - Enum constant in enum class com.sca4d.auth.password.credential.<a href="com/sca4d/auth/password/credential/PasswordCredential.Status.html" title="enum class in com.sca4d.auth.password.credential">PasswordCredential.Status</a></dt>
+<dd>
+<div class="block">凭据已停用，通常与账号删除的逻辑删除同时出现。</div>
+</dd>
 </dl>
 <h2 class="title" id="I:E">E</h2>
 <dl class="index">
@@ -132,25 +154,35 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">查询账号当前保存的密码凭据。</div>
 </dd>
+<dt><a href="com/sca4d/auth/password/credential/PasswordCredentialRepository.html#findByAccountId(java.lang.Long,com.sca4d.auth.password.credential.PasswordCredential.Status)" class="member-name-link">findByAccountId(Long, PasswordCredential.Status)</a> - Method in class com.sca4d.auth.password.credential.<a href="com/sca4d/auth/password/credential/PasswordCredentialRepository.html" title="class in com.sca4d.auth.password.credential">PasswordCredentialRepository</a></dt>
+<dd>
+<div class="block">按指定生命周期状态查询账号保存的密码凭据。</div>
+</dd>
 </dl>
 <h2 class="title" id="I:G">G</h2>
 <dl class="index">
 <dt><a href="com/sca4d/auth/password/config/PasswordProperties.html#getAccountRealm()" class="member-name-link">getAccountRealm()</a> - Method in class com.sca4d.auth.password.config.<a href="com/sca4d/auth/password/config/PasswordProperties.html" title="class in com.sca4d.auth.password.config">PasswordProperties</a></dt>
 <dd>
-<div class="block">返回用户名登录和 bootstrap 查找 Account 使用的认证域。</div>
+<div class="block">用户名登录和 bootstrap 查找 Account 使用的认证域。</div>
 </dd>
+<dt><a href="com/sca4d/auth/password/config/PasswordProperties.html#getBootstrap()" class="member-name-link">getBootstrap()</a> - Method in class com.sca4d.auth.password.config.<a href="com/sca4d/auth/password/config/PasswordProperties.html" title="class in com.sca4d.auth.password.config">PasswordProperties</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/password/config/PasswordProperties.html#getBootstrapPassword()" class="member-name-link">getBootstrapPassword()</a> - Method in class com.sca4d.auth.password.config.<a href="com/sca4d/auth/password/config/PasswordProperties.html" title="class in com.sca4d.auth.password.config">PasswordProperties</a></dt>
 <dd>
-<div class="block">返回 bootstrap 原始密码。</div>
+<div class="block">bootstrap 原始密码。</div>
 </dd>
 <dt><a href="com/sca4d/auth/password/config/PasswordProperties.html#getBootstrapUsername()" class="member-name-link">getBootstrapUsername()</a> - Method in class com.sca4d.auth.password.config.<a href="com/sca4d/auth/password/config/PasswordProperties.html" title="class in com.sca4d.auth.password.config">PasswordProperties</a></dt>
 <dd>
-<div class="block">返回 bootstrap 账号用户名。</div>
+<div class="block">bootstrap 账号用户名。</div>
 </dd>
 <dt><a href="com/sca4d/auth/password/config/PasswordProperties.html#getLoginIdentifierTypes()" class="member-name-link">getLoginIdentifierTypes()</a> - Method in class com.sca4d.auth.password.config.<a href="com/sca4d/auth/password/config/PasswordProperties.html" title="class in com.sca4d.auth.password.config">PasswordProperties</a></dt>
 <dd>
-<div class="block">返回 Password 登录依次尝试的开放标识类型。</div>
+<div class="block">Password 登录依次尝试的开放标识类型。</div>
 </dd>
+<dt><a href="com/sca4d/auth/password/config/PasswordProperties.Bootstrap.html#getPassword()" class="member-name-link">getPassword()</a> - Method in class com.sca4d.auth.password.config.<a href="com/sca4d/auth/password/config/PasswordProperties.Bootstrap.html" title="class in com.sca4d.auth.password.config">PasswordProperties.Bootstrap</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/password/config/PasswordProperties.Bootstrap.html#getUsername()" class="member-name-link">getUsername()</a> - Method in class com.sca4d.auth.password.config.<a href="com/sca4d/auth/password/config/PasswordProperties.Bootstrap.html" title="class in com.sca4d.auth.password.config">PasswordProperties.Bootstrap</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:I">I</h2>
 <dl class="index">
@@ -168,14 +200,20 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/auth/password/config/PasswordProperties.html#isBootstrapEnabled()" class="member-name-link">isBootstrapEnabled()</a> - Method in class com.sca4d.auth.password.config.<a href="com/sca4d/auth/password/config/PasswordProperties.html" title="class in com.sca4d.auth.password.config">PasswordProperties</a></dt>
 <dd>
-<div class="block">返回是否在启动时初始化密码凭据。</div>
+<div class="block">是否在启动时初始化密码凭据。</div>
 </dd>
+<dt><a href="com/sca4d/auth/password/config/PasswordProperties.Bootstrap.html#isEnabled()" class="member-name-link">isEnabled()</a> - Method in class com.sca4d.auth.password.config.<a href="com/sca4d/auth/password/config/PasswordProperties.Bootstrap.html" title="class in com.sca4d.auth.password.config">PasswordProperties.Bootstrap</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:L">L</h2>
 <dl class="index">
 <dt><a href="com/sca4d/auth/password/PasswordAuthenticationMethod.html#loadByAccountId(long)" class="member-name-link">loadByAccountId(long)</a> - Method in class com.sca4d.auth.password.<a href="com/sca4d/auth/password/PasswordAuthenticationMethod.html" title="class in com.sca4d.auth.password">PasswordAuthenticationMethod</a></dt>
 <dd>
 <div class="block">读取 Account 当前的 Password Credential。</div>
+</dd>
+<dt><a href="com/sca4d/auth/password/PasswordAuthenticationMethod.html#loadByAccountId(long,com.sca4d.auth.password.credential.PasswordCredential.Status)" class="member-name-link">loadByAccountId(long, PasswordCredential.Status)</a> - Method in class com.sca4d.auth.password.<a href="com/sca4d/auth/password/PasswordAuthenticationMethod.html" title="class in com.sca4d.auth.password">PasswordAuthenticationMethod</a></dt>
+<dd>
+<div class="block">按指定生命周期状态读取 Account 当前保存的 Password Credential。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:M">M</h2>
@@ -198,16 +236,22 @@ loadScripts(document, 'script');</script>
 <div class="block">按 Spring Boot 自动配置约定装配 Password 认证方法、凭据持久化和 bootstrap 任务。</div>
 </dd>
 <dt><a href="com/sca4d/auth/password/config/PasswordAutoConfiguration.html#%3Cinit%3E()" class="member-name-link">PasswordAutoConfiguration()</a> - Constructor for class com.sca4d.auth.password.config.<a href="com/sca4d/auth/password/config/PasswordAutoConfiguration.html" title="class in com.sca4d.auth.password.config">PasswordAutoConfiguration</a></dt>
-<dd>
-<div class="block">创建 Password 模块自动配置。</div>
-</dd>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/password/credential/PasswordCredential.html" class="type-name-link" title="class in com.sca4d.auth.password.credential">PasswordCredential</a> - Class in <a href="com/sca4d/auth/password/credential/package-summary.html">com.sca4d.auth.password.credential</a></dt>
 <dd>
 <div class="block">Account 绑定的不可逆 Argon2id 密码凭据，仅由 <a href="com/sca4d/auth/password/PasswordAuthenticationMethod.html" title="class in com.sca4d.auth.password"><code>PasswordAuthenticationMethod</code></a> 读取摘要并完成验证。</div>
 </dd>
 <dt><a href="com/sca4d/auth/password/credential/PasswordCredential.html#%3Cinit%3E(java.lang.Long,java.lang.String,java.time.Instant,com.sca4d.core.api.concurrent.Version)" class="member-name-link">PasswordCredential(Long, String, Instant, Version)</a> - Constructor for class com.sca4d.auth.password.credential.<a href="com/sca4d/auth/password/credential/PasswordCredential.html" title="class in com.sca4d.auth.password.credential">PasswordCredential</a></dt>
 <dd>
+<div class="block">创建状态为 ACTIVE 的密码凭据，供现有创建调用方使用。</div>
+</dd>
+<dt><a href="com/sca4d/auth/password/credential/PasswordCredential.html#%3Cinit%3E(java.lang.Long,java.lang.String,java.time.Instant,com.sca4d.core.api.concurrent.Version,com.sca4d.auth.password.credential.PasswordCredential.Status)" class="member-name-link">PasswordCredential(Long, String, Instant, Version, PasswordCredential.Status)</a> - Constructor for class com.sca4d.auth.password.credential.<a href="com/sca4d/auth/password/credential/PasswordCredential.html" title="class in com.sca4d.auth.password.credential">PasswordCredential</a></dt>
+<dd>
 <div class="block">创建账号的密码凭据。</div>
+</dd>
+<dt><a href="com/sca4d/auth/password/credential/PasswordCredential.Status.html" class="type-name-link" title="enum class in com.sca4d.auth.password.credential">PasswordCredential.Status</a> - Enum Class in <a href="com/sca4d/auth/password/credential/package-summary.html">com.sca4d.auth.password.credential</a></dt>
+<dd>
+<div class="block">Password 凭据的有限生命周期状态。</div>
 </dd>
 <dt><a href="com/sca4d/auth/password/credential/mapper/PasswordCredentialMapper.html" class="type-name-link" title="interface in com.sca4d.auth.password.credential.mapper">PasswordCredentialMapper</a> - Interface in <a href="com/sca4d/auth/password/credential/mapper/package-summary.html">com.sca4d.auth.password.credential.mapper</a></dt>
 <dd>
@@ -242,8 +286,10 @@ loadScripts(document, 'script');</script>
 <div class="block">配置 Password 用户名认证域和本地初始账号凭据。</div>
 </dd>
 <dt><a href="com/sca4d/auth/password/config/PasswordProperties.html#%3Cinit%3E()" class="member-name-link">PasswordProperties()</a> - Constructor for class com.sca4d.auth.password.config.<a href="com/sca4d/auth/password/config/PasswordProperties.html" title="class in com.sca4d.auth.password.config">PasswordProperties</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/password/config/PasswordProperties.Bootstrap.html" class="type-name-link" title="class in com.sca4d.auth.password.config">PasswordProperties.Bootstrap</a> - Class in <a href="com/sca4d/auth/password/config/package-summary.html">com.sca4d.auth.password.config</a></dt>
 <dd>
-<div class="block">创建使用默认 bootstrap 设置的 Password 配置。</div>
+<div class="block">配置初始账号密码凭据。</div>
 </dd>
 <dt><a href="com/sca4d/auth/password/PasswordAuthenticationMethod.html#proofType()" class="member-name-link">proofType()</a> - Method in class com.sca4d.auth.password.<a href="com/sca4d/auth/password/PasswordAuthenticationMethod.html" title="class in com.sca4d.auth.password">PasswordAuthenticationMethod</a></dt>
 <dd>&nbsp;</dd>
@@ -256,11 +302,23 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/auth/password/PasswordAuthenticationMethod.html#replace(long,java.lang.String)" class="member-name-link">replace(long, String)</a> - Method in class com.sca4d.auth.password.<a href="com/sca4d/auth/password/PasswordAuthenticationMethod.html" title="class in com.sca4d.auth.password">PasswordAuthenticationMethod</a></dt>
 <dd>
-<div class="block">替换 Password Credential，并终止该 Account 的全部旧 Session。</div>
+<div class="block">替换 Password Credential，并终止当前 Account 的全部旧 Session。</div>
 </dd>
-<dt><a href="com/sca4d/auth/password/credential/PasswordCredentialRepository.html#replace(java.lang.Long,java.lang.String,com.sca4d.core.api.concurrent.Version)" class="member-name-link">replace(Long, String, Version)</a> - Method in class com.sca4d.auth.password.credential.<a href="com/sca4d/auth/password/credential/PasswordCredentialRepository.html" title="class in com.sca4d.auth.password.credential">PasswordCredentialRepository</a></dt>
+<dt><a href="com/sca4d/auth/password/PasswordAuthenticationMethod.html#replace(long,java.lang.String,com.sca4d.auth.password.credential.PasswordCredential.Status)" class="member-name-link">replace(long, String, PasswordCredential.Status)</a> - Method in class com.sca4d.auth.password.<a href="com/sca4d/auth/password/PasswordAuthenticationMethod.html" title="class in com.sca4d.auth.password">PasswordAuthenticationMethod</a></dt>
 <dd>
-<div class="block">按乐观版本替换密码摘要。</div>
+<div class="block">按指定当前状态替换 Password Credential，并恢复为 ACTIVE。</div>
+</dd>
+<dt><a href="com/sca4d/auth/password/credential/PasswordCredentialRepository.html#replace(long,java.lang.String,com.sca4d.core.api.concurrent.Version)" class="member-name-link">replace(long, String, Version)</a> - Method in class com.sca4d.auth.password.credential.<a href="com/sca4d/auth/password/credential/PasswordCredentialRepository.html" title="class in com.sca4d.auth.password.credential">PasswordCredentialRepository</a></dt>
+<dd>
+<div class="block">按账号、摘要和预期版本替换 ACTIVE 凭据。</div>
+</dd>
+<dt><a href="com/sca4d/auth/password/credential/PasswordCredentialRepository.html#replace(com.sca4d.auth.password.credential.PasswordCredential,java.lang.String,com.sca4d.auth.password.credential.PasswordCredential.Status)" class="member-name-link">replace(PasswordCredential, String, PasswordCredential.Status)</a> - Method in class com.sca4d.auth.password.credential.<a href="com/sca4d/auth/password/credential/PasswordCredentialRepository.html" title="class in com.sca4d.auth.password.credential">PasswordCredentialRepository</a></dt>
+<dd>
+<div class="block">按当前凭据的版本和状态替换密码摘要及目标状态。</div>
+</dd>
+<dt><a href="com/sca4d/auth/password/credential/PasswordCredential.Status.html#RESET_REQUIRED" class="member-name-link">RESET_REQUIRED</a> - Enum constant in enum class com.sca4d.auth.password.credential.<a href="com/sca4d/auth/password/credential/PasswordCredential.Status.html" title="enum class in com.sca4d.auth.password.credential">PasswordCredential.Status</a></dt>
+<dd>
+<div class="block">当前密码已暂停，必须重新设置密码。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:S">S</h2>
@@ -285,10 +343,18 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">设置 bootstrap 账号用户名。</div>
 </dd>
+<dt><a href="com/sca4d/auth/password/config/PasswordProperties.Bootstrap.html#setEnabled(boolean)" class="member-name-link">setEnabled(boolean)</a> - Method in class com.sca4d.auth.password.config.<a href="com/sca4d/auth/password/config/PasswordProperties.Bootstrap.html" title="class in com.sca4d.auth.password.config">PasswordProperties.Bootstrap</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/password/config/PasswordProperties.html#setLoginIdentifierTypes(java.util.List)" class="member-name-link">setLoginIdentifierTypes(List&lt;String&gt;)</a> - Method in class com.sca4d.auth.password.config.<a href="com/sca4d/auth/password/config/PasswordProperties.html" title="class in com.sca4d.auth.password.config">PasswordProperties</a></dt>
 <dd>
 <div class="block">设置 Password 登录使用的开放标识类型。</div>
 </dd>
+<dt><a href="com/sca4d/auth/password/config/PasswordProperties.Bootstrap.html#setPassword(java.lang.String)" class="member-name-link">setPassword(String)</a> - Method in class com.sca4d.auth.password.config.<a href="com/sca4d/auth/password/config/PasswordProperties.Bootstrap.html" title="class in com.sca4d.auth.password.config">PasswordProperties.Bootstrap</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/password/config/PasswordProperties.Bootstrap.html#setUsername(java.lang.String)" class="member-name-link">setUsername(String)</a> - Method in class com.sca4d.auth.password.config.<a href="com/sca4d/auth/password/config/PasswordProperties.Bootstrap.html" title="class in com.sca4d.auth.password.config">PasswordProperties.Bootstrap</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/password/credential/PasswordCredential.html#status()" class="member-name-link">status()</a> - Method in class com.sca4d.auth.password.credential.<a href="com/sca4d/auth/password/credential/PasswordCredential.html" title="class in com.sca4d.auth.password.credential">PasswordCredential</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:T">T</h2>
 <dl class="index">
@@ -297,20 +363,31 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:U">U</h2>
 <dl class="index">
-<dt><a href="com/sca4d/auth/password/credential/mapper/PasswordCredentialMapper.html#updateCredentialIfVersion(java.lang.Long,java.lang.String,com.sca4d.core.api.concurrent.Version)" class="member-name-link">updateCredentialIfVersion(Long, String, Version)</a> - Method in interface com.sca4d.auth.password.credential.mapper.<a href="com/sca4d/auth/password/credential/mapper/PasswordCredentialMapper.html" title="interface in com.sca4d.auth.password.credential.mapper">PasswordCredentialMapper</a></dt>
+<dt><a href="com/sca4d/auth/password/credential/mapper/PasswordCredentialMapper.html#update(java.lang.Long,com.sca4d.core.api.concurrent.Version,com.sca4d.auth.password.credential.PasswordCredential.Status,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch)" class="member-name-link">update(Long, Version, PasswordCredential.Status, Patch&lt;String&gt;, Patch&lt;PasswordCredential.Status&gt;)</a> - Method in interface com.sca4d.auth.password.credential.mapper.<a href="com/sca4d/auth/password/credential/mapper/PasswordCredentialMapper.html" title="interface in com.sca4d.auth.password.credential.mapper">PasswordCredentialMapper</a></dt>
 <dd>
-<div class="block">按乐观版本替换密码摘要。</div>
+<div class="block">按预期版本和状态执行密码摘要、状态的部分更新。</div>
 </dd>
 <dt><a href="com/sca4d/auth/password/credential/PasswordCredential.html#updatedAt()" class="member-name-link">updatedAt()</a> - Method in class com.sca4d.auth.password.credential.<a href="com/sca4d/auth/password/credential/PasswordCredential.html" title="class in com.sca4d.auth.password.credential">PasswordCredential</a></dt>
 <dd>
-<div class="block">返回密码凭据最近更新时间。</div>
+<div class="block">密码凭据最近更新时间。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:V">V</h2>
 <dl class="index">
+<dt><a href="com/sca4d/auth/password/credential/PasswordCredential.Status.html#value()" class="member-name-link">value()</a> - Method in enum class com.sca4d.auth.password.credential.<a href="com/sca4d/auth/password/credential/PasswordCredential.Status.html" title="enum class in com.sca4d.auth.password.credential">PasswordCredential.Status</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/password/credential/PasswordCredential.Status.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class com.sca4d.auth.password.credential.<a href="com/sca4d/auth/password/credential/PasswordCredential.Status.html" title="enum class in com.sca4d.auth.password.credential">PasswordCredential.Status</a></dt>
+<dd>
+<div class="block">Returns the enum constant of this class with the specified name.</div>
+</dd>
 <dt><a href="com/sca4d/auth/password/PasswordErrorCode.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class com.sca4d.auth.password.<a href="com/sca4d/auth/password/PasswordErrorCode.html" title="enum class in com.sca4d.auth.password">PasswordErrorCode</a></dt>
 <dd>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
+</dd>
+<dt><a href="com/sca4d/auth/password/credential/PasswordCredential.Status.html#values()" class="member-name-link">values()</a> - Static method in enum class com.sca4d.auth.password.credential.<a href="com/sca4d/auth/password/credential/PasswordCredential.Status.html" title="enum class in com.sca4d.auth.password.credential">PasswordCredential.Status</a></dt>
+<dd>
+<div class="block">Returns an array containing the constants of this enum class, in
+the order they are declared.</div>
 </dd>
 <dt><a href="com/sca4d/auth/password/PasswordErrorCode.html#values()" class="member-name-link">values()</a> - Static method in enum class com.sca4d.auth.password.<a href="com/sca4d/auth/password/PasswordErrorCode.html" title="enum class in com.sca4d.auth.password">PasswordErrorCode</a></dt>
 <dd>
@@ -321,7 +398,7 @@ the order they are declared.</div>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/password/credential/PasswordCredential.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.auth.password.credential.<a href="com/sca4d/auth/password/credential/PasswordCredential.html" title="class in com.sca4d.auth.password.credential">PasswordCredential</a></dt>
 <dd>
-<div class="block">返回密码凭据版本。</div>
+<div class="block">密码凭据版本。</div>
 </dd>
 </dl>
 <a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:L">L</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:U">U</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a></main>

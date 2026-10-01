@@ -1,7 +1,9 @@
 [versions]
+pf4j = "3.16.0"
 bouncycastle = "1.84"
 aliyun-sms = "4.6.0"
 bucket4j = "8.18.0"
+dynamic-datasource = "4.5.0"
 googleauth = "1.5.0"
 hivemq-mqtt = "1.3.10"
 httpclient = "4.5.14"
@@ -14,7 +16,6 @@ jsoup = "1.23.2"
 libphonenumber = "9.0.35"
 logback = "1.5.25"
 minio = "9.0.3"
-mustache = "0.9.14"
 mybatis = "3.5.19"
 mybatis-spring-boot = "3.0.5"
 owasp-html-sanitizer = "20240325.1"
@@ -35,12 +36,13 @@ webauthn-server = "2.9.0"
 oauth2-oidc-sdk = "11.37.2"
 
 [libraries]
+pf4j = { module = "org.pf4j:pf4j", version.ref = "pf4j" }
+dynamic-datasource-starter = { module = "com.baomidou:dynamic-datasource-spring-boot3-starter", version.ref = "dynamic-datasource" }
 aliyun-sms = { module = "com.aliyun:dysmsapi20170525", version.ref = "aliyun-sms" }
 bouncycastle-provider = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncycastle" }
 bucket4j-core = { module = "com.bucket4j:bucket4j_jdk17-core", version.ref = "bucket4j" }
 bucket4j-redis-common = { module = "com.bucket4j:bucket4j_jdk17-redis-common", version.ref = "bucket4j" }
 bucket4j-redisson = { module = "com.bucket4j:bucket4j_jdk17-redisson", version.ref = "bucket4j" }
-caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version = "3.2.2" }
 flyway-core = { module = "org.flywaydb:flyway-core" }
 flyway-postgresql = { module = "org.flywaydb:flyway-database-postgresql" }
 googleauth = { module = "com.warrenstrange:googleauth", version.ref = "googleauth" }
@@ -66,7 +68,6 @@ mybatis-spring = { module = "org.mybatis:mybatis-spring", version.ref = "mybatis
 mybatis-spring-boot-autoconfigure = { module = "org.mybatis.spring.boot:mybatis-spring-boot-autoconfigure", version.ref = "mybatis-spring-boot" }
 mybatis-spring-boot-starter = { module = "org.mybatis.spring.boot:mybatis-spring-boot-starter", version.ref = "mybatis-spring-boot" }
 minio = { module = "io.minio:minio", version.ref = "minio" }
-mustache-compiler = { module = "com.github.spullara.mustache.java:compiler", version.ref = "mustache" }
 owasp-html-sanitizer = { module = "com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer", version.ref = "owasp-html-sanitizer" }
 postgresql = { module = "org.postgresql:postgresql" }
 redisson = { module = "org.redisson:redisson", version.ref = "redisson" }
@@ -96,6 +97,7 @@ spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-star
 spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
 spring-boot-starter-websocket = { module = "org.springframework.boot:spring-boot-starter-websocket" }
+reactor-netty-http = { module = "io.projectreactor.netty:reactor-netty-http" }
 spring-boot-testcontainers = { module = "org.springframework.boot:spring-boot-testcontainers" }
 spring-amqp = { module = "org.springframework.amqp:spring-amqp" }
 spring-data-redis = { module = "org.springframework.data:spring-data-redis" }

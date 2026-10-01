@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存一次 Product 选择解析得到的稳定 Device 绑定和技术定义。 */
-public final class ProductResolution {
+public class ProductResolution {
 
     private final @NotNull ProductBinding binding;
 

@@ -15,13 +15,21 @@ describe('actionVerificationController', () => {
     const controller = controllerWith(async (request) => {
       requests.push(request);
       if (request.path === '/verifications') {
-        return ok(verification(3, ['password', 'passkey', 'totp']));
+        return ok(
+          verification(3, [
+            'AUTHENTICATION/PASSWORD',
+            'AUTHENTICATION/PASSKEY',
+            'AUTHENTICATION/TOTP',
+          ]),
+        );
       }
       if (request.path.endsWith('/password/proofs')) {
-        return ok(verification(2, ['passkey', 'totp']));
+        return ok(
+          verification(2, ['AUTHENTICATION/PASSKEY', 'AUTHENTICATION/TOTP']),
+        );
       }
       if (request.path.endsWith('/passkey/proofs')) {
-        return ok(verification(1, ['totp']));
+        return ok(verification(1, ['AUTHENTICATION/TOTP']));
       }
       if (request.path.endsWith('/totp/proofs')) {
         return ok(verification(0, []));
@@ -35,7 +43,7 @@ describe('actionVerificationController', () => {
       remainingFactorCount: 3,
     });
     await expect(controller.submitPassword('secret')).resolves.toMatchObject({
-      availableMethods: ['passkey', 'totp'],
+      availableMethods: ['AUTHENTICATION/PASSKEY', 'AUTHENTICATION/TOTP'],
     });
     await expect(
       controller.submitPasskey({
@@ -68,9 +76,9 @@ describe('actionVerificationController', () => {
   });
 
   it('拒绝使用尚未满足的 verification 执行写入', () => {
-    expect(() => verificationHeaders(verification(1, ['password']))).toThrow(
-      '动作认证尚未满足要求',
-    );
+    expect(() =>
+      verificationHeaders(verification(1, ['AUTHENTICATION/PASSWORD'])),
+    ).toThrow('动作认证尚未满足要求');
   });
 });
 

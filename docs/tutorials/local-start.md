@@ -1,6 +1,8 @@
 # 第一次运行
 
-完成以下操作后，本机会运行 PostgreSQL、Redis、RabbitMQ、MinIO、Mailpit、Sca4d Gateway、Sca4d Server 和管理端。除特别说明外，命令都从仓库根目录执行。
+先复制本地配置并启动基础设施，再分别启动 Gateway、Server 和管理端，最后用初始管理员登录。Gateway 是浏览器访问后端的入口，Server 执行业务，管理端负责页面；除特别说明外，命令均在仓库根目录执行。
+
+完整示例使用 PostgreSQL、Redis、RabbitMQ、MinIO、Mailpit、EMQX 和 TimescaleDB。Gateway、Server 和管理端需要分别保持运行；按以下顺序启动，每一步检查通过后再继续。
 
 ## 准备工具
 
@@ -38,7 +40,7 @@ done
 
 管理端开发服务器默认使用 `http://localhost:5666`，Gateway 默认使用 `http://localhost:8088`，Server 默认使用 `http://localhost:8080`。本地 `SCA4DJ_AUTH_PASSKEY_RELYING_PARTY_ID` 为 `localhost`；Passkey 必须从 `SCA4DJ_FRONTEND_ORIGIN` 对应的完整地址打开页面，不要混用 `127.0.0.1` 或其他端口。
 
-PostgreSQL 和 TimescaleDB 只在各自数据目录首次初始化时读取用户名与密码。要按新的 `.env/database.env` 或 `.env/iot-database.env` 重建本地数据库，先停止对应容器，再由操作者清理 `docker-data/postgresql` 与可选的 `docker-data/iot/timescaledb`；仅修改环境文件不会修改已经存在数据库角色的密码。
+PostgreSQL 和 TimescaleDB 只在各自数据目录首次初始化时读取用户名与密码。清理数据目录会删除其中的全部数据库数据，只能在确认数据可丢弃或已经备份后执行。要按新的 `.env/database.env` 或 `.env/iot-database.env` 重建本地数据库，先停止对应容器，再由操作者清理 `docker-data/postgresql` 与可选的 `docker-data/iot/timescaledb`；仅修改环境文件不会修改已经存在数据库角色的密码。
 
 ## 启动全部本地依赖
 
@@ -92,16 +94,16 @@ Gateway 默认监听 `http://localhost:8088`。打开 `http://localhost:8088/act
 ./gradlew :apps:sca4d-server:bootRun
 ```
 
-Server 默认监听 `http://localhost:8080`，readiness 后使用 `.env/application.env` 中相同的 Secret 向 Gateway 注册。`local` 配置在 `SCA4DJ_OPENAPI_ENABLED=true` 时启用 OpenAPI 和 Swagger UI，可从统一入口打开：
+Server 默认监听 `http://localhost:8080`，readiness 后使用 `.env/application.env` 中相同的 Secret 向 Gateway 注册。`local` 配置在 `SCA4DJ_CORE_OPENAPI_ENABLED=true` 时启用 OpenAPI 和 Swagger UI，可从统一入口打开：
 
 - `http://localhost:8088/api/swagger-ui/index.html`；
 - `http://localhost:8088/api/v3/api-docs`。
 
-Server 启动日志出现“Server 实例已向 Gateway 注册”后，再使用 Swagger UI 和登录请求确认统一入口已经可用。`http://localhost:8080` 只用于检查单个 Server 实例，不作为浏览器和外部系统的正常入口。
+Server 启动日志出现「Server 实例已向 Gateway 注册」后，再使用 Swagger UI 和登录请求确认统一入口已经可用。`http://localhost:8080` 只用于检查单个 Server 实例，不作为浏览器和外部系统的正常入口。
 
 ## 启动管理端
 
-另开一个终端。开发服务器自动读取仓库根目录 `.env/frontend.env` 中的 `SCA4D_API_TARGET`，修改目标地址后需要重启开发服务器：
+另开一个终端。开发服务器自动读取仓库根目录 `.env/frontend.env` 中的 `SCA4DJ_API_TARGET`，修改目标地址后需要重启开发服务器：
 
 ```bash
 cd frontends/sca4d-admin
@@ -109,11 +111,11 @@ pnpm install
 pnpm dev
 ```
 
-开发脚本默认监听 `http://localhost:5666`。浏览器请求使用 `/api`，Vite 保留路径并转发到 `SCA4D_API_TARGET`；环境示例默认指向 `http://localhost:8088`，端口被占用时应与 `.env/application.env` 中的 Gateway 地址保持一致。
+开发脚本默认监听 `http://localhost:5666`。浏览器请求使用 `/api`，Vite 保留路径并转发到 `SCA4DJ_API_TARGET`；环境示例默认指向 `http://localhost:8088`，端口被占用时应与 `.env/application.env` 中的 Gateway 地址保持一致。
 
 ## 配置本地邮件
 
-清空数据库后没有 SMTP 发送方或统一通知模板。登录初始管理员后，通过 Swagger UI 或管理端调用 `/system/email/senders` 创建一个 `host=localhost`、`port=1025`、`security=NONE` 且不带用户名和密码的 Mailpit 发送方，测试连接并启用它。再为实际要发送的 NotificationCode 创建并启用统一通知模板；这两类资源保存在数据库，不应写入环境变量。认证邮件会出现在 `http://localhost:8025`。
+清空数据库后没有 SMTP 发送方或 Email 模板。登录初始管理员后，通过 Swagger UI 或管理端调用 `/system/email/senders` 创建一个 `host=localhost`、`port=1025`、`security=NONE` 且不带用户名和密码的 Mailpit 发送方，测试连接并启用它。再为实际要发送的通知 `TreeCode` 创建并启用 Email 模板；这两类资源保存在数据库，不应写入环境变量。认证邮件会出现在 `http://localhost:8025`。
 
 ## 检查结果
 
@@ -123,6 +125,6 @@ pnpm dev
 4. 管理端能够在 `http://localhost:5666` 打开登录页，并通过 `/api` 请求后端；
 5. 上传头像或文件时，浏览器能够向 MinIO 的预签名地址传输文件；
 6. 注册 Passkey 后，浏览器能够完成 WebAuthn ceremony 并提交结果；
-7. 启用的 Mailpit SMTP 发送方和统一通知模板能够把认证邮件显示在 Mailpit 收件箱。
+7. 启用的 Mailpit SMTP 发送方和 Email 模板能够把认证邮件显示在 Mailpit 收件箱。
 
 接下来按 [HTTP API 基础](/tutorials/authentication-and-session) 完成登录。运行配置的准确入口见 [Sca4d Server 应用规格](/reference/)，前后端职责见 [Sca4d Server 应用设计](/tutorials/assemble-application) 与 [Sca4d 管理端设计](/tutorials/admin-feature)。

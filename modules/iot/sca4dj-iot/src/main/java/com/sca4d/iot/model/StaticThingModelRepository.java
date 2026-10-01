@@ -15,7 +15,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 从 App 静态 Builder 定义构造只读 ThingModelRepository。 */
-public final class StaticThingModelRepository implements ThingModelRepository {
+public class StaticThingModelRepository implements ThingModelRepository {
 
     private final @NotNull Map<String, Map<Integer, ThingModelPresentation>> models;
 

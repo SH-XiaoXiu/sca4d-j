@@ -10,20 +10,25 @@ import java.time.Duration;
 
 /** 保存 Sca4d Server 自有 IoT HTTP 行为的运行参数。 */
 @ConfigurationProperties("app.iot")
-public final class AppIotProperties {
+public class AppIotProperties {
 
-    private @Nullable String emqxWebhookSecret;
+    private final Emqx emqx = new Emqx();
 
     private Duration deviceCreationCleanupInterval = Duration.ofMinutes(10);
 
     /** @return EMQX HTTP Authenticator 回调使用的 Secret */
     public @Nullable String getEmqxWebhookSecret() {
-        return emqxWebhookSecret;
+        return emqx.webhookSecret;
     }
 
     /** @param emqxWebhookSecret EMQX 回调通过请求头提交的独立 Secret */
     public void setEmqxWebhookSecret(@Nullable String emqxWebhookSecret) {
-        this.emqxWebhookSecret = emqxWebhookSecret;
+        emqx.webhookSecret = emqxWebhookSecret;
+    }
+
+    /** @return 应用 EMQX 回调资源配置 */
+    public @NotNull Emqx getEmqx() {
+        return emqx;
     }
 
     /** @return Device 创建幂等记录的清理间隔 */
@@ -53,10 +58,26 @@ public final class AppIotProperties {
      */
     @CheckReturnValue
     public @NotNull String emqxWebhookSecret() {
-        return DataOps.s(emqxWebhookSecret)
+        return DataOps.s(emqx.webhookSecret)
                 .strip()
-                .req("app.iot.emqx-webhook-secret")
+                .req("app.iot.emqx.webhook-secret")
                 .get();
+    }
+
+    /** 配置应用自己的 EMQX 回调凭据。 */
+    public static class Emqx {
+
+        private @Nullable String webhookSecret;
+
+        /** @return EMQX 回调使用的 Secret */
+        public @Nullable String getWebhookSecret() {
+            return webhookSecret;
+        }
+
+        /** @param webhookSecret EMQX 回调使用的 Secret */
+        public void setWebhookSecret(@Nullable String webhookSecret) {
+            this.webhookSecret = webhookSecret;
+        }
     }
 
 }

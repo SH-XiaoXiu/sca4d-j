@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 <dd><code>com.sca4d.core.api.permission.OperationModule</code>, <code><a href="../../rbac/RbacOperationModule.html" title="interface in com.sca4d.iam.rbac">RbacOperationModule</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">PlatformOperations</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">PlatformOperations</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../../rbac/RbacOperationModule.html" title="interface in com.sca4d.iam.rbac">RbacOperationModule</a></span></div>
 <div class="block">声明 Platform 角色、Account 和 Principal 角色管理使用的 Operation 模块。</div>
@@ -109,33 +109,51 @@ implements <a href="../../rbac/RbacOperationModule.html" title="interface in com
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
 <div class="col-second even-row-color"><code><a href="#ACCOUNTS_MANAGE" class="member-name-link">ACCOUNTS_MANAGE</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#ACCOUNTS_MANAGE_VALUE" class="member-name-link">ACCOUNTS_MANAGE_VALUE</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">创建和修改 Platform Account。</div>
 </div>
+<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
+<div class="col-second even-row-color"><code><a href="#ACCOUNTS_READ" class="member-name-link">ACCOUNTS_READ</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#ACCOUNTS_READ" class="member-name-link">ACCOUNTS_READ</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#ACCOUNTS_READ_VALUE" class="member-name-link">ACCOUNTS_READ_VALUE</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">读取 Platform Account 目录。</div>
 </div>
-<div class="col-first even-row-color"><code>static final @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
 <div class="col-second even-row-color"><code><a href="#PRINCIPAL_ROLES_MANAGE" class="member-name-link">PRINCIPAL_ROLES_MANAGE</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#PRINCIPAL_ROLES_MANAGE_VALUE" class="member-name-link">PRINCIPAL_ROLES_MANAGE_VALUE</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">替换 PlatformPrincipal 的角色。</div>
 </div>
+<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
+<div class="col-second even-row-color"><code><a href="#PRINCIPAL_ROLES_READ" class="member-name-link">PRINCIPAL_ROLES_READ</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#PRINCIPAL_ROLES_READ" class="member-name-link">PRINCIPAL_ROLES_READ</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#PRINCIPAL_ROLES_READ_VALUE" class="member-name-link">PRINCIPAL_ROLES_READ_VALUE</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">读取 PlatformPrincipal 的角色。</div>
 </div>
-<div class="col-first even-row-color"><code>static final @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
 <div class="col-second even-row-color"><code><a href="#ROLES_MANAGE" class="member-name-link">ROLES_MANAGE</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">管理 Platform 角色及其 Operation。</div>
-</div>
+<div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#ROLES_READ" class="member-name-link">ROLES_READ</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#ROLES_MANAGE_VALUE" class="member-name-link">ROLES_MANAGE_VALUE</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">管理 Platform 角色和 Operation。</div>
+</div>
+<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
+<div class="col-second even-row-color"><code><a href="#ROLES_READ" class="member-name-link">ROLES_READ</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#ROLES_READ_VALUE" class="member-name-link">ROLES_READ_VALUE</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">读取 Platform 角色。</div>
 </div>
@@ -195,99 +213,141 @@ implements <a href="../../rbac/RbacOperationModule.html" title="interface in com
 <h2>Field Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="ROLES_READ">
-<h3>ROLES_READ</h3>
+<section class="detail" id="ACCOUNTS_MANAGE_VALUE">
+<h3>ACCOUNTS_MANAGE_VALUE</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">ROLES_READ</span></div>
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">ACCOUNTS_MANAGE_VALUE</span></div>
+<div class="block">创建和修改 Platform Account。</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../../constant-values.html#com.sca4d.iam.base.rbac.PlatformOperations.ACCOUNTS_MANAGE_VALUE">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="ACCOUNTS_READ_VALUE">
+<h3>ACCOUNTS_READ_VALUE</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">ACCOUNTS_READ_VALUE</span></div>
+<div class="block">读取 Platform Account 目录。</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../../constant-values.html#com.sca4d.iam.base.rbac.PlatformOperations.ACCOUNTS_READ_VALUE">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="PRINCIPAL_ROLES_MANAGE_VALUE">
+<h3>PRINCIPAL_ROLES_MANAGE_VALUE</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">PRINCIPAL_ROLES_MANAGE_VALUE</span></div>
+<div class="block">替换 PlatformPrincipal 的角色。</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../../constant-values.html#com.sca4d.iam.base.rbac.PlatformOperations.PRINCIPAL_ROLES_MANAGE_VALUE">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="PRINCIPAL_ROLES_READ_VALUE">
+<h3>PRINCIPAL_ROLES_READ_VALUE</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">PRINCIPAL_ROLES_READ_VALUE</span></div>
+<div class="block">读取 PlatformPrincipal 的角色。</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../../constant-values.html#com.sca4d.iam.base.rbac.PlatformOperations.PRINCIPAL_ROLES_READ_VALUE">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="ROLES_MANAGE_VALUE">
+<h3>ROLES_MANAGE_VALUE</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">ROLES_MANAGE_VALUE</span></div>
+<div class="block">管理 Platform 角色和 Operation。</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../../constant-values.html#com.sca4d.iam.base.rbac.PlatformOperations.ROLES_MANAGE_VALUE">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="ROLES_READ_VALUE">
+<h3>ROLES_READ_VALUE</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">ROLES_READ_VALUE</span></div>
 <div class="block">读取 Platform 角色。</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
 <ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.iam.base.rbac.PlatformOperations.ROLES_READ">Constant Field Values</a></li>
+<li><a href="../../../../../constant-values.html#com.sca4d.iam.base.rbac.PlatformOperations.ROLES_READ_VALUE">Constant Field Values</a></li>
 </ul>
 </dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="ROLES_READ">
+<h3>ROLES_READ</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">ROLES_READ</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="ROLES_MANAGE">
 <h3>ROLES_MANAGE</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">ROLES_MANAGE</span></div>
-<div class="block">管理 Platform 角色及其 Operation。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.iam.base.rbac.PlatformOperations.ROLES_MANAGE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">ROLES_MANAGE</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="ACCOUNTS_READ">
 <h3>ACCOUNTS_READ</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">ACCOUNTS_READ</span></div>
-<div class="block">读取 Platform Account 目录。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.iam.base.rbac.PlatformOperations.ACCOUNTS_READ">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">ACCOUNTS_READ</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="ACCOUNTS_MANAGE">
 <h3>ACCOUNTS_MANAGE</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">ACCOUNTS_MANAGE</span></div>
-<div class="block">创建和修改 Platform Account。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.iam.base.rbac.PlatformOperations.ACCOUNTS_MANAGE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">ACCOUNTS_MANAGE</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="PRINCIPAL_ROLES_READ">
 <h3>PRINCIPAL_ROLES_READ</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">PRINCIPAL_ROLES_READ</span></div>
-<div class="block">读取 PlatformPrincipal 的角色。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.iam.base.rbac.PlatformOperations.PRINCIPAL_ROLES_READ">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">PRINCIPAL_ROLES_READ</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="PRINCIPAL_ROLES_MANAGE">
 <h3>PRINCIPAL_ROLES_MANAGE</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">PRINCIPAL_ROLES_MANAGE</span></div>
-<div class="block">替换 PlatformPrincipal 的角色。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../constant-values.html#com.sca4d.iam.base.rbac.PlatformOperations.PRINCIPAL_ROLES_MANAGE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">PRINCIPAL_ROLES_MANAGE</span></div>
 </section>
 </li>
 </ul>

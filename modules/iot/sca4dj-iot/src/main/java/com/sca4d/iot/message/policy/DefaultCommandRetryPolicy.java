@@ -1,6 +1,7 @@
 package com.sca4d.iot.message.policy;
 
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.message.IotFailureCode;
 import com.sca4d.iot.api.message.RetryDecision;
 import com.sca4d.iot.api.message.RetryPolicy;
@@ -10,24 +11,25 @@ import java.time.Duration;
 import java.time.Instant;
 
 /** 使用固定退避并在第五次发送仍失败后停止的默认命令重试策略。 */
-public final class DefaultCommandRetryPolicy implements RetryPolicy {
+public class DefaultCommandRetryPolicy implements RetryPolicy {
+
+    public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/RETRY/COMMAND/DEFAULT");
 
     private static final Duration[] RETRY_DELAYS = {
             Duration.ofSeconds(1), Duration.ofSeconds(5), Duration.ofSeconds(30), Duration.ofMinutes(2)
     };
 
-    /** 创建默认命令重试策略。 */
     public DefaultCommandRetryPolicy() {
     }
 
     @Override
-    public @NotNull String code() {
-        return "command-default";
+    public @NotNull TreeCode code() {
+        return CODE;
     }
 
     @Override
     public @NotNull RetryDecision evaluate(
-            @NotNull DeviceDownlinkMessage message,
+            @NotNull DeviceDownlink message,
             @NotNull IotFailureCode failure,
             @NotNull Instant now) {
         if (message.attemptCount() >= 5)

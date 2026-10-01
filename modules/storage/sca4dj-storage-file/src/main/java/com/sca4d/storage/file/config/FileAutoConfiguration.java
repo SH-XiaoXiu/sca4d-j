@@ -3,7 +3,6 @@ package com.sca4d.storage.file.config;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.job.JobExecutor;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
 import com.sca4d.core.api.scheduling.IntervalSchedule;
 import com.sca4d.core.api.scheduling.JobSchedule;
 import com.sca4d.core.api.scheduling.JobScheduler;
@@ -11,8 +10,9 @@ import com.sca4d.core.api.scheduling.MisfirePolicy;
 import com.sca4d.core.api.scheduling.OverlapPolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.api.security.SecretKeyring;
-import com.sca4d.core.api.setting.Settings;
-import com.sca4d.core.api.setting.SystemSetting;
+import com.sca4d.core.api.setting.access.SettingReader;
+import com.sca4d.core.api.setting.access.SettingWriter;
+import com.sca4d.core.api.setting.definition.SystemSetting;
 import com.sca4d.core.api.storage.FileService;
 import com.sca4d.core.api.storage.FileStorage;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
@@ -32,6 +32,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.time.Clock;
+import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,32 +42,38 @@ import java.util.Objects;
 @EnableConfigurationProperties(FileProperties.class)
 @EnableTransactionManagement
 public class FileAutoConfiguration {
-    /** 创建文件模块自动配置。 */
+
+    /** 创建本应用上下文的模块设置，来源由 Spring 显式注入。 */
+    @Bean
+    FileSettings fileSettings(SettingReader<String> reader, SettingWriter<String> writer) {
+        return new FileSettings(reader, writer);
+    }
+
     public FileAutoConfiguration() {
     }
 
     /** @return 文件上传有效期设置 */
     @Bean
-    SystemSetting<java.time.Duration> fileUploadTtlSetting() {
-        return FileSettings.UPLOAD_TTL;
+    SystemSetting<Duration> fileUploadTtlSetting(FileSettings settings) {
+        return settings.UPLOAD_TTL;
     }
 
     /** @return 文件访问地址有效期设置 */
     @Bean
-    SystemSetting<java.time.Duration> fileAccessTtlSetting() {
-        return FileSettings.ACCESS_TTL;
+    SystemSetting<Duration> fileAccessTtlSetting(FileSettings settings) {
+        return settings.ACCESS_TTL;
     }
 
     /** @return 待绑定文件保留期设置 */
     @Bean
-    SystemSetting<java.time.Duration> fileReadyRetentionSetting() {
-        return FileSettings.READY_RETENTION;
+    SystemSetting<Duration> fileReadyRetentionSetting(FileSettings settings) {
+        return settings.READY_RETENTION;
     }
 
     /** @return 文件大小上限设置 */
     @Bean
-    SystemSetting<Long> fileMaximumSizeSetting() {
-        return FileSettings.MAXIMUM_SIZE_BYTES;
+    SystemSetting<Long> fileMaximumSizeSetting(FileSettings settings) {
+        return settings.MAXIMUM_SIZE_BYTES;
     }
 
     /**
@@ -98,9 +105,8 @@ public class FileAutoConfiguration {
     TransferTokenService storageTransferTokenService(
             @NotNull SecretKeyring keyring,
             @NotNull FileProperties properties,
-            @NotNull Clock storageClock,
-            @NotNull RuntimeNamespace runtimeNamespace) {
-        return new TransferTokenService(keyring, properties.getTransferBaseUrl(), storageClock, runtimeNamespace);
+            @NotNull Clock storageClock) {
+        return new TransferTokenService(keyring, properties.getTransferBaseUrl(), storageClock);
     }
 
     @Bean
@@ -109,10 +115,9 @@ public class FileAutoConfiguration {
             @NotNull StorageRegistry storages,
             @NotNull IdGenerator ids,
             @NotNull FileProperties properties,
-            @NotNull Settings settings,
+            @NotNull FileSettings settings,
             @NotNull TransferTokenService tokens,
             @NotNull Clock storageClock,
-            @NotNull RuntimeNamespace runtimeNamespace,
             @NotNull DistributedLock distributedLock,
             @NotNull PlatformTransactionManager transactions) {
         return new DefaultFileService(
@@ -123,7 +128,6 @@ public class FileAutoConfiguration {
                 settings,
                 tokens,
                 storageClock,
-                runtimeNamespace,
                 distributedLock,
                 transactions);
     }
@@ -177,7 +181,7 @@ public class FileAutoConfiguration {
         Objects.requireNonNull(jobExecutor, "文件清理计划要求应用提供 JobExecutor Bean");
         Objects.requireNonNull(jobScheduler, "文件清理计划要求应用提供 JobScheduler Bean");
         return new JobSchedule<>(
-                new ScheduleKey("storage.file.cleanup"),
+                new ScheduleKey("STORAGE/FILE/CLEANUP"),
                 1,
                 job,
                 null,

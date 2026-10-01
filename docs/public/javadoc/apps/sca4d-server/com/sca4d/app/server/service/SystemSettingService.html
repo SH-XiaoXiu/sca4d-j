@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="annotations">@Service
-</span><span class="modifiers">public final class </span><span class="element-name type-name-label">SystemSettingService</span>
+</span><span class="modifiers">public class </span><span class="element-name type-name-label">SystemSettingService</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">管理当前应用注册的 SystemSetting，不允许请求创建未声明的任意键。</div>
 </section>
@@ -104,8 +104,7 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.spring.setting.SettingCatalog,com.sca4d.core.api.setting.Settings)" class="member-name-link">SystemSettingService</a><wbr>(@NotNull com.sca4d.core.spring.setting.SettingCatalog&nbsp;catalog,
- @NotNull com.sca4d.core.api.setting.Settings&nbsp;settings)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.spring.setting.SettingCatalog)" class="member-name-link">SystemSettingService</a><wbr>(@NotNull com.sca4d.core.spring.setting.SettingCatalog&nbsp;catalog)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建系统设置应用服务。</div>
 </div>
@@ -126,16 +125,16 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="../system/ManagedSetting.html" title="class in com.sca4d.app.server.system">ManagedSetting</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findAll()" class="member-name-link">findAll</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.setting.SettingValue<wbr>&lt;?&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#replace(java.lang.String,com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">replace</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.setting.value.SettingValue<wbr>&lt;?&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#replace(com.sca4d.core.api.name.code.TreeCode,com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">replace</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;key,
  @NotNull com.fasterxml.jackson.databind.JsonNode&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">使用设置自身 Codec 校验 JSON 后覆盖数据库值。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.setting.SettingValue<wbr>&lt;?&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#reset(java.lang.String)" class="member-name-link">reset</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.setting.value.SettingValue<wbr>&lt;?&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#reset(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">reset</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;key)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">删除数据库值，使后续查询恢复 Java 默认值。</div>
+<div class="block">删除数据库值，使之后的查询恢复 Java 默认值。</div>
 </div>
 </div>
 </div>
@@ -155,12 +154,10 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.core.spring.setting.SettingCatalog,com.sca4d.core.api.setting.Settings)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.core.spring.setting.SettingCatalog)">
 <h3>SystemSettingService</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">SystemSettingService</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.spring.setting.SettingCatalog&nbsp;catalog,
- @NotNull
- @NotNull com.sca4d.core.api.setting.Settings&nbsp;settings)</span></div>
+ @NotNull com.sca4d.core.spring.setting.SettingCatalog&nbsp;catalog)</span></div>
 <div class="block">创建系统设置应用服务。</div>
 </section>
 </li>
@@ -185,11 +182,11 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="replace(java.lang.String,com.fasterxml.jackson.databind.JsonNode)">
+<section class="detail" id="replace(com.sca4d.core.api.name.code.TreeCode,com.fasterxml.jackson.databind.JsonNode)">
 <h3>replace</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.setting.SettingValue&lt;?&gt;</span>&nbsp;<span class="element-name">replace</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.setting.value.SettingValue&lt;?&gt;</span>&nbsp;<span class="element-name">replace</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;key,
  @NotNull
  @NotNull com.fasterxml.jackson.databind.JsonNode&nbsp;value)</span></div>
 <div class="block">使用设置自身 Codec 校验 JSON 后覆盖数据库值。</div>
@@ -201,12 +198,12 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="reset(java.lang.String)">
+<section class="detail" id="reset(com.sca4d.core.api.name.code.TreeCode)">
 <h3>reset</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.setting.SettingValue&lt;?&gt;</span>&nbsp;<span class="element-name">reset</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
-<div class="block">删除数据库值，使后续查询恢复 Java 默认值。</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.setting.value.SettingValue&lt;?&gt;</span>&nbsp;<span class="element-name">reset</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;key)</span></div>
+<div class="block">删除数据库值，使之后的查询恢复 Java 默认值。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>key</code> - 已注册设置键</dd>

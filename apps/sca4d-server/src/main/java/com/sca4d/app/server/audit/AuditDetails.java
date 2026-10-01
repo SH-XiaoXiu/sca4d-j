@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 保存 Sca4d Server 明确选择、可以进入审计记录的非敏感字段。 */
-public final class AuditDetails implements AuditPayload {
+public class AuditDetails implements AuditPayload {
     private final @NotNull @Unmodifiable Map<@NotNull String, @NotNull Object> values;
 
     /**

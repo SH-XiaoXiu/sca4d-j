@@ -49,18 +49,20 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1>Index</h1>
 </div>
-<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a>
+<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a>
 <h2 class="title" id="I:A">A</h2>
 <dl class="index">
 <dt><a href="com/sca4d/iot/telemetry/TimescaleDeviceHistoryStore.html#acknowledgements(long,com.sca4d.core.api.query.PageRequest)" class="member-name-link">acknowledgements(long, PageRequest)</a> - Method in class com.sca4d.iot.telemetry.<a href="com/sca4d/iot/telemetry/TimescaleDeviceHistoryStore.html" title="class in com.sca4d.iot.telemetry">TimescaleDeviceHistoryStore</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/telemetry/TimescaleDeviceHistoryStore.html#acknowledgementsByMessageId(long,com.sca4d.core.api.query.PageRequest)" class="member-name-link">acknowledgementsByMessageId(long, PageRequest)</a> - Method in class com.sca4d.iot.telemetry.<a href="com/sca4d/iot/telemetry/TimescaleDeviceHistoryStore.html" title="class in com.sca4d.iot.telemetry">TimescaleDeviceHistoryStore</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/timescale/persistence/TimescaleRepository.html#addEvent(long,com.sca4d.iot.api.history.DeviceEventMessage)" class="member-name-link">addEvent(long, DeviceEventMessage)</a> - Method in class com.sca4d.iot.timescale.persistence.<a href="com/sca4d/iot/timescale/persistence/TimescaleRepository.html" title="class in com.sca4d.iot.timescale.persistence">TimescaleRepository</a></dt>
 <dd>
-<div class="block">按发生时间和 MessageId 幂等写入一条 Device 事件。</div>
+<div class="block">按发生时间和 Id 幂等写入一条 Device 事件。</div>
 </dd>
 <dt><a href="com/sca4d/iot/timescale/persistence/TimescaleRepository.html#addTelemetry(long,com.sca4d.iot.api.telemetry.TelemetryBatch)" class="member-name-link">addTelemetry(long, TelemetryBatch)</a> - Method in class com.sca4d.iot.timescale.persistence.<a href="com/sca4d/iot/timescale/persistence/TimescaleRepository.html" title="class in com.sca4d.iot.timescale.persistence">TimescaleRepository</a></dt>
 <dd>
-<div class="block">按 MessageId 和样本顺序幂等写入一批 Telemetry。</div>
+<div class="block">按 Id 和样本顺序幂等写入一批 Telemetry。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:B">B</h2>
@@ -70,24 +72,20 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:C">C</h2>
 <dl class="index">
+<dt><a href="com/sca4d/iot/telemetry/TimescaleEventConsumer.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.iot.telemetry.<a href="com/sca4d/iot/telemetry/TimescaleEventConsumer.html" title="class in com.sca4d.iot.telemetry">TimescaleEventConsumer</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/telemetry/TimescaleTelemetryConsumer.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.iot.telemetry.<a href="com/sca4d/iot/telemetry/TimescaleTelemetryConsumer.html" title="class in com.sca4d.iot.telemetry">TimescaleTelemetryConsumer</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/config/package-summary.html">com.sca4d.iot.config</a> - package com.sca4d.iot.config</dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/telemetry/package-summary.html">com.sca4d.iot.telemetry</a> - package com.sca4d.iot.telemetry</dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/timescale/persistence/package-summary.html">com.sca4d.iot.timescale.persistence</a> - package com.sca4d.iot.timescale.persistence</dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/telemetry/TimescaleEventConsumer.html#consume(com.sca4d.core.api.messaging.MessageDelivery)" class="member-name-link">consume(MessageDelivery&lt;DeviceEventMessage&gt;)</a> - Method in class com.sca4d.iot.telemetry.<a href="com/sca4d/iot/telemetry/TimescaleEventConsumer.html" title="class in com.sca4d.iot.telemetry">TimescaleEventConsumer</a></dt>
+<dt><a href="com/sca4d/iot/timescale/persistence/TimescaleMapper.html#countAcknowledgementsByMessageId(long)" class="member-name-link">countAcknowledgementsByMessageId(long)</a> - Method in interface com.sca4d.iot.timescale.persistence.<a href="com/sca4d/iot/timescale/persistence/TimescaleMapper.html" title="interface in com.sca4d.iot.timescale.persistence">TimescaleMapper</a></dt>
 <dd>
-<div class="block">同一发生时间和 MessageId 的重复投递不会产生重复事件。</div>
+<div class="block">统计指定下行消息的 ACK 事件。</div>
 </dd>
-<dt><a href="com/sca4d/iot/telemetry/TimescaleTelemetryConsumer.html#consume(com.sca4d.core.api.messaging.MessageDelivery)" class="member-name-link">consume(MessageDelivery&lt;TelemetryBatch&gt;)</a> - Method in class com.sca4d.iot.telemetry.<a href="com/sca4d/iot/telemetry/TimescaleTelemetryConsumer.html" title="class in com.sca4d.iot.telemetry">TimescaleTelemetryConsumer</a></dt>
-<dd>
-<div class="block">同一 MessageId 的 RabbitMQ 重复投递不会产生重复样本。</div>
-</dd>
-<dt><a href="com/sca4d/iot/telemetry/TimescaleEventConsumer.html#consumerCode()" class="member-name-link">consumerCode()</a> - Method in class com.sca4d.iot.telemetry.<a href="com/sca4d/iot/telemetry/TimescaleEventConsumer.html" title="class in com.sca4d.iot.telemetry">TimescaleEventConsumer</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/telemetry/TimescaleTelemetryConsumer.html#consumerCode()" class="member-name-link">consumerCode()</a> - Method in class com.sca4d.iot.telemetry.<a href="com/sca4d/iot/telemetry/TimescaleTelemetryConsumer.html" title="class in com.sca4d.iot.telemetry">TimescaleTelemetryConsumer</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/timescale/persistence/TimescaleMapper.html#countEvents(java.lang.Long,java.lang.String,java.lang.Long)" class="member-name-link">countEvents(Long, String, Long)</a> - Method in interface com.sca4d.iot.timescale.persistence.<a href="com/sca4d/iot/timescale/persistence/TimescaleMapper.html" title="interface in com.sca4d.iot.timescale.persistence">TimescaleMapper</a></dt>
 <dd>
 <div class="block">统计按 Device、事件编码或定时规则筛选的事件。</div>
@@ -95,6 +93,10 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:D">D</h2>
 <dl class="index">
+<dt><a href="com/sca4d/iot/config/IotTimescale.html#DATASOURCE" class="member-name-link">DATASOURCE</a> - Static variable in annotation interface com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotTimescale.html" title="annotation interface in com.sca4d.iot.config">IotTimescale</a></dt>
+<dd>
+<div class="block">在动态数据源配置中声明的 IoT 历史库名称。</div>
+</dd>
 <dt><a href="com/sca4d/iot/timescale/persistence/TimescaleTelemetrySample.html#deviceId()" class="member-name-link">deviceId()</a> - Method in class com.sca4d.iot.timescale.persistence.<a href="com/sca4d/iot/timescale/persistence/TimescaleTelemetrySample.html" title="class in com.sca4d.iot.timescale.persistence">TimescaleTelemetrySample</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/timescale/persistence/TimescaleThingEvent.html#deviceId()" class="member-name-link">deviceId()</a> - Method in class com.sca4d.iot.timescale.persistence.<a href="com/sca4d/iot/timescale/persistence/TimescaleThingEvent.html" title="class in com.sca4d.iot.timescale.persistence">TimescaleThingEvent</a></dt>
@@ -119,9 +121,7 @@ loadScripts(document, 'script');</script>
 <div class="block">映射一条 TimescaleDB Telemetry 查询结果。</div>
 </dd>
 <dt><a href="com/sca4d/iot/timescale/persistence/EncodedTelemetrySample.html#%3Cinit%3E(java.lang.String,java.lang.String,java.time.Instant,java.time.Instant)" class="member-name-link">EncodedTelemetrySample(String, String, Instant, Instant)</a> - Constructor for class com.sca4d.iot.timescale.persistence.<a href="com/sca4d/iot/timescale/persistence/EncodedTelemetrySample.html" title="class in com.sca4d.iot.timescale.persistence">EncodedTelemetrySample</a></dt>
-<dd>
-<div class="block">创建 Telemetry 查询结果。</div>
-</dd>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/timescale/persistence/TimescaleThingEvent.html#eventCode()" class="member-name-link">eventCode()</a> - Method in class com.sca4d.iot.timescale.persistence.<a href="com/sca4d/iot/timescale/persistence/TimescaleThingEvent.html" title="class in com.sca4d.iot.timescale.persistence">TimescaleThingEvent</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/timescale/persistence/TimescaleThingEvent.html#eventId()" class="member-name-link">eventId()</a> - Method in class com.sca4d.iot.timescale.persistence.<a href="com/sca4d/iot/timescale/persistence/TimescaleThingEvent.html" title="class in com.sca4d.iot.timescale.persistence">TimescaleThingEvent</a></dt>
@@ -143,6 +143,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">分页读取 Device 每条下行消息的完整 ACK 阶段历史。</div>
 </dd>
+<dt><a href="com/sca4d/iot/timescale/persistence/TimescaleRepository.html#findAcknowledgementsByMessageId(long,com.sca4d.core.api.query.PageRequest)" class="member-name-link">findAcknowledgementsByMessageId(long, PageRequest)</a> - Method in class com.sca4d.iot.timescale.persistence.<a href="com/sca4d/iot/timescale/persistence/TimescaleRepository.html" title="class in com.sca4d.iot.timescale.persistence">TimescaleRepository</a></dt>
+<dd>
+<div class="block">分页读取指定下行消息的完整 ACK 阶段历史。</div>
+</dd>
 <dt><a href="com/sca4d/iot/timescale/persistence/TimescaleRepository.html#findEvents(long,com.sca4d.core.api.query.PageRequest)" class="member-name-link">findEvents(long, PageRequest)</a> - Method in class com.sca4d.iot.timescale.persistence.<a href="com/sca4d/iot/timescale/persistence/TimescaleRepository.html" title="class in com.sca4d.iot.timescale.persistence">TimescaleRepository</a></dt>
 <dd>
 <div class="block">分页读取 Device 的全部物模型和 IoT 状态机事件。</div>
@@ -160,26 +164,37 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/iot/config/IotTimescaleProperties.html#getCleanupInterval()" class="member-name-link">getCleanupInterval()</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotTimescaleProperties.html" title="class in com.sca4d.iot.config">IotTimescaleProperties</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/config/IotTimescaleProperties.html#getDriverClassName()" class="member-name-link">getDriverClassName()</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotTimescaleProperties.html" title="class in com.sca4d.iot.config">IotTimescaleProperties</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/config/IotTimescaleProperties.html#getEventRetention()" class="member-name-link">getEventRetention()</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotTimescaleProperties.html" title="class in com.sca4d.iot.config">IotTimescaleProperties</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/config/IotTimescaleProperties.html#getMaxQueryResults()" class="member-name-link">getMaxQueryResults()</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotTimescaleProperties.html" title="class in com.sca4d.iot.config">IotTimescaleProperties</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/config/IotTimescaleProperties.html#getPassword()" class="member-name-link">getPassword()</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotTimescaleProperties.html" title="class in com.sca4d.iot.config">IotTimescaleProperties</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/config/IotTimescaleProperties.html#getTelemetryRetention()" class="member-name-link">getTelemetryRetention()</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotTimescaleProperties.html" title="class in com.sca4d.iot.config">IotTimescaleProperties</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/config/IotTimescaleProperties.html#getUrl()" class="member-name-link">getUrl()</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotTimescaleProperties.html" title="class in com.sca4d.iot.config">IotTimescaleProperties</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/config/IotTimescaleProperties.html#getUsername()" class="member-name-link">getUsername()</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotTimescaleProperties.html" title="class in com.sca4d.iot.config">IotTimescaleProperties</a></dt>
-<dd>&nbsp;</dd>
+</dl>
+<h2 class="title" id="I:H">H</h2>
+<dl class="index">
+<dt><a href="com/sca4d/iot/telemetry/TimescaleEventConsumer.html#handle(com.sca4d.core.api.messaging.IncomingMessage)" class="member-name-link">handle(IncomingMessage&lt;Event&lt;DeviceEventMessage&gt;&gt;)</a> - Method in class com.sca4d.iot.telemetry.<a href="com/sca4d/iot/telemetry/TimescaleEventConsumer.html" title="class in com.sca4d.iot.telemetry">TimescaleEventConsumer</a></dt>
+<dd>
+<div class="block">RabbitMQ 调用的入口先选择历史库，再开启事务；提交后才能确认消息。</div>
+</dd>
+<dt><a href="com/sca4d/iot/telemetry/TimescaleTelemetryConsumer.html#handle(com.sca4d.core.api.messaging.IncomingMessage)" class="member-name-link">handle(IncomingMessage&lt;Event&lt;TelemetryBatch&gt;&gt;)</a> - Method in class com.sca4d.iot.telemetry.<a href="com/sca4d/iot/telemetry/TimescaleTelemetryConsumer.html" title="class in com.sca4d.iot.telemetry">TimescaleTelemetryConsumer</a></dt>
+<dd>
+<div class="block">RabbitMQ 调用的入口先选择历史库，再开启事务；提交后才能确认消息。</div>
+</dd>
+<dt><a href="com/sca4d/iot/telemetry/TimescaleEventConsumer.html#handleEvent(com.sca4d.core.api.messaging.IncomingMessage)" class="member-name-link">handleEvent(IncomingMessage&lt;Event&lt;DeviceEventMessage&gt;&gt;)</a> - Method in class com.sca4d.iot.telemetry.<a href="com/sca4d/iot/telemetry/TimescaleEventConsumer.html" title="class in com.sca4d.iot.telemetry">TimescaleEventConsumer</a></dt>
+<dd>
+<div class="block">同一发生时间和 Id 的重复投递不会产生重复事件。</div>
+</dd>
+<dt><a href="com/sca4d/iot/telemetry/TimescaleTelemetryConsumer.html#handleEvent(com.sca4d.core.api.messaging.IncomingMessage)" class="member-name-link">handleEvent(IncomingMessage&lt;Event&lt;TelemetryBatch&gt;&gt;)</a> - Method in class com.sca4d.iot.telemetry.<a href="com/sca4d/iot/telemetry/TimescaleTelemetryConsumer.html" title="class in com.sca4d.iot.telemetry">TimescaleTelemetryConsumer</a></dt>
+<dd>
+<div class="block">同一 Id 的 RabbitMQ 重复投递不会产生重复样本。</div>
+</dd>
 </dl>
 <h2 class="title" id="I:I">I</h2>
 <dl class="index">
 <dt><a href="com/sca4d/iot/timescale/persistence/TimescaleMapper.html#insertEvent(long,com.sca4d.iot.api.history.DeviceEventMessage,java.lang.String)" class="member-name-link">insertEvent(long, DeviceEventMessage, String)</a> - Method in interface com.sca4d.iot.timescale.persistence.<a href="com/sca4d/iot/timescale/persistence/TimescaleMapper.html" title="interface in com.sca4d.iot.timescale.persistence">TimescaleMapper</a></dt>
 <dd>
-<div class="block">按发生时间和 MessageId 写入事件；同一发生时间内也约束来源事实键唯一。</div>
+<div class="block">按发生时间和 Id 写入事件；同一发生时间内也约束来源事实键唯一。</div>
 </dd>
 <dt><a href="com/sca4d/iot/timescale/persistence/TimescaleMapper.html#insertTelemetrySamples(java.util.List)" class="member-name-link">insertTelemetrySamples(List&lt;TimescaleTelemetrySample&gt;)</a> - Method in interface com.sca4d.iot.timescale.persistence.<a href="com/sca4d/iot/timescale/persistence/TimescaleMapper.html" title="interface in com.sca4d.iot.timescale.persistence">TimescaleMapper</a></dt>
 <dd>
@@ -191,7 +206,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/config/IotTimescaleProperties.html" class="type-name-link" title="class in com.sca4d.iot.config">IotTimescaleProperties</a> - Class in <a href="com/sca4d/iot/config/package-summary.html">com.sca4d.iot.config</a></dt>
 <dd>
-<div class="block">保存 IoT TimescaleDB 连接和高频历史清理参数。</div>
+<div class="block">保存 IoT 历史功能和清理参数；数据库连接由动态数据源配置负责。</div>
 </dd>
 <dt><a href="com/sca4d/iot/config/IotTimescaleProperties.html#%3Cinit%3E()" class="member-name-link">IotTimescaleProperties()</a> - Constructor for class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotTimescaleProperties.html" title="class in com.sca4d.iot.config">IotTimescaleProperties</a></dt>
 <dd>&nbsp;</dd>
@@ -236,6 +251,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/telemetry/TimescaleDeviceHistoryStore.html#scheduleExecutions(long,com.sca4d.core.api.query.PageRequest)" class="member-name-link">scheduleExecutions(long, PageRequest)</a> - Method in class com.sca4d.iot.telemetry.<a href="com/sca4d/iot/telemetry/TimescaleDeviceHistoryStore.html" title="class in com.sca4d.iot.telemetry">TimescaleDeviceHistoryStore</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/timescale/persistence/TimescaleMapper.html#selectAcknowledgementsByMessageId(long,long,int)" class="member-name-link">selectAcknowledgementsByMessageId(long, long, int)</a> - Method in interface com.sca4d.iot.timescale.persistence.<a href="com/sca4d/iot/timescale/persistence/TimescaleMapper.html" title="interface in com.sca4d.iot.timescale.persistence">TimescaleMapper</a></dt>
+<dd>
+<div class="block">分页读取指定下行消息的 ACK 事件。</div>
+</dd>
 <dt><a href="com/sca4d/iot/timescale/persistence/TimescaleMapper.html#selectEvents(java.lang.Long,java.lang.String,java.lang.Long,long,int)" class="member-name-link">selectEvents(Long, String, Long, long, int)</a> - Method in interface com.sca4d.iot.timescale.persistence.<a href="com/sca4d/iot/timescale/persistence/TimescaleMapper.html" title="interface in com.sca4d.iot.timescale.persistence">TimescaleMapper</a></dt>
 <dd>
 <div class="block">分页读取按 Device、事件编码或定时规则筛选的事件。</div>
@@ -246,21 +265,13 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/config/IotTimescaleProperties.html#setCleanupInterval(java.time.Duration)" class="member-name-link">setCleanupInterval(Duration)</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotTimescaleProperties.html" title="class in com.sca4d.iot.config">IotTimescaleProperties</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/config/IotTimescaleProperties.html#setDriverClassName(java.lang.String)" class="member-name-link">setDriverClassName(String)</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotTimescaleProperties.html" title="class in com.sca4d.iot.config">IotTimescaleProperties</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/config/IotTimescaleProperties.html#setEnabled(boolean)" class="member-name-link">setEnabled(boolean)</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotTimescaleProperties.html" title="class in com.sca4d.iot.config">IotTimescaleProperties</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/config/IotTimescaleProperties.html#setEventRetention(java.time.Duration)" class="member-name-link">setEventRetention(Duration)</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotTimescaleProperties.html" title="class in com.sca4d.iot.config">IotTimescaleProperties</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/config/IotTimescaleProperties.html#setMaxQueryResults(int)" class="member-name-link">setMaxQueryResults(int)</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotTimescaleProperties.html" title="class in com.sca4d.iot.config">IotTimescaleProperties</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/config/IotTimescaleProperties.html#setPassword(java.lang.String)" class="member-name-link">setPassword(String)</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotTimescaleProperties.html" title="class in com.sca4d.iot.config">IotTimescaleProperties</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/config/IotTimescaleProperties.html#setTelemetryRetention(java.time.Duration)" class="member-name-link">setTelemetryRetention(Duration)</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotTimescaleProperties.html" title="class in com.sca4d.iot.config">IotTimescaleProperties</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/config/IotTimescaleProperties.html#setUrl(java.lang.String)" class="member-name-link">setUrl(String)</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotTimescaleProperties.html" title="class in com.sca4d.iot.config">IotTimescaleProperties</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/config/IotTimescaleProperties.html#setUsername(java.lang.String)" class="member-name-link">setUsername(String)</a> - Method in class com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotTimescaleProperties.html" title="class in com.sca4d.iot.config">IotTimescaleProperties</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/timescale/persistence/TimescaleThingEvent.html#sourceEventId()" class="member-name-link">sourceEventId()</a> - Method in class com.sca4d.iot.timescale.persistence.<a href="com/sca4d/iot/timescale/persistence/TimescaleThingEvent.html" title="class in com.sca4d.iot.timescale.persistence">TimescaleThingEvent</a></dt>
 <dd>&nbsp;</dd>
@@ -277,7 +288,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/telemetry/TimescaleEventConsumer.html" class="type-name-link" title="class in com.sca4d.iot.telemetry">TimescaleEventConsumer</a> - Class in <a href="com/sca4d/iot/telemetry/package-summary.html">com.sca4d.iot.telemetry</a></dt>
 <dd>
-<div class="block">消费物模型和 IoT 状态机事件，并按发生时间与 MessageId 幂等写入 TimescaleDB。</div>
+<div class="block">消费物模型和 IoT 状态机事件，并按发生时间与 Id 幂等写入 TimescaleDB。</div>
 </dd>
 <dt><a href="com/sca4d/iot/telemetry/TimescaleEventConsumer.html#%3Cinit%3E(com.sca4d.iot.timescale.persistence.TimescaleRepository)" class="member-name-link">TimescaleEventConsumer(TimescaleRepository)</a> - Constructor for class com.sca4d.iot.telemetry.<a href="com/sca4d/iot/telemetry/TimescaleEventConsumer.html" title="class in com.sca4d.iot.telemetry">TimescaleEventConsumer</a></dt>
 <dd>&nbsp;</dd>
@@ -309,7 +320,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/telemetry/TimescaleTelemetryConsumer.html" class="type-name-link" title="class in com.sca4d.iot.telemetry">TimescaleTelemetryConsumer</a> - Class in <a href="com/sca4d/iot/telemetry/package-summary.html">com.sca4d.iot.telemetry</a></dt>
 <dd>
-<div class="block">消费 reported Telemetry 消息并按 MessageId 幂等写入 TimescaleDB。</div>
+<div class="block">消费 reported Telemetry 消息并按 Id 幂等写入 TimescaleDB。</div>
 </dd>
 <dt><a href="com/sca4d/iot/telemetry/TimescaleTelemetryConsumer.html#%3Cinit%3E(com.sca4d.iot.timescale.persistence.TimescaleRepository)" class="member-name-link">TimescaleTelemetryConsumer(TimescaleRepository)</a> - Constructor for class com.sca4d.iot.telemetry.<a href="com/sca4d/iot/telemetry/TimescaleTelemetryConsumer.html" title="class in com.sca4d.iot.telemetry">TimescaleTelemetryConsumer</a></dt>
 <dd>&nbsp;</dd>
@@ -329,10 +340,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建 TimescaleDB ThingEvent 查询结果。</div>
 </dd>
-<dt><a href="com/sca4d/iot/config/IotTimescale.html#TRANSACTION_MANAGER" class="member-name-link">TRANSACTION_MANAGER</a> - Static variable in annotation interface com.sca4d.iot.config.<a href="com/sca4d/iot/config/IotTimescale.html" title="annotation interface in com.sca4d.iot.config">IotTimescale</a></dt>
-<dd>
-<div class="block">IoT TimescaleDB 写入使用的 Spring 事务管理器 Bean 名称。</div>
-</dd>
 </dl>
 <h2 class="title" id="I:V">V</h2>
 <dl class="index">
@@ -345,7 +352,7 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/iot/timescale/persistence/TimescaleTelemetrySample.html#valueJson()" class="member-name-link">valueJson()</a> - Method in class com.sca4d.iot.timescale.persistence.<a href="com/sca4d/iot/timescale/persistence/TimescaleTelemetrySample.html" title="class in com.sca4d.iot.timescale.persistence">TimescaleTelemetrySample</a></dt>
 <dd>&nbsp;</dd>
 </dl>
-<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a></main>
+<a href="#I:A">A</a>&nbsp;<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:V">V</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a></main>
 </div>
 </div>
 </body>

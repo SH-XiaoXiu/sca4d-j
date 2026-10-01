@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 表示一次校验得到的不可变问题集合（Validation Result）。 */
-public final class ValidationResult {
+public class ValidationResult {
 
     private final List<Violation> violations;
 
@@ -31,7 +31,7 @@ public final class ValidationResult {
     }
 
     /**
-     * 返回不可变校验问题集合。
+     * 不可变校验问题集合。
      *
      * @return 不可变校验问题集合
      */

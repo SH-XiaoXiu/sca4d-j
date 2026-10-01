@@ -9,12 +9,14 @@ import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.dictionary.DictionaryOption;
 import com.sca4d.core.api.i18n.LocalizedFields;
-import com.sca4d.core.api.setting.SettingOwner;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.setting.value.SettingOwner;
 import com.sca4d.core.spring.dictionary.DictionaryMapper;
 import com.sca4d.core.spring.dictionary.DictionaryRepository;
 import com.sca4d.core.spring.persistence.batch.SqlBatchProperties;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.core.spring.persistence.mybatis.LocalizedFieldsTypeHandler;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.type.JdbcType;
 import org.junit.jupiter.api.AfterAll;
@@ -25,7 +27,6 @@ import org.junit.jupiter.api.Test;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -40,7 +41,9 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import java.util.List;
 import java.util.Map;
 
-/** 在隔离 PostgreSQL 中验证设置值、字典聚合删除与版本冲突。 */
+/**
+ * 在隔离 PostgreSQL 中验证设置值、字典聚合删除与版本冲突。
+ */
 @Testcontainers
 class ConfigurationPersistenceIntegrationTest {
     @Container
@@ -54,13 +57,17 @@ class ConfigurationPersistenceIntegrationTest {
 
     private static JdbcTemplate jdbc;
 
-    /** 字典完整删除使用真实事务代理。 */
-    @Configuration(proxyBeanMethods = false)
+    /**
+     * 字典完整删除使用真实事务代理。
+     */
+    @org.springframework.context.annotation.Configuration(proxyBeanMethods = false)
     @EnableTransactionManagement
     static class Transactions {
     }
 
-    /** 加载正式表结构和 Mapper，设置保留行内的版本字段为 long。 */
+    /**
+     * 加载正式表结构和 Mapper，设置保留行内的版本字段为 long。
+     */
     @BeforeAll
     static void initialize() throws Exception {
         DriverManagerDataSource source = new DriverManagerDataSource(
@@ -74,7 +81,7 @@ class ConfigurationPersistenceIntegrationTest {
         jdbc = new JdbcTemplate(source);
         SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
         factory.setDataSource(source);
-        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
+        Configuration configuration = new Configuration();
         configuration.setMapUnderscoreToCamelCase(true);
         configuration.getTypeHandlerRegistry()
                 .register(LocalizedFields.class, JdbcType.OTHER, new LocalizedFieldsTypeHandler(new ObjectMapper()));
@@ -100,7 +107,9 @@ class ConfigurationPersistenceIntegrationTest {
         settings = context.getBean(SettingRepository.class);
     }
 
-    /** 关闭隔离测试上下文。 */
+    /**
+     * 关闭隔离测试上下文。
+     */
     @AfterAll
     static void close() {
         if (context != null) {
@@ -108,7 +117,9 @@ class ConfigurationPersistenceIntegrationTest {
         }
     }
 
-    /** 每例使用独立配置记录。 */
+    /**
+     * 每例使用独立配置记录。
+     */
     @BeforeEach
     void reset() {
         jdbc.execute("TRUNCATE sys_dictionary_option, sys_dictionary, sys_setting");
@@ -149,7 +160,7 @@ class ConfigurationPersistenceIntegrationTest {
     @Test
     @DisplayName("设置从明文切换密文、恢复默认和再次覆盖时保持版本与 ENV 写保护")
     void settingReplacementPreservesOwnerAndTombstoneSemantics() {
-        SettingOwner owner = new SettingOwner("test", "one");
+        SettingOwner owner = new SettingOwner(TreeCode.ofSegment("TEST"), "one");
         settings.replace(owner, "value", 1, "plain", null, null, null, VersionCondition.optimistic(new Version(0)));
         settings.replace(
                 owner,
@@ -186,6 +197,6 @@ class ConfigurationPersistenceIntegrationTest {
                 null,
                 VersionCondition.optimistic(new Version(3)));
         assertThat(settings.findAllSystem(List.of("env", "env", "missing"))).hasSize(1);
-        assertThat(settings.find(new SettingOwner("test", "other"), "value")).isEmpty();
+        assertThat(settings.find(new SettingOwner(TreeCode.ofSegment("TEST"), "other"), "value")).isEmpty();
     }
 }

@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /** 返回当前账号的示例 App 用户资料。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
-public final class ProfileView {
+public class ProfileView {
 
     private final long principalId;
 

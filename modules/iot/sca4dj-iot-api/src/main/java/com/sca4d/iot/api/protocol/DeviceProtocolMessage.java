@@ -8,15 +8,15 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 保存传输路由已经定位 Device 后交给其协议解码的一条原始上行消息。 */
-public final class DeviceProtocolMessage {
+public class DeviceProtocolMessage {
 
     private final @NotNull Device device;
+
+    private final @NotNull Instant observedAt;
 
     private final @NotNull String code;
 
     private final byte @NotNull [] payload;
-
-    private final @NotNull Instant observedAt;
 
     /**
      * @param device 传输路由已经定位并完整读取的 Device

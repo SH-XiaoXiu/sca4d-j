@@ -9,17 +9,17 @@ import java.util.Objects;
 
 /** 保存 EMQX 共享订阅收到的一条 MQTT Topic、原始 Payload、发布标志和平台观察时间。 */
 @SuppressWarnings("ClassCanBeRecord") // Payload 需要防御性复制，且项目禁止使用 record。
-public final class MqttMessage {
-
-    private final @NotNull String topic;
-
-    private final byte @NotNull [] payload;
+public class MqttMessage {
 
     private final @NotNull Instant observedAt;
 
-    private final int qos;
+    private final @NotNull String topic;
 
     private final boolean retained;
+
+    private final byte @NotNull [] payload;
+
+    private final int qos;
 
     /**
      * 创建一条不可变 MQTT 上行消息，并复制 Payload。

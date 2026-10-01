@@ -1,5 +1,6 @@
 package com.sca4d.messaging.outbox.mapper;
 
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.messaging.outbox.OutboxStatus;
 import org.apache.ibatis.annotations.Param;
@@ -15,7 +16,7 @@ public interface OutboxMapper {
      * 新增一条待发布消息。
      *
      * @param messageId 消息主键
-     * @param eventCode 事件编码
+     * @param messageCode 消息编码
      * @param envelope 已序列化消息信封
      * @param status 初始状态
      * @param availableAt 最早发布时间
@@ -23,7 +24,7 @@ public interface OutboxMapper {
      */
     int insert(
             @Param("messageId") long messageId,
-            @Param("eventCode") @NotNull String eventCode,
+            @Param("messageCode") @NotNull TreeCode messageCode,
             @Param("envelope") byte @NotNull [] envelope,
             @Param("status") @NotNull OutboxStatus status,
             @Param("availableAt") @NotNull Instant availableAt);

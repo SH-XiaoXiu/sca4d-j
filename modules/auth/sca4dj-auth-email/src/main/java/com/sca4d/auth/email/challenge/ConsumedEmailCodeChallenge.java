@@ -9,11 +9,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存成功消费 Challenge 后确认的 Account、非秘密引用和版本。 */
-public final class ConsumedEmailCodeChallenge {
-
-    private final @NotNull EmailCodeChallengeId challengeId;
+public class ConsumedEmailCodeChallenge {
 
     private final @NotNull Account account;
+
+    private final @NotNull EmailCodeChallengeId challengeId;
 
     private final @NotNull Version version;
 

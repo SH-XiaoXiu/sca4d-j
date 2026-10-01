@@ -38,6 +38,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /** 使用 {@link PlatformRbacMapper} 读写 Platform 角色和 PlatformPrincipal 角色关系。 */
 public class PlatformRbacRepository implements RbacRepository {
@@ -49,13 +51,13 @@ public class PlatformRbacRepository implements RbacRepository {
 
     private final @NotNull PlatformRbacMapper mapper;
 
-    private final @NotNull VersionConditions versionConditions;
-
     private final @NotNull LocaleCatalog locales;
 
     private final @NotNull PrincipalType principalType;
 
     private final @NotNull SqlBatches sqlBatches;
+
+    private final @NotNull VersionConditions versionConditions;
 
     /**
      * 创建 Platform RBAC Repository。
@@ -137,7 +139,7 @@ public class PlatformRbacRepository implements RbacRepository {
                 batch -> mapper.selectPlatformRoles(batch, null, false))
                 .stream()
                 .map(PlatformRbacRepository::toRole)
-                .collect(java.util.stream.Collectors.toCollection(ArrayList::new));
+                .collect(Collectors.toCollection(ArrayList::new));
         result.sort(Comparator.comparing(Role::code));
         return List.copyOf(result);
     }
@@ -378,23 +380,23 @@ public class PlatformRbacRepository implements RbacRepository {
                 mapper::selectPlatformPrincipalRoles);
         LinkedHashSet<Long> returnedPrincipalIds = principalRoles.stream()
                 .map(PlatformPrincipalRole::principalId)
-                .collect(java.util.stream.Collectors.toCollection(LinkedHashSet::new));
+                .collect(Collectors.toCollection(LinkedHashSet::new));
         if (!returnedPrincipalIds.equals(unique)) {
             throw new IllegalStateException("PlatformPrincipal 不存在或已删除");
         }
         LinkedHashSet<Long> roleIds = principalRoles.stream()
                 .map(PlatformPrincipalRole::roleId)
                 .filter(Objects::nonNull)
-                .collect(java.util.stream.Collectors.toCollection(LinkedHashSet::new));
+                .collect(Collectors.toCollection(LinkedHashSet::new));
         Map<Long, Role> roles = findRoles(PLATFORM, roleIds)
                 .stream()
-                .collect(java.util.stream.Collectors.toUnmodifiableMap(Role::roleId, role -> role));
+                .collect(Collectors.toUnmodifiableMap(Role::roleId, role -> role));
         if (!roles.keySet().equals(roleIds)) {
             throw new IllegalStateException("PlatformPrincipal 角色关系引用了不存在的角色");
         }
 
         LinkedHashMap<Long, List<PlatformPrincipalRole>> rolesByPrincipal = new LinkedHashMap<>();
-        unique.forEach(principalId -> rolesByPrincipal.put(principalId, new java.util.ArrayList<>()));
+        unique.forEach(principalId -> rolesByPrincipal.put(principalId, new ArrayList<>()));
         for (PlatformPrincipalRole principalRole : principalRoles) {
             List<PlatformPrincipalRole> rolesForPrincipal = rolesByPrincipal.get(principalRole.principalId());
             if (rolesForPrincipal == null) {
@@ -418,7 +420,7 @@ public class PlatformRbacRepository implements RbacRepository {
             Set<Long> protectedRoleIds = roleRelations.stream()
                     .filter(value -> value.roleId() != null && value.protectedRelation())
                     .map(PlatformPrincipalRole::roleId)
-                    .collect(java.util.stream.Collectors.toUnmodifiableSet());
+                    .collect(Collectors.toUnmodifiableSet());
             result.put(
                     principalId,
                     new PrincipalRoles(PLATFORM, principalId, rolesForPrincipal, protectedRoleIds, rolesVersion));
@@ -491,7 +493,7 @@ public class PlatformRbacRepository implements RbacRepository {
                 || additions.stream().anyMatch(removals::contains)) {
             throw new BusinessException(RbacErrorCode.PRINCIPAL_ROLE_INVALID);
         }
-        List<Long> requested = java.util.stream.Stream.concat(additions.stream(), removals.stream())
+        List<Long> requested = Stream.concat(additions.stream(), removals.stream())
                 .distinct()
                 .sorted()
                 .toList();
@@ -578,7 +580,7 @@ public class PlatformRbacRepository implements RbacRepository {
                         principalIdsByScope.get(PLATFORM),
                         "PlatformPrincipal 标识集合不能为空"));
         LinkedHashMap<Long, List<PermissionSelector>> result = new LinkedHashMap<>();
-        unique.forEach(principalId -> result.put(principalId, new java.util.ArrayList<>()));
+        unique.forEach(principalId -> result.put(principalId, new ArrayList<>()));
         for (PlatformPrincipalPermission operation : sqlBatches.query(
                 unique,
                 1,

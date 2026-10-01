@@ -8,7 +8,6 @@ import com.sca4d.core.api.authentication.AuthenticationActionCode;
 import com.sca4d.core.api.authentication.AuthenticationAttemptId;
 import com.sca4d.core.api.authentication.AuthenticationAttempts;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.AuthenticationPolicy;
 import com.sca4d.core.api.authentication.AuthenticationProgress;
 import com.sca4d.core.api.authentication.AuthenticationRequirement;
@@ -16,7 +15,7 @@ import com.sca4d.core.api.authentication.AuthenticationResult;
 import com.sca4d.core.api.authentication.AuthenticationSubmission;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
 import com.sca4d.core.api.identity.Account;
-import com.sca4d.core.api.setting.Settings;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,34 +33,34 @@ import java.util.UUID;
 /**
  * 使用认证方法目录、Redis 尝试和应用动作策略编排零到三因素认证。
  */
-public final class RedisAuthenticationAttempts implements AuthenticationAttempts {
+public class RedisAuthenticationAttempts implements AuthenticationAttempts {
 
     private static final Logger LOG = LoggerFactory.getLogger(RedisAuthenticationAttempts.class);
 
-    private final AuthenticationMethods methods;
-
-    private final RedisAuthenticationAttemptStore attempts;
-
     private final AuthenticationPolicy policy;
 
-    private final Settings settings;
+    private final AuthSettings settings;
+
+    private final AuthenticationMethods methods;
 
     private final Clock clock;
+
+    private final RedisAuthenticationAttemptStore attempts;
 
     /**
      * 创建默认认证引擎。
      *
-     * @param methods    应用安装的认证方法
-     * @param attempts   Redis 尝试存储
-     * @param policy     具体应用提供的动作认证策略
+     * @param methods  应用安装的认证方法
+     * @param attempts Redis 尝试存储
+     * @param policy   具体应用提供的动作认证策略
      * @param settings 每次开始认证时读取尝试有效期的 Settings
-     * @param clock      时间来源
+     * @param clock    时间来源
      */
     public RedisAuthenticationAttempts(
             @NotNull AuthenticationMethods methods,
             @NotNull RedisAuthenticationAttemptStore attempts,
             @NotNull AuthenticationPolicy policy,
-            @NotNull Settings settings,
+            @NotNull AuthSettings settings,
             @NotNull Clock clock) {
         this.methods = Objects.requireNonNull(methods, "认证方法目录不能为空");
         this.attempts = Objects.requireNonNull(attempts, "认证尝试存储不能为空");
@@ -71,7 +70,7 @@ public final class RedisAuthenticationAttempts implements AuthenticationAttempts
     }
 
     /**
-     * 使用首个认证材料识别账号，并按该账号的应用策略开始动作认证。
+     * 使用首个认证材料识别账号，并按已识别账号的应用策略开始动作认证。
      */
     @Override
     public @NotNull AuthenticationProgress start(
@@ -82,14 +81,14 @@ public final class RedisAuthenticationAttempts implements AuthenticationAttempts
         VerifiedAuthentication verification = methods.authenticate(checkedSubmission);
         Account account = verification.account();
 
-        // 账号只能在首个材料验证成功后确定；随后仍按空进度检查该方法是否被应用策略允许。
-        Set<AuthenticationMethodCode> initiallyAllowed = policy.allowedMethods(account, checkedAction, List.of());
+        // 账号只能在首个材料验证成功后确定；确定后仍按空进度检查当前方法是否被应用策略允许。
+        Set<TreeCode> initiallyAllowed = policy.allowedMethods(account, checkedAction, List.of());
         if (!methods.available(account, initiallyAllowed).contains(checkedSubmission.methodCode())) {
             throw new IllegalArgumentException("认证方法不允许用于当前动作");
         }
 
         Instant now = clock.instant();
-        Duration attemptTtl = settings.get(AuthSettings.ATTEMPT_TTL);
+        Duration attemptTtl = settings.ATTEMPT_TTL.get();
         AuthenticationAttemptState state = new AuthenticationAttemptState(
                 new AuthenticationAttemptId(UUID.randomUUID().toString()),
                 account,
@@ -104,7 +103,7 @@ public final class RedisAuthenticationAttempts implements AuthenticationAttempts
                 "首个认证材料已创建认证尝试 | attemptId={} accountId={} actionCode={} status={}",
                 state.id().value(),
                 account.accountId(),
-                checkedAction.value(),
+                checkedAction,
                 progress.satisfied());
         return progress;
     }
@@ -118,7 +117,7 @@ public final class RedisAuthenticationAttempts implements AuthenticationAttempts
             @NotNull AuthenticationActionCode actionCode,
             @NotNull List<Authentication> reusableAuthentications) {
         Instant now = clock.instant();
-        Duration attemptTtl = settings.get(AuthSettings.ATTEMPT_TTL);
+        Duration attemptTtl = settings.ATTEMPT_TTL.get();
         AuthenticationAttemptState state = new AuthenticationAttemptState(
                 new AuthenticationAttemptId(UUID.randomUUID().toString()),
                 Objects.requireNonNull(account, "认证账号不能为空"),
@@ -133,7 +132,7 @@ public final class RedisAuthenticationAttempts implements AuthenticationAttempts
                 "已知账号已创建认证尝试 | attemptId={} accountId={} actionCode={} status={}",
                 state.id().value(),
                 state.account().accountId(),
-                state.actionCode().value(),
+                state.actionCode(),
                 progress.satisfied());
         return progress;
     }
@@ -155,7 +154,7 @@ public final class RedisAuthenticationAttempts implements AuthenticationAttempts
 
             Instant now = clock.instant();
             List<Authentication> completed = currentAuthentications(state, now);
-            Set<AuthenticationMethodCode> allowed = policy
+            Set<TreeCode> allowed = policy
                     .allowedMethods(state.account(), state.actionCode(), completed);
             if (!methods.available(state.account(), allowed).contains(checkedSubmission.methodCode())) {
                 throw new IllegalArgumentException("认证方法不允许用于当前动作");
@@ -171,7 +170,7 @@ public final class RedisAuthenticationAttempts implements AuthenticationAttempts
             LOG.trace(
                     "认证尝试已推进 | attemptId={} method={} status={} remainingFactorCount={}",
                     state.id().value(),
-                    verification.authentication().methodCode().value(),
+                    verification.authentication().methodCode(),
                     progress.satisfied(),
                     progress.remainingFactorCount());
             return progress;
@@ -211,7 +210,7 @@ public final class RedisAuthenticationAttempts implements AuthenticationAttempts
                     "认证尝试已消费 | attemptId={} accountId={} actionCode={} authenticationCount={}",
                     state.id().value(),
                     state.account().accountId(),
-                    state.actionCode().value(),
+                    state.actionCode(),
                     authentications.size());
             return completion;
         });
@@ -229,7 +228,7 @@ public final class RedisAuthenticationAttempts implements AuthenticationAttempts
         int remaining = Math.max(0, requirement.factorCount() - verifiedKinds.size());
         state.satisfied(remaining == 0);
 
-        List<AuthenticationMethodCode> available = state.satisfied()
+        List<TreeCode> available = state.satisfied()
                 ? List.of()
                 : methods.available(
                         state.account(),

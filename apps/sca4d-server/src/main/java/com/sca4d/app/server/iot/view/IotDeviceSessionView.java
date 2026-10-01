@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /** 返回 Device 连接 MQTT 和定位服务端 Session 所需的一次性认证结果。 */
 @SuppressWarnings("unused")
-public final class IotDeviceSessionView {
+public class IotDeviceSessionView {
 
     private final @NotNull String mqttToken;
 

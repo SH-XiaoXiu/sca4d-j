@@ -8,6 +8,7 @@ import com.sca4d.core.api.i18n.LocaleCatalog;
 import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.i18n.LocalizedFieldsSchema;
 import com.sca4d.core.api.id.IdGenerator;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.utils.TextUtils;
@@ -43,14 +44,26 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
 
-/** 使用固定 Platform Repository 读写角色、Operation 和 PlatformPrincipal 角色关系。 */
+/**
+ * 使用固定 Platform Repository 读写角色、Operation 和 PlatformPrincipal 角色关系。
+ */
 public class PlatformRbacService {
 
     private static final Logger LOG = LoggerFactory.getLogger(PlatformRbacService.class);
 
+    /**
+     * 新建 PlatformPrincipal 自动绑定的内置角色编码。
+     */
+    public static final @NotNull String DEFAULT = "DEFAULT";
+
     private static final int MAX_ROLE_CODE_LENGTH = 128;
 
-    private static final LockKey PLATFORM_INITIALIZATION_LOCK = new LockKey("iam", "rbac", "initialization");
+    /**
+     * 拥有 Operation Catalog 中全部 ACTION 的内置角色编码。
+     */
+    public static final @NotNull String ROOT = "ROOT";
+
+    private static final LockKey PLATFORM_INITIALIZATION_LOCK = new LockKey(TreeCode.of("IAM:RBAC:INITIALIZATION"));
 
     private static final Duration LOCK_WAIT = Duration.ofSeconds(10);
 
@@ -59,42 +72,36 @@ public class PlatformRbacService {
             Set.of("name"),
             Map.of("name", 128));
 
-    /** 拥有 Operation Catalog 中全部 ACTION 的内置角色编码。 */
-    public static final @NotNull String ROOT = "ROOT";
-
-    /** 新建 PlatformPrincipal 自动绑定的内置角色编码。 */
-    public static final @NotNull String DEFAULT = "DEFAULT";
+    private final @NotNull IdentityService identities;
 
     private final @NotNull RbacService rbac;
 
+    private final @NotNull PlatformAccountDirectoryRepository accounts;
+
     private final @NotNull PlatformRbacRepository repository;
 
-    private final @NotNull PermissionSelections permissionSelections;
+    private final @NotNull DistributedLock distributedLock;
 
     private final @NotNull IdGenerator idGenerator;
 
     private final @NotNull LocaleCatalog locales;
 
-    private final @NotNull IdentityService identities;
-
-    private final @NotNull PlatformAccountDirectoryRepository accounts;
-
-    private final @NotNull DistributedLock distributedLock;
+    private final @NotNull PermissionSelections permissionSelections;
 
     private final @NotNull TransactionTemplate transactions;
 
     /**
      * 创建 Platform RBAC 服务。
      *
-     * @param rbac 通用 RBAC 服务
-     * @param repository Platform RBAC Repository
+     * @param rbac                 通用 RBAC 服务
+     * @param repository           Platform RBAC Repository
      * @param permissionSelections Operation Catalog 的校验和展开规则
-     * @param idGenerator 角色标识生成器
-     * @param locales 应用支持和默认 Locale
-     * @param identities PlatformPrincipal 身份事实服务
-     * @param accounts Platform Account 内部持久化边界
-     * @param distributedLock Platform RBAC 跨实例写入锁
-     * @param transactions Platform RBAC 事务模板
+     * @param idGenerator          角色标识生成器
+     * @param locales              应用支持和默认 Locale
+     * @param identities           PlatformPrincipal 身份管理服务
+     * @param accounts             Platform Account 内部持久化边界
+     * @param distributedLock      Platform RBAC 跨实例写入锁
+     * @param transactions         Platform RBAC 事务模板
      */
     public PlatformRbacService(
             @NotNull RbacService rbac,
@@ -121,7 +128,7 @@ public class PlatformRbacService {
      * 读取全部 Platform 角色。
      *
      * @return 按角色编码排序的不可修改列表
-    */
+     */
     @CheckReturnValue
     @Transactional(readOnly = true)
     public @NotNull @Unmodifiable List<@NotNull PlatformRoleDetails> findRoles() {
@@ -133,7 +140,7 @@ public class PlatformRbacService {
      *
      * @param roleId 角色标识
      * @return 匹配角色
-    */
+     */
     @CheckReturnValue
     @Transactional(readOnly = true)
     public @NotNull PlatformRoleDetails loadRoleById(@NotNull Long roleId) {
@@ -143,8 +150,8 @@ public class PlatformRbacService {
     /**
      * 创建自定义 Platform 角色并保存初始 ACTION。
      *
-     * @param code 唯一且创建后不可修改的角色编码
-     * @param i18n 角色完整多语言字段
+     * @param code           唯一且创建后不可修改的角色编码
+     * @param i18n           角色完整多语言字段
      * @param operationCodes Operation Catalog 中声明的 ACTION 编码
      * @return 新建角色及具体 Operation
      */
@@ -152,15 +159,15 @@ public class PlatformRbacService {
     public @NotNull PlatformRoleDetails createRole(
             @NotNull String code,
             @NotNull LocalizedFields i18n,
-            @NotNull Collection<@NotNull String> operationCodes) {
+            @NotNull Collection<@NotNull TreeCode> operationCodes) {
         String checkedCode = validateRoleCode(code);
         LocalizedFields checkedI18n = validateI18n(i18n);
         List<PermissionSelector> selectors = permissionSelections
-                .validateGrantable(operationCodes);
+                .validateGrantableCodes(operationCodes);
 
         return write(roleCodeLock(checkedCode), () -> {
             PlatformRoleDetails created = repository.createRole(
-                    idGenerator.nextId(),
+                    idGenerator.nextId().value(),
                     checkedCode,
                     checkedI18n,
                     RoleStatus.ACTIVE,
@@ -180,7 +187,7 @@ public class PlatformRbacService {
      * @param roleId 角色标识
      * @param status 新角色状态
      * @return 修改后的角色详情
-    */
+     */
     @CheckReturnValue
     public @NotNull PlatformRoleDetails updateRoleStatus(
             @NotNull Long roleId,
@@ -195,7 +202,7 @@ public class PlatformRbacService {
      * 原子替换 Platform 角色的完整多语言字段。
      *
      * @param roleId 角色标识
-     * @param i18n 仅包含 Platform 角色声明字段的完整多语言内容
+     * @param i18n   仅包含 Platform 角色声明字段的完整多语言内容
      * @return 修改后的角色详情
      * @throws BusinessException 缺少默认 Locale 或字段不符合 schema 时抛出
      */
@@ -234,14 +241,14 @@ public class PlatformRbacService {
     /**
      * 原子替换 Platform 角色的具体 ACTION。
      *
-     * @param roleId 角色标识
+     * @param roleId         角色标识
      * @param operationCodes Operation Catalog 中声明的 ACTION 编码
      * @return 修改后的角色及具体 Operation
      */
     @CheckReturnValue
     public @NotNull RolePermissions replaceRolePermissions(
             @NotNull Long roleId,
-            @NotNull Collection<@NotNull String> operationCodes) {
+            @NotNull Collection<@NotNull TreeCode> operationCodes) {
         return write(
                 roleLock(roleId),
                 () -> rbac.replaceRolePermissions(
@@ -270,7 +277,7 @@ public class PlatformRbacService {
      * 原子替换 PlatformPrincipal 的非保护角色关系。
      *
      * @param principalId PlatformPrincipal 标识
-     * @param roleIds 新的完整角色标识集合
+     * @param roleIds     新的完整角色标识集合
      * @return 替换后的角色关系
      */
     @CheckReturnValue
@@ -293,9 +300,9 @@ public class PlatformRbacService {
     /**
      * 查询指定 Platform 角色已分配或未分配的一页 Account。
      *
-     * @param roleId Platform 角色标识
+     * @param roleId   Platform 角色标识
      * @param assigned 查询已分配 Account 时为 {@code true}
-     * @param query 分页、用户名和状态筛选
+     * @param query    分页、用户名和状态筛选
      * @return 当前页 Account 和完整命中数量
      */
     @CheckReturnValue
@@ -321,8 +328,8 @@ public class PlatformRbacService {
      * <p>该方法一次批量读取 Account 到 PlatformPrincipal 的关系，再委托通用 RBAC 批量修改。
      * 任一 Account 无效、重复、关联冲突或同时出现在添加和移除集合时整批失败。
      *
-     * @param roleId Platform 角色标识
-     * @param addAccountIds 需要增加目标角色的 Account 标识
+     * @param roleId           Platform 角色标识
+     * @param addAccountIds    需要增加目标角色的 Account 标识
      * @param removeAccountIds 需要移除目标角色的 Account 标识
      * @return 按 PlatformPrincipal 标识索引的修改后角色关系
      */
@@ -424,12 +431,16 @@ public class PlatformRbacService {
                 () -> rbac.bindRole(PlatformRbacRepository.PLATFORM, principalId, DEFAULT, false));
     }
 
-    /** 返回多个实例初始化 Platform 内置角色和 bootstrap 账号时共用的分布式锁键。 */
+    /**
+     * 返回多个实例初始化 Platform 内置角色和 bootstrap 账号时共用的分布式锁键。
+     */
     static @NotNull LockKey initializationLock() {
         return PLATFORM_INITIALIZATION_LOCK;
     }
 
-    /** 先取得指定 Platform RBAC 资源锁，再在新打开的事务中执行有返回值的写操作。 */
+    /**
+     * 先取得指定 Platform RBAC 资源锁，再在新打开的事务中执行有返回值的写操作。
+     */
     private <T> @NotNull T write(
             @NotNull LockKey lockKey,
             @NotNull Supplier<@NotNull T> operation) {
@@ -441,7 +452,9 @@ public class PlatformRbacService {
                         "Platform RBAC 写操作不能为空"));
     }
 
-    /** 先取得指定 Platform RBAC 资源锁，再在新打开的事务中执行无返回值的写操作。 */
+    /**
+     * 先取得指定 Platform RBAC 资源锁，再在新打开的事务中执行无返回值的写操作。
+     */
     private void write(@NotNull LockKey lockKey, @NotNull Runnable operation) {
         distributedLock.execute(
                 Objects.requireNonNull(lockKey, "Platform RBAC 锁键不能为空"),
@@ -452,30 +465,32 @@ public class PlatformRbacService {
                 });
     }
 
-    /** 返回同一角色编码创建请求共用的分布式锁键，不在 Redis 键中暴露原始编码。 */
+    /**
+     * 返回同一角色编码创建请求共用的分布式锁键，不在 Redis 键中暴露原始编码。
+     */
     private static @NotNull LockKey roleCodeLock(@NotNull String code) {
-        return new LockKey("iam", "rbac", "role-code", DigestUtil.sha256Hex(code));
+        return new LockKey(TreeCode.of("IAM:RBAC:ROLE_CODE"), DigestUtil.sha256Hex(code));
     }
 
-    /** 返回同一 Platform 角色全部修改操作共用的分布式锁键。 */
+    /**
+     * 返回同一 Platform 角色全部修改操作共用的分布式锁键。
+     */
     private static @NotNull LockKey roleLock(@NotNull Long roleId) {
-        return new LockKey(
-                "iam",
-                "rbac",
-                "role",
-                Objects.requireNonNull(roleId, "角色标识不能为空").toString());
+        return new LockKey(TreeCode.of("IAM:RBAC:ROLE"), Objects.requireNonNull(roleId, "角色标识不能为空").longValue());
     }
 
-    /** 返回同一 PlatformPrincipal 角色关系写入共用的分布式锁键。 */
+    /**
+     * 返回同一 PlatformPrincipal 角色关系写入共用的分布式锁键。
+     */
     private static @NotNull LockKey principalLock(@NotNull Long principalId) {
         return new LockKey(
-                "iam",
-                "rbac",
-                "principal",
-                Objects.requireNonNull(principalId, "PlatformPrincipal 标识不能为空").toString());
+                TreeCode.of("IAM:RBAC:PRINCIPAL"),
+                Objects.requireNonNull(principalId, "PlatformPrincipal 标识不能为空").longValue());
     }
 
-    /** 校验并复制不能包含空值或重复值的 Account 标识。 */
+    /**
+     * 校验并复制不能包含空值或重复值的 Account 标识。
+     */
     private static @NotNull LinkedHashSet<Long> uniqueAccountIds(
             @NotNull Collection<@NotNull Long> accountIds) {
         LinkedHashSet<Long> unique = new LinkedHashSet<>();
@@ -488,7 +503,9 @@ public class PlatformRbacService {
         return unique;
     }
 
-    /** 把 Account 标识按输入顺序转换成唯一 PlatformPrincipal 标识。 */
+    /**
+     * 把 Account 标识按输入顺序转换成唯一 PlatformPrincipal 标识。
+     */
     private static @NotNull LinkedHashSet<Long> principalIds(
             @NotNull Map<@NotNull Long, @NotNull PlatformAccountEntry> accounts,
             @NotNull Collection<@NotNull Long> accountIds) {
@@ -506,7 +523,9 @@ public class PlatformRbacService {
         return principalIds;
     }
 
-    /** 确保一个 Platform 内置角色存在，并检查其保护状态和固定 Operation。 */
+    /**
+     * 确保一个 Platform 内置角色存在，并检查其保护状态和固定 Operation。
+     */
     private void initializeBuiltInRole(
             @NotNull String code,
             @NotNull List<@NotNull PermissionSelector> selectors,
@@ -518,7 +537,7 @@ public class PlatformRbacService {
                             locales.defaultLocale(),
                             Map.of("name", code)));
             PlatformRoleDetails created = repository.createRole(
-                    idGenerator.nextId(),
+                    idGenerator.nextId().value(),
                     code,
                     i18n,
                     RoleStatus.ACTIVE,
@@ -542,7 +561,9 @@ public class PlatformRbacService {
         }
     }
 
-    /** 校验 Platform 角色编码并转换为统一业务失败。 */
+    /**
+     * 校验 Platform 角色编码并转换为统一业务失败。
+     */
     @CheckReturnValue
     private static @NotNull String validateRoleCode(@NotNull String code) {
         try {
@@ -556,7 +577,9 @@ public class PlatformRbacService {
         }
     }
 
-    /** 按应用默认 Locale 和 Platform 角色字段 schema 校验完整多语言内容。 */
+    /**
+     * 按应用默认 Locale 和 Platform 角色字段 schema 校验完整多语言内容。
+     */
     @CheckReturnValue
     private @NotNull LocalizedFields validateI18n(@NotNull LocalizedFields i18n) {
         try {

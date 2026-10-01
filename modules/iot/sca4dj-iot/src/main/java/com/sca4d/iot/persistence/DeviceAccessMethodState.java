@@ -5,11 +5,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存批量查询返回的 Device 标识和接入方式编码。 */
-public final class DeviceAccessMethodState {
-
-    private final long deviceId;
+public class DeviceAccessMethodState {
 
     private final @NotNull String methodCode;
+
+    private final long deviceId;
 
     /** @param deviceId Device 标识 @param methodCode Device 使用的接入方式编码 */
     public DeviceAccessMethodState(long deviceId, @NotNull String methodCode) {

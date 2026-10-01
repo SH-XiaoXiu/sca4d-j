@@ -37,6 +37,7 @@ import org.springframework.web.method.HandlerMethod;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 class HttpInputOpenApiCustomizerTest {
 
@@ -231,7 +232,7 @@ class HttpInputOpenApiCustomizerTest {
 
     /** 保存 OpenAPI 定制器测试需要识别的字段类型和覆盖注解。 */
     @SuppressWarnings("unused") // 字段只用于反射构造带声明注解的 AnnotatedType。
-    private static final class RequestTypes {
+    private static class RequestTypes {
 
         private int count;
 
@@ -250,7 +251,7 @@ class HttpInputOpenApiCustomizerTest {
         @NoDefaultValidation
         private String unrestricted;
 
-        private java.util.Map<String, String> labels;
+        private Map<String, String> labels;
 
         @NoDefaultValidation
         private RequestTypes disabledRequest;
@@ -279,7 +280,7 @@ class HttpInputOpenApiCustomizerTest {
     }
 
     /** 提供 OpenAPI 响应头声明使用的版本化类型。 */
-    private static final class VersionedResponse {
+    private static class VersionedResponse {
 
         /** @return 固定测试版本 */
         @ETag

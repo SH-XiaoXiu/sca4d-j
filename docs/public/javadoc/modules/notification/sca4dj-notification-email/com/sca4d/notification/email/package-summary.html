@@ -83,8 +83,10 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">自动装配 Email 通知的持久化、模板和 SMTP 投递。</div>
 </div>
-<div class="col-first odd-row-color"><a href="sender/package-summary.html">com.sca4d.notification.email.sender</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first odd-row-color"><a href="mapper/package-summary.html">com.sca4d.notification.email.mapper</a></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><a href="sender/package-summary.html">com.sca4d.notification.email.sender</a></div>
+<div class="col-last even-row-color">
 <div class="block">保存、管理和使用 SMTP 发件配置。</div>
 </div>
 </div>
@@ -105,24 +107,44 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">保存一封同步 Email 要附带的文件名、媒体类型和完整内容。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="EmailMessageService.html" title="class in com.sca4d.notification.email">EmailMessageService</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="EmailChannels.html" title="class in com.sca4d.notification.email">EmailChannels</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">使用当前 Email 模板和 SMTP 配置同步发送带可选附件的邮件。</div>
+<div class="block">Email 模块声明的通知渠道。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="EmailNotificationDelivery.html" title="class in com.sca4d.notification.email">EmailNotificationDelivery</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="EmailMessageService.html" title="class in com.sca4d.notification.email">EmailMessageService</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">把渠道无关通知解析为收件邮箱、多语言模板和当前 SMTP 配置并执行投递。</div>
+<div class="block">使用 Email 模板和当前 SMTP 配置同步发送带可选附件的邮件。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab3"><a href="EmailNotificationErrorCode.html" title="enum class in com.sca4d.notification.email">EmailNotificationErrorCode</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab3">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="EmailNotificationDelivery.html" title="class in com.sca4d.notification.email">EmailNotificationDelivery</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">把渠道无关通知解析为收件邮箱、Email 模板和 SMTP 配置并执行投递。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab3"><a href="EmailNotificationErrorCode.html" title="enum class in com.sca4d.notification.email">EmailNotificationErrorCode</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab3">
 <div class="block">Email 通知配置、模板和投递使用的稳定错误码。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="EmailRecipientResolver.html" title="interface in com.sca4d.notification.email">EmailRecipientResolver</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="EmailRecipientResolver.html" title="interface in com.sca4d.notification.email">EmailRecipientResolver</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">把通知内部接收人解析为当前有效邮箱，具体数据归属仍由 App 决定。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RenderedEmail.html" title="class in com.sca4d.notification.email">RenderedEmail</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="EmailRenderer.html" title="class in com.sca4d.notification.email">EmailRenderer</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">把 Email 源码模板渲染为主题、纯文本正文和安全 HTML 正文。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="EmailTemplate.html" title="class in com.sca4d.notification.email">EmailTemplate</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Email 模板聚合；每个 Locale 保存 subject、text 和 html 源码。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="EmailTemplateRepository.html" title="class in com.sca4d.notification.email">EmailTemplateRepository</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">Email 模块拥有的模板持久化边界。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="EmailTemplateSource.html" title="class in com.sca4d.notification.email">EmailTemplateSource</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">保存 Email 模板的主题、纯文本正文和 HTML 正文源码。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RenderedEmail.html" title="class in com.sca4d.notification.email">RenderedEmail</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">保存已经完成变量转义、主题校验和 HTML 清洗的 Email 内容。</div>
 </div>
 </div>

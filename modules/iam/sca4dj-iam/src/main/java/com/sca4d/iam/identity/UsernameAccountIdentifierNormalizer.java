@@ -9,8 +9,7 @@ import java.text.Normalizer;
 import java.util.Locale;
 
 /** IAM 内置的用户名规范化规则。 */
-public final class UsernameAccountIdentifierNormalizer implements AccountIdentifierNormalizer {
-    /** 创建内置用户名规范化器。 */
+public class UsernameAccountIdentifierNormalizer implements AccountIdentifierNormalizer {
     public UsernameAccountIdentifierNormalizer() {
     }
 

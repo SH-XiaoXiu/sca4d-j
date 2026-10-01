@@ -7,33 +7,33 @@ import org.jetbrains.annotations.Nullable;
 
 /** 保存 MyBatis 从 Provider 与配置表连接结果读取的持久化状态。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class ProviderSettingsState {
+public class ProviderSettingsState {
+
+    private final @NotNull FederatedClientAuthentication clientAuthentication;
 
     private final @NotNull FederatedProviderProtocol protocol;
 
-    private final @Nullable String issuer;
+    private final @Nullable String authorizationEndpoint;
+
+    private final @NotNull String authorizationParameters;
 
     private final @Nullable String clientId;
 
+    private final @Nullable String issuer;
+
+    private final @Nullable String jwksEndpoint;
+
+    private final @NotNull String profileMapping;
+
+    private final @NotNull String scopes;
+
     private final @Nullable String secretKeyId;
-
-    private final byte @Nullable [] secretCiphertext;
-
-    private final @Nullable String authorizationEndpoint;
 
     private final @Nullable String tokenEndpoint;
 
     private final @Nullable String userInfoEndpoint;
 
-    private final @Nullable String jwksEndpoint;
-
-    private final @NotNull FederatedClientAuthentication clientAuthentication;
-
-    private final @NotNull String scopes;
-
-    private final @NotNull String profileMapping;
-
-    private final @NotNull String authorizationParameters;
+    private final byte @Nullable [] secretCiphertext;
 
     /** 创建 Provider 配置持久化状态。 */
     public ProviderSettingsState(

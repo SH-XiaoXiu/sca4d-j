@@ -3,13 +3,14 @@ package com.sca4d.web.realtime.ticket;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.core.api.authentication.SessionLifecycle;
+import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.utils.TextUtils;
 import com.sca4d.web.realtime.config.WebRealtimeInfrastructureNames;
 import com.sca4d.web.realtime.config.WebRealtimeProperties;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 
 import java.security.SecureRandom;
@@ -22,17 +23,17 @@ import java.util.Optional;
 
 /** 把短期一次性 WebSocket 票据保存到 Redis，并在握手时原子读取和删除。 */
 @ApiStatus.Internal
-public final class RedisTicketService implements WebRealtimeTicketService {
+public class RedisTicketService implements WebRealtimeTicketService {
 
     private static final DefaultRedisScript<String> CONSUME = consumeScript();
-
-    private final @NotNull StringRedisTemplate redis;
-
-    private final @NotNull SessionLifecycle sessions;
 
     private final @NotNull WebRealtimeProperties properties;
 
     private final @NotNull Clock clock;
+
+    private final @NotNull RedisTemplate<Key, String> redis;
+
+    private final @NotNull SessionLifecycle sessions;
 
     private final @NotNull SecureRandom random;
 
@@ -40,7 +41,7 @@ public final class RedisTicketService implements WebRealtimeTicketService {
 
     /** 创建一次性票据签发和消费服务。 */
     public RedisTicketService(
-            @NotNull StringRedisTemplate redis,
+            @NotNull RedisTemplate<Key, String> redis,
             @NotNull SessionLifecycle sessions,
             @NotNull WebRealtimeInfrastructureNames names,
             @NotNull WebRealtimeProperties properties,

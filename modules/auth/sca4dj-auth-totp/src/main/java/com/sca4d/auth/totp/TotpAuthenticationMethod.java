@@ -8,10 +8,11 @@ import com.sca4d.auth.totp.enrollment.RedisTotpEnrollmentStore;
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.AuthenticationMethod;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.security.SecretKeyring;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,17 +26,23 @@ import java.util.Objects;
 import java.util.OptionalLong;
 import java.util.Set;
 
-/** 验证 Google Authenticator 兼容 TOTP 验证码，并原子拒绝旧时间步。 */
+/**
+ * 验证 Google Authenticator 兼容 TOTP 验证码，并原子拒绝旧时间步。
+ */
 public class TotpAuthenticationMethod implements AuthenticationMethod<TotpProof> {
 
     private static final Logger LOG = LoggerFactory.getLogger(TotpAuthenticationMethod.class);
 
-    /** TOTP 方法稳定编码。 */
-    public static final AuthenticationMethodCode CODE = new AuthenticationMethodCode("totp");
+    /**
+     * TOTP 方法稳定编码。
+     */
+    public static final TreeCode CODE = TreeCode.ofSlash("AUTHENTICATION/TOTP");
 
     private static final Set<AuthenticationFactorKind> FACTOR_KINDS = Set.of(AuthenticationFactorKind.POSSESSION);
 
     private final TotpCredentialRepository credentials;
+
+    private final Clock clock;
 
     private final RedisTotpEnrollmentStore enrollments;
 
@@ -43,22 +50,20 @@ public class TotpAuthenticationMethod implements AuthenticationMethod<TotpProof>
 
     private final TotpSecretCryptography secrets;
 
-    private final Clock clock;
-
     /**
      * 创建 TOTP 认证方法。
      *
      * @param credentials TOTP 凭据 Repository
      * @param enrollments Redis enrollment store
-     * @param verifier TOTP 验证码校验器
-     * @param keyring Secret 解密能力
-     * @param clock 认证时间来源
+     * @param verifier    TOTP 验证码校验器
+     * @param keyring     Secret 解密能力
+     * @param clock       认证时间来源
      */
     public TotpAuthenticationMethod(
             @NotNull TotpCredentialRepository credentials,
             @NotNull RedisTotpEnrollmentStore enrollments,
             @NotNull TotpCodeVerifier verifier,
-            @NotNull com.sca4d.core.api.security.SecretKeyring keyring,
+            @NotNull SecretKeyring keyring,
             @NotNull Clock clock) {
         this.credentials = Objects.requireNonNull(credentials, "TOTP 凭据 Repository 不能为空");
         this.enrollments = Objects.requireNonNull(enrollments, "TOTP enrollment store 不能为空");
@@ -68,7 +73,7 @@ public class TotpAuthenticationMethod implements AuthenticationMethod<TotpProof>
     }
 
     @Override
-    public @NotNull AuthenticationMethodCode code() {
+    public @NotNull TreeCode code() {
         return CODE;
     }
 
@@ -133,7 +138,9 @@ public class TotpAuthenticationMethod implements AuthenticationMethod<TotpProof>
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional
     public void eraseAccount(long accountId) {
@@ -145,7 +152,9 @@ public class TotpAuthenticationMethod implements AuthenticationMethod<TotpProof>
         LOG.debug("TOTP Credential 与 enrollment 已擦除 | accountId={}", accountId);
     }
 
-    /** 返回凭据 Secret 加解密使用的稳定 purpose。 */
+    /**
+     * 返回凭据 Secret 加解密使用的稳定 purpose。
+     */
     @ApiStatus.Internal
     public static String credentialPurpose(long accountId) {
         return "totp.credential." + accountId + ".secret";

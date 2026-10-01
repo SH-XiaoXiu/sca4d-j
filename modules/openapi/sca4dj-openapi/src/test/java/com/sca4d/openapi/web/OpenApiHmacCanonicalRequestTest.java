@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 
-/** 验证 OpenAPI HMAC canonical request 的字段顺序和输入限制。 */
+/** 验证 OpenAPI MAC canonical request 的字段顺序和输入限制。 */
 class OpenApiHmacCanonicalRequestTest {
 
     @Test

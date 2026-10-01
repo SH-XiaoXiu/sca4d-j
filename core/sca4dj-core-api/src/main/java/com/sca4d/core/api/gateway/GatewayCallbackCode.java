@@ -1,55 +1,45 @@
 package com.sca4d.core.api.gateway;
 
-import com.sca4d.core.api.utils.TextUtils;
-import org.jetbrains.annotations.Contract;
+import com.sca4d.core.api.name.NameFormat;
+import com.sca4d.core.api.name.code.Code;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-import java.util.regex.Pattern;
+import java.util.List;
 
-/** 表示 Gateway 可以发现并转发到应用实例的稳定回调编码。 */
-public final class GatewayCallbackCode {
+/** 使用稳定节点链标识跨实例发现的稳定回调，保留独立领域类型。 */
+public final class GatewayCallbackCode extends TreeCode {
 
-    private static final Pattern VALUE = Pattern.compile("[a-z0-9][a-z0-9.-]{0,127}");
+    /** 从代码声明或序列化边界解析编码，拒绝通配符和超过 128 字符的名称。 */
+    public GatewayCallbackCode(@NotNull String text) {
+        this(TreeCode.of(text));
+    }
 
-    private final @NotNull String value;
-
-    /**
-     * 创建回调编码。
-     *
-     * @param value 由小写字母、数字、点和连字符组成的稳定编码
-     * @throws IllegalArgumentException 编码格式不合法时抛出
-     */
-    public GatewayCallbackCode(@NotNull String value) {
-        String checked = TextUtils.requireText(value, "Gateway 回调编码");
-        if (!VALUE.matcher(checked).matches()) {
-            throw new IllegalArgumentException("Gateway 回调编码只能包含小写字母、数字、点和连字符");
+    /** 从已经校验的稳定编码构造领域名称。 */
+    public GatewayCallbackCode(@NotNull Code code) {
+        super(code);
+        if (hasNode(TreeCode.ofSegment("*")) || format(NameFormat.COLON).length() > 128) {
+            throw new IllegalArgumentException("GatewayCallbackCode 必须是最多 128 字符的固定编码");
         }
-        this.value = checked;
-    }
-
-    /** @return 跨实例注册和路由使用的稳定编码 */
-    @Contract(pure = true)
-    public @NotNull String value() {
-        return value;
     }
 
     @Override
-    @Contract(value = "null -> false", pure = true)
-    public boolean equals(@Nullable Object other) {
-        return this == other || other instanceof GatewayCallbackCode code && value.equals(code.value);
+    protected @NotNull GatewayCallbackCode withNodes(@NotNull List<String> nodes) {
+        return new GatewayCallbackCode(super.withNodes(nodes));
     }
 
     @Override
-    @Contract(pure = true)
-    public int hashCode() {
-        return Objects.hash(value);
+    public @NotNull GatewayCallbackCode child(@NotNull String node) {
+        return (GatewayCallbackCode) super.child(node);
     }
 
     @Override
-    @Contract(pure = true)
-    public @NotNull String toString() {
-        return value;
+    public @NotNull GatewayCallbackCode child(@NotNull TreeCode node) {
+        return (GatewayCallbackCode) super.child(node);
+    }
+
+    @Override
+    public @NotNull GatewayCallbackCode append(@NotNull Code code) {
+        return (GatewayCallbackCode) super.append(code);
     }
 }

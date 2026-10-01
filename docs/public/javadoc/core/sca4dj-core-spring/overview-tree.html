@@ -59,12 +59,15 @@ loadScripts(document, 'script');</script>
 <li><a href="com/sca4d/core/spring/id/package-tree.html">com.sca4d.core.spring.id</a>, </li>
 <li><a href="com/sca4d/core/spring/identity/package-tree.html">com.sca4d.core.spring.identity</a>, </li>
 <li><a href="com/sca4d/core/spring/json/package-tree.html">com.sca4d.core.spring.json</a>, </li>
+<li><a href="com/sca4d/core/spring/logging/package-tree.html">com.sca4d.core.spring.logging</a>, </li>
 <li><a href="com/sca4d/core/spring/openapi/package-tree.html">com.sca4d.core.spring.openapi</a>, </li>
+<li><a href="com/sca4d/core/spring/permission/package-tree.html">com.sca4d.core.spring.permission</a>, </li>
 <li><a href="com/sca4d/core/spring/persistence/batch/package-tree.html">com.sca4d.core.spring.persistence.batch</a>, </li>
 <li><a href="com/sca4d/core/spring/persistence/mybatis/package-tree.html">com.sca4d.core.spring.persistence.mybatis</a>, </li>
 <li><a href="com/sca4d/core/spring/redis/package-tree.html">com.sca4d.core.spring.redis</a>, </li>
 <li><a href="com/sca4d/core/spring/security/package-tree.html">com.sca4d.core.spring.security</a>, </li>
 <li><a href="com/sca4d/core/spring/setting/package-tree.html">com.sca4d.core.spring.setting</a>, </li>
+<li><a href="com/sca4d/core/spring/transaction/package-tree.html">com.sca4d.core.spring.transaction</a>, </li>
 <li><a href="com/sca4d/core/spring/validation/package-tree.html">com.sca4d.core.spring.validation</a>, </li>
 <li><a href="com/sca4d/core/spring/web/package-tree.html">com.sca4d.core.spring.web</a>, </li>
 <li><a href="com/sca4d/core/spring/web/annotation/package-tree.html">com.sca4d.core.spring.web.annotation</a>, </li>
@@ -77,12 +80,18 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" class="type-name-link external-link" title="class or interface in java.lang">Object</a>
 <ul>
+<li class="circle">org.springframework.aop.support.AbstractPointcutAdvisor (implements org.springframework.core.Ordered, org.springframework.aop.PointcutAdvisor, java.io.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a>)
+<ul>
+<li class="circle">com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallLifecycleAdvisor.html" class="type-name-link" title="class in com.sca4d.core.spring.call">CallLifecycleAdvisor</a></li>
+</ul>
+</li>
 <li class="circle">com.sca4d.core.spring.persistence.mybatis.<a href="com/sca4d/core/spring/persistence/mybatis/AdditionalMyBatisSessionFactoryBuilder.html" class="type-name-link" title="class in com.sca4d.core.spring.persistence.mybatis">AdditionalMyBatisSessionFactoryBuilder</a></li>
 <li class="circle">com.sca4d.core.spring.security.<a href="com/sca4d/core/spring/security/AesGcmSecretCipher.html" class="type-name-link" title="class in com.sca4d.core.spring.security">AesGcmSecretCipher</a> (implements com.sca4d.core.api.security.SecretCipher)</li>
 <li class="circle">com.sca4d.core.spring.persistence.mybatis.<a href="com/sca4d/core/spring/persistence/mybatis/AffectedRowsAspect.html" class="type-name-link" title="class in com.sca4d.core.spring.persistence.mybatis">AffectedRowsAspect</a></li>
 <li class="circle">com.sca4d.core.spring.persistence.mybatis.<a href="com/sca4d/core/spring/persistence/mybatis/AffectedRowsInterceptor.html" class="type-name-link" title="class in com.sca4d.core.spring.persistence.mybatis">AffectedRowsInterceptor</a> (implements org.apache.ibatis.plugin.Interceptor)</li>
 <li class="circle">com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/ApiResponse.html" class="type-name-link" title="class in com.sca4d.core.spring.web">ApiResponse</a>&lt;T&gt;</li>
 <li class="circle">com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/ApiResponseAdvice.html" class="type-name-link" title="class in com.sca4d.core.spring.web">ApiResponseAdvice</a> (implements org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice&lt;T&gt;)</li>
+<li class="circle">com.sca4d.core.spring.config.<a href="com/sca4d/core/spring/config/AppIsolationAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.core.spring.config">AppIsolationAutoConfiguration</a></li>
 <li class="circle">com.sca4d.core.spring.security.<a href="com/sca4d/core/spring/security/Argon2SecretHasher.html" class="type-name-link" title="class in com.sca4d.core.spring.security">Argon2SecretHasher</a> (implements com.sca4d.core.api.security.SecretHasher)</li>
 <li class="circle">com.sca4d.core.spring.web.view.<a href="com/sca4d/core/spring/web/view/BaseView.html" class="type-name-link" title="class in com.sca4d.core.spring.web.view">BaseView</a></li>
 <li class="circle">com.sca4d.core.spring.web.view.<a href="com/sca4d/core/spring/web/view/BaseViewJacksonInstaller.html" class="type-name-link" title="class in com.sca4d.core.spring.web.view">BaseViewJacksonInstaller</a> (implements org.springframework.beans.factory.SmartInitializingSingleton)</li>
@@ -93,16 +102,9 @@ loadScripts(document, 'script');</script>
 </li>
 <li class="circle">com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/BearerToken.html" class="type-name-link" title="class in com.sca4d.core.spring.web">BearerToken</a></li>
 <li class="circle">com.sca4d.core.spring.validation.<a href="com/sca4d/core/spring/validation/BizIdValidator.html" class="type-name-link" title="class in com.sca4d.core.spring.validation">BizIdValidator</a> (implements jakarta.validation.ConstraintValidator&lt;A,<wbr>T&gt;)</li>
-<li class="circle">com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallHandlerInterceptor.html" class="type-name-link" title="class in com.sca4d.core.spring.call">CallHandlerInterceptor</a> (implements org.springframework.web.servlet.HandlerInterceptor)
-<ul>
-<li class="circle">com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/IdentityMdcInterceptor.html" class="type-name-link" title="class in com.sca4d.core.spring.web">IdentityMdcInterceptor</a></li>
-<li class="circle">com.sca4d.core.spring.identity.<a href="com/sca4d/core/spring/identity/PrincipalSelectionInterceptor.html" class="type-name-link" title="class in com.sca4d.core.spring.identity">PrincipalSelectionInterceptor</a></li>
-</ul>
-</li>
 <li class="circle">com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallHolder.html" class="type-name-link" title="class in com.sca4d.core.spring.call">CallHolder</a></li>
-<li class="circle">com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallLifecycleAspect.html" class="type-name-link" title="class in com.sca4d.core.spring.call">CallLifecycleAspect</a></li>
-<li class="circle">com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallRequirementTransactionInstaller.html" class="type-name-link" title="class in com.sca4d.core.spring.call">CallRequirementTransactionInstaller</a> (implements org.springframework.beans.factory.config.BeanPostProcessor)</li>
-<li class="circle">com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallRequirementTransactionListener.html" class="type-name-link" title="class in com.sca4d.core.spring.call">CallRequirementTransactionListener</a> (implements org.springframework.transaction.TransactionExecutionListener)</li>
+<li class="circle">com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallPreCommitTransactionInstaller.html" class="type-name-link" title="class in com.sca4d.core.spring.call">CallPreCommitTransactionInstaller</a> (implements org.springframework.beans.factory.config.BeanPostProcessor)</li>
+<li class="circle">com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallPreCommitTransactionListener.html" class="type-name-link" title="class in com.sca4d.core.spring.call">CallPreCommitTransactionListener</a> (implements org.springframework.transaction.TransactionExecutionListener)</li>
 <li class="circle">com.sca4d.core.spring.i18n.<a href="com/sca4d/core/spring/i18n/CatalogMessageSource.html" class="type-name-link" title="class in com.sca4d.core.spring.i18n">CatalogMessageSource</a> (implements org.springframework.context.MessageSource)</li>
 <li class="circle">com.sca4d.core.spring.i18n.<a href="com/sca4d/core/spring/i18n/ClasspathMessageCatalog.html" class="type-name-link" title="class in com.sca4d.core.spring.i18n">ClasspathMessageCatalog</a> (implements com.sca4d.core.api.i18n.MessageCatalog)</li>
 <li class="circle">com.sca4d.core.spring.web.clientstate.<a href="com/sca4d/core/spring/web/clientstate/ClientState.html" class="type-name-link" title="class in com.sca4d.core.spring.web.clientstate">ClientState</a></li>
@@ -111,24 +113,40 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.core.spring.web.clientstate.<a href="com/sca4d/core/spring/web/clientstate/ClientStateResponseAdvice.html" class="type-name-link" title="class in com.sca4d.core.spring.web.clientstate">ClientStateResponseAdvice</a> (implements org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice&lt;T&gt;)</li>
 <li class="circle">com.sca4d.core.spring.web.clientstate.<a href="com/sca4d/core/spring/web/clientstate/ClientStateTarget.html" class="type-name-link" title="class in com.sca4d.core.spring.web.clientstate">ClientStateTarget</a></li>
 <li class="circle">com.sca4d.core.spring.security.<a href="com/sca4d/core/spring/security/ConfiguredSecretKeyring.html" class="type-name-link" title="class in com.sca4d.core.spring.security">ConfiguredSecretKeyring</a> (implements com.sca4d.core.api.security.SecretKeyring)</li>
+<li class="circle">ch.qos.logback.core.spi.ContextAwareBase (implements ch.qos.logback.core.spi.ContextAware)
+<ul>
+<li class="circle">ch.qos.logback.classic.turbo.TurboFilter (implements ch.qos.logback.core.spi.LifeCycle)
+<ul>
+<li class="circle">com.sca4d.core.spring.logging.<a href="com/sca4d/core/spring/logging/TransactionLogTurboFilter.html" class="type-name-link" title="class in com.sca4d.core.spring.logging">TransactionLogTurboFilter</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="circle">com.sca4d.core.spring.config.<a href="com/sca4d/core/spring/config/CoreJacksonAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.core.spring.config">CoreJacksonAutoConfiguration</a></li>
 <li class="circle">com.sca4d.core.spring.persistence.mybatis.<a href="com/sca4d/core/spring/persistence/mybatis/CoreMyBatisAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.core.spring.persistence.mybatis">CoreMyBatisAutoConfiguration</a></li>
 <li class="circle">com.sca4d.core.spring.openapi.<a href="com/sca4d/core/spring/openapi/CoreOpenApiConfiguration.html" class="type-name-link" title="class in com.sca4d.core.spring.openapi">CoreOpenApiConfiguration</a></li>
 <li class="circle">com.sca4d.core.spring.config.<a href="com/sca4d/core/spring/config/CoreRedisAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.core.spring.config">CoreRedisAutoConfiguration</a></li>
 <li class="circle">com.sca4d.core.spring.config.<a href="com/sca4d/core/spring/config/CoreSpringAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.core.spring.config">CoreSpringAutoConfiguration</a></li>
 <li class="circle">com.sca4d.core.spring.config.<a href="com/sca4d/core/spring/config/CoreSpringProperties.html" class="type-name-link" title="class in com.sca4d.core.spring.config">CoreSpringProperties</a></li>
+<li class="circle">com.sca4d.core.spring.config.<a href="com/sca4d/core/spring/config/CoreSpringProperties.OpenApi.html" class="type-name-link" title="class in com.sca4d.core.spring.config">CoreSpringProperties.OpenApi</a></li>
+<li class="circle">com.sca4d.core.spring.config.<a href="com/sca4d/core/spring/config/CoreSpringProperties.Pagination.html" class="type-name-link" title="class in com.sca4d.core.spring.config">CoreSpringProperties.Pagination</a></li>
 <li class="circle">com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/CurrentIdentityArgumentResolver.html" class="type-name-link" title="class in com.sca4d.core.spring.web">CurrentIdentityArgumentResolver</a> (implements org.springframework.web.method.support.HandlerMethodArgumentResolver)</li>
-<li class="circle">com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/CurrentResourceScope.html" class="type-name-link" title="class in com.sca4d.core.spring.web">CurrentResourceScope</a></li>
+<li class="circle">com.sca4d.core.spring.permission.<a href="com/sca4d/core/spring/permission/CurrentResourceScope.html" class="type-name-link" title="class in com.sca4d.core.spring.permission">CurrentResourceScope</a></li>
 <li class="circle">com.sca4d.core.spring.dictionary.<a href="com/sca4d/core/spring/dictionary/DatabaseDictionaries.html" class="type-name-link" title="class in com.sca4d.core.spring.dictionary">DatabaseDictionaries</a> (implements com.sca4d.core.api.dictionary.Dictionaries)</li>
 <li class="circle">com.sca4d.core.spring.dictionary.<a href="com/sca4d/core/spring/dictionary/DatabaseDictionaryOption.html" class="type-name-link" title="class in com.sca4d.core.spring.dictionary">DatabaseDictionaryOption</a></li>
-<li class="circle">com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/DatabaseSettings.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">DatabaseSettings</a> (implements com.sca4d.core.api.setting.PreferenceSettings, com.sca4d.core.api.setting.Settings)</li>
+<li class="circle">com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/DatabaseSettingStore.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">DatabaseSettingStore</a> (implements com.sca4d.core.api.setting.access.SettingReader&lt;W&gt;, com.sca4d.core.api.setting.access.SettingWriter&lt;W&gt;)</li>
 <li class="circle">com.sca4d.core.spring.dictionary.<a href="com/sca4d/core/spring/dictionary/DictionaryAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.core.spring.dictionary">DictionaryAutoConfiguration</a></li>
 <li class="circle">com.sca4d.core.spring.dictionary.<a href="com/sca4d/core/spring/dictionary/DictionaryRegistry.html" class="type-name-link" title="class in com.sca4d.core.spring.dictionary">DictionaryRegistry</a></li>
 <li class="circle">com.sca4d.core.spring.dictionary.<a href="com/sca4d/core/spring/dictionary/DictionaryRepository.html" class="type-name-link" title="class in com.sca4d.core.spring.dictionary">DictionaryRepository</a></li>
 <li class="circle">com.sca4d.core.spring.dictionary.<a href="com/sca4d/core/spring/dictionary/DictionaryScanner.html" class="type-name-link" title="class in com.sca4d.core.spring.dictionary">DictionaryScanner</a></li>
 <li class="circle">com.sca4d.core.spring.validation.<a href="com/sca4d/core/spring/validation/DisplayNameValidator.html" class="type-name-link" title="class in com.sca4d.core.spring.validation">DisplayNameValidator</a> (implements jakarta.validation.ConstraintValidator&lt;A,<wbr>T&gt;)</li>
 <li class="circle">com.sca4d.core.spring.dictionary.<a href="com/sca4d/core/spring/dictionary/DynamicDictionary.html" class="type-name-link" title="class in com.sca4d.core.spring.dictionary">DynamicDictionary</a></li>
+<li class="circle">com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/EnvironmentPrefixProperties.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">EnvironmentPrefixProperties</a></li>
+<li class="circle">com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/EnvironmentVariableResolver.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">EnvironmentVariableResolver</a></li>
+<li class="circle">com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/EnvSettingReader.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">EnvSettingReader</a> (implements com.sca4d.core.api.setting.access.SettingReader&lt;W&gt;)</li>
 <li class="circle">com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/FieldViolation.html" class="type-name-link" title="class in com.sca4d.core.spring.web">FieldViolation</a></li>
+<li class="circle">com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/FileSettingReader.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">FileSettingReader</a> (implements com.sca4d.core.api.setting.access.SettingReader&lt;W&gt;)</li>
+<li class="circle">com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/FileSettingStore.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">FileSettingStore</a> (implements com.sca4d.core.api.setting.access.SettingReader&lt;W&gt;, com.sca4d.core.api.setting.access.SettingWriter&lt;W&gt;)</li>
 <li class="circle">com.sca4d.core.spring.gateway.<a href="com/sca4d/core/spring/gateway/GatewayCallbackDispatcher.html" class="type-name-link" title="class in com.sca4d.core.spring.gateway">GatewayCallbackDispatcher</a></li>
 <li class="circle">com.sca4d.core.spring.gateway.<a href="com/sca4d/core/spring/gateway/GatewayRegistrationLifecycle.html" class="type-name-link" title="class in com.sca4d.core.spring.gateway">GatewayRegistrationLifecycle</a></li>
 <li class="circle">com.sca4d.core.spring.gateway.<a href="com/sca4d/core/spring/gateway/GatewayRegistrationProperties.html" class="type-name-link" title="class in com.sca4d.core.spring.gateway">GatewayRegistrationProperties</a></li>
@@ -137,8 +155,9 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">org.springframework.web.filter.OncePerRequestFilter
 <ul>
-<li class="circle">com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallFilter.html" class="type-name-link" title="class in com.sca4d.core.spring.call">CallFilter</a></li>
 <li class="circle">com.sca4d.core.spring.web.clientstate.<a href="com/sca4d/core/spring/web/clientstate/ClientStateFilter.html" class="type-name-link" title="class in com.sca4d.core.spring.web.clientstate">ClientStateFilter</a></li>
+<li class="circle">com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpCallFilter.html" class="type-name-link" title="class in com.sca4d.core.spring.web">HttpCallFilter</a></li>
+<li class="circle">com.sca4d.core.spring.config.<a href="com/sca4d/core/spring/config/InstanceCapabilityFilter.html" class="type-name-link" title="class in com.sca4d.core.spring.config">InstanceCapabilityFilter</a></li>
 <li class="circle">com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/RequestVersionConditionFilter.html" class="type-name-link" title="class in com.sca4d.core.spring.web">RequestVersionConditionFilter</a></li>
 <li class="circle">com.sca4d.core.spring.gateway.<a href="com/sca4d/core/spring/gateway/TrustedGatewayRequestFilter.html" class="type-name-link" title="class in com.sca4d.core.spring.gateway">TrustedGatewayRequestFilter</a></li>
 </ul>
@@ -146,13 +165,24 @@ loadScripts(document, 'script');</script>
 </ul>
 </li>
 <li class="circle">com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/GlobalExceptionHandler.html" class="type-name-link" title="class in com.sca4d.core.spring.web">GlobalExceptionHandler</a></li>
-<li class="circle">com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpIdempotencyKeyResolver.html" class="type-name-link" title="class in com.sca4d.core.spring.web">HttpIdempotencyKeyResolver</a> (implements com.sca4d.core.api.call.CallValueResolver&lt;T&gt;)</li>
+<li class="circle">com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpCallHandlerInterceptor.html" class="type-name-link" title="class in com.sca4d.core.spring.web">HttpCallHandlerInterceptor</a> (implements org.springframework.web.servlet.HandlerInterceptor)
+<ul>
+<li class="circle">com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/IdentityMdcInterceptor.html" class="type-name-link" title="class in com.sca4d.core.spring.web">IdentityMdcInterceptor</a></li>
+<li class="circle">com.sca4d.core.spring.identity.<a href="com/sca4d/core/spring/identity/PrincipalSelectionInterceptor.html" class="type-name-link" title="class in com.sca4d.core.spring.identity">PrincipalSelectionInterceptor</a></li>
+</ul>
+</li>
+<li class="circle">com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" class="type-name-link" title="class in com.sca4d.core.spring.web">HttpConstants</a></li>
 <li class="circle">com.sca4d.core.spring.openapi.<a href="com/sca4d/core/spring/openapi/HttpInputOpenApiCustomizer.html" class="type-name-link" title="class in com.sca4d.core.spring.openapi">HttpInputOpenApiCustomizer</a> (implements org.springdoc.core.customizers.OpenApiCustomizer, org.springdoc.core.customizers.OperationCustomizer, org.springdoc.core.customizers.ParameterCustomizer, org.springdoc.core.customizers.PropertyCustomizer)</li>
 <li class="circle">com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpInputValidationAspect.html" class="type-name-link" title="class in com.sca4d.core.spring.web">HttpInputValidationAspect</a></li>
 <li class="circle">com.sca4d.core.spring.config.<a href="com/sca4d/core/spring/config/HttpInputValidationProperties.html" class="type-name-link" title="class in com.sca4d.core.spring.config">HttpInputValidationProperties</a></li>
 <li class="circle">com.sca4d.core.spring.i18n.<a href="com/sca4d/core/spring/i18n/I18nProperties.html" class="type-name-link" title="class in com.sca4d.core.spring.i18n">I18nProperties</a></li>
 <li class="circle">com.sca4d.core.spring.config.<a href="com/sca4d/core/spring/config/IdProperties.html" class="type-name-link" title="class in com.sca4d.core.spring.config">IdProperties</a></li>
 <li class="circle">com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/IfMatchInterceptor.html" class="type-name-link" title="class in com.sca4d.core.spring.web">IfMatchInterceptor</a> (implements org.springframework.web.servlet.HandlerInterceptor)</li>
+<li class="circle">com.sca4d.core.spring.config.<a href="com/sca4d/core/spring/config/InstanceAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.core.spring.config">InstanceAutoConfiguration</a></li>
+<li class="circle">com.sca4d.core.spring.config.<a href="com/sca4d/core/spring/config/InstanceCapabilityCondition.html" class="type-name-link" title="class in com.sca4d.core.spring.config">InstanceCapabilityCondition</a> (implements org.springframework.context.annotation.Condition)</li>
+<li class="circle">com.sca4d.core.spring.config.<a href="com/sca4d/core/spring/config/InstanceEnvironmentPostProcessor.html" class="type-name-link" title="class in com.sca4d.core.spring.config">InstanceEnvironmentPostProcessor</a> (implements org.springframework.boot.env.EnvironmentPostProcessor, org.springframework.core.Ordered)</li>
+<li class="circle">com.sca4d.core.spring.config.<a href="com/sca4d/core/spring/config/InstanceProperties.html" class="type-name-link" title="class in com.sca4d.core.spring.config">InstanceProperties</a></li>
+<li class="circle">com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/JarSettingReader.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">JarSettingReader</a> (implements com.sca4d.core.api.setting.access.SettingReader&lt;W&gt;)</li>
 <li class="circle">com.fasterxml.jackson.databind.JsonSerializer&lt;T&gt; (implements com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitable)
 <ul>
 <li class="circle">com.fasterxml.jackson.databind.ser.std.StdSerializer&lt;T&gt; (implements com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitable, com.fasterxml.jackson.databind.jsonschema.SchemaAware, java.io.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a>)
@@ -162,6 +192,7 @@ loadScripts(document, 'script');</script>
 </li>
 </ul>
 </li>
+<li class="circle">com.sca4d.core.spring.redis.<a href="com/sca4d/core/spring/redis/KeyRedisSerializer.html" class="type-name-link" title="class in com.sca4d.core.spring.redis">KeyRedisSerializer</a> (implements org.springframework.data.redis.serializer.RedisSerializer&lt;T&gt;)</li>
 <li class="circle">com.sca4d.core.spring.web.list.<a href="com/sca4d/core/spring/web/list/ListDefinition.html" class="type-name-link" title="class in com.sca4d.core.spring.web.list">ListDefinition</a></li>
 <li class="circle">com.sca4d.core.spring.web.list.<a href="com/sca4d/core/spring/web/list/ListDefinition.Builder.html" class="type-name-link" title="class in com.sca4d.core.spring.web.list">ListDefinition.Builder</a></li>
 <li class="circle">com.sca4d.core.spring.web.list.<a href="com/sca4d/core/spring/web/list/ListParameters.html" class="type-name-link" title="class in com.sca4d.core.spring.web.list">ListParameters</a></li>
@@ -173,6 +204,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.fasterxml.jackson.databind.module.SimpleModule (implements java.io.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a>)
 <ul>
 <li class="circle">com.sca4d.core.spring.web.view.<a href="com/sca4d/core/spring/web/view/BaseViewJacksonModule.html" class="type-name-link" title="class in com.sca4d.core.spring.web.view">BaseViewJacksonModule</a></li>
+<li class="circle">com.sca4d.core.spring.json.<a href="com/sca4d/core/spring/json/NameJacksonModule.html" class="type-name-link" title="class in com.sca4d.core.spring.json">NameJacksonModule</a></li>
 </ul>
 </li>
 </ul>
@@ -180,12 +212,13 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/PageRequestArgumentResolver.html" class="type-name-link" title="class in com.sca4d.core.spring.web">PageRequestArgumentResolver</a> (implements org.springframework.web.method.support.HandlerMethodArgumentResolver)</li>
 <li class="circle">com.sca4d.core.spring.validation.<a href="com/sca4d/core/spring/validation/PhoneNumberConditionRegistry.html" class="type-name-link" title="class in com.sca4d.core.spring.validation">PhoneNumberConditionRegistry</a></li>
 <li class="circle">com.sca4d.core.spring.validation.<a href="com/sca4d/core/spring/validation/PhoneNumberValidator.html" class="type-name-link" title="class in com.sca4d.core.spring.validation">PhoneNumberValidator</a> (implements jakarta.validation.ConstraintValidator&lt;A,<wbr>T&gt;)</li>
-<li class="circle">com.sca4d.core.spring.identity.<a href="com/sca4d/core/spring/identity/PrincipalSelectionAspect.html" class="type-name-link" title="class in com.sca4d.core.spring.identity">PrincipalSelectionAspect</a></li>
+<li class="circle">com.sca4d.core.spring.identity.<a href="com/sca4d/core/spring/identity/PrincipalSelectionCallInterceptor.html" class="type-name-link" title="class in com.sca4d.core.spring.identity">PrincipalSelectionCallInterceptor</a> (implements com.sca4d.core.api.call.CallLifecycle.Around)</li>
 <li class="circle">com.sca4d.core.spring.identity.<a href="com/sca4d/core/spring/identity/PrincipalSelectionInput.html" class="type-name-link" title="class in com.sca4d.core.spring.identity">PrincipalSelectionInput</a></li>
 <li class="circle">com.sca4d.core.spring.identity.<a href="com/sca4d/core/spring/identity/PrincipalSelectionInputResolver.html" class="type-name-link" title="class in com.sca4d.core.spring.identity">PrincipalSelectionInputResolver</a></li>
 <li class="circle">com.sca4d.core.spring.identity.<a href="com/sca4d/core/spring/identity/PrincipalSelectionInvoker.html" class="type-name-link" title="class in com.sca4d.core.spring.identity">PrincipalSelectionInvoker</a></li>
 <li class="circle">com.sca4d.core.spring.redis.<a href="com/sca4d/core/spring/redis/RedisBatches.html" class="type-name-link" title="class in com.sca4d.core.spring.redis">RedisBatches</a></li>
 <li class="circle">com.sca4d.core.spring.redis.<a href="com/sca4d/core/spring/redis/RedisDistributedLock.html" class="type-name-link" title="class in com.sca4d.core.spring.redis">RedisDistributedLock</a> (implements com.sca4d.core.api.concurrent.DistributedLock)</li>
+<li class="circle">com.sca4d.core.spring.redis.<a href="com/sca4d/core/spring/redis/RedisHashTag.html" class="type-name-link" title="class in com.sca4d.core.spring.redis">RedisHashTag</a></li>
 <li class="circle">com.sca4d.core.spring.redis.<a href="com/sca4d/core/spring/redis/RedisIdempotencyProperties.html" class="type-name-link" title="class in com.sca4d.core.spring.redis">RedisIdempotencyProperties</a></li>
 <li class="circle">com.sca4d.core.spring.redis.<a href="com/sca4d/core/spring/redis/RedisIdempotencyStore.html" class="type-name-link" title="class in com.sca4d.core.spring.redis">RedisIdempotencyStore</a> (implements com.sca4d.core.api.concurrent.IdempotencyStore)</li>
 <li class="circle">com.sca4d.core.spring.redis.<a href="com/sca4d/core/spring/redis/RedisPipelineProperties.html" class="type-name-link" title="class in com.sca4d.core.spring.redis">RedisPipelineProperties</a></li>
@@ -195,7 +228,6 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.core.spring.i18n.<a href="com/sca4d/core/spring/i18n/RequestLocaleResolver.html" class="type-name-link" title="class in com.sca4d.core.spring.i18n">RequestLocaleResolver</a> (implements org.springframework.web.servlet.LocaleResolver)</li>
 <li class="circle">com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/RequestVersionConditions.html" class="type-name-link" title="class in com.sca4d.core.spring.web">RequestVersionConditions</a> (implements com.sca4d.core.api.concurrent.VersionConditions)</li>
 <li class="circle">com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/ResponseETagContractValidator.html" class="type-name-link" title="class in com.sca4d.core.spring.web">ResponseETagContractValidator</a> (implements org.springframework.beans.factory.SmartInitializingSingleton)</li>
-<li class="circle">com.sca4d.core.spring.config.<a href="com/sca4d/core/spring/config/RuntimeNamespaceAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.core.spring.config">RuntimeNamespaceAutoConfiguration</a></li>
 <li class="circle">com.sca4d.core.spring.validation.<a href="com/sca4d/core/spring/validation/SafeTextValidator.html" class="type-name-link" title="class in com.sca4d.core.spring.validation">SafeTextValidator</a> (implements jakarta.validation.ConstraintValidator&lt;A,<wbr>T&gt;)</li>
 <li class="circle">com.sca4d.core.spring.security.<a href="com/sca4d/core/spring/security/SecretHasherAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.core.spring.security">SecretHasherAutoConfiguration</a></li>
 <li class="circle">com.sca4d.core.spring.security.<a href="com/sca4d/core/spring/security/SecretKeyringAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.core.spring.security">SecretKeyringAutoConfiguration</a></li>
@@ -205,8 +237,13 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingRepository.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">SettingRepository</a></li>
 <li class="circle">com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingsAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">SettingsAutoConfiguration</a></li>
 <li class="circle">com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingsBootstrapProperties.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">SettingsBootstrapProperties</a></li>
+<li class="circle">com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecAdapter.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">SettingSecretCodecAdapter</a></li>
+<li class="circle">com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecCatalog.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">SettingSecretCodecCatalog</a></li>
+<li class="circle">com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV1.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV1</a> (implements com.sca4d.core.api.codec.SecretCodec&lt;V&gt;)</li>
+<li class="circle">com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretCodecV2.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV2</a> (implements com.sca4d.core.api.codec.SecretCodec&lt;V&gt;)</li>
+<li class="circle">com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingSecretEncryptionMigrator.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">SettingSecretEncryptionMigrator</a></li>
 <li class="circle">com.sca4d.core.spring.id.<a href="com/sca4d/core/spring/id/SnowflakeIdGenerator.html" class="type-name-link" title="class in com.sca4d.core.spring.id">SnowflakeIdGenerator</a> (implements com.sca4d.core.api.id.IdGenerator)</li>
-<li class="circle">com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/SpringAuditResolverLookup.html" class="type-name-link" title="class in com.sca4d.core.spring.call">SpringAuditResolverLookup</a> (implements com.sca4d.core.api.audit.AuditResolverLookup)</li>
+<li class="circle">com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/SpelCallValueResolver.html" class="type-name-link" title="class in com.sca4d.core.spring.call">SpelCallValueResolver</a> (implements com.sca4d.core.api.call.SPICallValueResolver)</li>
 <li class="circle">com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/SpringCallValueResolverLookup.html" class="type-name-link" title="class in com.sca4d.core.spring.call">SpringCallValueResolverLookup</a> (implements com.sca4d.core.api.call.CallValueResolverLookup)</li>
 <li class="circle">com.sca4d.core.spring.persistence.batch.<a href="com/sca4d/core/spring/persistence/batch/SqlBatches.html" class="type-name-link" title="class in com.sca4d.core.spring.persistence.batch">SqlBatches</a></li>
 <li class="circle">com.sca4d.core.spring.persistence.batch.<a href="com/sca4d/core/spring/persistence/batch/SqlBatchProperties.html" class="type-name-link" title="class in com.sca4d.core.spring.persistence.batch">SqlBatchProperties</a></li>
@@ -224,6 +261,20 @@ loadScripts(document, 'script');</script>
 </li>
 </ul>
 </li>
+<li class="circle">com.sca4d.core.spring.transaction.<a href="com/sca4d/core/spring/transaction/TransactionCallbacks.html" class="type-name-link" title="class in com.sca4d.core.spring.transaction">TransactionCallbacks</a></li>
+<li class="circle">com.fasterxml.jackson.core.TreeCodec
+<ul>
+<li class="circle">com.fasterxml.jackson.core.ObjectCodec (implements com.fasterxml.jackson.core.Versioned)
+<ul>
+<li class="circle">com.fasterxml.jackson.databind.ObjectMapper (implements java.io.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a>, com.fasterxml.jackson.core.Versioned)
+<ul>
+<li class="circle">com.sca4d.core.spring.json.<a href="com/sca4d/core/spring/json/Sca4djMapper.html" class="type-name-link" title="class in com.sca4d.core.spring.json">Sca4djMapper</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="circle">com.sca4d.core.spring.gateway.<a href="com/sca4d/core/spring/gateway/TrustedGatewayRequest.html" class="type-name-link" title="class in com.sca4d.core.spring.gateway">TrustedGatewayRequest</a></li>
 <li class="circle">org.apache.ibatis.type.TypeReference&lt;T&gt;
 <ul>
@@ -233,12 +284,18 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.core.spring.persistence.mybatis.<a href="com/sca4d/core/spring/persistence/mybatis/LocalizedFieldsTypeHandler.html" class="type-name-link" title="class in com.sca4d.core.spring.persistence.mybatis">LocalizedFieldsTypeHandler</a></li>
 <li class="circle">com.sca4d.core.spring.persistence.mybatis.<a href="com/sca4d/core/spring/persistence/mybatis/LongValueTypeHandler.html" class="type-name-link" title="class in com.sca4d.core.spring.persistence.mybatis">LongValueTypeHandler</a>&lt;T&gt;</li>
 <li class="circle">com.sca4d.core.spring.persistence.mybatis.<a href="com/sca4d/core/spring/persistence/mybatis/StringValueTypeHandler.html" class="type-name-link" title="class in com.sca4d.core.spring.persistence.mybatis">StringValueTypeHandler</a>&lt;T&gt;</li>
+<li class="circle">com.sca4d.core.spring.persistence.mybatis.<a href="com/sca4d/core/spring/persistence/mybatis/TreeCodeTypeHandler.html" class="type-name-link" title="class in com.sca4d.core.spring.persistence.mybatis">TreeCodeTypeHandler</a>
+<ul>
+<li class="circle">com.sca4d.core.spring.persistence.mybatis.<a href="com/sca4d/core/spring/persistence/mybatis/TreeCodeTypeHandler.Colon.html" class="type-name-link" title="class in com.sca4d.core.spring.persistence.mybatis">TreeCodeTypeHandler.Colon</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="circle">com.sca4d.core.spring.validation.<a href="com/sca4d/core/spring/validation/ValidationPatterns.html" class="type-name-link" title="class in com.sca4d.core.spring.validation">ValidationPatterns</a></li>
 <li class="circle">com.sca4d.core.spring.web.view.<a href="com/sca4d/core/spring/web/view/ViewJson.html" class="type-name-link" title="class in com.sca4d.core.spring.web.view">ViewJson</a></li>
+<li class="circle">com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/YamlCodec.html" class="type-name-link" title="class in com.sca4d.core.spring.setting">YamlCodec</a>&lt;T&gt; (implements com.sca4d.core.api.codec.Codec&lt;V,<wbr>W&gt;)</li>
 </ul>
 </li>
 </ul>
@@ -246,6 +303,8 @@ loadScripts(document, 'script');</script>
 <section class="hierarchy">
 <h2 title="Interface Hierarchy">Interface Hierarchy</h2>
 <ul>
+<li class="circle">com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallLifecycleAdvisor.AnnotationBinding.html" class="type-name-link" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.AnnotationBinding</a>&lt;A&gt;</li>
+<li class="circle">com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallLifecycleAdvisor.MethodBinding.html" class="type-name-link" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.MethodBinding</a></li>
 <li class="circle">com.sca4d.core.spring.dictionary.<a href="com/sca4d/core/spring/dictionary/DictionaryMapper.html" class="type-name-link" title="interface in com.sca4d.core.spring.dictionary">DictionaryMapper</a></li>
 <li class="circle">com.sca4d.core.spring.identity.<a href="com/sca4d/core/spring/identity/PrincipalSelection.html" class="type-name-link" title="interface in com.sca4d.core.spring.identity">PrincipalSelection</a>&lt;P&gt;</li>
 <li class="circle">com.sca4d.core.spring.setting.<a href="com/sca4d/core/spring/setting/SettingMapper.html" class="type-name-link" title="interface in com.sca4d.core.spring.setting">SettingMapper</a></li>
@@ -255,6 +314,7 @@ loadScripts(document, 'script');</script>
 <h2 title="Annotation Interface Hierarchy">Annotation Interface Hierarchy</h2>
 <ul>
 <li class="circle">com.sca4d.core.spring.validation.<a href="com/sca4d/core/spring/validation/BizId.html" class="type-name-link" title="annotation interface in com.sca4d.core.spring.validation">BizId</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
+<li class="circle">com.sca4d.core.spring.config.<a href="com/sca4d/core/spring/config/ConditionalOnCapability.html" class="type-name-link" title="annotation interface in com.sca4d.core.spring.config">ConditionalOnCapability</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
 <li class="circle">com.sca4d.core.spring.web.annotation.<a href="com/sca4d/core/spring/web/annotation/CurrentAccount.html" class="type-name-link" title="annotation interface in com.sca4d.core.spring.web.annotation">CurrentAccount</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
 <li class="circle">com.sca4d.core.spring.web.annotation.<a href="com/sca4d/core/spring/web/annotation/CurrentPrincipal.html" class="type-name-link" title="annotation interface in com.sca4d.core.spring.web.annotation">CurrentPrincipal</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
 <li class="circle">com.sca4d.core.spring.web.annotation.<a href="com/sca4d/core/spring/web/annotation/CurrentSession.html" class="type-name-link" title="annotation interface in com.sca4d.core.spring.web.annotation">CurrentSession</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>

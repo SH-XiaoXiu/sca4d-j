@@ -158,7 +158,7 @@ public class DeviceScheduleRepository {
     public @NotNull Page<DeviceSchedule> findDeviceSchedules(
             long deviceId,
             @NotNull PageRequest page) {
-        PageRequest checked = Objects.requireNonNull(page, "设备定时分页要求不能为空").requireMaxSize(100);
+        PageRequest checked = Objects.requireNonNull(page, "设备定时分页要求不能为空").verifyMaxSize(100);
         long total = mapper.countDeviceSchedules(deviceId);
         List<DeviceSchedule> items = total == 0
                 ? List.of()

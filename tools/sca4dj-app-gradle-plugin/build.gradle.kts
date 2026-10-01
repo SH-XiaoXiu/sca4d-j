@@ -7,6 +7,16 @@ plugins {
 group = "com.sca4dj"
 version = providers.gradleProperty("sca4dj.version").orElse("0.0.1-alpha").get()
 
+val pluginProcessor = sourceSets.create("pluginProcessor")
+val pluginProcessorJar =
+    tasks.register<Jar>("pluginProcessorJar") {
+        group = "build"
+        description = "构建 App 插件 API 注解处理器"
+        archiveClassifier.set("plugin-processor")
+        archiveFileName.set("sca4dj-plugin-processor.jar")
+        from(pluginProcessor.output)
+    }
+
 repositories {
     mavenCentral()
 }
@@ -25,10 +35,28 @@ gradlePlugin {
             displayName = "Sca4d-J App Plugin"
             description = "生成 Sca4d-J App 自己负责的 Flyway 初始迁移"
         }
+        create("sca4djPluginApi") {
+            id = "com.sca4dj.plugin-api"
+            implementationClass = "com.sca4dj.gradle.app.PluginApiGradlePlugin"
+            displayName = "Sca4d-J App Plugin API"
+            description = "生成 App 插件 API 构件和共享类型描述"
+        }
+        create("sca4djPlugin") {
+            id = "com.sca4dj.plugin"
+            implementationClass = "com.sca4dj.gradle.app.PluginArtifactGradlePlugin"
+            displayName = "Sca4d-J Plugin Artifact"
+            description = "原样打包插件资源并打包私有依赖"
+        }
     }
 }
 
 publishing {
+    publications {
+        create<MavenPublication>("pluginProcessor") {
+            artifact(pluginProcessorJar) { classifier = null }
+            artifactId = "sca4dj-plugin-processor"
+        }
+    }
     repositories {
         maven {
             name = "sca4dj"

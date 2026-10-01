@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -62,7 +63,7 @@ class SqlBatchesTest {
         properties.setMaxBindParameters(5);
         SqlBatches batches = new SqlBatches(properties);
 
-        assertThatThrownBy(() -> batches.query(java.util.Arrays.asList(1, null), 1, 0, batch -> batch))
+        assertThatThrownBy(() -> batches.query(Arrays.asList(1, null), 1, 0, batch -> batch))
                 .isInstanceOf(NullPointerException.class);
         assertThatThrownBy(() -> batches.query(List.of(1), 1, 0, batch -> null))
                 .isInstanceOf(NullPointerException.class);

@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">ViewJson</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">ViewJson</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">使用当前 HTTP ObjectMapper 和 DataOps 定制 BaseView 的最终 JSON。</div>
 </section>
@@ -170,7 +170,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.fasterxml.jackson.databind.node.ObjectNode</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#root()" class="member-name-link">root</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取 Jackson 最终写出的可变根对象。</div>
+<div class="block">Jackson 最终写出的可变根对象。</div>
 </div>
 </div>
 </div>
@@ -369,10 +369,10 @@ loadScripts(document, 'script');</script>
 <h3>root</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.fasterxml.jackson.databind.node.ObjectNode</span>&nbsp;<span class="element-name">root</span>()</div>
-<div class="block">读取 Jackson 最终写出的可变根对象。</div>
+<div class="block">Jackson 最终写出的可变根对象。</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>创建 ViewJson 时传入且后续操作原地修改的同一个 ObjectNode</dd>
+<dd>创建 ViewJson 时传入、之后操作会原地修改的同一个 ObjectNode</dd>
 </dl>
 </section>
 </li>

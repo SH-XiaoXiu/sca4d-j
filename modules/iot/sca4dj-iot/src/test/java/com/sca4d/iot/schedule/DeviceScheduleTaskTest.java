@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.time.Instant;
 
@@ -21,7 +22,7 @@ class DeviceScheduleTaskTest {
 
         new DeviceScheduleTask(schedules, 100).execute();
 
-        verify(schedules, org.mockito.Mockito.times(3)).triggerNextDueSchedule();
+        verify(schedules, Mockito.times(3)).triggerNextDueSchedule();
     }
 
     @Test

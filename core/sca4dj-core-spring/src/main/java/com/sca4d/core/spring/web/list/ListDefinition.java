@@ -26,13 +26,13 @@ import java.util.Set;
  *
  * <p>解析只生成 {@link Sort} 和 {@link SortDir}，不生成 SQL、数据库列名或筛选条件。
  */
-public final class ListDefinition {
+public class ListDefinition {
 
-    private final @NotNull @Unmodifiable Map<@NotNull String, @NotNull Sort> fields;
+    private final @Nullable Integer maxSize;
 
     private final @NotNull @Unmodifiable List<@NotNull SortOrder> defaultSort;
 
-    private final @Nullable Integer maxSize;
+    private final @NotNull @Unmodifiable Map<@NotNull String, @NotNull Sort> fields;
 
     /** 使用构造器已经收集的字段、默认排序和页大小限制创建不可修改声明。 */
     private ListDefinition(@NotNull Builder builder) {
@@ -120,7 +120,7 @@ public final class ListDefinition {
     }
 
     /** 按声明顺序收集列表允许字段、默认排序和页大小限制。 */
-    public static final class Builder {
+    public static class Builder {
 
         private final @NotNull Map<@NotNull String, @NotNull Sort> fields = new LinkedHashMap<>();
 

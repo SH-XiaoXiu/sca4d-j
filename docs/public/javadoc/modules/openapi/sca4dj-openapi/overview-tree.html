@@ -63,12 +63,6 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" class="type-name-link external-link" title="class or interface in java.lang">Object</a>
 <ul>
-<li class="circle">com.sca4d.core.spring.call.CallHandlerInterceptor (implements org.springframework.web.servlet.HandlerInterceptor)
-<ul>
-<li class="circle">com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiAuthenticationInterceptor.html" class="type-name-link" title="class in com.sca4d.openapi.web">OpenApiAuthenticationInterceptor</a></li>
-<li class="circle">com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiRequestInterceptor.html" class="type-name-link" title="class in com.sca4d.openapi.web">OpenApiRequestInterceptor</a></li>
-</ul>
-</li>
 <li class="circle">org.springframework.web.filter.GenericFilterBean (implements org.springframework.beans.factory.BeanNameAware, org.springframework.beans.factory.DisposableBean, org.springframework.context.EnvironmentAware, org.springframework.core.env.EnvironmentCapable, jakarta.servlet.Filter, org.springframework.beans.factory.InitializingBean, org.springframework.web.context.ServletContextAware)
 <ul>
 <li class="circle">org.springframework.web.filter.OncePerRequestFilter
@@ -76,6 +70,12 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiRequestBodyFilter.html" class="type-name-link" title="class in com.sca4d.openapi.web">OpenApiRequestBodyFilter</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="circle">com.sca4d.core.spring.web.HttpCallHandlerInterceptor (implements org.springframework.web.servlet.HandlerInterceptor)
+<ul>
+<li class="circle">com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiAuthenticationInterceptor.html" class="type-name-link" title="class in com.sca4d.openapi.web">OpenApiAuthenticationInterceptor</a></li>
+<li class="circle">com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiRequestInterceptor.html" class="type-name-link" title="class in com.sca4d.openapi.web">OpenApiRequestInterceptor</a></li>
 </ul>
 </li>
 <li class="circle">com.sca4d.openapi.oauth.<a href="com/sca4d/openapi/oauth/OpenApiAuthenticationEndpoint.html" class="type-name-link" title="class in com.sca4d.openapi.oauth">OpenApiAuthenticationEndpoint</a></li>
@@ -86,6 +86,8 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientOperationCheckerImpl.html" class="type-name-link" title="class in com.sca4d.openapi.client">OpenApiClientOperationCheckerImpl</a> (implements com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiClientOperationChecker.html" title="interface in com.sca4d.openapi.web">OpenApiClientOperationChecker</a>)</li>
 <li class="circle">com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientRepository.html" class="type-name-link" title="class in com.sca4d.openapi.client">OpenApiClientRepository</a></li>
 <li class="circle">com.sca4d.openapi.client.<a href="com/sca4d/openapi/client/OpenApiClientService.html" class="type-name-link" title="class in com.sca4d.openapi.client">OpenApiClientService</a></li>
+<li class="circle">com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiConstants.html" class="type-name-link" title="class in com.sca4d.openapi.web">OpenApiConstants</a></li>
+<li class="circle">com.sca4d.openapi.config.<a href="com/sca4d/openapi/config/OpenApiEnvironmentPostProcessor.html" class="type-name-link" title="class in com.sca4d.openapi.config">OpenApiEnvironmentPostProcessor</a> (implements org.springframework.boot.env.EnvironmentPostProcessor, org.springframework.core.Ordered)</li>
 <li class="circle">com.sca4d.openapi.web.<a href="com/sca4d/openapi/web/OpenApiHmacCanonicalRequest.html" class="type-name-link" title="class in com.sca4d.openapi.web">OpenApiHmacCanonicalRequest</a></li>
 <li class="circle">com.sca4d.openapi.oauth.<a href="com/sca4d/openapi/oauth/OpenApiJwtTokenService.html" class="type-name-link" title="class in com.sca4d.openapi.oauth">OpenApiJwtTokenService</a></li>
 <li class="circle">com.sca4d.openapi.oauth.<a href="com/sca4d/openapi/oauth/OpenApiJwtTokenService.IssuedOpenApiJwt.html" class="type-name-link" title="class in com.sca4d.openapi.oauth">OpenApiJwtTokenService.IssuedOpenApiJwt</a></li>

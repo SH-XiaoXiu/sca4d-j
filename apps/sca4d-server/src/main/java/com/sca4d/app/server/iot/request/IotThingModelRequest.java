@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 /** 接收一次 ThingModel 技术定义和初始完整多语言字段发布请求。 */
-public final class IotThingModelRequest {
+public class IotThingModelRequest {
 
     /** `model` 和 `i18n` 紧凑 JSON 允许占用的最大 UTF-8 字节数。 */
     private static final int MAXIMUM_CONTENT_LENGTH = 1_048_576;

@@ -90,7 +90,7 @@ class ListParametersArgumentResolverTest {
     }
 
     /** 保存参数解析测试使用的 Controller 方法声明。 */
-    private static final class ControllerFixtures {
+    private static class ControllerFixtures {
 
         /** 声明类型安全列表参数。 */
         @SuppressWarnings("unused")

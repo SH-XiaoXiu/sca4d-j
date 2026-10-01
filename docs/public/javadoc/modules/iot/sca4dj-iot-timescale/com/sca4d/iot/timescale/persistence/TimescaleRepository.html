@@ -128,13 +128,13 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addEvent(long,com.sca4d.iot.api.history.DeviceEventMessage)" class="member-name-link">addEvent</a><wbr>(long&nbsp;messageId,
  @NotNull com.sca4d.iot.api.history.DeviceEventMessage&nbsp;event)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">按发生时间和 MessageId 幂等写入一条 Device 事件。</div>
+<div class="block">按发生时间和 Id 幂等写入一条 Device 事件。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addTelemetry(long,com.sca4d.iot.api.telemetry.TelemetryBatch)" class="member-name-link">addTelemetry</a><wbr>(long&nbsp;messageId,
  @NotNull com.sca4d.iot.api.telemetry.TelemetryBatch&nbsp;batch)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">按 MessageId 和样本顺序幂等写入一批 Telemetry。</div>
+<div class="block">按 Id 和样本顺序幂等写入一批 Telemetry。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#dropChunks(java.time.Instant,java.time.Instant)" class="member-name-link">dropChunks</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;telemetryOlderThan,
@@ -148,25 +148,31 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">分页读取 Device 每条下行消息的完整 ACK 阶段历史。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.query.Page<wbr>&lt;com.sca4d.iot.api.query.DeviceEvent&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findEvents(long,com.sca4d.core.api.query.PageRequest)" class="member-name-link">findEvents</a><wbr>(long&nbsp;deviceId,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.query.Page<wbr>&lt;com.sca4d.iot.api.message.DeviceAcknowledgement&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findAcknowledgementsByMessageId(long,com.sca4d.core.api.query.PageRequest)" class="member-name-link">findAcknowledgementsByMessageId</a><wbr>(long&nbsp;messageId,
  @NotNull com.sca4d.core.api.query.PageRequest&nbsp;page)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">分页读取 Device 的全部物模型和 IoT 状态机事件。</div>
+<div class="block">分页读取指定下行消息的完整 ACK 阶段历史。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.query.Page<wbr>&lt;com.sca4d.iot.api.schedule.DeviceScheduleExecution&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findScheduleExecutions(long,com.sca4d.core.api.query.PageRequest)" class="member-name-link">findScheduleExecutions</a><wbr>(long&nbsp;scheduleId,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.query.Page<wbr>&lt;com.sca4d.iot.api.query.DeviceEvent&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findEvents(long,com.sca4d.core.api.query.PageRequest)" class="member-name-link">findEvents</a><wbr>(long&nbsp;deviceId,
  @NotNull com.sca4d.core.api.query.PageRequest&nbsp;page)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">分页读取 Device 的全部物模型和 IoT 状态机事件。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.query.Page<wbr>&lt;com.sca4d.iot.api.schedule.DeviceScheduleExecution&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findScheduleExecutions(long,com.sca4d.core.api.query.PageRequest)" class="member-name-link">findScheduleExecutions</a><wbr>(long&nbsp;scheduleId,
+ @NotNull com.sca4d.core.api.query.PageRequest&nbsp;page)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">分页读取一个设备定时规则的完整执行历史。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;com.sca4d.iot.api.telemetry.TelemetrySample&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findTelemetry(long,java.lang.String,java.time.Instant,java.time.Instant,int)" class="member-name-link">findTelemetry</a><wbr>(long&nbsp;deviceId,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;com.sca4d.iot.api.telemetry.TelemetrySample&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findTelemetry(long,java.lang.String,java.time.Instant,java.time.Instant,int)" class="member-name-link">findTelemetry</a><wbr>(long&nbsp;deviceId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;propertyCode,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;from,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;to,
  int&nbsp;limit)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">查询一个属性在半开时间范围内的 Telemetry。</div>
 </div>
 </div>
@@ -220,7 +226,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addTelemetry</span><wbr><span class="parameters">(long&nbsp;messageId,
  @NotNull
  @NotNull com.sca4d.iot.api.telemetry.TelemetryBatch&nbsp;batch)</span></div>
-<div class="block">按 MessageId 和样本顺序幂等写入一批 Telemetry。</div>
+<div class="block">按 Id 和样本顺序幂等写入一批 Telemetry。</div>
 </section>
 </li>
 <li>
@@ -231,7 +237,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addEvent</span><wbr><span class="parameters">(long&nbsp;messageId,
  @NotNull
  @NotNull com.sca4d.iot.api.history.DeviceEventMessage&nbsp;event)</span></div>
-<div class="block">按发生时间和 MessageId 幂等写入一条 Device 事件。</div>
+<div class="block">按发生时间和 Id 幂等写入一条 Device 事件。</div>
 </section>
 </li>
 <li>
@@ -267,6 +273,16 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull com.sca4d.core.api.query.PageRequest&nbsp;page)</span></div>
 <div class="block">分页读取 Device 每条下行消息的完整 ACK 阶段历史。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="findAcknowledgementsByMessageId(long,com.sca4d.core.api.query.PageRequest)">
+<h3>findAcknowledgementsByMessageId</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.query.Page&lt;com.sca4d.iot.api.message.DeviceAcknowledgement&gt;</span>&nbsp;<span class="element-name">findAcknowledgementsByMessageId</span><wbr><span class="parameters">(long&nbsp;messageId,
+ @NotNull
+ @NotNull com.sca4d.core.api.query.PageRequest&nbsp;page)</span></div>
+<div class="block">分页读取指定下行消息的完整 ACK 阶段历史。</div>
 </section>
 </li>
 <li>

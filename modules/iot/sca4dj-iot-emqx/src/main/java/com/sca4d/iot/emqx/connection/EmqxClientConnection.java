@@ -9,17 +9,17 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 保存 EMQX Management API 返回的一条当前 MQTT Client Connection。 */
-public final class EmqxClientConnection {
-
-    private final @NotNull String clientId;
-
-    private final @NotNull String brokerNode;
+public class EmqxClientConnection {
 
     private final @NotNull Instant connectedAt;
 
     private final @NotNull Map<String, String> clientAttributes;
 
-    /** 创建用于连接对账的 Broker 当前连接事实。 */
+    private final @NotNull String brokerNode;
+
+    private final @NotNull String clientId;
+
+    /** 创建用于连接对账的 Broker 当前连接信息。 */
     public EmqxClientConnection(
             @NotNull String clientId,
             @NotNull String brokerNode,

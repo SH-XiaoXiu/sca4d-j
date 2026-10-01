@@ -6,6 +6,10 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.Executor;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -15,6 +19,49 @@ import java.util.function.Function;
  * @param <O> 输出类型
  */
 public interface PipelineStage<I, O> {
+
+    /** 声明返回异步结果的阶段；同步调用在原线程等待，不传播事务或 ThreadLocal。 */
+    static <I, O> @NotNull PipelineStage<I, O> async(
+            @NotNull String code,
+            @NotNull Class<I> inputType,
+            @NotNull Class<O> outputType,
+            @NotNull BiFunction<? super I, Executor, ? extends CompletionStage<O>> action) {
+        Objects.requireNonNull(action);
+        PipelineStage<I, O> metadata = of(code, inputType, outputType, value -> {
+            throw new IllegalStateException("异步阶段不能使用同步占位函数");
+        });
+        return new PipelineStage<>() {
+            @Override
+            public @NotNull String code() {
+                return metadata.code();
+            }
+
+            @Override
+            public @NotNull Class<I> inputType() {
+                return metadata.inputType();
+            }
+
+            @Override
+            public @NotNull Class<O> outputType() {
+                return metadata.outputType();
+            }
+
+            @Override
+            public @NotNull O execute(@NotNull I input) {
+                return executeAsync(input, Runnable::run).toCompletableFuture().join();
+            }
+
+            @Override
+            public @NotNull CompletionStage<O> executeAsync(@NotNull I input, @NotNull Executor executor) {
+                return Objects.requireNonNull(action.apply(input, executor), "异步阶段不能返回空结果");
+            }
+        };
+    }
+
+    /** 在调用方执行器中执行同步阶段，异步实现覆盖此方法以直接返回完成信号。 */
+    default @NotNull CompletionStage<O> executeAsync(@NotNull I input, @NotNull Executor executor) {
+        return CompletableFuture.supplyAsync(() -> execute(input), executor);
+    }
 
     /**
      * 使用类型化函数创建一个同步处理阶段。

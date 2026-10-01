@@ -13,7 +13,7 @@ import java.util.Objects;
 
 /** 接收停用联邦 Provider 的 OIDC/OAuth2 协议配置，空 Secret 表示保留原值。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 和 setter 绑定 HTTP 请求字段。
-public final class ProviderSettingsRequest {
+public class ProviderSettingsRequest {
     private String issuer;
 
     private String clientId;

@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -18,7 +19,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 /** 校验并保存实现 `Dictionary` 的枚举类型及其不可变代码选项。 */
-public final class DictionaryRegistry {
+public class DictionaryRegistry {
 
     private static final Pattern KEY = Pattern.compile("[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+");
 
@@ -33,7 +34,7 @@ public final class DictionaryRegistry {
      */
     public DictionaryRegistry(@NotNull Collection<Class<? extends Enum<?>>> enumTypes) {
         Map<String, List<DictionaryOption>> byKey = new LinkedHashMap<>();
-        Set<String> extensible = new java.util.LinkedHashSet<>();
+        Set<String> extensible = new LinkedHashSet<>();
         for (Class<? extends Enum<?>> enumType : Objects.requireNonNull(enumTypes, "Dictionary 枚举不能为空")) {
             Enum<?>[] constants = enumType.getEnumConstants();
             if (constants.length == 0) {
@@ -82,7 +83,7 @@ public final class DictionaryRegistry {
     /** @return 按键排序的全部代码字典键 */
     @CheckReturnValue
     public @NotNull @Unmodifiable Set<@NotNull String> keys() {
-        Set<String> sorted = new java.util.LinkedHashSet<>(options.keySet().stream().sorted().toList());
+        Set<String> sorted = new LinkedHashSet<>(options.keySet().stream().sorted().toList());
         return Collections.unmodifiableSet(sorted);
     }
 

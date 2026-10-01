@@ -13,9 +13,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /** 为 Session 中的 PlatformPrincipal 读取启用角色提供的具体 Operation。 */
-public final class PlatformRbacResourceLoader implements ResourceLoader {
+public class PlatformRbacResourceLoader implements ResourceLoader {
 
     private final @NotNull PlatformRbacService rbac;
 
@@ -37,7 +38,7 @@ public final class PlatformRbacResourceLoader implements ResourceLoader {
                 .stream()
                 .filter(PlatformPrincipal.class::isInstance)
                 .map(Principal::principalId)
-                .collect(java.util.stream.Collectors.toCollection(LinkedHashSet::new));
+                .collect(Collectors.toCollection(LinkedHashSet::new));
         if (principalIds.isEmpty()) {
             return Map.of();
         }

@@ -7,14 +7,17 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.OperationCatalog;
 import com.sca4d.core.api.permission.OperationNode;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.mockito.ArgumentMatchers;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.core.script.RedisScript;
 
@@ -27,32 +30,33 @@ import java.util.concurrent.ConcurrentHashMap;
 /** 验证 Redis RBAC 权限缓存的范围隔离、空授权和修订号失效行为。 */
 class RedisRbacPermissionCacheTest {
 
+    private static final long PRINCIPAL_ID = 201L;
+
     private static final RbacDomain DOMAIN = new RbacDomain("PROJECT");
 
     private static final RbacScope FIRST_SCOPE = RbacScope.of(DOMAIN, 101L);
 
     private static final RbacScope SECOND_SCOPE = RbacScope.of(DOMAIN, 102L);
 
-    private static final long PRINCIPAL_ID = 201L;
+    private final Map<Key, String> redisValues = new ConcurrentHashMap<>();
 
-    private final Map<String, String> redisValues = new ConcurrentHashMap<>();
+    private List<Key> lastReadKeys = List.of();
 
-    private List<String> lastReadKeys = List.of();
-
-    private StringRedisTemplate redis;
+    private RedisTemplate<Key, String> redis;
 
     private RedisRbacPermissionCache cache;
 
     @BeforeEach
+    @SuppressWarnings("unchecked") // Mockito 的 Class 参数不能表达 RedisTemplate 泛型。
     void setUp() {
-        redis = mock(StringRedisTemplate.class);
+        redis = mock(RedisTemplate.class);
         @SuppressWarnings("unchecked")
-        ValueOperations<String, String> values = mock(ValueOperations.class);
+        ValueOperations<Key, String> values = mock(ValueOperations.class);
         when(redis.opsForValue()).thenReturn(values);
         when(values.multiGet(any()))
                 .thenAnswer(
                         invocation -> {
-                            lastReadKeys = List.copyOf(invocation.<List<String>>getArgument(0));
+                            lastReadKeys = List.copyOf(invocation.<List<Key>>getArgument(0));
                             return lastReadKeys.stream().map(redisValues::get).toList();
                         });
         doAnswer(
@@ -65,14 +69,13 @@ class RedisRbacPermissionCacheTest {
                                 invocation.getArguments().length)))
                 .when(redis)
                 .execute(
-                        org.mockito.ArgumentMatchers.<RedisScript<Long>>any(),
-                        org.mockito.ArgumentMatchers.anyList(),
+                        ArgumentMatchers.<RedisScript<Long>>any(),
+                        ArgumentMatchers.anyList(),
                         any(Object[].class));
         cache = new RedisRbacPermissionCache(
                 redis,
-                new RuntimeNamespace("example-app"),
                 new ObjectMapper(),
-                permissionSelections("read"));
+                permissionSelections(TreeCode.ofSegment("READ")));
     }
 
     @Test
@@ -96,11 +99,10 @@ class RedisRbacPermissionCacheTest {
         RbacPermissionCacheLookup cached = cache.find(requested);
         assertThat(cached.cachedSelectors().get(FIRST_SCOPE).get(PRINCIPAL_ID))
                 .extracting(PermissionSelector::value)
-                .containsExactly("project:read");
+                .containsExactly("PROJECT:READ");
         assertThat(cached.cachedSelectors().get(SECOND_SCOPE).get(PRINCIPAL_ID)).isEmpty();
-        assertThat(lastReadKeys)
-                .allSatisfy(key -> assertThat(key).contains(":{ZXhhbXBsZS1hcHA-iam-rbac}:"));
-        assertThat(lastReadKeys).allSatisfy(key -> assertThat(key).contains(":permissions:PROJECT:"));
+        assertThat(lastReadKeys).hasSize(4).doesNotHaveDuplicates();
+        assertThat(lastReadKeys).allSatisfy(key -> assertThat(key.isUnder(TreeCode.ofColon("IAM:RBAC"))).isTrue());
     }
 
     @Test
@@ -108,29 +110,27 @@ class RedisRbacPermissionCacheTest {
     void keepsCoordinatesStableAcrossOperationOrder() {
         cache = new RedisRbacPermissionCache(
                 redis,
-                new RuntimeNamespace("example-app"),
                 new ObjectMapper(),
-                permissionSelections("read", "manage"));
+                permissionSelections(TreeCode.ofSegment("READ"), TreeCode.ofSegment("MANAGE")));
         Map<RbacScope, List<Long>> requested = Map.of(FIRST_SCOPE, List.of(PRINCIPAL_ID));
         RbacPermissionCacheLookup lookup = cache.find(requested);
         cache.put(
                 lookup,
                 Map.of(
                         FIRST_SCOPE,
-                        Map.of(PRINCIPAL_ID, List.of(new PermissionSelector("projects:items:read")))));
-        List<String> originalKeys = List.copyOf(lastReadKeys);
+                        Map.of(PRINCIPAL_ID, List.of(new PermissionSelector("PROJECTS:ITEMS:READ")))));
+        List<Key> originalKeys = List.copyOf(lastReadKeys);
 
         RedisRbacPermissionCache reordered = new RedisRbacPermissionCache(
                 redis,
-                new RuntimeNamespace("example-app"),
                 new ObjectMapper(),
-                permissionSelections("manage", "read"));
+                permissionSelections(TreeCode.ofSegment("MANAGE"), TreeCode.ofSegment("READ")));
         RbacPermissionCacheLookup cached = reordered.find(requested);
 
         assertThat(lastReadKeys).isEqualTo(originalKeys);
         assertThat(cached.cachedSelectors().get(FIRST_SCOPE).get(PRINCIPAL_ID))
                 .extracting(PermissionSelector::value)
-                .containsExactly("projects:items:read");
+                .containsExactly("PROJECTS:ITEMS:READ");
     }
 
     @Test
@@ -142,14 +142,13 @@ class RedisRbacPermissionCacheTest {
                 lookup,
                 Map.of(
                         FIRST_SCOPE,
-                        Map.of(PRINCIPAL_ID, List.of(new PermissionSelector("projects:items:read")))));
-        List<String> originalKeys = List.copyOf(lastReadKeys);
+                        Map.of(PRINCIPAL_ID, List.of(new PermissionSelector("PROJECTS:ITEMS:READ")))));
+        List<Key> originalKeys = List.copyOf(lastReadKeys);
 
         RedisRbacPermissionCache expanded = new RedisRbacPermissionCache(
                 redis,
-                new RuntimeNamespace("example-app"),
                 new ObjectMapper(),
-                permissionSelections("read", "manage"));
+                permissionSelections(TreeCode.ofSegment("READ"), TreeCode.ofSegment("MANAGE")));
         RbacPermissionCacheLookup cached = expanded.find(requested);
 
         assertThat(lastReadKeys).isNotEqualTo(originalKeys);
@@ -177,12 +176,12 @@ class RedisRbacPermissionCacheTest {
     /** 在测试内按两个生产 Lua 脚本的原子语义维护 Redis String。 */
     private Object executeScript(
             RedisScript<?> script,
-            List<String> keys,
+            List<Key> keys,
             Object[] arguments) {
         assertThat(script.getSha1()).isNotBlank();
         if (arguments.length == 0) {
             for (int keyIndex = 0; keyIndex < keys.size(); keyIndex += 2) {
-                String revisionKey = keys.get(keyIndex);
+                Key revisionKey = keys.get(keyIndex);
                 long revision = Long.parseLong(redisValues.getOrDefault(revisionKey, "0"));
                 redisValues.put(revisionKey, Long.toString(revision + 1));
                 redisValues.remove(keys.get(keyIndex + 1));
@@ -204,19 +203,19 @@ class RedisRbacPermissionCacheTest {
     }
 
     /** 创建把指定动作全部授予测试 RBAC 领域的权限选择规则。 */
-    private static PermissionSelectionRegistry permissionSelections(String... actions) {
+    private static PermissionSelectionRegistry permissionSelections(TreeCode... actions) {
         OperationNode.ActionDeclaration[] declarations = Arrays.stream(actions)
-                .map(action -> OperationNode.action(action, "operation.projects.items." + action, 100))
+                .map(action -> OperationNode.action(action, "operation.projects.items.action", 100))
                 .toArray(OperationNode.ActionDeclaration[]::new);
         RbacOperationModule module = new RbacOperationModule() {
             @Override
             public OperationNode.@NotNull Module operationTree() {
                 return OperationNode.module(
-                        "projects",
+                        TreeCode.ofSegment("PROJECTS"),
                         "operation.projects",
                         100,
                         OperationNode.resource(
-                                "items",
+                                TreeCode.ofSegment("ITEMS"),
                                 "operation.projects.items",
                                 100,
                                 declarations));
@@ -230,7 +229,7 @@ class RedisRbacPermissionCacheTest {
             @Override
             public boolean canGrant(
                     @NotNull RbacDomain domain,
-                    @NotNull com.sca4d.core.api.permission.Operation operation) {
+                    @NotNull Operation operation) {
                 return DOMAIN.equals(domain);
             }
         };

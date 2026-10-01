@@ -103,12 +103,12 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.auth.totp.enrollment.RedisTotpEnrollmentStore,com.sca4d.auth.totp.credential.TotpCredentialRepository,com.sca4d.auth.totp.credential.TotpCodeVerifier,com.sca4d.core.api.security.SecretKeyring,com.sca4d.core.api.authentication.SessionControl,com.sca4d.core.api.setting.Settings,java.time.Clock)" class="member-name-link">TotpEnrollmentService</a><wbr>(@NotNull <a href="RedisTotpEnrollmentStore.html" title="class in com.sca4d.auth.totp.enrollment">RedisTotpEnrollmentStore</a>&nbsp;enrollments,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.auth.totp.enrollment.RedisTotpEnrollmentStore,com.sca4d.auth.totp.credential.TotpCredentialRepository,com.sca4d.auth.totp.credential.TotpCodeVerifier,com.sca4d.core.api.security.SecretKeyring,com.sca4d.core.api.authentication.SessionControl,com.sca4d.auth.totp.config.TotpSettings,java.time.Clock)" class="member-name-link">TotpEnrollmentService</a><wbr>(@NotNull <a href="RedisTotpEnrollmentStore.html" title="class in com.sca4d.auth.totp.enrollment">RedisTotpEnrollmentStore</a>&nbsp;enrollments,
  @NotNull <a href="../credential/TotpCredentialRepository.html" title="class in com.sca4d.auth.totp.credential">TotpCredentialRepository</a>&nbsp;credentials,
  @NotNull <a href="../credential/TotpCodeVerifier.html" title="class in com.sca4d.auth.totp.credential">TotpCodeVerifier</a>&nbsp;verifier,
- com.sca4d.core.api.security.SecretKeyring&nbsp;keyring,
+ @NotNull com.sca4d.core.api.security.SecretKeyring&nbsp;keyring,
  @NotNull com.sca4d.core.api.authentication.SessionControl&nbsp;sessions,
- @NotNull com.sca4d.core.api.setting.Settings&nbsp;settings,
+ @NotNull <a href="../config/TotpSettings.html" title="class in com.sca4d.auth.totp.config">TotpSettings</a>&nbsp;settings,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建 TOTP 凭据生命周期服务。</div>
@@ -132,7 +132,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;enrollmentId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">使用首次验证码激活凭据；该时间步在刷新前仍可用于认证。</div>
+<div class="block">使用首次验证码激活凭据；当前时间步在刷新前仍可用于认证。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#cancel(long,java.lang.String)" class="member-name-link">cancel</a><wbr>(long&nbsp;accountId,
@@ -189,7 +189,7 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.auth.totp.enrollment.RedisTotpEnrollmentStore,com.sca4d.auth.totp.credential.TotpCredentialRepository,com.sca4d.auth.totp.credential.TotpCodeVerifier,com.sca4d.core.api.security.SecretKeyring,com.sca4d.core.api.authentication.SessionControl,com.sca4d.core.api.setting.Settings,java.time.Clock)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.auth.totp.enrollment.RedisTotpEnrollmentStore,com.sca4d.auth.totp.credential.TotpCredentialRepository,com.sca4d.auth.totp.credential.TotpCodeVerifier,com.sca4d.core.api.security.SecretKeyring,com.sca4d.core.api.authentication.SessionControl,com.sca4d.auth.totp.config.TotpSettings,java.time.Clock)">
 <h3>TotpEnrollmentService</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">TotpEnrollmentService</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="RedisTotpEnrollmentStore.html" title="class in com.sca4d.auth.totp.enrollment">RedisTotpEnrollmentStore</a>&nbsp;enrollments,
@@ -198,11 +198,11 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull <a href="../credential/TotpCodeVerifier.html" title="class in com.sca4d.auth.totp.credential">TotpCodeVerifier</a>&nbsp;verifier,
  @NotNull
- com.sca4d.core.api.security.SecretKeyring&nbsp;keyring,
+ @NotNull com.sca4d.core.api.security.SecretKeyring&nbsp;keyring,
  @NotNull
  @NotNull com.sca4d.core.api.authentication.SessionControl&nbsp;sessions,
  @NotNull
- @NotNull com.sca4d.core.api.setting.Settings&nbsp;settings,
+ @NotNull <a href="../config/TotpSettings.html" title="class in com.sca4d.auth.totp.config">TotpSettings</a>&nbsp;settings,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</span></div>
 <div class="block">创建 TOTP 凭据生命周期服务。</div>
@@ -306,7 +306,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;enrollmentId,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code)</span></div>
-<div class="block">使用首次验证码激活凭据；该时间步在刷新前仍可用于认证。</div>
+<div class="block">使用首次验证码激活凭据；当前时间步在刷新前仍可用于认证。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>accountId</code> - enrollment 与新凭据所属账号</dd>

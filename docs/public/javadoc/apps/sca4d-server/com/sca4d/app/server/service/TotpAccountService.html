@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="annotations">@Service
-</span><span class="modifiers">public final class </span><span class="element-name type-name-label">TotpAccountService</span>
+</span><span class="modifiers">public class </span><span class="element-name type-name-label">TotpAccountService</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">组合 TOTP 模块与示例应用认证规则，限定所有自助操作属于当前 Account。</div>
 </section>
@@ -104,11 +104,11 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.auth.totp.enrollment.TotpEnrollmentService,com.sca4d.auth.totp.credential.TotpCredentialRepository,com.sca4d.app.server.service.PlatformAuthenticationPolicyService,com.sca4d.app.server.authentication.TotpQrCodeGenerator,com.sca4d.core.api.setting.Settings)" class="member-name-link">TotpAccountService</a><wbr>(@NotNull com.sca4d.auth.totp.enrollment.TotpEnrollmentService&nbsp;enrollments,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.auth.totp.enrollment.TotpEnrollmentService,com.sca4d.auth.totp.credential.TotpCredentialRepository,com.sca4d.app.server.service.PlatformAuthenticationPolicyService,com.sca4d.app.server.authentication.TotpQrCodeGenerator,com.sca4d.app.server.ProductSettings)" class="member-name-link">TotpAccountService</a><wbr>(@NotNull com.sca4d.auth.totp.enrollment.TotpEnrollmentService&nbsp;enrollments,
  @NotNull com.sca4d.auth.totp.credential.TotpCredentialRepository&nbsp;credentials,
  @NotNull <a href="PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a>&nbsp;policies,
  @NotNull <a href="../authentication/TotpQrCodeGenerator.html" title="class in com.sca4d.app.server.authentication">TotpQrCodeGenerator</a>&nbsp;qrCodes,
- @NotNull com.sca4d.core.api.setting.Settings&nbsp;settings)</code></div>
+ @NotNull <a href="../ProductSettings.html" title="class in com.sca4d.app.server">ProductSettings</a>&nbsp;settings)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建当前 Account TOTP 应用服务。</div>
 </div>
@@ -191,7 +191,7 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.auth.totp.enrollment.TotpEnrollmentService,com.sca4d.auth.totp.credential.TotpCredentialRepository,com.sca4d.app.server.service.PlatformAuthenticationPolicyService,com.sca4d.app.server.authentication.TotpQrCodeGenerator,com.sca4d.core.api.setting.Settings)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.auth.totp.enrollment.TotpEnrollmentService,com.sca4d.auth.totp.credential.TotpCredentialRepository,com.sca4d.app.server.service.PlatformAuthenticationPolicyService,com.sca4d.app.server.authentication.TotpQrCodeGenerator,com.sca4d.app.server.ProductSettings)">
 <h3>TotpAccountService</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">TotpAccountService</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.auth.totp.enrollment.TotpEnrollmentService&nbsp;enrollments,
@@ -202,7 +202,7 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull <a href="../authentication/TotpQrCodeGenerator.html" title="class in com.sca4d.app.server.authentication">TotpQrCodeGenerator</a>&nbsp;qrCodes,
  @NotNull
- @NotNull com.sca4d.core.api.setting.Settings&nbsp;settings)</span></div>
+ @NotNull <a href="../ProductSettings.html" title="class in com.sca4d.app.server">ProductSettings</a>&nbsp;settings)</span></div>
 <div class="block">创建当前 Account TOTP 应用服务。</div>
 <dl class="notes">
 <dt>Parameters:</dt>

@@ -2,10 +2,10 @@ package com.sca4d.job.runtime;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.job.Job;
 import com.sca4d.core.api.job.JobExecutor;
 import com.sca4d.core.api.job.JobRunFailedException;
-import com.sca4d.core.api.job.JobRunId;
 import com.sca4d.core.api.job.JobRunStatus;
 import com.sca4d.core.api.job.JobWaitTimeoutException;
 import com.sca4d.core.api.scheduling.OverlapPolicy;
@@ -21,15 +21,15 @@ import java.util.Optional;
 import java.util.concurrent.locks.LockSupport;
 
 /** 使用 PostgreSQL Job runtime 实现提交、查询、等待和结果恢复。 */
-public final class DefaultJobExecutor implements JobExecutor {
+public class DefaultJobExecutor implements JobExecutor {
 
     private static final long RESULT_POLL_NANOS = Duration.ofMillis(50).toNanos();
-
-    private final @NotNull JobCatalog catalog;
 
     private final @NotNull JobRunService runs;
 
     private final @NotNull ObjectMapper objectMapper;
+
+    private final @NotNull JobCatalog catalog;
 
     /**
      * 创建使用当前应用 Job 目录和 PostgreSQL Repository 的执行器。
@@ -48,13 +48,13 @@ public final class DefaultJobExecutor implements JobExecutor {
     }
 
     @Override
-    public <I, O> @NotNull JobRunId submit(@NotNull Job<I, O> job, @Nullable I input) {
+    public <I, O> @NotNull Id submit(@NotNull Job<I, O> job, @Nullable I input) {
         Job<I, O> registered = registered(job);
         return runs.create(registered, serializeInput(registered, input));
     }
 
     @Override
-    public <I, O> @NotNull Optional<JobRunId> submitScheduled(
+    public <I, O> @NotNull Optional<Id> submitScheduled(
             @NotNull Job<I, O> job,
             @Nullable I input,
             @NotNull ScheduleKey scheduleKey,
@@ -74,18 +74,18 @@ public final class DefaultJobExecutor implements JobExecutor {
             @NotNull Job<I, O> job,
             @Nullable I input,
             @NotNull Duration timeout) {
-        JobRunId runId = submit(job, input);
+        Id runId = submit(job, input);
         return await(runId, job, timeout);
     }
 
     @Override
-    public @NotNull JobRunStatus status(@NotNull JobRunId runId) {
+    public @NotNull JobRunStatus status(@NotNull Id runId) {
         return loadRunById(runId).status();
     }
 
     @Override
     public <O> @NotNull Optional<O> result(
-            @NotNull JobRunId runId,
+            @NotNull Id runId,
             @NotNull Job<?, O> job) {
         Job<?, O> registered = registered(job);
         RunRecord run = loadRunById(runId);
@@ -101,7 +101,7 @@ public final class DefaultJobExecutor implements JobExecutor {
 
     @Override
     public <O> @Nullable O await(
-            @NotNull JobRunId runId,
+            @NotNull Id runId,
             @NotNull Job<?, O> job,
             @NotNull Duration timeout) {
         Duration checkedTimeout = validateTimeout(timeout);
@@ -184,8 +184,8 @@ public final class DefaultJobExecutor implements JobExecutor {
     }
 
     /** 返回存在的根运行。 */
-    private @NotNull RunRecord loadRunById(@NotNull JobRunId runId) {
-        JobRunId checked = Objects.requireNonNull(runId, "JobRunId 不能为空");
+    private @NotNull RunRecord loadRunById(@NotNull Id runId) {
+        Id checked = Objects.requireNonNull(runId, "Id 不能为空");
         RunRecord run = runs.findRun(checked);
         if (run == null) {
             throw new IllegalArgumentException("Job run 不存在: " + checked);
@@ -195,7 +195,7 @@ public final class DefaultJobExecutor implements JobExecutor {
 
     /** 拒绝用不同 key 或定义版本读取已有 run。 */
     private static void validateDefinition(@NotNull RunRecord run, @NotNull Job<?, ?> job) {
-        if (!run.jobKey().equals(job.key().value())
+        if (!run.jobKey().equals(job.key())
                 || run.jobDefinitionVersion() != job.definitionVersion()) {
             throw new IllegalArgumentException("Job run 与定义不匹配: runId=" + run.id());
         }

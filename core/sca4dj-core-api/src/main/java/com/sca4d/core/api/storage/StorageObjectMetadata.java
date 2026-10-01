@@ -6,7 +6,7 @@ import java.util.Objects;
 
 /** 描述存储实现实际读取到的对象媒体类型和大小。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class StorageObjectMetadata {
+public class StorageObjectMetadata {
     private final @NotNull String contentType;
 
     private final long sizeBytes;
@@ -26,7 +26,7 @@ public final class StorageObjectMetadata {
     }
 
     /**
-     * 返回存储对象的媒体类型。
+     * 存储对象的媒体类型。
      *
      * @return 实际媒体类型
      */
@@ -35,7 +35,7 @@ public final class StorageObjectMetadata {
     }
 
     /**
-     * 返回存储对象的字节数。
+     * 存储对象的字节数。
      *
      * @return 实际正数字节数
      */

@@ -9,6 +9,7 @@ import com.sca4d.app.server.authentication.view.*;
 import com.sca4d.app.server.service.ActionAuthenticationService;
 import com.sca4d.app.server.service.PlatformLoginService;
 import com.sca4d.auth.federation.*;
+import com.sca4d.auth.federation.FederatedAuthenticationMethod;
 import com.sca4d.auth.federation.identity.FederatedIdentityService;
 import com.sca4d.core.api.annotation.AnonymousAccess;
 import com.sca4d.core.api.annotation.Audit;
@@ -208,9 +209,9 @@ public class FederatedAuthenticationController {
     /** 消费一次性联邦资料并绑定到当前账号；调用前必须完成动作认证。 */
     @PostMapping("/me/authentication/federated-identities")
     @RequireAuthentication(AuthenticationActions.FEDERATED_LINK_CODE)
-    @Audit(operation = "authentication/account/federated-identity/link")
+    @Audit(operation = "AUTHENTICATION/ACCOUNT/FEDERATED_IDENTITY/LINK")
     public @NotNull ApiResponse<FederatedIdentityView> link(
-            @CurrentAccount @AuditTarget(resourceType = Account.RESOURCE_TYPE) @NotNull Account account,
+            @CurrentAccount @AuditTarget(resourceType = Account.RESOURCE_TYPE_VALUE) @NotNull Account account,
             @RequestBody @Valid @NotNull FederatedProofRequest request,
             @NotNull HttpServletRequest httpRequest) {
         FederatedCompletedAuthorization completed = authorizationStore
@@ -236,9 +237,9 @@ public class FederatedAuthenticationController {
     /** 解绑当前账号的外部身份；调用前必须完成动作认证。 */
     @DeleteMapping("/me/authentication/federated-identities/{identityId}")
     @RequireAuthentication(AuthenticationActions.FEDERATED_UNLINK_CODE)
-    @Audit(operation = "authentication/account/federated-identity/unlink")
+    @Audit(operation = "AUTHENTICATION/ACCOUNT/FEDERATED_IDENTITY/UNLINK")
     public @NotNull ApiResponse<Void> unlink(
-            @CurrentAccount @AuditTarget(resourceType = Account.RESOURCE_TYPE) @NotNull Account account,
+            @CurrentAccount @AuditTarget(resourceType = Account.RESOURCE_TYPE_VALUE) @NotNull Account account,
             @PathVariable long identityId,
             @RequestParam long version) {
         identityBindings.unlink(identityId, account.accountId(), version);

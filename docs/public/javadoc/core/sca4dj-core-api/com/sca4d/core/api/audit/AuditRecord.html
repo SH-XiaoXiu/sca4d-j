@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">AuditRecord</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">AuditRecord</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">保存一次操作的行为主体、目标资源、结果和发生时间。</div>
 </section>
@@ -131,7 +131,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="AuditActor.html" title="class in com.sca4d.core.api.audit">AuditActor</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#actor()" class="member-name-link">actor</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回行为主体。</div>
+<div class="block">行为主体。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="HttpCall.html" title="class in com.sca4d.core.api.audit">HttpCall</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#httpCall()" class="member-name-link">httpCall</a>()</code></div>
@@ -141,12 +141,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#occurredAt()" class="member-name-link">occurredAt</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回事件发生时间。</div>
+<div class="block">事件发生时间。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="AuditOperation.html" title="class in com.sca4d.core.api.audit">AuditOperation</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#operation()" class="member-name-link">operation</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回业务操作。</div>
+<div class="block">业务操作。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="AuditPayload.html" title="interface in com.sca4d.core.api.audit">AuditPayload</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#payload()" class="member-name-link">payload</a>()</code></div>
@@ -156,12 +156,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#requestId()" class="member-name-link">requestId</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回调用链标识。</div>
+<div class="block">调用链标识。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="AuditResult.html" title="enum class in com.sca4d.core.api.audit">AuditResult</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#result()" class="member-name-link">result</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回操作结果。</div>
+<div class="block">操作结果。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../resource/Resource.html" title="interface in com.sca4d.core.api.resource">Resource</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#target()" class="member-name-link">target</a>()</code></div>
@@ -222,7 +222,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="requestId()">
 <h3>requestId</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">requestId</span>()</div>
-<div class="block">返回调用链标识。</div>
+<div class="block">调用链标识。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>调用链标识</dd>
@@ -233,7 +233,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="actor()">
 <h3>actor</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AuditActor.html" title="class in com.sca4d.core.api.audit">AuditActor</a></span>&nbsp;<span class="element-name">actor</span>()</div>
-<div class="block">返回行为主体。</div>
+<div class="block">行为主体。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>行为主体</dd>
@@ -244,7 +244,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="operation()">
 <h3>operation</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AuditOperation.html" title="class in com.sca4d.core.api.audit">AuditOperation</a></span>&nbsp;<span class="element-name">operation</span>()</div>
-<div class="block">返回业务操作。</div>
+<div class="block">业务操作。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>业务操作</dd>
@@ -266,7 +266,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="result()">
 <h3>result</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AuditResult.html" title="enum class in com.sca4d.core.api.audit">AuditResult</a></span>&nbsp;<span class="element-name">result</span>()</div>
-<div class="block">返回操作结果。</div>
+<div class="block">操作结果。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>操作结果</dd>
@@ -299,7 +299,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="occurredAt()">
 <h3>occurredAt</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name">occurredAt</span>()</div>
-<div class="block">返回事件发生时间。</div>
+<div class="block">事件发生时间。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>事件发生时间</dd>

@@ -5,21 +5,21 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 import com.sca4d.core.api.concurrent.DistributedLock;
+import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.SystemPrincipal;
 import com.sca4d.core.api.job.JobExecutor;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.ResourceReference;
 import com.sca4d.core.api.scheduling.JobScheduler;
-import com.sca4d.core.api.setting.LogicSetting;
-import com.sca4d.core.api.setting.Setting;
-import com.sca4d.core.api.setting.SettingOwner;
-import com.sca4d.core.api.setting.SettingValue;
-import com.sca4d.core.api.setting.SettingValues;
-import com.sca4d.core.api.setting.Settings;
-import com.sca4d.core.api.setting.SystemSetting;
+import com.sca4d.core.api.setting.access.SettingReader;
+import com.sca4d.core.api.setting.access.SettingWriter;
+import com.sca4d.core.api.setting.value.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingValue;
 import com.sca4d.core.api.storage.FileErrorCode;
 import com.sca4d.core.api.storage.FileService;
 import com.sca4d.core.api.storage.FileStatus;
@@ -66,16 +66,18 @@ import java.io.InputStream;
 import java.net.URI;
 import java.sql.Timestamp;
 import java.time.Clock;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Supplier;
 
 /** 使用 PostgreSQL 17 验证文件状态、对象位置和多实例删除领取。 */
 @Testcontainers
@@ -121,7 +123,7 @@ class FileServiceIntegrationTest {
         registry.add("spring.datasource.username", POSTGRES::getUsername);
         registry.add("spring.datasource.password", POSTGRES::getPassword);
         registry.add("spring.application.name", () -> "storage-test");
-        registry.add("sca4dj.storage.default-backend", () -> "test");
+        registry.add("sca4dj.storage.backend.default", () -> "test");
         registry.add("sca4dj.storage.cleanup-interval", () -> "PT24H");
     }
 
@@ -134,12 +136,12 @@ class FileServiceIntegrationTest {
             ResourceDatabasePopulator coreSchema = new ResourceDatabasePopulator(
                     new ClassPathResource("META-INF/sca4dj/schema/dictionary-settings.sql"));
             coreSchema.setSeparator(ScriptUtils.EOF_STATEMENT_SEPARATOR);
-            coreSchema.execute(java.util.Objects.requireNonNull(jdbc.getDataSource()));
+            coreSchema.execute(Objects.requireNonNull(jdbc.getDataSource()));
         }
         jdbc.execute("DROP TABLE IF EXISTS storage_file");
         ResourceDatabasePopulator schema = new ResourceDatabasePopulator(
                 new ClassPathResource("META-INF/sca4dj/schema/storage-file.sql"));
-        schema.execute(java.util.Objects.requireNonNull(jdbc.getDataSource()));
+        schema.execute(Objects.requireNonNull(jdbc.getDataSource()));
         storage.reset();
     }
 
@@ -178,16 +180,16 @@ class FileServiceIntegrationTest {
         byte[] content = png();
 
         StoredFile ready = files.upload(
-                SystemPrincipal.INSTANCE,
+                new SystemPrincipal(1, TreeCode.ofSegment("MAIN")),
                 new FileUploadIntent(use, "generated.png", "image/png", content.length),
                 new ByteArrayInputStream(content));
 
         assertThat(ready.status()).isEqualTo(FileStatus.READY);
-        assertThat(ready.uploaderPrincipalId()).isEqualTo(SystemPrincipal.ID);
+        assertThat(ready.uploaderPrincipalId()).isEqualTo(1L);
         assertThat(storage.preparedUploadCount()).isZero();
         FileRecord record = repository.find(ready.fileId()).orElseThrow();
         assertThat(storage.contains(record.containerName(), record.uploadObjectKey())).isFalse();
-        assertThat(storage.contains(record.containerName(), java.util.Objects.requireNonNull(record.objectKey())))
+        assertThat(storage.contains(record.containerName(), Objects.requireNonNull(record.objectKey())))
                 .isTrue();
         assertThat(files.bind(ready.fileId(), use).status()).isEqualTo(FileStatus.IN_USE);
     }
@@ -200,21 +202,25 @@ class FileServiceIntegrationTest {
         assertError(
                 () -> assertThat(
                         files.upload(
-                                SystemPrincipal.INSTANCE,
+                                new SystemPrincipal(1, TreeCode.ofSegment("MAIN")),
                                 intent,
                                 new ByteArrayInputStream(new byte[] {1, 2, 3})))
                         .isNotNull(),
                 FileErrorCode.CONTENT_MISMATCH);
 
         storage.failWritesWithIOException();
-        assertThatThrownBy(() -> files.upload(SystemPrincipal.INSTANCE, intent, new ByteArrayInputStream(png())))
+        assertThatThrownBy(
+                () -> files.upload(
+                        new SystemPrincipal(1, TreeCode.ofSegment("MAIN")),
+                        intent,
+                        new ByteArrayInputStream(png())))
                 .isInstanceOf(IOException.class);
 
         storage.failWritesWithBackendError();
         assertError(
                 () -> assertThat(
                         files.upload(
-                                SystemPrincipal.INSTANCE,
+                                new SystemPrincipal(1, TreeCode.ofSegment("MAIN")),
                                 intent,
                                 new ByteArrayInputStream(png())))
                         .isNotNull(),
@@ -281,7 +287,7 @@ class FileServiceIntegrationTest {
         FileRecord pending = repository.find(upload.fileId()).orElseThrow();
         StorageObject storedObject = new StorageObject(
                 pending.containerName(),
-                java.util.Objects.requireNonNull(pending.objectKey()));
+                Objects.requireNonNull(pending.objectKey()));
         storage.promote(storage.preparedObject(), storedObject);
 
         StoredFile completed = files.completeUpload(upload.fileId(), uploader);
@@ -361,7 +367,7 @@ class FileServiceIntegrationTest {
         storage.write(
                 new StorageObject(
                         recoverable.containerName(),
-                        java.util.Objects.requireNonNull(recoverable.objectKey())),
+                        Objects.requireNonNull(recoverable.objectKey())),
                 "application/octet-stream",
                 1L,
                 new ByteArrayInputStream(new byte[] {1}));
@@ -379,7 +385,7 @@ class FileServiceIntegrationTest {
         assertThat(
                 storage.contains(
                         recoverable.containerName(),
-                        java.util.Objects.requireNonNull(recoverable.objectKey())))
+                        Objects.requireNonNull(recoverable.objectKey())))
                 .isFalse();
         assertThat(repository.find(402L).orElseThrow().status()).isEqualTo(FileStatus.DELETE_FAILED);
         assertThat(
@@ -399,7 +405,7 @@ class FileServiceIntegrationTest {
     void readsAndDiscardsUnboundFilesTransactionally() throws Exception {
         FileUse use = use("server-read");
         StoredFile ready = files.upload(
-                SystemPrincipal.INSTANCE,
+                new SystemPrincipal(1, TreeCode.ofSegment("MAIN")),
                 new FileUploadIntent(use, "file.png", "image/png", png().length),
                 new ByteArrayInputStream(png()));
         try (var content = files.openForServer(ready.fileId())) {
@@ -424,13 +430,13 @@ class FileServiceIntegrationTest {
     void discardsPendingAndReadyUploads() throws Exception {
         FileUse use = use("discard");
         FileUpload pending = files.createUpload(
-                SystemPrincipal.INSTANCE,
+                new SystemPrincipal(1, TreeCode.ofSegment("MAIN")),
                 new FileUploadIntent(use, "file.png", "image/png", png().length));
         files.discard(pending.fileId(), use);
         files.discard(pending.fileId(), use);
         assertThat(files.loadById(pending.fileId()).status()).isEqualTo(FileStatus.DELETE_PENDING);
         assertError(
-                () -> files.completeUpload(pending.fileId(), SystemPrincipal.INSTANCE),
+                () -> files.completeUpload(pending.fileId(), new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
                 FileErrorCode.STATE_CONFLICT);
         assertError(() -> {
             try (var content = files.openForServer(pending.fileId())) {
@@ -438,7 +444,7 @@ class FileServiceIntegrationTest {
             }
         }, FileErrorCode.NOT_FOUND);
         StoredFile ready = files.upload(
-                SystemPrincipal.INSTANCE,
+                new SystemPrincipal(1, TreeCode.ofSegment("MAIN")),
                 new FileUploadIntent(use, "file.png", "image/png", png().length),
                 new ByteArrayInputStream(png()));
         files.discard(ready.fileId(), use);
@@ -455,7 +461,7 @@ class FileServiceIntegrationTest {
     @DisplayName("服务端不能读取已经到期且尚未清理的 READY 文件")
     void rejectsExpiredServerRead() throws Exception {
         StoredFile ready = files.upload(
-                SystemPrincipal.INSTANCE,
+                new SystemPrincipal(1, TreeCode.ofSegment("MAIN")),
                 new FileUploadIntent(use("expired-read"), "file.png", "image/png", png().length),
                 new ByteArrayInputStream(png()));
         jdbc.update("UPDATE storage_file SET ready_expires_at = ? WHERE id = ?", Timestamp.from(NOW), ready.fileId());
@@ -471,7 +477,7 @@ class FileServiceIntegrationTest {
                 id,
                 1L,
                 "test",
-                "test:target",
+                TreeCode.of("test:target"),
                 Long.toString(id),
                 "test",
                 "files",
@@ -489,7 +495,9 @@ class FileServiceIntegrationTest {
     }
 
     private static FileUse use(String targetId) {
-        return new FileUse("platform:user:profile:avatar", new ResourceReference("platform:user:profile", targetId));
+        return new FileUse(
+                "PLATFORM:USERS:PROFILES:AVATARS",
+                new ResourceReference("PLATFORM:USERS:PROFILES", targetId));
     }
 
     /** 返回使用指定正数标识的测试 Principal。 */
@@ -532,7 +540,7 @@ class FileServiceIntegrationTest {
         @Bean
         IdGenerator idGenerator() {
             AtomicLong values = new AtomicLong(1000L);
-            return values::incrementAndGet;
+            return () -> Id.of(values.incrementAndGet());
         }
 
         @Bean
@@ -547,15 +555,15 @@ class FileServiceIntegrationTest {
         }
 
         @Bean
-        Settings settings() {
-            return new DefaultSettings();
+        DefaultSource settings() {
+            return new DefaultSource();
         }
 
         @Bean
         ConfiguredSecretKeyring secretKeyring() {
             SecretKeyringProperties properties = new SecretKeyringProperties();
             properties.setActiveKeyId("test");
-            properties.setKeys(Map.of("test", java.util.Base64.getEncoder().encodeToString(new byte[32])));
+            properties.setKeys(Map.of("test", Base64.getEncoder().encodeToString(new byte[32])));
             return new ConfiguredSecretKeyring(properties);
         }
 
@@ -569,9 +577,9 @@ class FileServiceIntegrationTest {
             return new DistributedLock() {
                 @Override
                 public <T> T execute(
-                        com.sca4d.core.api.concurrent.LockKey key,
-                        java.time.Duration waitTime,
-                        java.util.function.Supplier<T> task) {
+                        LockKey key,
+                        Duration waitTime,
+                        Supplier<T> task) {
                     return task.get();
                 }
             };
@@ -579,79 +587,45 @@ class FileServiceIntegrationTest {
     }
 
     /** 始终返回设置定义默认值，避免文件状态测试依赖 `sys_setting` 表。 */
-    private static final class DefaultSettings implements Settings {
-
+    private static final class DefaultSource implements SettingReader<String>, SettingWriter<String> {
         @Override
-        public <T> @NotNull T get(@NotNull SystemSetting<T> setting) {
-            return setting.defaultValue();
+        public @NotNull TreeCode code() {
+            return TreeCode.of("SETTING:TEST");
         }
 
         @Override
-        public <T> @NotNull SettingValue<T> inspect(@NotNull SystemSetting<T> setting) {
-            return defaultValue(setting, SettingOwner.system());
+        public @NotNull SettingValue<String> read(@NotNull TreeCode setting, @NotNull SettingOwner owner) {
+            return SettingValue.read(code(), setting, owner, null, 0, new Version(0), false);
         }
 
         @Override
-        public @NotNull SettingValues get(@NotNull Collection<? extends SystemSetting<?>> settings) {
-            List<SettingValue<?>> values = new ArrayList<>();
-            for (SystemSetting<?> setting : settings) {
-                values.add(defaultValue(setting, SettingOwner.system()));
-            }
-            return new SettingValues(values);
-        }
-
-        @Override
-        public <T> @NotNull T get(@NotNull LogicSetting<T> setting, @NotNull SettingOwner owner) {
-            return setting.defaultValue();
-        }
-
-        @Override
-        public <T> @NotNull SettingValue<T> inspect(
-                @NotNull LogicSetting<T> setting,
-                @NotNull SettingOwner owner) {
-            return defaultValue(setting, owner);
-        }
-
-        @Override
-        public <T> @NotNull SettingValue<T> replace(
-                @NotNull SystemSetting<T> setting,
-                @NotNull T value) {
-            throw new UnsupportedOperationException("文件状态测试不修改 Settings");
-        }
-
-        @Override
-        public <T> @NotNull SettingValue<T> replace(
-                @NotNull LogicSetting<T> setting,
+        public void replace(
+                @NotNull TreeCode setting,
                 @NotNull SettingOwner owner,
-                @NotNull T value) {
-            throw new UnsupportedOperationException("文件状态测试不修改 Settings");
+                @NotNull String value,
+                int codecVersion,
+                boolean secret,
+                @NotNull Version expected) {
+            throw new UnsupportedOperationException("持久化测试不修改设置");
         }
 
         @Override
-        public @NotNull SettingValue<?> reset(@NotNull SystemSetting<?> setting) {
-            throw new UnsupportedOperationException("文件状态测试不修改 Settings");
+        public void reset(
+                @NotNull TreeCode setting,
+                @NotNull SettingOwner owner,
+                int codecVersion,
+                @NotNull Version expected) {
+            throw new UnsupportedOperationException("持久化测试不修改设置");
         }
 
         @Override
-        public @NotNull SettingValue<?> reset(
-                @NotNull LogicSetting<?> setting,
-                @NotNull SettingOwner owner) {
-            throw new UnsupportedOperationException("文件状态测试不修改 Settings");
-        }
-
-        @Override
-        public void erase(@NotNull LogicSetting<?> setting, @NotNull SettingOwner owner) {
-            throw new UnsupportedOperationException("文件状态测试不修改 Settings");
-        }
-
-        /** 把设置定义转换为使用 Java 默认值的快照项。 */
-        private static <T> SettingValue<T> defaultValue(Setting<T> setting, SettingOwner owner) {
-            return new SettingValue<>(setting, owner, setting.defaultValue(), false, false, new Version(0));
+        public void erase(@NotNull TreeCode setting, @NotNull SettingOwner owner) {
+            throw new UnsupportedOperationException("持久化测试不修改设置");
         }
     }
 
     /** 保存测试上传对象，完整执行 `FileStorage` 的复制、打开和删除行为。 */
-    static final class InMemoryFileStorage implements FileStorage {
+    static class InMemoryFileStorage implements FileStorage {
         private final Map<String, StoredObject> objects = new ConcurrentHashMap<>();
 
         private volatile StorageObject preparedObject;
@@ -777,7 +751,7 @@ class FileServiceIntegrationTest {
         }
 
         StorageObject preparedObject() {
-            return java.util.Objects.requireNonNull(preparedObject);
+            return Objects.requireNonNull(preparedObject);
         }
 
         void reset() {
@@ -804,7 +778,7 @@ class FileServiceIntegrationTest {
 
     /** 保存内存对象的媒体类型和内容副本。 */
     @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-    private static final class StoredObject {
+    private static class StoredObject {
         private final String contentType;
 
         private final byte[] content;

@@ -1,5 +1,7 @@
 package com.sca4d.core.api.authentication;
 
+import com.sca4d.core.api.name.code.TreeCode;
+
 import java.time.Instant;
 import java.util.Objects;
 import java.util.Set;
@@ -7,30 +9,30 @@ import java.util.Set;
 /**
  * 记录一种认证方式已经成功验证账号（Authentication）。
  *
- * <p>认证方法成功后直接返回该对象。多因素认证评估会话（Session，{@link Session}）中的认证列表。
+ * <p>认证方法成功后直接返回当前对象。多因素认证评估会话（Session，{@link Session}）中的认证列表。
  */
 @SuppressWarnings("ClassCanBeRecord")
-public final class Authentication {
+public class Authentication {
 
-    private final long accountId;
-
-    private final AuthenticationMethodCode methodCode;
+    private final Instant authenticatedAt;
 
     private final Set<AuthenticationFactorKind> factorKinds;
 
-    private final Instant authenticatedAt;
+    private final TreeCode methodCode;
+
+    private final long accountId;
 
     /**
      * 创建认证证据。
      *
-     * @param accountId 已验证的 Account
-     * @param methodCode 完成验证的认证方式编码
-     * @param factorKinds 已验证的认证因素
+     * @param accountId       已验证的 Account
+     * @param methodCode      完成验证的认证方式编码
+     * @param factorKinds     已验证的认证因素
      * @param authenticatedAt 验证完成时间
      */
     public Authentication(
             long accountId,
-            AuthenticationMethodCode methodCode,
+            TreeCode methodCode,
             Set<AuthenticationFactorKind> factorKinds,
             Instant authenticatedAt) {
         if (accountId <= 0) {
@@ -43,7 +45,7 @@ public final class Authentication {
     }
 
     /**
-     * 返回已验证的 Account 标识。
+     * 已验证的 Account 标识。
      *
      * @return 已验证的 Account 标识
      */
@@ -52,16 +54,16 @@ public final class Authentication {
     }
 
     /**
-     * 返回完成验证的认证方式编码。
+     * 完成验证的认证方式编码。
      *
      * @return 完成验证的认证方式编码
      */
-    public AuthenticationMethodCode methodCode() {
+    public TreeCode methodCode() {
         return methodCode;
     }
 
     /**
-     * 返回本次成功认证确认的因素类别。
+     * 本次成功认证确认的因素类别。
      *
      * @return 创建认证记录时复制的不可修改因素集合
      */
@@ -70,7 +72,7 @@ public final class Authentication {
     }
 
     /**
-     * 返回验证完成时间。
+     * 验证完成时间。
      *
      * @return 验证完成时间
      */

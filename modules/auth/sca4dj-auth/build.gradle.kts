@@ -25,7 +25,7 @@ dependencies {
     api(project(":core:sca4dj-core-spring"))
     api(libs.sa.token.core)
     implementation(libs.sa.token.spring.boot.starter)
-    runtimeOnly(libs.sa.token.redis.template)
+    implementation(libs.sa.token.redis.template)
     implementation(libs.spring.boot.starter.data.redis)
     implementation(libs.spring.tx)
     api(libs.spring.data.redis)

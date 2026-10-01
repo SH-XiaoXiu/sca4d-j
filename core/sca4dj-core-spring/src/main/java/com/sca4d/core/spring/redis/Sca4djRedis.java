@@ -8,7 +8,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/** 限定脚手架内部状态、索引和消息使用的 `StringRedisTemplate` Bean。 */
+/** 限定脚手架内部状态、索引和消息使用的 {@code RedisTemplate<Key, String>} Bean。 */
 @Documented
 @Qualifier
 @Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD, ElementType.TYPE})

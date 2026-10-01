@@ -16,14 +16,19 @@ import com.sca4d.auth.totp.credential.TotpCredentialRepository;
 import com.sca4d.core.api.authentication.SessionControl;
 import com.sca4d.core.api.authentication.SessionTerminationReason;
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.security.EncryptedSecret;
 import com.sca4d.core.api.security.SecretCipher;
 import com.sca4d.core.api.security.SecretKeyring;
-import com.sca4d.core.api.setting.Settings;
+import com.sca4d.core.api.setting.access.SettingReader;
+import com.sca4d.core.api.setting.access.SettingWriter;
+import com.sca4d.core.api.setting.value.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingValue;
 import com.sca4d.core.spring.security.AesGcmSecretCipher;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Clock;
@@ -38,9 +43,9 @@ class TotpEnrollmentServiceTest {
 
     private static final long ACCOUNT_ID = 10L;
 
-    private static final Instant NOW = Instant.parse("2026-07-26T06:00:00Z");
-
     private static final String SECRET = "JBSWY3DPEHPK3PXP";
+
+    private static final Instant NOW = Instant.parse("2026-07-26T06:00:00Z");
 
     @Test
     @DisplayName("创建加密 enrollment 并返回临时配置 URI")
@@ -131,7 +136,7 @@ class TotpEnrollmentServiceTest {
 
         verify(fixture.enrollments).consume(enrollment);
         verify(fixture.credentials).delete(ACCOUNT_ID, new Version(4));
-        verify(fixture.sessions, org.mockito.Mockito.times(2))
+        verify(fixture.sessions, Mockito.times(2))
                 .terminateAccount(ACCOUNT_ID, SessionTerminationReason.AUTHENTICATION_CHANGED);
     }
 
@@ -169,8 +174,17 @@ class TotpEnrollmentServiceTest {
         TotpCodeVerifier verifier = mock(TotpCodeVerifier.class);
         SessionControl sessions = mock(SessionControl.class);
         SecretKeyring keyring = keyring();
-        Settings settings = mock(Settings.class);
-        when(settings.get(TotpSettings.ENROLLMENT_TTL)).thenReturn(Duration.ofMinutes(10));
+        TestAccess source = mock(TestAccess.class);
+        TotpSettings settings = new TotpSettings(source, source);
+        when(source.read(settings.ENROLLMENT_TTL.code(), SettingOwner.system())).thenReturn(
+                SettingValue.read(
+                        TreeCode.of("SETTING:TEST"),
+                        settings.ENROLLMENT_TTL.code(),
+                        SettingOwner.system(),
+                        settings.ENROLLMENT_TTL.codec().encode(Duration.ofMinutes(10)),
+                        1,
+                        new Version(0),
+                        false));
         TotpEnrollmentService service = new TotpEnrollmentService(
                 enrollments,
                 credentials,
@@ -198,18 +212,18 @@ class TotpEnrollmentServiceTest {
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    private static final class Fixture {
+    private static class Fixture {
         private final TotpEnrollmentService service;
-
-        private final RedisTotpEnrollmentStore enrollments;
 
         private final TotpCredentialRepository credentials;
 
-        private final TotpCodeVerifier verifier;
+        private final RedisTotpEnrollmentStore enrollments;
+
+        private final SecretKeyring keyring;
 
         private final SessionControl sessions;
 
-        private final SecretKeyring keyring;
+        private final TotpCodeVerifier verifier;
 
         private Fixture(
                 TotpEnrollmentService service,
@@ -225,5 +239,9 @@ class TotpEnrollmentServiceTest {
             this.sessions = sessions;
             this.keyring = keyring;
         }
+    }
+
+    /** 测试替身同时实现读取和写入契约，避免引入生产组合接口。 */
+    private interface TestAccess extends SettingReader<String>, SettingWriter<String> {
     }
 }

@@ -1,39 +1,49 @@
 package com.sca4d.core.api.storage;
 
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-/** 返回文件标识、上传 Principal、业务用途、内容信息和当前状态。 */
-public final class StoredFile implements Resource {
-    /** 文件使用的稳定 Resource 类型。 */
-    public static final @NotNull String RESOURCE_TYPE = "file";
+/**
+ * 返回文件标识、上传 Principal、业务用途、内容信息和当前状态。
+ */
+public class StoredFile implements Resource {
+    /**
+     * 供 Java 注解参数使用的资源类型文本。
+     */
+    public static final @NotNull String RESOURCE_TYPE_VALUE = "STORAGE/FILE";
 
-    private final long id;
+    /**
+     * 文件使用的稳定 Resource 类型。
+     */
+    public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofSlash("STORAGE/FILE");
 
-    private final long uploaderPrincipalId;
+    private final @NotNull FileStatus status;
 
     private final @NotNull FileUse use;
 
+    private final @NotNull String contentType;
+
     private final @NotNull String filename;
 
-    private final @NotNull String contentType;
+    private final long id;
 
     private final long sizeBytes;
 
-    private final @NotNull FileStatus status;
+    private final long uploaderPrincipalId;
 
     /**
      * 创建供 App 检查上传 Principal、用途和状态的文件信息。
      *
-     * @param id 正数文件标识
+     * @param id                  正数文件标识
      * @param uploaderPrincipalId 创建文件的 Principal 标识
-     * @param use 申请上传时声明的业务用途
-     * @param filename 原始文件名
-     * @param contentType 声明或实际媒体类型
-     * @param sizeBytes 声明或实际正数字节数
-     * @param status 当前持久化状态
+     * @param use                 申请上传时声明的业务用途
+     * @param filename            原始文件名
+     * @param contentType         声明或实际媒体类型
+     * @param sizeBytes           声明或实际正数字节数
+     * @param status              当前持久化状态
      * @throws IllegalArgumentException 文件标识或字节数不是正数时抛出
      */
     public StoredFile(
@@ -62,7 +72,7 @@ public final class StoredFile implements Resource {
     }
 
     /**
-     * 返回文件标识。
+     * 文件标识。
      *
      * @return 正数文件标识
      */
@@ -70,20 +80,24 @@ public final class StoredFile implements Resource {
         return id;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public @NotNull String type() {
+    public @NotNull TreeCode type() {
         return RESOURCE_TYPE;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull String id() {
         return Long.toString(id);
     }
 
     /**
-     * 返回创建文件的 Principal 标识。
+     * 创建文件的 Principal 标识。
      *
      * @return 正数 Principal 标识
      */
@@ -92,7 +106,7 @@ public final class StoredFile implements Resource {
     }
 
     /**
-     * 返回申请上传时声明的业务用途。
+     * 申请上传时声明的业务用途。
      *
      * @return 文件用途
      */
@@ -101,7 +115,7 @@ public final class StoredFile implements Resource {
     }
 
     /**
-     * 返回调用方提供的原始文件名。
+     * 调用方提供的原始文件名。
      *
      * @return 原始文件名
      */
@@ -110,7 +124,7 @@ public final class StoredFile implements Resource {
     }
 
     /**
-     * 返回文件媒体类型。
+     * 文件媒体类型。
      *
      * @return 上传完成前为声明值，上传完成后为存储对象实际值
      */
@@ -119,7 +133,7 @@ public final class StoredFile implements Resource {
     }
 
     /**
-     * 返回文件字节数。
+     * 文件字节数。
      *
      * @return 上传完成前为声明值，上传完成后为存储对象实际值
      */
@@ -128,7 +142,7 @@ public final class StoredFile implements Resource {
     }
 
     /**
-     * 返回文件当前状态。
+     * 文件当前状态。
      *
      * @return 持久化文件状态
      */

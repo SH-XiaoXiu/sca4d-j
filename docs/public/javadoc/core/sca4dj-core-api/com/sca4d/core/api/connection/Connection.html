@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">Connection</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">Connection</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">保存 App 对外持续网络连接的公共生命周期事实，不保存协议句柄或消息内容。</div>
 </section>
@@ -110,7 +110,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;lastActivityAt,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nodeId)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建一条已经建立的连接事实。</div>
+<div class="block">创建一条已经建立的连接信息。</div>
 </div>
 </div>
 </section>
@@ -132,7 +132,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="ConnectionId.html" title="class in com.sca4d.core.api.connection">ConnectionId</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#id()" class="member-name-link">id</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回当前连接的代次标识。</div>
+<div class="block">当前连接的代次标识。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#lastActivityAt()" class="member-name-link">lastActivityAt</a>()</code></div>
@@ -180,7 +180,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;lastActivityAt,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nodeId)</span></div>
-<div class="block">创建一条已经建立的连接事实。</div>
+<div class="block">创建一条已经建立的连接信息。</div>
 </section>
 </li>
 </ul>
@@ -197,7 +197,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="ConnectionId.html" title="class in com.sca4d.core.api.connection">ConnectionId</a></span>&nbsp;<span class="element-name">id</span>()</div>
-<div class="block">返回当前连接的代次标识。</div>
+<div class="block">当前连接的代次标识。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>不透明连接标识；不同连接代次不能复用同一个值</dd>
@@ -237,7 +237,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name">connectedAt</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>连接事实首次登记的时间</dd>
+<dd>连接信息首次登记的时间</dd>
 </dl>
 </section>
 </li>
@@ -249,7 +249,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name">lastActivityAt</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>连接事实最后一次收到活动或续租的时间</dd>
+<dd>连接信息最后一次收到活动或续租的时间</dd>
 </dl>
 </section>
 </li>

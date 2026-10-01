@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <dd><code>org.quartz.Job</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">QuartzDispatchJob</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">QuartzDispatchJob</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements org.quartz.Job</span></div>
 <div class="block">把一次 Quartz fire 转换成同一原定时间的持久化 Job run 提交。</div>
@@ -140,9 +140,7 @@ implements org.quartz.Job</span></div>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">QuartzDispatchJob</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">创建无状态 Quartz 触发入口。</div>
-</div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -208,21 +206,6 @@ implements org.quartz.Job</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="SCHEDULE_KEY">
-<h3>SCHEDULE_KEY</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">SCHEDULE_KEY</span></div>
-<div class="block">JobDataMap 中保存稳定计划 key 的键。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../constant-values.html#com.sca4d.scheduling.quartz.QuartzDispatchJob.SCHEDULE_KEY">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="SCHEDULE_DEFINITION_VERSION">
 <h3>SCHEDULE_DEFINITION_VERSION</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">SCHEDULE_DEFINITION_VERSION</span></div>
@@ -232,6 +215,21 @@ implements org.quartz.Job</span></div>
 <dd>
 <ul class="tag-list">
 <li><a href="../../../../constant-values.html#com.sca4d.scheduling.quartz.QuartzDispatchJob.SCHEDULE_DEFINITION_VERSION">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="SCHEDULE_KEY">
+<h3>SCHEDULE_KEY</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">SCHEDULE_KEY</span></div>
+<div class="block">JobDataMap 中保存稳定计划 key 的键。</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../constant-values.html#com.sca4d.scheduling.quartz.QuartzDispatchJob.SCHEDULE_KEY">Constant Field Values</a></li>
 </ul>
 </dd>
 </dl>
@@ -249,7 +247,6 @@ implements org.quartz.Job</span></div>
 <section class="detail" id="&lt;init&gt;()">
 <h3>QuartzDispatchJob</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">QuartzDispatchJob</span>()</div>
-<div class="block">创建无状态 Quartz 触发入口。</div>
 </section>
 </li>
 </ul>

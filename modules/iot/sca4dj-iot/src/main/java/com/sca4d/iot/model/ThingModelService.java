@@ -1,9 +1,11 @@
 package com.sca4d.iot.model;
 
+import cn.hutool.crypto.digest.DigestUtil;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.i18n.LocalizedFields;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.Product;
 import com.sca4d.iot.api.model.ThingCommand;
@@ -19,32 +21,29 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
-import java.util.HexFormat;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 /** 在发布前校验 Product、策略和全部兼容协议，再调用 App 唯一选择的 Repository。 */
 public class ThingModelService {
 
     private static final Duration LOCK_WAIT = Duration.ofSeconds(10);
 
+    private final @NotNull ProductRepository products;
+
     private final @NotNull ThingModelRepository models;
 
-    private final @NotNull ProductRepository products;
+    private final @NotNull ThingModelI18nValidator i18nValidator;
 
     private final @NotNull DevicePolicyCatalog policies;
 
     private final @NotNull DeviceProtocolCatalog protocols;
 
-    private final @NotNull ThingModelJsonCodec codec;
-
-    private final @NotNull ThingModelI18nValidator i18nValidator;
-
     private final @NotNull DistributedLock distributedLock;
+
+    private final @NotNull ThingModelJsonCodec codec;
 
     private final @NotNull TransactionTemplate transactions;
 
@@ -93,8 +92,8 @@ public class ThingModelService {
             } catch (IllegalArgumentException exception) {
                 throw new BusinessException(IotErrorCode.PROTOCOL_CONFLICT, exception);
             }
-            // 相同版本、相同技术内容按幂等结果返回；其他版本必须严格连续且内容不能重复。
-            String hash = sha256(codec.encode(checked));
+            // 相同版本、相同技术内容按幂等结果返回；不同版本必须严格连续且内容不能重复。
+            String hash = DigestUtil.sha256Hex(codec.encode(checked));
             List<ThingModelPresentation> published = models.findPublished(checked.productCode());
             if (published.isEmpty()) {
                 if (checked.version() != 1) {
@@ -103,13 +102,13 @@ public class ThingModelService {
             } else {
                 ThingModel latest = published.getLast().model();
                 if (checked.version() == latest.version()) {
-                    if (hash.equals(sha256(codec.encode(latest)))) {
+                    if (hash.equals(DigestUtil.sha256Hex(codec.encode(latest)))) {
                         return published.getLast();
                     }
                     throw new BusinessException(IotErrorCode.THING_MODEL_CONFLICT);
                 }
                 if (checked.version() != latest.version() + 1
-                        || hash.equals(sha256(codec.encode(latest)))) {
+                        || hash.equals(DigestUtil.sha256Hex(codec.encode(latest)))) {
                     throw new BusinessException(IotErrorCode.THING_MODEL_CONFLICT);
                 }
             }
@@ -150,9 +149,9 @@ public class ThingModelService {
     /** 取得 Product 聚合锁后，在事务内发布或修改物模型。 */
     private <T> @NotNull T write(
             @NotNull String productCode,
-            @NotNull java.util.function.Supplier<@NotNull T> operation) {
+            @NotNull Supplier<@NotNull T> operation) {
         return distributedLock.execute(
-                new LockKey("iot", "product", productCode),
+                new LockKey(TreeCode.of("IOT:PRODUCT"), productCode),
                 LOCK_WAIT,
                 () -> Objects.requireNonNull(
                         transactions.execute(status -> operation.get()),
@@ -171,15 +170,4 @@ public class ThingModelService {
         policies.retry(command.retryPolicy().code());
     }
 
-    /** 计算规范 JSON 的小写 SHA-256 摘要，用于版本幂等和连续性判断。 */
-    private static @NotNull String sha256(@NotNull String value) {
-        try {
-            return HexFormat.of()
-                    .formatHex(
-                            MessageDigest.getInstance("SHA-256")
-                                    .digest(value.getBytes(StandardCharsets.UTF_8)));
-        } catch (NoSuchAlgorithmException exception) {
-            throw new IllegalStateException("JVM 不支持 SHA-256", exception);
-        }
-    }
 }

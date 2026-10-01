@@ -1,5 +1,4 @@
 package com.sca4dj.gradle.app;
-
 import org.gradle.api.DefaultTask;
 import org.gradle.api.GradleException;
 import org.gradle.api.artifacts.Configuration;
@@ -122,19 +121,19 @@ public abstract class InitFlywayTask extends DefaultTask {
             List<SchemaFragment> componentFragments = readFragments(artifact);
             if (componentFragments.size() > 1) {
                 throw new GradleException("组件 " + componentId.getDisplayName() + " 提供了多个数据库结构片段："
-                        + componentFragments.stream().map(SchemaFragment::name).sorted().toList());
+                        + componentFragments.stream().map(fragment -> fragment.name).sorted().toList());
             }
             if (componentFragments.isEmpty()) {
                 continue;
             }
             SchemaFragment fragment = componentFragments.getFirst();
-            if (fragment.content().isBlank()) {
+            if (fragment.content.isBlank()) {
                 throw new GradleException("组件 " + componentId.getDisplayName() + " 的数据库结构片段 "
-                        + fragment.name() + ".sql 为空");
+                        + fragment.name + ".sql 为空");
             }
-            String previousOwner = fragmentOwners.putIfAbsent(fragment.name(), componentId.getDisplayName());
+            String previousOwner = fragmentOwners.putIfAbsent(fragment.name, componentId.getDisplayName());
             if (previousOwner != null) {
-                throw new GradleException("数据库结构片段名称 " + fragment.name() + ".sql 重复：" + previousOwner
+                throw new GradleException("数据库结构片段名称 " + fragment.name + ".sql 重复：" + previousOwner
                         + "、" + componentId.getDisplayName());
             }
             fragments.put(componentId, fragment);
@@ -286,23 +285,23 @@ public abstract class InitFlywayTask extends DefaultTask {
             SchemaFragment appFragment) throws IOException {
         StringBuilder migration = new StringBuilder();
         migration.append("-- 此文件由 initFlyway 根据 App 运行模块生成。\n");
-        migration.append("-- 生成后由 App 维护，后续数据库变化请新增 V2、V3 等迁移。\n\n");
+        migration.append("-- 生成后由 App 维护，之后的数据库变化请新增 V2、V3 等迁移。\n\n");
         for (int index = 0; index < orderedComponents.size(); index++) {
             ComponentIdentifier componentId = orderedComponents.get(index);
             SchemaFragment fragment = Objects.requireNonNull(
                     fragments.get(componentId), "有序组件必须对应数据库结构片段: " + componentId.getDisplayName());
-            String content = fragment.content().replace("\r\n", "\n").replace('\r', '\n').stripTrailing();
+            String content = fragment.content.replace("\r\n", "\n").replace('\r', '\n').stripTrailing();
             migration.append("-- 组件：").append(componentId.getDisplayName()).append('\n');
-            migration.append("-- 结构：").append(fragment.name()).append(".sql\n");
+            migration.append("-- 结构：").append(fragment.name).append(".sql\n");
             migration.append(content).append('\n');
             if (index + 1 < orderedComponents.size() || appFragment != null) {
                 migration.append('\n');
             }
         }
         if (appFragment != null) {
-            String content = appFragment.content().replace("\r\n", "\n").replace('\r', '\n').stripTrailing();
+            String content = appFragment.content.replace("\r\n", "\n").replace('\r', '\n').stripTrailing();
             migration.append("-- App：自有结构\n");
-            migration.append("-- 结构：").append(appFragment.name()).append(".sql\n");
+            migration.append("-- 结构：").append(appFragment.name).append(".sql\n");
             migration.append(content).append('\n');
         }
 
@@ -323,7 +322,7 @@ public abstract class InitFlywayTask extends DefaultTask {
 
     /** 保存一个组件中唯一结构片段的名称和 SQL。 */
     @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-    private static final class SchemaFragment {
+    private static class SchemaFragment {
 
         private final String name;
         private final String content;
@@ -333,12 +332,5 @@ public abstract class InitFlywayTask extends DefaultTask {
             this.content = content;
         }
 
-        private String name() {
-            return name;
-        }
-
-        private String content() {
-            return content;
-        }
     }
 }

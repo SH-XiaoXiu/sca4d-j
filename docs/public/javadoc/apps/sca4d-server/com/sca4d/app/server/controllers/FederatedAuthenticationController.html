@@ -342,9 +342,9 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="link(com.sca4d.core.api.identity.Account,com.sca4d.app.server.authentication.request.FederatedProofRequest,jakarta.servlet.http.HttpServletRequest)">
 <h3>link</h3>
 <div class="member-signature"><span class="annotations">@PostMapping("/me/authentication/federated-identities")
-@Audit(operation="authentication/account/federated-identity/link")
+@Audit(operation="AUTHENTICATION/ACCOUNT/FEDERATED_IDENTITY/LINK")
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../authentication/view/FederatedIdentityView.html" title="class in com.sca4d.app.server.authentication.view">FederatedIdentityView</a>&gt;</span>&nbsp;<span class="element-name">link</span><wbr><span class="parameters">(@AuditTarget(resourceType="account") @NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../authentication/view/FederatedIdentityView.html" title="class in com.sca4d.app.server.authentication.view">FederatedIdentityView</a>&gt;</span>&nbsp;<span class="element-name">link</span><wbr><span class="parameters">(@AuditTarget(resourceType="IAM/ACCOUNT") @NotNull
  @NotNull com.sca4d.core.api.identity.Account&nbsp;account,
  @RequestBody @Valid @NotNull
  @Valid @NotNull <a href="../authentication/request/FederatedProofRequest.html" title="class in com.sca4d.app.server.authentication.request">FederatedProofRequest</a>&nbsp;request,
@@ -357,9 +357,9 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="unlink(com.sca4d.core.api.identity.Account,long,long)">
 <h3>unlink</h3>
 <div class="member-signature"><span class="annotations">@DeleteMapping("/me/authentication/federated-identities/{identityId}")
-@Audit(operation="authentication/account/federated-identity/unlink")
+@Audit(operation="AUTHENTICATION/ACCOUNT/FEDERATED_IDENTITY/UNLINK")
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">unlink</span><wbr><span class="parameters">(@AuditTarget(resourceType="account") @NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">unlink</span><wbr><span class="parameters">(@AuditTarget(resourceType="IAM/ACCOUNT") @NotNull
  @NotNull com.sca4d.core.api.identity.Account&nbsp;account,
  @PathVariable
  long&nbsp;identityId,

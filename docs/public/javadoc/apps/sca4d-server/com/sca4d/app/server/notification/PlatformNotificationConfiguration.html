@@ -115,10 +115,10 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">非中国大陆手机号使用的 SMS Provider 路由。</div>
 </div>
-<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.setting.LogicSetting<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-first even-row-color"><code>final @NotNull com.sca4d.core.api.setting.definition.LogicSetting<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
 <div class="col-second even-row-color"><code><a href="#LANGUAGE" class="member-name-link">LANGUAGE</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final @NotNull com.sca4d.core.api.setting.LogicSetting<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-first odd-row-color"><code>final @NotNull com.sca4d.core.api.setting.definition.LogicSetting<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
 <div class="col-second odd-row-color"><code><a href="#REGION" class="member-name-link">REGION</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 </div>
@@ -132,8 +132,11 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">PlatformNotificationConfiguration</a>()</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.setting.access.SettingWriter)" class="member-name-link">PlatformNotificationConfiguration</a><wbr>(@NotNull com.sca4d.core.api.setting.access.SettingReader&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;reader,
+ com.sca4d.core.api.setting.access.SettingWriter&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;writer)</code></div>
+<div class="col-last even-row-color">
+<div class="block">构造 App 设置并显式选择数据库来源。</div>
+</div>
 </div>
 </section>
 </li>
@@ -175,14 +178,14 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="LANGUAGE">
 <h3>LANGUAGE</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.setting.LogicSetting&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">LANGUAGE</span></div>
+</span><span class="modifiers">public final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.setting.definition.LogicSetting&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">LANGUAGE</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="REGION">
 <h3>REGION</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.setting.LogicSetting&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">REGION</span></div>
+</span><span class="modifiers">public final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.setting.definition.LogicSetting&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">REGION</span></div>
 </section>
 </li>
 </ul>
@@ -194,9 +197,12 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;()">
+<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.setting.access.SettingWriter)">
 <h3>PlatformNotificationConfiguration</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">PlatformNotificationConfiguration</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">PlatformNotificationConfiguration</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.setting.access.SettingReader&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;reader,
+ com.sca4d.core.api.setting.access.SettingWriter&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;writer)</span></div>
+<div class="block">构造 App 设置并显式选择数据库来源。</div>
 </section>
 </li>
 </ul>

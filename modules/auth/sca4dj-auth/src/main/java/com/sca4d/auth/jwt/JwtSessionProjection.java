@@ -12,7 +12,6 @@ import com.sca4d.auth.session.codec.SessionCodec;
 import com.sca4d.core.api.authentication.AuthTokenMode;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionTokens;
-import com.sca4d.core.api.setting.Settings;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,15 +27,15 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 使用独立 HS256 密钥把完整 Core Session 编码为短效 JWS 投影，并在请求中离线恢复。 */
-public final class JwtSessionProjection {
-
-    static final String TOKEN_TYPE = "Bearer";
+public class JwtSessionProjection {
 
     static final String JWT_TYPE = "session+jwt";
 
     static final String SESSION_CLAIM = "session";
 
     static final String SESSION_ID_CLAIM = "sid";
+
+    static final String TOKEN_TYPE = "Bearer";
 
     private final SessionCodec codec;
 
@@ -50,7 +49,7 @@ public final class JwtSessionProjection {
 
     private final String audience;
 
-    private final Settings settings;
+    private final AuthSettings settings;
 
     private final int maxTokenLength;
 
@@ -68,7 +67,7 @@ public final class JwtSessionProjection {
     public JwtSessionProjection(
             @NotNull SessionCodec codec,
             @NotNull AuthProperties properties,
-            @NotNull Settings settings,
+            @NotNull AuthSettings settings,
             @NotNull Clock clock) {
         this.codec = Objects.requireNonNull(codec, "Session 编解码器不能为空");
         AuthProperties checkedProperties = Objects.requireNonNull(properties, "Auth 配置不能为空");
@@ -121,7 +120,7 @@ public final class JwtSessionProjection {
         }
 
         Instant issuedAt = clock.instant().truncatedTo(ChronoUnit.SECONDS);
-        Duration accessTtl = settings.get(AuthSettings.JWT_ACCESS_TTL);
+        Duration accessTtl = settings.JWT_ACCESS_TTL.get();
         Instant accessExpiresAt = issuedAt.plus(accessTtl);
         if (accessExpiresAt.isAfter(checkedSession.expiresAt())) {
             accessExpiresAt = checkedSession.expiresAt();
@@ -184,7 +183,7 @@ public final class JwtSessionProjection {
 
             Instant issuedAt = claimInstant(jwt.getPayload(JWTPayload.ISSUED_AT));
             Instant expiresAt = claimInstant(jwt.getPayload(JWTPayload.EXPIRES_AT));
-            Duration accessTtl = settings.get(AuthSettings.JWT_ACCESS_TTL);
+            Duration accessTtl = settings.JWT_ACCESS_TTL.get();
             if (!expiresAt.isAfter(now)
                     || !expiresAt.isAfter(issuedAt)
                     || expiresAt.isAfter(issuedAt.plus(accessTtl))

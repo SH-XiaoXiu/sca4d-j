@@ -11,7 +11,7 @@ import com.sca4d.core.api.authentication.SessionControl;
 import com.sca4d.core.api.authentication.SessionTerminationReason;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.security.EncryptedSecret;
-import com.sca4d.core.api.setting.Settings;
+import com.sca4d.core.api.security.SecretKeyring;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Clock;
 import java.time.Instant;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.OptionalLong;
 import java.util.UUID;
 
@@ -28,19 +29,19 @@ public class TotpEnrollmentService {
 
     private static final Logger LOG = LoggerFactory.getLogger(TotpEnrollmentService.class);
 
+    private final TotpCredentialRepository credentials;
+
+    private final Clock clock;
+
     private final RedisTotpEnrollmentStore enrollments;
 
-    private final TotpCredentialRepository credentials;
+    private final SessionControl sessions;
 
     private final TotpCodeVerifier verifier;
 
     private final TotpSecretCryptography secrets;
 
-    private final SessionControl sessions;
-
-    private final Settings settings;
-
-    private final Clock clock;
+    private final TotpSettings settings;
 
     /**
      * 创建 TOTP 凭据生命周期服务。
@@ -57,9 +58,9 @@ public class TotpEnrollmentService {
             @NotNull RedisTotpEnrollmentStore enrollments,
             @NotNull TotpCredentialRepository credentials,
             @NotNull TotpCodeVerifier verifier,
-            @NotNull com.sca4d.core.api.security.SecretKeyring keyring,
+            @NotNull SecretKeyring keyring,
             @NotNull SessionControl sessions,
-            @NotNull Settings settings,
+            @NotNull TotpSettings settings,
             @NotNull Clock clock) {
         this.enrollments = Objects.requireNonNull(enrollments, "TOTP enrollment store 不能为空");
         this.credentials = Objects.requireNonNull(credentials, "TOTP 凭据 Repository 不能为空");
@@ -78,7 +79,7 @@ public class TotpEnrollmentService {
      */
     public @NotNull TotpEnrollment create(long accountId) {
         String enrollmentId = UUID.randomUUID().toString();
-        Instant expiresAt = clock.instant().plus(settings.get(TotpSettings.ENROLLMENT_TTL));
+        Instant expiresAt = clock.instant().plus(settings.ENROLLMENT_TTL.get());
         String secret = verifier.generateSecret();
         TotpEnrollmentState state = new TotpEnrollmentState(
                 enrollmentId,
@@ -142,7 +143,7 @@ public class TotpEnrollmentService {
     }
 
     /**
-     * 使用首次验证码激活凭据；该时间步在刷新前仍可用于认证。
+     * 使用首次验证码激活凭据；当前时间步在刷新前仍可用于认证。
      *
      * @param accountId enrollment 与新凭据所属账号
      * @param enrollmentId 待消费的 enrollment 标识
@@ -178,7 +179,7 @@ public class TotpEnrollmentService {
             long accountId,
             @NotNull String enrollmentId,
             @NotNull String code) {
-        TotpCredential current = java.util.Optional.ofNullable(credentials.findByAccountId(accountId))
+        TotpCredential current = Optional.ofNullable(credentials.findByAccountId(accountId))
                 .orElseThrow(() -> new BusinessException(TotpErrorCode.CREDENTIAL_UNAVAILABLE));
         TotpEnrollmentState enrollment = ownedEnrollment(accountId, enrollmentId);
         String secret = secrets.decrypt(enrollmentPurpose(enrollment.id()), enrollment.secret());
@@ -206,7 +207,7 @@ public class TotpEnrollmentService {
      */
     @Transactional
     public void delete(long accountId) {
-        TotpCredential current = java.util.Optional.ofNullable(credentials.findByAccountId(accountId))
+        TotpCredential current = Optional.ofNullable(credentials.findByAccountId(accountId))
                 .orElseThrow(() -> new BusinessException(TotpErrorCode.CREDENTIAL_UNAVAILABLE));
         credentials.delete(accountId, current.version());
         sessions.terminateAccount(accountId, SessionTerminationReason.AUTHENTICATION_CHANGED);

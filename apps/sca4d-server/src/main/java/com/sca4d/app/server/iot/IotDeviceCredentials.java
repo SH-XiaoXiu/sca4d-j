@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 保存 Sca4d Server 创建或修改 Device 时产生的 Account 和一次性认证凭据。 */
-public final class IotDeviceCredentials {
+public class IotDeviceCredentials {
 
     private final @NotNull Device device;
 
@@ -45,7 +45,7 @@ public final class IotDeviceCredentials {
         return Optional.ofNullable(sharedSecret);
     }
 
-    /** @return 本次新签发的 HMAC Key；没有签发时为空 */
+    /** @return 本次新签发的 MAC Key；没有签发时为空 */
     public @NotNull Optional<String> hmacKey() {
         return Optional.ofNullable(hmacKey);
     }

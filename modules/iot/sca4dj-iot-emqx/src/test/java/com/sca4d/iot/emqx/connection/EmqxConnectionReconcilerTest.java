@@ -10,7 +10,7 @@ import static org.mockito.Mockito.when;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.isolation.AppName;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.DeviceAccessMethod;
 import com.sca4d.iot.api.ProductBinding;
@@ -39,6 +39,10 @@ import java.util.function.Supplier;
 
 /** 验证 EMQX 单 Client 刷新与完整连接对账。 */
 class EmqxConnectionReconcilerTest {
+
+    static {
+        AppName.publish("SCA4D_TEST");
+    }
 
     private static final Instant NOW = Instant.parse("2026-08-07T13:00:00Z");
 
@@ -86,7 +90,7 @@ class EmqxConnectionReconcilerTest {
                 1,
                 "mqtt-debug-v1",
                 MqttDeviceConnection.clientId("dbg-71"),
-                Set.of(DeviceAccessMethod.parse("account:shared-secret")));
+                Set.of(DeviceAccessMethod.parse("ACCOUNT:AUTHENTICATION/SHARED_SECRET")));
         EmqxClientConnection managed = new EmqxClientConnection(
                 "dbg-71",
                 "emqx@node",
@@ -101,7 +105,7 @@ class EmqxConnectionReconcilerTest {
                         "protocol_code",
                         "mqtt-debug-v1",
                         "access_method",
-                        "account:shared-secret"));
+                        "ACCOUNT:AUTHENTICATION/SHARED_SECRET"));
         when(management.findClients()).thenReturn(List.of(managed));
         when(devices.findDevices(any()))
                 .thenReturn(Map.of(MqttDeviceConnection.clientId("dbg-71"), device));
@@ -123,8 +127,7 @@ class EmqxConnectionReconcilerTest {
         };
         MqttAuthorizationService authorization = new MqttAuthorizationService(
                 new MqttProtocolCatalog(List.of()),
-                List.of(policy),
-                new RuntimeNamespace("emergency-light-test"));
+                List.of(policy));
         EmqxConnectionReconciler reconciler = new EmqxConnectionReconciler(
                 management,
                 devices,
@@ -165,7 +168,7 @@ class EmqxConnectionReconcilerTest {
                         "protocol_code",
                         "mqtt-debug-v1",
                         "access_method",
-                        "account:shared-secret",
+                        "ACCOUNT:AUTHENTICATION/SHARED_SECRET",
                         MqttAuthorizationService.FINGERPRINT_ATTRIBUTE,
                         authorization.resolve(device, "dbg-71").fingerprint()));
         when(devices.findDevice(MqttDeviceConnection.clientId("dbg-71"))).thenReturn(Optional.of(device));
@@ -220,7 +223,7 @@ class EmqxConnectionReconcilerTest {
                 1,
                 "mqtt-debug-v1",
                 MqttDeviceConnection.clientId("dbg-71"),
-                Set.of(DeviceAccessMethod.parse("account:shared-secret")));
+                Set.of(DeviceAccessMethod.parse("ACCOUNT:AUTHENTICATION/SHARED_SECRET")));
     }
 
     /** 创建固定关闭 ACL 的当前授权服务。 */
@@ -242,8 +245,7 @@ class EmqxConnectionReconcilerTest {
         };
         return new MqttAuthorizationService(
                 new MqttProtocolCatalog(List.of()),
-                List.of(policy),
-                new RuntimeNamespace("emergency-light-test"));
+                List.of(policy));
     }
 
     /** 创建不执行完整对账租约的单 Client 刷新服务。 */

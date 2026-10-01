@@ -1,7 +1,8 @@
 package com.sca4d.iot.message.policy;
 
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.message.DeviceDownlinkKind;
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
 import com.sca4d.iot.api.message.IotFailureCode;
 import com.sca4d.iot.api.message.RetryDecision;
 import com.sca4d.iot.api.message.RetryPolicy;
@@ -11,24 +12,25 @@ import java.time.Duration;
 import java.time.Instant;
 
 /** 按固定退避持续发送当前 desired sequence，直到新 desired sequence 取代或 reported 收敛。 */
-public final class DefaultStateSyncRetryPolicy implements RetryPolicy {
+public class DefaultStateSyncRetryPolicy implements RetryPolicy {
+
+    public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/RETRY/STATE/SYNC/DEFAULT");
 
     private static final Duration[] RETRY_DELAYS = {
             Duration.ofSeconds(1), Duration.ofSeconds(5), Duration.ofSeconds(30), Duration.ofMinutes(2)
     };
 
-    /** 创建默认 desired 状态同步重试策略。 */
     public DefaultStateSyncRetryPolicy() {
     }
 
     @Override
-    public @NotNull String code() {
-        return "state-sync-default";
+    public @NotNull TreeCode code() {
+        return CODE;
     }
 
     @Override
     public @NotNull RetryDecision evaluate(
-            @NotNull DeviceDownlinkMessage message,
+            @NotNull DeviceDownlink message,
             @NotNull IotFailureCode failure,
             @NotNull Instant now) {
         if (message.kind() != DeviceDownlinkKind.DESIRED) {

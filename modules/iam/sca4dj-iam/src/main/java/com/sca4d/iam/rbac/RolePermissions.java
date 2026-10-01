@@ -10,11 +10,11 @@ import java.util.Objects;
 
 /** 保存角色以及已经展开为具体 ACTION 的 Operation。 */
 @SuppressWarnings("ClassCanBeRecord")
-public final class RolePermissions {
-
-    private final @NotNull Role role;
+public class RolePermissions {
 
     private final @NotNull @Unmodifiable List<@NotNull Operation> operations;
+
+    private final @NotNull Role role;
 
     /**
      * 创建角色 Operation 结果。
@@ -28,7 +28,7 @@ public final class RolePermissions {
     }
 
     /**
-     * 返回当前角色。
+     * 当前角色。
      *
      * @return 当前角色
      */
@@ -38,7 +38,7 @@ public final class RolePermissions {
     }
 
     /**
-     * 返回展开后的具体 ACTION。
+     * 展开后的具体 ACTION。
      *
      * @return 不包含内部选择符的不可修改列表
      */

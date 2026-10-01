@@ -33,9 +33,9 @@ import java.util.OptionalLong;
 
 /**
  * 定义规范温控器的稳定 JSON 信封，并把 JSON 字段映射为标准物模型 code。
- * 该类负责该设备的 Topic、字段名称和信封版本。
+ * 当前协议负责该设备的 Topic、字段名称和信封版本。
  */
-public final class StandardClimateDeviceProtocol {
+public class StandardClimateDeviceProtocol {
 
     /** 示例 Product code。 */
     public static final String PRODUCT_CODE = "standard-climate-controller";

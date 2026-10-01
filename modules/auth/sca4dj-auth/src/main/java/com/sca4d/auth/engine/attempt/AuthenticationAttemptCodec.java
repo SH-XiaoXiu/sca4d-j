@@ -1,5 +1,8 @@
 package com.sca4d.auth.engine.attempt;
 
+import static com.sca4d.core.api.name.NameFormat.DOT;
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,13 +12,13 @@ import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationActionCode;
 import com.sca4d.core.api.authentication.AuthenticationAttemptId;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.data.DataAssertionException;
 import com.sca4d.core.api.data.DataOps;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.RealmKey;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -28,17 +31,23 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-/** 以显式结构编解码不含秘密的动作认证尝试。 */
-final class AuthenticationAttemptCodec {
+/**
+ * 以显式结构编解码不含秘密的动作认证尝试。
+ */
+class AuthenticationAttemptCodec {
 
     private final @NotNull ObjectMapper objectMapper;
 
-    /** @param objectMapper 用于读写稳定 JSON 结构的映射器 */
+    /**
+     * @param objectMapper 用于读写稳定 JSON 结构的映射器
+     */
     AuthenticationAttemptCodec(@NotNull ObjectMapper objectMapper) {
         this.objectMapper = Objects.requireNonNull(objectMapper, "认证尝试 JSON 映射器不能为空");
     }
 
-    /** 把认证尝试编码为不包含 Proof、Credential 或 Secret 的 JSON。 */
+    /**
+     * 把认证尝试编码为不包含 Proof、Credential 或 Secret 的 JSON。
+     */
     @NotNull
     String encode(@NotNull AuthenticationAttemptState state) {
         ObjectNode root = objectMapper.createObjectNode();
@@ -47,7 +56,7 @@ final class AuthenticationAttemptCodec {
         root.put("accountId", state.account().accountId());
         root.put("subjectId", state.account().subjectId());
         root.put("realmKey", state.account().realmKey().value());
-        root.put("actionCode", state.actionCode().value());
+        root.put("actionCode", state.actionCode().format(DOT));
         root.put("expiresAt", state.expiresAt().toString());
         root.put("satisfied", state.satisfied());
 
@@ -70,7 +79,9 @@ final class AuthenticationAttemptCodec {
         }
     }
 
-    /** 从稳定 JSON 结构恢复受约束的认证尝试。 */
+    /**
+     * 从稳定 JSON 结构恢复受约束的认证尝试。
+     */
     @NotNull
     AuthenticationAttemptState decode(@NotNull String encoded) {
         try {
@@ -122,17 +133,21 @@ final class AuthenticationAttemptCodec {
         }
     }
 
-    /** 把认证记录写入指定 JSON 对象，并稳定排序因素类别。 */
+    /**
+     * 把认证记录写入指定 JSON 对象，并稳定排序因素类别。
+     */
     private static void encodeAuthentication(
             @NotNull ObjectNode target,
             @NotNull Authentication authentication) {
-        target.put("methodCode", authentication.methodCode().value());
+        target.put("methodCode", authentication.methodCode().format(SLASH));
         ArrayNode kinds = target.putArray("factorKinds");
         authentication.factorKinds().stream().map(Enum::name).sorted().forEach(kinds::add);
         target.put("authenticatedAt", authentication.authenticatedAt().toString());
     }
 
-    /** 解码调用方提供且可能被策略复用的认证记录。 */
+    /**
+     * 解码调用方提供且可能被策略复用的认证记录。
+     */
     private static @NotNull @Unmodifiable List<Authentication> decodeAuthentications(
             @NotNull JsonNode values,
             @NotNull Account account) {
@@ -144,7 +159,9 @@ final class AuthenticationAttemptCodec {
         return List.copyOf(result);
     }
 
-    /** 解码本次尝试新完成的认证和非秘密证据引用。 */
+    /**
+     * 解码本次尝试新完成的认证和非秘密证据引用。
+     */
     private static @NotNull @Unmodifiable List<VerifiedAuthentication> decodeVerifications(
             @NotNull JsonNode values,
             @NotNull Account account) {
@@ -171,7 +188,9 @@ final class AuthenticationAttemptCodec {
         return List.copyOf(result);
     }
 
-    /** 解码可选 ISO-8601 时间字段。 */
+    /**
+     * 解码可选 ISO-8601 时间字段。
+     */
     private static @Nullable Instant optionalInstant(JsonNode value, String fieldName) {
         JsonNode field = value.get(fieldName);
         if (field == null || field.isNull()) {
@@ -180,20 +199,24 @@ final class AuthenticationAttemptCodec {
         return Instant.parse(DataOps.s(field.textValue()).req(fieldName).get());
     }
 
-    /** 解码属于指定账号的单条认证记录。 */
+    /**
+     * 解码属于指定账号的单条认证记录。
+     */
     private static @NotNull Authentication decodeAuthentication(
             @NotNull JsonNode value,
             @NotNull Account account) {
         return new Authentication(
                 account.accountId(),
-                new AuthenticationMethodCode(
+                TreeCode.ofSlash(
                         DataOps.s(value.required("methodCode").textValue()).req("methodCode").get()),
                 factorKinds(value.required("factorKinds")),
                 Instant.parse(
                         DataOps.s(value.required("authenticatedAt").textValue()).req("authenticatedAt").get()));
     }
 
-    /** 解码非空认证因素类别集合。 */
+    /**
+     * 解码非空认证因素类别集合。
+     */
     private static @NotNull @Unmodifiable Set<AuthenticationFactorKind> factorKinds(
             @NotNull JsonNode values) {
         if (!values.isArray()) {

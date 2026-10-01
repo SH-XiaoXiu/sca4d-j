@@ -1,5 +1,6 @@
 package com.sca4d.storage.file.transfer;
 
+import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.storage.FileErrorCode;
 import com.sca4d.core.api.storage.FileStorage;
 import org.jetbrains.annotations.ApiStatus;
@@ -14,7 +15,7 @@ import java.util.Objects;
 
 /** 按文件记录中的 backendId 查找存储实现，并拒绝两个实现使用相同标识。 */
 @ApiStatus.Internal
-public final class StorageRegistry {
+public class StorageRegistry {
     private static final Logger LOG = LoggerFactory.getLogger(StorageRegistry.class);
 
     private final @NotNull Map<String, FileStorage> storages;
@@ -55,7 +56,7 @@ public final class StorageRegistry {
     public FileStorage storage(@NotNull String id) {
         FileStorage storage = storages.get(id);
         if (storage == null) {
-            throw new com.sca4d.core.api.error.BusinessException(FileErrorCode.BACKEND_UNAVAILABLE);
+            throw new BusinessException(FileErrorCode.BACKEND_UNAVAILABLE);
         }
         return storage;
     }

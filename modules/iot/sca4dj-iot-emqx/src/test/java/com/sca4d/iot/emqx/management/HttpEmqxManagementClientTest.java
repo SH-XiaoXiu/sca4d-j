@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.http.HttpTimeoutException;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
@@ -30,11 +31,11 @@ import java.util.concurrent.atomic.AtomicReference;
 /** 使用本地 HTTP 服务验证 EMQX Management API 的路径、认证和二进制发布契约。 */
 class HttpEmqxManagementClientTest {
 
-    private static final ObjectMapper JSON = new ObjectMapper();
-
     private static final String API_KEY = "test-api-key";
 
     private static final String API_SECRET = "test-api-secret";
+
+    private static final ObjectMapper JSON = new ObjectMapper();
 
     private final AtomicReference<String> authorization = new AtomicReference<>();
 
@@ -122,7 +123,7 @@ class HttpEmqxManagementClientTest {
             assertThatThrownBy(
                     () -> client.publish(new MqttPublication("debug/custom", new byte[0], 1, false)))
                     .isInstanceOf(EmqxPublishResultUnknownException.class)
-                    .hasRootCauseInstanceOf(java.net.http.HttpTimeoutException.class);
+                    .hasRootCauseInstanceOf(HttpTimeoutException.class);
         } finally {
             releasePublication.countDown();
         }

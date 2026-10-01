@@ -80,7 +80,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/message/DeviceUplinkReceiver.html#acknowledged(com.sca4d.iot.api.Device,com.sca4d.iot.api.message.DeviceAcknowledgement)" class="member-name-link">acknowledged(Device, DeviceAcknowledgement)</a> - Method in interface com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceUplinkReceiver.html" title="interface in com.sca4d.iot.api.message">DeviceUplinkReceiver</a></dt>
 <dd>
-<div class="block">接受设备显式回执或其他接入事实转换出的业务确认。</div>
+<div class="block">接受设备显式回执或其他接入数据转换出的业务确认。</div>
 </dd>
 <dt><a href="com/sca4d/iot/api/message/DeviceUplink.html#acknowledged(com.sca4d.iot.api.message.DeviceAcknowledgement)" class="member-name-link">acknowledged(DeviceAcknowledgement)</a> - Static method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceUplink.html" title="class in com.sca4d.iot.api.message">DeviceUplink</a></dt>
 <dd>
@@ -94,14 +94,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">设备显式业务回执。</div>
 </dd>
-<dt><a href="com/sca4d/iot/api/message/IotMessageTypes.html#ACKNOWLEDGEMENT_REQUESTED" class="member-name-link">ACKNOWLEDGEMENT_REQUESTED</a> - Static variable in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/IotMessageTypes.html" title="class in com.sca4d.iot.api.message">IotMessageTypes</a></dt>
-<dd>
-<div class="block">请求在来源事务提交后执行一次业务 ACK 状态转换。</div>
-</dd>
-<dt><a href="com/sca4d/iot/api/message/IotMessageTypes.html#ACKNOWLEDGEMENT_TIMEOUT" class="member-name-link">ACKNOWLEDGEMENT_TIMEOUT</a> - Static variable in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/IotMessageTypes.html" title="class in com.sca4d.iot.api.message">IotMessageTypes</a></dt>
-<dd>
-<div class="block">检查一次已经发布的标准 Device 下行是否等待 ACK 超时。</div>
-</dd>
 <dt><a href="com/sca4d/iot/api/message/AcknowledgementDecision.html" class="type-name-link" title="class in com.sca4d.iot.api.message">AcknowledgementDecision</a> - Class in <a href="com/sca4d/iot/api/message/package-summary.html">com.sca4d.iot.api.message</a></dt>
 <dd>
 <div class="block">表示 ACK 策略对当前下行消息给出的无副作用判断。</div>
@@ -110,7 +102,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">ACK 策略允许的固定结果。</div>
 </dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html#acknowledgementPolicy()" class="member-name-link">acknowledgementPolicy()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkMessage</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceDownlink.html#acknowledgementPolicy()" class="member-name-link">acknowledgementPolicy()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlink.html" title="class in com.sca4d.iot.api.message">DeviceDownlink</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/model/ThingCommand.html#acknowledgementPolicy()" class="member-name-link">acknowledgementPolicy()</a> - Method in class com.sca4d.iot.api.model.<a href="com/sca4d/iot/api/model/ThingCommand.html" title="class in com.sca4d.iot.api.model">ThingCommand</a></dt>
 <dd>&nbsp;</dd>
@@ -126,7 +118,11 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/query/DeviceHistoryQueryService.html#acknowledgements(long,com.sca4d.core.api.query.PageRequest)" class="member-name-link">acknowledgements(long, PageRequest)</a> - Method in interface com.sca4d.iot.api.query.<a href="com/sca4d/iot/api/query/DeviceHistoryQueryService.html" title="interface in com.sca4d.iot.api.query">DeviceHistoryQueryService</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html#acknowledgementTimeout()" class="member-name-link">acknowledgementTimeout()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkMessage</a></dt>
+<dt><a href="com/sca4d/iot/api/history/DeviceHistoryStore.html#acknowledgementsByMessageId(long,com.sca4d.core.api.query.PageRequest)" class="member-name-link">acknowledgementsByMessageId(long, PageRequest)</a> - Method in interface com.sca4d.iot.api.history.<a href="com/sca4d/iot/api/history/DeviceHistoryStore.html" title="interface in com.sca4d.iot.api.history">DeviceHistoryStore</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/api/query/DeviceHistoryQueryService.html#acknowledgementsByMessageId(long,com.sca4d.core.api.query.PageRequest)" class="member-name-link">acknowledgementsByMessageId(long, PageRequest)</a> - Method in interface com.sca4d.iot.api.query.<a href="com/sca4d/iot/api/query/DeviceHistoryQueryService.html" title="interface in com.sca4d.iot.api.query">DeviceHistoryQueryService</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/api/message/DeviceDownlink.html#acknowledgementTimeout()" class="member-name-link">acknowledgementTimeout()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlink.html" title="class in com.sca4d.iot.api.message">DeviceDownlink</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/schedule/DeviceScheduleStatus.html#ACTIVE" class="member-name-link">ACTIVE</a> - Enum constant in enum class com.sca4d.iot.api.schedule.<a href="com/sca4d/iot/api/schedule/DeviceScheduleStatus.html" title="enum class in com.sca4d.iot.api.schedule">DeviceScheduleStatus</a></dt>
 <dd>
@@ -150,6 +146,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/api/DeviceAccessMethod.html#anonymousAccess()" class="member-name-link">anonymousAccess()</a> - Method in class com.sca4d.iot.api.<a href="com/sca4d/iot/api/DeviceAccessMethod.html" title="class in com.sca4d.iot.api">DeviceAccessMethod</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/api/IotCapabilities.html#API" class="member-name-link">API</a> - Static variable in class com.sca4d.iot.api.<a href="com/sca4d/iot/api/IotCapabilities.html" title="class in com.sca4d.iot.api">IotCapabilities</a></dt>
+<dd>
+<div class="block">IoT 管理、设备状态和历史查询 API。</div>
+</dd>
 <dt><a href="com/sca4d/iot/api/change/DeviceChange.html#areas()" class="member-name-link">areas()</a> - Method in class com.sca4d.iot.api.change.<a href="com/sca4d/iot/api/change/DeviceChange.html" title="class in com.sca4d.iot.api.change">DeviceChange</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/model/ThingValueKind.html#ARRAY" class="member-name-link">ARRAY</a> - Enum constant in enum class com.sca4d.iot.api.model.<a href="com/sca4d/iot/api/model/ThingValueKind.html" title="enum class in com.sca4d.iot.api.model">ThingValueKind</a></dt>
@@ -162,17 +162,17 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/api/connection/DeviceDisconnectMessage.html#attempt()" class="member-name-link">attempt()</a> - Method in class com.sca4d.iot.api.connection.<a href="com/sca4d/iot/api/connection/DeviceDisconnectMessage.html" title="class in com.sca4d.iot.api.connection">DeviceDisconnectMessage</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceAcknowledgementTimeout.html#attempt()" class="member-name-link">attempt()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceAcknowledgementTimeout.html" title="class in com.sca4d.iot.api.message">DeviceAcknowledgementTimeout</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceAcknowledgementCheck.html#attempt()" class="member-name-link">attempt()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceAcknowledgementCheck.html" title="class in com.sca4d.iot.api.message">DeviceAcknowledgementCheck</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkDispatch.html#attempt()" class="member-name-link">attempt()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlinkDispatch.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkDispatch</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceDispatchMessage.html#attempt()" class="member-name-link">attempt()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDispatchMessage.html" title="class in com.sca4d.iot.api.message">DeviceDispatchMessage</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html#attemptCount()" class="member-name-link">attemptCount()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkMessage</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceDownlink.html#attemptCount()" class="member-name-link">attemptCount()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlink.html" title="class in com.sca4d.iot.api.message">DeviceDownlink</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/connection/DeviceConnectionRequest.html#authenticated(com.sca4d.iot.api.connection.DeviceConnectionBinding,com.sca4d.core.api.authentication.AuthenticationSubmission)" class="member-name-link">authenticated(DeviceConnectionBinding, AuthenticationSubmission&lt;?&gt;)</a> - Static method in class com.sca4d.iot.api.connection.<a href="com/sca4d/iot/api/connection/DeviceConnectionRequest.html" title="class in com.sca4d.iot.api.connection">DeviceConnectionRequest</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/connection/DeviceConnectionRequest.html#authentication()" class="member-name-link">authentication()</a> - Method in class com.sca4d.iot.api.connection.<a href="com/sca4d/iot/api/connection/DeviceConnectionRequest.html" title="class in com.sca4d.iot.api.connection">DeviceConnectionRequest</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/api/DeviceAccessMethod.html#authentication(com.sca4d.core.api.authentication.AuthenticationMethodCode)" class="member-name-link">authentication(AuthenticationMethodCode)</a> - Static method in class com.sca4d.iot.api.<a href="com/sca4d/iot/api/DeviceAccessMethod.html" title="class in com.sca4d.iot.api">DeviceAccessMethod</a></dt>
+<dt><a href="com/sca4d/iot/api/DeviceAccessMethod.html#authentication(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">authentication(TreeCode)</a> - Static method in class com.sca4d.iot.api.<a href="com/sca4d/iot/api/DeviceAccessMethod.html" title="class in com.sca4d.iot.api">DeviceAccessMethod</a></dt>
 <dd>
 <div class="block">创建直接使用一种通用 Account 认证方法的连接方式。</div>
 </dd>
@@ -185,7 +185,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/history/DeviceEventMessage.html#bindingGeneration()" class="member-name-link">bindingGeneration()</a> - Method in class com.sca4d.iot.api.history.<a href="com/sca4d/iot/api/history/DeviceEventMessage.html" title="class in com.sca4d.iot.api.history">DeviceEventMessage</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html#bindingGeneration()" class="member-name-link">bindingGeneration()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkMessage</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceDownlink.html#bindingGeneration()" class="member-name-link">bindingGeneration()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlink.html" title="class in com.sca4d.iot.api.message">DeviceDownlink</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/telemetry/TelemetryBatch.html#bindingGeneration()" class="member-name-link">bindingGeneration()</a> - Method in class com.sca4d.iot.api.telemetry.<a href="com/sca4d/iot/api/telemetry/TelemetryBatch.html" title="class in com.sca4d.iot.api.telemetry">TelemetryBatch</a></dt>
 <dd>&nbsp;</dd>
@@ -236,11 +236,19 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/api/connection/DeviceConnectionProtocol.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.iot.api.connection.<a href="com/sca4d/iot/api/connection/DeviceConnectionProtocol.html" title="class in com.sca4d.iot.api.connection">DeviceConnectionProtocol</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/api/connection/DeviceDisconnectMessage.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.iot.api.connection.<a href="com/sca4d/iot/api/connection/DeviceDisconnectMessage.html" title="class in com.sca4d.iot.api.connection">DeviceDisconnectMessage</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/Device.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.iot.api.<a href="com/sca4d/iot/api/Device.html" title="class in com.sca4d.iot.api">Device</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/DeviceAccessMethod.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.iot.api.<a href="com/sca4d/iot/api/DeviceAccessMethod.html" title="class in com.sca4d.iot.api">DeviceAccessMethod</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/message/AcknowledgementPolicy.html#code()" class="member-name-link">code()</a> - Method in interface com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/AcknowledgementPolicy.html" title="interface in com.sca4d.iot.api.message">AcknowledgementPolicy</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/api/message/DeviceAcknowledgement.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceAcknowledgement.html" title="class in com.sca4d.iot.api.message">DeviceAcknowledgement</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/api/message/DeviceAcknowledgementCheck.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceAcknowledgementCheck.html" title="class in com.sca4d.iot.api.message">DeviceAcknowledgementCheck</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/api/message/DeviceDispatchMessage.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDispatchMessage.html" title="class in com.sca4d.iot.api.message">DeviceDispatchMessage</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/message/IotFailureCode.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/IotFailureCode.html" title="class in com.sca4d.iot.api.message">IotFailureCode</a></dt>
 <dd>&nbsp;</dd>
@@ -270,6 +278,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Product 和物模型由应用代码构造并且运行时只读。</div>
 </dd>
+<dt><a href="com/sca4d/iot/api/connection/DeviceDisconnectMessage.html#CODE" class="member-name-link">CODE</a> - Static variable in class com.sca4d.iot.api.connection.<a href="com/sca4d/iot/api/connection/DeviceDisconnectMessage.html" title="class in com.sca4d.iot.api.connection">DeviceDisconnectMessage</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/api/message/DeviceAcknowledgement.html#CODE" class="member-name-link">CODE</a> - Static variable in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceAcknowledgement.html" title="class in com.sca4d.iot.api.message">DeviceAcknowledgement</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/api/message/DeviceAcknowledgementCheck.html#CODE" class="member-name-link">CODE</a> - Static variable in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceAcknowledgementCheck.html" title="class in com.sca4d.iot.api.message">DeviceAcknowledgementCheck</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/api/message/DeviceDispatchMessage.html#CODE" class="member-name-link">CODE</a> - Static variable in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDispatchMessage.html" title="class in com.sca4d.iot.api.message">DeviceDispatchMessage</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/ProductSelector.html#codeProductCode()" class="member-name-link">codeProductCode()</a> - Method in class com.sca4d.iot.api.<a href="com/sca4d/iot/api/ProductSelector.html" title="class in com.sca4d.iot.api">ProductSelector</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/package-summary.html">com.sca4d.iot.api</a> - package com.sca4d.iot.api</dt>
@@ -280,7 +296,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/connection/package-summary.html">com.sca4d.iot.api.connection</a> - package com.sca4d.iot.api.connection</dt>
 <dd>
-<div class="block">定义 Broker Connection、Session 和在线投影之间使用的稳定连接事实。</div>
+<div class="block">定义 Broker Connection、Session 和在线投影之间使用的稳定连接数据。</div>
 </dd>
 <dt><a href="com/sca4d/iot/api/history/package-summary.html">com.sca4d.iot.api.history</a> - package com.sca4d.iot.api.history</dt>
 <dd>
@@ -344,7 +360,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/change/DeviceChangeArea.html#CONNECTION" class="member-name-link">CONNECTION</a> - Enum constant in enum class com.sca4d.iot.api.change.<a href="com/sca4d/iot/api/change/DeviceChangeArea.html" title="enum class in com.sca4d.iot.api.change">DeviceChangeArea</a></dt>
 <dd>
-<div class="block">当前设备连接事实。</div>
+<div class="block">当前设备连接信息。</div>
 </dd>
 <dt><a href="com/sca4d/iot/api/connection/DeviceDisconnectMessage.html#connectionId()" class="member-name-link">connectionId()</a> - Method in class com.sca4d.iot.api.connection.<a href="com/sca4d/iot/api/connection/DeviceDisconnectMessage.html" title="class in com.sca4d.iot.api.connection">DeviceDisconnectMessage</a></dt>
 <dd>&nbsp;</dd>
@@ -366,7 +382,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建并登记下一次触发时间；command 在每次到期时按 Device 当前绑定物模型重新校验。</div>
 </dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html#createdAt()" class="member-name-link">createdAt()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkMessage</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceDownlink.html#createdAt()" class="member-name-link">createdAt()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlink.html" title="class in com.sca4d.iot.api.message">DeviceDownlink</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/schedule/DeviceScheduleTrigger.html#cron(java.lang.String,java.time.ZoneId)" class="member-name-link">cron(String, ZoneId)</a> - Static method in class com.sca4d.iot.api.schedule.<a href="com/sca4d/iot/api/schedule/DeviceScheduleTrigger.html" title="class in com.sca4d.iot.api.schedule">DeviceScheduleTrigger</a></dt>
 <dd>&nbsp;</dd>
@@ -379,7 +395,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/message/DeviceAcknowledgement.html#data()" class="member-name-link">data()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceAcknowledgement.html" title="class in com.sca4d.iot.api.message">DeviceAcknowledgement</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html#data()" class="member-name-link">data()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkMessage</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceDownlink.html#data()" class="member-name-link">data()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlink.html" title="class in com.sca4d.iot.api.message">DeviceDownlink</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/ProductSelector.html#database(long)" class="member-name-link">database(long)</a> - Static method in class com.sca4d.iot.api.<a href="com/sca4d/iot/api/ProductSelector.html" title="class in com.sca4d.iot.api">ProductSelector</a></dt>
 <dd>&nbsp;</dd>
@@ -433,7 +449,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">同步一个属性的持续期望值。</div>
 </dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html#desiredSequence()" class="member-name-link">desiredSequence()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkMessage</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceDownlink.html#desiredSequence()" class="member-name-link">desiredSequence()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlink.html" title="class in com.sca4d.iot.api.message">DeviceDownlink</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/query/DesiredStateSnapshot.html#desiredSequence()" class="member-name-link">desiredSequence()</a> - Method in class com.sca4d.iot.api.query.<a href="com/sca4d/iot/api/query/DesiredStateSnapshot.html" title="class in com.sca4d.iot.api.query">DesiredStateSnapshot</a></dt>
 <dd>&nbsp;</dd>
@@ -463,10 +479,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Device 基础资料、绑定、接入方式或具体应用合并展示的 Device Profile。</div>
 </dd>
-<dt><a href="com/sca4d/iot/api/message/IotMessageTypes.html#DEVICE_DISCONNECT" class="member-name-link">DEVICE_DISCONNECT</a> - Static variable in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/IotMessageTypes.html" title="class in com.sca4d.iot.api.message">IotMessageTypes</a></dt>
-<dd>
-<div class="block">请求协议实现终止一个明确的 Device 连接代次。</div>
-</dd>
 <dt><a href="com/sca4d/iot/api/message/IotMessageTypes.html#DEVICE_EVENT_OCCURRED" class="member-name-link">DEVICE_EVENT_OCCURRED</a> - Static variable in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/IotMessageTypes.html" title="class in com.sca4d.iot.api.message">IotMessageTypes</a></dt>
 <dd>
 <div class="block">物模型或 IoT 状态机产生的离散 Device 事件。</div>
@@ -487,11 +499,11 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建一条由设备接入实现解析、尚未分配数据库标识的业务确认。</div>
 </dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceAcknowledgementTimeout.html" class="type-name-link" title="class in com.sca4d.iot.api.message">DeviceAcknowledgementTimeout</a> - Class in <a href="com/sca4d/iot/api/message/package-summary.html">com.sca4d.iot.api.message</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceAcknowledgementCheck.html" class="type-name-link" title="class in com.sca4d.iot.api.message">DeviceAcknowledgementCheck</a> - Class in <a href="com/sca4d/iot/api/message/package-summary.html">com.sca4d.iot.api.message</a></dt>
 <dd>
 <div class="block">请求检查一个标准 Device 下行消息的指定发送尝试是否等待 ACK 超时。</div>
 </dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceAcknowledgementTimeout.html#%3Cinit%3E(long,int)" class="member-name-link">DeviceAcknowledgementTimeout(long, int)</a> - Constructor for class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceAcknowledgementTimeout.html" title="class in com.sca4d.iot.api.message">DeviceAcknowledgementTimeout</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceAcknowledgementCheck.html#%3Cinit%3E(long,int)" class="member-name-link">DeviceAcknowledgementCheck(long, int)</a> - Constructor for class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceAcknowledgementCheck.html" title="class in com.sca4d.iot.api.message">DeviceAcknowledgementCheck</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/change/DeviceChange.html" class="type-name-link" title="class in com.sca4d.iot.api.change">DeviceChange</a> - Class in <a href="com/sca4d/iot/api/change/package-summary.html">com.sca4d.iot.api.change</a></dt>
 <dd>
@@ -511,11 +523,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/api/connection/DeviceConnection.html" class="type-name-link" title="class in com.sca4d.iot.api.connection">DeviceConnection</a> - Class in <a href="com/sca4d/iot/api/connection/package-summary.html">com.sca4d.iot.api.connection</a></dt>
 <dd>
-<div class="block">保存设备接入实现观测到的一条连接事实，不把它等同于 `Session` 或在线状态。</div>
+<div class="block">保存设备接入实现观测到的一条连接数据，不把它等同于 `Session` 或在线状态。</div>
 </dd>
 <dt><a href="com/sca4d/iot/api/connection/DeviceConnection.html#%3Cinit%3E(com.sca4d.iot.api.connection.DeviceConnectionId,long,com.sca4d.iot.api.connection.DeviceConnectionProtocol,com.sca4d.core.api.authentication.SessionId,com.sca4d.iot.api.DeviceAccessMethod,java.time.Instant)" class="member-name-link">DeviceConnection(DeviceConnectionId, long, DeviceConnectionProtocol, SessionId, DeviceAccessMethod, Instant)</a> - Constructor for class com.sca4d.iot.api.connection.<a href="com/sca4d/iot/api/connection/DeviceConnection.html" title="class in com.sca4d.iot.api.connection">DeviceConnection</a></dt>
 <dd>
-<div class="block">创建一条具有稳定连接代次的设备连接事实。</div>
+<div class="block">创建一条具有稳定连接代次的设备连接信息。</div>
 </dd>
 <dt><a href="com/sca4d/iot/api/connection/DeviceConnectionAccess.html" class="type-name-link" title="class in com.sca4d.iot.api.connection">DeviceConnectionAccess</a> - Class in <a href="com/sca4d/iot/api/connection/package-summary.html">com.sca4d.iot.api.connection</a></dt>
 <dd>
@@ -559,7 +571,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/connection/DeviceConnectionQueryService.html" class="type-name-link" title="interface in com.sca4d.iot.api.connection">DeviceConnectionQueryService</a> - Interface in <a href="com/sca4d/iot/api/connection/package-summary.html">com.sca4d.iot.api.connection</a></dt>
 <dd>
-<div class="block">批量读取 Device 当前连接事实，不解释业务在线状态。</div>
+<div class="block">批量读取 Device 当前连接信息，不解释业务在线状态。</div>
 </dd>
 <dt><a href="com/sca4d/iot/api/connection/DeviceConnectionReceiver.html" class="type-name-link" title="interface in com.sca4d.iot.api.connection">DeviceConnectionReceiver</a> - Interface in <a href="com/sca4d/iot/api/connection/package-summary.html">com.sca4d.iot.api.connection</a></dt>
 <dd>
@@ -585,27 +597,23 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建可由通用 Messaging 可靠传递的断连请求。</div>
 </dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkDispatch.html" class="type-name-link" title="class in com.sca4d.iot.api.message">DeviceDownlinkDispatch</a> - Class in <a href="com/sca4d/iot/api/message/package-summary.html">com.sca4d.iot.api.message</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceDispatchMessage.html" class="type-name-link" title="class in com.sca4d.iot.api.message">DeviceDispatchMessage</a> - Class in <a href="com/sca4d/iot/api/message/package-summary.html">com.sca4d.iot.api.message</a></dt>
 <dd>
 <div class="block">请求发送一个标准 Device 下行消息的指定尝试。</div>
 </dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkDispatch.html#%3Cinit%3E(long,int)" class="member-name-link">DeviceDownlinkDispatch(long, int)</a> - Constructor for class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlinkDispatch.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkDispatch</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceDispatchMessage.html#%3Cinit%3E(long,int)" class="member-name-link">DeviceDispatchMessage(long, int)</a> - Constructor for class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDispatchMessage.html" title="class in com.sca4d.iot.api.message">DeviceDispatchMessage</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkKind.html" class="type-name-link" title="enum class in com.sca4d.iot.api.message">DeviceDownlinkKind</a> - Enum Class in <a href="com/sca4d/iot/api/message/package-summary.html">com.sca4d.iot.api.message</a></dt>
-<dd>
-<div class="block">区分标准下行消息代表持续 desired 还是一次性 command。</div>
-</dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html" class="type-name-link" title="class in com.sca4d.iot.api.message">DeviceDownlinkMessage</a> - Class in <a href="com/sca4d/iot/api/message/package-summary.html">com.sca4d.iot.api.message</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceDownlink.html" class="type-name-link" title="class in com.sca4d.iot.api.message">DeviceDownlink</a> - Class in <a href="com/sca4d/iot/api/message/package-summary.html">com.sca4d.iot.api.message</a></dt>
 <dd>
 <div class="block">保存 desired 或 command 共用的标准下行消息快照。</div>
 </dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html#%3Cinit%3E(long,long,long,com.sca4d.iot.api.message.DeviceDownlinkKind,java.lang.String,java.lang.Long,java.lang.Long,java.time.Instant,java.util.Map,com.sca4d.iot.api.message.AcknowledgementPolicy,java.time.Duration,com.sca4d.iot.api.message.RetryPolicy,com.sca4d.iot.api.message.DeviceDownlinkStatus,int,java.time.Instant,java.time.Instant)" class="member-name-link">DeviceDownlinkMessage(long, long, long, DeviceDownlinkKind, String, Long, Long, Instant, Map&lt;String, Object&gt;, AcknowledgementPolicy, Duration, RetryPolicy, DeviceDownlinkStatus, int, Instant, Instant)</a> - Constructor for class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkMessage</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceDownlink.html#%3Cinit%3E(long,long,long,com.sca4d.iot.api.message.DeviceDownlinkKind,java.lang.String,java.lang.Long,java.lang.Long,java.time.Instant,java.util.Map,com.sca4d.iot.api.message.AcknowledgementPolicy,java.time.Duration,com.sca4d.iot.api.message.RetryPolicy,com.sca4d.iot.api.message.DeviceDownlinkStatus,int,java.time.Instant,java.time.Instant)" class="member-name-link">DeviceDownlink(long, long, long, DeviceDownlinkKind, String, Long, Long, Instant, Map&lt;String, Object&gt;, AcknowledgementPolicy, Duration, RetryPolicy, DeviceDownlinkStatus, int, Instant, Instant)</a> - Constructor for class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlink.html" title="class in com.sca4d.iot.api.message">DeviceDownlink</a></dt>
 <dd>
 <div class="block">创建由 Repository 恢复或 Service 新建的标准下行消息。</div>
 </dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkPublisher.html" class="type-name-link" title="interface in com.sca4d.iot.api.message">DeviceDownlinkPublisher&lt;P&gt;</a> - Interface in <a href="com/sca4d/iot/api/message/package-summary.html">com.sca4d.iot.api.message</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkKind.html" class="type-name-link" title="enum class in com.sca4d.iot.api.message">DeviceDownlinkKind</a> - Enum Class in <a href="com/sca4d/iot/api/message/package-summary.html">com.sca4d.iot.api.message</a></dt>
 <dd>
-<div class="block">使用一种具体协议类型编码并发布标准设备下行消息。</div>
+<div class="block">区分标准下行消息代表持续 desired 还是一次性 command。</div>
 </dd>
 <dt><a href="com/sca4d/iot/api/message/DeviceDownlinkStatus.html" class="type-name-link" title="enum class in com.sca4d.iot.api.message">DeviceDownlinkStatus</a> - Enum Class in <a href="com/sca4d/iot/api/message/package-summary.html">com.sca4d.iot.api.message</a></dt>
 <dd>
@@ -621,7 +629,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/api/history/DeviceEventMessage.html" class="type-name-link" title="class in com.sca4d.iot.api.history">DeviceEventMessage</a> - Class in <a href="com/sca4d/iot/api/history/package-summary.html">com.sca4d.iot.api.history</a></dt>
 <dd>
-<div class="block">保存已经通过物模型校验、准备由 `MessagePublisher` 发布的一次 Device 事件。</div>
+<div class="block">保存已经通过物模型校验、准备由 `MessageBus` 发布的一次 Device 事件。</div>
 </dd>
 <dt><a href="com/sca4d/iot/api/history/DeviceEventMessage.html#%3Cinit%3E(long,long,java.lang.String,java.lang.String,java.util.Map,java.time.Instant,boolean,java.time.Instant)" class="member-name-link">DeviceEventMessage(long, long, String, String, Map&lt;String, ?&gt;, Instant, boolean, Instant)</a> - Constructor for class com.sca4d.iot.api.history.<a href="com/sca4d/iot/api/history/DeviceEventMessage.html" title="class in com.sca4d.iot.api.history">DeviceEventMessage</a></dt>
 <dd>
@@ -643,7 +651,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/history/DeviceEventMessage.html#deviceId()" class="member-name-link">deviceId()</a> - Method in class com.sca4d.iot.api.history.<a href="com/sca4d/iot/api/history/DeviceEventMessage.html" title="class in com.sca4d.iot.api.history">DeviceEventMessage</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html#deviceId()" class="member-name-link">deviceId()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkMessage</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceDownlink.html#deviceId()" class="member-name-link">deviceId()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlink.html" title="class in com.sca4d.iot.api.message">DeviceDownlink</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/protocol/DeviceProtocolMessage.html#deviceId()" class="member-name-link">deviceId()</a> - Method in class com.sca4d.iot.api.protocol.<a href="com/sca4d/iot/api/protocol/DeviceProtocolMessage.html" title="class in com.sca4d.iot.api.protocol">DeviceProtocolMessage</a></dt>
 <dd>&nbsp;</dd>
@@ -657,7 +665,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/connection/DeviceOnlinePolicy.html" class="type-name-link" title="interface in com.sca4d.iot.api.connection">DeviceOnlinePolicy</a> - Interface in <a href="com/sca4d/iot/api/connection/package-summary.html">com.sca4d.iot.api.connection</a></dt>
 <dd>
-<div class="block">根据具体应用已经选择的当前连接事实判断 Device 是否在线。</div>
+<div class="block">根据具体应用已经选择的当前连接信息判断 Device 是否在线。</div>
 </dd>
 <dt><a href="com/sca4d/iot/api/protocol/DeviceProtocol.html" class="type-name-link" title="interface in com.sca4d.iot.api.protocol">DeviceProtocol</a> - Interface in <a href="com/sca4d/iot/api/protocol/package-summary.html">com.sca4d.iot.api.protocol</a></dt>
 <dd>
@@ -725,6 +733,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用单次绝对时间或带时区的六字段 Cron 表达设备下行触发时间。</div>
 </dd>
+<dt><a href="com/sca4d/iot/api/message/DeviceTransport.html" class="type-name-link" title="interface in com.sca4d.iot.api.message">DeviceTransport&lt;P&gt;</a> - Interface in <a href="com/sca4d/iot/api/message/package-summary.html">com.sca4d.iot.api.message</a></dt>
+<dd>
+<div class="block">使用一种具体协议类型编码并发布标准设备下行消息。</div>
+</dd>
 <dt><a href="com/sca4d/iot/api/message/DeviceUplink.html" class="type-name-link" title="class in com.sca4d.iot.api.message">DeviceUplink</a> - Class in <a href="com/sca4d/iot/api/message/package-summary.html">com.sca4d.iot.api.message</a></dt>
 <dd>
 <div class="block">保存 DeviceProtocol 解码后的一次标准 reported、acknowledgement 或两者兼有的上行结果。</div>
@@ -749,7 +761,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/connection/DeviceConnectionReceiver.html#disconnected(com.sca4d.iot.api.connection.DeviceConnectionProtocol,com.sca4d.iot.api.connection.DeviceConnectionId)" class="member-name-link">disconnected(DeviceConnectionProtocol, DeviceConnectionId)</a> - Method in interface com.sca4d.iot.api.connection.<a href="com/sca4d/iot/api/connection/DeviceConnectionReceiver.html" title="interface in com.sca4d.iot.api.connection">DeviceConnectionReceiver</a></dt>
 <dd>
-<div class="block">删除仍与指定协议和连接代次一致的当前连接事实。</div>
+<div class="block">删除仍与指定协议和连接代次一致的当前连接信息。</div>
 </dd>
 <dt><a href="com/sca4d/iot/api/protocol/DeviceUplinkDispatcher.html#dispatch(com.sca4d.iot.api.protocol.DeviceProtocolMessage)" class="member-name-link">dispatch(DeviceProtocolMessage)</a> - Method in interface com.sca4d.iot.api.protocol.<a href="com/sca4d/iot/api/protocol/DeviceUplinkDispatcher.html" title="interface in com.sca4d.iot.api.protocol">DeviceUplinkDispatcher</a></dt>
 <dd>
@@ -764,10 +776,6 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/iot/api/change/DeviceChangeArea.html#DOWNLINK" class="member-name-link">DOWNLINK</a> - Enum constant in enum class com.sca4d.iot.api.change.<a href="com/sca4d/iot/api/change/DeviceChangeArea.html" title="enum class in com.sca4d.iot.api.change">DeviceChangeArea</a></dt>
 <dd>
 <div class="block">下行消息及其业务回执。</div>
-</dd>
-<dt><a href="com/sca4d/iot/api/message/IotMessageTypes.html#DOWNLINK_DISPATCH" class="member-name-link">DOWNLINK_DISPATCH</a> - Static variable in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/IotMessageTypes.html" title="class in com.sca4d.iot.api.message">IotMessageTypes</a></dt>
-<dd>
-<div class="block">请求协议实现执行一次标准 Device 下行发送。</div>
 </dd>
 <dt><a href="com/sca4d/iot/api/query/DeviceHistoryQueryService.html#downlinks(long,com.sca4d.core.api.query.PageRequest)" class="member-name-link">downlinks(long, PageRequest)</a> - Method in interface com.sca4d.iot.api.query.<a href="com/sca4d/iot/api/query/DeviceHistoryQueryService.html" title="interface in com.sca4d.iot.api.query">DeviceHistoryQueryService</a></dt>
 <dd>&nbsp;</dd>
@@ -788,10 +796,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">已生成一条可靠设备下行消息。</div>
 </dd>
-<dt><a href="com/sca4d/iot/api/model/ThingValueKind.html#ENUM" class="member-name-link">ENUM</a> - Enum constant in enum class com.sca4d.iot.api.model.<a href="com/sca4d/iot/api/model/ThingValueKind.html" title="enum class in com.sca4d.iot.api.model">ThingValueKind</a></dt>
-<dd>
-<div class="block">从固定 code 集合中选择的字符串。</div>
-</dd>
 <dt><a href="com/sca4d/iot/api/model/ThingValueType.html#enumType()" class="member-name-link">enumType()</a> - Static method in class com.sca4d.iot.api.model.<a href="com/sca4d/iot/api/model/ThingValueType.html" title="class in com.sca4d.iot.api.model">ThingValueType</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/model/ThingValueType.html#enumValues()" class="member-name-link">enumValues()</a> - Method in class com.sca4d.iot.api.model.<a href="com/sca4d/iot/api/model/ThingValueType.html" title="class in com.sca4d.iot.api.model">ThingValueType</a></dt>
@@ -808,9 +812,9 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/message/IotFailureCode.html#equals(java.lang.Object)" class="member-name-link">equals(Object)</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/IotFailureCode.html" title="class in com.sca4d.iot.api.message">IotFailureCode</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/api/message/AcknowledgementPolicy.html#evaluate(com.sca4d.iot.api.message.DeviceDownlinkMessage,com.sca4d.iot.api.message.DeviceAcknowledgement,java.time.Instant)" class="member-name-link">evaluate(DeviceDownlinkMessage, DeviceAcknowledgement, Instant)</a> - Method in interface com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/AcknowledgementPolicy.html" title="interface in com.sca4d.iot.api.message">AcknowledgementPolicy</a></dt>
+<dt><a href="com/sca4d/iot/api/message/AcknowledgementPolicy.html#evaluate(com.sca4d.iot.api.message.DeviceDownlink,com.sca4d.iot.api.message.DeviceAcknowledgement,java.time.Instant)" class="member-name-link">evaluate(DeviceDownlink, DeviceAcknowledgement, Instant)</a> - Method in interface com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/AcknowledgementPolicy.html" title="interface in com.sca4d.iot.api.message">AcknowledgementPolicy</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/api/message/RetryPolicy.html#evaluate(com.sca4d.iot.api.message.DeviceDownlinkMessage,com.sca4d.iot.api.message.IotFailureCode,java.time.Instant)" class="member-name-link">evaluate(DeviceDownlinkMessage, IotFailureCode, Instant)</a> - Method in interface com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/RetryPolicy.html" title="interface in com.sca4d.iot.api.message">RetryPolicy</a></dt>
+<dt><a href="com/sca4d/iot/api/message/RetryPolicy.html#evaluate(com.sca4d.iot.api.message.DeviceDownlink,com.sca4d.iot.api.message.IotFailureCode,java.time.Instant)" class="member-name-link">evaluate(DeviceDownlink, IotFailureCode, Instant)</a> - Method in interface com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/RetryPolicy.html" title="interface in com.sca4d.iot.api.message">RetryPolicy</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/model/ThingModel.Builder.html#event(com.sca4d.iot.api.model.ThingEvent)" class="member-name-link">event(ThingEvent)</a> - Method in class com.sca4d.iot.api.model.<a href="com/sca4d/iot/api/model/ThingModel.Builder.html" title="class in com.sca4d.iot.api.model">ThingModel.Builder</a></dt>
 <dd>&nbsp;</dd>
@@ -850,7 +854,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/api/connection/DeviceConnectionAccess.html#expiresAt()" class="member-name-link">expiresAt()</a> - Method in class com.sca4d.iot.api.connection.<a href="com/sca4d/iot/api/connection/DeviceConnectionAccess.html" title="class in com.sca4d.iot.api.connection">DeviceConnectionAccess</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html#expiresAt()" class="member-name-link">expiresAt()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkMessage</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceDownlink.html#expiresAt()" class="member-name-link">expiresAt()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlink.html" title="class in com.sca4d.iot.api.message">DeviceDownlink</a></dt>
 <dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:F">F</h2>
@@ -956,6 +960,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/api/model/ThingValueType.html#integerType()" class="member-name-link">integerType()</a> - Static method in class com.sca4d.iot.api.model.<a href="com/sca4d/iot/api/model/ThingValueType.html" title="class in com.sca4d.iot.api.model">ThingValueType</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/api/IotCapabilities.html" class="type-name-link" title="class in com.sca4d.iot.api">IotCapabilities</a> - Class in <a href="com/sca4d/iot/api/package-summary.html">com.sca4d.iot.api</a></dt>
+<dd>
+<div class="block">声明 IoT 管理 API、设备接入能力及其共同系统身份。</div>
+</dd>
 <dt><a href="com/sca4d/iot/api/message/IotFailureCode.html" class="type-name-link" title="class in com.sca4d.iot.api.message">IotFailureCode</a> - Class in <a href="com/sca4d/iot/api/message/package-summary.html">com.sca4d.iot.api.message</a></dt>
 <dd>
 <div class="block">保存可持久化的 IoT 处理失败 code 及其静态消息键。</div>
@@ -974,7 +982,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:K">K</h2>
 <dl class="index">
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html#kind()" class="member-name-link">kind()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkMessage</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceDownlink.html#kind()" class="member-name-link">kind()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlink.html" title="class in com.sca4d.iot.api.message">DeviceDownlink</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/message/DeviceUplink.html#kind()" class="member-name-link">kind()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceUplink.html" title="class in com.sca4d.iot.api.message">DeviceUplink</a></dt>
 <dd>&nbsp;</dd>
@@ -1012,11 +1020,11 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/message/DeviceAcknowledgement.html#messageId()" class="member-name-link">messageId()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceAcknowledgement.html" title="class in com.sca4d.iot.api.message">DeviceAcknowledgement</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceAcknowledgementTimeout.html#messageId()" class="member-name-link">messageId()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceAcknowledgementTimeout.html" title="class in com.sca4d.iot.api.message">DeviceAcknowledgementTimeout</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceAcknowledgementCheck.html#messageId()" class="member-name-link">messageId()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceAcknowledgementCheck.html" title="class in com.sca4d.iot.api.message">DeviceAcknowledgementCheck</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkDispatch.html#messageId()" class="member-name-link">messageId()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlinkDispatch.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkDispatch</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceDispatchMessage.html#messageId()" class="member-name-link">messageId()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDispatchMessage.html" title="class in com.sca4d.iot.api.message">DeviceDispatchMessage</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html#messageId()" class="member-name-link">messageId()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkMessage</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceDownlink.html#messageId()" class="member-name-link">messageId()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlink.html" title="class in com.sca4d.iot.api.message">DeviceDownlink</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/schedule/DeviceScheduleExecution.html#messageId()" class="member-name-link">messageId()</a> - Method in class com.sca4d.iot.api.schedule.<a href="com/sca4d/iot/api/schedule/DeviceScheduleExecution.html" title="class in com.sca4d.iot.api.schedule">DeviceScheduleExecution</a></dt>
 <dd>&nbsp;</dd>
@@ -1041,6 +1049,10 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/iot/api/schedule/DeviceSchedule.html#nextFireAt()" class="member-name-link">nextFireAt()</a> - Method in class com.sca4d.iot.api.schedule.<a href="com/sca4d/iot/api/schedule/DeviceSchedule.html" title="class in com.sca4d.iot.api.schedule">DeviceSchedule</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/api/model/ThingValueKind.html#NUM" class="member-name-link">NUM</a> - Enum constant in enum class com.sca4d.iot.api.model.<a href="com/sca4d/iot/api/model/ThingValueKind.html" title="enum class in com.sca4d.iot.api.model">ThingValueKind</a></dt>
+<dd>
+<div class="block">从固定 code 集合中选择的字符串。</div>
+</dd>
 </dl>
 <h2 class="title" id="I:O">O</h2>
 <dl class="index">
@@ -1177,13 +1189,29 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/connection/DeviceDisconnectMessage.html#protocol()" class="member-name-link">protocol()</a> - Method in class com.sca4d.iot.api.connection.<a href="com/sca4d/iot/api/connection/DeviceDisconnectMessage.html" title="class in com.sca4d.iot.api.connection">DeviceDisconnectMessage</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/api/connection/DeviceDisconnectMessage.html#PROTOCOL_VERSION" class="member-name-link">PROTOCOL_VERSION</a> - Static variable in class com.sca4d.iot.api.connection.<a href="com/sca4d/iot/api/connection/DeviceDisconnectMessage.html" title="class in com.sca4d.iot.api.connection">DeviceDisconnectMessage</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/api/message/DeviceAcknowledgement.html#PROTOCOL_VERSION" class="member-name-link">PROTOCOL_VERSION</a> - Static variable in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceAcknowledgement.html" title="class in com.sca4d.iot.api.message">DeviceAcknowledgement</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/api/message/DeviceAcknowledgementCheck.html#PROTOCOL_VERSION" class="member-name-link">PROTOCOL_VERSION</a> - Static variable in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceAcknowledgementCheck.html" title="class in com.sca4d.iot.api.message">DeviceAcknowledgementCheck</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/api/message/DeviceDispatchMessage.html#PROTOCOL_VERSION" class="member-name-link">PROTOCOL_VERSION</a> - Static variable in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDispatchMessage.html" title="class in com.sca4d.iot.api.message">DeviceDispatchMessage</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/Device.html#protocolCode()" class="member-name-link">protocolCode()</a> - Method in class com.sca4d.iot.api.<a href="com/sca4d/iot/api/Device.html" title="class in com.sca4d.iot.api">Device</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/Product.html#protocolCodes()" class="member-name-link">protocolCodes()</a> - Method in class com.sca4d.iot.api.<a href="com/sca4d/iot/api/Product.html" title="class in com.sca4d.iot.api">Product</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/ProductDefinition.html#protocolCodes()" class="member-name-link">protocolCodes()</a> - Method in class com.sca4d.iot.api.<a href="com/sca4d/iot/api/ProductDefinition.html" title="class in com.sca4d.iot.api">ProductDefinition</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkPublisher.html#protocolType()" class="member-name-link">protocolType()</a> - Method in interface com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlinkPublisher.html" title="interface in com.sca4d.iot.api.message">DeviceDownlinkPublisher</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceTransport.html#protocolType()" class="member-name-link">protocolType()</a> - Method in interface com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceTransport.html" title="interface in com.sca4d.iot.api.message">DeviceTransport</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/api/connection/DeviceDisconnectMessage.html#protocolVersion()" class="member-name-link">protocolVersion()</a> - Method in class com.sca4d.iot.api.connection.<a href="com/sca4d/iot/api/connection/DeviceDisconnectMessage.html" title="class in com.sca4d.iot.api.connection">DeviceDisconnectMessage</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/api/message/DeviceAcknowledgement.html#protocolVersion()" class="member-name-link">protocolVersion()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceAcknowledgement.html" title="class in com.sca4d.iot.api.message">DeviceAcknowledgement</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/api/message/DeviceAcknowledgementCheck.html#protocolVersion()" class="member-name-link">protocolVersion()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceAcknowledgementCheck.html" title="class in com.sca4d.iot.api.message">DeviceAcknowledgementCheck</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/iot/api/message/DeviceDispatchMessage.html#protocolVersion()" class="member-name-link">protocolVersion()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDispatchMessage.html" title="class in com.sca4d.iot.api.message">DeviceDispatchMessage</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/change/DeviceChangePublisher.html#publish(com.sca4d.iot.api.change.DeviceChange)" class="member-name-link">publish(DeviceChange)</a> - Method in interface com.sca4d.iot.api.change.<a href="com/sca4d/iot/api/change/DeviceChangePublisher.html" title="interface in com.sca4d.iot.api.change">DeviceChangePublisher</a></dt>
 <dd>
@@ -1193,7 +1221,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">发布不可修改物模型；实现必须保证版本连续和相同版本内容幂等。</div>
 </dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkPublisher.html#publish(P,com.sca4d.iot.api.Device,com.sca4d.iot.api.message.DeviceDownlinkMessage)" class="member-name-link">publish(P, Device, DeviceDownlinkMessage)</a> - Method in interface com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlinkPublisher.html" title="interface in com.sca4d.iot.api.message">DeviceDownlinkPublisher</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceTransport.html#publish(P,com.sca4d.iot.api.Device,com.sca4d.iot.api.message.DeviceDownlink)" class="member-name-link">publish(P, Device, DeviceDownlink)</a> - Method in interface com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceTransport.html" title="interface in com.sca4d.iot.api.message">DeviceTransport</a></dt>
 <dd>
 <div class="block">发布一条已经由 Worker 持有租约的标准消息。</div>
 </dd>
@@ -1332,7 +1360,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">表示 retry 策略要求停止或在明确时刻再次发送。</div>
 </dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html#retryPolicy()" class="member-name-link">retryPolicy()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkMessage</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceDownlink.html#retryPolicy()" class="member-name-link">retryPolicy()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlink.html" title="class in com.sca4d.iot.api.message">DeviceDownlink</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/model/ThingCommand.html#retryPolicy()" class="member-name-link">retryPolicy()</a> - Method in class com.sca4d.iot.api.model.<a href="com/sca4d/iot/api/model/ThingCommand.html" title="class in com.sca4d.iot.api.model">ThingCommand</a></dt>
 <dd>&nbsp;</dd>
@@ -1361,11 +1389,11 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">设备定时规则及执行结果。</div>
 </dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html#scheduledAt()" class="member-name-link">scheduledAt()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkMessage</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceDownlink.html#scheduledAt()" class="member-name-link">scheduledAt()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlink.html" title="class in com.sca4d.iot.api.message">DeviceDownlink</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/history/DeviceHistoryStore.html#scheduleExecutions(long,com.sca4d.core.api.query.PageRequest)" class="member-name-link">scheduleExecutions(long, PageRequest)</a> - Method in interface com.sca4d.iot.api.history.<a href="com/sca4d/iot/api/history/DeviceHistoryStore.html" title="interface in com.sca4d.iot.api.history">DeviceHistoryStore</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html#scheduleId()" class="member-name-link">scheduleId()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkMessage</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceDownlink.html#scheduleId()" class="member-name-link">scheduleId()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlink.html" title="class in com.sca4d.iot.api.message">DeviceDownlink</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/schedule/DeviceSchedule.html#scheduleId()" class="member-name-link">scheduleId()</a> - Method in class com.sca4d.iot.api.schedule.<a href="com/sca4d/iot/api/schedule/DeviceSchedule.html" title="class in com.sca4d.iot.api.schedule">DeviceSchedule</a></dt>
 <dd>&nbsp;</dd>
@@ -1409,7 +1437,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/state/ThingEventOccurrence.html#sourceEventId()" class="member-name-link">sourceEventId()</a> - Method in class com.sca4d.iot.api.state.<a href="com/sca4d/iot/api/state/ThingEventOccurrence.html" title="class in com.sca4d.iot.api.state">ThingEventOccurrence</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html#status()" class="member-name-link">status()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkMessage</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceDownlink.html#status()" class="member-name-link">status()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlink.html" title="class in com.sca4d.iot.api.message">DeviceDownlink</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/schedule/DeviceSchedule.html#status()" class="member-name-link">status()</a> - Method in class com.sca4d.iot.api.schedule.<a href="com/sca4d/iot/api/schedule/DeviceSchedule.html" title="class in com.sca4d.iot.api.schedule">DeviceSchedule</a></dt>
 <dd>&nbsp;</dd>
@@ -1437,10 +1465,18 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">同一 desired 属性已经产生更新的 desired sequence。</div>
 </dd>
+<dt><a href="com/sca4d/iot/api/IotCapabilities.html#SYSTEM_IDENTITY" class="member-name-link">SYSTEM_IDENTITY</a> - Static variable in class com.sca4d.iot.api.<a href="com/sca4d/iot/api/IotCapabilities.html" title="class in com.sca4d.iot.api">IotCapabilities</a></dt>
+<dd>
+<div class="block">IoT 各实例共享的系统自主执行身份。</div>
+</dd>
+<dt><a href="com/sca4d/iot/api/IotCapabilities.html#SYSTEM_IDENTITY_VALUE" class="member-name-link">SYSTEM_IDENTITY_VALUE</a> - Static variable in class com.sca4d.iot.api.<a href="com/sca4d/iot/api/IotCapabilities.html" title="class in com.sca4d.iot.api">IotCapabilities</a></dt>
+<dd>
+<div class="block">供注解声明的 IOT 系统身份编码。</div>
+</dd>
 </dl>
 <h2 class="title" id="I:T">T</h2>
 <dl class="index">
-<dt><a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html#targetCode()" class="member-name-link">targetCode()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlinkMessage.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkMessage</a></dt>
+<dt><a href="com/sca4d/iot/api/message/DeviceDownlink.html#targetCode()" class="member-name-link">targetCode()</a> - Method in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/DeviceDownlink.html" title="class in com.sca4d.iot.api.message">DeviceDownlink</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/iot/api/connection/DeviceConnectionProtocol.html#TCP" class="member-name-link">TCP</a> - Static variable in class com.sca4d.iot.api.connection.<a href="com/sca4d/iot/api/connection/DeviceConnectionProtocol.html" title="class in com.sca4d.iot.api.connection">DeviceConnectionProtocol</a></dt>
 <dd>
@@ -1498,7 +1534,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/iot/api/model/ThingEventDelivery.html" class="type-name-link" title="enum class in com.sca4d.iot.api.model">ThingEventDelivery</a> - Enum Class in <a href="com/sca4d/iot/api/model/package-summary.html">com.sca4d.iot.api.model</a></dt>
 <dd>
-<div class="block">声明 ThingEvent 通过通用 `MessagePublisher` 发布时是否使用 Outbox。</div>
+<div class="block">声明 ThingEvent 通过通用 `MessageBus` 发布时是否使用 Outbox。</div>
 </dd>
 <dt><a href="com/sca4d/iot/api/state/ThingEventOccurrence.html" class="type-name-link" title="class in com.sca4d.iot.api.state">ThingEventOccurrence</a> - Class in <a href="com/sca4d/iot/api/state/package-summary.html">com.sca4d.iot.api.state</a></dt>
 <dd>
@@ -1571,6 +1607,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/iot/api/model/ThingModelPresentation.html#translated(com.sca4d.iot.api.model.ThingModel,com.sca4d.core.api.i18n.LocalizedFields)" class="member-name-link">translated(ThingModel, LocalizedFields)</a> - Static method in class com.sca4d.iot.api.model.<a href="com/sca4d/iot/api/model/ThingModelPresentation.html" title="class in com.sca4d.iot.api.model">ThingModelPresentation</a></dt>
 <dd>
 <div class="block">从数据库保存的完整动态翻译创建展示结果。</div>
+</dd>
+<dt><a href="com/sca4d/iot/api/IotCapabilities.html#TRANSPORT" class="member-name-link">TRANSPORT</a> - Static variable in class com.sca4d.iot.api.<a href="com/sca4d/iot/api/IotCapabilities.html" title="class in com.sca4d.iot.api">IotCapabilities</a></dt>
+<dd>
+<div class="block">IoT 接入监听器和 Broker 回调。</div>
 </dd>
 <dt><a href="com/sca4d/iot/api/message/IotFailureCode.html#TRANSPORT_FAILED" class="member-name-link">TRANSPORT_FAILED</a> - Static variable in class com.sca4d.iot.api.message.<a href="com/sca4d/iot/api/message/IotFailureCode.html" title="class in com.sca4d.iot.api.message">IotFailureCode</a></dt>
 <dd>

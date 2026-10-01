@@ -9,11 +9,11 @@ import java.util.Optional;
 /**
  * 表示完成一个动作所需的独立认证因素数量，以及是否允许复用已有认证。
  */
-public final class AuthenticationRequirement {
-
-    private final int factorCount;
+public class AuthenticationRequirement {
 
     private final Duration reusableAuthenticationMaximumAge;
+
+    private final int factorCount;
 
     /**
      * 创建动作认证要求。
@@ -35,7 +35,7 @@ public final class AuthenticationRequirement {
     }
 
     /**
-     * 返回完成动作所需的不同认证因素数量。
+     * 完成动作所需的不同认证因素数量。
      *
      * @return 0 到 3；0 表示动作本身不要求额外认证
      */

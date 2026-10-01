@@ -11,6 +11,7 @@ import com.sca4d.auth.sharedsecret.SharedSecretCredentialMapper;
 import com.sca4d.auth.sharedsecret.SharedSecretCredentialRepository;
 import com.sca4d.core.api.concurrent.OptimisticLockException;
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.security.EncryptedSecret;
 import com.sca4d.core.spring.persistence.batch.SqlBatchProperties;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
@@ -19,22 +20,25 @@ import com.sca4d.core.spring.persistence.mybatis.AffectedRowsInterceptor;
 import com.sca4d.core.spring.persistence.mybatis.CoreEnumTypeHandler;
 import com.sca4d.core.spring.persistence.mybatis.LongValueTypeHandler;
 import com.sca4d.openapi.client.mapper.OpenApiClientMapper;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.type.JdbcType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -42,6 +46,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
@@ -53,6 +58,11 @@ import javax.sql.DataSource;
 /** 在隔离 PostgreSQL 中验证 Client 授权关系的原子替换与并发隔离。 */
 @Testcontainers
 class OpenApiClientPersistenceIntegrationTest {
+
+    private static final TreeCode READ = TreeCode.ofColon("TEST:READ");
+
+    private static final TreeCode WRITE = TreeCode.ofColon("TEST:WRITE");
+
     @Container
     private static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:17-alpine");
 
@@ -65,7 +75,7 @@ class OpenApiClientPersistenceIntegrationTest {
     private static TransactionTemplate transactions;
 
     /** 使用与生产相同的 Mapper 扫描和 Spring 事务代理。 */
-    @Configuration(proxyBeanMethods = false)
+    @org.springframework.context.annotation.Configuration(proxyBeanMethods = false)
     @EnableTransactionManagement
     @EnableAspectJAutoProxy(proxyTargetClass = true)
     @MapperScan(basePackageClasses = OpenApiClientMapper.class)
@@ -84,18 +94,18 @@ class OpenApiClientPersistenceIntegrationTest {
                 new ClassPathResource("META-INF/sca4dj/schema/auth-hmac.sql"),
                 new ClassPathResource("META-INF/sca4dj/schema/auth-shared-secret.sql"),
                 new ClassPathResource("META-INF/sca4dj/schema/openapi.sql"));
-        schema.setSeparator(org.springframework.jdbc.datasource.init.ScriptUtils.EOF_STATEMENT_SEPARATOR);
+        schema.setSeparator(ScriptUtils.EOF_STATEMENT_SEPARATOR);
         schema.execute(source);
         jdbc = new JdbcTemplate(source);
         SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
         factory.setDataSource(source);
-        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
+        Configuration configuration = new Configuration();
         configuration.setDefaultEnumTypeHandler(CoreEnumTypeHandler.class);
         configuration.setMapUnderscoreToCamelCase(true);
         configuration.getTypeHandlerRegistry()
                 .register(
                         Version.class,
-                        org.apache.ibatis.type.JdbcType.BIGINT,
+                        JdbcType.BIGINT,
                         new LongValueTypeHandler<>(Version::new, Version::value));
         factory.setConfiguration(configuration);
         factory.setPlugins(new AffectedRowsInterceptor());
@@ -112,7 +122,7 @@ class OpenApiClientPersistenceIntegrationTest {
         context.registerBean(DataSourceTransactionManager.class, () -> manager);
         context.registerBean(SqlBatches.class, () -> new SqlBatches(new SqlBatchProperties()));
         context.registerBean(OpenApiClientRepository.class);
-        org.mybatis.spring.SqlSessionTemplate template = new org.mybatis.spring.SqlSessionTemplate(sessions);
+        SqlSessionTemplate template = new SqlSessionTemplate(sessions);
         context.registerBean(HmacCredentialMapper.class, () -> template.getMapper(HmacCredentialMapper.class));
         context.registerBean(
                 SharedSecretCredentialMapper.class,
@@ -203,18 +213,18 @@ class OpenApiClientPersistenceIntegrationTest {
     @DisplayName("关系插入失败回滚新 Client，替换失败保留原授权，空集合明确清空")
     void aggregateWritesAreAtomic() {
         OpenApiClient client = new OpenApiClient("client-a", 101, "测试 Client", OpenApiClientStatus.ACTIVE);
-        assertThatThrownBy(() -> clients.create(client, List.of("read", "read"))).isInstanceOf(RuntimeException.class);
+        assertThatThrownBy(() -> clients.create(client, List.of(READ, READ))).isInstanceOf(RuntimeException.class);
         assertThat(clients.find("client-a")).isEmpty();
-        clients.create(client, List.of("read"));
-        assertThatThrownBy(() -> clients.replaceOperations("client-a", List.of("write", "write")))
+        clients.create(client, List.of(READ));
+        assertThatThrownBy(() -> clients.replaceOperations("client-a", List.of(WRITE, WRITE)))
                 .isInstanceOf(RuntimeException.class);
-        assertThat(clients.findOperations("client-a")).containsExactly("read");
+        assertThat(clients.findOperations("client-a")).containsExactly(READ);
         assertThat(clients.findByAccountId(101).orElseThrow().clientId()).isEqualTo("client-a");
         clients.updateStatus("client-a", OpenApiClientStatus.DISABLED);
         assertThat(clients.find("client-a").orElseThrow().active()).isFalse();
         clients.replaceOperations("client-a", List.of());
-        assertThat(clients.hasOperation("client-a", "read")).isFalse();
-        assertThatThrownBy(() -> clients.replaceOperations("missing", List.of("read")))
+        assertThat(clients.hasOperation("client-a", READ)).isFalse();
+        assertThatThrownBy(() -> clients.replaceOperations("missing", List.of(READ)))
                 .isInstanceOf(IllegalArgumentException.class);
         assertThat(clients.findOperations("missing")).isEmpty();
     }
@@ -222,10 +232,12 @@ class OpenApiClientPersistenceIntegrationTest {
     @Test
     @DisplayName("超过一个批次的完整授权保存及跨批次失败整体回滚")
     void batchesPreserveTheCompleteSelection() {
-        List<String> operations = IntStream.range(0, 1001).mapToObj(i -> "operation-" + i).toList();
+        List<TreeCode> operations = IntStream.range(0, 1001)
+                .mapToObj(i -> TreeCode.ofColon("TEST:OPERATION_" + i))
+                .toList();
         clients.create(new OpenApiClient("client-b", 102, "批量 Client", OpenApiClientStatus.ACTIVE), operations);
         assertThat(clients.findOperations("client-b")).containsExactlyInAnyOrderElementsOf(operations);
-        List<String> invalid = new java.util.ArrayList<>(operations.subList(0, 1000));
+        List<TreeCode> invalid = new ArrayList<>(operations.subList(0, 1000));
         invalid.add(operations.getFirst());
         assertThatThrownBy(() -> clients.replaceOperations("client-b", invalid)).isInstanceOf(RuntimeException.class);
         assertThat(clients.findOperations("client-b")).containsExactlyInAnyOrderElementsOf(operations);
@@ -239,7 +251,7 @@ class OpenApiClientPersistenceIntegrationTest {
         CountDownLatch secondStarted = new CountDownLatch(1);
         try (var executor = Executors.newFixedThreadPool(2)) {
             var first = executor.submit(() -> transactions.executeWithoutResult(status -> {
-                clients.replaceOperations("client-c", List.of("read"));
+                clients.replaceOperations("client-c", List.of(READ));
                 firstWritten.countDown();
                 try {
                     assertThat(secondStarted.await(10, TimeUnit.SECONDS)).isTrue();
@@ -251,12 +263,12 @@ class OpenApiClientPersistenceIntegrationTest {
             var second = executor.submit(() -> {
                 assertThat(firstWritten.await(10, TimeUnit.SECONDS)).isTrue();
                 secondStarted.countDown();
-                clients.replaceOperations("client-c", List.of("write"));
+                clients.replaceOperations("client-c", List.of(WRITE));
                 return null;
             });
             first.get(15, TimeUnit.SECONDS);
             second.get(15, TimeUnit.SECONDS);
         }
-        assertThat(clients.findOperations("client-c")).containsExactly("write");
+        assertThat(clients.findOperations("client-c")).containsExactly(WRITE);
     }
 }

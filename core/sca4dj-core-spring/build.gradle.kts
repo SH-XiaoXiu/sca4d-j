@@ -21,6 +21,7 @@ dependencyManagement {
 }
 
 dependencies {
+    api(libs.dynamic.datasource.starter)
     api(project(":core:sca4dj-core-api"))
     api(libs.spring.webmvc)
     implementation(libs.spring.tx)
@@ -34,11 +35,13 @@ dependencies {
     compileOnlyApi(libs.jakarta.servlet)
     compileOnlyApi(libs.swagger.annotations)
     compileOnlyApi(libs.swagger.models)
+    compileOnlyApi("ch.qos.logback:logback-classic")
     compileOnly(libs.springdoc.openapi.starter.webmvc.ui)
     compileOnly(libs.spotbugs.annotations)
     spotbugsAnnotations(libs.spotbugs.annotations)
     implementation(libs.slf4j.api)
     implementation(libs.jackson.datatype.jsr310)
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
     implementation(libs.bucket4j.redisson)
     implementation(libs.spring.security.crypto)
     api(libs.spring.aspectjweaver)
@@ -59,6 +62,7 @@ dependencies {
     testImplementation(libs.springdoc.openapi.starter.webmvc.ui)
     testImplementation(libs.swagger.core)
     testImplementation(libs.jakarta.servlet)
+    testImplementation("ch.qos.logback:logback-classic")
     testRuntimeOnly(libs.swagger.annotations)
     testRuntimeOnly(libs.swagger.models)
     testRuntimeOnly(libs.junit.platform.launcher)

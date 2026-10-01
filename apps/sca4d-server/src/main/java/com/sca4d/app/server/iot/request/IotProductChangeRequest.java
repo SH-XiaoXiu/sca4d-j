@@ -12,7 +12,7 @@ import java.util.Set;
 
 /** 接收 Product 可修改的接入方式和兼容协议。 */
 @SuppressWarnings("unused")
-public final class IotProductChangeRequest {
+public class IotProductChangeRequest {
 
     @Req.NotNull
     @Size(max = 16)

@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /** 接收一次 Passkey assertion ceremony 标识和浏览器 WebAuthn JSON 响应。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean setter 反序列化请求。
-public final class PasskeyProofRequest {
+public class PasskeyProofRequest {
 
     @NotBlank
     @Size(max = 128)

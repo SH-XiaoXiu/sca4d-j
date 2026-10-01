@@ -9,15 +9,15 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 保存一个 desired 属性当前持续期望的值和收敛状态。 */
-public final class DesiredStateSnapshot {
+public class DesiredStateSnapshot {
+
+    private final @Nullable Instant convergedAt;
+
+    private final @NotNull Object value;
 
     private final @NotNull String propertyCode;
 
     private final long desiredSequence;
-
-    private final @NotNull Object value;
-
-    private final @Nullable Instant convergedAt;
 
     /** 创建 desired 属性查询快照。 */
     public DesiredStateSnapshot(

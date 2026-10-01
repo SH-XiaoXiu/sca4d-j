@@ -1,8 +1,10 @@
 package com.sca4d.iam.rbac;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.OperationCatalog;
@@ -30,11 +32,11 @@ class PermissionSelectionRegistryTest {
                 List.of(module));
 
         assertThat(registry.selection(PLATFORM).operations())
-                .extracting(Operation::value)
-                .containsExactly("projects:items:read");
+                .extracting(operation -> operation.code().format(COLON))
+                .containsExactly("PROJECTS:ITEMS:READ");
         assertThat(registry.selection(PROJECT).operations())
-                .extracting(Operation::value)
-                .containsExactly("projects:items:manage", "projects:items:read");
+                .extracting(operation -> operation.code().format(COLON))
+                .containsExactly("PROJECTS:ITEMS:MANAGE", "PROJECTS:ITEMS:READ");
         assertThat(registry.domains()).containsExactlyInAnyOrder(PLATFORM, PROJECT);
     }
 
@@ -48,7 +50,7 @@ class PermissionSelectionRegistryTest {
                         new OperationCatalog(List.of(module)),
                         List.of()))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("missing=[projects]");
+                .hasMessageContaining("missing=[PROJECTS]");
     }
 
     @Test
@@ -79,7 +81,9 @@ class PermissionSelectionRegistryTest {
                 .hasMessageContaining("不能授予");
     }
 
-    /** @return 同时向 Platform 和 Project 提供不同 Operation 的测试模块 */
+    /**
+     * @return 同时向 Platform 和 Project 提供不同 Operation 的测试模块
+     */
     private static RbacOperationModule projectModule() {
         return new RbacOperationModule() {
             @Override
@@ -94,22 +98,24 @@ class PermissionSelectionRegistryTest {
 
             @Override
             public boolean canGrant(@NotNull RbacDomain domain, @NotNull Operation operation) {
-                return PROJECT.equals(domain) || operation.value().endsWith(":" + Action.READ_VALUE);
+                return PROJECT.equals(domain) || operation.code().format(COLON).endsWith(":READ");
             }
         };
     }
 
-    /** @return 包含 read 和 manage 的测试 Operation 树 */
+    /**
+     * @return 包含 read 和 manage 的测试 Operation 树
+     */
     private static OperationNode.Module tree() {
         return OperationNode.module(
-                "projects",
+                TreeCode.ofSegment("PROJECTS"),
                 "operation.projects",
                 100,
                 OperationNode.resource(
-                        "items",
+                        TreeCode.ofSegment("ITEMS"),
                         "operation.projects.items",
                         100,
-                        OperationNode.action(Action.MANAGE_VALUE, "operation.projects.items.manage", 200),
-                        OperationNode.action(Action.READ_VALUE, "operation.projects.items.read", 100)));
+                        OperationNode.action(Action.MANAGE.code(), "operation.projects.items.manage", 200),
+                        OperationNode.action(Action.READ.code(), "operation.projects.items.read", 100)));
     }
 }

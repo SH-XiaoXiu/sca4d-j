@@ -18,7 +18,7 @@ public interface RbacSessionInvalidation {
     RbacDomain domain();
 
     /**
-     * 立即标记关联 Session，使后续请求重新读取权限。
+     * 立即标记关联 Session，使之后的请求重新读取权限。
      *
      * @param scope 发生变化的角色空间
      * @param principalIds 角色或 Principal 角色关系发生变化的 Principal

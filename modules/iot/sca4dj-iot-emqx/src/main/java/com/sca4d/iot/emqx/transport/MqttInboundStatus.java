@@ -5,25 +5,24 @@ import org.jetbrains.annotations.NotNull;
 
 /** 返回当前进程 MQTT 上行队列和累计处理结果，供健康检查和运行排障使用。 */
 @SuppressWarnings("ClassCanBeRecord") // 运行状态类型遵守项目禁用 record 的规则。
-public final class MqttInboundStatus {
+public class MqttInboundStatus {
 
     private final int pending;
 
     private final int retrying;
 
-    private final long processed;
-
-    private final long rejected;
-
-    private final long quarantined;
-
-    private final long unacknowledged;
+    private final long acknowledgementFailures;
 
     private final long overloaded;
 
-    private final long acknowledgementFailures;
+    private final long processed;
 
-    /** 创建一份不可变的 MQTT 上行处理状态快照。 */
+    private final long quarantined;
+
+    private final long rejected;
+
+    private final long unacknowledged;
+
     public MqttInboundStatus(
             int pending,
             int retrying,

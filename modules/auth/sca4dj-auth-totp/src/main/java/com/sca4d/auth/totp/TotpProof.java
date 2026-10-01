@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 只在一次认证方法调用中存在的 TOTP 验证码。 */
-public final class TotpProof {
+public class TotpProof {
 
     private final String code;
 

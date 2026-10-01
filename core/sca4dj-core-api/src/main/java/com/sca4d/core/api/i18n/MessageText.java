@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Objects;
 
 /** 保存需要由 MessageCatalog 解析的静态消息键和模板参数。 */
-public final class MessageText extends LocalizableText {
-
-    private final String key;
+public class MessageText extends LocalizableText {
 
     private final List<Object> arguments;
+
+    private final String key;
 
     /** 创建静态消息文本。 */
     private MessageText(String key, Object[] arguments) {
@@ -38,7 +38,7 @@ public final class MessageText extends LocalizableText {
     }
 
     /**
-     * 读取 MessageCatalog 查找模板时使用的键。
+     * MessageCatalog 查找模板时使用的键。
      *
      * @return 跨版本保持不变的消息键
      */
@@ -47,7 +47,7 @@ public final class MessageText extends LocalizableText {
     }
 
     /**
-     * 读取解析消息模板时按位置传入的参数。
+     * 解析消息模板时按位置传入的参数。
      *
      * @return 保持输入顺序的不可变消息模板参数
      */

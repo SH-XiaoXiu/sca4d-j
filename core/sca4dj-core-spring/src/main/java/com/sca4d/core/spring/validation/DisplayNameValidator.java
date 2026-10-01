@@ -1,16 +1,17 @@
 package com.sca4d.core.spring.validation;
 
+import static com.sca4d.core.spring.validation.ValidationPatterns.DISPLAY_NAME;
+
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /** 执行 DisplayName 声明的长度和控制字符检查。 */
-public final class DisplayNameValidator implements ConstraintValidator<DisplayName, String> {
+public class DisplayNameValidator implements ConstraintValidator<DisplayName, String> {
 
     private int max;
 
-    /** 创建等待 Bean Validation Provider 初始化最大长度的校验器。 */
     public DisplayNameValidator() {
     }
 
@@ -39,6 +40,6 @@ public final class DisplayNameValidator implements ConstraintValidator<DisplayNa
     public boolean isValid(@Nullable String value, @Nullable ConstraintValidatorContext context) {
         return value == null
                 || value.isBlank()
-                || value.length() <= max && value.matches(ValidationPatterns.DISPLAY_NAME);
+                || value.length() <= max && value.matches(DISPLAY_NAME);
     }
 }

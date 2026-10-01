@@ -89,9 +89,9 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">ResourceIdLoaders</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">ResourceIdLoaders</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">并发合并所有 ResourceIdLoader 为完整 Principal 贡献的数字 Resource 标识。</div>
+<div class="block">使用 DataGraph 并发装载并合并 Principal 的数字 Resource 标识。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -106,7 +106,7 @@ loadScripts(document, 'script');</script>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.List,java.util.concurrent.Executor)" class="member-name-link">ResourceIdLoaders</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull com.sca4d.core.api.authentication.principalsession.ResourceIdLoader&gt;&nbsp;loaders,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Executor.html" title="class or interface in java.util.concurrent" class="external-link">Executor</a>&nbsp;executor)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建并发调用所有数字 Resource 标识 Loader 的装载服务。</div>
+<div class="block">创建使用 DataGraph 并发调用所有数字 Resource Loader 的装载服务。</div>
 </div>
 </div>
 </section>
@@ -122,10 +122,15 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr>@Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull com.sca4d.core.api.authentication.principalsession.ResourceIdSet&gt;&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.core.api.authentication.principalsession.ResourceIdSet&gt;&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#load(java.util.Collection)" class="member-name-link">load</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends @NotNull com.sca4d.core.api.identity.Principal&gt;&nbsp;principals)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">并发装载并合并每个完整 Principal 的数字 Resource 标识。</div>
+<div class="block">同步装载并合并数字 Resource 标识。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a><wbr>&lt;@Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.core.api.authentication.principalsession.ResourceIdSet&gt;&gt;&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#loadAsync(java.util.Collection)" class="member-name-link">loadAsync</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends @NotNull com.sca4d.core.api.identity.Principal&gt;&nbsp;principals)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">异步装载并合并数字 Resource 标识。</div>
 </div>
 </div>
 </div>
@@ -151,12 +156,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull com.sca4d.core.api.authentication.principalsession.ResourceIdLoader&gt;&nbsp;loaders,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Executor.html" title="class or interface in java.util.concurrent" class="external-link">Executor</a>&nbsp;executor)</span></div>
-<div class="block">创建并发调用所有数字 Resource 标识 Loader 的装载服务。</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>loaders</code> - 为完整 Principal 提供数字 Resource 标识的 Loader</dd>
-<dd><code>executor</code> - 并发执行 Loader 的执行器</dd>
-</dl>
+<div class="block">创建使用 DataGraph 并发调用所有数字 Resource Loader 的装载服务。</div>
 </section>
 </li>
 </ul>
@@ -170,19 +170,20 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="load(java.util.Collection)">
 <h3>load</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.core.api.authentication.principalsession.ResourceIdSet&gt;&gt;</span>&nbsp;<span class="element-name">load</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends @NotNull com.sca4d.core.api.identity.Principal&gt;&nbsp;principals)</span></div>
+<div class="block">同步装载并合并数字 Resource 标识。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="loadAsync(java.util.Collection)">
+<h3>loadAsync</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr>@Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull com.sca4d.core.api.authentication.principalsession.ResourceIdSet&gt;&gt;</span>&nbsp;<span class="element-name">load</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;@Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.core.api.authentication.principalsession.ResourceIdSet&gt;&gt;&gt;</span>&nbsp;<span class="element-name">loadAsync</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends @NotNull com.sca4d.core.api.identity.Principal&gt;&nbsp;principals)</span></div>
-<div class="block">并发装载并合并每个完整 Principal 的数字 Resource 标识。</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>principals</code> - 当前 Session 中完整装载且标识互不重复的 Principal</dd>
-<dt>Returns:</dt>
-<dd>按 Principal 分组的不可修改数字 Resource 标识集合；没有贡献时返回空映射</dd>
-<dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - Loader 执行失败、返回未知 Principal 或重复 Resource 标识时抛出</dd>
-</dl>
+<div class="block">异步装载并合并数字 Resource 标识。</div>
 </section>
 </li>
 </ul>

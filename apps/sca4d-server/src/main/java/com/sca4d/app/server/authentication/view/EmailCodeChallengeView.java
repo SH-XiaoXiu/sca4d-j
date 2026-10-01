@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 返回不包含完整邮箱和验证码的 Email Code Challenge。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
-public final class EmailCodeChallengeView {
+public class EmailCodeChallengeView {
 
     private final @NotNull String challengeId;
 

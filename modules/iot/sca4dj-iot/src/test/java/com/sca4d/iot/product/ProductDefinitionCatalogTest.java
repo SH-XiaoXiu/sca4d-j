@@ -33,7 +33,7 @@ class ProductDefinitionCatalogTest {
     private static final ProductDefinition CODE_PRODUCT = new ProductDefinition(
             "mqtt-debug",
             MessageText.of("product.mqtt-debug.display-name"),
-            Set.of(DeviceAccessMethod.parse("account:shared-secret")),
+            Set.of(DeviceAccessMethod.parse("ACCOUNT:AUTHENTICATION/SHARED_SECRET")),
             Set.of("mqtt-debug-v1"));
 
     @Test
@@ -59,7 +59,7 @@ class ProductDefinitionCatalogTest {
                 41,
                 "gateway",
                 i18n("网关"),
-                Set.of(DeviceAccessMethod.parse("account:shared-secret")),
+                Set.of(DeviceAccessMethod.parse("ACCOUNT:AUTHENTICATION/SHARED_SECRET")),
                 Set.of("gateway-v1"));
         when(database.find(41)).thenReturn(Optional.of(product));
         ProductDefinitionCatalog catalog = new ProductDefinitionCatalog(database, List.of(CODE_PRODUCT));
@@ -81,7 +81,7 @@ class ProductDefinitionCatalogTest {
                 42,
                 "mqtt-debug",
                 i18n("冲突 Product"),
-                Set.of(DeviceAccessMethod.parse("account:shared-secret")),
+                Set.of(DeviceAccessMethod.parse("ACCOUNT:AUTHENTICATION/SHARED_SECRET")),
                 Set.of("gateway-v1"));
         when(database.find(42)).thenReturn(Optional.of(conflicting));
         when(database.find("mqtt-debug")).thenReturn(Optional.of(conflicting));
@@ -105,7 +105,7 @@ class ProductDefinitionCatalogTest {
                 43,
                 "gateway",
                 i18n("网关"),
-                Set.of(DeviceAccessMethod.parse("account:shared-secret")),
+                Set.of(DeviceAccessMethod.parse("ACCOUNT:AUTHENTICATION/SHARED_SECRET")),
                 Set.of("gateway-v1"));
         when(database.find(43)).thenReturn(Optional.of(product));
         ProductDefinitionCatalog catalog = new ProductDefinitionCatalog(database, List.of(CODE_PRODUCT));
@@ -124,7 +124,7 @@ class ProductDefinitionCatalogTest {
                 44,
                 "gateway",
                 i18n("网关"),
-                Set.of(DeviceAccessMethod.parse("account:shared-secret")),
+                Set.of(DeviceAccessMethod.parse("ACCOUNT:AUTHENTICATION/SHARED_SECRET")),
                 Set.of("gateway-v1"));
         when(database.find("gateway")).thenReturn(Optional.of(gateway));
         when(database.find("mqtt-debug")).thenReturn(Optional.empty());

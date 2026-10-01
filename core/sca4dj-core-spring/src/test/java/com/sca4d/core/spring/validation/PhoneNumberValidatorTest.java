@@ -83,7 +83,7 @@ class PhoneNumberValidatorTest {
     }
 
     /** 保存不限制地区的电话号码。 */
-    private static final class AnyPhone {
+    private static class AnyPhone {
 
         @PhoneNumber
         private final String value;
@@ -94,7 +94,7 @@ class PhoneNumberValidatorTest {
     }
 
     /** 保存中国或美国电话号码。 */
-    private static final class RegionalPhone {
+    private static class RegionalPhone {
 
         @PhoneNumber(anyOf = {
                 @PhoneNumber.Rule(regions = "CN", continents = Continent.ASIA),
@@ -108,7 +108,7 @@ class PhoneNumberValidatorTest {
     }
 
     /** 保存亚洲地区中排除中国的电话号码。 */
-    private static final class NonChineseAsianPhone {
+    private static class NonChineseAsianPhone {
 
         @PhoneNumber(anyOf = @PhoneNumber.Rule(continents = Continent.ASIA, excludeRegions = "CN"))
         private final String value;
@@ -119,14 +119,14 @@ class PhoneNumberValidatorTest {
     }
 
     /** 保存需要自定义条件判断的电话号码。 */
-    private static final class CustomPhone {
+    private static class CustomPhone {
 
         @PhoneNumber(anyOf = @PhoneNumber.Rule(conditions = ChineseNumber.class))
         private String value;
     }
 
     /** 只接受中国国际电话代码的测试条件。 */
-    private static final class ChineseNumber implements PhoneNumberCondition {
+    private static class ChineseNumber implements PhoneNumberCondition {
 
         @Override
         public boolean test(@NotNull ParsedPhoneNumber phoneNumber) {

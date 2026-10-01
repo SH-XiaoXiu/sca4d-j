@@ -1,5 +1,6 @@
 package com.sca4d.iot.device;
 
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.core.api.persistence.AffectedRows;
 import com.sca4d.core.api.persistence.AffectedRowsMismatchException;
@@ -22,6 +23,7 @@ import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -29,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /** 把 Device 持久化状态和接入方式集合转换成完整 Device，并检查写入结果。 */
 public class DeviceRepository implements DeviceConnectionResolver {
@@ -76,7 +79,7 @@ public class DeviceRepository implements DeviceConnectionResolver {
                         connection == null ? null : connection.identifierValue()),
                 ZeroRowPolicy.ERROR,
                 "新增 Device");
-        List<String> accessMethods = checked.accessMethods().stream().map(DeviceAccessMethod::code).toList();
+        List<TreeCode> accessMethods = checked.accessMethods().stream().map(DeviceAccessMethod::code).toList();
         sqlBatches.forEach(
                 accessMethods,
                 2,
@@ -120,7 +123,7 @@ public class DeviceRepository implements DeviceConnectionResolver {
                     9,
                     batch -> selectRows(checked, batch, 0, batch.size()));
             Map<Long, DeviceState> byId = rows.stream()
-                    .collect(java.util.stream.Collectors.toMap(DeviceState::id, state -> state));
+                    .collect(Collectors.toMap(DeviceState::id, state -> state));
             List<DeviceState> ordered = deviceIds.stream().map(byId::get).filter(Objects::nonNull).toList();
             return new Page<>(hydrate(ordered), checked.request().getPage(), ordered.size());
         }
@@ -188,7 +191,7 @@ public class DeviceRepository implements DeviceConnectionResolver {
             long productId,
             @NotNull Collection<DeviceAccessMethod> accessMethods,
             @NotNull Collection<String> protocolCodes) {
-        List<String> methods = Objects.requireNonNull(accessMethods, "Product 接入方式不能为空")
+        List<TreeCode> methods = Objects.requireNonNull(accessMethods, "Product 接入方式不能为空")
                 .stream()
                 .map(DeviceAccessMethod::code)
                 .toList();
@@ -209,7 +212,7 @@ public class DeviceRepository implements DeviceConnectionResolver {
         Collection<DeviceAccessMethod> checked = List.copyOf(
                 Objects.requireNonNull(accessMethods, "Device 接入方式不能为空"));
         mapper.deleteDeviceAccessMethods(deviceId);
-        List<String> methodCodes = checked.stream().map(DeviceAccessMethod::code).toList();
+        List<TreeCode> methodCodes = checked.stream().map(DeviceAccessMethod::code).toList();
         sqlBatches.forEach(
                 methodCodes,
                 2,
@@ -300,7 +303,7 @@ public class DeviceRepository implements DeviceConnectionResolver {
                 1,
                 0,
                 mapper::selectDeviceAccessMethodsBatch)) {
-            accessMethods.computeIfAbsent(state.deviceId(), ignored -> new java.util.ArrayList<>())
+            accessMethods.computeIfAbsent(state.deviceId(), ignored -> new ArrayList<>())
                     .add(state.methodCode());
         }
 

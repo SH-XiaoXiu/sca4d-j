@@ -6,17 +6,17 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 使用代码声明一项由集群定时器直接执行的基础设施任务。 */
-public final class ClusterTaskSchedule {
+public class ClusterTaskSchedule {
 
-    private final @NotNull ScheduleKey key;
-
-    private final int definitionVersion;
+    private final @NotNull MisfirePolicy misfirePolicy;
 
     private final @NotNull ClusterTask task;
 
+    private final @NotNull ScheduleKey key;
+
     private final @NotNull ScheduleTiming timing;
 
-    private final @NotNull MisfirePolicy misfirePolicy;
+    private final int definitionVersion;
 
     /**
      * 创建一项完整的集群任务计划。

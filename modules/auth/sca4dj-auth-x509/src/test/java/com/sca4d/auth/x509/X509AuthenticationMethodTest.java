@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneOffset;
+import java.util.Set;
 
 /** 验证 X.509 认证证据始终绑定 Account、Credential 版本和证书有效状态。 */
 class X509AuthenticationMethodTest {
@@ -58,7 +59,7 @@ class X509AuthenticationMethodTest {
                                 new Authentication(
                                         ACCOUNT.accountId(),
                                         X509AuthenticationMethod.CODE,
-                                        java.util.Set.of(AuthenticationFactorKind.POSSESSION),
+                                        Set.of(AuthenticationFactorKind.POSSESSION),
                                         NOW),
                                 "30",
                                 new Version(1),

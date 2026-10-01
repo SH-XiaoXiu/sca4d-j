@@ -105,17 +105,17 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.setting.SystemSetting<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-first even-row-color"><code>final @NotNull com.sca4d.core.api.setting.definition.SystemSetting<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
 <div class="col-second even-row-color"><code><a href="#CONTACT_NAME" class="member-name-link">CONTACT_NAME</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">OpenAPI 显示的联系人名称。</div>
 </div>
-<div class="col-first odd-row-color"><code>static final @NotNull com.sca4d.core.api.setting.SystemSetting<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-first odd-row-color"><code>final @NotNull com.sca4d.core.api.setting.definition.SystemSetting<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
 <div class="col-second odd-row-color"><code><a href="#DISPLAY_NAME" class="member-name-link">DISPLAY_NAME</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">页面和 OpenAPI 使用的产品展示名称。</div>
 </div>
-<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.setting.SystemSetting<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-first even-row-color"><code>final @NotNull com.sca4d.core.api.setting.definition.SystemSetting<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
 <div class="col-second even-row-color"><code><a href="#TOTP_ISSUER" class="member-name-link">TOTP_ISSUER</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">身份验证器中显示的 TOTP 发行者。</div>
@@ -131,7 +131,8 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">ProductSettings</a>()</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.setting.access.SettingWriter)" class="member-name-link">ProductSettings</a><wbr>(@NotNull com.sca4d.core.api.setting.access.SettingReader&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;reader,
+ com.sca4d.core.api.setting.access.SettingWriter&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;writer)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建产品设置注册配置。</div>
 </div>
@@ -160,7 +161,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="DISPLAY_NAME">
 <h3>DISPLAY_NAME</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.setting.SystemSetting&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">DISPLAY_NAME</span></div>
+</span><span class="modifiers">public final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.setting.definition.SystemSetting&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">DISPLAY_NAME</span></div>
 <div class="block">页面和 OpenAPI 使用的产品展示名称。</div>
 </section>
 </li>
@@ -168,7 +169,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="CONTACT_NAME">
 <h3>CONTACT_NAME</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.setting.SystemSetting&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">CONTACT_NAME</span></div>
+</span><span class="modifiers">public final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.setting.definition.SystemSetting&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">CONTACT_NAME</span></div>
 <div class="block">OpenAPI 显示的联系人名称。</div>
 </section>
 </li>
@@ -176,7 +177,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="TOTP_ISSUER">
 <h3>TOTP_ISSUER</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.setting.SystemSetting&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">TOTP_ISSUER</span></div>
+</span><span class="modifiers">public final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.setting.definition.SystemSetting&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">TOTP_ISSUER</span></div>
 <div class="block">身份验证器中显示的 TOTP 发行者。</div>
 </section>
 </li>
@@ -189,9 +190,11 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;()">
+<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.setting.access.SettingWriter)">
 <h3>ProductSettings</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ProductSettings</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ProductSettings</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.setting.access.SettingReader&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;reader,
+ com.sca4d.core.api.setting.access.SettingWriter&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;writer)</span></div>
 <div class="block">创建产品设置注册配置。</div>
 </section>
 </li>

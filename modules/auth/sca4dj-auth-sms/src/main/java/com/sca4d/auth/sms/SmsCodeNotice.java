@@ -1,18 +1,20 @@
 package com.sca4d.auth.sms;
 
-import com.sca4d.core.api.notification.NotificationChannel;
 import com.sca4d.core.api.notification.NotificationType;
+import com.sca4d.notification.sms.SmsChannels;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 /** 保存一次 SMS 验证码通知需要投递的 Account、验证码和有效分钟数。 */
-public final class SmsCodeNotice {
+public class SmsCodeNotice {
 
     /** SMS Code 只能通过不可关闭的 SMS 渠道发送。 */
     public static final @NotNull NotificationType<SmsCodeNotice> TYPE = NotificationType.define(
-            "authentication.sms-code",
+            "AUTHENTICATION/SMS_CODE",
             SmsCodeNotice.class,
             definition -> {
-                definition.required(NotificationChannel.SMS);
+                definition.required(SmsChannels.SMS);
                 definition.variable("code", (notice, locale) -> notice.code());
                 definition.variable("expiresInMinutes", (notice, locale) -> Long.toString(notice.expiresInMinutes()));
             },
@@ -29,7 +31,7 @@ public final class SmsCodeNotice {
         if (accountId <= 0 || expiresInMinutes <= 0)
             throw new IllegalArgumentException("SMS Code 参数必须为正数");
         this.accountId = accountId;
-        this.code = java.util.Objects.requireNonNull(code, "SMS 验证码不能为空");
+        this.code = Objects.requireNonNull(code, "SMS 验证码不能为空");
         this.expiresInMinutes = expiresInMinutes;
     }
 

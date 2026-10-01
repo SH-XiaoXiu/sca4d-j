@@ -8,10 +8,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
 
-/** 定义 HMAC 模块拥有的 Account Credential SQL 形状。 */
+/** 定义 MAC 模块拥有的 Account Credential SQL 形状。 */
 public interface HmacCredentialMapper {
 
-    /** 写入 Account 首个加密 HMAC Key。 */
+    /** 写入 Account 首个加密 MAC Key。 */
     int insert(
             @Param("accountId") long accountId,
             @Param("keyId") String keyId,
@@ -31,6 +31,6 @@ public interface HmacCredentialMapper {
             @Param("status") @NotNull Patch<HmacCredential.Status> status,
             @Param("revokedAt") @NotNull Patch<Instant> revokedAt);
 
-    /** 幂等删除 Account 的 HMAC Credential。 */
+    /** 幂等删除 Account 的 MAC Credential。 */
     int deleteByAccountId(@Param("accountId") long accountId);
 }

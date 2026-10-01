@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 保存推动 {@link FlowInstance} 状态变化的已确认事件。 */
-public final class FlowEvent {
+public class FlowEvent {
 
     private final String type;
 
@@ -32,7 +32,7 @@ public final class FlowEvent {
     }
 
     /**
-     * 返回事件类型。
+     * 事件类型。
      *
      * @return 事件类型
      */
@@ -41,7 +41,7 @@ public final class FlowEvent {
     }
 
     /**
-     * 返回不可变事件属性。
+     * 不可变事件属性。
      *
      * @return 不可变事件属性
      */

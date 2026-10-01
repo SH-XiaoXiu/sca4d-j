@@ -1,0 +1,70 @@
+package com.sca4d.core.api.webrealtime;
+
+import com.sca4d.core.api.event.Event;
+import com.sca4d.core.api.message.Message;
+import com.sca4d.core.api.name.code.TreeCode;
+import org.jetbrains.annotations.NotNull;
+
+import java.time.Instant;
+import java.util.Objects;
+
+/** 请求 Web Realtime 把一个浏览器事件交给当前匹配目标的在线连接。 */
+public class WebRealtimeMessage extends Message {
+
+    public static final int PROTOCOL_VERSION = 1;
+
+    public static final @NotNull TreeCode CODE = TreeCode.of("WEB_REALTIME/PUBLISH");
+
+    private final @NotNull Event<?> browserEvent;
+
+    private final @NotNull Instant expiresAt;
+
+    private final @NotNull WebRealtimeTarget target;
+
+    private final boolean closeAfter;
+
+    /** 创建交给实时消息处理器的浏览器事件投递请求。 */
+    public WebRealtimeMessage(
+            @NotNull WebRealtimeTarget target,
+            @NotNull Event<?> browserEvent,
+            boolean closeAfter,
+            @NotNull Instant expiresAt) {
+        this.target = Objects.requireNonNull(target, "Web Realtime 目标不能为空");
+        this.browserEvent = Objects.requireNonNull(browserEvent, "浏览器事件不能为空");
+        this.closeAfter = closeAfter;
+        this.expiresAt = Objects.requireNonNull(expiresAt, "Web Realtime 消息到期时间不能为空");
+        if (!expiresAt.isAfter(browserEvent.occurredAt())) {
+            throw new IllegalArgumentException("Web Realtime 消息到期时间必须晚于事件发生时间");
+        }
+    }
+
+    @Override
+    public @NotNull TreeCode code() {
+        return CODE;
+    }
+
+    @Override
+    public int protocolVersion() {
+        return PROTOCOL_VERSION;
+    }
+
+    /** @return 当前消息匹配的实时目标 */
+    public @NotNull WebRealtimeTarget target() {
+        return target;
+    }
+
+    /** @return 要发送给浏览器的业务事件 */
+    public @NotNull Event<?> browserEvent() {
+        return browserEvent;
+    }
+
+    /** @return 写出事件后是否关闭连接 */
+    public boolean closeAfter() {
+        return closeAfter;
+    }
+
+    /** @return 消息失效时间 */
+    public @NotNull Instant expiresAt() {
+        return expiresAt;
+    }
+}

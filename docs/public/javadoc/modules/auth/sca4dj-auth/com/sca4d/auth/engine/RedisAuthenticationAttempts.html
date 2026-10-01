@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 <dd><code>com.sca4d.core.api.authentication.AuthenticationAttempts</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">RedisAuthenticationAttempts</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">RedisAuthenticationAttempts</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.core.api.authentication.AuthenticationAttempts</span></div>
 <div class="block">使用认证方法目录、Redis 尝试和应用动作策略编排零到三因素认证。</div>
@@ -108,10 +108,10 @@ implements com.sca4d.core.api.authentication.AuthenticationAttempts</span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.auth.engine.AuthenticationMethods,com.sca4d.auth.engine.attempt.RedisAuthenticationAttemptStore,com.sca4d.core.api.authentication.AuthenticationPolicy,com.sca4d.core.api.setting.Settings,java.time.Clock)" class="member-name-link">RedisAuthenticationAttempts</a><wbr>(@NotNull <a href="AuthenticationMethods.html" title="class in com.sca4d.auth.engine">AuthenticationMethods</a>&nbsp;methods,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.auth.engine.AuthenticationMethods,com.sca4d.auth.engine.attempt.RedisAuthenticationAttemptStore,com.sca4d.core.api.authentication.AuthenticationPolicy,com.sca4d.auth.config.AuthSettings,java.time.Clock)" class="member-name-link">RedisAuthenticationAttempts</a><wbr>(@NotNull <a href="AuthenticationMethods.html" title="class in com.sca4d.auth.engine">AuthenticationMethods</a>&nbsp;methods,
  @NotNull <a href="attempt/RedisAuthenticationAttemptStore.html" title="class in com.sca4d.auth.engine.attempt">RedisAuthenticationAttemptStore</a>&nbsp;attempts,
  @NotNull com.sca4d.core.api.authentication.AuthenticationPolicy&nbsp;policy,
- @NotNull com.sca4d.core.api.setting.Settings&nbsp;settings,
+ @NotNull <a href="../config/AuthSettings.html" title="class in com.sca4d.auth.config">AuthSettings</a>&nbsp;settings,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建默认认证引擎。</div>
@@ -144,7 +144,7 @@ implements com.sca4d.core.api.authentication.AuthenticationAttempts</span></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#start(com.sca4d.core.api.authentication.AuthenticationActionCode,com.sca4d.core.api.authentication.AuthenticationSubmission)" class="member-name-link">start</a><wbr>(@NotNull com.sca4d.core.api.authentication.AuthenticationActionCode&nbsp;actionCode,
  @NotNull com.sca4d.core.api.authentication.AuthenticationSubmission&lt;?&gt;&nbsp;submission)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">使用首个认证材料识别账号，并按该账号的应用策略开始动作认证。</div>
+<div class="block">使用首个认证材料识别账号，并按已识别账号的应用策略开始动作认证。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.authentication.AuthenticationProgress</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#start(com.sca4d.core.api.identity.Account,com.sca4d.core.api.authentication.AuthenticationActionCode,java.util.List)" class="member-name-link">start</a><wbr>(@NotNull com.sca4d.core.api.identity.Account&nbsp;account,
@@ -177,7 +177,7 @@ implements com.sca4d.core.api.authentication.AuthenticationAttempts</span></div>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.auth.engine.AuthenticationMethods,com.sca4d.auth.engine.attempt.RedisAuthenticationAttemptStore,com.sca4d.core.api.authentication.AuthenticationPolicy,com.sca4d.core.api.setting.Settings,java.time.Clock)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.auth.engine.AuthenticationMethods,com.sca4d.auth.engine.attempt.RedisAuthenticationAttemptStore,com.sca4d.core.api.authentication.AuthenticationPolicy,com.sca4d.auth.config.AuthSettings,java.time.Clock)">
 <h3>RedisAuthenticationAttempts</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RedisAuthenticationAttempts</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="AuthenticationMethods.html" title="class in com.sca4d.auth.engine">AuthenticationMethods</a>&nbsp;methods,
@@ -186,7 +186,7 @@ implements com.sca4d.core.api.authentication.AuthenticationAttempts</span></div>
  @NotNull
  @NotNull com.sca4d.core.api.authentication.AuthenticationPolicy&nbsp;policy,
  @NotNull
- @NotNull com.sca4d.core.api.setting.Settings&nbsp;settings,
+ @NotNull <a href="../config/AuthSettings.html" title="class in com.sca4d.auth.config">AuthSettings</a>&nbsp;settings,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</span></div>
 <div class="block">创建默认认证引擎。</div>
@@ -216,7 +216,7 @@ implements com.sca4d.core.api.authentication.AuthenticationAttempts</span></div>
  @NotNull com.sca4d.core.api.authentication.AuthenticationActionCode&nbsp;actionCode,
  @NotNull
  @NotNull com.sca4d.core.api.authentication.AuthenticationSubmission&lt;?&gt;&nbsp;submission)</span></div>
-<div class="block">使用首个认证材料识别账号，并按该账号的应用策略开始动作认证。</div>
+<div class="block">使用首个认证材料识别账号，并按已识别账号的应用策略开始动作认证。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>start</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.authentication.AuthenticationAttempts</code></dd>

@@ -1,8 +1,11 @@
 package com.sca4d.core.api.permission;
 
+import com.sca4d.core.api.name.NameFormat;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.Resource;
-import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 /**
  * 表示能够被权限判断和审计的固定业务入口（Operation）。
@@ -10,65 +13,78 @@ import org.jetbrains.annotations.NotNull;
  * <p>操作本身就是一种资源（Resource，{@link Resource}），因此接口权限与具体业务对象权限都由 {@link Permission} 表示。
  */
 @SuppressWarnings("ClassCanBeRecord") // 项目禁止使用 Java record，保留普通 class。
-public final class Operation implements Resource {
+public class Operation implements Resource {
 
-    /** 操作资源使用的资源类型。 */
-    public static final @NotNull String RESOURCE_TYPE = "operation";
+    /**
+     * 供 Java 注解参数使用的资源类型文本。
+     */
+    public static final @NotNull String RESOURCE_TYPE_VALUE = "CORE/OPERATIONS";
 
-    private final @NotNull String value;
+    /**
+     * 操作资源使用的资源类型。
+     */
+    public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofSlash("CORE/OPERATIONS");
+
+    private final @NotNull TreeCode code;
 
     /**
      * 创建操作资源。
      *
      * @param value 非空白操作键
-     * @throws NullPointerException value 为 {@code null} 时抛出
+     * @throws NullPointerException     value 为 {@code null} 时抛出
      * @throws IllegalArgumentException value 为空白时抛出
      */
     public Operation(@NotNull String value) {
-        this.value = TextUtils.requireText(value, "操作键");
+        this(TreeCode.ofColon(value));
     }
 
     /**
-     * 返回操作键。
-     *
-     * @return 操作键
+     * 创建使用已经规范化操作编码的操作资源。
      */
-    public @NotNull String value() {
-        return value;
+    public Operation(@NotNull TreeCode code) {
+        TreeCode checked = Objects.requireNonNull(code, "操作编码不能为空");
+        this.code = checked;
     }
 
     /**
-     * 返回操作资源类型。
+     * @return 已规范化的操作 TreeCode
+     */
+    public @NotNull TreeCode code() {
+        return code;
+    }
+
+    /**
+     * 操作资源类型。
      *
-     * @return 固定值 {@value #RESOURCE_TYPE}
+     * @return 固定的 {@link #RESOURCE_TYPE} 类型
      */
     @Override
-    public @NotNull String type() {
+    public @NotNull TreeCode type() {
         return RESOURCE_TYPE;
     }
 
     /**
      * 返回操作资源标识。
      *
-     * @return 与 {@link #value()} 相同的操作键
+     * @return 与 {@link #code()} 对应的操作键文本
      */
     @Override
     public @NotNull String id() {
-        return value;
+        return code.format(NameFormat.COLON);
     }
 
     @Override
     public boolean equals(Object other) {
-        return this == other || other instanceof Operation operation && value.equals(operation.value);
+        return this == other || other instanceof Operation operation && code.equals(operation.code);
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return code.hashCode();
     }
 
     @Override
     public @NotNull String toString() {
-        return value;
+        return code.toString();
     }
 }

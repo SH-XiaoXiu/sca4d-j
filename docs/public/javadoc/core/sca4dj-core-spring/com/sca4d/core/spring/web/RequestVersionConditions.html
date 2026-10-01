@@ -93,10 +93,10 @@ loadScripts(document, 'script');</script>
 <dd><code>com.sca4d.core.api.concurrent.VersionConditions</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">RequestVersionConditions</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">RequestVersionConditions</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.core.api.concurrent.VersionConditions</span></div>
-<div class="block">把当前 HTTP 请求提交的 `If-Match` 版本绑定为必须由根资源 Repository 消费的调用要求。</div>
+<div class="block">把当前 HTTP 请求提交的 `If-Match` 版本绑定为必须由根资源 Repository 消费的预提交条件。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -109,9 +109,7 @@ implements com.sca4d.core.api.concurrent.VersionConditions</span></div>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">RequestVersionConditions</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">创建 HTTP 请求版本条件入口。</div>
-</div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -136,14 +134,19 @@ implements com.sca4d.core.api.concurrent.VersionConditions</span></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">绑定当前 HTTP 请求提交的版本前置条件。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#clear()" class="member-name-link">clear</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.concurrent.VersionConditions</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#capture()" class="member-name-link">capture</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">冻结当前请求的版本条件，异步线程无需读取 HTTP ThreadLocal。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#clear()" class="member-name-link">clear</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">清理当前线程保存的版本前置条件。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.concurrent.VersionCondition</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resolve(com.sca4d.core.api.concurrent.Version)" class="member-name-link">resolve</a><wbr>(@NotNull com.sca4d.core.api.concurrent.Version&nbsp;currentVersion)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.concurrent.VersionCondition</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resolve(com.sca4d.core.api.concurrent.Version)" class="member-name-link">resolve</a><wbr>(@NotNull com.sca4d.core.api.concurrent.Version&nbsp;currentVersion)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">返回根资源写入必须使用的版本条件，并标记当前 `If-Match` 已被消费。</div>
 </div>
 </div>
@@ -167,7 +170,6 @@ implements com.sca4d.core.api.concurrent.VersionConditions</span></div>
 <section class="detail" id="&lt;init&gt;()">
 <h3>RequestVersionConditions</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RequestVersionConditions</span>()</div>
-<div class="block">创建 HTTP 请求版本条件入口。</div>
 </section>
 </li>
 </ul>
@@ -217,6 +219,18 @@ implements com.sca4d.core.api.concurrent.VersionConditions</span></div>
 <dd><code>currentVersion</code> - Repository 已读取的资源当前版本</dd>
 <dt>Returns:</dt>
 <dd>已绑定 `If-Match` 时返回前置条件，否则返回普通乐观锁条件</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="capture()">
+<h3>capture</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.concurrent.VersionConditions</span>&nbsp;<span class="element-name">capture</span>()</div>
+<div class="block">冻结当前请求的版本条件，异步线程无需读取 HTTP ThreadLocal。</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>capture</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.concurrent.VersionConditions</code></dd>
 </dl>
 </section>
 </li>

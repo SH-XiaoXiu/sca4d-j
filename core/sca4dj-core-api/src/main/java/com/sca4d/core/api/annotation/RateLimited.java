@@ -1,8 +1,9 @@
 package com.sca4d.core.api.annotation;
 
+import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.call.CallValueResolver;
-import com.sca4d.core.api.call.NoRateLimitKeyResolver;
-import com.sca4d.core.api.concurrent.RateLimitDimension;
+import com.sca4d.core.api.concurrent.NoRateLimitKeyResolver;
+import com.sca4d.core.api.concurrent.RateLimit;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -14,6 +15,7 @@ import java.lang.annotation.Target;
 @Documented
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
+@CallLifecycle.Intercepted
 public @interface RateLimited {
 
     /**
@@ -23,7 +25,7 @@ public @interface RateLimited {
      *
      * @return 内置限流维度
      */
-    RateLimitDimension[] dimensions() default {RateLimitDimension.GLOBAL};
+    RateLimit.Dim[] dimensions() default {RateLimit.Dim.GLOBAL};
 
     /**
      * 返回额外自定义限流维度使用的业务键解析器。
@@ -34,6 +36,9 @@ public @interface RateLimited {
      * @return 自定义业务键解析器；默认不增加自定义维度
      */
     Class<? extends CallValueResolver<?>> keyResolver() default NoRateLimitKeyResolver.class;
+
+    /** 从方法参数读取自定义限流键的表达式；与 `keyResolver` 二选一。 */
+    String key() default "";
 
     /**
      * 返回时间窗口内允许的调用次数。

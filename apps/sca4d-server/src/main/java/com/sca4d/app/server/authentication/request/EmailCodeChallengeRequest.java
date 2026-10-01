@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 接收匿名登录调用方已经知道的邮箱，不在字符串表示中暴露地址。 */
-public final class EmailCodeChallengeRequest {
+public class EmailCodeChallengeRequest {
 
     @NotBlank
     @Email

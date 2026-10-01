@@ -9,7 +9,7 @@ import java.util.Set;
 
 /** 配置 WebAuthn Relying Party 和允许完成 ceremony 的 Origin。 */
 @ConfigurationProperties("sca4dj.auth.passkey")
-public final class PasskeyProperties {
+public class PasskeyProperties {
 
     private String relyingPartyId = "localhost";
 
@@ -17,11 +17,14 @@ public final class PasskeyProperties {
 
     private Set<String> origins = new LinkedHashSet<>(Set.of("http://localhost:5173"));
 
-    /** 创建使用本地开发默认值的 Passkey 配置。 */
     public PasskeyProperties() {
     }
 
-    /** 返回 WebAuthn RP ID。 */
+    /**
+     * WebAuthn RP ID。
+     *
+     * @return WebAuthn RP ID
+     */
     public @NotNull String getRelyingPartyId() {
         return relyingPartyId;
     }
@@ -31,7 +34,11 @@ public final class PasskeyProperties {
         this.relyingPartyId = TextUtils.requireText(relyingPartyId, "Passkey RP ID");
     }
 
-    /** 返回浏览器展示的 Relying Party 名称。 */
+    /**
+     * 浏览器展示的 Relying Party 名称。
+     *
+     * @return 浏览器展示的 Relying Party 名称
+     */
     public @NotNull String getRelyingPartyName() {
         return relyingPartyName;
     }

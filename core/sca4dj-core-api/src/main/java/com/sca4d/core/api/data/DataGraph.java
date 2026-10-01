@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 保存已经校验并按稳定拓扑顺序排列的数据操作图。 */
-public final class DataGraph {
+public class DataGraph {
 
     private final List<DataKey<?>> inputs;
 
@@ -37,7 +37,7 @@ public final class DataGraph {
     }
 
     /**
-     * 读取执行 DataGraph 前必须由调用方提供的键。
+     * 执行 DataGraph 前必须由调用方提供的键。
      *
      * @return 保持声明顺序的不可变输入键列表
      */
@@ -46,7 +46,7 @@ public final class DataGraph {
     }
 
     /**
-     * 读取构建阶段完成依赖校验和排序后的节点。
+     * 构建阶段完成依赖校验和排序后的节点。
      *
      * @return 按节点登记顺序确定拓扑次序的不可变节点列表
      */
@@ -129,13 +129,12 @@ public final class DataGraph {
     }
 
     /** 按登记顺序声明 Graph 输入和数据操作。 */
-    public static final class Builder {
+    public static class Builder {
 
         private final List<DataKey<?>> inputs = new ArrayList<>();
 
         private final List<DataOperation<?>> operations = new ArrayList<>();
 
-        /** 创建空 Graph 构建器。 */
         public Builder() {
         }
 

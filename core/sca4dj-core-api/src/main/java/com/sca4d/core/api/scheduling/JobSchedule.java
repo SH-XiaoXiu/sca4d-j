@@ -16,21 +16,21 @@ import java.util.Objects;
  * @param <I> Job 输入类型
  * @param <O> Job 输出类型
  */
-public final class JobSchedule<I, O> {
-
-    private final @NotNull ScheduleKey key;
-
-    private final int definitionVersion;
-
-    private final @NotNull Job<I, O> job;
-
-    private final @Nullable I input;
-
-    private final @NotNull ScheduleTiming timing;
+public class JobSchedule<I, O> {
 
     private final @NotNull MisfirePolicy misfirePolicy;
 
     private final @NotNull OverlapPolicy overlapPolicy;
+
+    private final @Nullable I input;
+
+    private final @NotNull Job<I, O> job;
+
+    private final @NotNull ScheduleKey key;
+
+    private final @NotNull ScheduleTiming timing;
+
+    private final int definitionVersion;
 
     /**
      * 创建一项完整代码计划。
@@ -72,7 +72,7 @@ public final class JobSchedule<I, O> {
     }
 
     /**
-     * 返回稳定计划标识。
+     * 稳定计划标识。
      *
      * @return 不依赖 Bean 名和 Scheduler key 的标识
      */
@@ -82,7 +82,7 @@ public final class JobSchedule<I, O> {
     }
 
     /**
-     * 返回计划定义版本。
+     * 计划定义版本。
      *
      * @return 计划定义发生变化时递增的正整数
      */
@@ -92,7 +92,7 @@ public final class JobSchedule<I, O> {
     }
 
     /**
-     * 返回计划提交的 Job。
+     * 计划提交的 Job。
      *
      * @return 到达原定时间后交给 JobExecutor 的定义
      */
@@ -102,7 +102,7 @@ public final class JobSchedule<I, O> {
     }
 
     /**
-     * 返回计划固定输入。
+     * 计划固定输入。
      *
      * @return 每次触发使用的输入；Void Job 返回 null
      */
@@ -112,7 +112,7 @@ public final class JobSchedule<I, O> {
     }
 
     /**
-     * 返回触发时间定义。
+     * 触发时间定义。
      *
      * @return Cron 或固定间隔定义
      */
@@ -122,7 +122,7 @@ public final class JobSchedule<I, O> {
     }
 
     /**
-     * 返回 misfire 策略。
+     * misfire 策略。
      *
      * @return Scheduler 错过原定时间后的处理方式
      */
@@ -132,7 +132,7 @@ public final class JobSchedule<I, O> {
     }
 
     /**
-     * 返回重叠策略。
+     * 重叠策略。
      *
      * @return 前一次计划 run 未结束时的处理方式
      */

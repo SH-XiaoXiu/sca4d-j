@@ -7,9 +7,11 @@ import java.time.Instant;
 
 /** 映射一条设备显式回执或 reported 推导回执。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class EncodedDeviceAcknowledgement {
+public class EncodedDeviceAcknowledgement {
 
-    private final long messageId;
+    private final @NotNull Instant acknowledgedAt;
+
+    private final @NotNull Instant receivedAt;
 
     private final @NotNull String ackCode;
 
@@ -19,11 +21,8 @@ public final class EncodedDeviceAcknowledgement {
 
     private final @Nullable String sourceAcknowledgementId;
 
-    private final @NotNull Instant acknowledgedAt;
+    private final long messageId;
 
-    private final @NotNull Instant receivedAt;
-
-    /** 创建完整回执查询结果。 */
     @SuppressWarnings("ParameterNumber")
     public EncodedDeviceAcknowledgement(
             long messageId,

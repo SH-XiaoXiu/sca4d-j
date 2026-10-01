@@ -10,17 +10,17 @@ import java.util.List;
 import java.util.Objects;
 
 /** 表示 EMQX `5.8` HTTP Authenticator 响应中的一条新格式 ACL 规则。 */
-public final class EmqxAclRule {
+public class EmqxAclRule {
 
-    private final @NotNull String permission;
-
-    private final @NotNull String action;
-
-    private final @NotNull String topic;
+    private final @Nullable Boolean retain;
 
     private final @NotNull List<Integer> qos;
 
-    private final @Nullable Boolean retain;
+    private final @NotNull String action;
+
+    private final @NotNull String permission;
+
+    private final @NotNull String topic;
 
     /** 创建一条明确允许或拒绝 Topic 操作的 ACL 规则。 */
     public EmqxAclRule(

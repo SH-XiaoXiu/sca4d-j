@@ -1,18 +1,13 @@
 package com.sca4d.core.api.call;
 
-import com.sca4d.core.api.annotation.Audit;
-import com.sca4d.core.api.annotation.Idempotent;
-import com.sca4d.core.api.annotation.Locked;
-import com.sca4d.core.api.annotation.RateLimited;
-import com.sca4d.core.api.annotation.RequirePermission;
-import com.sca4d.core.api.permission.Permission;
-import com.sca4d.core.api.permission.PermissionDecision;
-import com.sca4d.core.api.permission.ResourceScope;
-import com.sca4d.core.api.utils.AnnotationUtils;
+import com.sca4d.core.api.name.code.TreeCode;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -23,8 +18,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-/** 保存一次被声明式调用规则包围的方法执行及其成功要求。 */
-public final class CallExecution {
+/** 保存一次被声明式调用规则包围的方法执行、结果和预提交条件。 */
+public class CallExecution {
 
     private final Call call;
 
@@ -34,32 +29,88 @@ public final class CallExecution {
 
     private final Object[] arguments;
 
+    private final TreeCode operation;
+
     private final Type resultType;
 
-    private final boolean anonymous;
+    private final Map<Class<? extends Annotation>, List<? extends Annotation>> methodDeclarations = new LinkedHashMap<>();
 
-    private final List<RequirePermission> requiredPermissions;
+    private final Map<Class<? extends Annotation>, List<? extends Annotation>> typeDeclarations = new LinkedHashMap<>();
 
-    private final @Nullable Audit audit;
+    private final List<CallLifecycle.PreCommit> preCommitConditions = new ArrayList<>();
 
-    private final @Nullable Idempotent idempotent;
+    private final List<CallLifecycle.AfterCommit> afterCommitCallbacks = new ArrayList<>();
 
-    private final @Nullable Locked locked;
+    private volatile @Nullable CallOutcome outcome;
 
-    private final @Nullable RateLimited rateLimited;
+    private volatile boolean invoking;
 
-    private final List<CallRequirement> requirements = new ArrayList<>();
+    private volatile boolean invoked;
 
-    private final Map<Permission, ResourceScopeRequirement> resourceScopes = new LinkedHashMap<>();
+    private boolean started;
 
-    private @Nullable CallOutcome outcome;
+    /** 拒绝同一方法执行被生命周期重复使用。 */
+    public void beginExecution() {
+        if (started || outcome != null) {
+            throw new IllegalStateException("同一方法执行只能进入生命周期一次");
+        }
+        started = true;
+    }
 
-    private boolean invoking;
+    /** 保存执行链返回的结果；生命周期负责唯一写入，审计读取同一结果。 */
+    public void recordOutcome(CallOutcome outcome) {
+        this.outcome = Objects.requireNonNull(outcome, "调用结果不能为空");
+    }
+
+    /** 查询有效声明；方法声明优先于类型声明。 */
+    @Contract(pure = true)
+    public <A extends Annotation> @NotNull Optional<A> declaration(@NotNull Class<A> type) {
+        return declarations(type).stream().findFirst();
+    }
+
+    /** 返回从方法到类型排列的全部声明，包括重复注解；相同声明只保留一次。 */
+    @Contract(pure = true)
+    public <A extends Annotation> @NotNull @Unmodifiable List<A> declarations(@NotNull Class<A> type) {
+        Objects.requireNonNull(type);
+        List<A> result = new ArrayList<>();
+        List<? extends Annotation> methods = methodDeclarations.get(type);
+        List<? extends Annotation> types = typeDeclarations.get(type);
+        for (Annotation annotation : methods == null
+                ? method == null ? List.<Annotation>of() : Arrays.asList(method.getAnnotationsByType(type))
+                : methods) {
+            result.add(type.cast(annotation));
+        }
+        for (Annotation annotation : types == null
+                ? declaringType == null
+                        ? List.<Annotation>of()
+                        : Arrays.asList(declaringType.getAnnotationsByType(type))
+                : types) {
+            A value = type.cast(annotation);
+            if (!result.contains(value)) {
+                result.add(value);
+            }
+        }
+        return List.copyOf(result);
+    }
+
+    /** 保存入口解析的声明，保留方法与类型的优先顺序；同一注解类型只能登记一次。 */
+    @Contract(mutates = "this")
+    public <A extends Annotation> void recordDeclarations(
+            @NotNull Class<A> type,
+            @NotNull List<A> methods,
+            @NotNull List<A> types) {
+        Objects.requireNonNull(type);
+        if (methodDeclarations.containsKey(type)) {
+            throw new IllegalStateException("同一执行不能重复登记注解类型: " + type.getName());
+        }
+        methodDeclarations.put(type, List.copyOf(methods));
+        typeDeclarations.put(type, List.copyOf(types));
+    }
 
     /**
-     * 创建一次方法执行，并立即解析类型和方法上的调用声明。
+     * 创建一次方法执行；入口可以补充接口方法及组合注解的声明。
      *
-     * @param call 当前传输调用
+     * @param call 当前往返调用
      * @param declaringType 声明业务方法的具体类型
      * @param method 被调用方法
      * @param arguments 方法实参
@@ -74,84 +125,104 @@ public final class CallExecution {
         this.call = Objects.requireNonNull(call, "调用不能为空");
         this.declaringType = Objects.requireNonNull(declaringType, "业务类型不能为空");
         this.method = Objects.requireNonNull(method, "业务方法不能为空");
+        this.operation = null;
         this.arguments = Arrays.copyOf(Objects.requireNonNull(arguments, "业务方法实参不能为空"), arguments.length);
         this.resultType = Objects.requireNonNull(resultType, "业务返回类型不能为空");
-        this.anonymous = declaringType.isAnnotationPresent(com.sca4d.core.api.annotation.AnonymousAccess.class)
-                || method.isAnnotationPresent(com.sca4d.core.api.annotation.AnonymousAccess.class);
-        List<RequirePermission> permissions = new ArrayList<>();
-        permissions.addAll(Arrays.asList(declaringType.getAnnotationsByType(RequirePermission.class)));
-        permissions.addAll(Arrays.asList(method.getAnnotationsByType(RequirePermission.class)));
-        this.requiredPermissions = List.copyOf(permissions);
-        this.audit = AnnotationUtils.find(declaringType, method, Audit.class);
-        this.idempotent = AnnotationUtils.find(declaringType, method, Idempotent.class);
-        this.locked = AnnotationUtils.find(declaringType, method, Locked.class);
-        this.rateLimited = AnnotationUtils.find(declaringType, method, RateLimited.class);
     }
 
-    /**
-     * 登记成功前必须满足的要求。
-     *
-     * @param requirement 当前执行产生的要求
-     */
-    public void addRequirement(CallRequirement requirement) {
-        requirements.add(Objects.requireNonNull(requirement, "调用要求不能为空"));
+    /** 创建纯函数执行，操作编码是函数的稳定身份。 */
+    public static @NotNull CallExecution function(
+            @NotNull Call call,
+            @NotNull TreeCode operation,
+            Object @NotNull [] arguments,
+            @NotNull Type resultType) {
+        return new CallExecution(
+                Objects.requireNonNull(call, "调用不能为空"),
+                Objects.requireNonNull(operation, "函数操作编码不能为空"),
+                arguments,
+                resultType);
     }
 
-    /**
-     * 登记权限判定携带的 Repository 资源范围。
-     *
-     * @param permission 携带范围的完整权限
-     */
-    public void registerResourceScope(Permission permission) {
-        Permission checked = Objects.requireNonNull(permission, "权限不能为空");
-        PermissionDecision decision = call.permissionDecision(checked)
-                .filter(PermissionDecision::isAllowed)
-                .filter(item -> item.scope().isPresent())
-                .orElseThrow(() -> new IllegalStateException("当前权限没有可登记的资源范围: " + checked));
-        ResourceScopeRequirement requirement = new ResourceScopeRequirement(
-                checked,
-                decision.scope().orElseThrow());
-        if (resourceScopes.putIfAbsent(checked, requirement) == null) {
-            addRequirement(requirement);
+    private CallExecution(Call call, TreeCode operation, Object[] arguments, Type resultType) {
+        this.call = Objects.requireNonNull(call, "调用不能为空");
+        this.declaringType = null;
+        this.method = null;
+        this.operation = Objects.requireNonNull(operation, "函数操作编码不能为空");
+        this.arguments = Arrays.copyOf(Objects.requireNonNull(arguments, "函数实参不能为空"), arguments.length);
+        this.resultType = Objects.requireNonNull(resultType, "函数返回类型不能为空");
+    }
+
+    /** 登记业务方法成功和事务提交前必须满足的条件。 */
+    public void addPreCommit(CallLifecycle.PreCommit condition) {
+        preCommitConditions.add(Objects.requireNonNull(condition, "预提交条件不能为空"));
+    }
+
+    /** 登记事务提交成功后的回调；同一执行不重复登记同一实现。 */
+    public void addAfterCommit(CallLifecycle.AfterCommit callback) {
+        CallLifecycle.AfterCommit checked = Objects.requireNonNull(callback, "提交后回调不能为空");
+        if (!afterCommitCallbacks.contains(checked)) {
+            afterCommitCallbacks.add(checked);
         }
     }
 
-    /**
-     * 消费当前执行为指定权限登记的资源范围。
-     *
-     * @param permission Repository 正在执行的完整权限
-     * @param scopeType 业务模块定义的资源范围类型
-     * @param <S> 资源范围类型
-     * @return 当前执行没有登记该权限时为空，否则返回已消费的范围
-     */
-    public <S extends ResourceScope> Optional<S> consumeResourceScope(
-            Permission permission,
-            Class<S> scopeType) {
-        ResourceScopeRequirement requirement = resourceScopes.get(Objects.requireNonNull(permission, "权限不能为空"));
-        if (requirement == null) {
-            return Optional.empty();
-        }
-        return Optional.of(requirement.consume(Objects.requireNonNull(scopeType, "资源范围类型不能为空")));
-    }
-
-    /** 校验实际业务方法成功前必须满足的全部要求。 */
-    public void verifyRequirements() {
-        requirements.forEach(CallRequirement::verifySatisfied);
-    }
-
-    /** 在只读或读写事务提交前校验适用于该事务的要求。 */
-    public void verifyRequirementsBeforeCommit(boolean readOnly) {
-        if (!invoking) {
+    /** 在事务提交成功后执行已经登记的回调，失败保留在已记录结果中并报告给调用方。 */
+    public void afterCommit() {
+        if (!invoked) {
             return;
         }
-        requirements.stream()
-                .filter(requirement -> !readOnly || requirement.appliesToReadOnlyTransaction())
-                .forEach(CallRequirement::verifySatisfied);
+        Throwable primary = null;
+        for (CallLifecycle.AfterCommit callback : afterCommitCallbacks) {
+            try {
+                callback.afterCommit(this);
+            } catch (Throwable failure) {
+                if (primary == null) {
+                    primary = failure;
+                } else if (primary != failure) {
+                    primary.addSuppressed(failure);
+                }
+            }
+        }
+        if (primary != null) {
+            CallOutcome recorded = outcome;
+            if (recorded != null) {
+                outcome = recorded.withCompletionFailure(primary);
+            }
+            if (primary instanceof Error error) {
+                throw error;
+            }
+            throw primary instanceof RuntimeException runtime
+                    ? runtime
+                    : new IllegalStateException("事务已经提交，但调用提交后回调失败", primary);
+        }
+    }
+
+    /** 返回指定类型的预提交条件，供所属功能读取和消费；不能修改条件集合。 */
+    @Contract(pure = true)
+    public <C extends CallLifecycle.PreCommit> @NotNull @Unmodifiable List<C> preCommitConditions(
+            @NotNull Class<C> type) {
+        Objects.requireNonNull(type);
+        return preCommitConditions.stream().filter(type::isInstance).map(type::cast).toList();
+    }
+
+    /** 校验实际业务方法成功前必须满足的全部预提交条件。 */
+    public void verifyPreCommit() {
+        preCommitConditions.forEach(CallLifecycle.PreCommit::verifySatisfied);
+    }
+
+    /** 在只读或读写事务提交前校验适用于该事务的预提交条件。 */
+    public void verifyPreCommitBeforeCommit(boolean readOnly) {
+        if (!invoked) {
+            return;
+        }
+        preCommitConditions.stream()
+                .filter(condition -> !readOnly || condition.appliesToReadOnlyTransaction())
+                .forEach(CallLifecycle.PreCommit::verifySatisfied);
     }
 
     /** 标记即将进入实际业务方法。 */
     public void beginInvocation() {
         invoking = true;
+        invoked = true;
     }
 
     /** 标记实际业务方法已经离开。 */
@@ -159,27 +230,12 @@ public final class CallExecution {
         invoking = false;
     }
 
-    /** @param result 实际业务结果 */
-    public void succeed(@Nullable Object result) {
-        outcome = CallOutcome.success(result);
+    /** @return 实际方法仍在执行或等待 CompletionStage 完成时为 true */
+    public boolean isInvoking() {
+        return invoking;
     }
 
-    /** @param result 已保存的幂等结果 */
-    public void replay(@Nullable Object result) {
-        outcome = CallOutcome.replayed(result);
-    }
-
-    /** @param error 拒绝调用的业务异常 */
-    public void deny(Throwable error) {
-        outcome = CallOutcome.denied(error);
-    }
-
-    /** @param error 导致调用失败的异常 */
-    public void fail(Throwable error) {
-        outcome = CallOutcome.failed(error);
-    }
-
-    /** @return 当前传输调用 */
+    /** @return 当前往返调用 */
     @Contract(pure = true)
     public Call call() {
         return call;
@@ -188,6 +244,9 @@ public final class CallExecution {
     /** @return 声明业务方法的具体类型 */
     @Contract(pure = true)
     public Class<?> declaringType() {
+        if (declaringType == null) {
+            throw new IllegalStateException("纯函数执行没有声明类型");
+        }
         return declaringType;
     }
 
@@ -195,7 +254,22 @@ public final class CallExecution {
     @Contract(pure = true)
     @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "CallExecution 的公开契约需要向声明解析器提供原始 Method")
     public Method method() {
+        if (method == null) {
+            throw new IllegalStateException("纯函数执行没有 Java Method");
+        }
         return method;
+    }
+
+    /** @return 纯函数操作编码；Java 方法执行为空 */
+    @Contract(pure = true)
+    public @NotNull Optional<TreeCode> operation() {
+        return Optional.ofNullable(operation);
+    }
+
+    /** @return 用于日志、指纹和限流范围的稳定执行标识 */
+    @Contract(pure = true)
+    public @NotNull String invocationName() {
+        return operation == null ? methodSignature() : operation.toString();
     }
 
     /** @return 方法实参副本 */
@@ -210,40 +284,22 @@ public final class CallExecution {
         return resultType;
     }
 
-    /** @return 当前方法允许匿名访问时返回 {@code true} */
-    @Contract(pure = true)
-    public boolean anonymous() {
-        return anonymous;
-    }
-
-    /** @return 类型和方法声明的权限要求 */
-    @Contract(pure = true)
-    public List<RequirePermission> requiredPermissions() {
-        return requiredPermissions;
-    }
-
-    /** @return 当前审计声明；未声明时为空 */
-    @Contract(pure = true)
-    public Optional<Audit> audit() {
-        return Optional.ofNullable(audit);
-    }
-
-    /** @return 当前幂等声明；未声明时为空 */
-    @Contract(pure = true)
-    public Optional<Idempotent> idempotent() {
-        return Optional.ofNullable(idempotent);
-    }
-
-    /** @return 当前分布式锁声明；未声明时为空 */
-    @Contract(pure = true)
-    public Optional<Locked> locked() {
-        return Optional.ofNullable(locked);
-    }
-
-    /** @return 当前限流声明；未声明时为空 */
-    @Contract(pure = true)
-    public Optional<RateLimited> rateLimited() {
-        return Optional.ofNullable(rateLimited);
+    /** 返回具体类型和完整参数类型组成的稳定签名，供限流范围及幂等指纹使用。 */
+    public String methodSignature() {
+        if (method == null || declaringType == null) {
+            return operation.toString();
+        }
+        StringBuilder signature = new StringBuilder(declaringType.getName()).append('#')
+                .append(method.getName())
+                .append('(');
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        for (int index = 0; index < parameterTypes.length; index++) {
+            if (index > 0) {
+                signature.append(',');
+            }
+            signature.append(parameterTypes[index].getName());
+        }
+        return signature.append(')').toString();
     }
 
     /**
@@ -256,34 +312,4 @@ public final class CallExecution {
         return Optional.ofNullable(outcome);
     }
 
-    /** 保存一项权限范围及其是否被 Repository 消费。 */
-    private static final class ResourceScopeRequirement implements CallRequirement {
-
-        private final Permission permission;
-
-        private final ResourceScope scope;
-
-        private boolean consumed;
-
-        private ResourceScopeRequirement(Permission permission, ResourceScope scope) {
-            this.permission = permission;
-            this.scope = scope;
-        }
-
-        private <S extends ResourceScope> S consume(Class<S> scopeType) {
-            if (!scopeType.isInstance(scope)) {
-                throw new IllegalStateException(
-                        "资源范围类型不匹配: 实际 " + scope.getClass().getName() + "，要求 " + scopeType.getName());
-            }
-            consumed = true;
-            return scopeType.cast(scope);
-        }
-
-        @Override
-        public void verifySatisfied() {
-            if (!consumed) {
-                throw new IllegalStateException("业务方法声明的数据权限范围没有被 Repository 消费: " + permission);
-            }
-        }
-    }
 }

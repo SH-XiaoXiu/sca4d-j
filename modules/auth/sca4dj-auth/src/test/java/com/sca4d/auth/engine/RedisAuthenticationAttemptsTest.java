@@ -1,5 +1,7 @@
 package com.sca4d.auth.engine;
 
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+import static java.util.Locale.ROOT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -14,7 +16,6 @@ import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationActionCode;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.AuthenticationMethod;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.AuthenticationPolicy;
 import com.sca4d.core.api.authentication.AuthenticationProgress;
 import com.sca4d.core.api.authentication.AuthenticationRequirement;
@@ -24,7 +25,11 @@ import com.sca4d.core.api.authentication.VerifiedAuthentication;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.RealmKey;
-import com.sca4d.core.api.setting.Settings;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.setting.access.SettingReader;
+import com.sca4d.core.api.setting.access.SettingWriter;
+import com.sca4d.core.api.setting.value.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.DisplayName;
@@ -108,8 +113,8 @@ class RedisAuthenticationAttemptsTest {
 
         assertThat(progress.remainingFactorCount()).isEqualTo(1);
         assertThat(fixture.engine.consume(completed.attemptId()).authentications())
-                .extracting(authentication -> authentication.methodCode().value())
-                .containsExactly("password", "totp");
+                .extracting(authentication -> authentication.methodCode().format(SLASH))
+                .containsExactly("AUTHENTICATION/PASSWORD", "AUTHENTICATION/TOTP");
     }
 
     @Test
@@ -240,7 +245,7 @@ class RedisAuthenticationAttemptsTest {
             Supplier<?> action = invocation.getArgument(1);
             return action.get();
         });
-        Set<AuthenticationMethodCode> allowed = Arrays.stream(methods)
+        Set<TreeCode> allowed = Arrays.stream(methods)
                 .map(Method::code)
                 .collect(Collectors.toUnmodifiableSet());
         AuthenticationPolicy policy = new AuthenticationPolicy() {
@@ -252,15 +257,24 @@ class RedisAuthenticationAttemptsTest {
             }
 
             @Override
-            public @NotNull Set<AuthenticationMethodCode> allowedMethods(
+            public @NotNull Set<TreeCode> allowedMethods(
                     @NotNull Account account,
                     @NotNull AuthenticationActionCode actionCode,
                     @NotNull List<Authentication> completedAuthentications) {
                 return allowed;
             }
         };
-        Settings settings = mock(Settings.class);
-        when(settings.get(AuthSettings.ATTEMPT_TTL)).thenReturn(Duration.ofMinutes(5));
+        TestAccess source = mock(TestAccess.class);
+        AuthSettings settings = new AuthSettings(source, source);
+        when(source.read(settings.ATTEMPT_TTL.code(), SettingOwner.system())).thenReturn(
+                SettingValue.read(
+                        TreeCode.of("SETTING:TEST"),
+                        settings.ATTEMPT_TTL.code(),
+                        SettingOwner.system(),
+                        settings.ATTEMPT_TTL.codec().encode(Duration.ofMinutes(5)),
+                        1,
+                        new Version(0),
+                        false));
         RedisAuthenticationAttempts engine = new RedisAuthenticationAttempts(
                 new AuthenticationMethods(List.of(methods)),
                 store,
@@ -280,13 +294,13 @@ class RedisAuthenticationAttemptsTest {
             Instant authenticatedAt) {
         return new Authentication(
                 ACCOUNT.accountId(),
-                new AuthenticationMethodCode(method),
+                authenticationMethodCode(method),
                 Set.of(kind),
                 authenticatedAt);
     }
 
     @SuppressWarnings("ClassCanBeRecord")
-    private static final class Fixture {
+    private static class Fixture {
         private final RedisAuthenticationAttempts engine;
 
         private Fixture(RedisAuthenticationAttempts engine) {
@@ -298,14 +312,14 @@ class RedisAuthenticationAttemptsTest {
      * 提供测试所需的固定认证方法行为。
      */
     @SuppressWarnings("ClassCanBeRecord") // 项目禁止使用 Java record，保留普通测试类型。
-    private static final class Method implements AuthenticationMethod<String> {
-        private final AuthenticationMethodCode code;
-
+    private static class Method implements AuthenticationMethod<String> {
         private final AuthenticationFactorKind kind;
 
-        private final boolean identifiesAccount;
-
         private final Instant authenticatedAt;
+
+        private final TreeCode code;
+
+        private final boolean identifiesAccount;
 
         private Method(String code, AuthenticationFactorKind kind, boolean identifiesAccount) {
             this(code, kind, identifiesAccount, NOW);
@@ -316,14 +330,14 @@ class RedisAuthenticationAttemptsTest {
                 AuthenticationFactorKind kind,
                 boolean identifiesAccount,
                 Instant authenticatedAt) {
-            this.code = new AuthenticationMethodCode(code);
+            this.code = authenticationMethodCode(code);
             this.kind = kind;
             this.identifiesAccount = identifiesAccount;
             this.authenticatedAt = authenticatedAt;
         }
 
         @Override
-        public @NotNull AuthenticationMethodCode code() {
+        public @NotNull TreeCode code() {
             return code;
         }
 
@@ -355,7 +369,7 @@ class RedisAuthenticationAttemptsTest {
             return new VerifiedAuthentication(
                     checkedAccount,
                     new Authentication(checkedAccount.accountId(), code, Set.of(kind), authenticatedAt),
-                    code.value(),
+                    code.format(SLASH),
                     new Version(0),
                     null);
         }
@@ -372,9 +386,16 @@ class RedisAuthenticationAttemptsTest {
     }
 
     /**
+     * @return 测试认证方法使用的稳定编码
+     */
+    private static @NotNull TreeCode authenticationMethodCode(@NotNull String value) {
+        return TreeCode.ofSlash("AUTHENTICATION/" + value.toUpperCase(ROOT).replace('-', '_'));
+    }
+
+    /**
      * 在每次读取后推进到下一个预设时间。
      */
-    private static final class AdvancingClock extends Clock {
+    private static class AdvancingClock extends Clock {
         private final Instant[] instants;
 
         private int index;
@@ -402,5 +423,9 @@ class RedisAuthenticationAttemptsTest {
             index++;
             return instants[current];
         }
+    }
+
+    /** 测试替身同时实现读取和写入契约，避免引入生产组合接口。 */
+    private interface TestAccess extends SettingReader<String>, SettingWriter<String> {
     }
 }

@@ -1,14 +1,19 @@
 package com.sca4d.auth.hmac;
 
+import static com.sca4d.auth.hmac.HmacCredential.Status.ACTIVE;
+import static com.sca4d.auth.hmac.HmacCredential.Status.REVOKED;
+import static com.sca4d.auth.hmac.HmacErrorCode.CREDENTIAL_NOT_FOUND;
+import static com.sca4d.auth.hmac.HmacErrorCode.REJECTED;
+
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.AuthenticationMethod;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.SessionControl;
 import com.sca4d.core.api.authentication.SessionTerminationReason;
 import com.sca4d.core.api.authentication.VerifiedAuthentication;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,6 +26,7 @@ import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.time.Clock;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Objects;
@@ -29,29 +35,35 @@ import java.util.Set;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
-/** 签发、轮换、撤销和验证 Account 的 HMAC-SHA256 Credential，并执行时间窗、防重放和失败限制。 */
+/**
+ * 签发、轮换、撤销和验证 Account 的 MAC-SHA256 Credential，并执行时间窗、防重放和失败限制。
+ */
 public class HmacAuthenticationMethod implements AuthenticationMethod<HmacProof> {
 
-    /** HMAC 方法稳定编码。 */
-    public static final AuthenticationMethodCode CODE = new AuthenticationMethodCode("hmac");
+    /**
+     * MAC 方法稳定编码。
+     */
+    public static final TreeCode CODE = TreeCode.ofSlash("AUTHENTICATION/HMAC");
 
     private static final Logger LOG = LoggerFactory.getLogger(HmacAuthenticationMethod.class);
 
     private final @NotNull HmacCredentialRepository credentials;
 
-    private final @NotNull HmacKeyCryptography cryptography;
-
-    private final @NotNull SessionControl sessions;
-
-    private final @NotNull SecureRandom random;
-
-    private final @NotNull HmacAuthenticationAttemptStore attempts;
+    private final @NotNull HmacProperties properties;
 
     private final @NotNull Clock clock;
 
-    private final @NotNull HmacProperties properties;
+    private final @NotNull HmacAuthenticationAttemptStore attempts;
 
-    /** 创建 Account 级 HMAC 认证方法。 */
+    private final @NotNull HmacKeyCryptography cryptography;
+
+    private final @NotNull SecureRandom random;
+
+    private final @NotNull SessionControl sessions;
+
+    /**
+     * 创建 Account 级 MAC 认证方法。
+     */
     public HmacAuthenticationMethod(
             @NotNull HmacCredentialRepository credentials,
             @NotNull HmacKeyCryptography cryptography,
@@ -71,7 +83,7 @@ public class HmacAuthenticationMethod implements AuthenticationMethod<HmacProof>
     }
 
     @Override
-    public @NotNull AuthenticationMethodCode code() {
+    public @NotNull TreeCode code() {
         return CODE;
     }
 
@@ -101,23 +113,23 @@ public class HmacAuthenticationMethod implements AuthenticationMethod<HmacProof>
             @Nullable Account account,
             @NotNull HmacProof proof) {
         if (account == null) {
-            throw new BusinessException(HmacErrorCode.REJECTED);
+            throw new BusinessException(REJECTED);
         }
         HmacProof checked = Objects.requireNonNull(proof, "HMAC Proof 不能为空");
         if (Duration.between(checked.timestamp(), clock.instant()).abs().compareTo(properties.getClockSkew()) > 0
                 || attempts.failureCount(account.accountId()) >= properties.getFailureLimit()) {
-            throw new BusinessException(HmacErrorCode.REJECTED);
+            throw new BusinessException(REJECTED);
         }
 
         // 先消费 Account 和 nonce，错误签名不能重复使用相同请求材料。
         if (!attempts.consumeNonce(account.accountId(), checked.nonce(), properties.getNonceTtl())) {
-            throw new BusinessException(HmacErrorCode.REJECTED);
+            throw new BusinessException(REJECTED);
         }
 
         HmacCredential credential = credentials.find(account.accountId());
         if (credential == null || !credential.active() || !matches(credential, checked)) {
             recordFailure(account.accountId());
-            throw new BusinessException(HmacErrorCode.REJECTED);
+            throw new BusinessException(REJECTED);
         }
         attempts.clearFailures(account.accountId());
         Authentication authentication = new Authentication(
@@ -145,7 +157,7 @@ public class HmacAuthenticationMethod implements AuthenticationMethod<HmacProof>
     }
 
     /**
-     * 为 Account 创建、轮换或重新签发 HMAC Key。
+     * 为 Account 创建、轮换或重新签发 MAC Key。
      *
      * @param account 已经由管理流程确认存在的 Account；Account 停用时仍允许预置或轮换 Credential
      * @return 新 Credential 和只在本次调用可见的 Key
@@ -162,7 +174,7 @@ public class HmacAuthenticationMethod implements AuthenticationMethod<HmacProof>
                 : credentials.replace(
                         current,
                         cryptography.encrypt(accountId, nextVersion, plaintext),
-                        HmacCredential.Status.ACTIVE,
+                        ACTIVE,
                         clock.instant());
         if (current != null) {
             sessions.terminateAccount(accountId, SessionTerminationReason.AUTHENTICATION_CHANGED);
@@ -172,7 +184,7 @@ public class HmacAuthenticationMethod implements AuthenticationMethod<HmacProof>
     }
 
     /**
-     * 判断 Account 是否存在仍有效的 HMAC Credential。
+     * 判断 Account 是否存在仍有效的 MAC Credential。
      *
      * @param accountId Account 标识
      * @return Credential 存在且未撤销时为 {@code true}
@@ -185,25 +197,25 @@ public class HmacAuthenticationMethod implements AuthenticationMethod<HmacProof>
     }
 
     /**
-     * 撤销 Account 当前 HMAC Credential。
+     * 撤销 Account 当前 MAC Credential。
      *
      * @param accountId Account 标识
      * @param revokedAt 撤销时间
      * @return 本次调用完成撤销时为 {@code true}，已经撤销时为 {@code false}
-    */
+     */
     @Transactional
-    public boolean revoke(long accountId, @NotNull java.time.Instant revokedAt) {
+    public boolean revoke(long accountId, @NotNull Instant revokedAt) {
         HmacCredential current = credentials.find(accountId);
         if (current == null) {
-            throw new BusinessException(HmacErrorCode.CREDENTIAL_NOT_FOUND);
+            throw new BusinessException(CREDENTIAL_NOT_FOUND);
         }
         if (!current.active()) {
             return false;
         }
         boolean revoked = credentials.updateStatus(
                 accountId,
-                HmacCredential.Status.ACTIVE,
-                HmacCredential.Status.REVOKED,
+                ACTIVE,
+                REVOKED,
                 Objects.requireNonNull(revokedAt, "撤销时间不能为空"));
         if (revoked) {
             sessions.terminateAccount(accountId, SessionTerminationReason.AUTHENTICATION_CHANGED);
@@ -212,7 +224,9 @@ public class HmacAuthenticationMethod implements AuthenticationMethod<HmacProof>
         return revoked;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional
     public void eraseAccount(long accountId) {
@@ -224,7 +238,9 @@ public class HmacAuthenticationMethod implements AuthenticationMethod<HmacProof>
         LOG.debug("HMAC Credential 已擦除 | accountId={}", accountId);
     }
 
-    /** 生成 32 字节无填充 Base64URL Key。 */
+    /**
+     * 生成 32 字节无填充 Base64URL Key。
+     */
     private @NotNull String generate() {
         byte[] bytes = new byte[32];
         random.nextBytes(bytes);
@@ -235,7 +251,9 @@ public class HmacAuthenticationMethod implements AuthenticationMethod<HmacProof>
         }
     }
 
-    /** 使用当前 Credential 解密 Key 并固定时间比较签名。 */
+    /**
+     * 使用当前 Credential 解密 Key 并固定时间比较签名。
+     */
     private boolean matches(HmacCredential credential, HmacProof proof) {
         byte[] key = cryptography.decrypt(credential);
         byte[] supplied;
@@ -262,7 +280,9 @@ public class HmacAuthenticationMethod implements AuthenticationMethod<HmacProof>
         }
     }
 
-    /** 记录失败并在首次失败时设置固定窗口。 */
+    /**
+     * 记录失败并在首次失败时设置固定窗口。
+     */
     private void recordFailure(long accountId) {
         long count = attempts.recordFailure(accountId, properties.getFailureWindow());
         LOG.debug("HMAC 认证失败已计数 | accountId={} failures={}", accountId, count);

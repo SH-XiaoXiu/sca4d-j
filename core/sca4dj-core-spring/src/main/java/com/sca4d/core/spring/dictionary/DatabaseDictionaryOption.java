@@ -7,13 +7,13 @@ import java.util.Objects;
 
 /** 保存动态字典选项或代码字典扩展项的配置。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class DatabaseDictionaryOption {
+public class DatabaseDictionaryOption {
 
-    private final String value;
+    private final LocalizedFields i18n;
 
     private final String label;
 
-    private final LocalizedFields i18n;
+    private final String value;
 
     private final boolean enabled;
 

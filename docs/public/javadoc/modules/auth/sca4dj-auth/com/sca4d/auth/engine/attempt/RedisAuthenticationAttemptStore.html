@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="annotations">@Internal
-</span><span class="modifiers">public final class </span><span class="element-name type-name-label">RedisAuthenticationAttemptStore</span>
+</span><span class="modifiers">public class </span><span class="element-name type-name-label">RedisAuthenticationAttemptStore</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">使用 Redis TTL 保存认证尝试，并以自动续租的分布式锁串行修改同一尝试。</div>
 </section>
@@ -104,10 +104,9 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,com.fasterxml.jackson.databind.ObjectMapper,java.time.Clock,com.sca4d.core.api.runtime.RuntimeNamespace,com.sca4d.core.api.concurrent.DistributedLock)" class="member-name-link">RedisAuthenticationAttemptStore</a><wbr>(@NotNull org.springframework.data.redis.core.StringRedisTemplate&nbsp;redis,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,com.fasterxml.jackson.databind.ObjectMapper,java.time.Clock,com.sca4d.core.api.concurrent.DistributedLock)" class="member-name-link">RedisAuthenticationAttemptStore</a><wbr>(@NotNull org.springframework.data.redis.core.RedisTemplate&lt;com.sca4d.core.api.name.Key,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;redis,
  @NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;objectMapper,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
- @NotNull com.sca4d.core.api.runtime.RuntimeNamespace&nbsp;runtimeNamespace,
  @NotNull com.sca4d.core.api.concurrent.DistributedLock&nbsp;distributedLock)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建 Redis 认证尝试存储。</div>
@@ -170,16 +169,14 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(org.springframework.data.redis.core.StringRedisTemplate,com.fasterxml.jackson.databind.ObjectMapper,java.time.Clock,com.sca4d.core.api.runtime.RuntimeNamespace,com.sca4d.core.api.concurrent.DistributedLock)">
+<section class="detail" id="&lt;init&gt;(org.springframework.data.redis.core.RedisTemplate,com.fasterxml.jackson.databind.ObjectMapper,java.time.Clock,com.sca4d.core.api.concurrent.DistributedLock)">
 <h3>RedisAuthenticationAttemptStore</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RedisAuthenticationAttemptStore</span><wbr><span class="parameters">(@NotNull
- @NotNull org.springframework.data.redis.core.StringRedisTemplate&nbsp;redis,
+ @NotNull org.springframework.data.redis.core.RedisTemplate&lt;com.sca4d.core.api.name.Key,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;redis,
  @NotNull
  @NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;objectMapper,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
- @NotNull
- @NotNull com.sca4d.core.api.runtime.RuntimeNamespace&nbsp;runtimeNamespace,
  @NotNull
  @NotNull com.sca4d.core.api.concurrent.DistributedLock&nbsp;distributedLock)</span></div>
 <div class="block">创建 Redis 认证尝试存储。</div>
@@ -188,7 +185,6 @@ loadScripts(document, 'script');</script>
 <dd><code>redis</code> - Redis 字符串操作</dd>
 <dd><code>objectMapper</code> - JSON 映射器</dd>
 <dd><code>clock</code> - TTL 时间来源</dd>
-<dd><code>runtimeNamespace</code> - 当前应用的运行时命名空间</dd>
 <dd><code>distributedLock</code> - 自动续租的跨实例分布式锁</dd>
 </dl>
 </section>

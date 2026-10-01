@@ -89,11 +89,11 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">Authentication</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">Authentication</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">记录一种认证方式已经成功验证账号（Authentication）。
 
- <p>认证方法成功后直接返回该对象。多因素认证评估会话（Session，<a href="Session.html" title="class in com.sca4d.core.api.authentication"><code>Session</code></a>）中的认证列表。</div>
+ <p>认证方法成功后直接返回当前对象。多因素认证评估会话（Session，<a href="Session.html" title="class in com.sca4d.core.api.authentication"><code>Session</code></a>）中的认证列表。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -105,8 +105,8 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(long,com.sca4d.core.api.authentication.AuthenticationMethodCode,java.util.Set,java.time.Instant)" class="member-name-link">Authentication</a><wbr>(long&nbsp;accountId,
- <a href="AuthenticationMethodCode.html" title="class in com.sca4d.core.api.authentication">AuthenticationMethodCode</a>&nbsp;methodCode,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(long,com.sca4d.core.api.name.code.TreeCode,java.util.Set,java.time.Instant)" class="member-name-link">Authentication</a><wbr>(long&nbsp;accountId,
+ <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;methodCode,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="AuthenticationFactorKind.html" title="enum class in com.sca4d.core.api.authentication">AuthenticationFactorKind</a>&gt;&nbsp;factorKinds,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;authenticatedAt)</code></div>
 <div class="col-last even-row-color">
@@ -129,22 +129,22 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#accountId()" class="member-name-link">accountId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回已验证的 Account 标识。</div>
+<div class="block">已验证的 Account 标识。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#authenticatedAt()" class="member-name-link">authenticatedAt</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回验证完成时间。</div>
+<div class="block">验证完成时间。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;<a href="AuthenticationFactorKind.html" title="enum class in com.sca4d.core.api.authentication">AuthenticationFactorKind</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#factorKinds()" class="member-name-link">factorKinds</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回本次成功认证确认的因素类别。</div>
+<div class="block">本次成功认证确认的因素类别。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="AuthenticationMethodCode.html" title="class in com.sca4d.core.api.authentication">AuthenticationMethodCode</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#methodCode()" class="member-name-link">methodCode</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回完成验证的认证方式编码。</div>
+<div class="block">完成验证的认证方式编码。</div>
 </div>
 </div>
 </div>
@@ -164,10 +164,10 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(long,com.sca4d.core.api.authentication.AuthenticationMethodCode,java.util.Set,java.time.Instant)">
+<section class="detail" id="&lt;init&gt;(long,com.sca4d.core.api.name.code.TreeCode,java.util.Set,java.time.Instant)">
 <h3>Authentication</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">Authentication</span><wbr><span class="parameters">(long&nbsp;accountId,
- <a href="AuthenticationMethodCode.html" title="class in com.sca4d.core.api.authentication">AuthenticationMethodCode</a>&nbsp;methodCode,
+ <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;methodCode,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="AuthenticationFactorKind.html" title="enum class in com.sca4d.core.api.authentication">AuthenticationFactorKind</a>&gt;&nbsp;factorKinds,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;authenticatedAt)</span></div>
 <div class="block">创建认证证据。</div>
@@ -192,7 +192,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="accountId()">
 <h3>accountId</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">accountId</span>()</div>
-<div class="block">返回已验证的 Account 标识。</div>
+<div class="block">已验证的 Account 标识。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>已验证的 Account 标识</dd>
@@ -202,8 +202,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="methodCode()">
 <h3>methodCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AuthenticationMethodCode.html" title="class in com.sca4d.core.api.authentication">AuthenticationMethodCode</a></span>&nbsp;<span class="element-name">methodCode</span>()</div>
-<div class="block">返回完成验证的认证方式编码。</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></span>&nbsp;<span class="element-name">methodCode</span>()</div>
+<div class="block">完成验证的认证方式编码。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>完成验证的认证方式编码</dd>
@@ -214,7 +214,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="factorKinds()">
 <h3>factorKinds</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="AuthenticationFactorKind.html" title="enum class in com.sca4d.core.api.authentication">AuthenticationFactorKind</a>&gt;</span>&nbsp;<span class="element-name">factorKinds</span>()</div>
-<div class="block">返回本次成功认证确认的因素类别。</div>
+<div class="block">本次成功认证确认的因素类别。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>创建认证记录时复制的不可修改因素集合</dd>
@@ -225,7 +225,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="authenticatedAt()">
 <h3>authenticatedAt</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name">authenticatedAt</span>()</div>
-<div class="block">返回验证完成时间。</div>
+<div class="block">验证完成时间。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>验证完成时间</dd>

@@ -1,6 +1,7 @@
 package com.sca4d.iot.persistence.mapper;
 
 import com.sca4d.core.api.i18n.LocalizedFields;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iot.persistence.ProductAccessMethodState;
 import com.sca4d.iot.persistence.ProductProtocolState;
 import com.sca4d.iot.persistence.ProductState;
@@ -36,7 +37,7 @@ public interface ProductMapper {
      */
     int insertProductAccessMethods(
             @Param("productId") long productId,
-            @Param("methodCodes") @NotNull Collection<@NotNull String> methodCodes);
+            @Param("methodCodes") @NotNull Collection<@NotNull TreeCode> methodCodes);
 
     /**
      * 新增 Product 兼容的设备协议。

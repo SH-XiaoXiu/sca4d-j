@@ -15,11 +15,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 /** 在 Spring MVC 序列化 `ApiResponse` 前应用它声明的 HTTP 状态和响应头。 */
 @ControllerAdvice
-public final class ApiResponseAdvice implements ResponseBodyAdvice<Object> {
+public class ApiResponseAdvice implements ResponseBodyAdvice<Object> {
 
     private final ResponseETagResolver etags = new ResponseETagResolver();
 
-    /** 创建 `ApiResponse` HTTP 元数据写出组件。 */
     public ApiResponseAdvice() {
     }
 

@@ -1,5 +1,7 @@
 package com.sca4d.app.server.notification.view;
 
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+
 import com.sca4d.notification.inbox.InboxMessage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -9,7 +11,7 @@ import java.util.Objects;
 
 /** 返回当前 Account 一项站内信渲染快照。 */
 @SuppressWarnings("unused")
-public final class InboxMessageView {
+public class InboxMessageView {
     private final long id;
 
     private final String notificationType;
@@ -30,7 +32,7 @@ public final class InboxMessageView {
 
     private InboxMessageView(InboxMessage message) {
         this.id = message.inboxMessageId();
-        this.notificationType = message.code().value();
+        this.notificationType = message.code().format(SLASH);
         this.languageTag = message.locale().toLanguageTag();
         this.title = message.title();
         this.text = message.text();

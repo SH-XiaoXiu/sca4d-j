@@ -14,7 +14,7 @@ import java.util.Objects;
 
 /** 返回 Device 定时规则、下一次触发时间和乐观版本。 */
 @SuppressWarnings("unused")
-public final class IotDeviceScheduleView {
+public class IotDeviceScheduleView {
 
     private final long scheduleId;
 

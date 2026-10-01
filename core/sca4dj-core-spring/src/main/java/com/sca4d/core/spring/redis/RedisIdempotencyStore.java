@@ -10,12 +10,13 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sca4d.core.api.concurrent.IdempotencyBeginResult;
 import com.sca4d.core.api.concurrent.IdempotencyKey;
 import com.sca4d.core.api.concurrent.IdempotencyStore;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.spring.web.ApiResponse;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /** 使用 Redis Lua 原子维护幂等处理所有权和成功结果。 */
-public final class RedisIdempotencyStore implements IdempotencyStore {
+public class RedisIdempotencyStore implements IdempotencyStore {
 
     private static final String ACQUIRED = "ACQUIRED";
 
@@ -50,25 +51,25 @@ public final class RedisIdempotencyStore implements IdempotencyStore {
             "redis/idempotency/release.lua",
             Long.class);
 
-    private final StringRedisTemplate redis;
-
-    private final RuntimeNamespace runtimeNamespace;
+    private static final DefaultRedisScript<Long> RENEW = script(
+            "redis/idempotency/renew.lua",
+            Long.class);
 
     private final ObjectMapper objectMapper;
+
+    private final RedisTemplate<Key, String> redis;
 
     /**
      * 创建使用脚手架 Redis 模板和内部稳定 JSON 契约的幂等存储。
      *
      * @param redis 脚手架内部字符串 Redis 模板
-     * @param runtimeNamespace 当前应用的运行时命名空间
      * @param objectMapper 脚手架内部 JSON 映射器
      */
     public RedisIdempotencyStore(
-            @NotNull StringRedisTemplate redis,
-            @NotNull RuntimeNamespace runtimeNamespace,
+            @NotNull RedisTemplate<Key, String> redis,
             @NotNull ObjectMapper objectMapper) {
         this.redis = Objects.requireNonNull(redis, "Redis 模板不能为空");
-        this.runtimeNamespace = Objects.requireNonNull(runtimeNamespace, "运行时命名空间不能为空");
+
         this.objectMapper = Objects.requireNonNull(objectMapper, "ObjectMapper 不能为空");
     }
 
@@ -174,11 +175,21 @@ public final class RedisIdempotencyStore implements IdempotencyStore {
         return Long.valueOf(1L).equals(deleted);
     }
 
+    @Override
+    public boolean renew(@NotNull IdempotencyKey key, @NotNull String token, @NotNull Duration processingTtl) {
+        Long renewed = redis.execute(
+                RENEW,
+                List.of(storageKey(key)),
+                requireText(token, "所有权 token"),
+                Long.toString(ttl(processingTtl).toMillis()));
+        return Long.valueOf(1L).equals(renewed);
+    }
+
     /** 使用摘要后的幂等键生成当前应用独立的 Redis key。 */
-    private String storageKey(IdempotencyKey key) {
-        return runtimeNamespace.sca4dj(
-                "idempotency",
-                DigestUtil.sha256Hex(Objects.requireNonNull(key, "幂等键不能为空").value()));
+    private Key storageKey(IdempotencyKey key) {
+        return Key.of(TreeCode.ofSegment("IDEMPOTENCY"))
+                .part(
+                        DigestUtil.sha256Hex(Objects.requireNonNull(key, "幂等键不能为空").value()));
     }
 
     /** 将正数时间规范到 Redis 毫秒精度。 */

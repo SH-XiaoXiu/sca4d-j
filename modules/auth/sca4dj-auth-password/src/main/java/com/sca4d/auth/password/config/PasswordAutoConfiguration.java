@@ -28,7 +28,6 @@ import java.time.Clock;
 @EnableConfigurationProperties(PasswordProperties.class)
 public class PasswordAutoConfiguration {
 
-    /** 创建 Password 模块自动配置。 */
     public PasswordAutoConfiguration() {
     }
 
@@ -78,7 +77,7 @@ public class PasswordAutoConfiguration {
      */
     @Bean
     @Order(100)
-    @ConditionalOnProperty(prefix = "sca4dj.auth.password", name = "bootstrap-enabled", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = "sca4dj.auth.password.bootstrap", name = "enabled", havingValue = "true", matchIfMissing = true)
     ApplicationRunner passwordBootstrap(PasswordAuthenticationMethod passwords, PasswordProperties properties) {
         // IAM 初始化任务先创建平台账号；本任务随后仅为该账号缺失的密码凭据写入初始摘要。
         return arguments -> passwords.bootstrap(properties.getBootstrapUsername(), properties.getBootstrapPassword());

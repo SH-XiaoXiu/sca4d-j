@@ -183,7 +183,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="find(java.lang.String,java.lang.Long,java.lang.Long,java.lang.String,com.sca4d.core.api.audit.AuditResult,java.lang.String,java.lang.String,java.time.Instant,java.time.Instant,com.sca4d.core.api.query.PageRequest)">
 <h3>find</h3>
 <div class="member-signature"><span class="annotations">@GetMapping
-@RequirePermission(operation="system:audit:read")
+@RequirePermission(operation="SYSTEM:AUDIT:READ")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;com.sca4d.core.api.query.Page&lt;<a href="../../system/view/OperationLogView.html" title="class in com.sca4d.app.server.system.view">OperationLogView</a>&gt;&gt;</span>&nbsp;<span class="element-name">find</span><wbr><span class="parameters">(@RequestParam(required=false) @Nullable
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;requestId,
@@ -227,7 +227,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="get(long)">
 <h3>get</h3>
 <div class="member-signature"><span class="annotations">@GetMapping("/{id}")
-@RequirePermission(operation="system:audit:read")
+@RequirePermission(operation="SYSTEM:AUDIT:READ")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../system/view/OperationLogView.html" title="class in com.sca4d.app.server.system.view">OperationLogView</a>&gt;</span>&nbsp;<span class="element-name">get</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;id)</span></div>

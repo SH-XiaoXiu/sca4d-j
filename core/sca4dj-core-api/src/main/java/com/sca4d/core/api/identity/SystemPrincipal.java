@@ -1,25 +1,52 @@
 package com.sca4d.core.api.identity;
 
-/** 系统任务执行、授权和审计使用的唯一 Principal。 */
-public final class SystemPrincipal implements Principal {
+import com.sca4d.core.api.name.code.TreeCode;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
-    /** 唯一 SYSTEM Principal 实例。 */
-    public static final SystemPrincipal INSTANCE = new SystemPrincipal();
+import java.util.Objects;
 
-    /** 固定 SYSTEM Principal 标识。 */
-    public static final long ID = 1;
+/** 表示系统以某个稳定领域身份自主执行操作，不随实例启停改变。 */
+public class SystemPrincipal implements Principal {
 
-    private SystemPrincipal() {
+    private final @NotNull TreeCode code;
+
+    private final long id;
+
+    /** 创建数据库已经确认的系统领域身份；数字 ID 不表达权限等级。 */
+    public SystemPrincipal(long id, @NotNull TreeCode code) {
+        if (id <= 0) {
+            throw new IllegalArgumentException("系统 Principal ID 必须为正数");
+        }
+        this.id = id;
+        this.code = Objects.requireNonNull(code, "系统身份编码不能为空");
+    }
+
+    @Override
+    public long principalId() {
+        return id;
     }
 
     /**
-     * 返回固定的 SYSTEM Principal 标识。
+     * 代码声明的稳定领域编码。
      *
-     * @return 固定的 SYSTEM Principal 标识
+     * @return 代码声明的稳定领域编码
      */
-    @Override
-    public long principalId() {
-        return ID;
+    @Contract(pure = true)
+    public @NotNull TreeCode code() {
+        return code;
     }
 
+    @Override
+    public boolean equals(Object other) {
+        return this == other
+                || other instanceof SystemPrincipal principal
+                        && id == principal.id
+                        && code.equals(principal.code);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, code);
+    }
 }

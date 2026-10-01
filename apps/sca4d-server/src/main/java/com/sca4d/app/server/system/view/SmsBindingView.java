@@ -1,5 +1,7 @@
 package com.sca4d.app.server.system.view;
 
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.spring.web.annotation.ETag;
 import com.sca4d.notification.sms.SmsProviderBinding;
@@ -10,7 +12,7 @@ import java.util.Objects;
 
 /** 返回统一通知到 SMS Provider 模板的传输绑定。 */
 @SuppressWarnings("unused")
-public final class SmsBindingView {
+public class SmsBindingView {
 
     private final long bindingId;
 
@@ -35,7 +37,7 @@ public final class SmsBindingView {
     private SmsBindingView(SmsProviderBinding binding) {
         this.bindingId = binding.bindingId();
         this.providerId = binding.providerId();
-        this.notificationCode = binding.code().value();
+        this.notificationCode = binding.code().format(SLASH);
         this.route = binding.route().value();
         this.languageTag = binding.locale().toLanguageTag();
         this.signName = binding.signName();
@@ -78,8 +80,8 @@ public final class SmsBindingView {
         return providerTemplateCode;
     }
 
-    public Map<String, String> getParameterMapping() {
-        return parameterMapping;
+    public @NotNull Map<String, String> getParameterMapping() {
+        return Map.copyOf(parameterMapping);
     }
 
     public boolean isEnabled() {

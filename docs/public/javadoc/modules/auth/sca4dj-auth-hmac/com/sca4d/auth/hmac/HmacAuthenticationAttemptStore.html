@@ -88,9 +88,9 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">HmacAuthenticationAttemptStore</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">HmacAuthenticationAttemptStore</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">使用 Redis 保存 HMAC nonce 一次性消费记录和账号失败窗口。</div>
+<div class="block">使用 Redis 保存 MAC nonce 一次性消费记录和账号失败窗口。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -102,10 +102,9 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,com.sca4d.core.api.runtime.RuntimeNamespace)" class="member-name-link">HmacAuthenticationAttemptStore</a><wbr>(@NotNull org.springframework.data.redis.core.StringRedisTemplate&nbsp;redis,
- @NotNull com.sca4d.core.api.runtime.RuntimeNamespace&nbsp;namespace)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate)" class="member-name-link">HmacAuthenticationAttemptStore</a><wbr>(@NotNull org.springframework.data.redis.core.RedisTemplate&lt;com.sca4d.core.api.name.Key,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;redis)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建按运行命名空间隔离的 HMAC 认证尝试存储。</div>
+<div class="block">创建按 App 隔离名称隔离的 MAC 认证尝试存储。</div>
 </div>
 </div>
 </section>
@@ -156,13 +155,11 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(org.springframework.data.redis.core.StringRedisTemplate,com.sca4d.core.api.runtime.RuntimeNamespace)">
+<section class="detail" id="&lt;init&gt;(org.springframework.data.redis.core.RedisTemplate)">
 <h3>HmacAuthenticationAttemptStore</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">HmacAuthenticationAttemptStore</span><wbr><span class="parameters">(@NotNull
- @NotNull org.springframework.data.redis.core.StringRedisTemplate&nbsp;redis,
- @NotNull
- @NotNull com.sca4d.core.api.runtime.RuntimeNamespace&nbsp;namespace)</span></div>
-<div class="block">创建按运行命名空间隔离的 HMAC 认证尝试存储。</div>
+ @NotNull org.springframework.data.redis.core.RedisTemplate&lt;com.sca4d.core.api.name.Key,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;redis)</span></div>
+<div class="block">创建按 App 隔离名称隔离的 MAC 认证尝试存储。</div>
 </section>
 </li>
 </ul>

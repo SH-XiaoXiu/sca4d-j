@@ -14,11 +14,11 @@ import java.util.Set;
  * 保存一个列表查询已经校验的分页要求和有序排序条件。
  */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class ListRequest {
-
-    private final @NotNull PageRequest page;
+public class ListRequest {
 
     private final @NotNull @Unmodifiable List<@NotNull SortOrder> sort;
+
+    private final @NotNull PageRequest page;
 
     /**
      * 创建列表查询要求。

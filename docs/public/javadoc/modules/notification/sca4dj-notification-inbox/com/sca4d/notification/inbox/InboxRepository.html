@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">InboxRepository</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">InboxRepository</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">隐藏站内信 Mapper、游标分页和幂等新增语义。</div>
 </section>
@@ -120,11 +120,11 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(long,com.sca4d.core.api.messaging.MessageId,long,com.sca4d.core.api.notification.Notification,com.sca4d.notification.template.RenderedNotification)" class="member-name-link">add</a><wbr>(long&nbsp;inboxMessageId,
- @NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(long,com.sca4d.core.api.id.Id,long,com.sca4d.core.api.notification.Notification,com.sca4d.notification.inbox.template.RenderedInboxMessage)" class="member-name-link">add</a><wbr>(long&nbsp;inboxMessageId,
+ @NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  long&nbsp;accountId,
  @NotNull com.sca4d.core.api.notification.Notification&nbsp;notification,
- @NotNull com.sca4d.notification.template.RenderedNotification&nbsp;rendered)</code></div>
+ @NotNull <a href="template/RenderedInboxMessage.html" title="class in com.sca4d.notification.inbox.template">RenderedInboxMessage</a>&nbsp;rendered)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">按原始 messageId 和 Account 幂等保存渲染快照。</div>
 </div>
@@ -209,16 +209,16 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="add(long,com.sca4d.core.api.messaging.MessageId,long,com.sca4d.core.api.notification.Notification,com.sca4d.notification.template.RenderedNotification)">
+<section class="detail" id="add(long,com.sca4d.core.api.id.Id,long,com.sca4d.core.api.notification.Notification,com.sca4d.notification.inbox.template.RenderedInboxMessage)">
 <h3>add</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(long&nbsp;inboxMessageId,
  @NotNull
- @NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+ @NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  long&nbsp;accountId,
  @NotNull
  @NotNull com.sca4d.core.api.notification.Notification&nbsp;notification,
  @NotNull
- @NotNull com.sca4d.notification.template.RenderedNotification&nbsp;rendered)</span></div>
+ @NotNull <a href="template/RenderedInboxMessage.html" title="class in com.sca4d.notification.inbox.template">RenderedInboxMessage</a>&nbsp;rendered)</span></div>
 <div class="block">按原始 messageId 和 Account 幂等保存渲染快照。</div>
 </section>
 </li>

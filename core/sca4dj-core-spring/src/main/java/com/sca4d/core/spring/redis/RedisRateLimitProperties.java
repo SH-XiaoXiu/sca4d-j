@@ -6,13 +6,13 @@ import java.time.Duration;
 
 /** 配置 Redis 限流状态在额度完全恢复后的额外保留时间。 */
 @ConfigurationProperties("sca4dj.redis.rate-limit")
-public final class RedisRateLimitProperties {
+public class RedisRateLimitProperties {
 
     /** 额度完全恢复后继续保留限流状态的时间，避免频繁删除和重建 Redis 键。 */
     private Duration keepAfterRefill = Duration.ofHours(1);
 
     /**
-     * 返回额度完全恢复后的额外保留时间。
+     * 额度完全恢复后的额外保留时间。
      *
      * @return 正数保留时间
      */

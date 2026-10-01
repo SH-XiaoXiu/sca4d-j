@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 按领域 scope 路由 ACL Repository。 */
-public final class AclRepositoryRegistry {
+public class AclRepositoryRegistry {
     private static final Logger LOG = LoggerFactory.getLogger(AclRepositoryRegistry.class);
 
     private final @NotNull @Unmodifiable Map<@NotNull DomainScope, @NotNull AclRepository> repositories;
@@ -29,7 +29,7 @@ public final class AclRepositoryRegistry {
         for (AclRepository repository : Objects.requireNonNull(repositories, "ACL Repository 不能为空")) {
             AclRepository checked = Objects.requireNonNull(repository, "ACL Repository 不能为空");
             if (values.putIfAbsent(checked.scope(), checked) != null) {
-                throw new IllegalStateException("ACL Repository scope 重复: " + checked.scope().value());
+                throw new IllegalStateException("ACL Repository scope 重复: " + checked.scope());
             }
         }
         this.repositories = Map.copyOf(values);
@@ -46,11 +46,11 @@ public final class AclRepositoryRegistry {
     public @NotNull AclRepository repository(@NotNull DomainScope scope) {
         AclRepository repository = repositories.get(Objects.requireNonNull(scope, "领域 scope 不能为空"));
         if (repository == null) {
-            throw new IllegalArgumentException("ACL Repository 未注册: " + scope.value());
+            throw new IllegalArgumentException("ACL Repository 未注册: " + scope);
         }
         LOG.trace(
                 "ACL Repository 已路由 | scope={} repository={}",
-                scope.value(),
+                scope,
                 repository.getClass().getName());
         return repository;
     }

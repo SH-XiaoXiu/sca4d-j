@@ -93,21 +93,21 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary" aria-labelledby="class-summary-tab0">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="MessageOutboxDispatcher.html" title="class in com.sca4d.messaging.outbox">MessageOutboxDispatcher</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">多实例领取 Outbox 记录，在事务外发布，并用独立事务写回确认或失败结果。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="MessageOutboxRepository.html" title="class in com.sca4d.messaging.outbox">MessageOutboxRepository</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">保存 Outbox 消息，并用租约和版本条件领取及完成派发。</div>
+</div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="OutboxCleanupTask.html" title="class in com.sca4d.messaging.outbox">OutboxCleanupTask</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">由集群定时器直接触发一次超过保留期的 SENT Outbox 记录分批删除。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OutboxDispatcher.html" title="class in com.sca4d.messaging.outbox">OutboxDispatcher</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OutboxDispatchTask.html" title="class in com.sca4d.messaging.outbox">OutboxDispatchTask</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">多实例领取 Outbox 记录，在事务外发布，并用独立事务写回确认或失败结果。</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OutboxDispatchTask.html" title="class in com.sca4d.messaging.outbox">OutboxDispatchTask</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">由集群定时器直接触发一次到期 Outbox 消息领取和发布。</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OutboxRepository.html" title="class in com.sca4d.messaging.outbox">OutboxRepository</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">保存 Outbox 消息，并用租约和版本条件领取及完成派发。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab3"><a href="OutboxStatus.html" title="enum class in com.sca4d.messaging.outbox">OutboxStatus</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab3">

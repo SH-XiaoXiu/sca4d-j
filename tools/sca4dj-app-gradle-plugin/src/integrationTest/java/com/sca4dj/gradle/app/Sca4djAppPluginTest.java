@@ -1,5 +1,4 @@
 package com.sca4dj.gradle.app;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.gradle.testkit.runner.BuildResult;

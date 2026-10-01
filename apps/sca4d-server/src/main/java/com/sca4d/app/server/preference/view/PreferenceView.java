@@ -2,7 +2,8 @@ package com.sca4d.app.server.preference.view;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.setting.SettingValue;
+import com.sca4d.core.api.name.NameFormat;
+import com.sca4d.core.api.setting.value.SettingValue;
 import com.sca4d.core.spring.web.annotation.ETag;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +11,7 @@ import java.util.Objects;
 
 /** 返回一个已注册个人偏好的结构版本、完整 JSON 值和维护状态。 */
 @SuppressWarnings("unused")
-public final class PreferenceView {
+public class PreferenceView {
 
     private final String key;
 
@@ -22,17 +23,17 @@ public final class PreferenceView {
 
     private final @NotNull Version revision;
 
-    private PreferenceView(@NotNull SettingValue<?> preference) {
-        SettingValue<?> checked = Objects.requireNonNull(preference, "偏好设置值不能为空");
-        this.key = checked.setting().key();
-        this.schemaVersion = checked.setting().schemaVersion();
-        this.value = encodeValue(checked);
+    private PreferenceView(@NotNull SettingValue<JsonNode> preference) {
+        SettingValue<JsonNode> checked = Objects.requireNonNull(preference, "偏好设置值不能为空");
+        this.key = checked.code().format(NameFormat.COLON);
+        this.schemaVersion = checked.codecVersion();
+        this.value = checked.value();
         this.stored = checked.stored();
-        this.revision = checked.version();
+        this.revision = checked.revision().orElseThrow();
     }
 
     /** 从类型化设置值创建 HTTP 投影。 */
-    public static @NotNull PreferenceView from(@NotNull SettingValue<?> preference) {
+    public static @NotNull PreferenceView from(@NotNull SettingValue<JsonNode> preference) {
         return new PreferenceView(preference);
     }
 
@@ -62,8 +63,4 @@ public final class PreferenceView {
         return revision;
     }
 
-    /** 捕获偏好值泛型并编码为独立 JSON 节点。 */
-    private static <T> @NotNull JsonNode encodeValue(@NotNull SettingValue<T> preference) {
-        return preference.setting().codec().encodeJson(preference.value());
-    }
 }

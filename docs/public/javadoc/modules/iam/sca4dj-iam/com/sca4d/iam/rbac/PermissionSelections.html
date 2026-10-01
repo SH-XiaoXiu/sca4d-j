@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">PermissionSelections</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">PermissionSelections</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">校验可由管理 API 保存的 ACTION 编码，并把内部全量选择符展开为具体 <code>Operation</code>。</div>
 </section>
@@ -159,6 +159,16 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#validateGrantable(java.util.Collection)" class="member-name-link">validateGrantable</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;operationCodes)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">校验管理 API 提交的 ACTION 编码。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="PermissionSelector.html" title="class in com.sca4d.iam.rbac">PermissionSelector</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#validateGrantableCodes(java.util.Collection)" class="member-name-link">validateGrantableCodes</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull com.sca4d.core.api.name.code.TreeCode&gt;&nbsp;operationCodes)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">校验已经在字符串边界解析完成的 Operation TreeCode。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="PermissionSelector.html" title="class in com.sca4d.iam.rbac">PermissionSelector</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#validateGrantableOperations(java.util.Collection)" class="member-name-link">validateGrantableOperations</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull com.sca4d.core.api.permission.Operation&gt;&nbsp;operations)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">校验已经由代码层保存的 Operation，不把 TreeCode 转回字符串。</div>
 </div>
 </div>
 </div>
@@ -272,6 +282,26 @@ loadScripts(document, 'script');</script>
 <dt>Throws:</dt>
 <dd><code>com.sca4d.core.api.error.BusinessException</code> - 编码重复、未声明或为内部全量选择符时抛出</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="validateGrantableCodes(java.util.Collection)">
+<h3>validateGrantableCodes</h3>
+<div class="member-signature"><span class="annotations">@CheckReturnValue
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="PermissionSelector.html" title="class in com.sca4d.iam.rbac">PermissionSelector</a>&gt;</span>&nbsp;<span class="element-name">validateGrantableCodes</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull com.sca4d.core.api.name.code.TreeCode&gt;&nbsp;operationCodes)</span></div>
+<div class="block">校验已经在字符串边界解析完成的 Operation TreeCode。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="validateGrantableOperations(java.util.Collection)">
+<h3>validateGrantableOperations</h3>
+<div class="member-signature"><span class="annotations">@CheckReturnValue
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="PermissionSelector.html" title="class in com.sca4d.iam.rbac">PermissionSelector</a>&gt;</span>&nbsp;<span class="element-name">validateGrantableOperations</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull com.sca4d.core.api.permission.Operation&gt;&nbsp;operations)</span></div>
+<div class="block">校验已经由代码层保存的 Operation，不把 TreeCode 转回字符串。</div>
 </section>
 </li>
 <li>

@@ -12,9 +12,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 /** 在 Spring MVC 序列化响应体前只写入当前请求产生的 ClientState 响应头。 */
 @ControllerAdvice
-public final class ClientStateResponseAdvice implements ResponseBodyAdvice<Object> {
+public class ClientStateResponseAdvice implements ResponseBodyAdvice<Object> {
 
-    /** 创建 ClientState 响应头写出组件。 */
     public ClientStateResponseAdvice() {
     }
 

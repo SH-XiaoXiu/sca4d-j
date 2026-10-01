@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/** 批量读取 Device 当前连接事实，不解释业务在线状态。 */
+/** 批量读取 Device 当前连接信息，不解释业务在线状态。 */
 public interface DeviceConnectionQueryService {
 
     /**

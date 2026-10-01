@@ -12,17 +12,17 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 表示 EMQX `5.8.9` HTTP Authenticator 必须以 HTTP 200 返回的认证结果。 */
-public final class EmqxAuthenticationResponse {
+public class EmqxAuthenticationResponse {
 
     private final @NotNull String result;
 
     private final boolean superuser;
 
-    private final @NotNull Map<String, String> clientAttributes;
-
     private final @NotNull List<EmqxAclRule> acl;
 
     private final @Nullable Long expireAt;
+
+    private final @NotNull Map<String, String> clientAttributes;
 
     private EmqxAuthenticationResponse(
             @NotNull String result,
@@ -36,7 +36,7 @@ public final class EmqxAuthenticationResponse {
         this.expireAt = expireAt;
     }
 
-    /** @return 明确拒绝且不能由后续 Authenticator 放宽的响应 */
+    /** @return 明确拒绝且不能由之后的 Authenticator 放宽的响应 */
     @CheckReturnValue
     public static @NotNull EmqxAuthenticationResponse deny() {
         return new EmqxAuthenticationResponse("deny", Map.of(), List.of(), null);

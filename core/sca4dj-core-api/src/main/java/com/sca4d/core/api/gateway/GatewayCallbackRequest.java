@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeMap;
 
@@ -19,11 +20,11 @@ import java.util.TreeMap;
  * @param <I> JSON 请求体转换后的输入类型
  */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class GatewayCallbackRequest<I> {
-
-    private final @NotNull Map<String, List<String>> headers;
+public class GatewayCallbackRequest<I> {
 
     private final @Nullable I body;
+
+    private final @NotNull Map<String, List<String>> headers;
 
     /**
      * 创建回调请求。
@@ -70,7 +71,7 @@ public final class GatewayCallbackRequest<I> {
         source.forEach((name, values) -> {
             ArrayList<String> copiedValues = new ArrayList<>(values.size());
             for (String value : values) {
-                copiedValues.add(java.util.Objects.requireNonNull(value, "Gateway 回调 Header 值不能为空"));
+                copiedValues.add(Objects.requireNonNull(value, "Gateway 回调 Header 值不能为空"));
             }
             copied.put(name, List.copyOf(copiedValues));
         });

@@ -7,23 +7,23 @@ import java.util.Objects;
 
 /** 保存一次消息消费批量写入 TimescaleDB 所需的单条 Telemetry 样本字段。 */
 @SuppressWarnings({"ClassCanBeRecord", "unused"}) // MyBatis XML 通过属性名读取写入参数。
-public final class TimescaleTelemetrySample {
+public class TimescaleTelemetrySample {
 
-    private final long messageId;
+    private final @NotNull Instant observedAt;
 
-    private final int sampleIndex;
-
-    private final long deviceId;
-
-    private final long bindingGeneration;
+    private final @NotNull Instant receivedAt;
 
     private final @NotNull String propertyCode;
 
     private final @NotNull String valueJson;
 
-    private final @NotNull Instant observedAt;
+    private final int sampleIndex;
 
-    private final @NotNull Instant receivedAt;
+    private final long bindingGeneration;
+
+    private final long deviceId;
+
+    private final long messageId;
 
     /** 创建已经完成物模型值编码的 Telemetry 持久化字段。 */
     public TimescaleTelemetrySample(
@@ -36,7 +36,7 @@ public final class TimescaleTelemetrySample {
             @NotNull Instant observedAt,
             @NotNull Instant receivedAt) {
         if (messageId <= 0 || sampleIndex < 0 || deviceId <= 0 || bindingGeneration <= 0) {
-            throw new IllegalArgumentException("Telemetry MessageId、样本序号、Device 或绑定版本不合法");
+            throw new IllegalArgumentException("Telemetry Id、样本序号、Device 或绑定版本不合法");
         }
         this.messageId = messageId;
         this.sampleIndex = sampleIndex;

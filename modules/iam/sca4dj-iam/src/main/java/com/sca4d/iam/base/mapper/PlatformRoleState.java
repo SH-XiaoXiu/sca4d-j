@@ -11,23 +11,23 @@ import java.util.Objects;
 
 /** 保存 {@code platform_role} 的角色状态和权限字段。 */
 @SuppressWarnings("ClassCanBeRecord")
-public final class PlatformRoleState {
-
-    private final @NotNull Long id;
-
-    private final @NotNull String code;
-
-    private final @NotNull LocalizedFields i18n;
-
-    private final @NotNull RoleStatus status;
-
-    private final boolean builtIn;
+public class PlatformRoleState {
 
     private final @NotNull Instant createdAt;
 
     private final @NotNull Instant updatedAt;
 
+    private final @NotNull LocalizedFields i18n;
+
+    private final @NotNull Long id;
+
+    private final @NotNull RoleStatus status;
+
+    private final @NotNull String code;
+
     private final @NotNull Version version;
+
+    private final boolean builtIn;
 
     /**
      * 创建 Platform 角色查询结果。
@@ -61,7 +61,7 @@ public final class PlatformRoleState {
     }
 
     /**
-     * 返回角色标识。
+     * 角色标识。
      *
      * @return 角色标识
      */
@@ -71,7 +71,7 @@ public final class PlatformRoleState {
     }
 
     /**
-     * 返回创建后不可修改的角色编码。
+     * 创建后不可修改的角色编码。
      *
      * @return 角色编码
      */
@@ -81,7 +81,7 @@ public final class PlatformRoleState {
     }
 
     /**
-     * 返回角色完整多语言字段。
+     * 角色完整多语言字段。
      *
      * @return 完整多语言字段
      */
@@ -91,7 +91,7 @@ public final class PlatformRoleState {
     }
 
     /**
-     * 返回角色状态。
+     * 角色状态。
      *
      * @return 角色状态
      */
@@ -101,7 +101,7 @@ public final class PlatformRoleState {
     }
 
     /**
-     * 返回角色是否由 IAM 创建并保护。
+     * 角色是否由 IAM 创建并保护。
      *
      * @return {@code true} 表示内置角色
      */
@@ -111,7 +111,7 @@ public final class PlatformRoleState {
     }
 
     /**
-     * 返回角色创建时间。
+     * 角色创建时间。
      *
      * @return 创建时间
      */
@@ -121,7 +121,7 @@ public final class PlatformRoleState {
     }
 
     /**
-     * 返回角色最近更新时间。
+     * 角色最近更新时间。
      *
      * @return 最近更新时间
      */
@@ -131,7 +131,7 @@ public final class PlatformRoleState {
     }
 
     /**
-     * 返回名称、状态、权限和删除共享的版本。
+     * 名称、状态、权限和删除共享的版本。
      *
      * @return 当前版本
      */

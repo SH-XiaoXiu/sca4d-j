@@ -9,7 +9,8 @@ import com.sca4d.core.api.authentication.AuthenticationFactorKind;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.principalsession.PrincipalCodec;
 import com.sca4d.core.api.identity.Principal;
-import com.sca4d.core.api.resource.Resource;
+import com.sca4d.core.api.name.code.TreeCode;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -22,22 +23,15 @@ import java.util.function.Consumer;
 class SessionCodecTest {
 
     private static final String LEGACY_SESSION_WIRE = """
-            {"formatVersion":1,"id":"session-1","subject":{"subjectId":11,"type":"HUMAN"},"account":{"accountId":22,"subjectId":11,"realmKey":"test"},"principals":[{"type":"test.principal","payload":"eyJpZCI6MzMsImZpZWxkIjoicHJpbmNpcGFsLWZpZWxkIn0="}],"authentications":[{"accountId":22,"methodCode":"password","factorKinds":["KNOWLEDGE","POSSESSION"],"authenticatedAt":"2026-07-22T00:00:00Z"}],"resources":[{"principalId":33,"resource":{"type":"test.resource","payload":"eyJ0eXBlIjoib3BlcmF0aW9uIiwiaWQiOiJwbGF0Zm9ybS5hY2NvdW50LnJlYWQiLCJmaWVsZCI6InJlc291cmNlLWZpZWxkIn0="}}],"issuedAt":"2026-07-22T00:00:00Z","expiresAt":"2026-07-22T01:00:00Z"}
+            {"formatVersion":2,"id":"session-1","subject":{"subjectId":11,"type":"HUMAN"},"account":{"accountId":22,"subjectId":11,"realmKey":"test"},"principals":[{"type":"test.principal","payload":"eyJpZCI6MzMsImZpZWxkIjoicHJpbmNpcGFsLWZpZWxkIn0="}],"authentications":[{"accountId":22,"methodCode":"password","factorKinds":["KNOWLEDGE","POSSESSION"],"authenticatedAt":"2026-07-22T00:00:00Z"}],"resources":[{"principalId":33,"resource":{"type":"test.resource","payload":"eyJ0eXBlIjoib3BlcmF0aW9uIiwiaWQiOiJwbGF0Zm9ybS5hY2NvdW50LnJlYWQiLCJmaWVsZCI6InJlc291cmNlLWZpZWxkIn0="}}],"issuedAt":"2026-07-22T00:00:00Z","expiresAt":"2026-07-22T01:00:00Z"}
             """;
 
     @Test
-    @DisplayName("Decodes A Fixed Legacy Session Wire")
-    void decodesAFixedLegacySessionWire() {
-        Session restored = SessionTestFixture.codec().decode(LEGACY_SESSION_WIRE);
-
-        assertThat(restored.id().value()).isEqualTo("session-1");
-        assertThat(restored.account().accountId()).isEqualTo(22L);
-        assertThat(restored.principals()).singleElement()
-                .extracting(Principal::principalId)
-                .isEqualTo(33L);
-        assertThat(restored.resources(33)).singleElement()
-                .extracting(Resource::id)
-                .isEqualTo("platform.account.read");
+    @DisplayName("Rejects Former Session Wire Version")
+    void rejectsFormerSessionWireVersion() {
+        assertThatThrownBy(() -> SessionTestFixture.codec().decode(LEGACY_SESSION_WIRE))
+                .isInstanceOf(IllegalStateException.class)
+                .hasRootCauseMessage("未知 Session wire 版本: 2");
     }
 
     @Test
@@ -53,6 +47,7 @@ class SessionCodecTest {
 
         ObjectNode wire = (ObjectNode) SessionTestFixture.OBJECT_MAPPER.readTree(encoded);
         assertThat(wire.get("subject").fieldNames()).toIterable().containsExactlyInAnyOrder("subjectId", "type");
+        assertThat(wire.withArray("principals").get(0).get("version").intValue()).isEqualTo(1);
         assertThat(wire.get("account").fieldNames()).toIterable()
                 .containsExactlyInAnyOrder("accountId", "subjectId", "realmKey");
         assertThat(restored.subject().subjectId()).isEqualTo(original.subject().subjectId());
@@ -69,7 +64,7 @@ class SessionCodecTest {
         assertThat(((SessionTestFixture.TestResource) restored.resources(principal.principalId()).getFirst()).field())
                 .isEqualTo("resource-field");
         assertThat(restored.authentications()).singleElement().satisfies(authentication -> {
-            assertThat(authentication.methodCode().value()).isEqualTo("password");
+            assertThat(authentication.methodCode()).isEqualTo(TreeCode.of("AUTHENTICATION/PASSWORD"));
             assertThat(authentication.factorKinds())
                     .containsExactlyInAnyOrder(AuthenticationFactorKind.KNOWLEDGE, AuthenticationFactorKind.POSSESSION);
             assertThat(authentication.authenticatedAt()).isEqualTo(SessionTestFixture.NOW);
@@ -94,6 +89,8 @@ class SessionCodecTest {
         ObjectNode wire = (ObjectNode) SessionTestFixture.OBJECT_MAPPER.readTree(encoded);
         assertThat(wire.withArray("principalIdSets")).hasSize(1);
         assertThat(wire.withArray("resourceIdSets")).hasSize(1);
+        assertThat(wire.withArray("principalIdSets").get(0).get("version").intValue()).isEqualTo(1);
+        assertThat(wire.withArray("resourceIdSets").get(0).get("version").intValue()).isEqualTo(1);
         assertThat(restored.principalIdSets()).singleElement().satisfies(principalIds -> {
             assertThat(principalIds.principalType()).isEqualTo(SessionTestFixture.TestPrincipal.class);
             assertThat(principalIds.ids().size()).isEqualTo(10_000);
@@ -102,7 +99,7 @@ class SessionCodecTest {
         });
         Principal principal = restored.principals().getFirst();
         assertThat(restored.resourceIdSets(principal.principalId())).singleElement().satisfies(resourceIds -> {
-            assertThat(resourceIds.resourceType()).isEqualTo("project");
+            assertThat(resourceIds.resourceType()).isEqualTo(TreeCode.of("PROJECT"));
             assertThat(resourceIds.ids().toArray()).containsExactly(1_927_273_629L, 1_927_273_630L);
         });
         assertThat(
@@ -155,7 +152,7 @@ class SessionCodecTest {
                         SessionTestFixture.NOW.plusSeconds(3600)));
 
         ObjectNode version = (ObjectNode) SessionTestFixture.OBJECT_MAPPER.readTree(encoded);
-        version.put("formatVersion", 2);
+        version.put("formatVersion", 999);
         assertDecodeFails(codec, version);
 
         ObjectNode unknown = (ObjectNode) SessionTestFixture.OBJECT_MAPPER.readTree(encoded);
@@ -218,17 +215,17 @@ class SessionCodecTest {
                 .hasMessage("Session 解码失败");
     }
 
-    private static final class AlternatePrincipal implements Principal {
+    private static class AlternatePrincipal implements Principal {
         @Override
         public long principalId() {
             return 99;
         }
     }
 
-    private static final class AlternatePrincipalCodec implements PrincipalCodec<AlternatePrincipal> {
+    private static class AlternatePrincipalCodec implements PrincipalCodec<AlternatePrincipal> {
         @Override
-        public String type() {
-            return "test.principal";
+        public @NotNull TreeCode type() {
+            return TreeCode.of("test.principal");
         }
 
         @Override

@@ -5,7 +5,7 @@ import com.sca4d.core.api.utils.TextUtils;
 import java.util.Objects;
 
 /** 表示结束认证 Session 的开放原因。 */
-public final class SessionTerminationReason {
+public class SessionTerminationReason {
 
     /** 当前接入者主动请求注销 Session。 */
     public static final SessionTerminationReason USER_REQUESTED = new SessionTerminationReason("USER_REQUESTED");
@@ -30,7 +30,7 @@ public final class SessionTerminationReason {
     }
 
     /**
-     * 返回注销原因编码。
+     * 注销原因编码。
      *
      * @return 注销原因编码
      */

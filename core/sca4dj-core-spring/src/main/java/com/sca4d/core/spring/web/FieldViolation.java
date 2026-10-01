@@ -1,7 +1,7 @@
 package com.sca4d.core.spring.web;
 
 /** 表示一个 HTTP 输入字段未满足的约束。 */
-public final class FieldViolation {
+public class FieldViolation {
 
     private final String field;
 
@@ -19,7 +19,7 @@ public final class FieldViolation {
     }
 
     /**
-     * 返回输入字段名称。
+     * 输入字段名称。
      *
      * @return 输入字段名称
      */
@@ -28,7 +28,7 @@ public final class FieldViolation {
     }
 
     /**
-     * 返回当前语言的拒绝原因。
+     * 当前语言的拒绝原因。
      *
      * @return 当前语言的拒绝原因
      */

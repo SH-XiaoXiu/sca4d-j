@@ -90,10 +90,10 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code>com.sca4d.core.api.notification.NotificationDelivery</code></dd>
+<dd><code>com.sca4d.core.api.delivery.Delivery&lt;com.sca4d.core.api.notification.Notification&gt;</code>, <code>com.sca4d.core.api.notification.NotificationDelivery</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">SmsNotificationDelivery</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">SmsNotificationDelivery</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.core.api.notification.NotificationDelivery</span></div>
 <div class="block">解析手机号、线路、Provider 与平台绑定，并提交一个必发或可选 SMS 渠道请求。</div>
@@ -108,14 +108,16 @@ implements com.sca4d.core.api.notification.NotificationDelivery</span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.notification.sms.SmsRecipientResolver,com.sca4d.core.api.region.RegionCatalog,com.sca4d.notification.sms.SmsRouteResolver,com.sca4d.notification.sms.SmsProviderSelector,com.sca4d.notification.sms.SmsRepository,com.sca4d.notification.sms.SmsDeliveryStore,java.util.List,com.sca4d.notification.template.NotificationTemplateRepository)" class="member-name-link">SmsNotificationDelivery</a><wbr>(@NotNull <a href="SmsRecipientResolver.html" title="interface in com.sca4d.notification.sms">SmsRecipientResolver</a>&nbsp;recipients,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.notification.sms.SmsRecipientResolver,com.sca4d.core.api.region.RegionCatalog,com.sca4d.notification.sms.SmsRouteResolver,com.sca4d.notification.sms.SmsProviderSelector,com.sca4d.notification.sms.SmsRepository,com.sca4d.notification.sms.SmsDeliveryStore,java.util.List,java.time.Clock,com.sca4d.core.api.messaging.MessageBus,org.springframework.transaction.PlatformTransactionManager)" class="member-name-link">SmsNotificationDelivery</a><wbr>(@NotNull <a href="SmsRecipientResolver.html" title="interface in com.sca4d.notification.sms">SmsRecipientResolver</a>&nbsp;recipients,
  @NotNull com.sca4d.core.api.region.RegionCatalog&nbsp;regions,
  @NotNull <a href="SmsRouteResolver.html" title="interface in com.sca4d.notification.sms">SmsRouteResolver</a>&nbsp;routes,
  @NotNull <a href="SmsProviderSelector.html" title="interface in com.sca4d.notification.sms">SmsProviderSelector</a>&nbsp;selector,
  @NotNull <a href="SmsRepository.html" title="class in com.sca4d.notification.sms">SmsRepository</a>&nbsp;repository,
  @NotNull <a href="SmsDeliveryStore.html" title="class in com.sca4d.notification.sms">SmsDeliveryStore</a>&nbsp;deliveries,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="SmsTransport.html" title="interface in com.sca4d.notification.sms">SmsTransport</a>&gt;&nbsp;transports,
- @NotNull com.sca4d.notification.template.NotificationTemplateRepository&nbsp;templates)</code></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="SmsProviderClient.html" title="interface in com.sca4d.notification.sms">SmsProviderClient</a>&gt;&nbsp;transports,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
+ @NotNull com.sca4d.core.api.messaging.MessageBus&nbsp;messages,
+ @NotNull org.springframework.transaction.PlatformTransactionManager&nbsp;transactionManager)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建 SMS 渠道投递实现。</div>
 </div>
@@ -136,12 +138,20 @@ implements com.sca4d.core.api.notification.NotificationDelivery</span></div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#available(com.sca4d.core.api.notification.Notification)" class="member-name-link">available</a><wbr>(@NotNull com.sca4d.core.api.notification.Notification&nbsp;notification)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.notification.NotificationChannel</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#channel()" class="member-name-link">channel</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#deliver(com.sca4d.core.api.messaging.MessageId,com.sca4d.core.api.notification.Notification)" class="member-name-link">deliver</a><wbr>(@NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.delivery.DeliveryOutcome</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#check(com.sca4d.notification.sms.SmsDeliveryCheck)" class="member-name-link">check</a><wbr>(@NotNull <a href="SmsDeliveryCheck.html" title="class in com.sca4d.notification.sms">SmsDeliveryCheck</a>&nbsp;check)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">查询一次 Provider 最终状态；未知时只登记下一条查询消息，不重新发送短信。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.delivery.DeliveryOutcome</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#deliver(com.sca4d.core.api.id.Id,com.sca4d.core.api.notification.Notification)" class="member-name-link">deliver</a><wbr>(@NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  @NotNull com.sca4d.core.api.notification.Notification&nbsp;notification)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.messaging.HandlingPolicy</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#handlingPolicy()" class="member-name-link">handlingPolicy</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
@@ -161,7 +171,7 @@ implements com.sca4d.core.api.notification.NotificationDelivery</span></div>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.notification.sms.SmsRecipientResolver,com.sca4d.core.api.region.RegionCatalog,com.sca4d.notification.sms.SmsRouteResolver,com.sca4d.notification.sms.SmsProviderSelector,com.sca4d.notification.sms.SmsRepository,com.sca4d.notification.sms.SmsDeliveryStore,java.util.List,com.sca4d.notification.template.NotificationTemplateRepository)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.notification.sms.SmsRecipientResolver,com.sca4d.core.api.region.RegionCatalog,com.sca4d.notification.sms.SmsRouteResolver,com.sca4d.notification.sms.SmsProviderSelector,com.sca4d.notification.sms.SmsRepository,com.sca4d.notification.sms.SmsDeliveryStore,java.util.List,java.time.Clock,com.sca4d.core.api.messaging.MessageBus,org.springframework.transaction.PlatformTransactionManager)">
 <h3>SmsNotificationDelivery</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">SmsNotificationDelivery</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="SmsRecipientResolver.html" title="interface in com.sca4d.notification.sms">SmsRecipientResolver</a>&nbsp;recipients,
@@ -176,9 +186,13 @@ implements com.sca4d.core.api.notification.NotificationDelivery</span></div>
  @NotNull
  @NotNull <a href="SmsDeliveryStore.html" title="class in com.sca4d.notification.sms">SmsDeliveryStore</a>&nbsp;deliveries,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="SmsTransport.html" title="interface in com.sca4d.notification.sms">SmsTransport</a>&gt;&nbsp;transports,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="SmsProviderClient.html" title="interface in com.sca4d.notification.sms">SmsProviderClient</a>&gt;&nbsp;transports,
  @NotNull
- @NotNull com.sca4d.notification.template.NotificationTemplateRepository&nbsp;templates)</span></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
+ @NotNull
+ @NotNull com.sca4d.core.api.messaging.MessageBus&nbsp;messages,
+ @NotNull
+ @NotNull org.springframework.transaction.PlatformTransactionManager&nbsp;transactionManager)</span></div>
 <div class="block">创建 SMS 渠道投递实现。</div>
 </section>
 </li>
@@ -194,7 +208,7 @@ implements com.sca4d.core.api.notification.NotificationDelivery</span></div>
 <section class="detail" id="channel()">
 <h3>channel</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.notification.NotificationChannel</span>&nbsp;<span class="element-name">channel</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">channel</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>channel</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.notification.NotificationDelivery</code></dd>
@@ -213,16 +227,39 @@ implements com.sca4d.core.api.notification.NotificationDelivery</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="deliver(com.sca4d.core.api.messaging.MessageId,com.sca4d.core.api.notification.Notification)">
+<section class="detail" id="handlingPolicy()">
+<h3>handlingPolicy</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.messaging.HandlingPolicy</span>&nbsp;<span class="element-name">handlingPolicy</span>()</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>handlingPolicy</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.notification.NotificationDelivery</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="deliver(com.sca4d.core.api.id.Id,com.sca4d.core.api.notification.Notification)">
 <h3>deliver</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">deliver</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.delivery.DeliveryOutcome</span>&nbsp;<span class="element-name">deliver</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  @NotNull
  @NotNull com.sca4d.core.api.notification.Notification&nbsp;notification)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
+<dd><code>deliver</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.delivery.Delivery&lt;com.sca4d.core.api.notification.Notification&gt;</code></dd>
+<dt>Specified by:</dt>
 <dd><code>deliver</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.notification.NotificationDelivery</code></dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="check(com.sca4d.notification.sms.SmsDeliveryCheck)">
+<h3>check</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.delivery.DeliveryOutcome</span>&nbsp;<span class="element-name">check</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="SmsDeliveryCheck.html" title="class in com.sca4d.notification.sms">SmsDeliveryCheck</a>&nbsp;check)</span></div>
+<div class="block">查询一次 Provider 最终状态；未知时只登记下一条查询消息，不重新发送短信。</div>
 </section>
 </li>
 </ul>

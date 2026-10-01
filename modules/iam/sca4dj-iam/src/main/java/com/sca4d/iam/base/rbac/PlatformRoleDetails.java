@@ -10,11 +10,11 @@ import java.util.Objects;
 
 /** 组合 Platform 角色授权事实和完整多语言字段。 */
 @SuppressWarnings("ClassCanBeRecord")
-public final class PlatformRoleDetails {
-
-    private final @NotNull Role role;
+public class PlatformRoleDetails {
 
     private final @NotNull LocalizedFields i18n;
+
+    private final @NotNull Role role;
 
     /**
      * 创建 Platform 角色管理详情。
@@ -30,7 +30,7 @@ public final class PlatformRoleDetails {
     }
 
     /**
-     * 返回不包含展示文案的角色授权事实。
+     * 不包含展示文案的角色授权事实。
      *
      * @return 角色授权事实
      */
@@ -40,7 +40,7 @@ public final class PlatformRoleDetails {
     }
 
     /**
-     * 返回角色保存的完整多语言字段。
+     * 角色保存的完整多语言字段。
      *
      * @return 完整多语言字段
      */

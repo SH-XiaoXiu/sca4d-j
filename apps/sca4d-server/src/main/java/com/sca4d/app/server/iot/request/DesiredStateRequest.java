@@ -9,7 +9,7 @@ import java.util.Set;
 
 /** 接收一次 desired 修改中明确设置和明确清除的 property code。 */
 @SuppressWarnings("unused")
-public final class DesiredStateRequest {
+public class DesiredStateRequest {
 
     @Req.NotNull
     @Size(max = 1000)

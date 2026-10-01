@@ -70,7 +70,7 @@ class PatchTest {
     }
 
     @Test
-    @DisplayName("choose 返回唯一命中分支并使用显式兜底")
+    @DisplayName("choose 返回唯一命中分支并使用显式默认分支")
     void selectsOneBranchOrExplicitFallback() {
         Patch<String> selected = Patch.<String>choose()
                 .setIf(false, "unused")

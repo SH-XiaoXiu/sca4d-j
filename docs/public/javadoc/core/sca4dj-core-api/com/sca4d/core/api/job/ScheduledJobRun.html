@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 <dd><code>T</code> - 查询选择的节点输出类型</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">ScheduledJobRun&lt;T&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">ScheduledJobRun&lt;T&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">返回一次定时 Job run 的状态和调用方选择的类型化节点输出。
 
@@ -109,14 +109,12 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.job.JobRunId,java.time.Instant,com.sca4d.core.api.job.JobRunStatus,java.time.Instant,T)" class="member-name-link">ScheduledJobRun</a><wbr>(@NotNull <a href="JobRunId.html" title="class in com.sca4d.core.api.job">JobRunId</a>&nbsp;runId,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.id.Id,java.time.Instant,com.sca4d.core.api.job.JobRunStatus,java.time.Instant,T)" class="member-name-link">ScheduledJobRun</a><wbr>(@NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a>&nbsp;runId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;scheduledAt,
  @NotNull <a href="JobRunStatus.html" title="enum class in com.sca4d.core.api.job">JobRunStatus</a>&nbsp;status,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;completedAt,
  <a href="ScheduledJobRun.html" title="type parameter in ScheduledJobRun">T</a>&nbsp;output)</code></div>
-<div class="col-last even-row-color">
-<div class="block">创建一条已经完成命名空间、Job 定义和计划范围检查的历史记录。</div>
-</div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -137,7 +135,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ScheduledJobRun.html" title="type parameter in ScheduledJobRun">T</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#output()" class="member-name-link">output</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="JobRunId.html" title="class in com.sca4d.core.api.job">JobRunId</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#runId()" class="member-name-link">runId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
@@ -164,10 +162,10 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.job.JobRunId,java.time.Instant,com.sca4d.core.api.job.JobRunStatus,java.time.Instant,T)">
-<h3 id="&lt;init&gt;(com.sca4d.core.api.job.JobRunId,java.time.Instant,com.sca4d.core.api.job.JobRunStatus,java.time.Instant,java.lang.Object)">ScheduledJobRun</h3>
+<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.id.Id,java.time.Instant,com.sca4d.core.api.job.JobRunStatus,java.time.Instant,T)">
+<h3 id="&lt;init&gt;(com.sca4d.core.api.id.Id,java.time.Instant,com.sca4d.core.api.job.JobRunStatus,java.time.Instant,java.lang.Object)">ScheduledJobRun</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ScheduledJobRun</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="JobRunId.html" title="class in com.sca4d.core.api.job">JobRunId</a>&nbsp;runId,
+ @NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a>&nbsp;runId,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;scheduledAt,
  @NotNull
@@ -176,7 +174,6 @@ loadScripts(document, 'script');</script>
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;completedAt,
  @Nullable
  <a href="ScheduledJobRun.html" title="type parameter in ScheduledJobRun">T</a>&nbsp;output)</span></div>
-<div class="block">创建一条已经完成命名空间、Job 定义和计划范围检查的历史记录。</div>
 </section>
 </li>
 </ul>
@@ -192,7 +189,7 @@ loadScripts(document, 'script');</script>
 <h3>runId</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="JobRunId.html" title="class in com.sca4d.core.api.job">JobRunId</a></span>&nbsp;<span class="element-name">runId</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a></span>&nbsp;<span class="element-name">runId</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>Job run 标识</dd>

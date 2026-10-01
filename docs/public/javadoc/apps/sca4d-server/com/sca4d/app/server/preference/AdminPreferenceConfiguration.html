@@ -105,7 +105,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.setting.PreferenceSetting<wbr>&lt;com.fasterxml.jackson.databind.JsonNode&gt;</code></div>
+<div class="col-first even-row-color"><code>final @NotNull com.sca4d.core.api.setting.definition.PreferenceSetting<wbr>&lt;com.fasterxml.jackson.databind.JsonNode&gt;</code></div>
 <div class="col-second even-row-color"><code><a href="#UI_PREFERENCES" class="member-name-link">UI_PREFERENCES</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Vben 管理端完整偏好 JSON。</div>
@@ -121,7 +121,8 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">AdminPreferenceConfiguration</a>()</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.setting.access.SettingWriter)" class="member-name-link">AdminPreferenceConfiguration</a><wbr>(@NotNull com.sca4d.core.api.setting.access.SettingReader&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;reader,
+ com.sca4d.core.api.setting.access.SettingWriter&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;writer)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建管理端偏好设置配置。</div>
 </div>
@@ -150,7 +151,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="UI_PREFERENCES">
 <h3>UI_PREFERENCES</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.setting.PreferenceSetting&lt;com.fasterxml.jackson.databind.JsonNode&gt;</span>&nbsp;<span class="element-name">UI_PREFERENCES</span></div>
+</span><span class="modifiers">public final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.setting.definition.PreferenceSetting&lt;com.fasterxml.jackson.databind.JsonNode&gt;</span>&nbsp;<span class="element-name">UI_PREFERENCES</span></div>
 <div class="block">Vben 管理端完整偏好 JSON。</div>
 </section>
 </li>
@@ -163,9 +164,11 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;()">
+<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.setting.access.SettingWriter)">
 <h3>AdminPreferenceConfiguration</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AdminPreferenceConfiguration</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AdminPreferenceConfiguration</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.setting.access.SettingReader&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;reader,
+ com.sca4d.core.api.setting.access.SettingWriter&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;writer)</span></div>
 <div class="block">创建管理端偏好设置配置。</div>
 </section>
 </li>

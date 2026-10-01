@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 <dd><code>com.sca4d.core.api.notification.Notifications</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">DefaultNotifications</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">DefaultNotifications</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.core.api.notification.Notifications</span></div>
 <div class="block">使用通知类型回调解析领域对象，并执行同步或 Outbox 发布。</div>
@@ -108,14 +108,13 @@ implements com.sca4d.core.api.notification.Notifications</span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.notification.NotificationTypeCatalog,com.sca4d.core.api.setting.Settings,com.sca4d.notification.NotificationLocaleResolver,com.sca4d.notification.NotificationRegionResolver,com.sca4d.notification.NotificationDeliveryRouter,com.sca4d.core.api.messaging.MessagePublisher,com.sca4d.core.api.id.IdGenerator,java.time.Clock)" class="member-name-link">DefaultNotifications</a><wbr>(@NotNull <a href="NotificationTypeCatalog.html" title="class in com.sca4d.notification">NotificationTypeCatalog</a>&nbsp;types,
- @NotNull com.sca4d.core.api.setting.Settings&nbsp;settings,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.notification.NotificationTypeCatalog,com.sca4d.notification.config.NotificationSettings,com.sca4d.notification.NotificationLocaleResolver,com.sca4d.notification.NotificationRegionResolver,com.sca4d.notification.NotificationDeliveryRouter,com.sca4d.core.api.messaging.MessageBus,com.sca4d.core.api.id.IdGenerator)" class="member-name-link">DefaultNotifications</a><wbr>(@NotNull <a href="NotificationTypeCatalog.html" title="class in com.sca4d.notification">NotificationTypeCatalog</a>&nbsp;types,
+ @NotNull <a href="config/NotificationSettings.html" title="class in com.sca4d.notification.config">NotificationSettings</a>&nbsp;settings,
  @NotNull <a href="NotificationLocaleResolver.html" title="interface in com.sca4d.notification">NotificationLocaleResolver</a>&nbsp;locales,
  @NotNull <a href="NotificationRegionResolver.html" title="interface in com.sca4d.notification">NotificationRegionResolver</a>&nbsp;regions,
  @NotNull <a href="NotificationDeliveryRouter.html" title="class in com.sca4d.notification">NotificationDeliveryRouter</a>&nbsp;deliveries,
- @NotNull com.sca4d.core.api.messaging.MessagePublisher&nbsp;messages,
- @NotNull com.sca4d.core.api.id.IdGenerator&nbsp;ids,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</code></div>
+ @NotNull com.sca4d.core.api.messaging.MessageBus&nbsp;messages,
+ @NotNull com.sca4d.core.api.id.IdGenerator&nbsp;ids)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建类型化通知发布入口。</div>
 </div>
@@ -133,7 +132,7 @@ implements com.sca4d.core.api.notification.Notifications</span></div>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@NotNull com.sca4d.core.api.messaging.MessageId</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@NotNull com.sca4d.core.api.id.Id</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#enqueue(com.sca4d.core.api.notification.NotificationType,T)" class="member-name-link">enqueue</a><wbr>(@NotNull com.sca4d.core.api.notification.NotificationType&lt;T&gt;&nbsp;type,
  T&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -163,12 +162,12 @@ implements com.sca4d.core.api.notification.Notifications</span></div>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.notification.NotificationTypeCatalog,com.sca4d.core.api.setting.Settings,com.sca4d.notification.NotificationLocaleResolver,com.sca4d.notification.NotificationRegionResolver,com.sca4d.notification.NotificationDeliveryRouter,com.sca4d.core.api.messaging.MessagePublisher,com.sca4d.core.api.id.IdGenerator,java.time.Clock)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.notification.NotificationTypeCatalog,com.sca4d.notification.config.NotificationSettings,com.sca4d.notification.NotificationLocaleResolver,com.sca4d.notification.NotificationRegionResolver,com.sca4d.notification.NotificationDeliveryRouter,com.sca4d.core.api.messaging.MessageBus,com.sca4d.core.api.id.IdGenerator)">
 <h3>DefaultNotifications</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">DefaultNotifications</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="NotificationTypeCatalog.html" title="class in com.sca4d.notification">NotificationTypeCatalog</a>&nbsp;types,
  @NotNull
- @NotNull com.sca4d.core.api.setting.Settings&nbsp;settings,
+ @NotNull <a href="config/NotificationSettings.html" title="class in com.sca4d.notification.config">NotificationSettings</a>&nbsp;settings,
  @NotNull
  @NotNull <a href="NotificationLocaleResolver.html" title="interface in com.sca4d.notification">NotificationLocaleResolver</a>&nbsp;locales,
  @NotNull
@@ -176,11 +175,9 @@ implements com.sca4d.core.api.notification.Notifications</span></div>
  @NotNull
  @NotNull <a href="NotificationDeliveryRouter.html" title="class in com.sca4d.notification">NotificationDeliveryRouter</a>&nbsp;deliveries,
  @NotNull
- @NotNull com.sca4d.core.api.messaging.MessagePublisher&nbsp;messages,
+ @NotNull com.sca4d.core.api.messaging.MessageBus&nbsp;messages,
  @NotNull
- @NotNull com.sca4d.core.api.id.IdGenerator&nbsp;ids,
- @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</span></div>
+ @NotNull com.sca4d.core.api.id.IdGenerator&nbsp;ids)</span></div>
 <div class="block">创建类型化通知发布入口。</div>
 </section>
 </li>
@@ -222,8 +219,7 @@ implements com.sca4d.core.api.notification.Notifications</span></div>
 <section class="detail" id="enqueue(com.sca4d.core.api.notification.NotificationType,T)">
 <h3 id="enqueue(com.sca4d.core.api.notification.NotificationType,java.lang.Object)">enqueue</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>
-<span class="return-type">@NotNull com.sca4d.core.api.messaging.MessageId</span>&nbsp;<span class="element-name">enqueue</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.id.Id</span>&nbsp;<span class="element-name">enqueue</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.notification.NotificationType&lt;T&gt;&nbsp;type,
  @NotNull
  T&nbsp;value)</span></div>

@@ -84,56 +84,60 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">审计事件发生时的身份快照。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="AuditInvocation.html" title="class in com.sca4d.core.api.audit">AuditInvocation</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="AuditCallInterceptor.html" title="class in com.sca4d.core.api.audit">AuditCallInterceptor</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">根据有效 `@Audit` 和调用结果建立审计记录，选择同步写入或可靠排队方式。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="AuditInvocation.html" title="class in com.sca4d.core.api.audit">AuditInvocation</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">向 Audit 目标解析器和 payload 工厂暴露一次已经得到结果的方法执行。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="AuditOperation.html" title="class in com.sca4d.core.api.audit">AuditOperation</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="AuditOperation.html" title="class in com.sca4d.core.api.audit">AuditOperation</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">表示审计记录使用的稳定业务操作，不参与权限判断。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="AuditPayload.html" title="interface in com.sca4d.core.api.audit">AuditPayload</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="AuditPayload.html" title="interface in com.sca4d.core.api.audit">AuditPayload</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">由业务模块定义、由审计实现编码保存的结构化审计载荷。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="AuditPayloadCodec.html" title="interface in com.sca4d.core.api.audit">AuditPayloadCodec</a>&lt;P extends <a href="AuditPayload.html" title="interface in com.sca4d.core.api.audit">AuditPayload</a>&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="AuditPayloadCodec.html" title="interface in com.sca4d.core.api.audit">AuditPayloadCodec</a>&lt;P extends <a href="AuditPayload.html" title="interface in com.sca4d.core.api.audit">AuditPayload</a>&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">为需要强类型历史读取的审计载荷声明稳定类型和 JSON 版本。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="AuditPayloadFactory.html" title="interface in com.sca4d.core.api.audit">AuditPayloadFactory</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="AuditPayloadFactory.html" title="interface in com.sca4d.core.api.audit">AuditPayloadFactory</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">为复杂审计声明生成经过业务筛选的结构化 payload。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="AuditRecord.html" title="class in com.sca4d.core.api.audit">AuditRecord</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="AuditRecord.html" title="class in com.sca4d.core.api.audit">AuditRecord</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">保存一次操作的行为主体、目标资源、结果和发生时间。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="AuditRecorder.html" title="interface in com.sca4d.core.api.audit">AuditRecorder</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
-<div class="block">保存或发送 <a href="AuditRecord.html" title="class in com.sca4d.core.api.audit"><code>AuditRecord</code></a>。</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="AuditResolverLookup.html" title="interface in com.sca4d.core.api.audit">AuditResolverLookup</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="AuditRecorder.html" title="interface in com.sca4d.core.api.audit">AuditRecorder</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">按明确方式记录审计；具体实现决定返回时完成写入、可靠交接或提交后尽力登记。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="AuditResolverLookup.html" title="interface in com.sca4d.core.api.audit">AuditResolverLookup</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">按审计声明的具体类型取得目标解析器和 payload 工厂。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab3"><a href="AuditResult.html" title="enum class in com.sca4d.core.api.audit">AuditResult</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab3">
+<div class="col-first even-row-color class-summary class-summary-tab3"><a href="AuditResult.html" title="enum class in com.sca4d.core.api.audit">AuditResult</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab3">
 <div class="block">审计操作记录的结果分类。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="AuditTargetResolver.html" title="interface in com.sca4d.core.api.audit">AuditTargetResolver</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="AuditTargetResolver.html" title="interface in com.sca4d.core.api.audit">AuditTargetResolver</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">为复杂审计声明解析目标 Resource。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="HttpCall.html" title="class in com.sca4d.core.api.audit">HttpCall</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="HttpCall.html" title="class in com.sca4d.core.api.audit">HttpCall</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">保存审计记录需要的 HTTP 方法、请求路径、客户端地址和 User-Agent 快照。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="NoAuditPayloadFactory.html" title="class in com.sca4d.core.api.audit">NoAuditPayloadFactory</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="NoAuditPayloadFactory.html" title="class in com.sca4d.core.api.audit">NoAuditPayloadFactory</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">表示 Audit 声明没有复杂 payload 工厂。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="NoAuditTargetResolver.html" title="class in com.sca4d.core.api.audit">NoAuditTargetResolver</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="NoAuditTargetResolver.html" title="class in com.sca4d.core.api.audit">NoAuditTargetResolver</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">表示 Audit 声明没有复杂目标解析器。</div>
 </div>
 </div>

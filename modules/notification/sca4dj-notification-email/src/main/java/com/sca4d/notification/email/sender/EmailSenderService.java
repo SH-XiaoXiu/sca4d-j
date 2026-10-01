@@ -4,6 +4,7 @@ import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.security.EncryptedSecret;
 import com.sca4d.core.api.security.SecretKeyring;
+import com.sca4d.core.api.utils.TextUtils;
 import com.sca4d.notification.email.EmailAddresses;
 import com.sca4d.notification.email.EmailNotificationErrorCode;
 import org.jetbrains.annotations.CheckReturnValue;
@@ -25,20 +26,20 @@ public class EmailSenderService {
 
     private final @NotNull EmailSenderRepository senders;
 
-    private final @NotNull EmailTransport transport;
-
-    private final @NotNull SecretKeyring keyring;
+    private final @NotNull EmailGateway transport;
 
     private final @NotNull IdGenerator ids;
+
+    private final @NotNull SecretKeyring keyring;
 
     /** @param senders SMTP 配置持久化语义 @param transport SMTP 操作 @param keyring 密码加密密钥环 @param ids 全局标识生成器 */
     public EmailSenderService(
             @NotNull EmailSenderRepository senders,
-            @NotNull EmailTransport transport,
+            @NotNull EmailGateway transport,
             @NotNull SecretKeyring keyring,
             @NotNull IdGenerator ids) {
         this.senders = Objects.requireNonNull(senders, "EmailSenderRepository 不能为空");
-        this.transport = Objects.requireNonNull(transport, "EmailTransport 不能为空");
+        this.transport = Objects.requireNonNull(transport, "EmailGateway 不能为空");
         this.keyring = Objects.requireNonNull(keyring, "SecretKeyring 不能为空");
         this.ids = Objects.requireNonNull(ids, "IdGenerator 不能为空");
     }
@@ -69,7 +70,7 @@ public class EmailSenderService {
             @NotNull String fromAddress,
             @Nullable String fromName,
             @Nullable String replyTo) {
-        long senderId = ids.nextId();
+        long senderId = ids.nextId().value();
         CheckedSender checked = validate(
                 name,
                 host,
@@ -192,12 +193,12 @@ public class EmailSenderService {
             @Nullable String fromName,
             @Nullable String replyTo) {
         try {
-            String checkedName = requireText(name, 128, "SMTP 配置名称");
-            String checkedHost = requireText(host, 253, "SMTP 主机");
+            String checkedName = TextUtils.requireText(name, "SMTP 配置名称", 128);
+            String checkedHost = TextUtils.requireText(host, "SMTP 主机", 253);
             if (port < 1 || port > 65_535 || security == null) {
                 throw new IllegalArgumentException("SMTP 端口或 TLS 模式无效");
             }
-            String checkedUsername = optionalText(username, 320, "SMTP 用户名");
+            String checkedUsername = TextUtils.optionalText(username, "SMTP 用户名", 320);
             if ((checkedUsername != null) != passwordConfigured) {
                 throw new IllegalArgumentException("SMTP 用户名和密码必须同时配置");
             }
@@ -206,7 +207,7 @@ public class EmailSenderService {
                     checkedHost,
                     checkedUsername,
                     EmailAddresses.require(fromAddress),
-                    optionalText(fromName, 256, "SMTP 发件显示名"),
+                    TextUtils.optionalText(fromName, "SMTP 发件显示名", 256),
                     replyTo == null ? null : EmailAddresses.require(replyTo));
         } catch (IllegalArgumentException exception) {
             throw new BusinessException(EmailNotificationErrorCode.SENDER_INVALID, exception);
@@ -217,42 +218,25 @@ public class EmailSenderService {
     private @NotNull EncryptedSecret encrypt(long senderId, @NotNull String password) {
         byte[] bytes = password.getBytes(StandardCharsets.UTF_8);
         try {
-            return keyring.activeCipher().encrypt(SmtpEmailTransport.passwordPurpose(senderId), bytes);
+            return keyring.activeCipher().encrypt(SmtpEmailGateway.passwordPurpose(senderId), bytes);
         } finally {
             Arrays.fill(bytes, (byte) 0);
         }
     }
 
-    /** 校验一项非空白且不超过上限的文本。 */
-    private static @NotNull String requireText(@NotNull String value, int maximumLength, @NotNull String label) {
-        String checked = Objects.requireNonNull(value, label + "不能为空").trim();
-        if (checked.isEmpty() || checked.length() > maximumLength) {
-            throw new IllegalArgumentException(label + "长度不正确");
-        }
-        return checked;
-    }
-
-    /** 校验可选文本；空白按未提供处理。 */
-    private static @Nullable String optionalText(@Nullable String value, int maximumLength, @NotNull String label) {
-        if (value == null || value.isBlank()) {
-            return null;
-        }
-        return requireText(value, maximumLength, label);
-    }
-
     /** 保存已经规范化但尚未持久化的 SMTP 文本字段。 */
-    private static final class CheckedSender {
-        private final @NotNull String name;
-
-        private final @NotNull String host;
-
-        private final @Nullable String username;
-
+    private static class CheckedSender {
         private final @NotNull String fromAddress;
 
         private final @Nullable String fromName;
 
+        private final @NotNull String host;
+
+        private final @NotNull String name;
+
         private final @Nullable String replyTo;
+
+        private final @Nullable String username;
 
         /** @param name 名称 @param host 主机 @param username 用户名 @param fromAddress 发件邮箱 @param fromName 发件名 @param replyTo 回复邮箱 */
         private CheckedSender(

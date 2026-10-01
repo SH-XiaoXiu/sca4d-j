@@ -7,6 +7,7 @@ import com.sca4d.app.server.system.request.ReplaceSettingRequest;
 import com.sca4d.app.server.system.view.SystemSettingsView;
 import com.sca4d.core.api.annotation.Audit;
 import com.sca4d.core.api.annotation.RequirePermission;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.spring.web.ApiResponse;
 import com.sca4d.core.spring.web.annotation.CurrentPrincipal;
 import com.sca4d.core.spring.web.annotation.IfMatch;
@@ -41,7 +42,7 @@ public class SystemSettingController {
     /** @return 当前应用全部设置分组、定义、值和维护来源 */
     @GetMapping
     @Operation(summary = "查询系统设置")
-    @RequirePermission(operation = SystemOperations.SETTINGS_READ)
+    @RequirePermission(operation = SystemOperations.SETTINGS_READ_VALUE)
     public @NotNull ApiResponse<SystemSettingsView> findAll() {
         return ApiResponse.ok(SystemSettingsView.from(settings.findAll()));
     }
@@ -50,12 +51,12 @@ public class SystemSettingController {
     @PutMapping("/{key}")
     @IfMatch
     @Operation(summary = "修改系统设置")
-    @RequirePermission(operation = SystemOperations.SETTINGS_MANAGE)
-    @Audit(operation = "system/setting/replace")
+    @RequirePermission(operation = SystemOperations.SETTINGS_MANAGE_VALUE)
+    @Audit(operation = "SYSTEM/SETTING/REPLACE")
     public @NotNull ApiResponse<SystemSettingsView> replace(
             @PathVariable @NotNull String key,
             @RequestBody @Valid @NotNull ReplaceSettingRequest request) {
-        settings.replace(key, request.getValue());
+        settings.replace(TreeCode.of(key), request.getValue());
         return ApiResponse.ok(SystemSettingsView.from(settings.findAll()));
     }
 
@@ -63,10 +64,10 @@ public class SystemSettingController {
     @DeleteMapping("/{key}")
     @IfMatch
     @Operation(summary = "恢复系统设置默认值")
-    @RequirePermission(operation = SystemOperations.SETTINGS_MANAGE)
-    @Audit(operation = "system/setting/reset")
+    @RequirePermission(operation = SystemOperations.SETTINGS_MANAGE_VALUE)
+    @Audit(operation = "SYSTEM/SETTING/RESET")
     public @NotNull ApiResponse<SystemSettingsView> reset(@PathVariable @NotNull String key) {
-        settings.reset(key);
+        settings.reset(TreeCode.of(key));
         return ApiResponse.ok(SystemSettingsView.from(settings.findAll()));
     }
 }

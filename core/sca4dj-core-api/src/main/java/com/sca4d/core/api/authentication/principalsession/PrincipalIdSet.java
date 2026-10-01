@@ -14,7 +14,7 @@ import java.util.Objects;
  * @param <P> 当前集合对应的 Principal 类型
  */
 @SuppressWarnings("ClassCanBeRecord") // 项目禁止使用 Java record，保留普通不可变类型。
-public final class PrincipalIdSet<P extends Principal> {
+public class PrincipalIdSet<P extends Principal> {
 
     private final @NotNull Class<P> principalType;
 
@@ -42,7 +42,7 @@ public final class PrincipalIdSet<P extends Principal> {
     }
 
     /**
-     * 返回候选 Principal 必须精确匹配的 Java 类型。
+     * 候选 Principal 必须精确匹配的 Java 类型。
      *
      * @return Principal Java 类型
      */
@@ -52,7 +52,7 @@ public final class PrincipalIdSet<P extends Principal> {
     }
 
     /**
-     * 返回建立 Session 时确认的标识集合。
+     * 建立 Session 时确认的标识集合。
      *
      * @return 不可变标识集合
      */

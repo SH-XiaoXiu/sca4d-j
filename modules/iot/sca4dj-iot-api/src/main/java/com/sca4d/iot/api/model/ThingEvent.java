@@ -11,11 +11,11 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 定义一个稳定 code 的设备离散事件及其输出字段。 */
-public final class ThingEvent {
-
-    private final @NotNull String code;
+public class ThingEvent {
 
     private final @NotNull Map<String, ThingValueType> outputs;
+
+    private final @NotNull String code;
 
     private final @NotNull ThingEventDelivery delivery;
 
@@ -47,7 +47,7 @@ public final class ThingEvent {
     }
 
     /** 构造事件输出定义。 */
-    public static final class Builder {
+    public static class Builder {
         private final @NotNull String code;
 
         private final @NotNull Map<String, ThingValueType> outputs = new LinkedHashMap<>();

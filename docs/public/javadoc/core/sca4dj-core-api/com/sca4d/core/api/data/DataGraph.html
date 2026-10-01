@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">DataGraph</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">DataGraph</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">保存已经校验并按稳定拓扑顺序排列的数据操作图。</div>
 </section>
@@ -104,7 +104,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final class&nbsp;</code></div>
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="DataGraph.Builder.html" class="type-name-link" title="class in com.sca4d.core.api.data">DataGraph.Builder</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">按登记顺序声明 Graph 输入和数据操作。</div>
@@ -131,12 +131,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Unmodifiable @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="DataKey.html" title="class in com.sca4d.core.api.data">DataKey</a>&lt;?&gt;&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#inputs()" class="member-name-link">inputs</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取执行 DataGraph 前必须由调用方提供的键。</div>
+<div class="block">执行 DataGraph 前必须由调用方提供的键。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Unmodifiable @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="DataOperation.html" title="class in com.sca4d.core.api.data">DataOperation</a>&lt;?&gt;&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#operations()" class="member-name-link">operations</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取构建阶段完成依赖校验和排序后的节点。</div>
+<div class="block">构建阶段完成依赖校验和排序后的节点。</div>
 </div>
 </div>
 </div>
@@ -173,7 +173,7 @@ loadScripts(document, 'script');</script>
 <h3>inputs</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Unmodifiable @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="DataKey.html" title="class in com.sca4d.core.api.data">DataKey</a>&lt;?&gt;&gt;</span>&nbsp;<span class="element-name">inputs</span>()</div>
-<div class="block">读取执行 DataGraph 前必须由调用方提供的键。</div>
+<div class="block">执行 DataGraph 前必须由调用方提供的键。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>保持声明顺序的不可变输入键列表</dd>
@@ -185,7 +185,7 @@ loadScripts(document, 'script');</script>
 <h3>operations</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Unmodifiable @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="DataOperation.html" title="class in com.sca4d.core.api.data">DataOperation</a>&lt;?&gt;&gt;</span>&nbsp;<span class="element-name">operations</span>()</div>
-<div class="block">读取构建阶段完成依赖校验和排序后的节点。</div>
+<div class="block">构建阶段完成依赖校验和排序后的节点。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>按节点登记顺序确定拓扑次序的不可变节点列表</dd>

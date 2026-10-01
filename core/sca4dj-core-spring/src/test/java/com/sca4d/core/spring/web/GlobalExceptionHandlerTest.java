@@ -234,7 +234,7 @@ class GlobalExceptionHandlerTest {
 
     /** 提供真实 Spring MVC 事件流映射，用于验证异常响应媒体协商。 */
     @RestController
-    private static final class EventStreamController {
+    private static class EventStreamController {
 
         /** 抛出建连前服务端异常。 */
         @GetMapping(value = "/test-events/failure", produces = MediaType.TEXT_EVENT_STREAM_VALUE)

@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">InboxMessage</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">InboxMessage</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">保存 Account 收件箱中一项不会随模板修改而变化的通知快照。</div>
 </section>
@@ -103,10 +103,10 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(long,com.sca4d.core.api.messaging.MessageId,long,com.sca4d.core.api.notification.NotificationCode,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.time.Instant,java.time.Instant,com.sca4d.core.api.concurrent.Version)" class="member-name-link">InboxMessage</a><wbr>(long&nbsp;inboxMessageId,
- @NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(long,com.sca4d.core.api.id.Id,long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.time.Instant,java.time.Instant,com.sca4d.core.api.concurrent.Version)" class="member-name-link">InboxMessage</a><wbr>(long&nbsp;inboxMessageId,
+ @NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  long&nbsp;accountId,
- @NotNull com.sca4d.core.api.notification.NotificationCode&nbsp;code,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;code,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;languageTag,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text,
@@ -134,7 +134,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#accountId()" class="member-name-link">accountId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.notification.NotificationCode</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#code()" class="member-name-link">code</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
@@ -149,7 +149,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#locale()" class="member-name-link">locale</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.messaging.MessageId</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.id.Id</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#messageId()" class="member-name-link">messageId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
@@ -182,14 +182,14 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(long,com.sca4d.core.api.messaging.MessageId,long,com.sca4d.core.api.notification.NotificationCode,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.time.Instant,java.time.Instant,com.sca4d.core.api.concurrent.Version)">
+<section class="detail" id="&lt;init&gt;(long,com.sca4d.core.api.id.Id,long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.time.Instant,java.time.Instant,com.sca4d.core.api.concurrent.Version)">
 <h3>InboxMessage</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">InboxMessage</span><wbr><span class="parameters">(long&nbsp;inboxMessageId,
  @NotNull
- @NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+ @NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  long&nbsp;accountId,
  @NotNull
- @NotNull com.sca4d.core.api.notification.NotificationCode&nbsp;code,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;code,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;languageTag,
  @NotNull
@@ -220,6 +220,10 @@ loadScripts(document, 'script');</script>
 <h3>inboxMessageId</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">inboxMessageId</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>站内信数据库标识</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -227,7 +231,11 @@ loadScripts(document, 'script');</script>
 <h3>messageId</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.messaging.MessageId</span>&nbsp;<span class="element-name">messageId</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.id.Id</span>&nbsp;<span class="element-name">messageId</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>原始通知消息标识</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -235,6 +243,10 @@ loadScripts(document, 'script');</script>
 <h3>accountId</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">accountId</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>接收站内信的 Account 标识</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -242,7 +254,11 @@ loadScripts(document, 'script');</script>
 <h3>code</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.notification.NotificationCode</span>&nbsp;<span class="element-name">code</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">code</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>通知编码</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -251,6 +267,10 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a></span>&nbsp;<span class="element-name">locale</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>渲染模板使用的 Locale</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -259,6 +279,10 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">title</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>站内信标题</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -267,6 +291,10 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">text</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>站内信纯文本正文</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -275,6 +303,10 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">html</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>站内信安全 HTML 正文</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -283,6 +315,10 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name">createdAt</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>站内信创建时间</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -291,6 +327,10 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @Nullable
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name">readAt</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>首次标记已读时间，未读时为空</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -299,6 +339,10 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.concurrent.Version</span>&nbsp;<span class="element-name">version</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>站内信并发版本</dd>
+</dl>
 </section>
 </li>
 </ul>

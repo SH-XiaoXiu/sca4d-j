@@ -1,5 +1,9 @@
 package com.sca4d.auth.passkey.registration;
 
+import static com.sca4d.auth.passkey.credential.PasskeyCredentialRepository.CredentialSlotReservation.ACCOUNT_MISSING;
+import static com.sca4d.auth.passkey.credential.PasskeyCredentialRepository.CredentialSlotReservation.LIMIT_REACHED;
+import static com.sca4d.auth.passkey.credential.PasskeyCredentialRepository.CredentialSlotReservation.RESERVED;
+
 import com.sca4d.auth.passkey.PasskeyCeremonyId;
 import com.sca4d.auth.passkey.PasskeyErrorCode;
 import com.sca4d.auth.passkey.ceremony.PasskeyCeremonyStore;
@@ -11,7 +15,6 @@ import com.sca4d.core.api.concurrent.OptimisticLockException;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.identity.Account;
-import com.sca4d.core.api.setting.Settings;
 import com.sca4d.core.api.utils.TextUtils;
 import com.yubico.webauthn.FinishRegistrationOptions;
 import com.yubico.webauthn.RegistrationResult;
@@ -19,6 +22,7 @@ import com.yubico.webauthn.RelyingParty;
 import com.yubico.webauthn.StartRegistrationOptions;
 import com.yubico.webauthn.data.AuthenticatorAttestationResponse;
 import com.yubico.webauthn.data.AuthenticatorSelectionCriteria;
+import com.yubico.webauthn.data.AuthenticatorTransport;
 import com.yubico.webauthn.data.ByteArray;
 import com.yubico.webauthn.data.ClientRegistrationExtensionOutputs;
 import com.yubico.webauthn.data.PublicKeyCredential;
@@ -50,21 +54,21 @@ public class PasskeyRegistrationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(PasskeyRegistrationService.class);
 
-    private static final int BACKUP_ELIGIBLE_FLAG = 0x08;
-
     private static final int BACKED_UP_FLAG = 0x10;
+
+    private static final int BACKUP_ELIGIBLE_FLAG = 0x08;
 
     private static final int USER_HANDLE_BYTES = 32;
 
-    private final RelyingParty relyingParty;
+    private final PasskeyCredentialRepository credentials;
+
+    private final Clock clock;
 
     private final PasskeyCeremonyStore ceremonies;
 
-    private final PasskeyCredentialRepository credentials;
+    private final PasskeySettings settings;
 
-    private final Settings settings;
-
-    private final Clock clock;
+    private final RelyingParty relyingParty;
 
     private final SecureRandom secureRandom;
 
@@ -82,7 +86,7 @@ public class PasskeyRegistrationService {
             @NotNull RelyingParty relyingParty,
             @NotNull PasskeyCeremonyStore ceremonies,
             @NotNull PasskeyCredentialRepository credentials,
-            @NotNull Settings settings,
+            @NotNull PasskeySettings settings,
             @NotNull Clock clock,
             @NotNull SecureRandom secureRandom) {
         this.relyingParty = Objects.requireNonNull(relyingParty, "WebAuthn RelyingParty 不能为空");
@@ -185,7 +189,7 @@ public class PasskeyRegistrationService {
             Set<String> transports = response.getResponse()
                     .getTransports()
                     .stream()
-                    .map(com.yubico.webauthn.data.AuthenticatorTransport::getId)
+                    .map(AuthenticatorTransport::getId)
                     .collect(Collectors.toUnmodifiableSet());
             byte authenticatorFlags = response.getResponse()
                     .getParsedAuthenticatorData()
@@ -209,7 +213,7 @@ public class PasskeyRegistrationService {
                     now,
                     null,
                     new Version(0));
-            int maximumCredentials = settings.get(PasskeySettings.MAXIMUM_CREDENTIALS);
+            int maximumCredentials = settings.MAXIMUM_CREDENTIALS.get();
             byte[] storedUserHandle = credentials.findUserHandle(checkedAccount.accountId());
             if (storedUserHandle == null || !Arrays.equals(storedUserHandle, credential.userHandle())) {
                 throw new IllegalStateException("Passkey 账号锚点不存在或 user handle 不一致");
@@ -221,14 +225,14 @@ public class PasskeyRegistrationService {
                 CredentialSlotReservation reservation = credentials.reserveCredentialSlot(
                         checkedAccount.accountId(),
                         maximumCredentials);
-                if (reservation == CredentialSlotReservation.RESERVED) {
+                if (reservation == RESERVED) {
                     reserved = true;
                     break;
                 }
-                if (reservation == CredentialSlotReservation.LIMIT_REACHED) {
+                if (reservation == LIMIT_REACHED) {
                     throw new BusinessException(PasskeyErrorCode.CREDENTIAL_LIMIT_REACHED);
                 }
-                if (reservation == CredentialSlotReservation.ACCOUNT_MISSING) {
+                if (reservation == ACCOUNT_MISSING) {
                     throw new IllegalStateException("Passkey 账号锚点不存在");
                 }
             }

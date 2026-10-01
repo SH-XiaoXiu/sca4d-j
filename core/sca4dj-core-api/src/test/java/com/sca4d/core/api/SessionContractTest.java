@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.core.api.authentication.SessionIdentity;
@@ -18,8 +17,10 @@ import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -39,14 +40,14 @@ class SessionContractTest {
         Subject subject = new Subject(10, SubjectType.HUMAN);
         Account account = new Account(20, subject.subjectId(), new RealmKey("test"));
         TestPrincipal principal = new TestPrincipal(30);
-        TestResource resource = new TestResource("operation", "platform.account.read");
+        TestResource resource = new TestResource("operation", "platform:account:read");
         Session session = session(subject, account, principal, List.of(resource));
 
         assertSame(subject, session.subject());
         assertSame(account, session.account());
         assertSame(principal, session.principalById(principal.principalId()));
         assertSame(resource, session.resources(principal.principalId()).getFirst());
-        assertTrue(session.grants(principal.principalId(), new TestResource("operation", "platform.account.read")));
+        assertTrue(session.grants(principal.principalId(), new TestResource("operation", "platform:account:read")));
     }
 
     @Test
@@ -122,23 +123,26 @@ class SessionContractTest {
                 List.of(principal),
                 List.of(),
                 authentications(account),
-                Map.of(principal.principalId(), List.of(new TestResource("operation", "project.read"))),
+                Map.of(principal.principalId(), List.of(new TestResource("operation", "project:read"))),
                 Map.of(
                         principal.principalId(),
-                        List.of(new ResourceIdSet("project", List.of(1_927_273_629L, 1_927_273_630L)))),
+                        List.of(
+                                new ResourceIdSet(
+                                        TreeCode.ofSegment("PROJECT"),
+                                        List.of(1_927_273_629L, 1_927_273_630L)))),
                 NOW,
                 NOW.plusSeconds(3600));
 
         assertTrue(session.grants(principal.principalId(), new TestResource("project", "1927273629")));
-        assertTrue(session.grants(principal.principalId(), new TestResource("operation", "project.read")));
+        assertTrue(session.grants(principal.principalId(), new TestResource("operation", "project:read")));
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new LongIdSet(List.of(3L, 2L, 3L)));
-        org.junit.jupiter.api.Assertions.assertFalse(
+        Assertions.assertFalse(
                 session.grants(principal.principalId(), new TestResource("project", "01927273629")));
-        org.junit.jupiter.api.Assertions.assertFalse(
-                session.grants(principal.principalId(), new TestResource("project", "project.read")));
-        org.junit.jupiter.api.Assertions.assertFalse(
+        Assertions.assertFalse(
+                session.grants(principal.principalId(), new TestResource("project", "project:read")));
+        Assertions.assertFalse(
                 session.grants(principal.principalId(), new TestResource("other", "1927273629")));
     }
 
@@ -178,12 +182,12 @@ class SessionContractTest {
         return List.of(
                 new Authentication(
                         account.accountId(),
-                        new AuthenticationMethodCode("test"),
+                        TreeCode.ofSlash("AUTHENTICATION/TEST"),
                         Set.of(AuthenticationFactorKind.KNOWLEDGE),
                         NOW));
     }
 
-    private static final class TestPrincipal implements Principal {
+    private static class TestPrincipal implements Principal {
         private final long id;
 
         private TestPrincipal(long id) {
@@ -196,7 +200,7 @@ class SessionContractTest {
         }
     }
 
-    private static final class OtherPrincipal implements Principal {
+    private static class OtherPrincipal implements Principal {
         private final long id;
 
         private OtherPrincipal(long id) {
@@ -209,18 +213,18 @@ class SessionContractTest {
         }
     }
 
-    private static final class TestResource implements Resource {
-        private final String type;
-
+    private static class TestResource implements Resource {
         private final String id;
 
+        private final TreeCode type;
+
         private TestResource(String type, String id) {
-            this.type = type;
+            this.type = TreeCode.ofSegment(type);
             this.id = id;
         }
 
         @Override
-        public @NotNull String type() {
+        public @NotNull TreeCode type() {
             return type;
         }
 

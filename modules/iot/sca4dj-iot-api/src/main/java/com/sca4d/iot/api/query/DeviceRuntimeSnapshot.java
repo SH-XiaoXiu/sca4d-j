@@ -9,18 +9,18 @@ import java.util.Objects;
 
 /** 保存同一 Device 当前连接、reported 和 desired 的一次查询结果。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class DeviceRuntimeSnapshot {
+public class DeviceRuntimeSnapshot {
 
     private final @NotNull List<DeviceConnection> connections;
 
-    private final @NotNull List<ReportedStateSnapshot> reported;
-
     private final @NotNull List<DesiredStateSnapshot> desired;
+
+    private final @NotNull List<ReportedStateSnapshot> reported;
 
     /**
      * 创建不可修改的 Device 运行态快照。
      *
-     * @param connections 查询时仍有效的连接事实
+     * @param connections 查询时仍有效的连接信息
      * @param reported 当前绑定代数 下的 reported 字段组
      * @param desired 当前绑定代数 下的 desired 属性
      */

@@ -3,7 +3,7 @@ package com.sca4d.core.api.flow;
 import com.sca4d.core.api.utils.TextUtils;
 
 /** 保存一个 {@link FlowInstance} 的不透明标识。 */
-public final class FlowId {
+public class FlowId {
 
     private final String value;
 
@@ -17,7 +17,7 @@ public final class FlowId {
     }
 
     /**
-     * 返回原始标识。
+     * 原始标识。
      *
      * @return 原始标识
      */

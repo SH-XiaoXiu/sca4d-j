@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="annotations">@ConfigurationProperties("sca4dj.messaging")
-</span><span class="modifiers">public final class </span><span class="element-name type-name-label">MessagingProperties</span>
+</span><span class="modifiers">public class </span><span class="element-name type-name-label">MessagingProperties</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">配置 RabbitMQ 发布确认以及 Outbox 派发、租约、退避和清理。</div>
 </section>
@@ -105,9 +105,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">MessagingProperties</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">创建使用默认发布确认、派发和清理参数的配置。</div>
-</div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -125,47 +123,47 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getCleanupBatchSize()" class="member-name-link">getCleanupBatchSize</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回每次最多删除的 SENT Outbox 记录数。</div>
+<div class="block">每次最多删除的 SENT Outbox 记录数。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getCleanupInterval()" class="member-name-link">getCleanupInterval</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回相邻两次 SENT Outbox 清理计划之间的间隔。</div>
+<div class="block">相邻两次 SENT Outbox 清理计划之间的间隔。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getConfirmTimeout()" class="member-name-link">getConfirmTimeout</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回等待 RabbitMQ publisher confirm 的最长时间。</div>
+<div class="block">等待 RabbitMQ publisher confirm 的最长时间。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getDispatchBatchSize()" class="member-name-link">getDispatchBatchSize</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回每次最多领取的 Outbox 记录数。</div>
+<div class="block">每次最多领取的 Outbox 记录数。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getDispatchInterval()" class="member-name-link">getDispatchInterval</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回相邻两次 Outbox 派发计划之间的时间。</div>
+<div class="block">相邻两次 Outbox 派发计划之间的时间。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getInitialBackoff()" class="member-name-link">getInitialBackoff</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回第一次发布失败后的退避时长。</div>
+<div class="block">第一次发布失败后的退避时长。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getLeaseDuration()" class="member-name-link">getLeaseDuration</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回 Outbox 处于 SENDING 时的租约时长。</div>
+<div class="block">Outbox 处于 SENDING 时的租约时长。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMaximumBackoff()" class="member-name-link">getMaximumBackoff</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回发布失败退避时长的上限。</div>
+<div class="block">发布失败退避时长的上限。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSentRetention()" class="member-name-link">getSentRetention</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回 SENT Outbox 记录的保留时间。</div>
+<div class="block">SENT Outbox 记录的保留时间。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setCleanupBatchSize(int)" class="member-name-link">setCleanupBatchSize</a><wbr>(int&nbsp;cleanupBatchSize)</code></div>
@@ -233,7 +231,6 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="&lt;init&gt;()">
 <h3>MessagingProperties</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">MessagingProperties</span>()</div>
-<div class="block">创建使用默认发布确认、派发和清理参数的配置。</div>
 </section>
 </li>
 </ul>
@@ -248,7 +245,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getConfirmTimeout()">
 <h3>getConfirmTimeout</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name">getConfirmTimeout</span>()</div>
-<div class="block">返回等待 RabbitMQ publisher confirm 的最长时间。</div>
+<div class="block">等待 RabbitMQ publisher confirm 的最长时间。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>等待 RabbitMQ publisher confirm 的最长时间</dd>
@@ -272,7 +269,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getDispatchInterval()">
 <h3>getDispatchInterval</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name">getDispatchInterval</span>()</div>
-<div class="block">返回相邻两次 Outbox 派发计划之间的时间。</div>
+<div class="block">相邻两次 Outbox 派发计划之间的时间。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>相邻两次 Outbox 派发扫描之间的时间</dd>
@@ -296,7 +293,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getDispatchBatchSize()">
 <h3>getDispatchBatchSize</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getDispatchBatchSize</span>()</div>
-<div class="block">返回每次最多领取的 Outbox 记录数。</div>
+<div class="block">每次最多领取的 Outbox 记录数。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>每次最多领取的 Outbox 记录数</dd>
@@ -320,7 +317,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getLeaseDuration()">
 <h3>getLeaseDuration</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name">getLeaseDuration</span>()</div>
-<div class="block">返回 Outbox 处于 SENDING 时的租约时长。</div>
+<div class="block">Outbox 处于 SENDING 时的租约时长。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>Outbox 处于 SENDING 时的租约时长</dd>
@@ -344,7 +341,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getInitialBackoff()">
 <h3>getInitialBackoff</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name">getInitialBackoff</span>()</div>
-<div class="block">返回第一次发布失败后的退避时长。</div>
+<div class="block">第一次发布失败后的退避时长。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>第一次发布失败后的退避时长</dd>
@@ -368,7 +365,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getMaximumBackoff()">
 <h3>getMaximumBackoff</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name">getMaximumBackoff</span>()</div>
-<div class="block">返回发布失败退避时长的上限。</div>
+<div class="block">发布失败退避时长的上限。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>发布失败退避时长的上限</dd>
@@ -392,7 +389,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getSentRetention()">
 <h3>getSentRetention</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name">getSentRetention</span>()</div>
-<div class="block">返回 SENT Outbox 记录的保留时间。</div>
+<div class="block">SENT Outbox 记录的保留时间。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>SENT Outbox 记录的保留时间</dd>
@@ -416,7 +413,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getCleanupInterval()">
 <h3>getCleanupInterval</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name">getCleanupInterval</span>()</div>
-<div class="block">返回相邻两次 SENT Outbox 清理计划之间的间隔。</div>
+<div class="block">相邻两次 SENT Outbox 清理计划之间的间隔。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>相邻两次 SENT Outbox 清理之间的时间</dd>
@@ -440,7 +437,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getCleanupBatchSize()">
 <h3>getCleanupBatchSize</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getCleanupBatchSize</span>()</div>
-<div class="block">返回每次最多删除的 SENT Outbox 记录数。</div>
+<div class="block">每次最多删除的 SENT Outbox 记录数。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>每次最多删除的 SENT Outbox 记录数</dd>

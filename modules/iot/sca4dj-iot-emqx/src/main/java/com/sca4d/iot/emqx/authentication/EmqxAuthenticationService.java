@@ -1,5 +1,7 @@
 package com.sca4d.iot.emqx.authentication;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.iot.api.connection.DeviceConnectionAccess;
 import com.sca4d.iot.api.connection.DeviceConnectionAdmission;
@@ -13,17 +15,16 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 按 Device 明确接入方式验证 MQTT CONNECT，并生成 EMQX client_attrs、ACL 和失效时间。 */
-public final class EmqxAuthenticationService {
+public class EmqxAuthenticationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(EmqxAuthenticationService.class);
+
+    private final @NotNull MqttAuthorizationService authorization;
 
     private final @NotNull EmqxDeviceConnectionRequestFactory requests;
 
     private final @NotNull DeviceConnectionAdmission admission;
 
-    private final @NotNull MqttAuthorizationService authorization;
-
-    /** 创建不允许认证方式自动降级的 EMQX HTTP Authenticator 服务。 */
     public EmqxAuthenticationService(
             @NotNull EmqxDeviceConnectionRequestFactory requests,
             @NotNull DeviceConnectionAdmission admission,
@@ -70,7 +71,7 @@ public final class EmqxAuthenticationService {
         values.put("product_code", result.device().product().code());
         values.put("product_source", result.device().product().source().name());
         values.put("protocol_code", result.device().protocolCode());
-        values.put("access_method", result.accessMethod().code());
+        values.put("access_method", result.accessMethod().code().format(COLON));
         values.put(MqttAuthorizationService.FINGERPRINT_ATTRIBUTE, authorization.fingerprint());
         result.sessionId().ifPresent(value -> values.put("device_session_id", value.value()));
         return Map.copyOf(values);

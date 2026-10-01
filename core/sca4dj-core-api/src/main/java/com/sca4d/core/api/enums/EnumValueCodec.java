@@ -4,7 +4,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
 /** 在业务枚举与外部字符串之间转换。 */
-public final class EnumValueCodec {
+public class EnumValueCodec {
 
     private EnumValueCodec() {
     }

@@ -1,13 +1,12 @@
 package com.sca4d.iot.change;
 
+import com.sca4d.core.spring.transaction.TransactionCallbacks;
 import com.sca4d.iot.api.change.DeviceChange;
 import com.sca4d.iot.api.change.DeviceChangeArea;
 import com.sca4d.iot.api.change.DeviceChangePublisher;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.transaction.support.TransactionSynchronization;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.Instant;
 import java.util.Collection;
@@ -15,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 在事务提交后把 Device 数据失效通知交给具体应用安装的发布器。 */
-public final class DeviceChangeNotifier {
+public class DeviceChangeNotifier {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeviceChangeNotifier.class);
 
@@ -32,17 +31,7 @@ public final class DeviceChangeNotifier {
             @NotNull Collection<DeviceChangeArea> areas,
             @NotNull Instant occurredAt) {
         DeviceChange change = new DeviceChange(deviceId, areas, occurredAt);
-        if (TransactionSynchronizationManager.isActualTransactionActive()
-                && TransactionSynchronizationManager.isSynchronizationActive()) {
-            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-                @Override
-                public void afterCommit() {
-                    publish(change);
-                }
-            });
-            return;
-        }
-        publish(change);
+        TransactionCallbacks.afterCommitOrNow(() -> publish(change));
     }
 
     /** 单独通知一个变化区域。 */

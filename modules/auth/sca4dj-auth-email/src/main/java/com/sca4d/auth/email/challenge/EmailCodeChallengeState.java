@@ -10,25 +10,25 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 保存 Redis 中的验证码摘要、可选 Account、状态、次数和时间边界。 */
-public final class EmailCodeChallengeState {
+public class EmailCodeChallengeState {
 
     private final @NotNull EmailCodeChallengeId challengeId;
 
-    private final long accountId;
-
-    private final @NotNull String codeHash;
-
-    private final @NotNull String maskedRecipient;
+    private final @NotNull EmailCodeChallengeStatus status;
 
     private final @NotNull Instant expiresAt;
 
     private final @NotNull Instant resendAt;
 
-    private final int attemptCount;
+    private final @NotNull String codeHash;
 
-    private final @NotNull EmailCodeChallengeStatus status;
+    private final @NotNull String maskedRecipient;
 
     private final @NotNull Version version;
+
+    private final int attemptCount;
+
+    private final long accountId;
 
     /**
      * @param challengeId Challenge 标识

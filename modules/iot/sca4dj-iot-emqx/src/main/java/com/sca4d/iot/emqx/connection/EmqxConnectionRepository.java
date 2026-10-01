@@ -1,14 +1,16 @@
 package com.sca4d.iot.emqx.connection;
 
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.spring.redis.KeyRedisSerializer;
 import com.sca4d.core.spring.redis.RedisBatches;
 import com.sca4d.iot.api.connection.DeviceConnectionId;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SessionCallback;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 
 import java.time.Instant;
@@ -24,7 +26,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /** 使用 Redis 保存 EMQX 终止连接和故障对账所需的 Client ID 与 Broker 节点事实。 */
-public final class EmqxConnectionRepository {
+public class EmqxConnectionRepository {
 
     private static final DefaultRedisScript<Long> PROJECT = script("project.lua");
 
@@ -34,15 +36,15 @@ public final class EmqxConnectionRepository {
 
     private static final DefaultRedisScript<Long> CLEANUP_CLIENT = script("cleanup-client.lua");
 
-    private final @NotNull StringRedisTemplate redis;
+    private final @NotNull RedisTemplate<Key, String> redis;
 
-    private final @NotNull String connectionPrefix;
+    private final @NotNull Key connectionPrefix;
 
-    private final @NotNull String clientPrefix;
+    private final @NotNull Key clientPrefix;
 
-    private final @NotNull String connectionIdsKey;
+    private final @NotNull Key connectionIdsKey;
 
-    private final @NotNull String clientIdsKey;
+    private final @NotNull Key clientIdsKey;
 
     private final @NotNull RedisBatches redisBatches;
 
@@ -50,31 +52,29 @@ public final class EmqxConnectionRepository {
      * 创建只保存 EMQX 专用连接字段的 Redis Repository。
      *
      * @param redis IoT 共享 Redis
-     * @param namespace 共享资源命名空间
      * @param redisBatches Redis pipeline 批处理器
      */
     public EmqxConnectionRepository(
-            @NotNull StringRedisTemplate redis,
-            @NotNull RuntimeNamespace namespace,
+            @NotNull RedisTemplate<Key, String> redis,
             @NotNull RedisBatches redisBatches) {
         this.redis = Objects.requireNonNull(redis, "EMQX Connection Redis 不能为空");
-        RuntimeNamespace checked = Objects.requireNonNull(namespace, "运行时命名空间不能为空");
-        this.connectionPrefix = checked.sca4dj("iot", "emqx-connection") + ':';
-        this.clientPrefix = checked.sca4dj("iot", "emqx-client-connection") + ':';
-        this.connectionIdsKey = checked.sca4dj("iot", "emqx-connections");
-        this.clientIdsKey = checked.sca4dj("iot", "emqx-clients");
+
+        this.connectionPrefix = Key.of(TreeCode.ofColon("IOT:EMQX_CONNECTION"));
+        this.clientPrefix = Key.of(TreeCode.ofColon("IOT:EMQX_CLIENT_CONNECTION"));
+        this.connectionIdsKey = Key.of(TreeCode.ofColon("IOT:EMQX_CONNECTIONS"));
+        this.clientIdsKey = Key.of(TreeCode.ofColon("IOT:EMQX_CLIENTS"));
         this.redisBatches = Objects.requireNonNull(redisBatches, "Redis 批处理器不能为空");
     }
 
     /**
      * 保存或刷新一条 EMQX 当前连接；较旧的对账快照不能覆盖较新的连接代次。
      *
-     * @param connection EMQX 当前连接事实
-     * @param projectedAt 当前实例取得该事实的时间
-     * @return 该观察结果是否成为 Client ID 当前投影
+     * @param connection EMQX 当前连接信息
+     * @param projectedAt 当前实例取得连接信息的时间
+     * @return 当前观察结果是否成为 Client ID 的最新投影
      */
     public boolean connected(@NotNull EmqxClientConnection connection, @NotNull Instant projectedAt) {
-        EmqxClientConnection checked = Objects.requireNonNull(connection, "EMQX 连接事实不能为空");
+        EmqxClientConnection checked = Objects.requireNonNull(connection, "EMQX 连接信息不能为空");
         Instant observed = Objects.requireNonNull(projectedAt, "EMQX 连接观察时间不能为空");
         DeviceConnectionId connectionId = checked.connectionId();
         Long projected = redis.execute(
@@ -98,7 +98,7 @@ public final class EmqxConnectionRepository {
         Long removed = redis.execute(
                 REMOVE,
                 List.of(connectionKey(checked), connectionIdsKey, clientIdsKey),
-                clientPrefix,
+                KeyRedisSerializer.keyText(redis, clientPrefix) + ":",
                 checked.value());
         return Long.valueOf(1).equals(removed);
     }
@@ -117,7 +117,7 @@ public final class EmqxConnectionRepository {
         String removed = redis.execute(
                 DISCONNECT_CLIENT,
                 List.of(clientKey(checkedClientId), connectionIdsKey, clientIdsKey),
-                connectionPrefix,
+                KeyRedisSerializer.keyText(redis, connectionPrefix) + ":",
                 checkedClientId,
                 Long.toString(Objects.requireNonNull(observedAt, "EMQX 断线观察时间不能为空").toEpochMilli()));
         return Optional.of(removed)
@@ -287,7 +287,7 @@ public final class EmqxConnectionRepository {
                     return null;
                 }
             });
-            return values.stream().map(EmqxConnectionRepository::hash).toList();
+            return values.stream().map(EmqxConnectionRepository::redisHash).toList();
         });
     }
 
@@ -302,7 +302,7 @@ public final class EmqxConnectionRepository {
                         operations.execute(
                                 REMOVE,
                                 List.of((K) connectionKey(connectionId), (K) connectionIdsKey, (K) clientIdsKey),
-                                clientPrefix,
+                                KeyRedisSerializer.keyText(redis, clientPrefix) + ":",
                                 connectionId.value());
                     }
                     return null;
@@ -331,9 +331,9 @@ public final class EmqxConnectionRepository {
         });
     }
 
-    /** 把 pipeline 返回值恢复为字符串 Hash。 */
+    /** 把 pipeline 返回值恢复为 Redis Hash 字段。 */
     @SuppressWarnings("unchecked")
-    private static @NotNull Map<Object, Object> hash(@NotNull Object value) {
+    private static @NotNull Map<Object, Object> redisHash(@NotNull Object value) {
         if (!(value instanceof Map<?, ?> fields)) {
             throw new IllegalStateException("EMQX Connection pipeline 返回了无法识别的 Hash");
         }
@@ -341,13 +341,13 @@ public final class EmqxConnectionRepository {
     }
 
     /** 返回 DeviceConnectionId 对应的 EMQX 专用 Hash key。 */
-    private @NotNull String connectionKey(@NotNull DeviceConnectionId connectionId) {
-        return connectionPrefix + connectionId.value();
+    private @NotNull Key connectionKey(@NotNull DeviceConnectionId connectionId) {
+        return connectionPrefix.part(connectionId.value());
     }
 
     /** 返回 MQTT Client ID 当前连接代次的反向索引 key。 */
-    private @NotNull String clientKey(@NotNull String clientId) {
-        return clientPrefix + clientId;
+    private @NotNull Key clientKey(@NotNull String clientId) {
+        return clientPrefix.part(clientId);
     }
 
     /** 从 classpath 加载返回 Long 的 EMQX 连接 Redis 脚本。 */

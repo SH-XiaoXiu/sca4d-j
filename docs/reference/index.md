@@ -1,6 +1,6 @@
 # 参考
 
-本页用于查找 HTTP 请求与响应、运行配置，以及 Java 类型和方法。首次接入功能时先按[教程](/tutorials/local-start)完成操作，再用对应参考核对字段、限制和失败结果。
+按问题查契约：HTTP 参考查请求与响应，运行配置查环境变量和启用条件，Java API 查方法参数与失败结果。第一次接入功能先完成[教程](/tutorials/local-start)，遇到具体字段或限制再查本页对应入口。
 
 | 要查的内容 | 入口 |
 |---|---|
@@ -77,4 +77,4 @@ IAM 管理 Subject、Account、Principal 和授权关系；Auth 管理认证尝�
 - [sca4dj-build-gradle-plugin](/javadoc/tools/sca4dj-build-gradle-plugin/index.html)
 - [sca4dj-app-gradle-plugin](/javadoc/tools/sca4dj-app-gradle-plugin/index.html)
 
-Java API 由源码 Javadoc 生成，保存在 `docs/public/javadoc/` 并随仓库提交。本地预览和文档打包直接使用这些文件，更新方法见[Javadoc 构建](/standards/build#javadoc)。
+Java API 由源码 Javadoc 生成，保存在 `docs/public/javadoc/` 并随仓库提交。本地预览和文档打包直接使用这些文件，更新方法见[Javadoc 构建](/standards/09_build#javadoc)。

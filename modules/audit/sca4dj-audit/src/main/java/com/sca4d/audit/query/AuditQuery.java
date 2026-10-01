@@ -9,26 +9,26 @@ import java.time.Instant;
 
 /** 保存审计记录分页查询使用的可选身份、操作、结果、目标和时间条件。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class AuditQuery {
-    private final @Nullable String requestId;
-
-    private final @Nullable Long accountId;
-
-    private final @Nullable Long principalId;
-
-    private final @Nullable String operation;
-
+public class AuditQuery {
     private final @Nullable AuditResult result;
-
-    private final @Nullable String targetType;
-
-    private final @Nullable String targetId;
 
     private final @Nullable Instant occurredFrom;
 
     private final @Nullable Instant occurredTo;
 
+    private final @Nullable Long accountId;
+
+    private final @Nullable Long principalId;
+
     private final @NotNull PageRequest page;
+
+    private final @Nullable String operation;
+
+    private final @Nullable String requestId;
+
+    private final @Nullable String targetId;
+
+    private final @Nullable String targetType;
 
     /**
      * 创建审计记录分页查询。
@@ -77,7 +77,7 @@ public final class AuditQuery {
         }
         this.occurredFrom = occurredFrom;
         this.occurredTo = occurredTo;
-        this.page = page.requireMaxSize(100);
+        this.page = page.verifyMaxSize(100);
     }
 
     /** @return 可选精确调用标识 */

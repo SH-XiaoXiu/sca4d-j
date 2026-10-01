@@ -1,6 +1,6 @@
 # 开发后端业务接口
 
-Sca4d Server 的个人资料接口包含读取、修改和头像绑定。增加应用业务字段时，可以沿着这条调用路径修改数据库、持久化代码和 HTTP 契约。本篇以现有的 `GET /me/profile` 和 `PUT /me/profile` 为例。
+新增业务字段要同时处理数据库存储、Service 规则和 HTTP 请求与响应。下面沿 Sca4d Server 的 `GET /me/profile`、`PUT /me/profile` 说明修改位置和验证方法，再补充分页、排序与字段部分更新的写法。
 
 ## 找到负责的代码
 
@@ -21,7 +21,7 @@ Sca4d Server 的个人资料接口包含读取、修改和头像绑定。增加�
 
 ## 定义字段和写入规则
 
-为字段确定类型、长度、空值含义、默认值和允许修改的条件。已有数据库通过新的 Flyway 迁移增加字段；检查旧记录怎样取得有效值，再增加非空或唯一约束。迁移要求见[PostgreSQL 规范](/standards/postgresql)。
+为字段确定类型、长度、空值含义、默认值和允许修改的条件。已有数据库通过新的 Flyway 迁移增加字段；检查旧记录怎样取得有效值，再增加非空或唯一约束。迁移要求见[数据库规范](/standards/06_database)。
 
 在 `ReplaceProfileRequest` 中声明输入及校验，在 `ProfileView` 中声明返回值。确认修改是替换完整资料还是只改变一个字段：完整替换中，空值可能表示清除；局部修改中，未提交字段必须与明确清空区分。
 
@@ -33,13 +33,13 @@ Sca4d Server 的个人资料接口包含读取、修改和头像绑定。增加�
 
 Controller 返回 `ApiResponse.ok(ProfileView.from(updated))`，并通过 `@Audit` 和 `@AuditTarget` 声明操作及资料目标。审计只保存允许记录的标识和字段变化，不写入密码、验证码或完整个人资料。
 
-Repository 组合 Mapper 查询与写入，向 Service 返回业务对象。SQL 明确列出本次更新的列，保留访问范围、状态和必要的版本条件。影响行数由 Repository 解释，具体写法见[持久化规范](/standards/persistence)。
+Repository 组合 Mapper 查询与写入，向 Service 返回业务对象。SQL 明确列出本次更新的列，保留访问范围、状态和必要的版本条件。影响行数由 Repository 解释，具体写法见[持久化规范](/standards/05_persistence)。
 
 ## 调用接口确认资料变化
 
 先按[认证与 Session](/tutorials/authentication-and-session)取得 Session Token，在 Swagger UI 中设置 Bearer Token，再读取 `GET /api/me/profile`。
 
-保存当前资料后，向 Gateway 提交完整替换请求。字段限制以 `ReplaceProfileRequest` 为准：
+以下请求会清除邮箱和手机号，只在测试账号上执行。保存当前资料后，向 Gateway 提交完整替换请求；字段限制以 `ReplaceProfileRequest` 为准：
 
 ```http
 PUT /api/me/profile
@@ -53,9 +53,9 @@ Authorization: Bearer <sessionToken>
 }
 ```
 
-再次读取，应得到修改后的资料。这个请求会清除邮箱和手机号，只在测试账号上执行。当前个人资料接口没有要求 `If-Match`；增加其他资源的完整编辑接口时，按[HTTP 并发契约](/reference/http/common#etag、if-match-与修改冲突)判断是否需要 ETag。
+再次读取，应得到修改后的资料。当前个人资料接口没有要求 `If-Match`；增加其他资源的完整编辑接口时，按[HTTP 并发契约](/reference/http/common#etag、if-match-与修改冲突)判断是否需要 ETag。
 
-测试覆盖有效输入、非法值、清空和事务失败。涉及邮箱时，还要覆盖标识冲突及回滚后资料与 Account 是否一致。只修改本应用时，先编译 `:apps:sca4d-server:compileJava`，再运行直接相关测试；资源限制见[测试规范](/standards/testing#资源限制)。
+测试覆盖有效输入、非法值、清空和事务失败。涉及邮箱时，还要覆盖标识冲突及回滚后资料与 Account 是否一致。只修改本应用时，先编译 `:apps:sca4d-server:compileJava`，再运行直接相关测试；检查范围见[测试规范](/standards/10_testing)，资源限制以仓库构建指令为准。
 
 ## 列表查询
 
@@ -68,7 +68,7 @@ Sca4d-J 使用同一组公共类型处理列表分页和动态排序。业务筛
 | 参数 | 默认值 | 限制 |
 |---|---:|---|
 | `page` | 1 | 不小于 1 |
-| `size` | `sca4dj.core.page-default-size`，默认 20 | 不大于全局或当前接口声明的上限 |
+| `size` | `sca4dj.core.pagination.default-size`，默认 20 | 不大于全局或当前接口声明的上限 |
 
 支持动态排序的接口另外接受可以重复的 `sort`：
 
@@ -129,7 +129,7 @@ public ApiResponse<Page<ProjectView>> find(
 
 Repository 使用同一个 Query 执行 count 和当前页查询，并返回 `Page<T>`。没有命中记录时可以跳过 rows 查询；超过末页时返回空 `items` 和不变的 `total`。
 
-Mapper 的筛选 SQL由 count 和 rows 共用，排序列逐项显式映射：
+Mapper 的筛选 SQL 由 count 和 rows 共用，排序列逐项显式映射：
 
 ```xml
 ORDER BY
@@ -167,7 +167,7 @@ p.id DESC
 
 源码：`core/sca4dj-core-api/src/main/java/com/sca4d/core/api/persistence/Patch.java`
 
-数据库字段的部分更新必须区分三种结果：保留原值、写入一个值、写入数据库 `NULL`。只传递可空 Java 值无法区分前两种结果；把数值零、`false` 或空字符串统一当作“空”又会丢失调用方明确给出的数据。Patch 使用三个互斥状态保存 Repository 已经确定的字段写入意图。
+数据库字段的部分更新必须区分三种结果：保留原值、写入一个值、写入数据库 `NULL`。只传递可空 Java 值无法区分前两种结果；把数值零、`false` 或空字符串统一当作「空」又会丢失调用方明确给出的数据。Patch 使用三个互斥状态保存 Repository 已经确定的字段写入意图。
 
 | 状态 | 构造方式 | Mapper 行为 |
 |---|---|---|
@@ -228,7 +228,7 @@ Patch<String> remark = Patch.<String>choose()
         .otherwiseIgnore();
 ```
 
-零个条件命中时返回结束方法声明的结果。一个以上条件命中时抛出 IllegalStateException，不按声明先后静默覆盖。Supplier 只在对应分支唯一命中且结束构造时执行；未命中的分支和未使用的兜底 Supplier 不执行。
+零个条件命中时返回结束方法声明的结果。一个以上条件命中时抛出 IllegalStateException，不按声明先后静默覆盖。Supplier 只在对应分支唯一命中且结束构造时执行；未命中的分支和未使用的默认 Supplier 不执行。
 
 ### Mapper 限制
 
@@ -245,4 +245,4 @@ Patch 不生成 SQL，也不通过反射推断列名。Mapper 方法可以直接
 </choose>
 ```
 
-Repository 将允许修改的字段转换为明确的 SQL 列。完整规则见[持久化规范](/standards/persistence)。
+Repository 将允许修改的字段转换为明确的 SQL 列。完整规则见[持久化规范](/standards/05_persistence)。

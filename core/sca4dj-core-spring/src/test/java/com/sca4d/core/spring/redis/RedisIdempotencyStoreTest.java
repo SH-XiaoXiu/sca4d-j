@@ -13,13 +13,13 @@ import com.sca4d.core.api.concurrent.IdempotencyBeginResult;
 import com.sca4d.core.api.concurrent.IdempotencyBeginStatus;
 import com.sca4d.core.api.concurrent.IdempotencyKey;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
 import com.sca4d.core.spring.config.CoreJacksonAutoConfiguration;
 import com.sca4d.core.spring.web.ApiResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.http.HttpStatus;
 
@@ -37,13 +37,14 @@ class RedisIdempotencyStoreTest {
 
     private final ObjectMapper objectMapper = new CoreJacksonAutoConfiguration().sca4djObjectMapper();
 
-    private final Map<String, String> storedRecords = new ConcurrentHashMap<>();
+    private final Map<Key, String> storedRecords = new ConcurrentHashMap<>();
 
     private RedisIdempotencyStore store;
 
     @BeforeEach
+    @SuppressWarnings("unchecked") // Mockito 的 Class 参数不能表达 RedisTemplate 的泛型。
     void setUp() {
-        StringRedisTemplate redis = mock(StringRedisTemplate.class);
+        RedisTemplate<Key, String> redis = mock(RedisTemplate.class);
         doAnswer(
                 invocation -> executeScript(
                         invocation.getArgument(0),
@@ -53,7 +54,6 @@ class RedisIdempotencyStoreTest {
                 .execute(any(RedisScript.class), any(List.class), any(Object[].class));
         store = new RedisIdempotencyStore(
                 redis,
-                new RuntimeNamespace("example-app"),
                 objectMapper);
     }
 
@@ -126,7 +126,10 @@ class RedisIdempotencyStoreTest {
                         Duration.ofHours(1)))
                 .isFalse();
         assertThat(store.release(key, "other-token")).isFalse();
+        assertThat(store.renew(key, "other-token", Duration.ofMinutes(1))).isFalse();
+        assertThat(store.renew(key, acquired.token(), Duration.ofMinutes(1))).isTrue();
         assertThat(store.release(key, acquired.token())).isTrue();
+        assertThat(store.renew(key, acquired.token(), Duration.ofMinutes(1))).isFalse();
         assertThat(
                 store.begin(
                         key,
@@ -283,7 +286,7 @@ class RedisIdempotencyStoreTest {
                         resultType,
                         Duration.ofHours(1)))
                 .isTrue();
-        for (Map.Entry<String, String> entry : storedRecords.entrySet()) {
+        for (Map.Entry<Key, String> entry : storedRecords.entrySet()) {
             var legacy = (ObjectNode) objectMapper.readTree(entry.getValue());
             legacy.remove(List.of("httpStatus", "httpHeaders"));
             entry.setValue(objectMapper.writeValueAsString(legacy));
@@ -303,9 +306,9 @@ class RedisIdempotencyStoreTest {
         assertThat(restored.responseHeaders()).isEmpty();
     }
 
-    /** 在测试内按三个生产 Lua 脚本的状态转换维护一条 Redis String。 */
-    private Object executeScript(RedisScript<?> script, List<String> keys, Object[] arguments) throws Exception {
-        String key = keys.getFirst();
+    /** 在测试内按四个生产 Lua 脚本的状态转换维护一条 Redis String。 */
+    private Object executeScript(RedisScript<?> script, List<Key> keys, Object[] arguments) throws Exception {
+        Key key = keys.getFirst();
         if (script.getResultType() == String.class) {
             String current = storedRecords.get(key);
             if (current != null) {
@@ -326,7 +329,7 @@ class RedisIdempotencyStoreTest {
         }
         if (arguments.length == 1) {
             storedRecords.remove(key);
-        } else {
+        } else if (arguments.length == 3) {
             storedRecords.put(key, (String) arguments[1]);
         }
         return 1L;

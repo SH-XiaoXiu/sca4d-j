@@ -103,11 +103,11 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.iot.message.DownlinkRepository,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.iot.message.DeviceDownlinkMessagePublisher,com.sca4d.core.api.messaging.MessagePublisher,com.sca4d.core.api.concurrent.DistributedLock,org.springframework.transaction.support.TransactionTemplate)" class="member-name-link">DeviceAcknowledgementService</a><wbr>(@NotNull <a href="DownlinkRepository.html" title="class in com.sca4d.iot.message">DownlinkRepository</a>&nbsp;downlinks,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.iot.message.DownlinkRepository,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.iot.message.DeviceDeliveryScheduler,com.sca4d.core.api.messaging.MessageBus,com.sca4d.core.api.concurrent.DistributedLock,org.springframework.transaction.support.TransactionTemplate)" class="member-name-link">DeviceAcknowledgementService</a><wbr>(@NotNull <a href="DownlinkRepository.html" title="class in com.sca4d.iot.message">DownlinkRepository</a>&nbsp;downlinks,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
  @NotNull <a href="../change/DeviceChangeNotifier.html" title="class in com.sca4d.iot.change">DeviceChangeNotifier</a>&nbsp;changes,
- @NotNull <a href="DeviceDownlinkMessagePublisher.html" title="class in com.sca4d.iot.message">DeviceDownlinkMessagePublisher</a>&nbsp;downlinkMessages,
- @NotNull com.sca4d.core.api.messaging.MessagePublisher&nbsp;messages,
+ @NotNull <a href="DeviceDeliveryScheduler.html" title="class in com.sca4d.iot.message">DeviceDeliveryScheduler</a>&nbsp;downlinkMessages,
+ @NotNull com.sca4d.core.api.messaging.MessageBus&nbsp;messages,
  @NotNull com.sca4d.core.api.concurrent.DistributedLock&nbsp;distributedLock,
  @NotNull org.springframework.transaction.support.TransactionTemplate&nbsp;transactions)</code></div>
 <div class="col-last even-row-color">
@@ -127,7 +127,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.message.DeviceDownlinkMessage</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.message.DeviceDownlink</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#acknowledge(long,com.sca4d.iot.api.message.DeviceAcknowledgement)" class="member-name-link">acknowledge</a><wbr>(long&nbsp;deviceId,
  @NotNull com.sca4d.iot.api.message.DeviceAcknowledgement&nbsp;acknowledgement)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -156,7 +156,7 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.iot.message.DownlinkRepository,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.iot.message.DeviceDownlinkMessagePublisher,com.sca4d.core.api.messaging.MessagePublisher,com.sca4d.core.api.concurrent.DistributedLock,org.springframework.transaction.support.TransactionTemplate)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.iot.message.DownlinkRepository,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.iot.message.DeviceDeliveryScheduler,com.sca4d.core.api.messaging.MessageBus,com.sca4d.core.api.concurrent.DistributedLock,org.springframework.transaction.support.TransactionTemplate)">
 <h3>DeviceAcknowledgementService</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">DeviceAcknowledgementService</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="DownlinkRepository.html" title="class in com.sca4d.iot.message">DownlinkRepository</a>&nbsp;downlinks,
@@ -165,9 +165,9 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull <a href="../change/DeviceChangeNotifier.html" title="class in com.sca4d.iot.change">DeviceChangeNotifier</a>&nbsp;changes,
  @NotNull
- @NotNull <a href="DeviceDownlinkMessagePublisher.html" title="class in com.sca4d.iot.message">DeviceDownlinkMessagePublisher</a>&nbsp;downlinkMessages,
+ @NotNull <a href="DeviceDeliveryScheduler.html" title="class in com.sca4d.iot.message">DeviceDeliveryScheduler</a>&nbsp;downlinkMessages,
  @NotNull
- @NotNull com.sca4d.core.api.messaging.MessagePublisher&nbsp;messages,
+ @NotNull com.sca4d.core.api.messaging.MessageBus&nbsp;messages,
  @NotNull
  @NotNull com.sca4d.core.api.concurrent.DistributedLock&nbsp;distributedLock,
  @NotNull
@@ -199,7 +199,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="acknowledge(long,com.sca4d.iot.api.message.DeviceAcknowledgement)">
 <h3>acknowledge</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.iot.api.message.DeviceDownlinkMessage</span>&nbsp;<span class="element-name">acknowledge</span><wbr><span class="parameters">(long&nbsp;deviceId,
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.iot.api.message.DeviceDownlink</span>&nbsp;<span class="element-name">acknowledge</span><wbr><span class="parameters">(long&nbsp;deviceId,
  @NotNull
  @NotNull com.sca4d.iot.api.message.DeviceAcknowledgement&nbsp;acknowledgement)</span></div>
 <div class="block">保存设备显式 ACK 前校验下行消息确实属于当前 Device。</div>

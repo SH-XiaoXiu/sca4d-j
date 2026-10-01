@@ -59,7 +59,7 @@ public class SystemOperationLogController {
      */
     @GetMapping
     @Operation(summary = "查询操作日志")
-    @RequirePermission(operation = SystemOperations.AUDIT_READ)
+    @RequirePermission(operation = SystemOperations.AUDIT_READ_VALUE)
     public @NotNull ApiResponse<Page<OperationLogView>> find(
             @RequestParam(required = false) @Nullable String requestId,
             @RequestParam(required = false) @Nullable Long accountId,
@@ -93,7 +93,7 @@ public class SystemOperationLogController {
      */
     @GetMapping("/{id}")
     @Operation(summary = "查询操作日志详情")
-    @RequirePermission(operation = SystemOperations.AUDIT_READ)
+    @RequirePermission(operation = SystemOperations.AUDIT_READ_VALUE)
     public @NotNull ApiResponse<OperationLogView> get(@PathVariable long id) {
         return ApiResponse.ok(OperationLogView.from(logs.loadById(id)));
     }

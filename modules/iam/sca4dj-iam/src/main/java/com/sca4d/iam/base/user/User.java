@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 组合单一 Platform 用户的 Subject、Account，并作为对应 Principal 使用。 */
-public final class User implements Principal {
+public class User implements Principal {
 
     private final @NotNull Subject subject;
 
@@ -47,7 +47,7 @@ public final class User implements Principal {
      * 使用任意一组 Subject、Account、Principal 构造直通对象。
      *
      * @param subject 接入者
-     * @param account 属于该接入者的账号
+     * @param account 属于当前接入者的账号
      * @param principal 业务主体
      * @return USER 直通对象
      */
@@ -123,7 +123,7 @@ public final class User implements Principal {
     }
 
     /**
-     * 读取构造 User 时保存的接入者。
+     * 构造 User 时保存的接入者。
      *
      * @return User 持有的 Subject
      */
@@ -133,7 +133,7 @@ public final class User implements Principal {
     }
 
     /**
-     * 读取构造 User 时保存的登录账号。
+     * 构造 User 时保存的登录账号。
      *
      * @return User 持有的 Account
      */
@@ -150,7 +150,7 @@ public final class User implements Principal {
     }
 
     /**
-     * 返回单一 Platform 用户场景使用的用户标识。
+     * 单一 Platform 用户场景使用的用户标识。
      *
      * @return USER 标识，与 {@link #principalId()} 相同
      */

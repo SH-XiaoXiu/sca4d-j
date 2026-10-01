@@ -6,8 +6,8 @@ import com.sca4d.core.api.pipeline.Pipeline;
 import com.sca4d.core.api.utils.TextUtils;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.message.DeviceAcknowledgement;
+import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.message.DeviceDownlinkKind;
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
 import com.sca4d.iot.api.message.DeviceUplink;
 import com.sca4d.iot.api.model.ThingCommand;
 import com.sca4d.iot.api.model.ThingModel;
@@ -30,7 +30,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 定义 MQTT Topic 路由、Core Pipeline 和物模型字段映射。 */
-public final class MqttDeviceProtocol implements DeviceUplinkProtocol {
+public class MqttDeviceProtocol implements DeviceUplinkProtocol {
 
     private static final MqttTopicIdentityMapper DIRECT_TOPIC_IDENTITY = new MqttTopicIdentityMapper() {
         @Override
@@ -44,15 +44,15 @@ public final class MqttDeviceProtocol implements DeviceUplinkProtocol {
         }
     };
 
-    private final @NotNull String code;
-
-    private final @NotNull Map<String, MqttUplinkDefinition> uplinks;
-
-    private final @NotNull Map<String, MqttUplinkRoute> uplinkRoutes;
+    private final @NotNull MqttTopicIdentityMapper topicIdentityMapper;
 
     private final @NotNull Map<String, DownlinkDefinition> downlinks;
 
-    private final @NotNull MqttTopicIdentityMapper topicIdentityMapper;
+    private final @NotNull Map<String, MqttUplinkRoute> uplinkRoutes;
+
+    private final @NotNull Map<String, MqttUplinkDefinition> uplinks;
+
+    private final @NotNull String code;
 
     private MqttDeviceProtocol(@NotNull Builder builder) {
         this.code = builder.code;
@@ -134,7 +134,7 @@ public final class MqttDeviceProtocol implements DeviceUplinkProtocol {
      * 把协议 Topic Filter 中的 Device 层替换为指定 clientId。
      *
      * @param clientId Device MQTT clientId
-     * @return 该 Device 可以发布的全部上行 Topic Filter
+     * @return 当前 Device 可以发布的全部上行 Topic Filter
      */
     public @NotNull List<String> deviceUplinkTopicFilters(@NotNull String clientId) {
         String topicIdentity = topicIdentityMapper.topicIdentity(clientId);
@@ -212,9 +212,9 @@ public final class MqttDeviceProtocol implements DeviceUplinkProtocol {
      * @throws IllegalArgumentException 没有匹配下行定义或消息数据缺少已声明字段时抛出
      */
     public @NotNull EncodedMqttMessage encode(
-            @NotNull DeviceDownlinkMessage message,
+            @NotNull DeviceDownlink message,
             @NotNull String clientId) {
-        DeviceDownlinkMessage checked = Objects.requireNonNull(message, "下行消息不能为空");
+        DeviceDownlink checked = Objects.requireNonNull(message, "下行消息不能为空");
         String key = routeKey(checked.kind(), checked.targetCode());
         DownlinkDefinition definition = downlinks.get(key);
         if (definition == null) {
@@ -285,7 +285,7 @@ public final class MqttDeviceProtocol implements DeviceUplinkProtocol {
     }
 
     /** 构造 MQTT 路由、转换和物模型映射。 */
-    public static final class Builder {
+    public static class Builder {
 
         private final @NotNull String code;
 
@@ -319,7 +319,7 @@ public final class MqttDeviceProtocol implements DeviceUplinkProtocol {
          * @param groupCode reported 字段组 code
          * @param mergeMode patch 或 snapshot
          * @param pipeline 把 MQTT payload 转为类型化字段的 Core Pipeline
-         * @param keys 允许写入该字段组的物模型属性
+         * @param keys 允许写入当前字段组的物模型属性
          * @return 当前构建器
          */
         public @NotNull Builder reported(
@@ -405,13 +405,13 @@ public final class MqttDeviceProtocol implements DeviceUplinkProtocol {
 
     /** 保存一条下行路由、Core Pipeline 和输入字段。 */
     @SuppressWarnings("ClassCanBeRecord") // 协议内部类型遵守项目禁用 record 的规则。
-    private static final class DownlinkDefinition {
+    private static class DownlinkDefinition {
+
+        private final List<DataKey<?>> keys;
 
         private final MqttDownlinkRoute route;
 
         private final Pipeline<MqttDownlinkFrame, byte[]> pipeline;
-
-        private final List<DataKey<?>> keys;
 
         private DownlinkDefinition(
                 MqttDownlinkRoute route,

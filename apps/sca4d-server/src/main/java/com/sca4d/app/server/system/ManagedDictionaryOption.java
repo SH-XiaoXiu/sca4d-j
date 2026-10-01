@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 保存管理端展示一个代码字典项或数据库字典项所需的数据和乐观锁版本。 */
-public final class ManagedDictionaryOption {
+public class ManagedDictionaryOption {
 
     private final DictionaryOption option;
 

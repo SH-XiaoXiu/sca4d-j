@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">AuthenticationMethodSettings</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">保存一个认证方法在登录首步、登录后续因素和敏感动作中的启用状态。</div>
+<div class="block">保存一个认证方法在登录首个认证阶段、附加认证因素和敏感动作中的启用状态。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -103,7 +103,7 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.authentication.AuthenticationMethodCode,boolean,boolean,boolean)" class="member-name-link">AuthenticationMethodSettings</a><wbr>(@NotNull com.sca4d.core.api.authentication.AuthenticationMethodCode&nbsp;methodCode,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.name.code.TreeCode,boolean,boolean,boolean)" class="member-name-link">AuthenticationMethodSettings</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;methodCode,
  boolean&nbsp;loginStartEnabled,
  boolean&nbsp;loginAdditionalEnabled,
  boolean&nbsp;sensitiveActionEnabled)</code></div>
@@ -127,14 +127,14 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#loginAdditionalEnabled()" class="member-name-link">loginAdditionalEnabled</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回该方法是否允许补充登录因素。</div>
+<div class="block">返回当前方法是否允许补充登录因素。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#loginStartEnabled()" class="member-name-link">loginStartEnabled</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回该方法是否允许开始登录。</div>
+<div class="block">返回当前方法是否允许开始登录。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.authentication.AuthenticationMethodCode</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#methodCode()" class="member-name-link">methodCode</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">返回认证模块声明的稳定方法编码。</div>
@@ -142,7 +142,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sensitiveActionEnabled()" class="member-name-link">sensitiveActionEnabled</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回该方法是否允许认证登录后的敏感动作。</div>
+<div class="block">返回当前方法是否允许认证登录后的敏感动作。</div>
 </div>
 </div>
 </div>
@@ -162,10 +162,10 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.authentication.AuthenticationMethodCode,boolean,boolean,boolean)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.name.code.TreeCode,boolean,boolean,boolean)">
 <h3>AuthenticationMethodSettings</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AuthenticationMethodSettings</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.authentication.AuthenticationMethodCode&nbsp;methodCode,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;methodCode,
  boolean&nbsp;loginStartEnabled,
  boolean&nbsp;loginAdditionalEnabled,
  boolean&nbsp;sensitiveActionEnabled)</span></div>
@@ -173,9 +173,9 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>methodCode</code> - 认证模块声明的稳定方法编码</dd>
-<dd><code>loginStartEnabled</code> - 是否允许用该方法识别账号并开始登录</dd>
-<dd><code>loginAdditionalEnabled</code> - 是否允许该方法补充登录因素</dd>
-<dd><code>sensitiveActionEnabled</code> - 是否允许该方法认证登录后的敏感动作</dd>
+<dd><code>loginStartEnabled</code> - 是否允许使用当前方法识别账号并开始登录</dd>
+<dd><code>loginAdditionalEnabled</code> - 是否允许当前方法补充登录因素</dd>
+<dd><code>sensitiveActionEnabled</code> - 是否允许当前方法认证登录后的敏感动作</dd>
 </dl>
 </section>
 </li>
@@ -191,7 +191,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="methodCode()">
 <h3>methodCode</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.authentication.AuthenticationMethodCode</span>&nbsp;<span class="element-name">methodCode</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">methodCode</span>()</div>
 <div class="block">返回认证模块声明的稳定方法编码。</div>
 </section>
 </li>
@@ -199,21 +199,21 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="loginStartEnabled()">
 <h3>loginStartEnabled</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">loginStartEnabled</span>()</div>
-<div class="block">返回该方法是否允许开始登录。</div>
+<div class="block">返回当前方法是否允许开始登录。</div>
 </section>
 </li>
 <li>
 <section class="detail" id="loginAdditionalEnabled()">
 <h3>loginAdditionalEnabled</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">loginAdditionalEnabled</span>()</div>
-<div class="block">返回该方法是否允许补充登录因素。</div>
+<div class="block">返回当前方法是否允许补充登录因素。</div>
 </section>
 </li>
 <li>
 <section class="detail" id="sensitiveActionEnabled()">
 <h3>sensitiveActionEnabled</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">sensitiveActionEnabled</span>()</div>
-<div class="block">返回该方法是否允许认证登录后的敏感动作。</div>
+<div class="block">返回当前方法是否允许认证登录后的敏感动作。</div>
 </section>
 </li>
 </ul>

@@ -21,7 +21,7 @@ export default defineConfig(async () => {
         proxy: {
           '/api': {
             changeOrigin: true,
-            target: process.env.SCA4D_API_TARGET || 'http://localhost:8088',
+            target: process.env.SCA4DJ_API_TARGET || 'http://localhost:8088',
           },
         },
       },

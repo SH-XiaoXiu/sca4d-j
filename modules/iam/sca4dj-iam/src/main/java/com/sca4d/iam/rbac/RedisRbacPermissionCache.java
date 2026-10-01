@@ -1,32 +1,37 @@
 package com.sca4d.iam.rbac;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
+import cn.hutool.crypto.digest.DigestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Operation;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.OptionalLong;
 
-/** 使用应用基础设施 Redis 按权限目录指纹批量缓存 RBAC 权限选择符。 */
-public final class RedisRbacPermissionCache implements RbacPermissionCache {
+/**
+ * 使用应用基础设施 Redis 按权限目录指纹批量缓存 RBAC 权限选择符。
+ */
+public class RedisRbacPermissionCache implements RbacPermissionCache {
 
     private static final Logger LOG = LoggerFactory.getLogger(RedisRbacPermissionCache.class);
 
@@ -39,49 +44,43 @@ public final class RedisRbacPermissionCache implements RbacPermissionCache {
 
     private static final DefaultRedisScript<Long> INVALIDATE_SELECTORS = script("invalidate-selectors.lua");
 
-    private final @NotNull StringRedisTemplate redis;
-
-    private final @NotNull RuntimeNamespace namespace;
-
-    private final @NotNull String redisSlot;
+    private final @NotNull ObjectMapper objectMapper;
 
     private final @NotNull Map<@NotNull RbacDomain, @NotNull String> catalogFingerprints;
 
-    private final @NotNull ObjectMapper objectMapper;
+    private final @NotNull RedisTemplate<Key, String> redis;
 
     /**
      * 创建 Redis RBAC 权限缓存。
      *
-     * @param redis 脚手架字符串 Redis 模板
-     * @param namespace 当前应用运行时命名空间
-     * @param objectMapper 脚手架 JSON 映射器
+     * @param redis                脚手架字符串 Redis 模板
+     * @param objectMapper         脚手架 JSON 映射器
      * @param permissionSelections 应用安装的 RBAC 权限选择规则
      */
     public RedisRbacPermissionCache(
-            @NotNull StringRedisTemplate redis,
-            @NotNull RuntimeNamespace namespace,
+            @NotNull RedisTemplate<Key, String> redis,
             @NotNull ObjectMapper objectMapper,
             @NotNull PermissionSelectionRegistry permissionSelections) {
         this.redis = Objects.requireNonNull(redis, "Redis 模板不能为空");
-        this.namespace = Objects.requireNonNull(namespace, "运行时命名空间不能为空");
-        this.redisSlot = "{" + encoded(namespace.applicationId()) + "-iam-rbac}";
         this.objectMapper = Objects.requireNonNull(objectMapper, "ObjectMapper 不能为空");
         this.catalogFingerprints = catalogFingerprints(permissionSelections);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @NotNull RbacPermissionCacheLookup find(
             @NotNull Map<@NotNull RbacScope, ? extends Collection<@NotNull Long>> principalIdsByScope) {
         List<RbacScope> scopes = new ArrayList<>();
         List<Long> principalIds = new ArrayList<>();
-        List<String> keys = new ArrayList<>();
+        List<Key> keys = new ArrayList<>();
         flatten(principalIdsByScope, scopes, principalIds, keys);
         if (keys.isEmpty()) {
             return new RbacPermissionCacheLookup(Map.of(), Map.of());
         }
 
-        // 一次 MGET 原子读取修订号和值，确保每个命中值都属于同时读取的修订号。
+        // 一次 GET 原子读取修订号和值，确保每个命中值都属于同时读取的修订号。
         try {
             List<String> values = redis.opsForValue().multiGet(keys);
             if (values == null || values.size() != keys.size()) {
@@ -125,18 +124,23 @@ public final class RedisRbacPermissionCache implements RbacPermissionCache {
             }
             return new RbacPermissionCacheLookup(cached, revisions);
         } catch (RuntimeException exception) {
-            LOG.warn("Redis RBAC 批量读取失败，跳过本次缓存回填", exception);
+            LOG.warn(
+                    "Redis RBAC 批量读取失败，跳过本次缓存回填 | errorType={}",
+                    exception.getClass().getSimpleName(),
+                    exception);
             return new RbacPermissionCacheLookup(Map.of(), Map.of());
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void put(
             @NotNull RbacPermissionCacheLookup lookup,
             @NotNull Map<@NotNull RbacScope, ? extends Map<@NotNull Long, ? extends List<@NotNull PermissionSelector>>> selectorsByScope) {
         RbacPermissionCacheLookup checkedLookup = Objects.requireNonNull(lookup, "缓存读取结果不能为空");
-        List<String> keys = new ArrayList<>();
+        List<Key> keys = new ArrayList<>();
         List<String> arguments = new ArrayList<>();
         int requestedCount = 0;
         try {
@@ -178,17 +182,22 @@ public final class RedisRbacPermissionCache implements RbacPermissionCache {
                     requestedCount,
                     written);
         } catch (JsonProcessingException | RuntimeException exception) {
-            LOG.warn("Redis RBAC 批量写入失败，后续请求将读取 Repository", exception);
+            LOG.warn(
+                    "Redis RBAC 批量写入失败，将改从 Repository 读取 | errorType={}",
+                    exception.getClass().getSimpleName(),
+                    exception);
         }
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void evict(
             @NotNull Map<@NotNull RbacScope, ? extends Collection<@NotNull Long>> principalIdsByScope) {
         List<RbacScope> scopes = new ArrayList<>();
         List<Long> principalIds = new ArrayList<>();
-        List<String> keys = new ArrayList<>();
+        List<Key> keys = new ArrayList<>();
         flatten(principalIdsByScope, scopes, principalIds, keys);
         if (keys.isEmpty()) {
             return;
@@ -197,16 +206,21 @@ public final class RedisRbacPermissionCache implements RbacPermissionCache {
             // 修订号和缓存值在一个 Lua 调用中改变，已经开始的旧读取无法再次写回。
             redis.execute(INVALIDATE_SELECTORS, keys);
         } catch (RuntimeException exception) {
-            LOG.warn("Redis RBAC 缓存批量失效失败，旧值将在 TTL 后失效", exception);
+            LOG.warn(
+                    "Redis RBAC 缓存批量失效失败，旧值将在 TTL 到期后失效 | errorType={}",
+                    exception.getClass().getSimpleName(),
+                    exception);
         }
     }
 
-    /** 把嵌套批量输入按稳定迭代顺序转换为缓存坐标和 Redis key。 */
+    /**
+     * 把嵌套批量输入按稳定迭代顺序转换为缓存坐标和 Redis key。
+     */
     private void flatten(
             @NotNull Map<@NotNull RbacScope, ? extends Collection<@NotNull Long>> principalIdsByScope,
             @NotNull List<RbacScope> scopes,
             @NotNull List<Long> principalIds,
-            @NotNull List<String> keys) {
+            @NotNull List<Key> keys) {
         for (Map.Entry<RbacScope, ? extends Collection<Long>> entry : Objects
                 .requireNonNull(principalIdsByScope, "RBAC 批量缓存输入不能为空")
                 .entrySet()) {
@@ -221,34 +235,38 @@ public final class RedisRbacPermissionCache implements RbacPermissionCache {
         }
     }
 
-    /** @return 指定缓存坐标的修订号 key */
-    private @NotNull String revisionKey(@NotNull RbacScope scope, @NotNull Long principalId) {
-        return coordinateKey(scope, principalId) + ":revision";
+    /**
+     * @return 指定缓存坐标的修订号 key
+     */
+    private @NotNull Key revisionKey(@NotNull RbacScope scope, @NotNull Long principalId) {
+        return coordinateKey(scope, principalId).append(TreeCode.ofSegment("REVISION"));
     }
 
-    /** @return 指定缓存坐标的权限选择符 key */
-    private @NotNull String selectorsKey(@NotNull RbacScope scope, @NotNull Long principalId) {
-        return coordinateKey(scope, principalId) + ":selectors";
+    /**
+     * @return 指定缓存坐标的权限选择符 key
+     */
+    private @NotNull Key selectorsKey(@NotNull RbacScope scope, @NotNull Long principalId) {
+        return coordinateKey(scope, principalId).append(TreeCode.ofSegment("SELECTORS"));
     }
 
-    /** @return 包含应用、RBAC 领域、具体范围和 Principal 的稳定缓存坐标 */
-    private @NotNull String coordinateKey(@NotNull RbacScope scope, @NotNull Long principalId) {
+    /**
+     * @return 包含应用、RBAC 领域、具体范围和 Principal 的稳定缓存坐标
+     */
+    private @NotNull Key coordinateKey(@NotNull RbacScope scope, @NotNull Long principalId) {
         String catalogFingerprint = catalogFingerprints.get(scope.domain());
         if (catalogFingerprint == null) {
             throw new IllegalArgumentException("应用没有安装对应的 RBAC 权限选择规则: " + scope.domain());
         }
-        return namespace.sca4dj(
-                "iam",
-                "rbac",
-                redisSlot,
-                "permissions",
-                scope.domain().value(),
-                catalogFingerprint,
-                scope.global() ? "GLOBAL" : Long.toString(scope.businessId()),
-                Objects.requireNonNull(principalId, "Principal 标识不能为空").toString());
+        return Key.of(TreeCode.ofColon("IAM:RBAC:PERMISSIONS"))
+                .append(scope.domain())
+                .part(catalogFingerprint)
+                .part(scope.global() ? "GLOBAL" : Long.toString(scope.businessId()))
+                .part(Objects.requireNonNull(principalId, "Principal 标识不能为空").longValue());
     }
 
-    /** @return 每个 RBAC 领域按 Operation 编码生成的稳定目录指纹 */
+    /**
+     * @return 每个 RBAC 领域按 Operation 编码生成的稳定目录指纹
+     */
     private static @NotNull Map<@NotNull RbacDomain, @NotNull String> catalogFingerprints(
             @NotNull PermissionSelectionRegistry permissionSelections) {
         PermissionSelectionRegistry registry = Objects.requireNonNull(
@@ -257,7 +275,7 @@ public final class RedisRbacPermissionCache implements RbacPermissionCache {
         LinkedHashMap<RbacDomain, String> fingerprints = new LinkedHashMap<>();
         registry.domains()
                 .stream()
-                .sorted(java.util.Comparator.comparing(RbacDomain::value))
+                .sorted(Comparator.naturalOrder())
                 .forEach(
                         domain -> fingerprints.put(
                                 domain,
@@ -265,26 +283,25 @@ public final class RedisRbacPermissionCache implements RbacPermissionCache {
         return Map.copyOf(fingerprints);
     }
 
-    /** @return 排序后 Operation 编码的 SHA-256 Base64URL 指纹 */
+    /**
+     * @return 排序后 Operation 编码的 SHA-256 Base64URL 指纹
+     */
     private static @NotNull String catalogFingerprint(
             @NotNull Collection<@NotNull Operation> operations) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            Objects.requireNonNull(operations, "RBAC Operation 集合不能为空")
-                    .stream()
-                    .map(operation -> Objects.requireNonNull(operation, "RBAC Operation 不能为空").value())
-                    .sorted()
-                    .forEach(value -> {
-                        digest.update(value.getBytes(StandardCharsets.UTF_8));
-                        digest.update((byte) 0);
-                    });
-            return Base64.getUrlEncoder().withoutPadding().encodeToString(digest.digest());
-        } catch (NoSuchAlgorithmException exception) {
-            throw new IllegalStateException("JVM 不支持 SHA-256", exception);
-        }
+        StringBuilder canonical = new StringBuilder();
+        Objects.requireNonNull(operations, "RBAC Operation 集合不能为空")
+                .stream()
+                .map(operation -> Objects.requireNonNull(operation, "RBAC Operation 不能为空").code().format(COLON))
+                .sorted()
+                .forEach(value -> canonical.append(value).append('\0'));
+        return Base64.getUrlEncoder()
+                .withoutPadding()
+                .encodeToString(DigestUtil.sha256(canonical.toString()));
     }
 
-    /** @return UTF-8 文本的无填充 Base64URL 编码 */
+    /**
+     * @return UTF-8 文本的无填充 Base64URL 编码
+     */
     private static @NotNull String encoded(@NotNull String value) {
         return Base64.getUrlEncoder()
                 .withoutPadding()
@@ -292,7 +309,9 @@ public final class RedisRbacPermissionCache implements RbacPermissionCache {
                         Objects.requireNonNull(value, "命名值不能为空").getBytes(StandardCharsets.UTF_8));
     }
 
-    /** 从 classpath 加载返回 Long 的 RBAC 权限缓存 Redis 脚本。 */
+    /**
+     * 从 classpath 加载返回 Long 的 RBAC 权限缓存 Redis 脚本。
+     */
     private static @NotNull DefaultRedisScript<Long> script(@NotNull String fileName) {
         DefaultRedisScript<Long> script = new DefaultRedisScript<>();
         script.setLocation(new ClassPathResource("redis/iam/rbac/" + fileName));

@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 /** 使用当前 HTTP ObjectMapper 和 DataOps 定制 BaseView 的最终 JSON。 */
-public final class ViewJson {
+public class ViewJson {
 
     private final ObjectMapper objectMapper;
 
@@ -161,9 +161,9 @@ public final class ViewJson {
     }
 
     /**
-     * 读取 Jackson 最终写出的可变根对象。
+     * Jackson 最终写出的可变根对象。
      *
-     * @return 创建 ViewJson 时传入且后续操作原地修改的同一个 ObjectNode
+     * @return 创建 ViewJson 时传入、之后操作会原地修改的同一个 ObjectNode
      */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "The public contract intentionally exposes the live final JSON object")
     public @NotNull ObjectNode root() {

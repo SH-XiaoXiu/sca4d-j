@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../rbac/RbacSessionInvalidation.html" title="interface in com.sca4d.iam.rbac">RbacSessionInvalidation</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">PlatformRbacSessionInvalidation</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">PlatformRbacSessionInvalidation</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../../rbac/RbacSessionInvalidation.html" title="interface in com.sca4d.iam.rbac">RbacSessionInvalidation</a></span></div>
 <div class="block">在 Platform 角色数据发生变化时标记关联 PlatformAccount 的 Session。</div>
@@ -136,7 +136,7 @@ implements <a href="../../rbac/RbacSessionInvalidation.html" title="interface in
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invalidate(com.sca4d.iam.rbac.RbacScope,java.util.Collection)" class="member-name-link">invalidate</a><wbr>(@NotNull <a href="../../rbac/RbacScope.html" title="class in com.sca4d.iam.rbac">RbacScope</a>&nbsp;scope,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;principalIds)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">立即标记关联 Session，使后续请求重新读取权限。</div>
+<div class="block">立即标记关联 Session，使之后的请求重新读取权限。</div>
 </div>
 </div>
 </div>
@@ -165,7 +165,7 @@ implements <a href="../../rbac/RbacSessionInvalidation.html" title="interface in
 <div class="block">创建 Platform Session 失效实现。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>identities</code> - IAM 身份事实服务</dd>
+<dd><code>identities</code> - IAM 身份管理服务</dd>
 <dd><code>sessions</code> - Auth 安装的 Session 生命周期；应用未安装 Auth 时为空</dd>
 </dl>
 </section>
@@ -199,7 +199,7 @@ implements <a href="../../rbac/RbacSessionInvalidation.html" title="interface in
  @NotNull <a href="../../rbac/RbacScope.html" title="class in com.sca4d.iam.rbac">RbacScope</a>&nbsp;scope,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&nbsp;principalIds)</span></div>
-<div class="block">立即标记关联 Session，使后续请求重新读取权限。</div>
+<div class="block">立即标记关联 Session，使之后的请求重新读取权限。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../../rbac/RbacSessionInvalidation.html#invalidate(com.sca4d.iam.rbac.RbacScope,java.util.Collection)">invalidate</a></code>&nbsp;in interface&nbsp;<code><a href="../../rbac/RbacSessionInvalidation.html" title="interface in com.sca4d.iam.rbac">RbacSessionInvalidation</a></code></dd>

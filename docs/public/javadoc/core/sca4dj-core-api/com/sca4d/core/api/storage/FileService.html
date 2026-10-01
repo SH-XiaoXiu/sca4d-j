@@ -217,12 +217,12 @@ loadScripts(document, 'script');</script>
                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">把服务端持有的内容流写入存储并转为可绑定文件。
 
- <p>本方法先保存等待上传的文件记录，再把内容写入该记录选定的存储实现。实际媒体类型和字节数通过核验后，
+ <p>本方法先保存等待上传的文件记录，再把内容写入记录选定的存储实现。实际媒体类型和字节数通过核验后，
  文件转为 <a href="FileStatus.html#READY"><code>FileStatus.READY</code></a>。调用方仍需在自己的业务事务中调用 <a href="#bind(long,com.sca4d.core.api.storage.FileUse)"><code>bind(long, FileUse)</code></a>。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>uploader</code> - 创建文件的 Principal；系统任务使用
-     <a href="../identity/SystemPrincipal.html#INSTANCE"><code>SystemPrincipal.INSTANCE</code></a></dd>
+     <a href="../identity/SystemPrincipals.html#mainPrincipal()"><code>SystemPrincipals.mainPrincipal()</code></a></dd>
 <dd><code>intent</code> - 已由 App 校验业务规则的上传意图</dd>
 <dd><code>content</code> - 文件内容流；本方法不关闭调用方提供的流</dd>
 <dt>Returns:</dt>

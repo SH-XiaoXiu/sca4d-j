@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /** 读取已经由 `TrustedGatewayRequestFilter` 验证的外部请求路径和客户端地址。 */
-public final class TrustedGatewayRequest {
+public class TrustedGatewayRequest {
 
     static final String EXTERNAL_PATH_ATTRIBUTE = TrustedGatewayRequest.class.getName() + ".externalPath";
 

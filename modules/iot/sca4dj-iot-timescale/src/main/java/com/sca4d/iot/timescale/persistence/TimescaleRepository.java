@@ -31,9 +31,9 @@ public class TimescaleRepository {
     private static final TypeReference<Map<String, Object>> MAP_TYPE = new TypeReference<>() {
     };
 
-    private final @NotNull TimescaleMapper mapper;
-
     private final @NotNull ObjectMapper json;
+
+    private final @NotNull TimescaleMapper mapper;
 
     private final @NotNull SqlBatches sqlBatches;
 
@@ -61,7 +61,7 @@ public class TimescaleRepository {
         this.maxQueryResults = maxQueryResults;
     }
 
-    /** 按 MessageId 和样本顺序幂等写入一批 Telemetry。 */
+    /** 按 Id 和样本顺序幂等写入一批 Telemetry。 */
     public void addTelemetry(long messageId, @NotNull TelemetryBatch batch) {
         TelemetryBatch checked = Objects.requireNonNull(batch, "TelemetryBatch 不能为空");
         List<TimescaleTelemetrySample> samples = new ArrayList<>(checked.samples().size());
@@ -86,7 +86,7 @@ public class TimescaleRepository {
         });
     }
 
-    /** 按发生时间和 MessageId 幂等写入一条 Device 事件。 */
+    /** 按发生时间和 Id 幂等写入一条 Device 事件。 */
     @AffectedRows(target = "新增 Device 事件", whenZero = ZeroRowPolicy.ALLOW)
     public void addEvent(long messageId, @NotNull DeviceEventMessage event) {
         DeviceEventMessage checked = Objects.requireNonNull(event, "DeviceEventMessage 不能为空");
@@ -122,7 +122,7 @@ public class TimescaleRepository {
         if (deviceId <= 0) {
             throw new IllegalArgumentException("Device 标识必须为正数");
         }
-        PageRequest checked = Objects.requireNonNull(page, "事件分页要求不能为空").requireMaxSize(100);
+        PageRequest checked = Objects.requireNonNull(page, "事件分页要求不能为空").verifyMaxSize(100);
         long total = mapper.countEvents(deviceId, null, null);
         List<DeviceEvent> items = total == 0
                 ? List.of()
@@ -140,11 +140,29 @@ public class TimescaleRepository {
         if (deviceId <= 0) {
             throw new IllegalArgumentException("Device 标识必须为正数");
         }
-        PageRequest checked = Objects.requireNonNull(page, "业务回执分页要求不能为空").requireMaxSize(100);
+        PageRequest checked = Objects.requireNonNull(page, "业务回执分页要求不能为空").verifyMaxSize(100);
         long total = mapper.countEvents(deviceId, "$downlink.ack", null);
         List<DeviceAcknowledgement> items = total == 0
                 ? List.of()
                 : mapper.selectEvents(deviceId, "$downlink.ack", null, checked.offset(), checked.size())
+                        .stream()
+                        .map(this::toAcknowledgement)
+                        .toList();
+        return new Page<>(items, checked, total);
+    }
+
+    /** 分页读取指定下行消息的完整 ACK 阶段历史。 */
+    public @NotNull Page<DeviceAcknowledgement> findAcknowledgementsByMessageId(
+            long messageId,
+            @NotNull PageRequest page) {
+        if (messageId <= 0) {
+            throw new IllegalArgumentException("下行消息标识必须为正数");
+        }
+        PageRequest checked = Objects.requireNonNull(page, "业务回执分页要求不能为空").verifyMaxSize(100);
+        long total = mapper.countAcknowledgementsByMessageId(messageId);
+        List<DeviceAcknowledgement> items = total == 0
+                ? List.of()
+                : mapper.selectAcknowledgementsByMessageId(messageId, checked.offset(), checked.size())
                         .stream()
                         .map(this::toAcknowledgement)
                         .toList();
@@ -158,7 +176,7 @@ public class TimescaleRepository {
         if (scheduleId <= 0) {
             throw new IllegalArgumentException("设备定时规则标识必须为正数");
         }
-        PageRequest checked = Objects.requireNonNull(page, "设备定时执行分页要求不能为空").requireMaxSize(100);
+        PageRequest checked = Objects.requireNonNull(page, "设备定时执行分页要求不能为空").verifyMaxSize(100);
         long total = mapper.countEvents(null, null, scheduleId);
         List<DeviceScheduleExecution> items = total == 0
                 ? List.of()

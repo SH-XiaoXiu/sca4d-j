@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 使用单次绝对时间或带时区的六字段 Cron 表达设备下行触发时间。 */
-public final class DeviceScheduleTrigger {
+public class DeviceScheduleTrigger {
 
     private final @Nullable Instant executeAt;
 
@@ -37,7 +37,7 @@ public final class DeviceScheduleTrigger {
                 null);
     }
 
-    /** @return 由 IoT 模块计算后续触发时间的六字段 Cron 规则 */
+    /** @return 由 IoT 模块计算下一次触发时间的六字段 Cron 规则 */
     @CheckReturnValue
     public static @NotNull DeviceScheduleTrigger cron(
             @NotNull String cronExpression,

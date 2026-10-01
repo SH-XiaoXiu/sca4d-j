@@ -59,18 +59,18 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 把外部 HTTP 输入的类型默认校验和显式覆盖规则写入最终 OpenAPI 请求定义。 */
-public final class HttpInputOpenApiCustomizer
+public class HttpInputOpenApiCustomizer
         implements
             ParameterCustomizer,
             PropertyCustomizer,
             OperationCustomizer,
             OpenApiCustomizer {
 
-    static final String INTEGRAL = "x-sca4dj-http-input-integral";
-
     private static final String EXPLICIT_RANGE = "x-sca4dj-http-input-explicit-range";
 
     private static final String EXPLICIT_SIZE = "x-sca4dj-http-input-explicit-size";
+
+    static final String INTEGRAL = "x-sca4dj-http-input-integral";
 
     private static final String NO_DEFAULT = "x-sca4dj-http-input-no-default";
 
@@ -94,9 +94,9 @@ public final class HttpInputOpenApiCustomizer
             EXPLICIT_SIZE,
             NO_DEFAULT);
 
-    private final @NotNull HttpInputValidationProperties properties;
-
     private final @NotNull CoreSpringProperties coreProperties;
+
+    private final @NotNull HttpInputValidationProperties properties;
 
     /**
      * 创建与运行时 HTTP 输入默认校验共用同一份配置的 OpenAPI 定制器。
@@ -588,12 +588,12 @@ public final class HttpInputOpenApiCustomizer
         return Object.class;
     }
 
-    /** @return 声明或其组合注解中是否包含任一目标注解 */
+    /** @return 声明或组合注解中是否包含任一目标注解 */
     private boolean hasNumericRangeAnnotation(Annotation @Nullable [] annotations) {
         return NUMERIC_RANGE_ANNOTATIONS.stream().anyMatch(type -> hasAnnotation(annotations, type));
     }
 
-    /** @return 声明或其组合注解中是否包含目标注解 */
+    /** @return 声明或组合注解中是否包含目标注解 */
     private boolean hasAnnotation(
             Annotation @Nullable [] annotations,
             @NotNull Class<? extends Annotation> annotationType) {
@@ -609,7 +609,7 @@ public final class HttpInputOpenApiCustomizer
         return false;
     }
 
-    /** @return 声明或其组合注解中是否包含目标注解 */
+    /** @return 声明或组合注解中是否包含目标注解 */
     private boolean hasNoDefaultValidation(@NotNull AnnotatedElement element) {
         return hasAnnotation(element.getAnnotations(), NoDefaultValidation.class);
     }

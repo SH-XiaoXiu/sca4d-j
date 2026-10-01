@@ -10,17 +10,17 @@ import java.util.Objects;
 
 /** 保存一个 reported 字段组当前已经接受的值和观测时间。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class ReportedStateSnapshot {
-
-    private final @NotNull String groupCode;
-
-    private final @NotNull Map<String, Object> values;
-
-    private final long version;
+public class ReportedStateSnapshot {
 
     private final @NotNull Instant observedAt;
 
     private final @NotNull Instant receivedAt;
+
+    private final @NotNull Map<String, Object> values;
+
+    private final @NotNull String groupCode;
+
+    private final long version;
 
     /** 创建 reported 字段组查询快照。 */
     public ReportedStateSnapshot(

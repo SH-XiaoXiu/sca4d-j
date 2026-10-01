@@ -69,7 +69,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="package-signature">package <span class="element-name">com.sca4d.iam.identity</span></div>
 <section class="package-description" id="package-description">
-<div class="block">管理 Subject、Account、Principal 和登录标识之间的身份事实。</div>
+<div class="block">管理 Subject、Account、Principal 和登录标识之间的身份关系。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -85,7 +85,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color"><a href="mapper/package-summary.html">com.sca4d.iam.identity.mapper</a></div>
 <div class="col-last odd-row-color">
-<div class="block">提供 IAM 身份事实的 MyBatis SQL 接口和持久化查询结果。</div>
+<div class="block">提供 IAM 身份数据的 MyBatis SQL 接口和持久化查询结果。</div>
 </div>
 <div class="col-first even-row-color"><a href="../acl/package-summary.html">com.sca4d.iam.acl</a></div>
 <div class="col-last even-row-color">
@@ -97,7 +97,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color"><a href="../config/package-summary.html">com.sca4d.iam.config</a></div>
 <div class="col-last even-row-color">
-<div class="block">装配 IAM 身份事实、基础管理功能和模块初始化。</div>
+<div class="block">装配 IAM 身份管理、基础管理功能和模块初始化。</div>
 </div>
 <div class="col-first odd-row-color"><a href="../rbac/package-summary.html">com.sca4d.iam.rbac</a></div>
 <div class="col-last odd-row-color">
@@ -123,7 +123,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="IamAccountDirectory.html" title="class in com.sca4d.iam.identity">IamAccountDirectory</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">使用 IAM 的标识规范化和身份事实实现 `AccountDirectory`。</div>
+<div class="block">使用 IAM 的标识规范化和身份数据实现 `AccountDirectory`。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab3"><a href="IamErrorCode.html" title="enum class in com.sca4d.iam.identity">IamErrorCode</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab3">
@@ -155,11 +155,19 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="PrincipalType.html" title="class in com.sca4d.iam.identity">PrincipalType</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">表示 Principal 具体 Java 类型对应的固定持久化判别值。</div>
+<div class="block">使用稳定 Code 标识 Principal 的具体类型，并保留独立领域类型。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="PrincipalTypes.html" title="class in com.sca4d.iam.identity">PrincipalTypes</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">将领域 Principal Java 类型映射为 Session Codec 的稳定判别值。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SystemIdentityRepository.html" title="class in com.sca4d.iam.identity">SystemIdentityRepository</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">原子维护 SYSTEM 的固定身份绑定，拒绝接管已有 ID 或改写历史映射。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SystemPrincipalCodec.html" title="class in com.sca4d.iam.identity">SystemPrincipalCodec</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">登记系统 Principal 类型，并按数据库确认的稳定身份读取序列化引用。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="UsernameAccountIdentifierNormalizer.html" title="class in com.sca4d.iam.identity">UsernameAccountIdentifierNormalizer</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">

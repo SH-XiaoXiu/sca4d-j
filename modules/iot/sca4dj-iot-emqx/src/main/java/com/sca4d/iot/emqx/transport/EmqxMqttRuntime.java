@@ -39,9 +39,9 @@ public final class EmqxMqttRuntime implements SmartLifecycle {
 
     private final @NotNull EmqxProperties properties;
 
-    private final @NotNull MqttMessageRouter router;
-
     private final @NotNull Clock clock;
+
+    private final @NotNull EmqxConnectionReconciler connectionReconciler;
 
     private final @NotNull List<MqttMessageObserver> observers;
 
@@ -49,7 +49,7 @@ public final class EmqxMqttRuntime implements SmartLifecycle {
 
     private final @Nullable MqttInboundFailureStore failureStore;
 
-    private final @NotNull EmqxConnectionReconciler connectionReconciler;
+    private final @NotNull MqttMessageRouter router;
 
     private final @NotNull Mqtt5AsyncClient client;
 
@@ -85,7 +85,10 @@ public final class EmqxMqttRuntime implements SmartLifecycle {
                         context -> subscribe()
                                 .thenRunAsync(this::reconcileAfterSubscribe)
                                 .exceptionally(failure -> {
-                                    LOG.error("EMQX MQTT 订阅未全部安装，不执行首次 Connection 对账", failure);
+                                    LOG.error(
+                                            "EMQX MQTT 订阅未全部安装，不执行首次 Connection 对账 | errorType={}",
+                                            failure.getClass().getSimpleName(),
+                                            failure);
                                     return null;
                                 }));
         if (properties.isTls())
@@ -188,10 +191,13 @@ public final class EmqxMqttRuntime implements SmartLifecycle {
             return;
         try {
             if (connectionReconciler.runOnce()) {
-                LOG.debug("EMQX MQTT 订阅完成后已更新 Connection 投影");
+                LOG.debug("EMQX MQTT 订阅完成后已更新 Connection 投影 | projection=updated");
             }
         } catch (RuntimeException exception) {
-            LOG.warn("EMQX MQTT 订阅完成后的 Connection 对账失败，等待周期重试", exception);
+            LOG.warn(
+                    "EMQX MQTT 订阅完成后的 Connection 对账失败，等待周期重试 | errorType={}",
+                    exception.getClass().getSimpleName(),
+                    exception);
         }
     }
 
@@ -280,7 +286,7 @@ public final class EmqxMqttRuntime implements SmartLifecycle {
     }
 
     /** 使用应用配置的统一 MQTT 操作超时等待异步结果。 */
-    private void await(java.util.concurrent.CompletableFuture<?> future) {
+    private void await(CompletableFuture<?> future) {
         try {
             future.orTimeout(properties.getOperationTimeout().toMillis(), TimeUnit.MILLISECONDS).join();
         } catch (CompletionException exception) {

@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 组合任意来源 Product 技术定义和可选数据库 App Profile。 */
-public final class IotProductCatalogItem {
+public class IotProductCatalogItem {
 
     private final @NotNull ProductBinding binding;
 

@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 按 {@link RbacDomain} 查找负责标记对应业务 Account Session 的实现。 */
-public final class RbacSessionInvalidationRegistry {
+public class RbacSessionInvalidationRegistry {
 
     private static final Logger LOG = LoggerFactory.getLogger(RbacSessionInvalidationRegistry.class);
 

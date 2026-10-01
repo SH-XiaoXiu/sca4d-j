@@ -1,5 +1,6 @@
 package com.sca4d.core.spring.web.list;
 
+import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.query.ListRequest;
 import com.sca4d.core.api.query.PageRequest;
 import org.jetbrains.annotations.CheckReturnValue;
@@ -10,11 +11,11 @@ import java.util.List;
 import java.util.Objects;
 
 /** 暂存 Controller 收到的分页和原始排序参数，直到列表声明完成安全字段转换。 */
-public final class ListParameters {
-
-    private final @NotNull PageRequest page;
+public class ListParameters {
 
     private final @NotNull List<@NotNull String> sort;
+
+    private final @NotNull PageRequest page;
 
     private final int maxSortFields;
 
@@ -44,7 +45,7 @@ public final class ListParameters {
      *
      * @param definition 当前接口允许的字段、默认排序和页大小限制
      * @return 不再包含外部字符串的列表查询要求
-     * @throws com.sca4d.core.api.error.BusinessException 任一列表参数无效时抛出
+     * @throws BusinessException 任一列表参数无效时抛出
      */
     @CheckReturnValue
     @Contract(pure = true)

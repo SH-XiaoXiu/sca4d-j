@@ -17,13 +17,13 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 把不可变物模型技术定义与按稳定路径索引的展示文本组合成读取结果。 */
-public final class ThingModelPresentation {
+public class ThingModelPresentation {
 
-    private final @NotNull ThingModel model;
+    private final @Nullable LocalizedFields i18n;
 
     private final @NotNull Map<String, LocalizableText> texts;
 
-    private final @Nullable LocalizedFields i18n;
+    private final @NotNull ThingModel model;
 
     /** 创建数据库动态翻译对应的物模型展示结果。 */
     private ThingModelPresentation(

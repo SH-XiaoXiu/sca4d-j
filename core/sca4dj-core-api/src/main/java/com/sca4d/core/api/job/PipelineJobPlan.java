@@ -22,7 +22,7 @@ import java.util.Set;
  * @param <I> 根输入类型
  * @param <O> 当前终点输出类型
  */
-public final class PipelineJobPlan<I, O> {
+public class PipelineJobPlan<I, O> {
 
     private final @NotNull Class<I> inputType;
 
@@ -139,7 +139,7 @@ public final class PipelineJobPlan<I, O> {
     }
 
     /**
-     * 返回根输入类型。
+     * 根输入类型。
      *
      * @return 创建计划时声明的具体类型
      */
@@ -149,7 +149,7 @@ public final class PipelineJobPlan<I, O> {
     }
 
     /**
-     * 返回当前终点输出类型。
+     * 当前终点输出类型。
      *
      * @return 最后一个顺序或合并节点的输出类型
      */
@@ -159,7 +159,7 @@ public final class PipelineJobPlan<I, O> {
     }
 
     /**
-     * 返回已经声明的节点。
+     * 已经声明的节点。
      *
      * @return 按声明顺序排列的不可修改列表
      */
@@ -202,15 +202,15 @@ public final class PipelineJobPlan<I, O> {
     }
 
     /** 保存一个可独立重试的 Pipeline 节点及其直接依赖。 */
-    public static final class Node {
-
-        private final @NotNull String key;
-
-        private final @NotNull Pipeline<?, ?> pipeline;
+    public static class Node {
 
         private final @NotNull JobRetryPolicy retryPolicy;
 
         private final @NotNull List<@NotNull String> dependencies;
+
+        private final @NotNull Pipeline<?, ?> pipeline;
+
+        private final @NotNull String key;
 
         private final boolean parallelMerge;
 
@@ -228,7 +228,7 @@ public final class PipelineJobPlan<I, O> {
         }
 
         /**
-         * 返回节点名称。
+         * 节点名称。
          *
          * @return 节点在当前 Job 内的稳定名称
          */
@@ -238,7 +238,7 @@ public final class PipelineJobPlan<I, O> {
         }
 
         /**
-         * 返回节点处理线。
+         * 节点处理线。
          *
          * @return 当前节点每次尝试完整执行的 Pipeline
          */
@@ -248,7 +248,7 @@ public final class PipelineJobPlan<I, O> {
         }
 
         /**
-         * 返回节点重试规则。
+         * 节点重试规则。
          *
          * @return 当前节点自己的重试策略
          */
@@ -258,7 +258,7 @@ public final class PipelineJobPlan<I, O> {
         }
 
         /**
-         * 返回直接依赖。
+         * 直接依赖。
          *
          * @return 按输入组装顺序排列的节点名称
          */
@@ -268,7 +268,7 @@ public final class PipelineJobPlan<I, O> {
         }
 
         /**
-         * 返回当前节点是否合并并发结果。
+         * 当前节点是否合并并发结果。
          *
          * @return 是否把两个依赖输出组合成 ParallelResults 后执行
          */
@@ -285,21 +285,21 @@ public final class PipelineJobPlan<I, O> {
      * @param <L> 左分支输出类型
      * @param <R> 右分支输出类型
      */
-    public static final class Parallel<I, L, R> {
+    public static class Parallel<I, L, R> {
+
+        private final @NotNull JobRetryPolicy leftRetry;
+
+        private final @NotNull JobRetryPolicy rightRetry;
+
+        private final @NotNull Pipeline<?, L> left;
+
+        private final @NotNull Pipeline<?, R> right;
 
         private final @NotNull PipelineJobPlan<I, ?> plan;
 
         private final @NotNull String leftKey;
 
-        private final @NotNull Pipeline<?, L> left;
-
-        private final @NotNull JobRetryPolicy leftRetry;
-
         private final @NotNull String rightKey;
-
-        private final @NotNull Pipeline<?, R> right;
-
-        private final @NotNull JobRetryPolicy rightRetry;
 
         private Parallel(
                 @NotNull PipelineJobPlan<I, ?> plan,

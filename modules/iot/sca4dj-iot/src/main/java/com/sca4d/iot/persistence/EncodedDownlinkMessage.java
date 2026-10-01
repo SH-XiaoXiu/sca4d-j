@@ -9,39 +9,39 @@ import java.time.Instant;
 
 /** 映射 desired 或 command 共用的下行消息持久化状态。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class EncodedDownlinkMessage {
-
-    private final long messageId;
-
-    private final long deviceId;
-
-    private final long bindingGeneration;
+public class EncodedDownlinkMessage {
 
     private final @NotNull DeviceDownlinkKind kind;
 
-    private final @NotNull String targetCode;
+    private final @NotNull DeviceDownlinkStatus status;
+
+    private final @NotNull Instant createdAt;
+
+    private final @Nullable Instant expiresAt;
+
+    private final @Nullable Instant scheduledAt;
 
     private final @Nullable Long desiredSequence;
 
     private final @Nullable Long scheduleId;
 
-    private final @Nullable Instant scheduledAt;
+    private final @NotNull String acknowledgementPolicy;
 
     private final @NotNull String dataJson;
 
-    private final @NotNull String acknowledgementPolicy;
-
-    private final long acknowledgementTimeoutMillis;
-
     private final @NotNull String retryPolicy;
 
-    private final @NotNull DeviceDownlinkStatus status;
+    private final @NotNull String targetCode;
 
     private final int attemptCount;
 
-    private final @Nullable Instant expiresAt;
+    private final long acknowledgementTimeoutMillis;
 
-    private final @NotNull Instant createdAt;
+    private final long bindingGeneration;
+
+    private final long deviceId;
+
+    private final long messageId;
 
     /** 创建 Mapper 返回的完整下行消息状态。 */
     @SuppressWarnings("ParameterNumber")

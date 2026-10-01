@@ -3,6 +3,7 @@ package com.sca4d.iam.base;
 import com.sca4d.core.api.authentication.SessionControl;
 import com.sca4d.core.api.authentication.SessionTerminationReason;
 import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.spring.transaction.TransactionCallbacks;
 import com.sca4d.iam.acl.AclService;
 import com.sca4d.iam.base.acl.PlatformAclRepository;
 import com.sca4d.iam.base.rbac.PlatformRbacService;
@@ -13,8 +14,6 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronization;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.Objects;
 
@@ -23,11 +22,11 @@ public class PlatformAccountLifecycleService {
 
     private static final Logger LOG = LoggerFactory.getLogger(PlatformAccountLifecycleService.class);
 
-    private final @NotNull PlatformAccountLifecycleRepository repository;
+    private final @NotNull AclService acl;
 
     private final @NotNull PlatformRbacService rbac;
 
-    private final @NotNull AclService acl;
+    private final @NotNull PlatformAccountLifecycleRepository repository;
 
     private final @Nullable SessionControl sessions;
 
@@ -92,7 +91,7 @@ public class PlatformAccountLifecycleService {
                 account.principalId(),
                 deletePrincipal,
                 deleteSubject);
-        completeAfterCommit(deletion);
+        TransactionCallbacks.afterCommit(() -> completeDeletion(deletion));
         return deletion;
     }
 
@@ -101,20 +100,6 @@ public class PlatformAccountLifecycleService {
         if (sessions != null) {
             sessions.terminateAccount(accountId, SessionTerminationReason.IDENTITY_UNAVAILABLE);
         }
-    }
-
-    /** 在当前事务提交后再次终止 Account Session，并记录已经提交的删除结果。 */
-    private void completeAfterCommit(@NotNull PlatformAccountDeletion deletion) {
-        if (!TransactionSynchronizationManager.isSynchronizationActive()) {
-            completeDeletion(deletion);
-            return;
-        }
-        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-            @Override
-            public void afterCommit() {
-                completeDeletion(deletion);
-            }
-        });
     }
 
     /** 再次终止 Session，并记录已经提交的 IAM 删除结果。 */

@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="ScheduleTiming.html" title="interface in com.sca4d.core.api.scheduling">ScheduleTiming</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">IntervalSchedule</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">IntervalSchedule</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="ScheduleTiming.html" title="interface in com.sca4d.core.api.scheduling">ScheduleTiming</a></span></div>
 <div class="block">按固定时间间隔触发 Job，不根据上一次 Job 完成时间重新计时。</div>
@@ -130,12 +130,12 @@ implements <a href="ScheduleTiming.html" title="interface in com.sca4d.core.api.
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#initialDelay()" class="member-name-link">initialDelay</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回首次触发延迟。</div>
+<div class="block">首次触发延迟。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#interval()" class="member-name-link">interval</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回固定触发间隔。</div>
+<div class="block">固定触发间隔。</div>
 </div>
 </div>
 </div>
@@ -186,7 +186,7 @@ implements <a href="ScheduleTiming.html" title="interface in com.sca4d.core.api.
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name">interval</span>()</div>
-<div class="block">返回固定触发间隔。</div>
+<div class="block">固定触发间隔。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>两次原定触发之间的正数间隔</dd>
@@ -199,7 +199,7 @@ implements <a href="ScheduleTiming.html" title="interface in com.sca4d.core.api.
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name">initialDelay</span>()</div>
-<div class="block">返回首次触发延迟。</div>
+<div class="block">首次触发延迟。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>完成计划登记后的非负延迟</dd>

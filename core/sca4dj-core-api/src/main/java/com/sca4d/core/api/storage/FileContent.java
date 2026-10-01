@@ -2,6 +2,7 @@ package com.sca4d.core.api.storage;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
@@ -58,7 +59,7 @@ public final class FileContent implements AutoCloseable {
     }
 
     @Override
-    public void close() throws java.io.IOException {
+    public void close() throws IOException {
         stream.close();
     }
 }

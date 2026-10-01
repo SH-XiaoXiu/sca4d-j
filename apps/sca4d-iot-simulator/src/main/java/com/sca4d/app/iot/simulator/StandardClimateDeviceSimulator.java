@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /** 模拟字段完整、时间可靠且使用稳定 JSON 信封的规范温控器固件。 */
-public final class StandardClimateDeviceSimulator extends MqttDeviceSimulator {
+public class StandardClimateDeviceSimulator extends MqttDeviceSimulator {
 
     private static final Logger LOG = LoggerFactory.getLogger(StandardClimateDeviceSimulator.class);
 

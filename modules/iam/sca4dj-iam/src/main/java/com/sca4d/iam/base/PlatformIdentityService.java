@@ -31,7 +31,7 @@ public class PlatformIdentityService {
     /**
      * 创建 Platform 身份领域服务。
      *
-     * @param identities IAM 身份事实服务
+     * @param identities IAM 身份管理服务
      */
     public PlatformIdentityService(@NotNull IdentityService identities) {
         this.identities = Objects.requireNonNull(identities, "身份服务不能为空");
@@ -78,7 +78,7 @@ public class PlatformIdentityService {
                 .flatMap(identities::findAccount);
         LOG.debug(
                 "Platform Account 解析完成 | identifierType={} matched={}",
-                type.value(),
+                type,
                 account.isPresent());
         return account;
     }

@@ -175,7 +175,7 @@ class HttpInputValidationAspectTest {
 
     /** 提供测试使用的无业务 Controller 方法。 */
     @RestController
-    private static final class TestController {
+    private static class TestController {
 
         public String body(@RequestBody ExplicitRequest request) {
             return "ok";
@@ -205,14 +205,14 @@ class HttpInputValidationAspectTest {
     }
 
     /** 保存只有显式 Bean Validation 约束的请求。 */
-    private static final class ExplicitRequest {
+    private static class ExplicitRequest {
 
         @NotBlank
         private String name;
     }
 
     /** 保存需要全部类型默认规则检查的请求。 */
-    private static final class DefaultRequest {
+    private static class DefaultRequest {
 
         private long count;
 
@@ -222,7 +222,7 @@ class HttpInputValidationAspectTest {
     }
 
     /** 保存显式覆盖默认范围及大小的请求。 */
-    private static final class OverrideRequest {
+    private static class OverrideRequest {
 
         @Max(10)
         private long maxOnly;
@@ -241,7 +241,7 @@ class HttpInputValidationAspectTest {
     }
 
     /** 保存用于验证循环对象图终止条件的请求。 */
-    private static final class CyclicRequest {
+    private static class CyclicRequest {
 
         private long value;
 
@@ -249,7 +249,7 @@ class HttpInputValidationAspectTest {
     }
 
     /** 提供只有一个元素且该元素是集合自身的循环输入。 */
-    private static final class SelfReferencingList extends AbstractList<Object> {
+    private static class SelfReferencingList extends AbstractList<Object> {
 
         @Override
         public Object get(int index) {

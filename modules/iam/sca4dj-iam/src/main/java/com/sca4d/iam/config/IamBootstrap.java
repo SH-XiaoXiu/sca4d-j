@@ -3,6 +3,7 @@ package com.sca4d.iam.config;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.identity.Account;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iam.base.rbac.PlatformBootstrapService;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -18,7 +19,7 @@ public final class IamBootstrap implements ApplicationRunner {
 
     private static final Logger LOG = LoggerFactory.getLogger(IamBootstrap.class);
 
-    private static final LockKey BOOTSTRAP_LOCK = new LockKey("iam", "bootstrap");
+    private static final LockKey BOOTSTRAP_LOCK = new LockKey(TreeCode.of("IAM:BOOTSTRAP"));
 
     private static final Duration BOOTSTRAP_WAIT = Duration.ofSeconds(30);
 

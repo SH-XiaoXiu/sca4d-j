@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sca4d.iam.identity.mapper.SystemIdentityMapper">
+
+    <select id="selectBindings" resultType="com.sca4d.core.api.identity.SystemPrincipal">
+        SELECT principal_id AS id, code
+        FROM iam_system_identity
+        WHERE code IN
+        <foreach collection="codes" item="code" open="(" separator="," close=")">#{code,typeHandler=com.sca4d.core.spring.persistence.mybatis.TreeCodeTypeHandler$Colon}</foreach>
+        ORDER BY code
+    </select>
+
+    <insert id="insertBindings">
+        WITH requested(code, principal_id) AS (
+            VALUES
+            <foreach collection="identities" item="identity" separator=",">
+                (#{identity.code,typeHandler=com.sca4d.core.spring.persistence.mybatis.TreeCodeTypeHandler$Colon}, #{identity.id})
+            </foreach>
+        ), created_principals AS (
+            INSERT INTO iam_principal(id, principal_type, status)
+            SELECT requested.principal_id, #{principalType}, #{status}
+            FROM requested
+            WHERE NOT EXISTS (
+                SELECT 1 FROM iam_system_identity binding WHERE binding.code = requested.code
+            )
+            ORDER BY requested.principal_id
+            ON CONFLICT (id) DO NOTHING
+            RETURNING id
+        )
+        INSERT INTO iam_system_identity(code, principal_id, subject_id)
+        SELECT requested.code, requested.principal_id, #{subjectId}
+        FROM requested
+        INNER JOIN created_principals ON created_principals.id = requested.principal_id
+        ORDER BY requested.code
+        ON CONFLICT DO NOTHING
+    </insert>
+</mapper>

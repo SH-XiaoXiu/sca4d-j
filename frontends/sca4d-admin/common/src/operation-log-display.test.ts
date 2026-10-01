@@ -12,21 +12,21 @@ import {
 const text = {
   empty: '-',
   operationLabels: {
-    'platform/account/delete': '删除账号',
+    'PLATFORM/ACCOUNT/DELETE': '删除账号',
   },
   targetTypeLabels: {
-    account: '账号',
-    file: '文件',
+    'IAM/ACCOUNT': '账号',
+    'STORAGE/FILE': '文件',
   },
   targetNames: {
-    'account:41': 'Administrator',
+    'IAM/ACCOUNT:41': 'Administrator',
   },
 };
 
 describe('operation log display', () => {
   it('uses registered operation labels before falling back to readable codes', () => {
     expect(
-      operationLogActionText(operationLog('platform/account/delete'), text),
+      operationLogActionText(operationLog('PLATFORM/ACCOUNT/DELETE'), text),
     ).toBe('删除账号');
     expect(
       operationLogActionText(operationLog('legacy:operation.read'), text),
@@ -35,17 +35,17 @@ describe('operation log display', () => {
 
   it('uses friendly target resource text without losing the identifier', () => {
     expect(
-      operationLogTargetText(operationLog('platform/account/delete'), text),
+      operationLogTargetText(operationLog('PLATFORM/ACCOUNT/DELETE'), text),
     ).toBe('Administrator 41');
     expect(
       operationLogTargetReference(
-        operationLog('platform/account/delete'),
+        operationLog('PLATFORM/ACCOUNT/DELETE'),
         text,
       ),
     ).toEqual({
       id: '41',
       name: 'Administrator',
-      resourceType: 'account',
+      resourceType: 'IAM/ACCOUNT',
       typeLabel: '账号',
     });
     expect(
@@ -83,7 +83,7 @@ function operationLog(operation: string): OperationLog {
     result: 'SUCCESS',
     subjectId: '11',
     targetId: '41',
-    targetType: 'account',
+    targetType: 'IAM/ACCOUNT',
     userAgent: 'test client',
   };
 }

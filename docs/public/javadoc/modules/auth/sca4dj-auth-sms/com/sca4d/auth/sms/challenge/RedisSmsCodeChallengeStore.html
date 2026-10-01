@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">RedisSmsCodeChallengeStore</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">RedisSmsCodeChallengeStore</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">使用 Redis Hash TTL 和 Lua 原子消费 SMS Code Challenge。</div>
 </section>
@@ -103,11 +103,10 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,java.time.Clock,com.sca4d.core.api.runtime.RuntimeNamespace)" class="member-name-link">RedisSmsCodeChallengeStore</a><wbr>(@NotNull org.springframework.data.redis.core.StringRedisTemplate&nbsp;redis,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
- @NotNull com.sca4d.core.api.runtime.RuntimeNamespace&nbsp;namespace)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,java.time.Clock)" class="member-name-link">RedisSmsCodeChallengeStore</a><wbr>(@NotNull org.springframework.data.redis.core.RedisTemplate&lt;com.sca4d.core.api.name.Key,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;redis,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建按运行命名空间隔离的 SMS Challenge Store。</div>
+<div class="block">创建按 App 隔离名称隔离的 SMS Challenge Store。</div>
 </div>
 </div>
 </section>
@@ -158,15 +157,13 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(org.springframework.data.redis.core.StringRedisTemplate,java.time.Clock,com.sca4d.core.api.runtime.RuntimeNamespace)">
+<section class="detail" id="&lt;init&gt;(org.springframework.data.redis.core.RedisTemplate,java.time.Clock)">
 <h3>RedisSmsCodeChallengeStore</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RedisSmsCodeChallengeStore</span><wbr><span class="parameters">(@NotNull
- @NotNull org.springframework.data.redis.core.StringRedisTemplate&nbsp;redis,
+ @NotNull org.springframework.data.redis.core.RedisTemplate&lt;com.sca4d.core.api.name.Key,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;redis,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
- @NotNull
- @NotNull com.sca4d.core.api.runtime.RuntimeNamespace&nbsp;namespace)</span></div>
-<div class="block">创建按运行命名空间隔离的 SMS Challenge Store。</div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</span></div>
+<div class="block">创建按 App 隔离名称隔离的 SMS Challenge Store。</div>
 </section>
 </li>
 </ul>

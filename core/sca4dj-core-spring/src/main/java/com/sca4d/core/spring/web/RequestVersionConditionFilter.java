@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 /** 在每次 HTTP 请求结束后清理当前线程保存的版本前置条件。 */
-public final class RequestVersionConditionFilter extends OncePerRequestFilter {
+public class RequestVersionConditionFilter extends OncePerRequestFilter {
 
     private final RequestVersionConditions versionConditions;
 

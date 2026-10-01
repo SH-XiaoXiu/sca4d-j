@@ -90,6 +90,23 @@ loadScripts(document, 'script');</script>
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<li>
+<section class="nested-class-summary" id="nested-class-summary">
+<h2>Nested Class Summary</h2>
+<div class="caption"><span>Nested Classes</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static enum&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="Audit.Mode.html" class="type-name-link" title="enum class in com.sca4d.core.api.annotation">Audit.Mode</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">指定审计返回前完成写入还是可靠排队；DEFAULT 只用于声明继承。</div>
+</div>
+</div>
+</section>
+</li>
 <!-- =========== ANNOTATION INTERFACE REQUIRED MEMBER SUMMARY =========== -->
 <li>
 <section class="member-summary" id="annotation-interface-required-element-summary">
@@ -116,10 +133,30 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Optional Element</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="Audit.Mode.html" title="enum class in com.sca4d.core.api.annotation">Audit.Mode</a></code></div>
+<div class="col-second even-row-color"><code><a href="#mode()" class="member-name-link">mode</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">方法显式值优先于类型显式值，均为 DEFAULT 时使用应用配置。</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#payload()" class="member-name-link">payload</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">从方法参数或返回结果读取 AuditPayload 的表达式；与 `payloadFactory` 二选一。</div>
+</div>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a><wbr>&lt;? extends <a href="../audit/AuditPayloadFactory.html" title="interface in com.sca4d.core.api.audit">AuditPayloadFactory</a>&gt;</code></div>
 <div class="col-second even-row-color"><code><a href="#payloadFactory()" class="member-name-link">payloadFactory</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">返回可选结构化审计载荷解析器。</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#resourceType()" class="member-name-link">resourceType</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">表达式返回资源标识时使用的资源类型；表达式返回完整 Resource 时可为空。</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#target()" class="member-name-link">target</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">从方法参数、Bean 或返回结果读取审计目标的表达式；与 `targetResolver` 和参数标记三选一。</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a><wbr>&lt;? extends <a href="../audit/AuditTargetResolver.html" title="interface in com.sca4d.core.api.audit">AuditTargetResolver</a>&gt;</code></div>
 <div class="col-second odd-row-color"><code><a href="#targetResolver()" class="member-name-link">targetResolver</a></code></div>
@@ -138,6 +175,17 @@ loadScripts(document, 'script');</script>
 <section class="member-details">
 <h2>Element Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="mode()">
+<h3>mode</h3>
+<div class="member-signature"><span class="return-type"><a href="Audit.Mode.html" title="enum class in com.sca4d.core.api.annotation">Audit.Mode</a></span>&nbsp;<span class="element-name">mode</span></div>
+<div class="block">方法显式值优先于类型显式值，均为 DEFAULT 时使用应用配置。</div>
+<dl class="notes">
+<dt>Default:</dt>
+<dd><code>DEFAULT</code></dd>
+</dl>
+</section>
+</li>
 <li>
 <section class="detail" id="operation()">
 <h3>operation</h3>
@@ -165,6 +213,28 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="target()">
+<h3>target</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">target</span></div>
+<div class="block">从方法参数、Bean 或返回结果读取审计目标的表达式；与 `targetResolver` 和参数标记三选一。</div>
+<dl class="notes">
+<dt>Default:</dt>
+<dd><code>""</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="resourceType()">
+<h3>resourceType</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">resourceType</span></div>
+<div class="block">表达式返回资源标识时使用的资源类型；表达式返回完整 Resource 时可为空。</div>
+<dl class="notes">
+<dt>Default:</dt>
+<dd><code>""</code></dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="payloadFactory()">
 <h3>payloadFactory</h3>
 <div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../audit/AuditPayloadFactory.html" title="interface in com.sca4d.core.api.audit">AuditPayloadFactory</a>&gt;</span>&nbsp;<span class="element-name">payloadFactory</span></div>
@@ -176,6 +246,17 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Default:</dt>
 <dd><code>com.sca4d.core.api.audit.NoAuditPayloadFactory.class</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="payload()">
+<h3>payload</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">payload</span></div>
+<div class="block">从方法参数或返回结果读取 AuditPayload 的表达式；与 `payloadFactory` 二选一。</div>
+<dl class="notes">
+<dt>Default:</dt>
+<dd><code>""</code></dd>
 </dl>
 </section>
 </li>

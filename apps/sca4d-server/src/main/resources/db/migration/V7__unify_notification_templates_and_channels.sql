@@ -12,45 +12,6 @@ CREATE TABLE notification_template (
 CREATE UNIQUE INDEX uk_notification_template_code
     ON notification_template (notification_code) WHERE deleted = 0;
 
-INSERT INTO notification_template
-    (id, notification_code, content, enabled, created_at, updated_at, version, deleted)
-SELECT template.id,
-       template.notification_code,
-       localized.content,
-       template.enabled,
-       template.created_at,
-       template.updated_at,
-       template.version,
-       template.deleted
-FROM notification_email_template template
-CROSS JOIN LATERAL (
-    SELECT jsonb_object_agg(
-        locale.key,
-        jsonb_build_object(
-            'title', jsonb_build_object(
-                'type', 'doc',
-                'content', jsonb_build_array(jsonb_build_object(
-                    'type', 'paragraph',
-                    'content', jsonb_build_array(jsonb_build_object(
-                        'type', 'templateText',
-                        'attrs', jsonb_build_object('source', locale.value ->> 'subject')))))),
-            'body', jsonb_build_object(
-                'type', 'doc',
-                'content', jsonb_build_array(
-                    CASE
-                        WHEN COALESCE(locale.value ->> 'html', '') <> ''
-                            THEN jsonb_build_object(
-                                'type', 'richHtml',
-                                'attrs', jsonb_build_object('source', locale.value ->> 'html'))
-                        ELSE jsonb_build_object(
-                            'type', 'paragraph',
-                            'content', jsonb_build_array(jsonb_build_object(
-                                'type', 'templateText',
-                                'attrs', jsonb_build_object('source', locale.value ->> 'text'))))
-                    END)))) AS content
-    FROM jsonb_each(template.i18n) locale
-) localized;
-
 DROP TABLE notification_email_template;
 
 COMMENT ON TABLE notification_template IS '保存平台无关的多语言 Tiptap JSON 通知模板';
@@ -99,7 +60,7 @@ CREATE UNIQUE INDEX uk_notification_sms_provider_code
 
 CREATE TABLE notification_sms_binding (
     id BIGINT PRIMARY KEY,
-    provider_id BIGINT NOT NULL REFERENCES notification_sms_provider (id),
+    provider_id BIGINT NOT NULL,
     notification_code VARCHAR(128) NOT NULL,
     route VARCHAR(64) NOT NULL,
     language_tag VARCHAR(64) NOT NULL,
@@ -121,7 +82,7 @@ CREATE UNIQUE INDEX uk_notification_sms_binding_route
 CREATE TABLE notification_sms_delivery (
     id BIGINT PRIMARY KEY,
     message_id BIGINT NOT NULL,
-    provider_id BIGINT NOT NULL REFERENCES notification_sms_provider (id),
+    provider_id BIGINT NOT NULL,
     route VARCHAR(64) NOT NULL,
     recipient_hash VARCHAR(64) NOT NULL,
     recipient_masked VARCHAR(32) NOT NULL,

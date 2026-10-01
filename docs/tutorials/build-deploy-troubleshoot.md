@@ -1,6 +1,6 @@
 # 构建、部署与排障
 
-Sca4d Server 和 Gateway 分别生成可执行 JAR，管理端生成静态文件。部署前准备各自的运行配置，再检查数据库迁移、实例注册和外部入口。
+部署包含 Server JAR、Gateway JAR 和管理端静态文件，分别配置并启动。先备份数据库、检查迁移与单实例 readiness，再通过 Gateway 验证登录和本次发布功能；请求失败时用响应头 `X-Call-Id` 定位日志。
 
 ## 构建应用
 
@@ -89,9 +89,13 @@ docker compose \
 ```properties
 SCA4DJ_GATEWAY_LOGGING_ENABLED=true
 SCA4DJ_GATEWAY_LOKI_ORIGIN=http://127.0.0.1:3100
+SCA4DJ_GATEWAY_LOGGING_PUSH_PATH=/internal/logging/push
+SCA4DJ_GATEWAY_LOKI_PATH=/loki/api/v1/push
 SCA4DJ_LOKI_PUSH_USERNAME=alloy
 SCA4DJ_LOKI_PUSH_PASSWORD=replace-me
 ```
+
+默认 `sca4d-gateway` BootJar 通过 `runtimeOnly` 包含 `sca4dj-gateway-loki`。自定义 Gateway 组装工程必须显式添加该 addon 依赖；未添加依赖时，设置 `SCA4DJ_GATEWAY_LOGGING_ENABLED=true` 不会创建日志写入路由。
 
 启动 Gateway 后，未带凭据的写入请求应返回 401，而不是进入 Loki：
 
@@ -99,7 +103,7 @@ SCA4DJ_LOKI_PUSH_PASSWORD=replace-me
 curl -i -X POST http://127.0.0.1:8088/internal/logging/push
 ```
 
-打开 `SCA4DJ_GRAFANA_BIND` 对应的地址，使用 Grafana 管理员账号登录。数据源页面中的 “Loki” 应显示连接成功，并可在 Explore 中选择该数据源。
+打开 `SCA4DJ_GRAFANA_BIND` 对应的地址，使用 Grafana 管理员账号登录。数据源页面中的「Loki」应显示连接成功，并可在 Explore 中选择该数据源。
 
 使用 S3 或 MinIO 时，先创建独立 Bucket 和最小权限凭据，再设置：
 
@@ -174,7 +178,7 @@ Alloy 管理端点默认只监听 `127.0.0.1:12345`。它只读取 `<service>/<i
 ### 失败入口
 
 - Alloy 出现 401 时，核对 Gateway 与该主机的写入用户名、密码和精确路径；不要改用 `SCA4DJ_GATEWAY_SECRET`。
-- Alloy 出现 404 时，确认中心 Gateway 已设置 `SCA4DJ_GATEWAY_LOGGING_ENABLED=true` 并完成重启。
+- Alloy 出现 404 时，确认中心 Gateway 包含 `sca4dj-gateway-loki`、已设置 `SCA4DJ_GATEWAY_LOGGING_ENABLED=true`，并且 `SCA4DJ_LOKI_PUSH_URL` 与 `SCA4DJ_GATEWAY_LOGGING_PUSH_PATH` 一致。
 - Alloy 出现 502 时，确认中心 Gateway 能访问 `SCA4DJ_GATEWAY_LOKI_ORIGIN`，并检查 Loki 是否就绪。
 - Java 文件不存在时，核对进程实际读取的 `SCA4DJ_LOG_ROOT` 和 `SCA4DJ_INSTANCE_ID`，再检查目录写权限。
 - Loki 因 S3 启动失败时，核对 Bucket 已存在、endpoint、region 和 path-style 是否匹配，以及凭据是否能读写并删除 Loki 自己的对象。

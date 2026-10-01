@@ -2,11 +2,13 @@ package com.sca4d.core.spring.web;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.sca4d.core.api.setting.ConfiguredConstants;
 import com.sca4d.core.spring.web.clientstate.ClientState;
 import com.sca4d.core.spring.web.clientstate.ClientStateFilter;
 import com.sca4d.core.spring.web.clientstate.ClientStateResponseAdvice;
 import com.sca4d.core.spring.web.clientstate.ClientStateTarget;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
@@ -20,6 +22,11 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 /** 验证 ClientState 响应组件只写入当前请求登记的状态刷新头。 */
 class ClientStateResponseAdviceTest {
+
+    @BeforeAll
+    static void initializeHttpConstants() {
+        ConfiguredConstants.initialize(HttpConstants.class, ignored -> null);
+    }
 
     private final ClientStateResponseAdvice advice = new ClientStateResponseAdvice();
 
@@ -52,7 +59,7 @@ class ClientStateResponseAdviceTest {
         response.flush();
 
         assertThat(body).isSameAs(responseBody);
-        assertThat(servletResponse.getHeader(ClientState.REFRESH_HEADER))
+        assertThat(servletResponse.getHeader(HttpConstants.CLIENT_STATE_REFRESH_HEADER))
                 .isEqualTo("account,permissions");
     }
 
@@ -67,7 +74,7 @@ class ClientStateResponseAdviceTest {
                 response,
                 new MockFilterChain());
 
-        assertThat(response.getHeader(ClientState.REFRESH_HEADER)).isEqualTo("account");
+        assertThat(response.getHeader(HttpConstants.CLIENT_STATE_REFRESH_HEADER)).isEqualTo("account");
         assertThat(ClientState.currentOrNull()).isNull();
     }
 }

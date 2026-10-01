@@ -4,7 +4,7 @@ import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.NotNull;
 
 /** 把固定前缀只保留在 MQTT Client ID 中，Topic 使用去掉前缀后的设备身份。 */
-public final class PrefixedMqttTopicIdentityMapper implements MqttTopicIdentityMapper {
+public class PrefixedMqttTopicIdentityMapper implements MqttTopicIdentityMapper {
 
     private final @NotNull String clientIdPrefix;
 

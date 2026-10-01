@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 接收 Device 的展示名称和备注。 */
 @SuppressWarnings("unused")
-public final class IotDeviceDetailsRequest {
+public class IotDeviceDetailsRequest {
 
     @NotBlank
     @Size(max = 128)

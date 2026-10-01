@@ -103,7 +103,7 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.iot.device.DeviceRepository,com.sca4d.iot.product.ProductDefinitionCatalog,com.sca4d.iot.message.DownlinkRepository,com.sca4d.iot.api.model.ThingModelRepository,com.sca4d.iot.model.ThingValueValidator,com.sca4d.core.api.id.IdGenerator,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.iot.model.ThingDataJsonCodec,com.sca4d.iot.message.DeviceDownlinkMessagePublisher,int)" class="member-name-link">DesiredStateService</a><wbr>(@NotNull <a href="../device/DeviceRepository.html" title="class in com.sca4d.iot.device">DeviceRepository</a>&nbsp;devices,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.iot.device.DeviceRepository,com.sca4d.iot.product.ProductDefinitionCatalog,com.sca4d.iot.message.DownlinkRepository,com.sca4d.iot.api.model.ThingModelRepository,com.sca4d.iot.model.ThingValueValidator,com.sca4d.core.api.id.IdGenerator,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.iot.model.ThingDataJsonCodec,com.sca4d.iot.message.DeviceDeliveryScheduler,int)" class="member-name-link">DesiredStateService</a><wbr>(@NotNull <a href="../device/DeviceRepository.html" title="class in com.sca4d.iot.device">DeviceRepository</a>&nbsp;devices,
  @NotNull <a href="../product/ProductDefinitionCatalog.html" title="class in com.sca4d.iot.product">ProductDefinitionCatalog</a>&nbsp;products,
  @NotNull <a href="DownlinkRepository.html" title="class in com.sca4d.iot.message">DownlinkRepository</a>&nbsp;downlinks,
  @NotNull com.sca4d.iot.api.model.ThingModelRepository&nbsp;models,
@@ -112,7 +112,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
  @NotNull <a href="../change/DeviceChangeNotifier.html" title="class in com.sca4d.iot.change">DeviceChangeNotifier</a>&nbsp;changes,
  @NotNull <a href="../model/ThingDataJsonCodec.html" title="class in com.sca4d.iot.model">ThingDataJsonCodec</a>&nbsp;json,
- @NotNull <a href="DeviceDownlinkMessagePublisher.html" title="class in com.sca4d.iot.message">DeviceDownlinkMessagePublisher</a>&nbsp;messagePublisher,
+ @NotNull <a href="DeviceDeliveryScheduler.html" title="class in com.sca4d.iot.message">DeviceDeliveryScheduler</a>&nbsp;messagePublisher,
  int&nbsp;maxProperties)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建 desired state 事务服务。</div>
@@ -154,7 +154,7 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.iot.device.DeviceRepository,com.sca4d.iot.product.ProductDefinitionCatalog,com.sca4d.iot.message.DownlinkRepository,com.sca4d.iot.api.model.ThingModelRepository,com.sca4d.iot.model.ThingValueValidator,com.sca4d.core.api.id.IdGenerator,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.iot.model.ThingDataJsonCodec,com.sca4d.iot.message.DeviceDownlinkMessagePublisher,int)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.iot.device.DeviceRepository,com.sca4d.iot.product.ProductDefinitionCatalog,com.sca4d.iot.message.DownlinkRepository,com.sca4d.iot.api.model.ThingModelRepository,com.sca4d.iot.model.ThingValueValidator,com.sca4d.core.api.id.IdGenerator,java.time.Clock,com.sca4d.iot.change.DeviceChangeNotifier,com.sca4d.iot.model.ThingDataJsonCodec,com.sca4d.iot.message.DeviceDeliveryScheduler,int)">
 <h3>DesiredStateService</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">DesiredStateService</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../device/DeviceRepository.html" title="class in com.sca4d.iot.device">DeviceRepository</a>&nbsp;devices,
@@ -175,7 +175,7 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull <a href="../model/ThingDataJsonCodec.html" title="class in com.sca4d.iot.model">ThingDataJsonCodec</a>&nbsp;json,
  @NotNull
- @NotNull <a href="DeviceDownlinkMessagePublisher.html" title="class in com.sca4d.iot.message">DeviceDownlinkMessagePublisher</a>&nbsp;messagePublisher,
+ @NotNull <a href="DeviceDeliveryScheduler.html" title="class in com.sca4d.iot.message">DeviceDeliveryScheduler</a>&nbsp;messagePublisher,
  int&nbsp;maxProperties)</span></div>
 <div class="block">创建 desired state 事务服务。</div>
 </section>

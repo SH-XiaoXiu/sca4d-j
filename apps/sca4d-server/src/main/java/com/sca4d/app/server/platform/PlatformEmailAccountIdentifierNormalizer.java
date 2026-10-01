@@ -14,7 +14,7 @@ import java.util.Locale;
 
 /** 把 Sca4d Server Profile 邮箱转换为 `EMAIL` 登录标识使用的稳定小写地址。 */
 @Component
-public final class PlatformEmailAccountIdentifierNormalizer implements AccountIdentifierNormalizer {
+public class PlatformEmailAccountIdentifierNormalizer implements AccountIdentifierNormalizer {
 
     /** 创建 Platform 邮箱登录标识规范化器。 */
     public PlatformEmailAccountIdentifierNormalizer() {

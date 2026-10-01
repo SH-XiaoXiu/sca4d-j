@@ -8,11 +8,11 @@ import java.util.Objects;
 import java.util.OptionalLong;
 
 /** 定位一个 RBAC 领域中的全局角色空间或一个带数字标识的业务角色空间。 */
-public final class RbacScope {
-
-    private final @NotNull RbacDomain domain;
+public class RbacScope {
 
     private final @Nullable Long id;
+
+    private final @NotNull RbacDomain domain;
 
     private RbacScope(@NotNull RbacDomain domain, @Nullable Long id) {
         this.domain = Objects.requireNonNull(domain, "RBAC 领域不能为空");
@@ -98,6 +98,6 @@ public final class RbacScope {
     @Override
     @Contract(pure = true)
     public @NotNull String toString() {
-        return id == null ? domain.value() + ":GLOBAL" : domain.value() + ':' + id;
+        return id == null ? domain.toString() + ":GLOBAL" : domain.toString() + ':' + id;
     }
 }

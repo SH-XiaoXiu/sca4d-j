@@ -18,4 +18,14 @@ public interface VersionConditions {
      */
     @NotNull
     VersionCondition resolve(@NotNull Version currentVersion);
+
+    /**
+     * 冻结当前调用的版本条件入口，供显式传入异步工作；默认无请求状态的实现保持自身。
+     * 异步工作仍须使用自己的事务，不传播当前线程的事务或 CallHolder。
+     *
+     * @return 只消费当前请求条件一次的版本条件入口
+     */
+    default @NotNull VersionConditions capture() {
+        return this;
+    }
 }

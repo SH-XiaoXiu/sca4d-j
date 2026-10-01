@@ -92,10 +92,12 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="annotations">@AutoConfiguration(after=org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration.class)
 @ConditionalOnClass(org.springframework.web.servlet.config.annotation.WebMvcConfigurer.class)
 @EnableAspectJAutoProxy
+@Role(2)
 @EnableConfigurationProperties({<a href="CoreSpringProperties.html" title="class in com.sca4d.core.spring.config">CoreSpringProperties.class</a>,<a href="HttpInputValidationProperties.html" title="class in com.sca4d.core.spring.config">HttpInputValidationProperties.class</a>,<a href="IdProperties.html" title="class in com.sca4d.core.spring.config">IdProperties.class</a>,<a href="../i18n/I18nProperties.html" title="class in com.sca4d.core.spring.i18n">I18nProperties.class</a>,<a href="../redis/RedisIdempotencyProperties.html" title="class in com.sca4d.core.spring.redis">RedisIdempotencyProperties.class</a>,<a href="../redis/RedisPipelineProperties.html" title="class in com.sca4d.core.spring.redis">RedisPipelineProperties.class</a>,<a href="../persistence/batch/SqlBatchProperties.html" title="class in com.sca4d.core.spring.persistence.batch">SqlBatchProperties.class</a>})
+@Import({com.sca4d.core.spring.config.CoreInfrastructureConfiguration.class,com.sca4d.core.spring.config.CoreI18nConfiguration.class,com.sca4d.core.spring.config.CoreCallLifecycleConfiguration.class,com.sca4d.core.spring.config.CoreConcurrencyConfiguration.class,com.sca4d.core.spring.config.CorePermissionConfiguration.class,com.sca4d.core.spring.config.CoreIdentityConfiguration.class,com.sca4d.core.spring.config.CoreWebMvcConfiguration.class})
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">CoreSpringAutoConfiguration</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">注册 Core API 在 Spring MVC 中使用的 Filter、参数解析器、异常处理器和 AOP Bean。</div>
+<div class="block">统一导入 Core Spring 的内部 Bean 工厂，保持自动配置条件和排除语义。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -108,9 +110,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">CoreSpringAutoConfiguration</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">创建 Core Spring 自动配置。</div>
-</div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -136,7 +136,6 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="&lt;init&gt;()">
 <h3>CoreSpringAutoConfiguration</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CoreSpringAutoConfiguration</span>()</div>
-<div class="block">创建 Core Spring 自动配置。</div>
 </section>
 </li>
 </ul>

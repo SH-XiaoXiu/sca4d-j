@@ -5,8 +5,10 @@ import com.sca4d.app.server.openapi.iot.OpenApiIotDeviceResponse;
 import com.sca4d.app.server.platform.PlatformPrincipalSelection;
 import com.sca4d.app.server.service.IotApplicationService;
 import com.sca4d.core.api.annotation.RequirePermission;
+import com.sca4d.core.spring.config.ConditionalOnCapability;
 import com.sca4d.core.spring.web.ApiResponse;
 import com.sca4d.core.spring.web.annotation.CurrentPrincipal;
+import com.sca4d.iot.api.IotCapabilities;
 import com.sca4d.openapi.web.annotation.OpenApiRoute;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -24,6 +26,7 @@ import java.util.Objects;
 
 /** 声明具体应用对第三方 OpenAPI Client 公开的 IoT Tool 路由。 */
 @RestController
+@ConditionalOnCapability(IotCapabilities.API)
 @Tag(name = "IoT 设备", description = "供第三方程序读取 Sca4d Server 中已经登记的 IoT 设备。")
 @CurrentPrincipal(selection = PlatformPrincipalSelection.class)
 public class IotOpenApiController {
@@ -41,7 +44,7 @@ public class IotOpenApiController {
      * @param deviceId 十进制 Device 标识
      * @return 独立于管理端响应类型的开放 API Device 响应
      */
-    @OpenApiRoute(method = RequestMethod.GET, path = "/openapi/iot/devices/{deviceId}", toolGroup = "iot", toolName = "getDevice", operation = IotOperations.DEVICES_READ)
+    @OpenApiRoute(method = RequestMethod.GET, path = "/openapi/iot/devices/{deviceId}", toolGroup = "iot", toolName = "getDevice", operation = IotOperations.DEVICES_READ_VALUE)
     @Operation(summary = "查询 IoT 设备", description = "按 Device 标识读取设备资料、Product 绑定、连接标识、接入方式和启停状态。")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "找到设备并返回当前资料", useReturnTypeSchema = true, content = @Content(mediaType = "application/json", examples = @ExampleObject(name = "device", summary = "数据库 Product 下启用的设备", value = """
@@ -86,7 +89,7 @@ public class IotOpenApiController {
                     }
                     """)))
     })
-    @RequirePermission(operation = IotOperations.DEVICES_READ)
+    @RequirePermission(operation = IotOperations.DEVICES_READ_VALUE)
     public @NotNull ApiResponse<OpenApiIotDeviceResponse> get(
             @Parameter(description = "Device 的十进制标识。", required = true, schema = @Schema(type = "string", example = "1057296481730560", pattern = "^[1-9][0-9]*$")) @PathVariable long deviceId) {
         return ApiResponse.ok(OpenApiIotDeviceResponse.from(iot.deviceById(deviceId)));

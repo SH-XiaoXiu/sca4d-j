@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.core.api.call.Call;
@@ -15,6 +14,7 @@ import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.permission.Permission;
 import com.sca4d.core.api.permission.PermissionAssessment;
@@ -44,12 +44,12 @@ class AuthenticationFactorTest {
                 List.of(
                         new Authentication(
                                 identity.account.accountId(),
-                                new AuthenticationMethodCode("password"),
+                                TreeCode.ofSlash("AUTHENTICATION/PASSWORD"),
                                 Set.of(AuthenticationFactorKind.KNOWLEDGE),
                                 NOW.minusSeconds(60)),
                         new Authentication(
                                 identity.account.accountId(),
-                                new AuthenticationMethodCode("passkey"),
+                                TreeCode.ofSlash("AUTHENTICATION/PASSKEY"),
                                 Set.of(AuthenticationFactorKind.POSSESSION),
                                 NOW.minusSeconds(30))));
         EnumSet<AuthenticationFactorKind> kinds = EnumSet.noneOf(AuthenticationFactorKind.class);
@@ -69,7 +69,7 @@ class AuthenticationFactorTest {
                 List.of(
                         new Authentication(
                                 identity.account.accountId(),
-                                new AuthenticationMethodCode("password"),
+                                TreeCode.ofSlash("AUTHENTICATION/PASSWORD"),
                                 Set.of(AuthenticationFactorKind.KNOWLEDGE),
                                 NOW.minusSeconds(10))));
         call.selectPrincipal(identity.principal);
@@ -89,7 +89,7 @@ class AuthenticationFactorTest {
                         .assess(call, permission));
     }
 
-    private static final class DeviceResource implements Resource {
+    private static class DeviceResource implements Resource {
 
         private final String id;
 
@@ -98,8 +98,8 @@ class AuthenticationFactorTest {
         }
 
         @Override
-        public @NotNull String type() {
-            return "device";
+        public @NotNull TreeCode type() {
+            return TreeCode.ofSlash("TEST/DEVICE");
         }
 
         @Override
@@ -108,11 +108,11 @@ class AuthenticationFactorTest {
         }
     }
 
-    private static final class DevicePolicy implements PermissionPolicy {
+    private static class DevicePolicy implements PermissionPolicy {
 
         @Override
         public boolean supports(Resource resource) {
-            return resource.type().equals("device");
+            return resource.type().equals(TreeCode.ofSlash("TEST/DEVICE"));
         }
 
         @Override
@@ -121,7 +121,7 @@ class AuthenticationFactorTest {
         }
     }
 
-    private static final class TestIdentity {
+    private static class TestIdentity {
 
         private final Subject subject = new Subject(10, SubjectType.HUMAN);
 
@@ -147,7 +147,7 @@ class AuthenticationFactorTest {
         }
     }
 
-    private static final class TestPrincipal implements Principal {
+    private static class TestPrincipal implements Principal {
 
         @Override
         public long principalId() {

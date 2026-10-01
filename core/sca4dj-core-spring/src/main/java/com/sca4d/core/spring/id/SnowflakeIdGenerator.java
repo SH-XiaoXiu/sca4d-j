@@ -1,6 +1,7 @@
 package com.sca4d.core.spring.id;
 
 import cn.hutool.core.lang.Snowflake;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
 
 /**
@@ -9,7 +10,7 @@ import com.sca4d.core.api.id.IdGenerator;
  * <p>外部使用一个 10 位节点编号。低 5 位映射为 Hutool worker ID，高 5 位映射为 data center ID，因此仍支持 1024
  * 个节点组合。部署系统必须保证同一集群内节点编号唯一。
  */
-public final class SnowflakeIdGenerator implements IdGenerator {
+public class SnowflakeIdGenerator implements IdGenerator {
 
     /** 节点编号允许的最大值。 */
     public static final long MAX_NODE_ID = 1023L;
@@ -39,12 +40,12 @@ public final class SnowflakeIdGenerator implements IdGenerator {
      * @return 下一个雪花 ID
      */
     @Override
-    public long nextId() {
-        return snowflake.nextId();
+    public Id nextId() {
+        return Id.of(snowflake.nextId());
     }
 
     /**
-     * 返回当前生成器的节点编号。
+     * 当前生成器的节点编号。
      *
      * @return 节点编号
      */

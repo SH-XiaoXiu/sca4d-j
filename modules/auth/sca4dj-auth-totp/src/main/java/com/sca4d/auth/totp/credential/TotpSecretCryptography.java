@@ -11,11 +11,10 @@ import java.util.Objects;
 
 /** 在 TOTP 内部集中选择加密密钥并拒绝未知历史 key。 */
 @ApiStatus.Internal
-public final class TotpSecretCryptography {
+public class TotpSecretCryptography {
 
     private final @NotNull SecretKeyring keyring;
 
-    /** 创建使用当前应用 SecretKeyring 的 TOTP Secret 加解密器。 */
     public TotpSecretCryptography(@NotNull SecretKeyring keyring) {
         this.keyring = Objects.requireNonNull(keyring, "Secret keyring 不能为空");
     }

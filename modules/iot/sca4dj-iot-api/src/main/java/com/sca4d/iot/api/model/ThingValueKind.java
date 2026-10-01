@@ -18,7 +18,7 @@ public enum ThingValueKind {
     /** 字符串。 */
     STRING(String.class),
     /** 从固定 code 集合中选择的字符串。 */
-    ENUM(String.class),
+    NUM(String.class),
     /** UTC 时间点。 */
     TIMESTAMP(Instant.class),
     /** 具有固定字段定义的对象。 */

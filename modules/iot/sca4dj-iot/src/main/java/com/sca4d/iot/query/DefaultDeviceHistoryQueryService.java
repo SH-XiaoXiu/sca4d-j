@@ -6,7 +6,7 @@ import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.history.DeviceHistoryStore;
 import com.sca4d.iot.api.message.DeviceAcknowledgement;
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
+import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.query.DeviceEvent;
 import com.sca4d.iot.api.query.DeviceHistoryQueryService;
 import com.sca4d.iot.api.telemetry.TelemetrySample;
@@ -24,7 +24,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 从主库读取下行与最新 ACK，并优先从可选历史存储读取完整 ACK、事件和 Telemetry。 */
-public final class DefaultDeviceHistoryQueryService implements DeviceHistoryQueryService {
+public class DefaultDeviceHistoryQueryService implements DeviceHistoryQueryService {
 
     private final @NotNull DeviceRepository devices;
 
@@ -32,7 +32,6 @@ public final class DefaultDeviceHistoryQueryService implements DeviceHistoryQuer
 
     private final @NotNull ObjectProvider<DeviceHistoryStore> history;
 
-    /** 创建明确区分主库历史与可选高频历史的查询服务。 */
     public DefaultDeviceHistoryQueryService(
             @NotNull DeviceRepository devices,
             @NotNull DownlinkRepository downlinks,
@@ -43,18 +42,33 @@ public final class DefaultDeviceHistoryQueryService implements DeviceHistoryQuer
     }
 
     @Override
-    public @NotNull Optional<DeviceDownlinkMessage> downlink(long messageId) {
+    public @NotNull Optional<DeviceDownlink> downlink(long messageId) {
         return downlinks.find(messageId);
     }
 
     @Override
-    public @NotNull @Unmodifiable Map<@NotNull Long, @NotNull DeviceDownlinkMessage> downlinks(
+    public @NotNull Page<DeviceAcknowledgement> acknowledgementsByMessageId(
+            long messageId,
+            @NotNull PageRequest page) {
+        PageRequest checked = Objects.requireNonNull(page, "业务回执分页要求不能为空").verifyMaxSize(100);
+        DeviceHistoryStore store = history.getIfAvailable();
+        if (store != null) {
+            Page<DeviceAcknowledgement> historical = store.acknowledgementsByMessageId(messageId, checked);
+            if (historical.getTotal() > 0) {
+                return historical;
+            }
+        }
+        return downlinks.findAcknowledgementsByMessageId(messageId, checked);
+    }
+
+    @Override
+    public @NotNull @Unmodifiable Map<@NotNull Long, @NotNull DeviceDownlink> downlinks(
             @NotNull Collection<@NotNull Long> messageIds) {
         return downlinks.findAll(messageIds);
     }
 
     @Override
-    public @NotNull Page<DeviceDownlinkMessage> downlinks(long deviceId, @NotNull PageRequest page) {
+    public @NotNull Page<DeviceDownlink> downlinks(long deviceId, @NotNull PageRequest page) {
         validateDeviceId(deviceId);
         return downlinks.findDownlinks(deviceId, page);
     }

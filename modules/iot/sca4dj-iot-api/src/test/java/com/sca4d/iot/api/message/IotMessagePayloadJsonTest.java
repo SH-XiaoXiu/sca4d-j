@@ -23,12 +23,12 @@ class IotMessagePayloadJsonTest {
 
     @Test
     void roundTripsDownlinkControlMessages() throws Exception {
-        DeviceDownlinkDispatch dispatch = roundTrip(
-                new DeviceDownlinkDispatch(101, 2),
-                DeviceDownlinkDispatch.class);
-        DeviceAcknowledgementTimeout timeout = roundTrip(
-                new DeviceAcknowledgementTimeout(102, 3),
-                DeviceAcknowledgementTimeout.class);
+        DeviceDispatchMessage dispatch = roundTrip(
+                new DeviceDispatchMessage(101, 2),
+                DeviceDispatchMessage.class);
+        DeviceAcknowledgementCheck timeout = roundTrip(
+                new DeviceAcknowledgementCheck(102, 3),
+                DeviceAcknowledgementCheck.class);
 
         assertAll(
                 () -> assertEquals(101, dispatch.messageId()),

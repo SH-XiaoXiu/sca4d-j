@@ -2,16 +2,16 @@ package com.sca4d.job.runtime;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.core.api.id.Id;
+import com.sca4d.core.api.isolation.AppName;
 import com.sca4d.core.api.job.DirectJob;
 import com.sca4d.core.api.job.Job;
 import com.sca4d.core.api.job.JobExecution;
-import com.sca4d.core.api.job.JobKey;
-import com.sca4d.core.api.job.JobRunId;
 import com.sca4d.core.api.job.ParallelResults;
 import com.sca4d.core.api.job.PipelineJob;
 import com.sca4d.core.api.job.PipelineJobPlan;
+import com.sca4d.core.api.name.Name;
 import com.sca4d.core.api.pipeline.Pipeline;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
 import com.sca4d.job.config.JobProperties;
 import com.sca4d.job.persistence.NodeClaim;
 import org.jetbrains.annotations.NotNull;
@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.SmartLifecycle;
 
 import java.time.Clock;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
@@ -36,11 +37,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 /** 轮询可执行节点，在有界线程池中执行并为每个运行中的节点续租。 */
 public final class JobWorker implements SmartLifecycle {
 
-    private static final Logger log = LoggerFactory.getLogger(JobWorker.class);
-
     private static final int MAX_ERROR_LENGTH = 1000;
 
-    private final @NotNull JobCatalog catalog;
+    private static final Logger log = LoggerFactory.getLogger(JobWorker.class);
 
     private final @NotNull JobRunService runs;
 
@@ -50,7 +49,9 @@ public final class JobWorker implements SmartLifecycle {
 
     private final @NotNull Clock clock;
 
-    private final @NotNull String applicationId;
+    private final @NotNull JobCatalog catalog;
+
+    private final @NotNull Name applicationId;
 
     private final @NotNull String workerId;
 
@@ -63,29 +64,26 @@ public final class JobWorker implements SmartLifecycle {
     private final @NotNull AtomicInteger activeWorkers = new AtomicInteger();
 
     /**
-     * 创建在当前运行时命名空间内领取和执行节点的 worker。
+     * 创建在当前 App 隔离名称内领取和执行节点的 worker。
      *
      * @param catalog 当前应用登记的 Job 定义
      * @param runs Job 运行事务服务
      * @param objectMapper 脚手架统一 JSON 映射器
      * @param properties worker、轮询和租约配置
      * @param clock 执行事实使用的时钟
-     * @param runtimeNamespace 日志和共享 Job 数据使用的应用命名空间
      */
     public JobWorker(
             @NotNull JobCatalog catalog,
             @NotNull JobRunService runs,
             @NotNull ObjectMapper objectMapper,
             @NotNull JobProperties properties,
-            @NotNull Clock clock,
-            @NotNull RuntimeNamespace runtimeNamespace) {
+            @NotNull Clock clock) {
         this.catalog = Objects.requireNonNull(catalog, "JobCatalog 不能为空");
         this.runs = Objects.requireNonNull(runs, "JobRunService 不能为空");
         this.objectMapper = Objects.requireNonNull(objectMapper, "Job ObjectMapper 不能为空");
         this.properties = Objects.requireNonNull(properties, "JobProperties 不能为空");
         this.clock = Objects.requireNonNull(clock, "Job 时钟不能为空");
-        this.applicationId = Objects.requireNonNull(runtimeNamespace, "Job 运行时命名空间不能为空")
-                .applicationId();
+        this.applicationId = AppName.current();
         this.workerId = UUID.randomUUID().toString();
         this.workers = Executors.newFixedThreadPool(
                 properties.getWorkerCount(),
@@ -145,7 +143,7 @@ public final class JobWorker implements SmartLifecycle {
             int capacity = properties.getWorkerCount() - activeWorkers.get();
             int claimCount = Math.min(capacity, properties.getClaimBatchSize());
             for (int index = 0; index < claimCount; index++) {
-                NodeClaim claim = runs.claim(workerId, properties.getLeaseDuration());
+                NodeClaim claim = runs.claim(workerId, properties.getLeaseDuration(), catalog.definitionVersions());
                 if (claim == null) {
                     break;
                 }
@@ -194,7 +192,7 @@ public final class JobWorker implements SmartLifecycle {
                     claim.nodeKey(),
                     claim.attempt(),
                     workerId,
-                    java.time.Duration.between(startedAt, clock.instant()).toMillis());
+                    Duration.between(startedAt, clock.instant()).toMillis());
         } catch (RuntimeException exception) {
             String error = errorSummary(exception);
             try {
@@ -242,7 +240,7 @@ public final class JobWorker implements SmartLifecycle {
 
     /** 执行 DirectJob 或 PipelineJob 中的一个 Pipeline 节点。 */
     private @Nullable Object execute(@NotNull NodeClaim claim, @NotNull Instant startedAt) {
-        Job<?, ?> job = catalog.loadByKeyAndVersion(new JobKey(claim.jobKey()), claim.jobDefinitionVersion());
+        Job<?, ?> job = catalog.loadByKeyAndVersion(claim.jobKey(), claim.jobDefinitionVersion());
         if (job instanceof DirectJob<?, ?> directJob) {
             if (!"DIRECT".equals(claim.jobKind())) {
                 throw new IllegalStateException("Job run kind 与 DirectJob 不一致: " + job.key());
@@ -251,7 +249,7 @@ public final class JobWorker implements SmartLifecycle {
             Object output = runDirect(
                     directJob,
                     new JobExecution(
-                            new JobRunId(claim.runId()),
+                            Id.of(claim.runId()),
                             claim.attempt(),
                             startedAt),
                     input);

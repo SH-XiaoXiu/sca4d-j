@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-/** 读写 SMTP 配置的最小 SQL 形状。 */
+/** 读写 SMTP 发件配置，并按版本条件更新或逻辑删除配置。 */
 public interface EmailSenderMapper {
 
     /** 按可选标识和启用状态读取未删除 SMTP 配置。 */

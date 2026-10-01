@@ -34,7 +34,7 @@ class ResponseETagContractValidatorTest {
     }
 
     /** 声明测试用 Controller 返回类型。 */
-    static final class InvalidController {
+    static class InvalidController {
 
         /** @return 包含错误 ETag 声明的响应 */
         public ApiResponse<InvalidBody> get() {
@@ -43,7 +43,7 @@ class ResponseETagContractValidatorTest {
     }
 
     /** 声明不应进入请求处理阶段的错误 ETag 方法。 */
-    static final class InvalidBody {
+    static class InvalidBody {
 
         /** @return 固定测试版本 */
         @ETag

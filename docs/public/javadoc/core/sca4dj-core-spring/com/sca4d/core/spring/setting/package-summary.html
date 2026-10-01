@@ -69,7 +69,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="package-signature">package <span class="element-name">com.sca4d.core.spring.setting</span></div>
 <section class="package-description" id="package-description">
-<div class="block">实现数据库 Settings、类型转换、敏感值加密和指定初始化节点。</div>
+<div class="block">实现数据库设置读取、文件与 YAML 编解码、敏感值加密和指定初始化节点。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -80,9 +80,33 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary" aria-labelledby="class-summary-tab0">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="DatabaseSettings.html" title="class in com.sca4d.core.spring.setting">DatabaseSettings</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="DatabaseSettingStore.html" title="class in com.sca4d.core.spring.setting">DatabaseSettingStore</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">每次调用都查询统一 `sys_setting`，并处理 owner、结构版本、Pipeline 和敏感值。</div>
+<div class="block">按 owner 和规范编码读写 sys_setting，保留来源版本及敏感值用途绑定。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="EnvironmentPrefixProperties.html" title="class in com.sca4d.core.spring.setting">EnvironmentPrefixProperties</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">配置系统设置初始化使用的环境变量前缀；未配置时由应用名称推导。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="EnvironmentVariableResolver.html" title="class in com.sca4d.core.spring.setting">EnvironmentVariableResolver</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">在 Spring 配置边界把中性 ENV 后缀解析为当前应用的实际变量名。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="EnvSettingReader.html" title="class in com.sca4d.core.spring.setting">EnvSettingReader</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">从显式 ENV 名称读取 System 所属文本，不隐式覆盖其他 owner 或写入数据库。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="FileSettingReader.html" title="class in com.sca4d.core.spring.setting">FileSettingReader</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">按明确所属读取手工维护的文件字节；格式由构造 Setting 时选择的 Codec 解释。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="FileSettingStore.html" title="class in com.sca4d.core.spring.setting">FileSettingStore</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">把所属、版本及内容作为同一个文档原子保存；文件格式由传入 Codec 决定。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JarSettingReader.html" title="class in com.sca4d.core.spring.setting">JarSettingReader</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">只从指定 JAR 读取配置资源，避免多个插件的同名资源在全局 classpath 中混淆。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SettingBootstrap.html" title="class in com.sca4d.core.spring.setting">SettingBootstrap</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
@@ -102,15 +126,39 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SettingsAutoConfiguration.html" title="class in com.sca4d.core.spring.setting">SettingsAutoConfiguration</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">自动装配数据库 Settings、设置目录和指定初始化节点。</div>
+<div class="block">自动装配设置目录、数据库读写、密钥保护和指定初始化节点。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="SettingsBootstrapProperties.html" title="class in com.sca4d.core.spring.setting">SettingsBootstrapProperties</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">控制当前节点是否负责把 Settings ENV 初始化或同步到数据库。</div>
+<div class="block">控制当前节点是否负责把设置 ENV 初始化或同步到数据库。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StoredSetting.html" title="class in com.sca4d.core.spring.setting">StoredSetting</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SettingSecretCodecAdapter.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecAdapter</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">读取设置编码迁移前的密文用途，写入始终使用当前设置编码；不迁移密钥材料。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SettingSecretCodecCatalog.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecCatalog</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">为一个设置所属和稳定编码建立 V1/V2 密文 Codec 目录，并把 V2 作为当前写入版本。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SettingSecretCodecV1.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV1</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">使用旧的 Setting key 上下文读取版本一敏感设置密文，供历史数据和显式迁移使用。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SettingSecretCodecV2.html" title="class in com.sca4d.core.spring.setting">SettingSecretCodecV2</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">使用 owner、Setting key 和长度分隔上下文读写当前版本二敏感设置密文。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SettingSecretEncryptionMigrator.html" title="class in com.sca4d.core.spring.setting">SettingSecretEncryptionMigrator</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">手工把一个 Setting 密文从指定版本转换到另一个版本，不读取或修改数据库。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StoredSetting.html" title="class in com.sca4d.core.spring.setting">StoredSetting</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">保存 Repository 从 `sys_setting` 读取的 owner、结构版本、值和行版本。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="YamlCodec.html" title="class in com.sca4d.core.spring.setting">YamlCodec</a>&lt;T&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">用独立 YAML 解析器与领域 JsonCodec 转换内容，不访问文件或启用 Java 多态类型。</div>
 </div>
 </div>
 </div>

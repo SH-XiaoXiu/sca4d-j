@@ -64,7 +64,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">删除平台账号的动作编码。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingConfiguration.html#ACCOUNT_POLICY" class="member-name-link">ACCOUNT_POLICY</a> - Static variable in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingConfiguration.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettingConfiguration</a></dt>
+<dt><a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingConfiguration.html#ACCOUNT_POLICY" class="member-name-link">ACCOUNT_POLICY</a> - Variable in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingConfiguration.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettingConfiguration</a></dt>
 <dd>
 <div class="block">Account 登录和敏感动作使用的完整认证策略。</div>
 </dd>
@@ -72,7 +72,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">注册 Sca4d Server 按 Account 保存的认证策略设置。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingConfiguration.html#%3Cinit%3E()" class="member-name-link">AccountAuthenticationSettingConfiguration()</a> - Constructor for class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingConfiguration.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettingConfiguration</a></dt>
+<dt><a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingConfiguration.html#%3Cinit%3E(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.setting.access.SettingWriter)" class="member-name-link">AccountAuthenticationSettingConfiguration(SettingReader&lt;String&gt;, SettingWriter&lt;String&gt;)</a> - Constructor for class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingConfiguration.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettingConfiguration</a></dt>
 <dd>
 <div class="block">创建账号认证策略设置配置。</div>
 </dd>
@@ -152,7 +152,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">注册 Sca4d Admin 可以按 Principal 同步的界面偏好。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/preference/AdminPreferenceConfiguration.html#%3Cinit%3E()" class="member-name-link">AdminPreferenceConfiguration()</a> - Constructor for class com.sca4d.app.server.preference.<a href="com/sca4d/app/server/preference/AdminPreferenceConfiguration.html" title="class in com.sca4d.app.server.preference">AdminPreferenceConfiguration</a></dt>
+<dt><a href="com/sca4d/app/server/preference/AdminPreferenceConfiguration.html#%3Cinit%3E(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.setting.access.SettingWriter)" class="member-name-link">AdminPreferenceConfiguration(SettingReader&lt;String&gt;, SettingWriter&lt;String&gt;)</a> - Constructor for class com.sca4d.app.server.preference.<a href="com/sca4d/app/server/preference/AdminPreferenceConfiguration.html" title="class in com.sca4d.app.server.preference">AdminPreferenceConfiguration</a></dt>
 <dd>
 <div class="block">创建管理端偏好设置配置。</div>
 </dd>
@@ -160,13 +160,19 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">检查 Device 声明的接入方式，并把 Account 认证统一交给 <code>AuthenticationMethods</code>。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#allowedMethods(com.sca4d.core.api.identity.Account,com.sca4d.core.api.authentication.AuthenticationActionCode,java.util.List)" class="member-name-link">allowedMethods(Account, AuthenticationActionCode, List&lt;Authentication&gt;)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaPolicy.html#allowedMethods(long,com.sca4d.core.api.authentication.AuthenticationActionCode,java.util.List)" class="member-name-link">allowedMethods(long, AuthenticationActionCode, List&lt;Authentication&gt;)</a> - Method in interface com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaPolicy.html" title="interface in com.sca4d.app.server.plugin.mfa">MfaPolicy</a></dt>
 <dd>
-<div class="block">根据登录阶段或敏感动作开关返回仍能贡献新因素的认证方法。</div>
+<div class="block">返回用途开关和已完成因素允许的认证方法。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#allowsMethodUnavailable(com.sca4d.core.api.identity.Account,com.sca4d.core.api.authentication.AuthenticationMethodCode)" class="member-name-link">allowsMethodUnavailable(Account, AuthenticationMethodCode)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
+<dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#allowedMethods(com.sca4d.core.api.identity.Account,com.sca4d.core.api.authentication.AuthenticationActionCode,java.util.List)" class="member-name-link">allowedMethods(Account, AuthenticationActionCode, List&lt;Authentication&gt;)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaPolicy.html#allowsMethodUnavailable(long,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">allowsMethodUnavailable(long, TreeCode)</a> - Method in interface com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaPolicy.html" title="interface in com.sca4d.app.server.plugin.mfa">MfaPolicy</a></dt>
 <dd>
-<div class="block">返回指定认证方法完全不可用后，账号当前设置是否仍能满足全部认证要求。</div>
+<div class="block">返回删除指定方法最后一个凭据后是否仍满足全部认证要求。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#allowsMethodUnavailable(com.sca4d.core.api.identity.Account,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">allowsMethodUnavailable(Account, TreeCode)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
+<dd>
+<div class="block">判断移除方法后登录及敏感动作是否仍能满足。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/DeviceCredentialService.html#ANONYMOUS" class="member-name-link">ANONYMOUS</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/DeviceCredentialService.html" title="class in com.sca4d.app.server.iot">DeviceCredentialService</a></dt>
 <dd>
@@ -178,6 +184,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/AppIotProperties.html#%3Cinit%3E()" class="member-name-link">AppIotProperties()</a> - Constructor for class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/AppIotProperties.html" title="class in com.sca4d.app.server.iot">AppIotProperties</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/iot/AppIotProperties.Emqx.html" class="type-name-link" title="class in com.sca4d.app.server.iot">AppIotProperties.Emqx</a> - Class in <a href="com/sca4d/app/server/iot/package-summary.html">com.sca4d.app.server.iot</a></dt>
+<dd>
+<div class="block">配置应用自己的 EMQX 回调凭据。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/iot/AppIotRealtime.html" class="type-name-link" title="class in com.sca4d.app.server.iot">AppIotRealtime</a> - Class in <a href="com/sca4d/app/server/iot/package-summary.html">com.sca4d.app.server.iot</a></dt>
 <dd>
 <div class="block">把 IoT 模块失效通知发布到 App Web Realtime，并授权 Device Topic 订阅。</div>
@@ -202,15 +212,21 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">从已支持的 App 修改请求中选择允许保存的状态、标识集合和字段名。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/plugin/Sca4dServerPluginSettings.html#applicationName()" class="member-name-link">applicationName()</a> - Method in class com.sca4d.app.server.plugin.<a href="com/sca4d/app/server/plugin/Sca4dServerPluginSettings.html" title="class in com.sca4d.app.server.plugin">Sca4dServerPluginSettings</a></dt>
+<dd>
+<div class="block">返回当前代次加载时读取的宿主应用名称。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/controllers/PasskeyController.html#assertionOptions()" class="member-name-link">assertionOptions()</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/PasskeyController.html" title="class in com.sca4d.app.server.controllers">PasskeyController</a></dt>
 <dd>
 <div class="block">开始可用于登录或动作认证的 discoverable assertion。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#assertMethodRemovalAllowed(com.sca4d.core.api.identity.Account,com.sca4d.core.api.authentication.AuthenticationMethodCode)" class="member-name-link">assertMethodRemovalAllowed(Account, AuthenticationMethodCode)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
+<dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#assertMethodRemovalAllowed(com.sca4d.core.api.identity.Account,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">assertMethodRemovalAllowed(Account, TreeCode)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
 <dd>
-<div class="block">确认指定认证方法完全不可用后，账号当前设置仍能满足登录和敏感动作要求。</div>
+<div class="block">删除方法最后一个凭据会使策略无法满足时抛出冲突。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/audit/SystemOperations.html#AUDIT_READ" class="member-name-link">AUDIT_READ</a> - Static variable in class com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/SystemOperations.html" title="class in com.sca4d.app.server.audit">SystemOperations</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/audit/SystemOperations.html#AUDIT_READ_VALUE" class="member-name-link">AUDIT_READ_VALUE</a> - Static variable in class com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/SystemOperations.html" title="class in com.sca4d.app.server.audit">SystemOperations</a></dt>
 <dd>
 <div class="block">读取审计记录。</div>
 </dd>
@@ -260,9 +276,9 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/authentication/AuthenticationMethodSettings.html" class="type-name-link" title="class in com.sca4d.app.server.authentication">AuthenticationMethodSettings</a> - Class in <a href="com/sca4d/app/server/authentication/package-summary.html">com.sca4d.app.server.authentication</a></dt>
 <dd>
-<div class="block">保存一个认证方法在登录首步、登录后续因素和敏感动作中的启用状态。</div>
+<div class="block">保存一个认证方法在登录首个认证阶段、附加认证因素和敏感动作中的启用状态。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/authentication/AuthenticationMethodSettings.html#%3Cinit%3E(com.sca4d.core.api.authentication.AuthenticationMethodCode,boolean,boolean,boolean)" class="member-name-link">AuthenticationMethodSettings(AuthenticationMethodCode, boolean, boolean, boolean)</a> - Constructor for class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AuthenticationMethodSettings.html" title="class in com.sca4d.app.server.authentication">AuthenticationMethodSettings</a></dt>
+<dt><a href="com/sca4d/app/server/authentication/AuthenticationMethodSettings.html#%3Cinit%3E(com.sca4d.core.api.name.code.TreeCode,boolean,boolean,boolean)" class="member-name-link">AuthenticationMethodSettings(TreeCode, boolean, boolean, boolean)</a> - Constructor for class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AuthenticationMethodSettings.html" title="class in com.sca4d.app.server.authentication">AuthenticationMethodSettings</a></dt>
 <dd>
 <div class="block">创建认证方法开关。</div>
 </dd>
@@ -290,6 +306,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">检查 `iot:devices:read` 后登记不包含 Spring broker 前缀的共享 Topic。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaFacts.html#availableMethods(long)" class="member-name-link">availableMethods(long)</a> - Method in interface com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaFacts.html" title="interface in com.sca4d.app.server.plugin.mfa">MfaFacts</a></dt>
+<dd>
+<div class="block">检查指定账号目前确实可用的方法；只在需要可满足性检查时调用。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaFactsService.html#availableMethods(long)" class="member-name-link">availableMethods(long)</a> - Method in class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaFactsService.html" title="class in com.sca4d.app.server.plugin.mfa">MfaFactsService</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/entity/PlatformUserProfile.html#avatarFileId()" class="member-name-link">avatarFileId()</a> - Method in class com.sca4d.app.server.entity.<a href="com/sca4d/app/server/entity/PlatformUserProfile.html" title="class in com.sca4d.app.server.entity">PlatformUserProfile</a></dt>
 <dd>
 <div class="block">返回可选头像文件标识。</div>
@@ -327,6 +349,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/app/server/service/TotpAccountService.html#cancelEnrollment(java.lang.Long,java.lang.String)" class="member-name-link">cancelEnrollment(Long, String)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/TotpAccountService.html" title="class in com.sca4d.app.server.service">TotpAccountService</a></dt>
 <dd>
 <div class="block">取消当前 Account 仍可使用的 enrollment。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaMethodFacts.html#canIdentifyAccount()" class="member-name-link">canIdentifyAccount()</a> - Method in class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaMethodFacts.html" title="class in com.sca4d.app.server.plugin.mfa">MfaMethodFacts</a></dt>
+<dd>
+<div class="block">返回是否允许作为首次账号发现方法。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/HmacCanonicalRequest.html#canonicalBytes()" class="member-name-link">canonicalBytes()</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/HmacCanonicalRequest.html" title="class in com.sca4d.app.server.iot">HmacCanonicalRequest</a></dt>
 <dd>&nbsp;</dd>
@@ -420,8 +446,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">删除一批已经超过重放窗口的 Device 创建幂等记录。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingsCodec.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingsCodec.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettingsCodec</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/EmqxAuthenticationCallback.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/EmqxAuthenticationCallback.html" title="class in com.sca4d.app.server.iot">EmqxAuthenticationCallback</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaMethodFacts.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaMethodFacts.html" title="class in com.sca4d.app.server.plugin.mfa">MfaMethodFacts</a></dt>
+<dd>
+<div class="block">返回稳定认证方法编码。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/system/SystemDictionaryErrorCode.html#code()" class="member-name-link">code()</a> - Method in enum class com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/SystemDictionaryErrorCode.html" title="enum class in com.sca4d.app.server.system">SystemDictionaryErrorCode</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/openapi/iot/OpenApiIotProductSource.html#CODE" class="member-name-link">CODE</a> - Enum constant in enum class com.sca4d.app.server.openapi.iot.<a href="com/sca4d/app/server/openapi/iot/OpenApiIotProductSource.html" title="enum class in com.sca4d.app.server.openapi.iot">OpenApiIotProductSource</a></dt>
@@ -484,6 +516,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/platform/view/package-summary.html">com.sca4d.app.server.platform.view</a> - package com.sca4d.app.server.platform.view</dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/plugin/package-summary.html">com.sca4d.app.server.plugin</a> - package com.sca4d.app.server.plugin</dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/package-summary.html">com.sca4d.app.server.plugin.mfa</a> - package com.sca4d.app.server.plugin.mfa</dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/preference/package-summary.html">com.sca4d.app.server.preference</a> - package com.sca4d.app.server.preference</dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/preference/request/package-summary.html">com.sca4d.app.server.preference.request</a> - package com.sca4d.app.server.preference.request</dt>
@@ -524,7 +560,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">单次消费动作认证结果，并复核账号和动作与当前接口一致。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/ProductSettings.html#CONTACT_NAME" class="member-name-link">CONTACT_NAME</a> - Static variable in class com.sca4d.app.server.<a href="com/sca4d/app/server/ProductSettings.html" title="class in com.sca4d.app.server">ProductSettings</a></dt>
+<dt><a href="com/sca4d/app/server/ProductSettings.html#CONTACT_NAME" class="member-name-link">CONTACT_NAME</a> - Variable in class com.sca4d.app.server.<a href="com/sca4d/app/server/ProductSettings.html" title="class in com.sca4d.app.server">ProductSettings</a></dt>
 <dd>
 <div class="block">OpenAPI 显示的联系人名称。</div>
 </dd>
@@ -561,6 +597,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">只读取已知请求类型的安全字段；密码、验证码、Passkey proof 和个人资料值不会进入结果。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/system/EmailTemplateManagementService.html#create(com.sca4d.core.api.name.code.TreeCode,java.util.Map)" class="member-name-link">create(TreeCode, Map&lt;String, EmailTemplateSource&gt;)</a> - Method in class com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/EmailTemplateManagementService.html" title="class in com.sca4d.app.server.system">EmailTemplateManagementService</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/Sca4dEmqxDeviceConnectionRequestFactory.html#create(com.sca4d.iot.emqx.authentication.EmqxAuthenticationRequest)" class="member-name-link">create(EmqxAuthenticationRequest)</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/Sca4dEmqxDeviceConnectionRequestFactory.html" title="class in com.sca4d.app.server.iot">Sca4dEmqxDeviceConnectionRequestFactory</a></dt>
 <dd>
 <div class="block">把示例 App 约定的 MQTT username 解析为接入方式，并且只创建一种连接输入。</div>
@@ -738,13 +776,15 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Product 和物模型保存在数据库中。</div>
 </dd>
+<dt><a href="db/migration/package-summary.html">db.migration</a> - package db.migration</dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/files/PlatformFilePermissionPolicy.html#decide(com.sca4d.core.api.call.Call,com.sca4d.core.api.permission.Permission)" class="member-name-link">decide(Call, Permission)</a> - Method in class com.sca4d.app.server.files.<a href="com/sca4d/app/server/files/PlatformFilePermissionPolicy.html" title="class in com.sca4d.app.server.files">PlatformFilePermissionPolicy</a></dt>
 <dd>
 <div class="block">完成上传时同时校验上传 Principal 和目标资料权限；读取时校验目标资料的本人或管理权限。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/files/PlatformUserProfilePermissionPolicy.html#decide(com.sca4d.core.api.call.Call,com.sca4d.core.api.permission.Permission)" class="member-name-link">decide(Call, Permission)</a> - Method in class com.sca4d.app.server.files.<a href="com/sca4d/app/server/files/PlatformUserProfilePermissionPolicy.html" title="class in com.sca4d.app.server.files">PlatformUserProfilePermissionPolicy</a></dt>
 <dd>
-<div class="block">允许本人写入自己的资料；具有账号维护操作权限的 Principal 可以写入其他资料。</div>
+<div class="block">允许资料所属 Principal 写入自己的资料；具有账号维护操作权限的 Principal 可以写入其他用户资料。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingsCodec.html#decode(java.lang.String)" class="member-name-link">decode(String)</a> - Method in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingsCodec.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettingsCodec</a></dt>
 <dt><a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingsCodec.html#decodeJson(com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">decodeJson(JsonNode)</a> - Method in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingsCodec.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettingsCodec</a></dt>
@@ -761,6 +801,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/app/server/controllers/system/EmailTemplateController.html#delete(long)" class="member-name-link">delete(long)</a> - Method in class com.sca4d.app.server.controllers.system.<a href="com/sca4d/app/server/controllers/system/EmailTemplateController.html" title="class in com.sca4d.app.server.controllers.system">EmailTemplateController</a></dt>
 <dd>
 <div class="block">按 `If-Match` 删除停用模板。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/system/EmailTemplateManagementService.html#delete(long)" class="member-name-link">delete(long)</a> - Method in class com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/EmailTemplateManagementService.html" title="class in com.sca4d.app.server.system">EmailTemplateManagementService</a></dt>
+<dd>
+<div class="block">删除未启用的 Email 模板。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/platform/PlatformAccountController.html#delete(long,com.sca4d.core.api.authentication.Session)" class="member-name-link">delete(long, Session)</a> - Method in class com.sca4d.app.server.controllers.platform.<a href="com/sca4d/app/server/controllers/platform/PlatformAccountController.html" title="class in com.sca4d.app.server.controllers.platform">PlatformAccountController</a></dt>
 <dd>
@@ -812,11 +856,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/system/SystemDictionaryController.html#deleteDictionary(java.lang.String,long)" class="member-name-link">deleteDictionary(String, long)</a> - Method in class com.sca4d.app.server.controllers.system.<a href="com/sca4d/app/server/controllers/system/SystemDictionaryController.html" title="class in com.sca4d.app.server.controllers.system">SystemDictionaryController</a></dt>
 <dd>
-<div class="block">按乐观版本删除一个数据库动态字典及其数据库选项。</div>
+<div class="block">按乐观版本删除一个数据库动态字典以及对应数据库选项。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/service/SystemDictionaryService.html#deleteDictionary(java.lang.String,long)" class="member-name-link">deleteDictionary(String, long)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/SystemDictionaryService.html" title="class in com.sca4d.app.server.service">SystemDictionaryService</a></dt>
 <dd>
-<div class="block">按版本删除数据库动态字典及其数据库选项，代码字典不可删除。</div>
+<div class="block">按版本删除数据库动态字典及对应数据库选项，代码字典不可删除。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/mapper/IotApplicationMapper.html#deleteExpiredDeviceCreation(java.lang.String,java.time.Instant)" class="member-name-link">deleteExpiredDeviceCreation(String, Instant)</a> - Method in interface com.sca4d.app.server.mapper.<a href="com/sca4d/app/server/mapper/IotApplicationMapper.html" title="interface in com.sca4d.app.server.mapper">IotApplicationMapper</a></dt>
 <dd>
@@ -864,7 +908,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/IotHttpHeaders.html#DEVICE_ID" class="member-name-link">DEVICE_ID</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotHttpHeaders.html" title="class in com.sca4d.app.server.iot">IotHttpHeaders</a></dt>
 <dd>
-<div class="block">Device HMAC 请求提交 Device 标识的 Header。</div>
+<div class="block">Device MAC 请求提交 Device 标识的 Header。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/DeviceCredentialService.html#DEVICE_REALM" class="member-name-link">DEVICE_REALM</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/DeviceCredentialService.html" title="class in com.sca4d.app.server.iot">DeviceCredentialService</a></dt>
 <dd>
@@ -890,7 +934,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/DeviceCredentialService.html" class="type-name-link" title="class in com.sca4d.app.server.iot">DeviceCredentialService</a> - Class in <a href="com/sca4d/app/server/iot/package-summary.html">com.sca4d.app.server.iot</a></dt>
 <dd>
-<div class="block">管理 Sca4d Server 的 Device Account 以及 Shared Secret、HMAC 和 X.509 Credential。</div>
+<div class="block">管理 Sca4d Server 的 Device Account 以及 Shared Secret、MAC 和 X.509 Credential。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/DeviceCredentialService.html#%3Cinit%3E(com.sca4d.iam.identity.IdentityService,com.sca4d.auth.engine.AuthenticationMethods)" class="member-name-link">DeviceCredentialService(IdentityService, AuthenticationMethods)</a> - Constructor for class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/DeviceCredentialService.html" title="class in com.sca4d.app.server.iot">DeviceCredentialService</a></dt>
 <dd>
@@ -905,30 +949,40 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/app/server/service/IotApplicationService.html#deviceProfileById(long)" class="member-name-link">deviceProfileById(long)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/IotApplicationService.html" title="class in com.sca4d.app.server.service">IotApplicationService</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/IotOperations.html#DEVICES_MANAGE" class="member-name-link">DEVICES_MANAGE</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotOperations.html" title="class in com.sca4d.app.server.iot">IotOperations</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/iot/IotOperations.html#DEVICES_MANAGE_VALUE" class="member-name-link">DEVICES_MANAGE_VALUE</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotOperations.html" title="class in com.sca4d.app.server.iot">IotOperations</a></dt>
 <dd>
 <div class="block">创建、修改、启停 Device 和管理凭据。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/IotOperations.html#DEVICES_OPERATE" class="member-name-link">DEVICES_OPERATE</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotOperations.html" title="class in com.sca4d.app.server.iot">IotOperations</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/iot/IotOperations.html#DEVICES_OPERATE_VALUE" class="member-name-link">DEVICES_OPERATE_VALUE</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotOperations.html" title="class in com.sca4d.app.server.iot">IotOperations</a></dt>
 <dd>
 <div class="block">修改 desired state 和提交 command。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/IotOperations.html#DEVICES_READ" class="member-name-link">DEVICES_READ</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotOperations.html" title="class in com.sca4d.app.server.iot">IotOperations</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/iot/IotOperations.html#DEVICES_READ_VALUE" class="member-name-link">DEVICES_READ_VALUE</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotOperations.html" title="class in com.sca4d.app.server.iot">IotOperations</a></dt>
 <dd>
 <div class="block">读取 Device、连接、状态和历史。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/DeviceSessionService.html" class="type-name-link" title="class in com.sca4d.app.server.iot">DeviceSessionService</a> - Class in <a href="com/sca4d/app/server/iot/package-summary.html">com.sca4d.app.server.iot</a></dt>
 <dd>
-<div class="block">使用 Device HMAC 认证结果建立 Sca4d Server 的通用 Session。</div>
+<div class="block">使用 Device MAC 认证结果建立 Sca4d Server 的通用 Session。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/DeviceSessionService.html#%3Cinit%3E(com.sca4d.iot.device.DeviceService,com.sca4d.iam.identity.IdentityService,com.sca4d.auth.engine.AuthenticationMethods,com.sca4d.core.api.authentication.SessionLifecycle)" class="member-name-link">DeviceSessionService(DeviceService, IdentityService, AuthenticationMethods, SessionLifecycle)</a> - Constructor for class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/DeviceSessionService.html" title="class in com.sca4d.app.server.iot">DeviceSessionService</a></dt>
 <dd>
-<div class="block">创建 Device HMAC Session 服务。</div>
+<div class="block">创建 Device MAC Session 服务。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/audit/SystemOperations.html#DICTIONARIES_MANAGE" class="member-name-link">DICTIONARIES_MANAGE</a> - Static variable in class com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/SystemOperations.html" title="class in com.sca4d.app.server.audit">SystemOperations</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/audit/SystemOperations.html#DICTIONARIES_MANAGE_VALUE" class="member-name-link">DICTIONARIES_MANAGE_VALUE</a> - Static variable in class com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/SystemOperations.html" title="class in com.sca4d.app.server.audit">SystemOperations</a></dt>
 <dd>
 <div class="block">管理动态字典和数据库选项。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/audit/SystemOperations.html#DICTIONARIES_READ" class="member-name-link">DICTIONARIES_READ</a> - Static variable in class com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/SystemOperations.html" title="class in com.sca4d.app.server.audit">SystemOperations</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/audit/SystemOperations.html#DICTIONARIES_READ_VALUE" class="member-name-link">DICTIONARIES_READ_VALUE</a> - Static variable in class com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/SystemOperations.html" title="class in com.sca4d.app.server.audit">SystemOperations</a></dt>
 <dd>
 <div class="block">读取字典和聚合选项。</div>
 </dd>
@@ -960,7 +1014,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Device 只允许管理，不允许认证、连接和交换消息。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/ProductSettings.html#DISPLAY_NAME" class="member-name-link">DISPLAY_NAME</a> - Static variable in class com.sca4d.app.server.<a href="com/sca4d/app/server/ProductSettings.html" title="class in com.sca4d.app.server">ProductSettings</a></dt>
+<dt><a href="com/sca4d/app/server/ProductSettings.html#DISPLAY_NAME" class="member-name-link">DISPLAY_NAME</a> - Variable in class com.sca4d.app.server.<a href="com/sca4d/app/server/ProductSettings.html" title="class in com.sca4d.app.server">ProductSettings</a></dt>
 <dd>
 <div class="block">页面和 OpenAPI 使用的产品展示名称。</div>
 </dd>
@@ -994,10 +1048,14 @@ loadScripts(document, 'script');</script>
 <div class="block">返回可选邮箱。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/audit/SystemOperations.html#EMAIL_MANAGE" class="member-name-link">EMAIL_MANAGE</a> - Static variable in class com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/SystemOperations.html" title="class in com.sca4d.app.server.audit">SystemOperations</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/audit/SystemOperations.html#EMAIL_MANAGE_VALUE" class="member-name-link">EMAIL_MANAGE_VALUE</a> - Static variable in class com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/SystemOperations.html" title="class in com.sca4d.app.server.audit">SystemOperations</a></dt>
 <dd>
 <div class="block">管理 SMTP 配置和 Email 模板。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/audit/SystemOperations.html#EMAIL_READ" class="member-name-link">EMAIL_READ</a> - Static variable in class com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/SystemOperations.html" title="class in com.sca4d.app.server.audit">SystemOperations</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/audit/SystemOperations.html#EMAIL_READ_VALUE" class="member-name-link">EMAIL_READ_VALUE</a> - Static variable in class com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/SystemOperations.html" title="class in com.sca4d.app.server.audit">SystemOperations</a></dt>
 <dd>
 <div class="block">读取 Email 通知配置。</div>
 </dd>
@@ -1049,20 +1107,38 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">管理多语言 Email 模板，并提供草稿预览和真实测试发送。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/controllers/system/EmailTemplateController.html#%3Cinit%3E(com.sca4d.notification.template.NotificationTemplateService)" class="member-name-link">EmailTemplateController(NotificationTemplateService)</a> - Constructor for class com.sca4d.app.server.controllers.system.<a href="com/sca4d/app/server/controllers/system/EmailTemplateController.html" title="class in com.sca4d.app.server.controllers.system">EmailTemplateController</a></dt>
+<dt><a href="com/sca4d/app/server/controllers/system/EmailTemplateController.html#%3Cinit%3E(com.sca4d.app.server.system.EmailTemplateManagementService)" class="member-name-link">EmailTemplateController(EmailTemplateManagementService)</a> - Constructor for class com.sca4d.app.server.controllers.system.<a href="com/sca4d/app/server/controllers/system/EmailTemplateController.html" title="class in com.sca4d.app.server.controllers.system">EmailTemplateController</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/system/EmailTemplateManagementService.html" class="type-name-link" title="class in com.sca4d.app.server.system">EmailTemplateManagementService</a> - Class in <a href="com/sca4d/app/server/system/package-summary.html">com.sca4d.app.server.system</a></dt>
+<dd>
+<div class="block">管理 Email 模板源码、Locale、变量声明和安全预览。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/system/EmailTemplateManagementService.html#%3Cinit%3E(com.sca4d.core.api.i18n.LocaleCatalog,com.sca4d.notification.email.EmailTemplateRepository,com.sca4d.notification.NotificationTypeCatalog,com.sca4d.core.api.id.IdGenerator,com.sca4d.notification.email.EmailRenderer)" class="member-name-link">EmailTemplateManagementService(LocaleCatalog, EmailTemplateRepository, NotificationTypeCatalog, IdGenerator, EmailRenderer)</a> - Constructor for class com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/EmailTemplateManagementService.html" title="class in com.sca4d.app.server.system">EmailTemplateManagementService</a></dt>
+<dd>
+<div class="block">创建 Email 模板管理服务。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/system/request/EmailTemplateRequest.html" class="type-name-link" title="class in com.sca4d.app.server.system.request">EmailTemplateRequest</a> - Class in <a href="com/sca4d/app/server/system/request/package-summary.html">com.sca4d.app.server.system.request</a></dt>
 <dd>
-<div class="block">接收通知编码和平台无关的完整 Tiptap JSON 模板。</div>
+<div class="block">接收通知编码和完整多语言 Email 源码模板。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/system/request/EmailTemplateRequest.html#%3Cinit%3E()" class="member-name-link">EmailTemplateRequest()</a> - Constructor for class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/EmailTemplateRequest.html" title="class in com.sca4d.app.server.system.request">EmailTemplateRequest</a></dt>
 <dd>
-<div class="block">创建供 JSON 反序列化使用的空请求。</div>
+<div class="block">创建空的请求对象，供 JSON 绑定使用。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/system/request/EmailTemplateSourceRequest.html" class="type-name-link" title="class in com.sca4d.app.server.system.request">EmailTemplateSourceRequest</a> - Class in <a href="com/sca4d/app/server/system/request/package-summary.html">com.sca4d.app.server.system.request</a></dt>
+<dd>
+<div class="block">接收一个 Locale 的 Email 主题、纯文本正文和 HTML 正文源码。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/system/request/EmailTemplateSourceRequest.html#%3Cinit%3E()" class="member-name-link">EmailTemplateSourceRequest()</a> - Constructor for class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/EmailTemplateSourceRequest.html" title="class in com.sca4d.app.server.system.request">EmailTemplateSourceRequest</a></dt>
+<dd>
+<div class="block">创建空的请求对象，供 JSON 绑定使用。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/system/view/EmailTemplateView.html" class="type-name-link" title="class in com.sca4d.app.server.system.view">EmailTemplateView</a> - Class in <a href="com/sca4d/app/server/system/view/package-summary.html">com.sca4d.app.server.system.view</a></dt>
 <dd>
-<div class="block">返回 Email 模板完整多语言字段、变量、状态和版本。</div>
+<div class="block">返回 Email 模板多语言源码、变量、状态和版本。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/iot/AppIotProperties.Emqx.html#%3Cinit%3E()" class="member-name-link">Emqx()</a> - Constructor for class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/AppIotProperties.Emqx.html" title="class in com.sca4d.app.server.iot">AppIotProperties.Emqx</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/IotHttpHeaders.html#EMQX_SECRET" class="member-name-link">EMQX_SECRET</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotHttpHeaders.html" title="class in com.sca4d.app.server.iot">IotHttpHeaders</a></dt>
 <dd>
 <div class="block">EMQX 端到端回调提交共享 Secret 的 Header。</div>
@@ -1115,11 +1191,11 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#erase(long)" class="member-name-link">erase(long)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
 <dd>
-<div class="block">幂等删除账号全部应用认证设置。</div>
+<div class="block">幂等删除账号的应用认证设置。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/DeviceSessionService.html#establish(com.sca4d.app.server.iot.HmacCanonicalRequest,java.lang.String)" class="member-name-link">establish(HmacCanonicalRequest, String)</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/DeviceSessionService.html" title="class in com.sca4d.app.server.iot">DeviceSessionService</a></dt>
 <dd>
-<div class="block">验证 Device HTTP HMAC canonical request 并建立 Session。</div>
+<div class="block">验证 Device HTTP MAC canonical request 并建立 Session。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/iot/IotDeviceSessionController.html#establish(java.lang.String,java.lang.String,java.lang.String,java.lang.String,byte%5B%5D,jakarta.servlet.http.HttpServletRequest)" class="member-name-link">establish(String, String, String, String, byte[], HttpServletRequest)</a> - Method in class com.sca4d.app.server.controllers.iot.<a href="com/sca4d/app/server/controllers/iot/IotDeviceSessionController.html" title="class in com.sca4d.app.server.controllers.iot">IotDeviceSessionController</a></dt>
 <dd>&nbsp;</dd>
@@ -1140,6 +1216,10 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:F">F</h2>
 <dl class="index">
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaMethodFacts.html#factorKinds()" class="member-name-link">factorKinds()</a> - Method in class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaMethodFacts.html" title="class in com.sca4d.app.server.plugin.mfa">MfaMethodFacts</a></dt>
+<dd>
+<div class="block">返回方法可能贡献的独立因素类别。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/authentication/AuthenticationActions.html#FEDERATED_LINK_CODE" class="member-name-link">FEDERATED_LINK_CODE</a> - Static variable in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AuthenticationActions.html" title="class in com.sca4d.app.server.authentication">AuthenticationActions</a></dt>
 <dd>
 <div class="block">绑定当前账号联邦身份的动作编码。</div>
@@ -1240,6 +1320,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回客户端必须原样执行的短期上传请求。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/system/EmailTemplateManagementService.html#find(com.sca4d.core.api.query.ListRequest)" class="member-name-link">find(ListRequest)</a> - Method in class com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/EmailTemplateManagementService.html" title="class in com.sca4d.app.server.system">EmailTemplateManagementService</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/controllers/system/EmailTemplateController.html#find(com.sca4d.core.spring.web.list.ListParameters)" class="member-name-link">find(ListParameters)</a> - Method in class com.sca4d.app.server.controllers.system.<a href="com/sca4d/app/server/controllers/system/EmailTemplateController.html" title="class in com.sca4d.app.server.controllers.system">EmailTemplateController</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/service/PlatformAccountApplicationService.html#find(com.sca4d.iam.base.PlatformAccountQuery)" class="member-name-link">find(PlatformAccountQuery)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAccountApplicationService.html" title="class in com.sca4d.app.server.service">PlatformAccountApplicationService</a></dt>
 <dd>
 <div class="block">查询一页 Platform Account 并组合 App 资料。</div>
@@ -1269,8 +1353,6 @@ loadScripts(document, 'script');</script>
 <div class="block">读取 Device 固定 Realm 下保留的 Account。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/system/EmailSenderController.html#findAll()" class="member-name-link">findAll()</a> - Method in class com.sca4d.app.server.controllers.system.<a href="com/sca4d/app/server/controllers/system/EmailSenderController.html" title="class in com.sca4d.app.server.controllers.system">EmailSenderController</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="com/sca4d/app/server/controllers/system/EmailTemplateController.html#findAll()" class="member-name-link">findAll()</a> - Method in class com.sca4d.app.server.controllers.system.<a href="com/sca4d/app/server/controllers/system/EmailTemplateController.html" title="class in com.sca4d.app.server.controllers.system">EmailTemplateController</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/controllers/system/SystemDictionaryController.html#findAll()" class="member-name-link">findAll()</a> - Method in class com.sca4d.app.server.controllers.system.<a href="com/sca4d/app/server/controllers/system/SystemDictionaryController.html" title="class in com.sca4d.app.server.controllers.system">SystemDictionaryController</a></dt>
 <dd>&nbsp;</dd>
@@ -1482,11 +1564,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotProductCatalogView.html#from(com.sca4d.core.api.query.Page,java.util.Collection,java.util.Collection)" class="member-name-link">from(Page&lt;IotProductCatalogItem&gt;, Collection&lt;DeviceAccessMethod&gt;, Collection&lt;DeviceProtocol&gt;)</a> - Static method in class com.sca4d.app.server.iot.view.<a href="com/sca4d/app/server/iot/view/IotProductCatalogView.html" title="class in com.sca4d.app.server.iot.view">IotProductCatalogView</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/app/server/preference/view/PreferenceView.html#from(com.sca4d.core.api.setting.SettingValue)" class="member-name-link">from(SettingValue&lt;?&gt;)</a> - Static method in class com.sca4d.app.server.preference.view.<a href="com/sca4d/app/server/preference/view/PreferenceView.html" title="class in com.sca4d.app.server.preference.view">PreferenceView</a></dt>
+<dt><a href="com/sca4d/app/server/preference/view/PreferenceView.html#from(com.sca4d.core.api.setting.value.SettingValue)" class="member-name-link">from(SettingValue&lt;JsonNode&gt;)</a> - Static method in class com.sca4d.app.server.preference.view.<a href="com/sca4d/app/server/preference/view/PreferenceView.html" title="class in com.sca4d.app.server.preference.view">PreferenceView</a></dt>
 <dd>
 <div class="block">从类型化设置值创建 HTTP 投影。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/authentication/view/AuthenticationSettingsView.html#from(com.sca4d.core.api.setting.SettingValue)" class="member-name-link">from(SettingValue&lt;AccountAuthenticationSettings&gt;)</a> - Static method in class com.sca4d.app.server.authentication.view.<a href="com/sca4d/app/server/authentication/view/AuthenticationSettingsView.html" title="class in com.sca4d.app.server.authentication.view">AuthenticationSettingsView</a></dt>
+<dt><a href="com/sca4d/app/server/authentication/view/AuthenticationSettingsView.html#from(com.sca4d.core.api.setting.value.SettingValue)" class="member-name-link">from(SettingValue&lt;AccountAuthenticationSettings&gt;)</a> - Static method in class com.sca4d.app.server.authentication.view.<a href="com/sca4d/app/server/authentication/view/AuthenticationSettingsView.html" title="class in com.sca4d.app.server.authentication.view">AuthenticationSettingsView</a></dt>
 <dd>
 <div class="block">创建账号认证设置的 HTTP 投影。</div>
 </dd>
@@ -1522,7 +1604,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotAcknowledgementView.html#from(com.sca4d.iot.api.message.DeviceAcknowledgement)" class="member-name-link">from(DeviceAcknowledgement)</a> - Static method in class com.sca4d.app.server.iot.view.<a href="com/sca4d/app/server/iot/view/IotAcknowledgementView.html" title="class in com.sca4d.app.server.iot.view">IotAcknowledgementView</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/app/server/iot/view/IotDownlinkMessageView.html#from(com.sca4d.iot.api.message.DeviceDownlinkMessage)" class="member-name-link">from(DeviceDownlinkMessage)</a> - Static method in class com.sca4d.app.server.iot.view.<a href="com/sca4d/app/server/iot/view/IotDownlinkMessageView.html" title="class in com.sca4d.app.server.iot.view">IotDownlinkMessageView</a></dt>
+<dt><a href="com/sca4d/app/server/iot/view/IotDownlinkMessageView.html#from(com.sca4d.iot.api.message.DeviceDownlink)" class="member-name-link">from(DeviceDownlink)</a> - Static method in class com.sca4d.app.server.iot.view.<a href="com/sca4d/app/server/iot/view/IotDownlinkMessageView.html" title="class in com.sca4d.app.server.iot.view">IotDownlinkMessageView</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotThingModelI18nView.html#from(com.sca4d.iot.api.model.ThingModelPresentation)" class="member-name-link">from(ThingModelPresentation)</a> - Static method in class com.sca4d.app.server.iot.view.<a href="com/sca4d/app/server/iot/view/IotThingModelI18nView.html" title="class in com.sca4d.app.server.iot.view">IotThingModelI18nView</a></dt>
 <dd>&nbsp;</dd>
@@ -1538,6 +1620,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotDesiredStateView.html#from(com.sca4d.iot.message.DesiredStateResult)" class="member-name-link">from(DesiredStateResult)</a> - Static method in class com.sca4d.app.server.iot.view.<a href="com/sca4d/app/server/iot/view/IotDesiredStateView.html" title="class in com.sca4d.app.server.iot.view">IotDesiredStateView</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/system/view/EmailTemplateView.html#from(com.sca4d.notification.email.EmailTemplate,java.util.Set)" class="member-name-link">from(EmailTemplate, Set&lt;String&gt;)</a> - Static method in class com.sca4d.app.server.system.view.<a href="com/sca4d/app/server/system/view/EmailTemplateView.html" title="class in com.sca4d.app.server.system.view">EmailTemplateView</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/system/view/RenderedEmailView.html#from(com.sca4d.notification.email.RenderedEmail)" class="member-name-link">from(RenderedEmail)</a> - Static method in class com.sca4d.app.server.system.view.<a href="com/sca4d/app/server/system/view/RenderedEmailView.html" title="class in com.sca4d.app.server.system.view">RenderedEmailView</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/system/view/EmailSenderView.html#from(com.sca4d.notification.email.sender.EmailSender)" class="member-name-link">from(EmailSender)</a> - Static method in class com.sca4d.app.server.system.view.<a href="com/sca4d/app/server/system/view/EmailSenderView.html" title="class in com.sca4d.app.server.system.view">EmailSenderView</a></dt>
@@ -1547,10 +1631,6 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/app/server/system/view/SmsProviderView.html#from(com.sca4d.notification.sms.SmsProvider)" class="member-name-link">from(SmsProvider)</a> - Static method in class com.sca4d.app.server.system.view.<a href="com/sca4d/app/server/system/view/SmsProviderView.html" title="class in com.sca4d.app.server.system.view">SmsProviderView</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/system/view/SmsBindingView.html#from(com.sca4d.notification.sms.SmsProviderBinding)" class="member-name-link">from(SmsProviderBinding)</a> - Static method in class com.sca4d.app.server.system.view.<a href="com/sca4d/app/server/system/view/SmsBindingView.html" title="class in com.sca4d.app.server.system.view">SmsBindingView</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="com/sca4d/app/server/system/view/EmailTemplateView.html#from(com.sca4d.notification.template.NotificationTemplate,java.util.Set)" class="member-name-link">from(NotificationTemplate, Set&lt;String&gt;)</a> - Static method in class com.sca4d.app.server.system.view.<a href="com/sca4d/app/server/system/view/EmailTemplateView.html" title="class in com.sca4d.app.server.system.view">EmailTemplateView</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="com/sca4d/app/server/system/view/RenderedEmailView.html#from(com.sca4d.notification.template.RenderedNotification)" class="member-name-link">from(RenderedNotification)</a> - Static method in class com.sca4d.app.server.system.view.<a href="com/sca4d/app/server/system/view/RenderedEmailView.html" title="class in com.sca4d.app.server.system.view">RenderedEmailView</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/authentication/view/FederatedAuthorizationView.html#from(java.lang.String)" class="member-name-link">from(String)</a> - Static method in class com.sca4d.app.server.authentication.view.<a href="com/sca4d/app/server/authentication/view/FederatedAuthorizationView.html" title="class in com.sca4d.app.server.authentication.view">FederatedAuthorizationView</a></dt>
 <dd>&nbsp;</dd>
@@ -1843,12 +1923,6 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotDeviceRuntimeView.html#getConnections()" class="member-name-link">getConnections()</a> - Method in class com.sca4d.app.server.iot.view.<a href="com/sca4d/app/server/iot/view/IotDeviceRuntimeView.html" title="class in com.sca4d.app.server.iot.view">IotDeviceRuntimeView</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/app/server/system/request/EmailTemplateRequest.html#getContent()" class="member-name-link">getContent()</a> - Method in class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/EmailTemplateRequest.html" title="class in com.sca4d.app.server.system.request">EmailTemplateRequest</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="com/sca4d/app/server/system/request/PreviewEmailTemplateRequest.html#getContent()" class="member-name-link">getContent()</a> - Method in class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/PreviewEmailTemplateRequest.html" title="class in com.sca4d.app.server.system.request">PreviewEmailTemplateRequest</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="com/sca4d/app/server/system/view/EmailTemplateView.html#getContent()" class="member-name-link">getContent()</a> - Method in class com.sca4d.app.server.system.view.<a href="com/sca4d/app/server/system/view/EmailTemplateView.html" title="class in com.sca4d.app.server.system.view">EmailTemplateView</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/files/request/CreateFileUploadRequest.html#getContentType()" class="member-name-link">getContentType()</a> - Method in class com.sca4d.app.server.files.request.<a href="com/sca4d/app/server/files/request/CreateFileUploadRequest.html" title="class in com.sca4d.app.server.files.request">CreateFileUploadRequest</a></dt>
 <dd>
 <div class="block">返回客户端声明的媒体类型。</div>
@@ -1997,6 +2071,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回可选邮箱。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/iot/AppIotProperties.html#getEmqx()" class="member-name-link">getEmqx()</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/AppIotProperties.html" title="class in com.sca4d.app.server.iot">AppIotProperties</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/AppIotProperties.html#getEmqxWebhookSecret()" class="member-name-link">getEmqxWebhookSecret()</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/AppIotProperties.html" title="class in com.sca4d.app.server.iot">AppIotProperties</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/authentication/request/TotpCredentialRequest.html#getEnrollmentId()" class="member-name-link">getEnrollmentId()</a> - Method in class com.sca4d.app.server.authentication.request.<a href="com/sca4d/app/server/authentication/request/TotpCredentialRequest.html" title="class in com.sca4d.app.server.authentication.request">TotpCredentialRequest</a></dt>
@@ -2108,6 +2184,8 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/app/server/system/view/EmailSenderView.html#getHost()" class="member-name-link">getHost()</a> - Method in class com.sca4d.app.server.system.view.<a href="com/sca4d/app/server/system/view/EmailSenderView.html" title="class in com.sca4d.app.server.system.view">EmailSenderView</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/notification/view/InboxMessageView.html#getHtml()" class="member-name-link">getHtml()</a> - Method in class com.sca4d.app.server.notification.view.<a href="com/sca4d/app/server/notification/view/InboxMessageView.html" title="class in com.sca4d.app.server.notification.view">InboxMessageView</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/system/request/EmailTemplateSourceRequest.html#getHtml()" class="member-name-link">getHtml()</a> - Method in class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/EmailTemplateSourceRequest.html" title="class in com.sca4d.app.server.system.request">EmailTemplateSourceRequest</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/system/view/RenderedEmailView.html#getHtml()" class="member-name-link">getHtml()</a> - Method in class com.sca4d.app.server.system.view.<a href="com/sca4d/app/server/system/view/RenderedEmailView.html" title="class in com.sca4d.app.server.system.view">RenderedEmailView</a></dt>
 <dd>&nbsp;</dd>
@@ -2265,6 +2343,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/authentication/view/PasskeyCredentialView.html#getLastUsedAt()" class="member-name-link">getLastUsedAt()</a> - Method in class com.sca4d.app.server.authentication.view.<a href="com/sca4d/app/server/authentication/view/PasskeyCredentialView.html" title="class in com.sca4d.app.server.authentication.view">PasskeyCredentialView</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/system/request/EmailTemplateRequest.html#getLocales()" class="member-name-link">getLocales()</a> - Method in class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/EmailTemplateRequest.html" title="class in com.sca4d.app.server.system.request">EmailTemplateRequest</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/system/view/EmailTemplateView.html#getLocales()" class="member-name-link">getLocales()</a> - Method in class com.sca4d.app.server.system.view.<a href="com/sca4d/app/server/system/view/EmailTemplateView.html" title="class in com.sca4d.app.server.system.view">EmailTemplateView</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/authentication/request/ReplaceAuthenticationSettingsRequest.html#getLoginFactorCount()" class="member-name-link">getLoginFactorCount()</a> - Method in class com.sca4d.app.server.authentication.request.<a href="com/sca4d/app/server/authentication/request/ReplaceAuthenticationSettingsRequest.html" title="class in com.sca4d.app.server.authentication.request">ReplaceAuthenticationSettingsRequest</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/authentication/view/AuthenticationSettingsView.html#getLoginFactorCount()" class="member-name-link">getLoginFactorCount()</a> - Method in class com.sca4d.app.server.authentication.view.<a href="com/sca4d/app/server/authentication/view/AuthenticationSettingsView.html" title="class in com.sca4d.app.server.authentication.view">AuthenticationSettingsView</a></dt>
@@ -2415,6 +2497,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回角色当前得到的 ACTION 编码集合。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/platform/request/CreateRoleRequest.html#getPermissionCodeTrees()" class="member-name-link">getPermissionCodeTrees()</a> - Method in class com.sca4d.app.server.platform.request.<a href="com/sca4d/app/server/platform/request/CreateRoleRequest.html" title="class in com.sca4d.app.server.platform.request">CreateRoleRequest</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/platform/request/ReplaceRolePermissionsRequest.html#getPermissionCodeTrees()" class="member-name-link">getPermissionCodeTrees()</a> - Method in class com.sca4d.app.server.platform.request.<a href="com/sca4d/app/server/platform/request/ReplaceRolePermissionsRequest.html" title="class in com.sca4d.app.server.platform.request">ReplaceRolePermissionsRequest</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/authentication/view/CurrentSessionView.html#getPermissions()" class="member-name-link">getPermissions()</a> - Method in class com.sca4d.app.server.authentication.view.<a href="com/sca4d/app/server/authentication/view/CurrentSessionView.html" title="class in com.sca4d.app.server.authentication.view">CurrentSessionView</a></dt>
 <dd>
 <div class="block">返回当前 Session 中生效的权限编码。</div>
@@ -2707,6 +2793,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotProductCatalogView.ProductItem.html#getSource()" class="member-name-link">getSource()</a> - Method in class com.sca4d.app.server.iot.view.<a href="com/sca4d/app/server/iot/view/IotProductCatalogView.ProductItem.html" title="class in com.sca4d.app.server.iot.view">IotProductCatalogView.ProductItem</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/system/request/PreviewEmailTemplateRequest.html#getSource()" class="member-name-link">getSource()</a> - Method in class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/PreviewEmailTemplateRequest.html" title="class in com.sca4d.app.server.system.request">PreviewEmailTemplateRequest</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotAcknowledgementView.html#getSourceAcknowledgementId()" class="member-name-link">getSourceAcknowledgementId()</a> - Method in class com.sca4d.app.server.iot.view.<a href="com/sca4d/app/server/iot/view/IotAcknowledgementView.html" title="class in com.sca4d.app.server.iot.view">IotAcknowledgementView</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/authentication/view/AuthenticationProgressView.html#getStatus()" class="member-name-link">getStatus()</a> - Method in class com.sca4d.app.server.authentication.view.<a href="com/sca4d/app/server/authentication/view/AuthenticationProgressView.html" title="class in com.sca4d.app.server.authentication.view">AuthenticationProgressView</a></dt>
@@ -2763,6 +2851,8 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/authentication/view/FederatedIdentityView.html#getSubject()" class="member-name-link">getSubject()</a> - Method in class com.sca4d.app.server.authentication.view.<a href="com/sca4d/app/server/authentication/view/FederatedIdentityView.html" title="class in com.sca4d.app.server.authentication.view">FederatedIdentityView</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/system/request/EmailTemplateSourceRequest.html#getSubject()" class="member-name-link">getSubject()</a> - Method in class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/EmailTemplateSourceRequest.html" title="class in com.sca4d.app.server.system.request">EmailTemplateSourceRequest</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/system/view/RenderedEmailView.html#getSubject()" class="member-name-link">getSubject()</a> - Method in class com.sca4d.app.server.system.view.<a href="com/sca4d/app/server/system/view/RenderedEmailView.html" title="class in com.sca4d.app.server.system.view">RenderedEmailView</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/authentication/view/CurrentSessionView.SubjectView.html#getSubjectId()" class="member-name-link">getSubjectId()</a> - Method in class com.sca4d.app.server.authentication.view.<a href="com/sca4d/app/server/authentication/view/CurrentSessionView.SubjectView.html" title="class in com.sca4d.app.server.authentication.view">CurrentSessionView.SubjectView</a></dt>
@@ -2788,6 +2878,8 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/app/server/system/view/EmailTemplateView.html#getTemplateId()" class="member-name-link">getTemplateId()</a> - Method in class com.sca4d.app.server.system.view.<a href="com/sca4d/app/server/system/view/EmailTemplateView.html" title="class in com.sca4d.app.server.system.view">EmailTemplateView</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/notification/view/InboxMessageView.html#getText()" class="member-name-link">getText()</a> - Method in class com.sca4d.app.server.notification.view.<a href="com/sca4d/app/server/notification/view/InboxMessageView.html" title="class in com.sca4d.app.server.notification.view">InboxMessageView</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/system/request/EmailTemplateSourceRequest.html#getText()" class="member-name-link">getText()</a> - Method in class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/EmailTemplateSourceRequest.html" title="class in com.sca4d.app.server.system.request">EmailTemplateSourceRequest</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/system/view/RenderedEmailView.html#getText()" class="member-name-link">getText()</a> - Method in class com.sca4d.app.server.system.view.<a href="com/sca4d/app/server/system/view/RenderedEmailView.html" title="class in com.sca4d.app.server.system.view">RenderedEmailView</a></dt>
 <dd>&nbsp;</dd>
@@ -2985,6 +3077,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/system/view/SystemSettingsView.Item.html#getVersion()" class="member-name-link">getVersion()</a> - Method in class com.sca4d.app.server.system.view.<a href="com/sca4d/app/server/system/view/SystemSettingsView.Item.html" title="class in com.sca4d.app.server.system.view">SystemSettingsView.Item</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/iot/AppIotProperties.Emqx.html#getWebhookSecret()" class="member-name-link">getWebhookSecret()</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/AppIotProperties.Emqx.html" title="class in com.sca4d.app.server.iot">AppIotProperties.Emqx</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/request/IotDeviceScheduleRequest.html#getZoneId()" class="member-name-link">getZoneId()</a> - Method in class com.sca4d.app.server.iot.request.<a href="com/sca4d/app/server/iot/request/IotDeviceScheduleRequest.html" title="class in com.sca4d.app.server.iot.request">IotDeviceScheduleRequest</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotDeviceScheduleView.html#getZoneId()" class="member-name-link">getZoneId()</a> - Method in class com.sca4d.app.server.iot.view.<a href="com/sca4d/app/server/iot/view/IotDeviceScheduleView.html" title="class in com.sca4d.app.server.iot.view">IotDeviceScheduleView</a></dt>
@@ -2996,7 +3090,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/HmacCanonicalRequest.html" class="type-name-link" title="class in com.sca4d.app.server.iot">HmacCanonicalRequest</a> - Class in <a href="com/sca4d/app/server/iot/package-summary.html">com.sca4d.app.server.iot</a></dt>
 <dd>
-<div class="block">按 Sca4d Server 的固定 HTTP 字段顺序生成 Device HMAC canonical request。</div>
+<div class="block">按 Sca4d Server 的固定 HTTP 字段顺序生成 Device MAC canonical request。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/HmacCanonicalRequest.html#%3Cinit%3E(long,java.lang.String,java.lang.String,java.lang.String,byte%5B%5D,java.time.Instant,java.lang.String)" class="member-name-link">HmacCanonicalRequest(long, String, String, String, byte[], Instant, String)</a> - Constructor for class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/HmacCanonicalRequest.html" title="class in com.sca4d.app.server.iot">HmacCanonicalRequest</a></dt>
 <dd>
@@ -3021,7 +3115,9 @@ loadScripts(document, 'script');</script>
 <div class="block">查询当前 Account 站内信并修改已读状态。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/InboxController.html#%3Cinit%3E(com.sca4d.notification.inbox.InboxService)" class="member-name-link">InboxController(InboxService)</a> - Constructor for class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/InboxController.html" title="class in com.sca4d.app.server.controllers">InboxController</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">创建站内信控制器。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/notification/view/InboxMessageView.html" class="type-name-link" title="class in com.sca4d.app.server.notification.view">InboxMessageView</a> - Class in <a href="com/sca4d/app/server/notification/view/package-summary.html">com.sca4d.app.server.notification.view</a></dt>
 <dd>
 <div class="block">返回当前 Account 一项站内信渲染快照。</div>
@@ -3031,7 +3127,9 @@ loadScripts(document, 'script');</script>
 <div class="block">返回当前 Account 的站内信游标页和未读数量。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/notification/view/InboxPageView.html#%3Cinit%3E(java.util.List,long)" class="member-name-link">InboxPageView(List&lt;InboxMessageView&gt;, long)</a> - Constructor for class com.sca4d.app.server.notification.view.<a href="com/sca4d/app/server/notification/view/InboxPageView.html" title="class in com.sca4d.app.server.notification.view">InboxPageView</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">创建站内信分页响应。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/service/PlatformUserProfileService.html#initialize(java.lang.Long,java.lang.String)" class="member-name-link">initialize(Long, String)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformUserProfileService.html" title="class in com.sca4d.app.server.service">PlatformUserProfileService</a></dt>
 <dd>
 <div class="block">为 bootstrap Principal 补齐默认资料；重复执行不修改已有资料。</div>
@@ -3067,8 +3165,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/app/server/notification/NotificationSettingsService.html#inspect(long)" class="member-name-link">inspect(long)</a> - Method in class com.sca4d.app.server.notification.<a href="com/sca4d/app/server/notification/NotificationSettingsService.html" title="class in com.sca4d.app.server.notification">NotificationSettingsService</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#inspect(long)" class="member-name-link">inspect(long)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="com/sca4d/app/server/preference/PreferenceService.html#inspect(long,java.lang.String)" class="member-name-link">inspect(long, String)</a> - Method in class com.sca4d.app.server.preference.<a href="com/sca4d/app/server/preference/PreferenceService.html" title="class in com.sca4d.app.server.preference">PreferenceService</a></dt>
+<dd>
+<div class="block">返回账号认证设置值、来源及版本。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/preference/PreferenceService.html#inspect(long,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">inspect(long, TreeCode)</a> - Method in class com.sca4d.app.server.preference.<a href="com/sca4d/app/server/preference/PreferenceService.html" title="class in com.sca4d.app.server.preference">PreferenceService</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/controllers/NotificationSettingsController.html#inspect(java.lang.Long)" class="member-name-link">inspect(Long)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/NotificationSettingsController.html" title="class in com.sca4d.app.server.controllers">NotificationSettingsController</a></dt>
 <dd>&nbsp;</dd>
@@ -3222,7 +3322,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotDeviceRuntimeView.Connection.html" class="type-name-link" title="class in com.sca4d.app.server.iot.view">IotDeviceRuntimeView.Connection</a> - Class in <a href="com/sca4d/app/server/iot/view/package-summary.html">com.sca4d.app.server.iot.view</a></dt>
 <dd>
-<div class="block">返回一条当前 Device 连接事实。</div>
+<div class="block">返回一条当前 Device 连接信息。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotDeviceRuntimeView.Desired.html" class="type-name-link" title="class in com.sca4d.app.server.iot.view">IotDeviceRuntimeView.Desired</a> - Class in <a href="com/sca4d/app/server/iot/view/package-summary.html">com.sca4d.app.server.iot.view</a></dt>
 <dd>
@@ -3266,7 +3366,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/iot/IotDeviceSessionController.html" class="type-name-link" title="class in com.sca4d.app.server.controllers.iot">IotDeviceSessionController</a> - Class in <a href="com/sca4d/app/server/controllers/iot/package-summary.html">com.sca4d.app.server.controllers.iot</a></dt>
 <dd>
-<div class="block">提供 Sca4d Server 示例应用真实 HTTP 请求的 Device HMAC Session 接口。</div>
+<div class="block">提供 Sca4d Server 示例应用真实 HTTP 请求的 Device MAC Session 接口。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/iot/IotDeviceSessionController.html#%3Cinit%3E(com.sca4d.app.server.iot.DeviceSessionService)" class="member-name-link">IotDeviceSessionController(DeviceSessionService)</a> - Constructor for class com.sca4d.app.server.controllers.iot.<a href="com/sca4d/app/server/controllers/iot/IotDeviceSessionController.html" title="class in com.sca4d.app.server.controllers.iot">IotDeviceSessionController</a></dt>
 <dd>
@@ -3302,7 +3402,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/IotHttpHeaders.html" class="type-name-link" title="class in com.sca4d.app.server.iot">IotHttpHeaders</a> - Class in <a href="com/sca4d/app/server/iot/package-summary.html">com.sca4d.app.server.iot</a></dt>
 <dd>
-<div class="block">定义示例应用的 Device HMAC 和 EMQX HTTP 请求使用的 Header。</div>
+<div class="block">定义示例应用的 Device MAC 和 EMQX HTTP 请求使用的 Header。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/request/IotI18nRequest.html" class="type-name-link" title="class in com.sca4d.app.server.iot.request">IotI18nRequest</a> - Class in <a href="com/sca4d/app/server/iot/request/package-summary.html">com.sca4d.app.server.iot.request</a></dt>
 <dd>
@@ -3434,15 +3534,15 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotThingModelView.Command.html" class="type-name-link" title="class in com.sca4d.app.server.iot.view">IotThingModelView.Command</a> - Class in <a href="com/sca4d/app/server/iot/view/package-summary.html">com.sca4d.app.server.iot.view</a></dt>
 <dd>
-<div class="block">返回一个 ThingModel 命令及其本地化输入字段。</div>
+<div class="block">返回一个 ThingModel 命令及本地化输入字段。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotThingModelView.EnumValue.html" class="type-name-link" title="class in com.sca4d.app.server.iot.view">IotThingModelView.EnumValue</a> - Class in <a href="com/sca4d/app/server/iot/view/package-summary.html">com.sca4d.app.server.iot.view</a></dt>
 <dd>
-<div class="block">返回 enum code 及其当前请求 Locale 展示名称。</div>
+<div class="block">返回 enum code 及当前请求 Locale 的展示名称。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotThingModelView.Event.html" class="type-name-link" title="class in com.sca4d.app.server.iot.view">IotThingModelView.Event</a> - Class in <a href="com/sca4d/app/server/iot/view/package-summary.html">com.sca4d.app.server.iot.view</a></dt>
 <dd>
-<div class="block">返回一个 ThingModel 事件及其本地化输出字段。</div>
+<div class="block">返回一个 ThingModel 事件及本地化输出字段。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotThingModelView.Field.html" class="type-name-link" title="class in com.sca4d.app.server.iot.view">IotThingModelView.Field</a> - Class in <a href="com/sca4d/app/server/iot/view/package-summary.html">com.sca4d.app.server.iot.view</a></dt>
 <dd>
@@ -3450,11 +3550,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotThingModelView.Property.html" class="type-name-link" title="class in com.sca4d.app.server.iot.view">IotThingModelView.Property</a> - Class in <a href="com/sca4d/app/server/iot/view/package-summary.html">com.sca4d.app.server.iot.view</a></dt>
 <dd>
-<div class="block">返回一个 ThingModel 属性及其当前请求 Locale 展示名称。</div>
+<div class="block">返回一个 ThingModel 属性及当前请求 Locale 的展示名称。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/view/IotThingModelView.ValueType.html" class="type-name-link" title="class in com.sca4d.app.server.iot.view">IotThingModelView.ValueType</a> - Class in <a href="com/sca4d/app/server/iot/view/package-summary.html">com.sca4d.app.server.iot.view</a></dt>
 <dd>
-<div class="block">返回 ThingModel 递归值类型及其全部技术约束和本地化成员。</div>
+<div class="block">返回 ThingModel 递归值类型及全部技术约束和本地化成员。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/platform/request/CreateProviderRequest.html#isAutoLinkVerifiedEmail()" class="member-name-link">isAutoLinkVerifiedEmail()</a> - Method in class com.sca4d.app.server.platform.request.<a href="com/sca4d/app/server/platform/request/CreateProviderRequest.html" title="class in com.sca4d.app.server.platform.request">CreateProviderRequest</a></dt>
 <dd>&nbsp;</dd>
@@ -3584,14 +3684,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用 `languageVersion` 对应的 `If-Match` 替换当前 Account 通知语言。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/notification/PlatformNotificationConfiguration.html#LANGUAGE" class="member-name-link">LANGUAGE</a> - Static variable in class com.sca4d.app.server.notification.<a href="com/sca4d/app/server/notification/PlatformNotificationConfiguration.html" title="class in com.sca4d.app.server.notification">PlatformNotificationConfiguration</a></dt>
+<dt><a href="com/sca4d/app/server/notification/PlatformNotificationConfiguration.html#LANGUAGE" class="member-name-link">LANGUAGE</a> - Variable in class com.sca4d.app.server.notification.<a href="com/sca4d/app/server/notification/PlatformNotificationConfiguration.html" title="class in com.sca4d.app.server.notification">PlatformNotificationConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/notification/NotificationSettingsSnapshot.html#languageVersion()" class="member-name-link">languageVersion()</a> - Method in class com.sca4d.app.server.notification.<a href="com/sca4d/app/server/notification/NotificationSettingsSnapshot.html" title="class in com.sca4d.app.server.notification">NotificationSettingsSnapshot</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/protocol/LegacyFreezerDeviceProtocol.html" class="type-name-link" title="class in com.sca4d.app.server.iot.protocol">LegacyFreezerDeviceProtocol</a> - Class in <a href="com/sca4d/app/server/iot/protocol/package-summary.html">com.sca4d.app.server.iot.protocol</a></dt>
 <dd>
 <div class="block">处理旧冷柜的二进制 TLV、缺字段 patch、位标志枚举和不对称寄存器下行帧。
- 厂商字段在该类中转换为物模型属性和标准业务 ACK。</div>
+ 厂商字段在当前协议中转换为物模型属性和标准业务 ACK。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/FederatedAuthenticationController.html#link(com.sca4d.core.api.identity.Account,com.sca4d.app.server.authentication.request.FederatedProofRequest,jakarta.servlet.http.HttpServletRequest)" class="member-name-link">link(Account, FederatedProofRequest, HttpServletRequest)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/FederatedAuthenticationController.html" title="class in com.sca4d.app.server.controllers">FederatedAuthenticationController</a></dt>
 <dd>
@@ -3601,8 +3701,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/IotDeviceSessionIdentityLoader.html#load(com.sca4d.core.api.identity.Account)" class="member-name-link">load(Account)</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotDeviceSessionIdentityLoader.html" title="class in com.sca4d.app.server.iot">IotDeviceSessionIdentityLoader</a></dt>
 <dd>
-<div class="block">重新读取可用 Device Account 及其 Device Subject。</div>
+<div class="block">重新读取可用 Device Account 以及对应 Device Subject。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/plugin/Sca4dServerPluginConfiguration.html#load(java.nio.file.Path)" class="member-name-link">load(Path)</a> - Method in class com.sca4d.app.server.plugin.<a href="com/sca4d/app/server/plugin/Sca4dServerPluginConfiguration.html" title="class in com.sca4d.app.server.plugin">Sca4dServerPluginConfiguration</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/service/PlatformAccountApplicationService.html#loadByAccountId(java.lang.Long)" class="member-name-link">loadByAccountId(Long)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAccountApplicationService.html" title="class in com.sca4d.app.server.service">PlatformAccountApplicationService</a></dt>
 <dd>
 <div class="block">读取一个完整 Platform Account。</div>
@@ -3611,6 +3713,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">查询一条必须存在的操作日志。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/system/EmailTemplateManagementService.html#loadById(long)" class="member-name-link">loadById(long)</a> - Method in class com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/EmailTemplateManagementService.html" title="class in com.sca4d.app.server.system">EmailTemplateManagementService</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/repository/PlatformUserProfileRepository.html#loadByPrincipalId(java.lang.Long)" class="member-name-link">loadByPrincipalId(Long)</a> - Method in class com.sca4d.app.server.repository.<a href="com/sca4d/app/server/repository/PlatformUserProfileRepository.html" title="class in com.sca4d.app.server.repository">PlatformUserProfileRepository</a></dt>
 <dd>
 <div class="block">读取必须存在的资料。</div>
@@ -3660,7 +3764,9 @@ loadScripts(document, 'script');</script>
 <div class="block">使用已消费的 Email Code Challenge 开始登录。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/SmsCodeController.html#login(com.sca4d.app.server.authentication.request.SmsCodeProofRequest)" class="member-name-link">login(SmsCodeProofRequest)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/SmsCodeController.html" title="class in com.sca4d.app.server.controllers">SmsCodeController</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">使用 SMS 验证码开始匿名登录。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/authentication/AuthenticationActions.html#LOGIN_ACTION" class="member-name-link">LOGIN_ACTION</a> - Static variable in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AuthenticationActions.html" title="class in com.sca4d.app.server.authentication">AuthenticationActions</a></dt>
 <dd>
 <div class="block">登录服务和认证策略使用的类型化登录动作。</div>
@@ -3671,29 +3777,39 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/authentication/AuthenticationMethodSettings.html#loginAdditionalEnabled()" class="member-name-link">loginAdditionalEnabled()</a> - Method in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AuthenticationMethodSettings.html" title="class in com.sca4d.app.server.authentication">AuthenticationMethodSettings</a></dt>
 <dd>
-<div class="block">返回该方法是否允许补充登录因素。</div>
+<div class="block">返回当前方法是否允许补充登录因素。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/EmailCodeController.html#loginAttempt(java.lang.String,com.sca4d.app.server.authentication.request.EmailCodeProofRequest)" class="member-name-link">loginAttempt(String, EmailCodeProofRequest)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/EmailCodeController.html" title="class in com.sca4d.app.server.controllers">EmailCodeController</a></dt>
 <dd>
 <div class="block">向已经确定 Account 的登录尝试提交 Email Code。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/SmsCodeController.html#loginAttempt(java.lang.String,com.sca4d.app.server.authentication.request.SmsCodeProofRequest)" class="member-name-link">loginAttempt(String, SmsCodeProofRequest)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/SmsCodeController.html" title="class in com.sca4d.app.server.controllers">SmsCodeController</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">向指定登录尝试提交 SMS 验证码。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/controllers/EmailCodeController.html#loginAttemptChallenge(java.lang.String)" class="member-name-link">loginAttemptChallenge(String)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/EmailCodeController.html" title="class in com.sca4d.app.server.controllers">EmailCodeController</a></dt>
 <dd>
-<div class="block">为已经确定 Account 的登录尝试签发后续 Email Code Challenge。</div>
+<div class="block">为已经确定 Account 的登录尝试签发附加 Email Code Challenge。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/SmsCodeController.html#loginAttemptChallenge(java.lang.String)" class="member-name-link">loginAttemptChallenge(String)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/SmsCodeController.html" title="class in com.sca4d.app.server.controllers">SmsCodeController</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">为指定登录尝试签发 SMS Challenge。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/controllers/EmailCodeController.html#loginChallenge(com.sca4d.app.server.authentication.request.EmailCodeChallengeRequest)" class="member-name-link">loginChallenge(EmailCodeChallengeRequest)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/EmailCodeController.html" title="class in com.sca4d.app.server.controllers">EmailCodeController</a></dt>
 <dd>
 <div class="block">使用邮箱签发匿名一致的登录 Challenge。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/SmsCodeController.html#loginChallenge(com.sca4d.app.server.authentication.request.SmsCodeChallengeRequest)" class="member-name-link">loginChallenge(SmsCodeChallengeRequest)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/SmsCodeController.html" title="class in com.sca4d.app.server.controllers">SmsCodeController</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">为匿名登录签发 SMS Challenge。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/authentication/AccountAuthenticationSettings.html#loginFactorCount()" class="member-name-link">loginFactorCount()</a> - Method in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a></dt>
 <dd>
 <div class="block">返回登录所需不同因素数量。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaSettings.html#loginFactorCount()" class="member-name-link">loginFactorCount()</a> - Method in class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaSettings.html" title="class in com.sca4d.app.server.plugin.mfa">MfaSettings</a></dt>
+<dd>
+<div class="block">返回登录所需独立因素数。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/AuthenticationAttemptController.html#loginPasskey(java.lang.String,com.sca4d.app.server.authentication.request.PasskeyProofRequest)" class="member-name-link">loginPasskey(String, PasskeyProofRequest)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/AuthenticationAttemptController.html" title="class in com.sca4d.app.server.controllers">AuthenticationAttemptController</a></dt>
 <dd>
@@ -3721,7 +3837,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/authentication/AuthenticationMethodSettings.html#loginStartEnabled()" class="member-name-link">loginStartEnabled()</a> - Method in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AuthenticationMethodSettings.html" title="class in com.sca4d.app.server.authentication">AuthenticationMethodSettings</a></dt>
 <dd>
-<div class="block">返回该方法是否允许开始登录。</div>
+<div class="block">返回当前方法是否允许开始登录。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/AuthenticationAttemptController.html#loginTotp(java.lang.String,com.sca4d.app.server.authentication.request.TotpProofRequest)" class="member-name-link">loginTotp(String, TotpProofRequest)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/AuthenticationAttemptController.html" title="class in com.sca4d.app.server.controllers">AuthenticationAttemptController</a></dt>
 <dd>
@@ -3766,7 +3882,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">保存管理端展示一个设置所需的定义、当前编码值和维护来源。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/system/ManagedSetting.html#%3Cinit%3E(com.sca4d.core.api.setting.SystemSetting,com.fasterxml.jackson.databind.JsonNode,boolean,boolean,com.sca4d.core.api.concurrent.Version)" class="member-name-link">ManagedSetting(SystemSetting&lt;?&gt;, JsonNode, boolean, boolean, Version)</a> - Constructor for class com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/ManagedSetting.html" title="class in com.sca4d.app.server.system">ManagedSetting</a></dt>
+<dt><a href="com/sca4d/app/server/system/ManagedSetting.html#%3Cinit%3E(com.sca4d.core.api.setting.definition.SystemSetting,com.fasterxml.jackson.databind.JsonNode,boolean,boolean,com.sca4d.core.api.concurrent.Version)" class="member-name-link">ManagedSetting(SystemSetting&lt;?&gt;, JsonNode, boolean, boolean, Version)</a> - Constructor for class com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/ManagedSetting.html" title="class in com.sca4d.app.server.system">ManagedSetting</a></dt>
 <dd>
 <div class="block">创建设置管理结果。</div>
 </dd>
@@ -3800,6 +3916,48 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回按方法编码索引的不可修改认证方法设置。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaFacts.html#methods()" class="member-name-link">methods()</a> - Method in interface com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaFacts.html" title="interface in com.sca4d.app.server.plugin.mfa">MfaFacts</a></dt>
+<dd>
+<div class="block">返回当前 App 安装的方法元数据，不检查账号凭据。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaFactsService.html#methods()" class="member-name-link">methods()</a> - Method in class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaFactsService.html" title="class in com.sca4d.app.server.plugin.mfa">MfaFactsService</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaSettings.html#methods()" class="member-name-link">methods()</a> - Method in class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaSettings.html" title="class in com.sca4d.app.server.plugin.mfa">MfaSettings</a></dt>
+<dd>
+<div class="block">返回三个用途开关的不可变集合。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaFacts.html" class="type-name-link" title="interface in com.sca4d.app.server.plugin.mfa">MfaFacts</a> - Interface in <a href="com/sca4d/app/server/plugin/mfa/package-summary.html">com.sca4d.app.server.plugin.mfa</a></dt>
+<dd>
+<div class="block">向策略插件提供设置与方法事实，不暴露凭据、Proof 和内部 Repository。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaFactsService.html" class="type-name-link" title="class in com.sca4d.app.server.plugin.mfa">MfaFactsService</a> - Class in <a href="com/sca4d/app/server/plugin/mfa/package-summary.html">com.sca4d.app.server.plugin.mfa</a></dt>
+<dd>
+<div class="block">从宿主设置和已安装方法读取策略事实，所有持久化仍由原模块完成。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaFactsService.html#%3Cinit%3E(com.sca4d.app.server.authentication.AccountAuthenticationSettingConfiguration,com.sca4d.core.api.identity.AccountDirectory,java.util.List)" class="member-name-link">MfaFactsService(AccountAuthenticationSettingConfiguration, AccountDirectory, List&lt;AuthenticationMethod&lt;?&gt;&gt;)</a> - Constructor for class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaFactsService.html" title="class in com.sca4d.app.server.plugin.mfa">MfaFactsService</a></dt>
+<dd>
+<div class="block">检查宿主方法编码唯一性，不把实际方法对象传入插件。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaMethodFacts.html" class="type-name-link" title="class in com.sca4d.app.server.plugin.mfa">MfaMethodFacts</a> - Class in <a href="com/sca4d/app/server/plugin/mfa/package-summary.html">com.sca4d.app.server.plugin.mfa</a></dt>
+<dd>
+<div class="block">保存认证方法的公开因素和账号识别声明，不持有认证方法对象。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaMethodFacts.html#%3Cinit%3E(com.sca4d.core.api.name.code.TreeCode,java.util.Set,boolean)" class="member-name-link">MfaMethodFacts(TreeCode, Set&lt;AuthenticationFactorKind&gt;, boolean)</a> - Constructor for class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaMethodFacts.html" title="class in com.sca4d.app.server.plugin.mfa">MfaMethodFacts</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaPolicy.html" class="type-name-link" title="interface in com.sca4d.app.server.plugin.mfa">MfaPolicy</a> - Interface in <a href="com/sca4d/app/server/plugin/mfa/package-summary.html">com.sca4d.app.server.plugin.mfa</a></dt>
+<dd>
+<div class="block">声明 Sca4d Server 必须安装的完整 MFA 策略扩展。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaSettings.html" class="type-name-link" title="class in com.sca4d.app.server.plugin.mfa">MfaSettings</a> - Class in <a href="com/sca4d/app/server/plugin/mfa/package-summary.html">com.sca4d.app.server.plugin.mfa</a></dt>
+<dd>
+<div class="block">保存不依赖认证模块实现的账号 MFA 配置快照。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaSettings.html#%3Cinit%3E(int,int,java.time.Duration,java.util.List)" class="member-name-link">MfaSettings(int, int, Duration, List&lt;AuthenticationMethodSettings&gt;)</a> - Constructor for class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaSettings.html" title="class in com.sca4d.app.server.plugin.mfa">MfaSettings</a></dt>
+<dd>
+<div class="block">校验并保存不可变配置快照，方法编码不得重复。</div>
+</dd>
+<dt><a href="db/migration/V13__normalize_setting_codes.html#migrate(org.flywaydb.core.api.migration.Context)" class="member-name-link">migrate(Context)</a> - Method in class db.migration.<a href="db/migration/V13__normalize_setting_codes.html" title="class in db.migration">V13__normalize_setting_codes</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/audit/ApplicationAuditValues.MutationDetails.html#%3Cinit%3E()" class="member-name-link">MutationDetails()</a> - Constructor for class com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/ApplicationAuditValues.MutationDetails.html" title="class in com.sca4d.app.server.audit">ApplicationAuditValues.MutationDetails</a></dt>
 <dd>
 <div class="block">创建无状态解析器。</div>
@@ -3813,10 +3971,6 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/HmacCanonicalRequest.html#nonce()" class="member-name-link">nonce()</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/HmacCanonicalRequest.html" title="class in com.sca4d.app.server.iot">HmacCanonicalRequest</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/app/server/iot/IotHttpHeaders.html#NONCE" class="member-name-link">NONCE</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotHttpHeaders.html" title="class in com.sca4d.app.server.iot">IotHttpHeaders</a></dt>
-<dd>
-<div class="block">Device HMAC 请求提交一次性随机值的 Header。</div>
-</dd>
 <dt><a href="com/sca4d/app/server/platform/PlatformEmailAccountIdentifierNormalizer.html#normalize(java.lang.String)" class="member-name-link">normalize(String)</a> - Method in class com.sca4d.app.server.platform.<a href="com/sca4d/app/server/platform/PlatformEmailAccountIdentifierNormalizer.html" title="class in com.sca4d.app.server.platform">PlatformEmailAccountIdentifierNormalizer</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/platform/PlatformPhoneAccountIdentifierNormalizer.html#normalize(java.lang.String)" class="member-name-link">normalize(String)</a> - Method in class com.sca4d.app.server.platform.<a href="com/sca4d/app/server/platform/PlatformPhoneAccountIdentifierNormalizer.html" title="class in com.sca4d.app.server.platform">PlatformPhoneAccountIdentifierNormalizer</a></dt>
@@ -3826,12 +3980,14 @@ loadScripts(document, 'script');</script>
 <div class="block">管理当前 Account 的领域化通知设置，不暴露通用 Settings key。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/NotificationSettingsController.html#%3Cinit%3E(com.sca4d.app.server.notification.NotificationSettingsService,com.sca4d.notification.NotificationTypeCatalog)" class="member-name-link">NotificationSettingsController(NotificationSettingsService, NotificationTypeCatalog)</a> - Constructor for class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/NotificationSettingsController.html" title="class in com.sca4d.app.server.controllers">NotificationSettingsController</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">创建当前 Account 通知设置控制器。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/notification/NotificationSettingsService.html" class="type-name-link" title="class in com.sca4d.app.server.notification">NotificationSettingsService</a> - Class in <a href="com/sca4d/app/server/notification/package-summary.html">com.sca4d.app.server.notification</a></dt>
 <dd>
 <div class="block">用领域接口包装 Notification 的 Account 语言、区域和可选渠道 Settings。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/notification/NotificationSettingsService.html#%3Cinit%3E(com.sca4d.core.api.setting.Settings,com.sca4d.notification.NotificationTypeCatalog)" class="member-name-link">NotificationSettingsService(Settings, NotificationTypeCatalog)</a> - Constructor for class com.sca4d.app.server.notification.<a href="com/sca4d/app/server/notification/NotificationSettingsService.html" title="class in com.sca4d.app.server.notification">NotificationSettingsService</a></dt>
+<dt><a href="com/sca4d/app/server/notification/NotificationSettingsService.html#%3Cinit%3E(com.sca4d.app.server.notification.PlatformNotificationConfiguration,com.sca4d.notification.config.NotificationSettings,com.sca4d.notification.NotificationTypeCatalog)" class="member-name-link">NotificationSettingsService(PlatformNotificationConfiguration, NotificationSettings, NotificationTypeCatalog)</a> - Constructor for class com.sca4d.app.server.notification.<a href="com/sca4d/app/server/notification/NotificationSettingsService.html" title="class in com.sca4d.app.server.notification">NotificationSettingsService</a></dt>
 <dd>
 <div class="block">创建用户通知设置服务。</div>
 </dd>
@@ -3840,7 +3996,9 @@ loadScripts(document, 'script');</script>
 <div class="block">保存当前 Account 三项通知设置的领域化读取结果。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/notification/NotificationSettingsSnapshot.html#%3Cinit%3E(java.util.Locale,com.sca4d.core.api.region.Region,com.fasterxml.jackson.databind.JsonNode,com.sca4d.core.api.concurrent.Version,com.sca4d.core.api.concurrent.Version,com.sca4d.core.api.concurrent.Version)" class="member-name-link">NotificationSettingsSnapshot(Locale, Region, JsonNode, Version, Version, Version)</a> - Constructor for class com.sca4d.app.server.notification.<a href="com/sca4d/app/server/notification/NotificationSettingsSnapshot.html" title="class in com.sca4d.app.server.notification">NotificationSettingsSnapshot</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">创建当前 Account 的通知设置快照。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/notification/view/NotificationSettingsView.html" class="type-name-link" title="class in com.sca4d.app.server.notification.view">NotificationSettingsView</a> - Class in <a href="com/sca4d/app/server/notification/view/package-summary.html">com.sca4d.app.server.notification.view</a></dt>
 <dd>
 <div class="block">返回当前 Account 的全局通知语言、区域和可选渠道覆盖值。</div>
@@ -3848,6 +4006,10 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:O">O</h2>
 <dl class="index">
+<dt><a href="com/sca4d/app/server/iot/IotHttpHeaders.html#ONCE" class="member-name-link">ONCE</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotHttpHeaders.html" title="class in com.sca4d.app.server.iot">IotHttpHeaders</a></dt>
+<dd>
+<div class="block">Device MAC 请求提交一次性随机值的 Header。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/iot/IotDeviceRuntimeDetails.html#online()" class="member-name-link">online()</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotDeviceRuntimeDetails.html" title="class in com.sca4d.app.server.iot">IotDeviceRuntimeDetails</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/openapi/iot/OpenApiIotDeviceResponse.html" class="type-name-link" title="class in com.sca4d.app.server.openapi.iot">OpenApiIotDeviceResponse</a> - Class in <a href="com/sca4d/app/server/openapi/iot/package-summary.html">com.sca4d.app.server.openapi.iot</a></dt>
@@ -4085,11 +4247,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" class="type-name-link" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a> - Class in <a href="com/sca4d/app/server/service/package-summary.html">com.sca4d.app.server.service</a></dt>
 <dd>
-<div class="block">实现 Sca4d Server 的登录和敏感动作认证规则，并管理账号的方法开关。</div>
+<div class="block">保存 App 账号认证设置，并把完整策略判断桥接到必需的 MFA 插件。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#%3Cinit%3E(com.sca4d.core.api.setting.Settings,java.util.List)" class="member-name-link">PlatformAuthenticationPolicyService(Settings, List&lt;AuthenticationMethod&lt;?&gt;&gt;)</a> - Constructor for class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
+<dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#%3Cinit%3E(com.sca4d.app.server.authentication.AccountAuthenticationSettingConfiguration,com.sca4d.app.server.plugin.mfa.MfaPolicy)" class="member-name-link">PlatformAuthenticationPolicyService(AccountAuthenticationSettingConfiguration, MfaPolicy)</a> - Constructor for class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
 <dd>
-<div class="block">创建 Sca4d Server 动作认证策略。</div>
+<div class="block">挂载生成客户端，设置持久化仍使用宿主事务。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/platform/PlatformEmailAccountIdentifierNormalizer.html" class="type-name-link" title="class in com.sca4d.app.server.platform">PlatformEmailAccountIdentifierNormalizer</a> - Class in <a href="com/sca4d/app/server/platform/package-summary.html">com.sca4d.app.server.platform</a></dt>
 <dd>
@@ -4147,8 +4309,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">用 Account LogicSetting 为 Notification 框架解析全局语言和业务区域。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/notification/PlatformNotificationConfiguration.html#%3Cinit%3E()" class="member-name-link">PlatformNotificationConfiguration()</a> - Constructor for class com.sca4d.app.server.notification.<a href="com/sca4d/app/server/notification/PlatformNotificationConfiguration.html" title="class in com.sca4d.app.server.notification">PlatformNotificationConfiguration</a></dt>
-<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/notification/PlatformNotificationConfiguration.html#%3Cinit%3E(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.setting.access.SettingWriter)" class="member-name-link">PlatformNotificationConfiguration(SettingReader&lt;String&gt;, SettingWriter&lt;String&gt;)</a> - Constructor for class com.sca4d.app.server.notification.<a href="com/sca4d/app/server/notification/PlatformNotificationConfiguration.html" title="class in com.sca4d.app.server.notification">PlatformNotificationConfiguration</a></dt>
+<dd>
+<div class="block">构造 App 设置并显式选择数据库来源。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/platform/PlatformPhoneAccountIdentifierNormalizer.html" class="type-name-link" title="class in com.sca4d.app.server.platform">PlatformPhoneAccountIdentifierNormalizer</a> - Class in <a href="com/sca4d/app/server/platform/package-summary.html">com.sca4d.app.server.platform</a></dt>
 <dd>
 <div class="block">把 Platform 手机登录标识规范为已经校验的 E.164 文本。</div>
@@ -4157,7 +4321,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/platform/PlatformPrincipalSelection.html" class="type-name-link" title="class in com.sca4d.app.server.platform">PlatformPrincipalSelection</a> - Class in <a href="com/sca4d/app/server/platform/package-summary.html">com.sca4d.app.server.platform</a></dt>
 <dd>
-<div class="block">为已认证平台账号选择其明确关联的平台业务主体。</div>
+<div class="block">为已认证平台账号选择明确关联的平台业务主体。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/platform/PlatformPrincipalSelection.html#%3Cinit%3E()" class="member-name-link">PlatformPrincipalSelection()</a> - Constructor for class com.sca4d.app.server.platform.<a href="com/sca4d/app/server/platform/PlatformPrincipalSelection.html" title="class in com.sca4d.app.server.platform">PlatformPrincipalSelection</a></dt>
 <dd>
@@ -4223,6 +4387,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">管理示例 App 自己拥有的 Platform 用户资料。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/plugin/PluginAuthenticationConfiguration.html" class="type-name-link" title="class in com.sca4d.app.server.plugin">PluginAuthenticationConfiguration</a> - Class in <a href="com/sca4d/app/server/plugin/package-summary.html">com.sca4d.app.server.plugin</a></dt>
+<dd>
+<div class="block">为 App 装配普通认证入口，并声明一次操作固定 MFA 插件代次。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/PluginAuthenticationConfiguration.html#%3Cinit%3E()" class="member-name-link">PluginAuthenticationConfiguration()</a> - Constructor for class com.sca4d.app.server.plugin.<a href="com/sca4d/app/server/plugin/PluginAuthenticationConfiguration.html" title="class in com.sca4d.app.server.plugin">PluginAuthenticationConfiguration</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/controllers/PreferenceController.html" class="type-name-link" title="class in com.sca4d.app.server.controllers">PreferenceController</a> - Class in <a href="com/sca4d/app/server/controllers/package-summary.html">com.sca4d.app.server.controllers</a></dt>
 <dd>
 <div class="block">管理当前 Platform Principal 的已注册个人偏好。</div>
@@ -4235,7 +4405,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">按当前 Platform Principal 读取、替换和恢复已注册的个人偏好。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/preference/PreferenceService.html#%3Cinit%3E(com.sca4d.core.spring.setting.SettingCatalog,com.sca4d.core.api.setting.PreferenceSettings)" class="member-name-link">PreferenceService(SettingCatalog, PreferenceSettings)</a> - Constructor for class com.sca4d.app.server.preference.<a href="com/sca4d/app/server/preference/PreferenceService.html" title="class in com.sca4d.app.server.preference">PreferenceService</a></dt>
+<dt><a href="com/sca4d/app/server/preference/PreferenceService.html#%3Cinit%3E(com.sca4d.core.spring.setting.SettingCatalog)" class="member-name-link">PreferenceService(SettingCatalog)</a> - Constructor for class com.sca4d.app.server.preference.<a href="com/sca4d/app/server/preference/PreferenceService.html" title="class in com.sca4d.app.server.preference">PreferenceService</a></dt>
 <dd>
 <div class="block">创建个人偏好应用服务。</div>
 </dd>
@@ -4245,7 +4415,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/EmqxGatewayCallbacks.html#PREFIX" class="member-name-link">PREFIX</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/EmqxGatewayCallbacks.html" title="class in com.sca4d.app.server.iot">EmqxGatewayCallbacks</a></dt>
 <dd>
-<div class="block">示例应用 EMQX 回调编码共用的命名空间。</div>
+<div class="block">示例应用 EMQX 回调编码共用的 App 隔离名称。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/IotHttpHeaders.html#PREFIX" class="member-name-link">PREFIX</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotHttpHeaders.html" title="class in com.sca4d.app.server.iot">IotHttpHeaders</a></dt>
 <dd>
@@ -4255,17 +4425,20 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">读取当前 Session 和验证请求头，并复核消费结果绑定的动作。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingsCodec.html#presentationType()" class="member-name-link">presentationType()</a> - Method in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingsCodec.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettingsCodec</a></dt>
 <dt><a href="com/sca4d/app/server/controllers/system/EmailTemplateController.html#preview(com.sca4d.app.server.system.request.PreviewEmailTemplateRequest)" class="member-name-link">preview(PreviewEmailTemplateRequest)</a> - Method in class com.sca4d.app.server.controllers.system.<a href="com/sca4d/app/server/controllers/system/EmailTemplateController.html" title="class in com.sca4d.app.server.controllers.system">EmailTemplateController</a></dt>
 <dd>
 <div class="block">渲染未保存草稿，并返回完成主题检查与 HTML 清洗的内容。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/system/EmailTemplateManagementService.html#preview(com.sca4d.notification.email.EmailTemplateSource,java.util.Locale,java.util.Map)" class="member-name-link">preview(EmailTemplateSource, Locale, Map&lt;String, String&gt;)</a> - Method in class com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/EmailTemplateManagementService.html" title="class in com.sca4d.app.server.system">EmailTemplateManagementService</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/system/request/PreviewEmailTemplateRequest.html" class="type-name-link" title="class in com.sca4d.app.server.system.request">PreviewEmailTemplateRequest</a> - Class in <a href="com/sca4d/app/server/system/request/package-summary.html">com.sca4d.app.server.system.request</a></dt>
 <dd>
-<div class="block">接收未保存 Email 模板、目标 Locale 和预览变量。</div>
+<div class="block">接收一份未保存 Email 源码、目标 Locale 和预览变量。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/system/request/PreviewEmailTemplateRequest.html#%3Cinit%3E()" class="member-name-link">PreviewEmailTemplateRequest()</a> - Constructor for class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/PreviewEmailTemplateRequest.html" title="class in com.sca4d.app.server.system.request">PreviewEmailTemplateRequest</a></dt>
 <dd>
-<div class="block">创建供 JSON 反序列化使用的空请求。</div>
+<div class="block">创建空的请求对象，供 JSON 绑定使用。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/audit/OperationLog.html#principalDisplayName()" class="member-name-link">principalDisplayName()</a> - Method in class com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/OperationLog.html" title="class in com.sca4d.app.server.audit">OperationLog</a></dt>
 <dd>&nbsp;</dd>
@@ -4290,10 +4463,14 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/app/server/service/IotApplicationService.html#productProfileById(long)" class="member-name-link">productProfileById(long)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/IotApplicationService.html" title="class in com.sca4d.app.server.service">IotApplicationService</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/IotOperations.html#PRODUCTS_MANAGE" class="member-name-link">PRODUCTS_MANAGE</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotOperations.html" title="class in com.sca4d.app.server.iot">IotOperations</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/iot/IotOperations.html#PRODUCTS_MANAGE_VALUE" class="member-name-link">PRODUCTS_MANAGE_VALUE</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotOperations.html" title="class in com.sca4d.app.server.iot">IotOperations</a></dt>
 <dd>
 <div class="block">创建、修改和启停 Product，并发布物模型。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/IotOperations.html#PRODUCTS_READ" class="member-name-link">PRODUCTS_READ</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotOperations.html" title="class in com.sca4d.app.server.iot">IotOperations</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/iot/IotOperations.html#PRODUCTS_READ_VALUE" class="member-name-link">PRODUCTS_READ_VALUE</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotOperations.html" title="class in com.sca4d.app.server.iot">IotOperations</a></dt>
 <dd>
 <div class="block">读取 Product 和物模型。</div>
 </dd>
@@ -4301,7 +4478,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">声明 Sca4d Server 可以由客户管理的产品名称、联系人和 TOTP issuer。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/ProductSettings.html#%3Cinit%3E()" class="member-name-link">ProductSettings()</a> - Constructor for class com.sca4d.app.server.<a href="com/sca4d/app/server/ProductSettings.html" title="class in com.sca4d.app.server">ProductSettings</a></dt>
+<dt><a href="com/sca4d/app/server/ProductSettings.html#%3Cinit%3E(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.setting.access.SettingWriter)" class="member-name-link">ProductSettings(SettingReader&lt;String&gt;, SettingWriter&lt;String&gt;)</a> - Constructor for class com.sca4d.app.server.<a href="com/sca4d/app/server/ProductSettings.html" title="class in com.sca4d.app.server">ProductSettings</a></dt>
 <dd>
 <div class="block">创建产品设置注册配置。</div>
 </dd>
@@ -4429,7 +4606,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用 `regionVersion` 对应的 `If-Match` 替换当前 Account 业务区域。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/notification/PlatformNotificationConfiguration.html#REGION" class="member-name-link">REGION</a> - Static variable in class com.sca4d.app.server.notification.<a href="com/sca4d/app/server/notification/PlatformNotificationConfiguration.html" title="class in com.sca4d.app.server.notification">PlatformNotificationConfiguration</a></dt>
+<dt><a href="com/sca4d/app/server/notification/PlatformNotificationConfiguration.html#REGION" class="member-name-link">REGION</a> - Variable in class com.sca4d.app.server.notification.<a href="com/sca4d/app/server/notification/PlatformNotificationConfiguration.html" title="class in com.sca4d.app.server.notification">PlatformNotificationConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/notification/NotificationSettingsSnapshot.html#regionVersion()" class="member-name-link">regionVersion()</a> - Method in class com.sca4d.app.server.notification.<a href="com/sca4d/app/server/notification/NotificationSettingsSnapshot.html" title="class in com.sca4d.app.server.notification">NotificationSettingsSnapshot</a></dt>
 <dd>&nbsp;</dd>
@@ -4441,6 +4618,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">为当前账号开始 discoverable Passkey registration。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/plugin/Sca4dServerPluginConfiguration.html#reload(java.nio.file.Path)" class="member-name-link">reload(Path)</a> - Method in class com.sca4d.app.server.plugin.<a href="com/sca4d/app/server/plugin/Sca4dServerPluginConfiguration.html" title="class in com.sca4d.app.server.plugin">Sca4dServerPluginConfiguration</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/system/view/RenderedEmailView.html" class="type-name-link" title="class in com.sca4d.app.server.system.view">RenderedEmailView</a> - Class in <a href="com/sca4d/app/server/system/view/package-summary.html">com.sca4d.app.server.system.view</a></dt>
 <dd>
 <div class="block">返回完成变量转义和 HTML 清洗后的 Email 模板预览。</div>
@@ -4455,17 +4634,23 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">按 `If-Match` 完整替换 SMTP 配置，按显式标志保留、替换或清除密码。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/preference/PreferenceService.html#replace(long,java.lang.String,com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">replace(long, String, JsonNode)</a> - Method in class com.sca4d.app.server.preference.<a href="com/sca4d/app/server/preference/PreferenceService.html" title="class in com.sca4d.app.server.preference">PreferenceService</a></dt>
+<dt><a href="com/sca4d/app/server/preference/PreferenceService.html#replace(long,com.sca4d.core.api.name.code.TreeCode,com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">replace(long, TreeCode, JsonNode)</a> - Method in class com.sca4d.app.server.preference.<a href="com/sca4d/app/server/preference/PreferenceService.html" title="class in com.sca4d.app.server.preference">PreferenceService</a></dt>
 <dd>
 <div class="block">使用偏好定义的 Codec 校验并完整替换当前 Principal 的 JSON 值。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/system/EmailTemplateManagementService.html#replace(long,com.sca4d.core.api.name.code.TreeCode,java.util.Map)" class="member-name-link">replace(long, TreeCode, Map&lt;String, EmailTemplateSource&gt;)</a> - Method in class com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/EmailTemplateManagementService.html" title="class in com.sca4d.app.server.system">EmailTemplateManagementService</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#replace(com.sca4d.core.api.identity.Account,int,int,java.time.Duration,java.util.List)" class="member-name-link">replace(Account, int, int, Duration, List&lt;AuthenticationMethodSettings&gt;)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
 <dd>
-<div class="block">校验登录和敏感动作能够由当前安装方法满足后，完整替换账号设置。</div>
+<div class="block">在同一事务中由插件校验完整候选配置，再保存账号设置。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/AccountAuthenticationSettingsController.html#replace(com.sca4d.core.api.identity.Account,com.sca4d.app.server.authentication.request.ReplaceAuthenticationSettingsRequest)" class="member-name-link">replace(Account, ReplaceAuthenticationSettingsRequest)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/AccountAuthenticationSettingsController.html" title="class in com.sca4d.app.server.controllers">AccountAuthenticationSettingsController</a></dt>
 <dd>
 <div class="block">单次消费对应动作认证后完整替换当前账号设置。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/service/SystemSettingService.html#replace(com.sca4d.core.api.name.code.TreeCode,com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">replace(TreeCode, JsonNode)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/SystemSettingService.html" title="class in com.sca4d.app.server.service">SystemSettingService</a></dt>
+<dd>
+<div class="block">使用设置自身 Codec 校验 JSON 后覆盖数据库值。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/TotpController.html#replace(java.lang.Long,com.sca4d.app.server.authentication.request.TotpCredentialRequest)" class="member-name-link">replace(Long, TotpCredentialRequest)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/TotpController.html" title="class in com.sca4d.app.server.controllers">TotpController</a></dt>
 <dd>
@@ -4490,10 +4675,6 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/app/server/service/PlatformUserProfileService.html#replace(java.lang.Long,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">replace(Long, String, String, String)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformUserProfileService.html" title="class in com.sca4d.app.server.service">PlatformUserProfileService</a></dt>
 <dd>
 <div class="block">替换用户资料。</div>
-</dd>
-<dt><a href="com/sca4d/app/server/service/SystemSettingService.html#replace(java.lang.String,com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">replace(String, JsonNode)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/SystemSettingService.html" title="class in com.sca4d.app.server.service">SystemSettingService</a></dt>
-<dd>
-<div class="block">使用设置自身 Codec 校验 JSON 后覆盖数据库值。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/system/SystemFederatedProviderController.html#replace(java.lang.String,com.sca4d.app.server.platform.request.ReplaceProviderRequest)" class="member-name-link">replace(String, ReplaceProviderRequest)</a> - Method in class com.sca4d.app.server.controllers.system.<a href="com/sca4d/app/server/controllers/system/SystemFederatedProviderController.html" title="class in com.sca4d.app.server.controllers.system">SystemFederatedProviderController</a></dt>
 <dd>
@@ -4685,17 +4866,23 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">声明 Controller 接口执行前必须单次消费指定动作的认证结果。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#requirementFor(com.sca4d.core.api.identity.Account,com.sca4d.core.api.authentication.AuthenticationActionCode)" class="member-name-link">requirementFor(Account, AuthenticationActionCode)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaPolicy.html#requirementFor(long,com.sca4d.core.api.authentication.AuthenticationActionCode)" class="member-name-link">requirementFor(long, AuthenticationActionCode)</a> - Method in interface com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaPolicy.html" title="interface in com.sca4d.app.server.plugin.mfa">MfaPolicy</a></dt>
 <dd>
-<div class="block">登录至少要求一个新因素；敏感动作按账号设置决定是否复用 Session 认证。</div>
+<div class="block">返回当前动作要求的因素数及认证复用时间。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html#requirementFor(com.sca4d.core.api.identity.Account,com.sca4d.core.api.authentication.AuthenticationActionCode)" class="member-name-link">requirementFor(Account, AuthenticationActionCode)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformAuthenticationPolicyService.html" title="class in com.sca4d.app.server.service">PlatformAuthenticationPolicyService</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/DeviceCredentialService.html#requiresAccount(java.util.Set)" class="member-name-link">requiresAccount(Set&lt;DeviceAccessMethod&gt;)</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/DeviceCredentialService.html" title="class in com.sca4d.app.server.iot">DeviceCredentialService</a></dt>
 <dd>
 <div class="block">判断一组 Device 接入方式是否需要创建固定 Realm Account。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/preference/PreferenceService.html#reset(long,java.lang.String)" class="member-name-link">reset(long, String)</a> - Method in class com.sca4d.app.server.preference.<a href="com/sca4d/app/server/preference/PreferenceService.html" title="class in com.sca4d.app.server.preference">PreferenceService</a></dt>
+<dt><a href="com/sca4d/app/server/preference/PreferenceService.html#reset(long,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">reset(long, TreeCode)</a> - Method in class com.sca4d.app.server.preference.<a href="com/sca4d/app/server/preference/PreferenceService.html" title="class in com.sca4d.app.server.preference">PreferenceService</a></dt>
 <dd>
 <div class="block">删除当前 Principal 的偏好覆盖值并保留递增版本。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/service/SystemSettingService.html#reset(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">reset(TreeCode)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/SystemSettingService.html" title="class in com.sca4d.app.server.service">SystemSettingService</a></dt>
+<dd>
+<div class="block">删除数据库值，使之后的查询恢复 Java 默认值。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/PreferenceController.html#reset(java.lang.Long,java.lang.String)" class="member-name-link">reset(Long, String)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/PreferenceController.html" title="class in com.sca4d.app.server.controllers">PreferenceController</a></dt>
 <dd>
@@ -4705,13 +4892,9 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">删除一个未由初始化节点同步的数据库值并恢复 Java 默认值。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/service/SystemSettingService.html#reset(java.lang.String)" class="member-name-link">reset(String)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/SystemSettingService.html" title="class in com.sca4d.app.server.service">SystemSettingService</a></dt>
-<dd>
-<div class="block">删除数据库值，使后续查询恢复 Java 默认值。</div>
-</dd>
 <dt><a href="com/sca4d/app/server/service/IotApplicationService.html#resetDeviceHmacKey(long)" class="member-name-link">resetDeviceHmacKey(long)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/IotApplicationService.html" title="class in com.sca4d.app.server.service">IotApplicationService</a></dt>
 <dd>
-<div class="block">重置 Device HMAC Key，并终止旧 Session 和连接。</div>
+<div class="block">重置 Device MAC Key，并终止旧 Session 和连接。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/service/IotApplicationService.html#resetDeviceSharedSecret(long)" class="member-name-link">resetDeviceSharedSecret(long)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/IotApplicationService.html" title="class in com.sca4d.app.server.service">IotApplicationService</a></dt>
 <dd>
@@ -4721,7 +4904,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/DeviceCredentialService.html#resetHmacKey(com.sca4d.iot.api.Device)" class="member-name-link">resetHmacKey(Device)</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/DeviceCredentialService.html" title="class in com.sca4d.app.server.iot">DeviceCredentialService</a></dt>
 <dd>
-<div class="block">重置 Device 建立 Session 使用的 HMAC Key。</div>
+<div class="block">重置 Device 建立 Session 使用的 MAC Key。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/iot/IotDeviceController.html#resetSharedSecret(long)" class="member-name-link">resetSharedSecret(long)</a> - Method in class com.sca4d.app.server.controllers.iot.<a href="com/sca4d/app/server/controllers/iot/IotDeviceController.html" title="class in com.sca4d.app.server.controllers.iot">IotDeviceController</a></dt>
 <dd>&nbsp;</dd>
@@ -4748,6 +4931,8 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/app/server/notification/PlatformSmsRecipientResolver.html#resolve(com.sca4d.core.api.notification.NotificationRecipient)" class="member-name-link">resolve(NotificationRecipient)</a> - Method in class com.sca4d.app.server.notification.<a href="com/sca4d/app/server/notification/PlatformSmsRecipientResolver.html" title="class in com.sca4d.app.server.notification">PlatformSmsRecipientResolver</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/entity/PlatformUserProfile.html#RESOURCE_TYPE" class="member-name-link">RESOURCE_TYPE</a> - Static variable in class com.sca4d.app.server.entity.<a href="com/sca4d/app/server/entity/PlatformUserProfile.html" title="class in com.sca4d.app.server.entity">PlatformUserProfile</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/entity/PlatformUserProfile.html#RESOURCE_TYPE_VALUE" class="member-name-link">RESOURCE_TYPE_VALUE</a> - Static variable in class com.sca4d.app.server.entity.<a href="com/sca4d/app/server/entity/PlatformUserProfile.html" title="class in com.sca4d.app.server.entity">PlatformUserProfile</a></dt>
 <dd>
 <div class="block">Platform 用户资料使用的稳定 Resource 类型。</div>
 </dd>
@@ -4760,6 +4945,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/app/server/authentication/AccountAuthenticationSettings.html#reusableAuthenticationMaximumAge()" class="member-name-link">reusableAuthenticationMaximumAge()</a> - Method in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a></dt>
 <dd>
 <div class="block">返回敏感动作允许复用 Session 认证的最大年龄。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaSettings.html#reusableAuthenticationMaximumAge()" class="member-name-link">reusableAuthenticationMaximumAge()</a> - Method in class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaSettings.html" title="class in com.sca4d.app.server.plugin.mfa">MfaSettings</a></dt>
+<dd>
+<div class="block">返回已有认证的最大复用年龄。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/authentication/view/AuthenticationSettingsView.html#revision()" class="member-name-link">revision()</a> - Method in class com.sca4d.app.server.authentication.view.<a href="com/sca4d/app/server/authentication/view/AuthenticationSettingsView.html" title="class in com.sca4d.app.server.authentication.view">AuthenticationSettingsView</a></dt>
 <dd>&nbsp;</dd>
@@ -4836,6 +5025,20 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建完整示例的 OpenAPI 配置。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/plugin/Sca4dServerPluginConfiguration.html" class="type-name-link" title="class in com.sca4d.app.server.plugin">Sca4dServerPluginConfiguration</a> - Class in <a href="com/sca4d/app/server/plugin/package-summary.html">com.sca4d.app.server.plugin</a></dt>
+<dd>
+<div class="block">读取插件作者声明的 `plugin.yml`，映射 Server 元信息并提供每个代次的公开配置。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/Sca4dServerPluginConfiguration.html#%3Cinit%3E(org.springframework.core.env.Environment)" class="member-name-link">Sca4dServerPluginConfiguration(Environment)</a> - Constructor for class com.sca4d.app.server.plugin.<a href="com/sca4d/app/server/plugin/Sca4dServerPluginConfiguration.html" title="class in com.sca4d.app.server.plugin">Sca4dServerPluginConfiguration</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/plugin/Sca4dServerPluginSettings.html" class="type-name-link" title="class in com.sca4d.app.server.plugin">Sca4dServerPluginSettings</a> - Class in <a href="com/sca4d/app/server/plugin/package-summary.html">com.sca4d.app.server.plugin</a></dt>
+<dd>
+<div class="block">保存 Sca4d Server 向一个插件代次公开的不可变运行配置，不暴露 Spring 或部署凭据。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/Sca4dServerPluginSettings.html#%3Cinit%3E(java.lang.String)" class="member-name-link">Sca4dServerPluginSettings(String)</a> - Constructor for class com.sca4d.app.server.plugin.<a href="com/sca4d/app/server/plugin/Sca4dServerPluginSettings.html" title="class in com.sca4d.app.server.plugin">Sca4dServerPluginSettings</a></dt>
+<dd>
+<div class="block">保存宿主应用名称；空白名称不能用于插件的运行诊断。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/platform/PlatformPrincipalSelection.html#select(com.sca4d.core.api.authentication.Session,com.sca4d.core.api.identity.Subject,com.sca4d.core.api.identity.Account,java.util.Map)" class="member-name-link">select(Session, Subject, Account, Map&lt;String, Object&gt;)</a> - Method in class com.sca4d.app.server.platform.<a href="com/sca4d/app/server/platform/PlatformPrincipalSelection.html" title="class in com.sca4d.app.server.platform">PlatformPrincipalSelection</a></dt>
 <dt><a href="com/sca4d/app/server/mapper/PlatformUserProfileMapper.html#select(java.lang.Long)" class="member-name-link">select(Long)</a> - Method in interface com.sca4d.app.server.mapper.<a href="com/sca4d/app/server/mapper/PlatformUserProfileMapper.html" title="interface in com.sca4d.app.server.mapper">PlatformUserProfileMapper</a></dt>
 <dd>
@@ -4875,12 +5078,22 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/authentication/AuthenticationMethodSettings.html#sensitiveActionEnabled()" class="member-name-link">sensitiveActionEnabled()</a> - Method in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AuthenticationMethodSettings.html" title="class in com.sca4d.app.server.authentication">AuthenticationMethodSettings</a></dt>
 <dd>
-<div class="block">返回该方法是否允许认证登录后的敏感动作。</div>
+<div class="block">返回当前方法是否允许认证登录后的敏感动作。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/authentication/AccountAuthenticationSettings.html#sensitiveActionFactorCount()" class="member-name-link">sensitiveActionFactorCount()</a> - Method in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a></dt>
 <dd>
 <div class="block">返回登录后敏感动作所需不同因素数量。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaSettings.html#sensitiveActionFactorCount()" class="member-name-link">sensitiveActionFactorCount()</a> - Method in class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaSettings.html" title="class in com.sca4d.app.server.plugin.mfa">MfaSettings</a></dt>
+<dd>
+<div class="block">返回敏感动作所需独立因素数。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/ServerRuntimeConfiguration.html" class="type-name-link" title="class in com.sca4d.app.server">ServerRuntimeConfiguration</a> - Class in <a href="com/sca4d/app/server/package-summary.html">com.sca4d.app.server</a></dt>
+<dd>
+<div class="block">声明 Sca4d Server 的业务 API、IoT API 和设备接入能力及服务器路径。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/ServerRuntimeConfiguration.html#%3Cinit%3E()" class="member-name-link">ServerRuntimeConfiguration()</a> - Constructor for class com.sca4d.app.server.<a href="com/sca4d/app/server/ServerRuntimeConfiguration.html" title="class in com.sca4d.app.server">ServerRuntimeConfiguration</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/authentication/LoginResult.html#session()" class="member-name-link">session()</a> - Method in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/LoginResult.html" title="class in com.sca4d.app.server.authentication">LoginResult</a></dt>
 <dd>
 <div class="block">返回认证满足后建立的 Session 和 Token。</div>
@@ -4991,10 +5204,6 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/request/IotDeviceRequest.html#setConnectionProtocol(java.lang.String)" class="member-name-link">setConnectionProtocol(String)</a> - Method in class com.sca4d.app.server.iot.request.<a href="com/sca4d/app/server/iot/request/IotDeviceRequest.html" title="class in com.sca4d.app.server.iot.request">IotDeviceRequest</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/app/server/system/request/EmailTemplateRequest.html#setContent(com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">setContent(JsonNode)</a> - Method in class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/EmailTemplateRequest.html" title="class in com.sca4d.app.server.system.request">EmailTemplateRequest</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="com/sca4d/app/server/system/request/PreviewEmailTemplateRequest.html#setContent(com.fasterxml.jackson.databind.JsonNode)" class="member-name-link">setContent(JsonNode)</a> - Method in class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/PreviewEmailTemplateRequest.html" title="class in com.sca4d.app.server.system.request">PreviewEmailTemplateRequest</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/files/request/CreateFileUploadRequest.html#setContentType(java.lang.String)" class="member-name-link">setContentType(String)</a> - Method in class com.sca4d.app.server.files.request.<a href="com/sca4d/app/server/files/request/CreateFileUploadRequest.html" title="class in com.sca4d.app.server.files.request">CreateFileUploadRequest</a></dt>
 <dd>
 <div class="block">设置客户端声明的媒体类型。</div>
@@ -5045,6 +5254,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/system/request/UpdateDictionaryRequest.html#setEnabled(boolean)" class="member-name-link">setEnabled(boolean)</a> - Method in class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/UpdateDictionaryRequest.html" title="class in com.sca4d.app.server.system.request">UpdateDictionaryRequest</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/system/EmailTemplateManagementService.html#setEnabled(long,boolean)" class="member-name-link">setEnabled(long, boolean)</a> - Method in class com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/EmailTemplateManagementService.html" title="class in com.sca4d.app.server.system">EmailTemplateManagementService</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/controllers/system/EmailSenderController.html#setEnabled(long,com.sca4d.app.server.system.request.EmailResourceStatusRequest)" class="member-name-link">setEnabled(long, EmailResourceStatusRequest)</a> - Method in class com.sca4d.app.server.controllers.system.<a href="com/sca4d/app/server/controllers/system/EmailSenderController.html" title="class in com.sca4d.app.server.controllers.system">EmailSenderController</a></dt>
 <dd>
 <div class="block">按 `If-Match` 启用或停用 SMTP 配置；数据库保证最多一个启用配置。</div>
@@ -5082,6 +5293,8 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/app/server/system/request/CreateEmailSenderRequest.html#setHost(java.lang.String)" class="member-name-link">setHost(String)</a> - Method in class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/CreateEmailSenderRequest.html" title="class in com.sca4d.app.server.system.request">CreateEmailSenderRequest</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/system/request/ReplaceEmailSenderRequest.html#setHost(java.lang.String)" class="member-name-link">setHost(String)</a> - Method in class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/ReplaceEmailSenderRequest.html" title="class in com.sca4d.app.server.system.request">ReplaceEmailSenderRequest</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/system/request/EmailTemplateSourceRequest.html#setHtml(java.lang.String)" class="member-name-link">setHtml(String)</a> - Method in class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/EmailTemplateSourceRequest.html" title="class in com.sca4d.app.server.system.request">EmailTemplateSourceRequest</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/request/IotI18nRequest.html#setI18n(com.sca4d.core.api.i18n.LocalizedFields)" class="member-name-link">setI18n(LocalizedFields)</a> - Method in class com.sca4d.app.server.iot.request.<a href="com/sca4d/app/server/iot/request/IotI18nRequest.html" title="class in com.sca4d.app.server.iot.request">IotI18nRequest</a></dt>
 <dd>&nbsp;</dd>
@@ -5138,6 +5351,8 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/app/server/system/request/SendTestEmailRequest.html#setLanguageTag(java.lang.String)" class="member-name-link">setLanguageTag(String)</a> - Method in class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/SendTestEmailRequest.html" title="class in com.sca4d.app.server.system.request">SendTestEmailRequest</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/system/request/SmsBindingRequest.html#setLanguageTag(java.lang.String)" class="member-name-link">setLanguageTag(String)</a> - Method in class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/SmsBindingRequest.html" title="class in com.sca4d.app.server.system.request">SmsBindingRequest</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/system/request/EmailTemplateRequest.html#setLocales(java.util.Map)" class="member-name-link">setLocales(Map&lt;String, EmailTemplateSourceRequest&gt;)</a> - Method in class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/EmailTemplateRequest.html" title="class in com.sca4d.app.server.system.request">EmailTemplateRequest</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/authentication/request/AuthenticationMethodSettingsRequest.html#setLoginAdditionalEnabled(boolean)" class="member-name-link">setLoginAdditionalEnabled(boolean)</a> - Method in class com.sca4d.app.server.authentication.request.<a href="com/sca4d/app/server/authentication/request/AuthenticationMethodSettingsRequest.html" title="class in com.sca4d.app.server.authentication.request">AuthenticationMethodSettingsRequest</a></dt>
 <dd>&nbsp;</dd>
@@ -5283,6 +5498,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/system/request/UpdateDictionaryRequest.html#setSortOrder(int)" class="member-name-link">setSortOrder(int)</a> - Method in class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/UpdateDictionaryRequest.html" title="class in com.sca4d.app.server.system.request">UpdateDictionaryRequest</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/system/request/PreviewEmailTemplateRequest.html#setSource(com.sca4d.app.server.system.request.EmailTemplateSourceRequest)" class="member-name-link">setSource(EmailTemplateSourceRequest)</a> - Method in class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/PreviewEmailTemplateRequest.html" title="class in com.sca4d.app.server.system.request">PreviewEmailTemplateRequest</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/request/IotStatusRequest.html#setStatus(com.sca4d.app.server.iot.IotProfileStatus)" class="member-name-link">setStatus(IotProfileStatus)</a> - Method in class com.sca4d.app.server.iot.request.<a href="com/sca4d/app/server/iot/request/IotStatusRequest.html" title="class in com.sca4d.app.server.iot.request">IotStatusRequest</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/platform/request/ProviderStatusRequest.html#setStatus(com.sca4d.auth.federation.FederatedProviderStatus)" class="member-name-link">setStatus(FederatedProviderStatus)</a> - Method in class com.sca4d.app.server.platform.request.<a href="com/sca4d/app/server/platform/request/ProviderStatusRequest.html" title="class in com.sca4d.app.server.platform.request">ProviderStatusRequest</a></dt>
@@ -5297,15 +5514,25 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/iot/request/IotDeviceScheduleStatusRequest.html#setStatus(com.sca4d.iot.api.schedule.DeviceScheduleStatus)" class="member-name-link">setStatus(DeviceScheduleStatus)</a> - Method in class com.sca4d.app.server.iot.request.<a href="com/sca4d/app/server/iot/request/IotDeviceScheduleStatusRequest.html" title="class in com.sca4d.app.server.iot.request">IotDeviceScheduleStatusRequest</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/system/request/EmailTemplateSourceRequest.html#setSubject(java.lang.String)" class="member-name-link">setSubject(String)</a> - Method in class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/EmailTemplateSourceRequest.html" title="class in com.sca4d.app.server.system.request">EmailTemplateSourceRequest</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/files/request/CreateFileUploadRequest.html#setTargetAccountId(long)" class="member-name-link">setTargetAccountId(long)</a> - Method in class com.sca4d.app.server.files.request.<a href="com/sca4d/app/server/files/request/CreateFileUploadRequest.html" title="class in com.sca4d.app.server.files.request">CreateFileUploadRequest</a></dt>
 <dd>
 <div class="block">设置头像所属的目标 Platform Account 标识。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/system/request/EmailTemplateSourceRequest.html#setText(java.lang.String)" class="member-name-link">setText(String)</a> - Method in class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/EmailTemplateSourceRequest.html" title="class in com.sca4d.app.server.system.request">EmailTemplateSourceRequest</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/request/IotDeviceBindingRequest.html#setThingModelVersion(int)" class="member-name-link">setThingModelVersion(int)</a> - Method in class com.sca4d.app.server.iot.request.<a href="com/sca4d/app/server/iot/request/IotDeviceBindingRequest.html" title="class in com.sca4d.app.server.iot.request">IotDeviceBindingRequest</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/request/IotDeviceRequest.html#setThingModelVersion(int)" class="member-name-link">setThingModelVersion(int)</a> - Method in class com.sca4d.app.server.iot.request.<a href="com/sca4d/app/server/iot/request/IotDeviceRequest.html" title="class in com.sca4d.app.server.iot.request">IotDeviceRequest</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/system/ManagedSetting.html#setting()" class="member-name-link">setting()</a> - Method in class com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/ManagedSetting.html" title="class in com.sca4d.app.server.system">ManagedSetting</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaFacts.html#settings(long)" class="member-name-link">settings(long)</a> - Method in interface com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaFacts.html" title="interface in com.sca4d.app.server.plugin.mfa">MfaFacts</a></dt>
+<dd>
+<div class="block">返回当前账号保存或默认的 MFA 设置。</div>
+</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaFactsService.html#settings(long)" class="member-name-link">settings(long)</a> - Method in class com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaFactsService.html" title="class in com.sca4d.app.server.plugin.mfa">MfaFactsService</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/controllers/AccountAuthenticationSettingsController.html#settings(com.sca4d.core.api.identity.Account)" class="member-name-link">settings(Account)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/AccountAuthenticationSettingsController.html" title="class in com.sca4d.app.server.controllers">AccountAuthenticationSettingsController</a></dt>
 <dd>
@@ -5316,10 +5543,14 @@ loadScripts(document, 'script');</script>
 <div class="block">查询协议配置摘要，不返回 Client Secret。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/audit/SystemOperations.html#SETTINGS_MANAGE" class="member-name-link">SETTINGS_MANAGE</a> - Static variable in class com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/SystemOperations.html" title="class in com.sca4d.app.server.audit">SystemOperations</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/audit/SystemOperations.html#SETTINGS_MANAGE_VALUE" class="member-name-link">SETTINGS_MANAGE_VALUE</a> - Static variable in class com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/SystemOperations.html" title="class in com.sca4d.app.server.audit">SystemOperations</a></dt>
 <dd>
 <div class="block">修改系统设置。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/audit/SystemOperations.html#SETTINGS_READ" class="member-name-link">SETTINGS_READ</a> - Static variable in class com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/SystemOperations.html" title="class in com.sca4d.app.server.audit">SystemOperations</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/audit/SystemOperations.html#SETTINGS_READ_VALUE" class="member-name-link">SETTINGS_READ_VALUE</a> - Static variable in class com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/SystemOperations.html" title="class in com.sca4d.app.server.audit">SystemOperations</a></dt>
 <dd>
 <div class="block">读取系统设置。</div>
 </dd>
@@ -5369,6 +5600,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/system/request/UpdateDictionaryRequest.html#setVersion(long)" class="member-name-link">setVersion(long)</a> - Method in class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/UpdateDictionaryRequest.html" title="class in com.sca4d.app.server.system.request">UpdateDictionaryRequest</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/iot/AppIotProperties.Emqx.html#setWebhookSecret(java.lang.String)" class="member-name-link">setWebhookSecret(String)</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/AppIotProperties.Emqx.html" title="class in com.sca4d.app.server.iot">AppIotProperties.Emqx</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/request/IotDeviceScheduleRequest.html#setZoneId(java.lang.String)" class="member-name-link">setZoneId(String)</a> - Method in class com.sca4d.app.server.iot.request.<a href="com/sca4d/app/server/iot/request/IotDeviceScheduleRequest.html" title="class in com.sca4d.app.server.iot.request">IotDeviceScheduleRequest</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/DeviceCredentialService.html#SHARED_SECRET" class="member-name-link">SHARED_SECRET</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/DeviceCredentialService.html" title="class in com.sca4d.app.server.iot">DeviceCredentialService</a></dt>
@@ -5381,13 +5614,17 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/IotHttpHeaders.html#SIGNATURE" class="member-name-link">SIGNATURE</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotHttpHeaders.html" title="class in com.sca4d.app.server.iot">IotHttpHeaders</a></dt>
 <dd>
-<div class="block">Device HMAC 请求提交签名的 Header。</div>
+<div class="block">Device MAC 请求提交签名的 Header。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/audit/SystemOperations.html#SMS_MANAGE" class="member-name-link">SMS_MANAGE</a> - Static variable in class com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/SystemOperations.html" title="class in com.sca4d.app.server.audit">SystemOperations</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/audit/SystemOperations.html#SMS_MANAGE_VALUE" class="member-name-link">SMS_MANAGE_VALUE</a> - Static variable in class com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/SystemOperations.html" title="class in com.sca4d.app.server.audit">SystemOperations</a></dt>
 <dd>
 <div class="block">管理 SMS Provider 与传输绑定。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/audit/SystemOperations.html#SMS_READ" class="member-name-link">SMS_READ</a> - Static variable in class com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/SystemOperations.html" title="class in com.sca4d.app.server.audit">SystemOperations</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/audit/SystemOperations.html#SMS_READ_VALUE" class="member-name-link">SMS_READ_VALUE</a> - Static variable in class com.sca4d.app.server.audit.<a href="com/sca4d/app/server/audit/SystemOperations.html" title="class in com.sca4d.app.server.audit">SystemOperations</a></dt>
 <dd>
 <div class="block">读取 SMS Provider 与传输绑定。</div>
 </dd>
@@ -5406,7 +5643,9 @@ loadScripts(document, 'script');</script>
 <div class="block">接收匿名登录调用方已经知道的规范 E.164 手机号。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/authentication/request/SmsCodeChallengeRequest.html#%3Cinit%3E()" class="member-name-link">SmsCodeChallengeRequest()</a> - Constructor for class com.sca4d.app.server.authentication.request.<a href="com/sca4d/app/server/authentication/request/SmsCodeChallengeRequest.html" title="class in com.sca4d.app.server.authentication.request">SmsCodeChallengeRequest</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">创建空的请求对象，供 JSON 绑定使用。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/authentication/view/SmsCodeChallengeView.html" class="type-name-link" title="class in com.sca4d.app.server.authentication.view">SmsCodeChallengeView</a> - Class in <a href="com/sca4d/app/server/authentication/view/package-summary.html">com.sca4d.app.server.authentication.view</a></dt>
 <dd>
 <div class="block">返回不包含完整手机号和验证码的 SMS Challenge。</div>
@@ -5424,13 +5663,17 @@ loadScripts(document, 'script');</script>
 <div class="block">接收 SMS Challenge 标识和只在当前认证调用中使用的六位验证码。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/authentication/request/SmsCodeProofRequest.html#%3Cinit%3E()" class="member-name-link">SmsCodeProofRequest()</a> - Constructor for class com.sca4d.app.server.authentication.request.<a href="com/sca4d/app/server/authentication/request/SmsCodeProofRequest.html" title="class in com.sca4d.app.server.authentication.request">SmsCodeProofRequest</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">创建空的请求对象，供 JSON 绑定使用。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/controllers/system/SmsProviderController.html" class="type-name-link" title="class in com.sca4d.app.server.controllers.system">SmsProviderController</a> - Class in <a href="com/sca4d/app/server/controllers/system/package-summary.html">com.sca4d.app.server.controllers.system</a></dt>
 <dd>
 <div class="block">管理 SMS Provider 实例和供应商模板绑定，不接收或返回 AccessKey。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/system/SmsProviderController.html#%3Cinit%3E(com.sca4d.notification.sms.SmsConfigurationService)" class="member-name-link">SmsProviderController(SmsConfigurationService)</a> - Constructor for class com.sca4d.app.server.controllers.system.<a href="com/sca4d/app/server/controllers/system/SmsProviderController.html" title="class in com.sca4d.app.server.controllers.system">SmsProviderController</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">创建 SMS Provider 管理控制器。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/system/request/SmsProviderRequest.html" class="type-name-link" title="class in com.sca4d.app.server.system.request">SmsProviderRequest</a> - Class in <a href="com/sca4d/app/server/system/request/package-summary.html">com.sca4d.app.server.system.request</a></dt>
 <dd>
 <div class="block">接收 SMS Provider 的类型、凭据引用和选择优先级。</div>
@@ -5445,10 +5688,12 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/system/ManagedDictionary.html#sortOrder()" class="member-name-link">sortOrder()</a> - Method in class com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/ManagedDictionary.html" title="class in com.sca4d.app.server.system">ManagedDictionary</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/system/request/EmailTemplateSourceRequest.html#source()" class="member-name-link">source()</a> - Method in class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/EmailTemplateSourceRequest.html" title="class in com.sca4d.app.server.system.request">EmailTemplateSourceRequest</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/protocol/StandardClimateDeviceProtocol.html" class="type-name-link" title="class in com.sca4d.app.server.iot.protocol">StandardClimateDeviceProtocol</a> - Class in <a href="com/sca4d/app/server/iot/protocol/package-summary.html">com.sca4d.app.server.iot.protocol</a></dt>
 <dd>
 <div class="block">定义规范温控器的稳定 JSON 信封，并把 JSON 字段映射为标准物模型 code。
- 该类负责该设备的 Topic、字段名称和信封版本。</div>
+ 当前协议负责该设备的 Topic、字段名称和信封版本。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/service/PlatformLoginService.html#start(com.sca4d.core.api.authentication.AuthenticationSubmission)" class="member-name-link">start(AuthenticationSubmission&lt;?&gt;)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformLoginService.html" title="class in com.sca4d.app.server.service">PlatformLoginService</a></dt>
 <dd>
@@ -5490,7 +5735,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/app/server/service/PlatformLoginService.html#submit(com.sca4d.core.api.authentication.AuthenticationAttemptId,com.sca4d.core.api.authentication.AuthenticationSubmission)" class="member-name-link">submit(AuthenticationAttemptId, AuthenticationSubmission&lt;?&gt;)</a> - Method in class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/PlatformLoginService.html" title="class in com.sca4d.app.server.service">PlatformLoginService</a></dt>
 <dd>
-<div class="block">向已有登录尝试提交一个后续认证材料。</div>
+<div class="block">向已有登录尝试提交一个附加认证材料。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/iot/IotDeviceController.html#submitCommand(long,java.lang.String,java.util.Map)" class="member-name-link">submitCommand(long, String, Map&lt;String, Object&gt;)</a> - Method in class com.sca4d.app.server.controllers.iot.<a href="com/sca4d/app/server/controllers/iot/IotDeviceController.html" title="class in com.sca4d.app.server.controllers.iot">IotDeviceController</a></dt>
 <dd>&nbsp;</dd>
@@ -5584,7 +5829,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">管理当前应用注册的 SystemSetting，不允许请求创建未声明的任意键。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/service/SystemSettingService.html#%3Cinit%3E(com.sca4d.core.spring.setting.SettingCatalog,com.sca4d.core.api.setting.Settings)" class="member-name-link">SystemSettingService(SettingCatalog, Settings)</a> - Constructor for class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/SystemSettingService.html" title="class in com.sca4d.app.server.service">SystemSettingService</a></dt>
+<dt><a href="com/sca4d/app/server/service/SystemSettingService.html#%3Cinit%3E(com.sca4d.core.spring.setting.SettingCatalog)" class="member-name-link">SystemSettingService(SettingCatalog)</a> - Constructor for class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/SystemSettingService.html" title="class in com.sca4d.app.server.service">SystemSettingService</a></dt>
 <dd>
 <div class="block">创建系统设置应用服务。</div>
 </dd>
@@ -5627,7 +5872,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/iot/IotHttpHeaders.html#TIMESTAMP" class="member-name-link">TIMESTAMP</a> - Static variable in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/IotHttpHeaders.html" title="class in com.sca4d.app.server.iot">IotHttpHeaders</a></dt>
 <dd>
-<div class="block">Device HMAC 请求提交 Unix 秒时间戳的 Header。</div>
+<div class="block">Device MAC 请求提交 Unix 秒时间戳的 Header。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/platform/request/ProviderSettingsRequest.html#toConfiguration(com.sca4d.auth.federation.FederatedProviderProtocol)" class="member-name-link">toConfiguration(FederatedProviderProtocol)</a> - Method in class com.sca4d.app.server.platform.request.<a href="com/sca4d/app/server/platform/request/ProviderSettingsRequest.html" title="class in com.sca4d.app.server.platform.request">ProviderSettingsRequest</a></dt>
 <dd>
@@ -5667,7 +5912,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">注册新 TOTP 凭据的动作编码。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/ProductSettings.html#TOTP_ISSUER" class="member-name-link">TOTP_ISSUER</a> - Static variable in class com.sca4d.app.server.<a href="com/sca4d/app/server/ProductSettings.html" title="class in com.sca4d.app.server">ProductSettings</a></dt>
+<dt><a href="com/sca4d/app/server/ProductSettings.html#TOTP_ISSUER" class="member-name-link">TOTP_ISSUER</a> - Variable in class com.sca4d.app.server.<a href="com/sca4d/app/server/ProductSettings.html" title="class in com.sca4d.app.server">ProductSettings</a></dt>
 <dd>
 <div class="block">身份验证器中显示的 TOTP 发行者。</div>
 </dd>
@@ -5679,7 +5924,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">组合 TOTP 模块与示例应用认证规则，限定所有自助操作属于当前 Account。</div>
 </dd>
-<dt><a href="com/sca4d/app/server/service/TotpAccountService.html#%3Cinit%3E(com.sca4d.auth.totp.enrollment.TotpEnrollmentService,com.sca4d.auth.totp.credential.TotpCredentialRepository,com.sca4d.app.server.service.PlatformAuthenticationPolicyService,com.sca4d.app.server.authentication.TotpQrCodeGenerator,com.sca4d.core.api.setting.Settings)" class="member-name-link">TotpAccountService(TotpEnrollmentService, TotpCredentialRepository, PlatformAuthenticationPolicyService, TotpQrCodeGenerator, Settings)</a> - Constructor for class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/TotpAccountService.html" title="class in com.sca4d.app.server.service">TotpAccountService</a></dt>
+<dt><a href="com/sca4d/app/server/service/TotpAccountService.html#%3Cinit%3E(com.sca4d.auth.totp.enrollment.TotpEnrollmentService,com.sca4d.auth.totp.credential.TotpCredentialRepository,com.sca4d.app.server.service.PlatformAuthenticationPolicyService,com.sca4d.app.server.authentication.TotpQrCodeGenerator,com.sca4d.app.server.ProductSettings)" class="member-name-link">TotpAccountService(TotpEnrollmentService, TotpCredentialRepository, PlatformAuthenticationPolicyService, TotpQrCodeGenerator, ProductSettings)</a> - Constructor for class com.sca4d.app.server.service.<a href="com/sca4d/app/server/service/TotpAccountService.html" title="class in com.sca4d.app.server.service">TotpAccountService</a></dt>
 <dd>
 <div class="block">创建当前 Account TOTP 应用服务。</div>
 </dd>
@@ -5728,10 +5973,12 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/platform/PlatformPhoneAccountIdentifierNormalizer.html#type()" class="member-name-link">type()</a> - Method in class com.sca4d.app.server.platform.<a href="com/sca4d/app/server/platform/PlatformPhoneAccountIdentifierNormalizer.html" title="class in com.sca4d.app.server.platform">PlatformPhoneAccountIdentifierNormalizer</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/plugin/Sca4dServerPluginConfiguration.html#type()" class="member-name-link">type()</a> - Method in class com.sca4d.app.server.plugin.<a href="com/sca4d/app/server/plugin/Sca4dServerPluginConfiguration.html" title="class in com.sca4d.app.server.plugin">Sca4dServerPluginConfiguration</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:U">U</h2>
 <dl class="index">
-<dt><a href="com/sca4d/app/server/preference/AdminPreferenceConfiguration.html#UI_PREFERENCES" class="member-name-link">UI_PREFERENCES</a> - Static variable in class com.sca4d.app.server.preference.<a href="com/sca4d/app/server/preference/AdminPreferenceConfiguration.html" title="class in com.sca4d.app.server.preference">AdminPreferenceConfiguration</a></dt>
+<dt><a href="com/sca4d/app/server/preference/AdminPreferenceConfiguration.html#UI_PREFERENCES" class="member-name-link">UI_PREFERENCES</a> - Variable in class com.sca4d.app.server.preference.<a href="com/sca4d/app/server/preference/AdminPreferenceConfiguration.html" title="class in com.sca4d.app.server.preference">AdminPreferenceConfiguration</a></dt>
 <dd>
 <div class="block">Vben 管理端完整偏好 JSON。</div>
 </dd>
@@ -5739,6 +5986,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">解绑当前账号的外部身份；调用前必须完成动作认证。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/plugin/Sca4dServerPluginConfiguration.html#unload(com.sca4d.core.api.plugin.PluginConfigurationSnapshot)" class="member-name-link">unload(PluginConfigurationSnapshot&lt;Sca4dServerPluginSettings&gt;)</a> - Method in class com.sca4d.app.server.plugin.<a href="com/sca4d/app/server/plugin/Sca4dServerPluginConfiguration.html" title="class in com.sca4d.app.server.plugin">Sca4dServerPluginConfiguration</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/controllers/iot/IotProductController.html#update(long,com.sca4d.app.server.iot.request.IotProductChangeRequest)" class="member-name-link">update(long, IotProductChangeRequest)</a> - Method in class com.sca4d.app.server.controllers.iot.<a href="com/sca4d/app/server/controllers/iot/IotProductController.html" title="class in com.sca4d.app.server.controllers.iot">IotProductController</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/controllers/platform/PlatformAccountController.html#update(long,com.sca4d.app.server.platform.request.UpdatePlatformAccountRequest,java.lang.Long)" class="member-name-link">update(long, UpdatePlatformAccountRequest, Long)</a> - Method in class com.sca4d.app.server.controllers.platform.<a href="com/sca4d/app/server/controllers/platform/PlatformAccountController.html" title="class in com.sca4d.app.server.controllers.platform">PlatformAccountController</a></dt>
@@ -5846,6 +6095,18 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:V">V</h2>
 <dl class="index">
+<dt><a href="db/migration/V13__normalize_setting_codes.html" class="type-name-link" title="class in db.migration">V13__normalize_setting_codes</a> - Class in <a href="db/migration/package-summary.html">db.migration</a></dt>
+<dd>
+<div class="block">由 Flyway 将旧设置键转换为严格 TreeCode，并重绑敏感值的加密用途。</div>
+</dd>
+<dt><a href="db/migration/V13__normalize_setting_codes.html#%3Cinit%3E()" class="member-name-link">V13__normalize_setting_codes()</a> - Constructor for class db.migration.<a href="db/migration/V13__normalize_setting_codes.html" title="class in db.migration">V13__normalize_setting_codes</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="db/migration/V13__normalize_setting_codes.html#%3Cinit%3E(com.sca4d.core.api.security.SecretKeyring)" class="member-name-link">V13__normalize_setting_codes(SecretKeyring)</a> - Constructor for class db.migration.<a href="db/migration/V13__normalize_setting_codes.html" title="class in db.migration">V13__normalize_setting_codes</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/plugin/mfa/MfaPolicy.html#validate(long,com.sca4d.app.server.plugin.mfa.MfaSettings)" class="member-name-link">validate(long, MfaSettings)</a> - Method in interface com.sca4d.app.server.plugin.mfa.<a href="com/sca4d/app/server/plugin/mfa/MfaPolicy.html" title="interface in com.sca4d.app.server.plugin.mfa">MfaPolicy</a></dt>
+<dd>
+<div class="block">检查候选设置是否能由已安装且可用的方法满足；非法时抛出异常。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/iot/DeviceCredentialService.html#validateActivation(com.sca4d.iot.api.Device,com.sca4d.core.api.identity.Account)" class="member-name-link">validateActivation(Device, Account)</a> - Method in class com.sca4d.app.server.iot.<a href="com/sca4d/app/server/iot/DeviceCredentialService.html" title="class in com.sca4d.app.server.iot">DeviceCredentialService</a></dt>
 <dd>
 <div class="block">校验 Device 当前接入方式已经具备启用所需的 Account 和 Credential。</div>
@@ -5903,16 +6164,21 @@ the order they are declared.</div>
 the order they are declared.</div>
 </dd>
 <dt><a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingsCodec.html#valueType()" class="member-name-link">valueType()</a> - Method in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingsCodec.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettingsCodec</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/system/request/PreviewEmailTemplateRequest.html#variables()" class="member-name-link">variables()</a> - Method in class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/PreviewEmailTemplateRequest.html" title="class in com.sca4d.app.server.system.request">PreviewEmailTemplateRequest</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/system/request/SendTestEmailRequest.html#variables()" class="member-name-link">variables()</a> - Method in class com.sca4d.app.server.system.request.<a href="com/sca4d/app/server/system/request/SendTestEmailRequest.html" title="class in com.sca4d.app.server.system.request">SendTestEmailRequest</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/app/server/system/EmailTemplateManagementService.html#variables(java.util.Map)" class="member-name-link">variables(Map&lt;String, EmailTemplateSource&gt;)</a> - Method in class com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/EmailTemplateManagementService.html" title="class in com.sca4d.app.server.system">EmailTemplateManagementService</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/controllers/EmailCodeController.html#verification(java.lang.String,com.sca4d.core.api.authentication.Session,com.sca4d.app.server.authentication.request.EmailCodeProofRequest)" class="member-name-link">verification(String, Session, EmailCodeProofRequest)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/EmailCodeController.html" title="class in com.sca4d.app.server.controllers">EmailCodeController</a></dt>
 <dd>
 <div class="block">向当前 Session 所属动作认证提交 Email Code。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/SmsCodeController.html#verification(java.lang.String,com.sca4d.core.api.authentication.Session,com.sca4d.app.server.authentication.request.SmsCodeProofRequest)" class="member-name-link">verification(String, Session, SmsCodeProofRequest)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/SmsCodeController.html" title="class in com.sca4d.app.server.controllers">SmsCodeController</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">向当前会话的敏感动作认证尝试提交 SMS 验证码。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/authentication/AuthenticationHttpContract.html#VERIFICATION_HEADER" class="member-name-link">VERIFICATION_HEADER</a> - Static variable in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AuthenticationHttpContract.html" title="class in com.sca4d.app.server.authentication">AuthenticationHttpContract</a></dt>
 <dd>
 <div class="block">携带已经满足当前接口动作认证要求的单次验证标识。</div>
@@ -5922,7 +6188,9 @@ the order they are declared.</div>
 <div class="block">为当前 Session 所属动作认证签发 Email Code Challenge。</div>
 </dd>
 <dt><a href="com/sca4d/app/server/controllers/SmsCodeController.html#verificationChallenge(java.lang.String,com.sca4d.core.api.authentication.Session)" class="member-name-link">verificationChallenge(String, Session)</a> - Method in class com.sca4d.app.server.controllers.<a href="com/sca4d/app/server/controllers/SmsCodeController.html" title="class in com.sca4d.app.server.controllers">SmsCodeController</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">为当前会话的敏感动作认证尝试签发 SMS Challenge。</div>
+</dd>
 <dt><a href="com/sca4d/app/server/authentication/view/VerificationView.html" class="type-name-link" title="class in com.sca4d.app.server.authentication.view">VerificationView</a> - Class in <a href="com/sca4d/app/server/authentication/view/package-summary.html">com.sca4d.app.server.authentication.view</a></dt>
 <dd>
 <div class="block">向 HTTP 暴露敏感 verification 的标识、状态、可用因素和过期时间。</div>
@@ -5937,6 +6205,8 @@ the order they are declared.</div>
 <dd>
 <div class="block">在 SMS Code 动作认证完成后把当前 Profile 手机号写成唯一启用 PHONE Identifier。</div>
 </dd>
+<dt><a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingsCodec.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.app.server.authentication.<a href="com/sca4d/app/server/authentication/AccountAuthenticationSettingsCodec.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettingsCodec</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/system/ManagedDictionary.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/ManagedDictionary.html" title="class in com.sca4d.app.server.system">ManagedDictionary</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/app/server/system/ManagedDictionaryOption.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.app.server.system.<a href="com/sca4d/app/server/system/ManagedDictionaryOption.html" title="class in com.sca4d.app.server.system">ManagedDictionaryOption</a></dt>

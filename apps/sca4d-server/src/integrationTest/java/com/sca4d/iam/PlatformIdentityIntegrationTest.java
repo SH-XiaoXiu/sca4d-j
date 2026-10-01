@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationActionCode;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.AuthenticationPolicy;
 import com.sca4d.core.api.authentication.AuthenticationRequirement;
 import com.sca4d.core.api.authentication.SessionControl;
@@ -19,6 +18,7 @@ import com.sca4d.core.api.identity.AccountIdentifierType;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.core.spring.web.RequestVersionConditions;
 import com.sca4d.iam.base.PlatformAccountEntry;
@@ -38,6 +38,7 @@ import com.sca4d.iam.rbac.Role;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -63,7 +64,7 @@ import java.util.Set;
 @Sql(statements = "TRUNCATE TABLE auth_password_secret, auth_password_credential, platform_acl_entry, platform_principal_role, platform_role_permission, platform_role, iam_account_identifier, iam_account_principal, iam_principal, iam_account, iam_subject CASCADE", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @SpringBootTest(classes = PlatformIdentityIntegrationTest.TestApplication.class, properties = {
         "sca4dj.iam.bootstrap.enabled=false",
-        "sca4dj.auth.password.bootstrap-enabled=false",
+        "sca4dj.auth.password.bootstrap.enabled=false",
         "spring.autoconfigure.exclude=com.sca4d.messaging.config.MessagingAutoConfiguration,com.sca4d.web.realtime.config.WebRealtimeAutoConfiguration,com.sca4d.notification.config.NotificationAutoConfiguration,com.sca4d.notification.email.config.EmailNotificationAutoConfiguration,com.sca4d.auth.email.config.EmailCodeAutoConfiguration,com.sca4d.iot.config.IotAutoConfiguration,com.sca4d.iot.config.IotWorkerAutoConfiguration,com.sca4d.iot.emqx.config.EmqxAutoConfiguration,com.sca4d.iot.config.TimescaleIotAutoConfiguration"
 })
 @SuppressWarnings({
@@ -94,11 +95,11 @@ class PlatformIdentityIntegrationTest {
                 }
 
                 @Override
-                public @NotNull Set<AuthenticationMethodCode> allowedMethods(
+                public @NotNull Set<TreeCode> allowedMethods(
                         @NotNull Account account,
                         @NotNull AuthenticationActionCode actionCode,
                         @NotNull List<Authentication> completedAuthentications) {
-                    return Set.of(new AuthenticationMethodCode("password"));
+                    return Set.of(TreeCode.ofSlash("AUTHENTICATION/PASSWORD"));
                 }
             };
         }
@@ -106,7 +107,7 @@ class PlatformIdentityIntegrationTest {
         @Bean
         @Primary
         SessionControl testSessionControl() {
-            return org.mockito.Mockito.mock(SessionControl.class);
+            return Mockito.mock(SessionControl.class);
         }
     }
 

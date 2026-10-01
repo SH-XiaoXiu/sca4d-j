@@ -8,13 +8,12 @@ import java.util.Objects;
 
 /** 读取应用支持的语言标签和默认语言标签。 */
 @ConfigurationProperties("sca4dj.i18n")
-public final class I18nProperties {
+public class I18nProperties {
 
     private List<String> supportedLocales = new ArrayList<>();
 
     private String defaultLocale = "";
 
-    /** 创建等待 Spring 绑定 {@code sca4dj.i18n} 配置的对象。 */
     public I18nProperties() {
     }
 
@@ -37,7 +36,7 @@ public final class I18nProperties {
     }
 
     /**
-     * 读取请求语言均不受支持时使用的标签。
+     * 请求语言均不受支持时使用的标签。
      *
      * @return 应用默认 BCP 47 语言标签
      */

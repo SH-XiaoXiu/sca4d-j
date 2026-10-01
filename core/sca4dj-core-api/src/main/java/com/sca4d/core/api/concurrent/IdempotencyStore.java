@@ -48,6 +48,16 @@ public interface IdempotencyStore {
             @NotNull Duration retention);
 
     /**
+     * 仅在 token 仍持有处理中记录时延长租约。
+     *
+     * @param key 幂等键
+     * @param token 当前处理所有权 token
+     * @param processingTtl 从本次续期开始重新计算的处理租约
+     * @return 记录仍归当前 token 所有且成功续期时为 true
+     */
+    boolean renew(@NotNull IdempotencyKey key, @NotNull String token, @NotNull Duration processingTtl);
+
+    /**
      * 仅在 token 仍拥有处理中记录时原子释放失败执行的所有权。
      *
      * @param key {@link #begin} 使用的幂等键

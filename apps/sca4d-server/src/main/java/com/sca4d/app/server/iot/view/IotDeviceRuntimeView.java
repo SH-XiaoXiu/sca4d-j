@@ -1,5 +1,7 @@
 package com.sca4d.app.server.iot.view;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import com.sca4d.app.server.iot.IotDeviceRuntimeDetails;
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.iot.api.connection.DeviceConnection;
@@ -18,7 +20,7 @@ import java.util.Objects;
 
 /** 返回 Device 当前连接、reported 和 desired 三类可重新读取的运行投影。 */
 @SuppressWarnings("unused")
-public final class IotDeviceRuntimeView {
+public class IotDeviceRuntimeView {
 
     private final @NotNull @Unmodifiable List<Connection> connections;
 
@@ -45,7 +47,7 @@ public final class IotDeviceRuntimeView {
         return new IotDeviceRuntimeView(details);
     }
 
-    /** @return 当前仍有效的连接事实 */
+    /** @return 当前仍有效的连接信息 */
     public @NotNull @Unmodifiable List<Connection> getConnections() {
         return List.copyOf(connections);
     }
@@ -65,8 +67,8 @@ public final class IotDeviceRuntimeView {
         return List.copyOf(desired);
     }
 
-    /** 返回一条当前 Device 连接事实。 */
-    public static final class Connection {
+    /** 返回一条当前 Device 连接信息。 */
+    public static class Connection {
 
         private final @NotNull String connectionId;
 
@@ -78,12 +80,12 @@ public final class IotDeviceRuntimeView {
 
         private final @NotNull Instant connectedAt;
 
-        /** 从协议无关连接事实创建 HTTP 视图。 */
+        /** 从协议无关的连接信息创建 HTTP 视图。 */
         private Connection(@NotNull DeviceConnection connection) {
             this.connectionId = connection.id().value();
             this.protocol = connection.protocol().code();
             this.sessionId = connection.sessionId().map(SessionId::value).orElse(null);
-            this.accessMethodCode = connection.accessMethod().code();
+            this.accessMethodCode = connection.accessMethod().code().format(COLON);
             this.connectedAt = connection.connectedAt();
         }
 
@@ -114,7 +116,7 @@ public final class IotDeviceRuntimeView {
     }
 
     /** 返回一个 reported 字段组当前快照。 */
-    public static final class Reported {
+    public static class Reported {
 
         private final @NotNull String groupCode;
 
@@ -162,7 +164,7 @@ public final class IotDeviceRuntimeView {
     }
 
     /** 返回一个 desired 属性当前快照。 */
-    public static final class Desired {
+    public static class Desired {
 
         private final @NotNull String propertyCode;
 

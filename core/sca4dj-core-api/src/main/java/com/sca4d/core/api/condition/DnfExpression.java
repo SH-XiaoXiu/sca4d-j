@@ -4,75 +4,90 @@ import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.Executor;
 
-/**
- * 保存任意一个 Clause 满足即可通过的析取范式表达式。
- *
- * @param <T> 各 Clause 检查的输入类型
- */
-@SuppressWarnings({"ClassCanBeRecord", "unused"})
-public final class DnfExpression<T> implements Predicate<T> {
+/** 保存按顺序选择第一个命中 Clause 的析取规则表达式。 */
+public class DnfExpression<T, R> {
 
-    private final List<DnfClause<T>> clauses;
+    private final List<DnfClause<T, R>> clauses;
 
-    /**
-     * 创建按登记顺序执行的析取表达式。
-     *
-     * @param clauses 任意一个满足即可通过的 Clause；空集合表示恒假
-     */
-    public DnfExpression(@NotNull List<DnfClause<T>> clauses) {
+    /** 创建按登记顺序执行的析取表达式；空集合表示没有命中结果。 */
+    public DnfExpression(@NotNull List<DnfClause<T, R>> clauses) {
         Objects.requireNonNull(clauses, "DNF Clause 不能为空");
         this.clauses = List.copyOf(clauses);
         if (this.clauses.stream().anyMatch(Objects::isNull)) {
             throw new NullPointerException("DNF Clause 不能包含 null");
         }
+        long distinctCodes = this.clauses.stream().map(DnfClause::code).distinct().count();
+        if (distinctCodes != this.clauses.size()) {
+            throw new IllegalArgumentException("DNF Clause 编码不能重复");
+        }
     }
 
-    /**
-     * 创建包含指定 Clause 的析取表达式。
-     *
-     * @param clauses 任意一个满足即可通过的 Clause
-     * @param <T> 待判断值类型
-     * @return 新的析取表达式
-     */
+    /** 创建任意一个 Clause 命中即可产生结果的表达式。 */
     @SafeVarargs
     @CheckReturnValue
-    public static <T> @NotNull DnfExpression<T> anyOf(@NotNull DnfClause<T>... clauses) {
-        return new DnfExpression<>(List.of(clauses));
+    public static <T, R> @NotNull DnfExpression<T, R> anyOf(
+            @NotNull DnfClause<T, R>... clauses) {
+        return new DnfExpression<>(Arrays.asList(clauses));
     }
 
-    /**
-     * 创建恒真表达式。
-     *
-     * @param <T> 待判断值类型
-     * @return 包含一个空 Clause 的表达式
-     */
+    /** 创建包含一个恒真 Clause 的表达式。 */
     @CheckReturnValue
-    public static <T> @NotNull DnfExpression<T> always() {
-        return new DnfExpression<>(List.of(new DnfClause<>(List.of())));
+    public static <T, R> @NotNull DnfExpression<T, R> always(
+            @NotNull String code,
+            @NotNull R result) {
+        return new DnfExpression<>(List.of(DnfClause.allOf(code, result)));
     }
 
     /**
-     * 读取该表达式按登记顺序检查的全部 Clause。
+     * 保持声明顺序的 Clause。
      *
-     * @return 保持登记顺序的不可变 Clause 列表
+     * @return 保持声明顺序的 Clause
      */
-    public @Unmodifiable @NotNull List<DnfClause<T>> clauses() {
+    public @Unmodifiable @NotNull List<DnfClause<T, R>> clauses() {
         return clauses;
     }
 
-    /**
-     * 按登记顺序短路判断全部 Clause。
-     *
-     * @param value 待判断值
-     * @return 任意 Clause 满足时返回 {@code true}
-     */
-    @Override
-    public boolean test(@NotNull T value) {
-        Objects.requireNonNull(value, "DNF 待判断值不能为空");
-        return clauses.stream().anyMatch(clause -> clause.test(value));
+    /** 返回第一个命中的 Clause。 */
+    @CheckReturnValue
+    public @NotNull Optional<DnfClause<T, R>> matchingClause(@NotNull T value) {
+        Objects.requireNonNull(value, "DNF 输入不能为空");
+        return clauses.stream().filter(clause -> clause.matches(value)).findFirst();
+    }
+
+    /** 返回第一个命中 Clause 的结果。 */
+    @CheckReturnValue
+    public @NotNull Optional<R> evaluate(@NotNull T value) {
+        return matchingClause(value).map(DnfClause::result);
+    }
+
+    /** 并行计算条件后按 Clause 声明顺序选择第一个命中结果。 */
+    @CheckReturnValue
+    public @NotNull CompletionStage<Optional<R>> evaluateAsync(
+            @NotNull T value,
+            @NotNull Executor executor) {
+        Objects.requireNonNull(value, "DNF 输入不能为空");
+        Objects.requireNonNull(executor, "DNF 执行器不能为空");
+        List<CompletionStage<Boolean>> stages = clauses.stream()
+                .map(clause -> clause.matchesAsync(value, executor))
+                .toList();
+        CompletableFuture<?>[] futures = stages.stream()
+                .map(CompletionStage::toCompletableFuture)
+                .toArray(CompletableFuture[]::new);
+        return CompletableFuture.allOf(futures).thenApply(ignored -> {
+            for (int index = 0; index < clauses.size(); index++) {
+                if (stages.get(index).toCompletableFuture().join()) {
+                    return Optional.of(clauses.get(index).result());
+                }
+            }
+            return Optional.empty();
+        });
     }
 }

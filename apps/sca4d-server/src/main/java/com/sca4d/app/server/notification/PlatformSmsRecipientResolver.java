@@ -4,7 +4,6 @@ import com.sca4d.app.server.entity.PlatformUserProfile;
 import com.sca4d.app.server.service.PlatformUserProfileService;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.notification.NotificationRecipient;
-import com.sca4d.core.api.notification.NotificationRecipientType;
 import com.sca4d.iam.base.PlatformAccountDirectory;
 import com.sca4d.iam.identity.IdentityStatus;
 import com.sca4d.notification.sms.SmsRecipientResolver;
@@ -34,7 +33,7 @@ public class PlatformSmsRecipientResolver implements SmsRecipientResolver {
     @Transactional(readOnly = true)
     public @NotNull Optional<String> resolve(@NotNull NotificationRecipient recipient) {
         NotificationRecipient checked = Objects.requireNonNull(recipient, "通知接收人不能为空");
-        if (!NotificationRecipientType.ACCOUNT.equals(checked.type()))
+        if (!NotificationRecipient.ACCOUNT_TYPE.equals(checked.type()))
             return Optional.empty();
         try {
             var account = accounts.loadById(Long.parseLong(checked.id()));

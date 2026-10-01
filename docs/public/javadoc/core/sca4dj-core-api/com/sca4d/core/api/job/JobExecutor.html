@@ -106,14 +106,14 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;O&gt;&nbsp;O</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#await(com.sca4d.core.api.job.JobRunId,com.sca4d.core.api.job.Job,java.time.Duration)" class="member-name-link">await</a><wbr>(@NotNull <a href="JobRunId.html" title="class in com.sca4d.core.api.job">JobRunId</a>&nbsp;runId,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#await(com.sca4d.core.api.id.Id,com.sca4d.core.api.job.Job,java.time.Duration)" class="member-name-link">await</a><wbr>(@NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a>&nbsp;runId,
  @NotNull <a href="Job.html" title="class in com.sca4d.core.api.job">Job</a>&lt;?,<wbr>O&gt;&nbsp;job,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;timeout)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">限时等待已有 run 并读取结果。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;O&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;O&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#result(com.sca4d.core.api.job.JobRunId,com.sca4d.core.api.job.Job)" class="member-name-link">result</a><wbr>(@NotNull <a href="JobRunId.html" title="class in com.sca4d.core.api.job">JobRunId</a>&nbsp;runId,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#result(com.sca4d.core.api.id.Id,com.sca4d.core.api.job.Job)" class="member-name-link">result</a><wbr>(@NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a>&nbsp;runId,
  @NotNull <a href="Job.html" title="class in com.sca4d.core.api.job">Job</a>&lt;?,<wbr>O&gt;&nbsp;job)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">读取已经成功的结果，不等待仍在执行的 run。</div>
@@ -127,19 +127,19 @@ O&gt;&nbsp;O</code></div>
 <div class="block">提交 Job 并限时等待最终结果。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="JobRunStatus.html" title="enum class in com.sca4d.core.api.job">JobRunStatus</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#status(com.sca4d.core.api.job.JobRunId)" class="member-name-link">status</a><wbr>(@NotNull <a href="JobRunId.html" title="class in com.sca4d.core.api.job">JobRunId</a>&nbsp;runId)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#status(com.sca4d.core.api.id.Id)" class="member-name-link">status</a><wbr>(@NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a>&nbsp;runId)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">返回当前应用运行时命名空间内指定 run 的状态。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;I,<wbr>
-O&gt;&nbsp;@NotNull <a href="JobRunId.html" title="class in com.sca4d.core.api.job">JobRunId</a></code></div>
+O&gt;&nbsp;@NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#submit(com.sca4d.core.api.job.Job,I)" class="member-name-link">submit</a><wbr>(@NotNull <a href="Job.html" title="class in com.sca4d.core.api.job">Job</a>&lt;I,<wbr>O&gt;&nbsp;job,
  I&nbsp;input)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">保存一个 run 后立即返回，不继承调用线程的 Session、ThreadLocal 或事务。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;I,<wbr>
-O&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="JobRunId.html" title="class in com.sca4d.core.api.job">JobRunId</a>&gt;</code></div>
+O&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#submitScheduled(com.sca4d.core.api.job.Job,I,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant,com.sca4d.core.api.scheduling.OverlapPolicy)" class="member-name-link">submitScheduled</a><wbr>(@NotNull <a href="Job.html" title="class in com.sca4d.core.api.job">Job</a>&lt;I,<wbr>O&gt;&nbsp;job,
  I&nbsp;input,
  @NotNull <a href="../scheduling/ScheduleKey.html" title="class in com.sca4d.core.api.scheduling">ScheduleKey</a>&nbsp;scheduleKey,
@@ -168,7 +168,7 @@ O&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
 </span><span class="type-parameters">&lt;I,<wbr>
-O&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="JobRunId.html" title="class in com.sca4d.core.api.job">JobRunId</a></span>&nbsp;<span class="element-name">submit</span><wbr><span class="parameters">(@NotNull
+O&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a></span>&nbsp;<span class="element-name">submit</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="Job.html" title="class in com.sca4d.core.api.job">Job</a>&lt;I,<wbr>O&gt;&nbsp;job,
  @Nullable
  I&nbsp;input)</span></div>
@@ -193,7 +193,7 @@ O&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="JobRunId.html" tit
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
 </span><span class="type-parameters">&lt;I,<wbr>
-O&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="JobRunId.html" title="class in com.sca4d.core.api.job">JobRunId</a>&gt;</span>&nbsp;<span class="element-name">submitScheduled</span><wbr><span class="parameters">(@NotNull
+O&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a>&gt;</span>&nbsp;<span class="element-name">submitScheduled</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="Job.html" title="class in com.sca4d.core.api.job">Job</a>&lt;I,<wbr>O&gt;&nbsp;job,
  @Nullable
  I&nbsp;input,
@@ -252,12 +252,12 @@ O&gt;</span>&nbsp;<span class="return-type">O</span>&nbsp;<span class="element-n
 </section>
 </li>
 <li>
-<section class="detail" id="status(com.sca4d.core.api.job.JobRunId)">
+<section class="detail" id="status(com.sca4d.core.api.id.Id)">
 <h3>status</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
 </span><span class="return-type">@NotNull <a href="JobRunStatus.html" title="enum class in com.sca4d.core.api.job">JobRunStatus</a></span>&nbsp;<span class="element-name">status</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="JobRunId.html" title="class in com.sca4d.core.api.job">JobRunId</a>&nbsp;runId)</span></div>
+ @NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a>&nbsp;runId)</span></div>
 <div class="block">返回当前应用运行时命名空间内指定 run 的状态。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -270,12 +270,12 @@ O&gt;</span>&nbsp;<span class="return-type">O</span>&nbsp;<span class="element-n
 </section>
 </li>
 <li>
-<section class="detail" id="result(com.sca4d.core.api.job.JobRunId,com.sca4d.core.api.job.Job)">
+<section class="detail" id="result(com.sca4d.core.api.id.Id,com.sca4d.core.api.job.Job)">
 <h3>result</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
 </span><span class="type-parameters">&lt;O&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;O&gt;</span>&nbsp;<span class="element-name">result</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="JobRunId.html" title="class in com.sca4d.core.api.job">JobRunId</a>&nbsp;runId,
+ @NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a>&nbsp;runId,
  @NotNull
  @NotNull <a href="Job.html" title="class in com.sca4d.core.api.job">Job</a>&lt;?,<wbr>O&gt;&nbsp;job)</span></div>
 <div class="block">读取已经成功的结果，不等待仍在执行的 run。</div>
@@ -294,12 +294,12 @@ O&gt;</span>&nbsp;<span class="return-type">O</span>&nbsp;<span class="element-n
 </section>
 </li>
 <li>
-<section class="detail" id="await(com.sca4d.core.api.job.JobRunId,com.sca4d.core.api.job.Job,java.time.Duration)">
+<section class="detail" id="await(com.sca4d.core.api.id.Id,com.sca4d.core.api.job.Job,java.time.Duration)">
 <h3>await</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @Nullable
 </span><span class="type-parameters">&lt;O&gt;</span>&nbsp;<span class="return-type">O</span>&nbsp;<span class="element-name">await</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="JobRunId.html" title="class in com.sca4d.core.api.job">JobRunId</a>&nbsp;runId,
+ @NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a>&nbsp;runId,
  @NotNull
  @NotNull <a href="Job.html" title="class in com.sca4d.core.api.job">Job</a>&lt;?,<wbr>O&gt;&nbsp;job,
  @NotNull

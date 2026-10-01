@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.OptionalLong;
 
 /** 使用 Google Authenticator 兼容参数生成密钥并匹配 TOTP 时间步。 */
-public final class TotpCodeVerifier {
+public class TotpCodeVerifier {
 
     /** TOTP 验证码位数。 */
     public static final int CODE_DIGITS = 6;

@@ -1,13 +1,15 @@
 sca4dj:
   storage:
-    default-backend: local
+    backend:
+      default: local
     local:
       enabled: true
       root: ${java.io.tmpdir}/sca4dj-integration-files
     minio:
       enabled: false
   core:
-    open-api-enabled: true
+    openapi:
+      enabled: true
   auth:
     excluded-paths:
       - /v3/api-docs

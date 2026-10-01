@@ -10,9 +10,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.Optional;
 
-/** 使用 IAM 的标识规范化和身份事实实现 `AccountDirectory`。 */
+/** 使用 IAM 的标识规范化和身份数据实现 `AccountDirectory`。 */
 @ApiStatus.Internal
-public final class IamAccountDirectory implements AccountDirectory {
+public class IamAccountDirectory implements AccountDirectory {
 
     private final @NotNull IdentityService identities;
 

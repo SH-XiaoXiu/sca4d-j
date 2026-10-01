@@ -93,10 +93,10 @@ loadScripts(document, 'script');</script>
 <dd><code>org.springframework.web.method.support.HandlerMethodArgumentResolver</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">CurrentUserArgumentResolver</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">CurrentUserArgumentResolver</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements org.springframework.web.method.support.HandlerMethodArgumentResolver</span></div>
-<div class="block">从当前请求的 Session 注入 USER，并把其唯一 PlatformPrincipal 绑定到 `Call`。</div>
+<div class="block">从当前请求的 Session 注入 USER，并把 USER 唯一的 PlatformPrincipal 绑定到 `Call`。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -109,9 +109,7 @@ implements org.springframework.web.method.support.HandlerMethodArgumentResolver<
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">CurrentUserArgumentResolver</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">创建无外部依赖的当前 USER 参数解析器。</div>
-</div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -132,7 +130,7 @@ implements org.springframework.web.method.support.HandlerMethodArgumentResolver<
  @NotNull org.springframework.web.context.request.NativeWebRequest&nbsp;webRequest,
  @Nullable org.springframework.web.bind.support.WebDataBinderFactory&nbsp;binderFactory)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">注入当前 USER 或其 Long，并为本次调用绑定 USER 的 PlatformPrincipal。</div>
+<div class="block">注入当前 USER 或 USER 的 Long 标识，并为本次调用绑定 USER 的 PlatformPrincipal。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#supportsParameter(org.springframework.core.MethodParameter)" class="member-name-link">supportsParameter</a><wbr>(@NotNull org.springframework.core.MethodParameter&nbsp;parameter)</code></div>
@@ -160,7 +158,6 @@ implements org.springframework.web.method.support.HandlerMethodArgumentResolver<
 <section class="detail" id="&lt;init&gt;()">
 <h3>CurrentUserArgumentResolver</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CurrentUserArgumentResolver</span>()</div>
-<div class="block">创建无外部依赖的当前 USER 参数解析器。</div>
 </section>
 </li>
 </ul>
@@ -201,7 +198,7 @@ implements org.springframework.web.method.support.HandlerMethodArgumentResolver<
  @NotNull org.springframework.web.context.request.NativeWebRequest&nbsp;webRequest,
  @Nullable
  @Nullable org.springframework.web.bind.support.WebDataBinderFactory&nbsp;binderFactory)</span></div>
-<div class="block">注入当前 USER 或其 Long，并为本次调用绑定 USER 的 PlatformPrincipal。</div>
+<div class="block">注入当前 USER 或 USER 的 Long 标识，并为本次调用绑定 USER 的 PlatformPrincipal。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>resolveArgument</code>&nbsp;in interface&nbsp;<code>org.springframework.web.method.support.HandlerMethodArgumentResolver</code></dd>
@@ -211,7 +208,7 @@ implements org.springframework.web.method.support.HandlerMethodArgumentResolver<
 <dd><code>webRequest</code> - 当前 HTTP 请求</dd>
 <dd><code>binderFactory</code> - 数据绑定工厂</dd>
 <dt>Returns:</dt>
-<dd>当前 USER 或其 Long</dd>
+<dd>当前 USER 或 USER 的 Long 标识</dd>
 </dl>
 </section>
 </li>

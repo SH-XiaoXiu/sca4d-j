@@ -107,8 +107,8 @@ loadScripts(document, 'script');</script>
  int&nbsp;limit)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insert(long,java.lang.String,byte%5B%5D,com.sca4d.messaging.outbox.OutboxStatus,java.time.Instant)" class="member-name-link">insert</a><wbr>(long&nbsp;messageId,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;eventCode,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insert(long,com.sca4d.core.api.name.code.TreeCode,byte%5B%5D,com.sca4d.messaging.outbox.OutboxStatus,java.time.Instant)" class="member-name-link">insert</a><wbr>(long&nbsp;messageId,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;messageCode,
  byte @NotNull []&nbsp;envelope,
  @NotNull <a href="../OutboxStatus.html" title="enum class in com.sca4d.messaging.outbox">OutboxStatus</a>&nbsp;status,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;availableAt)</code></div>
@@ -149,12 +149,12 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="insert(long,java.lang.String,byte[],com.sca4d.messaging.outbox.OutboxStatus,java.time.Instant)">
+<section class="detail" id="insert(long,com.sca4d.core.api.name.code.TreeCode,byte[],com.sca4d.messaging.outbox.OutboxStatus,java.time.Instant)">
 <h3>insert</h3>
 <div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">insert</span><wbr><span class="parameters">(@Param("messageId")
  long&nbsp;messageId,
- @Param("eventCode") @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;eventCode,
+ @Param("messageCode") @NotNull
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;messageCode,
  @Param("envelope")
  byte @NotNull []&nbsp;envelope,
  @Param("status") @NotNull
@@ -165,7 +165,7 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>messageId</code> - 消息主键</dd>
-<dd><code>eventCode</code> - 事件编码</dd>
+<dd><code>messageCode</code> - 消息编码</dd>
 <dd><code>envelope</code> - 已序列化消息信封</dd>
 <dd><code>status</code> - 初始状态</dd>
 <dd><code>availableAt</code> - 最早发布时间</dd>

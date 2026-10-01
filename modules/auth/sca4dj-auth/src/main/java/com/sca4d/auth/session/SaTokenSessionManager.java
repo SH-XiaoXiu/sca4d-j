@@ -17,16 +17,15 @@ import org.slf4j.LoggerFactory;
 
 import java.time.Clock;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.Objects;
 import java.util.Optional;
 
 /** 使用 Sa-Token Token-Session 保存 Core Session，并在失效代次或 Operation 目录变化后延迟刷新。 */
 @SuppressWarnings("LoggingSimilarMessage")
-public final class SaTokenSessionManager {
+public class SaTokenSessionManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(SaTokenSessionManager.class);
-
-    static final String SESSION_ATTRIBUTE = "sca4dj.session";
 
     static final String INVALIDATION_GENERATION_ATTRIBUTE = "sca4dj.session.invalidation-generation";
 
@@ -34,19 +33,21 @@ public final class SaTokenSessionManager {
 
     static final String OPERATION_CATALOG_FINGERPRINT_ATTRIBUTE = "sca4dj.session.operation-catalog-fingerprint";
 
-    private final SessionCodec codec;
+    static final String SESSION_ATTRIBUTE = "sca4dj.session";
 
     private final SessionRefreshService refresh;
 
-    private final RedisSessionGeneration generations;
+    private final Clock clock;
 
-    private final @NotNull String operationCatalogFingerprint;
+    private final RedisSessionGeneration generations;
 
     private final RedisSessionTokenIndex tokenIndex;
 
+    private final SessionCodec codec;
+
     private final StpLogic stpLogic;
 
-    private final Clock clock;
+    private final @NotNull String operationCatalogFingerprint;
 
     /**
      * 创建 Sa-Token Session 管理器。
@@ -248,7 +249,7 @@ public final class SaTokenSessionManager {
             invalidToken.run();
             return Optional.empty();
         }
-        java.time.Instant now = clock.instant();
+        Instant now = clock.instant();
         if (loginId != session.account().accountId()
                 || now.isBefore(session.issuedAt())
                 || !now.isBefore(session.expiresAt())) {

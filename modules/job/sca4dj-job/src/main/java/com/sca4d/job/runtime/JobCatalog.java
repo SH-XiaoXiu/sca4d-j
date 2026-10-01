@@ -13,7 +13,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /** 校验 Spring 登记的 Job，并按稳定 key 恢复当前定义版本。 */
-public final class JobCatalog {
+public class JobCatalog {
 
     private final @NotNull Map<@NotNull JobKey, @NotNull Job<?, ?>> jobs;
 
@@ -54,6 +54,11 @@ public final class JobCatalog {
                             + ", actual=" + job.definitionVersion());
         }
         return job;
+    }
+
+    /** 返回本实例能够执行的 Job key 和精确版本，供数据库领取时筛选。 */
+    public @NotNull Map<JobKey, Integer> definitionVersions() {
+        return jobs.values().stream().collect(Collectors.toUnmodifiableMap(Job::key, Job::definitionVersion));
     }
 
     /** 校验一个 Job 的公共定义。 */

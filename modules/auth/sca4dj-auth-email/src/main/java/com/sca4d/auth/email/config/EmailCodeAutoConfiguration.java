@@ -6,18 +6,19 @@ import com.sca4d.auth.email.challenge.EmailCodeChallengeService;
 import com.sca4d.auth.email.challenge.RedisEmailCodeChallengeStore;
 import com.sca4d.core.api.identity.AccountDirectory;
 import com.sca4d.core.api.identity.RealmKey;
+import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.notification.NotificationType;
 import com.sca4d.core.api.notification.Notifications;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
 import com.sca4d.core.api.security.SecretHasher;
-import com.sca4d.core.api.setting.Settings;
-import com.sca4d.core.api.setting.SystemSetting;
+import com.sca4d.core.api.setting.access.SettingReader;
+import com.sca4d.core.api.setting.access.SettingWriter;
+import com.sca4d.core.api.setting.definition.SystemSetting;
 import com.sca4d.core.spring.redis.Sca4djRedis;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.time.Clock;
 import java.time.Duration;
@@ -27,7 +28,12 @@ import java.time.Duration;
 @EnableConfigurationProperties(EmailCodeProperties.class)
 public class EmailCodeAutoConfiguration {
 
-    /** 创建 Email Code 自动配置。 */
+    /** 创建本应用上下文的模块设置，来源由 Spring 显式注入。 */
+    @Bean
+    EmailCodeSettings emailCodeSettings(SettingReader<String> reader, SettingWriter<String> writer) {
+        return new EmailCodeSettings(reader, writer);
+    }
+
     public EmailCodeAutoConfiguration() {
     }
 
@@ -39,29 +45,28 @@ public class EmailCodeAutoConfiguration {
 
     /** @return Challenge 有效期设置 */
     @Bean
-    SystemSetting<Duration> emailCodeChallengeTtlSetting() {
-        return EmailCodeSettings.CHALLENGE_TTL;
+    SystemSetting<Duration> emailCodeChallengeTtlSetting(EmailCodeSettings settings) {
+        return settings.CHALLENGE_TTL;
     }
 
     /** @return 重发间隔设置 */
     @Bean
-    SystemSetting<Duration> emailCodeResendIntervalSetting() {
-        return EmailCodeSettings.RESEND_INTERVAL;
+    SystemSetting<Duration> emailCodeResendIntervalSetting(EmailCodeSettings settings) {
+        return settings.RESEND_INTERVAL;
     }
 
     /** @return 错误验证码次数上限设置 */
     @Bean
-    SystemSetting<Integer> emailCodeMaximumAttemptsSetting() {
-        return EmailCodeSettings.MAXIMUM_ATTEMPTS;
+    SystemSetting<Integer> emailCodeMaximumAttemptsSetting(EmailCodeSettings settings) {
+        return settings.MAXIMUM_ATTEMPTS;
     }
 
-    /** @return 使用应用命名空间隔离 Hash、TTL、冷却和 Lua 消费的 Challenge Store */
+    /** @return 使用 App 隔离名称隔离 Hash、TTL、冷却和 Lua 消费的 Challenge Store */
     @Bean
     RedisEmailCodeChallengeStore redisEmailCodeChallengeStore(
-            @Sca4djRedis @NotNull StringRedisTemplate redis,
-            @NotNull Clock clock,
-            @NotNull RuntimeNamespace namespace) {
-        return new RedisEmailCodeChallengeStore(redis, clock, namespace);
+            @Sca4djRedis @NotNull RedisTemplate<Key, String> redis,
+            @NotNull Clock clock) {
+        return new RedisEmailCodeChallengeStore(redis, clock);
     }
 
     /** @return 签发匿名一致响应并可靠登记 Email 通知的 Challenge 服务 */
@@ -71,7 +76,7 @@ public class EmailCodeAutoConfiguration {
             @NotNull Notifications notifications,
             @NotNull RedisEmailCodeChallengeStore store,
             @NotNull SecretHasher hasher,
-            @NotNull Settings settings,
+            @NotNull EmailCodeSettings settings,
             @NotNull Clock clock,
             @NotNull EmailCodeProperties properties) {
         return new EmailCodeChallengeService(
@@ -84,7 +89,7 @@ public class EmailCodeAutoConfiguration {
                 clock);
     }
 
-    /** @return 可由认证引擎发现并同时支持首因素和后续因素的 Email Code 方法 */
+    /** @return 可由认证引擎发现并同时支持首因素和附加因素的 Email Code 方法 */
     @Bean
     EmailCodeAuthenticationMethod emailCodeAuthenticationMethod(
             @NotNull EmailCodeChallengeService challenges,

@@ -58,17 +58,13 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" class="type-name-link external-link" title="class or interface in java.lang">Object</a>
 <ul>
-<li class="circle">com.sca4d.core.api.call.<a href="AuditCallRecorder.html" class="type-name-link" title="class in com.sca4d.core.api.call">AuditCallRecorder</a></li>
 <li class="circle">com.sca4d.core.api.call.<a href="Call.html" class="type-name-link" title="class in com.sca4d.core.api.call">Call</a></li>
 <li class="circle">com.sca4d.core.api.call.<a href="CallExecution.html" class="type-name-link" title="class in com.sca4d.core.api.call">CallExecution</a></li>
-<li class="circle">com.sca4d.core.api.call.<a href="CallLifecycle.html" class="type-name-link" title="class in com.sca4d.core.api.call">CallLifecycle</a></li>
+<li class="circle">com.sca4d.core.api.call.<a href="CallInvoker.html" class="type-name-link" title="class in com.sca4d.core.api.call">CallInvoker</a></li>
+<li class="circle">com.sca4d.core.api.call.<a href="CallLifecycleConfiguration.html" class="type-name-link" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration</a></li>
+<li class="circle">com.sca4d.core.api.call.<a href="CallLifecycleConfiguration.Registration.html" class="type-name-link" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration.Registration</a></li>
 <li class="circle">com.sca4d.core.api.call.<a href="CallOutcome.html" class="type-name-link" title="class in com.sca4d.core.api.call">CallOutcome</a></li>
-<li class="circle">com.sca4d.core.api.call.<a href="IdempotentCallExecutor.html" class="type-name-link" title="class in com.sca4d.core.api.call">IdempotentCallExecutor</a></li>
-<li class="circle">com.sca4d.core.api.call.<a href="LockedCallExecutor.html" class="type-name-link" title="class in com.sca4d.core.api.call">LockedCallExecutor</a></li>
 <li class="circle">com.sca4d.core.api.call.<a href="NoCallValueResolver.html" class="type-name-link" title="class in com.sca4d.core.api.call">NoCallValueResolver</a> (implements com.sca4d.core.api.call.<a href="CallValueResolver.html" title="interface in com.sca4d.core.api.call">CallValueResolver</a>&lt;T&gt;)</li>
-<li class="circle">com.sca4d.core.api.call.<a href="NoRateLimitKeyResolver.html" class="type-name-link" title="class in com.sca4d.core.api.call">NoRateLimitKeyResolver</a> (implements com.sca4d.core.api.call.<a href="CallValueResolver.html" title="interface in com.sca4d.core.api.call">CallValueResolver</a>&lt;T&gt;)</li>
-<li class="circle">com.sca4d.core.api.call.<a href="PermissionCallAssessor.html" class="type-name-link" title="class in com.sca4d.core.api.call">PermissionCallAssessor</a></li>
-<li class="circle">com.sca4d.core.api.call.<a href="RateLimitedCallAssessor.html" class="type-name-link" title="class in com.sca4d.core.api.call">RateLimitedCallAssessor</a></li>
 </ul>
 </li>
 </ul>
@@ -76,9 +72,33 @@ loadScripts(document, 'script');</script>
 <section class="hierarchy">
 <h2 title="Interface Hierarchy">Interface Hierarchy</h2>
 <ul>
-<li class="circle">com.sca4d.core.api.call.<a href="CallRequirement.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallRequirement</a></li>
-<li class="circle">com.sca4d.core.api.call.<a href="CallValueResolver.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallValueResolver</a>&lt;T&gt;</li>
+<li class="circle">com.sca4d.core.api.call.<a href="CallLifecycle.AsyncNext.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.AsyncNext</a></li>
+<li class="circle">com.sca4d.core.api.call.<a href="CallLifecycle.Next.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.Next</a></li>
+<li class="circle">com.sca4d.core.api.call.<a href="CallLifecycle.Participant.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.Participant</a>
+<ul>
+<li class="circle">com.sca4d.core.api.call.<a href="CallLifecycle.After.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.After</a></li>
+<li class="circle">com.sca4d.core.api.call.<a href="CallLifecycle.AfterCommit.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.AfterCommit</a></li>
+<li class="circle">com.sca4d.core.api.call.<a href="CallLifecycle.AfterReturning.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.AfterReturning</a></li>
+<li class="circle">com.sca4d.core.api.call.<a href="CallLifecycle.AfterThrowing.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.AfterThrowing</a></li>
+<li class="circle">com.sca4d.core.api.call.<a href="CallLifecycle.Around.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a></li>
+<li class="circle">com.sca4d.core.api.call.<a href="CallLifecycle.Before.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.Before</a></li>
+<li class="circle">com.sca4d.core.api.call.<a href="CallLifecycle.Completion.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.Completion</a></li>
+</ul>
+</li>
+<li class="circle">com.sca4d.core.api.call.<a href="CallLifecycle.PreCommit.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycle.PreCommit</a></li>
+<li class="circle">com.sca4d.core.api.call.<a href="CallLifecycleConfiguration.Customizer.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallLifecycleConfiguration.Customizer</a></li>
+<li class="circle">com.sca4d.core.api.call.<a href="CallValueResolver.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallValueResolver</a>&lt;T&gt;
+<ul>
+<li class="circle">com.sca4d.core.api.call.<a href="SPICallValueResolver.html" class="type-name-link" title="interface in com.sca4d.core.api.call">SPICallValueResolver</a></li>
+</ul>
+</li>
 <li class="circle">com.sca4d.core.api.call.<a href="CallValueResolverLookup.html" class="type-name-link" title="interface in com.sca4d.core.api.call">CallValueResolverLookup</a></li>
+</ul>
+</section>
+<section class="hierarchy">
+<h2 title="Annotation Interface Hierarchy">Annotation Interface Hierarchy</h2>
+<ul>
+<li class="circle">com.sca4d.core.api.call.<a href="CallLifecycle.Intercepted.html" class="type-name-link" title="annotation interface in com.sca4d.core.api.call">CallLifecycle.Intercepted</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
 </ul>
 </section>
 <section class="hierarchy">
@@ -88,6 +108,7 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" class="type-name-link external-link" title="class or interface in java.lang">Enum</a>&lt;E&gt; (implements java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;T&gt;, java.lang.constant.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/constant/Constable.html" title="class or interface in java.lang.constant" class="external-link">Constable</a>, java.io.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a>)
 <ul>
+<li class="circle">com.sca4d.core.api.call.<a href="CallLifecycle.html" class="type-name-link" title="enum class in com.sca4d.core.api.call">CallLifecycle</a></li>
 <li class="circle">com.sca4d.core.api.call.<a href="CallOutcome.Status.html" class="type-name-link" title="enum class in com.sca4d.core.api.call">CallOutcome.Status</a></li>
 </ul>
 </li>

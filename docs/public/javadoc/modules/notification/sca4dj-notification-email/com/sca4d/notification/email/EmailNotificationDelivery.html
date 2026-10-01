@@ -90,13 +90,13 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code>com.sca4d.core.api.notification.NotificationDelivery</code></dd>
+<dd><code>com.sca4d.core.api.delivery.Delivery&lt;com.sca4d.core.api.notification.Notification&gt;</code>, <code>com.sca4d.core.api.notification.NotificationDelivery</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">EmailNotificationDelivery</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">EmailNotificationDelivery</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.core.api.notification.NotificationDelivery</span></div>
-<div class="block">把渠道无关通知解析为收件邮箱、多语言模板和当前 SMTP 配置并执行投递。</div>
+<div class="block">把渠道无关通知解析为收件邮箱、Email 模板和 SMTP 配置并执行投递。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -108,11 +108,11 @@ implements com.sca4d.core.api.notification.NotificationDelivery</span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.notification.email.EmailRecipientResolver,com.sca4d.notification.email.sender.EmailSenderRepository,com.sca4d.notification.template.NotificationTemplateRepository,com.sca4d.notification.template.NotificationRichTextRenderer,com.sca4d.notification.email.sender.EmailTransport)" class="member-name-link">EmailNotificationDelivery</a><wbr>(@NotNull <a href="EmailRecipientResolver.html" title="interface in com.sca4d.notification.email">EmailRecipientResolver</a>&nbsp;recipients,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.notification.email.EmailRecipientResolver,com.sca4d.notification.email.sender.EmailSenderRepository,com.sca4d.notification.email.EmailTemplateRepository,com.sca4d.notification.email.EmailRenderer,com.sca4d.notification.email.sender.EmailGateway)" class="member-name-link">EmailNotificationDelivery</a><wbr>(@NotNull <a href="EmailRecipientResolver.html" title="interface in com.sca4d.notification.email">EmailRecipientResolver</a>&nbsp;recipients,
  @NotNull <a href="sender/EmailSenderRepository.html" title="class in com.sca4d.notification.email.sender">EmailSenderRepository</a>&nbsp;senders,
- @NotNull com.sca4d.notification.template.NotificationTemplateRepository&nbsp;templates,
- @NotNull com.sca4d.notification.template.NotificationRichTextRenderer&nbsp;renderer,
- @NotNull <a href="sender/EmailTransport.html" title="interface in com.sca4d.notification.email.sender">EmailTransport</a>&nbsp;transport)</code></div>
+ @NotNull <a href="EmailTemplateRepository.html" title="class in com.sca4d.notification.email">EmailTemplateRepository</a>&nbsp;templates,
+ @NotNull <a href="EmailRenderer.html" title="class in com.sca4d.notification.email">EmailRenderer</a>&nbsp;renderer,
+ @NotNull <a href="sender/EmailGateway.html" title="interface in com.sca4d.notification.email.sender">EmailGateway</a>&nbsp;transport)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
@@ -131,11 +131,11 @@ implements com.sca4d.core.api.notification.NotificationDelivery</span></div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#available(com.sca4d.core.api.notification.Notification)" class="member-name-link">available</a><wbr>(@NotNull com.sca4d.core.api.notification.Notification&nbsp;notification)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.notification.NotificationChannel</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#channel()" class="member-name-link">channel</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#deliver(com.sca4d.core.api.messaging.MessageId,com.sca4d.core.api.notification.Notification)" class="member-name-link">deliver</a><wbr>(@NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.delivery.DeliveryOutcome</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#deliver(com.sca4d.core.api.id.Id,com.sca4d.core.api.notification.Notification)" class="member-name-link">deliver</a><wbr>(@NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  @NotNull com.sca4d.core.api.notification.Notification&nbsp;notification)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
@@ -144,6 +144,9 @@ implements com.sca4d.core.api.notification.NotificationDelivery</span></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
+<div class="inherited-list">
+<h3 id="methods-inherited-from-class-com.sca4d.core.api.notification.NotificationDelivery">Methods inherited from interface&nbsp;com.sca4d.core.api.notification.NotificationDelivery</h3>
+<code>handlingPolicy</code></div>
 </section>
 </li>
 </ul>
@@ -156,25 +159,25 @@ implements com.sca4d.core.api.notification.NotificationDelivery</span></div>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.notification.email.EmailRecipientResolver,com.sca4d.notification.email.sender.EmailSenderRepository,com.sca4d.notification.template.NotificationTemplateRepository,com.sca4d.notification.template.NotificationRichTextRenderer,com.sca4d.notification.email.sender.EmailTransport)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.notification.email.EmailRecipientResolver,com.sca4d.notification.email.sender.EmailSenderRepository,com.sca4d.notification.email.EmailTemplateRepository,com.sca4d.notification.email.EmailRenderer,com.sca4d.notification.email.sender.EmailGateway)">
 <h3>EmailNotificationDelivery</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">EmailNotificationDelivery</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="EmailRecipientResolver.html" title="interface in com.sca4d.notification.email">EmailRecipientResolver</a>&nbsp;recipients,
  @NotNull
  @NotNull <a href="sender/EmailSenderRepository.html" title="class in com.sca4d.notification.email.sender">EmailSenderRepository</a>&nbsp;senders,
  @NotNull
- @NotNull com.sca4d.notification.template.NotificationTemplateRepository&nbsp;templates,
+ @NotNull <a href="EmailTemplateRepository.html" title="class in com.sca4d.notification.email">EmailTemplateRepository</a>&nbsp;templates,
  @NotNull
- @NotNull com.sca4d.notification.template.NotificationRichTextRenderer&nbsp;renderer,
+ @NotNull <a href="EmailRenderer.html" title="class in com.sca4d.notification.email">EmailRenderer</a>&nbsp;renderer,
  @NotNull
- @NotNull <a href="sender/EmailTransport.html" title="interface in com.sca4d.notification.email.sender">EmailTransport</a>&nbsp;transport)</span></div>
+ @NotNull <a href="sender/EmailGateway.html" title="interface in com.sca4d.notification.email.sender">EmailGateway</a>&nbsp;transport)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>recipients</code> - 内部接收人邮箱解析入口</dd>
-<dd><code>senders</code> - SMTP 配置持久化语义</dd>
-<dd><code>templates</code> - 平台无关通知模板持久化语义</dd>
-<dd><code>renderer</code> - 统一 Tiptap JSON 模板渲染入口</dd>
-<dd><code>transport</code> - SMTP 操作</dd>
+<dd><code>recipients</code> - 收件邮箱解析器</dd>
+<dd><code>senders</code> - SMTP 发送方配置 Repository</dd>
+<dd><code>templates</code> - Email 模板 Repository</dd>
+<dd><code>renderer</code> - 模板渲染器</dd>
+<dd><code>transport</code> - SMTP 传输入口</dd>
 </dl>
 </section>
 </li>
@@ -190,7 +193,7 @@ implements com.sca4d.core.api.notification.NotificationDelivery</span></div>
 <section class="detail" id="channel()">
 <h3>channel</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.notification.NotificationChannel</span>&nbsp;<span class="element-name">channel</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">channel</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>channel</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.notification.NotificationDelivery</code></dd>
@@ -209,13 +212,16 @@ implements com.sca4d.core.api.notification.NotificationDelivery</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="deliver(com.sca4d.core.api.messaging.MessageId,com.sca4d.core.api.notification.Notification)">
+<section class="detail" id="deliver(com.sca4d.core.api.id.Id,com.sca4d.core.api.notification.Notification)">
 <h3>deliver</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">deliver</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.delivery.DeliveryOutcome</span>&nbsp;<span class="element-name">deliver</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  @NotNull
  @NotNull com.sca4d.core.api.notification.Notification&nbsp;notification)</span></div>
 <dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>deliver</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.delivery.Delivery&lt;com.sca4d.core.api.notification.Notification&gt;</code></dd>
 <dt>Specified by:</dt>
 <dd><code>deliver</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.notification.NotificationDelivery</code></dd>
 </dl>

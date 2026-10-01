@@ -102,17 +102,12 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#publish(com.sca4d.core.api.webrealtime.WebRealtimeTarget,com.sca4d.core.api.event.Event)" class="member-name-link">publish</a><wbr>(@NotNull <a href="WebRealtimeTarget.html" title="class in com.sca4d.core.api.webrealtime">WebRealtimeTarget</a>&nbsp;target,
- @NotNull <a href="../event/Event.html" title="class in com.sca4d.core.api.event">Event</a>&lt;?&gt;&nbsp;event)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="../messaging/DispatchReceipt.html" title="class in com.sca4d.core.api.messaging">DispatchReceipt</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#publish(com.sca4d.core.api.webrealtime.WebRealtimeTarget,com.sca4d.core.api.event.Event,com.sca4d.core.api.messaging.DispatchPolicy)" class="member-name-link">publish</a><wbr>(@NotNull <a href="WebRealtimeTarget.html" title="class in com.sca4d.core.api.webrealtime">WebRealtimeTarget</a>&nbsp;target,
+ @NotNull <a href="../event/Event.html" title="class in com.sca4d.core.api.event">Event</a>&lt;?&gt;&nbsp;event,
+ @NotNull <a href="../messaging/DispatchPolicy.html" title="class in com.sca4d.core.api.messaging">DispatchPolicy</a>&nbsp;policy)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">发布实时消息；存在活跃事务时在提交后发布，否则立即发布。</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#publishNow(com.sca4d.core.api.webrealtime.WebRealtimeTarget,com.sca4d.core.api.event.Event)" class="member-name-link">publishNow</a><wbr>(@NotNull <a href="WebRealtimeTarget.html" title="class in com.sca4d.core.api.webrealtime">WebRealtimeTarget</a>&nbsp;target,
- @NotNull <a href="../event/Event.html" title="class in com.sca4d.core.api.event">Event</a>&lt;?&gt;&nbsp;event)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">立即发布已经提交完成或不依赖事务结果的实时消息。</div>
 </div>
 </div>
 </div>
@@ -129,28 +124,16 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="publish(com.sca4d.core.api.webrealtime.WebRealtimeTarget,com.sca4d.core.api.event.Event)">
+<section class="detail" id="publish(com.sca4d.core.api.webrealtime.WebRealtimeTarget,com.sca4d.core.api.event.Event,com.sca4d.core.api.messaging.DispatchPolicy)">
 <h3>publish</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">publish</span><wbr><span class="parameters">(@NotNull
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="../messaging/DispatchReceipt.html" title="class in com.sca4d.core.api.messaging">DispatchReceipt</a></span>&nbsp;<span class="element-name">publish</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="WebRealtimeTarget.html" title="class in com.sca4d.core.api.webrealtime">WebRealtimeTarget</a>&nbsp;target,
  @NotNull
- @NotNull <a href="../event/Event.html" title="class in com.sca4d.core.api.event">Event</a>&lt;?&gt;&nbsp;event)</span></div>
+ @NotNull <a href="../event/Event.html" title="class in com.sca4d.core.api.event">Event</a>&lt;?&gt;&nbsp;event,
+ @NotNull
+ @NotNull <a href="../messaging/DispatchPolicy.html" title="class in com.sca4d.core.api.messaging">DispatchPolicy</a>&nbsp;policy)</span></div>
 <div class="block">发布实时消息；存在活跃事务时在提交后发布，否则立即发布。</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>target</code> - 由共享索引解析的目标</dd>
-<dd><code>event</code> - 发送给浏览器的业务事件</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="publishNow(com.sca4d.core.api.webrealtime.WebRealtimeTarget,com.sca4d.core.api.event.Event)">
-<h3>publishNow</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">publishNow</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="WebRealtimeTarget.html" title="class in com.sca4d.core.api.webrealtime">WebRealtimeTarget</a>&nbsp;target,
- @NotNull
- @NotNull <a href="../event/Event.html" title="class in com.sca4d.core.api.event">Event</a>&lt;?&gt;&nbsp;event)</span></div>
-<div class="block">立即发布已经提交完成或不依赖事务结果的实时消息。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>target</code> - 由共享索引解析的目标</dd>

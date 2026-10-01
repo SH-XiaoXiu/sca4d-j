@@ -18,6 +18,7 @@ import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountDirectory;
 import com.sca4d.core.api.identity.AccountIdentifierType;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.OperationCatalog;
 import com.sca4d.iam.base.PlatformIdentityService;
@@ -56,12 +57,16 @@ import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import javax.imageio.ImageIO;
 
@@ -70,9 +75,9 @@ import javax.imageio.ImageIO;
 @SpringBootTest(classes = Sca4dApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
         "sca4dj.iam.bootstrap.enabled=true",
         "sca4dj.iam.bootstrap.username=admin",
-        "sca4dj.auth.password.bootstrap-enabled=true",
-        "sca4dj.auth.password.bootstrap-username=admin",
-        "sca4dj.auth.password.bootstrap-password=admin@123",
+        "sca4dj.auth.password.bootstrap.enabled=true",
+        "sca4dj.auth.password.bootstrap.username=admin",
+        "sca4dj.auth.password.bootstrap.password=admin@123",
         "sca4dj.auth.session-ttl=PT1H"
 })
 @SuppressWarnings({
@@ -169,7 +174,7 @@ class SessionLifecycleIntegrationTest {
         assertThat(
                 businessHandlers.stream()
                         .flatMap(entry -> entry.getKey().getPatternValues().stream())
-                        .collect(java.util.stream.Collectors.toSet()))
+                        .collect(Collectors.toSet()))
                 .containsExactlyInAnyOrder(
                         "/login/attempts",
                         "/login/attempts/passkey",
@@ -862,21 +867,21 @@ class SessionLifecycleIntegrationTest {
         assertThat(initial.resources(principal.principalId())).isEmpty();
         long establishedGeneration = generations.current(account.accountId());
 
-        String operationCode = operations.actions().getFirst().operation().value();
+        TreeCode operationCode = operations.actions().getFirst().operation().code();
         Role refreshRole = rbac.createRole(
                 "SESSION_REFRESH_TEST",
                 LocalizedFields.of(
-                        java.util.Map.of(
-                                java.util.Locale.forLanguageTag("zh-CN"),
-                                java.util.Map.of("name", "Session Refresh Test"))),
-                java.util.List.of(operationCode))
+                        Map.of(
+                                Locale.forLanguageTag("zh-CN"),
+                                Map.of("name", "Session Refresh Test"))),
+                List.of(operationCode))
                 .role();
         PrincipalRoles currentRoles = rbac.findPrincipalRoles(principal.principalId());
         PrincipalRoles replacedRoles = rbac.replacePrincipalRoles(
                 principal.principalId(),
-                java.util.stream.Stream.concat(
+                Stream.concat(
                         currentRoles.roles().stream().map(Role::roleId),
-                        java.util.stream.Stream.of(refreshRole.roleId()))
+                        Stream.of(refreshRole.roleId()))
                         .toList());
         assertThat(replacedRoles.roles()).extracting(Role::roleId).contains(refreshRole.roleId());
 
@@ -885,7 +890,7 @@ class SessionLifecycleIntegrationTest {
         assertThat(refreshed.resources(principal.principalId()))
                 .filteredOn(Operation.class::isInstance)
                 .map(Operation.class::cast)
-                .extracting(Operation::value)
+                .extracting(Operation::code)
                 .contains(operationCode);
         assertThat(refreshed.id()).isEqualTo(initial.id());
     }
@@ -963,7 +968,8 @@ class SessionLifecycleIntegrationTest {
         JsonNode pendingLogin = startLogin("totp-user", "totp@123");
         assertThat(pendingLogin.path("authentication").path("status").asText()).isEqualTo("FACTOR_REQUIRED");
         assertThat(pendingLogin.path("session").isNull()).isTrue();
-        assertThat(pendingLogin.path("authentication").path("availableMethods").toString()).contains("\"totp\"");
+        assertThat(pendingLogin.path("authentication").path("availableMethods").toString())
+                .contains("\"AUTHENTICATION/TOTP\"");
         String loginAttempt = pendingLogin.path("authentication").path("attemptId").asText();
         String loginCode = totpCode(secret, Instant.now().plusSeconds(30));
         JsonNode completedLogin = postJson(
@@ -1230,14 +1236,14 @@ class SessionLifecycleIntegrationTest {
     }
 
     private static List<String> textValues(JsonNode array) {
-        return java.util.stream.StreamSupport.stream(array.spliterator(), false)
+        return StreamSupport.stream(array.spliterator(), false)
                 .map(JsonNode::asText)
                 .toList();
     }
 
     private static HttpHeaders copyHeaders(HttpHeaders source) {
         HttpHeaders copy = new HttpHeaders();
-        source.forEach((name, values) -> copy.put(name, new java.util.ArrayList<>(values)));
+        source.forEach((name, values) -> copy.put(name, new ArrayList<>(values)));
         return copy;
     }
 
@@ -1352,7 +1358,7 @@ class SessionLifecycleIntegrationTest {
         return List.of(
                 Map.of(
                         "methodCode",
-                        "password",
+                        "AUTHENTICATION/PASSWORD",
                         "loginStartEnabled",
                         true,
                         "loginAdditionalEnabled",
@@ -1361,7 +1367,7 @@ class SessionLifecycleIntegrationTest {
                         true),
                 Map.of(
                         "methodCode",
-                        "totp",
+                        "AUTHENTICATION/TOTP",
                         "loginStartEnabled",
                         false,
                         "loginAdditionalEnabled",
@@ -1370,7 +1376,7 @@ class SessionLifecycleIntegrationTest {
                         true),
                 Map.of(
                         "methodCode",
-                        "passkey",
+                        "AUTHENTICATION/PASSKEY",
                         "loginStartEnabled",
                         true,
                         "loginAdditionalEnabled",

@@ -1,11 +1,13 @@
 package com.sca4d.core.api.authentication.principalsession;
 
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.Resource;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Resource 的无框架 Session wire 编解码契约。
  *
- * @param <R> 该 Codec 可以编码和恢复的 Resource 类型
+ * @param <R> 当前 Codec 可以编码和恢复的 Resource 类型
  */
 public interface ResourceCodec<R extends Resource> {
     /**
@@ -13,7 +15,13 @@ public interface ResourceCodec<R extends Resource> {
      *
      * @return Session wire 中跨版本保持不变的 Resource 类型标识
      */
-    String type();
+    @NotNull
+    TreeCode type();
+
+    /** @return 当前 Resource payload 的正数结构版本 */
+    default int version() {
+        return 1;
+    }
 
     /**
      * 读取编码前用于拒绝不匹配实现类的类型。

@@ -90,10 +90,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="annotations">@RestController
-@ConditionalOnProperty(prefix="app.iot.capabilities",
-                       name="api",
-                       havingValue="true",
-                       matchIfMissing=true)
+@ConditionalOnCapability("IOT:API")
 @RequestMapping("/iot/devices/{deviceId}")
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">IotDeviceDataController</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
@@ -189,7 +186,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="runtime(long)">
 <h3>runtime</h3>
 <div class="member-signature"><span class="annotations">@GetMapping("/runtime")
-@RequirePermission(operation="iot:devices:read")
+@RequirePermission(operation="IOT:DEVICES:READ")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../../iot/view/IotDeviceRuntimeView.html" title="class in com.sca4d.app.server.iot.view">IotDeviceRuntimeView</a>&gt;</span>&nbsp;<span class="element-name">runtime</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;deviceId)</span></div>
@@ -203,7 +200,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="downlinks(long,com.sca4d.core.api.query.PageRequest)">
 <h3>downlinks</h3>
 <div class="member-signature"><span class="annotations">@GetMapping("/downlinks")
-@RequirePermission(operation="iot:devices:read")
+@RequirePermission(operation="IOT:DEVICES:READ")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;com.sca4d.core.api.query.Page&lt;<a href="../../iot/view/IotDownlinkMessageView.html" title="class in com.sca4d.app.server.iot.view">IotDownlinkMessageView</a>&gt;&gt;</span>&nbsp;<span class="element-name">downlinks</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;deviceId,
@@ -219,7 +216,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="acknowledgements(long,com.sca4d.core.api.query.PageRequest)">
 <h3>acknowledgements</h3>
 <div class="member-signature"><span class="annotations">@GetMapping("/acknowledgements")
-@RequirePermission(operation="iot:devices:read")
+@RequirePermission(operation="IOT:DEVICES:READ")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;com.sca4d.core.api.query.Page&lt;<a href="../../iot/view/IotAcknowledgementView.html" title="class in com.sca4d.app.server.iot.view">IotAcknowledgementView</a>&gt;&gt;</span>&nbsp;<span class="element-name">acknowledgements</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;deviceId,
@@ -235,7 +232,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="events(long,com.sca4d.core.api.query.PageRequest)">
 <h3>events</h3>
 <div class="member-signature"><span class="annotations">@GetMapping("/events")
-@RequirePermission(operation="iot:devices:read")
+@RequirePermission(operation="IOT:DEVICES:READ")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;com.sca4d.core.api.query.Page&lt;<a href="../../iot/view/IotDeviceEventView.html" title="class in com.sca4d.app.server.iot.view">IotDeviceEventView</a>&gt;&gt;</span>&nbsp;<span class="element-name">events</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;deviceId,
@@ -251,7 +248,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="telemetry(long,java.lang.String,java.time.Instant,java.time.Instant,int)">
 <h3>telemetry</h3>
 <div class="member-signature"><span class="annotations">@GetMapping("/telemetry")
-@RequirePermission(operation="iot:devices:read")
+@RequirePermission(operation="IOT:DEVICES:READ")
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../iot/view/IotTelemetryView.html" title="class in com.sca4d.app.server.iot.view">IotTelemetryView</a>&gt;&gt;</span>&nbsp;<span class="element-name">telemetry</span><wbr><span class="parameters">(@PathVariable
  long&nbsp;deviceId,

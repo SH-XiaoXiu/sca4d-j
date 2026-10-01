@@ -69,7 +69,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="package-signature">package <span class="element-name">com.sca4d.iam.config</span></div>
 <section class="package-description" id="package-description">
-<div class="block">装配 IAM 身份事实、基础管理功能和模块初始化。</div>
+<div class="block">装配 IAM 身份管理、基础管理功能和模块初始化。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color"><a href="../identity/package-summary.html">com.sca4d.iam.identity</a></div>
 <div class="col-last odd-row-color">
-<div class="block">管理 Subject、Account、Principal 和登录标识之间的身份事实。</div>
+<div class="block">管理 Subject、Account、Principal 和登录标识之间的身份关系。</div>
 </div>
 <div class="col-first even-row-color"><a href="../rbac/package-summary.html">com.sca4d.iam.rbac</a></div>
 <div class="col-last even-row-color">
@@ -110,7 +110,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="IamAutoConfiguration.html" title="class in com.sca4d.iam.config">IamAutoConfiguration</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">自动装配 IAM 身份事实、Platform 身份以及内置 RBAC 和 ACL 实现。</div>
+<div class="block">自动装配 IAM 身份管理、Platform 身份以及内置 RBAC 和 ACL 实现。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="IamBootstrap.html" title="class in com.sca4d.iam.config">IamBootstrap</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
@@ -123,6 +123,14 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="IamRbacRedisAutoConfiguration.html" title="class in com.sca4d.iam.config">IamRbacRedisAutoConfiguration</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">在应用安装脚手架 Redis 模板时启用跨实例 RBAC 权限缓存。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SystemIdentityInitializer.html" title="class in com.sca4d.iam.config">SystemIdentityInitializer</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">在全部单例和数据库迁移完成后、SmartLifecycle 启动前发布系统身份。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SystemIdentityProperties.html" title="class in com.sca4d.iam.config">SystemIdentityProperties</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">保存 SYSTEM Subject ID、代码声明的系统身份与人工指定的全局 Principal ID。</div>
 </div>
 </div>
 </div>

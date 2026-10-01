@@ -1,5 +1,9 @@
 package com.sca4d.auth.sms.challenge;
 
+import static com.sca4d.auth.sms.challenge.SmsCodeChallengeStatus.CONSUMED;
+import static com.sca4d.auth.sms.challenge.SmsCodeChallengeStatus.PENDING;
+
+import cn.hutool.crypto.digest.DigestUtil;
 import com.sca4d.auth.sms.SmsCodeAuthenticationMethod;
 import com.sca4d.auth.sms.SmsCodeChallenge;
 import com.sca4d.auth.sms.SmsCodeChallengeId;
@@ -9,27 +13,22 @@ import com.sca4d.auth.sms.SmsCodeProof;
 import com.sca4d.auth.sms.config.SmsCodeSettings;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountDirectory;
 import com.sca4d.core.api.identity.RealmKey;
-import com.sca4d.core.api.messaging.MessageId;
 import com.sca4d.core.api.notification.NotificationRecipient;
 import com.sca4d.core.api.notification.Notifications;
 import com.sca4d.core.api.security.SecretHasher;
-import com.sca4d.core.api.setting.Settings;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.HexFormat;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
@@ -51,7 +50,7 @@ public class SmsCodeChallengeService {
 
     private final SecretHasher hasher;
 
-    private final Settings settings;
+    private final SmsCodeSettings settings;
 
     private final Clock clock;
 
@@ -66,7 +65,7 @@ public class SmsCodeChallengeService {
             @NotNull Notifications notifications,
             @NotNull RedisSmsCodeChallengeStore store,
             @NotNull SecretHasher hasher,
-            @NotNull Settings settings,
+            @NotNull SmsCodeSettings settings,
             @NotNull Clock clock) {
         this(accounts, accountRealm, notifications, store, hasher, settings, clock, new SecureRandom());
     }
@@ -77,7 +76,7 @@ public class SmsCodeChallengeService {
             Notifications notifications,
             RedisSmsCodeChallengeStore store,
             SecretHasher hasher,
-            Settings settings,
+            SmsCodeSettings settings,
             Clock clock,
             SecureRandom random) {
         this.accounts = Objects.requireNonNull(accounts, "AccountDirectory 不能为空");
@@ -97,7 +96,9 @@ public class SmsCodeChallengeService {
         String raw = Objects.requireNonNull(phoneNumber, "PHONE 登录标识不能为空");
         Account account = accounts.resolve(accountRealm, SmsCodeAuthenticationMethod.PHONE_IDENTIFIER_TYPE, raw)
                 .orElse(null);
-        String targetHash = account == null ? targetHash("phone:" + raw) : targetHash("account:" + account.accountId());
+        String targetHash = account == null
+                ? DigestUtil.sha256Hex("phone:" + raw)
+                : DigestUtil.sha256Hex("account:" + account.accountId());
         return issue(account != null && available(account) ? account : null, mask(raw), targetHash);
     }
 
@@ -107,7 +108,7 @@ public class SmsCodeChallengeService {
         Account active = accounts.activeById(Objects.requireNonNull(account, "Account 不能为空").accountId());
         if (!available(active))
             throw new BusinessException(SmsCodeErrorCode.CHALLENGE_UNAVAILABLE);
-        return issue(active, "***", targetHash("account:" + active.accountId()));
+        return issue(active, "***", DigestUtil.sha256Hex("account:" + active.accountId()));
     }
 
     /** @return 当前 Account 是否存在可用 SMS 渠道和已验证手机号 */
@@ -128,12 +129,12 @@ public class SmsCodeChallengeService {
         if (state == null)
             throw new BusinessException(SmsCodeErrorCode.CODE_REJECTED);
         Instant now = clock.instant();
-        boolean valid = state.status() == SmsCodeChallengeStatus.PENDING
+        boolean valid = state.status() == PENDING
                 && now.isBefore(state.expiresAt())
                 && state.accountId() > 0
                 && CODE.matcher(checked.code()).matches()
                 && matches;
-        Version consumed = store.verify(state, valid, settings.get(SmsCodeSettings.MAXIMUM_ATTEMPTS));
+        Version consumed = store.verify(state, valid, settings.MAXIMUM_ATTEMPTS.get());
         if (!valid || consumed == null)
             throw new BusinessException(SmsCodeErrorCode.CODE_REJECTED);
 
@@ -146,11 +147,11 @@ public class SmsCodeChallengeService {
     }
 
     /** 最终完成认证前复核 Challenge 仍属于相同可用 Account 和消费版本。 */
-    public void requireConsumed(@NotNull SmsCodeChallengeId challengeId, long accountId, @NotNull Version version) {
+    public void verifyConsumed(@NotNull SmsCodeChallengeId challengeId, long accountId, @NotNull Version version) {
         SmsCodeChallengeState state = store.find(challengeId);
         if (state == null
                 || state.accountId() != accountId
-                || state.status() != SmsCodeChallengeStatus.CONSUMED
+                || state.status() != CONSUMED
                 || !state.version().equals(version)
                 || !clock.instant().isBefore(state.expiresAt())) {
             throw new IllegalStateException("SMS Challenge 已变化或不可用");
@@ -166,8 +167,8 @@ public class SmsCodeChallengeService {
     }
 
     private SmsCodeChallenge issue(Account account, String maskedRecipient, String targetHash) {
-        Duration ttl = settings.get(SmsCodeSettings.CHALLENGE_TTL);
-        Duration resend = settings.get(SmsCodeSettings.RESEND_INTERVAL);
+        Duration ttl = settings.CHALLENGE_TTL.get();
+        Duration resend = settings.RESEND_INTERVAL.get();
         if (!store.reserveCooldown(targetHash, resend))
             throw new BusinessException(SmsCodeErrorCode.RESEND_TOO_SOON);
         Instant now = clock.instant();
@@ -180,10 +181,10 @@ public class SmsCodeChallengeService {
                 now.plus(ttl),
                 now.plus(resend),
                 0,
-                SmsCodeChallengeStatus.PENDING,
+                PENDING,
                 new Version(0));
         store.create(state);
-        MessageId messageId = null;
+        Id messageId = null;
         if (account != null) {
             long minutes = Math.max(1, (ttl.toSeconds() + 59) / 60);
             messageId = notifications.enqueue(
@@ -209,14 +210,4 @@ public class SmsCodeChallengeService {
                 : checked.substring(0, 4) + "***" + checked.substring(checked.length() - 4);
     }
 
-    private static String targetHash(String value) {
-        try {
-            return HexFormat.of()
-                    .formatHex(
-                            MessageDigest.getInstance("SHA-256")
-                                    .digest(value.getBytes(StandardCharsets.UTF_8)));
-        } catch (NoSuchAlgorithmException exception) {
-            throw new IllegalStateException("JVM 不支持 SHA-256", exception);
-        }
-    }
 }

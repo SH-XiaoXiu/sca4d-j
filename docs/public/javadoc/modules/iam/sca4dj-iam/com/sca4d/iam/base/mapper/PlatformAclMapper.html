@@ -103,24 +103,24 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#delete(java.lang.Long,java.lang.String,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">delete</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
- @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;resourceType,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#delete(java.lang.Long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">delete</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
+ @Nullable com.sca4d.core.api.name.code.TreeCode&nbsp;resourceType,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;resourceId,
  @Nullable com.sca4d.core.api.permission.Action&nbsp;action)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">按主体或完整资源范围删除 ACL 条目；没有任何完整范围时不删除。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insert(java.lang.Long,java.lang.String,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">insert</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;resourceType,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insert(java.lang.Long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,com.sca4d.core.api.permission.Action)" class="member-name-link">insert</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;resourceType,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;resourceId,
  @NotNull com.sca4d.core.api.permission.Action&nbsp;action)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">幂等新增 ACL 条目。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="../../acl/AclEntry.html" title="class in com.sca4d.iam.acl">AclEntry</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectEntries(java.lang.Long,java.lang.String,java.lang.String,com.sca4d.core.api.permission.Action,java.lang.Integer)" class="member-name-link">selectEntries</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;resourceType,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectEntries(java.lang.Long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,com.sca4d.core.api.permission.Action,java.lang.Integer)" class="member-name-link">selectEntries</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;resourceType,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;resourceId,
  @Nullable com.sca4d.core.api.permission.Action&nbsp;action,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;limit)</code></div>
@@ -142,12 +142,12 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="insert(java.lang.Long,java.lang.String,java.lang.String,com.sca4d.core.api.permission.Action)">
+<section class="detail" id="insert(java.lang.Long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,com.sca4d.core.api.permission.Action)">
 <h3>insert</h3>
 <div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">insert</span><wbr><span class="parameters">(@Param("principalId") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
  @Param("resourceType") @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;resourceType,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;resourceType,
  @Param("resourceId") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;resourceId,
  @Param("action") @NotNull
@@ -165,12 +165,12 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="delete(java.lang.Long,java.lang.String,java.lang.String,com.sca4d.core.api.permission.Action)">
+<section class="detail" id="delete(java.lang.Long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,com.sca4d.core.api.permission.Action)">
 <h3>delete</h3>
 <div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">delete</span><wbr><span class="parameters">(@Param("principalId") @Nullable
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
  @Param("resourceType") @Nullable
- @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;resourceType,
+ @Nullable com.sca4d.core.api.name.code.TreeCode&nbsp;resourceType,
  @Param("resourceId") @Nullable
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;resourceId,
  @Param("action") @Nullable
@@ -188,14 +188,14 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="selectEntries(java.lang.Long,java.lang.String,java.lang.String,com.sca4d.core.api.permission.Action,java.lang.Integer)">
+<section class="detail" id="selectEntries(java.lang.Long,com.sca4d.core.api.name.code.TreeCode,java.lang.String,com.sca4d.core.api.permission.Action,java.lang.Integer)">
 <h3>selectEntries</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
 </span><span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="../../acl/AclEntry.html" title="class in com.sca4d.iam.acl">AclEntry</a>&gt;</span>&nbsp;<span class="element-name">selectEntries</span><wbr><span class="parameters">(@Param("principalId") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;principalId,
  @Param("resourceType") @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;resourceType,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;resourceType,
  @Param("resourceId") @Nullable
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;resourceId,
  @Param("action") @Nullable

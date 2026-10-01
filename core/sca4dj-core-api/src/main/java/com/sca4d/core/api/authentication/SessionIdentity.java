@@ -5,13 +5,13 @@ import com.sca4d.core.api.identity.Subject;
 
 import java.util.Objects;
 
-/** 保存认证完成后恢复出的 Subject 和 Account 身份事实。 */
+/** 保存认证完成后恢复出的 Subject 和 Account 身份信息。 */
 @SuppressWarnings("ClassCanBeRecord")
-public final class SessionIdentity {
-
-    private final Subject subject;
+public class SessionIdentity {
 
     private final Account account;
+
+    private final Subject subject;
 
     /**
      * 创建建立 Session 所需的身份快照。
@@ -30,7 +30,7 @@ public final class SessionIdentity {
     }
 
     /**
-     * 读取登录账号所属的接入者。
+     * 登录账号所属的接入者。
      *
      * @return 建立 Session 时恢复出的 Subject
      */
@@ -39,7 +39,7 @@ public final class SessionIdentity {
     }
 
     /**
-     * 读取本次建立 Session 使用的登录账号。
+     * 本次建立 Session 使用的登录账号。
      *
      * @return 建立 Session 时恢复出的 Account
      */

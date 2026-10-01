@@ -10,6 +10,22 @@ spring:
     url: ${SCA4DJ_DB_URL:jdbc:postgresql://localhost:5432/sca4dj?options=-c%20TimeZone%3DUTC}
     username: ${SCA4DJ_DB_USERNAME:sca4dj}
     password: ${SCA4DJ_DB_PASSWORD:sca4dj}
+    driver-class-name: org.postgresql.Driver
+    dynamic:
+      primary: main
+      strict: true
+      datasource:
+        main:
+          url: ${spring.datasource.url}
+          username: ${spring.datasource.username}
+          password: ${spring.datasource.password}
+          driver-class-name: ${spring.datasource.driver-class-name}
+        iot-history:
+          lazy: true
+          url: ${SCA4DJ_IOT_TIMESCALE_URL:jdbc:postgresql://localhost:5433/sca4dj_iot?options=-c%20TimeZone%3DUTC}
+          username: ${SCA4DJ_IOT_TIMESCALE_USERNAME:sca4dj}
+          password: ${SCA4DJ_IOT_TIMESCALE_PASSWORD:sca4dj}
+          driver-class-name: org.postgresql.Driver
   data:
     redis:
       host: ${SCA4DJ_REDIS_HOST:localhost}
@@ -30,14 +46,14 @@ spring:
 
 logging:
   file:
-    path: ${SCA4DJ_LOG_PATH:${SCA4DJ_LOG_ROOT:logs}/${spring.application.name}/${SCA4DJ_INSTANCE_ID:${HOSTNAME:local}}}
+    path: ${SCA4DJ_LOG_PATH:${SCA4DJ_LOG_ROOT:logs}/${spring.application.name}/${sca4dj.instance.id}}
   structured:
     json:
       exclude: sessionId
     ecs:
       service:
         environment: ${SCA4DJ_ENVIRONMENT:${SPRING_PROFILES_ACTIVE:default}}
-        node-name: ${SCA4DJ_INSTANCE_ID:${HOSTNAME:local}}
+        node-name: ${sca4dj.instance.id}
 
 server:
   port: ${SCA4DJ_SERVER_PORT:8080}
@@ -54,9 +70,9 @@ management:
 
 springdoc:
   api-docs:
-    enabled: ${SCA4DJ_OPENAPI_ENABLED:false}
+    enabled: ${sca4dj.core.openapi.enabled:false}
   swagger-ui:
-    enabled: ${SCA4DJ_OPENAPI_ENABLED:false}
+    enabled: ${sca4dj.core.openapi.enabled:false}
 
 app:
   authentication:
@@ -64,16 +80,28 @@ app:
       callback-uri: ${SCA4DJ_AUTH_FEDERATION_CALLBACK_URI:${SCA4DJ_GATEWAY_ORIGIN:http://localhost:8088}/api/login/federated-authorizations/callback}
       completion-uri: ${SCA4DJ_AUTH_FEDERATION_COMPLETION_URI:http://localhost:5666/#/login}
   iot:
-    emqx-webhook-secret: ${SCA4DJ_IOT_EMQX_WEBHOOK_SECRET:}
+    emqx:
+      webhook-secret: ${SCA4DJ_IOT_EMQX_WEBHOOK_SECRET:}
     device-creation-cleanup-interval: ${SCA4DJ_IOT_DEVICE_CREATION_CLEANUP_INTERVAL:PT10M}
 
 sca4dj:
+  environment:
+    prefix: SCA4DJ
+  plugin:
+    enabled: true
+    api: SCA4D:SERVER
+    artifacts:
+      - ${SCA4DJ_MFA_PLUGIN:plugins/sca4d-server-mfa.jar}
+    cache-directory: ${SCA4DJ_PLUGIN_CACHE:build/plugin-cache}
+    drain-timeout: PT30S
+  instance:
+    id: ${SCA4DJ_INSTANCE_ID:${random.uuid}}
+    capabilities: ${SCA4DJ_INSTANCE_CAPABILITIES:MAIN:API,IOT:API,IOT:TRANSPORT,JOB:WORKER,SCHEDULING:WORKER}
   gateway:
     registration:
       enabled: ${SCA4DJ_GATEWAY_REGISTRATION_ENABLED:false}
       gateway-base-url: ${SCA4DJ_GATEWAY_BASE_URL:http://localhost:8088}
       server-base-url: ${SCA4DJ_SERVER_BASE_URL:http://localhost:${SCA4DJ_SERVER_PORT:8080}}
-      instance-id: ${SCA4DJ_SERVER_INSTANCE_ID:}
       readiness-path: /actuator/health/readiness
       secret: ${SCA4DJ_GATEWAY_SECRET:}
       renew-interval: ${SCA4DJ_GATEWAY_RENEW_INTERVAL:PT10S}
@@ -90,16 +118,20 @@ sca4dj:
       - en-US
     default-locale: zh-CN
   core:
-    page-default-size: ${SCA4DJ_PAGE_DEFAULT_SIZE:20}
-    page-max-size: ${SCA4DJ_PAGE_MAX_SIZE:200}
-    open-api-enabled: ${SCA4DJ_OPENAPI_ENABLED:false}
-    http-input-validation:
-      positive-integer-enabled: ${SCA4DJ_HTTP_INPUT_POSITIVE_INTEGER_ENABLED:true}
-      request-body-validation-enabled: ${SCA4DJ_HTTP_INPUT_REQUEST_BODY_VALIDATION_ENABLED:true}
-      string-size-enabled: ${SCA4DJ_HTTP_INPUT_STRING_SIZE_ENABLED:true}
-      max-string-length: ${SCA4DJ_HTTP_INPUT_MAX_STRING_LENGTH:4096}
-      container-size-enabled: ${SCA4DJ_HTTP_INPUT_CONTAINER_SIZE_ENABLED:true}
-      max-container-size: ${SCA4DJ_HTTP_INPUT_MAX_CONTAINER_SIZE:1000}
+    pagination:
+      default-size: ${SCA4DJ_CORE_PAGINATION_DEFAULT_SIZE:20}
+      max-size: ${SCA4DJ_CORE_PAGINATION_MAX_SIZE:200}
+    openapi:
+      enabled: ${SCA4DJ_CORE_OPENAPI_ENABLED:false}
+    http:
+      input:
+        validation:
+          positive-integer-enabled: ${SCA4DJ_CORE_HTTP_INPUT_VALIDATION_POSITIVE_INTEGER_ENABLED:true}
+          request-body-validation-enabled: ${SCA4DJ_CORE_HTTP_INPUT_VALIDATION_REQUEST_BODY_VALIDATION_ENABLED:true}
+          string-size-enabled: ${SCA4DJ_CORE_HTTP_INPUT_VALIDATION_STRING_SIZE_ENABLED:true}
+          max-string-length: ${SCA4DJ_CORE_HTTP_INPUT_VALIDATION_MAX_STRING_LENGTH:4096}
+          container-size-enabled: ${SCA4DJ_CORE_HTTP_INPUT_VALIDATION_CONTAINER_SIZE_ENABLED:true}
+          max-container-size: ${SCA4DJ_CORE_HTTP_INPUT_VALIDATION_MAX_CONTAINER_SIZE:1000}
   persistence:
     batch:
       max-items: ${SCA4DJ_PERSISTENCE_BATCH_MAX_ITEMS:1000}
@@ -139,7 +171,8 @@ sca4dj:
       thread-count: ${SCA4DJ_QUARTZ_THREAD_COUNT:4}
       cluster-checkin-interval: ${SCA4DJ_QUARTZ_CLUSTER_CHECKIN_INTERVAL:PT15S}
   web-realtime:
-    node-transport: ${SCA4DJ_WEB_REALTIME_NODE_TRANSPORT:LOCAL}
+    node:
+      transport: ${SCA4DJ_WEB_REALTIME_NODE_TRANSPORT:LOCAL}
     lease-renew-interval: ${SCA4DJ_WEB_REALTIME_LEASE_RENEW_INTERVAL:PT30S}
     lease-duration: ${SCA4DJ_WEB_REALTIME_LEASE_DURATION:PT90S}
     routing-batch-size: ${SCA4DJ_WEB_REALTIME_ROUTING_BATCH_SIZE:500}
@@ -169,7 +202,8 @@ sca4dj:
     acknowledgement-timeout: ${SCA4DJ_IOT_ACKNOWLEDGEMENT_TIMEOUT:PT30S}
     downlink-retention: ${SCA4DJ_IOT_DOWNLINK_RETENTION:P7D}
     downlink-cleanup-interval: ${SCA4DJ_IOT_DOWNLINK_CLEANUP_INTERVAL:PT1H}
-    reported-store: ${SCA4DJ_IOT_REPORTED_STORE:postgresql}
+    reported:
+      store: ${SCA4DJ_IOT_REPORTED_STORE:POSTGRESQL}
     schedule-tick: ${SCA4DJ_IOT_SCHEDULE_TICK:PT0.2S}
     max-reported-properties: ${SCA4DJ_IOT_MAX_REPORTED_PROPERTIES:100}
     max-desired-properties: ${SCA4DJ_IOT_MAX_DESIRED_PROPERTIES:100}
@@ -182,7 +216,7 @@ sca4dj:
       host: ${SCA4DJ_IOT_EMQX_HOST:localhost}
       port: ${SCA4DJ_IOT_EMQX_INTERNAL_MQTT_PORT:1884}
       tls: ${SCA4DJ_IOT_EMQX_INTERNAL_MQTT_TLS:false}
-      # 未配置环境变量时由 EMQX 自动配置按 RuntimeNamespace 生成带 UUID 的实例 Client ID。
+      # 未配置时按服务器资源前缀生成当前进程独立的 Client ID。
       client-id: ${SCA4DJ_IOT_EMQX_CLIENT_ID:}
       # 内部 listener 不认证；固定 username 仅供 docker/emqx/acl.conf 识别 Runtime 的系统 Topic 订阅。
       username: sca4dj-iot-runtime
@@ -199,15 +233,13 @@ sca4dj:
       management-page-size: ${SCA4DJ_IOT_EMQX_MANAGEMENT_PAGE_SIZE:100}
     timescale:
       enabled: ${SCA4DJ_IOT_TIMESCALE_ENABLED:false}
-      url: ${SCA4DJ_IOT_TIMESCALE_URL:jdbc:postgresql://localhost:5433/sca4dj_iot?options=-c%20TimeZone%3DUTC}
-      username: ${SCA4DJ_IOT_TIMESCALE_USERNAME:sca4dj}
-      password: ${SCA4DJ_IOT_TIMESCALE_PASSWORD:sca4dj}
       cleanup-interval: ${SCA4DJ_IOT_TIMESCALE_CLEANUP_INTERVAL:PT1H}
       telemetry-retention: ${SCA4DJ_IOT_TELEMETRY_RETENTION:P90D}
       event-retention: ${SCA4DJ_IOT_EVENT_RETENTION:P90D}
       max-query-results: ${SCA4DJ_IOT_TIMESCALE_MAX_QUERY_RESULTS:1000}
   storage:
-    default-backend: ${SCA4DJ_STORAGE_DEFAULT_BACKEND:minio}
+    backend:
+      default: ${SCA4DJ_STORAGE_BACKEND_DEFAULT:minio}
     transfer-base-url: ${SCA4DJ_STORAGE_TRANSFER_BASE_URL:${SCA4DJ_GATEWAY_ORIGIN:http://localhost:8088}/api}
     cleanup-interval: ${SCA4DJ_STORAGE_CLEANUP_INTERVAL:PT10M}
     delete-lease: ${SCA4DJ_STORAGE_DELETE_LEASE:PT2M}
@@ -228,11 +260,16 @@ sca4dj:
       bucket: ${SCA4DJ_STORAGE_MINIO_BUCKET:sca4dj}
       create-bucket: ${SCA4DJ_STORAGE_MINIO_CREATE_BUCKET:true}
   iam:
+    system-subject-id: ${SCA4DJ_IAM_SYSTEM_SUBJECT_ID:1}
+    system-principal-ids:
+      MAIN: 1
+      IOT: 2
     bootstrap:
       enabled: ${SCA4DJ_IAM_BOOTSTRAP_ENABLED:true}
       username: ${SCA4DJ_IAM_BOOTSTRAP_USERNAME:admin}
   auth:
-    token-mode: ${SCA4DJ_AUTH_TOKEN_MODE:SESSION}
+    token:
+      mode: ${SCA4DJ_AUTH_TOKEN_MODE:SESSION}
     hmac:
       clock-skew: ${SCA4DJ_AUTH_HMAC_CLOCK_SKEW:PT5M}
       nonce-ttl: ${SCA4DJ_AUTH_HMAC_NONCE_TTL:PT10M}
@@ -241,10 +278,11 @@ sca4dj:
     email-code:
       account-realm: ${SCA4DJ_AUTH_EMAIL_CODE_ACCOUNT_REALM:platform}
     password:
-      bootstrap-enabled: ${SCA4DJ_AUTH_PASSWORD_BOOTSTRAP_ENABLED:true}
+      bootstrap:
+        enabled: ${SCA4DJ_AUTH_PASSWORD_BOOTSTRAP_ENABLED:true}
+        username: ${SCA4DJ_IAM_BOOTSTRAP_USERNAME:admin}
+        password: ${SCA4DJ_AUTH_PASSWORD_BOOTSTRAP_PASSWORD:}
       login-identifier-types: ${SCA4DJ_AUTH_PASSWORD_LOGIN_IDENTIFIER_TYPES:USERNAME,EMAIL}
-      bootstrap-username: ${SCA4DJ_IAM_BOOTSTRAP_USERNAME:admin}
-      bootstrap-password: ${SCA4DJ_AUTH_PASSWORD_BOOTSTRAP_PASSWORD:}
     passkey:
       relying-party-id: ${SCA4DJ_AUTH_PASSKEY_RELYING_PARTY_ID:localhost}
       relying-party-name: ${SCA4DJ_AUTH_PASSKEY_RELYING_PARTY_NAME:Sca4d-J}

@@ -1,6 +1,8 @@
 # 身份与访问
 
-身份与访问管理（IAM）需要依次确定四件事：实际接入的是谁、通过哪个账号完成认证、当前以什么业务身份工作，以及这个业务身份能否操作目标资源。
+Subject 表示实际接入的人、设备、外部程序或系统自身，Account 表示认证账号，Principal 表示这次操作采用的业务身份。一个人可以有多个账号和业务身份：密码关联 Account，顾客订单关联顾客 Principal，跨账号识别同一个人时才使用 Subject；系统自主调用不需要登录 Account。
+
+接入业务时，先为 Account 关联可选 Principal，登录后从 Session 中选择本次使用的 Principal，再检查它对目标的权限。具体步骤见[接入身份与权限](/tutorials/identity-and-permission)；下面用同一个人的管理账号和租户账号说明三者关系。
 
 ## Sca4d-J 的三个核心对象
 
@@ -14,7 +16,7 @@ Sca4d-J 使用三个对象分别确定接入者、认证账号和业务身份：
 
 一个 Subject 可以拥有多个 Account。一个 Account 可以进入多个 Principal，多个 Account 也可以进入同一个 Principal。认证确认 Subject 和 Account，Session 保存认证结果和可选 Principal；每次业务调用再确定一个当前 Principal，并使用它进行权限判断、数据关联和审计。
 
-对于“一个自然人、一个 Platform 账号、一个 Platform Principal”的简单场景，IAM 仍提供 [User](/javadoc/modules/iam/sca4dj-iam/com/sca4d/iam/base/user/User.html) 组合这三个对象。User 没有独立持久化标识，`subjectId`、`accountId` 和 `principalId` 仍然各自表达不同含义。
+对于「一个自然人、一个 Platform 账号、一个 Platform Principal」的简单场景，IAM 仍提供 [User](/javadoc/modules/iam/sca4dj-iam/com/sca4d/iam/base/user/User.html) 组合这三个对象。User 没有独立持久化标识，`subjectId`、`accountId` 和 `principalId` 仍然各自表达不同含义。
 
 三个对象分开管理，是为了让账号和业务身份能够独立变化：同一个人增加企业 SSO 账号时可以继续使用原员工资料；顾客同时成为骑手时可以分别管理两种身份的状态；同一个人在多个租户任职时，每段成员关系可以有独立权限和数据范围。设备、外部程序和自然人的接入类型由 Subject 区分。审计同时记录三个标识，能够说明谁通过哪个账号、以什么身份完成了操作。
 
@@ -127,7 +129,7 @@ SubjectType 固定提供四种类型。这四种类型已经覆盖 Sca4d-J 直�
 | `HUMAN` | 实际操作系统的自然人 | 密码、Passkey、企业登录等自然人认证 |
 | `DEVICE` | 直接接入 Sca4d-J 的设备 | IoT 设备认证、设备 Session 和设备调用 |
 | `APPLICATION` | 通过 OpenAPI 接入的外部程序 | OpenAPI Client、程序凭据和外部调用 |
-| `SYSTEM` | 当前应用自身 | 系统任务和不经过外部认证的内部调用 |
+| `SYSTEM` | 一个完整业务系统，包括其代码、组件、数据和部署共同体 | 定时、自动化和系统自主操作 |
 
 顾客、骑手、员工和租户成员都是自然人在具体业务中的身份，它们使用 `HUMAN` Subject 和不同的 Principal。ERP、支付平台和合作方服务通过 OpenAPI 接入时使用 `APPLICATION`；设备直连 IoT 模块时使用 `DEVICE`；系统任务使用固定的 `SYSTEM`。
 
@@ -165,31 +167,13 @@ Sca4d-J 使用 [Account](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/identi
 
 ### 为什么一个主体可以有多个账号
 
-同一个接入者可以通过不同入口登录，每个账号分别关联认证规则、凭据和可选业务身份。
+账号分别管理登录标识、凭据、认证要求和可选业务身份，因此可以独立停用。在[贯穿示例](#贯穿示例)中，管理账号和租户账号都属于张三，但只有管理账号能选择平台 Principal。
 
-以概览中的张三为例：
-
-| Account | RealmKey | 认证要求 | 认证成功后可选 Principal |
-|---|---|---|---|
-| 管理账号 #2001 | `admin` | Password + TOTP | 平台业务身份 #3001、租户成员身份 #3002 |
-| 租户账号 #2002 | `tenant` | Password | 只有租户成员身份 #3002 |
-
-两个 Account 都属于 Subject #1001，但 `realmKey` 让它们使用不同的账号查找、认证和 Principal 读取规则。管理账号可以进入平台管理流程，也可以进入租户业务；租户账号只能进入租户业务。
-
-两个账号都能进入 Principal #3002，因此通过不同账号认证可以得到同一个业务身份。进入 #3002 后，租户成员资料和权限完全相同；Session 和审计仍然保留各自的 `accountId`，说明这次从哪条认证路径进入。
-
-平台业务身份 #3001 关联的管理员角色可以包含 `*` 权限选择符，但这个权限属于 Principal，不属于管理账号。Account 决定认证后可以到达哪些业务身份，Principal 决定当前以谁参与业务并接受权限判断。
+两个账号进入同一个租户 Principal 时，使用相同的成员资料和权限；Session 与审计保留各自的 `accountId`。Account 决定认证后能选择哪些身份，角色和 `*` 权限选择符仍属于 Principal。
 
 ### RealmKey
 
-[RealmKey](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/identity/RealmKey.html) 标识账号所属的认证域。登录入口通常已经确定 RealmKey，用户不需要在页面上手工填写。
-
-`admin` 和 `tenant` 是概览示例应用定义的 Realm：
-
-- `admin` 让登录入口在管理账号范围内查找标识，执行 Password + TOTP 认证，再读取管理账号可以进入的 Principal；
-- `tenant` 让登录入口在租户账号范围内查找标识，执行 Password 认证，再读取租户账号可以进入的 Principal。
-
-RealmKey 决定使用哪套规则，`accountId` 决定规则处理哪个账号。RealmKey 本身不包含处理代码，也不授予任何权限。
+[RealmKey](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/identity/RealmKey.html) 标识账号所属的认证域，通常由登录入口确定。它选择账号查找、认证和身份读取规则，`accountId` 定位具体账号；RealmKey 本身不执行这些规则，也不授予权限。
 
 Sca4d-J 当前直接使用三个 Realm：
 
@@ -242,7 +226,7 @@ Account 创建后不修改 `subjectId` 和 `realmKey`，否则已有登录标识
 
 ### Account 与 Principal 的关系
 
-Account 与 Principal 是多对多关系。`iam_account_principal` 中的关系只表示“这个账号认证成功后可以选择这个业务身份”，不直接授予角色或权限。
+Account 与 Principal 是多对多关系。`iam_account_principal` 中的关系只表示「这个账号认证成功后可以选择这个业务身份」，不直接授予角色或权限。
 
 认证成功后，Session 保存本次使用的 Subject、Account 和可选 Principal。具体调用再从 Session 中确定一个当前 Principal。新增或删除 Account-Principal 关系时，需要刷新或终止受影响的 Session，避免旧 Session 继续使用已经变化的关系。
 
@@ -321,7 +305,7 @@ Subject 让系统确认李四始终是同一个实际接入者。Account 保存�
 
 RBAC 适合区分同一种 Principal 可以做什么。例如，同一个员工 Principal 可以同时拥有管理员和审核员角色。顾客和骑手的差异不只是权限多少，它们会进入不同业务流程、读取不同资料并关联不同数据。
 
-如果只给同一个对象增加“顾客角色”和“骑手角色”，Controller、Service、Repository 和页面都要先判断角色，再决定读取哪套资料和执行哪段流程。继续增加商户、调度员或租户成员后，每一处业务代码都要重新解释角色组合。
+如果只给同一个对象增加「顾客角色」和「骑手角色」，Controller、Service、Repository 和页面都要先判断角色，再决定读取哪套资料和执行哪段流程。继续增加商户、调度员或租户成员后，每一处业务代码都要重新解释角色组合。
 
 Principal 确定当前是顾客还是骑手，RBAC 再根据角色授予权限。权限策略还可以结合 ACL、资源关系和业务规则。
 
@@ -340,9 +324,26 @@ rider_profile(principal_id, qualification_status, ...)
 tenant_member(principal_id, tenant_id, member_status, ...)
 ```
 
-Principal 不保存 `subjectId` 或 `accountId`。Account 与 Principal 的可选关系由 `iam_account_principal` 保存；角色和 ACL 也通过各自的关系表关联 `principal_id`。
+Principal 不保存 `subjectId` 或 `accountId`。登录 Account 与 Principal 的可选关系由 `iam_account_principal` 保存；角色和 ACL 也通过各自的关系表关联 `principal_id`。系统自主身份由 `iam_system_identity` 直接关联唯一 SYSTEM Subject，不建立登录 Account。
 
 Sca4d-J 内置 Platform Principal，供管理端和 Platform 接口使用。具体应用可以增加自己的 Principal 类型，并为其提供稳定的 Session 编码和读取方式。Core 还固定提供 [SystemPrincipal](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/identity/SystemPrincipal.html)，供系统任务参与权限判断和审计；它不自动拥有管理员权限。
+
+### 系统、领域身份和实例
+
+SYSTEM 表示整个业务系统。一个进程是这个系统的一次运行实例，IoT、用户管理等职责可以使用系统的不同 Principal；它们共同属于 `Subject.SYSTEM`。系统身份的稳定编码由 Java 常量声明，数字 ID 由 `sca4dj.iam.system-principal-ids` 配置。MAIN 默认使用 1，其他身份显式指定正数 ID，通常选择 2、3、4 等小编号。
+
+| 数据 | 含义 | 多实例关系 |
+|---|---|---|
+| `Subject.SYSTEM` | 业务系统唯一的 SYSTEM Subject，持久化 Subject ID 为 1 | 同一业务系统共享 |
+| MAIN、IOT 等 `SystemPrincipal` | 系统自主执行时采用的稳定领域身份 | 编码和 Principal ID 都共享 |
+| `sca4dj.instance.id` | 本次进程的执行位置 | 每个运行实例唯一 |
+| `InstanceCapability` | 当前实例启用了哪些入口或工作线程 | 各实例可以选择不同集合 |
+
+IAM 在启动事务中登记 Subject、Principal 和固定编码绑定。ID 已被占用时拒绝启动，要求配置其他 ID；同一编码与历史 ID 不一致时拒绝启动，要求人工迁移。初始化提交后，SystemPrincipals 一次性发布完整的不可变身份表，消息消费者和任务随后启动。初始化前读取身份会失败。
+
+Spring 自主入口使用 `@SystemExecution("IOT")` 声明系统身份。通过 Spring 代理调用且没有已有 Call 时，脚手架建立 SYSTEM Call；已有用户、设备或外部应用 Call 时保留原身份。普通 Java 入口可以显式调用 `Call.system(callId, startedAt, SystemPrincipals.require(code))`。声明系统身份不授予业务权限。
+
+能力选择决定入口和工作线程是否启用，不选择数据库，也不改变调用者 Principal。审计分别保存 Subject、Principal 和实际 `instanceId`；历史审计的实例字段允许为空。系统 Principal 不授予登录 Account，也不通过普通身份 API 创建、停用或删除。
 
 ### 从 Session 选择当前业务身份
 
@@ -484,7 +485,7 @@ Sca4d-J 自身提供 IoT 模块，采用分布式单体，单实例与集群使�
 
 法人、公司、租户和商户不会亲自提交凭据或发送请求。实际执行操作的是自然人或程序：员工代表公司操作时使用 `HUMAN`，公司的信息系统通过 OpenAPI 调用时使用 `APPLICATION`。公司、租户和任职关系由具体业务模型记录。
 
-页面写“公司登录”时，仍要确认是公司员工登录，还是公司程序调用。增加法人 SubjectType 会隐藏真正完成认证的对象，审计也无法说明操作由哪个人或程序发起。
+页面写「公司登录」时，仍要确认是公司员工登录，还是公司程序调用。增加法人 SubjectType 会隐藏真正完成认证的对象，审计也无法说明操作由哪个人或程序发起。
 
 ### 为什么 RealmKey 不使用枚举或 Realm 主表？
 

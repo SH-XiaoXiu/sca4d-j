@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 为声明 `@IfMatch` 的 HTTP 方法解析强 ETag，并绑定独立的请求版本条件。 */
-public final class IfMatchInterceptor implements HandlerInterceptor {
+public class IfMatchInterceptor implements HandlerInterceptor {
 
     private final RequestVersionConditions versionConditions;
 

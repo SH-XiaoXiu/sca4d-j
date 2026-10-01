@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.sca4d.app.server.system.ManagedSetting;
 import com.sca4d.core.api.i18n.LocalizableText;
 import com.sca4d.core.api.i18n.MessageText;
-import com.sca4d.core.api.setting.SystemSetting;
+import com.sca4d.core.api.name.NameFormat;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.setting.definition.SystemSetting;
 import com.sca4d.core.spring.web.view.BaseView;
 import com.sca4d.core.spring.web.view.Localize;
 import org.jetbrains.annotations.CheckReturnValue;
@@ -12,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +22,7 @@ import java.util.Objects;
 
 /** 按分组返回管理端可以查看和修改的全部 Settings。 */
 @SuppressWarnings("unused")
-public final class SystemSettingsView {
+public class SystemSettingsView {
 
     private final List<Group> groups;
 
@@ -30,9 +33,9 @@ public final class SystemSettingsView {
     /** 从设置管理结果创建分组 HTTP 投影。 */
     @CheckReturnValue
     public static @NotNull SystemSettingsView from(@NotNull List<@NotNull ManagedSetting> settings) {
-        Map<String, List<ManagedSetting>> grouped = new LinkedHashMap<>();
+        Map<TreeCode, List<ManagedSetting>> grouped = new LinkedHashMap<>();
         for (ManagedSetting setting : Objects.requireNonNull(settings, "设置管理结果不能为空")) {
-            grouped.computeIfAbsent(setting.setting().group().key(), key -> new java.util.ArrayList<>())
+            grouped.computeIfAbsent(setting.setting().group().code(), key -> new ArrayList<>())
                     .add(setting);
         }
         List<Group> groups = grouped.values()
@@ -48,7 +51,7 @@ public final class SystemSettingsView {
     }
 
     /** 管理端中的一个设置分组。 */
-    public static final class Group extends BaseView {
+    public static class Group extends BaseView {
         private final String key;
 
         private final String labelKey;
@@ -75,7 +78,7 @@ public final class SystemSettingsView {
         private static @NotNull Group from(@NotNull List<ManagedSetting> settings) {
             ManagedSetting first = settings.getFirst();
             return new Group(
-                    first.setting().group().key(),
+                    first.setting().group().code().format(NameFormat.COLON),
                     first.setting().group().labelKey(),
                     first.setting().group().sortOrder(),
                     settings.stream().map(Item::new).toList());
@@ -114,7 +117,7 @@ public final class SystemSettingsView {
     }
 
     /** 管理端中的一个类型化设置。 */
-    public static final class Item extends BaseView {
+    public static class Item extends BaseView {
         private final String key;
 
         private final String labelKey;
@@ -145,12 +148,12 @@ public final class SystemSettingsView {
 
         private Item(@NotNull ManagedSetting managed) {
             SystemSetting<?> setting = managed.setting();
-            this.key = setting.key();
+            this.key = setting.code().format(NameFormat.COLON);
             this.labelKey = setting.labelKey();
             this.label = setting.labelKey();
             this.descriptionKey = setting.descriptionKey();
             this.description = setting.descriptionKey();
-            this.valueType = setting.codec().valueType();
+            this.valueType = setting.codec().presentationType();
             this.value = managed.value();
             this.defaultValue = setting.secret() ? null : encodeDefault(setting);
             this.stored = managed.stored();
@@ -220,7 +223,7 @@ public final class SystemSettingsView {
             return sortOrder;
         }
 
-        /** @return 当前设置行版本；数据库还没有该设置行时返回 {@code 0} */
+        /** @return 当前设置行版本；数据库没有该设置行时返回 {@code 0} */
         public long getVersion() {
             return version;
         }

@@ -1,12 +1,14 @@
 package com.sca4d.core.spring.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.IdempotencyStore;
 import com.sca4d.core.api.concurrent.RateLimiter;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
+import com.sca4d.core.spring.redis.KeyRedisSerializer;
 import com.sca4d.core.spring.redis.RedisDistributedLock;
+import com.sca4d.core.spring.redis.RedisHashTag;
 import com.sca4d.core.spring.redis.RedisIdempotencyProperties;
 import com.sca4d.core.spring.redis.RedisIdempotencyStore;
 import com.sca4d.core.spring.redis.RedisRateLimitProperties;
@@ -28,9 +30,14 @@ import org.springframework.boot.autoconfigure.data.redis.RedisConnectionDetails;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
+
+import java.util.List;
 
 /** 使用应用默认 Redis 连接创建脚手架 Redis 模板、共享限流和分布式锁。 */
 @AutoConfiguration(after = RedisAutoConfiguration.class)
@@ -49,12 +56,20 @@ public class CoreRedisAutoConfiguration {
      * @param connectionFactory 应用默认基础设施 Redis 连接工厂
      * @return 使用字符串 key 和 value 序列化的脚手架 Redis 模板
      */
-    @Bean(name = "sca4djStringRedisTemplate", defaultCandidate = false)
+    @Bean(name = "sca4djRedisTemplate", defaultCandidate = false)
+    @DependsOn("sca4djAppName")
     @Sca4djRedis
     @ConditionalOnMissingBean(annotation = Sca4djRedis.class)
-    public @NotNull StringRedisTemplate sca4djStringRedisTemplate(
-            @NotNull RedisConnectionFactory connectionFactory) {
-        return new StringRedisTemplate(connectionFactory);
+    public @NotNull RedisTemplate<Key, String> sca4djRedisTemplate(
+            @NotNull RedisConnectionFactory connectionFactory,
+            @NotNull List<RedisHashTag> hashTags) {
+        RedisTemplate<Key, String> template = new RedisTemplate<>();
+        template.setConnectionFactory(connectionFactory);
+        template.setKeySerializer(new KeyRedisSerializer(hashTags));
+        template.setValueSerializer(StringRedisSerializer.UTF_8);
+        template.setHashKeySerializer(StringRedisSerializer.UTF_8);
+        template.setHashValueSerializer(StringRedisSerializer.UTF_8);
+        return template;
     }
 
     /** 在 Spring Boot 已提供 Redis 连接信息时安装跨实例并发实现。 */
@@ -100,47 +115,41 @@ public class CoreRedisAutoConfiguration {
          * 创建多个应用实例共享的令牌桶限流器。
          *
          * @param proxyManager Bucket4j Redis CAS 代理
-         * @param runtimeNamespace 当前应用的运行时命名空间
          * @return Redis 限流器
          */
         @Bean
         @ConditionalOnMissingBean(RateLimiter.class)
         RateLimiter redisRateLimiter(
-                @NotNull ProxyManager<String> proxyManager,
-                @NotNull RuntimeNamespace runtimeNamespace) {
-            return new RedisRateLimiter(proxyManager, runtimeNamespace);
+                @NotNull ProxyManager<String> proxyManager) {
+            return new RedisRateLimiter(proxyManager);
         }
 
         /**
          * 创建多个应用实例共享的 Redis 幂等存储。
          *
          * @param redis 脚手架内部字符串 Redis 模板
-         * @param runtimeNamespace 当前应用的运行时命名空间
          * @param objectMapper 脚手架内部 JSON 映射器
          * @return Redis 幂等状态机
          */
         @Bean
         @ConditionalOnMissingBean(IdempotencyStore.class)
         IdempotencyStore redisIdempotencyStore(
-                @Sca4djRedis @NotNull StringRedisTemplate redis,
-                @NotNull RuntimeNamespace runtimeNamespace,
-                @Sca4djJson @NotNull ObjectMapper objectMapper) {
-            return new RedisIdempotencyStore(redis, runtimeNamespace, objectMapper);
+                @Sca4djRedis @NotNull RedisTemplate<Key, String> redis,
+                @Sca4djJson @NotNull Sca4djMapper objectMapper) {
+            return new RedisIdempotencyStore(redis, objectMapper);
         }
 
         /**
          * 创建多个应用实例共享的 Redisson 锁。
          *
          * @param redisson Redisson 客户端
-         * @param runtimeNamespace 当前应用的运行时命名空间
          * @return Redis 分布式锁
          */
         @Bean
         @ConditionalOnMissingBean(DistributedLock.class)
         DistributedLock redisDistributedLock(
-                @NotNull RedissonClient redisson,
-                @NotNull RuntimeNamespace runtimeNamespace) {
-            return new RedisDistributedLock(redisson, runtimeNamespace);
+                @NotNull RedissonClient redisson) {
+            return new RedisDistributedLock(redisson);
         }
     }
 }

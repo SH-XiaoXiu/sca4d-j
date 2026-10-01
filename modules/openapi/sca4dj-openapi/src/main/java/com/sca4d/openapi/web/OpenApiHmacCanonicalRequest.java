@@ -1,33 +1,32 @@
 package com.sca4d.openapi.web;
 
+import cn.hutool.crypto.digest.DigestUtil;
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.Locale;
 import java.util.Objects;
 
-/** 按 OpenAPI Client 的固定字段顺序生成 HMAC canonical request。 */
-public final class OpenApiHmacCanonicalRequest {
+/** 按 OpenAPI Client 的固定字段顺序生成 MAC canonical request。 */
+public class OpenApiHmacCanonicalRequest {
+
+    private final @NotNull Instant timestamp;
+
+    private final @NotNull String canonicalQuery;
 
     private final @NotNull String clientId;
 
     private final @NotNull String method;
 
-    private final @NotNull String path;
+    private final @NotNull String nonce;
 
-    private final @NotNull String canonicalQuery;
+    private final @NotNull String path;
 
     private final byte @NotNull [] body;
 
-    private final @NotNull Instant timestamp;
-
-    private final @NotNull String nonce;
-
-    /** 创建已经规范化的 OpenAPI HMAC 请求。 */
+    /** 创建已经规范化的 OpenAPI MAC 请求。 */
     public OpenApiHmacCanonicalRequest(
             @NotNull String clientId,
             @NotNull String method,
@@ -43,7 +42,8 @@ public final class OpenApiHmacCanonicalRequest {
         this.body = Objects.requireNonNull(body, "OpenAPI HMAC body 不能为空").clone();
         this.timestamp = Objects.requireNonNull(timestamp, "OpenAPI HMAC timestamp 不能为空");
         this.nonce = TextUtils.requireText(nonce, "OpenAPI HMAC nonce");
-        if (!this.path.startsWith("/openapi/")
+        if (!this.path.startsWith("/")
+                || this.path.contains("//")
                 || this.path.indexOf('\n') >= 0
                 || this.canonicalQuery.indexOf('\n') >= 0
                 || this.nonce.length() < 16
@@ -75,22 +75,10 @@ public final class OpenApiHmacCanonicalRequest {
                 + method + '\n'
                 + path + '\n'
                 + canonicalQuery + '\n'
-                + sha256Hex(body) + '\n'
+                + DigestUtil.sha256Hex(body) + '\n'
                 + timestamp.getEpochSecond() + '\n'
                 + nonce;
         return value.getBytes(StandardCharsets.UTF_8);
     }
 
-    private static String sha256Hex(byte[] body) {
-        try {
-            byte[] digest = MessageDigest.getInstance("SHA-256").digest(body);
-            StringBuilder result = new StringBuilder(digest.length * 2);
-            for (byte value : digest) {
-                result.append(String.format(Locale.ROOT, "%02x", value));
-            }
-            return result.toString();
-        } catch (NoSuchAlgorithmException exception) {
-            throw new IllegalStateException("JVM 不支持 SHA-256", exception);
-        }
-    }
 }

@@ -54,7 +54,7 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/auth/engine/attempt/AuthenticationAttemptState.html#account()" class="member-name-link">account()</a> - Method in class com.sca4d.auth.engine.attempt.<a href="com/sca4d/auth/engine/attempt/AuthenticationAttemptState.html" title="class in com.sca4d.auth.engine.attempt">AuthenticationAttemptState</a></dt>
 <dd>
-<div class="block">返回要执行动作的账号。</div>
+<div class="block">要执行动作的账号。</div>
 </dd>
 <dt><a href="com/sca4d/auth/engine/RedisAuthenticationAttempts.html#account(com.sca4d.core.api.authentication.AuthenticationAttemptId)" class="member-name-link">account(AuthenticationAttemptId)</a> - Method in class com.sca4d.auth.engine.<a href="com/sca4d/auth/engine/RedisAuthenticationAttempts.html" title="class in com.sca4d.auth.engine">RedisAuthenticationAttempts</a></dt>
 <dd>
@@ -62,9 +62,9 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/auth/engine/attempt/AuthenticationAttemptState.html#actionCode()" class="member-name-link">actionCode()</a> - Method in class com.sca4d.auth.engine.attempt.<a href="com/sca4d/auth/engine/attempt/AuthenticationAttemptState.html" title="class in com.sca4d.auth.engine.attempt">AuthenticationAttemptState</a></dt>
 <dd>
-<div class="block">返回认证完成后允许执行的动作。</div>
+<div class="block">认证完成后允许执行的动作。</div>
 </dd>
-<dt><a href="com/sca4d/auth/config/AuthSettings.html#ATTEMPT_TTL" class="member-name-link">ATTEMPT_TTL</a> - Static variable in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthSettings.html" title="class in com.sca4d.auth.config">AuthSettings</a></dt>
+<dt><a href="com/sca4d/auth/config/AuthSettings.html#ATTEMPT_TTL" class="member-name-link">ATTEMPT_TTL</a> - Variable in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthSettings.html" title="class in com.sca4d.auth.config">AuthSettings</a></dt>
 <dd>
 <div class="block">跨请求认证尝试有效期。</div>
 </dd>
@@ -103,12 +103,14 @@ loadScripts(document, 'script');</script>
 <div class="block">配置默认 Token 模式、服务端 Session 和短效 JWT 投影。</div>
 </dd>
 <dt><a href="com/sca4d/auth/config/AuthProperties.html#%3Cinit%3E()" class="member-name-link">AuthProperties()</a> - Constructor for class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthProperties.html" title="class in com.sca4d.auth.config">AuthProperties</a></dt>
-<dd>
-<div class="block">创建使用 SESSION 模式的部署配置对象。</div>
-</dd>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/config/AuthProperties.Jwt.html" class="type-name-link" title="class in com.sca4d.auth.config">AuthProperties.Jwt</a> - Class in <a href="com/sca4d/auth/config/package-summary.html">com.sca4d.auth.config</a></dt>
 <dd>
 <div class="block">配置 HS256 JWT 的密钥轮换、受众、有效期和长度限制。</div>
+</dd>
+<dt><a href="com/sca4d/auth/config/AuthProperties.Token.html" class="type-name-link" title="class in com.sca4d.auth.config">AuthProperties.Token</a> - Class in <a href="com/sca4d/auth/config/package-summary.html">com.sca4d.auth.config</a></dt>
+<dd>
+<div class="block">配置普通请求使用的认证 Token 模式。</div>
 </dd>
 <dt><a href="com/sca4d/auth/web/AuthRequestInterceptor.html" class="type-name-link" title="class in com.sca4d.auth.web">AuthRequestInterceptor</a> - Class in <a href="com/sca4d/auth/web/package-summary.html">com.sca4d.auth.web</a></dt>
 <dd>
@@ -122,17 +124,23 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">声明认证模块可以由客户管理的会话、尝试和 JWT 有效期。</div>
 </dd>
-<dt><a href="com/sca4d/auth/engine/AuthenticationMethods.html#available(com.sca4d.core.api.identity.Account,com.sca4d.core.api.authentication.AuthenticationMethodCode)" class="member-name-link">available(Account, AuthenticationMethodCode)</a> - Method in class com.sca4d.auth.engine.<a href="com/sca4d/auth/engine/AuthenticationMethods.html" title="class in com.sca4d.auth.engine">AuthenticationMethods</a></dt>
+<dt><a href="com/sca4d/auth/config/AuthSettings.html#%3Cinit%3E(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.setting.access.SettingWriter)" class="member-name-link">AuthSettings(SettingReader&lt;String&gt;, SettingWriter&lt;String&gt;)</a> - Constructor for class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthSettings.html" title="class in com.sca4d.auth.config">AuthSettings</a></dt>
+<dd>
+<div class="block">构造模块设置，每个应用上下文独立保存 Source。</div>
+</dd>
+<dt><a href="com/sca4d/auth/engine/AuthenticationMethods.html#available(com.sca4d.core.api.identity.Account,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">available(Account, TreeCode)</a> - Method in class com.sca4d.auth.engine.<a href="com/sca4d/auth/engine/AuthenticationMethods.html" title="class in com.sca4d.auth.engine">AuthenticationMethods</a></dt>
 <dd>
 <div class="block">判断指定 Account 当前能否使用已安装的认证方法。</div>
 </dd>
-<dt><a href="com/sca4d/auth/engine/AuthenticationMethods.html#available(com.sca4d.core.api.identity.Account,java.util.Set)" class="member-name-link">available(Account, Set&lt;AuthenticationMethodCode&gt;)</a> - Method in class com.sca4d.auth.engine.<a href="com/sca4d/auth/engine/AuthenticationMethods.html" title="class in com.sca4d.auth.engine">AuthenticationMethods</a></dt>
+<dt><a href="com/sca4d/auth/engine/AuthenticationMethods.html#available(com.sca4d.core.api.identity.Account,java.util.Set)" class="member-name-link">available(Account, Set&lt;TreeCode&gt;)</a> - Method in class com.sca4d.auth.engine.<a href="com/sca4d/auth/engine/AuthenticationMethods.html" title="class in com.sca4d.auth.engine">AuthenticationMethods</a></dt>
 <dd>
 <div class="block">返回策略允许且账号当前可用的方法。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:C">C</h2>
 <dl class="index">
+<dt><a href="com/sca4d/auth/session/codec/SessionCodec.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.auth.session.codec.<a href="com/sca4d/auth/session/codec/SessionCodec.html" title="class in com.sca4d.auth.session.codec">SessionCodec</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/config/package-summary.html">com.sca4d.auth.config</a> - package com.sca4d.auth.config</dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/engine/package-summary.html">com.sca4d.auth.engine</a> - package com.sca4d.auth.engine</dt>
@@ -229,7 +237,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/auth/engine/attempt/AuthenticationAttemptState.html#expiresAt()" class="member-name-link">expiresAt()</a> - Method in class com.sca4d.auth.engine.attempt.<a href="com/sca4d/auth/engine/attempt/AuthenticationAttemptState.html" title="class in com.sca4d.auth.engine.attempt">AuthenticationAttemptState</a></dt>
 <dd>
-<div class="block">返回认证尝试的过期时间。</div>
+<div class="block">认证尝试的过期时间。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:F">F</h2>
@@ -247,23 +255,27 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/config/AuthProperties.html#getExcludedPaths()" class="member-name-link">getExcludedPaths()</a> - Method in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthProperties.html" title="class in com.sca4d.auth.config">AuthProperties</a></dt>
 <dd>
-<div class="block">读取不进入认证拦截器的 Spring MVC 路径模式。</div>
+<div class="block">不进入认证拦截器的 Spring MVC 路径模式。</div>
 </dd>
 <dt><a href="com/sca4d/auth/config/AuthProperties.Jwt.html#getIssuer()" class="member-name-link">getIssuer()</a> - Method in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthProperties.Jwt.html" title="class in com.sca4d.auth.config">AuthProperties.Jwt</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/config/AuthProperties.html#getJwt()" class="member-name-link">getJwt()</a> - Method in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthProperties.html" title="class in com.sca4d.auth.config">AuthProperties</a></dt>
 <dd>
-<div class="block">读取 JWT 签发和验证配置。</div>
+<div class="block">JWT 签发和验证配置。</div>
 </dd>
 <dt><a href="com/sca4d/auth/config/AuthProperties.Jwt.html#getKeys()" class="member-name-link">getKeys()</a> - Method in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthProperties.Jwt.html" title="class in com.sca4d.auth.config">AuthProperties.Jwt</a></dt>
 <dd>
-<div class="block">读取验证密钥表。</div>
+<div class="block">验证密钥表。</div>
 </dd>
 <dt><a href="com/sca4d/auth/config/AuthProperties.Jwt.html#getMaxTokenLength()" class="member-name-link">getMaxTokenLength()</a> - Method in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthProperties.Jwt.html" title="class in com.sca4d.auth.config">AuthProperties.Jwt</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/config/AuthProperties.Token.html#getMode()" class="member-name-link">getMode()</a> - Method in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthProperties.Token.html" title="class in com.sca4d.auth.config">AuthProperties.Token</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/config/AuthProperties.html#getToken()" class="member-name-link">getToken()</a> - Method in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthProperties.html" title="class in com.sca4d.auth.config">AuthProperties</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/config/AuthProperties.html#getTokenMode()" class="member-name-link">getTokenMode()</a> - Method in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthProperties.html" title="class in com.sca4d.auth.config">AuthProperties</a></dt>
 <dd>
-<div class="block">读取普通 HTTP 请求默认使用的 Token 模式。</div>
+<div class="block">普通 HTTP 请求默认使用的 Token 模式。</div>
 </dd>
 <dt><a href="com/sca4d/auth/config/AuthSettings.html#GROUP" class="member-name-link">GROUP</a> - Static variable in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthSettings.html" title="class in com.sca4d.auth.config">AuthSettings</a></dt>
 <dd>
@@ -274,7 +286,7 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/auth/engine/attempt/AuthenticationAttemptState.html#id()" class="member-name-link">id()</a> - Method in class com.sca4d.auth.engine.attempt.<a href="com/sca4d/auth/engine/attempt/AuthenticationAttemptState.html" title="class in com.sca4d.auth.engine.attempt">AuthenticationAttemptState</a></dt>
 <dd>
-<div class="block">返回认证尝试标识。</div>
+<div class="block">认证尝试标识。</div>
 </dd>
 <dt><a href="com/sca4d/auth/session/RedisSessionGeneration.html#invalidate(long)" class="member-name-link">invalidate(long)</a> - Method in class com.sca4d.auth.session.<a href="com/sca4d/auth/session/RedisSessionGeneration.html" title="class in com.sca4d.auth.session">RedisSessionGeneration</a></dt>
 <dd>
@@ -294,10 +306,8 @@ loadScripts(document, 'script');</script>
 <h2 class="title" id="I:J">J</h2>
 <dl class="index">
 <dt><a href="com/sca4d/auth/config/AuthProperties.Jwt.html#%3Cinit%3E()" class="member-name-link">Jwt()</a> - Constructor for class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthProperties.Jwt.html" title="class in com.sca4d.auth.config">AuthProperties.Jwt</a></dt>
-<dd>
-<div class="block">创建使用五分钟 access Token 和 6144 字符上限的 JWT 配置。</div>
-</dd>
-<dt><a href="com/sca4d/auth/config/AuthSettings.html#JWT_ACCESS_TTL" class="member-name-link">JWT_ACCESS_TTL</a> - Static variable in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthSettings.html" title="class in com.sca4d.auth.config">AuthSettings</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/config/AuthSettings.html#JWT_ACCESS_TTL" class="member-name-link">JWT_ACCESS_TTL</a> - Variable in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthSettings.html" title="class in com.sca4d.auth.config">AuthSettings</a></dt>
 <dd>
 <div class="block">短效 access JWT 有效期。</div>
 </dd>
@@ -305,7 +315,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用独立 HS256 密钥把完整 Core Session 编码为短效 JWS 投影，并在请求中离线恢复。</div>
 </dd>
-<dt><a href="com/sca4d/auth/jwt/JwtSessionProjection.html#%3Cinit%3E(com.sca4d.auth.session.codec.SessionCodec,com.sca4d.auth.config.AuthProperties,com.sca4d.core.api.setting.Settings,java.time.Clock)" class="member-name-link">JwtSessionProjection(SessionCodec, AuthProperties, Settings, Clock)</a> - Constructor for class com.sca4d.auth.jwt.<a href="com/sca4d/auth/jwt/JwtSessionProjection.html" title="class in com.sca4d.auth.jwt">JwtSessionProjection</a></dt>
+<dt><a href="com/sca4d/auth/jwt/JwtSessionProjection.html#%3Cinit%3E(com.sca4d.auth.session.codec.SessionCodec,com.sca4d.auth.config.AuthProperties,com.sca4d.auth.config.AuthSettings,java.time.Clock)" class="member-name-link">JwtSessionProjection(SessionCodec, AuthProperties, AuthSettings, Clock)</a> - Constructor for class com.sca4d.auth.jwt.<a href="com/sca4d/auth/jwt/JwtSessionProjection.html" title="class in com.sca4d.auth.jwt">JwtSessionProjection</a></dt>
 <dd>
 <div class="block">创建 JWT 投影服务并验证 JWT 模式需要的全部签名配置。</div>
 </dd>
@@ -326,11 +336,19 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/auth/session/codec/ResourceIdLoaders.html#load(java.util.Collection)" class="member-name-link">load(Collection&lt;? extends Principal&gt;)</a> - Method in class com.sca4d.auth.session.codec.<a href="com/sca4d/auth/session/codec/ResourceIdLoaders.html" title="class in com.sca4d.auth.session.codec">ResourceIdLoaders</a></dt>
 <dd>
-<div class="block">并发装载并合并每个完整 Principal 的数字 Resource 标识。</div>
+<div class="block">同步装载并合并数字 Resource 标识。</div>
 </dd>
 <dt><a href="com/sca4d/auth/session/codec/ResourceLoaders.html#load(java.util.Collection)" class="member-name-link">load(Collection&lt;? extends Principal&gt;)</a> - Method in class com.sca4d.auth.session.codec.<a href="com/sca4d/auth/session/codec/ResourceLoaders.html" title="class in com.sca4d.auth.session.codec">ResourceLoaders</a></dt>
 <dd>
-<div class="block">并发装载并合并每个 Principal 的静态资源。</div>
+<div class="block">同步装载并合并静态资源；异步节点由本对象的 Executor 调度。</div>
+</dd>
+<dt><a href="com/sca4d/auth/session/codec/ResourceIdLoaders.html#loadAsync(java.util.Collection)" class="member-name-link">loadAsync(Collection&lt;? extends Principal&gt;)</a> - Method in class com.sca4d.auth.session.codec.<a href="com/sca4d/auth/session/codec/ResourceIdLoaders.html" title="class in com.sca4d.auth.session.codec">ResourceIdLoaders</a></dt>
+<dd>
+<div class="block">异步装载并合并数字 Resource 标识。</div>
+</dd>
+<dt><a href="com/sca4d/auth/session/codec/ResourceLoaders.html#loadAsync(java.util.Collection)" class="member-name-link">loadAsync(Collection&lt;? extends Principal&gt;)</a> - Method in class com.sca4d.auth.session.codec.<a href="com/sca4d/auth/session/codec/ResourceLoaders.html" title="class in com.sca4d.auth.session.codec">ResourceLoaders</a></dt>
+<dd>
+<div class="block">异步装载并合并静态资源，结果只在全部 Loader 和合并节点成功后完成。</div>
 </dd>
 <dt><a href="com/sca4d/auth/engine/attempt/RedisAuthenticationAttemptStore.html#loadById(com.sca4d.core.api.authentication.AuthenticationAttemptId)" class="member-name-link">loadById(AuthenticationAttemptId)</a> - Method in class com.sca4d.auth.engine.attempt.<a href="com/sca4d/auth/engine/attempt/RedisAuthenticationAttemptStore.html" title="class in com.sca4d.auth.engine.attempt">RedisAuthenticationAttemptStore</a></dt>
 <dd>
@@ -359,6 +377,8 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:P">P</h2>
 <dl class="index">
+<dt><a href="com/sca4d/auth/session/SaTokenRedisSerialization.html#postProcessAfterInitialization(java.lang.Object,java.lang.String)" class="member-name-link">postProcessAfterInitialization(Object, String)</a> - Method in class com.sca4d.auth.session.<a href="com/sca4d/auth/session/SaTokenRedisSerialization.html" title="class in com.sca4d.auth.session">SaTokenRedisSerialization</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/web/AuthRequestInterceptor.html#preHandleWithCall(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,java.lang.Object,com.sca4d.core.api.call.Call)" class="member-name-link">preHandleWithCall(HttpServletRequest, HttpServletResponse, Object, Call)</a> - Method in class com.sca4d.auth.web.<a href="com/sca4d/auth/web/AuthRequestInterceptor.html" title="class in com.sca4d.auth.web">AuthRequestInterceptor</a></dt>
 <dd>
 <div class="block">在 Controller 执行前按 <code>RequireSessionToken</code> 选择唯一 Token 类型并绑定 Session。
@@ -392,7 +412,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用认证方法目录、Redis 尝试和应用动作策略编排零到三因素认证。</div>
 </dd>
-<dt><a href="com/sca4d/auth/engine/RedisAuthenticationAttempts.html#%3Cinit%3E(com.sca4d.auth.engine.AuthenticationMethods,com.sca4d.auth.engine.attempt.RedisAuthenticationAttemptStore,com.sca4d.core.api.authentication.AuthenticationPolicy,com.sca4d.core.api.setting.Settings,java.time.Clock)" class="member-name-link">RedisAuthenticationAttempts(AuthenticationMethods, RedisAuthenticationAttemptStore, AuthenticationPolicy, Settings, Clock)</a> - Constructor for class com.sca4d.auth.engine.<a href="com/sca4d/auth/engine/RedisAuthenticationAttempts.html" title="class in com.sca4d.auth.engine">RedisAuthenticationAttempts</a></dt>
+<dt><a href="com/sca4d/auth/engine/RedisAuthenticationAttempts.html#%3Cinit%3E(com.sca4d.auth.engine.AuthenticationMethods,com.sca4d.auth.engine.attempt.RedisAuthenticationAttemptStore,com.sca4d.core.api.authentication.AuthenticationPolicy,com.sca4d.auth.config.AuthSettings,java.time.Clock)" class="member-name-link">RedisAuthenticationAttempts(AuthenticationMethods, RedisAuthenticationAttemptStore, AuthenticationPolicy, AuthSettings, Clock)</a> - Constructor for class com.sca4d.auth.engine.<a href="com/sca4d/auth/engine/RedisAuthenticationAttempts.html" title="class in com.sca4d.auth.engine">RedisAuthenticationAttempts</a></dt>
 <dd>
 <div class="block">创建默认认证引擎。</div>
 </dd>
@@ -400,7 +420,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用 Redis TTL 保存认证尝试，并以自动续租的分布式锁串行修改同一尝试。</div>
 </dd>
-<dt><a href="com/sca4d/auth/engine/attempt/RedisAuthenticationAttemptStore.html#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,com.fasterxml.jackson.databind.ObjectMapper,java.time.Clock,com.sca4d.core.api.runtime.RuntimeNamespace,com.sca4d.core.api.concurrent.DistributedLock)" class="member-name-link">RedisAuthenticationAttemptStore(StringRedisTemplate, ObjectMapper, Clock, RuntimeNamespace, DistributedLock)</a> - Constructor for class com.sca4d.auth.engine.attempt.<a href="com/sca4d/auth/engine/attempt/RedisAuthenticationAttemptStore.html" title="class in com.sca4d.auth.engine.attempt">RedisAuthenticationAttemptStore</a></dt>
+<dt><a href="com/sca4d/auth/engine/attempt/RedisAuthenticationAttemptStore.html#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,com.fasterxml.jackson.databind.ObjectMapper,java.time.Clock,com.sca4d.core.api.concurrent.DistributedLock)" class="member-name-link">RedisAuthenticationAttemptStore(RedisTemplate&lt;Key, String&gt;, ObjectMapper, Clock, DistributedLock)</a> - Constructor for class com.sca4d.auth.engine.attempt.<a href="com/sca4d/auth/engine/attempt/RedisAuthenticationAttemptStore.html" title="class in com.sca4d.auth.engine.attempt">RedisAuthenticationAttemptStore</a></dt>
 <dd>
 <div class="block">创建 Redis 认证尝试存储。</div>
 </dd>
@@ -408,7 +428,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">在 Redis 中保存每个 Account 的 Session 失效代次。</div>
 </dd>
-<dt><a href="com/sca4d/auth/session/RedisSessionGeneration.html#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,java.util.function.Supplier,com.sca4d.core.api.runtime.RuntimeNamespace)" class="member-name-link">RedisSessionGeneration(StringRedisTemplate, Supplier&lt;List&lt;SessionInvalidationListener&gt;&gt;, RuntimeNamespace)</a> - Constructor for class com.sca4d.auth.session.<a href="com/sca4d/auth/session/RedisSessionGeneration.html" title="class in com.sca4d.auth.session">RedisSessionGeneration</a></dt>
+<dt><a href="com/sca4d/auth/session/RedisSessionGeneration.html#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,java.util.function.Supplier)" class="member-name-link">RedisSessionGeneration(RedisTemplate&lt;Key, String&gt;, Supplier&lt;List&lt;SessionInvalidationListener&gt;&gt;)</a> - Constructor for class com.sca4d.auth.session.<a href="com/sca4d/auth/session/RedisSessionGeneration.html" title="class in com.sca4d.auth.session">RedisSessionGeneration</a></dt>
 <dd>
 <div class="block">创建 Redis Session 代次存储。</div>
 </dd>
@@ -416,7 +436,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">保存 SessionId 到 Sa-Token 不透明 Token 的短期索引，使 JWT 恢复的 Session 可以注销权威状态。</div>
 </dd>
-<dt><a href="com/sca4d/auth/session/RedisSessionTokenIndex.html#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,com.sca4d.core.api.runtime.RuntimeNamespace)" class="member-name-link">RedisSessionTokenIndex(StringRedisTemplate, RuntimeNamespace)</a> - Constructor for class com.sca4d.auth.session.<a href="com/sca4d/auth/session/RedisSessionTokenIndex.html" title="class in com.sca4d.auth.session">RedisSessionTokenIndex</a></dt>
+<dt><a href="com/sca4d/auth/session/RedisSessionTokenIndex.html#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate)" class="member-name-link">RedisSessionTokenIndex(RedisTemplate&lt;Key, String&gt;)</a> - Constructor for class com.sca4d.auth.session.<a href="com/sca4d/auth/session/RedisSessionTokenIndex.html" title="class in com.sca4d.auth.session">RedisSessionTokenIndex</a></dt>
 <dd>
 <div class="block">创建 Redis Session Token 索引。</div>
 </dd>
@@ -432,19 +452,19 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/auth/session/SessionService.html#resolveToken(java.lang.String)" class="member-name-link">resolveToken(String)</a> - Method in class com.sca4d.auth.session.<a href="com/sca4d/auth/session/SessionService.html" title="class in com.sca4d.auth.session">SessionService</a></dt>
 <dt><a href="com/sca4d/auth/session/codec/ResourceIdLoaders.html" class="type-name-link" title="class in com.sca4d.auth.session.codec">ResourceIdLoaders</a> - Class in <a href="com/sca4d/auth/session/codec/package-summary.html">com.sca4d.auth.session.codec</a></dt>
 <dd>
-<div class="block">并发合并所有 ResourceIdLoader 为完整 Principal 贡献的数字 Resource 标识。</div>
+<div class="block">使用 DataGraph 并发装载并合并 Principal 的数字 Resource 标识。</div>
 </dd>
 <dt><a href="com/sca4d/auth/session/codec/ResourceIdLoaders.html#%3Cinit%3E(java.util.List,java.util.concurrent.Executor)" class="member-name-link">ResourceIdLoaders(List&lt;ResourceIdLoader&gt;, Executor)</a> - Constructor for class com.sca4d.auth.session.codec.<a href="com/sca4d/auth/session/codec/ResourceIdLoaders.html" title="class in com.sca4d.auth.session.codec">ResourceIdLoaders</a></dt>
 <dd>
-<div class="block">创建并发调用所有数字 Resource 标识 Loader 的装载服务。</div>
+<div class="block">创建使用 DataGraph 并发调用所有数字 Resource Loader 的装载服务。</div>
 </dd>
 <dt><a href="com/sca4d/auth/session/codec/ResourceLoaders.html" class="type-name-link" title="class in com.sca4d.auth.session.codec">ResourceLoaders</a> - Class in <a href="com/sca4d/auth/session/codec/package-summary.html">com.sca4d.auth.session.codec</a></dt>
 <dd>
-<div class="block">并发合并所有 ResourceLoader 的静态资源贡献。</div>
+<div class="block">使用 DataGraph 并发装载并合并所有 ResourceLoader 的静态资源贡献。</div>
 </dd>
 <dt><a href="com/sca4d/auth/session/codec/ResourceLoaders.html#%3Cinit%3E(java.util.List,java.util.concurrent.Executor)" class="member-name-link">ResourceLoaders(List&lt;ResourceLoader&gt;, Executor)</a> - Constructor for class com.sca4d.auth.session.codec.<a href="com/sca4d/auth/session/codec/ResourceLoaders.html" title="class in com.sca4d.auth.session.codec">ResourceLoaders</a></dt>
 <dd>
-<div class="block">创建并发调用所有资源 Loader 的装载服务。</div>
+<div class="block">创建使用 DataGraph 并发调用所有资源 Loader 的装载服务。</div>
 </dd>
 <dt><a href="com/sca4d/auth/jwt/JwtSessionProjection.html#restore(java.lang.String)" class="member-name-link">restore(String)</a> - Method in class com.sca4d.auth.jwt.<a href="com/sca4d/auth/jwt/JwtSessionProjection.html" title="class in com.sca4d.auth.jwt">JwtSessionProjection</a></dt>
 <dd>
@@ -452,18 +472,26 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/auth/engine/attempt/AuthenticationAttemptState.html#reusableAuthentications()" class="member-name-link">reusableAuthentications()</a> - Method in class com.sca4d.auth.engine.attempt.<a href="com/sca4d/auth/engine/attempt/AuthenticationAttemptState.html" title="class in com.sca4d.auth.engine.attempt">AuthenticationAttemptState</a></dt>
 <dd>
-<div class="block">返回调用方提供的不可修改已有认证列表。</div>
+<div class="block">调用方提供的不可修改已有认证列表。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:S">S</h2>
 <dl class="index">
 <dt><a href="com/sca4d/auth/engine/attempt/AuthenticationAttemptState.html#satisfied()" class="member-name-link">satisfied()</a> - Method in class com.sca4d.auth.engine.attempt.<a href="com/sca4d/auth/engine/attempt/AuthenticationAttemptState.html" title="class in com.sca4d.auth.engine.attempt">AuthenticationAttemptState</a></dt>
 <dd>
-<div class="block">返回最近一次策略评估是否已经满足。</div>
+<div class="block">最近一次策略评估是否已经满足。</div>
 </dd>
 <dt><a href="com/sca4d/auth/engine/attempt/AuthenticationAttemptState.html#satisfied(boolean)" class="member-name-link">satisfied(boolean)</a> - Method in class com.sca4d.auth.engine.attempt.<a href="com/sca4d/auth/engine/attempt/AuthenticationAttemptState.html" title="class in com.sca4d.auth.engine.attempt">AuthenticationAttemptState</a></dt>
 <dd>
 <div class="block">设置当前尝试是否已经满足策略；调用方必须在同一尝试租约内保存结果。</div>
+</dd>
+<dt><a href="com/sca4d/auth/session/SaTokenRedisSerialization.html" class="type-name-link" title="class in com.sca4d.auth.session">SaTokenRedisSerialization</a> - Class in <a href="com/sca4d/auth/session/package-summary.html">com.sca4d.auth.session</a></dt>
+<dd>
+<div class="block">为官方 Sa-Token DAO 的独立 Redis 模板安装服务器 key 序列化，不修改 Token 或客户端协议。</div>
+</dd>
+<dt><a href="com/sca4d/auth/session/SaTokenRedisSerialization.html#%3Cinit%3E()" class="member-name-link">SaTokenRedisSerialization()</a> - Constructor for class com.sca4d.auth.session.<a href="com/sca4d/auth/session/SaTokenRedisSerialization.html" title="class in com.sca4d.auth.session">SaTokenRedisSerialization</a></dt>
+<dd>
+<div class="block">为官方 DAO 安装名称边界转换，不单独创建 Redis 连接。</div>
 </dd>
 <dt><a href="com/sca4d/auth/session/SaTokenSessionControl.html" class="type-name-link" title="class in com.sca4d.auth.session">SaTokenSessionControl</a> - Class in <a href="com/sca4d/auth/session/package-summary.html">com.sca4d.auth.session</a></dt>
 <dd>
@@ -489,7 +517,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">保存与 backing Session 相同有效期的 Token 索引。</div>
 </dd>
-<dt><a href="com/sca4d/auth/config/AuthSettings.html#SESSION_TTL" class="member-name-link">SESSION_TTL</a> - Static variable in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthSettings.html" title="class in com.sca4d.auth.config">AuthSettings</a></dt>
+<dt><a href="com/sca4d/auth/config/AuthSettings.html#SESSION_TTL" class="member-name-link">SESSION_TTL</a> - Variable in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthSettings.html" title="class in com.sca4d.auth.config">AuthSettings</a></dt>
 <dd>
 <div class="block">登录建立的 Session 有效期。</div>
 </dd>
@@ -521,7 +549,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用已经成功的认证记录建立、恢复、刷新和终止 Session。</div>
 </dd>
-<dt><a href="com/sca4d/auth/session/SessionService.html#%3Cinit%3E(com.sca4d.auth.session.SessionIdentityLoadService,com.sca4d.auth.session.codec.PrincipalLoaders,com.sca4d.auth.session.codec.PrincipalIdLoaders,com.sca4d.auth.session.codec.ResourceLoaders,com.sca4d.auth.session.codec.ResourceIdLoaders,com.sca4d.auth.session.SaTokenSessionManager,com.sca4d.auth.jwt.JwtSessionProjection,com.sca4d.core.api.setting.Settings,java.time.Clock)" class="member-name-link">SessionService(SessionIdentityLoadService, PrincipalLoaders, PrincipalIdLoaders, ResourceLoaders, ResourceIdLoaders, SaTokenSessionManager, JwtSessionProjection, Settings, Clock)</a> - Constructor for class com.sca4d.auth.session.<a href="com/sca4d/auth/session/SessionService.html" title="class in com.sca4d.auth.session">SessionService</a></dt>
+<dt><a href="com/sca4d/auth/session/SessionService.html#%3Cinit%3E(com.sca4d.auth.session.SessionIdentityLoadService,com.sca4d.auth.session.codec.PrincipalLoaders,com.sca4d.auth.session.codec.PrincipalIdLoaders,com.sca4d.auth.session.codec.ResourceLoaders,com.sca4d.auth.session.codec.ResourceIdLoaders,com.sca4d.auth.session.SaTokenSessionManager,com.sca4d.auth.jwt.JwtSessionProjection,com.sca4d.auth.config.AuthSettings,java.time.Clock)" class="member-name-link">SessionService(SessionIdentityLoadService, PrincipalLoaders, PrincipalIdLoaders, ResourceLoaders, ResourceIdLoaders, SaTokenSessionManager, JwtSessionProjection, AuthSettings, Clock)</a> - Constructor for class com.sca4d.auth.session.<a href="com/sca4d/auth/session/SessionService.html" title="class in com.sca4d.auth.session">SessionService</a></dt>
 <dd>
 <div class="block">创建 Session 服务。</div>
 </dd>
@@ -539,13 +567,15 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">设置接受和签发的 JWT 最大字符数。</div>
 </dd>
+<dt><a href="com/sca4d/auth/config/AuthProperties.Token.html#setMode(com.sca4d.core.api.authentication.AuthTokenMode)" class="member-name-link">setMode(AuthTokenMode)</a> - Method in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthProperties.Token.html" title="class in com.sca4d.auth.config">AuthProperties.Token</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/config/AuthProperties.html#setTokenMode(com.sca4d.core.api.authentication.AuthTokenMode)" class="member-name-link">setTokenMode(AuthTokenMode)</a> - Method in class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthProperties.html" title="class in com.sca4d.auth.config">AuthProperties</a></dt>
 <dd>
 <div class="block">设置普通 HTTP 请求默认使用的 Token 模式。</div>
 </dd>
 <dt><a href="com/sca4d/auth/engine/RedisAuthenticationAttempts.html#start(com.sca4d.core.api.authentication.AuthenticationActionCode,com.sca4d.core.api.authentication.AuthenticationSubmission)" class="member-name-link">start(AuthenticationActionCode, AuthenticationSubmission&lt;?&gt;)</a> - Method in class com.sca4d.auth.engine.<a href="com/sca4d/auth/engine/RedisAuthenticationAttempts.html" title="class in com.sca4d.auth.engine">RedisAuthenticationAttempts</a></dt>
 <dd>
-<div class="block">使用首个认证材料识别账号，并按该账号的应用策略开始动作认证。</div>
+<div class="block">使用首个认证材料识别账号，并按已识别账号的应用策略开始动作认证。</div>
 </dd>
 <dt><a href="com/sca4d/auth/engine/RedisAuthenticationAttempts.html#start(com.sca4d.core.api.identity.Account,com.sca4d.core.api.authentication.AuthenticationActionCode,java.util.List)" class="member-name-link">start(Account, AuthenticationActionCode, List&lt;Authentication&gt;)</a> - Method in class com.sca4d.auth.engine.<a href="com/sca4d/auth/engine/RedisAuthenticationAttempts.html" title="class in com.sca4d.auth.engine">RedisAuthenticationAttempts</a></dt>
 <dd>
@@ -570,12 +600,16 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/auth/session/SaTokenSessionControl.html#terminateAccount(long,com.sca4d.core.api.authentication.SessionTerminationReason)" class="member-name-link">terminateAccount(long, SessionTerminationReason)</a> - Method in class com.sca4d.auth.session.<a href="com/sca4d/auth/session/SaTokenSessionControl.html" title="class in com.sca4d.auth.session">SaTokenSessionControl</a></dt>
 <dt><a href="com/sca4d/auth/session/SaTokenSessionControl.html#terminateOtherSessions(long,com.sca4d.core.api.authentication.SessionId,com.sca4d.core.api.authentication.SessionTerminationReason)" class="member-name-link">terminateOtherSessions(long, SessionId, SessionTerminationReason)</a> - Method in class com.sca4d.auth.session.<a href="com/sca4d/auth/session/SaTokenSessionControl.html" title="class in com.sca4d.auth.session">SaTokenSessionControl</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/config/AuthProperties.Token.html#%3Cinit%3E()" class="member-name-link">Token()</a> - Constructor for class com.sca4d.auth.config.<a href="com/sca4d/auth/config/AuthProperties.Token.html" title="class in com.sca4d.auth.config">AuthProperties.Token</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/session/codec/OperationResourceCodec.html#type()" class="member-name-link">type()</a> - Method in class com.sca4d.auth.session.codec.<a href="com/sca4d/auth/session/codec/OperationResourceCodec.html" title="class in com.sca4d.auth.session.codec">OperationResourceCodec</a></dt>
 <dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:V">V</h2>
 <dl class="index">
 <dt><a href="com/sca4d/auth/session/codec/OperationResourceCodec.html#valueType()" class="member-name-link">valueType()</a> - Method in class com.sca4d.auth.session.codec.<a href="com/sca4d/auth/session/codec/OperationResourceCodec.html" title="class in com.sca4d.auth.session.codec">OperationResourceCodec</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/auth/session/codec/SessionCodec.html#valueType()" class="member-name-link">valueType()</a> - Method in class com.sca4d.auth.session.codec.<a href="com/sca4d/auth/session/codec/SessionCodec.html" title="class in com.sca4d.auth.session.codec">SessionCodec</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/engine/attempt/AuthenticationAttemptState.html#verifications()" class="member-name-link">verifications()</a> - Method in class com.sca4d.auth.engine.attempt.<a href="com/sca4d/auth/engine/attempt/AuthenticationAttemptState.html" title="class in com.sca4d.auth.engine.attempt">AuthenticationAttemptState</a></dt>
 <dd>
@@ -585,6 +619,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">复核已保存的非秘密证据引用。</div>
 </dd>
+<dt><a href="com/sca4d/auth/session/codec/SessionCodec.html#version()" class="member-name-link">version()</a> - Method in class com.sca4d.auth.session.codec.<a href="com/sca4d/auth/session/codec/SessionCodec.html" title="class in com.sca4d.auth.session.codec">SessionCodec</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:W">W</h2>
 <dl class="index">

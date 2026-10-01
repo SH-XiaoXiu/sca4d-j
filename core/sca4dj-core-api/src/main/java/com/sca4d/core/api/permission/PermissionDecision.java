@@ -14,15 +14,15 @@ import java.util.Optional;
  * <p>具体资源通常只需要允许或拒绝。集合资源被部分允许时，判定可以携带资源范围（Resource Scope，{@link ResourceScope}），由
  * 数据仓库（Repository）将范围落实为查询或原子写入条件。
  */
-public final class PermissionDecision {
+public class PermissionDecision {
 
     private static final PermissionDecision ALLOWED = new PermissionDecision(true, null, null);
 
-    private final boolean allowed;
+    private final @Nullable ResourceScope scope;
 
     private final @Nullable String reason;
 
-    private final @Nullable ResourceScope scope;
+    private final boolean allowed;
 
     private PermissionDecision(boolean allowed, @Nullable String reason, @Nullable ResourceScope scope) {
         this.allowed = allowed;
@@ -31,7 +31,7 @@ public final class PermissionDecision {
     }
 
     /**
-     * 返回允许执行的权限判定。
+     * 允许执行的权限判定。
      *
      * @return 允许执行的权限判定
      */
@@ -52,7 +52,7 @@ public final class PermissionDecision {
     @Contract(pure = true)
     public static PermissionDecision allow(ResourceScope scope) {
         ResourceScope checked = Objects.requireNonNull(scope, "资源范围不能为空");
-        TextUtils.requireText(checked.resourceType(), "资源范围类型");
+        Objects.requireNonNull(checked.resourceType(), "资源范围类型");
         return new PermissionDecision(true, null, checked);
     }
 
@@ -69,7 +69,7 @@ public final class PermissionDecision {
     }
 
     /**
-     * 返回允许执行时返回 {@code true}。
+     * 是否允许执行。
      *
      * @return 允许执行时返回 {@code true}
      */
@@ -102,7 +102,7 @@ public final class PermissionDecision {
      * 按明确类型取得允许判定携带的业务资源范围。
      *
      * @param scopeType 业务模块定义的资源范围类型
-     * @param <S> 资源范围类型
+     * @param <S>       资源范围类型
      * @return 类型匹配的业务资源范围
      * @throws IllegalStateException 当前判定未允许、没有携带范围或范围类型不匹配时抛出
      */

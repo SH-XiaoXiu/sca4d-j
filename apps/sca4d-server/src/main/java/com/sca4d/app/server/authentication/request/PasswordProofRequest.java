@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 接收已知 Account 的 STEP_UP 密码证明。 */
-public final class PasswordProofRequest {
+public class PasswordProofRequest {
 
     @NotBlank
     private @Nullable String password;

@@ -1,5 +1,6 @@
 package com.sca4d.messaging.outbox.mapper;
 
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -7,27 +8,27 @@ import java.util.Objects;
 
 /** 保存 Outbox 已写入领取租约后执行发布所需的列。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class OutboxCandidate {
+public class OutboxCandidate {
 
-    private final long messageId;
-
-    private final @NotNull String eventCode;
+    private final @NotNull TreeCode messageCode;
 
     private final byte @NotNull [] envelope;
 
     private final int attemptCount;
+
+    private final long messageId;
 
     private final long version;
 
     /** 创建已经登记租约、尝试次数和版本的 Outbox 领取数据。 */
     public OutboxCandidate(
             long messageId,
-            @NotNull String eventCode,
+            @NotNull TreeCode messageCode,
             byte @NotNull [] envelope,
             int attemptCount,
             long version) {
         this.messageId = messageId;
-        this.eventCode = Objects.requireNonNull(eventCode, "事件编码不能为空");
+        this.messageCode = Objects.requireNonNull(messageCode, "消息编码不能为空");
         this.envelope = Arrays.copyOf(Objects.requireNonNull(envelope, "消息信封不能为空"), envelope.length);
         this.attemptCount = attemptCount;
         this.version = version;
@@ -38,9 +39,9 @@ public final class OutboxCandidate {
         return messageId;
     }
 
-    /** @return RabbitMQ routing key 使用的事件编码 */
-    public @NotNull String eventCode() {
-        return eventCode;
+    /** @return RabbitMQ routing key 使用的消息编码 */
+    public @NotNull TreeCode messageCode() {
+        return messageCode;
     }
 
     /** @return 已序列化消息信封的副本 */

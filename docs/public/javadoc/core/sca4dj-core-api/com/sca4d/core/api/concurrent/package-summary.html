@@ -88,51 +88,67 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="IdempotencyBeginResult.html" title="class in com.sca4d.core.api.concurrent">IdempotencyBeginResult</a>&lt;T&gt;</div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">保存一次幂等处理权竞争的状态以及该状态允许读取的数据。</div>
+<div class="block">保存一次幂等处理权竞争的状态以及对应状态允许读取的数据。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab3"><a href="IdempotencyBeginStatus.html" title="enum class in com.sca4d.core.api.concurrent">IdempotencyBeginStatus</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab3">
 <div class="block">列出幂等请求开始处理时可能得到的互斥状态。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="IdempotencyFingerprints.html" title="class in com.sca4d.core.api.concurrent">IdempotencyFingerprints</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="IdempotencyCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">IdempotencyCallInterceptor</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">执行 `@Idempotent` 的处理权取得、结果重放、成功保存和失败释放。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="IdempotencyFingerprints.html" title="class in com.sca4d.core.api.concurrent">IdempotencyFingerprints</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">把方法参数转换成字段顺序稳定的 JSON，并生成不暴露原始参数的幂等摘要。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab5"><a href="IdempotencyInProgressException.html" title="class in com.sca4d.core.api.concurrent">IdempotencyInProgressException</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab5">
+<div class="col-first odd-row-color class-summary class-summary-tab5"><a href="IdempotencyInProgressException.html" title="class in com.sca4d.core.api.concurrent">IdempotencyInProgressException</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab5">
 <div class="block">表示同一幂等请求仍由其他执行者处理。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="IdempotencyKey.html" title="class in com.sca4d.core.api.concurrent">IdempotencyKey</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="IdempotencyKey.html" title="class in com.sca4d.core.api.concurrent">IdempotencyKey</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">一次幂等操作的不透明键。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab5"><a href="IdempotencyKeyConflictException.html" title="class in com.sca4d.core.api.concurrent">IdempotencyKeyConflictException</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab5">
+<div class="col-first odd-row-color class-summary class-summary-tab5"><a href="IdempotencyKeyConflictException.html" title="class in com.sca4d.core.api.concurrent">IdempotencyKeyConflictException</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab5">
 <div class="block">表示同一幂等键已经用于不同的方法参数。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="IdempotencyStore.html" title="interface in com.sca4d.core.api.concurrent">IdempotencyStore</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="IdempotencyStore.html" title="interface in com.sca4d.core.api.concurrent">IdempotencyStore</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">使用集群共享原子存储区分首次请求、处理中请求和可重放的成功结果。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="LockCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">LockCallInterceptor</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">解析 `@Locked` 的锁键，并在分布式锁内连续执行实际业务方法。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="LockKey.html" title="class in com.sca4d.core.api.concurrent">LockKey</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">保存跨应用实例互斥业务操作使用的锁键名称段。</div>
+<div class="block">使用稳定锁资源编码和动态标识组成跨实例互斥键，物理名称使用 App 隔离。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab5"><a href="OptimisticLockException.html" title="class in com.sca4d.core.api.concurrent">OptimisticLockException</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab5">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="NoRateLimitKeyResolver.html" title="class in com.sca4d.core.api.concurrent">NoRateLimitKeyResolver</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">表示 `@RateLimited` 没有声明额外的自定义限流键解析器。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab5"><a href="OptimisticLockException.html" title="class in com.sca4d.core.api.concurrent">OptimisticLockException</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab5">
 <div class="block">预期版本与当前版本不一致时抛出的乐观锁异常（Optimistic Lock Exception）。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RateLimit.html" title="class in com.sca4d.core.api.concurrent">RateLimit</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RateLimit.html" title="class in com.sca4d.core.api.concurrent">RateLimit</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">指定时间窗口内允许的最大调用次数。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RateLimitDecision.html" title="class in com.sca4d.core.api.concurrent">RateLimitDecision</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">保存一次限流额度判断是否允许以及拒绝后的等待时间。</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab3"><a href="RateLimitDimension.html" title="enum class in com.sca4d.core.api.concurrent">RateLimitDimension</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab3"><a href="RateLimit.Dim.html" title="enum class in com.sca4d.core.api.concurrent">RateLimit.Dim</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab3">
-<div class="block">列出 `@RateLimited` 可以直接读取的调用限流维度。</div>
+<div class="block">声明限流键使用的稳定维度。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RateLimitCallInterceptor.html" title="class in com.sca4d.core.api.concurrent">RateLimitCallInterceptor</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">解析 `@RateLimited` 的内置和自定义维度，并取得每个维度的限流额度。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RateLimitDecision.html" title="class in com.sca4d.core.api.concurrent">RateLimitDecision</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">保存一次限流额度判断是否允许以及拒绝后的等待时间。</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab1"><a href="RateLimiter.html" title="interface in com.sca4d.core.api.concurrent">RateLimiter</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab1">
@@ -142,20 +158,24 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color class-summary class-summary-tab5">
 <div class="block">表示调用没有取得全部限流额度，并携带调用方再次尝试前的等待秒数。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="Version.html" title="class in com.sca4d.core.api.concurrent">Version</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RateLimitKey.html" title="class in com.sca4d.core.api.concurrent">RateLimitKey</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">使用稳定限流编码和动态维度值组成跨实例限流键。</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="Version.html" title="class in com.sca4d.core.api.concurrent">Version</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">用于乐观并发控制的非负版本。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="VersionCondition.html" title="class in com.sca4d.core.api.concurrent">VersionCondition</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="VersionCondition.html" title="class in com.sca4d.core.api.concurrent">VersionCondition</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">保存一次条件写入使用的预期版本，以及写入零行时的失败含义。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="VersionConditions.html" title="interface in com.sca4d.core.api.concurrent">VersionConditions</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="VersionConditions.html" title="interface in com.sca4d.core.api.concurrent">VersionConditions</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">为一次根资源写入选择调用方提交的版本条件或 Repository 当前版本。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab5"><a href="VersionPreconditionFailedException.html" title="class in com.sca4d.core.api.concurrent">VersionPreconditionFailedException</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab5">
+<div class="col-first odd-row-color class-summary class-summary-tab5"><a href="VersionPreconditionFailedException.html" title="class in com.sca4d.core.api.concurrent">VersionPreconditionFailedException</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab5">
 <div class="block">表示调用方提交的预期版本与持久化对象的当前版本不一致。</div>
 </div>
 </div>

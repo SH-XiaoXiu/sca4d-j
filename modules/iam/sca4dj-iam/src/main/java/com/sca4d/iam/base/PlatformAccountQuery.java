@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 /** 保存 Platform Account 目录的一页查询条件。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class PlatformAccountQuery {
+public class PlatformAccountQuery {
 
     private final @NotNull PageRequest page;
 
@@ -31,7 +31,7 @@ public final class PlatformAccountQuery {
         if (checkedSearch != null && checkedSearch.length() > 128) {
             throw new IllegalArgumentException("账号搜索词长度不能超过 128");
         }
-        this.page = page.requireMaxSize(100);
+        this.page = page.verifyMaxSize(100);
         this.search = checkedSearch == null || checkedSearch.isEmpty() ? null : checkedSearch;
         this.status = status;
     }

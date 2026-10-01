@@ -1,11 +1,14 @@
 package com.sca4d.iot.state;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import cn.hutool.crypto.digest.DigestUtil;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.event.Event;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
-import com.sca4d.core.api.messaging.MessageId;
-import com.sca4d.core.api.messaging.MessagePublisher;
+import com.sca4d.core.api.messaging.DispatchPolicy;
+import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.ProductDefinition;
@@ -16,6 +19,7 @@ import com.sca4d.iot.api.message.IotMessageTypes;
 import com.sca4d.iot.api.model.ThingEvent;
 import com.sca4d.iot.api.model.ThingEventDelivery;
 import com.sca4d.iot.api.model.ThingModel;
+import com.sca4d.iot.api.model.ThingModelPresentation;
 import com.sca4d.iot.api.model.ThingModelRepository;
 import com.sca4d.iot.api.model.ThingProperty;
 import com.sca4d.iot.api.state.ReportedStateStore;
@@ -28,6 +32,7 @@ import com.sca4d.iot.change.DeviceChangeNotifier;
 import com.sca4d.iot.device.DeviceRepository;
 import com.sca4d.iot.message.DesiredConvergence;
 import com.sca4d.iot.message.DownlinkRepository;
+import com.sca4d.iot.message.policy.ReportedEqualsDesiredAcknowledgementPolicy;
 import com.sca4d.iot.model.ThingValueValidator;
 import com.sca4d.iot.product.ProductDefinitionCatalog;
 import org.jetbrains.annotations.NotNull;
@@ -51,27 +56,27 @@ public class ReportedStateService {
 
     private final @NotNull DeviceRepository devices;
 
-    private final @NotNull ProductDefinitionCatalog products;
-
-    private final @NotNull ReportedStateStore reportedStates;
-
     private final @NotNull DownlinkRepository downlinks;
 
     private final @NotNull ThingModelRepository models;
 
     private final @NotNull ThingValueValidator validator;
 
-    private final @NotNull IdGenerator ids;
-
-    private final @NotNull MessagePublisher messages;
-
     private final @NotNull Clock clock;
 
     private final @NotNull DeviceChangeNotifier changes;
 
-    private final int maxReportedProperties;
+    private final @NotNull IdGenerator ids;
+
+    private final @NotNull MessageBus messages;
+
+    private final @NotNull ProductDefinitionCatalog products;
+
+    private final @NotNull ReportedStateStore reportedStates;
 
     private final int maxEventsPerMessage;
+
+    private final int maxReportedProperties;
 
     /** 创建 reported 主事务服务。 */
     @SuppressWarnings("ParameterNumber")
@@ -83,7 +88,7 @@ public class ReportedStateService {
             @NotNull ThingModelRepository models,
             @NotNull ThingValueValidator validator,
             @NotNull IdGenerator ids,
-            @NotNull MessagePublisher messages,
+            @NotNull MessageBus messages,
             @NotNull Clock clock,
             @NotNull DeviceChangeNotifier changes,
             int maxReportedProperties,
@@ -95,7 +100,7 @@ public class ReportedStateService {
         this.models = Objects.requireNonNull(models, "ThingModelRepository 不能为空");
         this.validator = Objects.requireNonNull(validator, "Thing value 校验器不能为空");
         this.ids = Objects.requireNonNull(ids, "reported 顺序 ID 生成器不能为空");
-        this.messages = Objects.requireNonNull(messages, "MessagePublisher 不能为空");
+        this.messages = Objects.requireNonNull(messages, "MessageBus 不能为空");
         this.clock = Objects.requireNonNull(clock, "reported 时钟不能为空");
         this.changes = Objects.requireNonNull(changes, "Device 变化通知器不能为空");
         if (maxReportedProperties < 1 || maxEventsPerMessage < 1) {
@@ -135,7 +140,7 @@ public class ReportedStateService {
         // 使用同一 Device 快照解析 Product 和物模型，再把上报值转换成物模型声明的精确类型。
         ProductDefinition product = products.definition(checkedDevice.product());
         ThingModel model = models.find(product.code(), checkedDevice.thingModelVersion())
-                .map(com.sca4d.iot.api.model.ThingModelPresentation::model)
+                .map(ThingModelPresentation::model)
                 .orElseThrow(() -> new BusinessException(IotErrorCode.THING_MODEL_NOT_FOUND));
         Instant receivedAt = clock.instant();
 
@@ -144,7 +149,7 @@ public class ReportedStateService {
         String orderScope = requestedOrderScope == null ? "platform:" + input.groupCode() : requestedOrderScope;
         String requestedOrderValue = input.orderValue();
         String orderValue = requestedOrderValue == null
-                ? String.format(Locale.ROOT, "%019d", ids.nextId())
+                ? String.format(Locale.ROOT, "%019d", ids.nextId().value())
                 : requestedOrderValue;
 
         // 原子更新 latest reported；只有未过期结果才批量收敛 desired，实际变化才发布 Telemetry。
@@ -233,19 +238,15 @@ public class ReportedStateService {
                     + ':' + orderScope + ':' + orderValue + ':' + convergence.propertyCode();
             DeviceAcknowledgement acknowledgement = new DeviceAcknowledgement(
                     convergence.messageId(),
-                    "reported-equals-desired",
+                    ReportedEqualsDesiredAcknowledgementPolicy.CODE.format(COLON),
                     Map.of("propertyCode", convergence.propertyCode()),
                     "REPORTED",
                     sourceAcknowledgementId,
                     input.observedAt(),
                     receivedAt);
-            MessageId messageId = messages.publishReliably(
-                    new Event<>(
-                            IotMessageTypes.ACKNOWLEDGEMENT_REQUESTED,
-                            "reported-ack:" + convergence.messageId() + ':'
-                                    + DigestUtil.sha256Hex(sourceAcknowledgementId),
-                            receivedAt,
-                            acknowledgement));
+            Id messageId = messages.dispatch(
+                    acknowledgement,
+                    DispatchPolicy.outbox()).messageId();
             LOG.trace(
                     "reported 推导 ACK 已登记 | deviceId={} downlinkMessageId={} outboxMessageId={}",
                     device.id(),
@@ -270,12 +271,13 @@ public class ReportedStateService {
             return;
         }
         TelemetryBatch batch = new TelemetryBatch(device.id(), device.bindingGeneration(), samples);
-        MessageId telemetryMessageId = messages.publishAfterCommit(
+        Id telemetryMessageId = messages.dispatch(
                 new Event<>(
                         IotMessageTypes.TELEMETRY_REPORTED,
                         null,
                         receivedAt,
-                        batch));
+                        batch),
+                DispatchPolicy.afterCommit()).messageId();
         LOG.trace(
                 "Device Telemetry 提交后消息已登记 | deviceId={} sampleCount={} telemetryMessageId={}",
                 device.id(),
@@ -330,9 +332,10 @@ public class ReportedStateService {
                     businessKey,
                     occurredAt,
                     payload);
-            MessageId eventMessageId = event.delivery() == ThingEventDelivery.RELIABLE
-                    ? messages.publishReliably(message)
-                    : messages.publishAfterCommit(message);
+            DispatchPolicy policy = event.delivery() == ThingEventDelivery.RELIABLE
+                    ? DispatchPolicy.outbox()
+                    : DispatchPolicy.afterCommit();
+            Id eventMessageId = messages.dispatch(message, policy).messageId();
             LOG.trace(
                     "Device 事件消息已登记 | deviceId={} eventCode={} delivery={} eventMessageId={}",
                     device.id(),

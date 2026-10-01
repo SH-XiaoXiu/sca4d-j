@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 返回审计 payload 的持久化类型、版本、原始 JSON 和可选强类型结果。 */
-public final class AuditPayloadData {
+public class AuditPayloadData {
     private final @NotNull String type;
 
     private final int version;

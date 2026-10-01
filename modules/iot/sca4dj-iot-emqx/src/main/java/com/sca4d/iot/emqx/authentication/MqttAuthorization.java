@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 保存当前 Device MQTT ACL 及其稳定指纹。 */
-public final class MqttAuthorization {
+public class MqttAuthorization {
 
     private final @NotNull List<EmqxAclRule> rules;
 

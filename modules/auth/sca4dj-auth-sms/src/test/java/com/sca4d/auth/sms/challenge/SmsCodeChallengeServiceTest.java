@@ -9,17 +9,22 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.sca4d.auth.sms.SmsCodeAuthenticationMethod;
+import com.sca4d.auth.sms.SmsCodeChallengeId;
 import com.sca4d.auth.sms.SmsCodeNotice;
 import com.sca4d.auth.sms.SmsCodeProof;
 import com.sca4d.auth.sms.config.SmsCodeSettings;
 import com.sca4d.core.api.concurrent.Version;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountDirectory;
 import com.sca4d.core.api.identity.RealmKey;
-import com.sca4d.core.api.messaging.MessageId;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.Notifications;
 import com.sca4d.core.api.security.SecretHasher;
-import com.sca4d.core.api.setting.Settings;
+import com.sca4d.core.api.setting.access.SettingReader;
+import com.sca4d.core.api.setting.access.SettingWriter;
+import com.sca4d.core.api.setting.value.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingValue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -44,14 +49,31 @@ class SmsCodeChallengeServiceTest {
                 .thenReturn(Optional.of(account));
         Notifications notifications = mock(Notifications.class);
         when(notifications.isAvailable(any(), any())).thenReturn(true);
-        when(notifications.enqueue(any(), any())).thenReturn(new MessageId(1));
+        when(notifications.enqueue(any(), any())).thenReturn(Id.of(1));
         RedisSmsCodeChallengeStore store = mock(RedisSmsCodeChallengeStore.class);
         when(store.reserveCooldown(anyString(), any())).thenReturn(true);
         SecretHasher hasher = mock(SecretHasher.class);
         when(hasher.hash(anyString())).thenReturn("hash");
-        Settings settings = mock(Settings.class);
-        when(settings.get(SmsCodeSettings.CHALLENGE_TTL)).thenReturn(Duration.ofMinutes(5));
-        when(settings.get(SmsCodeSettings.RESEND_INTERVAL)).thenReturn(Duration.ofMinutes(1));
+        TestAccess source = mock(TestAccess.class);
+        SmsCodeSettings settings = new SmsCodeSettings(source, source);
+        when(source.read(settings.CHALLENGE_TTL.code(), SettingOwner.system())).thenReturn(
+                SettingValue.read(
+                        TreeCode.of("SETTING:TEST"),
+                        settings.CHALLENGE_TTL.code(),
+                        SettingOwner.system(),
+                        settings.CHALLENGE_TTL.codec().encode(Duration.ofMinutes(5)),
+                        1,
+                        new Version(0),
+                        false));
+        when(source.read(settings.RESEND_INTERVAL.code(), SettingOwner.system())).thenReturn(
+                SettingValue.read(
+                        TreeCode.of("SETTING:TEST"),
+                        settings.RESEND_INTERVAL.code(),
+                        SettingOwner.system(),
+                        settings.RESEND_INTERVAL.codec().encode(Duration.ofMinutes(1)),
+                        1,
+                        new Version(0),
+                        false));
         SecureRandom random = mock(SecureRandom.class);
         when(random.nextInt(1_000_000)).thenReturn(123456);
         SmsCodeChallengeService service = new SmsCodeChallengeService(
@@ -80,7 +102,7 @@ class SmsCodeChallengeServiceTest {
     void consumesValidChallengeOnce() {
         RealmKey realm = new RealmKey("platform");
         Account account = new Account(42, 52, realm);
-        var challengeId = new com.sca4d.auth.sms.SmsCodeChallengeId("00000000-0000-0000-0000-000000000001");
+        var challengeId = new SmsCodeChallengeId("00000000-0000-0000-0000-000000000001");
         var state = new SmsCodeChallengeState(
                 challengeId,
                 account.accountId(),
@@ -99,8 +121,17 @@ class SmsCodeChallengeServiceTest {
         SecretHasher hasher = mock(SecretHasher.class);
         when(hasher.hash(anyString())).thenReturn("dummy");
         when(hasher.matches("123456", "hash")).thenReturn(true);
-        Settings settings = mock(Settings.class);
-        when(settings.get(SmsCodeSettings.MAXIMUM_ATTEMPTS)).thenReturn(5);
+        TestAccess source = mock(TestAccess.class);
+        SmsCodeSettings settings = new SmsCodeSettings(source, source);
+        when(source.read(settings.MAXIMUM_ATTEMPTS.code(), SettingOwner.system())).thenReturn(
+                SettingValue.read(
+                        TreeCode.of("SETTING:TEST"),
+                        settings.MAXIMUM_ATTEMPTS.code(),
+                        SettingOwner.system(),
+                        settings.MAXIMUM_ATTEMPTS.codec().encode(5),
+                        1,
+                        new Version(0),
+                        false));
         SmsCodeChallengeService service = new SmsCodeChallengeService(
                 accounts,
                 realm,
@@ -115,5 +146,9 @@ class SmsCodeChallengeServiceTest {
 
         assertThat(consumed.account()).isEqualTo(account);
         assertThat(consumed.version()).isEqualTo(new Version(1));
+    }
+
+    /** 测试替身同时实现读取和写入契约，避免引入生产组合接口。 */
+    private interface TestAccess extends SettingReader<String>, SettingWriter<String> {
     }
 }

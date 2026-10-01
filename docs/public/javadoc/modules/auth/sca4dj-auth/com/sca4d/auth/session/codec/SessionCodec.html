@@ -88,9 +88,14 @@ loadScripts(document, 'script');</script>
 <div class="inheritance">com.sca4d.auth.session.codec.SessionCodec</div>
 </div>
 <section class="class-description" id="class-description">
+<dl class="notes">
+<dt>All Implemented Interfaces:</dt>
+<dd><code>com.sca4d.core.api.codec.Codec&lt;com.sca4d.core.api.authentication.Session,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code>, <code>com.sca4d.core.api.codec.VersionedCodec&lt;com.sca4d.core.api.authentication.Session,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></dd>
+</dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">SessionCodec</span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">SessionCodec</span>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
+implements com.sca4d.core.api.codec.VersionedCodec&lt;com.sca4d.core.api.authentication.Session,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span></div>
 <div class="block">将完整 <code>Session</code> 编解码为 Sa-Token 和 JWT 共用的版本化 JSON wire。</div>
 </section>
 <section class="summary">
@@ -123,16 +128,25 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.authentication.Session</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#decode(java.lang.String)" class="member-name-link">decode</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;encoded)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#code()" class="member-name-link">code</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.authentication.Session</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#decode(java.lang.String)" class="member-name-link">decode</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;encoded)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">从 JSON wire 恢复完整 Session。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#encode(com.sca4d.core.api.authentication.Session)" class="member-name-link">encode</a><wbr>(@NotNull com.sca4d.core.api.authentication.Session&nbsp;session)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#encode(com.sca4d.core.api.authentication.Session)" class="member-name-link">encode</a><wbr>(@NotNull com.sca4d.core.api.authentication.Session&nbsp;session)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">把完整 Session 编码为带格式版本的 JSON wire。</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a><wbr>&lt;com.sca4d.core.api.authentication.Session&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#valueType()" class="member-name-link">valueType</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#version()" class="member-name-link">version</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -179,6 +193,44 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="code()">
+<h3>code</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">code</span>()</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>code</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.codec.VersionedCodec&lt;com.sca4d.core.api.authentication.Session,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></dd>
+<dt>Returns:</dt>
+<dd>Session wire 的稳定类型编码</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="version()">
+<h3>version</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">version</span>()</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>version</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.codec.VersionedCodec&lt;com.sca4d.core.api.authentication.Session,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></dd>
+<dt>Returns:</dt>
+<dd>当前 Session wire 结构版本</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="valueType()">
+<h3>valueType</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;com.sca4d.core.api.authentication.Session&gt;</span>&nbsp;<span class="element-name">valueType</span>()</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>valueType</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.codec.VersionedCodec&lt;com.sca4d.core.api.authentication.Session,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></dd>
+<dt>Returns:</dt>
+<dd>当前 Codec 接受的 Session 类型</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="encode(com.sca4d.core.api.authentication.Session)">
 <h3>encode</h3>
 <div class="member-signature"><span class="annotations">@NotNull
@@ -186,6 +238,8 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.core.api.authentication.Session&nbsp;session)</span></div>
 <div class="block">把完整 Session 编码为带格式版本的 JSON wire。</div>
 <dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>encode</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.codec.Codec&lt;com.sca4d.core.api.authentication.Session,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>session</code> - 要持久化或传输的 Session</dd>
 <dt>Returns:</dt>
@@ -203,6 +257,8 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;encoded)</span></div>
 <div class="block">从 JSON wire 恢复完整 Session。</div>
 <dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>decode</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.codec.Codec&lt;com.sca4d.core.api.authentication.Session,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>encoded</code> - Session JSON wire</dd>
 <dt>Returns:</dt>

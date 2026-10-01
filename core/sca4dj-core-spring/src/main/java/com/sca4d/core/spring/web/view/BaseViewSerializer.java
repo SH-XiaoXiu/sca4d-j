@@ -37,12 +37,12 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 在 Jackson 默认 Bean 序列化后应用本地化和 ViewJson 定制。 */
-public final class BaseViewSerializer extends StdSerializer<BaseView> {
+public class BaseViewSerializer extends StdSerializer<BaseView> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(BaseViewSerializer.class);
 
     @Serial
     private static final long serialVersionUID = 1L;
-
-    private static final Logger LOG = LoggerFactory.getLogger(BaseViewSerializer.class);
 
     /** Jackson 已为具体 View 类型创建的默认 Bean 序列化器。 */
     private final JsonSerializer<Object> delegate;
@@ -90,7 +90,7 @@ public final class BaseViewSerializer extends StdSerializer<BaseView> {
             @NotNull JsonGenerator generator,
             @NotNull SerializerProvider provider)
             throws IOException {
-        // 先让 Jackson 默认序列化器生成完整对象，后续定制只修改这份缓冲结果。
+        // 先让 Jackson 默认序列化器生成完整对象，之后的定制只修改这份缓冲结果。
         TokenBuffer buffer = new TokenBuffer(generator.getCodec(), false);
         delegate.serialize(value, buffer, provider);
         JsonNode node = generator.getCodec().readTree(buffer.asParser());
@@ -113,12 +113,12 @@ public final class BaseViewSerializer extends StdSerializer<BaseView> {
         Locale requestLocale = Objects.requireNonNull(LocaleContextHolder.getLocale(), "当前请求 Locale 不能为空");
         for (Localization localization : localizations) {
             String text;
-            String key = localization.key();
+            String key = localization.key;
             if (key != null) {
                 LocalizedFields fields = value.localizedFields();
                 if (fields == null) {
                     throw new DataAssertionException(
-                            localization.target(),
+                            localization.target,
                             "动态 @Localize 要求 View 提供 LocalizedFields",
                             null);
                 }
@@ -127,18 +127,18 @@ public final class BaseViewSerializer extends StdSerializer<BaseView> {
                     text = localizer.localize(checkedFields, key, requestLocale);
                 } catch (IllegalArgumentException exception) {
                     throw new DataAssertionException(
-                            localization.target(),
+                            localization.target,
                             exception.getMessage(),
                             null);
                 }
             } else {
                 LocalizableText source = invoke(
-                        Objects.requireNonNull(localization.source()),
+                        Objects.requireNonNull(localization.source),
                         value,
-                        localization.target());
+                        localization.target);
                 text = localizer.localize(source, requestLocale);
             }
-            json.put(localization.target(), text);
+            json.put(localization.target, text);
         }
         value.apply(json);
 
@@ -302,13 +302,13 @@ public final class BaseViewSerializer extends StdSerializer<BaseView> {
 
     /** 一个经过校验的本地化目标与 source 方法。 */
     @SuppressWarnings("ClassCanBeRecord")
-    private static final class Localization {
-
-        private final String target;
+    private static class Localization {
 
         private final @Nullable Method source;
 
         private final @Nullable String key;
+
+        private final String target;
 
         private Localization(
                 @NotNull String target,
@@ -319,19 +319,5 @@ public final class BaseViewSerializer extends StdSerializer<BaseView> {
             this.key = key;
         }
 
-        /** 读取最终 JSON 中接收本地化文本的字段名。 */
-        private @NotNull String target() {
-            return target;
-        }
-
-        /** 读取当前 View 中返回 LocalizableText 的来源方法。 */
-        private @Nullable Method source() {
-            return source;
-        }
-
-        /** 读取动态国际化字段键；静态文本来源没有该值。 */
-        private @Nullable String key() {
-            return key;
-        }
     }
 }

@@ -1,7 +1,6 @@
 package com.sca4d.core.spring.openapi;
 
 import com.sca4d.core.api.query.PageRequest;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
 import com.sca4d.core.spring.config.CoreSpringProperties;
 import com.sca4d.core.spring.config.HttpInputValidationProperties;
 import com.sca4d.core.spring.web.list.ListParameters;
@@ -16,11 +15,12 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 
 /** 注册脚手架的 OpenAPI 基础信息和 Bearer 认证方案。 */
 @AutoConfiguration
 @ConditionalOnClass({OpenAPI.class, SpringDocUtils.class})
-@ConditionalOnProperty(prefix = "sca4dj.core", name = "open-api-enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "sca4dj.core.openapi", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class CoreOpenApiConfiguration {
 
     static {
@@ -36,21 +36,22 @@ public class CoreOpenApiConfiguration {
                 .addJavaTypeToIgnore(ListParameters.class);
     }
 
-    /** 创建可由应用覆盖的 OpenAPI 基础自动配置。 */
     public CoreOpenApiConfiguration() {
     }
 
     /**
      * 创建应用的 OpenAPI 基础定义。
      *
-     * @param runtimeNamespace 当前应用的运行时命名空间
+     * @param environment 应用名称配置；不使用中间件隔离前缀作为对外名称
      * @return 包含 Bearer 认证方案的 OpenAPI 定义
      */
     @Bean
     @ConditionalOnMissingBean
-    public OpenAPI sca4djOpenApi(RuntimeNamespace runtimeNamespace) {
+    public OpenAPI sca4djOpenApi(Environment environment) {
         return new OpenAPI()
-                .info(new Info().title(runtimeNamespace.applicationId() + " API").version("0.0.1-alpha"))
+                .info(
+                        new Info().title(environment.getProperty("spring.application.name", "Sca4d-J") + " API")
+                                .version("0.0.1-alpha"))
                 .components(
                         new Components().addSecuritySchemes(
                                 "bearerAuth",

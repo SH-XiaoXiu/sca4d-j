@@ -1,5 +1,6 @@
 package com.sca4d.job.persistence;
 
+import com.sca4d.core.api.job.JobKey;
 import com.sca4d.job.JobAttemptStatus;
 import com.sca4d.job.JobNodeStatus;
 import org.jetbrains.annotations.NotNull;
@@ -9,27 +10,27 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 保存一个 worker 已经持有租约的节点及其 Job 定义定位信息。 */
-public final class NodeClaim {
+public class NodeClaim {
 
-    private final long nodeId;
+    private final @NotNull JobKey jobKey;
 
-    private final long runId;
-
-    private final @NotNull String jobKey;
-
-    private final int jobDefinitionVersion;
+    private final @Nullable String inputJson;
 
     private final @NotNull String jobKind;
 
     private final @NotNull String nodeKey;
 
-    private final @Nullable String inputJson;
-
     private final int attempt;
+
+    private final int jobDefinitionVersion;
 
     private final int maxAttempts;
 
+    private final long nodeId;
+
     private final long retryDelayMillis;
+
+    private final long runId;
 
     private @Nullable JobNodeStatus resultStatus;
 
@@ -60,7 +61,7 @@ public final class NodeClaim {
     public NodeClaim(
             long nodeId,
             long runId,
-            @NotNull String jobKey,
+            @NotNull JobKey jobKey,
             int jobDefinitionVersion,
             @NotNull String jobKind,
             @NotNull String nodeKey,
@@ -81,7 +82,7 @@ public final class NodeClaim {
     }
 
     /**
-     * 返回已经领取的节点主键。
+     * 已经领取的节点主键。
      *
      * @return 节点主键
      */
@@ -156,7 +157,7 @@ public final class NodeClaim {
     }
 
     /**
-     * 返回当前节点所属的根运行主键。
+     * 当前节点所属的根运行主键。
      *
      * @return 根运行主键
      */
@@ -165,16 +166,16 @@ public final class NodeClaim {
     }
 
     /**
-     * 返回恢复代码定义使用的 Job key。
+     * 恢复 Job 定义使用的 Job key。
      *
      * @return Job key 文本
      */
-    public @NotNull String jobKey() {
+    public @NotNull JobKey jobKey() {
         return jobKey;
     }
 
     /**
-     * 返回提交根运行时保存的 Job 定义版本。
+     * 提交根运行时保存的 Job 定义版本。
      *
      * @return Job 定义版本
      */
@@ -183,7 +184,7 @@ public final class NodeClaim {
     }
 
     /**
-     * 返回根运行采用的 Job 种类。
+     * 根运行采用的 Job 种类。
      *
      * @return DIRECT 或 PIPELINE
      */
@@ -192,7 +193,7 @@ public final class NodeClaim {
     }
 
     /**
-     * 返回当前节点在 Job 定义内的稳定名称。
+     * 当前节点在 Job 定义内的稳定名称。
      *
      * @return 节点在 Job 内的稳定名称
      */
@@ -201,7 +202,7 @@ public final class NodeClaim {
     }
 
     /**
-     * 返回节点领取前已经准备的输入 JSON。
+     * 节点领取前已经准备的输入 JSON。
      *
      * @return 已准备的输入 JSON；Void 或并发合并节点为空
      */
@@ -210,7 +211,7 @@ public final class NodeClaim {
     }
 
     /**
-     * 返回当前租约对应的尝试次数。
+     * 当前租约对应的尝试次数。
      *
      * @return 本次从 1 开始的尝试次数
      */
@@ -219,7 +220,7 @@ public final class NodeClaim {
     }
 
     /**
-     * 返回当前节点允许的最大尝试次数。
+     * 当前节点允许的最大尝试次数。
      *
      * @return 当前节点最大尝试次数
      */
@@ -228,7 +229,7 @@ public final class NodeClaim {
     }
 
     /**
-     * 返回当前节点失败后的固定重试间隔。
+     * 当前节点失败后的固定重试间隔。
      *
      * @return 失败后再次 READY 前的固定毫秒数
      */

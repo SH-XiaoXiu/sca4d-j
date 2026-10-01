@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Objects;
 
 /** 返回 OAuth Client Credentials 交换得到的 Bearer Token 和 scope。 */
 @Schema(name = "OpenApiToken", description = "OpenAPI Client Credentials 签发的短期 Bearer Token。")
-public final class OpenApiTokenResponse {
+public class OpenApiTokenResponse {
 
     private final @NotNull String accessToken;
 
@@ -23,7 +24,7 @@ public final class OpenApiTokenResponse {
             @NotNull Instant expiresAt,
             @NotNull String scope) {
         this.accessToken = requireAccessToken(accessToken);
-        long seconds = java.time.Duration.between(Instant.now(), Objects.requireNonNull(expiresAt, "过期时间不能为空"))
+        long seconds = Duration.between(Instant.now(), Objects.requireNonNull(expiresAt, "过期时间不能为空"))
                 .toSeconds();
         if (seconds <= 0 || seconds > Integer.MAX_VALUE) {
             throw new IllegalArgumentException("Token 剩余有效期必须在正整数范围内");

@@ -136,7 +136,7 @@ class AffectedRowsAspectTest {
     }
 
     /** 只用于验证 Repository 影响行数声明。 */
-    private static final class DeclaredRepository {
+    private static class DeclaredRepository {
 
         /** 必须影响一行。 */
         @AffectedRows(target = "测试设置")

@@ -5,14 +5,19 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.OptimisticLockException;
+import com.sca4d.core.api.concurrent.VersionCondition;
+import com.sca4d.core.api.concurrent.VersionConditions;
 import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.event.EventType;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
+import com.sca4d.core.api.messaging.DispatchPolicy;
+import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageConsumer;
 import com.sca4d.core.api.messaging.MessageDelivery;
-import com.sca4d.core.api.messaging.MessageId;
-import com.sca4d.core.api.messaging.MessagePublisher;
+import com.sca4d.core.api.name.NameFormat;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
 import com.sca4d.core.api.scheduling.JobSchedule;
 import com.sca4d.core.spring.config.CoreJacksonAutoConfiguration;
@@ -22,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.core.MessageDeliveryMode;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -29,6 +35,8 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -42,6 +50,7 @@ import org.testcontainers.containers.RabbitMQContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.sql.Timestamp;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
@@ -53,9 +62,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.sql.DataSource;
+
 /** 使用 PostgreSQL 和 RabbitMQ 验证业务消息发布、消费、DLQ 与 Outbox。 */
 @Testcontainers
-@org.springframework.boot.test.context.SpringBootTest(classes = MessagingInfrastructureIntegrationTest.TestApplication.class, properties = {
+@SpringBootTest(classes = MessagingInfrastructureIntegrationTest.TestApplication.class, properties = {
         "spring.autoconfigure.exclude="
                 + "com.sca4d.core.spring.config.CoreSpringAutoConfiguration,"
                 + "com.sca4d.core.spring.config.CoreJacksonAutoConfiguration,"
@@ -71,15 +82,15 @@ import java.util.concurrent.atomic.AtomicLong;
 })
 class MessagingInfrastructureIntegrationTest {
 
-    private static final String EVENT_CODE = "invoice.created";
-
-    private static final EventType<Map> EVENT_TYPE = new EventType<>(EVENT_CODE, 1, Map.class);
-
-    private static final String SUCCESS_QUEUE = "messaging-test:sca4dj:messaging:consumer:invoice-primary";
-
     private static final String COPY_QUEUE = "messaging-test:sca4dj:messaging:consumer:invoice-copy";
 
     private static final String FAILURE_QUEUE = "messaging-test:sca4dj:messaging:consumer:invoice-failure";
+
+    private static final String SUCCESS_QUEUE = "messaging-test:sca4dj:messaging:consumer:invoice-primary";
+
+    private static final TreeCode EVENT_CODE = TreeCode.of("INVOICE/CREATED");
+
+    private static final EventType<Map> EVENT_TYPE = new EventType<>(EVENT_CODE, 1, Map.class);
 
     private static final String FAILURE_DLQ = FAILURE_QUEUE + ":dead-letter";
 
@@ -92,13 +103,13 @@ class MessagingInfrastructureIntegrationTest {
             .withAdminPassword("sca4dj");
 
     @Autowired
-    private MessagePublisher publisher;
+    private MessageBus publisher;
 
     @Autowired
-    private OutboxDispatcher dispatcher;
+    private MessageOutboxDispatcher dispatcher;
 
     @Autowired
-    private OutboxRepository outbox;
+    private MessageOutboxRepository outbox;
 
     @Autowired
     private TransactionTemplate transactions;
@@ -122,7 +133,7 @@ class MessagingInfrastructureIntegrationTest {
     private FailureConsumer failureConsumer;
 
     @Autowired
-    private org.springframework.context.ApplicationContext applicationContext;
+    private ApplicationContext applicationContext;
 
     @DynamicPropertySource
     static void infrastructureProperties(DynamicPropertyRegistry registry) {
@@ -142,7 +153,7 @@ class MessagingInfrastructureIntegrationTest {
                 "SELECT to_regclass('public.messaging_outbox') IS NOT NULL",
                 Boolean.class);
         if (!Boolean.TRUE.equals(schemaExists)) {
-            javax.sql.DataSource dataSource = Objects.requireNonNull(jdbc.getDataSource());
+            DataSource dataSource = Objects.requireNonNull(jdbc.getDataSource());
             ResourceDatabasePopulator coreSchema = new ResourceDatabasePopulator(
                     new ClassPathResource("META-INF/sca4dj/schema/dictionary-settings.sql"));
             coreSchema.setSeparator(ScriptUtils.EOF_STATEMENT_SEPARATOR);
@@ -166,8 +177,8 @@ class MessagingInfrastructureIntegrationTest {
     @Test
     void registersOutboxClusterTasksWithoutJobRuntime() {
         assertThat(applicationContext.getBeansOfType(ClusterTaskSchedule.class).values())
-                .extracting(schedule -> schedule.key().value())
-                .containsExactlyInAnyOrder("messaging.outbox.dispatch", "messaging.outbox.cleanup");
+                .extracting(schedule -> schedule.key().format(NameFormat.SLASH))
+                .containsExactlyInAnyOrder("MESSAGING/OUTBOX/DISPATCH", "MESSAGING/OUTBOX/CLEANUP");
         assertThat(applicationContext.getBeansOfType(JobSchedule.class)).isEmpty();
     }
 
@@ -176,13 +187,13 @@ class MessagingInfrastructureIntegrationTest {
     void publisherConfirmRequiresRouteAndEachConsumerReceivesCopy() throws InterruptedException {
         assertThat(rabbit.isMandatoryFor(MessageBuilder.withBody(new byte[0]).build())).isFalse();
 
-        MessageId messageId = publisher.publishNow(message());
+        Id messageId = publisher.dispatch(message(), DispatchPolicy.immediate()).messageId();
 
         assertThat(primaryConsumer.receivedMessage()).isEqualTo(messageId);
         assertThat(copyConsumer.receivedMessage()).isEqualTo(messageId);
         assertThat(failureConsumer.receivedMessage()).isEqualTo(messageId);
 
-        org.springframework.amqp.core.Message deadLetter = rabbit.receive(FAILURE_DLQ, 5_000);
+        Message deadLetter = rabbit.receive(FAILURE_DLQ, 5_000);
         assertThat(deadLetter).isNotNull();
         assertThat(deadLetter.getMessageProperties().getReceivedDeliveryMode())
                 .isEqualTo(MessageDeliveryMode.PERSISTENT);
@@ -192,12 +203,13 @@ class MessagingInfrastructureIntegrationTest {
         assertThat(failureConsumer.attempts).hasValue(1);
 
         assertThatThrownBy(() -> {
-            MessageId unexpected = publisher.publishNow(
+            Id unexpected = publisher.dispatch(
                     new Event<>(
-                            new EventType<>("invoice.unrouted", 1, Map.class),
+                            new EventType<>(TreeCode.of("INVOICE/UNROUTED"), 1, Map.class),
                             "invoice:42",
                             Instant.now(),
-                            Map.of("invoiceId", 42)));
+                            Map.of("invoiceId", 42)),
+                    DispatchPolicy.immediate()).messageId();
             assertThat(unexpected).isNotNull();
         })
                 .isInstanceOf(IllegalStateException.class)
@@ -207,8 +219,9 @@ class MessagingInfrastructureIntegrationTest {
     @Test
     @DisplayName("AMQP Message Id Must Match The Envelope")
     void amqpMessageIdMustMatchEnvelope() throws InterruptedException {
-        MessageId envelopeMessageId = Objects.requireNonNull(
-                transactions.execute(status -> publisher.publishReliably(message())));
+        Id envelopeMessageId = Objects.requireNonNull(
+                transactions.execute(
+                        status -> publisher.dispatch(message(), DispatchPolicy.outbox()).messageId()));
         byte[] envelope = jdbc.queryForObject(
                 "SELECT envelope FROM messaging_outbox WHERE message_id = ?",
                 byte[].class,
@@ -220,7 +233,7 @@ class MessagingInfrastructureIntegrationTest {
                         .setDeliveryMode(MessageDeliveryMode.PERSISTENT)
                         .build());
 
-        org.springframework.amqp.core.Message deadLetter = rabbit.receive(FAILURE_DLQ, 5_000);
+        Message deadLetter = rabbit.receive(FAILURE_DLQ, 5_000);
         assertThat(deadLetter).isNotNull();
         assertThat(deadLetter.getMessageProperties().getMessageId())
                 .isEqualTo(Long.toString(envelopeMessageId.value() + 1));
@@ -231,12 +244,13 @@ class MessagingInfrastructureIntegrationTest {
     @Test
     @DisplayName("Outbox Follows Transaction Delay Lease And Retention Rules")
     void outboxFollowsTransactionDelayLeaseAndRetentionRules() {
-        MessageId committed = transactions.execute(status -> publisher.publishReliably(message()));
+        Id committed = transactions.execute(
+                status -> publisher.dispatch(message(), DispatchPolicy.outbox()).messageId());
         assertThat(committed).isNotNull();
         assertThat(status(committed)).isEqualTo(OutboxStatus.PENDING);
 
         assertThatThrownBy(() -> transactions.executeWithoutResult(status -> {
-            MessageId rolledBack = publisher.publishReliably(message());
+            Id rolledBack = publisher.dispatch(message(), DispatchPolicy.outbox()).messageId();
             assertThat(rolledBack).isNotNull();
             throw new IllegalStateException("rollback");
         }))
@@ -249,13 +263,14 @@ class MessagingInfrastructureIntegrationTest {
         assertThat(status(committed)).isEqualTo(OutboxStatus.SENT);
 
         Instant delayedUntil = Instant.now().plus(Duration.ofHours(1));
-        MessageId delayed = transactions.execute(
-                status -> publisher.publishReliably(message(), delayedUntil));
+        Id delayed = transactions.execute(
+                status -> publisher.dispatch(message(), DispatchPolicy.outboxNotBefore(delayedUntil)).messageId());
         assertThat(delayed).isNotNull();
         dispatcher.dispatch();
         assertThat(status(delayed)).isEqualTo(OutboxStatus.PENDING);
 
-        MessageId takeover = transactions.execute(status -> publisher.publishReliably(message()));
+        Id takeover = transactions.execute(
+                status -> publisher.dispatch(message(), DispatchPolicy.outbox()).messageId());
         assertThat(takeover).isNotNull();
         transactions.executeWithoutResult(
                 status -> assertThat(
@@ -268,7 +283,7 @@ class MessagingInfrastructureIntegrationTest {
                         .containsExactly(takeover));
         jdbc.update(
                 "UPDATE messaging_outbox SET lease_until = ? WHERE message_id = ?",
-                java.sql.Timestamp.from(Instant.now().minusSeconds(1)),
+                Timestamp.from(Instant.now().minusSeconds(1)),
                 takeover.value());
         dispatcher.dispatch();
         assertThat(status(takeover)).isEqualTo(OutboxStatus.SENT);
@@ -281,7 +296,7 @@ class MessagingInfrastructureIntegrationTest {
 
         jdbc.update(
                 "UPDATE messaging_outbox SET sent_at = ? WHERE message_id IN (?, ?)",
-                java.sql.Timestamp.from(Instant.now().minus(Duration.ofDays(8))),
+                Timestamp.from(Instant.now().minus(Duration.ofDays(8))),
                 committed.value(),
                 takeover.value());
         dispatcher.cleanup();
@@ -299,7 +314,7 @@ class MessagingInfrastructureIntegrationTest {
     @DisplayName("Repository Affected Rows Uses The MyBatis Update Count")
     void repositoryAffectedRowsUsesTheMyBatisUpdateCount() {
         OutboxClaim missing = new OutboxClaim(
-                new MessageId(Long.MAX_VALUE),
+                Id.of(Long.MAX_VALUE),
                 EVENT_CODE,
                 new byte[0],
                 1,
@@ -312,7 +327,8 @@ class MessagingInfrastructureIntegrationTest {
                     assertThat(exception.messageArguments()).containsExactly("Outbox 消息派发结果");
                 });
 
-        MessageId id = transactions.execute(status -> publisher.publishReliably(message()));
+        Id id = transactions.execute(
+                status -> publisher.dispatch(message(), DispatchPolicy.outbox()).messageId());
         Instant now = Instant.now().plusSeconds(1);
         OutboxClaim first = transactions
                 .execute(status -> outbox.claim(now, 1, "first", now.plusSeconds(10)).getFirst());
@@ -332,7 +348,7 @@ class MessagingInfrastructureIntegrationTest {
     }
 
     /** 读取并校验数据库中的 Outbox 状态名称。 */
-    private OutboxStatus status(MessageId messageId) {
+    private OutboxStatus status(Id messageId) {
         return OutboxStatus.valueOf(
                 jdbc.queryForObject(
                         "SELECT status FROM messaging_outbox WHERE message_id = ?",
@@ -348,9 +364,9 @@ class MessagingInfrastructureIntegrationTest {
                 Map.of("invoiceId", 42));
     }
 
-    /** 保存成功 Consumer 收到的 MessageId。 */
+    /** 保存成功 Consumer 收到的 Id。 */
     private abstract static class SuccessfulConsumer implements MessageConsumer<Map> {
-        private final BlockingQueue<MessageId> messages = new LinkedBlockingQueue<>();
+        private final BlockingQueue<Id> messages = new LinkedBlockingQueue<>();
 
         @Override
         public @NotNull EventType<Map> eventType() {
@@ -362,7 +378,7 @@ class MessagingInfrastructureIntegrationTest {
             messages.add(delivery.messageId());
         }
 
-        MessageId receivedMessage() throws InterruptedException {
+        Id receivedMessage() throws InterruptedException {
             return messages.poll(5, TimeUnit.SECONDS);
         }
 
@@ -372,7 +388,7 @@ class MessagingInfrastructureIntegrationTest {
     }
 
     /** 消费 invoice.created 的主 Consumer。 */
-    private static final class PrimaryConsumer extends SuccessfulConsumer {
+    private static class PrimaryConsumer extends SuccessfulConsumer {
         @Override
         public @NotNull String consumerCode() {
             return "invoice-primary";
@@ -380,7 +396,7 @@ class MessagingInfrastructureIntegrationTest {
     }
 
     /** 独立消费同一事件并验证 RabbitMQ 为不同 Consumer 各保留一份消息。 */
-    private static final class CopyConsumer extends SuccessfulConsumer {
+    private static class CopyConsumer extends SuccessfulConsumer {
         @Override
         public @NotNull String consumerCode() {
             return "invoice-copy";
@@ -388,8 +404,8 @@ class MessagingInfrastructureIntegrationTest {
     }
 
     /** 每次都失败，用于验证消息直接进入当前 Consumer 的 DLQ。 */
-    private static final class FailureConsumer implements MessageConsumer<Map> {
-        private final BlockingQueue<MessageId> messages = new LinkedBlockingQueue<>();
+    private static class FailureConsumer implements MessageConsumer<Map> {
+        private final BlockingQueue<Id> messages = new LinkedBlockingQueue<>();
 
         private final AtomicInteger attempts = new AtomicInteger();
 
@@ -410,7 +426,7 @@ class MessagingInfrastructureIntegrationTest {
             throw new IllegalStateException("consumer failure");
         }
 
-        private MessageId receivedMessage() throws InterruptedException {
+        private Id receivedMessage() throws InterruptedException {
             return messages.poll(5, TimeUnit.SECONDS);
         }
 
@@ -430,8 +446,8 @@ class MessagingInfrastructureIntegrationTest {
 
         /** 非 HTTP 测试使用 Repository 当前版本作为乐观锁条件。 */
         @Bean
-        com.sca4d.core.api.concurrent.VersionConditions versionConditions() {
-            return com.sca4d.core.api.concurrent.VersionCondition::optimistic;
+        VersionConditions versionConditions() {
+            return VersionCondition::optimistic;
         }
 
         @Bean
@@ -448,7 +464,7 @@ class MessagingInfrastructureIntegrationTest {
         @Bean
         IdGenerator idGenerator() {
             AtomicLong ids = new AtomicLong(10_000);
-            return ids::incrementAndGet;
+            return () -> Id.of(ids.incrementAndGet());
         }
 
         @Bean

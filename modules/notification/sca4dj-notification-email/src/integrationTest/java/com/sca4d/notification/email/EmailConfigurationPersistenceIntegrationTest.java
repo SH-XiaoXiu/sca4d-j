@@ -7,6 +7,7 @@ import com.sca4d.core.api.concurrent.OptimisticLockException;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.concurrent.VersionConditions;
+import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.security.EncryptedSecret;
 import com.sca4d.core.spring.persistence.mybatis.AffectedRowsAspect;
 import com.sca4d.core.spring.persistence.mybatis.AffectedRowsInterceptor;
@@ -15,6 +16,7 @@ import com.sca4d.core.spring.persistence.mybatis.LongValueTypeHandler;
 import com.sca4d.notification.email.sender.EmailSenderRepository;
 import com.sca4d.notification.email.sender.SmtpSecurity;
 import com.sca4d.notification.email.sender.mapper.EmailSenderMapper;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.type.JdbcType;
 import org.junit.jupiter.api.AfterAll;
@@ -25,7 +27,6 @@ import org.junit.jupiter.api.Test;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -49,7 +50,7 @@ class EmailConfigurationPersistenceIntegrationTest {
     private static EmailSenderRepository senders;
 
     /** 装配 Mapper 和实际影响行数检查。 */
-    @Configuration(proxyBeanMethods = false)
+    @org.springframework.context.annotation.Configuration(proxyBeanMethods = false)
     @EnableAspectJAutoProxy
     @MapperScan(basePackageClasses = EmailSenderMapper.class)
     static class PersistenceConfiguration {
@@ -70,7 +71,7 @@ class EmailConfigurationPersistenceIntegrationTest {
         jdbc = new JdbcTemplate(source);
         SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
         factory.setDataSource(source);
-        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
+        Configuration configuration = new Configuration();
         configuration.setMapUnderscoreToCamelCase(true);
         configuration.setDefaultEnumTypeHandler(CoreEnumTypeHandler.class);
         configuration.getTypeHandlerRegistry()
@@ -167,7 +168,7 @@ class EmailConfigurationPersistenceIntegrationTest {
         senders.setEnabled(1, true);
         senders.add(2, "second", "smtp.example", 25, SmtpSecurity.NONE, null, null, "from@example.test", null, null);
         assertThatThrownBy(() -> senders.setEnabled(2, true))
-                .isInstanceOf(com.sca4d.core.api.error.BusinessException.class);
+                .isInstanceOf(BusinessException.class);
         assertThat(senders.findEnabledConfiguration().orElseThrow().sender().senderId()).isEqualTo(1);
         assertThat(senders.find(2).orElseThrow().enabled()).isFalse();
     }

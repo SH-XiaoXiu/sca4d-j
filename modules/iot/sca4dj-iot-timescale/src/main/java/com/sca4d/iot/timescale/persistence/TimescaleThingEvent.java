@@ -7,21 +7,21 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 保存 TimescaleDB 查询返回的一条已编码 ThingEvent。 */
-public final class TimescaleThingEvent {
-
-    private final long eventId;
-
-    private final long deviceId;
-
-    private final @NotNull String eventCode;
-
-    private final @Nullable String sourceEventId;
-
-    private final @NotNull String outputJson;
+public class TimescaleThingEvent {
 
     private final @NotNull Instant occurredAt;
 
     private final @NotNull Instant receivedAt;
+
+    private final @NotNull String eventCode;
+
+    private final @NotNull String outputJson;
+
+    private final @Nullable String sourceEventId;
+
+    private final long deviceId;
+
+    private final long eventId;
 
     /** 创建 TimescaleDB ThingEvent 查询结果。 */
     public TimescaleThingEvent(

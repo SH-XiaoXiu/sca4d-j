@@ -100,41 +100,41 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="GatewayLoadBalancer.html" title="class in com.sca4d.gateway.routing">GatewayLoadBalancer</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="GatewayControlHeadersFilter.html" title="class in com.sca4d.gateway.routing">GatewayControlHeadersFilter</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">删除客户端提交的 Gateway 控制 Header，不向未声明信任的路由写入内部值。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="GatewayLoadBalancer.html" title="class in com.sca4d.gateway.routing">GatewayLoadBalancer</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">根据请求路径从内存注册表选择普通 API 或指定回调的健康 Server 实例。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="GatewayLoadBalancerConfiguration.html" title="class in com.sca4d.gateway.routing">GatewayLoadBalancerConfiguration</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="GatewayLoadBalancerConfiguration.html" title="class in com.sca4d.gateway.routing">GatewayLoadBalancerConfiguration</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">为 `sca4d-server` 注册基于租约和回调编码选择实例的 LoadBalancer。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="GatewayRoutes.html" title="class in com.sca4d.gateway.routing">GatewayRoutes</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">注册日志写入、普通 API、SSE、WebSocket 和回调路由。</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="GatewayRoutingConfiguration.html" title="class in com.sca4d.gateway.routing">GatewayRoutingConfiguration</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="GatewayRoutePaths.html" title="class in com.sca4d.gateway.routing">GatewayRoutePaths</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">把 `sca4d-server` service ID 连接到 Gateway 自有实例选择器。</div>
+<div class="block">保存 Gateway 内置长连接路由在启动时确定的应用内路径。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="GatewayRoutingExceptionHandler.html" title="class in com.sca4d.gateway.routing">GatewayRoutingExceptionHandler</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="GatewayRoutingConfiguration.html" title="class in com.sca4d.gateway.routing">GatewayRoutingConfiguration</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">把配置的注册后端 service ID 连接到 Gateway 自有实例选择器。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="GatewayRoutingExceptionHandler.html" title="class in com.sca4d.gateway.routing">GatewayRoutingExceptionHandler</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">把连接 Server 实例失败转换为 502，不改变其他 HTTP 异常。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="GatewayServiceInstance.html" title="class in com.sca4d.gateway.routing">GatewayServiceInstance</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="GatewayServiceInstance.html" title="class in com.sca4d.gateway.routing">GatewayServiceInstance</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">把租约注册表中的健康 Server 实例转换为 Spring Cloud LoadBalancer 实例。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="LocationPrefixFilter.html" title="class in com.sca4d.gateway.routing">LocationPrefixFilter</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">在 Gateway 写出响应前为普通 API 的站内 Location 恢复公开路径前缀。</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="LokiPushAuthenticationFilter.html" title="class in com.sca4d.gateway.routing">LokiPushAuthenticationFilter</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RegisteredServerGatewayFilterFactory.html" title="class in com.sca4d.gateway.routing">RegisteredServerGatewayFilterFactory</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">验证 Alloy 的独立 Basic Auth 凭据，并在转发到 Loki 前删除认证 Header。</div>
+<div class="block">为注册 Server 路由写入可信 Header，并可恢复外部路径前缀。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TrustedProxyHeadersFilter.html" title="class in com.sca4d.gateway.routing">TrustedProxyHeadersFilter</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RegisteredServerGatewayFilterFactory.Config.html" title="class in com.sca4d.gateway.routing">RegisteredServerGatewayFilterFactory.Config</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">删除客户端提交的 Gateway/转发 Header，并为 Server 写入可信控制和客户端地址。</div>
+<div class="block">保存 YAML 路由为注册 Server 配置的可选外部路径前缀。</div>
 </div>
 </div>
 </div>

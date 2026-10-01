@@ -90,8 +90,8 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="annotations">@RestController
-@RequestMapping("/internal/gateway/registrations")
-</span><span class="modifiers">public final class </span><span class="element-name type-name-label">GatewayRegistrationController</span>
+@RequestMapping("${sca4dj.gateway.protocol.registration-path}")
+</span><span class="modifiers">public class </span><span class="element-name type-name-label">GatewayRegistrationController</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">提供 Server 实例注册、续租和带租约 ID 保护的注销控制 API。</div>
 </section>
@@ -128,16 +128,16 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invalidRegistration()" class="member-name-link">invalidRegistration</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull org.springframework.http.ResponseEntity<wbr>&lt;com.sca4d.core.api.gateway.GatewayRegistrationResponse&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#register(java.lang.String,com.sca4d.core.api.gateway.GatewayRegistrationRequest)" class="member-name-link">register</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;secret,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#register(org.springframework.http.HttpHeaders,com.sca4d.core.api.gateway.GatewayRegistrationRequest)" class="member-name-link">register</a><wbr>(@NotNull org.springframework.http.HttpHeaders&nbsp;headers,
  @NotNull com.sca4d.core.api.gateway.GatewayRegistrationRequest&nbsp;request)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull org.springframework.http.ResponseEntity<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#remove(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">remove</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;secret,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#remove(org.springframework.http.HttpHeaders,java.lang.String,java.lang.String)" class="member-name-link">remove</a><wbr>(@NotNull org.springframework.http.HttpHeaders&nbsp;headers,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;instanceId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;leaseId)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull org.springframework.http.ResponseEntity<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#renew(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">renew</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;secret,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#renew(org.springframework.http.HttpHeaders,java.lang.String,java.lang.String)" class="member-name-link">renew</a><wbr>(@NotNull org.springframework.http.HttpHeaders&nbsp;headers,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;instanceId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;leaseId)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -182,12 +182,12 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="register(java.lang.String,com.sca4d.core.api.gateway.GatewayRegistrationRequest)">
+<section class="detail" id="register(org.springframework.http.HttpHeaders,com.sca4d.core.api.gateway.GatewayRegistrationRequest)">
 <h3>register</h3>
 <div class="member-signature"><span class="annotations">@PostMapping
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull org.springframework.http.ResponseEntity&lt;com.sca4d.core.api.gateway.GatewayRegistrationResponse&gt;</span>&nbsp;<span class="element-name">register</span><wbr><span class="parameters">(@RequestHeader(name="X-Gateway-Secret",required=false) @Nullable
- @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;secret,
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull org.springframework.http.ResponseEntity&lt;com.sca4d.core.api.gateway.GatewayRegistrationResponse&gt;</span>&nbsp;<span class="element-name">register</span><wbr><span class="parameters">(@RequestHeader @NotNull
+ @NotNull org.springframework.http.HttpHeaders&nbsp;headers,
  @RequestBody @NotNull
  @NotNull com.sca4d.core.api.gateway.GatewayRegistrationRequest&nbsp;request)</span></div>
 <dl class="notes">
@@ -197,12 +197,12 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="renew(java.lang.String,java.lang.String,java.lang.String)">
+<section class="detail" id="renew(org.springframework.http.HttpHeaders,java.lang.String,java.lang.String)">
 <h3>renew</h3>
 <div class="member-signature"><span class="annotations">@PutMapping("/{instanceId}/leases/{leaseId}")
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull org.springframework.http.ResponseEntity&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">renew</span><wbr><span class="parameters">(@RequestHeader(name="X-Gateway-Secret",required=false) @Nullable
- @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;secret,
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull org.springframework.http.ResponseEntity&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">renew</span><wbr><span class="parameters">(@RequestHeader @NotNull
+ @NotNull org.springframework.http.HttpHeaders&nbsp;headers,
  @PathVariable @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;instanceId,
  @PathVariable @NotNull
@@ -214,12 +214,12 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="remove(java.lang.String,java.lang.String,java.lang.String)">
+<section class="detail" id="remove(org.springframework.http.HttpHeaders,java.lang.String,java.lang.String)">
 <h3>remove</h3>
 <div class="member-signature"><span class="annotations">@DeleteMapping("/{instanceId}/leases/{leaseId}")
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull org.springframework.http.ResponseEntity&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">remove</span><wbr><span class="parameters">(@RequestHeader(name="X-Gateway-Secret",required=false) @Nullable
- @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;secret,
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull org.springframework.http.ResponseEntity&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">remove</span><wbr><span class="parameters">(@RequestHeader @NotNull
+ @NotNull org.springframework.http.HttpHeaders&nbsp;headers,
  @PathVariable @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;instanceId,
  @PathVariable @NotNull

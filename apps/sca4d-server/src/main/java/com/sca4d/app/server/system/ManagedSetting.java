@@ -2,7 +2,7 @@ package com.sca4d.app.server.system;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.setting.SystemSetting;
+import com.sca4d.core.api.setting.definition.SystemSetting;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /** 保存管理端展示一个设置所需的定义、当前编码值和维护来源。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class ManagedSetting {
+public class ManagedSetting {
 
     private final SystemSetting<?> setting;
 

@@ -9,13 +9,13 @@ import java.util.Objects;
 
 /** 保存批量查询得到的一条 PlatformPrincipal 当前角色关系。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class PlatformPrincipalRole {
+public class PlatformPrincipalRole {
 
     private final @NotNull Long principalId;
 
-    private final @NotNull Version rolesVersion;
-
     private final @Nullable Long roleId;
+
+    private final @NotNull Version rolesVersion;
 
     private final boolean protectedRelation;
 

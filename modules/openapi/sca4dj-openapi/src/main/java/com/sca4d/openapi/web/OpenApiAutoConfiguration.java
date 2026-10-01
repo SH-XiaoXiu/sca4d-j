@@ -31,6 +31,8 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import java.time.Clock;
+
 /** 自动装配 OpenAPI 路由校验、认证端点和 Client Operation 请求检查。 */
 @AutoConfiguration
 @MapperScan(basePackageClasses = OpenApiClientMapper.class)
@@ -43,11 +45,11 @@ public class OpenApiAutoConfiguration {
     OpenApiJwtTokenService openApiJwtTokenService(
             SessionCodec codec,
             OpenApiProperties properties,
-            java.time.Clock clock) {
+            Clock clock) {
         return new OpenApiJwtTokenService(codec, properties, clock);
     }
 
-    /** 缓存 OpenAPI 请求体，确保 HMAC 校验不会消耗 Controller 的输入流。 */
+    /** 缓存 OpenAPI 请求体，确保 MAC 校验不会消耗 Controller 的输入流。 */
     @Bean
     FilterRegistrationBean<OpenApiRequestBodyFilter> openApiRequestBodyFilter() {
         FilterRegistrationBean<OpenApiRequestBodyFilter> registration = new FilterRegistrationBean<>(
@@ -131,7 +133,7 @@ public class OpenApiAutoConfiguration {
         };
     }
 
-    /** 创建在通用认证拦截器前处理 OpenAPI JWT 和 HMAC 的拦截器。 */
+    /** 创建在通用认证拦截器前处理 OpenAPI JWT 和 MAC 的拦截器。 */
     @Bean
     OpenApiAuthenticationInterceptor openApiAuthenticationInterceptor(
             OpenApiJwtTokenService jwtTokens,

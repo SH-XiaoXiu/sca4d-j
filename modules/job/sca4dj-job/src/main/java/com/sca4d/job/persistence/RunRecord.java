@@ -1,21 +1,22 @@
 package com.sca4d.job.persistence;
 
+import com.sca4d.core.api.job.JobKey;
 import com.sca4d.core.api.job.JobRunStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /** 保存 JobExecutor 查询状态和结果需要的根运行列值。 */
-public final class RunRecord {
+public class RunRecord {
 
-    private final long id;
+    private final @NotNull JobKey jobKey;
 
-    private final @NotNull String jobKey;
-
-    private final int jobDefinitionVersion;
+    private final @NotNull JobRunStatus status;
 
     private final @Nullable String outputJson;
 
-    private final @NotNull JobRunStatus status;
+    private final int jobDefinitionVersion;
+
+    private final long id;
 
     /**
      * 创建根运行查询结果。
@@ -28,7 +29,7 @@ public final class RunRecord {
      */
     public RunRecord(
             long id,
-            @NotNull String jobKey,
+            @NotNull JobKey jobKey,
             int jobDefinitionVersion,
             @Nullable String outputJson,
             @NotNull JobRunStatus status) {
@@ -40,7 +41,7 @@ public final class RunRecord {
     }
 
     /**
-     * 返回根运行主键。
+     * 根运行主键。
      *
      * @return 根运行主键
      */
@@ -49,16 +50,16 @@ public final class RunRecord {
     }
 
     /**
-     * 返回提交根运行时保存的 Job key。
+     * 提交根运行时保存的 Job key。
      *
      * @return 提交时的 Job key
      */
-    public @NotNull String jobKey() {
+    public @NotNull JobKey jobKey() {
         return jobKey;
     }
 
     /**
-     * 返回提交根运行时保存的 Job 定义版本。
+     * 提交根运行时保存的 Job 定义版本。
      *
      * @return 提交时的 Job 定义版本
      */
@@ -67,7 +68,7 @@ public final class RunRecord {
     }
 
     /**
-     * 返回根运行成功后保存的输出 JSON。
+     * 根运行成功后保存的输出 JSON。
      *
      * @return 成功输出 JSON；未成功或 Void 输出时为空
      */
@@ -76,7 +77,7 @@ public final class RunRecord {
     }
 
     /**
-     * 返回当前根运行状态。
+     * 当前根运行状态。
      *
      * @return 当前根运行状态
      */

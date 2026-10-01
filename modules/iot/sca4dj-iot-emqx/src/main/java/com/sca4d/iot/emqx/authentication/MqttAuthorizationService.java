@@ -1,44 +1,45 @@
 package com.sca4d.iot.emqx.authentication;
 
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
+import cn.hutool.crypto.digest.DigestUtil;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.emqx.protocol.MqttDeviceProtocol;
 import com.sca4d.iot.emqx.protocol.MqttProtocolCatalog;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 /** 统一解析应用授权策略或协议 ACL，并为连接失效判断生成稳定指纹。 */
-public final class MqttAuthorizationService {
+public class MqttAuthorizationService {
 
     /** EMQX `client_attrs` 中保存的当前 MQTT ACL 指纹。 */
     public static final String FINGERPRINT_ATTRIBUTE = "authz_fingerprint";
 
-    private final @NotNull MqttProtocolCatalog protocols;
-
     private final @NotNull List<MqttAuthorizationPolicy> policies;
 
-    private final @NotNull String fingerprintSchema;
+    private final @NotNull MqttProtocolCatalog protocols;
 
-    /** 创建应用策略优先、协议 ACL 兜底且使用当前应用命名空间的 MQTT 授权服务。 */
+    private final @NotNull Key fingerprintSchema;
+
+    /** 创建应用策略优先、协议 ACL 作为默认规则且使用当前 App 隔离名称的 MQTT 授权服务。 */
     public MqttAuthorizationService(
             @NotNull MqttProtocolCatalog protocols,
-            @NotNull Collection<MqttAuthorizationPolicy> policies,
-            @NotNull RuntimeNamespace namespace) {
+            @NotNull Collection<MqttAuthorizationPolicy> policies) {
         this.protocols = Objects.requireNonNull(protocols, "MQTT 协议目录不能为空");
         this.policies = List.copyOf(Objects.requireNonNull(policies, "MQTT 授权策略不能为空"));
-        this.fingerprintSchema = Objects.requireNonNull(namespace, "运行时命名空间不能为空")
-                .sca4dj("iot", "emqx", "authorization", "v1");
+        this.fingerprintSchema = Key.of(TreeCode.ofColon("IOT:EMQX:AUTHORIZATION:V1"));
         if (this.policies.stream().anyMatch(Objects::isNull)) {
             throw new IllegalArgumentException("MQTT 授权策略不能包含空值");
         }
@@ -49,7 +50,7 @@ public final class MqttAuthorizationService {
      *
      * @param device 已完成身份认证的 Device
      * @param identifierValue MQTT 连接身份
-     * @return 完整 ACL 及其稳定指纹
+     * @return 完整 ACL 和稳定指纹
      */
     @CheckReturnValue
     public @NotNull MqttAuthorization resolve(
@@ -124,30 +125,26 @@ public final class MqttAuthorizationService {
 
     /** 按有序规则和规范化 QoS 计算跨进程稳定的 SHA-256。 */
     private @NotNull String fingerprint(List<EmqxAclRule> rules) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            update(digest, fingerprintSchema);
-            for (EmqxAclRule rule : rules) {
-                update(digest, rule.permission());
-                update(digest, rule.action());
-                update(digest, rule.topic());
-                rule.qos()
-                        .stream()
-                        .sorted()
-                        .forEach(qos -> update(digest, Integer.toString(qos)));
-                Boolean retain = rule.retain();
-                update(digest, retain == null ? "null" : retain.toString());
-            }
-            return HexFormat.of().formatHex(digest.digest());
-        } catch (NoSuchAlgorithmException exception) {
-            throw new IllegalStateException("当前 JVM 不支持 SHA-256", exception);
+        ByteArrayOutputStream canonical = new ByteArrayOutputStream();
+        appendFingerprintField(canonical, fingerprintSchema.format(COLON));
+        for (EmqxAclRule rule : rules) {
+            appendFingerprintField(canonical, rule.permission());
+            appendFingerprintField(canonical, rule.action());
+            appendFingerprintField(canonical, rule.topic());
+            rule.qos()
+                    .stream()
+                    .sorted()
+                    .forEach(qos -> appendFingerprintField(canonical, Integer.toString(qos)));
+            Boolean retain = rule.retain();
+            appendFingerprintField(canonical, retain == null ? "null" : retain.toString());
         }
+        return DigestUtil.sha256Hex(canonical.toByteArray());
     }
 
     /** 使用长度前缀消除相邻字段连接后的歧义。 */
-    private static void update(MessageDigest digest, String value) {
+    private static void appendFingerprintField(ByteArrayOutputStream canonical, String value) {
         byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
-        digest.update(ByteBuffer.allocate(Integer.BYTES).putInt(bytes.length).array());
-        digest.update(bytes);
+        canonical.writeBytes(ByteBuffer.allocate(Integer.BYTES).putInt(bytes.length).array());
+        canonical.writeBytes(bytes);
     }
 }

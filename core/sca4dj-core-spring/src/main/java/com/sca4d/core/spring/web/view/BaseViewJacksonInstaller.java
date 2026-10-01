@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 在 MVC HandlerAdapter 初始化后把 BaseView 模块安装到实际使用的 Jackson converter。 */
-public final class BaseViewJacksonInstaller implements SmartInitializingSingleton {
+public class BaseViewJacksonInstaller implements SmartInitializingSingleton {
 
     private static final Logger LOG = LoggerFactory.getLogger(BaseViewJacksonInstaller.class);
 

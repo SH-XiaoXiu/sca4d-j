@@ -101,7 +101,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">RateLimitExceededException</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">RateLimitExceededException</span>
 <span class="extends-implements">extends <a href="../error/BusinessException.html" title="class in com.sca4d.core.api.error">BusinessException</a></span></div>
 <div class="block">表示调用没有取得全部限流额度，并携带调用方再次尝试前的等待秒数。</div>
 <dl class="notes">
@@ -144,7 +144,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#retryAfterSeconds()" class="member-name-link">retryAfterSeconds</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回可直接写入 HTTP `Retry-After` 的等待秒数。</div>
+<div class="block">可直接写入 HTTP `Retry-After` 的等待秒数。</div>
 </div>
 </div>
 </div>
@@ -196,7 +196,7 @@ loadScripts(document, 'script');</script>
 <h3>retryAfterSeconds</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">retryAfterSeconds</span>()</div>
-<div class="block">返回可直接写入 HTTP `Retry-After` 的等待秒数。</div>
+<div class="block">可直接写入 HTTP `Retry-After` 的等待秒数。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>向上取整后的正整数秒数</dd>

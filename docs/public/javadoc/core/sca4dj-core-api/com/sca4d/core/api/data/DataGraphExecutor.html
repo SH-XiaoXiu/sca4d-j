@@ -89,9 +89,9 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">DataGraphExecutor</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">DataGraphExecutor</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">按 DataGraph 的稳定拓扑顺序执行类型化同步数据图。</div>
+<div class="block">按 DataGraph 数据依赖同步或异步计算，成功后以稳定拓扑顺序返回完整结果。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -111,6 +111,13 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="DataValues.html" title="class in com.sca4d.core.api.data">DataValues</a>&nbsp;inputs)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">执行完整 Graph；任意节点失败时不返回部分结果。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link">CompletableFuture</a><wbr>&lt;<a href="DataValues.html" title="class in com.sca4d.core.api.data">DataValues</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#executeAsync(com.sca4d.core.api.data.DataGraph,com.sca4d.core.api.data.DataValues,java.util.concurrent.Executor)" class="member-name-link">executeAsync</a><wbr>(@NotNull <a href="DataGraph.html" title="class in com.sca4d.core.api.data">DataGraph</a>&nbsp;graph,
+ @NotNull <a href="DataValues.html" title="class in com.sca4d.core.api.data">DataValues</a>&nbsp;inputs,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Executor.html" title="class or interface in java.util.concurrent" class="external-link">Executor</a>&nbsp;executor)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">通过调用方提供的 Executor 异步执行无共享可变状态的数据节点。</div>
 </div>
 </div>
 </div>
@@ -145,6 +152,32 @@ loadScripts(document, 'script');</script>
 <dd><code>inputs</code> - 与 Graph 输入完全一致的非空值</dd>
 <dt>Returns:</dt>
 <dd>包含输入和全部节点输出的不可变值集合</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="executeAsync(com.sca4d.core.api.data.DataGraph,com.sca4d.core.api.data.DataValues,java.util.concurrent.Executor)">
+<h3>executeAsync</h3>
+<div class="member-signature"><span class="annotations">@CheckReturnValue
+@NotNull
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link">CompletableFuture</a>&lt;<a href="DataValues.html" title="class in com.sca4d.core.api.data">DataValues</a>&gt;</span>&nbsp;<span class="element-name">executeAsync</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="DataGraph.html" title="class in com.sca4d.core.api.data">DataGraph</a>&nbsp;graph,
+ @NotNull
+ @NotNull <a href="DataValues.html" title="class in com.sca4d.core.api.data">DataValues</a>&nbsp;inputs,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Executor.html" title="class or interface in java.util.concurrent" class="external-link">Executor</a>&nbsp;executor)</span></div>
+<div class="block">通过调用方提供的 Executor 异步执行无共享可变状态的数据节点。
+
+ <p>节点只在直接输入全部成功后运行；任一失败立即结束返回值并取消未完成节点。
+ 取消不能强制终止已经运行的 Java 函数，节点必须遵守纯数据操作契约。
+ 不传播 CallHolder、事务或其他线程状态，不关闭调用方 Executor。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>graph</code> - 已校验的计算图</dd>
+<dd><code>inputs</code> - 与图输入严格一致的不可变数据</dd>
+<dd><code>executor</code> - 由调用方管理生命周期及容量的执行器</dd>
+<dt>Returns:</dt>
+<dd>可以取消的完整结果 Future，不返回部分结果</dd>
 </dl>
 </section>
 </li>

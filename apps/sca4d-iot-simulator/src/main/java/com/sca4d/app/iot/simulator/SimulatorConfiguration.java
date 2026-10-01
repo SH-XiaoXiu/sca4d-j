@@ -8,7 +8,7 @@ import java.util.Locale;
 import java.util.Map;
 
 /** 读取两个设备模拟器连接 EMQX 所需的进程环境变量。 */
-public final class SimulatorConfiguration {
+public class SimulatorConfiguration {
 
     private final @NotNull String host;
 
@@ -106,7 +106,12 @@ public final class SimulatorConfiguration {
         return legacySecret;
     }
 
-    /** @param device standard 或 legacy @return 当前进程是否启动该设备 */
+    /**
+     * 判断当前进程是否启动指定类型的模拟设备。
+     *
+     * @param device `standard` 或 `legacy`
+     * @return 配置允许启动该设备时返回 {@code true}
+     */
     public boolean selected(@NotNull String device) {
         return selectedDevices.equals("all") || selectedDevices.equals(device);
     }

@@ -1,6 +1,5 @@
 package com.sca4d.auth.totp.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.auth.totp.TotpAuthenticationMethod;
 import com.sca4d.auth.totp.credential.TotpCodeVerifier;
 import com.sca4d.auth.totp.credential.TotpCredentialRepository;
@@ -8,32 +7,40 @@ import com.sca4d.auth.totp.credential.mapper.TotpCredentialMapper;
 import com.sca4d.auth.totp.enrollment.RedisTotpEnrollmentStore;
 import com.sca4d.auth.totp.enrollment.TotpEnrollmentService;
 import com.sca4d.core.api.authentication.SessionControl;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.security.SecretKeyring;
-import com.sca4d.core.api.setting.Settings;
-import com.sca4d.core.api.setting.SystemSetting;
+import com.sca4d.core.api.setting.access.SettingReader;
+import com.sca4d.core.api.setting.access.SettingWriter;
+import com.sca4d.core.api.setting.definition.SystemSetting;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.core.spring.redis.Sca4djRedis;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.time.Clock;
+import java.time.Duration;
 
 /** 自动装配 TOTP 方法、SQL 凭据和 Redis enrollment，不注册 HTTP 或二维码实现。 */
 @AutoConfiguration
 @MapperScan(basePackageClasses = TotpCredentialMapper.class)
 public class TotpAutoConfiguration {
 
-    /** 创建 TOTP 自动配置。 */
+    /** 创建本应用上下文的模块设置，来源由 Spring 显式注入。 */
+    @Bean
+    TotpSettings totpSettings(SettingReader<String> reader, SettingWriter<String> writer) {
+        return new TotpSettings(reader, writer);
+    }
+
     public TotpAutoConfiguration() {
     }
 
     /** @return TOTP enrollment 有效期设置 */
     @Bean
-    SystemSetting<java.time.Duration> totpEnrollmentTtlSetting() {
-        return TotpSettings.ENROLLMENT_TTL;
+    SystemSetting<Duration> totpEnrollmentTtlSetting(TotpSettings settings) {
+        return settings.ENROLLMENT_TTL;
     }
 
     /** @return Google Authenticator 兼容验证码实现 */
@@ -51,11 +58,10 @@ public class TotpAutoConfiguration {
     /** @return Redis enrollment store */
     @Bean
     RedisTotpEnrollmentStore redisTotpEnrollmentStore(
-            @Sca4djRedis StringRedisTemplate redis,
-            @Sca4djJson ObjectMapper objectMapper,
-            Clock clock,
-            RuntimeNamespace runtimeNamespace) {
-        return new RedisTotpEnrollmentStore(redis, objectMapper, clock, runtimeNamespace);
+            @Sca4djRedis RedisTemplate<Key, String> redis,
+            @Sca4djJson Sca4djMapper objectMapper,
+            Clock clock) {
+        return new RedisTotpEnrollmentStore(redis, objectMapper, clock);
     }
 
     /** @return TOTP enrollment 与凭据生命周期服务 */
@@ -66,7 +72,7 @@ public class TotpAutoConfiguration {
             TotpCodeVerifier verifier,
             SecretKeyring keyring,
             SessionControl sessions,
-            Settings settings,
+            TotpSettings settings,
             Clock clock) {
         return new TotpEnrollmentService(
                 enrollments,

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.authentication.principalsession.ResourceCodec;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Operation;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +13,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 /** 在 Session wire 中编解码 {@link Operation} 标识。 */
-public final class OperationResourceCodec implements ResourceCodec<Operation> {
+public class OperationResourceCodec implements ResourceCodec<Operation> {
 
     private final @NotNull ObjectMapper objectMapper;
 
@@ -26,8 +27,8 @@ public final class OperationResourceCodec implements ResourceCodec<Operation> {
     }
 
     @Override
-    public @NotNull String type() {
-        return "core.operation";
+    public @NotNull TreeCode type() {
+        return TreeCode.of("CORE.OPERATION");
     }
 
     @Override
@@ -57,7 +58,7 @@ public final class OperationResourceCodec implements ResourceCodec<Operation> {
     }
 
     /** 保存 Session JSON 中的 Operation 标识。 */
-    private static final class Payload {
+    private static class Payload {
         @JsonProperty("id")
         private String id;
 

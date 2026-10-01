@@ -7,21 +7,20 @@ import java.time.Instant;
 
 /** 保存当前 desired property 的规范 JSON 和 desired sequence。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class EncodedDesiredProperty {
-
-    private final long deviceId;
-
-    private final long bindingGeneration;
-
-    private final @NotNull String propertyCode;
-
-    private final long desiredSequence;
-
-    private final @NotNull String valueJson;
+public class EncodedDesiredProperty {
 
     private final @Nullable Instant convergedAt;
 
-    /** 创建已经完成 JSON 编码的 desired property。 */
+    private final @NotNull String propertyCode;
+
+    private final @NotNull String valueJson;
+
+    private final long bindingGeneration;
+
+    private final long desiredSequence;
+
+    private final long deviceId;
+
     public EncodedDesiredProperty(
             long deviceId,
             long bindingGeneration,

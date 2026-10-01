@@ -1,5 +1,6 @@
 package com.sca4d.storage.file.persistence;
 
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.storage.FileStatus;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -13,42 +14,42 @@ import java.util.Objects;
  */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
 @ApiStatus.Internal
-public final class FileRecord {
-    private final long id;
+public class FileRecord {
+    private final @NotNull FileStatus status;
 
-    private final long uploaderPrincipalId;
+    private final @Nullable Instant readyExpiresAt;
 
-    private final @NotNull String scene;
+    private final @NotNull Instant uploadExpiresAt;
 
-    private final @NotNull String targetResourceType;
-
-    private final @NotNull String targetResourceId;
+    private final @Nullable Long sizeBytes;
 
     private final @NotNull String backendId;
 
     private final @NotNull String containerName;
 
-    private final @NotNull String uploadObjectKey;
-
-    private final @Nullable String objectKey;
-
-    private final @NotNull String filename;
+    private final @Nullable String contentType;
 
     private final @NotNull String declaredContentType;
 
-    private final long declaredSizeBytes;
+    private final @NotNull String filename;
 
-    private final @Nullable String contentType;
+    private final @Nullable String objectKey;
 
-    private final @Nullable Long sizeBytes;
+    private final @NotNull String scene;
 
-    private final @NotNull FileStatus status;
+    private final @NotNull String targetResourceId;
 
-    private final @NotNull Instant uploadExpiresAt;
+    private final @NotNull String uploadObjectKey;
 
-    private final @Nullable Instant readyExpiresAt;
+    private final @NotNull TreeCode targetResourceType;
 
     private final boolean uploadObjectCleaned;
+
+    private final long declaredSizeBytes;
+
+    private final long id;
+
+    private final long uploaderPrincipalId;
 
     /**
      * 创建包含上传、存储和状态信息的文件记录。
@@ -57,7 +58,7 @@ public final class FileRecord {
             long id,
             long uploaderPrincipalId,
             @NotNull String scene,
-            @NotNull String targetResourceType,
+            @NotNull TreeCode targetResourceType,
             @NotNull String targetResourceId,
             @NotNull String backendId,
             @NotNull String containerName,
@@ -110,7 +111,7 @@ public final class FileRecord {
 
     /** @return 文件关联的目标 Resource 类型 */
     @NotNull
-    public String targetResourceType() {
+    public TreeCode targetResourceType() {
         return targetResourceType;
     }
 

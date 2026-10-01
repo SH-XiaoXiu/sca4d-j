@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { NotificationRichTextNode } from '@sca4d/admin';
+
 import type { Editor, JSONContent } from '@vben/plugins/tiptap';
 
 import { computed, ref } from 'vue';
@@ -9,6 +10,7 @@ import {
   Node,
   VbenTiptap,
 } from '@vben/plugins/tiptap';
+
 import { Plus } from 'lucide-vue-next';
 
 interface EditorHandle {
@@ -42,8 +44,6 @@ const variableOptions = computed(() =>
 const extensions = [
   ...createDefaultTiptapExtensions({ placeholder: props.placeholder }),
   notificationVariable(),
-  migratedInlineTemplate(),
-  migratedRichHtml(),
 ];
 
 /** 在当前光标处插入一个由后端校验名称的通知变量节点。 */
@@ -80,47 +80,6 @@ function notificationVariable() {
   });
 }
 
-/** 显示旧模板迁移产生的 Mustache 文本，保存时保持原节点。 */
-function migratedInlineTemplate() {
-  return Node.create({
-    addAttributes: () => ({ source: { default: '' } }),
-    atom: true,
-    group: 'inline',
-    inline: true,
-    name: 'templateText',
-    parseHTML: () => [{ tag: 'span[data-template-text]' }],
-    renderHTML: ({ node }) => [
-      'span',
-      {
-        class: 'rounded bg-muted px-1 font-mono text-muted-foreground',
-        'data-template-text': node.attrs.source,
-      },
-      String(node.attrs.source),
-    ],
-    selectable: true,
-  });
-}
-
-/** 显示旧模板迁移产生的 HTML 原文，保存时保持原节点。 */
-function migratedRichHtml() {
-  return Node.create({
-    addAttributes: () => ({ source: { default: '' } }),
-    atom: true,
-    group: 'block',
-    name: 'richHtml',
-    parseHTML: () => [{ tag: 'pre[data-rich-html]' }],
-    renderHTML: ({ node }) => [
-      'pre',
-      {
-        class:
-          'whitespace-pre-wrap rounded border border-dashed bg-muted p-3 font-mono text-xs text-muted-foreground',
-        'data-rich-html': node.attrs.source,
-      },
-      String(node.attrs.source),
-    ],
-    selectable: true,
-  });
-}
 </script>
 
 <template>

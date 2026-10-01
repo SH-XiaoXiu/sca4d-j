@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">SmsCodeChallengeState</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">SmsCodeChallengeState</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">保存 Redis 中的 SMS 验证码摘要、Account、状态、次数和时间边界。</div>
 </section>
@@ -112,9 +112,7 @@ loadScripts(document, 'script');</script>
  int&nbsp;attemptCount,
  @NotNull <a href="SmsCodeChallengeStatus.html" title="enum class in com.sca4d.auth.sms.challenge">SmsCodeChallengeStatus</a>&nbsp;status,
  @NotNull com.sca4d.core.api.concurrent.Version&nbsp;version)</code></div>
-<div class="col-last even-row-color">
-<div class="block">创建 SMS Challenge Redis 状态。</div>
-</div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -195,7 +193,18 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="SmsCodeChallengeStatus.html" title="enum class in com.sca4d.auth.sms.challenge">SmsCodeChallengeStatus</a>&nbsp;status,
  @NotNull
  @NotNull com.sca4d.core.api.concurrent.Version&nbsp;version)</span></div>
-<div class="block">创建 SMS Challenge Redis 状态。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>challengeId</code> - Challenge 标识</dd>
+<dd><code>accountId</code> - 关联 Account 标识</dd>
+<dd><code>codeHash</code> - 验证码摘要</dd>
+<dd><code>maskedRecipient</code> - 脱敏后的接收目标</dd>
+<dd><code>expiresAt</code> - Challenge 到期时间</dd>
+<dd><code>resendAt</code> - 允许再次发送验证码的时间</dd>
+<dd><code>attemptCount</code> - 已尝试次数</dd>
+<dd><code>status</code> - 当前 Challenge 状态</dd>
+<dd><code>version</code> - Redis 状态版本</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -211,12 +220,20 @@ loadScripts(document, 'script');</script>
 <h3>challengeId</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../SmsCodeChallengeId.html" title="class in com.sca4d.auth.sms">SmsCodeChallengeId</a></span>&nbsp;<span class="element-name">challengeId</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>Challenge 标识</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="accountId()">
 <h3>accountId</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">accountId</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>关联 Account 标识</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -224,6 +241,10 @@ loadScripts(document, 'script');</script>
 <h3>codeHash</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">codeHash</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>验证码摘要</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -231,6 +252,10 @@ loadScripts(document, 'script');</script>
 <h3>maskedRecipient</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">maskedRecipient</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>脱敏后的接收目标</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -238,6 +263,10 @@ loadScripts(document, 'script');</script>
 <h3>expiresAt</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name">expiresAt</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>Challenge 到期时间</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -245,12 +274,20 @@ loadScripts(document, 'script');</script>
 <h3>resendAt</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name">resendAt</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>允许再次发送验证码的时间</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="attemptCount()">
 <h3>attemptCount</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">attemptCount</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>已尝试次数</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -258,6 +295,10 @@ loadScripts(document, 'script');</script>
 <h3>status</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="SmsCodeChallengeStatus.html" title="enum class in com.sca4d.auth.sms.challenge">SmsCodeChallengeStatus</a></span>&nbsp;<span class="element-name">status</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>当前 Challenge 状态</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -265,6 +306,10 @@ loadScripts(document, 'script');</script>
 <h3>version</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.concurrent.Version</span>&nbsp;<span class="element-name">version</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>Redis 状态版本</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -272,6 +317,10 @@ loadScripts(document, 'script');</script>
 <h3>publicChallenge</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../SmsCodeChallenge.html" title="class in com.sca4d.auth.sms">SmsCodeChallenge</a></span>&nbsp;<span class="element-name">publicChallenge</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>不包含验证码摘要和 Account 标识的公开 Challenge</dd>
+</dl>
 </section>
 </li>
 </ul>

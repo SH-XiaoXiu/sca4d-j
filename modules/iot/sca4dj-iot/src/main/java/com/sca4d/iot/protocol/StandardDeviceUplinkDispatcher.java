@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Objects;
 
 /** 使用 Device 台账选择实际协议，并分发协议解码后的标准上行结果。 */
-public final class StandardDeviceUplinkDispatcher implements DeviceUplinkDispatcher {
+public class StandardDeviceUplinkDispatcher implements DeviceUplinkDispatcher {
 
     private static final Logger LOG = LoggerFactory.getLogger(StandardDeviceUplinkDispatcher.class);
 
@@ -22,7 +22,6 @@ public final class StandardDeviceUplinkDispatcher implements DeviceUplinkDispatc
 
     private final @NotNull DeviceUplinkReceiver receiver;
 
-    /** 创建不依赖具体传输方式的 Device 上行分发器。 */
     public StandardDeviceUplinkDispatcher(
             @NotNull DeviceProtocolCatalog protocols,
             @NotNull DeviceUplinkReceiver receiver) {

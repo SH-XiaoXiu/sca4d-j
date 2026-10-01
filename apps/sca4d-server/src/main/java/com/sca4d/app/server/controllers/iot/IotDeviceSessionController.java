@@ -6,15 +6,16 @@ import com.sca4d.app.server.iot.IotHttpHeaders;
 import com.sca4d.app.server.iot.view.IotDeviceSessionView;
 import com.sca4d.core.api.annotation.AnonymousAccess;
 import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.spring.config.ConditionalOnCapability;
 import com.sca4d.core.spring.gateway.TrustedGatewayRequest;
 import com.sca4d.core.spring.web.ApiResponse;
 import com.sca4d.iot.IotErrorCode;
+import com.sca4d.iot.api.IotCapabilities;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -24,10 +25,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.Instant;
 import java.util.Objects;
 
-/** 提供 Sca4d Server 示例应用真实 HTTP 请求的 Device HMAC Session 接口。 */
+/** 提供 Sca4d Server 示例应用真实 HTTP 请求的 Device MAC Session 接口。 */
 @RestController
 @AnonymousAccess
-@ConditionalOnProperty(prefix = "app.iot.capabilities", name = "api", havingValue = "true", matchIfMissing = true)
+@ConditionalOnCapability(IotCapabilities.API)
 @RequestMapping("/iot/device-sessions")
 @Tag(name = "IoT Device Sessions")
 public class IotDeviceSessionController {
@@ -41,13 +42,13 @@ public class IotDeviceSessionController {
         this.sessions = Objects.requireNonNull(sessions, "Device Session 服务不能为空");
     }
 
-    /** @return HMAC 验证成功后签发的 MQTT Session Token、Session ID 和过期时间 */
+    /** @return MAC 验证成功后签发的 MQTT Session Token、Session ID 和过期时间 */
     @PostMapping
     @Operation(summary = "使用 Device HMAC 建立 Session")
     public @NotNull ApiResponse<IotDeviceSessionView> establish(
             @RequestHeader(IotHttpHeaders.DEVICE_ID) @NotNull String deviceId,
             @RequestHeader(IotHttpHeaders.TIMESTAMP) @NotNull String timestamp,
-            @RequestHeader(IotHttpHeaders.NONCE) @NotNull String nonce,
+            @RequestHeader(IotHttpHeaders.ONCE) @NotNull String nonce,
             @RequestHeader(IotHttpHeaders.SIGNATURE) @NotNull String signature,
             @RequestBody(required = false) byte @Nullable [] body,
             @NotNull HttpServletRequest request) {

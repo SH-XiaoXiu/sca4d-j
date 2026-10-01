@@ -3,6 +3,7 @@ package com.sca4d.core.api.audit;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallExecution;
 import com.sca4d.core.api.call.CallOutcome;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,11 +12,11 @@ import java.util.Objects;
 
 /** 向 Audit 目标解析器和 payload 工厂暴露一次已经得到结果的方法执行。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class AuditInvocation {
-
-    private final CallExecution execution;
+public class AuditInvocation {
 
     private final AuditResult auditResult;
+
+    private final CallExecution execution;
 
     /**
      * 创建审计调用快照。
@@ -37,6 +38,7 @@ public final class AuditInvocation {
     }
 
     /** @return 当前方法执行 */
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "审计解析器需要读取完整的 CallExecution；该对象仅在调用生命周期内由框架持有")
     public CallExecution execution() {
         return execution;
     }

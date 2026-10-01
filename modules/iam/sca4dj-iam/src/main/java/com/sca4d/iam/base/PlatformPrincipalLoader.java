@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** 为 platform realm 的身份读取当前可选择的 `PlatformPrincipal`。 */
-public final class PlatformPrincipalLoader implements PrincipalLoader {
+public class PlatformPrincipalLoader implements PrincipalLoader {
 
     private final PlatformIdentityService identities;
 

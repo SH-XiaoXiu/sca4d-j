@@ -14,7 +14,7 @@ import java.util.List;
 
 /** 从完成上传的文件标识或批量读取请求建立文件资源集合。 */
 @Component
-public final class FileResourceResolver implements CallValueResolver<Collection<Resource>> {
+public class FileResourceResolver implements CallValueResolver<Collection<Resource>> {
     /** 创建无状态的文件资源解析器。 */
     public FileResourceResolver() {
     }

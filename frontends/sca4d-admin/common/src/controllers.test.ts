@@ -67,7 +67,7 @@ describe('admin controllers', () => {
           attemptId: 'attempt-1',
           status: 'FACTOR_REQUIRED',
           remainingFactorCount: 1,
-          availableMethods: ['totp'],
+          availableMethods: ['AUTHENTICATION/TOTP'],
           expiresAt: '2026-01-01T00:00:00Z',
         },
         session: null,

@@ -1,8 +1,9 @@
 package com.sca4d.app.server.openapi.iot;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import com.sca4d.app.server.iot.IotDeviceDetails;
 import com.sca4d.iot.api.Device;
-import com.sca4d.iot.api.DeviceAccessMethod;
 import com.sca4d.iot.api.connection.DeviceConnectionBinding;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.jetbrains.annotations.CheckReturnValue;
@@ -17,7 +18,7 @@ import java.util.OptionalLong;
 
 /** 返回第三方程序读取 IoT Device 时需要的稳定字段，不复用管理端 HTTP 视图。 */
 @Schema(name = "IotDevice", description = "开放 API 返回的 IoT Device 资料、连接标识和启停状态。")
-public final class OpenApiIotDeviceResponse {
+public class OpenApiIotDeviceResponse {
 
     private final @NotNull String id;
 
@@ -76,7 +77,7 @@ public final class OpenApiIotDeviceResponse {
         this.connectionIdentity = connection == null ? null : connection.identifierValue();
         this.accessMethods = device.accessMethods()
                 .stream()
-                .map(DeviceAccessMethod::code)
+                .map(method -> method.code().format(COLON))
                 .sorted()
                 .toList();
         this.status = OpenApiIotDeviceStatus.from(details.profile().status());

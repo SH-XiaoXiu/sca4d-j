@@ -9,15 +9,15 @@ import com.sca4d.app.server.iot.DeviceCreationRequestRecord;
 import com.sca4d.app.server.iot.IotProductProfile;
 import com.sca4d.app.server.iot.IotProfileStatus;
 import com.sca4d.app.server.mapper.IotApplicationMapper;
+import com.sca4d.auth.passkey.credential.PasskeyCredential;
 import com.sca4d.auth.passkey.credential.mapper.PasskeyAccountState;
 import com.sca4d.auth.passkey.credential.mapper.PasskeyCredentialMapper;
-import com.sca4d.auth.passkey.credential.mapper.PasskeyCredentialState;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.enums.BaseEnum;
 import com.sca4d.core.api.i18n.LocalizedFields;
-import com.sca4d.core.api.setting.SettingOwner;
-import com.sca4d.core.api.setting.SettingValue;
-import com.sca4d.core.api.setting.Settings;
+import com.sca4d.core.api.identity.Account;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.setting.value.SettingOwner;
+import com.sca4d.core.api.setting.value.SettingValue;
 import com.sca4d.core.spring.dictionary.DatabaseDictionaryOption;
 import com.sca4d.core.spring.dictionary.DictionaryMapper;
 import com.sca4d.core.spring.setting.SettingMapper;
@@ -31,6 +31,8 @@ import com.sca4d.iot.persistence.mapper.ThingModelMapper;
 import com.sca4d.iot.timescale.persistence.EncodedTelemetrySample;
 import com.sca4d.iot.timescale.persistence.TimescaleMapper;
 import com.sca4d.iot.timescale.persistence.TimescaleTelemetrySample;
+import org.apache.ibatis.mapping.ResultMap;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.DisplayName;
@@ -58,11 +60,13 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.WildcardType;
 import java.sql.Timestamp;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -105,14 +109,14 @@ class Sca4dApplicationStartupIntegrationTest {
     /** 把完整应用的外部依赖绑定到本测试拥有的隔离容器。 */
     @DynamicPropertySource
     static void infrastructureProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
-        registry.add("spring.datasource.username", POSTGRES::getUsername);
-        registry.add("spring.datasource.password", POSTGRES::getPassword);
+        registry.add("spring.datasource.dynamic.datasource.main.url", POSTGRES::getJdbcUrl);
+        registry.add("spring.datasource.dynamic.datasource.main.username", POSTGRES::getUsername);
+        registry.add("spring.datasource.dynamic.datasource.main.password", POSTGRES::getPassword);
 
         registry.add("sca4dj.iot.timescale.enabled", () -> true);
-        registry.add("sca4dj.iot.timescale.url", TIMESCALE::getJdbcUrl);
-        registry.add("sca4dj.iot.timescale.username", TIMESCALE::getUsername);
-        registry.add("sca4dj.iot.timescale.password", TIMESCALE::getPassword);
+        registry.add("spring.datasource.dynamic.datasource.iot-history.url", TIMESCALE::getJdbcUrl);
+        registry.add("spring.datasource.dynamic.datasource.iot-history.username", TIMESCALE::getUsername);
+        registry.add("spring.datasource.dynamic.datasource.iot-history.password", TIMESCALE::getPassword);
 
         registry.add("spring.data.redis.host", REDIS::getHost);
         registry.add("spring.data.redis.port", () -> REDIS.getMappedPort(6379));
@@ -127,9 +131,9 @@ class Sca4dApplicationStartupIntegrationTest {
         registry.add("sca4dj.iot.emqx.management-base-url", () -> "http://localhost:18083");
         registry.add("sca4dj.iot.emqx.management-api-key", () -> "integration-key");
         registry.add("sca4dj.iot.emqx.management-secret", () -> "integration-secret");
-        registry.add("app.iot.emqx-webhook-secret", () -> "integration-webhook-secret");
+        registry.add("app.iot.emqx.webhook-secret", () -> "integration-webhook-secret");
         registry.add("sca4dj.iam.bootstrap.enabled", () -> false);
-        registry.add("sca4dj.auth.password.bootstrap-enabled", () -> false);
+        registry.add("sca4dj.auth.password.bootstrap.enabled", () -> false);
         registry.add("sca4dj.bootstrap.enabled", () -> false);
     }
 
@@ -175,7 +179,7 @@ class Sca4dApplicationStartupIntegrationTest {
     private DictionaryMapper dictionaryMapper;
 
     @Autowired
-    private Settings settings;
+    private AccountAuthenticationSettingConfiguration settings;
 
     @Autowired
     private PasskeyCredentialMapper passkeyCredentialMapper;
@@ -212,7 +216,7 @@ class Sca4dApplicationStartupIntegrationTest {
 
         assertThat(defaultFlyway.info().current()).isNotNull();
         assertThat(historyFlyway.info().current()).isNotNull();
-        assertThat(settingMapper.selectSystem(List.of("startup.integration.missing"))).isEmpty();
+        assertThat(settingMapper.select(TreeCode.of("SYSTEM"), "1", List.of("startup.integration.missing"))).isEmpty();
         assertThat(
                 timescaleMapper.selectTelemetry(
                         1L,
@@ -243,7 +247,7 @@ class Sca4dApplicationStartupIntegrationTest {
     @DisplayName("主数据库直接映射认证设置、Passkey 二进制值和应用 IoT 状态")
     void mapsDefaultDatabaseValues() {
         long accountId = 9_100_001L;
-        AuthenticationMethodCode methodCode = new AuthenticationMethodCode("passkey");
+        TreeCode methodCode = TreeCode.ofSlash("AUTHENTICATION/PASSKEY");
         byte[] userHandle = new byte[32];
         for (int index = 0; index < userHandle.length; index++) {
             userHandle[index] = (byte) index;
@@ -251,9 +255,9 @@ class Sca4dApplicationStartupIntegrationTest {
         byte[] credentialId = new byte[] {10, 20, 30, 40};
         byte[] publicKeyCose = new byte[] {50, 60, 70, 80};
 
-        assertThat(passkeyCredentialMapper.selectAccountByAccountId(accountId)).isNull();
+        assertThat(passkeyCredentialMapper.selectAccount(accountId, null)).isNull();
         assertThat(passkeyCredentialMapper.insertAccountIfAbsent(accountId, userHandle)).isOne();
-        PasskeyAccountState account = passkeyCredentialMapper.selectAccountByAccountId(accountId);
+        PasskeyAccountState account = passkeyCredentialMapper.selectAccount(accountId, null);
         assertThat(account).isNotNull();
         assertThat(account.userHandle()).containsExactly(userHandle);
         assertThat(account.version().value()).isZero();
@@ -263,26 +267,28 @@ class Sca4dApplicationStartupIntegrationTest {
                 credentialId,
                 publicKeyCose,
                 7,
-                "internal,usb",
+                Set.of("internal", "usb"),
                 true,
                 false,
                 "Integration key");
         assertThat(credentialRecordId).isNotNull().isPositive();
-        PasskeyCredentialState credential = passkeyCredentialMapper.selectByCredentialId(credentialId);
+        PasskeyCredential credential = passkeyCredentialMapper.selectCredentials(null, credentialId, null)
+                .stream()
+                .findFirst()
+                .orElse(null);
         assertThat(credential).isNotNull();
         assertThat(credential.userHandle()).containsExactly(userHandle);
         assertThat(credential.credentialId()).containsExactly(credentialId);
         assertThat(credential.publicKeyCose()).containsExactly(publicKeyCose);
         assertThat(credential.signatureCount()).isEqualTo(7);
 
-        SettingOwner accountOwner = new SettingOwner("account", Long.toString(accountId));
-        SettingValue<AccountAuthenticationSettings> savedAuthentication = settings.replace(
-                AccountAuthenticationSettingConfiguration.ACCOUNT_POLICY,
+        SettingOwner accountOwner = new SettingOwner(Account.RESOURCE_TYPE, Long.toString(accountId));
+        SettingValue<AccountAuthenticationSettings> savedAuthentication = settings.ACCOUNT_POLICY.replace(
                 accountOwner,
                 new AccountAuthenticationSettings(
                         2,
                         1,
-                        java.time.Duration.ofSeconds(300),
+                        Duration.ofSeconds(300),
                         List.of(new AuthenticationMethodSettings(methodCode, true, false, true))));
         assertThat(savedAuthentication.value().loginFactorCount()).isEqualTo(2);
         assertThat(savedAuthentication.value().reusableAuthenticationMaximumAge().toSeconds()).isEqualTo(300);
@@ -344,7 +350,10 @@ class Sca4dApplicationStartupIntegrationTest {
                                         Map.of("/displayName", "Startup integration product"))),
                         now))
                 .isOne();
-        EncodedThingModel thingModel = thingModelMapper.selectThingModel(productCode, 1);
+        EncodedThingModel thingModel = thingModelMapper.selectThingModels(productCode, 1)
+                .stream()
+                .findFirst()
+                .orElse(null);
         assertThat(thingModel).isNotNull();
         assertThat(thingModel.version()).isOne();
         assertThat(thingModel.modelJson()).isEqualTo("{}");
@@ -423,9 +432,9 @@ class Sca4dApplicationStartupIntegrationTest {
                         null,
                         null,
                         "{}",
-                        "none",
+                        TreeCode.of("NONE"),
                         30_000L,
-                        "none",
+                        TreeCode.of("NONE"),
                         null))
                 .isOne();
         assertThat(
@@ -439,9 +448,9 @@ class Sca4dApplicationStartupIntegrationTest {
                         null,
                         null,
                         "{}",
-                        "none",
+                        TreeCode.of("NONE"),
                         30_000L,
-                        "none",
+                        TreeCode.of("NONE"),
                         null))
                 .isOne();
 
@@ -454,7 +463,7 @@ class Sca4dApplicationStartupIntegrationTest {
 
     /** 检查一个会话工厂的公共映射配置和已经注册的 Mapper 类型。 */
     private static void assertMyBatisConventions(SqlSessionFactory factory) {
-        org.apache.ibatis.session.Configuration configuration = factory.getConfiguration();
+        Configuration configuration = factory.getConfiguration();
         assertThat(configuration.isMapUnderscoreToCamelCase()).isTrue();
         assertThat(configuration.isArgNameBasedConstructorAutoMapping()).isTrue();
 
@@ -476,7 +485,7 @@ class Sca4dApplicationStartupIntegrationTest {
             }
         }
 
-        for (org.apache.ibatis.mapping.ResultMap resultMap : configuration.getResultMaps()) {
+        for (ResultMap resultMap : configuration.getResultMaps()) {
             Class<?> resultType = resultMap.getType();
             assertThat(resultType.getSimpleName())
                     .as("MyBatis 查询结果类型不能使用 Row 后缀: %s", resultMap.getId())

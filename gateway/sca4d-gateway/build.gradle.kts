@@ -32,6 +32,8 @@ dependencies {
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.cloud.starter.gateway.server.webflux)
     implementation(libs.spring.cloud.starter.loadbalancer)
+    runtimeOnly(project(":gateway:sca4dj-gateway-loki"))
+    annotationProcessor(libs.spring.boot.configuration.processor)
 
     testImplementation(libs.spring.boot.starter.test)
     testRuntimeOnly(libs.junit.platform.launcher)

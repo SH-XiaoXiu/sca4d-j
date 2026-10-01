@@ -20,16 +20,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /** 使用 libphonenumber 和 PhoneNumberCondition Bean 执行 PhoneNumber 约束。 */
-public final class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, String> {
-
-    private final RegionCatalog regions;
+public class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, String> {
 
     private final PhoneNumberConditionRegistry conditionRegistry;
 
-    private DnfExpression<ParsedPhoneNumber> expression = DnfExpression.always();
+    private final RegionCatalog regions;
+
+    private DnfExpression<ParsedPhoneNumber, Boolean> expression = DnfExpression.always("always", true);
 
     /** 创建不包含自定义条件的校验器，供非 Spring Bean Validation 环境使用。 */
     public PhoneNumberValidator() {
@@ -54,11 +55,12 @@ public final class PhoneNumberValidator implements ConstraintValidator<PhoneNumb
     @Override
     public void initialize(@NotNull PhoneNumber annotation) {
         if (annotation.anyOf().length == 0) {
-            expression = DnfExpression.always();
+            expression = DnfExpression.always("always", true);
             return;
         }
-        List<DnfClause<ParsedPhoneNumber>> clauses = Arrays.stream(annotation.anyOf())
-                .map(this::clause)
+        List<DnfClause<ParsedPhoneNumber, Boolean>> clauses = java.util.stream.IntStream
+                .range(0, annotation.anyOf().length)
+                .mapToObj(index -> clause("phone-rule-" + index, annotation.anyOf()[index]))
                 .toList();
         expression = new DnfExpression<>(clauses);
     }
@@ -74,14 +76,14 @@ public final class PhoneNumberValidator implements ConstraintValidator<PhoneNumb
             return true;
         }
         ParsedPhoneNumber phoneNumber = regions.parse(value);
-        return phoneNumber != null && expression.test(phoneNumber);
+        return phoneNumber != null && expression.evaluate(phoneNumber).orElse(false);
     }
 
     /** 把一个注解 Rule 转换成按声明顺序执行的 AND 条件。 */
-    private DnfClause<ParsedPhoneNumber> clause(PhoneNumber.Rule rule) {
+    private DnfClause<ParsedPhoneNumber, Boolean> clause(String code, PhoneNumber.Rule rule) {
         List<Predicate<? super ParsedPhoneNumber>> predicates = new ArrayList<>();
 
-        // 先校验并复制 Rule 声明，后续 Predicate 不再读取可变数组。
+        // 先校验并复制 Rule 声明，之后的 Predicate 不再读取可变数组。
         Set<Region> includedRegions = regions(rule.regions());
         Set<Continent> includedContinents = new HashSet<>(Arrays.asList(rule.continents()));
         Set<Integer> includedCallingCodes = callingCodes(rule.countryCallingCodes());
@@ -106,14 +108,18 @@ public final class PhoneNumberValidator implements ConstraintValidator<PhoneNumb
             PhoneNumberCondition condition = conditionRegistry.resolve(conditionType);
             predicates.add(condition::test);
         }
-        return new DnfClause<>(predicates);
+        List<DnfClause.Condition<? super ParsedPhoneNumber>> conditions = new ArrayList<>();
+        for (Predicate<? super ParsedPhoneNumber> predicate : predicates) {
+            conditions.add(DnfClause.Condition.of(predicate));
+        }
+        return new DnfClause<>(code, conditions, true);
     }
 
     /** 添加一个值必须包含在非空集合中的条件。 */
     private static <T> void addIncluded(
             List<Predicate<? super ParsedPhoneNumber>> predicates,
             Set<T> allowed,
-            java.util.function.Function<ParsedPhoneNumber, T> value) {
+            Function<ParsedPhoneNumber, T> value) {
         if (!allowed.isEmpty()) {
             predicates.add(facts -> allowed.contains(value.apply(facts)));
         }
@@ -123,7 +129,7 @@ public final class PhoneNumberValidator implements ConstraintValidator<PhoneNumb
     private static <T> void addExcluded(
             List<Predicate<? super ParsedPhoneNumber>> predicates,
             Set<T> excluded,
-            java.util.function.Function<ParsedPhoneNumber, T> value) {
+            Function<ParsedPhoneNumber, T> value) {
         if (!excluded.isEmpty()) {
             predicates.add(facts -> !excluded.contains(value.apply(facts)));
         }

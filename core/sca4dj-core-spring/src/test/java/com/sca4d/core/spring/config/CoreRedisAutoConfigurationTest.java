@@ -7,7 +7,7 @@ import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.IdempotencyStore;
 import com.sca4d.core.api.concurrent.RateLimitDecision;
 import com.sca4d.core.api.concurrent.RateLimiter;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
 import com.sca4d.core.spring.redis.RedisDistributedLock;
 import com.sca4d.core.spring.redis.RedisIdempotencyStore;
 import com.sca4d.core.spring.redis.Sca4djRedis;
@@ -24,17 +24,21 @@ import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.time.Clock;
+import java.util.List;
 
 /** 验证脚手架 Redis 模板只使用应用默认连接工厂且不参与普通类型注入。 */
 class CoreRedisAutoConfigurationTest {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
+            .withPropertyValues("spring.application.name=sca4d-test")
             .withConfiguration(
                     AutoConfigurations.of(
                             CoreJacksonAutoConfiguration.class,
+                            AppIsolationAutoConfiguration.class,
                             JacksonAutoConfiguration.class,
                             CoreRedisAutoConfiguration.class));
 
@@ -52,11 +56,11 @@ class CoreRedisAutoConfigurationTest {
                         () -> businessTemplate,
                         definition -> definition.setPrimary(true))
                 .run(context -> {
-                    StringRedisTemplate sca4djTemplate = context.getBean(
-                            "sca4djStringRedisTemplate",
-                            StringRedisTemplate.class);
+                    RedisTemplate<?, ?> sca4djTemplate = context.getBean(
+                            "sca4djRedisTemplate",
+                            RedisTemplate.class);
                     AbstractBeanDefinition definition = (AbstractBeanDefinition) context.getBeanFactory()
-                            .getBeanDefinition("sca4djStringRedisTemplate");
+                            .getBeanDefinition("sca4djRedisTemplate");
 
                     assertThat(sca4djTemplate.getConnectionFactory()).isSameAs(connectionFactory);
                     assertThat(context.getBean(StringRedisTemplate.class)).isSameAs(businessTemplate);
@@ -73,8 +77,8 @@ class CoreRedisAutoConfigurationTest {
                 .withBean("redisConnectionFactory", RedisConnectionFactory.class, () -> connectionFactory)
                 .withUserConfiguration(CustomSca4djRedisConfiguration.class)
                 .run(context -> {
-                    assertThat(context).doesNotHaveBean("sca4djStringRedisTemplate");
-                    assertThat(context.getBean("customSca4djRedisTemplate", StringRedisTemplate.class))
+                    assertThat(context).doesNotHaveBean("sca4djRedisTemplate");
+                    assertThat(context.getBean("customSca4djRedisTemplate", RedisTemplate.class))
                             .isSameAs(
                                     context.getBeansWithAnnotation(Sca4djRedis.class)
                                             .get("customSca4djRedisTemplate"));
@@ -97,8 +101,8 @@ class CoreRedisAutoConfigurationTest {
                 .run(
                         context -> assertThat(
                                 context.getBean(
-                                        "sca4djStringRedisTemplate",
-                                        StringRedisTemplate.class)
+                                        "sca4djRedisTemplate",
+                                        RedisTemplate.class)
                                         .getConnectionFactory())
                                 .isSameAs(primary));
     }
@@ -136,7 +140,7 @@ class CoreRedisAutoConfigurationTest {
                 .withBean(RedissonClient.class, () -> mock(RedissonClient.class))
                 .withBean("bucket4jProxyManager", ProxyManager.class, () -> proxyManager)
                 .withBean(RateLimiter.class, () -> customRateLimiter)
-                .withBean(RuntimeNamespace.class, () -> new RuntimeNamespace("test-app"))
+                .withPropertyValues("sca4dj.serialization.key-prefix=TEST_APP")
                 .withBean(Clock.class, Clock::systemUTC)
                 .run(context -> {
                     assertThat(context.getBean(IdempotencyStore.class))
@@ -154,8 +158,10 @@ class CoreRedisAutoConfigurationTest {
         /** @return 应用显式声明的脚手架 Redis 模板 */
         @Bean
         @Sca4djRedis
-        StringRedisTemplate customSca4djRedisTemplate() {
-            return new StringRedisTemplate(mock(RedisConnectionFactory.class));
+        RedisTemplate<Key, String> customSca4djRedisTemplate() {
+            return new CoreRedisAutoConfiguration().sca4djRedisTemplate(
+                    mock(RedisConnectionFactory.class),
+                    List.of());
         }
     }
 }

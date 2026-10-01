@@ -13,7 +13,7 @@ import java.util.Objects;
 
 /** 返回一个字典键及代码项和数据库项聚合后的选择项。 */
 @SuppressWarnings({"ClassCanBeRecord", "unused"})
-public final class DictionarySelectionView {
+public class DictionarySelectionView {
 
     private final String key;
 
@@ -38,7 +38,7 @@ public final class DictionarySelectionView {
     }
 
     /** 一个已经可以直接展示的字典选择项。 */
-    public static final class Option extends BaseView {
+    public static class Option extends BaseView {
         private final String value;
 
         private final String labelKey;

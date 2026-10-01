@@ -186,6 +186,7 @@ implements com.sca4d.core.api.scheduling.ClusterTask</span></div>
 <section class="detail" id="execute()">
 <h3>execute</h3>
 <div class="member-signature"><span class="annotations">@Transactional
+@SystemExecution("IOT")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">execute</span>()</div>
 <div class="block">删除一批早于保留截止时间且已经进入最终状态的下行消息。</div>
 <dl class="notes">

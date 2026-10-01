@@ -9,21 +9,21 @@ import java.util.Objects;
 
 /** 保存 Platform Account 目录返回的身份、用户名和状态。 */
 @SuppressWarnings("ClassCanBeRecord")
-public final class PlatformAccountEntry {
-
-    private final @NotNull Long accountId;
-
-    private final @NotNull Long subjectId;
-
-    private final @NotNull Long principalId;
-
-    private final @NotNull String username;
+public class PlatformAccountEntry {
 
     private final @NotNull IdentityStatus status;
 
     private final @NotNull Instant createdAt;
 
     private final @NotNull Instant updatedAt;
+
+    private final @NotNull Long accountId;
+
+    private final @NotNull Long principalId;
+
+    private final @NotNull Long subjectId;
+
+    private final @NotNull String username;
 
     private final boolean protectedRoot;
 

@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.nio.ByteBuffer;
@@ -40,10 +41,11 @@ import java.util.zip.CRC32C;
 import java.util.zip.Checksum;
 
 /** 提供不访问外部状态的文本、值、集合、字节、JSON 和标识数据处理。 */
-public final class DataOps {
+public class DataOps {
 
     private static final int DEFAULT_ID_LENGTH = 12;
 
+    /** 通用 JSON 值处理使用的中性解析器，不包含服务器 I/O 或业务 ObjectMapper 定制。 */
     private static final ObjectMapper JSON = new ObjectMapper()
             .enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
 
@@ -246,7 +248,7 @@ public final class DataOps {
         }
         try {
             return JSON.readTree(json.clone());
-        } catch (java.io.IOException exception) {
+        } catch (IOException exception) {
             throw new DataAssertionException(null, "JSON 语法无效", null, exception);
         }
     }
@@ -307,7 +309,7 @@ public final class DataOps {
         if (node.isBinary()) {
             try {
                 return node.binaryValue();
-            } catch (java.io.IOException exception) {
+            } catch (IOException exception) {
                 throw new DataAssertionException(null, "JSON binary 值无法读取", null, exception);
             }
         }
@@ -335,7 +337,7 @@ public final class DataOps {
     }
 
     /** 不可变文本处理对象。 */
-    public static final class TextPipe {
+    public static class TextPipe {
 
         private final @Nullable String value;
 
@@ -449,7 +451,7 @@ public final class DataOps {
      *
      * @param <T> 当前值类型
      */
-    public static final class ValuePipe<T> {
+    public static class ValuePipe<T> {
 
         private final @Nullable T value;
 
@@ -613,7 +615,7 @@ public final class DataOps {
         }
 
         /**
-         * 读取不执行额外断言或转换的值。
+         * 不执行额外断言或转换的值。
          *
          * @return 当前值，可以为空
          */
@@ -650,7 +652,7 @@ public final class DataOps {
      *
      * @param <T> 当前元素类型
      */
-    public static final class SeqPipe<T> {
+    public static class SeqPipe<T> {
 
         private final List<T> values;
 
@@ -699,7 +701,7 @@ public final class DataOps {
         }
 
         /**
-         * 读取创建当前对象时复制的元素。
+         * 管道内部保存的元素副本；返回列表保持原顺序且不可修改。
          *
          * @return 保持顺序的不可修改列表
          */
@@ -718,7 +720,7 @@ public final class DataOps {
     }
 
     /** 保存字节快照并按明确偏移读取数值、文本和校验值。 */
-    public static final class BytePipe {
+    public static class BytePipe {
 
         private final byte @NotNull [] values;
 
@@ -727,7 +729,7 @@ public final class DataOps {
         }
 
         /**
-         * 返回当前字节数。
+         * 当前字节数。
          *
          * @return 创建处理对象时复制的字节数量
          */
@@ -990,7 +992,7 @@ public final class DataOps {
     }
 
     /** 在固定长度数组中按明确偏移写入数值并生成防御性副本。 */
-    public static final class ByteBuilder {
+    public static class ByteBuilder {
 
         private final byte @NotNull [] values;
 
@@ -1150,7 +1152,7 @@ public final class DataOps {
     }
 
     /** 不可变 JSON 对象构建器。 */
-    public static final class JsonObjectPipe {
+    public static class JsonObjectPipe {
 
         private final ObjectNode value;
 
@@ -1237,7 +1239,7 @@ public final class DataOps {
     }
 
     /** 不可变短 ID 生成器。 */
-    public static final class IdPipe {
+    public static class IdPipe {
 
         private final @Nullable String prefix;
 
@@ -1275,7 +1277,7 @@ public final class DataOps {
     }
 
     /** 不可变 JSON 解析和结构编辑对象。 */
-    public static final class JsonPipe {
+    public static class JsonPipe {
 
         private final @Nullable JsonNode value;
 
@@ -1454,7 +1456,7 @@ public final class DataOps {
         }
 
         /**
-         * 保护指定顶层字段，后续 merge 不得改变已有值。
+         * 保护指定顶层字段，之后的 merge 操作不得改变已有值。
          *
          * @param fields 需要保护的字段名；空数组、空值和空白元素均忽略
          * @return 包含新增受保护字段且 JSON 内容不变的新对象
@@ -1483,6 +1485,8 @@ public final class DataOps {
             if (patchJson == null || patchJson.isBlank()) {
                 return this;
             }
+
+            // 先确认 patch 是对象，再检查受保护字段；检查通过后复制当前对象并递归合并，原对象保持不变。
             JsonNode patchValue = parse(patchJson, null);
             if (!(patchValue instanceof ObjectNode patch)) {
                 throw new DataAssertionException(null, "JSON patch 必须是对象", null);
@@ -1589,10 +1593,13 @@ public final class DataOps {
             Objects.requireNonNull(action, "JSON 对象编辑函数不能为空");
             ObjectNode base = object(path);
             if (path == null || path.isBlank()) {
+                // 编辑根对象时沿用当前保护字段集合，回调返回的对象必须独立于当前值。
                 JsonPipe edited = Objects.requireNonNull(action.apply(this), "JSON 对象编辑结果不能为空");
                 edited.object(null);
                 return edited;
             }
+
+            // 编辑嵌套对象时先创建缺失路径，再把回调结果写回深复制的根对象。
             String[] parts = path(path);
             JsonNode current = read(base, parts, path);
             ObjectNode child;
@@ -1630,6 +1637,8 @@ public final class DataOps {
             if (current == null) {
                 return this;
             }
+
+            // 只编辑数组中的对象元素，标量和 null 原样保留；所有元素处理完成后一次性写回新数组。
             if (!(current instanceof ArrayNode array)) {
                 throw new DataAssertionException(path, "目标 JSON 必须是数组", null);
             }
@@ -1656,6 +1665,12 @@ public final class DataOps {
          */
         public @Nullable String get() {
             return value == null ? null : stringify(value);
+        }
+
+        /** 返回独立 JSON 节点，调用方修改节点不会改变当前处理对象；没有 JSON 时为空。 */
+        @CheckReturnValue
+        public @Nullable JsonNode node() {
+            return value == null ? null : value.deepCopy();
         }
 
         /**

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 声明具体应用选择公开的 OpenAPI 认证端点路径和认证流程。 */
-public final class OpenApiAuthenticationEndpoint {
+public class OpenApiAuthenticationEndpoint {
 
     private final @NotNull String path;
 

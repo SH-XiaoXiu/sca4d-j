@@ -1,5 +1,7 @@
 package com.sca4d.core.spring.web;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -30,24 +32,24 @@ import java.util.Objects;
  *
  * @param <T> 响应数据类型
  */
-public final class ApiResponse<T> {
+public class ApiResponse<T> {
 
     /** 成功响应使用的固定响应码。 */
     public static final String SUCCESS_CODE = "0";
 
-    private final String code;
-
-    private final @Nullable String messageKey;
+    private final Instant timestamp;
 
     private final List<Object> messageArgs;
 
-    private final @Nullable String message;
-
-    private final @Nullable T data;
-
     private final @Nullable String callId;
 
-    private final Instant timestamp;
+    private final String code;
+
+    private final @Nullable String message;
+
+    private final @Nullable String messageKey;
+
+    private final @Nullable T data;
 
     private boolean dynamicMetadataVisible = true;
 
@@ -177,10 +179,10 @@ public final class ApiResponse<T> {
     }
 
     /**
-     * 创建携带后续查询地址的 202 成功响应。
+     * 创建携带状态查询地址的 202 成功响应。
      *
      * @param data 已接受处理的资源
-     * @param location 后续查询地址
+     * @param location 状态查询地址
      * @param <T> 响应数据类型
      * @return 携带 Location 的 202 成功响应
      */
@@ -264,7 +266,7 @@ public final class ApiResponse<T> {
     }
 
     /**
-     * 返回显式 HTTP 状态。
+     * 显式 HTTP 状态。
      *
      * @return 显式 HTTP 状态；未指定时为空并由 Spring 使用默认状态
      */
@@ -299,7 +301,7 @@ public final class ApiResponse<T> {
     }
 
     /**
-     * 返回响应码。
+     * 响应码。
      *
      * @return 响应码
      */
@@ -308,7 +310,7 @@ public final class ApiResponse<T> {
     }
 
     /**
-     * 返回固定消息键。
+     * 固定消息键。
      *
      * @return 固定消息键；成功响应没有消息时为空
      */
@@ -317,7 +319,7 @@ public final class ApiResponse<T> {
     }
 
     /**
-     * 返回消息模板参数。
+     * 消息模板参数。
      *
      * @return 保持模板顺序的消息参数
      */
@@ -326,7 +328,7 @@ public final class ApiResponse<T> {
     }
 
     /**
-     * 返回当前语言的安全展示文案。
+     * 当前语言的安全展示文案。
      *
      * @return 当前语言的安全展示文案；成功响应没有消息时为空
      */
@@ -335,7 +337,7 @@ public final class ApiResponse<T> {
     }
 
     /**
-     * 返回响应数据。
+     * 响应数据。
      *
      * @return 响应数据；没有数据时为空
      */
@@ -348,7 +350,7 @@ public final class ApiResponse<T> {
      *
      * @return 当前请求编号；请求外创建或响应发布强 ETag 时为空
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonInclude(NON_NULL)
     public @Nullable String getCallId() {
         return dynamicMetadataVisible ? callId : null;
     }
@@ -359,7 +361,7 @@ public final class ApiResponse<T> {
      * @return 响应创建时间；响应发布强 ETag 时为空
      */
     @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化固定响应字段。
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonInclude(NON_NULL)
     public @Nullable Instant getTimestamp() {
         return dynamicMetadataVisible ? timestamp : null;
     }

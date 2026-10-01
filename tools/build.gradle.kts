@@ -7,10 +7,10 @@ val buildPlugin = gradle.includedBuild("sca4dj-build-gradle-plugin")
 
 sca4djBuild {
     minimumLevel.set(com.sca4dj.build.QualityLevel.OBSESSIVE)
-    compile(appPlugin.task(":classes"), buildPlugin.task(":classes"))
+    compile(appPlugin.task(":classes"), appPlugin.task(":pluginProcessorClasses"), buildPlugin.task(":classes"))
     test(appPlugin.task(":test"), buildPlugin.task(":test"))
     integrationTest(appPlugin.task(":integrationTest"))
-    assemble(appPlugin.task(":assemble"), buildPlugin.task(":assemble"))
+    assemble(appPlugin.task(":assemble"), appPlugin.task(":pluginProcessorJar"), buildPlugin.task(":assemble"))
     format(appPlugin.task(":spotlessApply"), buildPlugin.task(":spotlessApply"))
     formatCheck(appPlugin.task(":spotlessCheck"), buildPlugin.task(":spotlessCheck"))
     fullAudit(

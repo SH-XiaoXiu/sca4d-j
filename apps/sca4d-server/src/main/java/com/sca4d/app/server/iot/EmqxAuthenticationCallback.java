@@ -4,6 +4,8 @@ import com.sca4d.core.api.gateway.GatewayCallback;
 import com.sca4d.core.api.gateway.GatewayCallbackCode;
 import com.sca4d.core.api.gateway.GatewayCallbackRequest;
 import com.sca4d.core.api.gateway.GatewayCallbackResponse;
+import com.sca4d.core.spring.config.ConditionalOnCapability;
+import com.sca4d.iot.api.IotCapabilities;
 import com.sca4d.iot.emqx.authentication.EmqxAuthenticationRequest;
 import com.sca4d.iot.emqx.authentication.EmqxAuthenticationResponse;
 import com.sca4d.iot.emqx.authentication.EmqxAuthenticationService;
@@ -15,9 +17,9 @@ import java.util.Objects;
 
 /** 验证 EMQX HTTP Authenticator 提交的共享 Secret，并执行 MQTT CONNECT 认证。 */
 @Component
-@ConditionalOnProperty(prefix = "app.iot.capabilities", name = "transport", havingValue = "true", matchIfMissing = true)
+@ConditionalOnCapability(IotCapabilities.TRANSPORT)
 @ConditionalOnProperty(prefix = "sca4dj.iot.emqx", name = "enabled", havingValue = "true")
-public final class EmqxAuthenticationCallback
+public class EmqxAuthenticationCallback
         implements
             GatewayCallback<EmqxAuthenticationRequest, EmqxAuthenticationResponse> {
 
@@ -39,7 +41,7 @@ public final class EmqxAuthenticationCallback
         this.callbackAuthenticator = Objects.requireNonNull(callbackAuthenticator, "EMQX 回调认证器不能为空");
     }
 
-    /** @return `iot.emqx.authenticate` */
+    /** @return `IOT.EMQX.AUTHENTICATE` */
     @Override
     public @NotNull GatewayCallbackCode code() {
         return EmqxGatewayCallbacks.AUTHENTICATION;

@@ -11,17 +11,17 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 定义一个稳定 code 的设备属性及其 desired 策略。 */
-public final class ThingProperty {
-
-    private final @NotNull String code;
-
-    private final @NotNull ThingValueType valueType;
-
-    private final @NotNull ThingPropertyAccess access;
+public class ThingProperty {
 
     private final @Nullable AcknowledgementPolicy acknowledgementPolicy;
 
     private final @Nullable RetryPolicy retryPolicy;
+
+    private final @NotNull String code;
+
+    private final @NotNull ThingPropertyAccess access;
+
+    private final @NotNull ThingValueType valueType;
 
     private final boolean telemetry;
 
@@ -71,7 +71,7 @@ public final class ThingProperty {
     }
 
     /** 构造一个设备属性定义。 */
-    public static final class Builder {
+    public static class Builder {
         private final @NotNull String code;
 
         private final @NotNull ThingValueType valueType;

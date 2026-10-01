@@ -1,7 +1,11 @@
 package com.sca4d.job.persistence;
 
+import com.sca4d.core.api.job.JobKey;
 import com.sca4d.core.api.job.JobRunStatus;
+import com.sca4d.core.api.name.Name;
 import com.sca4d.core.api.persistence.Patch;
+import com.sca4d.core.api.query.PageRequest;
+import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.job.JobAttemptStatus;
 import com.sca4d.job.JobNodeStatus;
 import org.apache.ibatis.annotations.Param;
@@ -15,38 +19,38 @@ import java.util.Map;
 /** 使用 MyBatis 执行 Job run、节点、依赖和尝试的单条 PostgreSQL 读写。 */
 public interface JobMapper {
 
-    /** 返回当前命名空间、Job 定义和计划共同限定的运行数量。 */
+    /** 返回当前 App 隔离名称、Job 定义和计划共同限定的运行数量。 */
     long countScheduledRuns(
-            @Param("runtimeNamespace") @NotNull String runtimeNamespace,
-            @Param("scheduleKey") @NotNull String scheduleKey,
-            @Param("jobKey") @NotNull String jobKey,
+            @Param("appName") @NotNull Name appName,
+            @Param("scheduleKey") @NotNull ScheduleKey scheduleKey,
+            @Param("jobKey") @NotNull JobKey jobKey,
             @Param("definitionVersion") int definitionVersion);
 
     /** 返回指定计划的运行分页以及目标成功节点的输出。 */
     @NotNull
     List<ScheduledRunRecord> selectScheduledRuns(
-            @Param("runtimeNamespace") @NotNull String runtimeNamespace,
-            @Param("scheduleKey") @NotNull String scheduleKey,
-            @Param("jobKey") @NotNull String jobKey,
+            @Param("appName") @NotNull Name appName,
+            @Param("scheduleKey") @NotNull ScheduleKey scheduleKey,
+            @Param("jobKey") @NotNull JobKey jobKey,
             @Param("definitionVersion") int definitionVersion,
             @Param("nodeKey") @NotNull String nodeKey,
-            @Param("page") @NotNull com.sca4d.core.api.query.PageRequest page);
+            @Param("page") @NotNull PageRequest page);
 
     /** 插入根运行并返回数据库主键。 */
     long insertRun(
-            @Param("runtimeNamespace") @NotNull String runtimeNamespace,
-            @Param("jobKey") @NotNull String jobKey,
+            @Param("appName") @NotNull Name appName,
+            @Param("jobKey") @NotNull JobKey jobKey,
             @Param("definitionVersion") int definitionVersion,
             @Param("kind") @NotNull String kind,
             @Param("inputJson") @Nullable String inputJson,
-            @Param("scheduleKey") @Nullable String scheduleKey,
+            @Param("scheduleKey") @Nullable ScheduleKey scheduleKey,
             @Param("scheduledAt") @Nullable Instant scheduledAt);
 
     /** 按计划、可选触发时间及状态读取首个匹配运行。 */
     @Nullable
     Long selectScheduledRun(
-            @Param("runtimeNamespace") @NotNull String runtimeNamespace,
-            @Param("scheduleKey") @NotNull String scheduleKey,
+            @Param("appName") @NotNull Name appName,
+            @Param("scheduleKey") @NotNull ScheduleKey scheduleKey,
             @Param("scheduledAt") @Nullable Instant scheduledAt,
             @Param("statuses") @Nullable List<JobRunStatus> statuses);
 
@@ -67,19 +71,20 @@ public interface JobMapper {
             @Param("runId") long runId,
             @Param("dependencies") @NotNull Map<Long, Map<Integer, Long>> dependencies);
 
-    /** 按运行时命名空间和主键查询根运行列值。 */
+    /** 按 App 隔离名称和主键查询根运行列值。 */
     @Nullable
     RunRecord selectRun(
-            @Param("runtimeNamespace") @NotNull String runtimeNamespace,
+            @Param("appName") @NotNull Name appName,
             @Param("runId") long runId);
 
     /** 原子领取一个可执行节点并登记本次尝试。 */
     @Nullable
     NodeClaim updateClaimableNode(
-            @Param("runtimeNamespace") @NotNull String runtimeNamespace,
+            @Param("appName") @NotNull Name appName,
             @Param("workerId") @NotNull String workerId,
             @Param("now") @NotNull Instant now,
-            @Param("leaseUntil") @NotNull Instant leaseUntil);
+            @Param("leaseUntil") @NotNull Instant leaseUntil,
+            @Param("definitions") @NotNull Map<JobKey, Integer> definitions);
 
     /** 按节点状态和租约 owner 更新租约结束时间。 */
     int updateNodeLease(
@@ -128,15 +133,15 @@ public interface JobMapper {
             @Param("error") @NotNull String error,
             @Param("failedAt") @NotNull Instant failedAt);
 
-    /** 失败当前命名空间内租约过期且重试耗尽的节点及其根运行。 */
+    /** 失败当前 App 隔离名称内租约过期且重试耗尽的节点及其根运行。 */
     int updateExpiredNodes(
-            @Param("runtimeNamespace") @NotNull String runtimeNamespace,
+            @Param("appName") @NotNull Name appName,
             @Param("now") @NotNull Instant now);
 
-    /** 锁定当前命名空间内待清理的成功根运行，跳过其他清理者已持锁的行。 */
+    /** 锁定当前 App 隔离名称内待清理的成功根运行，跳过其他清理者已持锁的行。 */
     @NotNull
     List<Long> selectExpiredRunIdsForUpdate(
-            @Param("runtimeNamespace") @NotNull String runtimeNamespace,
+            @Param("appName") @NotNull Name appName,
             @Param("completedBefore") @NotNull Instant completedBefore,
             @Param("limit") int limit);
 
@@ -151,6 +156,6 @@ public interface JobMapper {
 
     /** 删除已锁定的指定成功根运行，返回实际根记录数量。 */
     int deleteRuns(
-            @Param("runtimeNamespace") @NotNull String runtimeNamespace,
+            @Param("appName") @NotNull Name appName,
             @Param("runIds") @NotNull List<Long> runIds);
 }

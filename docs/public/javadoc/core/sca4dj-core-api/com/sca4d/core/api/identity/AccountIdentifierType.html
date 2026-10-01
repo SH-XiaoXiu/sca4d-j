@@ -48,7 +48,7 @@ loadScripts(document, 'script');</script>
 <ul>
 <li><a href="#field-detail">Field</a></li>
 <li><a href="#constructor-detail">Constr</a></li>
-<li><a href="#method-detail">Method</a></li>
+<li>Method</li>
 </ul>
 </li>
 </ul>
@@ -66,7 +66,7 @@ loadScripts(document, 'script');</script>
 <li>Detail:&nbsp;</li>
 <li><a href="#field-detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#method-detail">Method</a></li>
+<li>Method</li>
 </ul>
 </div>
 <div class="nav-list-search"><a href="../../../../../search.html">SEARCH</a>
@@ -85,13 +85,21 @@ loadScripts(document, 'script');</script>
 <h1 title="Class AccountIdentifierType" class="title">Class AccountIdentifierType</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
+<div class="inheritance"><a href="../name/Name.html" title="class in com.sca4d.core.api.name">com.sca4d.core.api.name.Name</a>
+<div class="inheritance"><a href="../name/code/Code.html" title="class in com.sca4d.core.api.name.code">com.sca4d.core.api.name.code.Code</a>
 <div class="inheritance">com.sca4d.core.api.identity.AccountIdentifierType</div>
 </div>
+</div>
+</div>
 <section class="class-description" id="class-description">
+<dl class="notes">
+<dt>All Implemented Interfaces:</dt>
+<dd><code><a href="../isolation/AppIsolation.html" title="interface in com.sca4d.core.api.isolation">AppIsolation</a>&lt;<a href="../name/Name.html" title="class in com.sca4d.core.api.name">Name</a>&gt;</code>, <code><a href="../isolation/Isolation.html" title="interface in com.sca4d.core.api.isolation">Isolation</a>&lt;<a href="../name/Name.html" title="class in com.sca4d.core.api.name">Name</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;<a href="../name/code/Code.html" title="class in com.sca4d.core.api.name.code">Code</a>&gt;</code></dd>
+</dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">AccountIdentifierType</span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">表示账号可用于登录解析的开放标识类型。</div>
+<span class="extends-implements">extends <a href="../name/code/Code.html" title="class in com.sca4d.core.api.name.code">Code</a></span></div>
+<div class="block">使用稳定 Code 标识账号登录标识的种类，并保留独立领域类型。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -107,7 +115,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>static final @NotNull <a href="AccountIdentifierType.html" title="class in com.sca4d.core.api.identity">AccountIdentifierType</a></code></div>
 <div class="col-second even-row-color"><code><a href="#USERNAME" class="member-name-link">USERNAME</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">用户名标识。</div>
+<div class="block">用户名标识的稳定编码。</div>
 </div>
 </div>
 </section>
@@ -120,9 +128,13 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String)" class="member-name-link">AccountIdentifierType</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.name.code.Code)" class="member-name-link">AccountIdentifierType</a><wbr>(@NotNull <a href="../name/code/Code.html" title="class in com.sca4d.core.api.name.code">Code</a>&nbsp;code)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建一个开放的登录标识类型。</div>
+<div class="block">复用已校验的稳定节点，拒绝通配符和超过数据库限制的名称。</div>
+</div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.lang.String)" class="member-name-link">AccountIdentifierType</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">从代码声明或序列化边界解析稳定类型编码。</div>
 </div>
 </div>
 </section>
@@ -131,33 +143,18 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
-<div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
-<div id="method-summary-table.tabpanel" role="tabpanel">
-<div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;other)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#value()" class="member-name-link">value</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回持久化使用的稳定类型值。</div>
-</div>
-</div>
-</div>
-</div>
+<div class="inherited-list">
+<h3 id="methods-inherited-from-class-com.sca4d.core.api.name.code.Code">Methods inherited from class&nbsp;com.sca4d.core.api.name.code.<a href="../name/code/Code.html" title="class in com.sca4d.core.api.name.code">Code</a></h3>
+<code><a href="../name/code/Code.html#compareTo(com.sca4d.core.api.name.code.Code)">compareTo</a>, <a href="../name/code/Code.html#equals(java.lang.Object)">equals</a>, <a href="../name/code/Code.html#format(com.sca4d.core.api.name.NameFormat)">format</a>, <a href="../name/code/Code.html#hashCode()">hashCode</a>, <a href="../name/code/Code.html#logicalFormat(com.sca4d.core.api.name.NameFormat)">logicalFormat</a>, <a href="../name/code/Code.html#nodes()">nodes</a>, <a href="../name/code/Code.html#sameCode(com.sca4d.core.api.name.code.Code)">sameCode</a>, <a href="../name/code/Code.html#size()">size</a>, <a href="../name/code/Code.html#toString()">toString</a></code></div>
+<div class="inherited-list">
+<h3 id="methods-inherited-from-class-com.sca4d.core.api.name.Name">Methods inherited from class&nbsp;com.sca4d.core.api.name.<a href="../name/Name.html" title="class in com.sca4d.core.api.name">Name</a></h3>
+<code><a href="../name/Name.html#isolate()">isolate</a>, <a href="../name/Name.html#isolate(com.sca4d.core.api.name.NameFormat)">isolate</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
+<div class="inherited-list">
+<h3 id="methods-inherited-from-class-com.sca4d.core.api.isolation.AppIsolation">Methods inherited from interface&nbsp;com.sca4d.core.api.isolation.<a href="../isolation/AppIsolation.html" title="interface in com.sca4d.core.api.isolation">AppIsolation</a></h3>
+<code><a href="../isolation/AppIsolation.html#appName()">appName</a></code></div>
 </section>
 </li>
 </ul>
@@ -174,7 +171,7 @@ loadScripts(document, 'script');</script>
 <h3>USERNAME</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull <a href="AccountIdentifierType.html" title="class in com.sca4d.core.api.identity">AccountIdentifierType</a></span>&nbsp;<span class="element-name">USERNAME</span></div>
-<div class="block">用户名标识。</div>
+<div class="block">用户名标识的稳定编码。</div>
 </section>
 </li>
 </ul>
@@ -189,69 +186,16 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="&lt;init&gt;(java.lang.String)">
 <h3>AccountIdentifierType</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AccountIdentifierType</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
-<div class="block">创建一个开放的登录标识类型。</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>value</code> - 持久化使用的稳定类型值</dd>
-</dl>
-</section>
-</li>
-</ul>
-</section>
-</li>
-<!-- ============ METHOD DETAIL ========== -->
-<li>
-<section class="method-details" id="method-detail">
-<h2>Method Details</h2>
-<ul class="member-list">
-<li>
-<section class="detail" id="value()">
-<h3>value</h3>
-<div class="member-signature"><span class="annotations">@Contract(pure=true)
-@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">value</span>()</div>
-<div class="block">返回持久化使用的稳定类型值。</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>类型值</dd>
-</dl>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span></div>
+<div class="block">从代码声明或序列化边界解析稳定类型编码。</div>
 </section>
 </li>
 <li>
-<section class="detail" id="equals(java.lang.Object)">
-<h3>equals</h3>
-<div class="member-signature"><span class="annotations">@Contract(value="null -&gt; false",
-          pure=true)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">equals</span><wbr><span class="parameters">(@Nullable
- @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;other)</span></div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="hashCode()">
-<h3>hashCode</h3>
-<div class="member-signature"><span class="annotations">@Contract(pure=true)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">hashCode</span>()</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="toString()">
-<h3>toString</h3>
-<div class="member-signature"><span class="annotations">@Contract(pure=true)
-@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">toString</span>()</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
-</dl>
+<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.name.code.Code)">
+<h3>AccountIdentifierType</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AccountIdentifierType</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../name/code/Code.html" title="class in com.sca4d.core.api.name.code">Code</a>&nbsp;code)</span></div>
+<div class="block">复用已校验的稳定节点，拒绝通配符和超过数据库限制的名称。</div>
 </section>
 </li>
 </ul>

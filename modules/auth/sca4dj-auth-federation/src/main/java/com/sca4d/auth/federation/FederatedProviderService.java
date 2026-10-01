@@ -6,13 +6,12 @@ import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.i18n.LocaleCatalog;
 import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.i18n.LocalizedFieldsSchema;
+import com.sca4d.core.api.logging.LogMark;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronization;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.net.URI;
 import java.util.List;
@@ -128,12 +127,13 @@ public class FederatedProviderService {
                 iconReference,
                 new Version(0));
         FederatedProvider created = repository.insert(draft);
-        afterCommit(
-                () -> LOG.info(
+        LOG.atInfo()
+                .addMarker(LogMark.AFTER_COMMIT)
+                .log(
                         "联邦 Provider 已创建 | providerCode={} protocol={} status={}",
                         created.code(),
                         created.protocol(),
-                        created.status()));
+                        created.status());
         return created;
     }
 
@@ -171,11 +171,12 @@ public class FederatedProviderService {
                 autoLinkVerifiedEmail,
                 validateI18n(i18n),
                 iconReference);
-        afterCommit(
-                () -> LOG.info(
+        LOG.atInfo()
+                .addMarker(LogMark.AFTER_COMMIT)
+                .log(
                         "联邦 Provider 展示配置已替换 | providerCode={} version={}",
                         updated.code(),
-                        updated.version()));
+                        updated.version().value());
         return updated;
     }
 
@@ -192,11 +193,12 @@ public class FederatedProviderService {
         FederatedProvider updated = repository.saveConfiguration(provider.code(), configuration);
         boolean clientSecretConfigured = configuration.clientSecret() != null
                 || configuration.clientSecretConfigured();
-        afterCommit(
-                () -> LOG.info(
+        LOG.atInfo()
+                .addMarker(LogMark.AFTER_COMMIT)
+                .log(
                         "联邦 Provider 协议配置已替换 | providerCode={} clientSecretConfigured={}",
                         provider.code(),
-                        clientSecretConfigured));
+                        clientSecretConfigured);
         return updated;
     }
 
@@ -210,17 +212,18 @@ public class FederatedProviderService {
             if (configuration == null)
                 throw new BusinessException(FederatedErrorCode.CONFIGURATION_INVALID);
             validate(configuration);
-            if (configuration.clientAuthentication() != FederatedClientAuthentication.NONE
+            if (configuration.clientAuthentication() != FederatedClientAuthentication.ONE
                     && !configuration.clientSecretConfigured()) {
                 throw new BusinessException(FederatedErrorCode.CONFIGURATION_INVALID);
             }
         }
         FederatedProvider changed = repository.changeStatus(code, status);
-        afterCommit(
-                () -> LOG.info(
+        LOG.atInfo()
+                .addMarker(LogMark.AFTER_COMMIT)
+                .log(
                         "联邦 Provider 状态已修改 | providerCode={} status={}",
                         changed.code(),
-                        changed.status()));
+                        changed.status());
         return changed;
     }
 
@@ -228,7 +231,7 @@ public class FederatedProviderService {
     @Transactional
     public void delete(@NotNull String code) {
         repository.delete(code);
-        afterCommit(() -> LOG.info("联邦 Provider 已删除 | providerCode={}", code));
+        LOG.atInfo().addMarker(LogMark.AFTER_COMMIT).log("联邦 Provider 已删除 | providerCode={}", code);
     }
 
     /** @return 不包含 Client Secret 的协议配置摘要 */
@@ -319,18 +322,4 @@ public class FederatedProviderService {
         }
     }
 
-    /** 在当前事务提交后记录最终结果；没有事务同步时立即记录。 */
-    private static void afterCommit(@NotNull Runnable action) {
-        Runnable checked = Objects.requireNonNull(action, "事务提交动作不能为空");
-        if (!TransactionSynchronizationManager.isSynchronizationActive()) {
-            checked.run();
-            return;
-        }
-        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-            @Override
-            public void afterCommit() {
-                checked.run();
-            }
-        });
-    }
 }

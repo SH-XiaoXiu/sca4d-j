@@ -103,23 +103,28 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="NotificationExecution.html" title="interface in com.sca4d.core.api.notification">NotificationExecution</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#locale(java.util.Locale)" class="member-name-link">locale</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#content(com.sca4d.core.api.message.MessageContent)" class="member-name-link">content</a><wbr>(@NotNull <a href="../message/MessageContent.html" title="class in com.sca4d.core.api.message">MessageContent</a>&nbsp;content)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">指定本次通知使用的 Locale；未指定时由框架按接收人和区域解析。</div>
+<div class="block">增加一项由最终渠道解释的消息内容。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="NotificationExecution.html" title="interface in com.sca4d.core.api.notification">NotificationExecution</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#region(com.sca4d.core.api.region.Region)" class="member-name-link">region</a><wbr>(@NotNull <a href="../region/Region.html" title="class in com.sca4d.core.api.region">Region</a>&nbsp;region)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#locale(java.util.Locale)" class="member-name-link">locale</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">指定本次通知使用的 Locale；未指定时由框架按接收人和区域解析。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="NotificationExecution.html" title="interface in com.sca4d.core.api.notification">NotificationExecution</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#region(com.sca4d.core.api.region.Region)" class="member-name-link">region</a><wbr>(@NotNull <a href="../region/Region.html" title="class in com.sca4d.core.api.region">Region</a>&nbsp;region)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">指定本次通知发生或面向的业务区域。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#sendTo(com.sca4d.core.api.notification.NotificationRecipient)" class="member-name-link">sendTo</a><wbr>(@NotNull <a href="NotificationRecipient.html" title="class in com.sca4d.core.api.notification">NotificationRecipient</a>&nbsp;recipient)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#sendTo(com.sca4d.core.api.notification.NotificationRecipient)" class="member-name-link">sendTo</a><wbr>(@NotNull <a href="NotificationRecipient.html" title="class in com.sca4d.core.api.notification">NotificationRecipient</a>&nbsp;recipient)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">把通知发送给开放的内部接收人类型。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#sendToAccount(long)" class="member-name-link">sendToAccount</a><wbr>(long&nbsp;accountId)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#sendToAccount(long)" class="member-name-link">sendToAccount</a><wbr>(long&nbsp;accountId)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">把通知发送给指定 Account。</div>
 </div>
 </div>
@@ -152,6 +157,15 @@ loadScripts(document, 'script');</script>
 </span><span class="return-type">@NotNull <a href="NotificationExecution.html" title="interface in com.sca4d.core.api.notification">NotificationExecution</a></span>&nbsp;<span class="element-name">region</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../region/Region.html" title="class in com.sca4d.core.api.region">Region</a>&nbsp;region)</span></div>
 <div class="block">指定本次通知发生或面向的业务区域。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="content(com.sca4d.core.api.message.MessageContent)">
+<h3>content</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="NotificationExecution.html" title="interface in com.sca4d.core.api.notification">NotificationExecution</a></span>&nbsp;<span class="element-name">content</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../message/MessageContent.html" title="class in com.sca4d.core.api.message">MessageContent</a>&nbsp;content)</span></div>
+<div class="block">增加一项由最终渠道解释的消息内容。</div>
 </section>
 </li>
 <li>

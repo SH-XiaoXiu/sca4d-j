@@ -1,46 +1,48 @@
 package com.sca4d.app.server.system.request;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.sca4d.core.spring.validation.Req;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 
-/** 接收通知编码和平台无关的完整 Tiptap JSON 模板。 */
-@SuppressWarnings("unused") // Jackson 通过 JavaBean setter 反序列化请求。
-public final class EmailTemplateRequest {
+/** 接收通知编码和完整多语言 Email 源码模板。 */
+public class EmailTemplateRequest {
 
     @NotBlank
     @Size(max = 128)
     private @Nullable String notificationCode;
 
     @Req.NotNull
-    private @Nullable JsonNode content;
+    @Size(min = 1, max = 100)
+    private @Nullable Map<@NotBlank @Size(max = 35) String, @Valid EmailTemplateSourceRequest> locales;
 
-    /** 创建供 JSON 反序列化使用的空请求。 */
+    /** 创建空的请求对象，供 JSON 绑定使用。 */
     public EmailTemplateRequest() {
     }
 
-    /** @return 渠道无关通知编码 */
+    /** @return 通知编码 */
     public @NotNull String getNotificationCode() {
         return Objects.requireNonNull(notificationCode, "通知编码不能为空");
     }
 
-    /** @param notificationCode 渠道无关通知编码 */
+    /** @param notificationCode 通知编码 */
     public void setNotificationCode(@Nullable String notificationCode) {
         this.notificationCode = notificationCode;
     }
 
-    /** @return Locale 到 title/body ProseMirror 文档的完整 JSON */
-    public @NotNull JsonNode getContent() {
-        return Objects.requireNonNull(content, "统一通知模板内容不能为空").deepCopy();
+    /** @return 多语言 Email 模板源码 */
+    public @NotNull Map<String, EmailTemplateSourceRequest> getLocales() {
+        return Map.copyOf(Objects.requireNonNull(locales, "Email 模板 Locale 不能为空"));
     }
 
-    /** @param content Locale 到 title/body ProseMirror 文档的完整 JSON */
-    public void setContent(@Nullable JsonNode content) {
-        this.content = content == null ? null : content.deepCopy();
+    /** @param locales 多语言 Email 模板源码 */
+    public void setLocales(@Nullable Map<String, EmailTemplateSourceRequest> locales) {
+        this.locales = locales == null ? null : new LinkedHashMap<>(locales);
     }
 }

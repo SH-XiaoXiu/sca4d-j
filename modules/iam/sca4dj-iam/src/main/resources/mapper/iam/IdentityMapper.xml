@@ -6,13 +6,23 @@
     <sql id="accountColumns">id, subject_id, realm_key</sql>
     <sql id="identifierColumns">id, account_id, realm_key, identifier_type AS type, value, normalized_value, status</sql>
 
-    <insert id="insertSubject">
+    <insert id="insertSubjects">
         INSERT INTO iam_subject (id, subject_type, status)
-        VALUES (#{id}, #{type}, #{status})
+        VALUES
+        <foreach collection="subjects" item="subject" separator=",">
+            (#{subject.id}, #{subject.type}, #{status})
+        </foreach>
+        ON CONFLICT (id) DO NOTHING
     </insert>
     <select id="selectSubject" resultType="com.sca4d.core.api.identity.Subject">
         SELECT <include refid="subjectColumns"/> FROM iam_subject WHERE id = #{id} AND deleted = 0
         <if test="status != null">AND status = #{status}</if>
+    </select>
+    <select id="selectSubjects" resultType="com.sca4d.core.api.identity.Subject">
+        SELECT <include refid="subjectColumns"/> FROM iam_subject
+        WHERE deleted = 0 AND id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+        ORDER BY id
     </select>
     <select id="selectSubjectStatus" resultType="com.sca4d.iam.identity.IdentityStatus">
         SELECT status FROM iam_subject WHERE id = #{id} AND deleted = 0
@@ -43,6 +53,16 @@
         </if>
         <if test="id == null and subjectId == null and principalId == null">AND FALSE</if>
         ORDER BY account.id
+    </select>
+    <select id="selectAccountsBySubjectIds" resultType="com.sca4d.core.api.identity.Account">
+        SELECT account.id, account.subject_id, account.realm_key
+        FROM iam_account account
+        WHERE account.deleted = 0
+          AND account.subject_id IN
+        <foreach collection="subjectIds" item="subjectId" open="(" separator="," close=")">
+            #{subjectId}
+        </foreach>
+        ORDER BY account.subject_id, account.id
     </select>
     <select id="selectAccountStatus" resultType="com.sca4d.iam.identity.IdentityStatus">
         SELECT status FROM iam_account WHERE id = #{id} AND deleted = 0
@@ -140,7 +160,8 @@
         <if test="id == null and accountId == null">AND FALSE</if>
         ORDER BY identifier_type
     </select>
-    <update id="updateIdentifier">
+    <select id="updateIdentifier" resultType="com.sca4d.iam.identity.AccountIdentifier"
+            affectData="true" flushCache="true" useCache="false">
         UPDATE iam_account_identifier
         <set>
             <if test="value.set">value = #{value.value},</if>
@@ -149,7 +170,8 @@
             <if test="deleted.set">deleted = CASE WHEN #{deleted.value} THEN 1 ELSE 0 END,</if>
         </set>
         WHERE id = #{id} AND deleted = 0
-    </update>
+        RETURNING <include refid="identifierColumns"/>
+    </select>
 
 
     <select id="resolveActiveAccountId" resultType="java.lang.Long">

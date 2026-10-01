@@ -88,7 +88,7 @@ class ApiResponseAdviceTest {
     }
 
     /** 提供测试响应的稳定版本。 */
-    static final class VersionedBody {
+    static class VersionedBody {
 
         private final Version version;
 

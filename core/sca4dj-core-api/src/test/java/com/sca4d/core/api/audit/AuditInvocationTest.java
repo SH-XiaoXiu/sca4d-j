@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.call.CallExecution;
+import com.sca4d.core.api.call.CallOutcome;
+import com.sca4d.core.api.identity.SystemPrincipal;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -49,12 +52,12 @@ class AuditInvocationTest {
     private static AuditInvocation invocation(Object result) throws Exception {
         Method method = AuditInvocationTest.class.getDeclaredMethod("auditedMethod");
         CallExecution execution = new CallExecution(
-                Call.system("audit-result-test", Instant.EPOCH),
+                Call.system("audit-result-test", Instant.EPOCH, new SystemPrincipal(1, TreeCode.ofSegment("MAIN"))),
                 AuditInvocationTest.class,
                 method,
                 new Object[0],
                 Object.class);
-        execution.succeed(result);
+        execution.recordOutcome(CallOutcome.success(result));
         return new AuditInvocation(execution, AuditResult.SUCCESS);
     }
 

@@ -7,11 +7,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存一次条件写入使用的预期版本，以及写入零行时的失败含义。 */
-public final class VersionCondition {
-
-    private final @NotNull Version expected;
+public class VersionCondition {
 
     private final @NotNull ZeroRowPolicy whenZero;
+
+    private final @NotNull Version expected;
 
     private VersionCondition(@NotNull Version expected, @NotNull ZeroRowPolicy whenZero) {
         this.expected = Objects.requireNonNull(expected, "预期版本不能为空");
@@ -41,7 +41,7 @@ public final class VersionCondition {
     }
 
     /**
-     * 返回条件 SQL 应比较的版本。
+     * 条件 SQL 应比较的版本。
      *
      * @return 预期版本
      */
@@ -51,7 +51,7 @@ public final class VersionCondition {
     }
 
     /**
-     * 返回条件 SQL 没有更新记录时的失败含义。
+     * 条件 SQL 没有更新记录时的失败含义。
      *
      * @return 内部乐观锁冲突或调用方版本前置条件失败
      */

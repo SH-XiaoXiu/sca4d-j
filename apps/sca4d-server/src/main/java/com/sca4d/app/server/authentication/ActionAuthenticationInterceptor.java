@@ -6,7 +6,7 @@ import com.sca4d.core.api.authentication.AuthenticationAttemptId;
 import com.sca4d.core.api.call.Call;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
-import com.sca4d.core.spring.call.CallHandlerInterceptor;
+import com.sca4d.core.spring.web.HttpCallHandlerInterceptor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +16,7 @@ import org.springframework.web.method.HandlerMethod;
 import java.util.Objects;
 
 /** 在 Controller 参数绑定前单次消费 `@RequireAuthentication` 声明的动作认证结果。 */
-public final class ActionAuthenticationInterceptor extends CallHandlerInterceptor {
+public class ActionAuthenticationInterceptor extends HttpCallHandlerInterceptor {
 
     private final ActionAuthenticationService authentications;
 

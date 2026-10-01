@@ -19,7 +19,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 描述 Device 台账支持的有界标识查询或分页列表查询。 */
-public final class DeviceQuery {
+public class DeviceQuery {
 
     private static final @NotNull @Unmodifiable Set<@NotNull Sort> SORT_FIELDS = Set.of(
             Sort.CREATED_AT,
@@ -27,17 +27,17 @@ public final class DeviceQuery {
             Sort.NAME,
             Sort.SERIAL);
 
+    private final @Nullable Boolean directConnection;
+
     private final @Nullable @Unmodifiable List<@NotNull Long> deviceIds;
 
     private final @NotNull ListRequest request;
 
     private final @Nullable ProductBinding product;
 
-    private final @Nullable String search;
-
     private final @Nullable String protocolCode;
 
-    private final @Nullable Boolean directConnection;
+    private final @Nullable String search;
 
     /** 保存 Builder 已校验的 Device 查询条件。 */
     private DeviceQuery(@NotNull Builder builder) {
@@ -85,7 +85,7 @@ public final class DeviceQuery {
     @CheckReturnValue
     public static @NotNull Builder list(@NotNull ListRequest request) {
         ListRequest checked = Objects.requireNonNull(request, "Device 列表要求不能为空");
-        PageRequest page = checked.getPage().requireMaxSize(100);
+        PageRequest page = checked.getPage().verifyMaxSize(100);
         for (SortOrder order : checked.getSort()) {
             if (!SORT_FIELDS.contains(order.getField())) {
                 throw new IllegalArgumentException("Device 列表包含不支持的排序字段: " + order.getField());
@@ -138,7 +138,7 @@ public final class DeviceQuery {
     }
 
     /** 逐项声明 Device 台账筛选条件。 */
-    public static final class Builder {
+    public static class Builder {
 
         private final @Nullable @Unmodifiable List<@NotNull Long> deviceIds;
 

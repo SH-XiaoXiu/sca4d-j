@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.sca4d.core.api.authentication.principalsession.ResourceLoader;
 import com.sca4d.core.api.identity.Principal;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +37,7 @@ class ResourceLoadersTest {
     void mergesMultipleContributorsForTheSamePrincipal() {
         ResourceLoader operations = principals -> Map.of(
                 PRINCIPAL.principalId(),
-                List.of(new Operation("platform.account.read")));
+                List.of(new Operation("platform:account:read")));
         ResourceLoader businessResources = principals -> Map.of(
                 PRINCIPAL.principalId(),
                 List.of(new TestResource("tenant", "42")));
@@ -48,7 +49,7 @@ class ResourceLoadersTest {
 
         assertThat(resources.get(PRINCIPAL.principalId()))
                 .extracting(resource -> resource.type() + "/" + resource.id())
-                .containsExactly("operation/platform.account.read", "tenant/42");
+                .containsExactly("CORE:OPERATIONS/PLATFORM:ACCOUNT:READ", "TENANT/42");
     }
 
     @Test
@@ -56,13 +57,13 @@ class ResourceLoadersTest {
     void rejectsDuplicateResourcesAndPrincipalsOutsideTheInput() {
         ResourceLoader first = principals -> Map.of(
                 PRINCIPAL.principalId(),
-                List.of(new Operation("platform.account.read")));
+                List.of(new Operation("platform:account:read")));
         ResourceLoader duplicate = principals -> Map.of(
                 PRINCIPAL.principalId(),
-                List.of(new Operation("platform.account.read")));
+                List.of(new Operation("platform:account:read")));
         ResourceLoader extraPrincipal = principals -> Map.of(
                 2L,
-                List.of(new Operation("platform.account.read")));
+                List.of(new Operation("platform:account:read")));
 
         assertThatThrownBy(
                 () -> new ResourceLoaders(List.of(first, duplicate), Runnable::run)
@@ -107,7 +108,7 @@ class ResourceLoadersTest {
                 .hasRootCauseMessage("loader failed");
     }
 
-    private static final class TestPrincipal implements Principal {
+    private static class TestPrincipal implements Principal {
         private final long id;
 
         private TestPrincipal(long id) {
@@ -120,18 +121,18 @@ class ResourceLoadersTest {
         }
     }
 
-    private static final class TestResource implements Resource {
-        private final String type;
-
+    private static class TestResource implements Resource {
         private final String id;
 
+        private final TreeCode type;
+
         private TestResource(String type, String id) {
-            this.type = type;
+            this.type = TreeCode.ofSegment(type);
             this.id = id;
         }
 
         @Override
-        public @NotNull String type() {
+        public @NotNull TreeCode type() {
             return type;
         }
 

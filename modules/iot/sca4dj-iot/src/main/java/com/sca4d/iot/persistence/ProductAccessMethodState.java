@@ -5,11 +5,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存批量查询返回的 Product 标识和允许接入方式编码。 */
-public final class ProductAccessMethodState {
-
-    private final long productId;
+public class ProductAccessMethodState {
 
     private final @NotNull String methodCode;
+
+    private final long productId;
 
     /** @param productId Product 标识 @param methodCode Product 允许的接入方式编码 */
     public ProductAccessMethodState(long productId, @NotNull String methodCode) {

@@ -4,11 +4,10 @@ import cn.dev33.satoken.stp.StpLogic;
 import com.sca4d.core.api.authentication.SessionControl;
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.core.api.authentication.SessionTerminationReason;
+import com.sca4d.core.spring.transaction.TransactionCallbacks;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.transaction.support.TransactionSynchronization;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -16,15 +15,15 @@ import java.util.List;
 import java.util.Objects;
 
 /** 使用 Sa-Token 和 Redis 失效代次控制指定 Account 的全部 Session。 */
-public final class SaTokenSessionControl implements SessionControl {
+public class SaTokenSessionControl implements SessionControl {
 
     private static final Logger LOG = LoggerFactory.getLogger(SaTokenSessionControl.class);
 
     private final @NotNull RedisSessionGeneration generations;
 
-    private final @NotNull StpLogic stpLogic;
-
     private final @NotNull RedisSessionTokenIndex tokenIndex;
+
+    private final @NotNull StpLogic stpLogic;
 
     /**
      * 创建不依赖身份、Principal 或 Resource Loader 的 Account Session 控制器。
@@ -48,7 +47,7 @@ public final class SaTokenSessionControl implements SessionControl {
         if (accountId <= 0) {
             throw new IllegalArgumentException("Account 标识必须为正数");
         }
-        invalidateAfterCommit(() -> generations.invalidate(accountId));
+        TransactionCallbacks.afterCommitOrNow(() -> generations.invalidate(accountId));
     }
 
     /** {@inheritDoc} */
@@ -66,7 +65,7 @@ public final class SaTokenSessionControl implements SessionControl {
             return;
         }
         List<Long> checkedIds = List.copyOf(unique);
-        invalidateAfterCommit(() -> generations.invalidate(checkedIds));
+        TransactionCallbacks.afterCommitOrNow(() -> generations.invalidate(checkedIds));
     }
 
     /** {@inheritDoc} */
@@ -107,40 +106,6 @@ public final class SaTokenSessionControl implements SessionControl {
                     retained.value(),
                     checkedReason.code());
         };
-        invalidateAfterCommit(termination);
-    }
-
-    /** 当前存在数据库事务时在提交后失效 Session，否则立即执行。 */
-    private static void invalidateAfterCommit(@NotNull Runnable action) {
-        Runnable checkedAction = Objects.requireNonNull(action, "Session 失效操作不能为空");
-        if (TransactionSynchronizationManager.isActualTransactionActive()
-                && TransactionSynchronizationManager.isSynchronizationActive()) {
-            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-                private boolean invalidated;
-
-                @Override
-                public void afterCommit() {
-                    invalidateOnce();
-                }
-
-                @Override
-                public void afterCompletion(int status) {
-                    if (status == STATUS_COMMITTED) {
-                        invalidateOnce();
-                    }
-                }
-
-                /** 确保提交回调期间新增的同步也只执行一次 Session 失效。 */
-                private void invalidateOnce() {
-                    if (invalidated) {
-                        return;
-                    }
-                    invalidated = true;
-                    checkedAction.run();
-                }
-            });
-            return;
-        }
-        checkedAction.run();
+        TransactionCallbacks.afterCommitOrNow(termination);
     }
 }

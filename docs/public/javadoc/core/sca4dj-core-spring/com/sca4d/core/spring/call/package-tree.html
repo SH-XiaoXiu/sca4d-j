@@ -58,24 +58,25 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" class="type-name-link external-link" title="class or interface in java.lang">Object</a>
 <ul>
-<li class="circle">com.sca4d.core.spring.call.<a href="CallHandlerInterceptor.html" class="type-name-link" title="class in com.sca4d.core.spring.call">CallHandlerInterceptor</a> (implements org.springframework.web.servlet.HandlerInterceptor)</li>
+<li class="circle">org.springframework.aop.support.AbstractPointcutAdvisor (implements org.springframework.core.Ordered, org.springframework.aop.PointcutAdvisor, java.io.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a>)
+<ul>
+<li class="circle">com.sca4d.core.spring.call.<a href="CallLifecycleAdvisor.html" class="type-name-link" title="class in com.sca4d.core.spring.call">CallLifecycleAdvisor</a></li>
+</ul>
+</li>
 <li class="circle">com.sca4d.core.spring.call.<a href="CallHolder.html" class="type-name-link" title="class in com.sca4d.core.spring.call">CallHolder</a></li>
-<li class="circle">com.sca4d.core.spring.call.<a href="CallLifecycleAspect.html" class="type-name-link" title="class in com.sca4d.core.spring.call">CallLifecycleAspect</a></li>
-<li class="circle">com.sca4d.core.spring.call.<a href="CallRequirementTransactionInstaller.html" class="type-name-link" title="class in com.sca4d.core.spring.call">CallRequirementTransactionInstaller</a> (implements org.springframework.beans.factory.config.BeanPostProcessor)</li>
-<li class="circle">com.sca4d.core.spring.call.<a href="CallRequirementTransactionListener.html" class="type-name-link" title="class in com.sca4d.core.spring.call">CallRequirementTransactionListener</a> (implements org.springframework.transaction.TransactionExecutionListener)</li>
-<li class="circle">org.springframework.web.filter.GenericFilterBean (implements org.springframework.beans.factory.BeanNameAware, org.springframework.beans.factory.DisposableBean, org.springframework.context.EnvironmentAware, org.springframework.core.env.EnvironmentCapable, jakarta.servlet.Filter, org.springframework.beans.factory.InitializingBean, org.springframework.web.context.ServletContextAware)
-<ul>
-<li class="circle">org.springframework.web.filter.OncePerRequestFilter
-<ul>
-<li class="circle">com.sca4d.core.spring.call.<a href="CallFilter.html" class="type-name-link" title="class in com.sca4d.core.spring.call">CallFilter</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="circle">com.sca4d.core.spring.call.<a href="SpringAuditResolverLookup.html" class="type-name-link" title="class in com.sca4d.core.spring.call">SpringAuditResolverLookup</a> (implements com.sca4d.core.api.audit.AuditResolverLookup)</li>
+<li class="circle">com.sca4d.core.spring.call.<a href="CallPreCommitTransactionInstaller.html" class="type-name-link" title="class in com.sca4d.core.spring.call">CallPreCommitTransactionInstaller</a> (implements org.springframework.beans.factory.config.BeanPostProcessor)</li>
+<li class="circle">com.sca4d.core.spring.call.<a href="CallPreCommitTransactionListener.html" class="type-name-link" title="class in com.sca4d.core.spring.call">CallPreCommitTransactionListener</a> (implements org.springframework.transaction.TransactionExecutionListener)</li>
+<li class="circle">com.sca4d.core.spring.call.<a href="SpelCallValueResolver.html" class="type-name-link" title="class in com.sca4d.core.spring.call">SpelCallValueResolver</a> (implements com.sca4d.core.api.call.SPICallValueResolver)</li>
 <li class="circle">com.sca4d.core.spring.call.<a href="SpringCallValueResolverLookup.html" class="type-name-link" title="class in com.sca4d.core.spring.call">SpringCallValueResolverLookup</a> (implements com.sca4d.core.api.call.CallValueResolverLookup)</li>
 </ul>
 </li>
+</ul>
+</section>
+<section class="hierarchy">
+<h2 title="Interface Hierarchy">Interface Hierarchy</h2>
+<ul>
+<li class="circle">com.sca4d.core.spring.call.<a href="CallLifecycleAdvisor.AnnotationBinding.html" class="type-name-link" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.AnnotationBinding</a>&lt;A&gt;</li>
+<li class="circle">com.sca4d.core.spring.call.<a href="CallLifecycleAdvisor.MethodBinding.html" class="type-name-link" title="interface in com.sca4d.core.spring.call">CallLifecycleAdvisor.MethodBinding</a></li>
 </ul>
 </section>
 </main>

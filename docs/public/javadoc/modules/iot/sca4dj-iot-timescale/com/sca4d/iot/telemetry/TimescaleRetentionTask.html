@@ -186,7 +186,9 @@ implements com.sca4d.core.api.scheduling.ClusterTask</span></div>
 <li>
 <section class="detail" id="execute()">
 <h3>execute</h3>
-<div class="member-signature"><span class="annotations">@Transactional(transactionManager="iotTimescaleTransactionManager")
+<div class="member-signature"><span class="annotations">@DS("iot-history")
+@Transactional(propagation=REQUIRES_NEW)
+@SystemExecution("IOT")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">execute</span>()</div>
 <div class="block">清理两个 hypertable 中早于各自保留截止时间的完整 chunk。</div>
 <dl class="notes">

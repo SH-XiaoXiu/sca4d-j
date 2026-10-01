@@ -7,13 +7,13 @@ import java.util.Objects;
 
 /** 返回给调用方的非秘密 TOTP enrollment 元数据。 */
 @SuppressWarnings("ClassCanBeRecord") // 保持与项目值对象一致的显式构造校验和访问器风格。
-public final class TotpEnrollment {
+public class TotpEnrollment {
 
-    private final String enrollmentId;
+    private final Instant expiresAt;
 
     private final Long accountId;
 
-    private final Instant expiresAt;
+    private final String enrollmentId;
 
     /**
      * 创建 TOTP enrollment 元数据。
@@ -32,7 +32,7 @@ public final class TotpEnrollment {
     }
 
     /**
-     * 返回 enrollment 不透明标识。
+     * enrollment 不透明标识。
      *
      * @return enrollment 不透明标识
      */
@@ -41,7 +41,7 @@ public final class TotpEnrollment {
     }
 
     /**
-     * 返回 enrollment 所属账号。
+     * enrollment 所属账号。
      *
      * @return enrollment 所属账号
      */
@@ -50,7 +50,7 @@ public final class TotpEnrollment {
     }
 
     /**
-     * 返回 enrollment 过期时间。
+     * enrollment 过期时间。
      *
      * @return enrollment 过期时间
      */

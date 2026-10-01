@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 从部署配置构造 active key 与可解密历史 key 的 AES-256-GCM 密钥环。 */
-public final class ConfiguredSecretKeyring implements SecretKeyring {
+public class ConfiguredSecretKeyring implements SecretKeyring {
 
     private final SecretCipher activeCipher;
 

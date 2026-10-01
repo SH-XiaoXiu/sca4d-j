@@ -1,6 +1,6 @@
 # HTTP API 通用契约
 
-本页说明客户端调用 Core Spring HTTP 接口时使用的响应字段、错误码、分页参数和请求头。具体路由、认证与权限要求见[Sca4d Server HTTP API](/reference/http/sca4d-server)。
+客户端先检查 HTTP 状态，再从 `data` 读取结果或用稳定 `code` 判断失败；64 位 ID 保持字符串，修改要求版本的资源时原样提交读取到的强 ETag。204 和 SSE 错误没有普通 JSON 响应体，解析前必须区分。具体路由、认证与权限要求见[Sca4d Server HTTP API](/reference/http/sca4d-server)。
 
 | 调用时需要处理的内容 | 查阅位置 |
 |---|---|
@@ -55,7 +55,7 @@
 
 `noContent()` 不写 JSON 响应体；客户端不能在 204 后继续解析 `ApiResponse.data`。
 
-`responseStatus` 和 `responseHeaders` 只用于生成 HTTP 响应，不进入 JSON。幂等存储同时保存成功结果的 HTTP 状态和响应头；重放时恢复首次执行的状态、Location 和 ETag，不把这些元数据退化成默认 200。`CallFilter` 始终为当前请求写入 `X-Call-Id`，重放结果不能用首次执行的 `callId` 覆盖它。
+`responseStatus` 和 `responseHeaders` 只用于生成 HTTP 响应，不进入 JSON。幂等存储同时保存成功结果的 HTTP 状态和响应头；重放时恢复首次执行的状态、Location 和 ETag，不把这些元数据退化成默认 200。`HttpCallFilter` 始终为当前请求写入 `X-Call-Id`，重放结果不能用首次执行的 `callId` 覆盖它。
 
 ### HTTP 缓存与代理
 
@@ -112,7 +112,7 @@ Core Spring 自己声明的 HTTP 错误如下：
 
 路由不存在和静态资源不存在使用 Core 的 `NOT_FOUND`。未分类服务端异常使用 Core 的 `INTERNAL`，响应中只保留固定安全文案，原始异常写入服务端日志。
 
-`@RateLimited` 拒绝的请求使用 Core 错误码 `1005` 和 HTTP 429，并返回 `Retry-After: <seconds>`。秒数是 Bucket4j 当前令牌桶补充出一个可用令牌所需时间向上取整后的正整数；客户端应至少等待该秒数再发起新的尝试。限流维度和令牌补充规则见[并发规则](/standards/persistence)。
+`@RateLimited` 拒绝的请求使用 Core 错误码 `1005` 和 HTTP 429，并返回 `Retry-After: <seconds>`。秒数是 Bucket4j 当前令牌桶补充出一个可用令牌所需时间向上取整后的正整数；客户端应至少等待该秒数再发起新的尝试。限流维度和令牌补充规则见[并发规则](/standards/05_persistence)。
 
 `@Idempotent` 请求仍由另一个执行者处理时使用 Core 错误码 `1006`、HTTP 409 和 `Retry-After: <seconds>`。同一幂等键已经绑定不同方法参数时使用 Core 错误码 `1007` 和 HTTP 409，不返回等待时间。两种情况都不会进入业务方法。
 
@@ -147,7 +147,7 @@ Core Spring 自己声明的 HTTP 错误如下：
 
 ## X-Call-Id
 
-客户端可以发送 `X-Call-Id`。只有匹配 `[A-Za-z0-9._-]{1,128}` 的值才会被保留；缺失或格式不正确时，CallFilter 生成 UUID。最终值同时写入：
+客户端可以发送 `X-Call-Id`。只有匹配 `[A-Za-z0-9._-]{1,128}` 的值才会被保留；缺失或格式不正确时，HttpCallFilter 生成 UUID。最终值同时写入：
 
 - HTTP 响应头 `X-Call-Id`；
 - ApiResponse 的 `callId`，发布强 ETag 的成功响应除外；
@@ -162,7 +162,7 @@ Controller 参数使用 PageRequest 时，Core Spring 读取查询参数 `page` 
 | 参数 | 默认值 | 限制 |
 |---|---:|---|
 | `page` | `1` | 必须是不小于 1 的整数 |
-| `size` | `sca4dj.core.page-default-size`，默认 20 | 必须是不小于 1 且不大于 `sca4dj.core.page-max-size` 的整数；最大值默认 200 |
+| `size` | `sca4dj.core.pagination.default-size`，默认 20 | 必须是不小于 1 且不大于 `sca4dj.core.pagination.max-size` 的整数；最大值默认 200 |
 
 接口可以使用 `@PageOptions` 声明更小的 `size` 上限。非法数字、非正数或超过上限时返回 Core 的 `VALIDATION_FAILED`，HTTP 状态为 400。PageRequest 的 `offset()` 使用 `long` 计算 `(page - 1) * size`，因此页码从 1 开始。
 
@@ -187,7 +187,7 @@ Page 的 JSON 形状如下：
 
 路由要求 `If-Match` 时，先读取资源及其 ETag，再把 ETag 原样放入修改请求。资源已经被其他请求修改时返回 412，客户端需要重新读取并确认修改内容。
 
-服务端在完整资源编辑存在并发覆盖风险、且客户端能够处理 412 时采用这一机制。状态命令、字段级 Patch、列表和动态投影通常不采用，具体以路由声明为准。设计要求见[并发规则](/standards/persistence)。
+服务端在完整资源编辑存在并发覆盖风险、且客户端能够处理 412 时采用这一机制。状态命令、字段级 Patch、列表和动态投影通常不采用，具体以路由声明为准。设计要求见[并发规则](/standards/05_persistence)。
 
 数据库 `Version` 可以作为强 ETag 返回，例如 Version 3 对应：
 
@@ -209,7 +209,7 @@ ETag: "3"
 If-Match: "3"
 ```
 
-[RFC 9110 的 If-Match](https://www.rfc-editor.org/rfc/rfc9110.html#section-13.1.1)用于避免客户端根据过期内容覆盖较新的修改。[IfMatchInterceptor](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/web/IfMatchInterceptor.html) 把一个强 ETag 绑定到 RequestVersionConditions，CallLifecycleAspect 再把它登记为对应方法执行的成功要求。根资源 Repository 读取当前对象后调用 `VersionConditions.resolve(currentVersion)`；Controller 和 Service 不声明 HTTP Version 参数。写入事务提交前会检查版本条件已经消费，业务方法正常返回后也会再次检查。写入返回稳定资源 View 时，由 View 的 `@ETag` 方法发布新版本；204 响应由 Controller 使用修改后的 `Version` 调用 `ApiResponse.noContent(version)`。
+[RFC 9110 的 If-Match](https://www.rfc-editor.org/rfc/rfc9110.html#section-13.1.1)用于避免客户端根据过期内容覆盖较新的修改。[IfMatchInterceptor](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/web/IfMatchInterceptor.html) 把一个强 ETag 绑定到 RequestVersionConditions。CallLifecycleAdvisor 使用该对象注册的 IfMatch 声明，把它登记为对应方法执行的成功要求。根资源 Repository 读取当前对象后调用 `VersionConditions.resolve(currentVersion)`；Controller 和 Service 不声明 HTTP Version 参数。写入事务提交前会检查版本条件已经消费，业务方法正常返回后也会再次检查。写入返回稳定资源 View 时，由 View 的 `@ETag` 方法发布新版本；204 响应由 Controller 使用修改后的 `Version` 调用 `ApiResponse.noContent(version)`。
 
 | 结果 | HTTP 状态 | 含义 |
 |---|---:|---|
@@ -243,12 +243,12 @@ SSE 连接建立后的事件、心跳、超时和断开方式由具体 SSE 路�
 
 ## OpenAPI
 
-存在 springdoc 时，[CoreOpenApiConfiguration](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/openapi/CoreOpenApiConfiguration.html) 默认创建标题为 `${spring.application.name} API`、版本为 `0.0.1-alpha` 的 OpenAPI 定义，并注册名为 `bearerAuth` 的 HTTP Bearer 安全方案，`bearerFormat` 为 `Opaque`。应用名称没有公共回退值；`spring.application.name` 缺失时 RuntimeNamespace 自动配置会使应用启动失败。该配置还把 Java `long` 和 `Long` schema 声明为十进制字符串，与运行时 Jackson 输出保持一致。[HttpInputOpenApiCustomizer](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/openapi/HttpInputOpenApiCustomizer.html) 只向参数和请求体 Schema 添加当前启用的类型默认限制，并遵守显式约束和 `@NoDefaultValidation` 的替代规则。
+存在 springdoc 时，[CoreOpenApiConfiguration](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/openapi/CoreOpenApiConfiguration.html) 默认创建标题为 `${spring.application.name} API`、版本为 `0.0.1-alpha` 的 OpenAPI 定义，并注册名为 `bearerAuth` 的 HTTP Bearer 安全方案，`bearerFormat` 为 `Opaque`。应用名称没有公共回退值；`spring.application.name` 缺失时 AppIsolation 自动配置会使应用启动失败。该配置还把 Java `long` 和 `Long` schema 声明为十进制字符串，与运行时 Jackson 输出保持一致。[HttpInputOpenApiCustomizer](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/openapi/HttpInputOpenApiCustomizer.html) 只向参数和请求体 Schema 添加当前启用的类型默认限制，并遵守显式约束和 `@NoDefaultValidation` 的替代规则。
 
-`sca4dj.core.open-api-enabled=false` 会关闭这项 Core 基础配置。应用还需要同时配置 springdoc 是否开放 `/v3/api-docs` 和 Swagger UI。注册安全方案不等于自动标记每条路由的认证要求；具体路由仍以应用 HTTP API 规格和 Controller 声明为准。
+`sca4dj.core.openapi.enabled=false` 会关闭这项 Core 基础配置。应用还需要同时配置 springdoc 是否开放 `/v3/api-docs` 和 Swagger UI。注册安全方案不等于自动标记每条路由的认证要求；具体路由仍以应用 HTTP API 规格和 Controller 声明为准。
 
 模块依赖和自动配置不会开放业务 Controller。具体应用必须在自己的源码中定义 Controller、HTTP Request/View 和 OpenAPI 声明，路由才会出现在 Spring MVC 和 OpenAPI 中。
 
 ## 响应生成位置
 
-[CallFilter](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/call/CallFilter.html) 在 Controller 之前确定 `callId`。[ApiResponse](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/web/ApiResponse.html) 保存 JSON 字段和 HTTP 状态、Location、ETag；ApiResponseAdvice 将元数据写入响应。异常由 [GlobalExceptionHandler](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/web/GlobalExceptionHandler.html) 转换为失败响应，ClientStateResponseAdvice 写入当前请求登记的客户端状态响应头。请求结束后清理调用与客户端状态数据。
+[HttpCallFilter](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/web/HttpCallFilter.html) 在 Controller 之前确定 `callId`。[ApiResponse](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/web/ApiResponse.html) 保存 JSON 字段和 HTTP 状态、Location、ETag；ApiResponseAdvice 将元数据写入响应。异常由 [GlobalExceptionHandler](/javadoc/core/sca4dj-core-spring/com/sca4d/core/spring/web/GlobalExceptionHandler.html) 转换为失败响应，ClientStateResponseAdvice 写入当前请求登记的客户端状态响应头。请求结束后清理调用与客户端状态数据。

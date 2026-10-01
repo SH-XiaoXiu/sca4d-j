@@ -10,21 +10,21 @@ import java.util.Objects;
 import java.util.Optional;
 
 /** 保存 App 对外持续网络连接的公共生命周期事实，不保存协议句柄或消息内容。 */
-public final class Connection {
+public class Connection {
 
     private final @NotNull ConnectionId id;
 
     private final @NotNull ConnectionProtocol protocol;
 
-    private final @Nullable SessionId sessionId;
-
     private final @NotNull Instant connectedAt;
 
     private final @NotNull Instant lastActivityAt;
 
+    private final @Nullable SessionId sessionId;
+
     private final @NotNull String nodeId;
 
-    /** 创建一条已经建立的连接事实。 */
+    /** 创建一条已经建立的连接信息。 */
     public Connection(
             @NotNull ConnectionId id,
             @NotNull ConnectionProtocol protocol,
@@ -44,7 +44,7 @@ public final class Connection {
     }
 
     /**
-     * 返回当前连接的代次标识。
+     * 当前连接的代次标识。
      *
      * @return 不透明连接标识；不同连接代次不能复用同一个值
      */
@@ -69,13 +69,13 @@ public final class Connection {
         return Optional.ofNullable(sessionId);
     }
 
-    /** @return 连接事实首次登记的时间 */
+    /** @return 连接信息首次登记的时间 */
     @Contract(pure = true)
     public @NotNull Instant connectedAt() {
         return connectedAt;
     }
 
-    /** @return 连接事实最后一次收到活动或续租的时间 */
+    /** @return 连接信息最后一次收到活动或续租的时间 */
     @Contract(pure = true)
     public @NotNull Instant lastActivityAt() {
         return lastActivityAt;

@@ -10,6 +10,7 @@ import com.sca4d.core.api.permission.Operation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -24,18 +25,18 @@ class ExtensionContractTest {
         PrincipalResolver<PlatformOperator> resolver = principalId -> operator.principalId() == principalId
                 ? Optional.of(operator)
                 : Optional.empty();
-        Operation readAccount = new Operation("platform.account.read");
+        Operation readAccount = new Operation("platform:account:read");
         ResourceLoader loader = principals -> Map.of(operator.principalId(), Set.of(readAccount));
 
         Principal resolved = resolver.resolve(operator.principalId()).orElseThrow();
-        var resources = loader.load(java.util.List.of(operator)).get(operator.principalId());
+        var resources = loader.load(List.of(operator)).get(operator.principalId());
 
         assertInstanceOf(PlatformOperator.class, resolved);
         assertTrue(resolver.resolve(9).isEmpty());
         assertTrue(resources.contains(readAccount));
     }
 
-    private static final class PlatformOperator implements Principal {
+    private static class PlatformOperator implements Principal {
 
         private final long id;
 

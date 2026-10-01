@@ -5,11 +5,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存停用 Device 后一次物模型版本和协议实现的显式切换。 */
-public final class DeviceBindingChange {
-
-    private final int thingModelVersion;
+public class DeviceBindingChange {
 
     private final @NotNull String protocolCode;
+
+    private final int thingModelVersion;
 
     /**
      * @param thingModelVersion 目标已发布版本

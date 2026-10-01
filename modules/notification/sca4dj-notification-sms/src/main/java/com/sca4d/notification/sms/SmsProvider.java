@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存一个由系统管理数据库维护的 SMS Provider 实例。 */
-public final class SmsProvider {
+public class SmsProvider {
 
     private final long providerId;
 
@@ -55,7 +55,7 @@ public final class SmsProvider {
         return code;
     }
 
-    /** @return 选择 `SmsTransport` 使用的 Provider 类型 */
+    /** @return 选择 `SmsProviderClient` 使用的 Provider 类型 */
     @Contract(pure = true)
     public @NotNull String type() {
         return type;

@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="RbacPermissionCache.html" title="interface in com.sca4d.iam.rbac">RbacPermissionCache</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">RedisRbacPermissionCache</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">RedisRbacPermissionCache</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="RbacPermissionCache.html" title="interface in com.sca4d.iam.rbac">RbacPermissionCache</a></span></div>
 <div class="block">使用应用基础设施 Redis 按权限目录指纹批量缓存 RBAC 权限选择符。</div>
@@ -108,8 +108,7 @@ implements <a href="RbacPermissionCache.html" title="interface in com.sca4d.iam.
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,com.sca4d.core.api.runtime.RuntimeNamespace,com.fasterxml.jackson.databind.ObjectMapper,com.sca4d.iam.rbac.PermissionSelectionRegistry)" class="member-name-link">RedisRbacPermissionCache</a><wbr>(@NotNull org.springframework.data.redis.core.StringRedisTemplate&nbsp;redis,
- @NotNull com.sca4d.core.api.runtime.RuntimeNamespace&nbsp;namespace,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,com.fasterxml.jackson.databind.ObjectMapper,com.sca4d.iam.rbac.PermissionSelectionRegistry)" class="member-name-link">RedisRbacPermissionCache</a><wbr>(@NotNull org.springframework.data.redis.core.RedisTemplate&lt;com.sca4d.core.api.name.Key,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;redis,
  @NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;objectMapper,
  @NotNull <a href="PermissionSelectionRegistry.html" title="class in com.sca4d.iam.rbac">PermissionSelectionRegistry</a>&nbsp;permissionSelections)</code></div>
 <div class="col-last even-row-color">
@@ -163,12 +162,10 @@ implements <a href="RbacPermissionCache.html" title="interface in com.sca4d.iam.
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(org.springframework.data.redis.core.StringRedisTemplate,com.sca4d.core.api.runtime.RuntimeNamespace,com.fasterxml.jackson.databind.ObjectMapper,com.sca4d.iam.rbac.PermissionSelectionRegistry)">
+<section class="detail" id="&lt;init&gt;(org.springframework.data.redis.core.RedisTemplate,com.fasterxml.jackson.databind.ObjectMapper,com.sca4d.iam.rbac.PermissionSelectionRegistry)">
 <h3>RedisRbacPermissionCache</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RedisRbacPermissionCache</span><wbr><span class="parameters">(@NotNull
- @NotNull org.springframework.data.redis.core.StringRedisTemplate&nbsp;redis,
- @NotNull
- @NotNull com.sca4d.core.api.runtime.RuntimeNamespace&nbsp;namespace,
+ @NotNull org.springframework.data.redis.core.RedisTemplate&lt;com.sca4d.core.api.name.Key,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;redis,
  @NotNull
  @NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;objectMapper,
  @NotNull
@@ -177,7 +174,6 @@ implements <a href="RbacPermissionCache.html" title="interface in com.sca4d.iam.
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>redis</code> - 脚手架字符串 Redis 模板</dd>
-<dd><code>namespace</code> - 当前应用运行时命名空间</dd>
 <dd><code>objectMapper</code> - 脚手架 JSON 映射器</dd>
 <dd><code>permissionSelections</code> - 应用安装的 RBAC 权限选择规则</dd>
 </dl>

@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">FileAccessUrl</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">FileAccessUrl</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">返回一个文件的短期读取地址。</div>
 </section>
@@ -126,17 +126,17 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#expiresAt()" class="member-name-link">expiresAt</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回读取地址失效时间。</div>
+<div class="block">读取地址失效时间。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fileId()" class="member-name-link">fileId</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回文件标识。</div>
+<div class="block">文件标识。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#url()" class="member-name-link">url</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回客户端可以访问的短期地址。</div>
+<div class="block">客户端可以访问的短期地址。</div>
 </div>
 </div>
 </div>
@@ -186,7 +186,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="fileId()">
 <h3>fileId</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">fileId</span>()</div>
-<div class="block">返回文件标识。</div>
+<div class="block">文件标识。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>正数文件标识</dd>
@@ -198,7 +198,7 @@ loadScripts(document, 'script');</script>
 <h3>url</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name">url</span>()</div>
-<div class="block">返回客户端可以访问的短期地址。</div>
+<div class="block">客户端可以访问的短期地址。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>绝对读取地址</dd>
@@ -210,7 +210,7 @@ loadScripts(document, 'script');</script>
 <h3>expiresAt</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name">expiresAt</span>()</div>
-<div class="block">返回读取地址失效时间。</div>
+<div class="block">读取地址失效时间。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>地址失效时间</dd>

@@ -1,28 +1,28 @@
 package com.sca4d.auth.federation;
 
 import java.time.Instant;
+import java.util.Objects;
 
 /** Redis 中保存的单次外部授权请求状态。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class FederatedAuthorization {
-
-    private final String id;
-
-    private final String providerCode;
+public class FederatedAuthorization {
 
     private final FederatedAuthorizationPurpose purpose;
 
-    private final String browserBinding;
+    private final Instant expiresAt;
 
-    private final String nonce;
+    private final String browserBinding;
 
     private final String codeVerifier;
 
+    private final String id;
+
+    private final String nonce;
+
+    private final String providerCode;
+
     private final String redirectUri;
 
-    private final Instant expiresAt;
-
-    /** 创建授权状态。 */
     public FederatedAuthorization(
             String id,
             String providerCode,
@@ -32,14 +32,14 @@ public final class FederatedAuthorization {
             String codeVerifier,
             String redirectUri,
             Instant expiresAt) {
-        this.id = java.util.Objects.requireNonNull(id, "授权状态标识不能为空");
-        this.providerCode = java.util.Objects.requireNonNull(providerCode, "Provider 编码不能为空");
-        this.purpose = java.util.Objects.requireNonNull(purpose, "授权用途不能为空");
-        this.browserBinding = java.util.Objects.requireNonNull(browserBinding, "浏览器绑定不能为空");
-        this.nonce = java.util.Objects.requireNonNull(nonce, "Nonce 不能为空");
-        this.codeVerifier = java.util.Objects.requireNonNull(codeVerifier, "PKCE verifier 不能为空");
-        this.redirectUri = java.util.Objects.requireNonNull(redirectUri, "回调 URI 不能为空");
-        this.expiresAt = java.util.Objects.requireNonNull(expiresAt, "授权过期时间不能为空");
+        this.id = Objects.requireNonNull(id, "授权状态标识不能为空");
+        this.providerCode = Objects.requireNonNull(providerCode, "Provider 编码不能为空");
+        this.purpose = Objects.requireNonNull(purpose, "授权用途不能为空");
+        this.browserBinding = Objects.requireNonNull(browserBinding, "浏览器绑定不能为空");
+        this.nonce = Objects.requireNonNull(nonce, "Nonce 不能为空");
+        this.codeVerifier = Objects.requireNonNull(codeVerifier, "PKCE verifier 不能为空");
+        this.redirectUri = Objects.requireNonNull(redirectUri, "回调 URI 不能为空");
+        this.expiresAt = Objects.requireNonNull(expiresAt, "授权过期时间不能为空");
     }
 
     /** @return 一次性状态 ID */

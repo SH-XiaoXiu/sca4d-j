@@ -24,7 +24,7 @@ public interface AuditPayloadCodec<P extends AuditPayload> {
      *
      * @return 从 1 开始的正整数
      */
-    default int payloadVersion() {
+    default int version() {
         return 1;
     }
 

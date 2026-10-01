@@ -105,7 +105,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final @NotNull com.sca4d.core.api.setting.LogicSetting<wbr>&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</code></div>
+<div class="col-first even-row-color"><code>final @NotNull com.sca4d.core.api.setting.definition.LogicSetting<wbr>&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</code></div>
 <div class="col-second even-row-color"><code><a href="#ACCOUNT_POLICY" class="member-name-link">ACCOUNT_POLICY</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Account 登录和敏感动作使用的完整认证策略。</div>
@@ -121,7 +121,8 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">AccountAuthenticationSettingConfiguration</a>()</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.setting.access.SettingWriter)" class="member-name-link">AccountAuthenticationSettingConfiguration</a><wbr>(@NotNull com.sca4d.core.api.setting.access.SettingReader&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;reader,
+ com.sca4d.core.api.setting.access.SettingWriter&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;writer)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建账号认证策略设置配置。</div>
 </div>
@@ -150,7 +151,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="ACCOUNT_POLICY">
 <h3>ACCOUNT_POLICY</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.setting.LogicSetting&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</span>&nbsp;<span class="element-name">ACCOUNT_POLICY</span></div>
+</span><span class="modifiers">public final</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.setting.definition.LogicSetting&lt;<a href="AccountAuthenticationSettings.html" title="class in com.sca4d.app.server.authentication">AccountAuthenticationSettings</a>&gt;</span>&nbsp;<span class="element-name">ACCOUNT_POLICY</span></div>
 <div class="block">Account 登录和敏感动作使用的完整认证策略。</div>
 </section>
 </li>
@@ -163,9 +164,11 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;()">
+<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.setting.access.SettingReader,com.sca4d.core.api.setting.access.SettingWriter)">
 <h3>AccountAuthenticationSettingConfiguration</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AccountAuthenticationSettingConfiguration</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AccountAuthenticationSettingConfiguration</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.setting.access.SettingReader&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;reader,
+ com.sca4d.core.api.setting.access.SettingWriter&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;writer)</span></div>
 <div class="block">创建账号认证策略设置配置。</div>
 </section>
 </li>

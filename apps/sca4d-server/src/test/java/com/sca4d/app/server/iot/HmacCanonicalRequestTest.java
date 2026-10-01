@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 
-/** 验证 Sca4d Server 的 Device HTTP HMAC 使用稳定 canonical 格式。 */
+/** 验证 Sca4d Server 的 Device HTTP MAC 使用稳定 canonical 格式。 */
 class HmacCanonicalRequestTest {
 
     @Test

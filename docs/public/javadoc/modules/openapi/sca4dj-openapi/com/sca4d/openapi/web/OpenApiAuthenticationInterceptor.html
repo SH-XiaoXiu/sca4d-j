@@ -38,7 +38,7 @@ loadScripts(document, 'script');</script>
 <p>Summary:</p>
 <ul>
 <li>Nested</li>
-<li><a href="#field-summary">Field</a></li>
+<li>Field</li>
 <li><a href="#constructor-summary">Constr</a></li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
@@ -46,7 +46,7 @@ loadScripts(document, 'script');</script>
 <li>
 <p>Detail:</p>
 <ul>
-<li><a href="#field-detail">Field</a></li>
+<li>Field</li>
 <li><a href="#constructor-detail">Constr</a></li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -58,13 +58,13 @@ loadScripts(document, 'script');</script>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
 <ul class="sub-nav-list">
 <li>Detail:&nbsp;</li>
-<li><a href="#field-detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -85,7 +85,7 @@ loadScripts(document, 'script');</script>
 <h1 title="Class OpenApiAuthenticationInterceptor" class="title">Class OpenApiAuthenticationInterceptor</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">com.sca4d.core.spring.call.CallHandlerInterceptor
+<div class="inheritance">com.sca4d.core.spring.web.HttpCallHandlerInterceptor
 <div class="inheritance">com.sca4d.openapi.web.OpenApiAuthenticationInterceptor</div>
 </div>
 </div>
@@ -95,44 +95,12 @@ loadScripts(document, 'script');</script>
 <dd><code>org.springframework.web.servlet.HandlerInterceptor</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">OpenApiAuthenticationInterceptor</span>
-<span class="extends-implements">extends com.sca4d.core.spring.call.CallHandlerInterceptor</span></div>
-<div class="block">在通用认证拦截器前恢复 OpenAPI 独立 JWT 或验证 OpenAPI HMAC 请求。</div>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">OpenApiAuthenticationInterceptor</span>
+<span class="extends-implements">extends com.sca4d.core.spring.web.HttpCallHandlerInterceptor</span></div>
+<div class="block">在通用认证拦截器前恢复 OpenAPI 独立 JWT 或验证 OpenAPI MAC 请求。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
-<!-- =========== FIELD SUMMARY =========== -->
-<li>
-<section class="field-summary" id="field-summary">
-<h2>Field Summary</h2>
-<div class="caption"><span>Fields</span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Field</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#CLIENT_ID_HEADER" class="member-name-link">CLIENT_ID_HEADER</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">OpenAPI HMAC Client 标识请求头。</div>
-</div>
-<div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#NONCE_HEADER" class="member-name-link">NONCE_HEADER</a></code></div>
-<div class="col-last odd-row-color">
-<div class="block">OpenAPI HMAC 一次性随机数请求头。</div>
-</div>
-<div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#SIGNATURE_HEADER" class="member-name-link">SIGNATURE_HEADER</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">OpenAPI HMAC 无填充 Base64URL 签名请求头。</div>
-</div>
-<div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#TIMESTAMP_HEADER" class="member-name-link">TIMESTAMP_HEADER</a></code></div>
-<div class="col-last odd-row-color">
-<div class="block">OpenAPI HMAC Unix 秒请求头。</div>
-</div>
-</div>
-</section>
-</li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <li>
 <section class="constructor-summary" id="constructor-summary">
@@ -145,9 +113,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="../client/OpenApiClientService.html" title="class in com.sca4d.openapi.client">OpenApiClientService</a>&nbsp;clients,
  @NotNull com.sca4d.auth.hmac.HmacAuthenticationMethod&nbsp;hmac,
  @NotNull com.sca4d.auth.session.SessionService&nbsp;sessions)</code></div>
-<div class="col-last even-row-color">
-<div class="block">创建 OpenAPI 认证拦截器。</div>
-</div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -168,13 +134,13 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;handler,
  @NotNull com.sca4d.core.api.call.Call&nbsp;call)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">恢复 OpenAPI JWT 或将 HMAC Proof 转换为当前调用的 Session。</div>
+<div class="block">恢复 OpenAPI JWT 或将 MAC Proof 转换为当前调用的 Session。</div>
 </div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-com.sca4d.core.spring.call.CallHandlerInterceptor">Methods inherited from class&nbsp;com.sca4d.core.spring.call.CallHandlerInterceptor</h3>
+<h3 id="methods-inherited-from-class-com.sca4d.core.spring.web.HttpCallHandlerInterceptor">Methods inherited from class&nbsp;com.sca4d.core.spring.web.HttpCallHandlerInterceptor</h3>
 <code>preHandle</code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
@@ -188,74 +154,6 @@ loadScripts(document, 'script');</script>
 </section>
 <section class="details">
 <ul class="details-list">
-<!-- ============ FIELD DETAIL =========== -->
-<li>
-<section class="field-details" id="field-detail">
-<h2>Field Details</h2>
-<ul class="member-list">
-<li>
-<section class="detail" id="CLIENT_ID_HEADER">
-<h3>CLIENT_ID_HEADER</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">CLIENT_ID_HEADER</span></div>
-<div class="block">OpenAPI HMAC Client 标识请求头。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../constant-values.html#com.sca4d.openapi.web.OpenApiAuthenticationInterceptor.CLIENT_ID_HEADER">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="TIMESTAMP_HEADER">
-<h3>TIMESTAMP_HEADER</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">TIMESTAMP_HEADER</span></div>
-<div class="block">OpenAPI HMAC Unix 秒请求头。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../constant-values.html#com.sca4d.openapi.web.OpenApiAuthenticationInterceptor.TIMESTAMP_HEADER">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="NONCE_HEADER">
-<h3>NONCE_HEADER</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">NONCE_HEADER</span></div>
-<div class="block">OpenAPI HMAC 一次性随机数请求头。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../constant-values.html#com.sca4d.openapi.web.OpenApiAuthenticationInterceptor.NONCE_HEADER">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="SIGNATURE_HEADER">
-<h3>SIGNATURE_HEADER</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">SIGNATURE_HEADER</span></div>
-<div class="block">OpenAPI HMAC 无填充 Base64URL 签名请求头。</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../constant-values.html#com.sca4d.openapi.web.OpenApiAuthenticationInterceptor.SIGNATURE_HEADER">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-</ul>
-</section>
-</li>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <li>
 <section class="constructor-details" id="constructor-detail">
@@ -272,7 +170,6 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.auth.hmac.HmacAuthenticationMethod&nbsp;hmac,
  @NotNull
  @NotNull com.sca4d.auth.session.SessionService&nbsp;sessions)</span></div>
-<div class="block">创建 OpenAPI 认证拦截器。</div>
 </section>
 </li>
 </ul>
@@ -294,10 +191,10 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;handler,
  @NotNull
  @NotNull com.sca4d.core.api.call.Call&nbsp;call)</span></div>
-<div class="block">恢复 OpenAPI JWT 或将 HMAC Proof 转换为当前调用的 Session。</div>
+<div class="block">恢复 OpenAPI JWT 或将 MAC Proof 转换为当前调用的 Session。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code>preHandleWithCall</code>&nbsp;in class&nbsp;<code>com.sca4d.core.spring.call.CallHandlerInterceptor</code></dd>
+<dd><code>preHandleWithCall</code>&nbsp;in class&nbsp;<code>com.sca4d.core.spring.web.HttpCallHandlerInterceptor</code></dd>
 </dl>
 </section>
 </li>

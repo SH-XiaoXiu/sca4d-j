@@ -1,5 +1,6 @@
 package com.sca4d.iam.base.acl;
 
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.persistence.AffectedRows;
 import com.sca4d.core.api.persistence.ZeroRowPolicy;
@@ -15,13 +16,19 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-/** Platform 表实现的内置 ACL Repository。 */
+/**
+ * Platform 表实现的内置 ACL Repository。
+ */
 public class PlatformAclRepository implements AclRepository {
-    /** Platform ACL 的领域范围。 */
+    /**
+     * Platform ACL 的领域范围。
+     */
     public static final @NotNull DomainScope PLATFORM = new DomainScope("PLATFORM");
 
-    /** 内置 Platform ACL 示例认领的资源类型。 */
-    public static final @NotNull String RESOURCE_TYPE = "platform-resource";
+    /**
+     * 内置 Platform ACL 示例认领的资源类型。
+     */
+    public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofSlash("IAM/PLATFORM_RESOURCE");
 
     private final @NotNull PlatformAclMapper mapper;
 
@@ -34,63 +41,80 @@ public class PlatformAclRepository implements AclRepository {
         this.mapper = Objects.requireNonNull(mapper, "Platform ACL Mapper 不能为空");
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @CheckReturnValue
     public @NotNull DomainScope scope() {
         return PLATFORM;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @CheckReturnValue
-    public @NotNull @Unmodifiable Set<@NotNull String> resourceTypes() {
+    public @NotNull @Unmodifiable Set<@NotNull TreeCode> resourceTypes() {
         return Set.of(RESOURCE_TYPE);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @AffectedRows(target = "Platform ACL", whenZero = ZeroRowPolicy.ALLOW)
     public void grant(
             @NotNull Long principalId,
-            @NotNull String type,
+            @NotNull TreeCode type,
             @NotNull String id,
             @NotNull Action action) {
         mapper.insert(principalId, type, id, action);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @AffectedRows(target = "Platform ACL", whenZero = ZeroRowPolicy.ALLOW)
     public void revoke(
             @NotNull Long principalId,
-            @NotNull String type,
+            @NotNull TreeCode type,
             @NotNull String id,
             @NotNull Action action) {
         AclEntry checked = new AclEntry(principalId, type, id, action);
         mapper.delete(checked.principalId(), checked.resourceType(), checked.resourceId(), checked.action());
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @CheckReturnValue
     public boolean allows(
             @NotNull Long principalId,
-            @NotNull String type,
+            @NotNull TreeCode type,
             @NotNull String id,
             @NotNull Action action) {
         AclEntry checked = new AclEntry(principalId, type, id, action);
         return !mapper
-                .selectEntries(checked.principalId(), checked.resourceType(), checked.resourceId(), checked.action(), 1)
+                .selectEntries(
+                        checked.principalId(),
+                        checked.resourceType(),
+                        checked.resourceId(),
+                        checked.action(),
+                        1)
                 .isEmpty();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @CheckReturnValue
     public @NotNull @Unmodifiable List<@NotNull String> findAllowedResourceIds(
             @NotNull Long principalId,
-            @NotNull String type,
+            @NotNull TreeCode type,
             @NotNull Action action) {
         return mapper.selectEntries(principalId, type, null, Objects.requireNonNull(action, "ACL 动作不能为空"), null)
                 .stream()
@@ -98,24 +122,30 @@ public class PlatformAclRepository implements AclRepository {
                 .toList();
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @CheckReturnValue
     public @NotNull @Unmodifiable List<@NotNull AclEntry> findEntries(
             @NotNull Long principalId,
-            @NotNull String type) {
+            @NotNull TreeCode type) {
         return List.copyOf(mapper.selectEntries(principalId, type, null, null, null));
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void revokeByPrincipal(@NotNull Long principalId) {
         mapper.delete(Objects.requireNonNull(principalId, "主体标识不能为空"), null, null, null);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void revokeByResource(@NotNull String type, @NotNull String id) {
+    public void revokeByResource(@NotNull TreeCode type, @NotNull String id) {
         mapper.delete(
                 null,
                 Objects.requireNonNull(type, "资源类型不能为空"),

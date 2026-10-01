@@ -2,15 +2,19 @@ package com.sca4d.iot.api.connection;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sca4d.core.api.message.Message;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 /** 请求一种设备接入实现终止一个明确连接代次。 */
-public final class DeviceDisconnectMessage {
+public class DeviceDisconnectMessage extends Message {
 
-    private final long deviceId;
+    public static final int PROTOCOL_VERSION = 1;
+
+    public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DEVICE/DISCONNECT");
 
     private final @NotNull DeviceConnectionId connectionId;
 
@@ -19,6 +23,8 @@ public final class DeviceDisconnectMessage {
     private final @NotNull String reason;
 
     private final int attempt;
+
+    private final long deviceId;
 
     /** 创建可由通用 Messaging 可靠传递的断连请求。 */
     @JsonCreator
@@ -66,5 +72,15 @@ public final class DeviceDisconnectMessage {
     @JsonProperty("attempt")
     public int attempt() {
         return attempt;
+    }
+
+    @Override
+    public @NotNull TreeCode code() {
+        return CODE;
+    }
+
+    @Override
+    public int protocolVersion() {
+        return PROTOCOL_VERSION;
     }
 }

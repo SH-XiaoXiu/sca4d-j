@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="annotations">@Internal
-</span><span class="modifiers">public final class </span><span class="element-name type-name-label">RedisTicketService</span>
+</span><span class="modifiers">public class </span><span class="element-name type-name-label">RedisTicketService</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="WebRealtimeTicketService.html" title="interface in com.sca4d.web.realtime.ticket">WebRealtimeTicketService</a></span></div>
 <div class="block">把短期一次性 WebSocket 票据保存到 Redis，并在握手时原子读取和删除。</div>
@@ -109,7 +109,7 @@ implements <a href="WebRealtimeTicketService.html" title="interface in com.sca4d
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,com.sca4d.core.api.authentication.SessionLifecycle,com.sca4d.web.realtime.config.WebRealtimeInfrastructureNames,com.sca4d.web.realtime.config.WebRealtimeProperties,java.time.Clock)" class="member-name-link">RedisTicketService</a><wbr>(@NotNull org.springframework.data.redis.core.StringRedisTemplate&nbsp;redis,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate,com.sca4d.core.api.authentication.SessionLifecycle,com.sca4d.web.realtime.config.WebRealtimeInfrastructureNames,com.sca4d.web.realtime.config.WebRealtimeProperties,java.time.Clock)" class="member-name-link">RedisTicketService</a><wbr>(@NotNull org.springframework.data.redis.core.RedisTemplate&lt;com.sca4d.core.api.name.Key,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;redis,
  @NotNull com.sca4d.core.api.authentication.SessionLifecycle&nbsp;sessions,
  @NotNull <a href="../config/WebRealtimeInfrastructureNames.html" title="class in com.sca4d.web.realtime.config">WebRealtimeInfrastructureNames</a>&nbsp;names,
  @NotNull <a href="../config/WebRealtimeProperties.html" title="class in com.sca4d.web.realtime.config">WebRealtimeProperties</a>&nbsp;properties,
@@ -155,10 +155,10 @@ implements <a href="WebRealtimeTicketService.html" title="interface in com.sca4d
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(org.springframework.data.redis.core.StringRedisTemplate,com.sca4d.core.api.authentication.SessionLifecycle,com.sca4d.web.realtime.config.WebRealtimeInfrastructureNames,com.sca4d.web.realtime.config.WebRealtimeProperties,java.time.Clock)">
+<section class="detail" id="&lt;init&gt;(org.springframework.data.redis.core.RedisTemplate,com.sca4d.core.api.authentication.SessionLifecycle,com.sca4d.web.realtime.config.WebRealtimeInfrastructureNames,com.sca4d.web.realtime.config.WebRealtimeProperties,java.time.Clock)">
 <h3>RedisTicketService</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RedisTicketService</span><wbr><span class="parameters">(@NotNull
- @NotNull org.springframework.data.redis.core.StringRedisTemplate&nbsp;redis,
+ @NotNull org.springframework.data.redis.core.RedisTemplate&lt;com.sca4d.core.api.name.Key,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;redis,
  @NotNull
  @NotNull com.sca4d.core.api.authentication.SessionLifecycle&nbsp;sessions,
  @NotNull

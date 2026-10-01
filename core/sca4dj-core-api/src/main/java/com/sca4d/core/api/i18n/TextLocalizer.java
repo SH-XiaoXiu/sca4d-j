@@ -7,7 +7,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 /** 按静态消息目录或动态数据自身的 Locale 把 LocalizableText 转换成最终字符串。 */
-public final class TextLocalizer {
+public class TextLocalizer {
 
     private final LocaleCatalog locales;
 

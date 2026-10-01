@@ -63,9 +63,17 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存一封同步 Email 要附带的文件名、媒体类型和完整内容。</div>
 </div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/EmailChannels.html" title="class in com.sca4d.notification.email">EmailChannels</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Email 模块声明的通知渠道。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/notification/email/sender/EmailGateway.html" title="interface in com.sca4d.notification.email.sender">EmailGateway</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="block">使用一项 SMTP 配置测试连接或发送已经渲染的 Email。</div>
+</div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/EmailMessageService.html" title="class in com.sca4d.notification.email">EmailMessageService</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">使用当前 Email 模板和 SMTP 配置同步发送带可选附件的邮件。</div>
+<div class="block">使用 Email 模板和当前 SMTP 配置同步发送带可选附件的邮件。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/config/EmailNotificationAutoConfiguration.html" title="class in com.sca4d.notification.email.config">EmailNotificationAutoConfiguration</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
@@ -73,7 +81,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/EmailNotificationDelivery.html" title="class in com.sca4d.notification.email">EmailNotificationDelivery</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">把渠道无关通知解析为收件邮箱、多语言模板和当前 SMTP 配置并执行投递。</div>
+<div class="block">把渠道无关通知解析为收件邮箱、Email 模板和 SMTP 配置并执行投递。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/notification/email/EmailNotificationErrorCode.html" title="enum class in com.sca4d.notification.email">EmailNotificationErrorCode</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
@@ -87,44 +95,64 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">把通知内部接收人解析为当前有效邮箱，具体数据归属仍由 App 决定。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/sender/EmailSender.html" title="class in com.sca4d.notification.email.sender">EmailSender</a></div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/EmailRenderer.html" title="class in com.sca4d.notification.email">EmailRenderer</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">把 Email 源码模板渲染为主题、纯文本正文和安全 HTML 正文。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/sender/EmailSender.html" title="class in com.sca4d.notification.email.sender">EmailSender</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存可安全返回给管理调用方的 SMTP 地址、发件资料、状态和版本。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/sender/EmailSenderConfiguration.html" title="class in com.sca4d.notification.email.sender">EmailSenderConfiguration</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/sender/EmailSenderConfiguration.html" title="class in com.sca4d.notification.email.sender">EmailSenderConfiguration</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">组合安全 SMTP 配置和仅供建立连接使用的可选密码密文。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/notification/email/sender/mapper/EmailSenderMapper.html" title="interface in com.sca4d.notification.email.sender.mapper">EmailSenderMapper</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
-<div class="block">读写 SMTP 配置的最小 SQL 形状。</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/notification/email/sender/mapper/EmailSenderMapper.html" title="interface in com.sca4d.notification.email.sender.mapper">EmailSenderMapper</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="block">读写 SMTP 发件配置，并按版本条件更新或逻辑删除配置。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/sender/EmailSenderRepository.html" title="class in com.sca4d.notification.email.sender">EmailSenderRepository</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/sender/EmailSenderRepository.html" title="class in com.sca4d.notification.email.sender">EmailSenderRepository</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">提供 SMTP 配置查询、加密列读取和版本保护的持久化语义。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/sender/EmailSenderService.html" title="class in com.sca4d.notification.email.sender">EmailSenderService</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/sender/EmailSenderService.html" title="class in com.sca4d.notification.email.sender">EmailSenderService</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">管理 SMTP 配置、加密密码、启用状态和连接测试。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/sender/mapper/EmailSenderState.html" title="class in com.sca4d.notification.email.sender.mapper">EmailSenderState</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/sender/mapper/EmailSenderState.html" title="class in com.sca4d.notification.email.sender.mapper">EmailSenderState</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存 Email Sender Mapper 返回的完整数据库列。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/notification/email/sender/EmailTransport.html" title="interface in com.sca4d.notification.email.sender">EmailTransport</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
-<div class="block">使用一项 SMTP 配置测试连接或发送已经渲染的 Email。</div>
-</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/RenderedEmail.html" title="class in com.sca4d.notification.email">RenderedEmail</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/EmailTemplate.html" title="class in com.sca4d.notification.email">EmailTemplate</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Email 模板聚合；每个 Locale 保存 subject、text 和 html 源码。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/notification/email/mapper/EmailTemplateMapper.html" title="interface in com.sca4d.notification.email.mapper">EmailTemplateMapper</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="block">读写 Email 模板、启用状态和版本条件。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/EmailTemplateRepository.html" title="class in com.sca4d.notification.email">EmailTemplateRepository</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Email 模块拥有的模板持久化边界。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/EmailTemplateSource.html" title="class in com.sca4d.notification.email">EmailTemplateSource</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">保存 Email 模板的主题、纯文本正文和 HTML 正文源码。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/mapper/EmailTemplateState.html" title="class in com.sca4d.notification.email.mapper">EmailTemplateState</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Email 模板 Mapper 读取的数据库状态。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/RenderedEmail.html" title="class in com.sca4d.notification.email">RenderedEmail</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存已经完成变量转义、主题校验和 HTML 清洗的 Email 内容。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/sender/SmtpEmailTransport.html" title="class in com.sca4d.notification.email.sender">SmtpEmailTransport</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/notification/email/sender/SmtpEmailGateway.html" title="class in com.sca4d.notification.email.sender">SmtpEmailGateway</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用 JavaMail 和 SecretKeyring 建立三种 TLS 模式的 SMTP 连接。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/notification/email/sender/SmtpSecurity.html" title="enum class in com.sca4d.notification.email.sender">SmtpSecurity</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/notification/email/sender/SmtpSecurity.html" title="enum class in com.sca4d.notification.email.sender">SmtpSecurity</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
 <div class="block">声明 SMTP 连接使用明文、STARTTLS 升级或隐式 TLS。</div>
 </div>
 </div>

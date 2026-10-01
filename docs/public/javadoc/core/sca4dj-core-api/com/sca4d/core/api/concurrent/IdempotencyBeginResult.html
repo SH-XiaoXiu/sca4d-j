@@ -89,9 +89,9 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">IdempotencyBeginResult&lt;T&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">IdempotencyBeginResult&lt;T&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">保存一次幂等处理权竞争的状态以及该状态允许读取的数据。</div>
+<div class="block">保存一次幂等处理权竞争的状态以及对应状态允许读取的数据。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -121,7 +121,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="IdempotencyBeginResult.html" title="type parameter in IdempotencyBeginResult">T</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#replayResult()" class="member-name-link">replayResult</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回成功重放的结果。</div>
+<div class="block">成功重放的结果。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#retryAfter()" class="member-name-link">retryAfter</a>()</code></div>
@@ -234,7 +234,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @Nullable
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="IdempotencyBeginResult.html" title="type parameter in IdempotencyBeginResult">T</a></span>&nbsp;<span class="element-name">replayResult</span>()</div>
-<div class="block">返回成功重放的结果。</div>
+<div class="block">成功重放的结果。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>仅 <a href="IdempotencyBeginStatus.html#REPLAY"><code>IdempotencyBeginStatus.REPLAY</code></a> 状态可读取；首次结果可以明确为 <code>null</code></dd>
@@ -249,7 +249,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name">retryAfter</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>仅 <a href="IdempotencyBeginStatus.html#IN_PROGRESS"><code>IdempotencyBeginStatus.IN_PROGRESS</code></a> 状态返回正数时间，其他状态返回零</dd>
+<dd>仅 <a href="IdempotencyBeginStatus.html#IN_PROGRESS"><code>IdempotencyBeginStatus.IN_PROGRESS</code></a> 状态返回正数时间；其他状态返回零</dd>
 </dl>
 </section>
 </li>

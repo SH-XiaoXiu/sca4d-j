@@ -1,5 +1,7 @@
 package com.sca4d.app.server.authentication.view;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.permission.Operation;
 import org.jetbrains.annotations.CheckReturnValue;
@@ -12,7 +14,7 @@ import java.util.Objects;
 
 /** 返回 Dashboard 所需的当前认证身份投影。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应及其嵌套对象。
-public final class CurrentSessionView {
+public class CurrentSessionView {
 
     private final @NotNull String sessionId;
 
@@ -61,7 +63,7 @@ public final class CurrentSessionView {
                         .flatMap(principal -> checked.resources(principal.principalId()).stream())
                         .filter(Operation.class::isInstance)
                         .map(Operation.class::cast)
-                        .map(Operation::value)
+                        .map(operation -> operation.code().format(COLON))
                         .distinct()
                         .sorted()
                         .toList());
@@ -116,7 +118,7 @@ public final class CurrentSessionView {
     }
 
     /** 当前 Session 的 Subject 字段。 */
-    public static final class SubjectView {
+    public static class SubjectView {
         private final long subjectId;
 
         private final @NotNull String type;
@@ -144,7 +146,7 @@ public final class CurrentSessionView {
     }
 
     /** 当前 Session 的 Account 字段。 */
-    public static final class AccountView {
+    public static class AccountView {
         private final long accountId;
 
         private final @NotNull String realmKey;

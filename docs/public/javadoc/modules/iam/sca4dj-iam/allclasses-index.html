@@ -97,19 +97,19 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iam/base/user/CurrentUserArgumentResolver.html" title="class in com.sca4d.iam.base.user">CurrentUserArgumentResolver</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">从当前请求的 Session 注入 USER，并把其唯一 PlatformPrincipal 绑定到 `Call`。</div>
+<div class="block">从当前请求的 Session 注入 USER，并把 USER 唯一的 PlatformPrincipal 绑定到 `Call`。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iam/DomainScope.html" title="class in com.sca4d.iam">DomainScope</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">保存用于选择一种业务 <a href="com/sca4d/iam/rbac/RbacRepository.html" title="interface in com.sca4d.iam.rbac"><code>RbacRepository</code></a> 的大小写不敏感编码。</div>
+<div class="block">使用稳定 Code 选择 ACL Repository，并保留独立领域类型。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iam/identity/IamAccountDirectory.html" title="class in com.sca4d.iam.identity">IamAccountDirectory</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">使用 IAM 的标识规范化和身份事实实现 `AccountDirectory`。</div>
+<div class="block">使用 IAM 的标识规范化和身份数据实现 `AccountDirectory`。</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iam/config/IamAutoConfiguration.html" title="class in com.sca4d.iam.config">IamAutoConfiguration</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">自动装配 IAM 身份事实、Platform 身份以及内置 RBAC 和 ACL 实现。</div>
+<div class="block">自动装配 IAM 身份管理、Platform 身份以及内置 RBAC 和 ACL 实现。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iam/config/IamBootstrap.html" title="class in com.sca4d.iam.config">IamBootstrap</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
@@ -293,7 +293,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iam/identity/PrincipalType.html" title="class in com.sca4d.iam.identity">PrincipalType</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">表示 Principal 具体 Java 类型对应的固定持久化判别值。</div>
+<div class="block">使用稳定 Code 标识 Principal 的具体类型，并保留独立领域类型。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iam/identity/PrincipalTypes.html" title="class in com.sca4d.iam.identity">PrincipalTypes</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
@@ -301,7 +301,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iam/rbac/RbacDomain.html" title="class in com.sca4d.iam.rbac">RbacDomain</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">保存用于选择一套 RBAC Repository 和权限目录的大小写不敏感编码。</div>
+<div class="block">使用稳定 Code 选择 RBAC Repository，并保留独立领域类型。</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/iam/rbac/RbacErrorCode.html" title="enum class in com.sca4d.iam.rbac">RbacErrorCode</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab3">
@@ -359,16 +359,36 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
 <div class="block">表示角色是否贡献已分配的 Operation。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iam/base/user/User.html" title="class in com.sca4d.iam.base.user">User</a></div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iam/config/SystemIdentityInitializer.html" title="class in com.sca4d.iam.config">SystemIdentityInitializer</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">在全部单例和数据库迁移完成后、SmartLifecycle 启动前发布系统身份。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/iam/identity/mapper/SystemIdentityMapper.html" title="interface in com.sca4d.iam.identity.mapper">SystemIdentityMapper</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="block">批量读取固定身份绑定，并原子插入本次新建 Principal 与对应绑定。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iam/config/SystemIdentityProperties.html" title="class in com.sca4d.iam.config">SystemIdentityProperties</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">保存 SYSTEM Subject ID、代码声明的系统身份与人工指定的全局 Principal ID。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iam/identity/SystemIdentityRepository.html" title="class in com.sca4d.iam.identity">SystemIdentityRepository</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">原子维护 SYSTEM 的固定身份绑定，拒绝接管已有 ID 或改写历史映射。</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iam/identity/SystemPrincipalCodec.html" title="class in com.sca4d.iam.identity">SystemPrincipalCodec</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">登记系统 Principal 类型，并按数据库确认的稳定身份读取序列化引用。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iam/base/user/User.html" title="class in com.sca4d.iam.base.user">User</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">组合单一 Platform 用户的 Subject、Account，并作为对应 Principal 使用。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iam/base/user/UserAutoConfiguration.html" title="class in com.sca4d.iam.base.user">UserAutoConfiguration</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iam/base/user/UserAutoConfiguration.html" title="class in com.sca4d.iam.base.user">UserAutoConfiguration</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">自动装配单一 Platform 身份系统使用的当前 User 参数解析器。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iam/identity/UsernameAccountIdentifierNormalizer.html" title="class in com.sca4d.iam.identity">UsernameAccountIdentifierNormalizer</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/iam/identity/UsernameAccountIdentifierNormalizer.html" title="class in com.sca4d.iam.identity">UsernameAccountIdentifierNormalizer</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">IAM 内置的用户名规范化规则。</div>
 </div>
 </div>

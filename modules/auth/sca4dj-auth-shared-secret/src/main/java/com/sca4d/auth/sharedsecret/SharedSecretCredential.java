@@ -1,5 +1,7 @@
 package com.sca4d.auth.sharedsecret;
 
+import static com.sca4d.auth.sharedsecret.SharedSecretCredential.Status.ACTIVE;
+
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.enums.BaseEnum;
 import com.sca4d.core.api.utils.TextUtils;
@@ -10,7 +12,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 保存一个 Account 当前 Shared Secret 的不可逆摘要、状态和乐观版本。 */
-public final class SharedSecretCredential {
+public class SharedSecretCredential {
 
     /** Shared Secret 凭据的有限生命周期状态。 */
     public enum Status implements BaseEnum {
@@ -30,15 +32,15 @@ public final class SharedSecretCredential {
         }
     }
 
-    private final long accountId;
-
-    private final @NotNull String secretHash;
+    private final @NotNull Instant updatedAt;
 
     private final @NotNull Status status;
 
+    private final @NotNull String secretHash;
+
     private final @NotNull Version version;
 
-    private final @NotNull Instant updatedAt;
+    private final long accountId;
 
     /** 创建从数据库读取的 Shared Secret 凭据。 */
     public SharedSecretCredential(
@@ -64,7 +66,7 @@ public final class SharedSecretCredential {
 
     /** @return 当前凭据是否允许认证 */
     public boolean active() {
-        return status == Status.ACTIVE;
+        return status == ACTIVE;
     }
 
     /** @return 当前凭据状态 */

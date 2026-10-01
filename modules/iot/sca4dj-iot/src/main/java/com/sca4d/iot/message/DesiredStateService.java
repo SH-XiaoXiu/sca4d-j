@@ -6,10 +6,11 @@ import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.ProductDefinition;
 import com.sca4d.iot.api.change.DeviceChangeArea;
+import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.message.DeviceDownlinkKind;
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
 import com.sca4d.iot.api.model.ThingModel;
+import com.sca4d.iot.api.model.ThingModelPresentation;
 import com.sca4d.iot.api.model.ThingModelRepository;
 import com.sca4d.iot.api.model.ThingProperty;
 import com.sca4d.iot.api.model.ThingPropertyAccess;
@@ -27,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -34,6 +36,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /** 原子修改多个 desired property，并只为实际变化创建新的可靠状态同步消息。 */
 public class DesiredStateService {
@@ -44,23 +47,23 @@ public class DesiredStateService {
 
     private final @NotNull DeviceRepository devices;
 
-    private final @NotNull ProductDefinitionCatalog products;
-
     private final @NotNull DownlinkRepository downlinks;
 
     private final @NotNull ThingModelRepository models;
 
     private final @NotNull ThingValueValidator validator;
 
-    private final @NotNull IdGenerator ids;
-
     private final @NotNull Clock clock;
 
     private final @NotNull DeviceChangeNotifier changes;
 
-    private final @NotNull ThingDataJsonCodec json;
+    private final @NotNull DeviceDeliveryScheduler messagePublisher;
 
-    private final @NotNull DeviceDownlinkMessagePublisher messagePublisher;
+    private final @NotNull IdGenerator ids;
+
+    private final @NotNull ProductDefinitionCatalog products;
+
+    private final @NotNull ThingDataJsonCodec json;
 
     private final int maxProperties;
 
@@ -75,7 +78,7 @@ public class DesiredStateService {
             @NotNull Clock clock,
             @NotNull DeviceChangeNotifier changes,
             @NotNull ThingDataJsonCodec json,
-            @NotNull DeviceDownlinkMessagePublisher messagePublisher,
+            @NotNull DeviceDeliveryScheduler messagePublisher,
             int maxProperties) {
         this.devices = Objects.requireNonNull(devices, "Device Repository 不能为空");
         this.products = Objects.requireNonNull(products, "ProductDefinition 目录不能为空");
@@ -120,7 +123,7 @@ public class DesiredStateService {
                 .orElseThrow(() -> new BusinessException(IotErrorCode.DEVICE_NOT_FOUND));
         ProductDefinition product = products.definition(device.product());
         ThingModel model = models.find(product.code(), device.thingModelVersion())
-                .map(com.sca4d.iot.api.model.ThingModelPresentation::model)
+                .map(ThingModelPresentation::model)
                 .orElseThrow(() -> new BusinessException(IotErrorCode.THING_MODEL_NOT_FOUND));
 
         // 按 ThingModel 规范校验并规范化全部 set/clear；任一值失败时不修改数据库。
@@ -140,7 +143,7 @@ public class DesiredStateService {
         LinkedHashMap<String, Long> messageIds = new LinkedHashMap<>();
         normalized.keySet().forEach(code -> {
             properties.put(code, writableProperty(model, code));
-            messageIds.put(code, ids.nextId());
+            messageIds.put(code, ids.nextId().value());
         });
         Instant changedAt = clock.instant();
         DesiredStateResult result = null;
@@ -169,7 +172,7 @@ public class DesiredStateService {
             Set<String> changedClear = input.clearCodes()
                     .stream()
                     .filter(code -> existing.get(code).isPresent())
-                    .collect(java.util.stream.Collectors.toCollection(LinkedHashSet::new));
+                    .collect(Collectors.toCollection(LinkedHashSet::new));
             if (changedSet.isEmpty() && changedClear.isEmpty()) {
                 result = new DesiredStateResult(currentDesiredSequence, List.of());
                 break;
@@ -180,7 +183,7 @@ public class DesiredStateService {
             }
 
             // 只为实际变化的 set 创建新消息并终止旧消息；clear 取消旧消息并删除当前值。
-            List<DeviceDownlinkMessage> messages = new java.util.ArrayList<>();
+            List<DeviceDownlink> messages = new ArrayList<>();
             for (Map.Entry<String, Object> changeEntry : changedSet.entrySet()) {
                 String code = changeEntry.getKey();
                 ThingProperty property = Objects.requireNonNull(properties.get(code), "desired 属性定义不存在: " + code);
@@ -196,7 +199,7 @@ public class DesiredStateService {
                         code,
                         desiredSequence,
                         changeEntry.getValue());
-                DeviceDownlinkMessage message = new DeviceDownlinkMessage(
+                DeviceDownlink message = new DeviceDownlink(
                         Objects.requireNonNull(messageIds.get(code), "desired messageId 不存在: " + code),
                         device.id(),
                         device.bindingGeneration(),
@@ -236,7 +239,7 @@ public class DesiredStateService {
         // 在同一事务中登记 Device 变化；事务提交后再由通知器发布可见变化。
         changes.changed(
                 deviceId,
-                java.util.List.of(DeviceChangeArea.DESIRED, DeviceChangeArea.DOWNLINK),
+                List.of(DeviceChangeArea.DESIRED, DeviceChangeArea.DOWNLINK),
                 clock.instant());
         LOG.info(
                 "Device desired 已修改 | deviceId={} desiredSequence={} setCount={} clearCount={}",

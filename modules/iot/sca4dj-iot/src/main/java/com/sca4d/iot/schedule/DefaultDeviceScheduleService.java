@@ -4,9 +4,11 @@ import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.event.Event;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
-import com.sca4d.core.api.messaging.MessageId;
-import com.sca4d.core.api.messaging.MessagePublisher;
+import com.sca4d.core.api.messaging.DispatchPolicy;
+import com.sca4d.core.api.messaging.MessageBus;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.iot.IotErrorCode;
@@ -14,7 +16,7 @@ import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.change.DeviceChangeArea;
 import com.sca4d.iot.api.history.DeviceEventMessage;
 import com.sca4d.iot.api.history.DeviceHistoryStore;
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
+import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.message.IotMessageTypes;
 import com.sca4d.iot.api.schedule.DeviceSchedule;
 import com.sca4d.iot.api.schedule.DeviceScheduleExecution;
@@ -55,25 +57,25 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
 
     private static final Duration LOCK_WAIT = Duration.ofSeconds(10);
 
-    private final @NotNull DeviceScheduleRepository schedules;
+    private final @NotNull DeviceCommandService commands;
 
     private final @NotNull DeviceRepository devices;
 
-    private final @NotNull DeviceCommandService commands;
+    private final @NotNull DeviceScheduleRepository schedules;
 
-    private final @NotNull IdGenerator ids;
+    private final @NotNull ObjectProvider<DeviceHistoryStore> history;
+
+    private final @NotNull IotProperties properties;
 
     private final @NotNull Clock clock;
 
     private final @NotNull DeviceChangeNotifier changes;
 
-    private final @NotNull IotProperties properties;
-
-    private final @NotNull MessagePublisher messages;
-
-    private final @NotNull ObjectProvider<DeviceHistoryStore> history;
-
     private final @NotNull DistributedLock distributedLock;
+
+    private final @NotNull IdGenerator ids;
+
+    private final @NotNull MessageBus messages;
 
     private final @NotNull TransactionTemplate transactions;
 
@@ -87,7 +89,7 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
             @NotNull Clock clock,
             @NotNull DeviceChangeNotifier changes,
             @NotNull IotProperties properties,
-            @NotNull MessagePublisher messages,
+            @NotNull MessageBus messages,
             @NotNull ObjectProvider<DeviceHistoryStore> history,
             @NotNull DistributedLock distributedLock,
             @NotNull TransactionTemplate transactions) {
@@ -98,7 +100,7 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
         this.clock = Objects.requireNonNull(clock, "设备定时时钟不能为空");
         this.changes = Objects.requireNonNull(changes, "Device 变化通知器不能为空");
         this.properties = Objects.requireNonNull(properties, "IoT 配置不能为空");
-        this.messages = Objects.requireNonNull(messages, "MessagePublisher 不能为空");
+        this.messages = Objects.requireNonNull(messages, "MessageBus 不能为空");
         this.history = Objects.requireNonNull(history, "DeviceHistoryStore Provider 不能为空");
         this.distributedLock = Objects.requireNonNull(distributedLock, "设备定时分布式锁不能为空");
         this.transactions = Objects.requireNonNull(transactions, "设备定时事务模板不能为空");
@@ -115,7 +117,7 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
         validateDeviceId(deviceId);
         Instant now = clock.instant();
         DeviceScheduleTrigger checkedTrigger = validatedTrigger(trigger);
-        long scheduleId = ids.nextId();
+        long scheduleId = ids.nextId().value();
         schedules.add(
                 scheduleId,
                 deviceId,
@@ -203,6 +205,7 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
         changes.changed(current.deviceId(), DeviceChangeArea.SCHEDULE, now);
     }
 
+    /** 按计划标识读取设备计划，并在不存在时抛出稳定的业务错误。 */
     @Transactional(readOnly = true)
     @CheckReturnValue
     public @NotNull DeviceSchedule loadById(long scheduleId) {
@@ -231,9 +234,9 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
     }
 
     /**
-     * 读取一条到期候选，取得该规则的 Redis 锁后在事务内重新确认并生成 command；没有到期候选时返回 `false`。
+     * 读取一条到期候选，取得候选规则的 Redis 锁后在事务内重新确认并生成 command；没有到期候选时返回 `false`。
      *
-     * @throws DeviceScheduleTriggerFailure command 业务校验失败时抛出，调用方必须在新事务中暂停该规则
+     * @throws DeviceScheduleTriggerFailure command 业务校验失败时抛出，调用方必须在新事务中暂停候选规则
      */
     public boolean triggerNextDueSchedule() {
         Instant scannedAt = clock.instant();
@@ -241,14 +244,19 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
         if (candidate == null) {
             return false;
         }
-        return distributedLock.execute(
+        distributedLock.execute(
                 scheduleLock(candidate.scheduleId()),
                 LOCK_WAIT,
-                () -> Boolean.TRUE.equals(transactions.execute(status -> triggerDueCandidate(candidate))));
+                () -> {
+                    transactions.executeWithoutResult(status -> triggerDueCandidate(candidate));
+                    return null;
+                });
+        return true;
     }
 
     /** 在规则锁内重新确认候选版本和计划时间，并推进一次到期执行。 */
-    private boolean triggerDueCandidate(@NotNull DeviceSchedule candidate) {
+    private void triggerDueCandidate(@NotNull DeviceSchedule candidate) {
+        // 锁内重新读取规则，只有版本、状态和计划时间都未变化时才继续执行，避免重复触发旧候选。
         DeviceSchedule schedule = schedules.find(candidate.scheduleId()).orElse(null);
         Instant now = clock.instant();
         if (schedule == null
@@ -256,17 +264,19 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
                 || schedule.status() != DeviceScheduleStatus.ACTIVE
                 || !schedule.nextFireAt().equals(candidate.nextFireAt())
                 || schedule.nextFireAt().filter(fireAt -> !fireAt.isAfter(now)).isEmpty()) {
-            return true;
+            return;
         }
         Instant plannedAt = schedule.nextFireAt().orElseThrow();
         Instant expiresAt = addValidFor(plannedAt, schedule.validFor());
         DeviceScheduleExecutionStatus executionStatus;
         Long messageId = null;
+
+        // 过期规则只记录 EXPIRED；仍在有效期内的规则提交下行消息，业务校验失败交由外层暂停规则。
         if (!now.isBefore(expiresAt)) {
             executionStatus = DeviceScheduleExecutionStatus.EXPIRED;
         } else {
             try {
-                DeviceDownlinkMessage message = commands.submitScheduled(
+                DeviceDownlink message = commands.submitScheduled(
                         schedule.deviceId(),
                         schedule.command().commandCode(),
                         schedule.command().inputs(),
@@ -289,6 +299,8 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
                 ? DeviceScheduleStatus.COMPLETED
                 : DeviceScheduleStatus.ACTIVE;
         Instant nextFireAt = schedule.trigger().once() ? null : nextCronFire(schedule.trigger(), now);
+
+        // 执行结果、下一状态和下一次触发时间必须在同一事务中写入，保证规则不会重复领取。
         recordExecution(
                 schedule,
                 plannedAt,
@@ -298,7 +310,6 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
                 null,
                 nextStatus,
                 nextFireAt);
-        return true;
     }
 
     /** 在触发事务回滚后，取得同一规则的 Redis 锁，并在新事务中保存同版本 FAILED 结果。 */
@@ -335,7 +346,7 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
 
     /** @return 指定设备定时规则在全部应用实例间共用的锁键 */
     private static @NotNull LockKey scheduleLock(long scheduleId) {
-        return new LockKey("iot", "schedule", Long.toString(scheduleId));
+        return new LockKey(TreeCode.of("IOT:SCHEDULE"), scheduleId);
     }
 
     /** 原子保存最新结果、推进规则，并可靠发布完整执行历史事件。 */
@@ -383,12 +394,13 @@ public class DefaultDeviceScheduleService implements DeviceScheduleService, Devi
                 plannedAt,
                 true,
                 triggeredAt);
-        MessageId eventMessageId = messages.publishReliably(
+        Id eventMessageId = messages.dispatch(
                 new Event<>(
                         IotMessageTypes.DEVICE_EVENT_OCCURRED,
                         "schedule-execution:" + sourceEventId,
                         plannedAt,
-                        payload));
+                        payload),
+                DispatchPolicy.outbox()).messageId();
         changes.changed(schedule.deviceId(), DeviceChangeArea.SCHEDULE, triggeredAt);
         LOG.debug(
                 "设备定时执行结果已保存 | scheduleId={} plannedAt={} status={} messageId={} eventMessageId={}",

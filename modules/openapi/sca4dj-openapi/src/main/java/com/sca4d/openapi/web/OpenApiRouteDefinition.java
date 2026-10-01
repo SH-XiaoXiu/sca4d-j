@@ -1,5 +1,6 @@
 package com.sca4d.openapi.web;
 
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.openapi.web.annotation.OpenApiRoute;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -8,8 +9,8 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
-/** 保存已经校验的 OpenAPI 路由标识及其 Client Operation 约束。 */
-public final class OpenApiRouteDefinition {
+/** 保存已经校验的 OpenAPI 路由标识和 Client Operation 约束。 */
+public class OpenApiRouteDefinition {
 
     private static final Set<String> JAVA_KEYWORDS = Set.of(
             "abstract",
@@ -80,7 +81,7 @@ public final class OpenApiRouteDefinition {
 
     private final @NotNull String toolName;
 
-    private final @NotNull String operation;
+    private final @NotNull TreeCode operation;
 
     /**
      * 创建路由定义。
@@ -93,7 +94,7 @@ public final class OpenApiRouteDefinition {
         this.path = requirePath(checked.path());
         this.toolGroup = requireJavaIdentifier(checked.toolGroup(), "OpenAPI Tool 分组");
         this.toolName = requireJavaIdentifier(checked.toolName(), "OpenAPI Tool 名称");
-        this.operation = requireText(checked.operation(), "OpenAPI Operation");
+        this.operation = TreeCode.ofColon(requireText(checked.operation(), "OpenAPI Operation"));
     }
 
     /** @return HTTP 方法 */
@@ -122,7 +123,7 @@ public final class OpenApiRouteDefinition {
     }
 
     /** @return Client 开放检查使用的 Operation 编码 */
-    public @NotNull String operation() {
+    public @NotNull TreeCode operation() {
         return operation;
     }
 
@@ -135,15 +136,15 @@ public final class OpenApiRouteDefinition {
         return values[0];
     }
 
-    /** 校验并返回以 {@code /openapi/} 开头的唯一公开路径。 */
+    /** 校验并返回位于配置的 OpenAPI 路径前缀之下的唯一公开路径。 */
     private static @NotNull String requirePath(String @NotNull [] values) {
         Objects.requireNonNull(values, "OpenAPI 路径不能为空");
         if (values.length != 1) {
             throw new IllegalArgumentException("OpenAPI 路由必须声明一个路径");
         }
         String path = requireText(values[0], "OpenAPI 路径");
-        if (!path.startsWith("/openapi/")) {
-            throw new IllegalArgumentException("OpenAPI 路径必须以 /openapi/ 开头: " + path);
+        if (!path.startsWith(OpenApiConstants.PATH_PREFIX + "/")) {
+            throw new IllegalArgumentException("OpenAPI 路径必须以 " + OpenApiConstants.PATH_PREFIX + "/ 开头: " + path);
         }
         if (path.contains("//") || path.contains("?") || path.contains("#")) {
             throw new IllegalArgumentException("OpenAPI 路径不能包含重复斜杠、查询参数或片段: " + path);

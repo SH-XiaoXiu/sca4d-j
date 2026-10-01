@@ -131,7 +131,7 @@ class FlowEngineTest {
         };
     }
 
-    private static final class MemoryFlowStore implements FlowStore {
+    private static class MemoryFlowStore implements FlowStore {
 
         private final Map<FlowId, FlowInstance> instances = new HashMap<>();
 

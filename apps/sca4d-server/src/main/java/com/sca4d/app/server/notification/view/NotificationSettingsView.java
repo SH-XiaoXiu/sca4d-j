@@ -1,5 +1,7 @@
 package com.sca4d.app.server.notification.view;
 
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.sca4d.app.server.notification.NotificationSettingsSnapshot;
@@ -7,11 +9,12 @@ import com.sca4d.core.api.notification.NotificationType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Objects;
 
 /** 返回当前 Account 的全局通知语言、区域和可选渠道覆盖值。 */
 @SuppressWarnings("unused")
-public final class NotificationSettingsView {
+public class NotificationSettingsView {
     private final String languageTag;
 
     private final String regionCode;
@@ -79,15 +82,15 @@ public final class NotificationSettingsView {
     private static JsonNode definitions(Collection<NotificationType<?>> notificationTypes) {
         var result = JsonNodeFactory.instance.objectNode();
         notificationTypes.stream()
-                .sorted(java.util.Comparator.comparing(type -> type.code().value()))
+                .sorted(Comparator.comparing(type -> type.code().format(SLASH)))
                 .forEach(type -> {
-                    var channels = result.putObject(type.code().value());
+                    var channels = result.putObject(type.code().format(SLASH));
                     type.definition().requiredChannels().forEach(channel -> {
-                        var value = channels.putObject(channel.value());
+                        var value = channels.putObject(channel.format(SLASH));
                         value.put("required", true);
                     });
                     type.definition().optionalChannels().forEach((channel, defaultEnabled) -> {
-                        var value = channels.putObject(channel.value());
+                        var value = channels.putObject(channel.format(SLASH));
                         value.put("required", false);
                         value.put("defaultEnabled", defaultEnabled);
                     });

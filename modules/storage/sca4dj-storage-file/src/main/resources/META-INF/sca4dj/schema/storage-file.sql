@@ -34,7 +34,7 @@ CREATE INDEX idx_storage_file_upload_cleanup
 
 COMMENT ON TABLE storage_file IS '记录文件上传意图、业务用途和实际存储位置';
 COMMENT ON COLUMN storage_file.id IS '文件记录全局标识';
-COMMENT ON COLUMN storage_file.uploader_principal_id IS '创建文件的 Principal 标识快照；SYSTEM 使用固定标识 1';
+COMMENT ON COLUMN storage_file.uploader_principal_id IS '创建文件的 Principal 标识快照；SYSTEM 使用应用配置的全局 Subject ID';
 COMMENT ON COLUMN storage_file.scene IS '文件在目标业务资源中的固定使用场景';
 COMMENT ON COLUMN storage_file.target_resource_type IS '文件准备绑定或已经绑定的目标 Resource 类型';
 COMMENT ON COLUMN storage_file.target_resource_id IS '文件准备绑定或已经绑定的目标 Resource 标识';

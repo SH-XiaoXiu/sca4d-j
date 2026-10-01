@@ -102,11 +102,11 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull com.sca4d.core.api.name.code.TreeCode</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#code()" class="member-name-link">code</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="RetryDecision.html" title="class in com.sca4d.iot.api.message">RetryDecision</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#evaluate(com.sca4d.iot.api.message.DeviceDownlinkMessage,com.sca4d.iot.api.message.IotFailureCode,java.time.Instant)" class="member-name-link">evaluate</a><wbr>(@NotNull <a href="DeviceDownlinkMessage.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkMessage</a>&nbsp;message,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#evaluate(com.sca4d.iot.api.message.DeviceDownlink,com.sca4d.iot.api.message.IotFailureCode,java.time.Instant)" class="member-name-link">evaluate</a><wbr>(@NotNull <a href="DeviceDownlink.html" title="class in com.sca4d.iot.api.message">DeviceDownlink</a>&nbsp;message,
  @NotNull <a href="IotFailureCode.html" title="class in com.sca4d.iot.api.message">IotFailureCode</a>&nbsp;failure,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
@@ -128,7 +128,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="code()">
 <h3>code</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">code</span>()</div>
+</span><span class="return-type">@NotNull com.sca4d.core.api.name.code.TreeCode</span>&nbsp;<span class="element-name">code</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>App 内唯一且跨部署稳定的策略 code</dd>
@@ -136,12 +136,12 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="evaluate(com.sca4d.iot.api.message.DeviceDownlinkMessage,com.sca4d.iot.api.message.IotFailureCode,java.time.Instant)">
+<section class="detail" id="evaluate(com.sca4d.iot.api.message.DeviceDownlink,com.sca4d.iot.api.message.IotFailureCode,java.time.Instant)">
 <h3>evaluate</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
 </span><span class="return-type">@NotNull <a href="RetryDecision.html" title="class in com.sca4d.iot.api.message">RetryDecision</a></span>&nbsp;<span class="element-name">evaluate</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="DeviceDownlinkMessage.html" title="class in com.sca4d.iot.api.message">DeviceDownlinkMessage</a>&nbsp;message,
+ @NotNull <a href="DeviceDownlink.html" title="class in com.sca4d.iot.api.message">DeviceDownlink</a>&nbsp;message,
  @NotNull
  @NotNull <a href="IotFailureCode.html" title="class in com.sca4d.iot.api.message">IotFailureCode</a>&nbsp;failure,
  @NotNull

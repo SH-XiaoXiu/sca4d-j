@@ -211,7 +211,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用 `ProviderMapper` 保存联邦 Provider 和协议配置。</div>
 </dd>
-<dt><a href="com/sca4d/auth/federation/provider/DefaultFederatedProviderRepository.html#%3Cinit%3E(com.sca4d.auth.federation.provider.mapper.ProviderMapper,com.fasterxml.jackson.databind.ObjectMapper,com.sca4d.auth.federation.FederatedSecretCryptography,com.sca4d.core.api.concurrent.VersionConditions)" class="member-name-link">DefaultFederatedProviderRepository(ProviderMapper, ObjectMapper, FederatedSecretCryptography, VersionConditions)</a> - Constructor for class com.sca4d.auth.federation.provider.<a href="com/sca4d/auth/federation/provider/DefaultFederatedProviderRepository.html" title="class in com.sca4d.auth.federation.provider">DefaultFederatedProviderRepository</a></dt>
+<dt><a href="com/sca4d/auth/federation/provider/DefaultFederatedProviderRepository.html#%3Cinit%3E(com.sca4d.auth.federation.provider.mapper.ProviderMapper,com.sca4d.core.spring.json.Sca4djMapper,com.sca4d.auth.federation.FederatedSecretCryptography,com.sca4d.core.api.concurrent.VersionConditions)" class="member-name-link">DefaultFederatedProviderRepository(ProviderMapper, Sca4djMapper, FederatedSecretCryptography, VersionConditions)</a> - Constructor for class com.sca4d.auth.federation.provider.<a href="com/sca4d/auth/federation/provider/DefaultFederatedProviderRepository.html" title="class in com.sca4d.auth.federation.provider">DefaultFederatedProviderRepository</a></dt>
 <dd>
 <div class="block">创建 Provider Repository。</div>
 </dd>
@@ -313,9 +313,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Redis 中保存的单次外部授权请求状态。</div>
 </dd>
 <dt><a href="com/sca4d/auth/federation/FederatedAuthorization.html#%3Cinit%3E(java.lang.String,java.lang.String,com.sca4d.auth.federation.FederatedAuthorizationPurpose,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.time.Instant)" class="member-name-link">FederatedAuthorization(String, String, FederatedAuthorizationPurpose, String, String, String, String, Instant)</a> - Constructor for class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedAuthorization.html" title="class in com.sca4d.auth.federation">FederatedAuthorization</a></dt>
-<dd>
-<div class="block">创建授权状态。</div>
-</dd>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/federation/FederatedAuthorizationPurpose.html" class="type-name-link" title="enum class in com.sca4d.auth.federation">FederatedAuthorizationPurpose</a> - Enum Class in <a href="com/sca4d/auth/federation/package-summary.html">com.sca4d.auth.federation</a></dt>
 <dd>
 <div class="block">区分联邦授权结果要用于登录还是绑定外部身份。</div>
@@ -325,9 +323,7 @@ loadScripts(document, 'script');</script>
 <div class="block">执行 OIDC/OAuth2 授权码、PKCE、Token 交换和用户资料标准化。</div>
 </dd>
 <dt><a href="com/sca4d/auth/federation/FederatedAuthorizationService.html#%3Cinit%3E(com.sca4d.auth.federation.FederatedProviderService,com.sca4d.auth.federation.FederatedAuthorizationStore,com.fasterxml.jackson.databind.ObjectMapper,org.springframework.web.client.RestClient,java.time.Clock)" class="member-name-link">FederatedAuthorizationService(FederatedProviderService, FederatedAuthorizationStore, ObjectMapper, RestClient, Clock)</a> - Constructor for class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedAuthorizationService.html" title="class in com.sca4d.auth.federation">FederatedAuthorizationService</a></dt>
-<dd>
-<div class="block">创建授权服务。</div>
-</dd>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/federation/FederatedAuthorizationStore.html" class="type-name-link" title="interface in com.sca4d.auth.federation">FederatedAuthorizationStore</a> - Interface in <a href="com/sca4d/auth/federation/package-summary.html">com.sca4d.auth.federation</a></dt>
 <dd>
 <div class="block">保存并单次消费 Redis 外部授权状态和回调结果。</div>
@@ -347,9 +343,7 @@ loadScripts(document, 'script');</script>
 <div class="block">回调完成后交给认证方法的一次性外部资料。</div>
 </dd>
 <dt><a href="com/sca4d/auth/federation/FederatedCompletedAuthorization.html#%3Cinit%3E(java.lang.String,com.sca4d.auth.federation.FederatedAuthorizationPurpose,com.sca4d.auth.federation.FederatedProfile)" class="member-name-link">FederatedCompletedAuthorization(String, FederatedAuthorizationPurpose, FederatedProfile)</a> - Constructor for class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedCompletedAuthorization.html" title="class in com.sca4d.auth.federation">FederatedCompletedAuthorization</a></dt>
-<dd>
-<div class="block">创建完成结果。</div>
-</dd>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/federation/FederatedErrorCode.html" class="type-name-link" title="enum class in com.sca4d.auth.federation">FederatedErrorCode</a> - Enum Class in <a href="com/sca4d/auth/federation/package-summary.html">com.sca4d.auth.federation</a></dt>
 <dd>
 <div class="block">联邦 Provider 配置和登录流程使用的错误码。</div>
@@ -364,7 +358,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/auth/federation/identity/mapper/FederatedIdentityMapper.html" class="type-name-link" title="interface in com.sca4d.auth.federation.identity.mapper">FederatedIdentityMapper</a> - Interface in <a href="com/sca4d/auth/federation/identity/mapper/package-summary.html">com.sca4d.auth.federation.identity.mapper</a></dt>
 <dd>
-<div class="block">定义联邦身份绑定的最小 SQL 形状。</div>
+<div class="block">读写 Account 与外部身份之间的绑定及其资料快照。</div>
 </dd>
 <dt><a href="com/sca4d/auth/federation/identity/FederatedIdentityRepository.html" class="type-name-link" title="class in com.sca4d.auth.federation.identity">FederatedIdentityRepository</a> - Class in <a href="com/sca4d/auth/federation/identity/package-summary.html">com.sca4d.auth.federation.identity</a></dt>
 <dd>
@@ -443,9 +437,7 @@ loadScripts(document, 'script');</script>
 <div class="block">使用 SecretKeyring 保存和读取 Provider Client Secret。</div>
 </dd>
 <dt><a href="com/sca4d/auth/federation/FederatedSecretCryptography.html#%3Cinit%3E(com.sca4d.core.api.security.SecretKeyring)" class="member-name-link">FederatedSecretCryptography(SecretKeyring)</a> - Constructor for class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedSecretCryptography.html" title="class in com.sca4d.auth.federation">FederatedSecretCryptography</a></dt>
-<dd>
-<div class="block">创建外部 Provider Secret 加密器。</div>
-</dd>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/federation/FederatedUnlinkedIdentityAction.html" class="type-name-link" title="enum class in com.sca4d.auth.federation">FederatedUnlinkedIdentityAction</a> - Enum Class in <a href="com/sca4d/auth/federation/package-summary.html">com.sca4d.auth.federation</a></dt>
 <dd>
 <div class="block">外部身份尚未绑定本地账号时的处理方式。</div>
@@ -579,10 +571,6 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="com/sca4d/auth/federation/FederatedAuthorization.html#nonce()" class="member-name-link">nonce()</a> - Method in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedAuthorization.html" title="class in com.sca4d.auth.federation">FederatedAuthorization</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/auth/federation/FederatedClientAuthentication.html#NONE" class="member-name-link">NONE</a> - Enum constant in enum class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedClientAuthentication.html" title="enum class in com.sca4d.auth.federation">FederatedClientAuthentication</a></dt>
-<dd>
-<div class="block">不发送 Client Secret，仅允许带 PKCE 的公开客户端。</div>
-</dd>
 </dl>
 <h2 class="title" id="I:O">O</h2>
 <dl class="index">
@@ -593,6 +581,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/auth/federation/FederatedProviderProtocol.html#OIDC" class="member-name-link">OIDC</a> - Enum constant in enum class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProviderProtocol.html" title="enum class in com.sca4d.auth.federation">FederatedProviderProtocol</a></dt>
 <dd>
 <div class="block">使用 OpenID Connect 身份断言。</div>
+</dd>
+<dt><a href="com/sca4d/auth/federation/FederatedClientAuthentication.html#ONE" class="member-name-link">ONE</a> - Enum constant in enum class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedClientAuthentication.html" title="enum class in com.sca4d.auth.federation">FederatedClientAuthentication</a></dt>
+<dd>
+<div class="block">不发送 Client Secret，仅允许带 PKCE 的公开客户端。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:P">P</h2>
@@ -635,7 +627,7 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/federation/provider/mapper/ProviderMapper.html" class="type-name-link" title="interface in com.sca4d.auth.federation.provider.mapper">ProviderMapper</a> - Interface in <a href="com/sca4d/auth/federation/provider/mapper/package-summary.html">com.sca4d.auth.federation.provider.mapper</a></dt>
 <dd>
-<div class="block">定义联邦 Provider 和协议配置的最小 SQL 形状。</div>
+<div class="block">读写联邦 Provider、协议配置和版本条件。</div>
 </dd>
 <dt><a href="com/sca4d/auth/federation/provider/mapper/ProviderSettingsState.html" class="type-name-link" title="class in com.sca4d.auth.federation.provider.mapper">ProviderSettingsState</a> - Class in <a href="com/sca4d/auth/federation/provider/mapper/package-summary.html">com.sca4d.auth.federation.provider.mapper</a></dt>
 <dd>
@@ -664,9 +656,9 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/auth/federation/RedisFederatedAuthorizationStore.html" class="type-name-link" title="class in com.sca4d.auth.federation">RedisFederatedAuthorizationStore</a> - Class in <a href="com/sca4d/auth/federation/package-summary.html">com.sca4d.auth.federation</a></dt>
 <dd>
-<div class="block">使用命名空间隔离的 Redis 一次性值保存外部授权状态和标准化资料。</div>
+<div class="block">使用 App 隔离名称隔离的 Redis 一次性值保存外部授权状态和标准化资料。</div>
 </dd>
-<dt><a href="com/sca4d/auth/federation/RedisFederatedAuthorizationStore.html#%3Cinit%3E(org.springframework.data.redis.core.StringRedisTemplate,com.sca4d.core.api.runtime.RuntimeNamespace)" class="member-name-link">RedisFederatedAuthorizationStore(StringRedisTemplate, RuntimeNamespace)</a> - Constructor for class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/RedisFederatedAuthorizationStore.html" title="class in com.sca4d.auth.federation">RedisFederatedAuthorizationStore</a></dt>
+<dt><a href="com/sca4d/auth/federation/RedisFederatedAuthorizationStore.html#%3Cinit%3E(org.springframework.data.redis.core.RedisTemplate)" class="member-name-link">RedisFederatedAuthorizationStore(RedisTemplate&lt;Key, String&gt;)</a> - Constructor for class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/RedisFederatedAuthorizationStore.html" title="class in com.sca4d.auth.federation">RedisFederatedAuthorizationStore</a></dt>
 <dd>
 <div class="block">创建外部授权状态存储。</div>
 </dd>
@@ -703,6 +695,14 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/auth/federation/FederatedProvider.html#RESOURCE_TYPE" class="member-name-link">RESOURCE_TYPE</a> - Static variable in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProvider.html" title="class in com.sca4d.auth.federation">FederatedProvider</a></dt>
 <dd>
 <div class="block">Provider 管理接口和审计记录使用的资源类型。</div>
+</dd>
+<dt><a href="com/sca4d/auth/federation/FederatedIdentity.html#RESOURCE_TYPE_VALUE" class="member-name-link">RESOURCE_TYPE_VALUE</a> - Static variable in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedIdentity.html" title="class in com.sca4d.auth.federation">FederatedIdentity</a></dt>
+<dd>
+<div class="block">供 Java 注解参数使用的资源类型文本。</div>
+</dd>
+<dt><a href="com/sca4d/auth/federation/FederatedProvider.html#RESOURCE_TYPE_VALUE" class="member-name-link">RESOURCE_TYPE_VALUE</a> - Static variable in class com.sca4d.auth.federation.<a href="com/sca4d/auth/federation/FederatedProvider.html" title="class in com.sca4d.auth.federation">FederatedProvider</a></dt>
+<dd>
+<div class="block">供 Java 注解参数使用的资源类型文本。</div>
 </dd>
 </dl>
 <h2 class="title" id="I:S">S</h2>

@@ -15,10 +15,9 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-/** 从当前请求的 Session 注入 USER，并把其唯一 PlatformPrincipal 绑定到 `Call`。 */
-public final class CurrentUserArgumentResolver implements HandlerMethodArgumentResolver {
+/** 从当前请求的 Session 注入 USER，并把 USER 唯一的 PlatformPrincipal 绑定到 `Call`。 */
+public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolver {
 
-    /** 创建无外部依赖的当前 USER 参数解析器。 */
     public CurrentUserArgumentResolver() {
     }
 
@@ -35,13 +34,13 @@ public final class CurrentUserArgumentResolver implements HandlerMethodArgumentR
     }
 
     /**
-     * 注入当前 USER 或其 Long，并为本次调用绑定 USER 的 PlatformPrincipal。
+     * 注入当前 USER 或 USER 的 Long 标识，并为本次调用绑定 USER 的 PlatformPrincipal。
      *
      * @param parameter Controller 方法参数
      * @param modelAndViewContainer 当前 MVC 容器
      * @param webRequest 当前 HTTP 请求
      * @param binderFactory 数据绑定工厂
-     * @return 当前 USER 或其 Long
+     * @return 当前 USER 或 USER 的 Long 标识
      */
     @Override
     @CheckReturnValue

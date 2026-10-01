@@ -3,13 +3,13 @@ package com.sca4d.core.api.audit;
 import java.util.Optional;
 
 /** 审计事件发生时的身份快照。 */
-public final class AuditActor {
-
-    private final long subjectId;
+public class AuditActor {
 
     private final Long accountId;
 
     private final long principalId;
+
+    private final long subjectId;
 
     /**
      * 创建审计行为主体。
@@ -28,7 +28,7 @@ public final class AuditActor {
     }
 
     /**
-     * 返回Subject 标识。
+     * Subject 标识。
      *
      * @return Subject 标识
      */
@@ -46,7 +46,7 @@ public final class AuditActor {
     }
 
     /**
-     * 返回Principal 标识。
+     * Principal 标识。
      *
      * @return Principal 标识
      */

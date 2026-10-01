@@ -1,6 +1,13 @@
 # 接入认证与 Session
 
-Sca4d Server 通过登录 attempt 收集认证结果，满足账号的认证要求后返回 Session Token。新增登录入口时复用 `AuthenticationAttempts` 和 `SessionLifecycle`；业务接口通过已恢复的 Session 选择 Principal。
+登录先创建认证尝试（attempt），再提交密码、验证码或 Passkey 等认证材料（proof）；要求满足后，Sca4d Server 才返回 Session Token。普通请求携带 Token，改密等敏感操作另外完成一次性验证（verification）；新增登录入口复用 `AuthenticationAttempts` 和 `SessionLifecycle`。
+
+| 需要完成的任务 | 入口 | 完成标志 |
+|---|---|---|
+| 登录管理端账号 | 下方密码登录或 SMS Code 登录 | `data.session` 非空 |
+| 修改密码等敏感操作 | 创建 verification，再调用目标业务接口 | 目标业务请求成功，不能只看 proof 成功 |
+| 增加自己的身份类型 | 身份 Loader 与 PrincipalSelection | Session 包含允许选择的身份，请求只能选择其中之一 |
+| 决定请求是否在线读取 Session | Token 模式 | 明确接受 JWT 延迟失效，或使用在线 Session Token |
 
 ## 完成一次密码登录
 
@@ -27,9 +34,42 @@ Sca4d Server 通过登录 attempt 收集认证结果，满足账号的认证要�
 
 verification 绑定当前 Session、Account 和动作编码，只能消费一次。完成 proof 后，密码或账号仍未修改，必须继续调用目标业务接口。动作编码、允许方法及请求字段以[应用 HTTP 参考](/reference/http/sca4d-server)中对应接口为准。
 
-## 在应用中装载身份
+## 使用 SMS Code 登录或完成 verification
 
-登录确认 Account 后，`SessionLifecycle` 重新读取 Subject 与 Account，并调用应用注册的 Loader 建立 Session。业务入口使用 `PrincipalSelection` 从这份 Session 中选择身份，不能接受任意客户端 `principalId`。
+SMS Code 依赖三个条件：Account 已绑定规范 E.164 `PHONE` Identifier，`AUTHENTICATION/SMS_CODE` 存在启用的 SMS Provider 绑定，Account 的手机号可以由 `SmsRecipientResolver` 解析。Provider 和绑定配置见[发布消息与通知](/tutorials/messaging-and-notification#配置一个阿里云-sms-provider)。
+
+手机号登录先签发 Challenge：
+
+```http
+POST /api/login/sms-code/challenges
+Content-Type: application/json
+
+{"phoneNumber":"+12025550123"}
+```
+
+响应只返回 `challengeId`、脱敏接收人、`expiresAt` 和 `resendAt`。匿名接口对不存在或不可投递的手机号也返回相同形状的 Challenge，不据此暴露账号是否存在；这种 Challenge 不会发送短信，也不能完成登录。
+
+收到六位验证码后，提交同一个 Challenge：
+
+```http
+POST /api/login/sms-code/proofs
+Content-Type: application/json
+
+{
+  "challengeId": "<challengeId>",
+  "code": "123456"
+}
+```
+
+成功响应为 201，并在 `Location` 中给出登录 attempt。`data.session` 不为空时登录已经完成；仍为空时，根据 `data.authentication` 继续提交账号策略要求的其他 proof。验证码单次消费，过期、错误次数达到上限、Challenge 不存在或已经消费时都不能再次使用。
+
+密码登录已经确定 Account，但策略继续要求 SMS Code 时，不再提交手机号。调用 `POST /api/login/attempts/{attemptId}/sms-code/challenges` 签发 Challenge，再把 `challengeId` 和 `code` 提交到 `POST /api/login/attempts/{attemptId}/sms-code/proofs`。
+
+敏感操作的调用顺序相同。先创建 `POST /api/verifications`，再调用 `POST /api/verifications/{verificationId}/sms-code/challenges` 和 `POST /api/verifications/{verificationId}/sms-code/proofs`。这两个接口要求当前 Session；服务端还会确认 verification 对应的 Account 与当前 Session Account 相同。proof 完成后，把 verification 放入目标业务请求的 `X-Verification` 头。
+
+当前 Profile 手机号还没有绑定为登录 Identifier 时，先以动作 `AUTHENTICATION.PHONE.VERIFY` 完成 verification，再使用强制 Session Token 调用 `PUT /api/me/phone-identifier`。该接口读取当前 Profile 手机号，不接受客户端另传手机号；成功后才可使用这个号码从匿名 SMS Code 登录入口查找 Account。
+
+Challenge 有效期、重发间隔和最大错误次数由 `auth.sms-code.challenge-ttl`、`auth.sms-code.resend-interval` 和 `auth.sms-code.maximum-attempts` 管理。修改这些 SystemSetting 只影响之后签发或校验的 Challenge，不应把验证码、手机号或 AccessKey 写入日志。
 
 ## 会话建立与身份装载
 
@@ -75,7 +115,7 @@ public final class ProjectMemberPrincipalIdLoader
 }
 ```
 
-Loader 返回普通 ID 集合即可。PrincipalIdLoaders 校验每种 Principal 类型只有一个来源，Session 校验正数、重复值以及完整 Principal 和紧凑集合之间的冲突，SessionCodec 再把每种类型编码成一个 Roaring64 集合。业务模块不直接构造位图。
+Loader 返回普通 ID 集合即可。PrincipalIdLoaders 校验每种 Principal 类型只有一个来源，Session 校验正数、重复值以及完整 Principal 和紧凑集合之间的冲突，SessionCodec 再把每种类型编码成一个带 V1 Codec 版本的 Roaring64 集合。业务模块不直接构造位图；未来版本通过相邻版本迁移步骤转换。
 
 请求进入 `/projects/{projectId}/...` 后，PrincipalSelection 可以按 Account 和 `projectId` 查询当前 ProjectMemberPrincipal。它返回完整候选对象，`Call.selectPrincipal(...)` 再校验该对象的精确 Java 类型和 ID 是否存在于 Session。查询业务表不能把 Session 集合外的 Principal 变成可信对象。
 
@@ -97,7 +137,7 @@ return Map.of(
 
 ## Token 模式
 
-`sca4dj.auth.token-mode` 支持 `SESSION` 和 `JWT`。两种模式使用同一份 Session wire，Sa-Token Redis Token-Session 始终保存权威 Session；JWT 只是该 wire 的短效签名投影。
+`sca4dj.auth.token.mode` 支持 `SESSION` 和 `JWT`。两种模式使用同一份 Session wire，Sa-Token Redis Token-Session 始终保存权威 Session；JWT 只是该 wire 的短效签名投影。
 
 SESSION 模式只向客户端发送不透明 Token，完整 Session 保存在 Redis。每次在线读取都会比较 Token-Session 保存的 Operation 目录指纹；具体 Operation 编码变化后，旧 Session 在下一次请求重新装载身份和静态 Resource，不需要部署时清空 Redis。
 

@@ -34,7 +34,7 @@ class DeviceConnectionAccessTest {
     @Test
     @DisplayName("直接认证接入方式拒绝绑定 SessionId")
     void rejectsSessionForDirectAuthenticationMethod() {
-        DeviceAccessMethod method = DeviceAccessMethod.parse("account:shared-secret");
+        DeviceAccessMethod method = DeviceAccessMethod.parse("ACCOUNT:AUTHENTICATION/SHARED_SECRET");
         assertThrows(
                 IllegalArgumentException.class,
                 () -> new DeviceConnectionAccess(

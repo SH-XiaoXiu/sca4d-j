@@ -7,16 +7,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /**
- * 使用固定名称和运行时类型标识 DataGraph 中的一个值。
+ * 使用固定名称和运行时类型标识一个数据值，供 DataGraph 输入输出和 Call 入口快照使用。
  *
  * @param <T> 该键允许读写的值类型
  */
 @SuppressWarnings("ClassCanBeRecord")
-public final class DataKey<T> {
-
-    private final String name;
+public class DataKey<T> {
 
     private final Class<T> type;
+
+    private final String name;
 
     /**
      * 创建类型化数据键。
@@ -46,7 +46,7 @@ public final class DataKey<T> {
     }
 
     /**
-     * 读取该键在 DataGraph 中的名称。
+     * 该键在 DataGraph 中的名称。
      *
      * @return DataGraph 内唯一名称
      */
@@ -55,7 +55,7 @@ public final class DataKey<T> {
     }
 
     /**
-     * 读取执行器校验输入和节点输出时使用的类型。
+     * 执行器校验输入和节点输出时使用的类型。
      *
      * @return 该键接受的运行时类型
      */

@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 /** 使用固定 {@link DateTimeFormatter} 格式化日期和时间。 */
-public final class TimeFormats {
+public class TimeFormats {
 
     /** 日期格式 {@code yyyy-MM-dd}。 */
     public static final DateTimeFormatter DATE = DateTimeFormatter.ISO_LOCAL_DATE;

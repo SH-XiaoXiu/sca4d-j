@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /** 带密钥标识且不暴露具体算法的加密结果。 */
-public final class EncryptedSecret {
+public class EncryptedSecret {
 
     private final String keyId;
 
@@ -25,7 +25,7 @@ public final class EncryptedSecret {
     }
 
     /**
-     * 返回加密所用密钥标识。
+     * 加密所用密钥标识。
      *
      * @return 加密所用密钥标识
      */

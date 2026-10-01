@@ -1,8 +1,11 @@
 package com.sca4d.gateway.routing;
 
+import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_ROUTE_ATTR;
+
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cloud.gateway.route.Route;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -16,7 +19,7 @@ import java.net.ConnectException;
 /** 把连接 Server 实例失败转换为 502，不改变其他 HTTP 异常。 */
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public final class GatewayRoutingExceptionHandler implements WebExceptionHandler {
+public class GatewayRoutingExceptionHandler implements WebExceptionHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GatewayRoutingExceptionHandler.class);
 
@@ -30,16 +33,12 @@ public final class GatewayRoutingExceptionHandler implements WebExceptionHandler
         }
         if (connectionFailure(failure)) {
             String path = exchange.getRequest().getPath().value();
-            if (Boolean.TRUE.equals(exchange.getAttribute(LokiPushAuthenticationFilter.LOGGING_PUSH_ATTRIBUTE))) {
-                LOGGER.trace(
-                        "Loki 连接失败，当前日志写入返回 502 | failureType={}",
-                        failure.getClass().getSimpleName());
-            } else {
-                LOGGER.warn(
-                        "Server 实例连接失败，当前请求返回 502，后续请求将重新选择实例 | path={} failureType={}",
-                        path,
-                        failure.getClass().getSimpleName());
-            }
+            Route route = exchange.getAttribute(GATEWAY_ROUTE_ATTR);
+            LOGGER.warn(
+                    "Gateway 上游连接失败，当前请求返回 502 | routeId={} path={} failureType={}",
+                    route == null ? "unknown" : route.getId(),
+                    path,
+                    failure.getClass().getSimpleName());
             exchange.getResponse().setStatusCode(HttpStatus.BAD_GATEWAY);
             return exchange.getResponse().setComplete();
         }

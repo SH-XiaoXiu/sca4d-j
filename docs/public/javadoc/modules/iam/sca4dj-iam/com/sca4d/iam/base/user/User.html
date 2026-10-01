@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 <dd><code>com.sca4d.core.api.identity.Principal</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">User</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">User</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.core.api.identity.Principal</span></div>
 <div class="block">组合单一 Platform 用户的 Subject、Account，并作为对应 Principal 使用。</div>
@@ -131,7 +131,7 @@ implements com.sca4d.core.api.identity.Principal</span></div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.identity.Account</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#account()" class="member-name-link">account</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取构造 User 时保存的登录账号。</div>
+<div class="block">构造 User 时保存的登录账号。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#accountId()" class="member-name-link">accountId</a>()</code></div>
@@ -161,7 +161,7 @@ implements com.sca4d.core.api.identity.Principal</span></div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.identity.Subject</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#subject()" class="member-name-link">subject</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取构造 User 时保存的接入者。</div>
+<div class="block">构造 User 时保存的接入者。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#subjectId()" class="member-name-link">subjectId</a>()</code></div>
@@ -176,7 +176,7 @@ implements com.sca4d.core.api.identity.Principal</span></div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#userId()" class="member-name-link">userId</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回单一 Platform 用户场景使用的用户标识。</div>
+<div class="block">单一 Platform 用户场景使用的用户标识。</div>
 </div>
 </div>
 </div>
@@ -239,7 +239,7 @@ implements com.sca4d.core.api.identity.Principal</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>subject</code> - 接入者</dd>
-<dd><code>account</code> - 属于该接入者的账号</dd>
+<dd><code>account</code> - 属于当前接入者的账号</dd>
 <dd><code>principal</code> - 业务主体</dd>
 <dt>Returns:</dt>
 <dd>USER 直通对象</dd>
@@ -320,7 +320,7 @@ implements com.sca4d.core.api.identity.Principal</span></div>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.identity.Subject</span>&nbsp;<span class="element-name">subject</span>()</div>
-<div class="block">读取构造 User 时保存的接入者。</div>
+<div class="block">构造 User 时保存的接入者。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>User 持有的 Subject</dd>
@@ -333,7 +333,7 @@ implements com.sca4d.core.api.identity.Principal</span></div>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.identity.Account</span>&nbsp;<span class="element-name">account</span>()</div>
-<div class="block">读取构造 User 时保存的登录账号。</div>
+<div class="block">构造 User 时保存的登录账号。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>User 持有的 Account</dd>
@@ -358,7 +358,7 @@ implements com.sca4d.core.api.identity.Principal</span></div>
 <h3>userId</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">userId</span>()</div>
-<div class="block">返回单一 Platform 用户场景使用的用户标识。</div>
+<div class="block">单一 Platform 用户场景使用的用户标识。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>USER 标识，与 <a href="#principalId()"><code>principalId()</code></a> 相同</dd>

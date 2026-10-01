@@ -14,7 +14,7 @@ import java.util.Set;
  *
  * <p>构造时校验节点唯一性、起点存在、连线端点、终点出边和从起点可达性，使错误定义在启动阶段失败。
  */
-public final class FlowGraph {
+public class FlowGraph {
 
     private final String initialNodeId;
 
@@ -55,7 +55,7 @@ public final class FlowGraph {
     }
 
     /**
-     * 返回起始节点标识。
+     * 起始节点标识。
      *
      * @return 起始节点标识
      */
@@ -79,7 +79,7 @@ public final class FlowGraph {
     }
 
     /**
-     * 返回不可变节点映射。
+     * 不可变节点映射。
      *
      * @return 不可变节点映射
      */
@@ -88,7 +88,7 @@ public final class FlowGraph {
     }
 
     /**
-     * 返回不可变转换列表。
+     * 不可变转换列表。
      *
      * @return 不可变转换列表
      */

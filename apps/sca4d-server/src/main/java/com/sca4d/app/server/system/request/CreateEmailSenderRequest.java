@@ -13,7 +13,7 @@ import java.util.Objects;
 
 /** 接收创建 SMTP 配置所需的连接、认证和发件资料。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean setter 反序列化请求。
-public final class CreateEmailSenderRequest {
+public class CreateEmailSenderRequest {
 
     @NotBlank
     @Size(max = 128)

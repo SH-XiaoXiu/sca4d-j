@@ -56,7 +56,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color all-packages-table all-packages-table-tab1"><a href="com/sca4d/core/spring/call/package-summary.html">com.sca4d.core.spring.call</a></div>
 <div class="col-last even-row-color all-packages-table all-packages-table-tab1">
-<div class="block">在 Spring Filter 和 AOP 切面中创建、保存并执行 `Call`。</div>
+<div class="block">把方法入口接入 `CallLifecycle`，管理当前线程的调用和嵌套执行。</div>
 </div>
 <div class="col-first odd-row-color all-packages-table all-packages-table-tab1"><a href="com/sca4d/core/spring/config/package-summary.html">com.sca4d.core.spring.config</a></div>
 <div class="col-last odd-row-color all-packages-table all-packages-table-tab1">
@@ -82,9 +82,17 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color all-packages-table all-packages-table-tab1"><a href="com/sca4d/core/spring/json/package-summary.html">com.sca4d.core.spring.json</a></div>
 <div class="col-last odd-row-color all-packages-table all-packages-table-tab1">&nbsp;</div>
-<div class="col-first even-row-color all-packages-table all-packages-table-tab1"><a href="com/sca4d/core/spring/openapi/package-summary.html">com.sca4d.core.spring.openapi</a></div>
+<div class="col-first even-row-color all-packages-table all-packages-table-tab1"><a href="com/sca4d/core/spring/logging/package-summary.html">com.sca4d.core.spring.logging</a></div>
 <div class="col-last even-row-color all-packages-table all-packages-table-tab1">
+<div class="block">将公共日志约定接入日志后端。</div>
+</div>
+<div class="col-first odd-row-color all-packages-table all-packages-table-tab1"><a href="com/sca4d/core/spring/openapi/package-summary.html">com.sca4d.core.spring.openapi</a></div>
+<div class="col-last odd-row-color all-packages-table all-packages-table-tab1">
 <div class="block">提供 OpenAPI 基础信息和安全方案。</div>
+</div>
+<div class="col-first even-row-color all-packages-table all-packages-table-tab1"><a href="com/sca4d/core/spring/permission/package-summary.html">com.sca4d.core.spring.permission</a></div>
+<div class="col-last even-row-color all-packages-table all-packages-table-tab1">
+<div class="block">为 Repository 读取并消费当前调用已经批准的权限资源范围。</div>
 </div>
 <div class="col-first odd-row-color all-packages-table all-packages-table-tab1"><a href="com/sca4d/core/spring/persistence/batch/package-summary.html">com.sca4d.core.spring.persistence.batch</a></div>
 <div class="col-last odd-row-color all-packages-table all-packages-table-tab1">&nbsp;</div>
@@ -100,30 +108,34 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color all-packages-table all-packages-table-tab1">&nbsp;</div>
 <div class="col-first odd-row-color all-packages-table all-packages-table-tab1"><a href="com/sca4d/core/spring/setting/package-summary.html">com.sca4d.core.spring.setting</a></div>
 <div class="col-last odd-row-color all-packages-table all-packages-table-tab1">
-<div class="block">实现数据库 Settings、类型转换、敏感值加密和指定初始化节点。</div>
+<div class="block">实现数据库设置读取、文件与 YAML 编解码、敏感值加密和指定初始化节点。</div>
 </div>
-<div class="col-first even-row-color all-packages-table all-packages-table-tab1"><a href="com/sca4d/core/spring/validation/package-summary.html">com.sca4d.core.spring.validation</a></div>
+<div class="col-first even-row-color all-packages-table all-packages-table-tab1"><a href="com/sca4d/core/spring/transaction/package-summary.html">com.sca4d.core.spring.transaction</a></div>
 <div class="col-last even-row-color all-packages-table all-packages-table-tab1">
+<div class="block">在 Spring 事务提交后执行进程内动作。</div>
+</div>
+<div class="col-first odd-row-color all-packages-table all-packages-table-tab1"><a href="com/sca4d/core/spring/validation/package-summary.html">com.sca4d.core.spring.validation</a></div>
+<div class="col-last odd-row-color all-packages-table all-packages-table-tab1">
 <div class="block">提供跨模块复用的 Bean Validation 注解及 Spring 条件接入。</div>
 </div>
-<div class="col-first odd-row-color all-packages-table all-packages-table-tab1"><a href="com/sca4d/core/spring/web/package-summary.html">com.sca4d.core.spring.web</a></div>
-<div class="col-last odd-row-color all-packages-table all-packages-table-tab1">
+<div class="col-first even-row-color all-packages-table all-packages-table-tab1"><a href="com/sca4d/core/spring/web/package-summary.html">com.sca4d.core.spring.web</a></div>
+<div class="col-last even-row-color all-packages-table all-packages-table-tab1">
 <div class="block">定义 HTTP 响应、异常处理器和 Controller 参数解析器。</div>
 </div>
-<div class="col-first even-row-color all-packages-table all-packages-table-tab1"><a href="com/sca4d/core/spring/web/annotation/package-summary.html">com.sca4d.core.spring.web.annotation</a></div>
-<div class="col-last even-row-color all-packages-table all-packages-table-tab1">
+<div class="col-first odd-row-color all-packages-table all-packages-table-tab1"><a href="com/sca4d/core/spring/web/annotation/package-summary.html">com.sca4d.core.spring.web.annotation</a></div>
+<div class="col-last odd-row-color all-packages-table all-packages-table-tab1">
 <div class="block">提供 Spring MVC 参数注入使用的明确注解。</div>
 </div>
-<div class="col-first odd-row-color all-packages-table all-packages-table-tab1"><a href="com/sca4d/core/spring/web/clientstate/package-summary.html">com.sca4d.core.spring.web.clientstate</a></div>
-<div class="col-last odd-row-color all-packages-table all-packages-table-tab1">
+<div class="col-first even-row-color all-packages-table all-packages-table-tab1"><a href="com/sca4d/core/spring/web/clientstate/package-summary.html">com.sca4d.core.spring.web.clientstate</a></div>
+<div class="col-last even-row-color all-packages-table all-packages-table-tab1">
 <div class="block">提供当前 HTTP 调用的客户端本地状态刷新信号。</div>
 </div>
-<div class="col-first even-row-color all-packages-table all-packages-table-tab1"><a href="com/sca4d/core/spring/web/list/package-summary.html">com.sca4d.core.spring.web.list</a></div>
-<div class="col-last even-row-color all-packages-table all-packages-table-tab1">
+<div class="col-first odd-row-color all-packages-table all-packages-table-tab1"><a href="com/sca4d/core/spring/web/list/package-summary.html">com.sca4d.core.spring.web.list</a></div>
+<div class="col-last odd-row-color all-packages-table all-packages-table-tab1">
 <div class="block">把 HTTP 列表参数转换成 Core API 类型，并拒绝未声明的排序字段。</div>
 </div>
-<div class="col-first odd-row-color all-packages-table all-packages-table-tab1"><a href="com/sca4d/core/spring/web/view/package-summary.html">com.sca4d.core.spring.web.view</a></div>
-<div class="col-last odd-row-color all-packages-table all-packages-table-tab1">
+<div class="col-first even-row-color all-packages-table all-packages-table-tab1"><a href="com/sca4d/core/spring/web/view/package-summary.html">com.sca4d.core.spring.web.view</a></div>
+<div class="col-last even-row-color all-packages-table all-packages-table-tab1">
 <div class="block">提供 BaseView 最终 JSON 定制、本地化内置定制和 HTTP Jackson 序列化接入。</div>
 </div>
 </div>

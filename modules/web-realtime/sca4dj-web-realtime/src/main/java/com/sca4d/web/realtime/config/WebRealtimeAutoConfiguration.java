@@ -1,21 +1,28 @@
 package com.sca4d.web.realtime.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.authentication.SessionLifecycle;
+import com.sca4d.core.api.call.CallInvoker;
 import com.sca4d.core.api.concurrent.RateLimiter;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.messaging.MessageBus;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.core.spring.redis.RedisBatches;
+import com.sca4d.core.spring.redis.RedisHashTag;
 import com.sca4d.core.spring.redis.Sca4djRedis;
+import com.sca4d.web.realtime.connection.DefaultWebRealtimePublisher;
 import com.sca4d.web.realtime.connection.LocalConnectionRegistry;
-import com.sca4d.web.realtime.connection.LocalNodeTransport;
-import com.sca4d.web.realtime.connection.NodeTransport;
+import com.sca4d.web.realtime.connection.LocalNodeRouter;
+import com.sca4d.web.realtime.connection.NodeRouter;
 import com.sca4d.web.realtime.connection.RedisConnectionRegistry;
-import com.sca4d.web.realtime.connection.TargetPublisher;
+import com.sca4d.web.realtime.connection.WebRealtimeMessageCodec;
+import com.sca4d.web.realtime.connection.WebRealtimeMessageHandler;
 import com.sca4d.web.realtime.rabbit.NodeMessageCodec;
-import com.sca4d.web.realtime.rabbit.RabbitNodeTransport;
+import com.sca4d.web.realtime.rabbit.RabbitNodeRouter;
 import com.sca4d.web.realtime.sse.SseConnections;
 import com.sca4d.web.realtime.sse.WebRealtimeSseConnector;
+import com.sca4d.web.realtime.stomp.StompChannelDispatcher;
 import com.sca4d.web.realtime.stomp.StompConfiguration;
 import com.sca4d.web.realtime.stomp.StompConnections;
 import com.sca4d.web.realtime.stomp.StompInboundInterceptor;
@@ -36,7 +43,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -50,17 +57,22 @@ import java.util.List;
 @Import(StompConfiguration.class)
 public class WebRealtimeAutoConfiguration {
 
+    /** 连接和目标索引由 Lua 同时修改，必须位于同一 Redis Cluster 槽。 */
+    @Bean
+    RedisHashTag webRealtimeRedisHashTag() {
+        return new RedisHashTag(TreeCode.ofSegment("WEB_REALTIME"));
+    }
+
     /** @return Web Realtime 全部 Redis 键和 RabbitMQ 对象的统一运行时名称 */
     @Bean
-    WebRealtimeInfrastructureNames webRealtimeInfrastructureNames(
-            @NotNull RuntimeNamespace runtimeNamespace) {
-        return new WebRealtimeInfrastructureNames(runtimeNamespace);
+    WebRealtimeInfrastructureNames webRealtimeInfrastructureNames() {
+        return new WebRealtimeInfrastructureNames();
     }
 
     /** @return Redis 共享连接、目标和租约索引 */
     @Bean
     RedisConnectionRegistry redisConnectionRegistry(
-            @Sca4djRedis @NotNull StringRedisTemplate redis,
+            @Sca4djRedis @NotNull RedisTemplate<Key, String> redis,
             @NotNull WebRealtimeInfrastructureNames names,
             @NotNull WebRealtimeProperties properties,
             @NotNull Clock clock,
@@ -77,22 +89,22 @@ public class WebRealtimeAutoConfiguration {
 
     /** @return RabbitMQ 节点消息编解码器 */
     @Bean
-    @ConditionalOnProperty(prefix = "sca4dj.web-realtime", name = "node-transport", havingValue = "RABBIT")
-    NodeMessageCodec nodeMessageCodec(@Sca4djJson @NotNull ObjectMapper objectMapper) {
+    @ConditionalOnProperty(prefix = "sca4dj.web-realtime.node", name = "transport", havingValue = "RABBIT")
+    NodeMessageCodec nodeMessageCodec(@Sca4djJson @NotNull Sca4djMapper objectMapper) {
         return new NodeMessageCodec(objectMapper);
     }
 
     /** @return 当前节点的独占自动删除队列和消息转发器 */
     @Bean
-    @ConditionalOnProperty(prefix = "sca4dj.web-realtime", name = "node-transport", havingValue = "RABBIT")
-    RabbitNodeTransport rabbitNodeTransport(
+    @ConditionalOnProperty(prefix = "sca4dj.web-realtime.node", name = "transport", havingValue = "RABBIT")
+    RabbitNodeRouter rabbitNodeRouter(
             @NotNull WebRealtimeInfrastructureNames names,
             @NotNull RabbitTemplate rabbitTemplate,
             @NotNull ConnectionFactory connectionFactory,
             @NotNull NodeMessageCodec codec,
             @NotNull LocalConnectionRegistry localConnections,
             @NotNull WebRealtimeProperties properties) {
-        return new RabbitNodeTransport(
+        return new RabbitNodeRouter(
                 names,
                 rabbitTemplate,
                 connectionFactory,
@@ -103,27 +115,43 @@ public class WebRealtimeAutoConfiguration {
 
     /** @return 当前节点临时 exchange、queue 和 binding 声明 */
     @Bean
-    @ConditionalOnProperty(prefix = "sca4dj.web-realtime", name = "node-transport", havingValue = "RABBIT")
-    Declarables webRealtimeDeclarables(@NotNull RabbitNodeTransport node) {
+    @ConditionalOnProperty(prefix = "sca4dj.web-realtime.node", name = "transport", havingValue = "RABBIT")
+    Declarables webRealtimeDeclarables(@NotNull RabbitNodeRouter node) {
         return node.declarables();
     }
 
     /** @return 不依赖 RabbitMQ 的当前 JVM 节点传输 */
     @Bean
-    @ConditionalOnProperty(prefix = "sca4dj.web-realtime", name = "node-transport", havingValue = "LOCAL", matchIfMissing = true)
-    LocalNodeTransport localNodeTransport(@NotNull LocalConnectionRegistry connections) {
-        return new LocalNodeTransport(connections);
+    @ConditionalOnProperty(prefix = "sca4dj.web-realtime.node", name = "transport", havingValue = "LOCAL", matchIfMissing = true)
+    LocalNodeRouter localNodeRouter(@NotNull LocalConnectionRegistry connections) {
+        return new LocalNodeRouter(connections);
     }
 
-    /** @return Redis 目标解析和节点定向发布器，同时接收 Session 失效结果 */
+    /** @return Web Realtime Message 与 RabbitMQ payload 之间的稳定转换 */
     @Bean
-    TargetPublisher webRealtimePublisher(
+    WebRealtimeMessageCodec webRealtimeMessageCodec(@Sca4djJson @NotNull Sca4djMapper objectMapper) {
+        return new WebRealtimeMessageCodec(objectMapper);
+    }
+
+    /** @return 把应用实时事件转换为 MessageBus 消息的公共入口 */
+    @Bean
+    DefaultWebRealtimePublisher webRealtimePublisher(
+            @NotNull MessageBus messages,
+            @NotNull WebRealtimeProperties properties,
+            @NotNull Clock clock) {
+        return new DefaultWebRealtimePublisher(messages, properties, clock);
+    }
+
+    /** @return Redis 目标解析和节点定向写出的 MessageHandler */
+    @Bean
+    WebRealtimeMessageHandler webRealtimeMessageHandler(
             @NotNull RedisConnectionRegistry registry,
-            @NotNull NodeTransport nodeTransport,
+            @NotNull NodeRouter nodeRouter,
             @NotNull WebRealtimeProperties properties,
             @NotNull Clock clock,
-            @Sca4djJson @NotNull ObjectMapper objectMapper) {
-        return new TargetPublisher(registry, nodeTransport, properties, clock, objectMapper);
+            @Sca4djJson @NotNull Sca4djMapper objectMapper,
+            @NotNull WebRealtimeMessageCodec codec) {
+        return new WebRealtimeMessageHandler(registry, nodeRouter, properties, clock, objectMapper, codec);
     }
 
     /** @return 使用有界串行写出和统一浏览器信封的 SSE 连接入口 */
@@ -131,7 +159,7 @@ public class WebRealtimeAutoConfiguration {
     WebRealtimeSseConnector webRealtimeSseConnector(
             @NotNull RedisConnectionRegistry shared,
             @NotNull LocalConnectionRegistry local,
-            @NotNull NodeTransport nodeTransport,
+            @NotNull NodeRouter nodeTransport,
             @NotNull WebRealtimeProperties properties) {
         return new SseConnections(shared, local, nodeTransport, properties);
     }
@@ -139,7 +167,7 @@ public class WebRealtimeAutoConfiguration {
     /** @return Redis 一次性 WebSocket 票据服务 */
     @Bean
     RedisTicketService redisTicketService(
-            @Sca4djRedis @NotNull StringRedisTemplate redis,
+            @Sca4djRedis @NotNull RedisTemplate<Key, String> redis,
             @NotNull SessionLifecycle sessions,
             @NotNull WebRealtimeInfrastructureNames names,
             @NotNull WebRealtimeProperties properties,
@@ -159,12 +187,24 @@ public class WebRealtimeAutoConfiguration {
         return new WebSocketSessions();
     }
 
+    /** @return 独立预算的 STOMP 入站有界分派器，不参与应用默认 Executor 选择 */
+    @Bean(destroyMethod = "close", defaultCandidate = false)
+    StompChannelDispatcher stompInboundDispatcher(WebRealtimeProperties properties, WebSocketSessions sockets) {
+        return new StompChannelDispatcher("inbound", properties.getStomp(), sockets);
+    }
+
+    /** @return 独立预算的 STOMP 出站有界分派器，不参与应用默认 Executor 选择 */
+    @Bean(destroyMethod = "close", defaultCandidate = false)
+    StompChannelDispatcher stompOutboundDispatcher(WebRealtimeProperties properties, WebSocketSessions sockets) {
+        return new StompChannelDispatcher("outbound", properties.getStomp(), sockets);
+    }
+
     /** @return Spring STOMP Session 到 Redis 路由和本机连接句柄的生命周期桥接 */
     @Bean
     StompConnections stompConnections(
             @NotNull RedisConnectionRegistry shared,
             @NotNull LocalConnectionRegistry local,
-            @NotNull NodeTransport nodeTransport,
+            @NotNull NodeRouter nodeTransport,
             @NotNull SimpMessagingTemplate messagingTemplate,
             @NotNull WebSocketSessions sockets) {
         return new StompConnections(shared, local, nodeTransport, messagingTemplate, sockets);
@@ -176,8 +216,9 @@ public class WebRealtimeAutoConfiguration {
             @NotNull StompRateLimits rateLimits,
             @NotNull RedisConnectionRegistry shared,
             @NotNull List<@NotNull WebRealtimeSubscriptionPolicy> subscriptionPolicies,
-            @NotNull Clock clock) {
-        return new StompInboundInterceptor(rateLimits, shared, subscriptionPolicies, clock);
+            @NotNull Clock clock,
+            @NotNull CallInvoker invoker) {
+        return new StompInboundInterceptor(rateLimits, shared, subscriptionPolicies, clock, invoker);
     }
 
     /** @return Spring 写出失效事件后的 WebSocket 定向关闭拦截器 */

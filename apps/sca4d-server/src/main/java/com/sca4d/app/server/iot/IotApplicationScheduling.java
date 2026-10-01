@@ -35,7 +35,7 @@ public class IotApplicationScheduling {
             @NotNull AppIotProperties properties) {
         properties.validateScheduling();
         return new ClusterTaskSchedule(
-                new ScheduleKey("app.iot.device-creation-request.cleanup"),
+                new ScheduleKey("APP/IOT/DEVICE_CREATION_REQUEST/CLEANUP"),
                 1,
                 new DeviceCreationRequestCleanupTask(
                         application,

@@ -16,7 +16,7 @@ import com.sca4d.core.api.authentication.AuthenticationAttemptId;
 import com.sca4d.core.api.authentication.AuthenticationAttempts;
 import com.sca4d.core.api.authentication.AuthenticationSubmission;
 import com.sca4d.core.api.authentication.Session;
-import com.sca4d.core.api.concurrent.RateLimitDimension;
+import com.sca4d.core.api.concurrent.RateLimit;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.identity.Account;
@@ -40,7 +40,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping
 @Tag(name = "Authentication")
-public final class SmsCodeController {
+public class SmsCodeController {
     private final SmsCodeChallengeService challenges;
 
     private final AuthenticationAttempts authentication;
@@ -61,6 +61,7 @@ public final class SmsCodeController {
         this.actions = Objects.requireNonNull(actions, "动作认证服务不能为空");
     }
 
+    /** 为匿名登录签发 SMS Challenge。 */
     @PostMapping("/login/sms-code/challenges")
     @AnonymousAccess
     @Operation(summary = "签发 SMS Code 登录 Challenge")
@@ -69,15 +70,17 @@ public final class SmsCodeController {
         return ApiResponse.ok(SmsCodeChallengeView.from(challenges.issue(request.getPhoneNumber())));
     }
 
+    /** 使用 SMS 验证码开始匿名登录。 */
     @PostMapping("/login/sms-code/proofs")
     @AnonymousAccess
-    @RateLimited(dimensions = RateLimitDimension.IP, permits = 10, windowSeconds = 300)
+@RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
     @Operation(summary = "使用 SMS Code 开始登录")
     public @NotNull ApiResponse<LoginResultView> login(@RequestBody @Valid @NotNull SmsCodeProofRequest request) {
         LoginResultView result = LoginResultView.from(login.start(submission(request)));
         return ApiResponse.created(result, URI.create("/login/attempts/" + result.getAuthentication().getAttemptId()));
     }
 
+    /** 为指定登录尝试签发 SMS Challenge。 */
     @PostMapping("/login/attempts/{attemptId}/sms-code/challenges")
     @AnonymousAccess
     public @NotNull ApiResponse<SmsCodeChallengeView> loginAttemptChallenge(
@@ -87,15 +90,17 @@ public final class SmsCodeController {
                         challenges.issue(authentication.account(attempt(attemptId)))));
     }
 
+    /** 向指定登录尝试提交 SMS 验证码。 */
     @PostMapping("/login/attempts/{attemptId}/sms-code/proofs")
     @AnonymousAccess
-    @RateLimited(dimensions = RateLimitDimension.IP, permits = 10, windowSeconds = 300)
+@RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
     public @NotNull ApiResponse<LoginResultView> loginAttempt(
             @PathVariable @Size(max = 128) @NotNull String attemptId,
             @RequestBody @Valid @NotNull SmsCodeProofRequest request) {
         return ApiResponse.ok(LoginResultView.from(login.submit(attempt(attemptId), submission(request))));
     }
 
+    /** 为当前会话的敏感动作认证尝试签发 SMS Challenge。 */
     @PostMapping("/verifications/{verificationId}/sms-code/challenges")
     public @NotNull ApiResponse<SmsCodeChallengeView> verificationChallenge(
             @PathVariable @Size(max = 128) @NotNull String verificationId,
@@ -103,8 +108,9 @@ public final class SmsCodeController {
         return ApiResponse.ok(SmsCodeChallengeView.from(challenges.issue(account(session, attempt(verificationId)))));
     }
 
+    /** 向当前会话的敏感动作认证尝试提交 SMS 验证码。 */
     @PostMapping("/verifications/{verificationId}/sms-code/proofs")
-    @RateLimited(dimensions = RateLimitDimension.IP, permits = 10, windowSeconds = 300)
+@RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
     public @NotNull ApiResponse<VerificationView> verification(
             @PathVariable @Size(max = 128) @NotNull String verificationId,
             @CurrentSession @NotNull Session session,

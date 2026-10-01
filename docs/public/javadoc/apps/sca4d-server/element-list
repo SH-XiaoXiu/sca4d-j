@@ -24,6 +24,8 @@ com.sca4d.app.server.openapi.iot
 com.sca4d.app.server.platform
 com.sca4d.app.server.platform.request
 com.sca4d.app.server.platform.view
+com.sca4d.app.server.plugin
+com.sca4d.app.server.plugin.mfa
 com.sca4d.app.server.preference
 com.sca4d.app.server.preference.request
 com.sca4d.app.server.preference.view
@@ -32,3 +34,4 @@ com.sca4d.app.server.service
 com.sca4d.app.server.system
 com.sca4d.app.server.system.request
 com.sca4d.app.server.system.view
+db.migration

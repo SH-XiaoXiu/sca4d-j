@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 标识一个短期、单次消费的 SMS Code Challenge。 */
-public final class SmsCodeChallengeId {
+public class SmsCodeChallengeId {
     private final @NotNull String value;
 
     /** @param value Challenge UUID 文本 */
@@ -19,6 +19,7 @@ public final class SmsCodeChallengeId {
         this.value = checked;
     }
 
+    /** @return Challenge 的稳定文本标识 */
     @Contract(pure = true)
     public @NotNull String value() {
         return value;

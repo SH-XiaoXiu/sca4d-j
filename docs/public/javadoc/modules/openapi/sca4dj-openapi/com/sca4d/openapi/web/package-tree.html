@@ -58,12 +58,6 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" class="type-name-link external-link" title="class or interface in java.lang">Object</a>
 <ul>
-<li class="circle">com.sca4d.core.spring.call.CallHandlerInterceptor (implements org.springframework.web.servlet.HandlerInterceptor)
-<ul>
-<li class="circle">com.sca4d.openapi.web.<a href="OpenApiAuthenticationInterceptor.html" class="type-name-link" title="class in com.sca4d.openapi.web">OpenApiAuthenticationInterceptor</a></li>
-<li class="circle">com.sca4d.openapi.web.<a href="OpenApiRequestInterceptor.html" class="type-name-link" title="class in com.sca4d.openapi.web">OpenApiRequestInterceptor</a></li>
-</ul>
-</li>
 <li class="circle">org.springframework.web.filter.GenericFilterBean (implements org.springframework.beans.factory.BeanNameAware, org.springframework.beans.factory.DisposableBean, org.springframework.context.EnvironmentAware, org.springframework.core.env.EnvironmentCapable, jakarta.servlet.Filter, org.springframework.beans.factory.InitializingBean, org.springframework.web.context.ServletContextAware)
 <ul>
 <li class="circle">org.springframework.web.filter.OncePerRequestFilter
@@ -73,8 +67,15 @@ loadScripts(document, 'script');</script>
 </li>
 </ul>
 </li>
+<li class="circle">com.sca4d.core.spring.web.HttpCallHandlerInterceptor (implements org.springframework.web.servlet.HandlerInterceptor)
+<ul>
+<li class="circle">com.sca4d.openapi.web.<a href="OpenApiAuthenticationInterceptor.html" class="type-name-link" title="class in com.sca4d.openapi.web">OpenApiAuthenticationInterceptor</a></li>
+<li class="circle">com.sca4d.openapi.web.<a href="OpenApiRequestInterceptor.html" class="type-name-link" title="class in com.sca4d.openapi.web">OpenApiRequestInterceptor</a></li>
+</ul>
+</li>
 <li class="circle">com.sca4d.openapi.web.<a href="OpenApiAuthenticationEndpointRegistrar.html" class="type-name-link" title="class in com.sca4d.openapi.web">OpenApiAuthenticationEndpointRegistrar</a> (implements org.springframework.beans.factory.InitializingBean)</li>
 <li class="circle">com.sca4d.openapi.web.<a href="OpenApiAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.openapi.web">OpenApiAutoConfiguration</a></li>
+<li class="circle">com.sca4d.openapi.web.<a href="OpenApiConstants.html" class="type-name-link" title="class in com.sca4d.openapi.web">OpenApiConstants</a></li>
 <li class="circle">com.sca4d.openapi.web.<a href="OpenApiHmacCanonicalRequest.html" class="type-name-link" title="class in com.sca4d.openapi.web">OpenApiHmacCanonicalRequest</a></li>
 <li class="circle">com.sca4d.openapi.web.<a href="OpenApiRouteCatalog.html" class="type-name-link" title="class in com.sca4d.openapi.web">OpenApiRouteCatalog</a> (implements org.springframework.beans.factory.SmartInitializingSingleton)</li>
 <li class="circle">com.sca4d.openapi.web.<a href="OpenApiRouteDefinition.html" class="type-name-link" title="class in com.sca4d.openapi.web">OpenApiRouteDefinition</a></li>

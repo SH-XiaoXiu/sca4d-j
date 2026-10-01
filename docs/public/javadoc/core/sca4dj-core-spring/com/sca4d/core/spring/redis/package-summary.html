@@ -80,13 +80,21 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary" aria-labelledby="class-summary-tab0">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RedisBatches.html" title="class in com.sca4d.core.spring.redis">RedisBatches</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="KeyRedisSerializer.html" title="class in com.sca4d.core.spring.redis">KeyRedisSerializer</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">在 Redis key 字节边界应用 App 隔离及模块声明的 Cluster 同槽分组。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RedisBatches.html" title="class in com.sca4d.core.spring.redis">RedisBatches</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">按 pipeline 命令数量限制分批执行已经确定的 Redis 操作。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RedisDistributedLock.html" title="class in com.sca4d.core.spring.redis">RedisDistributedLock</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RedisDistributedLock.html" title="class in com.sca4d.core.spring.redis">RedisDistributedLock</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">使用 Redisson watchdog 在多个应用实例之间互斥执行同一业务键的任务。</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RedisHashTag.html" title="class in com.sca4d.core.spring.redis">RedisHashTag</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">声明需要在 Redis Cluster 中共同参与 Lua 操作的一组逻辑 key。</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="RedisIdempotencyProperties.html" title="class in com.sca4d.core.spring.redis">RedisIdempotencyProperties</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
@@ -110,7 +118,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab6"><a href="Sca4djRedis.html" title="annotation interface in com.sca4d.core.spring.redis">Sca4djRedis</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab6">
-<div class="block">限定脚手架内部状态、索引和消息使用的 `StringRedisTemplate` Bean。</div>
+<div class="block">限定脚手架内部状态、索引和消息使用的 <code>RedisTemplate&lt;Key, String&gt;</code> Bean。</div>
 </div>
 </div>
 </div>

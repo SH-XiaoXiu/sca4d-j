@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 按名称和版本索引不可变的 {@link FlowDefinition}。 */
-public final class FlowCatalog {
+public class FlowCatalog {
 
     private final Map<String, FlowDefinition> definitions;
 

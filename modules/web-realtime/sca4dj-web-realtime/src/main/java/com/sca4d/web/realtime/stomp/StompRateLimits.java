@@ -2,7 +2,9 @@ package com.sca4d.web.realtime.stomp;
 
 import cn.hutool.crypto.digest.DigestUtil;
 import com.sca4d.core.api.concurrent.RateLimit;
+import com.sca4d.core.api.concurrent.RateLimitKey;
 import com.sca4d.core.api.concurrent.RateLimiter;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +14,7 @@ import java.util.Objects;
 
 /** 声明 Web Realtime STOMP 各命令的限流额度和业务维度。 */
 @ApiStatus.Internal
-public final class StompRateLimits {
+public class StompRateLimits {
 
     private static final RateLimit CONNECT = new RateLimit(20, Duration.ofSeconds(10));
 
@@ -22,7 +24,6 @@ public final class StompRateLimits {
 
     private final @NotNull RateLimiter limiter;
 
-    /** 创建使用脚手架共享令牌桶限流器的 Web Realtime 策略。 */
     public StompRateLimits(@NotNull RateLimiter limiter) {
         this.limiter = Objects.requireNonNull(limiter, "令牌桶限流器不能为空");
     }
@@ -52,7 +53,7 @@ public final class StompRateLimits {
     private boolean acquire(String scope, List<String> keys, RateLimit limit) {
         boolean allowed = true;
         for (String key : keys) {
-            if (!limiter.tryAcquire(scope + ":" + key, limit).isAllowed()) {
+            if (!limiter.tryAcquire(new RateLimitKey(TreeCode.of("STOMP"), scope, key), limit).isAllowed()) {
                 allowed = false;
             }
         }

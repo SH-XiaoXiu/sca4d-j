@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 返回不包含摘要的密码凭据状态和更新时间。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
-public final class PasswordView {
+public class PasswordView {
 
     private final @NotNull String status;
 
@@ -29,7 +29,7 @@ public final class PasswordView {
     @CheckReturnValue
     public static @NotNull PasswordView from(@NotNull PasswordCredential credential) {
         PasswordCredential checked = Objects.requireNonNull(credential, "Password Credential 不能为空");
-        return new PasswordView("SET", checked.updatedAt());
+        return new PasswordView(checked.status().value(), checked.updatedAt());
     }
 
     /**

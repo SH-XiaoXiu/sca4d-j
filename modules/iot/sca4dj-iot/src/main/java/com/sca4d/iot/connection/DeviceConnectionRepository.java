@@ -1,7 +1,11 @@
 package com.sca4d.iot.connection;
 
+import static com.sca4d.core.api.name.NameFormat.COLON;
+
 import com.sca4d.core.api.authentication.SessionId;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.spring.redis.KeyRedisSerializer;
 import com.sca4d.core.spring.redis.RedisBatches;
 import com.sca4d.iot.api.DeviceAccessMethod;
 import com.sca4d.iot.api.change.DeviceChangeArea;
@@ -16,8 +20,8 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SessionCallback;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 
 import java.nio.charset.StandardCharsets;
@@ -35,8 +39,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-/** 使用 Redis 保存可由设备接入实现重建的当前连接事实。 */
-public final class DeviceConnectionRepository implements DeviceConnectionReceiver, DeviceConnectionQueryService {
+/** 使用 Redis 保存可由设备接入实现重建的当前连接信息。 */
+public class DeviceConnectionRepository implements DeviceConnectionReceiver, DeviceConnectionQueryService {
 
     private static final DefaultRedisScript<Long> CONNECT = script("connect.lua");
 
@@ -53,17 +57,17 @@ public final class DeviceConnectionRepository implements DeviceConnectionReceive
         FIND_BY_DEVICE = script;
     }
 
-    private final @NotNull StringRedisTemplate redis;
-
     private final @NotNull Clock clock;
 
     private final @NotNull Duration ttl;
 
-    private final @NotNull String connectionPrefix;
+    private final @NotNull RedisTemplate<Key, String> redis;
 
-    private final @NotNull String devicePrefix;
+    private final @NotNull Key connectionPrefix;
 
-    private final @NotNull String protocolPrefix;
+    private final @NotNull Key devicePrefix;
+
+    private final @NotNull Key protocolPrefix;
 
     private final @NotNull DeviceChangeNotifier changes;
 
@@ -74,25 +78,23 @@ public final class DeviceConnectionRepository implements DeviceConnectionReceive
      *
      * @param redis IoT 共享 Redis
      * @param clock 计算连接过期时间的时钟
-     * @param ttl 未续期连接事实的保留时间
-     * @param namespace 共享资源命名空间
+     * @param ttl 未续期连接信息的保留时间
      * @param changes Device 运行区域变化通知器
      * @param redisBatches Redis pipeline 批处理器
      */
     public DeviceConnectionRepository(
-            @NotNull StringRedisTemplate redis,
+            @NotNull RedisTemplate<Key, String> redis,
             @NotNull Clock clock,
             @NotNull Duration ttl,
-            @NotNull RuntimeNamespace namespace,
             @NotNull DeviceChangeNotifier changes,
             @NotNull RedisBatches redisBatches) {
         this.redis = Objects.requireNonNull(redis, "Connection Redis 不能为空");
         this.clock = Objects.requireNonNull(clock, "Connection 时钟不能为空");
         this.ttl = Objects.requireNonNull(ttl, "Connection TTL 不能为空");
-        RuntimeNamespace checked = Objects.requireNonNull(namespace, "运行时命名空间不能为空");
-        this.connectionPrefix = checked.sca4dj("iot", "connection") + ":";
-        this.devicePrefix = checked.sca4dj("iot", "device-connections") + ":";
-        this.protocolPrefix = checked.sca4dj("iot", "protocol-connections") + ":";
+
+        this.connectionPrefix = Key.of(TreeCode.ofColon("IOT:CONNECTION"));
+        this.devicePrefix = Key.of(TreeCode.ofColon("IOT:DEVICE_CONNECTIONS"));
+        this.protocolPrefix = Key.of(TreeCode.ofColon("IOT:PROTOCOL_CONNECTIONS"));
         this.changes = Objects.requireNonNull(changes, "Device 变化通知器不能为空");
         this.redisBatches = Objects.requireNonNull(redisBatches, "Redis 批处理器不能为空");
     }
@@ -112,7 +114,7 @@ public final class DeviceConnectionRepository implements DeviceConnectionReceive
                         Long.toString(checked.deviceId()),
                         checked.protocol().code(),
                         checked.sessionId().map(SessionId::value).orElse(""),
-                        checked.accessMethod().code(),
+                        checked.accessMethod().code().format(COLON),
                         Long.toString(checked.connectedAt().toEpochMilli()),
                         Long.toString(ttl.toMillis()),
                         Long.toString(expiresAt),
@@ -135,7 +137,7 @@ public final class DeviceConnectionRepository implements DeviceConnectionReceive
                         DISCONNECT,
                         List.of(connectionKey(checkedId), protocolKey(checkedProtocol)),
                         checkedProtocol.code(),
-                        devicePrefix,
+                        KeyRedisSerializer.keyText(redis, devicePrefix) + ":",
                         checkedId.value()),
                 "断开 Redis Lua 脚本没有返回设备标识");
         if (changedDeviceId > 0) {
@@ -162,14 +164,14 @@ public final class DeviceConnectionRepository implements DeviceConnectionReceive
             retained.add(connection.id());
             connected(connection);
         }
-        for (DeviceConnection projected : findByProtocol(checkedProtocol)) {
+        for (DeviceConnection projected : find(protocolKey(checkedProtocol))) {
             if (!projected.connectedAt().isAfter(cutoff) && !retained.contains(projected.id())) {
                 disconnected(checkedProtocol, projected.id());
             }
         }
     }
 
-    /** 使用分批 pipeline 读取连接事实，每个 Device 的 Lua 脚本同时清理失效索引。 */
+    /** 使用分批 pipeline 读取连接信息，每个 Device 的 Lua 脚本同时清理失效索引。 */
     @Override
     public @NotNull @Unmodifiable Map<@NotNull Long, @NotNull List<@NotNull DeviceConnection>> connections(
             @NotNull Collection<@NotNull Long> deviceIds) {
@@ -199,7 +201,7 @@ public final class DeviceConnectionRepository implements DeviceConnectionReceive
                         operations.execute(
                                 FIND_BY_DEVICE,
                                 List.of((K) deviceKey(deviceId)),
-                                connectionPrefix,
+                                KeyRedisSerializer.keyText(redis, connectionPrefix) + ":",
                                 observedAt);
                     }
                     return null;
@@ -217,13 +219,8 @@ public final class DeviceConnectionRepository implements DeviceConnectionReceive
         return Collections.unmodifiableMap(result);
     }
 
-    /** 读取一种连接协议的当前共享投影。 */
-    private @NotNull List<DeviceConnection> findByProtocol(@NotNull DeviceConnectionProtocol protocol) {
-        return find(protocolKey(protocol));
-    }
-
     /** 清理过期索引，并忽略已经没有 Redis 主记录的 DeviceConnectionId。 */
-    private @NotNull List<DeviceConnection> find(@NotNull String indexKey) {
+    private @NotNull List<DeviceConnection> find(@NotNull Key indexKey) {
         redis.opsForZSet().removeRangeByScore(indexKey, Double.NEGATIVE_INFINITY, clock.millis());
         Set<String> ids = redis.opsForZSet().rangeByScore(indexKey, clock.millis(), Double.POSITIVE_INFINITY);
         if (ids == null || ids.isEmpty()) {
@@ -263,7 +260,7 @@ public final class DeviceConnectionRepository implements DeviceConnectionReceive
         return List.copyOf(result);
     }
 
-    /** 把 Redis Hash 恢复成协议无关的连接事实。 */
+    /** 把 Redis Hash 恢复成协议无关的连接信息。 */
     private static @NotNull DeviceConnection connection(
             @NotNull DeviceConnectionId id,
             @NotNull Map<Object, Object> fields) {
@@ -277,7 +274,7 @@ public final class DeviceConnectionRepository implements DeviceConnectionReceive
                 Instant.ofEpochMilli(Long.parseLong(string(fields, "connectedAtMillis"))));
     }
 
-    /** 把 Lua 返回的固定六字段平铺列表恢复为连接事实。 */
+    /** 把 Lua 返回的固定六字段平铺列表恢复为连接信息。 */
     private static @NotNull List<DeviceConnection> connections(@Nullable Object value) {
         if (!(value instanceof List<?> fields) || fields.isEmpty()) {
             return List.of();
@@ -334,18 +331,18 @@ public final class DeviceConnectionRepository implements DeviceConnectionReceive
     }
 
     /** 返回 Connection 主记录 key。 */
-    private @NotNull String connectionKey(@NotNull DeviceConnectionId id) {
-        return connectionPrefix + id.value();
+    private @NotNull Key connectionKey(@NotNull DeviceConnectionId id) {
+        return connectionPrefix.part(id.value());
     }
 
     /** 返回 Device 到 DeviceConnectionId 的反向索引 key。 */
-    private @NotNull String deviceKey(long deviceId) {
-        return devicePrefix + deviceId;
+    private @NotNull Key deviceKey(long deviceId) {
+        return devicePrefix.part(deviceId);
     }
 
     /** 返回连接协议到 DeviceConnectionId 的反向索引 key。 */
-    private @NotNull String protocolKey(@NotNull DeviceConnectionProtocol protocol) {
-        return protocolPrefix + protocol.code();
+    private @NotNull Key protocolKey(@NotNull DeviceConnectionProtocol protocol) {
+        return protocolPrefix.part(protocol.code());
     }
 
     /** 从 classpath 加载返回 Long 的连接状态 Redis 脚本。 */

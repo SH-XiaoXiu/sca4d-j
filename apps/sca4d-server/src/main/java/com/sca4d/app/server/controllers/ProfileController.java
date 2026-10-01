@@ -73,9 +73,9 @@ public class ProfileController {
      */
     @PutMapping
     @Operation(summary = "替换当前账号资料")
-    @Audit(operation = "platform/profile/replace", payloadFactory = ApplicationAuditValues.MutationDetails.class)
+    @Audit(operation = "PLATFORM/PROFILE/REPLACE", payloadFactory = ApplicationAuditValues.MutationDetails.class)
     public @NotNull ApiResponse<ProfileView> replace(
-            @CurrentPrincipal @NotNull @AuditTarget(resourceType = PlatformUserProfile.RESOURCE_TYPE) Long principalId,
+            @CurrentPrincipal @NotNull @AuditTarget(resourceType = PlatformUserProfile.RESOURCE_TYPE_VALUE) Long principalId,
             @RequestBody @NotNull @AuditPayload ReplaceProfileRequest request) {
         PlatformUserProfile updated = accounts.replaceProfile(
                 principalId,
@@ -94,9 +94,9 @@ public class ProfileController {
      */
     @PutMapping("/avatar")
     @Operation(summary = "替换当前账号头像")
-    @Audit(operation = "platform/profile/avatar/replace", payloadFactory = ApplicationAuditValues.MutationDetails.class)
+    @Audit(operation = "PLATFORM/PROFILE/AVATAR/REPLACE", payloadFactory = ApplicationAuditValues.MutationDetails.class)
     public @NotNull ApiResponse<ProfileView> replaceAvatar(
-            @CurrentPrincipal @NotNull @AuditTarget(resourceType = PlatformUserProfile.RESOURCE_TYPE) Long principalId,
+            @CurrentPrincipal @NotNull @AuditTarget(resourceType = PlatformUserProfile.RESOURCE_TYPE_VALUE) Long principalId,
             @RequestBody @NotNull @AuditPayload ReplaceAvatarRequest request) {
         PlatformUserProfile updated = profiles.replaceAvatar(
                 principalId,
@@ -113,9 +113,9 @@ public class ProfileController {
      */
     @DeleteMapping("/avatar")
     @Operation(summary = "删除当前账号头像")
-    @Audit(operation = "platform/profile/avatar/delete")
+    @Audit(operation = "PLATFORM/PROFILE/AVATAR/DELETE")
     public @NotNull ApiResponse<ProfileView> deleteAvatar(
-            @CurrentPrincipal @NotNull @AuditTarget(resourceType = PlatformUserProfile.RESOURCE_TYPE) Long principalId) {
+            @CurrentPrincipal @NotNull @AuditTarget(resourceType = PlatformUserProfile.RESOURCE_TYPE_VALUE) Long principalId) {
         PlatformUserProfile updated = profiles.deleteAvatar(principalId);
         return ApiResponse.ok(ProfileView.from(updated));
     }

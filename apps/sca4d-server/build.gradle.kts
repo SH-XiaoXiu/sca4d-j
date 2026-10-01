@@ -1,3 +1,4 @@
+import org.gradle.api.tasks.testing.Test
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
@@ -6,11 +7,23 @@ plugins {
     id("org.springframework.boot")
     id("io.spring.dependency-management")
     id("com.sca4dj.app")
+    id("com.sca4dj.plugin-api")
 }
 
 val buildVersion = rootProject.extra["sca4dBuildVersion"] as String
 
 dependencies {
+    implementation(project(":modules:plugin:sca4dj-plugin-spring"))
+    add("pluginShared", project(":core:sca4dj-core-api"))
+    add("pluginShared", libs.slf4j.api)
+    add(
+        "pluginProcessor",
+        files(
+            rootProject.layout.projectDirectory.file(
+                "tools/sca4dj-app-gradle-plugin/build/libs/sca4dj-plugin-processor.jar",
+            ),
+        ).builtBy(gradle.includedBuild("sca4dj-app-gradle-plugin").task(":pluginProcessorJar")),
+    )
     implementation(project(":core:sca4dj-core-spring"))
     implementation(project(":modules:iam:sca4dj-iam"))
     implementation(project(":modules:auth:sca4dj-auth"))
@@ -62,6 +75,15 @@ dependencies {
     runtimeOnly(libs.postgresql)
 
     testImplementation(libs.spring.boot.starter.test)
+    testImplementation(project(":modules:plugin:sca4dj-plugin"))
+    testImplementation(project(":modules:plugin:sca4dj-plugin-pf4j"))
+    testImplementation(
+        files(
+            rootProject.layout.projectDirectory.file(
+                "tools/sca4dj-app-gradle-plugin/build/libs/sca4dj-plugin-processor.jar",
+            ),
+        ).builtBy(gradle.includedBuild("sca4dj-app-gradle-plugin").task(":pluginProcessorJar")),
+    )
     add("integrationTestImplementation", project(":modules:auth:sca4dj-auth"))
     add("integrationTestImplementation", project(":modules:storage:sca4dj-storage-file"))
     add("integrationTestImplementation", libs.spring.boot.testcontainers)
@@ -84,6 +106,54 @@ sca4djApp {
     schemaFragment.set(layout.projectDirectory.file("src/main/resources/schema/app.sql"))
 }
 
+appPluginApi {
+    id.set("SCA4D:SERVER")
+    version.set("1.1.0")
+    generatedPackage.set("com.sca4d.app.server.plugin.api")
+    entryName.set("Sca4dServerPlugin")
+    configurationType.set("com.sca4d.app.server.plugin.Sca4dServerPluginSettings")
+}
+
 tasks.named<BootJar>("bootJar") {
     archiveFileName.set("${project.name}-$buildVersion.jar")
+}
+
+tasks.withType<Test>().configureEach {
+    dependsOn(":apps:sca4d-server-mfa-plugin:pluginJar")
+    systemProperty(
+        "sca4dj.plugin.artifacts[0]",
+        rootProject.layout.projectDirectory
+            .file(
+                "apps/sca4d-server-mfa-plugin/build/libs/sca4d-server-mfa-plugin-1.0.0-plugin.jar",
+            ).asFile.absolutePath,
+    )
+    systemProperty(
+        "javax.xml.parsers.SAXParserFactory",
+        "com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl",
+    )
+}
+
+tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun") {
+    dependsOn(":apps:sca4d-server-mfa-plugin:pluginJar")
+    environment(
+        "SCA4DJ_MFA_PLUGIN",
+        rootProject.layout.projectDirectory
+            .file(
+                "apps/sca4d-server-mfa-plugin/build/libs/sca4d-server-mfa-plugin-1.0.0-plugin.jar",
+            ).asFile.absolutePath,
+    )
+}
+
+tasks.register<Zip>("pluginDistribution") {
+    dependsOn("bootJar", ":apps:sca4d-server-mfa-plugin:pluginJar")
+    archiveClassifier.set("distribution")
+    from(tasks.named<BootJar>("bootJar"))
+    from(
+        rootProject.layout.projectDirectory.file(
+            "apps/sca4d-server-mfa-plugin/build/libs/sca4d-server-mfa-plugin-1.0.0-plugin.jar",
+        ),
+    ) {
+        into("plugins")
+        rename { "sca4d-server-mfa.jar" }
+    }
 }

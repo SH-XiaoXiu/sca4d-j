@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">RolePermissions</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">RolePermissions</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">保存角色以及已经展开为具体 ACTION 的 Operation。</div>
 </section>
@@ -125,12 +125,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull com.sca4d.core.api.permission.Operation&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#operations()" class="member-name-link">operations</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回展开后的具体 ACTION。</div>
+<div class="block">展开后的具体 ACTION。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Role.html" title="class in com.sca4d.iam.rbac">Role</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#role()" class="member-name-link">role</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回当前角色。</div>
+<div class="block">当前角色。</div>
 </div>
 </div>
 </div>
@@ -178,7 +178,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="Role.html" title="class in com.sca4d.iam.rbac">Role</a></span>&nbsp;<span class="element-name">role</span>()</div>
-<div class="block">返回当前角色。</div>
+<div class="block">当前角色。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>当前角色</dd>
@@ -191,7 +191,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull @Unmodifiable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull com.sca4d.core.api.permission.Operation&gt;</span>&nbsp;<span class="element-name">operations</span>()</div>
-<div class="block">返回展开后的具体 ACTION。</div>
+<div class="block">展开后的具体 ACTION。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>不包含内部选择符的不可修改列表</dd>

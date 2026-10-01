@@ -1,6 +1,7 @@
 package com.sca4d.app.server.authentication.view;
 
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+
 import com.sca4d.core.api.authentication.AuthenticationProgress;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +11,7 @@ import java.util.Objects;
 
 /** 不包含 Account、Proof 或 Evidence 的动作认证进度。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
-public final class AuthenticationProgressView {
+public class AuthenticationProgressView {
 
     private final String attemptId;
 
@@ -42,7 +43,7 @@ public final class AuthenticationProgressView {
                 checked.attemptId().value(),
                 checked.satisfied() ? "SATISFIED" : "FACTOR_REQUIRED",
                 checked.remainingFactorCount(),
-                checked.availableMethods().stream().map(AuthenticationMethodCode::value).toList(),
+                checked.availableMethods().stream().map(code -> code.format(SLASH)).toList(),
                 checked.expiresAt());
     }
 

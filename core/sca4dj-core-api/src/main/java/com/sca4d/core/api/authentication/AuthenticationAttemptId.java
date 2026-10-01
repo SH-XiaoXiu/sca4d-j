@@ -6,7 +6,7 @@ import java.util.Objects;
 
 /** 跨请求认证尝试的不透明标识。 */
 @SuppressWarnings("ClassCanBeRecord")
-public final class AuthenticationAttemptId {
+public class AuthenticationAttemptId {
 
     private final String value;
 
@@ -21,7 +21,7 @@ public final class AuthenticationAttemptId {
     }
 
     /**
-     * 读取跨请求定位认证尝试所需的值。
+     * 认证尝试的不透明标识。
      *
      * @return 构造时保存的不透明标识
      */

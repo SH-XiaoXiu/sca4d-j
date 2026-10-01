@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /** 认证引擎单次消费满足结果后返回的可信动作认证数据。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class AuthenticationResult {
+public class AuthenticationResult {
 
     private final Account account;
 
@@ -39,7 +39,7 @@ public final class AuthenticationResult {
     }
 
     /**
-     * 返回全部认证记录共同验证的账号。
+     * 全部认证记录共同验证的账号。
      *
      * @return 已验证账号
      */
@@ -48,7 +48,7 @@ public final class AuthenticationResult {
     }
 
     /**
-     * 返回本次认证允许执行的动作。
+     * 本次认证允许执行的动作。
      *
      * @return 具体应用定义的动作编码
      */
@@ -57,7 +57,7 @@ public final class AuthenticationResult {
     }
 
     /**
-     * 返回满足动作要求的认证记录。
+     * 满足动作要求的认证记录。
      *
      * @return 构造时复制的不可修改列表；零因素动作返回空列表
      */

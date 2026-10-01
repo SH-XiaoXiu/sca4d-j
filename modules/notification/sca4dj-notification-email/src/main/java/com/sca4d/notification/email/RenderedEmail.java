@@ -7,16 +7,16 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /** 保存已经完成变量转义、主题校验和 HTML 清洗的 Email 内容。 */
-public final class RenderedEmail {
+public class RenderedEmail {
 
     /** Email 主题允许的最大字符数。 */
     public static final int MAXIMUM_SUBJECT_LENGTH = 998;
 
     private final @NotNull String subject;
 
-    private final @NotNull String text;
-
     private final @Nullable String html;
+
+    private final @NotNull String text;
 
     /**
      * @param subject 不含回车换行的主题

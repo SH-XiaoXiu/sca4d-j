@@ -4,13 +4,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /** 配置单条 SQL 批量操作的条目数和绑定参数保护上限。 */
 @ConfigurationProperties("sca4dj.persistence.batch")
-public final class SqlBatchProperties {
+public class SqlBatchProperties {
 
     private int maxItems = 1_000;
 
     private int maxBindParameters = 30_000;
 
-    /** 创建使用保守 PostgreSQL 批次默认值的配置。 */
     public SqlBatchProperties() {
     }
 

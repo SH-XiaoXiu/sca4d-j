@@ -33,6 +33,14 @@
         ORDER BY last_ack_received_at DESC, message_id DESC
         OFFSET #{offset} LIMIT #{limit}
     </select>
+    <select id="selectAcknowledgementByMessageId" resultType="com.sca4d.iot.persistence.EncodedDeviceAcknowledgement">
+        SELECT message_id, last_ack_code AS ack_code, last_ack_data_json::text AS data_json,
+               last_ack_source AS source,
+               last_ack_source_acknowledgement_id AS source_acknowledgement_id,
+               last_acknowledged_at AS acknowledged_at, last_ack_received_at AS received_at
+        FROM iot_downlink_message
+        WHERE message_id = #{messageId} AND last_ack_code IS NOT NULL
+    </select>
 
     <select id="countActiveDownlinkMessages" resultType="long">
         SELECT COUNT(*)

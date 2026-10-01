@@ -6,12 +6,15 @@ com.sca4d.core.spring.i18n
 com.sca4d.core.spring.id
 com.sca4d.core.spring.identity
 com.sca4d.core.spring.json
+com.sca4d.core.spring.logging
 com.sca4d.core.spring.openapi
+com.sca4d.core.spring.permission
 com.sca4d.core.spring.persistence.batch
 com.sca4d.core.spring.persistence.mybatis
 com.sca4d.core.spring.redis
 com.sca4d.core.spring.security
 com.sca4d.core.spring.setting
+com.sca4d.core.spring.transaction
 com.sca4d.core.spring.validation
 com.sca4d.core.spring.web
 com.sca4d.core.spring.web.annotation

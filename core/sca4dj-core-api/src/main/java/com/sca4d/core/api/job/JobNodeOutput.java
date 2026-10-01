@@ -13,15 +13,15 @@ import java.util.Objects;
  *
  * @param <T> 节点输出类型
  */
-public final class JobNodeOutput<T> {
+public class JobNodeOutput<T> {
+
+    private final @NotNull Class<T> outputType;
 
     private final @NotNull JobKey jobKey;
 
-    private final int definitionVersion;
-
     private final @NotNull String nodeKey;
 
-    private final @NotNull Class<T> outputType;
+    private final int definitionVersion;
 
     /**
      * 只允许 {@link PipelineJob#nodeOutput(String, Class)} 创建节点输出声明。

@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="ScheduleTiming.html" title="interface in com.sca4d.core.api.scheduling">ScheduleTiming</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">CronSchedule</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">CronSchedule</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="ScheduleTiming.html" title="interface in com.sca4d.core.api.scheduling">ScheduleTiming</a></span></div>
 <div class="block">使用显式时区解释 Quartz Cron 表达式。</div>
@@ -130,12 +130,12 @@ implements <a href="ScheduleTiming.html" title="interface in com.sca4d.core.api.
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#expression()" class="member-name-link">expression</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回 Cron 表达式。</div>
+<div class="block">Cron 表达式。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/ZoneId.html" title="class or interface in java.time" class="external-link">ZoneId</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#zone()" class="member-name-link">zone</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回 Cron 时区。</div>
+<div class="block">Cron 时区。</div>
 </div>
 </div>
 </div>
@@ -186,7 +186,7 @@ implements <a href="ScheduleTiming.html" title="interface in com.sca4d.core.api.
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">expression</span>()</div>
-<div class="block">返回 Cron 表达式。</div>
+<div class="block">Cron 表达式。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>由 Scheduler 实现校验的 Quartz Cron 文本</dd>
@@ -199,7 +199,7 @@ implements <a href="ScheduleTiming.html" title="interface in com.sca4d.core.api.
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/ZoneId.html" title="class or interface in java.time" class="external-link">ZoneId</a></span>&nbsp;<span class="element-name">zone</span>()</div>
-<div class="block">返回 Cron 时区。</div>
+<div class="block">Cron 时区。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>解释表达式使用的显式时区</dd>

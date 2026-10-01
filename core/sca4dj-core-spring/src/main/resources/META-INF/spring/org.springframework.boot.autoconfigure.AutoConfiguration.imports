@@ -1,4 +1,5 @@
-com.sca4d.core.spring.config.RuntimeNamespaceAutoConfiguration
+com.sca4d.core.spring.config.AppIsolationAutoConfiguration
+com.sca4d.core.spring.config.InstanceAutoConfiguration
 com.sca4d.core.spring.config.CoreSpringAutoConfiguration
 com.sca4d.core.spring.gateway.GatewaySpringAutoConfiguration
 com.sca4d.core.spring.config.CoreJacksonAutoConfiguration

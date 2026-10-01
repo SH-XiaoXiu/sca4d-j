@@ -1,6 +1,6 @@
 # Sca4d Server HTTP API
 
-本页列出 Sca4d Server 的路由、认证要求、请求字段和失败结果。表中的普通 API 路径使用 Server 内部路径；通过 Gateway 访问时加 `/api`，例如 `/sessions/current` 对应 `/api/sessions/current`。EMQX 回调使用独立的 `/callbacks/{code}` 入口。
+调用接口先在路由表确认方法、认证与权限，再查对应章节的请求字段和失败结果。表中的普通 API 路径使用 Server 内部路径；通过 Gateway 访问时加 `/api`，例如 `/sessions/current` 对应 `/api/sessions/current`。EMQX 回调使用独立的 `/callbacks/{code}` 入口。
 
 普通 JSON 响应、错误、分页和条件请求遵守 [HTTP 通用契约](/reference/http/common)。文件流、SSE 和 EMQX 回调使用各自的响应格式。
 
@@ -22,7 +22,7 @@ HTTP 使用 account、role 和 permission 命名公开资源。其中 permission
 先按路由选择认证材料，再满足表中列出的权限、verification 和版本条件：
 
 - **匿名 App 路由**：不要求已有 Session，按接口提交密码、验证码或 Passkey proof 等材料。
-- **Session**：提交当前 Token 模式允许的 Bearer Token；标明“强制 Session Token”的路由只接受在线不透明 Session Token。
+- **Session**：提交当前 Token 模式允许的 Bearer Token；标明「强制 Session Token」的路由只接受在线不透明 Session Token。
 - **permission**：恢复 Session 并选择唯一 Platform Principal 后，检查表中列出的权限编码。这是授权条件。
 - **verification**：先完成对应动作的认证要求，再通过 `X-Verification` 提交一次性验证标识；它与当前 Session、Account 和动作绑定。
 - **If-Match**：提交最近读取的强 ETag，详细规则见[条件请求与失败](#条件请求与失败)。
@@ -77,7 +77,7 @@ HTTP 使用 account、role 和 permission 命名公开资源。其中 permission
 | `GET /me/notifications?beforeId={id}&limit={n}` | Session | 200；站内信页和未读数量 |
 | `POST /me/notifications/{messageId}/read` | Session | 204；按 Version 标记单条已读 |
 | `POST /me/notifications/read-all` | Session | 204；全部标记已读 |
-| `PUT /me/phone-identifier` | 强制 Session Token、`authentication.phone.verify` verification | 204；验证 Profile 手机号并绑定 PHONE Identifier |
+| `PUT /me/phone-identifier` | 强制 Session Token、`AUTHENTICATION.PHONE.VERIFY` verification | 204；验证 Profile 手机号并绑定 PHONE Identifier |
 | `PUT /me/profile/avatar` | Session | 200；绑定已完成上传的头像 |
 | `DELETE /me/profile/avatar` | Session | 200；删除当前头像 |
 | `POST /files/uploads` | Session、目标资料 `WRITE` | 201；头像上传请求 |
@@ -153,10 +153,10 @@ HTTP 使用 account、role 和 permission 命名公开资源。其中 permission
 | `PATCH /system/email/senders/{senderId}/status` | Session、`system:email:manage`、If-Match | 200；启停 SMTP 配置、新 ETag |
 | `POST /system/email/senders/{senderId}/connection-tests` | Session、`system:email:manage` | 204；只测试连接 |
 | `DELETE /system/email/senders/{senderId}` | Session、`system:email:manage`、If-Match | 204；删除停用 SMTP 配置 |
-| `GET /system/email/templates` | Session、`system:email:read` | 200；统一通知模板列表与变量集合 |
+| `GET /system/email/templates` | Session、`system:email:read` | 200；按 `page`、`size`、`sort` 返回 Email 模板分页与变量集合 |
 | `POST /system/email/templates` | Session、`system:email:manage` | 201；默认停用模板、Location |
 | `GET /system/email/templates/{templateId}` | Session、`system:email:read` | 200；模板、变量集合、ETag |
-| `PUT /system/email/templates/{templateId}` | Session、`system:email:manage`、If-Match | 200；替换完整多语言 Tiptap JSON、新 ETag |
+| `PUT /system/email/templates/{templateId}` | Session、`system:email:manage`、If-Match | 200；替换完整多语言 Email 源码、新 ETag |
 | `PATCH /system/email/templates/{templateId}/status` | Session、`system:email:manage`、If-Match | 200；启停模板、新 ETag |
 | `POST /system/email/templates/previews` | Session、`system:email:manage` | 200；安全渲染结果 |
 | `DELETE /system/email/templates/{templateId}` | Session、`system:email:manage`、If-Match | 204；删除停用模板 |
@@ -172,6 +172,70 @@ HTTP 使用 account、role 和 permission 命名公开资源。其中 permission
 | `PUT /system/sms/providers/{providerId}/bindings/{bindingId}` | Session、`system:sms:manage`、If-Match | 200；替换停用绑定、新 ETag |
 | `PATCH /system/sms/providers/{providerId}/bindings/{bindingId}/status` | Session、`system:sms:manage`、If-Match | 200；启停绑定、新 ETag |
 | `DELETE /system/sms/providers/{providerId}/bindings/{bindingId}` | Session、`system:sms:manage`、If-Match | 204；删除停用绑定 |
+
+### 通知模板、设置与站内信契约
+
+`GET /system/email/templates` 使用公共列表参数：
+
+| 参数 | 规则 |
+|---|---|
+| `page` | 从 1 开始，默认 1 |
+| `size` | 默认 20，范围 1..100 |
+| `sort` | 可以重复；格式为 `FIELD,DIRECTION` |
+
+模板列表只允许 `NOTIFICATION_CODE` 和 `SERIAL`，方向为 `ASC` 或 `DESC`。没有 `sort` 时按 `NOTIFICATION_CODE,ASC`、`SERIAL,ASC` 排列。响应 `items` 返回当前页模板，`page` 和 `size` 返回实际分页条件，`total` 返回完整模板数量。每项包含 `templateId`、`notificationCode`、完整 `locales`、模板使用的 `variables`、`enabled` 和 `version`。
+
+`POST` 和 `PUT /system/email/templates` 接受以下字段：
+
+| 字段 | 规则 |
+|---|---|
+| `notificationCode` | 已注册 `NotificationType` 的稳定编码，最长 128 个字符 |
+| `locales` | 1..100 个 Locale 到 Email 源码的完整映射；每项包含 `subject`、`text`、`html` 字符串 |
+
+`locales` 必须包含应用默认 Locale，所有 Locale 都须在应用支持列表中。每项的 `subject` 最长 998 个字符，`text` 与 `html` 各最多 1,000,000 个字符；三个字段均须提供。源码中的变量必须由对应 NotificationType 声明，使用双花括号引用。
+
+`POST /system/email/templates/previews` 接受 `source`、BCP 47 `languageTag` 和字符串 `variables` object。`source` 是单个 Locale 的 `subject`、`text`、`html` 源码；响应返回渲染后的 `subject`、`text` 和清洗后的 `html`，不保存模板。完整请求见[创建并启用 Email 模板](/tutorials/messaging-and-notification#创建并启用-email-模板)。
+
+Email 模板接口不管理 Inbox 或 SMS 模板。站内信由 Inbox 模块读取自己的 Tiptap JSON，SMS 使用供应商模板绑定。
+
+`GET /me/notification-settings` 返回以下字段：
+
+| 字段 | 含义 |
+|---|---|
+| `languageTag` | 当前 Account 的 BCP 47 通知语言 |
+| `regionCode` | 具体应用定义的业务 `Region` 编码 |
+| `channels` | 通知编码到可选渠道布尔覆盖值的 object |
+| `definitions` | 已注册通知类型的必发/可选渠道及 Java 初值 |
+| `languageVersion`、`regionVersion`、`channelsVersion` | 三项设置各自的乐观锁版本 |
+
+三个 `PUT` 接口都接受 `{"value":...}`，并要求 `If-Match` 使用对应 Version。语言值必须包含有效语言，区域值必须能构造具体应用的 `Region`，渠道值必须是完整 JSON object。渠道 object 只能引用已注册通知类型的可选渠道；未知通知编码、必发渠道和非布尔值返回输入错误。
+
+当前渠道键按单节点 `TreeCode.ofSegment(...)` 解析，与内置渠道的多节点编码不匹配，所以非空的内置渠道偏好写入会失败。可用 `{"value":{}}` 清除个人覆盖值；不能把 `email` 或 `inbox` 当作完整内置编码的替代值。
+
+`GET /me/notifications` 的 `beforeId` 可选，`limit` 默认 20、范围 1..100。响应 `messages` 按 `id` 倒序排列，`unreadCount` 返回当前 Account 的完整未读数量。每条消息包含 `id`、`notificationType`、`languageTag`、`title`、`text`、`html`、`createdAt`、可空 `readAt` 和 `version`。`POST /me/notifications/{messageId}/read` 接受 `{"version":<当前版本>}`；`POST /me/notifications/read-all` 没有请求体。
+
+### SMS Code 契约
+
+`POST /login/sms-code/challenges` 接受 `{"phoneNumber":"<E.164>"}`。响应包含 `challengeId`、`maskedRecipient`、`expiresAt` 和 `resendAt`，不返回验证码或完整手机号。匿名签发对未知或不可投递手机号保持相同响应形状。
+
+`POST /login/sms-code/proofs`、`POST /login/attempts/{attemptId}/sms-code/proofs` 和 `POST /verifications/{verificationId}/sms-code/proofs` 接受相同请求：
+
+```json
+{
+  "challengeId": "<最多 64 个字符>",
+  "code": "123456"
+}
+```
+
+`code` 必须是六位数字。Challenge 只能成功消费一次；不存在、过期、已消费、验证码错误或超过最大错误次数时 proof 被拒绝。带 `attemptId` 或 `verificationId` 的 Challenge 接口不接收手机号，服务端从已经确定的 Account 解析接收人。verification 路由还要求当前 Session Account 与 verification Account 相同。
+
+### SMS Provider 与绑定契约
+
+Provider 请求包含 `code`、已安装 `SmsProviderClient` 的 `type`、部署配置引用 `credentialRef` 和整数 `priority`。阿里云 Transport 类型是 `ALIYUN`。HTTP 不接收或返回 AccessKey；运行配置见[阿里云 SMS](/reference/runtime/sca4d-server#阿里云-sms)。
+
+绑定请求包含 `notificationCode`、具体应用声明的 `route`、BCP 47 `languageTag`、`signName`、`providerTemplateCode` 和 `parameterMapping`。`parameterMapping` 的键是供应商模板参数名，值是 `NotificationType` 变量名。通知类型未注册、变量未声明或 Locale 不合法时，创建、替换和启用绑定都会失败。
+
+Provider 和绑定创建后默认停用。绑定可以在 Provider 停用时启用；Provider 启用前至少需要一个启用绑定。启用中的 Provider 或绑定不能替换或删除。Provider 删除还要求不存在未删除绑定。详情、替换、状态修改和删除均使用各自 `version` 对应的强 `ETag`/`If-Match`。
 
 ### IoT Product、Device 与 EMQX
 
@@ -214,7 +278,7 @@ HTTP 使用 account、role 和 permission 命名公开资源。其中 permission
 | `PATCH /iot/devices/{deviceId}/schedules/{scheduleId}/status` | Session、`iot:devices:operate` | 200；按 version 暂停或恢复的规则 |
 | `DELETE /iot/devices/{deviceId}/schedules/{scheduleId}?version={version}` | Session、`iot:devices:operate` | 200；取消规则 |
 | `GET /iot/devices/{deviceId}/schedules/{scheduleId}/executions` | Session、`iot:devices:read` | 200；每个计划时间的处理结果页 |
-| `POST /callbacks/iot.emqx.authenticate` | EMQX 共享 Secret | 200；EMQX `allow` 或 `deny` JSON |
+| `POST /callbacks/IOT.EMQX.AUTHENTICATE` | EMQX 共享 Secret | 200；EMQX `allow` 或 `deny` JSON |
 
 该回调仅在 `sca4dj.iot.emqx.enabled=true` 时登记，不使用 `ApiResponse`，也不属于对管理端公开的 IoT API。正常部署由 EMQX 调用 Gateway；Server 只执行分发后的内部路径。
 
@@ -293,7 +357,7 @@ Platform、系统管理和 IoT 管理路由都要求当前 Session 能选择唯�
 }
 ```
 
-SESSION 模式下 `accessToken` 就是不透明 Session Token，`sessionToken` 为 `null`，两个过期时间相同。JWT 模式下普通请求使用短效 `accessToken`；标记“强制 Session Token”的接口使用不透明 `sessionToken`。所有 Token 都按标准 Bearer 格式发送：
+SESSION 模式下 `accessToken` 就是不透明 Session Token，`sessionToken` 为 `null`，两个过期时间相同。JWT 模式下普通请求使用短效 `accessToken`；标记「强制 Session Token」的接口使用不透明 `sessionToken`。所有 Token 都按标准 Bearer 格式发送：
 
 ```http
 Authorization: Bearer <token>
@@ -348,31 +412,31 @@ Sca4d Server 把 Password 登录标识类型配置为 `USERNAME,EMAIL`，所以 
     "attemptId": "opaque-attempt-id",
     "status": "FACTOR_REQUIRED",
     "remainingFactorCount": 1,
-    "availableMethods": ["totp"],
+    "availableMethods": ["AUTHENTICATION/TOTP"],
     "expiresAt": "2026-08-23T10:20:30Z"
   },
   "session": null
 }
 ```
 
-登录要求满足时，`authentication.status` 为 `SATISFIED`，`session` 包含 Token 模式、access Token、可选 Session Token、Session 标识和两个过期时间。仍需因素时，客户端从 `availableMethods` 选择 Password、TOTP、Passkey 或 Email Code，并向同一 attempt 的对应 proofs 路由提交。attempt 过期、Proof 无效、方法不可用或提交方法不能贡献新的因素时不建立 Session。
+登录要求满足时，`authentication.status` 为 `SATISFIED`，`session` 包含 Token 模式、access Token、可选 Session Token、Session 标识和两个过期时间。仍需因素时，客户端按 `availableMethods` 返回的 `AUTHENTICATION/PASSWORD`、`AUTHENTICATION/TOTP`、`AUTHENTICATION/PASSKEY`、`AUTHENTICATION/EMAIL_CODE` 等 TreeCode 选择方法，并向同一 attempt 的对应 proofs 路由提交。attempt 过期、Proof 无效、方法不可用或提交方法不能贡献新的因素时不建立 Session。
 
 Passkey 登录先调用 `POST /passkey/assertions/options`，浏览器完成 WebAuthn assertion 后，把 `ceremonyId` 与 `responseJson` 提交到 `POST /login/attempts/passkey`。后续因素使用 Passkey 时提交到当前 attempt 的 passkey proofs 路由。
 
 ### 敏感 verification
 
-`POST /verifications` 使用 `{ "actionCode": "authentication.password.replace" }` 为当前 Session 和 Account 创建 verification。当前动作编码包括：
+`POST /verifications` 使用 `{ "actionCode": "AUTHENTICATION.PASSWORD.REPLACE" }` 为当前 Session 和 Account 创建 verification。当前动作编码包括：
 
-- `authentication.password.replace`；
-- `authentication.settings.replace`；
-- `authentication.totp.enroll`；
-- `authentication.totp.replace`；
-- `authentication.passkey.register`；
-- `authentication.passkey.delete`；
-- `authentication.phone.verify`；
-- `authentication.federated.link`；
-- `authentication.federated.unlink`；
-- `account.delete`。
+- `AUTHENTICATION.PASSWORD.REPLACE`；
+- `AUTHENTICATION.SETTINGS.REPLACE`；
+- `AUTHENTICATION.TOTP.ENROLL`；
+- `AUTHENTICATION.TOTP.REPLACE`；
+- `AUTHENTICATION.PASSKEY.REGISTER`；
+- `AUTHENTICATION.PASSKEY.DELETE`；
+- `AUTHENTICATION.PHONE.VERIFY`；
+- `AUTHENTICATION.FEDERATED.LINK`；
+- `AUTHENTICATION.FEDERATED.UNLINK`；
+- `ACCOUNT.DELETE`。
 
 创建成功返回 201 与 `Location: /verifications/{verificationId}`。密码 proof 提交 `{ "password": "..." }`，TOTP proof 提交 `{ "code": "123456" }`。响应字段使用 `verificationId`，不把内部 attempt 名称暴露给客户端。
 
@@ -395,7 +459,7 @@ verification 必须已经满足动作要求，并且只能由绑定的 Session�
   "expiresAt": "2026-08-23T10:15:30Z",
   "subject": { "subjectId": "2081571083508514816", "type": "HUMAN" },
   "account": { "accountId": "2081571083525292032", "realmKey": "platform" },
-  "permissions": ["platform:accounts:read"]
+  "permissions": ["PLATFORM:ACCOUNTS:READ"]
 }
 ```
 
@@ -446,18 +510,18 @@ MinIO backend 则返回 MinIO 预签名 URL。`PUT /files/transfers/uploads` 和
 
 ```json
 {
-  "status": "SET",
+  "status": "ACTIVE",
   "updatedAt": "2026-07-24T10:15:30Z"
 }
 ```
 
-它不返回摘要或内部凭据 Version。`PUT /me/password` 提交 `{ "password": "new-password" }`，要求满足 `authentication.password.replace` 的 `X-Verification`。成功返回 204，PasswordAuthenticationMethod 通过 `SessionControl.terminateAccount(...)` 注销该账号全部 Session。模块内部仍使用 Credential Version 拒绝已经过期的 VerifiedAuthentication，并通过 CAS 避免覆盖刚刚变化的 Credential。
+`status` 使用 Password Credential 的状态编码：`ACTIVE` 表示可以登录，`RESET_REQUIRED` 表示必须重新设置密码，`DISABLED` 不会出现在当前账号查询结果中。接口不返回摘要或内部凭据 Version。`PUT /me/password` 提交 `{ "password": "new-password" }`，要求满足 `AUTHENTICATION.PASSWORD.REPLACE` 的 `X-Verification`。成功返回 204，PasswordAuthenticationMethod 通过 `SessionControl.terminateAccount(...)` 注销该账号全部 Session。模块内部仍使用 Credential Version 拒绝已经过期的 VerifiedAuthentication，并通过 CAS 避免覆盖刚刚变化的 Credential。
 
 ## 认证设置与 Credential
 
 `GET /me/authentication/settings` 返回 `loginFactorCount`、`sensitiveActionFactorCount`、`reusableAuthenticationMaximumAgeSeconds` 和方法列表，并发布当前 Account owner 设置行的强 ETag。每个方法包含 `methodCode`、`loginStartEnabled`、`loginAdditionalEnabled` 与 `sensitiveActionEnabled`。
 
-`PUT /me/authentication/settings` 要求 `authentication.settings.replace` verification 和最近读取的 `If-Match`，并完整替换因素数量与方法开关。登录因素数量范围为一到三，敏感动作因素数量范围为零到三。设置必须至少保留一种能够识别账号的登录方法，并由账号当前 Credential 提供足够多的不同 AuthenticationFactorKind；TOTP 与 Passkey 都是 `POSSESSION`，不能合计为两个因素。无法满足时返回 409，版本已经变化时返回 412，两种结果都不写入数据。
+`PUT /me/authentication/settings` 要求 `AUTHENTICATION.SETTINGS.REPLACE` verification 和最近读取的 `If-Match`，并完整替换因素数量与方法开关。登录因素数量范围为一到三，敏感动作因素数量范围为零到三。设置必须至少保留一种能够识别账号的登录方法，并由账号当前 Credential 提供足够多的不同 AuthenticationFactorKind；TOTP 与 Passkey 都是 `POSSESSION`，不能合计为两个因素。无法满足时返回 409，版本已经变化时返回 412，两种结果都不写入数据。
 
 ## 当前 Principal 偏好
 
@@ -479,7 +543,7 @@ sequenceDiagram
     participant QR as /me/authentication/totp/enrollments/{id}/qr-code
     participant Credential as /me/authentication/totp/credential
 
-    Client->>Verification: 完成 authentication.totp.enroll
+    Client->>Verification: 完成 AUTHENTICATION.TOTP.ENROLL
     Client->>Enrollment: POST + X-Verification
     Enrollment-->>Client: 201 + enrollmentId + Location
     Client->>QR: GET
@@ -488,15 +552,15 @@ sequenceDiagram
     Credential-->>Client: 201 + Location
 ```
 
-`GET /me/authentication/totp/credential` 返回启用状态，不返回 secret 或内部 Version。没有凭据时返回 404。激活与替换请求都包含 `enrollmentId` 和 `code`；二维码、JSON、日志和数据库明文都不返回 secret 或 provisioning URI。替换和删除要求 `authentication.totp.replace` verification。Credential Version 用于复核 VerifiedAuthentication、推进验证码时间步和执行写入 CAS。
+`GET /me/authentication/totp/credential` 返回启用状态，不返回 secret 或内部 Version。没有凭据时返回 404。激活与替换请求都包含 `enrollmentId` 和 `code`；二维码、JSON、日志和数据库明文都不返回 secret 或 provisioning URI。替换和删除要求 `AUTHENTICATION.TOTP.REPLACE` verification。Credential Version 用于复核 VerifiedAuthentication、推进验证码时间步和执行写入 CAS。
 
 首次激活只创建 TOTP Credential，不修改认证设置，也不注销当前 Session。替换或删除 TOTP 会注销该账号全部 Session。删除前 Sca4d Server 检查剩余方法仍能满足认证设置；取消 enrollment 不修改 Credential、认证设置或 Session。
 
 ### Passkey 注册与删除
 
-先通过 Session 调用 Passkey registration options 路由。浏览器创建 Credential 后，客户端完成 `authentication.passkey.register` verification，再把 `ceremonyId`、`responseJson` 和最长 100 字符的 `name` 提交到 `POST /me/passkeys`。每个账号默认最多五个 Passkey；达到上限返回冲突。
+先通过 Session 调用 Passkey registration options 路由。浏览器创建 Credential 后，客户端完成 `AUTHENTICATION.PASSKEY.REGISTER` verification，再把 `ceremonyId`、`responseJson` 和最长 100 字符的 `name` 提交到 `POST /me/passkeys`。每个账号默认最多五个 Passkey；达到上限返回冲突。
 
-`GET /me/passkeys` 返回模块标识、名称、transport、备份状态、创建时间、最近使用时间和 Version，不返回公钥或 user handle。删除要求 `authentication.passkey.delete` verification。删除最后一个 Passkey 前 Sca4d Server 检查认证设置；模块使用账号锚点版本 CAS 同时检查最小保留数量，避免并发删除绕过规则。Passkey 删除不注销现有 Session。
+`GET /me/passkeys` 返回模块标识、名称、transport、备份状态、创建时间、最近使用时间和 Version，不返回公钥或 user handle。删除要求 `AUTHENTICATION.PASSKEY.DELETE` verification。删除最后一个 Passkey 前 Sca4d Server 检查认证设置；模块使用账号锚点版本 CAS 同时检查最小保留数量，避免并发删除绕过规则。Passkey 删除不注销现有 Session。
 
 ## Platform Account
 
@@ -535,11 +599,11 @@ App 在一个事务中创建 Subject、Account、Principal、用户名标识、�
 
 `PATCH /platform/accounts/{accountId}` 接受 `status` 字段，值为 `ACTIVE` 或 `DISABLED`，采用后写覆盖。停用后注销目标账号全部 Session；不能停用当前账号或受保护 ROOT Account，违反时返回 409。
 
-`DELETE /platform/accounts/{accountId}` 只接受在线 Session Token，并消费绑定当前管理员 Session、Account 与 `account.delete` 的一次性 verification。客户端从 verification 的 `availableMethods` 选择 Password、TOTP 或 Passkey，直到满足账号的敏感动作因素数量。应用按目标 Account 取得分布式锁后再开启删除事务，不使用数据库显式行锁。
+`DELETE /platform/accounts/{accountId}` 只接受在线 Session Token，并消费绑定当前管理员 Session、Account 与 `ACCOUNT.DELETE` 的一次性 verification。客户端从 verification 的 `availableMethods` 选择 Password、TOTP 或 Passkey，直到满足账号的敏感动作因素数量。应用按目标 Account 取得分布式锁后再开启删除事务，不使用数据库显式行锁。
 
 删除不能用于当前管理员自己的 Account 或受保护 ROOT Account。IAM 完成这些保护规则后才首次终止目标 Session 并修改数据；失败时 Password、TOTP、Passkey、认证设置和资料保持不变。Account、登录标识和认证 Credential 元数据改为 `DISABLED + deleted = 1`；Account-Principal 关系、认证设置、Password/TOTP secret、Passkey 模块账号数据和未完成 TOTP enrollment 物理删除。未删除记录的局部唯一索引使原用户名可以重新注册。
 
-Subject 还有其他未删除 Account 时保留 Subject；删除最后一个 Account 时逻辑删除 Subject。Principal 还有其他未删除 Account 时保留 Principal、资料、角色和 ACL；否则 Principal 与 `platform_user_profile` 逻辑删除，资料邮箱与手机号清空，展示名称改为“已删除账号”，角色关系和 ACL 物理删除。事务提交后再次终止目标 Account Session。在线 Session 立即失效；已经签发的普通离线 JWT 仍按最长五分钟 TTL 到期。
+Subject 还有其他未删除 Account 时保留 Subject；删除最后一个 Account 时逻辑删除 Subject。Principal 还有其他未删除 Account 时保留 Principal、资料、角色和 ACL；否则 Principal 与 `platform_user_profile` 逻辑删除，资料邮箱与手机号清空，展示名称改为「已删除账号」，角色关系和 ACL 物理删除。事务提交后再次终止目标 Account Session。在线 Session 立即失效；已经签发的普通离线 JWT 仍按最长五分钟 TTL 到期。
 
 ### 分配角色
 
@@ -610,7 +674,7 @@ Product 响应包含 `id`、不可修改的 `code`、按请求 Locale 生成的 
     "zh-CN": { "displayName": "规范温控器" },
     "en-US": { "displayName": "Standard climate controller" }
   },
-  "accessMethods": ["account:shared-secret"],
+  "accessMethods": ["ACCOUNT:AUTHENTICATION:SHARED_SECRET"],
   "protocolCodes": ["standard-climate-json-v1"]
 }
 ```
@@ -619,7 +683,7 @@ Product `i18n` 第一层是 BCP 47 Locale，第二层只允许 `displayName`。�
 
 Product、双来源 Product Catalog 和 Device 列表都使用从 1 开始的 `page` 与 `size`，默认分别为 1 和 20，`size` 最大 100。响应包含 `items`、`page`、`size` 和 `total`；超过末页返回空 `items` 和不变的总数。Catalog 以稳定 Product code 统一排序数据库与代码定义，不要求服务端全量读取数据库 Product。
 
-新 Product 为 `DISABLED`。只有停用 Product 能通过 `PUT /{productId}` 完整替换接入方式和协议，或向 `/{productId}/thing-models` 发布最大 1 MiB 的完整请求。发布正文由 `model` 和 `i18n` 组成：`model.formatVersion` 必须为 `2`，只包含技术定义，不包含模型、属性、字段或枚举的 `displayName`；`model.productCode` 必须等于 Product code。
+新 Product 为 `DISABLED`。只有停用 Product 能通过 `PUT /{productId}` 完整替换接入方式和协议，或向 `/{productId}/thing-models` 发布最大 1 MiB 的完整请求。发布正文由 `model` 和 `i18n` 组成：`model.formatVersion` 必须为 `1`，只包含技术定义，不包含模型、属性、字段或枚举的 `displayName`；`model.productCode` 必须等于 Product code。
 
 ThingModel `i18n` 的字段键是服务端返回结构使用的稳定 JSON Pointer 路径，例如 `/displayName`、`/properties/power/displayName` 和 `/commands/set-mode/inputs/mode/displayName`。默认 `zh-CN` 必须完整且仅覆盖模型要求的全部路径，其他 Locale 可以只提供覆盖项；未知路径和超过 128 字符的文本使整个请求失败。列表和详情返回技术定义与按请求 Locale 生成的嵌套 `displayName`，`GET /{productId}/thing-models/{version}/i18n` 返回完整原值。翻译使用对应 `PUT .../i18n` 完整替换，采用后写覆盖，不改变 ThingModel 版本或技术内容摘要，也不要求停用 Product。
 
@@ -644,11 +708,11 @@ Content-Type: application/json
   "connectionProtocol": "mqtt",
   "connectionIdentityType": "mqtt-client-id",
   "connectionIdentity": "freezer-001",
-  "accessMethods": ["account:shared-secret"]
+  "accessMethods": ["ACCOUNT:AUTHENTICATION:SHARED_SECRET"]
 }
 ```
 
-响应中的 `device` 默认 `DISABLED`，`accountId`、`sharedSecret` 和 `hmacKey` 按接入方式可空；原始凭据只在创建、连接修改新签发或对应重置响应中显示。十分钟内相同 key 和相同请求重放同一加密保存的创建结果；相同 key 配不同请求返回 409。Device 停用时才允许修改 details、binding 和 connection。直接连接 Device 的三个连接字段必须全有且 `accessMethods` 非空；间接 Device 的三个连接字段必须全空且 `accessMethods` 为空。启用要求 Product 已启用且物模型、协议、连接绑定和接入方式有效。Sca4d Server 支持 `anonymous`、`session`、`account:shared-secret` 和 `account:x509`；`anonymous` 不能与其他方式混用。
+响应中的 `device` 默认 `DISABLED`，`accountId`、`sharedSecret` 和 `hmacKey` 按接入方式可空；原始凭据只在创建、连接修改新签发或对应重置响应中显示。十分钟内相同 key 和相同请求重放同一加密保存的创建结果；相同 key 配不同请求返回 409。Device 停用时才允许修改 details、binding 和 connection。直接连接 Device 的三个连接字段必须全有且 `accessMethods` 非空；间接 Device 的三个连接字段必须全空且 `accessMethods` 为空。启用要求 Product 已启用且物模型、协议、连接绑定和接入方式有效。Sca4d Server 支持 `ANONYMOUS`、`SESSION`、`ACCOUNT:AUTHENTICATION:SHARED_SECRET` 和 `ACCOUNT:AUTHENTICATION:X509`；`ANONYMOUS` 不能与其他方式混用。
 
 ### 属性修改与命令
 
@@ -656,7 +720,7 @@ Content-Type: application/json
 
 ### 设备 HMAC 登录
 
-声明 `session` 的 Device 通过匿名 `POST /iot/device-sessions` 提交以下请求头。Controller 只转换 HTTP 输入；DeviceSessionService 把请求转换为 HmacProof，并通过 AuthenticationMethods 使用通用 HmacAuthenticationMethod 校验 Credential version、签名、时间偏差和 nonce 防重放，再通过 SessionLifecycle 建立 Device Account 的通用 Session：
+声明 `SESSION` 的 Device 通过匿名 `POST /iot/device-sessions` 提交以下请求头。Controller 只转换 HTTP 输入；DeviceSessionService 把请求转换为 HmacProof，并通过 AuthenticationMethods 使用通用 HmacAuthenticationMethod 校验 Credential version、签名、时间偏差和 nonce 防重放，再通过 SessionLifecycle 建立 Device Account 的通用 Session：
 
 ```http
 X-Iot-Device-Id: 2081571083508514816
@@ -702,7 +766,7 @@ IOT-HMAC-SHA256
 
 ### EMQX 认证回调
 
-EMQX 认证回调只在 `SCA4DJ_IOT_EMQX_ENABLED=true` 时注册。它比较 `X-Iot-Emqx-Secret` 与 `SCA4DJ_IOT_EMQX_WEBHOOK_SECRET`；错误共享 Secret 返回 401。`@AnonymousAccess` 只取消用户 Session 恢复，不能跳过这项独立校验。`iot.emqx.authenticate` 返回 EMQX 规定的 `allow` 或 `deny` JSON，以及允许连接时的 `client_attrs` 和 ACL。
+EMQX 认证回调只在 `SCA4DJ_IOT_EMQX_ENABLED=true` 时注册。它比较 `X-Iot-Emqx-Secret` 与 `SCA4DJ_IOT_EMQX_WEBHOOK_SECRET`；错误共享 Secret 返回 401。`@AnonymousAccess` 只取消用户 Session 恢复，不能跳过这项独立校验。`IOT.EMQX.AUTHENTICATE` 返回 EMQX 规定的 `allow` 或 `deny` JSON，以及允许连接时的 `client_attrs` 和 ACL。
 
 ## 条件请求与失败
 
@@ -723,7 +787,7 @@ EMQX 认证回调只在 `SCA4DJ_IOT_EMQX_ENABLED=true` 时注册。它比较 `X-
 `GET /events` 只使用不透明 Session Token 建立连接。响应设置 `Cache-Control: no-cache, no-transform` 和 `X-Accel-Buffering: no`，并立即发送首个 SSE 注释，使浏览器和反向代理确认流已经开始。Session 状态发生变化时发送：
 
 ```text
-event:authentication.session.changed
+event:AUTHENTICATION.SESSION.CHANGED
 data:{}
 ```
 
@@ -752,7 +816,7 @@ Upgrade 完成后，STOMP `CONNECT` 只提交协议参数并沿用握手绑定�
 
 每个 `SUBSCRIBE` 和 `/app/**` `SEND` 必须用 STOMP native header `principal-id` 提交当前 Session 中的正整数业务身份标识。header 缺失、重复、格式错误或 Principal 不属于 Session 时，当前帧在进入 App 或登记订阅前失败。
 
-订阅目标与 `/app/**` SEND 由 App 显式扩展。浏览器发送到 `/app/invoices` 时，App 使用 `@MessageMapping("/invoices")` 接收；本示例 App 当前没有业务 STOMP destination。默认 Vben 前端在登录或恢复 Session 后会使用 backing Session Token 连接 `/events` SSE，收到 `authentication.session.changed` 后刷新 Session、permission、菜单和动态路由；它不申请票据，也不连接 `/events/ws` WebSocket。
+订阅目标与 `/app/**` SEND 由 App 显式扩展。浏览器发送到 `/app/invoices` 时，App 使用 `@MessageMapping("/invoices")` 接收；本示例 App 当前没有业务 STOMP destination。默认 Vben 前端在登录或恢复 Session 后会使用 backing Session Token 连接 `/events` SSE，收到 `AUTHENTICATION.SESSION.CHANGED` 后刷新 Session、permission、菜单和动态路由；它不申请票据，也不连接 `/events/ws` WebSocket。
 
 ## 开放 API 路由
 
@@ -769,6 +833,6 @@ Upgrade 完成后，STOMP `CONNECT` 只提交协议参数并沿用握手绑定�
 
 `local` 和 `dev` profile 启用 Springdoc，并把 `/v3/api-docs`、`/swagger-ui.html` 和 `/swagger-ui/**` 排除在认证拦截器之外，因此开发环境可以直接读取运行时 OpenAPI 或打开 Swagger UI。基础配置默认关闭 Core OpenAPI、Springdoc API docs 和 Swagger UI，生产环境不开放这些端点。
 
-Swagger UI 位于 `/swagger-ui/index.html`。文档选择器中的“开放 API”分组只包含应用明确声明的 `@OpenApiRoute` 方法和 `OpenApiAuthenticationEndpoint` Bean 配置的认证端点；Swagger UI 从 `/v3/api-docs/openapi` 读取该分组的运行时数据。应用不生成或提交静态 OpenAPI 文件。
+Swagger UI 位于 `/swagger-ui/index.html`。文档选择器中的「开放 API」分组只包含应用明确声明的 `@OpenApiRoute` 方法和 `OpenApiAuthenticationEndpoint` Bean 配置的认证端点；Swagger UI 从 `/v3/api-docs/openapi` 读取该分组的运行时数据。应用不生成或提交静态 OpenAPI 文件。
 
 标记 `@Hidden` 的 `/files/transfers/uploads` 与 `/files/transfers/objects` 不出现在 OpenAPI 中。条件装配的 EMQX 回调是 Broker 专用协议，管理端使用上表中的 IoT 管理接口。

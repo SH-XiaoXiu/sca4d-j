@@ -19,7 +19,9 @@ import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.core.api.persistence.AffectedRows;
 import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.core.api.persistence.ZeroRowPolicy;
+import com.sca4d.core.api.security.EncryptedSecret;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -29,13 +31,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /** 使用 `ProviderMapper` 保存联邦 Provider 和协议配置。 */
 public class DefaultFederatedProviderRepository implements FederatedProviderRepository {
 
-    private final @NotNull ProviderMapper mapper;
-
     private final @NotNull ObjectMapper objectMapper;
+
+    private final @NotNull ProviderMapper mapper;
 
     private final @NotNull FederatedSecretCryptography secrets;
 
@@ -44,7 +47,7 @@ public class DefaultFederatedProviderRepository implements FederatedProviderRepo
     /** 创建 Provider Repository。 */
     public DefaultFederatedProviderRepository(
             @NotNull ProviderMapper mapper,
-            @Sca4djJson @NotNull ObjectMapper objectMapper,
+            @Sca4djJson @NotNull Sca4djMapper objectMapper,
             @NotNull FederatedSecretCryptography secrets,
             @NotNull VersionConditions versionConditions) {
         this.mapper = Objects.requireNonNull(mapper, "Provider Mapper 不能为空");
@@ -185,7 +188,7 @@ public class DefaultFederatedProviderRepository implements FederatedProviderRepo
         FederatedProviderConfiguration old = checked.clientSecret() == null
                 ? authorizationConfiguration(current)
                 : null;
-        com.sca4d.core.api.security.EncryptedSecret encrypted = checked.clientSecret() == null
+        EncryptedSecret encrypted = checked.clientSecret() == null
                 && old != null
                 && old.clientSecret() != null
                         ? secrets.encrypt(current.id(), old.clientSecret())
@@ -230,7 +233,7 @@ public class DefaultFederatedProviderRepository implements FederatedProviderRepo
         if (includeSecret && ciphertext != null && state.secretKeyId() != null) {
             secret = secrets.decrypt(
                     provider.id(),
-                    new com.sca4d.core.api.security.EncryptedSecret(state.secretKeyId(), ciphertext));
+                    new EncryptedSecret(state.secretKeyId(), ciphertext));
         }
         return new FederatedProviderConfiguration(
                 state.protocol(),
@@ -294,7 +297,7 @@ public class DefaultFederatedProviderRepository implements FederatedProviderRepo
                 .entrySet()
                 .stream()
                 .collect(
-                        java.util.stream.Collectors.toUnmodifiableMap(
+                        Collectors.toUnmodifiableMap(
                                 Map.Entry::getKey,
                                 entry -> String.valueOf(entry.getValue())));
     }
@@ -306,7 +309,7 @@ public class DefaultFederatedProviderRepository implements FederatedProviderRepo
                 .entrySet()
                 .stream()
                 .collect(
-                        java.util.stream.Collectors.toUnmodifiableMap(
+                        Collectors.toUnmodifiableMap(
                                 Map.Entry::getKey,
                                 entry -> {
                                     if (!(entry.getValue() instanceof Map<?, ?> nested)) {
@@ -315,7 +318,7 @@ public class DefaultFederatedProviderRepository implements FederatedProviderRepo
                                     return nested.entrySet()
                                             .stream()
                                             .collect(
-                                                    java.util.stream.Collectors.toUnmodifiableMap(
+                                                    Collectors.toUnmodifiableMap(
                                                             item -> String.valueOf(item.getKey()),
                                                             item -> String.valueOf(item.getValue())));
                                 }));

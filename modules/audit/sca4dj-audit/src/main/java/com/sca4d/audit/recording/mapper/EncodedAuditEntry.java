@@ -8,40 +8,42 @@ import java.time.Instant;
 
 /** 保存 audit_record 查询和写入使用的数据库列值。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class EncodedAuditEntry {
-    private final long id;
-
-    private final @NotNull String requestId;
-
-    private final long subjectId;
-
-    private final @Nullable Long accountId;
-
-    private final long principalId;
-
-    private final @NotNull String operation;
-
-    private final @Nullable String targetType;
-
-    private final @Nullable String targetId;
-
+public class EncodedAuditEntry {
     private final @NotNull AuditResult result;
 
-    private final @Nullable String payloadType;
+    private final @NotNull Instant occurredAt;
 
     private final @Nullable Integer payloadVersion;
 
-    private final @Nullable String payloadJson;
+    private final @Nullable Long accountId;
+
+    private final @Nullable String clientIp;
 
     private final @Nullable String httpMethod;
 
     private final @Nullable String httpPath;
 
-    private final @Nullable String clientIp;
+    private final @Nullable String instanceId;
+
+    private final @NotNull String operation;
+
+    private final @Nullable String payloadJson;
+
+    private final @Nullable String payloadType;
+
+    private final @NotNull String requestId;
+
+    private final @Nullable String targetId;
+
+    private final @Nullable String targetType;
 
     private final @Nullable String userAgent;
 
-    private final @NotNull Instant occurredAt;
+    private final long id;
+
+    private final long principalId;
+
+    private final long subjectId;
 
     /**
      * 创建已经完成 JSON 编码的审计字段。
@@ -81,7 +83,8 @@ public final class EncodedAuditEntry {
             @Nullable String httpPath,
             @Nullable String clientIp,
             @Nullable String userAgent,
-            @NotNull Instant occurredAt) {
+            @NotNull Instant occurredAt,
+            @Nullable String instanceId) {
         this.id = id;
         this.requestId = requestId;
         this.subjectId = subjectId;
@@ -99,6 +102,30 @@ public final class EncodedAuditEntry {
         this.clientIp = clientIp;
         this.userAgent = userAgent;
         this.occurredAt = occurredAt;
+        this.instanceId = instanceId;
+    }
+
+    /** 为冻结的审计字段分配数据库主键，其他列保持不变。 */
+    public @NotNull EncodedAuditEntry withId(long id) {
+        return new EncodedAuditEntry(
+                id,
+                requestId,
+                subjectId,
+                accountId,
+                principalId,
+                operation,
+                targetType,
+                targetId,
+                result,
+                payloadType,
+                payloadVersion,
+                payloadJson,
+                httpMethod,
+                httpPath,
+                clientIp,
+                userAgent,
+                occurredAt,
+                instanceId);
     }
 
     /** @return 主键 */
@@ -184,5 +211,14 @@ public final class EncodedAuditEntry {
     /** @return 操作发生时间 */
     public @NotNull Instant occurredAt() {
         return occurredAt;
+    }
+
+    /**
+     * 实际执行实例；旧记录没有此字段时为空。
+     *
+     * @return 实际执行实例；旧记录没有此字段时为空
+     */
+    public @Nullable String instanceId() {
+        return instanceId;
     }
 }

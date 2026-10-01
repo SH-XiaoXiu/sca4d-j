@@ -16,6 +16,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
@@ -174,7 +175,7 @@ class MqttInboundProcessorTest {
 
         try (MqttInboundProcessor processor = processor(router, List.of(), List.of(), null, 2, 1)) {
             processor.submit(first, message("a", 1));
-            assertThat(firstStarted.await(1, java.util.concurrent.TimeUnit.SECONDS)).isTrue();
+            assertThat(firstStarted.await(1, TimeUnit.SECONDS)).isTrue();
             processor.submit(queued, message("a", 2));
             processor.submit(overloaded, message("a", 3));
             processor.submit(otherShard, message("b", 4));

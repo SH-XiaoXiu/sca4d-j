@@ -250,17 +250,17 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.auth.hmac.IssuedHmacKey</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resetDeviceHmacKey(long)" class="member-name-link">resetDeviceHmacKey</a><wbr>(long&nbsp;deviceId)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">重置 Device HMAC Key，并终止旧 Session 和连接。</div>
+<div class="block">重置 Device MAC Key，并终止旧 Session 和连接。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.auth.sharedsecret.IssuedSharedSecret</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resetDeviceSharedSecret(long)" class="member-name-link">resetDeviceSharedSecret</a><wbr>(long&nbsp;deviceId)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">重置 Device Shared Secret，并终止旧 Session 和连接。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.message.DeviceDownlinkMessage</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.iot.api.message.DeviceDownlink</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#submitCommand(long,java.lang.String,java.util.Map)" class="member-name-link">submitCommand</a><wbr>(long&nbsp;deviceId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;commandCode,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>?&gt;&nbsp;inputs)</code></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>?&gt;&nbsp;inputs)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">只允许启用的 Device 提交物模型中声明的 command。</div>
 </div>
@@ -328,7 +328,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="../repository/IotApplicationRepository.html" title="class in com.sca4d.app.server.repository">IotApplicationRepository</a>&nbsp;repository,
  @NotNull
  @NotNull com.sca4d.core.api.security.SecretKeyring&nbsp;keyring,
- @Sca4djJson @NotNull
+ @NotNull
  @NotNull com.fasterxml.jackson.databind.ObjectMapper&nbsp;objectMapper,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
@@ -541,7 +541,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.auth.hmac.IssuedHmacKey</span>&nbsp;<span class="element-name">resetDeviceHmacKey</span><wbr><span class="parameters">(long&nbsp;deviceId)</span></div>
-<div class="block">重置 Device HMAC Key，并终止旧 Session 和连接。</div>
+<div class="block">重置 Device MAC Key，并终止旧 Session 和连接。</div>
 </section>
 </li>
 <li>
@@ -560,11 +560,11 @@ loadScripts(document, 'script');</script>
 <h3>submitCommand</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.iot.api.message.DeviceDownlinkMessage</span>&nbsp;<span class="element-name">submitCommand</span><wbr><span class="parameters">(long&nbsp;deviceId,
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.iot.api.message.DeviceDownlink</span>&nbsp;<span class="element-name">submitCommand</span><wbr><span class="parameters">(long&nbsp;deviceId,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;commandCode,
  @NotNull
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>?&gt;&nbsp;inputs)</span></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>?&gt;&nbsp;inputs)</span></div>
 <div class="block">只允许启用的 Device 提交物模型中声明的 command。</div>
 </section>
 </li>

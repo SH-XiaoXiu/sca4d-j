@@ -4,9 +4,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.time.Duration;
 
-/** 保存 HMAC 认证的时间窗、nonce 和失败限制。 */
+/** 保存 MAC 认证的时间窗、nonce 和失败限制。 */
 @ConfigurationProperties("sca4dj.auth.hmac")
-public final class HmacProperties {
+public class HmacProperties {
 
     private Duration clockSkew = Duration.ofMinutes(5);
 

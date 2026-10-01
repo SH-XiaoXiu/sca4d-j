@@ -1,65 +1,45 @@
 package com.sca4d.core.api.scheduling;
 
-import org.jetbrains.annotations.Contract;
+import com.sca4d.core.api.name.NameFormat;
+import com.sca4d.core.api.name.code.Code;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-import java.util.regex.Pattern;
+import java.util.List;
 
-/** 标识代码中长期存在的一项 Job 计划，不使用 Bean 名或 Quartz key。 */
-public final class ScheduleKey {
+/** 使用稳定节点链标识调度计划，并保留独立领域类型。 */
+public final class ScheduleKey extends TreeCode {
 
-    private static final Pattern FORMAT = Pattern.compile("[a-z][a-z0-9]*(?:[._-][a-z0-9]+)*");
-
-    private final @NotNull String value;
-
-    /**
-     * 创建代码计划标识。
-     *
-     * @param value 不超过 128 个字符，以小写字母开头，可继续使用小写字母、数字、点、横线或下划线
-     * @throws NullPointerException 标识为空时抛出
-     * @throws IllegalArgumentException 标识超过 128 个字符、包含首尾空白或不符合格式时抛出
-     */
-    public ScheduleKey(@NotNull String value) {
-        String checked = Objects.requireNonNull(value, "ScheduleKey 不能为空").trim();
-        if (!checked.equals(value)) {
-            throw new IllegalArgumentException("ScheduleKey 不能包含首尾空白");
-        }
-        if (checked.length() > 128) {
-            throw new IllegalArgumentException("ScheduleKey 不能超过 128 个字符: length=" + checked.length());
-        }
-        if (!FORMAT.matcher(checked).matches()) {
-            throw new IllegalArgumentException("ScheduleKey 格式错误: " + checked);
-        }
-        this.value = checked;
+    /** 从代码声明或序列化边界解析编码，拒绝通配符和超过 128 字符的名称。 */
+    public ScheduleKey(@NotNull String text) {
+        this(TreeCode.of(text));
     }
 
-    /**
-     * 返回稳定计划标识文本。
-     *
-     * @return 构造时已经校验的标识
-     */
-    @Contract(pure = true)
-    public @NotNull String value() {
-        return value;
+    /** 从已经校验的稳定编码构造领域名称。 */
+    public ScheduleKey(@NotNull Code code) {
+        super(code);
+        if (hasNode(TreeCode.ofSegment("*")) || format(NameFormat.COLON).length() > 128) {
+            throw new IllegalArgumentException("ScheduleKey 必须是最多 128 字符的固定编码");
+        }
     }
 
     @Override
-    @Contract(pure = true)
-    public boolean equals(@Nullable Object other) {
-        return this == other || other instanceof ScheduleKey key && value.equals(key.value);
+    protected @NotNull ScheduleKey withNodes(@NotNull List<String> nodes) {
+        return new ScheduleKey(super.withNodes(nodes));
     }
 
     @Override
-    @Contract(pure = true)
-    public int hashCode() {
-        return value.hashCode();
+    public @NotNull ScheduleKey child(@NotNull String node) {
+        return (ScheduleKey) super.child(node);
     }
 
     @Override
-    @Contract(pure = true)
-    public @NotNull String toString() {
-        return value;
+    public @NotNull ScheduleKey child(@NotNull TreeCode node) {
+        return (ScheduleKey) super.child(node);
+    }
+
+    @Override
+    public @NotNull ScheduleKey append(@NotNull Code code) {
+        return (ScheduleKey) super.append(code);
     }
 }

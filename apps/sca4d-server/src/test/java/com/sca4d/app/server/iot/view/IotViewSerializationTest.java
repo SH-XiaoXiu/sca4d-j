@@ -138,7 +138,7 @@ class IotViewSerializationTest {
         assertThat(json.at("/products/0/status").isNull()).isTrue();
         assertThat(json.at("/products/0/createdAt").isNull()).isTrue();
         assertThat(json.at("/products/0/updatedAt").isNull()).isTrue();
-        assertThat(json.at("/accessMethods/0").textValue()).isEqualTo("anonymous");
+        assertThat(json.at("/accessMethods/0").textValue()).isEqualTo("ANONYMOUS");
         assertThat(json.at("/protocolCodes/0").textValue()).isEqualTo("gateway-v1");
     }
 

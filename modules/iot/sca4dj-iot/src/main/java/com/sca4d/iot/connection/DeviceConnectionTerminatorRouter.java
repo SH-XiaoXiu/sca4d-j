@@ -14,7 +14,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /** 按 `DeviceConnectionProtocol` 选择唯一的设备连接终止实现。 */
-public final class DeviceConnectionTerminatorRouter {
+public class DeviceConnectionTerminatorRouter {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeviceConnectionTerminatorRouter.class);
 

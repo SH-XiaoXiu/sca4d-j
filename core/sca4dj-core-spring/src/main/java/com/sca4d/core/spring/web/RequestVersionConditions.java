@@ -1,7 +1,7 @@
 package com.sca4d.core.spring.web;
 
 import com.sca4d.core.api.call.CallExecution;
-import com.sca4d.core.api.call.CallRequirement;
+import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.concurrent.VersionConditions;
@@ -9,13 +9,13 @@ import com.sca4d.core.spring.web.annotation.IfMatch;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-/** 把当前 HTTP 请求提交的 `If-Match` 版本绑定为必须由根资源 Repository 消费的调用要求。 */
-public final class RequestVersionConditions implements VersionConditions {
+/** 把当前 HTTP 请求提交的 `If-Match` 版本绑定为必须由根资源 Repository 消费的预提交条件。 */
+public class RequestVersionConditions implements VersionConditions {
 
     private final ThreadLocal<State> current = new ThreadLocal<>();
 
-    /** 创建 HTTP 请求版本条件入口。 */
     public RequestVersionConditions() {
     }
 
@@ -40,11 +40,11 @@ public final class RequestVersionConditions implements VersionConditions {
     public void attach(CallExecution execution) {
         State state = current.get();
         CallExecution checked = Objects.requireNonNull(execution, "方法执行不能为空");
-        if (state == null || state.attached || !checked.method().isAnnotationPresent(IfMatch.class)) {
+        if (state == null || state.attached || checked.declaration(IfMatch.class).isEmpty()) {
             return;
         }
         state.attached = true;
-        checked.addRequirement(state);
+        checked.addPreCommit(state);
     }
 
     /**
@@ -60,11 +60,17 @@ public final class RequestVersionConditions implements VersionConditions {
         if (state == null) {
             return VersionCondition.optimistic(checkedCurrent);
         }
-        if (state.consumed) {
-            throw new IllegalStateException("同一个 HTTP 版本前置条件只能由一个根资源写入消费");
+        return state.resolve(checkedCurrent);
+    }
+
+    /** 冻结当前请求的版本条件，异步线程无需读取 HTTP ThreadLocal。 */
+    @Override
+    public @NotNull VersionConditions capture() {
+        State state = current.get();
+        if (state != null && !state.attached) {
+            throw new IllegalStateException("版本前置条件尚未附着到 @IfMatch 方法执行");
         }
-        state.consumed = true;
-        return VersionCondition.precondition(state.expectedVersion);
+        return state == null ? VersionCondition::optimistic : state::resolve;
     }
 
     /** 清理当前线程保存的版本前置条件。 */
@@ -73,32 +79,32 @@ public final class RequestVersionConditions implements VersionConditions {
     }
 
     /** 保存一个 `If-Match` 版本及其附着和消费状态。 */
-    private static final class State implements CallRequirement {
-
+    private static class State implements CallLifecycle.PreCommit {
         private final @NotNull Version expectedVersion;
 
         private boolean attached;
 
-        private boolean consumed;
+        private final AtomicBoolean consumed = new AtomicBoolean();
 
-        /** @param expectedVersion `If-Match` 声明的预期版本 */
         private State(@NotNull Version expectedVersion) {
             this.expectedVersion = expectedVersion;
         }
 
-        /** 在业务写入成功前确认根资源 Repository 已经消费版本条件。 */
+        private @NotNull VersionCondition resolve(@NotNull Version currentVersion) {
+            Objects.requireNonNull(currentVersion, "当前版本不能为空");
+            if (!consumed.compareAndSet(false, true)) {
+                throw new IllegalStateException("同一个 HTTP 版本前置条件只能由一个根资源写入消费");
+            }
+            return VersionCondition.precondition(expectedVersion);
+        }
+
         @Override
         public void verifySatisfied() {
-            if (!consumed) {
+            if (!consumed.get()) {
                 throw new IllegalStateException("HTTP 方法声明了 @IfMatch，但根资源 Repository 没有消费版本前置条件");
             }
         }
 
-        /**
-         * `If-Match` 只约束写入，不在无关只读事务提交时检查。
-         *
-         * @return 固定返回 {@code false}
-         */
         @Override
         public boolean appliesToReadOnlyTransaction() {
             return false;

@@ -39,8 +39,6 @@ import java.util.Objects;
 @CurrentPrincipal(selection = PlatformPrincipalSelection.class)
 public class EmailSenderController {
 
-    private static final String RESOURCE_TYPE = "notification:email:sender";
-
     private final @NotNull EmailSenderService senders;
 
     /** @param senders SMTP 配置管理服务 */
@@ -51,7 +49,7 @@ public class EmailSenderController {
     /** @return 全部未删除且不包含密码的 SMTP 配置 */
     @GetMapping
     @Operation(summary = "查询 SMTP 配置")
-    @RequirePermission(operation = SystemOperations.EMAIL_READ)
+    @RequirePermission(operation = SystemOperations.EMAIL_READ_VALUE)
     public @NotNull ApiResponse<List<EmailSenderView>> findAll() {
         return ApiResponse.ok(senders.findAll().stream().map(EmailSenderView::from).toList());
     }
@@ -59,8 +57,8 @@ public class EmailSenderController {
     /** 创建默认停用的 SMTP 配置，并加密保存可选密码。 */
     @PostMapping
     @Operation(summary = "创建 SMTP 配置")
-    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE)
-    @Audit(operation = "system/email/sender/create")
+    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE_VALUE)
+    @Audit(operation = "SYSTEM/EMAIL/SENDER/CREATE")
     public @NotNull ApiResponse<EmailSenderView> create(
             @RequestBody @Valid @NotNull CreateEmailSenderRequest request) {
         EmailSender created = senders.create(
@@ -81,7 +79,7 @@ public class EmailSenderController {
     /** 读取一个不包含密码的 SMTP 配置，并发布 ETag。 */
     @GetMapping("/{senderId}")
     @Operation(summary = "查询 SMTP 配置详情")
-    @RequirePermission(operation = SystemOperations.EMAIL_READ)
+    @RequirePermission(operation = SystemOperations.EMAIL_READ_VALUE)
     public @NotNull ApiResponse<EmailSenderView> get(@PathVariable long senderId) {
         EmailSender sender = senders.loadById(senderId);
         return ApiResponse.ok(EmailSenderView.from(sender));
@@ -91,10 +89,10 @@ public class EmailSenderController {
     @PutMapping("/{senderId}")
     @IfMatch
     @Operation(summary = "替换 SMTP 配置")
-    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE)
-    @Audit(operation = "system/email/sender/replace")
+    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE_VALUE)
+    @Audit(operation = "SYSTEM/EMAIL/SENDER/REPLACE")
     public @NotNull ApiResponse<EmailSenderView> replace(
-            @PathVariable @AuditTarget(resourceType = RESOURCE_TYPE) long senderId,
+            @PathVariable @AuditTarget(resourceType = EmailSender.RESOURCE_TYPE_VALUE) long senderId,
             @RequestBody @Valid @NotNull ReplaceEmailSenderRequest request) {
         EmailSender updated = senders.replace(
                 senderId,
@@ -115,10 +113,10 @@ public class EmailSenderController {
     @PatchMapping("/{senderId}/status")
     @IfMatch
     @Operation(summary = "修改 SMTP 配置状态")
-    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE)
-    @Audit(operation = "system/email/sender/status/change")
+    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE_VALUE)
+    @Audit(operation = "SYSTEM/EMAIL/SENDER/STATUS/CHANGE")
     public @NotNull ApiResponse<EmailSenderView> setEnabled(
-            @PathVariable @AuditTarget(resourceType = RESOURCE_TYPE) long senderId,
+            @PathVariable @AuditTarget(resourceType = EmailSender.RESOURCE_TYPE_VALUE) long senderId,
             @RequestBody @Valid @NotNull EmailResourceStatusRequest request) {
         EmailSender updated = senders.setEnabled(senderId, request.isEnabled());
         return ApiResponse.ok(EmailSenderView.from(updated));
@@ -127,10 +125,10 @@ public class EmailSenderController {
     /** 使用指定 SMTP 配置建立并关闭连接，不发送邮件。 */
     @PostMapping("/{senderId}/connection-tests")
     @Operation(summary = "测试 SMTP 连接")
-    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE)
-    @Audit(operation = "system/email/sender/connection/test")
+    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE_VALUE)
+    @Audit(operation = "SYSTEM/EMAIL/SENDER/CONNECTION/TEST")
     public @NotNull ApiResponse<Void> testConnection(
-            @PathVariable @AuditTarget(resourceType = RESOURCE_TYPE) long senderId) {
+            @PathVariable @AuditTarget(resourceType = EmailSender.RESOURCE_TYPE_VALUE) long senderId) {
         senders.testConnection(senderId);
         return ApiResponse.noContent();
     }
@@ -139,10 +137,10 @@ public class EmailSenderController {
     @DeleteMapping("/{senderId}")
     @IfMatch
     @Operation(summary = "删除 SMTP 配置")
-    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE)
-    @Audit(operation = "system/email/sender/delete")
+    @RequirePermission(operation = SystemOperations.EMAIL_MANAGE_VALUE)
+    @Audit(operation = "SYSTEM/EMAIL/SENDER/DELETE")
     public @NotNull ApiResponse<Void> delete(
-            @PathVariable @AuditTarget(resourceType = RESOURCE_TYPE) long senderId) {
+            @PathVariable @AuditTarget(resourceType = EmailSender.RESOURCE_TYPE_VALUE) long senderId) {
         senders.delete(senderId);
         return ApiResponse.noContent();
     }

@@ -1,5 +1,7 @@
 package com.sca4d.app.server.system.view;
 
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+
 import com.sca4d.app.server.audit.OperationLog;
 import com.sca4d.audit.payload.AuditPayloadData;
 import com.sca4d.audit.query.AuditEntry;
@@ -14,7 +16,7 @@ import java.util.Objects;
 
 /** 返回管理端展示一条操作日志所需的身份、目标、结果、payload 和 HTTP 快照。 */
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
-public final class OperationLogView {
+public class OperationLogView {
     private final long id;
 
     private final @NotNull String requestId;
@@ -111,7 +113,7 @@ public final class OperationLogView {
                 entry.actor().principalId(),
                 checked.principalDisplayName(),
                 entry.operation().id(),
-                target == null ? null : target.type(),
+                target == null ? null : target.type().format(SLASH),
                 target == null ? null : target.id(),
                 entry.result().name(),
                 payload == null ? null : payload.type(),

@@ -1,5 +1,6 @@
 package com.sca4d.iam.base.mapper;
 
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.iam.acl.AclEntry;
 import org.apache.ibatis.annotations.Param;
@@ -22,7 +23,7 @@ public interface PlatformAclMapper {
      */
     int insert(
             @Param("principalId") @NotNull Long principalId,
-            @Param("resourceType") @NotNull String resourceType,
+            @Param("resourceType") @NotNull TreeCode resourceType,
             @Param("resourceId") @NotNull String resourceId,
             @Param("action") @NotNull Action action);
 
@@ -37,7 +38,7 @@ public interface PlatformAclMapper {
      */
     int delete(
             @Param("principalId") @Nullable Long principalId,
-            @Param("resourceType") @Nullable String resourceType,
+            @Param("resourceType") @Nullable TreeCode resourceType,
             @Param("resourceId") @Nullable String resourceId,
             @Param("action") @Nullable Action action);
 
@@ -52,7 +53,7 @@ public interface PlatformAclMapper {
     @NotNull
     List<@NotNull AclEntry> selectEntries(
             @Param("principalId") @NotNull Long principalId,
-            @Param("resourceType") @NotNull String resourceType,
+            @Param("resourceType") @NotNull TreeCode resourceType,
             @Param("resourceId") @Nullable String resourceId,
             @Param("action") @Nullable Action action,
             @Param("limit") @Nullable Integer limit);

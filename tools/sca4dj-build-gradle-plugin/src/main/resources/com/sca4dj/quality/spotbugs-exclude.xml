@@ -9,7 +9,117 @@
     <Bug pattern="CT_CONSTRUCTOR_THROW"/>
   </Match>
   <!-- 请求 Call ID 只有通过严格长度和字符白名单后才会写回响应头。 -->
-  <Match class="com.sca4d.core.spring.call.CallFilter">
+  <Match class="com.sca4d.core.spring.web.HttpCallFilter">
     <Bug pattern="HRS_REQUEST_PARAMETER_TO_HTTP_HEADER"/>
+  </Match>
+  <!-- Spring Bean 构造器保存注入协作者是依赖装配，不是向调用方暴露内部表示。 -->
+  <Match>
+    <Bug pattern="EI_EXPOSE_REP2"/>
+    <Method name="&lt;init&gt;"/>
+    <Or>
+      <Annotation name="org.springframework.stereotype.Service"/>
+      <Annotation name="org.springframework.stereotype.Repository"/>
+      <Annotation name="org.springframework.web.bind.annotation.RestController"/>
+      <Annotation name="org.springframework.stereotype.Component"/>
+    </Or>
+  </Match>
+  <!-- 这些 Bean 由自动配置工厂装配，保存的字段是共享协作者；集合和请求值不在此豁免中。 -->
+  <Match class="com.sca4d.core.spring.setting.DatabaseSettingStore">
+    <Bug pattern="EI_EXPOSE_REP2"/>
+    <Method name="&lt;init&gt;"/>
+    <Field name="repository"/>
+  </Match>
+  <Match class="com.sca4d.audit.recording.AuditMessageCodec">
+    <Bug pattern="EI_EXPOSE_REP2"/>
+    <Method name="&lt;init&gt;"/>
+    <Field name="json"/>
+  </Match>
+  <Match class="com.sca4d.audit.recording.AuditMessageHandler">
+    <Bug pattern="EI_EXPOSE_REP2"/>
+    <Method name="&lt;init&gt;"/>
+    <Field name="repository"/>
+  </Match>
+  <Match class="com.sca4d.audit.recording.QueuedAuditRecorder">
+    <Bug pattern="EI_EXPOSE_REP2"/>
+    <Method name="&lt;init&gt;"/>
+    <Field name="repository"/>
+  </Match>
+  <Match class="com.sca4d.iam.config.SystemIdentityInitializer">
+    <Bug pattern="EI_EXPOSE_REP2"/>
+    <Method name="&lt;init&gt;"/>
+    <Field name="~(transaction|properties)"/>
+  </Match>
+  <Match class="com.sca4d.iam.identity.SystemIdentityRepository">
+    <Bug pattern="EI_EXPOSE_REP2"/>
+    <Method name="&lt;init&gt;"/>
+    <Field name="~(bindings|identities)"/>
+  </Match>
+  <Match class="com.sca4d.iot.state.ReportedStateKeyMigration">
+    <Bug pattern="EI_EXPOSE_REP2"/>
+    <Method name="&lt;init&gt;"/>
+    <Field name="~(legacy|target)"/>
+  </Match>
+  <Match class="com.sca4d.plugin.spring.PluginScopeCallInterceptor">
+    <Bug pattern="EI_EXPOSE_REP2"/>
+    <Method name="&lt;init&gt;"/>
+    <Field name="runtime"/>
+  </Match>
+  <!-- 嵌套配置对象是 Spring Boot 的绑定入口，替换为副本会丢失绑定结果。 -->
+  <Match>
+    <Bug pattern="EI_EXPOSE_REP"/>
+    <Annotation name="org.springframework.boot.context.properties.ConfigurationProperties"/>
+    <Method name="~get(Pagination|Openapi|Token|Bootstrap|Reported|Backend|Node)"/>
+  </Match>
+  <!-- Code 的领域子类只保存不可变节点链，复制引用不会暴露可写状态。 -->
+  <Match>
+    <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
+    <Or>
+      <Field type="com.sca4d.core.api.authentication.AuthenticationActionCode"/>
+      <Field type="com.sca4d.core.api.job.JobKey"/>
+      <Field type="com.sca4d.core.api.scheduling.ScheduleKey"/>
+    </Or>
+  </Match>
+  <!-- 加载器是插件调用切换 TCCL 的共享入口，复制 ClassLoader 会改变类身份。 -->
+  <Match class="com.sca4d.plugin.pf4j.Pf4jPluginLoader$Loaded">
+    <Bug pattern="EI_EXPOSE_REP"/>
+    <Method name="classLoader"/>
+  </Match>
+  <!-- Advisor 的匹配器由 Spring AOP 读取并复用。 -->
+  <Match class="com.sca4d.core.spring.call.CallLifecycleAdvisor">
+    <Bug pattern="EI_EXPOSE_REP"/>
+    <Method name="getPointcut"/>
+  </Match>
+  <!-- Spring Bean 绑定及名称解析器只在进程内使用，不通过 Java 对象序列化传递。 -->
+  <Match class="com.sca4d.core.spring.call.CallLifecycleAdvisor">
+    <Bug pattern="SE_BAD_FIELD,SE_BAD_FIELD_STORE"/>
+    <Field name="~(bindings|pointcut)"/>
+  </Match>
+  <Match class="com.sca4d.core.spring.json.NameJacksonModule$NameDeserializer">
+    <Bug pattern="SE_BAD_FIELD"/>
+    <Field name="factory"/>
+  </Match>
+  <!-- requireExactText 接受空值并抛出异常，Nullable 与 null -> fail 契约一致。 -->
+  <Match class="com.sca4d.core.api.utils.TextUtils">
+    <Bug pattern="NP_PARAMETER_MUST_BE_NONNULL_BUT_MARKED_AS_NULLABLE"/>
+    <Method name="requireExactText"/>
+  </Match>
+  <!-- FileCollection 必须保留惰性依赖解析和输入追踪，不能冻结为普通文件列表。 -->
+  <Match class="com.sca4dj.gradle.app.PluginApiCompilerArguments">
+    <Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2"/>
+    <Field name="shared"/>
+  </Match>
+  <!-- CopySpec 在原对象上设置输入和过滤规则；返回值只用于链式调用。 -->
+  <Match>
+    <Class name="~com.sca4dj.gradle.app.Plugin(ApiGradlePlugin|ArtifactGradlePlugin)"/>
+    <Bug pattern="RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT"/>
+    <Or>
+      <Method name="~(from|include|exclude)" returns="org.gradle.api.tasks.AbstractCopyTask" role="METHOD_CALLED"/>
+      <Method name="~(from|include|exclude)" returns="org.gradle.api.file.CopySpec" role="METHOD_CALLED"/>
+    </Or>
+  </Match>
+  <!-- appendNode 已将子节点加入 POM，仅在继续编辑子节点时才需要返回值。 -->
+  <Match class="com.sca4dj.gradle.app.PluginApiGradlePlugin">
+    <Bug pattern="RV_RETURN_VALUE_IGNORED_INFERRED"/>
+    <Method name="appendNode" returns="groovy.util.Node" role="METHOD_CALLED"/>
   </Match>
 </FindBugsFilter>

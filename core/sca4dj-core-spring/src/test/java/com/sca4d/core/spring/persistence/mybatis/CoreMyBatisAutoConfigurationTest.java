@@ -4,17 +4,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.enums.BaseEnum;
 import com.sca4d.core.api.i18n.LocalizedFields;
 import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.core.spring.config.CoreJacksonAutoConfiguration;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandlerRegistry;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
@@ -48,7 +49,7 @@ class CoreMyBatisAutoConfigurationTest {
         Configuration configuration = new Configuration();
 
         new CoreMyBatisAutoConfiguration()
-                .coreTypeHandlerCustomizer(new ObjectMapper())
+                .coreTypeHandlerCustomizer(new Sca4djMapper())
                 .customize(configuration);
 
         assertThat(configuration.isMapUnderscoreToCamelCase()).isTrue();
@@ -139,7 +140,7 @@ class CoreMyBatisAutoConfigurationTest {
         TypeHandlerRegistry handlers = new TypeHandlerRegistry();
         handlers.setDefaultEnumTypeHandler(CoreEnumTypeHandler.class);
 
-        org.assertj.core.api.Assertions.assertThatThrownBy(() -> handlers.getTypeHandler(OrdinaryState.class))
+        Assertions.assertThatThrownBy(() -> handlers.getTypeHandler(OrdinaryState.class))
                 .rootCause()
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("BaseEnum");

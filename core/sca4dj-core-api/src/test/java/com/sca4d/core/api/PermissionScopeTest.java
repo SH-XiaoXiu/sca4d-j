@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationFactorKind;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.authentication.Session;
 import com.sca4d.core.api.authentication.SessionId;
 import com.sca4d.core.api.call.Call;
@@ -18,6 +17,8 @@ import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.RealmKey;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.identity.SubjectType;
+import com.sca4d.core.api.identity.SystemPrincipal;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Action;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.Permission;
@@ -25,12 +26,14 @@ import com.sca4d.core.api.permission.PermissionAssessment;
 import com.sca4d.core.api.permission.PermissionDecision;
 import com.sca4d.core.api.permission.PermissionPolicy;
 import com.sca4d.core.api.permission.ResourceScope;
+import com.sca4d.core.api.permission.ResourceScopeRequirement;
 import com.sca4d.core.api.permission.SessionOperationPermissionPolicy;
 import com.sca4d.core.api.resource.Resource;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Method;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +47,7 @@ class PermissionScopeTest {
     @Test
     @DisplayName("Stores Resource Scopes By Complete Permission")
     void storesResourceScopesByCompletePermission() {
-        Call call = Call.system("scope-test", NOW);
+        Call call = Call.system("scope-test", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")));
         Resource devices = new DeviceResource("collection");
         Permission read = new Permission(devices, Action.READ);
         Permission update = new Permission(devices, Action.UPDATE);
@@ -54,12 +57,12 @@ class PermissionScopeTest {
         call.recordPermissionDecision(read, PermissionDecision.allow(readScope));
         call.recordPermissionDecision(update, PermissionDecision.allow(updateScope));
         CallExecution execution = execution(call);
-        execution.registerResourceScope(read);
-        execution.registerResourceScope(update);
+        ResourceScopeRequirement.register(execution, read);
+        ResourceScopeRequirement.register(execution, update);
 
-        assertSame(readScope, execution.consumeResourceScope(read, DeviceScope.class).orElseThrow());
-        assertSame(updateScope, execution.consumeResourceScope(update, DeviceScope.class).orElseThrow());
-        assertEquals("read", execution.consumeResourceScope(read, DeviceScope.class).orElseThrow().name);
+        assertSame(readScope, ResourceScopeRequirement.consume(execution, read, DeviceScope.class).orElseThrow());
+        assertSame(updateScope, ResourceScopeRequirement.consume(execution, update, DeviceScope.class).orElseThrow());
+        assertEquals("read", ResourceScopeRequirement.consume(execution, read, DeviceScope.class).orElseThrow().name);
         assertThrows(
                 IllegalStateException.class,
                 () -> call.recordPermissionDecision(read, PermissionDecision.allow(readScope)));
@@ -68,26 +71,26 @@ class PermissionScopeTest {
     @Test
     @DisplayName("Rejects Missing Denied And Mismatched Resource Scopes")
     void rejectsMissingDeniedAndMismatchedResourceScopes() {
-        Call call = Call.system("scope-test", NOW);
+        Call call = Call.system("scope-test", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")));
         Permission devices = new Permission(new DeviceResource("collection"), Action.READ);
         Permission accounts = new Permission(new AccountResource("collection"), Action.READ);
         CallExecution execution = execution(call);
 
-        assertThrows(IllegalStateException.class, () -> execution.registerResourceScope(devices));
+        assertThrows(IllegalStateException.class, () -> ResourceScopeRequirement.register(execution, devices));
 
         call.recordPermissionDecision(devices, PermissionDecision.deny("设备读取被拒绝"));
-        assertThrows(IllegalStateException.class, () -> execution.registerResourceScope(devices));
+        assertThrows(IllegalStateException.class, () -> ResourceScopeRequirement.register(execution, devices));
         assertThrows(
                 IllegalStateException.class,
                 () -> call.recordPermissionDecision(accounts, PermissionDecision.allow(new DeviceScope("read"))));
 
-        Call wrongType = Call.system("wrong-type", NOW);
+        Call wrongType = Call.system("wrong-type", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")));
         wrongType.recordPermissionDecision(accounts, PermissionDecision.allow(new AccountScope()));
         CallExecution wrongTypeExecution = execution(wrongType);
-        wrongTypeExecution.registerResourceScope(accounts);
+        ResourceScopeRequirement.register(wrongTypeExecution, accounts);
         assertThrows(
                 IllegalStateException.class,
-                () -> wrongTypeExecution.consumeResourceScope(accounts, DeviceScope.class));
+                () -> ResourceScopeRequirement.consume(wrongTypeExecution, accounts, DeviceScope.class));
     }
 
     @Test
@@ -99,7 +102,7 @@ class PermissionScopeTest {
         assertTrue(decision.reason().isEmpty());
         assertTrue(decision.scope().isPresent());
         assertEquals("read", decision.scopeAs(DeviceScope.class).name);
-        assertThrows(IllegalArgumentException.class, () -> PermissionDecision.allow(() -> " "));
+        assertThrows(NullPointerException.class, () -> PermissionDecision.allow(() -> null));
 
         PermissionDecision denied = PermissionDecision.deny("没有权限");
         assertFalse(denied.isAllowed());
@@ -110,8 +113,8 @@ class PermissionScopeTest {
     @Test
     @DisplayName("Uses Session Snapshot Only For Operation Policy")
     void usesSessionSnapshotOnlyForOperationPolicy() {
-        Permission allowed = new Permission(new Operation("device.read"), Action.INVOKE);
-        Permission denied = new Permission(new Operation("device.update"), Action.INVOKE);
+        Permission allowed = new Permission(new Operation("device:read"), Action.INVOKE);
+        Permission denied = new Permission(new Operation("device:update"), Action.INVOKE);
         Call call = userCall(Set.of((Operation) allowed.resource()));
         SessionOperationPermissionPolicy policy = new SessionOperationPermissionPolicy();
 
@@ -130,7 +133,7 @@ class PermissionScopeTest {
     @DisplayName("Lets Business Policy Produce Scope Without Exact Session Grant")
     void letsBusinessPolicyProduceScopeWithoutExactSessionGrant() {
         Permission collectionRead = new Permission(new DeviceResource("collection"), Action.READ);
-        Call call = Call.system("business-policy", NOW);
+        Call call = Call.system("business-policy", NOW, new SystemPrincipal(1, TreeCode.ofSegment("MAIN")));
         PermissionPolicy policy = new DevicePermissionPolicy();
 
         PermissionDecision decision = new PermissionAssessment(List.of(policy))
@@ -156,7 +159,7 @@ class PermissionScopeTest {
                 List.of(
                         new Authentication(
                                 accountId,
-                                new AuthenticationMethodCode("test"),
+                                TreeCode.ofSlash("AUTHENTICATION/TEST"),
                                 Set.of(AuthenticationFactorKind.KNOWLEDGE),
                                 NOW)),
                 Map.of(principalId, operations),
@@ -171,20 +174,20 @@ class PermissionScopeTest {
 
     private static CallExecution execution(Call call) {
         try {
-            java.lang.reflect.Method method = TestCall.class.getDeclaredMethod("invoke");
+            Method method = TestCall.class.getDeclaredMethod("invoke");
             return new CallExecution(call, TestCall.class, method, new Object[0], method.getGenericReturnType());
         } catch (NoSuchMethodException exception) {
             throw new AssertionError(exception);
         }
     }
 
-    private static final class TestCall {
+    private static class TestCall {
 
         private void invoke() {
         }
     }
 
-    private static final class TestPrincipal implements Principal {
+    private static class TestPrincipal implements Principal {
         private final long id;
 
         private TestPrincipal(long id) {
@@ -197,11 +200,11 @@ class PermissionScopeTest {
         }
     }
 
-    private static final class DevicePermissionPolicy implements PermissionPolicy {
+    private static class DevicePermissionPolicy implements PermissionPolicy {
 
         @Override
         public boolean supports(Resource resource) {
-            return resource.type().equals("device");
+            return resource.type().equals(TreeCode.ofSlash("TEST/DEVICE"));
         }
 
         @Override
@@ -210,7 +213,7 @@ class PermissionScopeTest {
         }
     }
 
-    private static final class DeviceResource implements Resource {
+    private static class DeviceResource implements Resource {
 
         private final String id;
 
@@ -219,8 +222,8 @@ class PermissionScopeTest {
         }
 
         @Override
-        public @NotNull String type() {
-            return "device";
+        public @NotNull TreeCode type() {
+            return TreeCode.ofSlash("TEST/DEVICE");
         }
 
         @Override
@@ -229,7 +232,7 @@ class PermissionScopeTest {
         }
     }
 
-    private static final class AccountResource implements Resource {
+    private static class AccountResource implements Resource {
 
         private final String id;
 
@@ -238,8 +241,8 @@ class PermissionScopeTest {
         }
 
         @Override
-        public @NotNull String type() {
-            return "account";
+        public @NotNull TreeCode type() {
+            return Account.RESOURCE_TYPE;
         }
 
         @Override
@@ -248,7 +251,7 @@ class PermissionScopeTest {
         }
     }
 
-    private static final class DeviceScope implements ResourceScope {
+    private static class DeviceScope implements ResourceScope {
 
         private final String name;
 
@@ -257,16 +260,16 @@ class PermissionScopeTest {
         }
 
         @Override
-        public String resourceType() {
-            return "device";
+        public TreeCode resourceType() {
+            return TreeCode.ofSlash("TEST/DEVICE");
         }
     }
 
-    private static final class AccountScope implements ResourceScope {
+    private static class AccountScope implements ResourceScope {
 
         @Override
-        public String resourceType() {
-            return "account";
+        public TreeCode resourceType() {
+            return Account.RESOURCE_TYPE;
         }
     }
 }

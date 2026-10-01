@@ -6,11 +6,11 @@ import java.util.Objects;
 
 /** 保存一次成功登录建立的 Session 和仅向调用方返回一次的 Token 集合。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class EstablishedSession {
-
-    private final SessionTokens tokens;
+public class EstablishedSession {
 
     private final Session session;
+
+    private final SessionTokens tokens;
 
     /**
      * 保存一次登录建立的 Session 及其访问 Token。
@@ -33,7 +33,7 @@ public final class EstablishedSession {
     }
 
     /**
-     * 读取 Token 对应的服务端认证状态。
+     * Token 对应的服务端认证状态。
      *
      * @return 本次登录建立的认证 Session
      */

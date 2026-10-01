@@ -11,7 +11,7 @@ import java.util.Set;
 
 /** 保存应用支持的 Locale 及默认 Locale，并按配置顺序选择请求语言。 */
 @SuppressWarnings({"ClassCanBeRecord", "unused"})
-public final class LocaleCatalog {
+public class LocaleCatalog {
 
     private final List<Locale> supportedLocales;
 
@@ -45,7 +45,7 @@ public final class LocaleCatalog {
     }
 
     /**
-     * 读取应用接受的 Locale 及同语言回退次序。
+     * 应用接受的 Locale 及同语言回退次序。
      *
      * @return 保持配置顺序的不可变支持列表
      */
@@ -54,7 +54,7 @@ public final class LocaleCatalog {
     }
 
     /**
-     * 读取所有请求语言都不受支持时使用的 Locale。
+     * 所有请求语言都不受支持时使用的 Locale。
      *
      * @return 支持列表中包含的应用默认 Locale
      */

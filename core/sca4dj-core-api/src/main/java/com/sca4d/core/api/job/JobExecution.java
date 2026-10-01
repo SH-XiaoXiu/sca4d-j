@@ -1,5 +1,6 @@
 package com.sca4d.core.api.job;
 
+import com.sca4d.core.api.id.Id;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -7,13 +8,14 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 向 DirectJob 明确提供当前持久化运行和尝试事实。 */
-public final class JobExecution {
+@SuppressWarnings({"ClassCanBeRecord", "unused"})
+public class JobExecution {
 
-    private final @NotNull JobRunId runId;
-
-    private final int attempt;
+    private final @NotNull Id runId;
 
     private final @NotNull Instant startedAt;
+
+    private final int attempt;
 
     /**
      * 创建一次节点尝试的执行事实。
@@ -25,7 +27,7 @@ public final class JobExecution {
      * @throws IllegalArgumentException 节点名称为空或尝试次数小于 1 时抛出
      */
     public JobExecution(
-            @NotNull JobRunId runId,
+            @NotNull Id runId,
             int attempt,
             @NotNull Instant startedAt) {
         this.runId = Objects.requireNonNull(runId, "Job run 标识不能为空");
@@ -37,17 +39,17 @@ public final class JobExecution {
     }
 
     /**
-     * 返回所属持久化 run。
+     * 所属持久化 run。
      *
      * @return 当前尝试所属的 run 标识
      */
     @Contract(pure = true)
-    public @NotNull JobRunId runId() {
+    public @NotNull Id runId() {
         return runId;
     }
 
     /**
-     * 返回当前尝试序号。
+     * 当前尝试序号。
      *
      * @return 从 1 开始的尝试次数
      */
@@ -57,7 +59,7 @@ public final class JobExecution {
     }
 
     /**
-     * 返回当前尝试开始时间。
+     * 当前尝试开始时间。
      *
      * @return Job runtime 开始本次尝试时使用的时间
      */

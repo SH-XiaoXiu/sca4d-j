@@ -11,21 +11,21 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 保存协议 Pipeline 输出的一次 reported 字段组更新。 */
-public final class ReportedStateUpdate {
+public class ReportedStateUpdate {
 
-    private final @NotNull String groupCode;
+    private final @NotNull Instant observedAt;
+
+    private final @NotNull Map<String, Object> values;
 
     private final @NotNull ReportedMergeMode mergeMode;
 
     private final @NotNull Set<String> coveredProperties;
 
-    private final @NotNull Map<String, Object> values;
+    private final @NotNull String groupCode;
 
     private final @Nullable String orderScope;
 
     private final @Nullable String orderValue;
-
-    private final @NotNull Instant observedAt;
 
     /** 创建具有明确覆盖范围和可选设备顺序的 reported 更新。 */
     @SuppressWarnings("ParameterNumber")

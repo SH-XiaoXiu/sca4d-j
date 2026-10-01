@@ -16,6 +16,8 @@ import { LOGIN_PATH } from '@vben/constants';
 import { preferences } from '@vben/preferences';
 import { useAccessStore, useTabbarStore, useUserStore } from '@vben/stores';
 
+import { AUTHENTICATION_METHOD_CODES } from '@sca4d/admin';
+
 import { defineStore } from 'pinia';
 
 import {
@@ -80,12 +82,10 @@ export const useSessionTokenStore = defineStore('sca4d-session-tokens', {
   }),
 });
 
-type PendingLoginMethod =
-  | 'email-code'
-  | 'passkey'
-  | 'password'
-  | 'sms-code'
-  | 'totp';
+type PendingLoginMethod = Exclude<
+  (typeof AUTHENTICATION_METHOD_CODES)[keyof typeof AUTHENTICATION_METHOD_CODES],
+  typeof AUTHENTICATION_METHOD_CODES.federated
+>;
 
 interface InitialEmailCodeChallenge extends EmailCodeChallenge {
   readonly email: string;
@@ -96,11 +96,11 @@ interface InitialSmsCodeChallenge extends SmsCodeChallenge {
 }
 
 const SUPPORTED_PENDING_LOGIN_METHODS: readonly PendingLoginMethod[] = [
-  'password',
-  'totp',
-  'passkey',
-  'email-code',
-  'sms-code',
+  AUTHENTICATION_METHOD_CODES.password,
+  AUTHENTICATION_METHOD_CODES.totp,
+  AUTHENTICATION_METHOD_CODES.passkey,
+  AUTHENTICATION_METHOD_CODES.emailCode,
+  AUTHENTICATION_METHOD_CODES.smsCode,
 ];
 
 /** 管理登录起点、后续认证因素、Session 恢复、刷新和注销。 */
@@ -128,22 +128,22 @@ export const useAuthStore = defineStore('auth', () => {
     () => pendingLoginAttemptId.value !== null,
   );
   const supportsPendingTotp = computed(() =>
-    pendingLoginMethods.value.includes('totp'),
+    pendingLoginMethods.value.includes(AUTHENTICATION_METHOD_CODES.totp),
   );
   const supportsPendingPassword = computed(() =>
-    pendingLoginMethods.value.includes('password'),
+    pendingLoginMethods.value.includes(AUTHENTICATION_METHOD_CODES.password),
   );
   const supportsPendingEmailCode = computed(() =>
-    pendingLoginMethods.value.includes('email-code'),
+    pendingLoginMethods.value.includes(AUTHENTICATION_METHOD_CODES.emailCode),
   );
   const supportsPendingSmsCode = computed(() =>
-    pendingLoginMethods.value.includes('sms-code'),
+    pendingLoginMethods.value.includes(AUTHENTICATION_METHOD_CODES.smsCode),
   );
   const availablePendingLoginMethods = computed<readonly PendingLoginMethod[]>(
     () => {
       const available = new Set(pendingLoginMethods.value);
       return SUPPORTED_PENDING_LOGIN_METHODS.filter((method) =>
-        method === 'passkey'
+        method === AUTHENTICATION_METHOD_CODES.passkey
           ? available.has(method) && browserPasskeyClient.isSupported()
           : available.has(method),
       );
@@ -152,7 +152,8 @@ export const useAuthStore = defineStore('auth', () => {
   const passkeySupported = computed(() => browserPasskeyClient.isSupported());
   const supportsPendingPasskey = computed(
     () =>
-      passkeySupported.value && pendingLoginMethods.value.includes('passkey'),
+      passkeySupported.value &&
+      pendingLoginMethods.value.includes(AUTHENTICATION_METHOD_CODES.passkey),
   );
 
   let refreshPromise: null | Promise<void> = null;

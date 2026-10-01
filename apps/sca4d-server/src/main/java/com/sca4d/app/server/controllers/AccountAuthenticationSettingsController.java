@@ -12,9 +12,9 @@ import com.sca4d.app.server.service.PlatformAuthenticationPolicyService;
 import com.sca4d.core.api.annotation.Audit;
 import com.sca4d.core.api.annotation.AuditPayload;
 import com.sca4d.core.api.annotation.AuditTarget;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
 import com.sca4d.core.api.identity.Account;
-import com.sca4d.core.api.setting.SettingValue;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.setting.value.SettingValue;
 import com.sca4d.core.spring.web.ApiResponse;
 import com.sca4d.core.spring.web.annotation.CurrentAccount;
 import com.sca4d.core.spring.web.annotation.CurrentPrincipal;
@@ -61,15 +61,15 @@ public class AccountAuthenticationSettingsController {
     @IfMatch
     @RequireAuthentication(AuthenticationActions.AUTHENTICATION_SETTINGS_REPLACE_CODE)
     @Operation(summary = "替换当前账号认证设置")
-    @Audit(operation = "authentication/account/settings/replace", payloadFactory = ApplicationAuditValues.MutationDetails.class)
+    @Audit(operation = "AUTHENTICATION/ACCOUNT/SETTINGS/REPLACE", payloadFactory = ApplicationAuditValues.MutationDetails.class)
     public @NotNull ApiResponse<AuthenticationSettingsView> replace(
-            @CurrentAccount @AuditTarget(resourceType = Account.RESOURCE_TYPE) @NotNull Account account,
+            @CurrentAccount @AuditTarget(resourceType = Account.RESOURCE_TYPE_VALUE) @NotNull Account account,
             @RequestBody @Valid @AuditPayload @NotNull ReplaceAuthenticationSettingsRequest request) {
         var methods = request.getMethods()
                 .stream()
                 .map(
                         method -> new AuthenticationMethodSettings(
-                                new AuthenticationMethodCode(method.getMethodCode()),
+                                TreeCode.ofSlash(method.getMethodCode()),
                                 method.isLoginStartEnabled(),
                                 method.isLoginAdditionalEnabled(),
                                 method.isSensitiveActionEnabled()))

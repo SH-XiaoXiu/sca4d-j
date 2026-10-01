@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /** 保存动态数据已经存在的多语言文本及明确的业务回退值。 */
-public final class TranslatedText extends LocalizableText {
+public class TranslatedText extends LocalizableText {
 
     private final Map<Locale, String> translations;
 
@@ -47,7 +47,7 @@ public final class TranslatedText extends LocalizableText {
     }
 
     /**
-     * 读取动态数据已经提供的 Locale 文本。
+     * 动态数据已经提供的 Locale 文本。
      *
      * @return 构造时复制的不可变翻译映射
      */
@@ -56,7 +56,7 @@ public final class TranslatedText extends LocalizableText {
     }
 
     /**
-     * 读取任何已配置 Locale 都没有翻译时显示的文本。
+     * 任何已配置 Locale 都没有翻译时显示的文本。
      *
      * @return 请求和默认 Locale 都缺失时使用的业务回退文本
      */

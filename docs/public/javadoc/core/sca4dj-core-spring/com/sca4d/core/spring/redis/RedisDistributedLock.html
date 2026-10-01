@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 <dd><code>com.sca4d.core.api.concurrent.DistributedLock</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">RedisDistributedLock</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">RedisDistributedLock</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.core.api.concurrent.DistributedLock</span></div>
 <div class="block">使用 Redisson watchdog 在多个应用实例之间互斥执行同一业务键的任务。</div>
@@ -108,10 +108,9 @@ implements com.sca4d.core.api.concurrent.DistributedLock</span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.redisson.api.RedissonClient,com.sca4d.core.api.runtime.RuntimeNamespace)" class="member-name-link">RedisDistributedLock</a><wbr>(@NotNull org.redisson.api.RedissonClient&nbsp;redisson,
- @NotNull com.sca4d.core.api.runtime.RuntimeNamespace&nbsp;runtimeNamespace)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.redisson.api.RedissonClient)" class="member-name-link">RedisDistributedLock</a><wbr>(@NotNull org.redisson.api.RedissonClient&nbsp;redisson)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建使用当前应用 Redis 命名空间的分布式锁。</div>
+<div class="block">创建使用当前 App 隔离名称的分布式锁。</div>
 </div>
 </div>
 </section>
@@ -134,6 +133,13 @@ implements com.sca4d.core.api.concurrent.DistributedLock</span></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">等待取得锁后执行任务，任务执行期间由 Redisson watchdog 续租。</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a><wbr>&lt;T&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#executeAsync(com.sca4d.core.api.concurrent.LockKey,java.time.Duration,java.util.function.Supplier)" class="member-name-link">executeAsync</a><wbr>(@NotNull com.sca4d.core.api.concurrent.LockKey&nbsp;key,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;waitTime,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;T&gt;&gt;&nbsp;task)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">使用独立逻辑 owner ID 持锁到 CompletionStage 终止，watchdog 负责期间续租。</div>
+</div>
 </div>
 </div>
 </div>
@@ -152,17 +158,14 @@ implements com.sca4d.core.api.concurrent.DistributedLock</span></div>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(org.redisson.api.RedissonClient,com.sca4d.core.api.runtime.RuntimeNamespace)">
+<section class="detail" id="&lt;init&gt;(org.redisson.api.RedissonClient)">
 <h3>RedisDistributedLock</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RedisDistributedLock</span><wbr><span class="parameters">(@NotNull
- @NotNull org.redisson.api.RedissonClient&nbsp;redisson,
- @NotNull
- @NotNull com.sca4d.core.api.runtime.RuntimeNamespace&nbsp;runtimeNamespace)</span></div>
-<div class="block">创建使用当前应用 Redis 命名空间的分布式锁。</div>
+ @NotNull org.redisson.api.RedissonClient&nbsp;redisson)</span></div>
+<div class="block">创建使用当前 App 隔离名称的分布式锁。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>redisson</code> - Redisson 客户端</dd>
-<dd><code>runtimeNamespace</code> - 当前应用的运行时命名空间</dd>
 </dl>
 </section>
 </li>
@@ -197,6 +200,22 @@ implements com.sca4d.core.api.concurrent.DistributedLock</span></div>
 <dd>任务结果</dd>
 <dt>Throws:</dt>
 <dd><code>com.sca4d.core.api.error.BusinessException</code> - 等待超时或线程被中断时抛出，任务不会执行</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="executeAsync(com.sca4d.core.api.concurrent.LockKey,java.time.Duration,java.util.function.Supplier)">
+<h3>executeAsync</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;T&gt;</span>&nbsp;<span class="element-name">executeAsync</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.concurrent.LockKey&nbsp;key,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;waitTime,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;T&gt;&gt;&nbsp;task)</span></div>
+<div class="block">使用独立逻辑 owner ID 持锁到 CompletionStage 终止，watchdog 负责期间续租。</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>executeAsync</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.concurrent.DistributedLock</code></dd>
 </dl>
 </section>
 </li>

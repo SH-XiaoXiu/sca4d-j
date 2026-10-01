@@ -35,14 +35,14 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /** 使用 MinIO 保存临时和正式对象，并生成浏览器直接使用的预签名地址。 */
-public final class MinioFileStorage implements FileStorage {
+public class MinioFileStorage implements FileStorage {
     private static final Logger LOG = LoggerFactory.getLogger(MinioFileStorage.class);
-
-    private final @NotNull MinioStorageProperties properties;
 
     private final @NotNull MinioClient client;
 
     private final @NotNull MinioClient publicClient;
+
+    private final @NotNull MinioStorageProperties properties;
 
     private final @NotNull Clock clock;
 
@@ -228,8 +228,8 @@ public final class MinioFileStorage implements FileStorage {
                             .stream(checkedContent, sizeBytes, -1L)
                             .contentType(contentType)
                             .build());
-            if (checkedContent.bytesRead() > sizeBytes
-                    || checkedContent.bytesRead() == sizeBytes && checkedContent.read() != -1) {
+            if (checkedContent.bytesRead > sizeBytes
+                    || checkedContent.bytesRead == sizeBytes && checkedContent.read() != -1) {
                 throw new IllegalArgumentException("上传内容字节数与申请不一致");
             }
         } catch (InsufficientDataException exception) {
@@ -305,7 +305,7 @@ public final class MinioFileStorage implements FileStorage {
     }
 
     /** 统计 MinIO SDK 实际从调用方内容流读取的字节数。 */
-    private static final class CountingInputStream extends InputStream {
+    private static class CountingInputStream extends InputStream {
         private final @NotNull InputStream delegate;
 
         private long bytesRead;
@@ -332,9 +332,5 @@ public final class MinioFileStorage implements FileStorage {
             return count;
         }
 
-        /** 返回 MinIO SDK 和尾部探测已经读取的总字节数。 */
-        private long bytesRead() {
-            return bytesRead;
-        }
     }
 }

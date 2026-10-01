@@ -1,6 +1,9 @@
 package com.sca4d.core.api.annotation;
 
+import com.sca4d.core.api.call.CallLifecycle;
 import com.sca4d.core.api.call.CallValueResolver;
+import com.sca4d.core.api.call.NoCallValueResolver;
+import com.sca4d.core.api.concurrent.LockKey;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -12,14 +15,18 @@ import java.lang.annotation.Target;
 @Documented
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
+@CallLifecycle.Intercepted
 public @interface Locked {
 
     /**
-     * 返回 {@link com.sca4d.core.api.concurrent.LockKey} 的解析器。
+     * 返回 {@link LockKey} 的解析器。
      *
      * @return 锁键解析器类型
      */
-    Class<? extends CallValueResolver<?>> keyResolver();
+    Class<? extends CallValueResolver<?>> keyResolver() default NoCallValueResolver.class;
+
+    /** 从方法参数读取 `LockKey` 的表达式；与 `keyResolver` 二选一。 */
+    String key() default "";
 
     /**
      * 返回最大锁等待毫秒数。

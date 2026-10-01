@@ -9,7 +9,7 @@
         INSERT INTO iot_product_access_method (product_id, method_code)
         VALUES
         <foreach collection="methodCodes" item="methodCode" separator=",">
-            (#{productId}, #{methodCode})
+            (#{productId}, #{methodCode,typeHandler=com.sca4d.core.spring.persistence.mybatis.TreeCodeTypeHandler$Colon})
         </foreach>
     </insert>
     <insert id="insertProductProtocols">

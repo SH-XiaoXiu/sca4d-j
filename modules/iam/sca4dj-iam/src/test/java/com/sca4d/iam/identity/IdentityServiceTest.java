@@ -8,9 +8,11 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import com.sca4d.core.api.authentication.principalsession.PrincipalCodec;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.identity.AccountIdentifierType;
 import com.sca4d.core.api.identity.RealmKey;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.persistence.AffectedRowsMismatchException;
 import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.core.spring.persistence.batch.SqlBatchProperties;
@@ -60,7 +62,7 @@ class IdentityServiceTest {
         PrincipalCodec<PlatformPrincipal> codec = platformPrincipalCodec();
         IdentityService identities = new IdentityService(
                 new IdentityRepository(mapper, SQL_BATCHES),
-                () -> 1L,
+                () -> Id.of(1L),
                 new PrincipalTypes(List.of(codec)),
                 List.of());
         List<Long> principalIds = List.of(41L, 42L);
@@ -105,7 +107,7 @@ class IdentityServiceTest {
         IdentityMapper mapper = mock(IdentityMapper.class);
         IdentityService identities = new IdentityService(
                 new IdentityRepository(mapper, SQL_BATCHES),
-                () -> 1L,
+                () -> Id.of(1L),
                 new PrincipalTypes(List.of(platformPrincipalCodec())),
                 List.of());
         List<Long> principalIds = List.of(41L, 42L);
@@ -128,7 +130,7 @@ class IdentityServiceTest {
         IdentityMapper mapper = mock(IdentityMapper.class);
         IdentityService identities = new IdentityService(
                 new IdentityRepository(mapper, SQL_BATCHES),
-                () -> 1L,
+                () -> Id.of(1L),
                 new PrincipalTypes(List.of()),
                 List.of());
 
@@ -143,7 +145,7 @@ class IdentityServiceTest {
         IdentityMapper mapper = mock(IdentityMapper.class);
         IdentityService identities = new IdentityService(
                 new IdentityRepository(mapper, SQL_BATCHES),
-                () -> 1L,
+                () -> Id.of(1L),
                 new PrincipalTypes(List.of(platformPrincipalCodec())),
                 List.of());
         RealmKey realm = new RealmKey("platform");
@@ -181,7 +183,7 @@ class IdentityServiceTest {
         };
         IdentityService identities = new IdentityService(
                 new IdentityRepository(mapper, SQL_BATCHES),
-                () -> 1L,
+                () -> Id.of(1L),
                 new PrincipalTypes(List.of()),
                 List.of(normalizer));
 
@@ -193,7 +195,7 @@ class IdentityServiceTest {
     @SuppressWarnings("unchecked")
     private static PrincipalCodec<PlatformPrincipal> platformPrincipalCodec() {
         PrincipalCodec<PlatformPrincipal> codec = mock(PrincipalCodec.class);
-        when(codec.type()).thenReturn("platform");
+        when(codec.type()).thenReturn(TreeCode.of("PLATFORM"));
         when(codec.valueType()).thenReturn(PlatformPrincipal.class);
         return codec;
     }

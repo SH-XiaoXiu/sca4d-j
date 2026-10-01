@@ -7,16 +7,16 @@ import org.jetbrains.annotations.Nullable;
 import java.time.Duration;
 import java.util.Objects;
 
-/** 保存一次幂等处理权竞争的状态以及该状态允许读取的数据。 */
-public final class IdempotencyBeginResult<T> {
+/** 保存一次幂等处理权竞争的状态以及对应状态允许读取的数据。 */
+public class IdempotencyBeginResult<T> {
+
+    private final @NotNull Duration retryAfter;
 
     private final @NotNull IdempotencyBeginStatus status;
 
     private final @Nullable String token;
 
     private final @Nullable T replayResult;
-
-    private final @NotNull Duration retryAfter;
 
     private IdempotencyBeginResult(
             @NotNull IdempotencyBeginStatus status,
@@ -74,7 +74,7 @@ public final class IdempotencyBeginResult<T> {
     }
 
     /**
-     * 返回成功重放的结果。
+     * 成功重放的结果。
      *
      * @return 仅 {@link IdempotencyBeginStatus#REPLAY} 状态可读取；首次结果可以明确为 {@code null}
      */
@@ -83,7 +83,7 @@ public final class IdempotencyBeginResult<T> {
         return replayResult;
     }
 
-    /** @return 仅 {@link IdempotencyBeginStatus#IN_PROGRESS} 状态返回正数时间，其他状态返回零 */
+    /** @return 仅 {@link IdempotencyBeginStatus#IN_PROGRESS} 状态返回正数时间；其他状态返回零 */
     @Contract(pure = true)
     public @NotNull Duration retryAfter() {
         return retryAfter;

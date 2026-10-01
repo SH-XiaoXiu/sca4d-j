@@ -7,11 +7,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 声明 Repository 方法怎样解释其唯一一条数据库写入的影响行数。
+ * 声明 Repository 方法怎样解释唯一一条数据库写入的影响行数。
  *
  * <p>方法成功返回前必须执行且只能执行一条 INSERT、UPDATE 或 DELETE。影响一行表示成功，零行按照
  * {@link #whenZero()} 解释，影响多行始终表示持久化结果异常。包含多条写入或动态预期行数的方法应直接使用
- * {@link AffectedRowCounts}。Mapper 可以继续返回影响行数；使用本注解的 Repository 不读取该返回值。
+ * {@link AffectedRowCounts}。Mapper 可以继续返回影响行数；使用本注解的 Repository 不读取 Mapper 返回值。
  */
 @Documented
 @Target(ElementType.METHOD)

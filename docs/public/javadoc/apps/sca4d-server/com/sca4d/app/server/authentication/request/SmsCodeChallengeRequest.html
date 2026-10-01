@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">SmsCodeChallengeRequest</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">SmsCodeChallengeRequest</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">接收匿名登录调用方已经知道的规范 E.164 手机号。</div>
 </section>
@@ -104,7 +104,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">SmsCodeChallengeRequest</a>()</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">创建空的请求对象，供 JSON 绑定使用。</div>
+</div>
 </div>
 </section>
 </li>
@@ -149,6 +151,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="&lt;init&gt;()">
 <h3>SmsCodeChallengeRequest</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">SmsCodeChallengeRequest</span>()</div>
+<div class="block">创建空的请求对象，供 JSON 绑定使用。</div>
 </section>
 </li>
 </ul>
@@ -164,6 +167,10 @@ loadScripts(document, 'script');</script>
 <h3>getPhoneNumber</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getPhoneNumber</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>规范化前的 E.164 手机号</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -171,6 +178,10 @@ loadScripts(document, 'script');</script>
 <h3>setPhoneNumber</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setPhoneNumber</span><wbr><span class="parameters">(@Nullable
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;phoneNumber)</span></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>phoneNumber</code> - E.164 手机号</dd>
+</dl>
 </section>
 </li>
 <li>

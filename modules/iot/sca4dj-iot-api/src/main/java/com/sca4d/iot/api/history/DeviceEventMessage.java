@@ -11,24 +11,24 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.Objects;
 
-/** 保存已经通过物模型校验、准备由 `MessagePublisher` 发布的一次 Device 事件。 */
-public final class DeviceEventMessage {
+/** 保存已经通过物模型校验、准备由 `MessageBus` 发布的一次 Device 事件。 */
+public class DeviceEventMessage {
 
-    private final long deviceId;
+    private final @NotNull Instant occurredAt;
 
-    private final long bindingGeneration;
+    private final @NotNull Instant receivedAt;
+
+    private final @NotNull Map<String, Object> data;
 
     private final @NotNull String eventCode;
 
     private final @Nullable String sourceEventId;
 
-    private final @NotNull Map<String, Object> data;
-
-    private final @NotNull Instant occurredAt;
-
     private final boolean deviceOccurredAt;
 
-    private final @NotNull Instant receivedAt;
+    private final long bindingGeneration;
+
+    private final long deviceId;
 
     /** 创建一条不包含消息代理投递信息的 Device 事件。 */
     @JsonCreator

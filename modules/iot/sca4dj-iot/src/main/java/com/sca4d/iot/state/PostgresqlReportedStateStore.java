@@ -33,9 +33,9 @@ public class PostgresqlReportedStateStore implements ReportedStateStore {
 
     private final @NotNull ReportedStateMapper mapper;
 
-    private final @NotNull ThingDataJsonCodec json;
-
     private final @NotNull SqlBatches sqlBatches;
+
+    private final @NotNull ThingDataJsonCodec json;
 
     /**
      * @param mapper reported state SQL Mapper

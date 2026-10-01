@@ -1,6 +1,6 @@
 # 开发管理端页面
 
-Sca4d Server Admin 使用 `common/` 中的 HTTP 契约和 Controller 访问后端，Vue 页面负责表单、列表和交互状态。新增页面时，可以参考 `frontends/sca4d-admin/apps/sca4d-admin/src/pages/RolesPage.vue` 的角色查询和编辑流程。
+新增管理端页面先在 `common/` 定义后端契约和请求，再在 Vue 页面连接表格、表单与操作状态，最后登记路由和权限。可参考 `frontends/sca4d-admin/apps/sca4d-admin/src/pages/RolesPage.vue`；权限与业务结果始终由后端决定。
 
 ## 从接口接到页面
 
@@ -10,13 +10,13 @@ Sca4d Server Admin 使用 `common/` 中的 HTTP 契约和 Controller 访问后�
 4. 在应用路由中登记页面及后端声明的权限编码，同时维护中文和英文文案。
 5. 完成提交后刷新受影响的数据；检查失败时输入是否保留、版本冲突是否要求重新读取、权限变化是否更新路由。
 
-布局、表格和表单的通用用法见 [Vben 官方文档](https://doc.vben.pro/)。以下说明 Sca4d-J 的接口和状态约定，编码要求见[前端规范](/standards/frontend)。
+布局、表格和表单的通用用法见 [Vben 官方文档](https://doc.vben.pro/)。以下说明 Sca4d-J 的接口和状态约定，编码要求见[前端规范](/standards/07_frontend)。
 
 ## `common/` 契约
 
 `frontends/sca4d-admin/common` 保存手写 TypeScript 契约、HTTP Client、错误转换、ETag、业务 Controller 和运行环境 Port。它必须能够在没有 Vue、Pinia、Router 和 DOM 的环境中执行和测试。
 
-后端 Request、View、状态编码、错误或路由变化时，同步修改负责该接口的 `common/` 类型与 Controller。不能在页面内复制一份“临时响应类型”，也不能引入 OpenAPI 生成器覆盖手写契约。
+后端 Request、View、状态编码、错误或路由变化时，同步修改负责该接口的 `common/` 类型与 Controller。不能在页面内复制一份「临时响应类型」，也不能引入 OpenAPI 生成器覆盖手写契约。
 
 `AdminApiClient` 集中处理 Token、`Accept-Language`、统一响应、ETag 和 HTTP 错误。Controller 把多个请求和状态变化整理成页面可以直接使用的操作。页面不跳过这两层自行创建 Axios 请求。
 
@@ -59,7 +59,7 @@ JWT 与在线 Session Token 的选择由统一认证代码处理。普通页面�
 
 页面使用 Vben token 和公共组件，保持管理工具需要的密度与信息层级。桌面和移动端保留相同业务操作；高风险操作明确对象和后果；图标按钮有可访问名称；键盘可以完成主要流程。
 
-权限隐藏不替代后端授权，响应式布局不以删除功能解决空间问题，Tooltip 不承载完成任务所必需的信息。
+权限隐藏不替代后端授权，响应式布局不以删除功能解决空间问题，Tooltip 不提供完成任务所必需的信息。
 
 ## 验证
 
@@ -69,7 +69,7 @@ JWT 与在线 Session Token 的选择由统一认证代码处理。普通页面�
 - 浏览器和 Playwright：仅在任务明确要求时执行指定流程；
 - 依赖、入口或生产配置变化：运行前端构建。
 
-不固定要求每次页面修改都执行所有脚本。实际命令、检查范围和未执行项按[格式化与构建](/standards/build)说明。
+不固定要求每次页面修改都执行所有脚本。实际命令、检查范围和未执行项按[格式化与构建](/standards/09_build)说明。
 
 ## HTTP 请求
 

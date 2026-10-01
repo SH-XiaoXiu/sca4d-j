@@ -3,7 +3,7 @@
 <mapper namespace="com.sca4d.audit.recording.mapper.AuditMapper">
     <sql id="columns">id, request_id, subject_id, account_id, principal_id, operation,
         target_type, target_id, result, payload_type, payload_version,
-        payload_json::text AS payload_json, http_method, http_path, client_ip, user_agent, occurred_at
+        payload_json::text AS payload_json, http_method, http_path, client_ip, user_agent, occurred_at, instance_id
     </sql>
 
     <sql id="conditions">
@@ -21,16 +21,25 @@
         </where>
     </sql>
 
-    <insert id="insert">
+    <sql id="insertRow">
         INSERT INTO audit_record
         (id, request_id, subject_id, account_id, principal_id, operation,
         target_type, target_id, result, payload_type, payload_version, payload_json,
-        http_method, http_path, client_ip, user_agent, occurred_at)
+        http_method, http_path, client_ip, user_agent, occurred_at, instance_id)
         VALUES
         (#{row.id}, #{row.requestId}, #{row.subjectId}, #{row.accountId}, #{row.principalId},
         #{row.operation}, #{row.targetType}, #{row.targetId}, #{row.result},
         #{row.payloadType}, #{row.payloadVersion}, CAST(#{row.payloadJson} AS JSONB),
-        #{row.httpMethod}, #{row.httpPath}, #{row.clientIp}, #{row.userAgent}, #{row.occurredAt})
+        #{row.httpMethod}, #{row.httpPath}, #{row.clientIp}, #{row.userAgent}, #{row.occurredAt}, #{row.instanceId})
+    </sql>
+
+    <insert id="insert">
+        <include refid="insertRow"/>
+    </insert>
+
+    <insert id="insertDelivery">
+        <include refid="insertRow"/>
+        ON CONFLICT (id) DO NOTHING
     </insert>
 
     <select id="selectById" resultType="com.sca4d.audit.recording.mapper.EncodedAuditEntry">

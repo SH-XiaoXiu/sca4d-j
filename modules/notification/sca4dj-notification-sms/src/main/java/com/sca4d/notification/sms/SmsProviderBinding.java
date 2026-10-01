@@ -1,7 +1,7 @@
 package com.sca4d.notification.sms;
 
 import com.sca4d.core.api.concurrent.Version;
-import com.sca4d.core.api.notification.NotificationCode;
+import com.sca4d.core.api.name.code.TreeCode;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,14 +9,16 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-/** 把统一通知变量绑定到一个 Provider 已审核模板，不保存业务模板正文。 */
-public final class SmsProviderBinding {
+/**
+ * 把统一通知变量绑定到一个 Provider 已审核模板，不保存业务模板正文。
+ */
+public class SmsProviderBinding {
 
     private final long bindingId;
 
     private final long providerId;
 
-    private final @NotNull NotificationCode code;
+    private final @NotNull TreeCode code;
 
     private final @NotNull SmsRoute route;
 
@@ -32,11 +34,13 @@ public final class SmsProviderBinding {
 
     private final @NotNull Version version;
 
-    /** 创建一个供应商模板绑定快照。 */
+    /**
+     * 创建一个供应商模板绑定快照。
+     */
     public SmsProviderBinding(
             long bindingId,
             long providerId,
-            @NotNull NotificationCode code,
+            @NotNull TreeCode code,
             @NotNull SmsRoute route,
             @NotNull String languageTag,
             @NotNull String signName,
@@ -58,61 +62,81 @@ public final class SmsProviderBinding {
         this.version = Objects.requireNonNull(version, "SMS 绑定版本不能为空");
     }
 
-    /** @return 绑定全局标识 */
+    /**
+     * @return 绑定全局标识
+     */
     @Contract(pure = true)
     public long bindingId() {
         return bindingId;
     }
 
-    /** @return 绑定所属 Provider 标识 */
+    /**
+     * @return 绑定所属 Provider 标识
+     */
     @Contract(pure = true)
     public long providerId() {
         return providerId;
     }
 
-    /** @return 统一通知编码 */
+    /**
+     * @return 统一通知编码
+     */
     @Contract(pure = true)
-    public @NotNull NotificationCode code() {
+    public @NotNull TreeCode code() {
         return code;
     }
 
-    /** @return 具体应用声明的 SMS 路由 */
+    /**
+     * @return 具体应用声明的 SMS 路由
+     */
     @Contract(pure = true)
     public @NotNull SmsRoute route() {
         return route;
     }
 
-    /** @return Provider 模板适用的 Locale */
+    /**
+     * @return Provider 模板适用的 Locale
+     */
     @Contract(pure = true)
     public @NotNull Locale locale() {
         return locale;
     }
 
-    /** @return Provider 审核通过的短信签名 */
+    /**
+     * @return Provider 审核通过的短信签名
+     */
     @Contract(pure = true)
     public @NotNull String signName() {
         return signName;
     }
 
-    /** @return Provider 审核通过的模板编码 */
+    /**
+     * @return Provider 审核通过的模板编码
+     */
     @Contract(pure = true)
     public @NotNull String providerTemplateCode() {
         return providerTemplateCode;
     }
 
-    /** @return Provider 参数名到统一通知变量名的不可修改映射 */
+    /**
+     * @return Provider 参数名到统一通知变量名的不可修改映射
+     */
     @Contract(pure = true)
     public @NotNull Map<@NotNull String, @NotNull String> parameterMapping() {
         return parameterMapping;
     }
 
-    /** @return 绑定是否参与新投递 */
+    /**
+     * @return 绑定是否参与新投递
+     */
     @Contract(pure = true)
     public boolean enabled() {
         return enabled;
     }
 
-    /** @return 绑定当前乐观版本 */
+    /**
+     * @return 绑定当前乐观版本
+     */
     @Contract(pure = true)
     public @NotNull Version version() {
         return version;

@@ -9,15 +9,15 @@ import java.util.Objects;
 
 /** Account 当前激活的加密 TOTP 凭据及已接受时间步下限。 */
 @SuppressWarnings("ClassCanBeRecord") // 项目统一使用普通 class，不使用 Java record。
-public final class TotpCredential {
-
-    private final Long accountId;
+public class TotpCredential {
 
     private final EncryptedSecret secret;
 
-    private final long lastAcceptedStep;
+    private final Long accountId;
 
     private final Version version;
+
+    private final long lastAcceptedStep;
 
     /**
      * 创建 TOTP 凭据。
@@ -39,7 +39,7 @@ public final class TotpCredential {
     }
 
     /**
-     * 返回凭据所属账号。
+     * 凭据所属账号。
      *
      * @return 凭据所属账号
      */
@@ -47,7 +47,11 @@ public final class TotpCredential {
         return accountId;
     }
 
-    /** 仅供 TOTP 认证和 enrollment 生命周期解密，不得返回给 Controller 或日志。 */
+    /**
+     * 仅供 TOTP 认证和 enrollment 生命周期解密，不得返回给 Controller 或日志。
+     *
+     * @return 加密后的 TOTP 共享密钥
+     */
     @ApiStatus.Internal
     @NotNull
     public EncryptedSecret secret() {
@@ -55,7 +59,7 @@ public final class TotpCredential {
     }
 
     /**
-     * 返回已接受的 TOTP 时间步下限。
+     * 已接受的 TOTP 时间步下限。
      *
      * @return 最近一次接受的 TOTP 时间步
      */
@@ -64,7 +68,7 @@ public final class TotpCredential {
     }
 
     /**
-     * 返回凭据版本。
+     * 凭据版本。
      *
      * @return 凭据版本
      */

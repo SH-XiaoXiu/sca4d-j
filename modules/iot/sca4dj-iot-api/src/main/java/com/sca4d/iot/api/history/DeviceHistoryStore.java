@@ -34,6 +34,14 @@ public interface DeviceHistoryStore {
     Page<DeviceAcknowledgement> acknowledgements(long deviceId, @NotNull PageRequest page);
 
     /**
+     * @param messageId 下行消息标识
+     * @param page 从 1 开始且页大小不超过 100 的分页要求
+     * @return 按接收时间倒序排列的该下行 ACK 历史
+     */
+    @NotNull
+    Page<DeviceAcknowledgement> acknowledgementsByMessageId(long messageId, @NotNull PageRequest page);
+
+    /**
      * @param scheduleId 设备定时规则标识
      * @param page 从 1 开始且页大小不超过 100 的分页要求
      * @return 按计划时间倒序排列的设备定时执行结果页

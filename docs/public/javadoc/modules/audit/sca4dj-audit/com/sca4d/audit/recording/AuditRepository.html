@@ -104,9 +104,10 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.audit.recording.mapper.AuditMapper,com.sca4d.core.api.id.IdGenerator,com.sca4d.audit.payload.AuditPayloadJson)" class="member-name-link">AuditRepository</a><wbr>(@NotNull <a href="mapper/AuditMapper.html" title="interface in com.sca4d.audit.recording.mapper">AuditMapper</a>&nbsp;mapper,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.audit.recording.mapper.AuditMapper,com.sca4d.core.api.id.IdGenerator,com.sca4d.audit.payload.AuditPayloadJson,java.lang.String)" class="member-name-link">AuditRepository</a><wbr>(@NotNull <a href="mapper/AuditMapper.html" title="interface in com.sca4d.audit.recording.mapper">AuditMapper</a>&nbsp;mapper,
  @NotNull com.sca4d.core.api.id.IdGenerator&nbsp;ids,
- @NotNull <a href="../payload/AuditPayloadJson.html" title="class in com.sca4d.audit.payload">AuditPayloadJson</a>&nbsp;payloadJson)</code></div>
+ @NotNull <a href="../payload/AuditPayloadJson.html" title="class in com.sca4d.audit.payload">AuditPayloadJson</a>&nbsp;payloadJson,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;instanceId)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建负责审计领域对象和数据库列值转换的 Repository。</div>
 </div>
@@ -127,16 +128,22 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#append(com.sca4d.core.api.audit.AuditRecord)" class="member-name-link">append</a><wbr>(@NotNull com.sca4d.core.api.audit.AuditRecord&nbsp;record)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">追加一条后续不再更新的审计行。</div>
+<div class="block">追加一条写入后不再更新的审计行。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../query/AuditEntry.html" title="class in com.sca4d.audit.query">AuditEntry</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#find(long)" class="member-name-link">find</a><wbr>(long&nbsp;id)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#appendDelivery(long,com.sca4d.audit.recording.AuditMessage)" class="member-name-link">appendDelivery</a><wbr>(long&nbsp;messageId,
+ @NotNull <a href="AuditMessage.html" title="class in com.sca4d.audit.recording">AuditMessage</a>&nbsp;message)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">使用消息标识幂等追加冻结记录；提交成功后消费者才允许确认消息。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../query/AuditEntry.html" title="class in com.sca4d.audit.query">AuditEntry</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#find(long)" class="member-name-link">find</a><wbr>(long&nbsp;id)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">按标识读取审计行。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.query.Page<wbr>&lt;<a href="../query/AuditEntry.html" title="class in com.sca4d.audit.query">AuditEntry</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#page(com.sca4d.audit.query.AuditQuery)" class="member-name-link">page</a><wbr>(@NotNull <a href="../query/AuditQuery.html" title="class in com.sca4d.audit.query">AuditQuery</a>&nbsp;query)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.query.Page<wbr>&lt;<a href="../query/AuditEntry.html" title="class in com.sca4d.audit.query">AuditEntry</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#page(com.sca4d.audit.query.AuditQuery)" class="member-name-link">page</a><wbr>(@NotNull <a href="../query/AuditQuery.html" title="class in com.sca4d.audit.query">AuditQuery</a>&nbsp;query)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -155,14 +162,16 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.audit.recording.mapper.AuditMapper,com.sca4d.core.api.id.IdGenerator,com.sca4d.audit.payload.AuditPayloadJson)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.audit.recording.mapper.AuditMapper,com.sca4d.core.api.id.IdGenerator,com.sca4d.audit.payload.AuditPayloadJson,java.lang.String)">
 <h3>AuditRepository</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AuditRepository</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="mapper/AuditMapper.html" title="interface in com.sca4d.audit.recording.mapper">AuditMapper</a>&nbsp;mapper,
  @NotNull
  @NotNull com.sca4d.core.api.id.IdGenerator&nbsp;ids,
  @NotNull
- @NotNull <a href="../payload/AuditPayloadJson.html" title="class in com.sca4d.audit.payload">AuditPayloadJson</a>&nbsp;payloadJson)</span></div>
+ @NotNull <a href="../payload/AuditPayloadJson.html" title="class in com.sca4d.audit.payload">AuditPayloadJson</a>&nbsp;payloadJson,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;instanceId)</span></div>
 <div class="block">创建负责审计领域对象和数据库列值转换的 Repository。</div>
 </section>
 </li>
@@ -180,7 +189,16 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@AffectedRows(target="\u65b0\u589e\u5ba1\u8ba1\u8bb0\u5f55")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">append</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.audit.AuditRecord&nbsp;record)</span></div>
-<div class="block">追加一条后续不再更新的审计行。</div>
+<div class="block">追加一条写入后不再更新的审计行。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="appendDelivery(long,com.sca4d.audit.recording.AuditMessage)">
+<h3>appendDelivery</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">appendDelivery</span><wbr><span class="parameters">(long&nbsp;messageId,
+ @NotNull
+ @NotNull <a href="AuditMessage.html" title="class in com.sca4d.audit.recording">AuditMessage</a>&nbsp;message)</span></div>
+<div class="block">使用消息标识幂等追加冻结记录；提交成功后消费者才允许确认消息。</div>
 </section>
 </li>
 <li>

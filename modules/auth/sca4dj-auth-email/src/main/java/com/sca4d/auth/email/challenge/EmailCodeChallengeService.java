@@ -1,5 +1,9 @@
 package com.sca4d.auth.email.challenge;
 
+import static com.sca4d.auth.email.challenge.EmailCodeChallengeStatus.CONSUMED;
+import static com.sca4d.auth.email.challenge.EmailCodeChallengeStatus.PENDING;
+
+import cn.hutool.crypto.digest.DigestUtil;
 import com.sca4d.auth.email.EmailCodeAuthenticationMethod;
 import com.sca4d.auth.email.EmailCodeChallenge;
 import com.sca4d.auth.email.EmailCodeChallengeId;
@@ -9,14 +13,13 @@ import com.sca4d.auth.email.EmailCodeProof;
 import com.sca4d.auth.email.config.EmailCodeSettings;
 import com.sca4d.core.api.concurrent.Version;
 import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.identity.Account;
 import com.sca4d.core.api.identity.AccountDirectory;
 import com.sca4d.core.api.identity.RealmKey;
-import com.sca4d.core.api.messaging.MessageId;
 import com.sca4d.core.api.notification.NotificationRecipient;
 import com.sca4d.core.api.notification.Notifications;
 import com.sca4d.core.api.security.SecretHasher;
-import com.sca4d.core.api.setting.Settings;
 import org.jetbrains.annotations.CheckReturnValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,14 +27,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.HexFormat;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
@@ -46,17 +45,17 @@ public class EmailCodeChallengeService {
 
     private final @NotNull AccountDirectory accounts;
 
-    private final @NotNull RealmKey accountRealm;
+    private final @NotNull Clock clock;
+
+    private final @NotNull EmailCodeSettings settings;
 
     private final @NotNull Notifications notifications;
+
+    private final @NotNull RealmKey accountRealm;
 
     private final @NotNull RedisEmailCodeChallengeStore store;
 
     private final @NotNull SecretHasher hasher;
-
-    private final @NotNull Settings settings;
-
-    private final @NotNull Clock clock;
 
     private final @NotNull SecureRandom random;
 
@@ -77,7 +76,7 @@ public class EmailCodeChallengeService {
             @NotNull Notifications notifications,
             @NotNull RedisEmailCodeChallengeStore store,
             @NotNull SecretHasher hasher,
-            @NotNull Settings settings,
+            @NotNull EmailCodeSettings settings,
             @NotNull Clock clock) {
         this(accounts, accountRealm, notifications, store, hasher, settings, clock, new SecureRandom());
     }
@@ -89,7 +88,7 @@ public class EmailCodeChallengeService {
             @NotNull Notifications notifications,
             @NotNull RedisEmailCodeChallengeStore store,
             @NotNull SecretHasher hasher,
-            @NotNull Settings settings,
+            @NotNull EmailCodeSettings settings,
             @NotNull Clock clock,
             @NotNull SecureRandom random) {
         this.accounts = Objects.requireNonNull(accounts, "AccountDirectory 不能为空");
@@ -119,14 +118,14 @@ public class EmailCodeChallengeService {
                 rawEmail)
                 .orElse(null);
         String targetHash = account == null
-                ? targetHash("email:" + rawEmail.strip().toLowerCase(Locale.ROOT))
-                : targetHash("account:" + account.accountId());
+                ? DigestUtil.sha256Hex("email:" + rawEmail.strip().toLowerCase(Locale.ROOT))
+                : DigestUtil.sha256Hex("account:" + account.accountId());
         boolean deliverable = account != null && available(account);
         return issue(deliverable ? account : null, mask(rawEmail), targetHash);
     }
 
     /**
-     * 为认证尝试已经确定的 Account 签发后续因素 Challenge。
+     * 为认证尝试已经确定的 Account 签发附加因素 Challenge。
      *
      * @param account 有效认证尝试绑定的 Account
      * @return 不包含完整邮箱的 Challenge
@@ -138,7 +137,7 @@ public class EmailCodeChallengeService {
         if (!available(active)) {
             throw new BusinessException(EmailCodeErrorCode.CHALLENGE_UNAVAILABLE);
         }
-        return issue(active, "***", targetHash("account:" + active.accountId()));
+        return issue(active, "***", DigestUtil.sha256Hex("account:" + active.accountId()));
     }
 
     /** @return 当前 Account 是否存在启用 Email 模板、SMTP 配置和可解析邮箱 */
@@ -164,12 +163,12 @@ public class EmailCodeChallengeService {
             throw new BusinessException(EmailCodeErrorCode.CODE_REJECTED);
         }
         Instant now = clock.instant();
-        boolean valid = state.status() == EmailCodeChallengeStatus.PENDING
+        boolean valid = state.status() == PENDING
                 && now.isBefore(state.expiresAt())
                 && state.accountId() > 0
                 && CODE.matcher(checkedProof.code()).matches()
                 && matches;
-        Version consumed = store.verify(state, valid, settings.get(EmailCodeSettings.MAXIMUM_ATTEMPTS));
+        Version consumed = store.verify(state, valid, settings.MAXIMUM_ATTEMPTS.get());
         if (!valid || consumed == null) {
             throw new BusinessException(EmailCodeErrorCode.CODE_REJECTED);
         }
@@ -189,7 +188,7 @@ public class EmailCodeChallengeService {
         EmailCodeChallengeState state = store.find(challengeId);
         if (state == null
                 || state.accountId() != accountId
-                || state.status() != EmailCodeChallengeStatus.CONSUMED
+                || state.status() != CONSUMED
                 || !state.version().equals(version)
                 || !clock.instant().isBefore(state.expiresAt())) {
             throw new IllegalStateException("Email Code Challenge 已变化或不可用");
@@ -209,8 +208,8 @@ public class EmailCodeChallengeService {
             @Nullable Account account,
             @NotNull String maskedRecipient,
             @NotNull String targetHash) {
-        Duration ttl = settings.get(EmailCodeSettings.CHALLENGE_TTL);
-        Duration resendInterval = settings.get(EmailCodeSettings.RESEND_INTERVAL);
+        Duration ttl = settings.CHALLENGE_TTL.get();
+        Duration resendInterval = settings.RESEND_INTERVAL.get();
         if (!store.reserveCooldown(targetHash, resendInterval)) {
             throw new BusinessException(EmailCodeErrorCode.RESEND_TOO_SOON);
         }
@@ -224,12 +223,12 @@ public class EmailCodeChallengeService {
                 now.plus(ttl),
                 now.plus(resendInterval),
                 0,
-                EmailCodeChallengeStatus.PENDING,
+                PENDING,
                 new Version(0));
         store.create(state);
 
         // 只有真实且当前可投递的 Account 才写入 Outbox；dummy Challenge 保持相同响应结构但不包含投递目标。
-        MessageId messageId = null;
+        Id messageId = null;
         if (account != null) {
             long minutes = Math.max(1, (ttl.toSeconds() + 59) / 60);
             messageId = notifications.enqueue(
@@ -264,15 +263,4 @@ public class EmailCodeChallengeService {
         return localHint + '@' + domainHint;
     }
 
-    /** @return 不直接把原始邮箱或 Account 标识写入 Redis key 的固定长度冷却目标 */
-    private static @NotNull String targetHash(@NotNull String value) {
-        try {
-            return HexFormat.of()
-                    .formatHex(
-                            MessageDigest.getInstance("SHA-256")
-                                    .digest(value.getBytes(StandardCharsets.UTF_8)));
-        } catch (NoSuchAlgorithmException exception) {
-            throw new IllegalStateException("JVM 不支持 SHA-256", exception);
-        }
-    }
 }

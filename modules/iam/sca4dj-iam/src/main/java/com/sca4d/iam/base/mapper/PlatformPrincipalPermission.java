@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /** 保存启用 Platform 角色为一个 Principal 提供的 Operation 选择符。 */
 @SuppressWarnings("ClassCanBeRecord")
-public final class PlatformPrincipalPermission {
+public class PlatformPrincipalPermission {
 
     private final @NotNull Long principalId;
 
@@ -27,7 +27,7 @@ public final class PlatformPrincipalPermission {
     }
 
     /**
-     * 返回得到 Operation 的 PlatformPrincipal 标识。
+     * 得到 Operation 的 PlatformPrincipal 标识。
      *
      * @return PlatformPrincipal 标识
      */
@@ -37,7 +37,7 @@ public final class PlatformPrincipalPermission {
     }
 
     /**
-     * 返回角色保存的 Operation 选择符。
+     * 角色保存的 Operation 选择符。
      *
      * @return 具体 ACTION 编码或内部 {@code "*"} 选择符
      */

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 /** 判断当前 Platform Principal 能否为目标用户资料申请头像上传。 */
 @Component
-public final class PlatformUserProfilePermissionPolicy implements PermissionPolicy {
+public class PlatformUserProfilePermissionPolicy implements PermissionPolicy {
     /** 创建无状态的 Platform 用户资料权限策略。 */
     public PlatformUserProfilePermissionPolicy() {
     }
@@ -26,7 +26,7 @@ public final class PlatformUserProfilePermissionPolicy implements PermissionPoli
     }
 
     /**
-     * 允许本人写入自己的资料；具有账号维护操作权限的 Principal 可以写入其他资料。
+     * 允许资料所属 Principal 写入自己的资料；具有账号维护操作权限的 Principal 可以写入其他用户资料。
      *
      * @param call 已完成 Platform Principal 选择的调用
      * @param permission 目标用户资料与动作
@@ -48,7 +48,7 @@ public final class PlatformUserProfilePermissionPolicy implements PermissionPoli
             return PermissionDecision.deny("Platform 用户资料标识不是有效的数字");
         }
 
-        // 本人可以申请自己的头像；账号管理员可以为其他 Platform 用户资料申请。
+        // 资料所属 Principal 可以申请自己的头像；账号管理员可以为其他 Platform 用户资料申请头像。
         long currentPrincipalId = call.principal().orElseThrow().principalId();
         boolean allowed = targetPrincipalId == currentPrincipalId
                 || call.grants(new Operation(PlatformOperations.ACCOUNTS_MANAGE));

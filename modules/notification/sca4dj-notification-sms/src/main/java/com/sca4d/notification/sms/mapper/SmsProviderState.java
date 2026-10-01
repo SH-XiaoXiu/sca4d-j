@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 /** 保存 SMS Provider Mapper 返回的数据库状态。 */
-public final class SmsProviderState {
+public class SmsProviderState {
     private final long providerId;
 
     private final @NotNull String code;
@@ -21,7 +21,15 @@ public final class SmsProviderState {
 
     private final @NotNull Version version;
 
-    /** 创建 Provider 数据库状态。 */
+    /**
+     * @param providerId Provider 数据库标识
+     * @param code Provider 配置编码
+     * @param type Provider 类型
+     * @param credentialRef 凭据引用
+     * @param priority 路由优先级
+     * @param enabled 是否允许投递
+     * @param version Provider 配置版本
+     */
     public SmsProviderState(
             long providerId,
             @NotNull String code,
@@ -39,30 +47,37 @@ public final class SmsProviderState {
         this.version = Objects.requireNonNull(version, "Provider 版本不能为空");
     }
 
+    /** @return Provider 数据库标识 */
     public long providerId() {
         return providerId;
     }
 
+    /** @return Provider 编码 */
     public @NotNull String code() {
         return code;
     }
 
+    /** @return Provider 类型 */
     public @NotNull String type() {
         return type;
     }
 
+    /** @return 凭据引用 */
     public @NotNull String credentialRef() {
         return credentialRef;
     }
 
+    /** @return 路由优先级 */
     public int priority() {
         return priority;
     }
 
+    /** @return 是否允许投递 */
     public boolean enabled() {
         return enabled;
     }
 
+    /** @return Provider 配置版本 */
     public @NotNull Version version() {
         return version;
     }

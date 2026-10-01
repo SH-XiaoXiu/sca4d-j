@@ -105,9 +105,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.notification.sms.mapper.SmsDeliveryMapper,com.sca4d.core.api.id.IdGenerator)" class="member-name-link">SmsDeliveryStore</a><wbr>(@NotNull <a href="mapper/SmsDeliveryMapper.html" title="interface in com.sca4d.notification.sms.mapper">SmsDeliveryMapper</a>&nbsp;mapper,
  @NotNull com.sca4d.core.api.id.IdGenerator&nbsp;ids)</code></div>
-<div class="col-last even-row-color">
-<div class="block">创建 SMS 投递状态存储。</div>
-</div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -122,24 +120,24 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#begin(com.sca4d.core.api.messaging.MessageId,com.sca4d.notification.sms.SmsProvider,com.sca4d.notification.sms.SmsRoute,java.lang.String,java.lang.String)" class="member-name-link">begin</a><wbr>(@NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="SmsDeliveryAttempt.html" title="class in com.sca4d.notification.sms">SmsDeliveryAttempt</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#attempt(com.sca4d.core.api.id.Id,long)" class="member-name-link">attempt</a><wbr>(@NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
+ long&nbsp;providerId)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#begin(com.sca4d.core.api.id.Id,com.sca4d.notification.sms.SmsProvider,com.sca4d.notification.sms.SmsRoute,java.lang.String,java.lang.String)" class="member-name-link">begin</a><wbr>(@NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  @NotNull <a href="SmsProvider.html" title="class in com.sca4d.notification.sms">SmsProvider</a>&nbsp;provider,
  @NotNull <a href="SmsRoute.html" title="class in com.sca4d.notification.sms">SmsRoute</a>&nbsp;route,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;recipientHash,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;recipientMasked)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#finish(com.sca4d.core.api.messaging.MessageId,com.sca4d.notification.sms.SmsProvider,com.sca4d.notification.sms.SmsTransportResult)" class="member-name-link">finish</a><wbr>(@NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#finish(com.sca4d.core.api.id.Id,com.sca4d.notification.sms.SmsProvider,com.sca4d.notification.sms.SmsProviderResult)" class="member-name-link">finish</a><wbr>(@NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  @NotNull <a href="SmsProvider.html" title="class in com.sca4d.notification.sms">SmsProvider</a>&nbsp;provider,
- @NotNull <a href="SmsTransportResult.html" title="class in com.sca4d.notification.sms">SmsTransportResult</a>&nbsp;result)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+ @NotNull <a href="SmsProviderResult.html" title="class in com.sca4d.notification.sms">SmsProviderResult</a>&nbsp;result)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">把 PENDING 尝试写成 Provider API 的最终确定程度。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="SmsDeliveryStatus.html" title="enum class in com.sca4d.notification.sms">SmsDeliveryStatus</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#status(com.sca4d.core.api.messaging.MessageId,long)" class="member-name-link">status</a><wbr>(@NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
- long&nbsp;providerId)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -164,7 +162,6 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="mapper/SmsDeliveryMapper.html" title="interface in com.sca4d.notification.sms.mapper">SmsDeliveryMapper</a>&nbsp;mapper,
  @NotNull
  @NotNull com.sca4d.core.api.id.IdGenerator&nbsp;ids)</span></div>
-<div class="block">创建 SMS 投递状态存储。</div>
 </section>
 </li>
 </ul>
@@ -176,26 +173,26 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="status(com.sca4d.core.api.messaging.MessageId,long)">
-<h3>status</h3>
+<section class="detail" id="attempt(com.sca4d.core.api.id.Id,long)">
+<h3>attempt</h3>
 <div class="member-signature"><span class="annotations">@Transactional(readOnly=true,
                propagation=REQUIRES_NEW)
 @Nullable
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="SmsDeliveryStatus.html" title="enum class in com.sca4d.notification.sms">SmsDeliveryStatus</a></span>&nbsp;<span class="element-name">status</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="SmsDeliveryAttempt.html" title="class in com.sca4d.notification.sms">SmsDeliveryAttempt</a></span>&nbsp;<span class="element-name">attempt</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  long&nbsp;providerId)</span></div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>已存在的 Provider 尝试状态；尚未尝试时为空</dd>
+<dd>已存在的 Provider 尝试和外部标识；尚未尝试时为空</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="begin(com.sca4d.core.api.messaging.MessageId,com.sca4d.notification.sms.SmsProvider,com.sca4d.notification.sms.SmsRoute,java.lang.String,java.lang.String)">
+<section class="detail" id="begin(com.sca4d.core.api.id.Id,com.sca4d.notification.sms.SmsProvider,com.sca4d.notification.sms.SmsRoute,java.lang.String,java.lang.String)">
 <h3>begin</h3>
 <div class="member-signature"><span class="annotations">@Transactional(propagation=REQUIRES_NEW)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">begin</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+ @NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  @NotNull
  @NotNull <a href="SmsProvider.html" title="class in com.sca4d.notification.sms">SmsProvider</a>&nbsp;provider,
  @NotNull
@@ -211,15 +208,15 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="finish(com.sca4d.core.api.messaging.MessageId,com.sca4d.notification.sms.SmsProvider,com.sca4d.notification.sms.SmsTransportResult)">
+<section class="detail" id="finish(com.sca4d.core.api.id.Id,com.sca4d.notification.sms.SmsProvider,com.sca4d.notification.sms.SmsProviderResult)">
 <h3>finish</h3>
 <div class="member-signature"><span class="annotations">@Transactional(propagation=REQUIRES_NEW)
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">finish</span><wbr><span class="parameters">(@NotNull
- @NotNull com.sca4d.core.api.messaging.MessageId&nbsp;messageId,
+ @NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
  @NotNull
  @NotNull <a href="SmsProvider.html" title="class in com.sca4d.notification.sms">SmsProvider</a>&nbsp;provider,
  @NotNull
- @NotNull <a href="SmsTransportResult.html" title="class in com.sca4d.notification.sms">SmsTransportResult</a>&nbsp;result)</span></div>
+ @NotNull <a href="SmsProviderResult.html" title="class in com.sca4d.notification.sms">SmsProviderResult</a>&nbsp;result)</span></div>
 <div class="block">把 PENDING 尝试写成 Provider API 的最终确定程度。</div>
 </section>
 </li>

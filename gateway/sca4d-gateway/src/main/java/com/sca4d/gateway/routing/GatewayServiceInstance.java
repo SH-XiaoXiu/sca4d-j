@@ -9,13 +9,19 @@ import java.net.URI;
 import java.util.Map;
 
 /** 把租约注册表中的健康 Server 实例转换为 Spring Cloud LoadBalancer 实例。 */
-public final class GatewayServiceInstance implements ServiceInstance {
+public class GatewayServiceInstance implements ServiceInstance {
 
     private final @NotNull GatewayInstance instance;
 
-    /** @param instance 已通过租约和 readiness 筛选的 Server 实例 */
-    public GatewayServiceInstance(@NotNull GatewayInstance instance) {
+    private final @NotNull String serviceId;
+
+    /**
+     * @param instance 已通过租约和 readiness 筛选的 Server 实例
+     * @param serviceId 当前注册 Server 集群的 LoadBalancer service ID
+     */
+    public GatewayServiceInstance(@NotNull GatewayInstance instance, @NotNull String serviceId) {
         this.instance = instance;
+        this.serviceId = serviceId;
     }
 
     /** @return Server 注册时提供的实例标识 */
@@ -24,10 +30,10 @@ public final class GatewayServiceInstance implements ServiceInstance {
         return instance.instanceId();
     }
 
-    /** @return Gateway 路由使用的固定 service ID */
+    /** @return Gateway 路由使用的已配置 service ID */
     @Override
     public @NotNull String getServiceId() {
-        return GatewayRoutes.SERVER_SERVICE_ID;
+        return serviceId;
     }
 
     /** @return Server 地址中的主机 */

@@ -12,7 +12,7 @@ import java.lang.reflect.Type;
 import java.util.Objects;
 
 /** 在应用启动时校验 Controller 返回的顶层响应数据 ETag 声明。 */
-public final class ResponseETagContractValidator implements SmartInitializingSingleton {
+public class ResponseETagContractValidator implements SmartInitializingSingleton {
 
     private final RequestMappingHandlerMapping mappings;
 

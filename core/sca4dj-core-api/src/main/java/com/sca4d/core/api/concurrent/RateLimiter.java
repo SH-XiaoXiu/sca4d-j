@@ -15,5 +15,5 @@ public interface RateLimiter {
      */
     @CheckReturnValue
     @NotNull
-    RateLimitDecision tryAcquire(@NotNull String key, @NotNull RateLimit limit);
+    RateLimitDecision tryAcquire(@NotNull RateLimitKey key, @NotNull RateLimit limit);
 }

@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="annotations">@Component
-</span><span class="modifiers">public final class </span><span class="element-name type-name-label">PlatformUserProfilePermissionPolicy</span>
+</span><span class="modifiers">public class </span><span class="element-name type-name-label">PlatformUserProfilePermissionPolicy</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.core.api.permission.PermissionPolicy</span></div>
 <div class="block">判断当前 Platform Principal 能否为目标用户资料申请头像上传。</div>
@@ -131,7 +131,7 @@ implements com.sca4d.core.api.permission.PermissionPolicy</span></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#decide(com.sca4d.core.api.call.Call,com.sca4d.core.api.permission.Permission)" class="member-name-link">decide</a><wbr>(@NotNull com.sca4d.core.api.call.Call&nbsp;call,
  @NotNull com.sca4d.core.api.permission.Permission&nbsp;permission)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">允许本人写入自己的资料；具有账号维护操作权限的 Principal 可以写入其他资料。</div>
+<div class="block">允许资料所属 Principal 写入自己的资料；具有账号维护操作权限的 Principal 可以写入其他用户资料。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#supports(com.sca4d.core.api.resource.Resource)" class="member-name-link">supports</a><wbr>(@NotNull com.sca4d.core.api.resource.Resource&nbsp;resource)</code></div>
@@ -187,7 +187,7 @@ implements com.sca4d.core.api.permission.PermissionPolicy</span></div>
  @NotNull com.sca4d.core.api.call.Call&nbsp;call,
  @NotNull
  @NotNull com.sca4d.core.api.permission.Permission&nbsp;permission)</span></div>
-<div class="block">允许本人写入自己的资料；具有账号维护操作权限的 Principal 可以写入其他资料。</div>
+<div class="block">允许资料所属 Principal 写入自己的资料；具有账号维护操作权限的 Principal 可以写入其他用户资料。</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>decide</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.permission.PermissionPolicy</code></dd>

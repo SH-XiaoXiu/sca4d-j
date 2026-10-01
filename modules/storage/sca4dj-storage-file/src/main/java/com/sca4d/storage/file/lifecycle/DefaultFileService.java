@@ -1,14 +1,17 @@
 package com.sca4d.storage.file.lifecycle;
 
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+import static java.lang.Boolean.TRUE;
+
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.identity.Principal;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.ResourceReference;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
-import com.sca4d.core.api.setting.SettingValues;
-import com.sca4d.core.api.setting.Settings;
+import com.sca4d.core.api.setting.value.SettingValues;
 import com.sca4d.core.api.storage.FileAccessUrl;
 import com.sca4d.core.api.storage.FileContent;
 import com.sca4d.core.api.storage.FileErrorCode;
@@ -66,30 +69,32 @@ import java.util.UUID;
 public class DefaultFileService implements FileService {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultFileService.class);
 
-    /** 正式对象键使用的 UTC 年月目录格式。 */
+    /**
+     * 正式对象键使用的 UTC 年月目录格式。
+     */
     private static final DateTimeFormatter OBJECT_MONTH = DateTimeFormatter.ofPattern("uuuu/MM")
             .withZone(ZoneOffset.UTC);
 
-    /** 同一文件的上传写入和完成确认等待分布式锁的最长时间。 */
+    /**
+     * 同一文件的上传写入和完成确认等待分布式锁的最长时间。
+     */
     private static final Duration FILE_OPERATION_LOCK_WAIT = Duration.ofSeconds(10);
+
+    private final @NotNull TransferTokenService transferTokens;
 
     private final @NotNull FileRepository repository;
 
     private final @NotNull StorageRegistry storages;
 
-    private final @NotNull IdGenerator ids;
-
     private final @NotNull FileProperties properties;
-
-    private final @NotNull Settings settings;
-
-    private final @NotNull TransferTokenService transferTokens;
 
     private final @NotNull Clock clock;
 
-    private final @NotNull String objectKeyPrefix;
-
     private final @NotNull DistributedLock distributedLock;
+
+    private final @NotNull FileSettings settings;
+
+    private final @NotNull IdGenerator ids;
 
     private final @NotNull TransactionTemplate transactions;
 
@@ -103,10 +108,9 @@ public class DefaultFileService implements FileService {
             @NotNull StorageRegistry storages,
             @NotNull IdGenerator ids,
             @NotNull FileProperties properties,
-            @NotNull Settings settings,
+            @NotNull FileSettings settings,
             @NotNull TransferTokenService transferTokens,
             @NotNull Clock clock,
-            @NotNull RuntimeNamespace runtimeNamespace,
             @NotNull DistributedLock distributedLock,
             @NotNull PlatformTransactionManager transactionManager) {
         this.repository = Objects.requireNonNull(repository, "文件 Repository 不能为空");
@@ -116,8 +120,6 @@ public class DefaultFileService implements FileService {
         this.settings = Objects.requireNonNull(settings, "Settings 不能为空");
         this.transferTokens = Objects.requireNonNull(transferTokens, "文件传输签名器不能为空");
         this.clock = Objects.requireNonNull(clock, "时钟不能为空");
-        RuntimeNamespace namespace = Objects.requireNonNull(runtimeNamespace, "运行时命名空间不能为空");
-        this.objectKeyPrefix = namespace.sca4dj("storage");
         this.distributedLock = Objects.requireNonNull(distributedLock, "分布式锁不能为空");
         this.transactions = new TransactionTemplate(Objects.requireNonNull(transactionManager, "事务管理器不能为空"));
     }
@@ -199,7 +201,7 @@ public class DefaultFileService implements FileService {
                     throw new BusinessException(FileErrorCode.UPLOAD_EXPIRED);
                 }
 
-                // 把服务端持有的流写入临时对象，完成核验前不把该对象作为正式文件读取来源。
+                // 把服务端持有的流写入临时对象，完成核验前不把临时对象作为正式文件读取来源。
                 try {
                     storages.storage(record.backendId())
                             .write(
@@ -239,7 +241,7 @@ public class DefaultFileService implements FileService {
      * 保存客户端上传和服务端上传共同使用的 PENDING 文件记录。
      *
      * @param uploader 创建文件的 Principal
-     * @param intent App 已经确认用途和内容限制的上传意图
+     * @param intent   App 已经确认用途和内容限制的上传意图
      * @return 包含固定 backend、临时对象键、正式对象键和上传期限的文件记录
      */
     private @NotNull FileRecord createPending(
@@ -252,8 +254,9 @@ public class DefaultFileService implements FileService {
             throw new BusinessException(FileErrorCode.INVALID);
         }
         FileUploadIntent checked = Objects.requireNonNull(intent, "上传意图不能为空");
-        SettingValues fileLimits = settings.get(List.of(FileSettings.MAXIMUM_SIZE_BYTES, FileSettings.UPLOAD_TTL));
-        long maximumSizeBytes = fileLimits.get(FileSettings.MAXIMUM_SIZE_BYTES);
+        SettingValues fileLimits = new SettingValues(
+                List.of(settings.MAXIMUM_SIZE_BYTES.inspect(), settings.UPLOAD_TTL.inspect()));
+        long maximumSizeBytes = fileLimits.get(settings.MAXIMUM_SIZE_BYTES);
         if (checked.sizeBytes() > maximumSizeBytes) {
             LOG.debug(
                     "文件上传申请超过大小限制 | principalId={} scene={} targetType={} targetId={} sizeBytes={} maxSizeBytes={}",
@@ -277,12 +280,15 @@ public class DefaultFileService implements FileService {
                 checked.sizeBytes());
 
         // 保存 PENDING 记录以及不可猜测的临时、正式对象键。
-        long fileId = ids.nextId();
+        long fileId = ids.nextId().value();
         Instant now = clock.instant();
-        Instant expiresAt = now.plus(fileLimits.get(FileSettings.UPLOAD_TTL));
+        Instant expiresAt = now.plus(fileLimits.get(settings.UPLOAD_TTL));
         String nonce = UUID.randomUUID().toString().replace("-", "");
-        String objectKey = objectKeyPrefix + "/objects/" + OBJECT_MONTH.format(now) + "/" + fileId + "-"
-                + UUID.randomUUID().toString().replace("-", "");
+        String objectKey = Key.of(TreeCode.of("STORAGE:OBJECTS"))
+                .part(OBJECT_MONTH.format(now))
+                .part(fileId)
+                .part(UUID.randomUUID().toString())
+                .format(SLASH);
         FileRecord record = new FileRecord(
                 fileId,
                 uploaderPrincipalId,
@@ -291,7 +297,7 @@ public class DefaultFileService implements FileService {
                 checked.use().target().id(),
                 storage.backendId(),
                 storage.defaultContainer(),
-                objectKeyPrefix + "/uploads/" + fileId + "/" + nonce,
+                Key.of(TreeCode.of("STORAGE:UPLOADS")).part(fileId).part(nonce).format(SLASH),
                 objectKey,
                 checked.filename(),
                 checked.contentType(),
@@ -333,7 +339,7 @@ public class DefaultFileService implements FileService {
                 fileId,
                 uploaderPrincipalId);
         return distributedLock.execute(fileOperationLock(fileId), FILE_OPERATION_LOCK_WAIT, () -> {
-            // 在短事务中读取状态；等待锁和后续对象存储操作都不占用数据库事务。
+            // 在短事务中读取状态；等待锁和之后的对象存储操作都不占用数据库事务。
             FileRecord record = Objects.requireNonNull(
                     transactions.execute(status -> find(fileId)),
                     "文件读取事务没有返回结果");
@@ -344,7 +350,7 @@ public class DefaultFileService implements FileService {
     /**
      * 在已经取得文件锁后核验上传对象、执行幂等转正并把 PENDING 记录更新为 READY。
      *
-     * @param record 当前文件记录
+     * @param record              当前文件记录
      * @param uploaderPrincipalId 请求完成上传的 Principal 标识
      * @return 已完成上传或先前已经完成的文件信息
      */
@@ -359,7 +365,7 @@ public class DefaultFileService implements FileService {
                 record.backendId(),
                 record.status());
 
-        // 只允许创建文件的 Principal 完成上传；对其他 Principal 隐藏文件是否存在。
+        // 只允许创建文件的 Principal 完成上传；对其他 Principal 隐藏文件是否存在这一事实。
         if (record.uploaderPrincipalId() != uploaderPrincipalId) {
             LOG.trace(
                     "文件上传完成确认 Principal 不匹配 | fileId={} principalId={} status={}",
@@ -440,13 +446,13 @@ public class DefaultFileService implements FileService {
         }
 
         // 转正成功后在新事务中把数据库状态从 PENDING 改为 READY，并设置未绑定文件的保留期限。
-        Instant readyExpiresAt = clock.instant().plus(settings.get(FileSettings.READY_RETENTION));
+        Instant readyExpiresAt = clock.instant().plus(settings.READY_RETENTION.get());
         FileRecord completed = record.completed(
                 metadata.contentType(),
                 metadata.sizeBytes(),
                 storedObject.objectKey(),
                 readyExpiresAt);
-        boolean saved = Boolean.TRUE.equals(
+        boolean saved = TRUE.equals(
                 transactions.execute(status -> repository.saveCompleted(completed)));
         if (!saved) {
             LOG.trace("文件上传完成状态保存冲突 | fileId={} expectedStatus={}", fileId, FileStatus.PENDING);
@@ -643,7 +649,7 @@ public class DefaultFileService implements FileService {
 
         // 按去重后的输入顺序核对状态并签发地址，READY 文件的地址不能超过其保留期限。
         Instant now = clock.instant();
-        Instant expiresAt = now.plus(settings.get(FileSettings.ACCESS_TTL));
+        Instant expiresAt = now.plus(settings.ACCESS_TTL.get());
         List<FileAccessUrl> result = new ArrayList<>(ids.size());
         for (Long id : ids) {
             FileRecord record = records.get(id);
@@ -787,7 +793,9 @@ public class DefaultFileService implements FileService {
         return openRecordContent(record, fileId);
     }
 
-    /** 打开已经完成文件的正式对象；调用方已经完成用途和权限校验。 */
+    /**
+     * 打开已经完成文件的正式对象；调用方已经完成用途和权限校验。
+     */
     private @NotNull FileContent openRecordContent(
             @NotNull FileRecord record,
             long fileId) throws IOException {
@@ -835,12 +843,16 @@ public class DefaultFileService implements FileService {
         }
     }
 
-    /** 读取必须存在的文件记录，不存在时返回稳定的文件错误。 */
+    /**
+     * 读取必须存在的文件记录，不存在时返回稳定的文件错误。
+     */
     private @NotNull FileRecord find(long id) {
         return repository.find(id).orElseThrow(() -> new BusinessException(FileErrorCode.NOT_FOUND));
     }
 
-    /** 核对调用方提交的 scene 和目标 Resource 与上传申请完全一致。 */
+    /**
+     * 核对调用方提交的 scene 和目标 Resource 与上传申请完全一致。
+     */
     private static void validateUse(@NotNull FileRecord record, @NotNull FileUse use) {
         if (!record.scene().equals(use.scene())
                 || !record.targetResourceType().equals(use.target().type())
@@ -858,7 +870,9 @@ public class DefaultFileService implements FileService {
         }
     }
 
-    /** 返回文件是否已经进入释放后的删除流程。 */
+    /**
+     * 返回文件是否已经进入释放后的删除流程。
+     */
     private static boolean isDeletionRequested(@NotNull FileStatus status) {
         return status == FileStatus.DELETE_PENDING
                 || status == FileStatus.DELETING
@@ -866,17 +880,23 @@ public class DefaultFileService implements FileService {
                 || status == FileStatus.DELETED;
     }
 
-    /** 返回上传写入和完成确认共同使用的文件锁键。 */
+    /**
+     * 返回上传写入和完成确认共同使用的文件锁键。
+     */
     private static @NotNull LockKey fileOperationLock(long fileId) {
-        return new LockKey("storage", "file", Long.toString(fileId));
+        return new LockKey(TreeCode.of("STORAGE:FILE"), fileId);
     }
 
-    /** 返回上传请求只能写入的临时对象位置。 */
+    /**
+     * 返回上传请求只能写入的临时对象位置。
+     */
     private static @NotNull StorageObject uploadObject(@NotNull FileRecord record) {
         return new StorageObject(record.containerName(), record.uploadObjectKey());
     }
 
-    /** 返回完成上传后的正式对象位置；尚未分配时拒绝继续。 */
+    /**
+     * 返回完成上传后的正式对象位置；尚未分配时拒绝继续。
+     */
     private static @NotNull StorageObject object(@NotNull FileRecord record) {
         String objectKey = record.objectKey();
         if (objectKey == null)
@@ -884,7 +904,9 @@ public class DefaultFileService implements FileService {
         return new StorageObject(record.containerName(), objectKey);
     }
 
-    /** 把内部文件记录转换为不暴露 backend、container 和对象键的 Core 结果。 */
+    /**
+     * 把内部文件记录转换为不暴露 backend、container 和对象键的 Core 结果。
+     */
     private static @NotNull StoredFile view(@NotNull FileRecord record) {
         String actualContentType = record.contentType();
         Long actualSizeBytes = record.sizeBytes();

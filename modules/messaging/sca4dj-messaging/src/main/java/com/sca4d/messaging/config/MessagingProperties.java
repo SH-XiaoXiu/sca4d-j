@@ -6,7 +6,7 @@ import java.time.Duration;
 
 /** 配置 RabbitMQ 发布确认以及 Outbox 派发、租约、退避和清理。 */
 @ConfigurationProperties("sca4dj.messaging")
-public final class MessagingProperties {
+public class MessagingProperties {
 
     private Duration confirmTimeout = Duration.ofSeconds(10);
 
@@ -26,12 +26,11 @@ public final class MessagingProperties {
 
     private int cleanupBatchSize = 500;
 
-    /** 创建使用默认发布确认、派发和清理参数的配置。 */
     public MessagingProperties() {
     }
 
     /**
-     * 返回等待 RabbitMQ publisher confirm 的最长时间。
+     * 等待 RabbitMQ publisher confirm 的最长时间。
      *
      * @return 等待 RabbitMQ publisher confirm 的最长时间
      */
@@ -50,7 +49,7 @@ public final class MessagingProperties {
     }
 
     /**
-     * 返回相邻两次 Outbox 派发计划之间的时间。
+     * 相邻两次 Outbox 派发计划之间的时间。
      *
      * @return 相邻两次 Outbox 派发扫描之间的时间
      */
@@ -69,7 +68,7 @@ public final class MessagingProperties {
     }
 
     /**
-     * 返回每次最多领取的 Outbox 记录数。
+     * 每次最多领取的 Outbox 记录数。
      *
      * @return 每次最多领取的 Outbox 记录数
      */
@@ -88,7 +87,7 @@ public final class MessagingProperties {
     }
 
     /**
-     * 返回 Outbox 处于 SENDING 时的租约时长。
+     * Outbox 处于 SENDING 时的租约时长。
      *
      * @return Outbox 处于 SENDING 时的租约时长
      */
@@ -107,7 +106,7 @@ public final class MessagingProperties {
     }
 
     /**
-     * 返回第一次发布失败后的退避时长。
+     * 第一次发布失败后的退避时长。
      *
      * @return 第一次发布失败后的退避时长
      */
@@ -126,7 +125,7 @@ public final class MessagingProperties {
     }
 
     /**
-     * 返回发布失败退避时长的上限。
+     * 发布失败退避时长的上限。
      *
      * @return 发布失败退避时长的上限
      */
@@ -145,7 +144,7 @@ public final class MessagingProperties {
     }
 
     /**
-     * 返回 SENT Outbox 记录的保留时间。
+     * SENT Outbox 记录的保留时间。
      *
      * @return SENT Outbox 记录的保留时间
      */
@@ -164,7 +163,7 @@ public final class MessagingProperties {
     }
 
     /**
-     * 返回相邻两次 SENT Outbox 清理计划之间的间隔。
+     * 相邻两次 SENT Outbox 清理计划之间的间隔。
      *
      * @return 相邻两次 SENT Outbox 清理之间的时间
      */
@@ -183,7 +182,7 @@ public final class MessagingProperties {
     }
 
     /**
-     * 返回每次最多删除的 SENT Outbox 记录数。
+     * 每次最多删除的 SENT Outbox 记录数。
      *
      * @return 每次最多删除的 SENT Outbox 记录数
      */

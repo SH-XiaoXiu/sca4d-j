@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="annotations">@RestController
 @RequestMapping
-</span><span class="modifiers">public final class </span><span class="element-name type-name-label">SmsCodeController</span>
+</span><span class="modifiers">public class </span><span class="element-name type-name-label">SmsCodeController</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">签发 SMS Challenge，并向登录或敏感动作认证尝试提交验证码。</div>
 </section>
@@ -128,26 +128,38 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.spring.web.ApiResponse<wbr>&lt;<a href="../authentication/view/LoginResultView.html" title="class in com.sca4d.app.server.authentication.view">LoginResultView</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#login(com.sca4d.app.server.authentication.request.SmsCodeProofRequest)" class="member-name-link">login</a><wbr>(@Valid @NotNull <a href="../authentication/request/SmsCodeProofRequest.html" title="class in com.sca4d.app.server.authentication.request">SmsCodeProofRequest</a>&nbsp;request)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">使用 SMS 验证码开始匿名登录。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.spring.web.ApiResponse<wbr>&lt;<a href="../authentication/view/LoginResultView.html" title="class in com.sca4d.app.server.authentication.view">LoginResultView</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#loginAttempt(java.lang.String,com.sca4d.app.server.authentication.request.SmsCodeProofRequest)" class="member-name-link">loginAttempt</a><wbr>(@Size(max=128) @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attemptId,
  @Valid @NotNull <a href="../authentication/request/SmsCodeProofRequest.html" title="class in com.sca4d.app.server.authentication.request">SmsCodeProofRequest</a>&nbsp;request)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">向指定登录尝试提交 SMS 验证码。</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.spring.web.ApiResponse<wbr>&lt;<a href="../authentication/view/SmsCodeChallengeView.html" title="class in com.sca4d.app.server.authentication.view">SmsCodeChallengeView</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#loginAttemptChallenge(java.lang.String)" class="member-name-link">loginAttemptChallenge</a><wbr>(@Size(max=128) @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attemptId)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">为指定登录尝试签发 SMS Challenge。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.spring.web.ApiResponse<wbr>&lt;<a href="../authentication/view/SmsCodeChallengeView.html" title="class in com.sca4d.app.server.authentication.view">SmsCodeChallengeView</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#loginChallenge(com.sca4d.app.server.authentication.request.SmsCodeChallengeRequest)" class="member-name-link">loginChallenge</a><wbr>(@Valid @NotNull <a href="../authentication/request/SmsCodeChallengeRequest.html" title="class in com.sca4d.app.server.authentication.request">SmsCodeChallengeRequest</a>&nbsp;request)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">为匿名登录签发 SMS Challenge。</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.spring.web.ApiResponse<wbr>&lt;<a href="../authentication/view/VerificationView.html" title="class in com.sca4d.app.server.authentication.view">VerificationView</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#verification(java.lang.String,com.sca4d.core.api.authentication.Session,com.sca4d.app.server.authentication.request.SmsCodeProofRequest)" class="member-name-link">verification</a><wbr>(@Size(max=128) @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;verificationId,
  @NotNull com.sca4d.core.api.authentication.Session&nbsp;session,
  @Valid @NotNull <a href="../authentication/request/SmsCodeProofRequest.html" title="class in com.sca4d.app.server.authentication.request">SmsCodeProofRequest</a>&nbsp;request)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">向当前会话的敏感动作认证尝试提交 SMS 验证码。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.spring.web.ApiResponse<wbr>&lt;<a href="../authentication/view/SmsCodeChallengeView.html" title="class in com.sca4d.app.server.authentication.view">SmsCodeChallengeView</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#verificationChallenge(java.lang.String,com.sca4d.core.api.authentication.Session)" class="member-name-link">verificationChallenge</a><wbr>(@Size(max=128) @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;verificationId,
  @NotNull com.sca4d.core.api.authentication.Session&nbsp;session)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">为当前会话的敏感动作认证尝试签发 SMS Challenge。</div>
+</div>
 </div>
 </div>
 </div>
@@ -195,6 +207,7 @@ loadScripts(document, 'script');</script>
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../authentication/view/SmsCodeChallengeView.html" title="class in com.sca4d.app.server.authentication.view">SmsCodeChallengeView</a>&gt;</span>&nbsp;<span class="element-name">loginChallenge</span><wbr><span class="parameters">(@RequestBody @Valid @NotNull
  @Valid @NotNull <a href="../authentication/request/SmsCodeChallengeRequest.html" title="class in com.sca4d.app.server.authentication.request">SmsCodeChallengeRequest</a>&nbsp;request)</span></div>
+<div class="block">为匿名登录签发 SMS Challenge。</div>
 </section>
 </li>
 <li>
@@ -208,6 +221,7 @@ loadScripts(document, 'script');</script>
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../authentication/view/LoginResultView.html" title="class in com.sca4d.app.server.authentication.view">LoginResultView</a>&gt;</span>&nbsp;<span class="element-name">login</span><wbr><span class="parameters">(@RequestBody @Valid @NotNull
  @Valid @NotNull <a href="../authentication/request/SmsCodeProofRequest.html" title="class in com.sca4d.app.server.authentication.request">SmsCodeProofRequest</a>&nbsp;request)</span></div>
+<div class="block">使用 SMS 验证码开始匿名登录。</div>
 </section>
 </li>
 <li>
@@ -218,6 +232,7 @@ loadScripts(document, 'script');</script>
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.spring.web.ApiResponse&lt;<a href="../authentication/view/SmsCodeChallengeView.html" title="class in com.sca4d.app.server.authentication.view">SmsCodeChallengeView</a>&gt;</span>&nbsp;<span class="element-name">loginAttemptChallenge</span><wbr><span class="parameters">(@PathVariable @Size(max=128) @NotNull
  @Size(max=128) @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attemptId)</span></div>
+<div class="block">为指定登录尝试签发 SMS Challenge。</div>
 </section>
 </li>
 <li>
@@ -233,6 +248,7 @@ loadScripts(document, 'script');</script>
  @Size(max=128) @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attemptId,
  @RequestBody @Valid @NotNull
  @Valid @NotNull <a href="../authentication/request/SmsCodeProofRequest.html" title="class in com.sca4d.app.server.authentication.request">SmsCodeProofRequest</a>&nbsp;request)</span></div>
+<div class="block">向指定登录尝试提交 SMS 验证码。</div>
 </section>
 </li>
 <li>
@@ -244,6 +260,7 @@ loadScripts(document, 'script');</script>
  @Size(max=128) @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;verificationId,
  @NotNull
  @NotNull com.sca4d.core.api.authentication.Session&nbsp;session)</span></div>
+<div class="block">为当前会话的敏感动作认证尝试签发 SMS Challenge。</div>
 </section>
 </li>
 <li>
@@ -260,6 +277,7 @@ loadScripts(document, 'script');</script>
  @NotNull com.sca4d.core.api.authentication.Session&nbsp;session,
  @RequestBody @Valid @NotNull
  @Valid @NotNull <a href="../authentication/request/SmsCodeProofRequest.html" title="class in com.sca4d.app.server.authentication.request">SmsCodeProofRequest</a>&nbsp;request)</span></div>
+<div class="block">向当前会话的敏感动作认证尝试提交 SMS 验证码。</div>
 </section>
 </li>
 </ul>

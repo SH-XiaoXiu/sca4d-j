@@ -89,9 +89,9 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">ResourceLoaders</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">ResourceLoaders</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">并发合并所有 ResourceLoader 的静态资源贡献。</div>
+<div class="block">使用 DataGraph 并发装载并合并所有 ResourceLoader 的静态资源贡献。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -106,7 +106,7 @@ loadScripts(document, 'script');</script>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.List,java.util.concurrent.Executor)" class="member-name-link">ResourceLoaders</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.core.api.authentication.principalsession.ResourceLoader&gt;&nbsp;loaders,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Executor.html" title="class or interface in java.util.concurrent" class="external-link">Executor</a>&nbsp;executor)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建并发调用所有资源 Loader 的装载服务。</div>
+<div class="block">创建使用 DataGraph 并发调用所有资源 Loader 的装载服务。</div>
 </div>
 </div>
 </section>
@@ -125,7 +125,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.core.api.resource.Resource&gt;&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#load(java.util.Collection)" class="member-name-link">load</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends com.sca4d.core.api.identity.Principal&gt;&nbsp;principals)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">并发装载并合并每个 Principal 的静态资源。</div>
+<div class="block">同步装载并合并静态资源；异步节点由本对象的 Executor 调度。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.core.api.resource.Resource&gt;&gt;&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#loadAsync(java.util.Collection)" class="member-name-link">loadAsync</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends com.sca4d.core.api.identity.Principal&gt;&nbsp;principals)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">异步装载并合并静态资源，结果只在全部 Loader 和合并节点成功后完成。</div>
 </div>
 </div>
 </div>
@@ -149,7 +154,7 @@ loadScripts(document, 'script');</script>
 <h3>ResourceLoaders</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ResourceLoaders</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.core.api.authentication.principalsession.ResourceLoader&gt;&nbsp;loaders,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Executor.html" title="class or interface in java.util.concurrent" class="external-link">Executor</a>&nbsp;executor)</span></div>
-<div class="block">创建并发调用所有资源 Loader 的装载服务。</div>
+<div class="block">创建使用 DataGraph 并发调用所有资源 Loader 的装载服务。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>loaders</code> - 为 Principal 提供静态资源的 Loader 列表</dd>
@@ -169,15 +174,14 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="load(java.util.Collection)">
 <h3>load</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.core.api.resource.Resource&gt;&gt;</span>&nbsp;<span class="element-name">load</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends com.sca4d.core.api.identity.Principal&gt;&nbsp;principals)</span></div>
-<div class="block">并发装载并合并每个 Principal 的静态资源。</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>principals</code> - 当前 Session 中互不重复的 Principal</dd>
-<dt>Returns:</dt>
-<dd>按输入 Principal 分组的不可修改资源映射；没有资源时仍保留对应 Principal</dd>
-<dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - Loader 执行失败、返回输入外的 Principal 或返回重复资源时抛出</dd>
-</dl>
+<div class="block">同步装载并合并静态资源；异步节点由本对象的 Executor 调度。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="loadAsync(java.util.Collection)">
+<h3>loadAsync</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.sca4d.core.api.resource.Resource&gt;&gt;&gt;</span>&nbsp;<span class="element-name">loadAsync</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends com.sca4d.core.api.identity.Principal&gt;&nbsp;principals)</span></div>
+<div class="block">异步装载并合并静态资源，结果只在全部 Loader 和合并节点成功后完成。</div>
 </section>
 </li>
 </ul>

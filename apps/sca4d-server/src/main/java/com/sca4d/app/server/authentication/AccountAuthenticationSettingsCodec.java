@@ -1,11 +1,14 @@
 package com.sca4d.app.server.authentication;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import static com.sca4d.core.api.name.NameFormat.SLASH;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.sca4d.core.api.authentication.AuthenticationMethodCode;
-import com.sca4d.core.api.setting.SettingCodec;
+import com.sca4d.core.api.data.DataOps;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.setting.codec.SettingCodec;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -16,7 +19,22 @@ import java.util.Objects;
 import java.util.Set;
 
 /** 把账号认证策略转换为不包含 Account 标识的稳定 JSON 文档。 */
-public final class AccountAuthenticationSettingsCodec implements SettingCodec<AccountAuthenticationSettings> {
+public class AccountAuthenticationSettingsCodec implements SettingCodec<AccountAuthenticationSettings> {
+
+    @Override
+    public @NotNull TreeCode code() {
+        return TreeCode.of("SETTING:ACCOUNT_AUTHENTICATION");
+    }
+
+    @Override
+    public int version() {
+        return 1;
+    }
+
+    @Override
+    public @NotNull Class<AccountAuthenticationSettings> valueType() {
+        return AccountAuthenticationSettings.class;
+    }
 
     private static final Set<String> ROOT_FIELDS = Set.of(
             "loginFactorCount",
@@ -43,18 +61,18 @@ public final class AccountAuthenticationSettingsCodec implements SettingCodec<Ac
     /** {@inheritDoc} */
     @Override
     public @NotNull AccountAuthenticationSettings decode(@NotNull String value) {
-        try {
-            return decodeJson(SettingCodec.JSON.readTree(Objects.requireNonNull(value, "认证设置文本不能为空")));
-        } catch (JsonProcessingException exception) {
-            throw new IllegalArgumentException("账号认证设置必须是完整 JSON object", exception);
+        JsonNode node = DataOps.j(Objects.requireNonNull(value, "认证设置文本不能为空")).node();
+        if (node == null) {
+            throw new IllegalArgumentException("账号认证设置必须是完整 JSON object");
         }
+        return decodeJson(node);
     }
 
     /** {@inheritDoc} */
     @Override
     public @NotNull JsonNode encodeJson(@NotNull AccountAuthenticationSettings value) {
         AccountAuthenticationSettings checked = Objects.requireNonNull(value, "账号认证设置不能为空");
-        ObjectNode root = SettingCodec.JSON.createObjectNode();
+        ObjectNode root = JsonNodeFactory.instance.objectNode();
         root.put("loginFactorCount", checked.loginFactorCount());
         root.put("sensitiveActionFactorCount", checked.sensitiveActionFactorCount());
         root.put(
@@ -64,10 +82,10 @@ public final class AccountAuthenticationSettingsCodec implements SettingCodec<Ac
         checked.methods()
                 .values()
                 .stream()
-                .sorted(Comparator.comparing(method -> method.methodCode().value()))
+                .sorted(Comparator.comparing(method -> method.methodCode().format(SLASH)))
                 .forEach(method -> {
                     ObjectNode item = methods.addObject();
-                    item.put("methodCode", method.methodCode().value());
+                    item.put("methodCode", method.methodCode().format(SLASH));
                     item.put("loginStartEnabled", method.loginStartEnabled());
                     item.put("loginAdditionalEnabled", method.loginAdditionalEnabled());
                     item.put("sensitiveActionEnabled", method.sensitiveActionEnabled());
@@ -99,9 +117,14 @@ public final class AccountAuthenticationSettingsCodec implements SettingCodec<Ac
             if (methodCode == null || !methodCode.isTextual() || methodCode.textValue().isBlank()) {
                 throw new IllegalArgumentException("methodCode 必须是非空 String");
             }
+            TreeCode parsedMethodCode = TreeCode.ofSlash(methodCode.textValue());
+            if (parsedMethodCode.size() < 2
+                    || !parsedMethodCode.isUnder(TreeCode.ofSegment("AUTHENTICATION"))) {
+                throw new IllegalArgumentException("认证方法编码必须使用 AUTHENTICATION 层级");
+            }
             methods.add(
                     new AuthenticationMethodSettings(
-                            new AuthenticationMethodCode(methodCode.textValue()),
+                            parsedMethodCode,
                             requireBoolean(method, "loginStartEnabled"),
                             requireBoolean(method, "loginAdditionalEnabled"),
                             requireBoolean(method, "sensitiveActionEnabled")));
@@ -115,7 +138,7 @@ public final class AccountAuthenticationSettingsCodec implements SettingCodec<Ac
 
     /** {@inheritDoc} */
     @Override
-    public @NotNull String valueType() {
+    public @NotNull String presentationType() {
         return "object";
     }
 

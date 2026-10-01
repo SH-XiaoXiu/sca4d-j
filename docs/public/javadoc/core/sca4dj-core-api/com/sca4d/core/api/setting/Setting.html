@@ -37,7 +37,7 @@ loadScripts(document, 'script');</script>
 <li>
 <p>Summary:</p>
 <ul>
-<li>Nested</li>
+<li><a href="#nested-class-summary">Nested</a></li>
 <li>Field</li>
 <li><a href="#constructor-summary">Constr</a></li>
 <li><a href="#method-summary">Method</a></li>
@@ -57,7 +57,7 @@ loadScripts(document, 'script');</script>
 <div id="navbar-sub-list">
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested-class-summary">Nested</a>&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
@@ -90,15 +90,32 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>Direct Known Subclasses:</dt>
-<dd><code><a href="PersonalSetting.html" title="class in com.sca4d.core.api.setting">PersonalSetting</a></code>, <code><a href="SystemSetting.html" title="class in com.sca4d.core.api.setting">SystemSetting</a></code></dd>
+<dd><code><a href="WritableSetting.html" title="class in com.sca4d.core.api.setting">WritableSetting</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name type-name-label">Setting&lt;T&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">Setting&lt;T&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">定义一个由 Java Bean 声明并按 owner 保存完整类型化值的设置。</div>
+<div class="block">直接读取一项类型化设置，按构造声明选择所属、版本 Codec、继承及覆盖规则。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<li>
+<section class="nested-class-summary" id="nested-class-summary">
+<h2>Nested Class Summary</h2>
+<div class="caption"><span>Nested Classes</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static final class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="Setting.Builder.html" class="type-name-link" title="class in com.sca4d.core.api.setting">Setting.Builder</a>&lt;<a href="Setting.Builder.html" title="type parameter in Setting.Builder">T</a>,<wbr><a href="Setting.Builder.html" title="type parameter in Setting.Builder">D</a>&gt;</code></div>
+<div class="col-last even-row-color">
+<div class="block">在构造阶段声明 IO 与解码顺序；构造后只通过 Setting 访问。</div>
+</div>
+</div>
+</section>
+</li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <li>
 <section class="constructor-summary" id="constructor-summary">
@@ -109,14 +126,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected </code></div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,int,T,com.sca4d.core.api.setting.SettingCodec,com.sca4d.core.api.pipeline.Pipeline,boolean)" class="member-name-link">Setting</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
- int&nbsp;schemaVersion,
- <a href="Setting.html" title="type parameter in Setting">T</a>&nbsp;defaultValue,
- @NotNull <a href="SettingCodec.html" title="interface in com.sca4d.core.api.setting">SettingCodec</a>&lt;<a href="Setting.html" title="type parameter in Setting">T</a>&gt;&nbsp;codec,
- @NotNull <a href="../pipeline/Pipeline.html" title="class in com.sca4d.core.api.pipeline">Pipeline</a>&lt;<a href="Setting.html" title="type parameter in Setting">T</a>,<wbr><a href="Setting.html" title="type parameter in Setting">T</a>&gt;&nbsp;pipeline,
- boolean&nbsp;secret)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.setting.Setting.Builder)" class="member-name-link">Setting</a><wbr>(@NotNull <a href="Setting.Builder.html" title="class in com.sca4d.core.api.setting">Setting.Builder</a>&lt;<a href="Setting.html" title="type parameter in Setting">T</a>,<wbr>?&gt;&nbsp;builder)</code></div>
 <div class="col-last even-row-color">
-<div class="block">创建设置定义。</div>
+<div class="block">固定构造配置并校验默认值；不会在启动后补写 IO 依赖。</div>
 </div>
 </div>
 </section>
@@ -126,30 +138,79 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="SettingCodec.html" title="interface in com.sca4d.core.api.setting">SettingCodec</a><wbr>&lt;<a href="Setting.html" title="type parameter in Setting">T</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#codec()" class="member-name-link">codec</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T,<wbr>
+W&gt;&nbsp;@NotNull <a href="Setting.Builder.html" title="class in com.sca4d.core.api.setting">Setting.Builder</a><wbr>&lt;T,<wbr>W&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#builder(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.codec.VersionedCodec)" class="member-name-link">builder</a><wbr>(@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;code,
+ @NotNull <a href="../codec/VersionedCodec.html" title="interface in com.sca4d.core.api.codec">VersionedCodec</a>&lt;T,<wbr>W&gt;&nbsp;codec)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">用领域 Codec 创建构造器，值类型和内容版本均从 Codec 获取。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected final void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#checkOwner(com.sca4d.core.api.setting.value.SettingOwner)" class="member-name-link">checkOwner</a><wbr>(@NotNull <a href="value/SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a>&nbsp;owner)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">拒绝把固定 owner 的设置当成其他所属访问。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#code()" class="member-name-link">code</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">设置身份，序列化格式不参与身份判断。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../codec/VersionedCodec.html" title="interface in com.sca4d.core.api.codec">VersionedCodec</a><wbr>&lt;<a href="Setting.html" title="type parameter in Setting">T</a>,<wbr>?&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#codec()" class="member-name-link">codec</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">当前写入 Codec，版本与 Java 类型不在 Setting 中重复声明。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Setting.html" title="type parameter in Setting">T</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#defaultValue()" class="member-name-link">defaultValue</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">返回默认值副本；必需设置没有默认值。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="value/SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fixedOwner()" class="member-name-link">fixedOwner</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">返回固定 owner；未声明时为空，每次调用必须提供 owner。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Setting.html" title="type parameter in Setting">T</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#get()" class="member-name-link">get</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">读取固定 owner 的值。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Setting.html" title="type parameter in Setting">T</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#defaultValue()" class="member-name-link">defaultValue</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#key()" class="member-name-link">key</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../pipeline/Pipeline.html" title="class in com.sca4d.core.api.pipeline">Pipeline</a><wbr>&lt;<a href="Setting.html" title="type parameter in Setting">T</a>,<wbr><a href="Setting.html" title="type parameter in Setting">T</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pipeline()" class="member-name-link">pipeline</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#schemaVersion()" class="member-name-link">schemaVersion</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#get(com.sca4d.core.api.setting.value.SettingOwner)" class="member-name-link">get</a><wbr>(@NotNull <a href="value/SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a>&nbsp;owner)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">读取指定 owner 的有效值。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="value/SettingValue.html" title="class in com.sca4d.core.api.setting.value">SettingValue</a><wbr>&lt;<a href="Setting.html" title="type parameter in Setting">T</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#inspect()" class="member-name-link">inspect</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">返回固定 owner 的值和读取元数据。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="value/SettingValue.html" title="class in com.sca4d.core.api.setting.value">SettingValue</a><wbr>&lt;<a href="Setting.html" title="type parameter in Setting">T</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#inspect(com.sca4d.core.api.setting.value.SettingOwner)" class="member-name-link">inspect</a><wbr>(@NotNull <a href="value/SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a>&nbsp;owner)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">只有缺失才读取下一层；基础值及所有覆盖完成后校验完整结果。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected final @NotNull <a href="value/SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#requireOwner()" class="member-name-link">requireOwner</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">返回明确固定的 owner，不从线程或全局身份猜测。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#secret()" class="member-name-link">secret</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">是否要求持久化实现加密保存。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="Setting.html" title="type parameter in Setting">T</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#validate(T)" class="member-name-link">validate</a><wbr>(<a href="Setting.html" title="type parameter in Setting">T</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">对完整值执行类型检查和领域校验。</div>
+</div>
 </div>
 </div>
 </div>
@@ -168,28 +229,11 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(java.lang.String,int,T,com.sca4d.core.api.setting.SettingCodec,com.sca4d.core.api.pipeline.Pipeline,boolean)">
-<h3 id="&lt;init&gt;(java.lang.String,int,java.lang.Object,com.sca4d.core.api.setting.SettingCodec,com.sca4d.core.api.pipeline.Pipeline,boolean)">Setting</h3>
+<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.setting.Setting.Builder)">
+<h3>Setting</h3>
 <div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name">Setting</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
- int&nbsp;schemaVersion,
- @NotNull
- <a href="Setting.html" title="type parameter in Setting">T</a>&nbsp;defaultValue,
- @NotNull
- @NotNull <a href="SettingCodec.html" title="interface in com.sca4d.core.api.setting">SettingCodec</a>&lt;<a href="Setting.html" title="type parameter in Setting">T</a>&gt;&nbsp;codec,
- @NotNull
- @NotNull <a href="../pipeline/Pipeline.html" title="class in com.sca4d.core.api.pipeline">Pipeline</a>&lt;<a href="Setting.html" title="type parameter in Setting">T</a>,<wbr><a href="Setting.html" title="type parameter in Setting">T</a>&gt;&nbsp;pipeline,
- boolean&nbsp;secret)</span></div>
-<div class="block">创建设置定义。</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>key</code> - 数据库中长期稳定的点分小写键</dd>
-<dd><code>schemaVersion</code> - 当前 Codec 能够读取和值结构版本</dd>
-<dd><code>defaultValue</code> - 数据库没有值时使用的 Java 默认值</dd>
-<dd><code>codec</code> - 文本编解码和取值校验</dd>
-<dd><code>pipeline</code> - 对已经解码的值执行 owner 无关规范化和校验</dd>
-<dd><code>secret</code> - 是否只以密文保存</dd>
-</dl>
+ @NotNull <a href="Setting.Builder.html" title="class in com.sca4d.core.api.setting">Setting.Builder</a>&lt;<a href="Setting.html" title="type parameter in Setting">T</a>,<wbr>?&gt;&nbsp;builder)</span></div>
+<div class="block">固定构造配置并校验默认值；不会在启动后补写 IO 依赖。</div>
 </section>
 </li>
 </ul>
@@ -201,73 +245,125 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="key()">
-<h3>key</h3>
-<div class="member-signature"><span class="annotations">@Contract(pure=true)
-@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">key</span>()</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>数据库中长期稳定的设置键</dd>
-</dl>
+<section class="detail" id="builder(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.codec.VersionedCodec)">
+<h3>builder</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T,<wbr>
+W&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="Setting.Builder.html" title="class in com.sca4d.core.api.setting">Setting.Builder</a>&lt;T,<wbr>W&gt;</span>&nbsp;<span class="element-name">builder</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;code,
+ @NotNull
+ @NotNull <a href="../codec/VersionedCodec.html" title="interface in com.sca4d.core.api.codec">VersionedCodec</a>&lt;T,<wbr>W&gt;&nbsp;codec)</span></div>
+<div class="block">用领域 Codec 创建构造器，值类型和内容版本均从 Codec 获取。</div>
 </section>
 </li>
 <li>
-<section class="detail" id="schemaVersion()">
-<h3>schemaVersion</h3>
-<div class="member-signature"><span class="annotations">@Contract(pure=true)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">schemaVersion</span>()</div>
+<section class="detail" id="code()">
+<h3>code</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></span>&nbsp;<span class="element-name">code</span>()</div>
+<div class="block">设置身份，序列化格式不参与身份判断。</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>当前 Codec 能够读取和值结构版本</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="defaultValue()">
-<h3>defaultValue</h3>
-<div class="member-signature"><span class="annotations">@Contract(pure=true)
-@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Setting.html" title="type parameter in Setting">T</a></span>&nbsp;<span class="element-name">defaultValue</span>()</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>数据库没有值时使用的 Java 默认值</dd>
+<dd>设置身份，序列化格式不参与身份判断</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="codec()">
 <h3>codec</h3>
-<div class="member-signature"><span class="annotations">@Contract(pure=true)
-@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="SettingCodec.html" title="interface in com.sca4d.core.api.setting">SettingCodec</a>&lt;<a href="Setting.html" title="type parameter in Setting">T</a>&gt;</span>&nbsp;<span class="element-name">codec</span>()</div>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../codec/VersionedCodec.html" title="interface in com.sca4d.core.api.codec">VersionedCodec</a>&lt;<a href="Setting.html" title="type parameter in Setting">T</a>,<wbr>?&gt;</span>&nbsp;<span class="element-name">codec</span>()</div>
+<div class="block">当前写入 Codec，版本与 Java 类型不在 Setting 中重复声明。</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>当前设置使用的文本编解码器</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="pipeline()">
-<h3>pipeline</h3>
-<div class="member-signature"><span class="annotations">@Contract(pure=true)
-@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../pipeline/Pipeline.html" title="class in com.sca4d.core.api.pipeline">Pipeline</a>&lt;<a href="Setting.html" title="type parameter in Setting">T</a>,<wbr><a href="Setting.html" title="type parameter in Setting">T</a>&gt;</span>&nbsp;<span class="element-name">pipeline</span>()</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>对已经解码的值执行 owner 无关规范化和校验的 Pipeline</dd>
+<dd>当前写入 Codec，版本与 Java 类型不在 Setting 中重复声明</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="secret()">
 <h3>secret</h3>
-<div class="member-signature"><span class="annotations">@Contract(pure=true)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">secret</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">secret</span>()</div>
+<div class="block">是否要求持久化实现加密保存。</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>数据库必须保存密文且管理查询不得返回当前值时返回 <code>true</code></dd>
+<dd>是否要求持久化实现加密保存</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="fixedOwner()">
+<h3>fixedOwner</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="value/SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a></span>&nbsp;<span class="element-name">fixedOwner</span>()</div>
+<div class="block">返回固定 owner；未声明时为空，每次调用必须提供 owner。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="defaultValue()">
+<h3>defaultValue</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Setting.html" title="type parameter in Setting">T</a></span>&nbsp;<span class="element-name">defaultValue</span>()</div>
+<div class="block">返回默认值副本；必需设置没有默认值。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="get()">
+<h3>get</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Setting.html" title="type parameter in Setting">T</a></span>&nbsp;<span class="element-name">get</span>()</div>
+<div class="block">读取固定 owner 的值。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="get(com.sca4d.core.api.setting.value.SettingOwner)">
+<h3>get</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Setting.html" title="type parameter in Setting">T</a></span>&nbsp;<span class="element-name">get</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="value/SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a>&nbsp;owner)</span></div>
+<div class="block">读取指定 owner 的有效值。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="inspect()">
+<h3>inspect</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="value/SettingValue.html" title="class in com.sca4d.core.api.setting.value">SettingValue</a>&lt;<a href="Setting.html" title="type parameter in Setting">T</a>&gt;</span>&nbsp;<span class="element-name">inspect</span>()</div>
+<div class="block">返回固定 owner 的值和读取元数据。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="inspect(com.sca4d.core.api.setting.value.SettingOwner)">
+<h3>inspect</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="value/SettingValue.html" title="class in com.sca4d.core.api.setting.value">SettingValue</a>&lt;<a href="Setting.html" title="type parameter in Setting">T</a>&gt;</span>&nbsp;<span class="element-name">inspect</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="value/SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a>&nbsp;owner)</span></div>
+<div class="block">只有缺失才读取下一层；基础值及所有覆盖完成后校验完整结果。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="validate(T)">
+<h3 id="validate(java.lang.Object)">validate</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="Setting.html" title="type parameter in Setting">T</a></span>&nbsp;<span class="element-name">validate</span><wbr><span class="parameters">(@NotNull
+ <a href="Setting.html" title="type parameter in Setting">T</a>&nbsp;value)</span></div>
+<div class="block">对完整值执行类型检查和领域校验。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="checkOwner(com.sca4d.core.api.setting.value.SettingOwner)">
+<h3>checkOwner</h3>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">checkOwner</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="value/SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a>&nbsp;owner)</span></div>
+<div class="block">拒绝把固定 owner 的设置当成其他所属访问。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="requireOwner()">
+<h3>requireOwner</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">protected final</span>&nbsp;<span class="return-type">@NotNull <a href="value/SettingOwner.html" title="class in com.sca4d.core.api.setting.value">SettingOwner</a></span>&nbsp;<span class="element-name">requireOwner</span>()</div>
+<div class="block">返回明确固定的 owner，不从线程或全局身份猜测。</div>
 </section>
 </li>
 </ul>

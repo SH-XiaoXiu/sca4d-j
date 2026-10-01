@@ -11,14 +11,19 @@ import static org.mockito.Mockito.when;
 
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
+import com.sca4d.core.api.event.Event;
+import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
-import com.sca4d.core.api.messaging.MessagePublisher;
+import com.sca4d.core.api.messaging.DispatchPolicy;
+import com.sca4d.core.api.messaging.DispatchReceipt;
+import com.sca4d.core.api.messaging.MessageBus;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.ProductBinding;
 import com.sca4d.iot.api.history.DeviceHistoryStore;
 import com.sca4d.iot.api.message.AcknowledgementPolicy;
+import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.message.DeviceDownlinkKind;
-import com.sca4d.iot.api.message.DeviceDownlinkMessage;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
 import com.sca4d.iot.api.message.IotMessageTypes;
 import com.sca4d.iot.api.message.RetryPolicy;
@@ -34,8 +39,10 @@ import com.sca4d.iot.message.DeviceCommandService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.time.Clock;
@@ -64,7 +71,7 @@ class DefaultDeviceScheduleServiceTest {
 
     private final DeviceCommandService commands = mock(DeviceCommandService.class);
 
-    private final MessagePublisher messages = mock(MessagePublisher.class);
+    private final MessageBus messages = mock(MessageBus.class);
 
     @SuppressWarnings("unchecked")
     private final ObjectProvider<DeviceHistoryStore> history = mock(ObjectProvider.class);
@@ -89,11 +96,13 @@ class DefaultDeviceScheduleServiceTest {
     @BeforeEach
     @SuppressWarnings("unchecked")
     void executeLockAndTransactionCallbacks() {
+        when(messages.dispatch(any(), any()))
+                .thenReturn(new DispatchReceipt(Id.of(201L), DispatchReceipt.Status.OUTBOX_ENLISTED));
         when(distributedLock.execute(any(LockKey.class), any(Duration.class), any(Supplier.class)))
                 .thenAnswer(invocation -> ((Supplier<?>) invocation.getArgument(2)).get());
         when(transactions.execute(any()))
                 .thenAnswer(
-                        invocation -> invocation.<org.springframework.transaction.support.TransactionCallback<?>>getArgument(
+                        invocation -> invocation.<TransactionCallback<?>>getArgument(
                                 0)
                                 .doInTransaction(mock(TransactionStatus.class)));
         doAnswer(invocation -> {
@@ -128,7 +137,7 @@ class DefaultDeviceScheduleServiceTest {
                 DeviceScheduleStatus.ACTIVE,
                 PLANNED_AT,
                 3);
-        DeviceDownlinkMessage downlink = new DeviceDownlinkMessage(
+        DeviceDownlink downlink = new DeviceDownlink(
                 200,
                 20,
                 4,
@@ -183,13 +192,17 @@ class DefaultDeviceScheduleServiceTest {
                 DeviceScheduleExecutionStatus.ENQUEUED,
                 200L,
                 null);
-        verify(messages).publishReliably(
+        verify(messages).dispatch(
                 argThat(
-                        event -> IotMessageTypes.DEVICE_EVENT_OCCURRED.equals(event.type())
-                                && "schedule-execution:10:2026-08-05T10:00:00Z".equals(event.businessKey())));
+                        message -> {
+                            Event<?> event = (Event<?>) message;
+                            return IotMessageTypes.DEVICE_EVENT_OCCURRED.equals(event.type())
+                                    && "schedule-execution:10:2026-08-05T10:00:00Z".equals(event.businessKey());
+                        }),
+                argThat(policy -> policy.mode() == DispatchPolicy.Mode.OUTBOX));
         verify(distributedLock).execute(
-                argThat(key -> new LockKey("iot", "schedule", "10").equals(key)),
-                org.mockito.ArgumentMatchers.eq(Duration.ofSeconds(10)),
+                argThat(key -> new LockKey(TreeCode.of("IOT:SCHEDULE"), 10L).equals(key)),
+                ArgumentMatchers.eq(Duration.ofSeconds(10)),
                 any(Supplier.class));
     }
 

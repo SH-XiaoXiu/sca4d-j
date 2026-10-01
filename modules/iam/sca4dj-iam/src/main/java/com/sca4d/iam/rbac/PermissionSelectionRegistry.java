@@ -1,5 +1,6 @@
 package com.sca4d.iam.rbac;
 
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Operation;
 import com.sca4d.core.api.permission.OperationCatalog;
 import com.sca4d.core.api.permission.OperationNode;
@@ -16,9 +17,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-/** 根据各 Operation 模块的领域行为构建并查找 RBAC 权限选择规则。 */
-public final class PermissionSelectionRegistry {
+/**
+ * 根据各 Operation 模块的领域行为构建并查找 RBAC 权限选择规则。
+ */
+public class PermissionSelectionRegistry {
 
     private static final Logger LOG = LoggerFactory.getLogger(PermissionSelectionRegistry.class);
 
@@ -35,7 +39,7 @@ public final class PermissionSelectionRegistry {
             @NotNull OperationCatalog catalog,
             @NotNull List<? extends @NotNull RbacOperationModule> modules) {
         OperationCatalog checkedCatalog = Objects.requireNonNull(catalog, "Operation Catalog 不能为空");
-        LinkedHashMap<String, RbacOperationModule> modulesByCode = new LinkedHashMap<>();
+        LinkedHashMap<TreeCode, RbacOperationModule> modulesByCode = new LinkedHashMap<>();
         LinkedHashMap<RbacDomain, List<Operation>> operationsByDomain = new LinkedHashMap<>();
         for (RbacOperationModule module : Objects.requireNonNull(modules, "RBAC Operation 模块不能为空")) {
             RbacOperationModule checked = Objects.requireNonNull(module, "RBAC Operation 模块不能为空");
@@ -61,19 +65,19 @@ public final class PermissionSelectionRegistry {
                     }
                 }
                 if (!grantable) {
-                    throw new IllegalStateException("Operation 不能授予模块声明的任何 RBAC 领域: " + operation.value());
+                    throw new IllegalStateException("Operation 不能授予模块声明的任何 RBAC 领域: " + operation.code());
                 }
             }
         }
 
-        LinkedHashSet<String> catalogModules = checkedCatalog.tree()
+        LinkedHashSet<TreeCode> catalogModules = checkedCatalog.tree()
                 .stream()
                 .map(OperationNode.Module::code)
-                .collect(java.util.stream.Collectors.toCollection(LinkedHashSet::new));
+                .collect(Collectors.toCollection(LinkedHashSet::new));
         if (!catalogModules.equals(new LinkedHashSet<>(modulesByCode.keySet()))) {
-            LinkedHashSet<String> missing = new LinkedHashSet<>(catalogModules);
+            LinkedHashSet<TreeCode> missing = new LinkedHashSet<>(catalogModules);
             missing.removeAll(modulesByCode.keySet());
-            LinkedHashSet<String> unexpected = new LinkedHashSet<>(modulesByCode.keySet());
+            LinkedHashSet<TreeCode> unexpected = new LinkedHashSet<>(modulesByCode.keySet());
             unexpected.removeAll(catalogModules);
             throw new IllegalStateException(
                     "Operation Catalog 与 RBAC Operation 模块不一致 | missing=" + missing + " unexpected=" + unexpected);
@@ -105,7 +109,9 @@ public final class PermissionSelectionRegistry {
         return selection;
     }
 
-    /** @return 应用已经安装权限选择规则的不可变 RBAC 领域 */
+    /**
+     * @return 应用已经安装权限选择规则的不可变 RBAC 领域
+     */
     public @NotNull @Unmodifiable Set<@NotNull RbacDomain> domains() {
         return selections.keySet();
     }

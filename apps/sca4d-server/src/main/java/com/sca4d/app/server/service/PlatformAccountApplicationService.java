@@ -12,6 +12,7 @@ import com.sca4d.auth.sms.SmsCodeAuthenticationMethod;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.identity.Account;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.iam.base.PlatformAccountDeletion;
 import com.sca4d.iam.base.PlatformAccountDirectory;
@@ -80,7 +81,7 @@ public class PlatformAccountApplicationService {
      * 创建 Platform Account 应用服务。
      *
      * @param identities Platform 身份服务
-     * @param identityFacts IAM 身份事实服务
+     * @param identityFacts IAM 身份管理服务
      * @param accounts Platform Account 目录
      * @param accountLifecycle Platform Account 生命周期服务
      * @param rbac Platform RBAC 服务
@@ -105,7 +106,7 @@ public class PlatformAccountApplicationService {
             @NotNull DistributedLock distributedLock,
             @NotNull PlatformTransactionManager transactionManager) {
         this.identities = Objects.requireNonNull(identities, "Platform 身份服务不能为空");
-        this.identityFacts = Objects.requireNonNull(identityFacts, "IAM 身份事实服务不能为空");
+        this.identityFacts = Objects.requireNonNull(identityFacts, "IAM 身份管理服务不能为空");
         this.accounts = Objects.requireNonNull(accounts, "Platform Account 目录不能为空");
         this.accountLifecycle = Objects.requireNonNull(accountLifecycle, "Platform Account 生命周期服务不能为空");
         this.rbac = Objects.requireNonNull(rbac, "Platform RBAC 服务不能为空");
@@ -139,12 +140,15 @@ public class PlatformAccountApplicationService {
             @NotNull String displayName,
             @Nullable String email,
             @Nullable String phoneNumber) {
+        // 先创建 Platform Principal，并确认它只关联一个可用 Account；认证数据随后全部写入该 Account。
         PlatformPrincipal principal = identities.provision(username);
         List<Account> linkedAccounts = identities.findActiveAccounts(principal.principalId());
         if (linkedAccounts.size() != 1) {
             throw new IllegalStateException("新建 PlatformPrincipal 必须恰好关联一个 Platform Account");
         }
         Account account = linkedAccounts.getFirst();
+
+        // 在同一事务中创建默认角色、密码、登录标识和用户资料，联系邮箱由 EMAIL 标识同步维护。
         String normalizedEmail = normalizeEmail(email);
         rbac.bindDefaultRole(principal.principalId());
         PasswordCredential passwordCredential = passwords.create(account.accountId(), initialPassword);
@@ -401,6 +405,8 @@ public class PlatformAccountApplicationService {
             @NotNull Long currentAccountId) {
         Long checkedAccountId = Objects.requireNonNull(accountId, "Account 标识不能为空");
         Long checkedCurrentAccountId = Objects.requireNonNull(currentAccountId, "当前 Account 标识不能为空");
+
+        // 先锁定目标 Account，再锁定目标 Profile，避免角色变更、头像操作和删除交叉写入。
         PlatformAccountDeletion deletion = distributedLock.execute(
                 accountWriteLock(checkedAccountId),
                 ACCOUNT_WRITE_LOCK_WAIT,
@@ -410,6 +416,7 @@ public class PlatformAccountApplicationService {
                             PlatformUserProfileService.profileLock(current.principalId()),
                             ACCOUNT_WRITE_LOCK_WAIT,
                             () -> Objects.requireNonNull(transactions.execute(status -> {
+                                // 认证设置和 Profile 只在身份删除事务内清理；Principal 仍被其他关系使用时保留 Profile。
                                 PlatformAccountDeletion result = accountLifecycle.delete(
                                         checkedAccountId,
                                         checkedCurrentAccountId);
@@ -430,7 +437,7 @@ public class PlatformAccountApplicationService {
 
     /** 返回同一 Account 角色替换和终态删除共用的分布式锁键。 */
     private static @NotNull LockKey accountWriteLock(@NotNull Long accountId) {
-        return new LockKey("platform", "account", accountId.toString());
+        return new LockKey(TreeCode.of("PLATFORM:ACCOUNT"), accountId.longValue());
     }
 
     /** 返回 Principal 唯一且启用的 Platform Account。 */
@@ -502,17 +509,25 @@ public class PlatformAccountApplicationService {
         }
         AccountIdentifier current = identifiers.isEmpty() ? null : identifiers.getFirst();
         if (current == null) {
-            identityFacts.addIdentifier(
+            AccountIdentifier added = identityFacts.addIdentifier(
                     account.accountId(),
                     SmsCodeAuthenticationMethod.PHONE_IDENTIFIER_TYPE,
                     phoneNumber);
+            LOG.debug(
+                    "Platform Account PHONE 标识已新增 | accountId={} identifierId={}",
+                    account.accountId(),
+                    added.id());
             return;
         }
         AccountIdentifier updated = current.value().equals(phoneNumber)
                 ? current
                 : identityFacts.changeIdentifierValue(current.id(), phoneNumber);
         if (updated.status() != IdentityStatus.ACTIVE) {
-            identityFacts.changeIdentifierStatus(updated.id(), IdentityStatus.ACTIVE);
+            AccountIdentifier activated = identityFacts.changeIdentifierStatus(updated.id(), IdentityStatus.ACTIVE);
+            LOG.debug(
+                    "Platform Account PHONE 标识已启用 | accountId={} identifierId={}",
+                    account.accountId(),
+                    activated.id());
         }
     }
 }

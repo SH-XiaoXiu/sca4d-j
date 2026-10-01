@@ -1,37 +1,37 @@
 package com.sca4d.auth.federation;
 
 import com.sca4d.core.api.data.DataOps;
-import com.sca4d.core.api.runtime.RuntimeNamespace;
+import com.sca4d.core.api.name.Key;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.spring.redis.Sca4djRedis;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Objects;
 
-/** 使用命名空间隔离的 Redis 一次性值保存外部授权状态和标准化资料。 */
-public final class RedisFederatedAuthorizationStore implements FederatedAuthorizationStore {
+/** 使用 App 隔离名称隔离的 Redis 一次性值保存外部授权状态和标准化资料。 */
+public class RedisFederatedAuthorizationStore implements FederatedAuthorizationStore {
 
     private static final Logger LOG = LoggerFactory.getLogger(RedisFederatedAuthorizationStore.class);
 
-    private final @NotNull StringRedisTemplate redis;
+    private final @NotNull RedisTemplate<Key, String> redis;
 
-    private final @NotNull String authorizationPrefix;
+    private final @NotNull Key authorizationPrefix;
 
-    private final @NotNull String completionPrefix;
+    private final @NotNull Key completionPrefix;
 
     /** 创建外部授权状态存储。 */
     public RedisFederatedAuthorizationStore(
-            @Sca4djRedis @NotNull StringRedisTemplate redis,
-            @NotNull RuntimeNamespace namespace) {
+            @Sca4djRedis @NotNull RedisTemplate<Key, String> redis) {
         this.redis = Objects.requireNonNull(redis, "Redis 操作不能为空");
-        RuntimeNamespace checked = Objects.requireNonNull(namespace, "RuntimeNamespace 不能为空");
-        this.authorizationPrefix = checked.sca4dj("authentication", "federated", "authorization") + ":";
-        this.completionPrefix = checked.sca4dj("authentication", "federated", "completion") + ":";
+
+        this.authorizationPrefix = Key.of(TreeCode.ofColon("AUTHENTICATION:FEDERATED:AUTHORIZATION"));
+        this.completionPrefix = Key.of(TreeCode.ofColon("AUTHENTICATION:FEDERATED:COMPLETION"));
     }
 
     @Override
@@ -148,12 +148,12 @@ public final class RedisFederatedAuthorizationStore implements FederatedAuthoriz
         }
     }
 
-    /** 校验一次性标识格式，并拼接到对应 RuntimeNamespace 前缀。 */
-    private static String key(String prefix, String id) {
+    /** 校验一次性标识格式，并拼接到对应内部键前缀。 */
+    private static Key key(Key prefix, String id) {
         String checked = Objects.requireNonNull(id, "授权标识不能为空");
         if (!checked.matches("[A-Za-z0-9_-]{20,128}"))
             throw new IllegalArgumentException("授权标识格式无效");
-        return prefix + checked;
+        return prefix.part(checked);
     }
 
     /** 限制授权状态 TTL，避免错误配置产生长期凭据。 */

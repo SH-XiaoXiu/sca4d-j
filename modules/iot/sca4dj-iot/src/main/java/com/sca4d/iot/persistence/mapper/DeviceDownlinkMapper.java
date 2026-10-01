@@ -1,5 +1,6 @@
 package com.sca4d.iot.persistence.mapper;
 
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.iot.api.message.DeviceDownlinkKind;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
@@ -36,6 +37,10 @@ public interface DeviceDownlinkMapper {
             @Param("offset") long offset,
             @Param("limit") int limit);
 
+    /** 按下行消息标识读取主库保存的最近 ACK 投影。 */
+    @Nullable
+    EncodedDeviceAcknowledgement selectAcknowledgementByMessageId(@Param("messageId") long messageId);
+
     /** 查询当前物模型绑定仍未完成的下行消息数量。 */
     long countActiveDownlinkMessages(
             @Param("deviceId") long deviceId,
@@ -52,9 +57,9 @@ public interface DeviceDownlinkMapper {
             @Param("scheduleId") @Nullable Long scheduleId,
             @Param("scheduledAt") @Nullable Instant scheduledAt,
             @Param("dataJson") @NotNull String dataJson,
-            @Param("acknowledgementPolicy") @NotNull String acknowledgementPolicy,
+            @Param("acknowledgementPolicy") @NotNull TreeCode acknowledgementPolicy,
             @Param("acknowledgementTimeoutMillis") long acknowledgementTimeoutMillis,
-            @Param("retryPolicy") @NotNull String retryPolicy,
+            @Param("retryPolicy") @NotNull TreeCode retryPolicy,
             @Param("expiresAt") @Nullable Instant expiresAt);
 
     /**

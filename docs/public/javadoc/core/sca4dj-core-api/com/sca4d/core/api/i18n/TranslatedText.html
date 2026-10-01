@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">TranslatedText</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">TranslatedText</span>
 <span class="extends-implements">extends <a href="LocalizableText.html" title="class in com.sca4d.core.api.i18n">LocalizableText</a></span></div>
 <div class="block">保存动态数据已经存在的多语言文本及明确的业务回退值。</div>
 </section>
@@ -111,7 +111,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fallback()" class="member-name-link">fallback</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取任何已配置 Locale 都没有翻译时显示的文本。</div>
+<div class="block">任何已配置 Locale 都没有翻译时显示的文本。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="TranslatedText.html" title="class in com.sca4d.core.api.i18n">TranslatedText</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#of(java.util.Map,java.lang.String)" class="member-name-link">of</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;translations,
@@ -122,7 +122,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Unmodifiable @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#translations()" class="member-name-link">translations</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">读取动态数据已经提供的 Locale 文本。</div>
+<div class="block">动态数据已经提供的 Locale 文本。</div>
 </div>
 </div>
 </div>
@@ -165,7 +165,7 @@ loadScripts(document, 'script');</script>
 <h3>translations</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Unmodifiable @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">translations</span>()</div>
-<div class="block">读取动态数据已经提供的 Locale 文本。</div>
+<div class="block">动态数据已经提供的 Locale 文本。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>构造时复制的不可变翻译映射</dd>
@@ -177,7 +177,7 @@ loadScripts(document, 'script');</script>
 <h3>fallback</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">fallback</span>()</div>
-<div class="block">读取任何已配置 Locale 都没有翻译时显示的文本。</div>
+<div class="block">任何已配置 Locale 都没有翻译时显示的文本。</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>请求和默认 Locale 都缺失时使用的业务回退文本</dd>

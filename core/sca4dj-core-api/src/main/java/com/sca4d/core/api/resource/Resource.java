@@ -1,14 +1,17 @@
 package com.sca4d.core.api.resource;
 
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.permission.Operation;
+import com.sca4d.core.api.permission.Permission;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * 表示权限判断所保护的业务资源（Resource）。
  *
  * <p>资源由类型和标识共同确定。接口、任务等固定入口也属于资源，参见
- * {@link com.sca4d.core.api.permission.Operation}。
+ * {@link Operation}。
  *
- * @see com.sca4d.core.api.permission.Permission
+ * @see Permission
  */
 public interface Resource {
 
@@ -18,7 +21,7 @@ public interface Resource {
      * @return 非空白资源类型
      */
     @NotNull
-    String type();
+    TreeCode type();
 
     /**
      * 返回资源标识。

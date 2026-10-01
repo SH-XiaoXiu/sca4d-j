@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 <dd><code>com.sca4d.core.api.authentication.SessionLifecycle</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">SessionService</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">SessionService</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements com.sca4d.core.api.authentication.SessionLifecycle</span></div>
 <div class="block">使用已经成功的认证记录建立、恢复、刷新和终止 Session。</div>
@@ -108,14 +108,14 @@ implements com.sca4d.core.api.authentication.SessionLifecycle</span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.auth.session.SessionIdentityLoadService,com.sca4d.auth.session.codec.PrincipalLoaders,com.sca4d.auth.session.codec.PrincipalIdLoaders,com.sca4d.auth.session.codec.ResourceLoaders,com.sca4d.auth.session.codec.ResourceIdLoaders,com.sca4d.auth.session.SaTokenSessionManager,com.sca4d.auth.jwt.JwtSessionProjection,com.sca4d.core.api.setting.Settings,java.time.Clock)" class="member-name-link">SessionService</a><wbr>(@NotNull <a href="SessionIdentityLoadService.html" title="class in com.sca4d.auth.session">SessionIdentityLoadService</a>&nbsp;identities,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.auth.session.SessionIdentityLoadService,com.sca4d.auth.session.codec.PrincipalLoaders,com.sca4d.auth.session.codec.PrincipalIdLoaders,com.sca4d.auth.session.codec.ResourceLoaders,com.sca4d.auth.session.codec.ResourceIdLoaders,com.sca4d.auth.session.SaTokenSessionManager,com.sca4d.auth.jwt.JwtSessionProjection,com.sca4d.auth.config.AuthSettings,java.time.Clock)" class="member-name-link">SessionService</a><wbr>(@NotNull <a href="SessionIdentityLoadService.html" title="class in com.sca4d.auth.session">SessionIdentityLoadService</a>&nbsp;identities,
  @NotNull <a href="codec/PrincipalLoaders.html" title="class in com.sca4d.auth.session.codec">PrincipalLoaders</a>&nbsp;principals,
  @NotNull <a href="codec/PrincipalIdLoaders.html" title="class in com.sca4d.auth.session.codec">PrincipalIdLoaders</a>&nbsp;principalIds,
  @NotNull <a href="codec/ResourceLoaders.html" title="class in com.sca4d.auth.session.codec">ResourceLoaders</a>&nbsp;resources,
  @NotNull <a href="codec/ResourceIdLoaders.html" title="class in com.sca4d.auth.session.codec">ResourceIdLoaders</a>&nbsp;resourceIds,
  @NotNull <a href="SaTokenSessionManager.html" title="class in com.sca4d.auth.session">SaTokenSessionManager</a>&nbsp;sessions,
  @NotNull <a href="../jwt/JwtSessionProjection.html" title="class in com.sca4d.auth.jwt">JwtSessionProjection</a>&nbsp;tokenProjection,
- @NotNull com.sca4d.core.api.setting.Settings&nbsp;settings,
+ @NotNull <a href="../config/AuthSettings.html" title="class in com.sca4d.auth.config">AuthSettings</a>&nbsp;settings,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建 Session 服务。</div>
@@ -185,7 +185,7 @@ implements com.sca4d.core.api.authentication.SessionLifecycle</span></div>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.auth.session.SessionIdentityLoadService,com.sca4d.auth.session.codec.PrincipalLoaders,com.sca4d.auth.session.codec.PrincipalIdLoaders,com.sca4d.auth.session.codec.ResourceLoaders,com.sca4d.auth.session.codec.ResourceIdLoaders,com.sca4d.auth.session.SaTokenSessionManager,com.sca4d.auth.jwt.JwtSessionProjection,com.sca4d.core.api.setting.Settings,java.time.Clock)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.auth.session.SessionIdentityLoadService,com.sca4d.auth.session.codec.PrincipalLoaders,com.sca4d.auth.session.codec.PrincipalIdLoaders,com.sca4d.auth.session.codec.ResourceLoaders,com.sca4d.auth.session.codec.ResourceIdLoaders,com.sca4d.auth.session.SaTokenSessionManager,com.sca4d.auth.jwt.JwtSessionProjection,com.sca4d.auth.config.AuthSettings,java.time.Clock)">
 <h3>SessionService</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">SessionService</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="SessionIdentityLoadService.html" title="class in com.sca4d.auth.session">SessionIdentityLoadService</a>&nbsp;identities,
@@ -202,7 +202,7 @@ implements com.sca4d.core.api.authentication.SessionLifecycle</span></div>
  @NotNull
  @NotNull <a href="../jwt/JwtSessionProjection.html" title="class in com.sca4d.auth.jwt">JwtSessionProjection</a>&nbsp;tokenProjection,
  @NotNull
- @NotNull com.sca4d.core.api.setting.Settings&nbsp;settings,
+ @NotNull <a href="../config/AuthSettings.html" title="class in com.sca4d.auth.config">AuthSettings</a>&nbsp;settings,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</span></div>
 <div class="block">创建 Session 服务。</div>

@@ -89,7 +89,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">PasskeyRegistrationOptions</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">PasskeyRegistrationOptions</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">返回浏览器开始 discoverable Passkey registration 所需的数据。</div>
 </section>
@@ -106,9 +106,7 @@ loadScripts(document, 'script');</script>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.auth.passkey.PasskeyCeremonyId,java.lang.String,java.time.Instant)" class="member-name-link">PasskeyRegistrationOptions</a><wbr>(@NotNull <a href="../PasskeyCeremonyId.html" title="class in com.sca4d.auth.passkey">PasskeyCeremonyId</a>&nbsp;ceremonyId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;optionsJson,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;expiresAt)</code></div>
-<div class="col-last even-row-color">
-<div class="block">创建 registration ceremony 的公开结果。</div>
-</div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -126,17 +124,17 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../PasskeyCeremonyId.html" title="class in com.sca4d.auth.passkey">PasskeyCeremonyId</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#ceremonyId()" class="member-name-link">ceremonyId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回完成 registration 时必须原样回传的标识。</div>
+<div class="block">完成 registration 时必须原样回传的标识。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#expiresAt()" class="member-name-link">expiresAt</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回 ceremony 失效时间。</div>
+<div class="block">ceremony 失效时间。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#optionsJson()" class="member-name-link">optionsJson</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">返回可以直接传给浏览器原生 WebAuthn JSON API 的 options JSON。</div>
+<div class="block">可以直接传给浏览器原生 WebAuthn JSON API 的 options JSON。</div>
 </div>
 </div>
 </div>
@@ -164,7 +162,6 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;optionsJson,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;expiresAt)</span></div>
-<div class="block">创建 registration ceremony 的公开结果。</div>
 </section>
 </li>
 </ul>
@@ -180,7 +177,11 @@ loadScripts(document, 'script');</script>
 <h3>ceremonyId</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../PasskeyCeremonyId.html" title="class in com.sca4d.auth.passkey">PasskeyCeremonyId</a></span>&nbsp;<span class="element-name">ceremonyId</span>()</div>
-<div class="block">返回完成 registration 时必须原样回传的标识。</div>
+<div class="block">完成 registration 时必须原样回传的标识。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>完成 registration 时必须原样回传的标识</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -188,7 +189,11 @@ loadScripts(document, 'script');</script>
 <h3>optionsJson</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">optionsJson</span>()</div>
-<div class="block">返回可以直接传给浏览器原生 WebAuthn JSON API 的 options JSON。</div>
+<div class="block">可以直接传给浏览器原生 WebAuthn JSON API 的 options JSON。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>可以直接传给浏览器原生 WebAuthn JSON API 的 options JSON</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -196,7 +201,11 @@ loadScripts(document, 'script');</script>
 <h3>expiresAt</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a></span>&nbsp;<span class="element-name">expiresAt</span>()</div>
-<div class="block">返回 ceremony 失效时间。</div>
+<div class="block">ceremony 失效时间。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>ceremony 失效时间</dd>
+</dl>
 </section>
 </li>
 </ul>

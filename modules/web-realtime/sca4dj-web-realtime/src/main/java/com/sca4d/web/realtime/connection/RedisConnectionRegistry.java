@@ -7,7 +7,9 @@ import com.sca4d.core.api.connection.ConnectionId;
 import com.sca4d.core.api.connection.ConnectionProtocol;
 import com.sca4d.core.api.connection.ConnectionRegistry;
 import com.sca4d.core.api.identity.Principal;
+import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.webrealtime.WebRealtimeTarget;
+import com.sca4d.core.spring.redis.KeyRedisSerializer;
 import com.sca4d.core.spring.redis.RedisBatches;
 import com.sca4d.web.realtime.config.WebRealtimeInfrastructureNames;
 import com.sca4d.web.realtime.config.WebRealtimeProperties;
@@ -15,7 +17,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisCallback;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 
 import java.nio.charset.StandardCharsets;
@@ -29,9 +31,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-/** 使用 Redis Hash、Set 和按租约到期时间排序的 ZSET 保存所有 Web Realtime 共享索引。 */
+/** 使用 Redis Hash、Set 和按租约到期时间排序的 SET 保存所有 Web Realtime 共享索引。 */
 @ApiStatus.Internal
-public final class RedisConnectionRegistry implements ConnectionRegistry {
+public class RedisConnectionRegistry implements ConnectionRegistry {
 
     private static final ConnectionProtocol WEB_REALTIME = new ConnectionProtocol("web-realtime");
 
@@ -45,19 +47,18 @@ public final class RedisConnectionRegistry implements ConnectionRegistry {
 
     private static final DefaultRedisScript<Long> UNSUBSCRIBE = script("registry-unsubscribe.lua");
 
-    private final @NotNull StringRedisTemplate redis;
-
-    private final @NotNull WebRealtimeInfrastructureNames names;
-
     private final @NotNull WebRealtimeProperties properties;
 
     private final @NotNull Clock clock;
 
     private final @NotNull RedisBatches redisBatches;
 
-    /** 创建使用当前 App 命名空间的共享连接索引。 */
+    private final @NotNull RedisTemplate<Key, String> redis;
+
+    private final @NotNull WebRealtimeInfrastructureNames names;
+
     public RedisConnectionRegistry(
-            @NotNull StringRedisTemplate redis,
+            @NotNull RedisTemplate<Key, String> redis,
             @NotNull WebRealtimeInfrastructureNames names,
             @NotNull WebRealtimeProperties properties,
             @NotNull Clock clock,
@@ -88,7 +89,7 @@ public final class RedisConnectionRegistry implements ConnectionRegistry {
         targets.add(WebRealtimeTarget.connection(connectionId));
 
         // 使用同一 Redis Cluster 槽位中的 Lua 原子写入连接、反向目标和目标成员租约。
-        List<String> keys = new ArrayList<>();
+        List<Key> keys = new ArrayList<>();
         keys.add(connectionKey(connectionId));
         keys.add(connectionTargetsKey(connectionId));
         keys.add(connectionSubscriptionsKey(connectionId));
@@ -106,12 +107,12 @@ public final class RedisConnectionRegistry implements ConnectionRegistry {
                 Long.toString(properties.getLeaseDuration().toMillis()));
     }
 
-    /** 登记不包含身份展开信息的公共连接事实。 */
+    /** 登记不包含身份展开信息的公共连接信息。 */
     @Override
     public void register(@NotNull Connection connection) {
         Connection checked = Objects.requireNonNull(connection, "Connection 不能为空");
         Instant expiresAt = clock.instant().plus(properties.getLeaseDuration());
-        String connectionKey = connectionKey(checked.id());
+        Key connectionKey = connectionKey(checked.id());
         redis.opsForHash()
                 .putAll(
                         connectionKey,
@@ -128,16 +129,16 @@ public final class RedisConnectionRegistry implements ConnectionRegistry {
                                 Long.toString(checked.lastActivityAt().toEpochMilli())));
         redis.expire(connectionKey, properties.getLeaseDuration());
         checked.sessionId().ifPresent(sessionId -> {
-            String target = targetKey(WebRealtimeTarget.session(sessionId));
+            Key target = targetKey(WebRealtimeTarget.session(sessionId));
             redis.opsForZSet().add(target, checked.id().value(), expiresAt.toEpochMilli());
             redis.expire(target, properties.getLeaseDuration().multipliedBy(2));
         });
     }
 
-    /** 更新公共连接事实的最近活动时间。 */
+    /** 更新公共连接信息的最近活动时间。 */
     @Override
     public void touch(
-            @NotNull com.sca4d.core.api.connection.ConnectionId connectionId,
+            @NotNull ConnectionId connectionId,
             @NotNull Instant lastActivityAt) {
         redis.opsForHash()
                 .put(
@@ -146,23 +147,23 @@ public final class RedisConnectionRegistry implements ConnectionRegistry {
                         Long.toString(Objects.requireNonNull(lastActivityAt, "Connection 活动时间不能为空").toEpochMilli()));
     }
 
-    /** 删除公共连接事实。 */
+    /** 删除公共连接信息。 */
     @Override
-    public void remove(@NotNull com.sca4d.core.api.connection.ConnectionId connectionId) {
+    public void remove(@NotNull ConnectionId connectionId) {
         unregister(connectionId);
     }
 
-    /** 读取当前 Session 关联的公共连接事实。 */
+    /** 读取当前 Session 关联的公共连接信息。 */
     @Override
     public @NotNull List<Connection> findBySession(@NotNull SessionId sessionId) {
-        Map<String, List<com.sca4d.core.api.connection.ConnectionId>> grouped = resolve(
+        Map<String, List<ConnectionId>> grouped = resolve(
                 WebRealtimeTarget.session(Objects.requireNonNull(sessionId, "SessionId 不能为空")));
         List<Connection> result = new ArrayList<>();
         List<ConnectionId> ids = grouped.values().stream().flatMap(List::stream).toList();
         redisBatches.forEach(ids, 1, batch -> {
             List<Object> values = redis.executePipelined((RedisCallback<Object>) connection -> {
                 for (ConnectionId id : batch) {
-                    connection.hashCommands().hGetAll(connectionKey(id).getBytes(StandardCharsets.UTF_8));
+                    connection.hashCommands().hGetAll(KeyRedisSerializer.keyBytes(redis, connectionKey(id)));
                 }
                 return null;
             });
@@ -191,7 +192,7 @@ public final class RedisConnectionRegistry implements ConnectionRegistry {
         return List.copyOf(result);
     }
 
-    /** 删除当前 Session 的全部共享连接事实。 */
+    /** 删除当前 Session 的全部共享连接信息。 */
     @Override
     public void terminateBySession(@NotNull SessionId sessionId, @NotNull String reason) {
         findBySession(sessionId).forEach(connection -> remove(connection.id()));
@@ -212,7 +213,7 @@ public final class RedisConnectionRegistry implements ConnectionRegistry {
         return Long.valueOf(1).equals(result);
     }
 
-    /** 从全部目标 ZSET 和连接元数据中删除指定连接。 */
+    /** 从全部目标 SET 和连接元数据中删除指定连接。 */
     public void unregister(@NotNull ConnectionId connectionId) {
         redis.execute(
                 UNREGISTER,
@@ -263,7 +264,7 @@ public final class RedisConnectionRegistry implements ConnectionRegistry {
     /** 删除到期成员，并把仍有连接元数据的 ConnectionId 按持有节点分组。 */
     @NotNull
     public Map<@NotNull String, @NotNull List<@NotNull ConnectionId>> resolve(@NotNull WebRealtimeTarget target) {
-        String targetKey = targetKey(Objects.requireNonNull(target, "Web Realtime 目标不能为空"));
+        Key targetKey = targetKey(Objects.requireNonNull(target, "Web Realtime 目标不能为空"));
         double now = clock.instant().toEpochMilli();
         redis.opsForZSet().removeRangeByScore(targetKey, Double.NEGATIVE_INFINITY, now);
         Set<String> ids = redis.opsForZSet().rangeByScore(targetKey, now, Double.POSITIVE_INFINITY);
@@ -277,7 +278,7 @@ public final class RedisConnectionRegistry implements ConnectionRegistry {
                 for (String id : batch) {
                     connection.hashCommands()
                             .hGet(
-                                    connectionKey(new ConnectionId(id)).getBytes(StandardCharsets.UTF_8),
+                                    KeyRedisSerializer.keyBytes(redis, connectionKey(new ConnectionId(id))),
                                     "node".getBytes(StandardCharsets.UTF_8));
                 }
                 return null;
@@ -304,22 +305,22 @@ public final class RedisConnectionRegistry implements ConnectionRegistry {
     }
 
     /** @return Connection Hash 键 */
-    private @NotNull String connectionKey(@NotNull ConnectionId id) {
+    private @NotNull Key connectionKey(@NotNull ConnectionId id) {
         return names.connection(id);
     }
 
     /** @return Connection 当前全部目标索引键的 Set 键 */
-    private @NotNull String connectionTargetsKey(@NotNull ConnectionId id) {
+    private @NotNull Key connectionTargetsKey(@NotNull ConnectionId id) {
         return names.connectionTargets(id);
     }
 
     /** @return Connection 的 STOMP subscription ID 到目标 Redis 键映射 Hash */
-    private @NotNull String connectionSubscriptionsKey(@NotNull ConnectionId id) {
+    private @NotNull Key connectionSubscriptionsKey(@NotNull ConnectionId id) {
         return names.connectionSubscriptions(id);
     }
 
-    /** @return 不暴露 Resource、Topic 或身份原文的目标 ZSET 键 */
-    private @NotNull String targetKey(@NotNull WebRealtimeTarget target) {
+    /** @return 不暴露 Resource、Topic 或身份原文的目标 SET 键 */
+    private @NotNull Key targetKey(@NotNull WebRealtimeTarget target) {
         return names.target(target);
     }
 
