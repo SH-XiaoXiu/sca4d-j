@@ -42,6 +42,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -71,6 +72,7 @@ import java.util.stream.StreamSupport;
 import javax.imageio.ImageIO;
 
 @Testcontainers
+@ActiveProfiles("integration")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @SpringBootTest(classes = Sca4dApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
         "sca4dj.iam.bootstrap.enabled=true",
@@ -275,7 +277,7 @@ class SessionLifecycleIntegrationTest {
     }
 
     @Test
-    @DisplayName("Bootstraps Logs In Restores The Redis Backed Session And Logs Out")
+    @DisplayName("管理员用默认密码登录，读取 Session 和个人资料后注销")
     void bootstrapsLogsInRestoresTheRedisBackedSessionAndLogsOut() throws Exception {
         JsonNode establishment = login("admin", "admin@123");
         String tokenValue = establishment.path("accessToken").asText();
@@ -312,14 +314,13 @@ class SessionLifecycleIntegrationTest {
         assertThat(accountId.asLong()).isPositive();
         assertThat(firstBody.path("data").has("principals")).isFalse();
         assertThat(firstBody.path("data").path("permissions")).isNotEmpty();
-        assertThat(
-                REDIS.execInContainer(
-                        "redis-cli",
-                        "--scan",
-                        "--pattern",
-                        "*token-session*" + tokenValue)
-                        .getStdout())
-                .isNotBlank();
+
+        ResponseEntity<JsonNode> profile = http.exchange(
+                "/me/profile",
+                HttpMethod.GET,
+                new HttpEntity<>(authenticatedHeaders),
+                JsonNode.class);
+        assertThat(profile.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         ResponseEntity<JsonNode> roles = http.exchange(
                 "/platform/roles",

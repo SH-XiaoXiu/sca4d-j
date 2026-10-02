@@ -275,7 +275,8 @@ implements com.sca4d.core.api.authentication.AuthenticationPolicy</span></div>
 <li>
 <section class="detail" id="requirementFor(com.sca4d.core.api.identity.Account,com.sca4d.core.api.authentication.AuthenticationActionCode)">
 <h3>requirementFor</h3>
-<div class="member-signature"><span class="annotations">@Transactional(readOnly=true)
+<div class="member-signature"><span class="annotations">@AnonymousAccess
+@Transactional(readOnly=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.authentication.AuthenticationRequirement</span>&nbsp;<span class="element-name">requirementFor</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.identity.Account&nbsp;account,
@@ -290,7 +291,8 @@ implements com.sca4d.core.api.authentication.AuthenticationPolicy</span></div>
 <li>
 <section class="detail" id="allowedMethods(com.sca4d.core.api.identity.Account,com.sca4d.core.api.authentication.AuthenticationActionCode,java.util.List)">
 <h3>allowedMethods</h3>
-<div class="member-signature"><span class="annotations">@Transactional(readOnly=true)
+<div class="member-signature"><span class="annotations">@AnonymousAccess
+@Transactional(readOnly=true)
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;com.sca4d.core.api.name.code.TreeCode&gt;</span>&nbsp;<span class="element-name">allowedMethods</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.identity.Account&nbsp;account,

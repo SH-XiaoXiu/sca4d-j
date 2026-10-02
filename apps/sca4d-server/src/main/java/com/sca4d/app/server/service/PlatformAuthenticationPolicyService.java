@@ -6,6 +6,7 @@ import com.sca4d.app.server.authentication.AuthenticationActions;
 import com.sca4d.app.server.authentication.AuthenticationMethodSettings;
 import com.sca4d.app.server.plugin.mfa.MfaPolicy;
 import com.sca4d.app.server.plugin.mfa.MfaSettings;
+import com.sca4d.core.api.annotation.AnonymousAccess;
 import com.sca4d.core.api.authentication.Authentication;
 import com.sca4d.core.api.authentication.AuthenticationActionCode;
 import com.sca4d.core.api.authentication.AuthenticationPolicy;
@@ -34,9 +35,9 @@ import java.util.Set;
 public class PlatformAuthenticationPolicyService implements AuthenticationPolicy {
     private static final Logger LOG = LoggerFactory.getLogger(PlatformAuthenticationPolicyService.class);
 
-    private final AccountAuthenticationSettingConfiguration settings;
-
     private final MfaPolicy policy;
+
+    private final AccountAuthenticationSettingConfiguration settings;
 
     /** 挂载生成客户端，设置持久化仍使用宿主事务。 */
     public PlatformAuthenticationPolicyService(
@@ -117,6 +118,7 @@ public class PlatformAuthenticationPolicyService implements AuthenticationPolicy
     }
 
     @Override
+    @AnonymousAccess
     @PluginScope
     @Transactional(readOnly = true)
     public @NotNull AuthenticationRequirement requirementFor(
@@ -130,6 +132,7 @@ public class PlatformAuthenticationPolicyService implements AuthenticationPolicy
     }
 
     @Override
+    @AnonymousAccess
     @PluginScope
     @Transactional(readOnly = true)
     public @NotNull Set<TreeCode> allowedMethods(
