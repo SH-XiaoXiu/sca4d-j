@@ -14,7 +14,9 @@ import org.springframework.aop.support.AbstractPointcutAdvisor;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.aop.support.StaticMethodMatcherPointcut;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
+import org.springframework.core.annotation.AnnotatedElementUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -89,7 +91,11 @@ public class CallLifecycleAdvisor extends AbstractPointcutAdvisor {
 
             @Override
             public boolean matches(@NotNull Method method, @NotNull Class<?> targetClass) {
-                if (method.getDeclaringClass() == Object.class) {
+                // Bean 工厂声明用于装配返回对象，创建单例时不能提前进入业务 Call。
+                if (method.getDeclaringClass() == Object.class
+                        || AnnotatedElementUtils.hasAnnotation(
+                                CallBindingRegistry.concreteMethod(method, targetClass),
+                                Bean.class)) {
                     return false;
                 }
                 return bindings.matches(method, targetClass);
