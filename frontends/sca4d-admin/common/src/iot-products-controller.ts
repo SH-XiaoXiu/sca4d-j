@@ -3,6 +3,7 @@ import type { ResourcePhase } from './controller';
 import type { Int64String, LocaleCatalog, LocalizedFields } from './types';
 
 import { ObservableController } from './controller';
+import { SavedResourceRefreshError } from './errors';
 import { AdminError } from './errors';
 import { freezeLocaleCatalog, freezeLocalizedFields } from './localized-fields';
 
@@ -175,31 +176,6 @@ export class IotProductsController extends ObservableController<IotProductsState
     });
   }
 
-  /** 创建数据库 Product 并重新读取管理目录。 */
-  async create(input: CreateIotProductInput): Promise<void> {
-    try {
-      await this.api.post('/iot/products', input);
-      await this.load();
-    } catch (error) {
-      this.failMutation(error);
-      throw error;
-    }
-  }
-
-  /** 修改停用数据库 Product 的接入方式和协议并重新读取目录。 */
-  async update(
-    product: IotDatabaseProductCatalogItem,
-    input: UpdateIotProductInput,
-  ): Promise<void> {
-    try {
-      await this.api.put(`/iot/products/${product.id}`, input);
-      await this.load();
-    } catch (error) {
-      this.failMutation(error);
-      throw error;
-    }
-  }
-
   /** 修改数据库 Product 启停状态并重新读取目录。 */
   async changeStatus(
     product: IotDatabaseProductCatalogItem,
@@ -207,7 +183,42 @@ export class IotProductsController extends ObservableController<IotProductsState
   ): Promise<void> {
     try {
       await this.api.patch(`/iot/products/${product.id}/status`, { status });
-      await this.load();
+      try {
+        await this.load();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
+    } catch (error) {
+      this.failMutation(error);
+      throw error;
+    }
+  }
+
+  /** 清除离开 Product 详情后不再使用的物模型和翻译状态。 */
+  clearDetails(): void {
+    this.cancelRead('loadThingModels');
+    this.cancelRead('loadThingModel');
+    this.cancelRead('loadThingModelI18n');
+    this.publish({
+      ...this.state,
+      detailsPhase: 'idle',
+      error: null,
+      productI18n: null,
+      selectedThingModel: null,
+      thingModelI18n: null,
+      thingModels: Object.freeze([]),
+    });
+  }
+
+  /** 创建数据库 Product 并重新读取管理目录。 */
+  async create(input: CreateIotProductInput): Promise<void> {
+    try {
+      await this.api.post('/iot/products', input);
+      try {
+        await this.load();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
     } catch (error) {
       this.failMutation(error);
       throw error;
@@ -219,6 +230,7 @@ export class IotProductsController extends ObservableController<IotProductsState
     page = this.state.catalog?.page ?? 1,
     size = this.state.catalog?.size ?? 20,
   ): Promise<void> {
+    const read = this.beginRead('load');
     this.publish({ ...this.state, error: null, phase: 'loading' });
     try {
       const [catalog, locales] = await Promise.all([
@@ -228,6 +240,7 @@ export class IotProductsController extends ObservableController<IotProductsState
         this.api.get<LocaleCatalog>('/system/locales'),
       ]);
       const value = freezeCatalog(catalog.data);
+      if (!this.isCurrentRead('load', read)) return;
       this.publish({
         ...this.state,
         catalog: value,
@@ -236,13 +249,80 @@ export class IotProductsController extends ObservableController<IotProductsState
         phase: value.products.length > 0 ? 'ready' : 'empty',
       });
     } catch (error) {
+      if (!this.isCurrentRead('load', read)) return;
       this.fail(error, false);
+      throw error;
+    }
+  }
+
+  /** 读取数据库 Product 保存的全部 Locale 展示字段。 */
+  async loadProductI18n(product: IotDatabaseProductCatalogItem): Promise<void> {
+    const read = this.beginRead('loadProductI18n');
+    try {
+      const result = await this.api.get<IotProductI18n>(
+        `/iot/products/${product.id}/i18n`,
+      );
+      if (!this.isCurrentRead('loadProductI18n', read)) return;
+      this.publish({
+        ...this.state,
+        error: null,
+        productI18n: freezeProductI18n(result.data),
+      });
+    } catch (error) {
+      if (!this.isCurrentRead('loadProductI18n', read)) return;
+      this.failMutation(error);
+      throw error;
+    }
+  }
+
+  /** 读取任意来源 Product 的指定物模型版本。 */
+  async loadThingModel(productCode: string, version: number): Promise<void> {
+    const read = this.beginRead('loadThingModel');
+    this.publish({ ...this.state, detailsPhase: 'loading', error: null });
+    try {
+      const result = await this.api.get<IotThingModel>(
+        `${catalogProductPath(productCode)}/thing-models/${version}`,
+      );
+      if (!this.isCurrentRead('loadThingModel', read)) return;
+      this.publish({
+        ...this.state,
+        detailsPhase: 'ready',
+        error: null,
+        selectedThingModel: freezeThingModel(result.data),
+      });
+    } catch (error) {
+      if (!this.isCurrentRead('loadThingModel', read)) return;
+      this.fail(error, true);
+      throw error;
+    }
+  }
+
+  /** 读取数据库 Product 指定物模型版本的全部 Locale 展示字段。 */
+  async loadThingModelI18n(
+    product: IotDatabaseProductCatalogItem,
+    version: number,
+  ): Promise<void> {
+    const read = this.beginRead('loadThingModelI18n');
+    try {
+      const result = await this.api.get<IotThingModelI18n>(
+        `/iot/products/${product.id}/thing-models/${version}/i18n`,
+      );
+      if (!this.isCurrentRead('loadThingModelI18n', read)) return;
+      this.publish({
+        ...this.state,
+        error: null,
+        thingModelI18n: freezeThingModelI18n(result.data),
+      });
+    } catch (error) {
+      if (!this.isCurrentRead('loadThingModelI18n', read)) return;
+      this.failMutation(error);
       throw error;
     }
   }
 
   /** 读取任意来源 Product 的全部物模型版本。 */
   async loadThingModels(productCode: string): Promise<void> {
+    const read = this.beginRead('loadThingModels');
     this.publish({
       ...this.state,
       detailsPhase: 'loading',
@@ -255,7 +335,10 @@ export class IotProductsController extends ObservableController<IotProductsState
       const result = await this.api.get<readonly IotThingModel[]>(
         `${catalogProductPath(productCode)}/thing-models`,
       );
-      const models = Object.freeze(result.data.map(freezeThingModel));
+      const models = Object.freeze(
+        result.data.map((item) => freezeThingModel(item)),
+      );
+      if (!this.isCurrentRead('loadThingModels', read)) return;
       this.publish({
         ...this.state,
         detailsPhase: models.length > 0 ? 'ready' : 'empty',
@@ -263,60 +346,31 @@ export class IotProductsController extends ObservableController<IotProductsState
         thingModels: models,
       });
     } catch (error) {
+      if (!this.isCurrentRead('loadThingModels', read)) return;
       this.fail(error, true);
       throw error;
     }
   }
 
-  /** 读取任意来源 Product 的指定物模型版本。 */
-  async loadThingModel(productCode: string, version: number): Promise<void> {
-    this.publish({ ...this.state, detailsPhase: 'loading', error: null });
+  /** 发布数据库 Product 的新物模型版本并刷新版本列表。 */
+  async publishThingModel(
+    product: IotDatabaseProductCatalogItem,
+    input: PublishIotThingModelInput,
+  ): Promise<void> {
     try {
-      const result = await this.api.get<IotThingModel>(
-        `${catalogProductPath(productCode)}/thing-models/${version}`,
+      const result = await this.api.post<IotThingModel>(
+        `/iot/products/${product.id}/thing-models`,
+        input,
       );
+      try {
+        await this.loadThingModels(product.code);
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
       this.publish({
         ...this.state,
         detailsPhase: 'ready',
-        error: null,
         selectedThingModel: freezeThingModel(result.data),
-      });
-    } catch (error) {
-      this.fail(error, true);
-      throw error;
-    }
-  }
-
-  /** 读取数据库 Product 保存的全部 Locale 展示字段。 */
-  async loadProductI18n(product: IotDatabaseProductCatalogItem): Promise<void> {
-    try {
-      const result = await this.api.get<IotProductI18n>(
-        `/iot/products/${product.id}/i18n`,
-      );
-      this.publish({
-        ...this.state,
-        error: null,
-        productI18n: freezeProductI18n(result.data),
-      });
-    } catch (error) {
-      this.failMutation(error);
-      throw error;
-    }
-  }
-
-  /** 读取数据库 Product 指定物模型版本的全部 Locale 展示字段。 */
-  async loadThingModelI18n(
-    product: IotDatabaseProductCatalogItem,
-    version: number,
-  ): Promise<void> {
-    try {
-      const result = await this.api.get<IotThingModelI18n>(
-        `/iot/products/${product.id}/thing-models/${version}/i18n`,
-      );
-      this.publish({
-        ...this.state,
-        error: null,
-        thingModelI18n: freezeThingModelI18n(result.data),
       });
     } catch (error) {
       this.failMutation(error);
@@ -339,29 +393,11 @@ export class IotProductsController extends ObservableController<IotProductsState
         error: null,
         productI18n: freezeProductI18n(result.data),
       });
-      await this.load();
-    } catch (error) {
-      this.failMutation(error);
-      throw error;
-    }
-  }
-
-  /** 发布数据库 Product 的新物模型版本并刷新版本列表。 */
-  async publishThingModel(
-    product: IotDatabaseProductCatalogItem,
-    input: PublishIotThingModelInput,
-  ): Promise<void> {
-    try {
-      const result = await this.api.post<IotThingModel>(
-        `/iot/products/${product.id}/thing-models`,
-        input,
-      );
-      await this.loadThingModels(product.code);
-      this.publish({
-        ...this.state,
-        detailsPhase: 'ready',
-        selectedThingModel: freezeThingModel(result.data),
-      });
+      try {
+        await this.load();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
     } catch (error) {
       this.failMutation(error);
       throw error;
@@ -384,24 +420,33 @@ export class IotProductsController extends ObservableController<IotProductsState
         error: null,
         thingModelI18n: freezeThingModelI18n(result.data),
       });
-      await this.loadThingModel(product.code, version);
+      try {
+        await this.loadThingModel(product.code, version);
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
     } catch (error) {
       this.failMutation(error);
       throw error;
     }
   }
 
-  /** 清除离开 Product 详情后不再使用的物模型和翻译状态。 */
-  clearDetails(): void {
-    this.publish({
-      ...this.state,
-      detailsPhase: 'idle',
-      error: null,
-      productI18n: null,
-      selectedThingModel: null,
-      thingModelI18n: null,
-      thingModels: Object.freeze([]),
-    });
+  /** 修改停用数据库 Product 的接入方式和协议并重新读取目录。 */
+  async update(
+    product: IotDatabaseProductCatalogItem,
+    input: UpdateIotProductInput,
+  ): Promise<void> {
+    try {
+      await this.api.put(`/iot/products/${product.id}`, input);
+      try {
+        await this.load();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
+    } catch (error) {
+      this.failMutation(error);
+      throw error;
+    }
   }
 
   /** 将统一 HTTP 错误转换成目录或详情区域可以显示的阶段。 */
@@ -459,7 +504,9 @@ function freezeThingModel(value: IotThingModel): IotThingModel {
       value.commands.map((command) =>
         Object.freeze({
           ...command,
-          inputs: Object.freeze(command.inputs.map(freezeThingField)),
+          inputs: Object.freeze(
+            command.inputs.map((item) => freezeThingField(item)),
+          ),
         }),
       ),
     ),
@@ -467,7 +514,9 @@ function freezeThingModel(value: IotThingModel): IotThingModel {
       value.events.map((event) =>
         Object.freeze({
           ...event,
-          outputs: Object.freeze(event.outputs.map(freezeThingField)),
+          outputs: Object.freeze(
+            event.outputs.map((item) => freezeThingField(item)),
+          ),
         }),
       ),
     ),
@@ -498,8 +547,12 @@ function freezeThingValueType(value: IotThingValueType): IotThingValueType {
     enumValues: Object.freeze(
       value.enumValues.map((item) => Object.freeze({ ...item })),
     ),
-    optionalFields: Object.freeze(value.optionalFields.map(freezeThingField)),
-    requiredFields: Object.freeze(value.requiredFields.map(freezeThingField)),
+    optionalFields: Object.freeze(
+      value.optionalFields.map((item) => freezeThingField(item)),
+    ),
+    requiredFields: Object.freeze(
+      value.requiredFields.map((item) => freezeThingField(item)),
+    ),
   });
 }
 

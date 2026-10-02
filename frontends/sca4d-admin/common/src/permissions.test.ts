@@ -15,7 +15,7 @@ const nodes: readonly PermissionNode[] = [
     sortOrder: 20,
     children: [
       {
-        code: 'platform:accounts:read',
+        code: 'PLATFORM:ACCOUNTS:READ',
         parentCode: 'platform',
         nameKey: 'permission.platform.accounts.read',
         name: 'Read accounts',
@@ -33,8 +33,8 @@ describe('permission tree', () => {
     const tree = permissionTree(nodes);
 
     expect(tree[0]?.title).toBe('Platform');
-    expect(tree[0]?.children[0]?.key).toBe('platform:accounts:read');
-    expect(grantablePermissionCodes(nodes)).toEqual(['platform:accounts:read']);
+    expect(tree[0]?.children[0]?.key).toBe('PLATFORM:ACCOUNTS:READ');
+    expect(grantablePermissionCodes(nodes)).toEqual(['PLATFORM:ACCOUNTS:READ']);
     expect(Object.isFrozen(tree)).toBe(true);
   });
 });

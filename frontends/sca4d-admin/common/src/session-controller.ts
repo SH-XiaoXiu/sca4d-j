@@ -103,8 +103,10 @@ export class SessionController extends ObservableController<SessionState> {
 
   /** 重新读取当前 Session 和权限。 */
   async loadCurrent(): Promise<void> {
+    const read = this.beginRead('loadCurrent');
     const result = await this.api.get<CurrentSession>('/sessions/current');
     const session = freezeSession(result.data);
+    if (!this.isCurrentRead('loadCurrent', read)) return;
     this.publish({
       phase: 'authenticated',
       session,
@@ -126,7 +128,7 @@ export class SessionController extends ObservableController<SessionState> {
     });
     try {
       const result = await this.api.post<LoginOutcome>('/login/attempts', {
-        username,
+        identifier: username,
         password,
       });
       await this.acceptLoginOutcome(result.data);
@@ -144,6 +146,17 @@ export class SessionController extends ObservableController<SessionState> {
     } finally {
       this.clearSession();
     }
+  }
+
+  /** 合并响应头和实时事件触发的 Session 刷新，失败时清除失效的本地 Session。 */
+  refreshFromServer(): void {
+    if (this.realtimeRefresh) return;
+    this.realtimeRefresh = this.refreshAccessToken()
+      .then(() => this.loadCurrent())
+      .catch(() => this.clearSession())
+      .finally(() => {
+        this.realtimeRefresh = null;
+      });
   }
 
   /** 向当前登录 attempt 提交 TOTP，并在满足策略后建立 Session。 */
@@ -233,17 +246,6 @@ export class SessionController extends ObservableController<SessionState> {
     return this.tokenRefresh;
   }
 
-  /** 合并响应头和实时事件触发的 Session 刷新，失败时清除失效的本地 Session。 */
-  refreshFromServer(): void {
-    if (this.realtimeRefresh) return;
-    this.realtimeRefresh = this.refreshAccessToken()
-      .then(() => this.loadCurrent())
-      .catch(() => this.clearSession())
-      .finally(() => {
-        this.realtimeRefresh = null;
-      });
-  }
-
   /** JWT 在过期前 30 秒刷新；SESSION 模式不安排后台刷新。 */
   private scheduleAccessRefresh(tokens: SessionToken): void {
     if (this.refreshTimer) clearTimeout(this.refreshTimer);
@@ -267,12 +269,12 @@ function capabilities(permissions: readonly string[]): SessionCapabilities {
   const values = new Set(permissions);
   return Object.freeze({
     accountsRead:
-      values.has('platform:accounts:read') ||
-      values.has('platform:accounts:manage'),
-    accountsManage: values.has('platform:accounts:manage'),
+      values.has('PLATFORM:ACCOUNTS:READ') ||
+      values.has('PLATFORM:ACCOUNTS:MANAGE'),
+    accountsManage: values.has('PLATFORM:ACCOUNTS:MANAGE'),
     rolesRead:
-      values.has('platform:roles:read') || values.has('platform:roles:manage'),
-    rolesManage: values.has('platform:roles:manage'),
+      values.has('PLATFORM:ROLES:READ') || values.has('PLATFORM:ROLES:MANAGE'),
+    rolesManage: values.has('PLATFORM:ROLES:MANAGE'),
   });
 }
 

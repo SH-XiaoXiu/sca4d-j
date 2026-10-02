@@ -4,13 +4,14 @@ import { computed, onBeforeUnmount, ref, watch } from 'vue';
 import { message } from 'ant-design-vue';
 import { RefreshCw, Smartphone, Trash2 } from 'lucide-vue-next';
 
-import ResourceState from '#/components/ResourceState.vue';
-import { useI18n } from '#/i18n';
+import { SjResourceState } from '#/components/sj';
+import { useSjPresentation } from '#/features/sj-presentation';
 import { $t } from '#/locales';
 import { useSecurityStore } from '#/store/security';
 
+const { errorText } = useSjPresentation();
+
 const store = useSecurityStore();
-const { errorText } = useI18n();
 const activationCode = ref('');
 const qrCodeUrl = ref<null | string>(null);
 const loading = computed(
@@ -122,7 +123,7 @@ function revokeQrCode(): void {
       </a-button>
     </header>
 
-    <ResourceState
+    <SjResourceState
       v-if="store.totp.phase === 'error' || store.totp.phase === 'loading'"
       :error="store.totp.error"
       :phase="store.totp.phase"

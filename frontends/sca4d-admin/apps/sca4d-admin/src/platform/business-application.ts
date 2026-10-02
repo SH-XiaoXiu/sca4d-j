@@ -23,7 +23,10 @@ import {
   EmailTemplatesController,
   FederatedProviderController,
   FilesController,
+  InboxController,
   IotProductsController,
+  NotificationSettingsController,
+  ObservableController,
   OperationLogsController,
   PasskeyController,
   PasswordController,
@@ -136,6 +139,9 @@ class BrowserObjectTransferPort implements ObjectTransferPort {
 /** Sca4d Server 示例业务页面使用的 Controller 集合。 */
 export interface BusinessApplication {
   readonly accounts: AccountsController;
+  readonly inbox: InboxController;
+  readonly createInbox: (limit?: number) => InboxController;
+  readonly notificationSettings: NotificationSettingsController;
   readonly authenticationSettings: AuthenticationSettingsController;
   readonly emailSenders: EmailSendersController;
   readonly emailTemplates: EmailTemplatesController;
@@ -167,6 +173,9 @@ const api = new AdminApiClient(
 /** 已连接 Vben Token、语言和浏览器传输实现的业务 Controller。 */
 export const businessApplication: BusinessApplication = Object.freeze({
   accounts: new AccountsController(api),
+  inbox: new InboxController(api, 20),
+  createInbox: (limit = 20) => new InboxController(api, limit),
+  notificationSettings: new NotificationSettingsController(api),
   authenticationSettings: new AuthenticationSettingsController(api),
   emailSenders: new EmailSendersController(api),
   emailTemplates: new EmailTemplatesController(api),
@@ -204,4 +213,12 @@ function parseResponseBody(value: string): unknown {
   } catch {
     return value;
   }
+}
+
+/** Session 清除或切换时，清除所有业务快照及文件缓存并拒绝迟到的读取结果。 */
+export function clearBusinessSessionResources(): void {
+  for (const controller of Object.values(businessApplication)) {
+    if (controller instanceof ObservableController) controller.resetState();
+  }
+  businessApplication.files.clear();
 }

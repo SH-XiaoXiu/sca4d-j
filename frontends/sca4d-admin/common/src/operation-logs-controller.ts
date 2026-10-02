@@ -78,6 +78,7 @@ export class OperationLogsController extends ObservableController<OperationLogsS
 
   /** 清除当前抽屉中的日志详情和详情错误。 */
   clearSelection(): void {
+    this.cancelRead('detail');
     this.publish({
       ...this.state,
       detailError: null,
@@ -88,6 +89,7 @@ export class OperationLogsController extends ObservableController<OperationLogsS
 
   /** 使用完整筛选条件读取操作日志页。 */
   async load(filters: Partial<OperationLogFilters> = {}): Promise<void> {
+    const read = this.beginRead('load');
     const next = Object.freeze({ ...this.state.filters, ...filters });
     this.publish({
       ...this.state,
@@ -113,6 +115,7 @@ export class OperationLogsController extends ObservableController<OperationLogsS
         },
       );
       const page = freezePage(result.data);
+      if (!this.isCurrentRead('load', read)) return;
       this.publish({
         ...this.state,
         error: null,
@@ -120,7 +123,9 @@ export class OperationLogsController extends ObservableController<OperationLogsS
         phase: page.items.length > 0 ? 'ready' : 'empty',
       });
     } catch (error) {
+      if (!this.isCurrentRead('load', read)) return;
       const value = asAdminError(error);
+      if (!this.isCurrentRead('load', read)) return;
       this.publish({
         ...this.state,
         error: value,
@@ -132,6 +137,7 @@ export class OperationLogsController extends ObservableController<OperationLogsS
 
   /** 读取指定标识的完整操作日志并作为当前详情。 */
   async require(id: Int64String): Promise<void> {
+    const read = this.beginRead('detail');
     this.publish({
       ...this.state,
       detailError: null,
@@ -142,6 +148,7 @@ export class OperationLogsController extends ObservableController<OperationLogsS
       const result = await this.api.get<OperationLog>(
         `/system/audit/records/${id}`,
       );
+      if (!this.isCurrentRead('detail', read)) return;
       this.publish({
         ...this.state,
         detailError: null,
@@ -149,7 +156,9 @@ export class OperationLogsController extends ObservableController<OperationLogsS
         selected: Object.freeze({ ...result.data }),
       });
     } catch (error) {
+      if (!this.isCurrentRead('detail', read)) return;
       const value = asAdminError(error);
+      if (!this.isCurrentRead('detail', read)) return;
       this.publish({
         ...this.state,
         detailError: value,

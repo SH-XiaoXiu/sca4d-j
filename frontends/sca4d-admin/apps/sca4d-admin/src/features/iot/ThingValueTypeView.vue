@@ -3,15 +3,15 @@ import type { IotThingValueType } from '@sca4d/admin';
 
 import { computed } from 'vue';
 
-import { useI18n } from '#/i18n';
-
+import { useSjPresentation } from '#/features/sj-presentation';
 defineOptions({ name: 'ThingValueTypeView' });
 
 const props = defineProps<{
   value: IotThingValueType;
 }>();
 
-const { t } = useI18n();
+const { t } = useSjPresentation();
+
 const constraints = computed(() => {
   const value = props.value;
   return [

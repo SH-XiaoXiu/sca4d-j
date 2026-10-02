@@ -80,7 +80,8 @@
     "preferenceSaveFailed": "Preferences could not be saved",
     "totpLabel": "TOTP code",
     "passkeyLogin": "Sign in with Passkey",
-    "or": "or"
+    "or": "or",
+    "sendCode": "Send code"
   },
   "federatedProviders": {
     "title": "Third-party login Providers",
@@ -225,7 +226,9 @@
     "variableName": "Variable name, for example code",
     "variables": "Template variables",
     "variableValueTooLong": "Variable values must not exceed 4096 characters",
-    "view": "View"
+    "view": "View",
+    "subjectSource": "Subject source",
+    "saved": "Saved"
   },
   "smsNotifications": {
     "actions": "Actions",

@@ -9,6 +9,8 @@ import type {
 } from './types';
 
 import { ObservableController } from './controller';
+import { SavedResourceRefreshError } from './errors';
+import { SupersededReadError } from './errors';
 import { AdminError } from './errors';
 
 /** SMS Provider 与模板绑定页面使用的不可变状态。 */
@@ -40,21 +42,44 @@ export class SmsNotificationsController extends ObservableController<SmsNotifica
     });
   }
 
-  /** 读取全部 Provider；空列表仍允许创建。 */
-  async loadProviders(): Promise<void> {
-    this.publish({ ...this.state, error: null, phase: 'loading' });
+  /** 清除绑定详情和 ETag。 */
+  clearBinding(): void {
+    this.cancelRead('requireBinding');
+    this.publish({
+      ...this.state,
+      bindingDetail: null,
+      bindingEtag: null,
+    });
+  }
+
+  /** 清除 Provider 详情和 ETag。 */
+  clearProvider(): void {
+    this.cancelRead('requireProvider');
+    this.publish({
+      ...this.state,
+      providerDetail: null,
+      providerEtag: null,
+    });
+  }
+
+  /** 创建默认停用绑定并刷新当前 Provider 的绑定列表。 */
+  async createBinding(
+    providerId: Int64String,
+    input: SmsProviderBindingInput,
+  ): Promise<SmsProviderBinding> {
     try {
-      const result = await this.api.get<readonly SmsProvider[]>(
-        '/system/sms/providers',
+      const result = await this.api.post<SmsProviderBinding>(
+        bindingsPath(providerId),
+        input,
       );
-      this.publish({
-        ...this.state,
-        error: null,
-        phase: 'ready',
-        providers: Object.freeze(result.data.map(freezeProvider)),
-      });
+      try {
+        await this.loadBindings(providerId);
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
+      return freezeBinding(result.data);
     } catch (error) {
-      this.failed(error, true);
+      this.failed(error, false);
       throw error;
     }
   }
@@ -66,7 +91,11 @@ export class SmsNotificationsController extends ObservableController<SmsNotifica
         '/system/sms/providers',
         input,
       );
-      await this.loadProviders();
+      try {
+        await this.loadProviders();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
       return freezeProvider(result.data);
     } catch (error) {
       this.failed(error, false);
@@ -74,65 +103,25 @@ export class SmsNotificationsController extends ObservableController<SmsNotifica
     }
   }
 
-  /** 读取 Provider 详情及后续写入使用的 ETag。 */
-  async requireProvider(providerId: Int64String): Promise<SmsProvider> {
-    try {
-      const result = await this.api.get<SmsProvider>(providerPath(providerId));
-      if (!result.etag) throw new Error('SMS provider response has no ETag');
-      const provider = freezeProvider(result.data);
-      this.publish({
-        ...this.state,
-        error: null,
-        providerDetail: provider,
-        providerEtag: result.etag,
-      });
-      return provider;
-    } catch (error) {
-      this.failed(error, false);
-      throw error;
-    }
-  }
-
-  /** 按已加载 ETag 完整替换停用 Provider。 */
-  async replaceProvider(input: SmsProviderInput): Promise<SmsProvider> {
-    const detail = this.state.providerDetail;
-    const etag = this.state.providerEtag;
-    if (!detail || !etag) throw new Error('No SMS provider detail is loaded');
-    try {
-      const result = await this.api.put<SmsProvider>(
-        providerPath(detail.providerId),
-        input,
-        { 'If-Match': etag },
-      );
-      const updated = freezeProvider(result.data);
-      this.publish({
-        ...this.state,
-        error: null,
-        providerDetail: updated,
-        providerEtag: result.etag,
-      });
-      await this.loadProviders();
-      return updated;
-    } catch (error) {
-      this.failed(error, false);
-      throw error;
-    }
-  }
-
-  /** 读取最新 ETag 后修改 Provider 状态。 */
-  async setProviderEnabled(
+  /** 按最新 ETag 删除停用绑定。 */
+  async deleteBinding(
     providerId: Int64String,
-    enabled: boolean,
+    bindingId: Int64String,
   ): Promise<void> {
     try {
-      const current = await this.api.get<SmsProvider>(providerPath(providerId));
-      if (!current.etag) throw new Error('SMS provider response has no ETag');
-      await this.api.patch(
-        `${providerPath(providerId)}/status`,
-        { enabled },
-        { 'If-Match': current.etag },
+      const current = await this.api.get<SmsProviderBinding>(
+        bindingPath(providerId, bindingId),
       );
-      await this.loadProviders();
+      if (!current.etag) throw new Error('SMS binding response has no ETag');
+      await this.api.delete(bindingPath(providerId, bindingId), {
+        'If-Match': current.etag,
+      });
+      this.clearBinding();
+      try {
+        await this.loadBindings(providerId);
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
     } catch (error) {
       this.failed(error, false);
       throw error;
@@ -148,7 +137,11 @@ export class SmsNotificationsController extends ObservableController<SmsNotifica
         'If-Match': current.etag,
       });
       this.clearProvider();
-      await this.loadProviders();
+      try {
+        await this.loadProviders();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
     } catch (error) {
       this.failed(error, false);
       throw error;
@@ -157,60 +150,45 @@ export class SmsNotificationsController extends ObservableController<SmsNotifica
 
   /** 读取指定 Provider 的全部绑定。 */
   async loadBindings(providerId: Int64String): Promise<void> {
+    const read = this.beginRead('loadBindings');
     try {
       const result = await this.api.get<readonly SmsProviderBinding[]>(
         bindingsPath(providerId),
       );
+      if (!this.isCurrentRead('loadBindings', read)) return;
       this.publish({
         ...this.state,
-        bindings: Object.freeze(result.data.map(freezeBinding)),
+        bindings: Object.freeze(result.data.map((item) => freezeBinding(item))),
         error: null,
         selectedProviderId: providerId,
       });
     } catch (error) {
+      if (!this.isCurrentRead('loadBindings', read)) return;
       this.failed(error, false);
       throw error;
     }
   }
 
-  /** 创建默认停用绑定并刷新当前 Provider 的绑定列表。 */
-  async createBinding(
-    providerId: Int64String,
-    input: SmsProviderBindingInput,
-  ): Promise<SmsProviderBinding> {
+  /** 读取全部 Provider；空列表仍允许创建。 */
+  async loadProviders(): Promise<void> {
+    const read = this.beginRead('loadProviders');
+    this.publish({ ...this.state, error: null, phase: 'loading' });
     try {
-      const result = await this.api.post<SmsProviderBinding>(
-        bindingsPath(providerId),
-        input,
+      const result = await this.api.get<readonly SmsProvider[]>(
+        '/system/sms/providers',
       );
-      await this.loadBindings(providerId);
-      return freezeBinding(result.data);
-    } catch (error) {
-      this.failed(error, false);
-      throw error;
-    }
-  }
-
-  /** 读取绑定详情及后续写入使用的 ETag。 */
-  async requireBinding(
-    providerId: Int64String,
-    bindingId: Int64String,
-  ): Promise<SmsProviderBinding> {
-    try {
-      const result = await this.api.get<SmsProviderBinding>(
-        bindingPath(providerId, bindingId),
-      );
-      if (!result.etag) throw new Error('SMS binding response has no ETag');
-      const binding = freezeBinding(result.data);
+      if (!this.isCurrentRead('loadProviders', read)) return;
       this.publish({
         ...this.state,
-        bindingDetail: binding,
-        bindingEtag: result.etag,
         error: null,
+        phase: 'ready',
+        providers: Object.freeze(
+          result.data.map((item) => freezeProvider(item)),
+        ),
       });
-      return binding;
     } catch (error) {
-      this.failed(error, false);
+      if (!this.isCurrentRead('loadProviders', read)) return;
+      this.failed(error, true);
       throw error;
     }
   }
@@ -235,9 +213,100 @@ export class SmsNotificationsController extends ObservableController<SmsNotifica
         bindingEtag: result.etag,
         error: null,
       });
-      await this.loadBindings(detail.providerId);
+      try {
+        await this.loadBindings(detail.providerId);
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
       return updated;
     } catch (error) {
+      this.failed(error, false);
+      throw error;
+    }
+  }
+
+  /** 按已加载 ETag 完整替换停用 Provider。 */
+  async replaceProvider(input: SmsProviderInput): Promise<SmsProvider> {
+    const detail = this.state.providerDetail;
+    const etag = this.state.providerEtag;
+    if (!detail || !etag) throw new Error('No SMS provider detail is loaded');
+    try {
+      const result = await this.api.put<SmsProvider>(
+        providerPath(detail.providerId),
+        input,
+        { 'If-Match': etag },
+      );
+      const updated = freezeProvider(result.data);
+      this.publish({
+        ...this.state,
+        error: null,
+        providerDetail: updated,
+        providerEtag: result.etag,
+      });
+      try {
+        await this.loadProviders();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
+      return updated;
+    } catch (error) {
+      this.failed(error, false);
+      throw error;
+    }
+  }
+
+  /** 读取绑定详情及后续写入使用的 ETag。 */
+  async requireBinding(
+    providerId: Int64String,
+    bindingId: Int64String,
+  ): Promise<SmsProviderBinding> {
+    const read = this.beginRead('requireBinding');
+    try {
+      const result = await this.api.get<SmsProviderBinding>(
+        bindingPath(providerId, bindingId),
+      );
+      if (!result.etag) throw new Error('SMS binding response has no ETag');
+      const binding = freezeBinding(result.data);
+      if (!this.isCurrentRead('requireBinding', read))
+        throw new SupersededReadError();
+      this.publish({
+        ...this.state,
+        bindingDetail: binding,
+        bindingEtag: result.etag,
+        error: null,
+      });
+      if (!this.isCurrentRead('requireBinding', read))
+        throw new SupersededReadError();
+      return binding;
+    } catch (error) {
+      if (!this.isCurrentRead('requireBinding', read))
+        throw new SupersededReadError();
+      this.failed(error, false);
+      throw error;
+    }
+  }
+
+  /** 读取 Provider 详情及后续写入使用的 ETag。 */
+  async requireProvider(providerId: Int64String): Promise<SmsProvider> {
+    const read = this.beginRead('requireProvider');
+    try {
+      const result = await this.api.get<SmsProvider>(providerPath(providerId));
+      if (!result.etag) throw new Error('SMS provider response has no ETag');
+      const provider = freezeProvider(result.data);
+      if (!this.isCurrentRead('requireProvider', read))
+        throw new SupersededReadError();
+      this.publish({
+        ...this.state,
+        error: null,
+        providerDetail: provider,
+        providerEtag: result.etag,
+      });
+      if (!this.isCurrentRead('requireProvider', read))
+        throw new SupersededReadError();
+      return provider;
+    } catch (error) {
+      if (!this.isCurrentRead('requireProvider', read))
+        throw new SupersededReadError();
       this.failed(error, false);
       throw error;
     }
@@ -259,50 +328,39 @@ export class SmsNotificationsController extends ObservableController<SmsNotifica
         { enabled },
         { 'If-Match': current.etag },
       );
-      await this.loadBindings(providerId);
+      try {
+        await this.loadBindings(providerId);
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
     } catch (error) {
       this.failed(error, false);
       throw error;
     }
   }
 
-  /** 按最新 ETag 删除停用绑定。 */
-  async deleteBinding(
+  /** 读取最新 ETag 后修改 Provider 状态。 */
+  async setProviderEnabled(
     providerId: Int64String,
-    bindingId: Int64String,
+    enabled: boolean,
   ): Promise<void> {
     try {
-      const current = await this.api.get<SmsProviderBinding>(
-        bindingPath(providerId, bindingId),
+      const current = await this.api.get<SmsProvider>(providerPath(providerId));
+      if (!current.etag) throw new Error('SMS provider response has no ETag');
+      await this.api.patch(
+        `${providerPath(providerId)}/status`,
+        { enabled },
+        { 'If-Match': current.etag },
       );
-      if (!current.etag) throw new Error('SMS binding response has no ETag');
-      await this.api.delete(bindingPath(providerId, bindingId), {
-        'If-Match': current.etag,
-      });
-      this.clearBinding();
-      await this.loadBindings(providerId);
+      try {
+        await this.loadProviders();
+      } catch {
+        throw new SavedResourceRefreshError();
+      }
     } catch (error) {
       this.failed(error, false);
       throw error;
     }
-  }
-
-  /** 清除 Provider 详情和 ETag。 */
-  clearProvider(): void {
-    this.publish({
-      ...this.state,
-      providerDetail: null,
-      providerEtag: null,
-    });
-  }
-
-  /** 清除绑定详情和 ETag。 */
-  clearBinding(): void {
-    this.publish({
-      ...this.state,
-      bindingDetail: null,
-      bindingEtag: null,
-    });
   }
 
   /** 映射错误并保留已读取资源。 */
@@ -311,18 +369,11 @@ export class SmsNotificationsController extends ObservableController<SmsNotifica
       error instanceof AdminError
         ? error
         : new AdminError('unknown', 'SMS notification request failed');
-    this.publish({
-      ...this.state,
-      error: value,
-      phase:
-        value.kind === 'permission'
-          ? 'forbidden'
-          : value.kind === 'versionConflict'
-            ? 'conflict'
-            : loading
-              ? 'error'
-              : this.state.phase,
-    });
+    let phase = this.state.phase;
+    if (value.kind === 'permission') phase = 'forbidden';
+    else if (value.kind === 'versionConflict') phase = 'conflict';
+    else if (loading) phase = 'error';
+    this.publish({ ...this.state, error: value, phase });
   }
 }
 

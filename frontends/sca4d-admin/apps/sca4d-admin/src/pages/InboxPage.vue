@@ -1,122 +1,144 @@
 <script setup lang="ts">
-import type { InboxMessage } from '#/api/core/notifications';
+import type { InboxMessage } from '@sca4d/admin';
 
-import { computed, onMounted, ref } from 'vue';
-
-import { Page } from '@vben/common-ui';
+import { computed, onMounted, onScopeDispose, ref } from 'vue';
+import { useRoute } from 'vue-router';
 
 import { message } from 'ant-design-vue';
 import { CheckCheck, RefreshCw } from 'lucide-vue-next';
 
-import {
-  getInboxApi,
-  markAllInboxReadApi,
-  markInboxReadApi,
-} from '#/api/core/notifications';
+import { SjPage, SjResourceState } from '#/components/sj';
+import { useSjControllerState } from '#/features/sj-controller-state';
+import { useSjPresentation } from '#/features/sj-presentation';
 import { $t } from '#/locales';
+import { businessApplication } from '#/platform/business-application';
 
-const messages = ref<readonly InboxMessage[]>([]);
-const unreadCount = ref(0);
-const loading = ref(false);
-const beforeId = ref<string>();
-const hasMore = computed(
-  () => messages.value.length > 0 && beforeId.value !== undefined,
+const { dateTime, errorText } = useSjPresentation();
+
+const inbox = businessApplication.createInbox(50);
+const state = useSjControllerState(inbox);
+const route = useRoute();
+const busy = ref(new Set<string>());
+const active = ref(
+  typeof route.query.messageId === 'string' ? route.query.messageId : undefined,
 );
-
-onMounted(() => void reload());
-
-/** 从第一页重新读取站内信。 */
-async function reload(): Promise<void> {
-  loading.value = true;
+const hasMore = computed(() => Boolean(state.value.beforeId));
+onMounted(() => {
+  void load();
+  window.addEventListener('sca4d:notification-inbox-changed', load);
+});
+onScopeDispose(() => {
+  window.removeEventListener('sca4d:notification-inbox-changed', load);
+  inbox.resetState();
+});
+/** 只读取当前列表；摘要由另一个 Controller 负责。 */
+async function load() {
   try {
-    const page = await getInboxApi(undefined, 50);
-    messages.value = page.messages;
-    unreadCount.value = page.unreadCount;
-    beforeId.value =
-      page.messages.length === 50 ? page.messages.at(-1)?.id : undefined;
-  } finally {
-    loading.value = false;
+    await inbox.load();
+  } catch {
+    /* SjResourceState 展示实际失败。 */
   }
 }
-
-/** 追加更早的站内信页。 */
-async function loadMore(): Promise<void> {
-  if (!beforeId.value) return;
-  const page = await getInboxApi(beforeId.value, 50);
-  messages.value = [...messages.value, ...page.messages];
-  unreadCount.value = page.unreadCount;
-  beforeId.value =
-    page.messages.length === 50 ? page.messages.at(-1)?.id : undefined;
+/** 追加有界游标页，失败保留已经读取的消息。 */
+async function loadMore() {
+  try {
+    await inbox.loadMore();
+  } catch (error) {
+    message.error(errorText(error));
+  }
 }
-
-/** 首次展开未读站内信时保存已读状态。 */
-async function read(item: InboxMessage): Promise<void> {
-  if (item.readAt) return;
-  await markInboxReadApi(item);
-  await reload();
+/** 只保护对应的已读动作，完成后更新同一 Account 的通知摘要。 */
+async function markRead(item: InboxMessage) {
+  if (item.readAt || busy.value.has(item.id)) return;
+  busy.value.add(item.id);
+  try {
+    await inbox.markRead(item);
+    await businessApplication.inbox.load();
+  } catch (error) {
+    message.error(errorText(error));
+  } finally {
+    busy.value.delete(item.id);
+  }
 }
-
-/** 展开一条站内信时读取对应消息。 */
-function panelChanged(key: string | string[]): void {
-  const selected = Array.isArray(key) ? key[0] : key;
-  const item = messages.value.find(
-    (value) => String(value.id) === String(selected),
+/** 展开消息后使用其读取版本标记已读。 */
+function changed(key: (number | string)[] | number | string) {
+  const id = Array.isArray(key) ? key[0] : key;
+  const item = state.value.messages.find(
+    (candidate) => candidate.id === String(id),
   );
-  if (item) void read(item);
+  if (item) void markRead(item);
 }
-
-/** 把全部站内信标记已读。 */
-async function readAll(): Promise<void> {
-  await markAllInboxReadApi();
-  await reload();
-  message.success(t('markedAllRead'));
-}
-
-function t(key: string, values?: Record<string, unknown>): string {
-  return values ? $t(`page.inbox.${key}`, values) : $t(`page.inbox.${key}`);
+/** 标记全部已读，成功后同步完整列表和铃铛。 */
+async function readAll() {
+  if (busy.value.has('all')) return;
+  busy.value.add('all');
+  try {
+    await inbox.markAllRead();
+    await businessApplication.inbox.load();
+    message.success($t('page.inbox.markedAllRead'));
+  } catch (error) {
+    message.error(errorText(error));
+  } finally {
+    busy.value.delete('all');
+  }
 }
 </script>
-
 <template>
-  <Page auto-content-height>
-    <div class="mb-4 flex items-center justify-between gap-3">
-      <div>
-        <h2 class="text-base font-medium">{{ t('title') }}</h2>
-        <p class="text-muted-foreground text-sm">
-          {{ t('unread', { count: unreadCount }) }}
-        </p>
-      </div>
-      <div class="flex gap-2">
-        <a-button @click="reload"
-          ><RefreshCw :size="17" />{{ t('refresh') }}</a-button
-        >
-        <a-button :disabled="unreadCount === 0" @click="readAll"
-          ><CheckCheck :size="17" />{{ t('markAllRead') }}</a-button
-        >
-      </div>
-    </div>
-    <a-spin :spinning="loading">
-      <a-empty v-if="messages.length === 0" :description="t('empty')" />
-      <a-collapse v-else accordion @change="panelChanged">
-        <a-collapse-panel v-for="item in messages" :key="item.id">
+  <SjPage :title="$t('page.inbox.title')" mode="detail">
+    <template #description>
+      {{ $t('page.inbox.unread', { count: state.unreadCount }) }}
+    </template>
+    <template #extra>
+      <a-button :loading="state.phase === 'loading'" @click="load">
+        <RefreshCw :size="17" aria-hidden="true" />
+        {{ $t('page.inbox.refresh') }}
+      </a-button>
+      <a-button
+        :disabled="state.unreadCount === 0"
+        :loading="busy.has('all')"
+        @click="readAll"
+      >
+        <CheckCheck :size="17" aria-hidden="true" />
+        {{ $t('page.inbox.markAllRead') }}
+      </a-button>
+    </template>
+    <SjResourceState
+      :phase="state.phase"
+      :error="state.error"
+      :has-data="state.messages.length > 0"
+      @retry="load"
+    >
+      <a-collapse v-model:active-key="active" accordion @change="changed">
+        <a-collapse-panel v-for="item in state.messages" :key="item.id">
           <template #header>
-            <div class="flex min-w-0 flex-1 items-center gap-2">
-              <span
+            <div class="flex min-w-0 flex-wrap items-center gap-2">
+              <a-badge
                 v-if="!item.readAt"
-                class="size-2 shrink-0 rounded-full bg-primary"
-              ></span>
-              <strong class="truncate">{{ item.title }}</strong>
-              <span class="text-muted-foreground ml-auto text-xs">{{
-                new Date(item.createdAt).toLocaleString()
-              }}</span>
+                :text="$t('page.inbox.unread', { count: 1 })"
+                status="processing"
+              />
+              <strong class="min-w-0 break-words">{{ item.title }}</strong>
+              <span class="ml-auto text-xs text-muted-foreground">
+                {{ dateTime(item.createdAt) }}
+              </span>
             </div>
           </template>
-          <div class="prose prose-sm max-w-none" v-html="item.html"></div>
+          <iframe
+            class="h-96 w-full border-0"
+            sandbox=""
+            :srcdoc="item.html"
+            :title="item.title"
+          ></iframe>
         </a-collapse-panel>
       </a-collapse>
-      <a-button v-if="hasMore" class="mt-4 w-full" @click="loadMore">{{
-        t('loadMore')
-      }}</a-button>
-    </a-spin>
-  </Page>
+      <a-button
+        v-if="hasMore"
+        class="mt-4 w-full"
+        :loading="state.loadingMore"
+        @click="loadMore"
+      >
+        {{ $t('page.inbox.loadMore') }}
+      </a-button>
+    </SjResourceState>
+  </SjPage>
 </template>

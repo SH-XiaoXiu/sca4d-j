@@ -9,15 +9,18 @@ import type {
 import { ActionVerificationController } from './action-verification-controller';
 import { AdminApiClient } from './api-client';
 import { AuthenticationSettingsController } from './authentication-settings-controller';
+import { ObservableController } from './controller';
 import {
   EmailSendersController,
   EmailTemplatesController,
 } from './email-notification-controllers';
-import { FilesController } from './files-controller';
 import { FederatedAuthController } from './federated-auth-controller';
 import { FederatedProviderController } from './federated-provider-controller';
-import { OperationLogsController } from './operation-logs-controller';
+import { FilesController } from './files-controller';
+import { InboxController } from './inbox-controller';
 import { IotProductsController } from './iot-products-controller';
+import { NotificationSettingsController } from './notification-settings-controller';
+import { OperationLogsController } from './operation-logs-controller';
 import { PasskeyController } from './passkey-controller';
 import { PreferencesController } from './preferences-controller';
 import {
@@ -50,16 +53,18 @@ export interface AdminApplication {
   readonly authenticationSettings: AuthenticationSettingsController;
   readonly emailSenders: EmailSendersController;
   readonly emailTemplates: EmailTemplatesController;
-  readonly files: FilesController;
   readonly federatedAuth: FederatedAuthController;
   readonly federatedProviders: FederatedProviderController;
-  readonly operationLogs: OperationLogsController;
+  readonly files: FilesController;
+  readonly inbox: InboxController;
   readonly iotProducts: IotProductsController;
+  readonly notificationSettings: NotificationSettingsController;
+  readonly operationLogs: OperationLogsController;
   readonly passkeys: PasskeyController;
   readonly password: PasswordController;
   readonly permissions: PermissionsController;
-  readonly profile: ProfileController;
   readonly preferences: PreferencesController;
+  readonly profile: ProfileController;
   readonly roles: RolesController;
   readonly session: SessionController;
   readonly smsNotifications: SmsNotificationsController;
@@ -86,15 +91,11 @@ export function createAdminApplication(
     ports.objectTransfers,
     () => ports.tokens.read()?.sessionId ?? 'anonymous',
   );
-  let fileSession = ports.tokens.read()?.sessionId;
-  session.subscribe(() => {
-    const current = ports.tokens.read()?.sessionId;
-    if (fileSession !== current) files.clear();
-    fileSession = current;
-  });
   controllers.session = session;
-  return Object.freeze({
+  const application = Object.freeze({
     accounts: new AccountsController(api),
+    inbox: new InboxController(api),
+    notificationSettings: new NotificationSettingsController(api),
     authenticationSettings: new AuthenticationSettingsController(api),
     emailSenders: new EmailSendersController(api),
     emailTemplates: new EmailTemplatesController(api),
@@ -116,4 +117,16 @@ export function createAdminApplication(
     totp: new TotpCredentialController(api, () => session.clearSession()),
     verification: new ActionVerificationController(api),
   });
+  let resourceSession = ports.tokens.read()?.sessionId;
+  session.subscribe(() => {
+    const current = ports.tokens.read()?.sessionId;
+    if (resourceSession === current) return;
+    resourceSession = current;
+    files.clear();
+    for (const controller of Object.values(application)) {
+      if (controller !== session && controller instanceof ObservableController)
+        controller.resetState();
+    }
+  });
+  return application;
 }

@@ -1,27 +1,28 @@
 <script lang="ts" setup>
 import type { NotificationItem } from '@vben/layouts';
-import type { InboxMessage } from '#/api/core/notifications';
 
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { BasicLayout, Notification, UserDropdown } from '@vben/layouts';
 import { preferences } from '@vben/preferences';
 import { useUserStore } from '@vben/stores';
 
+import { message as notificationMessage } from 'ant-design-vue';
+
+import { useSjPresentation } from '#/features/sj-presentation';
 import { $t } from '#/locales';
-import {
-  getInboxApi,
-  markAllInboxReadApi,
-  markInboxReadApi,
-} from '#/api/core/notifications';
+import { businessApplication } from '#/platform/business-application';
 import { useAuthStore } from '#/store';
+import { useNotificationStore } from '#/store/notifications';
 
 const userStore = useUserStore();
 const authStore = useAuthStore();
 const router = useRouter();
-const inbox = ref<readonly InboxMessage[]>([]);
-const unreadCount = ref(0);
+const notifications = useNotificationStore();
+const inbox = computed(() => notifications.state.messages);
+const unreadCount = computed(() => notifications.state.unreadCount);
+const { errorText } = useSjPresentation();
 
 const avatar = computed(
   () => userStore.userInfo?.avatar || preferences.app.defaultAvatar,
@@ -64,12 +65,9 @@ onBeforeUnmount(() =>
 /** 读取顶部铃铛显示的最近站内信。 */
 async function loadInbox(): Promise<void> {
   try {
-    const page = await getInboxApi(undefined, 20);
-    inbox.value = page.messages;
-    unreadCount.value = page.unreadCount;
+    await businessApplication.inbox.load();
   } catch {
-    inbox.value = [];
-    unreadCount.value = 0;
+    // Controller 保留此前摘要和错误，网络失败不改变未读数量。
   }
 }
 
@@ -77,14 +75,20 @@ async function loadInbox(): Promise<void> {
 async function markRead(item: NotificationItem): Promise<void> {
   const message = inbox.value.find((candidate) => candidate.id === item.id);
   if (!message || message.readAt) return;
-  await markInboxReadApi(message);
-  await loadInbox();
+  try {
+    await businessApplication.inbox.markRead(message);
+  } catch (error) {
+    notificationMessage.error(errorText(error));
+  }
 }
 
 /** 标记全部站内信已读。 */
 async function markAllRead(): Promise<void> {
-  await markAllInboxReadApi();
-  await loadInbox();
+  try {
+    await businessApplication.inbox.markAllRead();
+  } catch (error) {
+    notificationMessage.error(errorText(error));
+  }
 }
 
 /** 打开完整站内信页面，并先标记点击项已读。 */

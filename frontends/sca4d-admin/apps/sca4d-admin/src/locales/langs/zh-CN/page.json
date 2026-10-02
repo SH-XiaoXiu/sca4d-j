@@ -80,7 +80,8 @@
     "preferenceSaveFailed": "偏好设置保存失败",
     "totpLabel": "TOTP 验证码",
     "passkeyLogin": "使用 Passkey 登录",
-    "or": "或"
+    "or": "或",
+    "sendCode": "发送验证码"
   },
   "federatedProviders": {
     "title": "第三方登录 Provider",
@@ -225,7 +226,9 @@
     "variableName": "变量名，例如 code",
     "variables": "模板变量",
     "variableValueTooLong": "变量值不能超过 4096 个字符",
-    "view": "查看"
+    "view": "查看",
+    "subjectSource": "主题源码",
+    "saved": "保存成功"
   },
   "smsNotifications": {
     "actions": "操作",

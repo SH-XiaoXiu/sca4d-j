@@ -9,6 +9,7 @@ export type AdminErrorKind =
   | 'notFound'
   | 'permission'
   | 'precondition'
+  | 'refresh'
   | 'unavailable'
   | 'unknown'
   | 'validation'
@@ -116,4 +117,19 @@ function defaultMessage(status: number): string {
   if (status === 428) return 'The resource version is required';
   if (status >= 500) return 'Service unavailable';
   return 'Request failed';
+}
+
+/** 资源视图已关闭或开始了更新的读取，调用方不得再使用本次结果。 */
+export class SupersededReadError extends Error {
+  constructor() {
+    super('Resource read superseded');
+    this.name = 'SupersededReadError';
+  }
+}
+
+/** 写入已经完成，但重新读取失败；调用方应刷新数据而非重复写入。 */
+export class SavedResourceRefreshError extends AdminError {
+  constructor() {
+    super('refresh', 'The change was saved, but refreshing failed');
+  }
 }

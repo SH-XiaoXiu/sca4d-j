@@ -52,12 +52,12 @@ export interface CurrentSessionUserText {
 export function currentSessionHomePath(permissions: readonly string[]): string {
   const codes = new Set(permissions);
   if (
-    codes.has('platform:accounts:read') ||
-    codes.has('platform:accounts:manage')
+    codes.has('PLATFORM:ACCOUNTS:READ') ||
+    codes.has('PLATFORM:ACCOUNTS:MANAGE')
   ) {
     return '/sca4d-server/accounts';
   }
-  if (codes.has('platform:roles:read') || codes.has('platform:roles:manage')) {
+  if (codes.has('PLATFORM:ROLES:READ') || codes.has('PLATFORM:ROLES:MANAGE')) {
     return '/sca4d-server/roles';
   }
   return '/profile';

@@ -40,6 +40,7 @@ export class PasskeyController extends ObservableController<PasskeyState> {
 
   /** 读取当前账号全部 Passkey。 */
   async load(): Promise<void> {
+    const read = this.beginRead('load');
     this.publish({ ...this.state, error: null, phase: 'loading' });
     try {
       const result =
@@ -47,12 +48,14 @@ export class PasskeyController extends ObservableController<PasskeyState> {
       const credentials = Object.freeze(
         result.data.map((credential) => freezeCredential(credential)),
       );
+      if (!this.isCurrentRead('load', read)) return;
       this.publish({
         credentials,
         error: null,
         phase: credentials.length === 0 ? 'empty' : 'ready',
       });
     } catch (error) {
+      if (!this.isCurrentRead('load', read)) return;
       this.fail(error);
       throw error;
     }
