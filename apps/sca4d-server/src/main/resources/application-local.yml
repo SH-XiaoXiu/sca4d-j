@@ -26,7 +26,8 @@ spring:
 
 mybatis:
   configuration:
-    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    # 默认不输出 SQL 参数和结果；业务 DEBUG 日志仍由各 Service 记录。
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
 
 springdoc:
   api-docs:
