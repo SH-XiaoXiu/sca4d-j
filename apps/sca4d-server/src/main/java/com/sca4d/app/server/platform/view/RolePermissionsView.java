@@ -18,11 +18,11 @@ import java.util.Objects;
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
 public class RolePermissionsView {
 
-    private final long roleId;
-
     private final @NotNull List<@NotNull String> permissionCodes;
 
     private final @NotNull Version revision;
+
+    private final long roleId;
 
     private RolePermissionsView(
             long roleId,

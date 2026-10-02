@@ -41,7 +41,7 @@ public class AuthenticationController {
     /** 使用 Sca4d Server 已配置的账号标识和密码开始登录。 */
     @PostMapping
     @AnonymousAccess
-@RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
+    @RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
     @Operation(summary = "使用密码开始登录")
     public @NotNull ApiResponse<LoginResultView> password(
             @RequestBody @Valid @NotNull PasswordLoginRequest request) {
@@ -59,7 +59,7 @@ public class AuthenticationController {
     /** 使用 discoverable Passkey assertion 开始登录。 */
     @PostMapping("/passkey")
     @AnonymousAccess
-@RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
+    @RateLimited(dimensions = RateLimit.Dim.IP, permits = 10, windowSeconds = 300)
     @Operation(summary = "使用 Passkey 开始登录")
     public @NotNull ApiResponse<LoginResultView> passkey(
             @RequestBody @Valid @NotNull PasskeyProofRequest request) {

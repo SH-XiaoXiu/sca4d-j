@@ -15,9 +15,9 @@ import java.util.Objects;
 @SuppressWarnings({"ClassCanBeRecord", "unused"})
 public class DictionarySelectionView {
 
-    private final String key;
-
     private final List<Option> options;
+
+    private final String key;
 
     /** 从聚合字典结果创建 HTTP 投影。 */
     public DictionarySelectionView(
@@ -39,14 +39,14 @@ public class DictionarySelectionView {
 
     /** 一个已经可以直接展示的字典选择项。 */
     public static class Option extends BaseView {
-        private final String value;
-
-        private final String labelKey;
-
         private final LocalizableText localizedLabel;
 
         @Localize(source = "labelText")
         private final String label;
+
+        private final String labelKey;
+
+        private final String value;
 
         private final boolean codeDefined;
 

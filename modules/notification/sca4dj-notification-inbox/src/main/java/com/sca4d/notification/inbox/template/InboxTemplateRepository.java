@@ -37,9 +37,9 @@ public class InboxTemplateRepository {
 
     private final @NotNull InboxTemplateMapper mapper;
 
-    private final @NotNull VersionConditions versionConditions;
-
     private final @NotNull ObjectMapper objectMapper;
+
+    private final @NotNull VersionConditions versionConditions;
 
     /**
      * 创建站内信模板 Repository。

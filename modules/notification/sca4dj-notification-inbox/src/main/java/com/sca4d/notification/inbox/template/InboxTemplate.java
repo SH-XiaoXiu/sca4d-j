@@ -13,15 +13,15 @@ import java.util.Objects;
  */
 public class InboxTemplate {
 
-    private final long templateId;
+    private final @NotNull JsonNode content;
 
     private final @NotNull TreeCode code;
 
-    private final @NotNull JsonNode content;
+    private final @NotNull Version version;
 
     private final boolean enabled;
 
-    private final @NotNull Version version;
+    private final long templateId;
 
     /**
      * 创建一项已从数据库恢复的站内信模板。

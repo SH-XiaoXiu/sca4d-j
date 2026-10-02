@@ -8,13 +8,13 @@ import java.util.Objects;
 
 /** 返回调用方可以安全读取的 SMS Challenge 标识、脱敏提示和时间边界。 */
 public class SmsCodeChallenge {
-    private final @NotNull SmsCodeChallengeId challengeId;
-
-    private final @NotNull String maskedRecipient;
-
     private final @NotNull Instant expiresAt;
 
     private final @NotNull Instant resendAt;
+
+    private final @NotNull SmsCodeChallengeId challengeId;
+
+    private final @NotNull String maskedRecipient;
 
     /**
      * @param challengeId 短期 Challenge 标识

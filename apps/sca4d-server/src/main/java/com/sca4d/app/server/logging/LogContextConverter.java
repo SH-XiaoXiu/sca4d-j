@@ -10,13 +10,13 @@ import java.util.Map;
 /** 把一次调用及其当前执行主体组合为紧凑的对象式日志上下文。 */
 public final class LogContextConverter extends ClassicConverter {
 
-    private static final String CALL_ID = "callId";
-
-    private static final String SUBJECT_ID = "subjectId";
-
     private static final String ACCOUNT_ID = "accountId";
 
+    private static final String CALL_ID = "callId";
+
     private static final String PRINCIPAL_ID = "principalId";
+
+    private static final String SUBJECT_ID = "subjectId";
 
     /** 创建日志上下文转换器。 */
     public LogContextConverter() {

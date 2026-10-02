@@ -42,19 +42,19 @@ public class SmsCodeChallengeService {
 
     private final AccountDirectory accounts;
 
-    private final RealmKey accountRealm;
+    private final Clock clock;
 
     private final Notifications notifications;
+
+    private final RealmKey accountRealm;
 
     private final RedisSmsCodeChallengeStore store;
 
     private final SecretHasher hasher;
 
-    private final SmsCodeSettings settings;
-
-    private final Clock clock;
-
     private final SecureRandom random;
+
+    private final SmsCodeSettings settings;
 
     private final String dummyHash;
 

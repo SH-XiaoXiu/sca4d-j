@@ -364,7 +364,10 @@ class PlatformFileAuditContractTest {
         return new CallInvoker(
                 List.of(
                         new IdentityCallInterceptor(),
-                        new PermissionCallInterceptor(new PermissionAssessment(List.of(applicationFiles)), resolvers, expressions),
+                        new PermissionCallInterceptor(
+                                new PermissionAssessment(List.of(applicationFiles)),
+                                resolvers,
+                                expressions),
                         new AuditCallInterceptor(
                                 List.of(records::add),
                                 Audit.Mode.DIRECT,

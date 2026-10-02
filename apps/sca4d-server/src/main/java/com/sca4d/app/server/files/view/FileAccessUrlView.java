@@ -11,11 +11,11 @@ import java.util.Objects;
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
 public class FileAccessUrlView {
 
-    private final long fileId;
+    private final @NotNull Instant expiresAt;
 
     private final @NotNull String url;
 
-    private final @NotNull Instant expiresAt;
+    private final long fileId;
 
     private FileAccessUrlView(long fileId, @NotNull String url, @NotNull Instant expiresAt) {
         this.fileId = fileId;

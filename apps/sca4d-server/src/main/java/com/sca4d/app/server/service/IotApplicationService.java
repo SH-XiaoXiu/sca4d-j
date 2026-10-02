@@ -99,49 +99,49 @@ public class IotApplicationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(IotApplicationService.class);
 
-    private static final Duration DEVICE_CREATION_REPLAY_WINDOW = Duration.ofMinutes(10);
-
     private static final String DEVICE_CREATION_PURPOSE_PREFIX = "app-iot-device-create:";
 
+    private static final Duration DEVICE_CREATION_REPLAY_WINDOW = Duration.ofMinutes(10);
+
     private static final Duration LOCK_WAIT = Duration.ofSeconds(10);
-
-    private final @NotNull ProductService products;
-
-    private final @NotNull ProductDefinitionCatalog productDefinitions;
-
-    private final @NotNull DeviceService devices;
-
-    private final @NotNull ThingModelService thingModels;
 
     private final @NotNull DesiredStateService desiredStates;
 
     private final @NotNull DeviceCommandService deviceCommands;
 
-    private final @NotNull ThingModelRepository thingModelRepository;
+    private final @NotNull DeviceCredentialService credentials;
 
-    private final @NotNull ThingModelJsonCodec thingModelJson;
-
-    private final @NotNull DeviceProtocolCatalog protocols;
+    private final @NotNull DeviceService devices;
 
     private final @NotNull IdentityService identities;
 
-    private final @NotNull SessionControl sessions;
+    private final @NotNull ProductService products;
 
-    private final @NotNull DeviceCredentialService credentials;
+    private final @NotNull ThingModelService thingModels;
 
     private final @NotNull IotApplicationRepository repository;
 
-    private final @NotNull SecretKeyring keyring;
+    private final @NotNull ThingModelRepository thingModelRepository;
 
     private final @NotNull ObjectMapper objectMapper;
+
+    private final @NotNull IotProperties iotProperties;
 
     private final @NotNull Clock clock;
 
     private final @NotNull DeviceChangeNotifier changes;
 
-    private final @NotNull IotProperties iotProperties;
+    private final @NotNull DeviceProtocolCatalog protocols;
 
     private final @NotNull DistributedLock distributedLock;
+
+    private final @NotNull ProductDefinitionCatalog productDefinitions;
+
+    private final @NotNull SecretKeyring keyring;
+
+    private final @NotNull SessionControl sessions;
+
+    private final @NotNull ThingModelJsonCodec thingModelJson;
 
     private final @NotNull TransactionTemplate transactions;
 

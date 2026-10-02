@@ -346,11 +346,11 @@ class IdentityLayeringExtensionIntegrationTest {
 
     @SuppressWarnings("ClassCanBeRecord")
     private static class PrincipalIdCodec<P extends Principal> implements PrincipalCodec<P> {
-        private final String type;
-
         private final Class<P> valueType;
 
         private final Function<Long, P> factory;
+
+        private final String type;
 
         private PrincipalIdCodec(String type, Class<P> valueType, Function<Long, P> factory) {
             this.type = type;
@@ -459,9 +459,9 @@ class IdentityLayeringExtensionIntegrationTest {
 
     @SuppressWarnings("ClassCanBeRecord")
     private static class SimpleResource implements Resource {
-        private final TreeCode type;
-
         private final String id;
+
+        private final TreeCode type;
 
         private SimpleResource(TreeCode type, String id) {
             this.type = type;

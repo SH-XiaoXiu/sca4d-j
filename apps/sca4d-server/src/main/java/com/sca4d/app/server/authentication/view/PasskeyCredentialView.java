@@ -14,19 +14,19 @@ import java.util.Objects;
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
 public class PasskeyCredentialView {
 
-    private final long id;
-
-    private final String name;
-
-    private final List<String> transports;
-
-    private final boolean backupEligible;
-
-    private final boolean backedUp;
-
     private final Instant createdAt;
 
     private final @Nullable Instant lastUsedAt;
+
+    private final List<String> transports;
+
+    private final String name;
+
+    private final boolean backedUp;
+
+    private final boolean backupEligible;
+
+    private final long id;
 
     private final long version;
 

@@ -43,15 +43,15 @@ public class PlatformFederatedAccountResolver implements FederatedAccountResolve
 
     private static final Duration LOCK_WAIT = Duration.ofSeconds(10);
 
-    private final PlatformIdentityService identities;
+    private final FederatedIdentityService identityBindings;
 
     private final IdentityService identityFacts;
+
+    private final PlatformIdentityService identities;
 
     private final PlatformRbacService rbac;
 
     private final PlatformUserProfileService profiles;
-
-    private final FederatedIdentityService identityBindings;
 
     private final DistributedLock lock;
 

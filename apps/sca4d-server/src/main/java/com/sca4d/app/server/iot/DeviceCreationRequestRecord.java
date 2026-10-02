@@ -8,6 +8,8 @@ import java.util.Objects;
 /** 保存一次仍在有效窗口内的 Device 创建幂等请求和加密响应。 */
 public class DeviceCreationRequestRecord {
 
+    private final @NotNull Instant expiresAt;
+
     private final @NotNull String idempotencyKey;
 
     private final @NotNull String requestHash;
@@ -15,8 +17,6 @@ public class DeviceCreationRequestRecord {
     private final @NotNull String responseKeyId;
 
     private final byte @NotNull [] responseCiphertext;
-
-    private final @NotNull Instant expiresAt;
 
     /** 创建 Mapper 返回的 Device 创建幂等记录。 */
     public DeviceCreationRequestRecord(

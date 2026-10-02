@@ -9,9 +9,9 @@ import java.util.Objects;
 /** 不包含 Secret、URI 或二维码内容的 TOTP enrollment。 */
 public class TotpEnrollmentView {
 
-    private final String enrollmentId;
-
     private final Instant expiresAt;
+
+    private final String enrollmentId;
 
     private TotpEnrollmentView(String enrollmentId, Instant expiresAt) {
         this.enrollmentId = enrollmentId;

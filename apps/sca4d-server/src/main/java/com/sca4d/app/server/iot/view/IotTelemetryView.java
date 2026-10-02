@@ -11,13 +11,13 @@ import java.util.Objects;
 @SuppressWarnings("unused")
 public class IotTelemetryView {
 
-    private final @NotNull String propertyCode;
-
-    private final @NotNull Object value;
-
     private final @NotNull Instant observedAt;
 
     private final @NotNull Instant receivedAt;
+
+    private final @NotNull Object value;
+
+    private final @NotNull String propertyCode;
 
     /** 从模块 Telemetry 查询结果创建 HTTP 视图。 */
     private IotTelemetryView(@NotNull TelemetrySample sample) {

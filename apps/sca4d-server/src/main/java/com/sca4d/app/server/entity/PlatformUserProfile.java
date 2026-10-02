@@ -18,6 +18,12 @@ public class PlatformUserProfile implements Resource {
 
     public static final @NotNull TreeCode RESOURCE_TYPE = TreeCode.ofColon(RESOURCE_TYPE_VALUE);
 
+    private final @NotNull Instant createdAt;
+
+    private final @NotNull Instant updatedAt;
+
+    private final @Nullable Long avatarFileId;
+
     private final @NotNull Long principalId;
 
     private final @NotNull String displayName;
@@ -25,12 +31,6 @@ public class PlatformUserProfile implements Resource {
     private final @Nullable String email;
 
     private final @Nullable String phoneNumber;
-
-    private final @Nullable Long avatarFileId;
-
-    private final @NotNull Instant createdAt;
-
-    private final @NotNull Instant updatedAt;
 
     /**
      * 创建 Platform 用户资料。

@@ -16,34 +16,34 @@ import java.util.Set;
 @Component
 public class IotOperations implements RbacOperationModule {
 
+    /** 创建、修改、启停 Device 和管理凭据。 */
+    public static final @NotNull String DEVICES_MANAGE_VALUE = "IOT:DEVICES:MANAGE";
+
+    /** 修改 desired state 和提交 command。 */
+    public static final @NotNull String DEVICES_OPERATE_VALUE = "IOT:DEVICES:OPERATE";
+
+    /** 读取 Device、连接、状态和历史。 */
+    public static final @NotNull String DEVICES_READ_VALUE = "IOT:DEVICES:READ";
+
+    /** 创建、修改和启停 Product，并发布物模型。 */
+    public static final @NotNull String PRODUCTS_MANAGE_VALUE = "IOT:PRODUCTS:MANAGE";
+
+    /** 读取 Product 和物模型。 */
+    public static final @NotNull String PRODUCTS_READ_VALUE = "IOT:PRODUCTS:READ";
+
     private static final @NotNull TreeCode MODULE = TreeCode.ofSegment("IOT");
 
     private static final @NotNull TreeCode PRODUCTS_RESOURCE = TreeCode.ofSegment("PRODUCTS");
 
     private static final @NotNull TreeCode DEVICES_RESOURCE = TreeCode.ofSegment("DEVICES");
 
-    /** 读取 Product 和物模型。 */
-    public static final @NotNull String PRODUCTS_READ_VALUE = "IOT:PRODUCTS:READ";
-
     public static final @NotNull TreeCode PRODUCTS_READ = TreeCode.ofColon(PRODUCTS_READ_VALUE);
-
-    /** 创建、修改和启停 Product，并发布物模型。 */
-    public static final @NotNull String PRODUCTS_MANAGE_VALUE = "IOT:PRODUCTS:MANAGE";
 
     public static final @NotNull TreeCode PRODUCTS_MANAGE = TreeCode.ofColon(PRODUCTS_MANAGE_VALUE);
 
-    /** 读取 Device、连接、状态和历史。 */
-    public static final @NotNull String DEVICES_READ_VALUE = "IOT:DEVICES:READ";
-
     public static final @NotNull TreeCode DEVICES_READ = TreeCode.ofColon(DEVICES_READ_VALUE);
 
-    /** 创建、修改、启停 Device 和管理凭据。 */
-    public static final @NotNull String DEVICES_MANAGE_VALUE = "IOT:DEVICES:MANAGE";
-
     public static final @NotNull TreeCode DEVICES_MANAGE = TreeCode.ofColon(DEVICES_MANAGE_VALUE);
-
-    /** 修改 desired state 和提交 command。 */
-    public static final @NotNull String DEVICES_OPERATE_VALUE = "IOT:DEVICES:OPERATE";
 
     public static final @NotNull TreeCode DEVICES_OPERATE = TreeCode.ofColon(DEVICES_OPERATE_VALUE);
 

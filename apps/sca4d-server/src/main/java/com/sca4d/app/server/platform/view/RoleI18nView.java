@@ -15,11 +15,11 @@ import java.util.Objects;
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
 public class RoleI18nView {
 
-    private final long roleId;
-
     private final @NotNull LocalizedFields i18n;
 
     private final @NotNull Version revision;
+
+    private final long roleId;
 
     private RoleI18nView(long roleId, @NotNull LocalizedFields i18n, @NotNull Version revision) {
         this.roleId = roleId;

@@ -17,9 +17,9 @@ import java.util.Optional;
 /** 从有效 Platform Account 的 App Profile 读取当前 E.164 SMS 地址。 */
 @Component
 public class PlatformSmsRecipientResolver implements SmsRecipientResolver {
-    private final PlatformAccountDirectory accounts;
-
     private final PlatformUserProfileService profiles;
+
+    private final PlatformAccountDirectory accounts;
 
     /** 创建 Platform SMS 接收人解析器。 */
     public PlatformSmsRecipientResolver(

@@ -11,11 +11,11 @@ import java.util.Objects;
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
 public class RenderedEmailView {
 
+    private final @Nullable String html;
+
     private final @NotNull String subject;
 
     private final @NotNull String text;
-
-    private final @Nullable String html;
 
     private RenderedEmailView(@NotNull RenderedEmail email) {
         this.subject = email.subject();

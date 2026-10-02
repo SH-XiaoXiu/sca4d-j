@@ -13,13 +13,13 @@ import java.util.Objects;
 /** 保存不依赖认证模块实现的账号 MFA 配置快照。 */
 @PluginApiType
 public final class MfaSettings {
-    private final int loginFactorCount;
-
-    private final int sensitiveActionFactorCount;
-
     private final Duration reusableAuthenticationMaximumAge;
 
     private final List<AuthenticationMethodSettings> methods;
+
+    private final int loginFactorCount;
+
+    private final int sensitiveActionFactorCount;
 
     /**
      * 校验并保存不可变配置快照，方法编码不得重复。

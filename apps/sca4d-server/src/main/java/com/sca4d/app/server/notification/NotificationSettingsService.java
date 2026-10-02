@@ -17,11 +17,11 @@ import java.util.Objects;
 /** 用领域接口包装 Notification 的 Account 语言、区域和可选渠道 Settings。 */
 @Service
 public class NotificationSettingsService {
-    private final PlatformNotificationConfiguration settings;
-
     private final NotificationSettings notification;
 
     private final NotificationTypeCatalog types;
+
+    private final PlatformNotificationConfiguration settings;
 
     /** 创建用户通知设置服务。 */
     public NotificationSettingsService(

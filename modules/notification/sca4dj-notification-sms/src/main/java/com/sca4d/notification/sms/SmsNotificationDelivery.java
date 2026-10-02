@@ -36,17 +36,17 @@ public class SmsNotificationDelivery implements NotificationDelivery {
 
     private static final Duration CHECK_DELAY = Duration.ofSeconds(30);
 
-    private final SmsRecipientResolver recipients;
+    private final SmsRepository repository;
 
     private final RegionCatalog regions;
 
-    private final SmsRouteResolver routes;
+    private final SmsDeliveryStore deliveries;
 
     private final SmsProviderSelector selector;
 
-    private final SmsRepository repository;
+    private final SmsRecipientResolver recipients;
 
-    private final SmsDeliveryStore deliveries;
+    private final SmsRouteResolver routes;
 
     private final Map<String, SmsProviderClient> transports;
 

@@ -43,21 +43,21 @@ public class SystemDictionariesView {
 
     /** 管理端中的一个代码字典或动态字典。 */
     public static class Entry {
+        private final List<Option> options;
+
+        private final Long version;
+
         private final String key;
 
         private final String label;
 
         private final boolean codeDefined;
 
-        private final boolean optionsEditable;
-
         private final boolean enabled;
 
+        private final boolean optionsEditable;
+
         private final int sortOrder;
-
-        private final Long version;
-
-        private final List<Option> options;
 
         private Entry(@NotNull ManagedDictionary dictionary) {
             this.key = dictionary.key();

@@ -30,15 +30,15 @@ import java.util.Set;
 @Service
 public class EmailTemplateManagementService {
 
-    private final @NotNull LocaleCatalog locales;
-
     private final @NotNull EmailTemplateRepository templates;
 
-    private final @NotNull NotificationTypeCatalog types;
+    private final @NotNull EmailRenderer renderer;
 
     private final @NotNull IdGenerator ids;
 
-    private final @NotNull EmailRenderer renderer;
+    private final @NotNull LocaleCatalog locales;
+
+    private final @NotNull NotificationTypeCatalog types;
 
     /** 创建 Email 模板管理服务。 */
     public EmailTemplateManagementService(

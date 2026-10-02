@@ -39,9 +39,9 @@ import java.util.Objects;
 @CurrentPrincipal(selection = PlatformPrincipalSelection.class)
 public class SystemDictionaryController {
 
-    private final Dictionaries dictionaries;
-
     private final SystemDictionaryService management;
+
+    private final Dictionaries dictionaries;
 
     /** 创建字典查询 HTTP 入口。 */
     public SystemDictionaryController(

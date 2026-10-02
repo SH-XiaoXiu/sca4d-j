@@ -15,6 +15,33 @@ import java.util.Set;
 /** 声明 Sca4d Server 系统管理接口使用的 Operation Catalog 节点。 */
 @Component
 public class SystemOperations implements RbacOperationModule {
+    /** 读取审计记录。 */
+    public static final @NotNull String AUDIT_READ_VALUE = "SYSTEM:AUDIT:READ";
+
+    /** 管理动态字典和数据库选项。 */
+    public static final @NotNull String DICTIONARIES_MANAGE_VALUE = "SYSTEM:DICTIONARIES:MANAGE";
+
+    /** 读取字典和聚合选项。 */
+    public static final @NotNull String DICTIONARIES_READ_VALUE = "SYSTEM:DICTIONARIES:READ";
+
+    /** 管理 SMTP 配置和 Email 模板。 */
+    public static final @NotNull String EMAIL_MANAGE_VALUE = "SYSTEM:EMAIL:MANAGE";
+
+    /** 读取 Email 通知配置。 */
+    public static final @NotNull String EMAIL_READ_VALUE = "SYSTEM:EMAIL:READ";
+
+    /** 修改系统设置。 */
+    public static final @NotNull String SETTINGS_MANAGE_VALUE = "SYSTEM:SETTINGS:MANAGE";
+
+    /** 读取系统设置。 */
+    public static final @NotNull String SETTINGS_READ_VALUE = "SYSTEM:SETTINGS:READ";
+
+    /** 管理 SMS Provider 与传输绑定。 */
+    public static final @NotNull String SMS_MANAGE_VALUE = "SYSTEM:SMS:MANAGE";
+
+    /** 读取 SMS Provider 与传输绑定。 */
+    public static final @NotNull String SMS_READ_VALUE = "SYSTEM:SMS:READ";
+
     private static final @NotNull TreeCode MODULE = TreeCode.ofSegment("SYSTEM");
 
     private static final @NotNull TreeCode AUDIT_RESOURCE = TreeCode.ofSegment("AUDIT");
@@ -27,48 +54,21 @@ public class SystemOperations implements RbacOperationModule {
 
     private static final @NotNull TreeCode SMS_RESOURCE = TreeCode.ofSegment("SMS");
 
-    /** 读取审计记录。 */
-    public static final @NotNull String AUDIT_READ_VALUE = "SYSTEM:AUDIT:READ";
-
     public static final @NotNull TreeCode AUDIT_READ = TreeCode.ofColon(AUDIT_READ_VALUE);
-
-    /** 读取系统设置。 */
-    public static final @NotNull String SETTINGS_READ_VALUE = "SYSTEM:SETTINGS:READ";
 
     public static final @NotNull TreeCode SETTINGS_READ = TreeCode.ofColon(SETTINGS_READ_VALUE);
 
-    /** 修改系统设置。 */
-    public static final @NotNull String SETTINGS_MANAGE_VALUE = "SYSTEM:SETTINGS:MANAGE";
-
     public static final @NotNull TreeCode SETTINGS_MANAGE = TreeCode.ofColon(SETTINGS_MANAGE_VALUE);
-
-    /** 读取字典和聚合选项。 */
-    public static final @NotNull String DICTIONARIES_READ_VALUE = "SYSTEM:DICTIONARIES:READ";
 
     public static final @NotNull TreeCode DICTIONARIES_READ = TreeCode.ofColon(DICTIONARIES_READ_VALUE);
 
-    /** 管理动态字典和数据库选项。 */
-    public static final @NotNull String DICTIONARIES_MANAGE_VALUE = "SYSTEM:DICTIONARIES:MANAGE";
-
     public static final @NotNull TreeCode DICTIONARIES_MANAGE = TreeCode.ofColon(DICTIONARIES_MANAGE_VALUE);
-
-    /** 读取 Email 通知配置。 */
-    public static final @NotNull String EMAIL_READ_VALUE = "SYSTEM:EMAIL:READ";
 
     public static final @NotNull TreeCode EMAIL_READ = TreeCode.ofColon(EMAIL_READ_VALUE);
 
-    /** 管理 SMTP 配置和 Email 模板。 */
-    public static final @NotNull String EMAIL_MANAGE_VALUE = "SYSTEM:EMAIL:MANAGE";
-
     public static final @NotNull TreeCode EMAIL_MANAGE = TreeCode.ofColon(EMAIL_MANAGE_VALUE);
 
-    /** 读取 SMS Provider 与传输绑定。 */
-    public static final @NotNull String SMS_READ_VALUE = "SYSTEM:SMS:READ";
-
     public static final @NotNull TreeCode SMS_READ = TreeCode.ofColon(SMS_READ_VALUE);
-
-    /** 管理 SMS Provider 与传输绑定。 */
-    public static final @NotNull String SMS_MANAGE_VALUE = "SYSTEM:SMS:MANAGE";
 
     public static final @NotNull TreeCode SMS_MANAGE = TreeCode.ofColon(SMS_MANAGE_VALUE);
 

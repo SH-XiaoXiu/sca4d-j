@@ -114,11 +114,11 @@ class PlatformUserProfilePersistenceIntegrationTest {
         registry.add("spring.datasource.password", POSTGRES::getPassword);
     }
 
+    private final FileService files;
+
     private final PlatformUserProfileService profiles;
 
     private final PlatformUserProfileRepository repository;
-
-    private final FileService files;
 
     private final TestFileStorage storage;
 

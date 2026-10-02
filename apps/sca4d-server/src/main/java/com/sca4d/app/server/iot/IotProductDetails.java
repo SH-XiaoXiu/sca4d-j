@@ -8,9 +8,9 @@ import java.util.Objects;
 /** 把公共 Product 与 Sca4d Server 的启停 Profile 组合成一个应用查询结果。 */
 public class IotProductDetails {
 
-    private final @NotNull Product product;
-
     private final @NotNull IotProductProfile profile;
+
+    private final @NotNull Product product;
 
     /** 创建标识一致的 Product 应用查询结果。 */
     public IotProductDetails(@NotNull Product product, @NotNull IotProductProfile profile) {

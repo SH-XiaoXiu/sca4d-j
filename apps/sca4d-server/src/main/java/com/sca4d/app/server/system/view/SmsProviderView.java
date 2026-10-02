@@ -11,19 +11,19 @@ import java.util.Objects;
 @SuppressWarnings("unused")
 public class SmsProviderView {
 
-    private final long providerId;
-
     private final String code;
-
-    private final String type;
 
     private final String credentialRef;
 
-    private final int priority;
+    private final String type;
+
+    private final Version revision;
 
     private final boolean enabled;
 
-    private final Version revision;
+    private final int priority;
+
+    private final long providerId;
 
     private SmsProviderView(SmsProvider provider) {
         this.providerId = provider.providerId();

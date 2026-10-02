@@ -14,25 +14,25 @@ import java.util.Objects;
  */
 public class SmsProviderBinding {
 
-    private final long bindingId;
-
-    private final long providerId;
-
-    private final @NotNull TreeCode code;
-
-    private final @NotNull SmsRoute route;
-
     private final @NotNull Locale locale;
-
-    private final @NotNull String signName;
-
-    private final @NotNull String providerTemplateCode;
 
     private final @NotNull Map<@NotNull String, @NotNull String> parameterMapping;
 
-    private final boolean enabled;
+    private final @NotNull SmsRoute route;
+
+    private final @NotNull String providerTemplateCode;
+
+    private final @NotNull String signName;
+
+    private final @NotNull TreeCode code;
 
     private final @NotNull Version version;
+
+    private final boolean enabled;
+
+    private final long bindingId;
+
+    private final long providerId;
 
     /**
      * 创建一个供应商模板绑定快照。

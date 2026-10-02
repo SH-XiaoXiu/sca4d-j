@@ -17,27 +17,27 @@ import java.util.Objects;
 @SuppressWarnings("ClassCanBeRecord")
 public class InboxMessage {
 
-    private final long inboxMessageId;
-
     private final @NotNull Id messageId;
-
-    private final long accountId;
-
-    private final @NotNull TreeCode code;
-
-    private final @NotNull Locale locale;
-
-    private final @NotNull String title;
-
-    private final @NotNull String text;
-
-    private final @NotNull String html;
 
     private final @NotNull Instant createdAt;
 
     private final @Nullable Instant readAt;
 
+    private final @NotNull Locale locale;
+
+    private final @NotNull String html;
+
+    private final @NotNull String text;
+
+    private final @NotNull String title;
+
+    private final @NotNull TreeCode code;
+
     private final @NotNull Version version;
+
+    private final long accountId;
+
+    private final long inboxMessageId;
 
     /**
      * 创建从数据库读取的站内信快照。

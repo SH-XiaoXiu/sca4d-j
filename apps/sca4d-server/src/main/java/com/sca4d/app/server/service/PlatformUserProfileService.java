@@ -38,14 +38,14 @@ public class PlatformUserProfileService {
 
     private static final String DELETED_DISPLAY_NAME = "已删除账号";
 
-    private static final Duration PROFILE_LOCK_WAIT = Duration.ofSeconds(10);
-
     /** Platform Account 头像文件使用的上传场景。 */
     public static final String PROFILE_AVATAR = "platform:user:profile:avatar";
 
-    private final @NotNull PlatformUserProfileRepository repository;
+    private static final Duration PROFILE_LOCK_WAIT = Duration.ofSeconds(10);
 
     private final @NotNull FileService files;
+
+    private final @NotNull PlatformUserProfileRepository repository;
 
     private final @NotNull DistributedLock distributedLock;
 

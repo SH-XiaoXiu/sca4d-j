@@ -10,9 +10,9 @@ import java.util.Set;
 /** 保存认证方法的公开因素和账号识别声明，不持有认证方法对象。 */
 @PluginApiType
 public final class MfaMethodFacts {
-    private final TreeCode code;
-
     private final Set<AuthenticationFactorKind> factorKinds;
+
+    private final TreeCode code;
 
     private final boolean canIdentifyAccount;
 

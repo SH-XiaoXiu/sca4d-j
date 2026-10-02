@@ -14,19 +14,19 @@ import java.util.Objects;
 @SuppressWarnings("unused")
 public class IotAcknowledgementView {
 
-    private final long messageId;
+    private final @NotNull Instant acknowledgedAt;
 
-    private final @NotNull String ackCode;
+    private final @NotNull Instant receivedAt;
 
     private final @NotNull @Unmodifiable Map<String, Object> data;
+
+    private final @NotNull String ackCode;
 
     private final @NotNull String source;
 
     private final @Nullable String sourceAcknowledgementId;
 
-    private final @NotNull Instant acknowledgedAt;
-
-    private final @NotNull Instant receivedAt;
+    private final long messageId;
 
     /** 从模块 ACK 查询结果创建 HTTP 视图。 */
     private IotAcknowledgementView(@NotNull DeviceAcknowledgement acknowledgement) {

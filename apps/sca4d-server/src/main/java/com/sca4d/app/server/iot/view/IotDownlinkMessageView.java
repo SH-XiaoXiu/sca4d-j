@@ -19,15 +19,15 @@ import java.util.Objects;
 @SuppressWarnings("unused")
 public class IotDownlinkMessageView {
 
-    private final long messageId;
-
-    private final long deviceId;
-
-    private final long bindingGeneration;
-
     private final @NotNull DeviceDownlinkKind kind;
 
-    private final @NotNull String targetCode;
+    private final @NotNull DeviceDownlinkStatus status;
+
+    private final @NotNull Duration acknowledgementTimeout;
+
+    private final @NotNull Instant createdAt;
+
+    private final @Nullable Instant expiresAt;
 
     private final @Nullable Long desiredSequence;
 
@@ -35,17 +35,17 @@ public class IotDownlinkMessageView {
 
     private final @NotNull String acknowledgementPolicy;
 
-    private final @NotNull Duration acknowledgementTimeout;
-
     private final @NotNull String retryPolicy;
 
-    private final @NotNull DeviceDownlinkStatus status;
+    private final @NotNull String targetCode;
 
     private final int attemptCount;
 
-    private final @Nullable Instant expiresAt;
+    private final long bindingGeneration;
 
-    private final @NotNull Instant createdAt;
+    private final long deviceId;
+
+    private final long messageId;
 
     /** 从公共标准下行消息创建 HTTP 视图。 */
     private IotDownlinkMessageView(@NotNull DeviceDownlink message) {

@@ -13,29 +13,29 @@ import java.util.Objects;
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
 public class EmailSenderView {
 
-    private final long senderId;
+    private final @NotNull String fromAddress;
 
-    private final @NotNull String name;
+    private final @Nullable String fromName;
 
     private final @NotNull String host;
 
-    private final int port;
+    private final @NotNull String name;
+
+    private final @Nullable String replyTo;
 
     private final @NotNull String security;
 
     private final @Nullable String username;
 
-    private final boolean passwordConfigured;
-
-    private final @NotNull String fromAddress;
-
-    private final @Nullable String fromName;
-
-    private final @Nullable String replyTo;
+    private final @NotNull Version revision;
 
     private final boolean enabled;
 
-    private final @NotNull Version revision;
+    private final boolean passwordConfigured;
+
+    private final int port;
+
+    private final long senderId;
 
     private EmailSenderView(@NotNull EmailSender sender) {
         this.senderId = sender.senderId();

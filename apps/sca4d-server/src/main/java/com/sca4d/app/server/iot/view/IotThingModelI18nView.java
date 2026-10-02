@@ -11,11 +11,11 @@ import java.util.Objects;
 @SuppressWarnings("unused")
 public class IotThingModelI18nView {
 
+    private final @NotNull LocalizedFields i18n;
+
     private final @NotNull String productCode;
 
     private final int version;
-
-    private final @NotNull LocalizedFields i18n;
 
     /** 从数据库 ThingModel 展示结果创建完整多语言字段视图。 */
     private IotThingModelI18nView(@NotNull ThingModelPresentation presentation) {

@@ -51,17 +51,17 @@ public class PlatformAccountApplicationService {
 
     private static final Duration ACCOUNT_WRITE_LOCK_WAIT = Duration.ofSeconds(10);
 
-    private final @NotNull PlatformIdentityService identities;
-
     private final @NotNull IdentityService identityFacts;
 
-    private final @NotNull PlatformAccountDirectory accounts;
-
     private final @NotNull PlatformAccountLifecycleService accountLifecycle;
+
+    private final @NotNull PlatformIdentityService identities;
 
     private final @NotNull PlatformRbacService rbac;
 
     private final @NotNull AuthenticationMethods authenticationMethods;
+
+    private final @NotNull PlatformAccountDirectory accounts;
 
     private final @NotNull PasswordAuthenticationMethod passwords;
 
@@ -69,11 +69,11 @@ public class PlatformAccountApplicationService {
 
     private final @NotNull PlatformUserProfileService profiles;
 
+    private final @NotNull DistributedLock distributedLock;
+
     private final @NotNull PlatformEmailAccountIdentifierNormalizer emailNormalizer;
 
     private final @NotNull PlatformPhoneAccountIdentifierNormalizer phoneNormalizer;
-
-    private final @NotNull DistributedLock distributedLock;
 
     private final @NotNull TransactionTemplate transactions;
 

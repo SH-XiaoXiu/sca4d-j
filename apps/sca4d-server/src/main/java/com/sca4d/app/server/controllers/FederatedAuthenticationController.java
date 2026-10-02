@@ -44,23 +44,23 @@ import java.util.Objects;
 @Tag(name = "Federated Authentication")
 public class FederatedAuthenticationController {
 
-    private final FederatedProviderService providers;
-
-    private final FederatedIdentityService identityBindings;
+    private final ActionAuthenticationService actions;
 
     private final FederatedAuthorizationService authorizations;
 
-    private final FederatedAuthorizationStore authorizationStore;
+    private final FederatedIdentityService identityBindings;
 
-    private final FederatedAccountResolver accounts;
+    private final FederatedProviderService providers;
 
     private final PlatformLoginService login;
 
-    private final ActionAuthenticationService actions;
+    private final FederatedLoginProperties properties;
+
+    private final FederatedAccountResolver accounts;
+
+    private final FederatedAuthorizationStore authorizationStore;
 
     private final FederatedBrowserBinding bindings;
-
-    private final FederatedLoginProperties properties;
 
     /** 创建联邦认证 HTTP 入口。 */
     public FederatedAuthenticationController(

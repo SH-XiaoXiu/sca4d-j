@@ -21,22 +21,22 @@ import java.util.Objects;
 @SuppressWarnings({"FieldCanBeLocal", "unused"}) // Jackson 调用 getter，BaseViewSerializer 读取 @Localize 字段。
 public class RoleView extends BaseView {
 
-    private final long id;
-
     private final @NotNull String code;
+
+    private final long id;
 
     @Localize(key = "name")
     private final @NotNull String name = "";
-
-    private final @NotNull RoleStatus status;
-
-    private final boolean builtIn;
 
     private final @NotNull Instant createdAt;
 
     private final @NotNull Instant updatedAt;
 
+    private final @NotNull RoleStatus status;
+
     private final @NotNull Version revision;
+
+    private final boolean builtIn;
 
     private RoleView(
             long id,

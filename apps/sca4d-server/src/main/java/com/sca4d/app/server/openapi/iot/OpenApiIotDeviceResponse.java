@@ -50,11 +50,11 @@ public class OpenApiIotDeviceResponse {
 
     private final @NotNull @Unmodifiable List<String> accessMethods;
 
-    private final @NotNull OpenApiIotDeviceStatus status;
-
     private final @NotNull Instant createdAt;
 
     private final @NotNull Instant updatedAt;
+
+    private final @NotNull OpenApiIotDeviceStatus status;
 
     /** 从应用 Device 查询结果创建开放 API 响应。 */
     private OpenApiIotDeviceResponse(@NotNull IotDeviceDetails details) {

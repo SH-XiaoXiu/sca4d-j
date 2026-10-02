@@ -11,11 +11,11 @@ import java.util.Objects;
 /** 组合任意来源 Product 技术定义和可选数据库 App Profile。 */
 public class IotProductCatalogItem {
 
+    private final @Nullable IotProductProfile profile;
+
     private final @NotNull ProductBinding binding;
 
     private final @NotNull ProductDefinition definition;
-
-    private final @Nullable IotProductProfile profile;
 
     /** 创建来源、定义和 Profile 一致的 Product 管理目录项。 */
     public IotProductCatalogItem(

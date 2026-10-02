@@ -14,25 +14,25 @@ import java.util.Objects;
 @SuppressWarnings("unused")
 public class SmsBindingView {
 
-    private final long bindingId;
-
-    private final long providerId;
-
-    private final String notificationCode;
-
-    private final String route;
+    private final Map<String, String> parameterMapping;
 
     private final String languageTag;
 
-    private final String signName;
+    private final String notificationCode;
 
     private final String providerTemplateCode;
 
-    private final Map<String, String> parameterMapping;
+    private final String route;
+
+    private final String signName;
+
+    private final Version revision;
 
     private final boolean enabled;
 
-    private final Version revision;
+    private final long bindingId;
+
+    private final long providerId;
 
     private SmsBindingView(SmsProviderBinding binding) {
         this.bindingId = binding.bindingId();

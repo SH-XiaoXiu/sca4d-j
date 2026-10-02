@@ -13,11 +13,13 @@ import java.util.Objects;
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
 public class PlatformAccountView {
 
-    private final long id;
-
-    private final @NotNull String username;
-
     private final @NotNull IdentityStatus status;
+
+    private final @NotNull Instant createdAt;
+
+    private final @NotNull Instant updatedAt;
+
+    private final @Nullable Long avatarFileId;
 
     private final @NotNull String displayName;
 
@@ -25,13 +27,11 @@ public class PlatformAccountView {
 
     private final @Nullable String phoneNumber;
 
-    private final @Nullable Long avatarFileId;
+    private final @NotNull String username;
 
     private final boolean protectedRoot;
 
-    private final @NotNull Instant createdAt;
-
-    private final @NotNull Instant updatedAt;
+    private final long id;
 
     private PlatformAccountView(
             long id,

@@ -13,19 +13,19 @@ import java.util.Objects;
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
 public class SessionTokensView {
 
-    private final @NotNull String tokenMode;
+    private final @NotNull Instant accessTokenExpiresAt;
 
-    private final @NotNull String tokenType;
+    private final @NotNull Instant sessionExpiresAt;
 
     private final @NotNull String accessToken;
 
-    private final @NotNull Instant accessTokenExpiresAt;
+    private final @NotNull String sessionId;
 
     private final @Nullable String sessionToken;
 
-    private final @NotNull String sessionId;
+    private final @NotNull String tokenMode;
 
-    private final @NotNull Instant sessionExpiresAt;
+    private final @NotNull String tokenType;
 
     private SessionTokensView(@NotNull SessionTokens tokens) {
         this.tokenMode = tokens.tokenMode().name();

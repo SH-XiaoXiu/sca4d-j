@@ -19,15 +19,15 @@ import java.util.Objects;
  */
 public class InboxNotificationDelivery implements NotificationDelivery {
 
-    private final InboxTemplateRepository templates;
-
-    private final InboxTemplateRenderer renderers;
+    private final InboxService service;
 
     private final InboxRepository inbox;
 
-    private final InboxService service;
+    private final InboxTemplateRepository templates;
 
     private final IdGenerator ids;
+
+    private final InboxTemplateRenderer renderers;
 
     /**
      * 创建站内信渠道投递实现。

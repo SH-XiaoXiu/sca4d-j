@@ -10,25 +10,25 @@ import java.util.Objects;
  * 保存 SMS Provider Binding Mapper 返回的参数映射 JSON 文本。
  */
 public class SmsBindingState {
-    private final long bindingId;
-
-    private final long providerId;
-
-    private final @NotNull TreeCode code;
-
-    private final @NotNull String route;
-
     private final @NotNull String languageTag;
-
-    private final @NotNull String signName;
-
-    private final @NotNull String providerTemplateCode;
 
     private final @NotNull String parameterMappingJson;
 
-    private final boolean enabled;
+    private final @NotNull String providerTemplateCode;
+
+    private final @NotNull String route;
+
+    private final @NotNull String signName;
+
+    private final @NotNull TreeCode code;
 
     private final @NotNull Version version;
+
+    private final boolean enabled;
+
+    private final long bindingId;
+
+    private final long providerId;
 
     /**
      * @param bindingId 绑定数据库标识

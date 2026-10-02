@@ -8,13 +8,13 @@ import java.util.Objects;
 /** 保存 Sca4d Server 为公共 IoT Product 增加的启停状态。 */
 public class IotProductProfile {
 
-    private final long productId;
-
-    private final @NotNull IotProfileStatus status;
-
     private final @NotNull Instant createdAt;
 
     private final @NotNull Instant updatedAt;
+
+    private final @NotNull IotProfileStatus status;
+
+    private final long productId;
 
     /** 创建数据库返回的 Product App Profile。 */
     public IotProductProfile(

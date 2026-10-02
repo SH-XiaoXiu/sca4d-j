@@ -10,17 +10,17 @@ import java.util.Objects;
 
 /** 保存当前 Account 三项通知设置的领域化读取结果。 */
 public class NotificationSettingsSnapshot {
+    private final JsonNode channels;
+
     private final Locale language;
 
     private final Region region;
 
-    private final JsonNode channels;
+    private final Version channelsVersion;
 
     private final Version languageVersion;
 
     private final Version regionVersion;
-
-    private final Version channelsVersion;
 
     /** 创建当前 Account 的通知设置快照。 */
     public NotificationSettingsSnapshot(

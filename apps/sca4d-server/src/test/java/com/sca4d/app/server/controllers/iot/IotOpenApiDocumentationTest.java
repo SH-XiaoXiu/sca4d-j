@@ -48,9 +48,9 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureMockMvc
 class IotOpenApiDocumentationTest {
 
-    private final MockMvc mvc;
-
     private final ObjectMapper objectMapper;
+
+    private final MockMvc mvc;
 
     @Autowired
     IotOpenApiDocumentationTest(MockMvc mvc, ObjectMapper objectMapper) {

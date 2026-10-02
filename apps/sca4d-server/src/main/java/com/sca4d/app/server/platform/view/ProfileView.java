@@ -12,7 +12,9 @@ import java.util.Objects;
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
 public class ProfileView {
 
-    private final long principalId;
+    private final @NotNull Instant updatedAt;
+
+    private final @Nullable Long avatarFileId;
 
     private final @NotNull String displayName;
 
@@ -20,9 +22,7 @@ public class ProfileView {
 
     private final @Nullable String phoneNumber;
 
-    private final @Nullable Long avatarFileId;
-
-    private final @NotNull Instant updatedAt;
+    private final long principalId;
 
     private ProfileView(
             long principalId,

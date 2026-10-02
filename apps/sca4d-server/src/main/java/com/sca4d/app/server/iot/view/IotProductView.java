@@ -20,22 +20,22 @@ import java.util.Objects;
 @SuppressWarnings("unused")
 public class IotProductView extends BaseView {
 
-    private final long id;
+    private final @NotNull Instant createdAt;
+
+    private final @NotNull Instant updatedAt;
+
+    private final @NotNull IotProfileStatus status;
+
+    private final @NotNull @Unmodifiable List<String> accessMethods;
+
+    private final @NotNull @Unmodifiable List<String> protocolCodes;
 
     private final @NotNull String code;
 
     @Localize(key = "displayName")
     private final @NotNull String displayName;
 
-    private final @NotNull @Unmodifiable List<String> accessMethods;
-
-    private final @NotNull @Unmodifiable List<String> protocolCodes;
-
-    private final @NotNull IotProfileStatus status;
-
-    private final @NotNull Instant createdAt;
-
-    private final @NotNull Instant updatedAt;
+    private final long id;
 
     /** 从公共 Product 和应用 Profile 创建 HTTP 视图。 */
     private IotProductView(@NotNull Product product, @NotNull IotProductProfile profile) {

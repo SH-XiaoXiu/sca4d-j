@@ -5,13 +5,13 @@ import org.jetbrains.annotations.Nullable;
 /** 保存 Device 创建幂等记录解密后恢复结果所需的稳定字段。 */
 public class DeviceCreationReplay {
 
-    private final long deviceId;
-
     private final @Nullable Long accountId;
+
+    private final @Nullable String hmacKey;
 
     private final @Nullable String sharedSecret;
 
-    private final @Nullable String hmacKey;
+    private final long deviceId;
 
     /** 创建只在加密幂等响应中保存的 Device 创建结果。 */
     public DeviceCreationReplay(

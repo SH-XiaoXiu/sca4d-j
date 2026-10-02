@@ -41,9 +41,9 @@ public class PasskeyController {
 
     private final PasskeyAssertionService assertions;
 
-    private final PasskeyRegistrationService registrations;
-
     private final PasskeyDeletionService deletions;
+
+    private final PasskeyRegistrationService registrations;
 
     /** 创建 Passkey HTTP 入口。 */
     public PasskeyController(

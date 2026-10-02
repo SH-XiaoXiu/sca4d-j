@@ -38,9 +38,9 @@ import java.util.Objects;
 @CurrentPrincipal(selection = PlatformPrincipalSelection.class)
 public class IotDeviceDataController {
 
-    private final @NotNull IotDeviceRuntimeService runtime;
-
     private final @NotNull DeviceHistoryQueryService history;
+
+    private final @NotNull IotDeviceRuntimeService runtime;
 
     /** 创建只把模块查询结果转换为 App HTTP View 的 Controller。 */
     public IotDeviceDataController(

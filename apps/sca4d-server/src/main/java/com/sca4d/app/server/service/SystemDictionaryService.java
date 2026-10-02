@@ -41,9 +41,9 @@ public class SystemDictionaryService {
 
     private static final Pattern OPTION_VALUE = Pattern.compile("[A-Za-z0-9][A-Za-z0-9._:-]{0,159}");
 
-    private final DictionaryRegistry registry;
-
     private final DictionaryRepository repository;
+
+    private final DictionaryRegistry registry;
 
     /** 创建系统字典应用服务。 */
     public SystemDictionaryService(

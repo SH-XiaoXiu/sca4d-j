@@ -13,15 +13,15 @@ import java.util.Objects;
 @SuppressWarnings("unused") // Jackson 通过 JavaBean getter 序列化响应。
 public class VerificationView {
 
-    private final String verificationId;
-
-    private final String status;
-
-    private final int remainingFactorCount;
+    private final Instant expiresAt;
 
     private final List<String> availableMethods;
 
-    private final Instant expiresAt;
+    private final String status;
+
+    private final String verificationId;
+
+    private final int remainingFactorCount;
 
     private VerificationView(
             String verificationId,
