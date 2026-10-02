@@ -34,4 +34,3 @@ com.sca4d.app.server.service
 com.sca4d.app.server.system
 com.sca4d.app.server.system.request
 com.sca4d.app.server.system.view
-db.migration

@@ -1,6 +1,7 @@
 package com.sca4d.app.server.iot.view;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -40,7 +41,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-/** 检查 IoT HTTP 视图输出请求语言文本，并隐藏动态翻译和历史失败原值。 */
+/** 检查 IoT HTTP 视图输出请求语言文本，并隐藏动态翻译并校验失败编码。 */
 class IotViewSerializationTest {
 
     private static final Locale ZH_CN = Locale.forLanguageTag("zh-CN");
@@ -159,15 +160,16 @@ class IotViewSerializationTest {
     }
 
     @Test
-    @DisplayName("未知历史调度失败不返回原始文本")
-    void replacesUnknownHistoricalScheduleFailure() throws Exception {
+    @DisplayName("合法扩展失败保留 code，拒绝未校验的失败文本")
+    void retainsValidatedExtensionScheduleFailure() throws Exception {
         LocaleContextHolder.setLocale(ZH_CN);
 
-        JsonNode json = json(scheduleFailure("database error: private detail"));
+        JsonNode json = json(scheduleFailure("EXTENSION_FAILED"));
 
-        assertThat(json.at("/failure/code").textValue()).isEqualTo("LEGACY_FAILURE");
-        assertThat(json.at("/failure/message").textValue()).isEqualTo("无法识别历史失败原因");
-        assertThat(json.toString()).doesNotContain("private detail");
+        assertThat(json.at("/failure/code").textValue()).isEqualTo("EXTENSION_FAILED");
+        assertThat(json.at("/failure/message").textValue()).isEqualTo("IoT 操作失败");
+        assertThatThrownBy(() -> scheduleFailure("database error: private detail"))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     /** 创建一条固定时间且失败的调度执行视图。 */
@@ -196,8 +198,8 @@ class IotViewSerializationTest {
         Map<Locale, Map<String, String>> messages = Map.of(
                 ZH_CN,
                 Map.of(
-                        IotFailureCode.LEGACY_FAILURE.messageKey(),
-                        "无法识别历史失败原因"),
+                        "failure.iot.unknown",
+                        "IoT 操作失败"),
                 EN_US,
                 Map.of(
                         "product.gateway.display-name",

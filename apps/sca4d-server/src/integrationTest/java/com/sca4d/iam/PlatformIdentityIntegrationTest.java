@@ -451,33 +451,6 @@ class PlatformIdentityIntegrationTest {
                 .containsExactly(root.roleId());
     }
 
-    @Test
-    @DisplayName("Migration Contains Only Platform Identity Tables")
-    void migrationContainsOnlyPlatformIdentityTables() {
-        List<String> tables = jdbc.sql("""
-                SELECT table_name
-                FROM information_schema.tables
-                WHERE table_schema = 'public'
-                  AND table_name LIKE 'iam_%'
-                ORDER BY table_name
-                """)
-                .query(String.class)
-                .list();
-
-        assertThat(tables)
-                .containsExactly(
-                        "iam_account",
-                        "iam_account_identifier",
-                        "iam_account_principal",
-                        "iam_principal",
-                        "iam_subject");
-        assertThat(
-                jdbc.sql("SELECT COUNT(*) FROM iam_subject WHERE id = 1")
-                        .query(Long.class)
-                        .single())
-                .isZero();
-    }
-
     private Account provisionAccount(String username) {
         PlatformPrincipal principal = identities.provision(username);
         return identities.findActiveAccounts(principal.principalId()).getFirst();
@@ -491,48 +464,6 @@ class PlatformIdentityIntegrationTest {
                 Map.of(
                         Locale.forLanguageTag("zh-CN"),
                         Map.of("name", name)));
-    }
-
-    @Test
-    @DisplayName("Applies App Owned Initial Migration")
-    void appliesAppOwnedInitialMigration() {
-        assertThat(
-                jdbc.sql("""
-                        SELECT version || ':' || description || ':' || success
-                        FROM flyway_schema_history
-                        WHERE version = '1'
-                        """)
-                        .query(String.class)
-                        .single())
-                .isEqualTo("1:init sca4d:true");
-        assertThat(
-                jdbc.sql("""
-                        SELECT COUNT(*)
-                        FROM pg_constraint constraint_record
-                        JOIN pg_class table_record ON table_record.oid = constraint_record.conrelid
-                        WHERE constraint_record.contype = 'f' AND table_record.relname LIKE 'iam_%'
-                        """)
-                        .query(Long.class)
-                        .single())
-                .isZero();
-        assertThat(
-                jdbc.sql("""
-                        SELECT column_name
-                        FROM information_schema.columns
-                        WHERE table_schema = 'public'
-                          AND table_name = 'iam_principal'
-                        ORDER BY ordinal_position
-                        """)
-                        .query(String.class)
-                        .list())
-                .containsExactly(
-                        "id",
-                        "principal_type",
-                        "status",
-                        "created_at",
-                        "updated_at",
-                        "roles_version",
-                        "deleted");
     }
 
 }

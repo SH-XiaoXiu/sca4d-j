@@ -3,15 +3,11 @@ package com.sca4d.app.server;
 import com.sca4d.core.api.identity.SystemPrincipals;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.runtime.InstanceCapability;
-import com.sca4d.core.spring.security.SecretKeyringProperties;
 import com.sca4d.iot.api.IotCapabilities;
-import org.springframework.boot.autoconfigure.flyway.FlywayConfigurationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /** 声明 Sca4d Server 的业务 API、IoT API 和设备接入能力及服务器路径。 */
 @Configuration(proxyBeanMethods = false)
@@ -41,16 +37,4 @@ public class ServerRuntimeConfiguration {
                 List.of());
     }
 
-    /** 把 Spring 已解析的密钥环配置传给 Flyway Java migration，避免迁移直接读取进程环境。 */
-    @Bean
-    FlywayConfigurationCustomizer flywaySecretKeyringPlaceholders(SecretKeyringProperties properties) {
-        return configuration -> {
-            Map<String, String> placeholders = new LinkedHashMap<>(configuration.getPlaceholders());
-            if (properties.getActiveKeyId() != null) {
-                placeholders.put("sca4dj_keyring_active_key_id", properties.getActiveKeyId());
-            }
-            properties.getKeys().forEach((keyId, value) -> placeholders.put("sca4dj_keyring_" + keyId + "_key", value));
-            configuration.placeholders(placeholders);
-        };
-    }
 }

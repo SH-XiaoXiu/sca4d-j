@@ -9,19 +9,18 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-/** 为一个设置所属和稳定编码建立 V1/V2 密文 Codec 目录，并把 V2 作为当前写入版本。 */
+/** 为一个设置所属和稳定编码选择当前写入及已登记的读取 Codec。 */
 public class SettingSecretCodecCatalog {
 
     private final @NotNull VersionedCodecCatalog<byte[], EncryptedSecret> codecs;
 
-    /** 创建使用同一密钥读取或写入一个 Setting 的 V1/V2 Codec 目录。 */
+    /** 创建绑定密钥、owner 和设置编码的版本目录；未登记的读取版本直接报错。 */
     public SettingSecretCodecCatalog(
             @NotNull SecretCipher cipher,
             @NotNull SettingOwner owner,
             @NotNull String key) {
-        SettingSecretCodecV1 v1 = new SettingSecretCodecV1(cipher, owner, key);
         SettingSecretCodecV2 v2 = new SettingSecretCodecV2(cipher, owner, key);
-        this.codecs = new VersionedCodecCatalog<>(v2, List.of(v1, v2));
+        this.codecs = new VersionedCodecCatalog<>(v2, List.of(v2));
     }
 
     /** @return 当前写入使用的 V2 Codec */

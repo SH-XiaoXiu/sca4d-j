@@ -77,7 +77,7 @@ flowchart LR
 
 应用将每个 Setting 作为 Spring Bean 注册到 SettingCatalog。SettingCatalog 拒绝重复 TreeCode，并按 SystemSetting、LogicSetting 和 PreferenceSetting 限制管理入口。Setting 通过 DatabaseSettingStore 读取 `sys_setting`，没有显式覆盖值时使用定义的 Java 默认值。敏感 Setting 只保存密文。SettingBootstrap 只处理 SystemSetting，并且仅在指定初始化节点启动时写入或同步 System owner；节点启动失败时该节点不会就绪。
 
-敏感 Setting 的密文由 `SecretCodec<byte[]>` 处理。当前写入使用 `SettingSecretCodecV2`，用途绑定 Setting owner、规范编码和加密上下文版本；`SettingSecretCodecV1` 只用于 Flyway 迁移读取历史密文。`SecretKeyring` 根据 active key 或密文保存的 key ID 选择 `SecretCipher`，`encryption_context_version` 选择 V1 或 V2 Codec。V13 Flyway 迁移使用同一个 keyId 重新绑定规范编码用途，迁移失败时整次事务回滚。
+敏感 Setting 的密文由 `SecretCodec<byte[]>` 处理。`SettingSecretCodecCatalog.current()` 选择写入 Codec，`select(encryption_context_version)` 按持久化版本选择读取 Codec；当前仅登记 `SettingSecretCodecV2`，用途绑定 Setting owner、规范编码和加密上下文版本。`SecretKeyring` 根据 active key 或密文保存的 key ID 选择 `SecretCipher`。数据库和设置文件中的 `encryption_context_version` 必须对应目录中已登记的版本；未登记的版本直接报错，不尝试旧键名或旧加密上下文。Sca4d Server 的初始数据库由 App V1 建立，数据库迁移版本与密文格式版本分别维护。
 
 ## 字典保存哪些数据
 

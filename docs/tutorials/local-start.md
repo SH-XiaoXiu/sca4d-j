@@ -42,6 +42,8 @@ done
 
 PostgreSQL 和 TimescaleDB 只在各自数据目录首次初始化时读取用户名与密码。清理数据目录会删除其中的全部数据库数据，只能在确认数据可丢弃或已经备份后执行。要按新的 `.env/database.env` 或 `.env/iot-database.env` 重建本地数据库，先停止对应容器，再由操作者清理 `docker-data/postgresql` 与可选的 `docker-data/iot/timescaledb`；仅修改环境文件不会修改已经存在数据库角色的密码。
 
+Sca4d Server 主库仅包含 `V1__init_sca4d.sql`，直接建立现行模块和 App 结构，必须使用空数据库。存在旧 Flyway 记录的数据库不能直接启动，也不要通过 `repair` 或 `baseline` 跳过校验。独立 TimescaleDB 同样仅通过 V1 建立现行历史数据结构，也必须使用空数据库。Docker 数据采用宿主机目录挂载，删除容器或执行 `down --volumes` 都不会清空这些目录；完全重新体验还需由操作者清理可丢弃的 Redis、RabbitMQ、MinIO 和 EMQX 状态，避免遗留会话、消息和文件。RabbitMQ 初始密码也只在首次初始化时写入。
+
 ## 启动全部本地依赖
 
 完整环境包含 PostgreSQL、Redis、RabbitMQ、MinIO、Mailpit、EMQX 和 TimescaleDB。`.env/iot.env.example` 与 `.env/iot-database.env.example` 默认启用后两项，因此体验全部示例功能时必须同时加载两个 Compose 文件。Docker Compose 不会自动读取 `.env/` 目录中的分片文件，必须显式传入参与 Compose 变量替换的文件：

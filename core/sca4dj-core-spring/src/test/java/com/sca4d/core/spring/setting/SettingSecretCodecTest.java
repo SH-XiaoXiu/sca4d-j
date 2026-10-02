@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+/** 验证当前设置密文绑定 owner，不能由其他 owner 解密。 */
 class SettingSecretCodecTest {
 
     private static final String KEY = "auth.key";
@@ -21,19 +22,6 @@ class SettingSecretCodecTest {
     private static final SettingOwner OWNER = new SettingOwner(
             TreeCode.of("IAM/ACCOUNT"),
             "123");
-
-    @Test
-    @DisplayName("V1 保持旧 Setting key 加密上下文")
-    void keepsV1Purpose() {
-        FakeCipher cipher = new FakeCipher();
-        SettingSecretCodecV1 codec = new SettingSecretCodecV1(cipher, OWNER, KEY);
-
-        EncryptedSecret encrypted = codec.encode(bytes());
-
-        assertThat(codec.version()).isEqualTo(1);
-        assertThat(cipher.lastPurpose).isEqualTo("setting:auth.key");
-        assertThat(new String(codec.decode(encrypted), StandardCharsets.UTF_8)).isEqualTo("secret");
-    }
 
     @Test
     @DisplayName("V2 purpose 绑定 owner 类型、owner ID 和 key")
@@ -55,44 +43,21 @@ class SettingSecretCodecTest {
     }
 
     @Test
-    @DisplayName("目录默认写 V2，同时可以读取 V1")
-    void selectsCurrentAndHistoricalCodec() {
-        FakeCipher cipher = new FakeCipher();
-        SettingSecretCodecCatalog catalog = new SettingSecretCodecCatalog(cipher, OWNER, KEY);
+    @DisplayName("版本目录写入当前格式，拒绝未登记的历史格式")
+    void selectsRegisteredCodecAndRejectsUnsupportedVersion() {
+        SettingSecretCodecCatalog catalog = new SettingSecretCodecCatalog(new FakeCipher(), OWNER, KEY);
+        EncryptedSecret encrypted = catalog.current().encode(bytes());
 
-        assertThat(catalog.current().version()).isEqualTo(2);
-        assertThat(catalog.select(1).version()).isEqualTo(1);
-        assertThat(catalog.select(2).version()).isEqualTo(2);
+        assertThat(catalog.select(catalog.current().version()).decode(encrypted)).containsExactly(bytes());
+        assertThatThrownBy(() -> catalog.select(1)).isInstanceOf(IllegalArgumentException.class);
     }
 
-    @Test
-    @DisplayName("迁移器只转换密文，不访问数据库")
-    void migratesV1CiphertextToV2() {
-        FakeCipher cipher = new FakeCipher();
-        SettingSecretCodecV1 v1 = new SettingSecretCodecV1(cipher, OWNER, KEY);
-        EncryptedSecret source = v1.encode(bytes());
-
-        EncryptedSecret target = new SettingSecretEncryptionMigrator().migrate(
-                OWNER,
-                KEY,
-                1,
-                cipher,
-                source,
-                2,
-                cipher);
-
-        assertThat(cipher.lastPurpose).isEqualTo("setting:v2:11:IAM/ACCOUNT:3:123:auth.key");
-        assertThat(
-                new String(
-                        new SettingSecretCodecV2(cipher, OWNER, KEY).decode(target),
-                        StandardCharsets.UTF_8))
-                .isEqualTo("secret");
-    }
-
+    /** 返回本测试使用的 UTF-8 明文。 */
     private static byte[] bytes() {
         return "secret".getBytes(StandardCharsets.UTF_8);
     }
 
+    /** 校验加密用途并保存测试密文，隔离真实密钥生成。 */
     private static class FakeCipher implements SecretCipher {
         private String lastPurpose;
 
