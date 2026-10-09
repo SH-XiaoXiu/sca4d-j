@@ -88,14 +88,9 @@ loadScripts(document, 'script');</script>
 <div class="inheritance">com.sca4d.iot.telemetry.TimescaleRetentionTask</div>
 </div>
 <section class="class-description" id="class-description">
-<dl class="notes">
-<dt>All Implemented Interfaces:</dt>
-<dd><code>com.sca4d.core.api.scheduling.ClusterTask</code></dd>
-</dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">TimescaleRetentionTask</span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
-implements com.sca4d.core.api.scheduling.ClusterTask</span></div>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">使用 `drop_chunks` 清理 TimescaleDB Telemetry 和事件历史。</div>
 </section>
 <section class="summary">
@@ -191,10 +186,6 @@ implements com.sca4d.core.api.scheduling.ClusterTask</span></div>
 @SystemExecution("IOT")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">execute</span>()</div>
 <div class="block">清理两个 hypertable 中早于各自保留截止时间的完整 chunk。</div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code>execute</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.scheduling.ClusterTask</code></dd>
-</dl>
 </section>
 </li>
 </ul>

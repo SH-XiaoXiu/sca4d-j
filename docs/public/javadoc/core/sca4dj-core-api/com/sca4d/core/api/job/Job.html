@@ -100,10 +100,10 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name type-name-label">Job&lt;I,<wbr>O&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">表示可独立命名、持久化并由集群 worker 执行的一次工作定义。
+<div class="block">表示可独立命名、由具备所需能力的实例执行的一项工作定义。
 
- <p>Job 只声明稳定标识、定义版本和输入输出类型。提交、租约、重试和结果保存由 Job runtime 负责；
- 定时调度只在到达触发时间后提交 Job，不改变 Job 的执行语义。</div>
+ <p>Job 声明稳定标识、定义版本、输入输出类型、系统执行能力和并发工作键。持久化 Job 由 runtime 保存运行与结果；
+ 无记录 Job 直接执行或短期投递。定时调度只在触发时间发起工作，不改变 Job 的执行语义。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -129,7 +129,7 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
 <div class="table-header col-first">Modifier and Type</div>
@@ -154,6 +154,31 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#outputType()" class="member-name-link">outputType</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">返回持久化输出类型。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../scheduling/OverlapPolicy.html" title="enum class in com.sca4d.core.api.scheduling">OverlapPolicy</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#overlapPolicy()" class="member-name-link">overlapPolicy</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">返回同一工作键已有活动运行时的新提交处理方式。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#requiredCapability()" class="member-name-link">requiredCapability</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">返回执行该 Job 所需的实例能力；能力定义同时选择后台使用的系统身份。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="JobRunRecording.html" title="enum class in com.sca4d.core.api.job">JobRunRecording</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#runRecording()" class="member-name-link">runRecording</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">返回是否保存独立运行记录。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="JobTarget.html" title="class in com.sca4d.core.api.job">JobTarget</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#target(I)" class="member-name-link">target</a><wbr>(<a href="Job.html" title="type parameter in Job">I</a>&nbsp;input)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">根据本次输入确定工作目标。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="JobWorkKey.html" title="class in com.sca4d.core.api.job">JobWorkKey</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#workKey(I)" class="member-name-link">workKey</a><wbr>(<a href="Job.html" title="type parameter in Job">I</a>&nbsp;input)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">根据本次输入返回并发控制使用的工作键。</div>
 </div>
 </div>
 </div>
@@ -235,6 +260,75 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>序列化和恢复成功结果使用的具体 Java 类型</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="requiredCapability()">
+<h3>requiredCapability</h3>
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></span>&nbsp;<span class="element-name">requiredCapability</span>()</div>
+<div class="block">返回执行该 Job 所需的实例能力；能力定义同时选择后台使用的系统身份。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>当前 Job 所需的能力编码</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="runRecording()">
+<h3>runRecording</h3>
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="JobRunRecording.html" title="enum class in com.sca4d.core.api.job">JobRunRecording</a></span>&nbsp;<span class="element-name">runRecording</span>()</div>
+<div class="block">返回是否保存独立运行记录。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>持久化运行记录策略</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="workKey(I)">
+<h3 id="workKey(java.lang.Object)">workKey</h3>
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="JobWorkKey.html" title="class in com.sca4d.core.api.job">JobWorkKey</a></span>&nbsp;<span class="element-name">workKey</span><wbr><span class="parameters">(<a href="Job.html" title="type parameter in Job">I</a>&nbsp;input)</span></div>
+<div class="block">根据本次输入返回并发控制使用的工作键。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>input</code> - 本次 Job 输入；Void Job 为 null，其他输入非空</dd>
+<dt>Returns:</dt>
+<dd>同一系统执行身份下的工作键</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="target(I)">
+<h3 id="target(java.lang.Object)">target</h3>
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="JobTarget.html" title="class in com.sca4d.core.api.job">JobTarget</a></span>&nbsp;<span class="element-name">target</span><wbr><span class="parameters">(<a href="Job.html" title="type parameter in Job">I</a>&nbsp;input)</span></div>
+<div class="block">根据本次输入确定工作目标。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>input</code> - 本次输入；Void Job 为 null，其他输入非空</dd>
+<dt>Returns:</dt>
+<dd>默认由任一合格实例执行一次</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="overlapPolicy()">
+<h3>overlapPolicy</h3>
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../scheduling/OverlapPolicy.html" title="enum class in com.sca4d.core.api.scheduling">OverlapPolicy</a></span>&nbsp;<span class="element-name">overlapPolicy</span>()</div>
+<div class="block">返回同一工作键已有活动运行时的新提交处理方式。</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>默认跳过活动工作</dd>
 </dl>
 </section>
 </li>

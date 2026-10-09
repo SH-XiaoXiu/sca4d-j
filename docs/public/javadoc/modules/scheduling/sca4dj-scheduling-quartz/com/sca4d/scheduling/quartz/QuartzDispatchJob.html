@@ -95,7 +95,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">QuartzDispatchJob</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements org.quartz.Job</span></div>
-<div class="block">把一次 Quartz fire 转换成同一原定时间的持久化 Job run 提交。</div>
+<div class="block">把一次 Quartz fire 转换成有记录提交或无记录系统执行。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -109,10 +109,22 @@ implements org.quartz.Job</span></div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#CAPABILITIES_CONTEXT_KEY" class="member-name-link">CAPABILITIES_CONTEXT_KEY</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#CLOCK_CONTEXT_KEY" class="member-name-link">CLOCK_CONTEXT_KEY</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><code><a href="#EXECUTOR_CONTEXT_KEY" class="member-name-link">EXECUTOR_CONTEXT_KEY</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Quartz SchedulerContext 中保存 JobExecutor 的键。</div>
 </div>
+<div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#INSTANCE_CONTEXT_KEY" class="member-name-link">INSTANCE_CONTEXT_KEY</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#LOCK_CONTEXT_KEY" class="member-name-link">LOCK_CONTEXT_KEY</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#REGISTRY_CONTEXT_KEY" class="member-name-link">REGISTRY_CONTEXT_KEY</a></code></div>
 <div class="col-last odd-row-color">
@@ -176,6 +188,34 @@ implements org.quartz.Job</span></div>
 <h2>Field Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="CAPABILITIES_CONTEXT_KEY">
+<h3>CAPABILITIES_CONTEXT_KEY</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">CAPABILITIES_CONTEXT_KEY</span></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../constant-values.html#com.sca4d.scheduling.quartz.QuartzDispatchJob.CAPABILITIES_CONTEXT_KEY">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="CLOCK_CONTEXT_KEY">
+<h3>CLOCK_CONTEXT_KEY</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">CLOCK_CONTEXT_KEY</span></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../constant-values.html#com.sca4d.scheduling.quartz.QuartzDispatchJob.CLOCK_CONTEXT_KEY">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="EXECUTOR_CONTEXT_KEY">
 <h3>EXECUTOR_CONTEXT_KEY</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">EXECUTOR_CONTEXT_KEY</span></div>
@@ -185,6 +225,34 @@ implements org.quartz.Job</span></div>
 <dd>
 <ul class="tag-list">
 <li><a href="../../../../constant-values.html#com.sca4d.scheduling.quartz.QuartzDispatchJob.EXECUTOR_CONTEXT_KEY">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="INSTANCE_CONTEXT_KEY">
+<h3>INSTANCE_CONTEXT_KEY</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">INSTANCE_CONTEXT_KEY</span></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../constant-values.html#com.sca4d.scheduling.quartz.QuartzDispatchJob.INSTANCE_CONTEXT_KEY">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="LOCK_CONTEXT_KEY">
+<h3>LOCK_CONTEXT_KEY</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">LOCK_CONTEXT_KEY</span></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../constant-values.html#com.sca4d.scheduling.quartz.QuartzDispatchJob.LOCK_CONTEXT_KEY">Constant Field Values</a></li>
 </ul>
 </dd>
 </dl>

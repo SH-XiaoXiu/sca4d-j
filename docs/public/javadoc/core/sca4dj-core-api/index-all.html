@@ -314,6 +314,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">观察调用失败，不得把失败伪装成成功。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/job/JobTarget.html#all(java.time.Duration)" class="member-name-link">all(Duration)</a> - Static method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobTarget.html" title="class in com.sca4d.core.api.job">JobTarget</a></dt>
+<dd>
+<div class="block">由提交时在线且具备所需能力的每个实例各执行一次。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/job/JobTarget.Kind.html#ALL" class="member-name-link">ALL</a> - Enum constant in enum class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobTarget.Kind.html" title="enum class in com.sca4d.core.api.job">JobTarget.Kind</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/condition/DnfClause.html#allOf(java.lang.String,R,com.sca4d.core.api.condition.DnfClause.Condition...)" class="member-name-link">allOf(String, R, DnfClause.Condition&lt;? super T&gt;...)</a> - Static method in class com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfClause.html" title="class in com.sca4d.core.api.condition">DnfClause</a></dt>
 <dd>
 <div class="block">创建一个由全部条件组成的 Clause。</div>
@@ -366,10 +372,16 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">南极洲。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/job/JobTarget.html#any()" class="member-name-link">any()</a> - Static method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobTarget.html" title="class in com.sca4d.core.api.job">JobTarget</a></dt>
+<dd>
+<div class="block">由任一启用所需能力的实例执行一次。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/persistence/AffectedRowCounts.html#any(int,java.lang.String)" class="member-name-link">any(int, String)</a> - Static method in class com.sca4d.core.api.persistence.<a href="com/sca4d/core/api/persistence/AffectedRowCounts.html" title="class in com.sca4d.core.api.persistence">AffectedRowCounts</a></dt>
 <dd>
 <div class="block">把允许影响任意行的写入转换为是否至少修改一行。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/job/JobTarget.Kind.html#ANY" class="member-name-link">ANY</a> - Enum constant in enum class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobTarget.Kind.html" title="enum class in com.sca4d.core.api.job">JobTarget.Kind</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/condition/DnfExpression.html#anyOf(com.sca4d.core.api.condition.DnfClause...)" class="member-name-link">anyOf(DnfClause&lt;T, R&gt;...)</a> - Static method in class com.sca4d.core.api.condition.<a href="com/sca4d/core/api/condition/DnfExpression.html" title="class in com.sca4d.core.api.condition">DnfExpression</a></dt>
 <dd>
 <div class="block">创建任意一个 Clause 命中即可产生结果的表达式。</div>
@@ -905,6 +917,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">把布尔值、数字或受支持的英文文本转换为 Boolean。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/job/JobExecutor.html#broadcast(com.sca4d.core.api.job.Job,I)" class="member-name-link">broadcast(Job&lt;I, O&gt;, I)</a> - Method in interface com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobExecutor.html" title="interface in com.sca4d.core.api.job">JobExecutor</a></dt>
+<dd>
+<div class="block">根据 Job 声明的全部在线实例目标，固定目标并创建一次普通广播。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/job/JobExecutor.html#broadcastScheduled(com.sca4d.core.api.job.Job,I,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant,com.sca4d.core.api.scheduling.OverlapPolicy)" class="member-name-link">broadcastScheduled(Job&lt;I, O&gt;, I, ScheduleKey, Instant, OverlapPolicy)</a> - Method in interface com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobExecutor.html" title="interface in com.sca4d.core.api.job">JobExecutor</a></dt>
+<dd>
+<div class="block">使用计划 key 和原定触发时间去重，并固定本次广播的实例目标。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/messaging/DispatchReceipt.Status.html#BROKER_ACCEPTED" class="member-name-link">BROKER_ACCEPTED</a> - Enum constant in enum class com.sca4d.core.api.messaging.<a href="com/sca4d/core/api/messaging/DispatchReceipt.Status.html" title="enum class in com.sca4d.core.api.messaging">DispatchReceipt.Status</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/webrealtime/WebRealtimeMessage.html#browserEvent()" class="member-name-link">browserEvent()</a> - Method in class com.sca4d.core.api.webrealtime.<a href="com/sca4d/core/api/webrealtime/WebRealtimeMessage.html" title="class in com.sca4d.core.api.webrealtime">WebRealtimeMessage</a></dt>
@@ -1116,6 +1136,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回字段顺序稳定、保留数组业务顺序的参数 JSON。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/job/JobExecution.html#capability()" class="member-name-link">capability()</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobExecution.html" title="class in com.sca4d.core.api.job">JobExecution</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/concurrent/VersionConditions.html#capture()" class="member-name-link">capture()</a> - Method in interface com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/VersionConditions.html" title="interface in com.sca4d.core.api.concurrent">VersionConditions</a></dt>
 <dd>
 <div class="block">冻结当前调用的版本条件入口，供显式传入异步工作；默认无请求状态的实现保持自身。
@@ -1228,22 +1250,6 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/webrealtime/WebRealtimeMessage.html#closeAfter()" class="member-name-link">closeAfter()</a> - Method in class com.sca4d.core.api.webrealtime.<a href="com/sca4d/core/api/webrealtime/WebRealtimeMessage.html" title="class in com.sca4d.core.api.webrealtime">WebRealtimeMessage</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/scheduling/ClusterTask.html" class="type-name-link" title="interface in com.sca4d.core.api.scheduling">ClusterTask</a> - Interface in <a href="com/sca4d/core/api/scheduling/package-summary.html">com.sca4d.core.api.scheduling</a></dt>
-<dd>
-<div class="block">表示由集群定时器直接执行的一项基础设施任务。</div>
-</dd>
-<dt><a href="com/sca4d/core/api/scheduling/ClusterTaskSchedule.html" class="type-name-link" title="class in com.sca4d.core.api.scheduling">ClusterTaskSchedule</a> - Class in <a href="com/sca4d/core/api/scheduling/package-summary.html">com.sca4d.core.api.scheduling</a></dt>
-<dd>
-<div class="block">使用代码声明一项由集群定时器直接执行的基础设施任务。</div>
-</dd>
-<dt><a href="com/sca4d/core/api/scheduling/ClusterTaskSchedule.html#%3Cinit%3E(com.sca4d.core.api.scheduling.ScheduleKey,int,com.sca4d.core.api.scheduling.ClusterTask,com.sca4d.core.api.scheduling.ScheduleTiming,com.sca4d.core.api.scheduling.MisfirePolicy)" class="member-name-link">ClusterTaskSchedule(ScheduleKey, int, ClusterTask, ScheduleTiming, MisfirePolicy)</a> - Constructor for class com.sca4d.core.api.scheduling.<a href="com/sca4d/core/api/scheduling/ClusterTaskSchedule.html" title="class in com.sca4d.core.api.scheduling">ClusterTaskSchedule</a></dt>
-<dd>
-<div class="block">创建一项完整的集群任务计划。</div>
-</dd>
-<dt><a href="com/sca4d/core/api/scheduling/ClusterTaskScheduler.html" class="type-name-link" title="interface in com.sca4d.core.api.scheduling">ClusterTaskScheduler</a> - Interface in <a href="com/sca4d/core/api/scheduling/package-summary.html">com.sca4d.core.api.scheduling</a></dt>
-<dd>
-<div class="block">把基础设施集群任务计划登记到集群定时实现。</div>
-</dd>
 <dt><a href="com/sca4d/core/api/audit/AuditCallInterceptor.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.core.api.audit.<a href="com/sca4d/core/api/audit/AuditCallInterceptor.html" title="class in com.sca4d.core.api.audit">AuditCallInterceptor</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/audit/AuditOperation.html#code()" class="member-name-link">code()</a> - Method in class com.sca4d.core.api.audit.<a href="com/sca4d/core/api/audit/AuditOperation.html" title="class in com.sca4d.core.api.audit">AuditOperation</a></dt>
@@ -1875,6 +1881,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">为已经由 App 授权的文件批量生成短期读取地址。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/job/JobSubmission.html#created(com.sca4d.core.api.id.Id)" class="member-name-link">created(Id)</a> - Static method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobSubmission.html" title="class in com.sca4d.core.api.job">JobSubmission</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/job/JobSubmission.Status.html#CREATED" class="member-name-link">CREATED</a> - Enum constant in enum class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobSubmission.Status.html" title="enum class in com.sca4d.core.api.job">JobSubmission.Status</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/query/Sort.html#CREATED_AT" class="member-name-link">CREATED_AT</a> - Static variable in class com.sca4d.core.api.query.<a href="com/sca4d/core/api/query/Sort.html" title="class in com.sca4d.core.api.query">Sort</a></dt>
 <dd>
 <div class="block">记录创建时间。</div>
@@ -2149,8 +2159,6 @@ loadScripts(document, 'script');</script>
 <div class="block">返回当前工作定义版本。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/job/JobNodeOutput.html#definitionVersion()" class="member-name-link">definitionVersion()</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobNodeOutput.html" title="class in com.sca4d.core.api.job">JobNodeOutput</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/scheduling/ClusterTaskSchedule.html#definitionVersion()" class="member-name-link">definitionVersion()</a> - Method in class com.sca4d.core.api.scheduling.<a href="com/sca4d/core/api/scheduling/ClusterTaskSchedule.html" title="class in com.sca4d.core.api.scheduling">ClusterTaskSchedule</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/scheduling/JobSchedule.html#definitionVersion()" class="member-name-link">definitionVersion()</a> - Method in class com.sca4d.core.api.scheduling.<a href="com/sca4d/core/api/scheduling/JobSchedule.html" title="class in com.sca4d.core.api.scheduling">JobSchedule</a></dt>
 <dd>
@@ -2637,10 +2645,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建跨发布端和消费端共用的事件类型。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/scheduling/ClusterTask.html#execute()" class="member-name-link">execute()</a> - Method in interface com.sca4d.core.api.scheduling.<a href="com/sca4d/core/api/scheduling/ClusterTask.html" title="interface in com.sca4d.core.api.scheduling">ClusterTask</a></dt>
-<dd>
-<div class="block">执行一次当前任务。</div>
-</dd>
 <dt><a href="com/sca4d/core/api/call/CallInvoker.html#execute(com.sca4d.core.api.call.CallExecution,java.util.concurrent.Callable)" class="member-name-link">execute(CallExecution, Callable&lt;T&gt;)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallInvoker.html" title="class in com.sca4d.core.api.call">CallInvoker</a></dt>
 <dd>
 <div class="block">同步完成方法执行和各环绕处理；返回 Future 只代表本次调度返回，不延伸事务或锁。</div>
@@ -2683,6 +2687,12 @@ loadScripts(document, 'script');</script>
 <div class="block">在调用方执行器中执行同步阶段，异步实现覆盖此方法以直接返回完成信号。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/audit/AuditInvocation.html#execution()" class="member-name-link">execution()</a> - Method in class com.sca4d.core.api.audit.<a href="com/sca4d/core/api/audit/AuditInvocation.html" title="class in com.sca4d.core.api.audit">AuditInvocation</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/job/JobExecution.html#executionId()" class="member-name-link">executionId()</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobExecution.html" title="class in com.sca4d.core.api.job">JobExecution</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/job/JobSubmission.html#existing(com.sca4d.core.api.id.Id)" class="member-name-link">existing(Id)</a> - Static method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobSubmission.html" title="class in com.sca4d.core.api.job">JobSubmission</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/job/JobSubmission.Status.html#EXISTING" class="member-name-link">EXISTING</a> - Enum constant in enum class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobSubmission.Status.html" title="enum class in com.sca4d.core.api.job">JobSubmission.Status</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/concurrent/VersionCondition.html#expected()" class="member-name-link">expected()</a> - Method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/VersionCondition.html" title="class in com.sca4d.core.api.concurrent">VersionCondition</a></dt>
 <dd>
@@ -2910,6 +2920,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/scheduling/MisfirePolicy.html#FIRE_ONCE_NOW" class="member-name-link">FIRE_ONCE_NOW</a> - Enum constant in enum class com.sca4d.core.api.scheduling.<a href="com/sca4d/core/api/scheduling/MisfirePolicy.html" title="enum class in com.sca4d.core.api.scheduling">MisfirePolicy</a></dt>
 <dd>
 <div class="block">恢复后立即补一次执行，不逐个补齐全部错过时间。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/job/JobWorkKey.html#fixed(com.sca4d.core.api.job.JobKey)" class="member-name-link">fixed(JobKey)</a> - Static method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobWorkKey.html" title="class in com.sca4d.core.api.job">JobWorkKey</a></dt>
+<dd>
+<div class="block">使用 Job 定义标识创建默认固定工作键。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/region/PhoneNumberType.html#FIXED_LINE" class="member-name-link">FIXED_LINE</a> - Enum constant in enum class com.sca4d.core.api.region.<a href="com/sca4d/core/api/region/PhoneNumberType.html" title="enum class in com.sca4d.core.api.region">PhoneNumberType</a></dt>
 <dd>
@@ -3483,6 +3497,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回资源标识。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/job/JobDispatch.html#id()" class="member-name-link">id()</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobDispatch.html" title="class in com.sca4d.core.api.job">JobDispatch</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/notification/NotificationRecipient.html#id()" class="member-name-link">id()</a> - Method in class com.sca4d.core.api.notification.<a href="com/sca4d/core/api/notification/NotificationRecipient.html" title="class in com.sca4d.core.api.notification">NotificationRecipient</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/permission/Operation.html#id()" class="member-name-link">id()</a> - Method in class com.sca4d.core.api.permission.<a href="com/sca4d/core/api/permission/Operation.html" title="class in com.sca4d.core.api.permission">Operation</a></dt>
@@ -3729,6 +3745,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回写入目标的实际存储状态，管理接口使用其版本而不是组合读取版本。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/job/JobTarget.html#instance(com.sca4d.core.api.runtime.InstanceId,java.time.Duration)" class="member-name-link">instance(InstanceId, Duration)</a> - Static method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobTarget.html" title="class in com.sca4d.core.api.job">JobTarget</a></dt>
+<dd>
+<div class="block">只由指定实例执行；实例不就绪时最多等待给定时长。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/job/JobTarget.Kind.html#INSTANCE" class="member-name-link">INSTANCE</a> - Enum constant in enum class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobTarget.Kind.html" title="enum class in com.sca4d.core.api.job">JobTarget.Kind</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/runtime/InstanceCapabilities.html" class="type-name-link" title="class in com.sca4d.core.api.runtime">InstanceCapabilities</a> - Class in <a href="com/sca4d/core/api/runtime/package-summary.html">com.sca4d.core.api.runtime</a></dt>
 <dd>
 <div class="block">保存当前实例全部能力声明与启用选择；能力不参与业务权限判定。</div>
@@ -3744,6 +3766,18 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/runtime/InstanceCapability.html#%3Cinit%3E(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.name.code.TreeCode,java.util.List)" class="member-name-link">InstanceCapability(TreeCode, TreeCode, List&lt;String&gt;)</a> - Constructor for class com.sca4d.core.api.runtime.<a href="com/sca4d/core/api/runtime/InstanceCapability.html" title="class in com.sca4d.core.api.runtime">InstanceCapability</a></dt>
 <dd>
 <div class="block">创建能力声明；能力可用性不授予调用者业务权限。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/job/JobExecution.html#instanceId()" class="member-name-link">instanceId()</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobExecution.html" title="class in com.sca4d.core.api.job">JobExecution</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/job/JobTarget.html#instanceId()" class="member-name-link">instanceId()</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobTarget.html" title="class in com.sca4d.core.api.job">JobTarget</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/runtime/InstanceId.html" class="type-name-link" title="class in com.sca4d.core.api.runtime">InstanceId</a> - Class in <a href="com/sca4d/core/api/runtime/package-summary.html">com.sca4d.core.api.runtime</a></dt>
+<dd>
+<div class="block">标识一次进程配置中的实例名称；进程重启不改变配置名称。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/runtime/InstanceId.html#%3Cinit%3E(java.lang.String)" class="member-name-link">InstanceId(String)</a> - Constructor for class com.sca4d.core.api.runtime.<a href="com/sca4d/core/api/runtime/InstanceId.html" title="class in com.sca4d.core.api.runtime">InstanceId</a></dt>
+<dd>
+<div class="block">使用与 sca4dj.instance.id 一致的格式创建实例标识。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/call/CallLifecycleConfiguration.Registration.html#interceptor()" class="member-name-link">interceptor()</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycleConfiguration.Registration.html" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration.Registration</a></dt>
 <dd>&nbsp;</dd>
@@ -3961,23 +3995,31 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/job/Job.html" class="type-name-link" title="class in com.sca4d.core.api.job">Job&lt;I,<wbr>O&gt;</a> - Class in <a href="com/sca4d/core/api/job/package-summary.html">com.sca4d.core.api.job</a></dt>
 <dd>
-<div class="block">表示可独立命名、持久化并由集群 worker 执行的一次工作定义。</div>
+<div class="block">表示可独立命名、由具备所需能力的实例执行的一项工作定义。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/job/Job.html#%3Cinit%3E()" class="member-name-link">Job()</a> - Constructor for class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/Job.html" title="class in com.sca4d.core.api.job">Job</a></dt>
 <dd>
 <div class="block">供具体 Job 定义初始化稳定元数据。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/job/JobDispatch.html" class="type-name-link" title="class in com.sca4d.core.api.job">JobDispatch</a> - Class in <a href="com/sca4d/core/api/job/package-summary.html">com.sca4d.core.api.job</a></dt>
+<dd>
+<div class="block">返回一次广播固定的目标及各目标持久化 Run；无记录广播不返回 Run。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/job/JobDispatch.html#%3Cinit%3E(com.sca4d.core.api.id.Id,java.util.Set,java.util.Map)" class="member-name-link">JobDispatch(Id, Set&lt;InstanceId&gt;, Map&lt;InstanceId, Id&gt;)</a> - Constructor for class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobDispatch.html" title="class in com.sca4d.core.api.job">JobDispatch</a></dt>
+<dd>
+<div class="block">保存提交时固定的目标快照和已创建的持久化运行。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/job/JobExecution.html" class="type-name-link" title="class in com.sca4d.core.api.job">JobExecution</a> - Class in <a href="com/sca4d/core/api/job/package-summary.html">com.sca4d.core.api.job</a></dt>
 <dd>
-<div class="block">向 DirectJob 明确提供当前持久化运行和尝试事实。</div>
+<div class="block">向 DirectJob 提供当前执行、系统身份和尝试事实。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/job/JobExecution.html#%3Cinit%3E(com.sca4d.core.api.id.Id,int,java.time.Instant)" class="member-name-link">JobExecution(Id, int, Instant)</a> - Constructor for class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobExecution.html" title="class in com.sca4d.core.api.job">JobExecution</a></dt>
+<dt><a href="com/sca4d/core/api/job/JobExecution.html#%3Cinit%3E(java.util.UUID,com.sca4d.core.api.id.Id,int,java.time.Instant,com.sca4d.core.api.runtime.InstanceId,com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.identity.SystemPrincipal)" class="member-name-link">JobExecution(UUID, Id, int, Instant, InstanceId, TreeCode, SystemPrincipal)</a> - Constructor for class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobExecution.html" title="class in com.sca4d.core.api.job">JobExecution</a></dt>
 <dd>
-<div class="block">创建一次节点尝试的执行事实。</div>
+<div class="block">创建一次 Job Attempt 的执行事实。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/job/JobExecutor.html" class="type-name-link" title="interface in com.sca4d.core.api.job">JobExecutor</a> - Interface in <a href="com/sca4d/core/api/job/package-summary.html">com.sca4d.core.api.job</a></dt>
 <dd>
-<div class="block">提交持久化 Job run，并查询、等待或读取其结果。</div>
+<div class="block">提交持久化 Job Run、触发无记录工作，并查询或等待已保存的结果。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/job/JobHistory.html" class="type-name-link" title="interface in com.sca4d.core.api.job">JobHistory</a> - Interface in <a href="com/sca4d/core/api/job/package-summary.html">com.sca4d.core.api.job</a></dt>
 <dd>
@@ -4017,6 +4059,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建终态失败异常。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/job/JobRunRecording.html" class="type-name-link" title="enum class in com.sca4d.core.api.job">JobRunRecording</a> - Enum Class in <a href="com/sca4d/core/api/job/package-summary.html">com.sca4d.core.api.job</a></dt>
+<dd>
+<div class="block">指定 Job 是否保存独立的持久化运行记录。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/job/JobRunStatus.html" class="type-name-link" title="enum class in com.sca4d.core.api.job">JobRunStatus</a> - Enum Class in <a href="com/sca4d/core/api/job/package-summary.html">com.sca4d.core.api.job</a></dt>
 <dd>
 <div class="block">表示持久化 Job run 是否排队、运行或已经结束。</div>
@@ -4033,6 +4079,20 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">把当前应用的完整代码计划登记到定时实现，并删除同一 App 隔离名称内已经移除的计划。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/job/JobSubmission.html" class="type-name-link" title="class in com.sca4d.core.api.job">JobSubmission</a> - Class in <a href="com/sca4d/core/api/job/package-summary.html">com.sca4d.core.api.job</a></dt>
+<dd>
+<div class="block">说明一次普通提交新建了运行、复用了同一输入，还是因占用而跳过。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/job/JobSubmission.Status.html" class="type-name-link" title="enum class in com.sca4d.core.api.job">JobSubmission.Status</a> - Enum Class in <a href="com/sca4d/core/api/job/package-summary.html">com.sca4d.core.api.job</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/job/JobTarget.html" class="type-name-link" title="class in com.sca4d.core.api.job">JobTarget</a> - Class in <a href="com/sca4d/core/api/job/package-summary.html">com.sca4d.core.api.job</a></dt>
+<dd>
+<div class="block">指定一项工作由任一合格实例、某个实例或当前全部合格实例执行。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/job/JobTarget.Kind.html" class="type-name-link" title="enum class in com.sca4d.core.api.job">JobTarget.Kind</a> - Enum Class in <a href="com/sca4d/core/api/job/package-summary.html">com.sca4d.core.api.job</a></dt>
+<dd>
+<div class="block">目标选择方式。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/job/JobWaitTimeoutException.html" class="type-name-link" title="class in com.sca4d.core.api.job">JobWaitTimeoutException</a> - Exception Class in <a href="com/sca4d/core/api/job/package-summary.html">com.sca4d.core.api.job</a></dt>
 <dd>
 <div class="block">表明调用方等待时间结束，持久化 Job run 仍继续执行。</div>
@@ -4040,6 +4100,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/job/JobWaitTimeoutException.html#%3Cinit%3E(com.sca4d.core.api.id.Id,java.time.Duration)" class="member-name-link">JobWaitTimeoutException(Id, Duration)</a> - Constructor for exception class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobWaitTimeoutException.html" title="class in com.sca4d.core.api.job">JobWaitTimeoutException</a></dt>
 <dd>
 <div class="block">创建不取消后台运行的等待超时异常。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/job/JobWorkKey.html" class="type-name-link" title="class in com.sca4d.core.api.job">JobWorkKey</a> - Class in <a href="com/sca4d/core/api/job/package-summary.html">com.sca4d.core.api.job</a></dt>
+<dd>
+<div class="block">标识同一 Job 下参与并发控制的具体工作对象。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/name/NameFormat.html#join(java.util.List)" class="member-name-link">join(List&lt;String&gt;)</a> - Method in enum class com.sca4d.core.api.name.<a href="com/sca4d/core/api/name/NameFormat.html" title="enum class in com.sca4d.core.api.name">NameFormat</a></dt>
 <dd>
@@ -4100,8 +4164,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回 KEYED 扩展的实现编码；SINGLE 使用空字符串。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/scheduling/ClusterTaskSchedule.html#key()" class="member-name-link">key()</a> - Method in class com.sca4d.core.api.scheduling.<a href="com/sca4d/core/api/scheduling/ClusterTaskSchedule.html" title="class in com.sca4d.core.api.scheduling">ClusterTaskSchedule</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/scheduling/JobSchedule.html#key()" class="member-name-link">key()</a> - Method in class com.sca4d.core.api.scheduling.<a href="com/sca4d/core/api/scheduling/JobSchedule.html" title="class in com.sca4d.core.api.scheduling">JobSchedule</a></dt>
 <dd>
 <div class="block">稳定计划标识。</div>
@@ -4152,6 +4214,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回当前应用声明或数据库创建的全部字典键。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/job/JobTarget.html#kind()" class="member-name-link">kind()</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobTarget.html" title="class in com.sca4d.core.api.job">JobTarget</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/plugin/ApiDefinition.html#kind()" class="member-name-link">kind()</a> - Method in class com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/ApiDefinition.html" title="class in com.sca4d.core.api.plugin">ApiDefinition</a></dt>
 <dd>
 <div class="block">契约方向。</div>
@@ -4570,8 +4634,6 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/persistence/AffectedRowsMismatchException.html#minimum()" class="member-name-link">minimum()</a> - Method in exception class com.sca4d.core.api.persistence.<a href="com/sca4d/core/api/persistence/AffectedRowsMismatchException.html" title="class in com.sca4d.core.api.persistence">AffectedRowsMismatchException</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/scheduling/ClusterTaskSchedule.html#misfirePolicy()" class="member-name-link">misfirePolicy()</a> - Method in class com.sca4d.core.api.scheduling.<a href="com/sca4d/core/api/scheduling/ClusterTaskSchedule.html" title="class in com.sca4d.core.api.scheduling">ClusterTaskSchedule</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/scheduling/JobSchedule.html#misfirePolicy()" class="member-name-link">misfirePolicy()</a> - Method in class com.sca4d.core.api.scheduling.<a href="com/sca4d/core/api/scheduling/JobSchedule.html" title="class in com.sca4d.core.api.scheduling">JobSchedule</a></dt>
 <dd>
 <div class="block">misfire 策略。</div>
@@ -4713,6 +4775,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回不可修改的稳定节点序列。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/job/JobRunRecording.html#NONE" class="member-name-link">NONE</a> - Enum constant in enum class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobRunRecording.html" title="enum class in com.sca4d.core.api.job">JobRunRecording</a></dt>
+<dd>
+<div class="block">不保存 Job Run；失败由触发方或业务状态再次发现。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/concurrent/NoRateLimitKeyResolver.html" class="type-name-link" title="class in com.sca4d.core.api.concurrent">NoRateLimitKeyResolver</a> - Class in <a href="com/sca4d/core/api/concurrent/package-summary.html">com.sca4d.core.api.concurrent</a></dt>
 <dd>
 <div class="block">表示 `@RateLimited` 没有声明额外的自定义限流键解析器。</div>
@@ -4836,9 +4902,17 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">用稳定编码构造固定 IO 键，通配编码不能作为实际键。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/job/JobWorkKey.html#of(com.sca4d.core.api.name.code.Code,long)" class="member-name-link">of(Code, long)</a> - Static method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobWorkKey.html" title="class in com.sca4d.core.api.job">JobWorkKey</a></dt>
+<dd>
+<div class="block">以稳定命名空间和动态数字标识创建工作键。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/name/Key.html#of(com.sca4d.core.api.name.code.Code,long...)" class="member-name-link">of(Code, long...)</a> - Static method in class com.sca4d.core.api.name.<a href="com/sca4d/core/api/name/Key.html" title="class in com.sca4d.core.api.name">Key</a></dt>
 <dd>
 <div class="block">以有序动态数字构造键，数字在物理键中使用十进制。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/job/JobWorkKey.html#of(com.sca4d.core.api.name.code.Code,java.lang.String)" class="member-name-link">of(Code, String)</a> - Static method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobWorkKey.html" title="class in com.sca4d.core.api.job">JobWorkKey</a></dt>
+<dd>
+<div class="block">使用命名空间和对象标识创建工作键。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/name/Key.html#of(com.sca4d.core.api.name.code.Code,java.lang.String...)" class="member-name-link">of(Code, String...)</a> - Static method in class com.sca4d.core.api.name.<a href="com/sca4d/core/api/name/Key.html" title="class in com.sca4d.core.api.name">Key</a></dt>
 <dd>
@@ -4853,6 +4927,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/webrealtime/WebRealtimeTarget.html#of(com.sca4d.core.api.webrealtime.WebRealtimeTarget.Type,java.lang.String,java.lang.String)" class="member-name-link">of(WebRealtimeTarget.Type, String, String)</a> - Static method in class com.sca4d.core.api.webrealtime.<a href="com/sca4d/core/api/webrealtime/WebRealtimeTarget.html" title="class in com.sca4d.core.api.webrealtime">WebRealtimeTarget</a></dt>
 <dd>
 <div class="block">按已经持久化的目标类型、限定类型和标识恢复目标。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/job/JobWorkKey.html#of(java.lang.String)" class="member-name-link">of(String)</a> - Static method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobWorkKey.html" title="class in com.sca4d.core.api.job">JobWorkKey</a></dt>
+<dd>
+<div class="block">把自由文本作为动态值保存，不把内容误解析为稳定编码。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/name/code/TreeCode.html#of(java.lang.String)" class="member-name-link">of(String)</a> - Static method in class com.sca4d.core.api.name.code.<a href="com/sca4d/core/api/name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a></dt>
 <dd>
@@ -5170,6 +5248,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回阶段输出类型。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/job/Job.html#overlapPolicy()" class="member-name-link">overlapPolicy()</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/Job.html" title="class in com.sca4d.core.api.job">Job</a></dt>
+<dd>
+<div class="block">返回同一工作键已有活动运行时的新提交处理方式。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/scheduling/JobSchedule.html#overlapPolicy()" class="member-name-link">overlapPolicy()</a> - Method in class com.sca4d.core.api.scheduling.<a href="com/sca4d/core/api/scheduling/JobSchedule.html" title="class in com.sca4d.core.api.scheduling">JobSchedule</a></dt>
 <dd>
 <div class="block">重叠策略。</div>
@@ -5265,6 +5347,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/concurrent/RateLimitKey.html#part(long)" class="member-name-link">part(long)</a> - Method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitKey.html" title="class in com.sca4d.core.api.concurrent">RateLimitKey</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/job/JobWorkKey.html#part(long)" class="member-name-link">part(long)</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobWorkKey.html" title="class in com.sca4d.core.api.job">JobWorkKey</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/name/Key.html#part(long)" class="member-name-link">part(long)</a> - Method in class com.sca4d.core.api.name.<a href="com/sca4d/core/api/name/Key.html" title="class in com.sca4d.core.api.name">Key</a></dt>
 <dd>
 <div class="block">追加动态数字；固定编码中的数字节点使用转义，避免与动态数字混淆。</div>
@@ -5272,6 +5356,8 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/concurrent/LockKey.html#part(java.lang.String)" class="member-name-link">part(String)</a> - Method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/LockKey.html" title="class in com.sca4d.core.api.concurrent">LockKey</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/concurrent/RateLimitKey.html#part(java.lang.String)" class="member-name-link">part(String)</a> - Method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitKey.html" title="class in com.sca4d.core.api.concurrent">RateLimitKey</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/job/JobWorkKey.html#part(java.lang.String)" class="member-name-link">part(String)</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobWorkKey.html" title="class in com.sca4d.core.api.job">JobWorkKey</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/name/Key.html#part(java.lang.String)" class="member-name-link">part(String)</a> - Method in class com.sca4d.core.api.name.<a href="com/sca4d/core/api/name/Key.html" title="class in com.sca4d.core.api.name">Key</a></dt>
 <dd>
@@ -5382,6 +5468,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/concurrent/RateLimit.html#permits()" class="member-name-link">permits()</a> - Method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimit.html" title="class in com.sca4d.core.api.concurrent">RateLimit</a></dt>
 <dd>
 <div class="block">窗口内允许次数。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/job/JobRunRecording.html#PERSISTED" class="member-name-link">PERSISTED</a> - Enum constant in enum class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobRunRecording.html" title="enum class in com.sca4d.core.api.job">JobRunRecording</a></dt>
+<dd>
+<div class="block">保存 Run、节点、尝试和结果，支持恢复与查询。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/region/PhoneNumberType.html#PERSONAL_NUMBER" class="member-name-link">PERSONAL_NUMBER</a> - Enum constant in enum class com.sca4d.core.api.region.<a href="com/sca4d/core/api/region/PhoneNumberType.html" title="enum class in com.sca4d.core.api.region">PhoneNumberType</a></dt>
 <dd>
@@ -5909,10 +5999,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">对账当前应用的全部计划。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/scheduling/ClusterTaskScheduler.html#reconcileClusterTasks(java.util.Collection)" class="member-name-link">reconcileClusterTasks(Collection&lt;ClusterTaskSchedule&gt;)</a> - Method in interface com.sca4d.core.api.scheduling.<a href="com/sca4d/core/api/scheduling/ClusterTaskScheduler.html" title="interface in com.sca4d.core.api.scheduling">ClusterTaskScheduler</a></dt>
-<dd>
-<div class="block">对账当前应用的全部基础设施集群任务计划。</div>
-</dd>
 <dt><a href="com/sca4d/core/api/audit/AuditRecorder.html#record(com.sca4d.core.api.audit.AuditRecord)" class="member-name-link">record(AuditRecord)</a> - Method in interface com.sca4d.core.api.audit.<a href="com/sca4d/core/api/audit/AuditRecorder.html" title="interface in com.sca4d.core.api.audit">AuditRecorder</a></dt>
 <dd>
 <div class="block">执行本实现声明的写入或交接；尽力模式必须自行记录丢弃和后台失败。</div>
@@ -6135,6 +6221,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/data/DataOps.JsonPipe.html#requiredBoolean(java.lang.String)" class="member-name-link">requiredBoolean(String)</a> - Method in class com.sca4d.core.api.data.<a href="com/sca4d/core/api/data/DataOps.JsonPipe.html" title="class in com.sca4d.core.api.data">DataOps.JsonPipe</a></dt>
 <dd>
 <div class="block">按点分路径读取必须存在的布尔值。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/job/Job.html#requiredCapability()" class="member-name-link">requiredCapability()</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/Job.html" title="class in com.sca4d.core.api.job">Job</a></dt>
+<dd>
+<div class="block">返回执行该 Job 所需的实例能力；能力定义同时选择后台使用的系统身份。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/notification/Notification.html#requiredChannels()" class="member-name-link">requiredChannels()</a> - Method in class com.sca4d.core.api.notification.<a href="com/sca4d/core/api/notification/Notification.html" title="class in com.sca4d.core.api.notification">Notification</a></dt>
 <dd>&nbsp;</dd>
@@ -6518,12 +6608,14 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/job/JobExecution.html#runId()" class="member-name-link">runId()</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobExecution.html" title="class in com.sca4d.core.api.job">JobExecution</a></dt>
 <dd>
-<div class="block">所属持久化 run。</div>
+<div class="block">所属持久化 Run。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/job/JobRunFailedException.html#runId()" class="member-name-link">runId()</a> - Method in exception class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobRunFailedException.html" title="class in com.sca4d.core.api.job">JobRunFailedException</a></dt>
 <dd>
 <div class="block">失败的 run。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/job/JobSubmission.html#runId()" class="member-name-link">runId()</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobSubmission.html" title="class in com.sca4d.core.api.job">JobSubmission</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/job/JobWaitTimeoutException.html#runId()" class="member-name-link">runId()</a> - Method in exception class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobWaitTimeoutException.html" title="class in com.sca4d.core.api.job">JobWaitTimeoutException</a></dt>
 <dd>
 <div class="block">尚未完成的 run。</div>
@@ -6534,6 +6626,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">至少一个节点已经开始执行。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/job/Job.html#runRecording()" class="member-name-link">runRecording()</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/Job.html" title="class in com.sca4d.core.api.job">Job</a></dt>
+<dd>
+<div class="block">返回是否保存独立运行记录。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/job/JobDispatch.html#runs()" class="member-name-link">runs()</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobDispatch.html" title="class in com.sca4d.core.api.job">JobDispatch</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:S">S</h2>
 <dl class="index">
@@ -6579,7 +6677,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/scheduling/ScheduleTiming.html" class="type-name-link" title="interface in com.sca4d.core.api.scheduling">ScheduleTiming</a> - Interface in <a href="com/sca4d/core/api/scheduling/package-summary.html">com.sca4d.core.api.scheduling</a></dt>
 <dd>
-<div class="block">标明 JobSchedule 或 ClusterTaskSchedule 使用 Cron 或固定间隔计算原定触发时间。</div>
+<div class="block">JobSchedule 只接受 Cron 或固定间隔两种时间定义。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/message/ReferencedContent.html#scheme()" class="member-name-link">scheme()</a> - Method in class com.sca4d.core.api.message.<a href="com/sca4d/core/api/message/ReferencedContent.html" title="class in com.sca4d.core.api.message">ReferencedContent</a></dt>
 <dd>&nbsp;</dd>
@@ -6911,6 +7009,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">跳过新的 fire，不创建排队 run。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/job/JobSubmission.html#skipped()" class="member-name-link">skipped()</a> - Static method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobSubmission.html" title="class in com.sca4d.core.api.job">JobSubmission</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/job/JobSubmission.Status.html#SKIPPED" class="member-name-link">SKIPPED</a> - Enum constant in enum class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobSubmission.Status.html" title="enum class in com.sca4d.core.api.job">JobSubmission.Status</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/name/NameFormat.html#SLASH" class="member-name-link">SLASH</a> - Enum constant in enum class com.sca4d.core.api.name.<a href="com/sca4d/core/api/name/NameFormat.html" title="enum class in com.sca4d.core.api.name">NameFormat</a></dt>
 <dd>
 <div class="block">资源类型和目录式分类使用斜杠。</div>
@@ -7019,6 +7121,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">异常表示的终态。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/job/JobSubmission.html#status()" class="member-name-link">status()</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobSubmission.html" title="class in com.sca4d.core.api.job">JobSubmission</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/job/ScheduledJobRun.html#status()" class="member-name-link">status()</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/ScheduledJobRun.html" title="class in com.sca4d.core.api.job">ScheduledJobRun</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/messaging/DispatchReceipt.html#status()" class="member-name-link">status()</a> - Method in class com.sca4d.core.api.messaging.<a href="com/sca4d/core/api/messaging/DispatchReceipt.html" title="class in com.sca4d.core.api.messaging">DispatchReceipt</a></dt>
@@ -7150,7 +7254,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/job/JobExecutor.html#submit(com.sca4d.core.api.job.Job,I)" class="member-name-link">submit(Job&lt;I, O&gt;, I)</a> - Method in interface com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobExecutor.html" title="interface in com.sca4d.core.api.job">JobExecutor</a></dt>
 <dd>
-<div class="block">保存一个 run 后立即返回，不继承调用线程的 Session、ThreadLocal 或事务。</div>
+<div class="block">在系统身份与工作键的并发范围内提交一次持久化运行，不继承调用线程的身份或事务。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/job/JobExecutor.html#submitScheduled(com.sca4d.core.api.job.Job,I,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant,com.sca4d.core.api.scheduling.OverlapPolicy)" class="member-name-link">submitScheduled(Job&lt;I, O&gt;, I, ScheduleKey, Instant, OverlapPolicy)</a> - Method in interface com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobExecutor.html" title="interface in com.sca4d.core.api.job">JobExecutor</a></dt>
 <dd>
@@ -7264,6 +7368,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">系统自主工作使用的领域身份编码。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/job/JobExecution.html#systemPrincipal()" class="member-name-link">systemPrincipal()</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobExecution.html" title="class in com.sca4d.core.api.job">JobExecution</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/identity/SystemPrincipal.html" class="type-name-link" title="class in com.sca4d.core.api.identity">SystemPrincipal</a> - Class in <a href="com/sca4d/core/api/identity/package-summary.html">com.sca4d.core.api.identity</a></dt>
 <dd>
 <div class="block">表示系统以某个稳定领域身份自主执行操作，不随实例启停改变。</div>
@@ -7311,6 +7417,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/webrealtime/WebRealtimeMessage.html#target()" class="member-name-link">target()</a> - Method in class com.sca4d.core.api.webrealtime.<a href="com/sca4d/core/api/webrealtime/WebRealtimeMessage.html" title="class in com.sca4d.core.api.webrealtime">WebRealtimeMessage</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/job/Job.html#target(I)" class="member-name-link">target(I)</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/Job.html" title="class in com.sca4d.core.api.job">Job</a></dt>
+<dd>
+<div class="block">根据本次输入确定工作目标。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/annotation/Audit.html#targetResolver()" class="member-name-link">targetResolver()</a> - Element in annotation interface com.sca4d.core.api.annotation.<a href="com/sca4d/core/api/annotation/Audit.html" title="annotation interface in com.sca4d.core.api.annotation">Audit</a></dt>
 <dd>
 <div class="block">返回可选审计目标资源解析器。</div>
@@ -7321,11 +7431,11 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/call/Call.html#targetResource()" class="member-name-link">targetResource()</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/Call.html" title="class in com.sca4d.core.api.call">Call</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/job/JobDispatch.html#targets()" class="member-name-link">targets()</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobDispatch.html" title="class in com.sca4d.core.api.job">JobDispatch</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/codec/CodecMigrationStep.html#targetVersion()" class="member-name-link">targetVersion()</a> - Method in class com.sca4d.core.api.codec.<a href="com/sca4d/core/api/codec/CodecMigrationStep.html" title="class in com.sca4d.core.api.codec">CodecMigrationStep</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/codec/Migratable.html#targetVersion()" class="member-name-link">targetVersion()</a> - Method in interface com.sca4d.core.api.codec.<a href="com/sca4d/core/api/codec/Migratable.html" title="interface in com.sca4d.core.api.codec">Migratable</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="com/sca4d/core/api/scheduling/ClusterTaskSchedule.html#task()" class="member-name-link">task()</a> - Method in class com.sca4d.core.api.scheduling.<a href="com/sca4d/core/api/scheduling/ClusterTaskSchedule.html" title="class in com.sca4d.core.api.scheduling">ClusterTaskSchedule</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/render/TemplateInspection.html" class="type-name-link" title="class in com.sca4d.core.api.render">TemplateInspection</a> - Class in <a href="com/sca4d/core/api/render/package-summary.html">com.sca4d.core.api.render</a></dt>
 <dd>
@@ -7445,8 +7555,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">提供使用明确时钟和时区的通用时间换算。</div>
 </dd>
-<dt><a href="com/sca4d/core/api/scheduling/ClusterTaskSchedule.html#timing()" class="member-name-link">timing()</a> - Method in class com.sca4d.core.api.scheduling.<a href="com/sca4d/core/api/scheduling/ClusterTaskSchedule.html" title="class in com.sca4d.core.api.scheduling">ClusterTaskSchedule</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/scheduling/JobSchedule.html#timing()" class="member-name-link">timing()</a> - Method in class com.sca4d.core.api.scheduling.<a href="com/sca4d/core/api/scheduling/JobSchedule.html" title="class in com.sca4d.core.api.scheduling">JobSchedule</a></dt>
 <dd>
 <div class="block">触发时间定义。</div>
@@ -7579,6 +7687,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">从已拆分的稳定节点构造编码。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/job/JobExecutor.html#trigger(com.sca4d.core.api.job.Job,I,com.sca4d.core.api.scheduling.OverlapPolicy)" class="member-name-link">trigger(Job&lt;I, O&gt;, I, OverlapPolicy)</a> - Method in interface com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobExecutor.html" title="interface in com.sca4d.core.api.job">JobExecutor</a></dt>
+<dd>
+<div class="block">触发一次不保存 Run 的 DirectJob；任一合格实例可直接执行，定向份额先保存短期投递。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/job/JobExecutor.html#triggerScheduled(com.sca4d.core.api.job.Job,I,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant,com.sca4d.core.api.scheduling.OverlapPolicy)" class="member-name-link">triggerScheduled(Job&lt;I, O&gt;, I, ScheduleKey, Instant, OverlapPolicy)</a> - Method in interface com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobExecutor.html" title="interface in com.sca4d.core.api.job">JobExecutor</a></dt>
+<dd>
+<div class="block">按原定触发时间投递一项不保存 Run 的定时工作。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/concurrent/RateLimiter.html#tryAcquire(com.sca4d.core.api.concurrent.RateLimitKey,com.sca4d.core.api.concurrent.RateLimit)" class="member-name-link">tryAcquire(RateLimitKey, RateLimit)</a> - Method in interface com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimiter.html" title="interface in com.sca4d.core.api.concurrent">RateLimiter</a></dt>
 <dd>
 <div class="block">尝试消耗一次调用额度。</div>
@@ -7689,6 +7805,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">释放快照拥有的资源；候选失败或代次无活动租用后，每个快照只调用一次。
  可能与另一个代次的加载同时执行，不得释放其他快照或 App 共享服务。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/job/DirectJob.html#unrecorded(com.sca4d.core.api.job.JobKey,int,com.sca4d.core.api.name.code.TreeCode,java.lang.Runnable)" class="member-name-link">unrecorded(JobKey, int, TreeCode, Runnable)</a> - Static method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/DirectJob.html" title="class in com.sca4d.core.api.job">DirectJob</a></dt>
+<dd>
+<div class="block">使用已有业务动作登记一项不保存 Run 的系统工作。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/data/DataOps.BytePipe.html#unsignedByte(int,java.lang.String)" class="member-name-link">unsignedByte(int, String)</a> - Method in class com.sca4d.core.api.data.<a href="com/sca4d/core/api/data/DataOps.BytePipe.html" title="class in com.sca4d.core.api.data">DataOps.BytePipe</a></dt>
 <dd>
@@ -7885,6 +8005,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/job/JobRunStatus.html#value()" class="member-name-link">value()</a> - Method in enum class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobRunStatus.html" title="enum class in com.sca4d.core.api.job">JobRunStatus</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/job/JobWorkKey.html#value()" class="member-name-link">value()</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobWorkKey.html" title="class in com.sca4d.core.api.job">JobWorkKey</a></dt>
+<dd>
+<div class="block">返回已编码且不含 App 前缀的数据库工作键。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/message/BinaryContent.html#value()" class="member-name-link">value()</a> - Method in class com.sca4d.core.api.message.<a href="com/sca4d/core/api/message/BinaryContent.html" title="class in com.sca4d.core.api.message">BinaryContent</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/message/TextContent.html#value()" class="member-name-link">value()</a> - Method in class com.sca4d.core.api.message.<a href="com/sca4d/core/api/message/TextContent.html" title="class in com.sca4d.core.api.message">TextContent</a></dt>
@@ -7983,7 +8107,19 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
 </dd>
+<dt><a href="com/sca4d/core/api/job/JobRunRecording.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobRunRecording.html" title="enum class in com.sca4d.core.api.job">JobRunRecording</a></dt>
+<dd>
+<div class="block">Returns the enum constant of this class with the specified name.</div>
+</dd>
 <dt><a href="com/sca4d/core/api/job/JobRunStatus.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobRunStatus.html" title="enum class in com.sca4d.core.api.job">JobRunStatus</a></dt>
+<dd>
+<div class="block">Returns the enum constant of this class with the specified name.</div>
+</dd>
+<dt><a href="com/sca4d/core/api/job/JobSubmission.Status.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobSubmission.Status.html" title="enum class in com.sca4d.core.api.job">JobSubmission.Status</a></dt>
+<dd>
+<div class="block">Returns the enum constant of this class with the specified name.</div>
+</dd>
+<dt><a href="com/sca4d/core/api/job/JobTarget.Kind.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobTarget.Kind.html" title="enum class in com.sca4d.core.api.job">JobTarget.Kind</a></dt>
 <dd>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
 </dd>
@@ -8137,7 +8273,22 @@ the order they are declared.</div>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
 </dd>
+<dt><a href="com/sca4d/core/api/job/JobRunRecording.html#values()" class="member-name-link">values()</a> - Static method in enum class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobRunRecording.html" title="enum class in com.sca4d.core.api.job">JobRunRecording</a></dt>
+<dd>
+<div class="block">Returns an array containing the constants of this enum class, in
+the order they are declared.</div>
+</dd>
 <dt><a href="com/sca4d/core/api/job/JobRunStatus.html#values()" class="member-name-link">values()</a> - Static method in enum class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobRunStatus.html" title="enum class in com.sca4d.core.api.job">JobRunStatus</a></dt>
+<dd>
+<div class="block">Returns an array containing the constants of this enum class, in
+the order they are declared.</div>
+</dd>
+<dt><a href="com/sca4d/core/api/job/JobSubmission.Status.html#values()" class="member-name-link">values()</a> - Static method in enum class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobSubmission.Status.html" title="enum class in com.sca4d.core.api.job">JobSubmission.Status</a></dt>
+<dd>
+<div class="block">Returns an array containing the constants of this enum class, in
+the order they are declared.</div>
+</dd>
+<dt><a href="com/sca4d/core/api/job/JobTarget.Kind.html#values()" class="member-name-link">values()</a> - Static method in enum class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobTarget.Kind.html" title="enum class in com.sca4d.core.api.job">JobTarget.Kind</a></dt>
 <dd>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
@@ -8422,6 +8573,12 @@ the order they are declared.</div>
 </dl>
 <h2 class="title" id="I:W">W</h2>
 <dl class="index">
+<dt><a href="com/sca4d/core/api/scheduling/OverlapPolicy.html#WAIT" class="member-name-link">WAIT</a> - Enum constant in enum class com.sca4d.core.api.scheduling.<a href="com/sca4d/core/api/scheduling/OverlapPolicy.html" title="enum class in com.sca4d.core.api.scheduling">OverlapPolicy</a></dt>
+<dd>
+<div class="block">保存新的运行，等同一工作键下更早的运行结束后再执行。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/job/JobTarget.html#waitForInstance()" class="member-name-link">waitForInstance()</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobTarget.html" title="class in com.sca4d.core.api.job">JobTarget</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/flow/FlowNodeType.html#WAITING" class="member-name-link">WAITING</a> - Enum constant in enum class com.sca4d.core.api.flow.<a href="com/sca4d/core/api/flow/FlowNodeType.html" title="enum class in com.sca4d.core.api.flow">FlowNodeType</a></dt>
 <dd>
 <div class="block">等待外部系统或下一次请求提交事件。</div>
@@ -8490,9 +8647,15 @@ the order they are declared.</div>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/concurrent/RateLimitKey.html#withSegments(java.util.List)" class="member-name-link">withSegments(List&lt;String&gt;)</a> - Method in class com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitKey.html" title="class in com.sca4d.core.api.concurrent">RateLimitKey</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/job/JobWorkKey.html#withSegments(java.util.List)" class="member-name-link">withSegments(List&lt;String&gt;)</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobWorkKey.html" title="class in com.sca4d.core.api.job">JobWorkKey</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/name/Key.html#withSegments(java.util.List)" class="member-name-link">withSegments(List&lt;String&gt;)</a> - Method in class com.sca4d.core.api.name.<a href="com/sca4d/core/api/name/Key.html" title="class in com.sca4d.core.api.name">Key</a></dt>
 <dd>
 <div class="block">返回保持当前领域类型的新键；专属子类覆盖此方法。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/job/Job.html#workKey(I)" class="member-name-link">workKey(I)</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/Job.html" title="class in com.sca4d.core.api.job">Job</a></dt>
+<dd>
+<div class="block">根据本次输入返回并发控制使用的工作键。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/setting/WritableSetting.html" class="type-name-link" title="class in com.sca4d.core.api.setting">WritableSetting&lt;T&gt;</a> - Class in <a href="com/sca4d/core/api/setting/package-summary.html">com.sca4d.core.api.setting</a></dt>
 <dd>

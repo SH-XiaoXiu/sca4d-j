@@ -88,14 +88,9 @@ loadScripts(document, 'script');</script>
 <div class="inheritance">com.sca4d.iot.message.DownlinkRetentionTask</div>
 </div>
 <section class="class-description" id="class-description">
-<dl class="notes">
-<dt>All Implemented Interfaces:</dt>
-<dd><code>com.sca4d.core.api.scheduling.ClusterTask</code></dd>
-</dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">DownlinkRetentionTask</span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
-implements com.sca4d.core.api.scheduling.ClusterTask</span></div>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">分批删除超过保留期的最终状态下行消息，使 PostgreSQL 只保留可靠投递所需状态和近期查询数据。</div>
 </section>
 <section class="summary">
@@ -189,10 +184,6 @@ implements com.sca4d.core.api.scheduling.ClusterTask</span></div>
 @SystemExecution("IOT")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">execute</span>()</div>
 <div class="block">删除一批早于保留截止时间且已经进入最终状态的下行消息。</div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code>execute</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.scheduling.ClusterTask</code></dd>
-</dl>
 </section>
 </li>
 </ul>

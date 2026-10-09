@@ -89,13 +89,13 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code>com.sca4d.core.api.scheduling.ClusterTaskScheduler</code>, <code>com.sca4d.core.api.scheduling.JobScheduler</code>, <code>org.springframework.context.Lifecycle</code>, <code>org.springframework.context.Phased</code>, <code>org.springframework.context.SmartLifecycle</code></dd>
+<dd><code>com.sca4d.core.api.scheduling.JobScheduler</code>, <code>org.springframework.context.Lifecycle</code>, <code>org.springframework.context.Phased</code>, <code>org.springframework.context.SmartLifecycle</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">QuartzJobScheduler</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">QuartzJobScheduler</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
-implements com.sca4d.core.api.scheduling.JobScheduler, com.sca4d.core.api.scheduling.ClusterTaskScheduler, org.springframework.context.SmartLifecycle</span></div>
-<div class="block">对账代码声明的持久化 Job 计划和基础设施集群任务，并在对账成功后启动 Quartz。</div>
+implements com.sca4d.core.api.scheduling.JobScheduler, org.springframework.context.SmartLifecycle</span></div>
+<div class="block">对账代码声明的 Job 计划，并在对账成功后启动 Quartz。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -129,14 +129,11 @@ implements com.sca4d.core.api.scheduling.JobScheduler, com.sca4d.core.api.schedu
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#reconcile(java.util.Collection)" class="member-name-link">reconcile</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull com.sca4d.core.api.scheduling.JobSchedule&lt;?,<wbr>?&gt;&gt;&nbsp;schedules)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#reconcileClusterTasks(java.util.Collection)" class="member-name-link">reconcileClusterTasks</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull com.sca4d.core.api.scheduling.ClusterTaskSchedule&gt;&nbsp;schedules)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#start()" class="member-name-link">start</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#start()" class="member-name-link">start</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stop()" class="member-name-link">stop</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stop()" class="member-name-link">stop</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -165,17 +162,6 @@ implements com.sca4d.core.api.scheduling.JobScheduler, com.sca4d.core.api.schedu
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>reconcile</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.scheduling.JobScheduler</code></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="reconcileClusterTasks(java.util.Collection)">
-<h3>reconcileClusterTasks</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">reconcileClusterTasks</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull com.sca4d.core.api.scheduling.ClusterTaskSchedule&gt;&nbsp;schedules)</span></div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code>reconcileClusterTasks</code>&nbsp;in interface&nbsp;<code>com.sca4d.core.api.scheduling.ClusterTaskScheduler</code></dd>
 </dl>
 </section>
 </li>

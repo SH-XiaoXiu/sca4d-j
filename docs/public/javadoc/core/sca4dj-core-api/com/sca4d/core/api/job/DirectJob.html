@@ -100,8 +100,8 @@ loadScripts(document, 'script');</script>
 <span class="extends-implements">extends <a href="Job.html" title="class in com.sca4d.core.api.job">Job</a>&lt;I,<wbr>O&gt;</span></div>
 <div class="block">由一个工作实例直接执行完整业务动作的 Job。
 
- <p>运行时按照至少一次（at-least-once）语义调用该 Job；worker 在结果写回前失联时，同一节点可能由其他
- worker 再次执行。实现应使用业务唯一键、状态条件或其他明确方式保证重复执行不会产生错误结果。</div>
+ <p>持久化运行按至少一次语义执行；worker 在结果写回前失联时，同一节点可能再次执行。无记录任务不保证失败重试。
+ 实现应使用业务唯一键、状态条件或其他明确方式处理重复执行。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -127,7 +127,7 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel">
 <div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
 <div class="table-header col-first">Modifier and Type</div>
@@ -150,12 +150,20 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">供 Job runtime 调用当前业务动作，不绕过子类定义的执行方法。</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="DirectJob.html" title="class in com.sca4d.core.api.job">DirectJob</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#unrecorded(com.sca4d.core.api.job.JobKey,int,com.sca4d.core.api.name.code.TreeCode,java.lang.Runnable)" class="member-name-link">unrecorded</a><wbr>(@NotNull <a href="JobKey.html" title="class in com.sca4d.core.api.job">JobKey</a>&nbsp;key,
+ int&nbsp;definitionVersion,
+ @NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;capability,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Runnable.html" title="class or interface in java.lang" class="external-link">Runnable</a>&nbsp;action)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">使用已有业务动作登记一项不保存 Run 的系统工作。</div>
+</div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-com.sca4d.core.api.job.Job">Methods inherited from class&nbsp;com.sca4d.core.api.job.<a href="Job.html" title="class in com.sca4d.core.api.job">Job</a></h3>
-<code><a href="Job.html#definitionVersion()">definitionVersion</a>, <a href="Job.html#inputType()">inputType</a>, <a href="Job.html#key()">key</a>, <a href="Job.html#outputType()">outputType</a></code></div>
+<code><a href="Job.html#definitionVersion()">definitionVersion</a>, <a href="Job.html#inputType()">inputType</a>, <a href="Job.html#key()">key</a>, <a href="Job.html#outputType()">outputType</a>, <a href="Job.html#overlapPolicy()">overlapPolicy</a>, <a href="Job.html#requiredCapability()">requiredCapability</a>, <a href="Job.html#runRecording()">runRecording</a>, <a href="Job.html#target(I)">target</a>, <a href="Job.html#workKey(I)">workKey</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
@@ -186,6 +194,20 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="unrecorded(com.sca4d.core.api.job.JobKey,int,com.sca4d.core.api.name.code.TreeCode,java.lang.Runnable)">
+<h3>unrecorded</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="DirectJob.html" title="class in com.sca4d.core.api.job">DirectJob</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">unrecorded</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="JobKey.html" title="class in com.sca4d.core.api.job">JobKey</a>&nbsp;key,
+ int&nbsp;definitionVersion,
+ @NotNull
+ @NotNull <a href="../name/code/TreeCode.html" title="class in com.sca4d.core.api.name.code">TreeCode</a>&nbsp;capability,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Runnable.html" title="class or interface in java.lang" class="external-link">Runnable</a>&nbsp;action)</span></div>
+<div class="block">使用已有业务动作登记一项不保存 Run 的系统工作。</div>
+</section>
+</li>
+<li>
 <section class="detail" id="retryPolicy()">
 <h3>retryPolicy</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
@@ -209,12 +231,12 @@ loadScripts(document, 'script');</script>
 <div class="block">执行一次已经领取的尝试。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>execution</code> - 当前 run、节点、尝试次数和开始时间</dd>
-<dd><code>input</code> - 从持久化输入恢复的数据；输入类型为 Void 时是 null</dd>
+<dd><code>execution</code> - 当前执行标识、可选 run、尝试次数和开始时间</dd>
+<dd><code>input</code> - 本次工作输入；输入类型为 Void 时是 null</dd>
 <dt>Returns:</dt>
-<dd>要持久化的结果；输出类型为 Void 时可以是 null</dd>
+<dd>本次执行结果；输出类型为 Void 时可以是 null</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a></code> - 当前尝试失败时抛出；Job runtime 根据 <a href="#retryPolicy()"><code>retryPolicy()</code></a> 决定重试或结束 run</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a></code> - 当前尝试失败时抛出；持久化 Job 按 <a href="#retryPolicy()"><code>retryPolicy()</code></a> 决定后续状态</dd>
 </dl>
 </section>
 </li>

@@ -103,9 +103,10 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(long,com.sca4d.core.api.job.JobKey,int,java.lang.String,com.sca4d.core.api.job.JobRunStatus)" class="member-name-link">RunRecord</a><wbr>(long&nbsp;id,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(long,com.sca4d.core.api.job.JobKey,int,java.lang.String,java.lang.String,com.sca4d.core.api.job.JobRunStatus)" class="member-name-link">RunRecord</a><wbr>(long&nbsp;id,
  @NotNull com.sca4d.core.api.job.JobKey&nbsp;jobKey,
  int&nbsp;jobDefinitionVersion,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;inputJson,
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;outputJson,
  @NotNull com.sca4d.core.api.job.JobRunStatus&nbsp;status)</code></div>
 <div class="col-last even-row-color">
@@ -130,24 +131,27 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">根运行主键。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#jobDefinitionVersion()" class="member-name-link">jobDefinitionVersion</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#inputJson()" class="member-name-link">inputJson</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#jobDefinitionVersion()" class="member-name-link">jobDefinitionVersion</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">提交根运行时保存的 Job 定义版本。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.job.JobKey</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#jobKey()" class="member-name-link">jobKey</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.job.JobKey</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#jobKey()" class="member-name-link">jobKey</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">提交根运行时保存的 Job key。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#outputJson()" class="member-name-link">outputJson</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#outputJson()" class="member-name-link">outputJson</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">根运行成功后保存的输出 JSON。</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.job.JobRunStatus</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#status()" class="member-name-link">status</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.job.JobRunStatus</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#status()" class="member-name-link">status</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">当前根运行状态。</div>
 </div>
 </div>
@@ -168,12 +172,14 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(long,com.sca4d.core.api.job.JobKey,int,java.lang.String,com.sca4d.core.api.job.JobRunStatus)">
+<section class="detail" id="&lt;init&gt;(long,com.sca4d.core.api.job.JobKey,int,java.lang.String,java.lang.String,com.sca4d.core.api.job.JobRunStatus)">
 <h3>RunRecord</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RunRecord</span><wbr><span class="parameters">(long&nbsp;id,
  @NotNull
  @NotNull com.sca4d.core.api.job.JobKey&nbsp;jobKey,
  int&nbsp;jobDefinitionVersion,
+ @Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;inputJson,
  @Nullable
  @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;outputJson,
  @NotNull
@@ -184,6 +190,7 @@ loadScripts(document, 'script');</script>
 <dd><code>id</code> - 根运行数据库主键</dd>
 <dd><code>jobKey</code> - 提交时保存的 Job key</dd>
 <dd><code>jobDefinitionVersion</code> - 提交时保存的 Job 定义版本</dd>
+<dd><code>inputJson</code> - 提交时保存的输入 JSON；Void 输入为空</dd>
 <dd><code>outputJson</code> - 成功输出 JSON；未成功或 Void 输出时为空</dd>
 <dd><code>status</code> - 当前根运行状态</dd>
 </dl>
@@ -240,6 +247,17 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>成功输出 JSON；未成功或 Void 输出时为空</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="inputJson()">
+<h3>inputJson</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">inputJson</span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>提交时保存的输入 JSON</dd>
 </dl>
 </section>
 </li>

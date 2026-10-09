@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">JobExecutor</span></div>
-<div class="block">提交持久化 Job run，并查询、等待或读取其结果。
+<div class="block">提交持久化 Job Run、触发无记录工作，并查询或等待已保存的结果。
 
  <p>实现只访问当前应用运行时命名空间内的 run。异步执行不继承提交线程的身份、Session、ThreadLocal
  或事务；需要在后台恢复的数据必须放入 Job 的类型化输入中。</div>
@@ -112,6 +112,23 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">限时等待已有 run 并读取结果。</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;I,<wbr>
+O&gt;&nbsp;@NotNull <a href="JobDispatch.html" title="class in com.sca4d.core.api.job">JobDispatch</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#broadcast(com.sca4d.core.api.job.Job,I)" class="member-name-link">broadcast</a><wbr>(@NotNull <a href="Job.html" title="class in com.sca4d.core.api.job">Job</a>&lt;I,<wbr>O&gt;&nbsp;job,
+ I&nbsp;input)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">根据 Job 声明的全部在线实例目标，固定目标并创建一次普通广播。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;I,<wbr>
+O&gt;&nbsp;@NotNull <a href="JobDispatch.html" title="class in com.sca4d.core.api.job">JobDispatch</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#broadcastScheduled(com.sca4d.core.api.job.Job,I,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant,com.sca4d.core.api.scheduling.OverlapPolicy)" class="member-name-link">broadcastScheduled</a><wbr>(@NotNull <a href="Job.html" title="class in com.sca4d.core.api.job">Job</a>&lt;I,<wbr>O&gt;&nbsp;job,
+ I&nbsp;input,
+ @NotNull <a href="../scheduling/ScheduleKey.html" title="class in com.sca4d.core.api.scheduling">ScheduleKey</a>&nbsp;scheduleKey,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;scheduledAt,
+ @NotNull <a href="../scheduling/OverlapPolicy.html" title="enum class in com.sca4d.core.api.scheduling">OverlapPolicy</a>&nbsp;overlapPolicy)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">使用计划 key 和原定触发时间去重，并固定本次广播的实例目标。</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;O&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;O&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#result(com.sca4d.core.api.id.Id,com.sca4d.core.api.job.Job)" class="member-name-link">result</a><wbr>(@NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a>&nbsp;runId,
  @NotNull <a href="Job.html" title="class in com.sca4d.core.api.job">Job</a>&lt;?,<wbr>O&gt;&nbsp;job)</code></div>
@@ -132,11 +149,11 @@ O&gt;&nbsp;O</code></div>
 <div class="block">返回当前应用运行时命名空间内指定 run 的状态。</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;I,<wbr>
-O&gt;&nbsp;@NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a></code></div>
+O&gt;&nbsp;@NotNull <a href="JobSubmission.html" title="class in com.sca4d.core.api.job">JobSubmission</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#submit(com.sca4d.core.api.job.Job,I)" class="member-name-link">submit</a><wbr>(@NotNull <a href="Job.html" title="class in com.sca4d.core.api.job">Job</a>&lt;I,<wbr>O&gt;&nbsp;job,
  I&nbsp;input)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">保存一个 run 后立即返回，不继承调用线程的 Session、ThreadLocal 或事务。</div>
+<div class="block">在系统身份与工作键的并发范围内提交一次持久化运行，不继承调用线程的身份或事务。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;I,<wbr>
 O&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a>&gt;</code></div>
@@ -147,6 +164,24 @@ O&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/
  @NotNull <a href="../scheduling/OverlapPolicy.html" title="enum class in com.sca4d.core.api.scheduling">OverlapPolicy</a>&nbsp;overlapPolicy)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">保存定时 fire 对应的 run，并按计划 key 和原定时间去重。</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;I,<wbr>
+O&gt;&nbsp;boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#trigger(com.sca4d.core.api.job.Job,I,com.sca4d.core.api.scheduling.OverlapPolicy)" class="member-name-link">trigger</a><wbr>(@NotNull <a href="Job.html" title="class in com.sca4d.core.api.job">Job</a>&lt;I,<wbr>O&gt;&nbsp;job,
+ I&nbsp;input,
+ @NotNull <a href="../scheduling/OverlapPolicy.html" title="enum class in com.sca4d.core.api.scheduling">OverlapPolicy</a>&nbsp;overlapPolicy)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">触发一次不保存 Run 的 DirectJob；任一合格实例可直接执行，定向份额先保存短期投递。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;I,<wbr>
+O&gt;&nbsp;boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#triggerScheduled(com.sca4d.core.api.job.Job,I,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant,com.sca4d.core.api.scheduling.OverlapPolicy)" class="member-name-link">triggerScheduled</a><wbr>(@NotNull <a href="Job.html" title="class in com.sca4d.core.api.job">Job</a>&lt;I,<wbr>O&gt;&nbsp;job,
+ I&nbsp;input,
+ @NotNull <a href="../scheduling/ScheduleKey.html" title="class in com.sca4d.core.api.scheduling">ScheduleKey</a>&nbsp;scheduleKey,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;scheduledAt,
+ @NotNull <a href="../scheduling/OverlapPolicy.html" title="enum class in com.sca4d.core.api.scheduling">OverlapPolicy</a>&nbsp;overlapPolicy)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">按原定触发时间投递一项不保存 Run 的定时工作。</div>
 </div>
 </div>
 </div>
@@ -168,11 +203,11 @@ O&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @NotNull
 </span><span class="type-parameters">&lt;I,<wbr>
-O&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a></span>&nbsp;<span class="element-name">submit</span><wbr><span class="parameters">(@NotNull
+O&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="JobSubmission.html" title="class in com.sca4d.core.api.job">JobSubmission</a></span>&nbsp;<span class="element-name">submit</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="Job.html" title="class in com.sca4d.core.api.job">Job</a>&lt;I,<wbr>O&gt;&nbsp;job,
  @Nullable
  I&nbsp;input)</span></div>
-<div class="block">保存一个 run 后立即返回，不继承调用线程的 Session、ThreadLocal 或事务。</div>
+<div class="block">在系统身份与工作键的并发范围内提交一次持久化运行，不继承调用线程的身份或事务。</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
 <dd><code>I</code> - Job 输入类型</dd>
@@ -181,9 +216,9 @@ O&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="../id/Id.html" tit
 <dd><code>job</code> - 已登记的 Job</dd>
 <dd><code>input</code> - 与 Job 输入类型一致的数据；Void 输入可以为 null</dd>
 <dt>Returns:</dt>
-<dd>新 run 标识</dd>
+<dd>区分新建、复用同一输入与跳过其他输入的提交结果</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - Job 未登记、定义不一致、输入类型错误或输入无法序列化时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - Job 未登记、无记录、定义不一致、输入无效或目标为全部实例时抛出</dd>
 </dl>
 </section>
 </li>
@@ -213,12 +248,80 @@ O&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracl
 <dd><code>input</code> - 计划固定输入</dd>
 <dd><code>scheduleKey</code> - 产生本次 fire 的稳定计划标识</dd>
 <dd><code>scheduledAt</code> - Quartz 记录的原定触发时间</dd>
-<dd><code>overlapPolicy</code> - 前一次计划 run 未结束时的处理策略</dd>
+<dd><code>overlapPolicy</code> - 同一工作键已有活动运行时的处理策略</dd>
 <dt>Returns:</dt>
 <dd>已创建或同一 fire 已存在的 run；禁止重叠且前一次仍活动时返回空</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - Job 未登记、定义不一致、输入无效或计划参数无效时抛出</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="broadcast(com.sca4d.core.api.job.Job,I)">
+<h3 id="broadcast(com.sca4d.core.api.job.Job,java.lang.Object)">broadcast</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="type-parameters">&lt;I,<wbr>
+O&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="JobDispatch.html" title="class in com.sca4d.core.api.job">JobDispatch</a></span>&nbsp;<span class="element-name">broadcast</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Job.html" title="class in com.sca4d.core.api.job">Job</a>&lt;I,<wbr>O&gt;&nbsp;job,
+ @Nullable
+ I&nbsp;input)</span></div>
+<div class="block">根据 Job 声明的全部在线实例目标，固定目标并创建一次普通广播。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="broadcastScheduled(com.sca4d.core.api.job.Job,I,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant,com.sca4d.core.api.scheduling.OverlapPolicy)">
+<h3 id="broadcastScheduled(com.sca4d.core.api.job.Job,java.lang.Object,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant,com.sca4d.core.api.scheduling.OverlapPolicy)">broadcastScheduled</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="type-parameters">&lt;I,<wbr>
+O&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="JobDispatch.html" title="class in com.sca4d.core.api.job">JobDispatch</a></span>&nbsp;<span class="element-name">broadcastScheduled</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Job.html" title="class in com.sca4d.core.api.job">Job</a>&lt;I,<wbr>O&gt;&nbsp;job,
+ @Nullable
+ I&nbsp;input,
+ @NotNull
+ @NotNull <a href="../scheduling/ScheduleKey.html" title="class in com.sca4d.core.api.scheduling">ScheduleKey</a>&nbsp;scheduleKey,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;scheduledAt,
+ @NotNull
+ @NotNull <a href="../scheduling/OverlapPolicy.html" title="enum class in com.sca4d.core.api.scheduling">OverlapPolicy</a>&nbsp;overlapPolicy)</span></div>
+<div class="block">使用计划 key 和原定触发时间去重，并固定本次广播的实例目标。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="trigger(com.sca4d.core.api.job.Job,I,com.sca4d.core.api.scheduling.OverlapPolicy)">
+<h3 id="trigger(com.sca4d.core.api.job.Job,java.lang.Object,com.sca4d.core.api.scheduling.OverlapPolicy)">trigger</h3>
+<div class="member-signature"><span class="type-parameters">&lt;I,<wbr>
+O&gt;</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">trigger</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Job.html" title="class in com.sca4d.core.api.job">Job</a>&lt;I,<wbr>O&gt;&nbsp;job,
+ @Nullable
+ I&nbsp;input,
+ @NotNull
+ @NotNull <a href="../scheduling/OverlapPolicy.html" title="enum class in com.sca4d.core.api.scheduling">OverlapPolicy</a>&nbsp;overlapPolicy)</span></div>
+<div class="block">触发一次不保存 Run 的 DirectJob；任一合格实例可直接执行，定向份额先保存短期投递。</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>job</code> - 已登记且声明不保存 Run 的 DirectJob</dd>
+<dd><code>input</code> - 本次计划固定输入</dd>
+<dd><code>overlapPolicy</code> - 同一工作键已经执行时的处理方式</dd>
+<dt>Returns:</dt>
+<dd>已执行或已投递为 true；按跳过策略未取得执行权为 false</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="triggerScheduled(com.sca4d.core.api.job.Job,I,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant,com.sca4d.core.api.scheduling.OverlapPolicy)">
+<h3 id="triggerScheduled(com.sca4d.core.api.job.Job,java.lang.Object,com.sca4d.core.api.scheduling.ScheduleKey,java.time.Instant,com.sca4d.core.api.scheduling.OverlapPolicy)">triggerScheduled</h3>
+<div class="member-signature"><span class="type-parameters">&lt;I,<wbr>
+O&gt;</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">triggerScheduled</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Job.html" title="class in com.sca4d.core.api.job">Job</a>&lt;I,<wbr>O&gt;&nbsp;job,
+ @Nullable
+ I&nbsp;input,
+ @NotNull
+ @NotNull <a href="../scheduling/ScheduleKey.html" title="class in com.sca4d.core.api.scheduling">ScheduleKey</a>&nbsp;scheduleKey,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;scheduledAt,
+ @NotNull
+ @NotNull <a href="../scheduling/OverlapPolicy.html" title="enum class in com.sca4d.core.api.scheduling">OverlapPolicy</a>&nbsp;overlapPolicy)</span></div>
+<div class="block">按原定触发时间投递一项不保存 Run 的定时工作。</div>
 </section>
 </li>
 <li>
@@ -248,6 +351,7 @@ O&gt;</span>&nbsp;<span class="return-type">O</span>&nbsp;<span class="element-n
 <dd><code><a href="JobWaitTimeoutException.html" title="class in com.sca4d.core.api.job">JobWaitTimeoutException</a></code> - 等待时间结束但 run 尚未完成时抛出</dd>
 <dd><code><a href="JobRunFailedException.html" title="class in com.sca4d.core.api.job">JobRunFailedException</a></code> - run 失败时抛出</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - Job、输入或等待时长无效时抛出</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - 同键其他输入正在执行，本次提交被跳过时抛出</dd>
 </dl>
 </section>
 </li>
