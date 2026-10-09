@@ -1,7 +1,6 @@
 package com.sca4d.job.runtime;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.job.JobHistory;
 import com.sca4d.core.api.job.JobNodeOutput;
@@ -9,6 +8,7 @@ import com.sca4d.core.api.job.ScheduledJobRun;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.query.PageRequest;
 import com.sca4d.core.api.scheduling.ScheduleKey;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.job.persistence.JobRepository;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,11 +20,11 @@ public class DefaultJobHistory implements JobHistory {
 
     private final @NotNull JobRepository repository;
 
-    private final @NotNull ObjectMapper objectMapper;
+    private final @NotNull Sca4djMapper objectMapper;
 
     public DefaultJobHistory(
             @NotNull JobRepository repository,
-            @NotNull ObjectMapper objectMapper) {
+            @NotNull Sca4djMapper objectMapper) {
         this.repository = Objects.requireNonNull(repository, "JobRepository 不能为空");
         this.objectMapper = Objects.requireNonNull(objectMapper, "Job ObjectMapper 不能为空");
     }

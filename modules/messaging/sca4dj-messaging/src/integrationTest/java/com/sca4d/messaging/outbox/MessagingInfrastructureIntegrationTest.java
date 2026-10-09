@@ -3,7 +3,6 @@ package com.sca4d.messaging.outbox;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.OptimisticLockException;
 import com.sca4d.core.api.concurrent.VersionCondition;
 import com.sca4d.core.api.concurrent.VersionConditions;
@@ -18,11 +17,13 @@ import com.sca4d.core.api.messaging.MessageConsumer;
 import com.sca4d.core.api.messaging.MessageDelivery;
 import com.sca4d.core.api.name.NameFormat;
 import com.sca4d.core.api.name.code.TreeCode;
-import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
 import com.sca4d.core.api.scheduling.JobSchedule;
 import com.sca4d.core.spring.config.CoreJacksonAutoConfiguration;
 import com.sca4d.core.spring.config.CoreSpringAutoConfiguration;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.json.Sca4djMapper;
+import com.sca4d.core.spring.persistence.batch.SqlBatchProperties;
+import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -54,6 +55,7 @@ import java.sql.Timestamp;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
@@ -67,6 +69,7 @@ import javax.sql.DataSource;
 /** 使用 PostgreSQL 和 RabbitMQ 验证业务消息发布、消费、DLQ 与 Outbox。 */
 @Testcontainers
 @SpringBootTest(classes = MessagingInfrastructureIntegrationTest.TestApplication.class, properties = {
+        "spring.application.name=messaging-test",
         "spring.autoconfigure.exclude="
                 + "com.sca4d.core.spring.config.CoreSpringAutoConfiguration,"
                 + "com.sca4d.core.spring.config.CoreJacksonAutoConfiguration,"
@@ -141,6 +144,10 @@ class MessagingInfrastructureIntegrationTest {
         registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
         registry.add("spring.datasource.username", POSTGRES::getUsername);
         registry.add("spring.datasource.password", POSTGRES::getPassword);
+        registry.add("spring.datasource.dynamic.primary", () -> "master");
+        registry.add("spring.datasource.dynamic.datasource.master.url", POSTGRES::getJdbcUrl);
+        registry.add("spring.datasource.dynamic.datasource.master.username", POSTGRES::getUsername);
+        registry.add("spring.datasource.dynamic.datasource.master.password", POSTGRES::getPassword);
         registry.add("spring.rabbitmq.host", RABBITMQ::getHost);
         registry.add("spring.rabbitmq.port", RABBITMQ::getAmqpPort);
         registry.add("spring.rabbitmq.username", () -> "sca4dj");
@@ -167,19 +174,19 @@ class MessagingInfrastructureIntegrationTest {
         primaryConsumer.reset();
         copyConsumer.reset();
         failureConsumer.reset();
-        rabbitAdmin.purgeQueue(SUCCESS_QUEUE, false);
-        rabbitAdmin.purgeQueue(COPY_QUEUE, false);
-        rabbitAdmin.purgeQueue(FAILURE_QUEUE, false);
-        rabbitAdmin.purgeQueue(FAILURE_DLQ, false);
+        for (String queue : List.of(SUCCESS_QUEUE, COPY_QUEUE, FAILURE_QUEUE, FAILURE_DLQ)) {
+            if (rabbitAdmin.getQueueProperties(queue) != null) {
+                rabbitAdmin.purgeQueue(queue, false);
+            }
+        }
     }
 
-    /** Messaging 只登记 Quartz 直接执行的集群任务，不要求 Job runtime 也不登记 JobSchedule。 */
+    /** Messaging 登记不保留 Run 的派发与清理 Job 计划。 */
     @Test
-    void registersOutboxClusterTasksWithoutJobRuntime() {
-        assertThat(applicationContext.getBeansOfType(ClusterTaskSchedule.class).values())
+    void registersOutboxJobsWithoutJobRuntime() {
+        assertThat(applicationContext.getBeansOfType(JobSchedule.class).values())
                 .extracting(schedule -> schedule.key().format(NameFormat.SLASH))
                 .containsExactlyInAnyOrder("MESSAGING/OUTBOX/DISPATCH", "MESSAGING/OUTBOX/CLEANUP");
-        assertThat(applicationContext.getBeansOfType(JobSchedule.class)).isEmpty();
     }
 
     @Test
@@ -452,8 +459,13 @@ class MessagingInfrastructureIntegrationTest {
 
         @Bean
         @Sca4djJson
-        ObjectMapper sca4djObjectMapper() {
-            return new ObjectMapper();
+        Sca4djMapper sca4djObjectMapper() {
+            return new Sca4djMapper();
+        }
+
+        @Bean
+        SqlBatches sqlBatches() {
+            return new SqlBatches(new SqlBatchProperties());
         }
 
         @Bean

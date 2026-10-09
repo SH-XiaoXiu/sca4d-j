@@ -1,9 +1,13 @@
 package com.sca4d.iot.config;
 
 import com.baomidou.dynamic.datasource.DynamicRoutingDataSource;
-import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
+import com.sca4d.core.api.job.DirectJob;
+import com.sca4d.core.api.job.JobKey;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.scheduling.IntervalSchedule;
+import com.sca4d.core.api.scheduling.JobSchedule;
 import com.sca4d.core.api.scheduling.MisfirePolicy;
+import com.sca4d.core.api.scheduling.OverlapPolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.spring.config.ConditionalOnCapability;
 import com.sca4d.core.spring.json.Sca4djJson;
@@ -23,6 +27,7 @@ import org.flywaydb.core.Flyway;
 import org.jetbrains.annotations.NotNull;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -144,14 +149,25 @@ public class TimescaleIotAutoConfiguration {
 
     /** @return 按应用配置间隔清理 TimescaleDB 完整历史 chunk 的集群计划 */
     @Bean
-    ClusterTaskSchedule timescaleRetentionSchedule(
-            @NotNull TimescaleRetentionTask task,
+    JobSchedule<Void, Void> timescaleRetentionSchedule(
+            @Qualifier("timescaleRetentionJob") @NotNull DirectJob<Void, Void> job,
             @NotNull IotTimescaleProperties properties) {
-        return new ClusterTaskSchedule(
+        return new JobSchedule<>(
                 new ScheduleKey("IOT/TIMESCALE/RETENTION"),
                 1,
-                task,
+                job,
+                null,
                 new IntervalSchedule(properties.getCleanupInterval(), properties.getCleanupInterval()),
-                MisfirePolicy.FIRE_ONCE_NOW);
+                MisfirePolicy.FIRE_ONCE_NOW,
+                OverlapPolicy.SKIP_IF_RUNNING);
+    }
+
+    @Bean
+    DirectJob<Void, Void> timescaleRetentionJob(@NotNull TimescaleRetentionTask task) {
+        return DirectJob.unrecorded(
+                new JobKey("IOT/TIMESCALE/RETENTION"),
+                1,
+                TreeCode.ofColon(IotCapabilities.WORKER),
+                task::execute);
     }
 }

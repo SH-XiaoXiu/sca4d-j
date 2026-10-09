@@ -1,12 +1,11 @@
 package com.sca4d.job.runtime;
 
-import com.sca4d.core.api.scheduling.ClusterTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 /** 由集群定时器触发一次成功 Job run 历史清理。 */
-public final class JobHistoryCleanupTask implements ClusterTask {
+public final class JobHistoryCleanupTask {
 
     private final @NotNull JobHistoryService history;
 
@@ -19,7 +18,7 @@ public final class JobHistoryCleanupTask implements ClusterTask {
         this.history = Objects.requireNonNull(history, "JobHistoryService 不能为空");
     }
 
-    @Override
+    /** 按 Job 历史保留策略清理已成功的运行。 */
     public void execute() {
         history.cleanupSucceededRuns();
     }

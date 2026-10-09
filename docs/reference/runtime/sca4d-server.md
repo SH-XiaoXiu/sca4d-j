@@ -129,7 +129,7 @@ Job 和 Quartz 使用主 PostgreSQL DataSource。Flyway V7 建立 `job.*` 和 `q
 
 Quartz scheduler name 通过 Key 输出为 `<APP_NAME>:SCHEDULING:QUARTZ`；Job run 将同一 App 隔离名称写入 `app_name`。同一 App 的多个实例必须使用相同 `SCA4DJ_APPLICATION_NAME`。App 名转大写并将连字符替换为下划线；共享中间件的 App 必须避免归一化后重名。修改已运行名称需要迁移已有资源，不自动接管其他名称的数据。
 
-文件清理由 JobSchedule 触发，需要时创建可恢复的 Job run。Outbox 派发与清理、Job 成功历史清理、IoT 到期扫描与数据清理、EMQX 连接对账和 TimescaleDB 保留期清理由各自模块声明 ClusterTaskSchedule，Quartz 集群直接执行，因此高频空扫描不会写入 `job.*`。Quartz 禁止同一集群任务 JobDetail 重叠执行；任务自己的数据库行使用状态、租约或 `version` 条件防止旧实例写回，需要跨事务串行的对象在事务前取得 Redis 分布式锁。Web Realtime 租约续约只维护当前 JVM 的连接，继续使用本机定时入口。
+文件清理由 `JobSchedule` 触发，需要时创建可恢复的 Job Run。Outbox 派发与清理、Job 成功历史清理、IoT 到期扫描与数据清理、EMQX 连接对账和 TimescaleDB 保留期清理由各自模块声明无记录 `JobSchedule`，高频空扫描不写 Job Run。任务自己的数据库行使用状态、租约或 `version` 条件防止旧实例写回，需要跨事务串行的对象在事务前取得 Redis 分布式锁。Web Realtime 租约续约只维护当前 JVM 的连接，继续使用本机定时入口。
 
 ## Web Realtime
 
@@ -221,11 +221,11 @@ IoT 定时扫描间隔、ACK timeout 和连接 TTL 来自 `SCA4DJ_IOT_*`；HMAC 
 
 MQTT 业务上行默认使用 4 个 Topic 分片，每个分片最多等待 64 条消息；未明确拒绝的失败最多处理 3 次，相邻处理间隔 5 秒。分别通过 `SCA4DJ_IOT_EMQX_INBOUND_WORKER_COUNT`、`SCA4DJ_IOT_EMQX_INBOUND_QUEUE_CAPACITY`、`SCA4DJ_IOT_EMQX_INBOUND_MAXIMUM_ATTEMPTS` 和 `SCA4DJ_IOT_EMQX_INBOUND_RETRY_DELAY` 调整。MQTT Receive Maximum 等于单个分片的等待容量，为 ACK 后立即补发的热点 Topic 消息保留队列位置。
 
-Sca4d Server 只在 `application.yml` 声明各模块的运行间隔。`sca4dj-iot`、`sca4dj-iot-emqx` 与 `sca4dj-iot-timescale` 分别声明自己的 ClusterTask 和 ClusterTaskSchedule；App 不调用模块内部 Worker、Repository 或清理服务。Quartz 使用同一个 App 隔离名称在集群中触发这些计划。
+Sca4d Server 只在 `application.yml` 声明各模块的运行间隔。`sca4dj-iot`、`sca4dj-iot-emqx` 与 `sca4dj-iot-timescale` 分别声明无记录 DirectJob 和 JobSchedule；App 不调用模块内部 Worker、Repository 或清理服务。Quartz 使用同一个 App 隔离名称在集群中触发这些计划。
 
 设备定时计划默认按 `sca4dj.iot.schedule-tick=PT0.2S` 触发，DeviceScheduleTask 每次最多处理 `SCA4DJ_IOT_DEVICE_SCHEDULE_BATCH_SIZE` 条，默认 1000。Product 完整目录扫描使用 `SCA4DJ_IOT_PRODUCT_CATALOG_SCAN_BATCH_SIZE`，默认 1000；终态下行清理使用 `SCA4DJ_IOT_DOWNLINK_CLEANUP_BATCH_SIZE`，默认 10000。三项范围都是 1 到 10000，只控制一次后台扫描或清理的工作量，不截断 Service 查询结果。设备定时任务普通查询一条到期候选，取得 `iot:schedule:<scheduleId>` Redis 分布式锁后再开启独立事务，并在事务中重新检查 version、状态和计划时间；不使用显式行锁，也不创建 Redis 到期索引或处理租约。`iot_device_schedule` 保存规则、版本、下一次触发时间和最近一次执行结果。
 
-Device 创建幂等结果只允许在十分钟窗口内重放。App 自己声明该表的 ClusterTaskSchedule，默认每十分钟按 `expires_at` 索引清理，每批最多 10000 条，每轮最多执行 500 个有界删除事务；删除 SQL 不使用显式行锁，多个实例重复选择同一记录时由 `DELETE` 的实际结果自然竞争。App 只通过 `SCA4DJ_IOT_DEVICE_CREATION_CLEANUP_INTERVAL` 声明触发间隔，批量上限由任务实现固定。
+Device 创建幂等结果只允许在十分钟窗口内重放。App 自己声明该表的无记录 `JobSchedule`，默认每十分钟按 `expires_at` 索引清理，每批最多 10000 条，每轮最多执行 500 个有界删除事务；删除 SQL 不使用显式行锁，多个实例重复选择同一记录时由 `DELETE` 的实际结果自然竞争。App 只通过 `SCA4DJ_IOT_DEVICE_CREATION_CLEANUP_INTERVAL` 声明触发间隔，批量上限由任务实现固定。
 
 DeviceScheduleTask 到期时不会通过 Connection 或 EMQX 直接发送。它在主库事务中调用 DeviceCommandService 重新校验当前物模型，创建带 `expiresAt` 的 PENDING 下行，并通过通用 Messaging Outbox 登记派发消息。DeviceDownlinkDispatchConsumer 随后通过 DeviceDownlinkRouter 选择 Transport 发布。低精度、长周期业务预约使用 JobSchedule，不进入设备定时规则。
 
@@ -428,7 +428,7 @@ OAuth2 Provider 示例：
 | `cleanupInterval` | `PT1H` |
 | `cleanupBatchSize` | `500` |
 
-所有值必须为正数。`confirmTimeout`、`leaseDuration`、`initialBackoff`、`maximumBackoff` 和 `sentRetention` 按毫秒使用，不能短于 1 毫秒或超过 Java `long` 的毫秒表示范围。dispatchInterval 和 cleanupInterval 定义 Quartz ClusterTaskSchedule 的固定间隔；每次触发直接扫描 Outbox，不创建 Job run。退避只用于 Outbox 发布失败，不是 Consumer 重试；派发没有最大尝试次数和 `DEAD` 状态。
+所有值必须为正数。`confirmTimeout`、`leaseDuration`、`initialBackoff`、`maximumBackoff` 和 `sentRetention` 按毫秒使用，不能短于 1 毫秒或超过 Java `long` 的毫秒表示范围。dispatchInterval 和 cleanupInterval 定义无记录 `JobSchedule` 的固定间隔；每次触发直接扫描 Outbox，不创建 Job Run。退避只用于 Outbox 发布失败，不是 Consumer 重试；派发没有最大尝试次数和 `DEAD` 状态。
 
 ## 任务执行参数 {#jobproperties}
 

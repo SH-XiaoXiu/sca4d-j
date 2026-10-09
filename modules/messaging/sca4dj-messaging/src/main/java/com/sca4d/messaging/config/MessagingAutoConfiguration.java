@@ -1,13 +1,17 @@
 package com.sca4d.messaging.config;
 
 import com.sca4d.core.api.id.IdGenerator;
+import com.sca4d.core.api.job.DirectJob;
+import com.sca4d.core.api.job.JobKey;
 import com.sca4d.core.api.messaging.EventHandler;
 import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.api.messaging.MessageHandler;
-import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.scheduling.IntervalSchedule;
+import com.sca4d.core.api.scheduling.JobSchedule;
 import com.sca4d.core.api.scheduling.MisfirePolicy;
+import com.sca4d.core.api.scheduling.OverlapPolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.spring.json.Sca4djJson;
 import com.sca4d.core.spring.json.Sca4djMapper;
@@ -27,6 +31,7 @@ import org.springframework.amqp.core.Declarables;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -167,40 +172,62 @@ public class MessagingAutoConfiguration {
     }
 
     /**
-     * 创建由 Quartz 集群直接执行 OutboxDispatchTask 的代码计划。
+     * 创建定时触发 Outbox 派发 Job 的代码计划。
      *
-     * @param task 每次触发时执行的 Outbox 派发任务
+     * @param job 每次触发时执行的 Outbox 派发 Job
      * @param properties 派发间隔配置
-     * @return 高频执行 Outbox 派发且不创建 Job run 的集群任务计划
+     * @return 高频执行 Outbox 派发且不创建 Job Run 的计划
      */
     @Bean
-    ClusterTaskSchedule outboxDispatchSchedule(
-            @NotNull OutboxDispatchTask task,
+    JobSchedule<Void, Void> outboxDispatchSchedule(
+            @Qualifier("outboxDispatchJob") @NotNull DirectJob<Void, Void> job,
             @NotNull MessagingProperties properties) {
-        return new ClusterTaskSchedule(
+        return new JobSchedule<>(
                 new ScheduleKey("MESSAGING/OUTBOX/DISPATCH"),
                 1,
-                task,
+                job,
+                null,
                 new IntervalSchedule(properties.getDispatchInterval(), properties.getDispatchInterval()),
-                MisfirePolicy.FIRE_ONCE_NOW);
+                MisfirePolicy.FIRE_ONCE_NOW,
+                OverlapPolicy.SKIP_IF_RUNNING);
+    }
+
+    @Bean
+    DirectJob<Void, Void> outboxDispatchJob(@NotNull OutboxDispatchTask task) {
+        return DirectJob.unrecorded(
+                new JobKey("MESSAGING/OUTBOX/DISPATCH"),
+                1,
+                TreeCode.ofColon("SCHEDULING:WORKER"),
+                task::execute);
     }
 
     /**
-     * 创建由 Quartz 集群直接执行 OutboxCleanupTask 的代码计划。
+     * 创建定时触发 Outbox 清理 Job 的代码计划。
      *
-     * @param task 每次触发时执行的 Outbox 清理任务
+     * @param job 每次触发时执行的 Outbox 清理 Job
      * @param properties 清理间隔配置
-     * @return 按保留期清理间隔执行且不创建 Job run 的集群任务计划
+     * @return 按保留期清理间隔执行且不创建 Job Run 的计划
      */
     @Bean
-    ClusterTaskSchedule outboxCleanupSchedule(
-            @NotNull OutboxCleanupTask task,
+    JobSchedule<Void, Void> outboxCleanupSchedule(
+            @Qualifier("outboxCleanupJob") @NotNull DirectJob<Void, Void> job,
             @NotNull MessagingProperties properties) {
-        return new ClusterTaskSchedule(
+        return new JobSchedule<>(
                 new ScheduleKey("MESSAGING/OUTBOX/CLEANUP"),
                 1,
-                task,
+                job,
+                null,
                 new IntervalSchedule(properties.getCleanupInterval(), properties.getCleanupInterval()),
-                MisfirePolicy.FIRE_ONCE_NOW);
+                MisfirePolicy.FIRE_ONCE_NOW,
+                OverlapPolicy.SKIP_IF_RUNNING);
+    }
+
+    @Bean
+    DirectJob<Void, Void> outboxCleanupJob(@NotNull OutboxCleanupTask task) {
+        return DirectJob.unrecorded(
+                new JobKey("MESSAGING/OUTBOX/CLEANUP"),
+                1,
+                TreeCode.ofColon("SCHEDULING:WORKER"),
+                task::execute);
     }
 }

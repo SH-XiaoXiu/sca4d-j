@@ -2,7 +2,6 @@ package com.sca4d.iot.telemetry;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.sca4d.core.api.annotation.SystemExecution;
-import com.sca4d.core.api.scheduling.ClusterTask;
 import com.sca4d.core.spring.transaction.TransactionCallbacks;
 import com.sca4d.iot.api.IotCapabilities;
 import com.sca4d.iot.config.IotTimescale;
@@ -19,7 +18,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 /** 使用 `drop_chunks` 清理 TimescaleDB Telemetry 和事件历史。 */
-public class TimescaleRetentionTask implements ClusterTask {
+public class TimescaleRetentionTask {
 
     private static final Logger LOG = LoggerFactory.getLogger(TimescaleRetentionTask.class);
 
@@ -61,7 +60,6 @@ public class TimescaleRetentionTask implements ClusterTask {
     }
 
     /** 清理两个 hypertable 中早于各自保留截止时间的完整 chunk。 */
-    @Override
     @DS(IotTimescale.DATASOURCE)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @SystemExecution(IotCapabilities.SYSTEM_IDENTITY_VALUE)

@@ -7,7 +7,7 @@ import java.time.Duration;
 import java.util.Objects;
 
 /** 按固定时间间隔触发 Job，不根据上一次 Job 完成时间重新计时。 */
-public class IntervalSchedule implements ScheduleTiming {
+public final class IntervalSchedule implements ScheduleTiming {
 
     private final @NotNull Duration interval;
 

@@ -10,7 +10,6 @@ import com.sca4d.core.api.connection.ConnectionProtocol;
 import com.sca4d.core.api.connection.ConnectionRegistry;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.name.code.TreeCode;
-import com.sca4d.core.api.scheduling.ClusterTask;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.DeviceAccessMethod;
 import com.sca4d.iot.api.IotCapabilities;
@@ -40,7 +39,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /** 用单 Client 当前状态实时刷新连接，并在 watchdog 分布式锁内使用完整快照修复遗漏事件。 */
-public class EmqxConnectionReconciler implements ClusterTask {
+public class EmqxConnectionReconciler {
 
     private static final Logger LOG = LoggerFactory.getLogger(EmqxConnectionReconciler.class);
 
@@ -164,7 +163,6 @@ public class EmqxConnectionReconciler implements ClusterTask {
     }
 
     /** 取得集群分布式锁后使用 EMQX 当前连接列表修正 Connection 投影。 */
-    @Override
     @SystemExecution(IotCapabilities.SYSTEM_IDENTITY_VALUE)
     public void execute() {
         runOnce();

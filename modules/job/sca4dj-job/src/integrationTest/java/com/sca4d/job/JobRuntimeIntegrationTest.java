@@ -3,11 +3,14 @@ package com.sca4d.job;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.concurrent.LockKey;
 import com.sca4d.core.api.concurrent.OptimisticLockException;
+import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.id.Id;
+import com.sca4d.core.api.identity.SystemPrincipal;
+import com.sca4d.core.api.identity.SystemPrincipals;
 import com.sca4d.core.api.isolation.AppName;
 import com.sca4d.core.api.job.DirectJob;
 import com.sca4d.core.api.job.Job;
@@ -15,20 +18,34 @@ import com.sca4d.core.api.job.JobExecution;
 import com.sca4d.core.api.job.JobKey;
 import com.sca4d.core.api.job.JobRetryPolicy;
 import com.sca4d.core.api.job.JobRunFailedException;
+import com.sca4d.core.api.job.JobRunRecording;
 import com.sca4d.core.api.job.JobRunStatus;
+import com.sca4d.core.api.job.JobSubmission;
+import com.sca4d.core.api.job.JobTarget;
 import com.sca4d.core.api.job.JobWaitTimeoutException;
+import com.sca4d.core.api.job.JobWorkKey;
 import com.sca4d.core.api.job.ParallelResults;
 import com.sca4d.core.api.job.PipelineJob;
 import com.sca4d.core.api.job.PipelineJobPlan;
+import com.sca4d.core.api.name.Name;
 import com.sca4d.core.api.name.NameFormat;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.pipeline.Pipeline;
 import com.sca4d.core.api.pipeline.PipelineStage;
 import com.sca4d.core.api.query.PageRequest;
+import com.sca4d.core.api.runtime.InstanceCapabilities;
+import com.sca4d.core.api.runtime.InstanceCapability;
+import com.sca4d.core.api.runtime.InstanceId;
 import com.sca4d.core.api.scheduling.OverlapPolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
+import com.sca4d.core.spring.call.CallHolder;
+import com.sca4d.core.spring.config.InstanceProperties;
+import com.sca4d.core.spring.json.Sca4djMapper;
 import com.sca4d.core.spring.persistence.batch.SqlBatchProperties;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.core.spring.persistence.mybatis.CoreEnumTypeHandler;
+import com.sca4d.core.spring.persistence.mybatis.StringValueTypeHandler;
+import com.sca4d.core.spring.persistence.mybatis.TreeCodeTypeHandler;
 import com.sca4d.job.config.JobProperties;
 import com.sca4d.job.persistence.JobMapper;
 import com.sca4d.job.persistence.JobRepository;
@@ -62,11 +79,14 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 import javax.sql.DataSource;
@@ -82,6 +102,10 @@ class JobRuntimeIntegrationTest {
 
     static {
         AppName.publish(APPLICATION_NAME);
+        SystemPrincipals.publish(
+                Map.of(
+                        SystemPrincipals.MAIN,
+                        new SystemPrincipal(1, SystemPrincipals.MAIN)));
     }
 
     private DataSource dataSource;
@@ -207,7 +231,7 @@ class JobRuntimeIntegrationTest {
         Runtime runtime = runtime(List.of(job));
         runtime.worker.start();
         try {
-            Id runId = runtime.executor.submit(job, "value");
+            Id runId = runtime.executor.submit(job, "value").runId().orElseThrow();
             assertThatThrownBy(() -> runtime.executor.await(runId, job, Duration.ofMillis(100)))
                     .isInstanceOf(JobWaitTimeoutException.class)
                     .satisfies(
@@ -293,7 +317,7 @@ class JobRuntimeIntegrationTest {
         Runtime runtime = runtime(List.of(job));
         runtime.worker.start();
         try {
-            Id runId = runtime.executor.submit(job, "value");
+            Id runId = runtime.executor.submit(job, "value").runId().orElseThrow();
             assertThatThrownBy(() -> runtime.executor.await(runId, job, Duration.ofSeconds(10)))
                     .isInstanceOf(JobRunFailedException.class);
             assertThat(runtime.executor.status(runId)).isEqualTo(JobRunStatus.FAILED);
@@ -324,6 +348,7 @@ class JobRuntimeIntegrationTest {
     /** PipelineJob 按顺序执行起点，并行执行两支，等二者成功后执行 merge。 */
     @Test
     void pipelineJobPersistsBranchesAndMerge() {
+        CountDownLatch bothBranches = new CountDownLatch(2);
         Pipeline<String, String> normalize = Pipeline.of(new PipelineStage<>() {
             @Override
             public @NotNull String code() {
@@ -363,6 +388,7 @@ class JobRuntimeIntegrationTest {
 
             @Override
             public @NotNull String execute(@NotNull String input) {
+                awaitBothBranches(bothBranches);
                 return input.toUpperCase();
             }
         });
@@ -384,6 +410,7 @@ class JobRuntimeIntegrationTest {
 
             @Override
             public @NotNull Integer execute(@NotNull String input) {
+                awaitBothBranches(bothBranches);
                 return input.length();
             }
         });
@@ -455,6 +482,337 @@ class JobRuntimeIntegrationTest {
         }
     }
 
+    /** 同键 WAIT 创建两个 Run，后一个只在前一个成为终态后可领取。 */
+    @Test
+    void waitsForEarlierWorkBeforeClaimingTheNextRun() {
+        DirectJob<Long, Void> job = workJob(JobTarget.any(), OverlapPolicy.WAIT, JobRunRecording.PERSISTED);
+        Runtime runtime = runtime(List.of(job));
+        Id first = runtime.executor.submit(job, 42L).runId().orElseThrow();
+        Id second = runtime.executor.submit(job, 42L).runId().orElseThrow();
+        assertThat(second).isNotEqualTo(first);
+
+        var firstClaim = runtime.runs.claim(
+                "worker",
+                new InstanceId("test-instance"),
+                UUID.randomUUID(),
+                Duration.ofSeconds(5),
+                runtime.definitions);
+        assertThat(firstClaim).isNotNull();
+        assertThat(firstClaim.runId()).isEqualTo(first.value());
+        assertThat(
+                runtime.runs.claim(
+                        "worker",
+                        new InstanceId("test-instance"),
+                        UUID.randomUUID(),
+                        Duration.ofSeconds(5),
+                        runtime.definitions))
+                .isNull();
+
+        runtime.runs.succeed(firstClaim, "worker", null);
+        var secondClaim = runtime.runs.claim(
+                "worker",
+                new InstanceId("test-instance"),
+                UUID.randomUUID(),
+                Duration.ofSeconds(5),
+                runtime.definitions);
+        assertThat(secondClaim).isNotNull();
+        assertThat(secondClaim.runId()).isEqualTo(second.value());
+    }
+
+    /** 同一原定 fire 的广播保留首次目标快照，份额只由目标进程代次领取。 */
+    @Test
+    void broadcastsOnlyToInstancesPresentAtTheFirstFire() {
+        DirectJob<Long, Void> job = workJob(
+                JobTarget.all(Duration.ofSeconds(30)),
+                OverlapPolicy.SKIP_IF_RUNNING,
+                JobRunRecording.PERSISTED);
+        Runtime runtime = runtime(List.of(job));
+        UUID a = UUID.randomUUID();
+        UUID b = UUID.randomUUID();
+        runtime.runs.registerInstance(new InstanceId("a"), a, "[\"JOB:WORKER\"]", Duration.ofMinutes(1));
+        runtime.runs.registerInstance(new InstanceId("b"), b, "[\"JOB:WORKER\"]", Duration.ofMinutes(1));
+
+        ScheduleKey schedule = new ScheduleKey("TEST/BROADCAST");
+        Instant fire = Instant.parse("2026-10-09T00:00:00Z");
+        var first = runtime.executor.broadcastScheduled(job, 42L, schedule, fire, OverlapPolicy.SKIP_IF_RUNNING);
+        assertThat(first.targets()).containsExactlyInAnyOrder(new InstanceId("a"), new InstanceId("b"));
+        assertThat(first.runs()).hasSize(2);
+
+        runtime.runs.registerInstance(
+                new InstanceId("c"),
+                UUID.randomUUID(),
+                "[\"JOB:WORKER\"]",
+                Duration.ofMinutes(1));
+        var duplicate = runtime.executor.broadcastScheduled(job, 42L, schedule, fire, OverlapPolicy.SKIP_IF_RUNNING);
+        assertThat(duplicate.id()).isEqualTo(first.id());
+        assertThat(duplicate.targets()).containsExactlyInAnyOrder(new InstanceId("a"), new InstanceId("b"));
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM job.job_run", Integer.class)).isEqualTo(2);
+
+        var claim = runtime.runs.claim(
+                "other-worker",
+                new InstanceId("a"),
+                UUID.randomUUID(),
+                Duration.ofSeconds(5),
+                runtime.definitions);
+        assertThat(claim).isNull();
+        var ownClaim = runtime.runs.claim(
+                "a-worker",
+                new InstanceId("a"),
+                a,
+                Duration.ofSeconds(5),
+                runtime.definitions);
+        assertThat(ownClaim).isNotNull();
+        assertThat(ownClaim.runId()).isEqualTo(first.runs().get(new InstanceId("a")).value());
+    }
+
+    /** 无记录广播只保存短期投递，不创建 Job Run。 */
+    @Test
+    void broadcastsUnrecordedWorkWithoutCreatingRuns() {
+        DirectJob<Long, Void> job = workJob(
+                JobTarget.all(Duration.ofSeconds(30)),
+                OverlapPolicy.SKIP_IF_RUNNING,
+                JobRunRecording.NONE);
+        Runtime runtime = runtime(List.of(job));
+        UUID a = UUID.randomUUID();
+        runtime.runs.registerInstance(new InstanceId("a"), a, "[\"JOB:WORKER\"]", Duration.ofMinutes(1));
+
+        var dispatch = runtime.executor.broadcast(job, 42L);
+        assertThat(dispatch.targets()).containsExactly(new InstanceId("a"));
+        assertThat(dispatch.runs()).isEmpty();
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM job.job_run", Integer.class)).isZero();
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM job.job_delivery", Integer.class)).isOne();
+
+        var delivery = runtime.runs.claimDelivery(
+                new InstanceId("a"),
+                a,
+                Duration.ofSeconds(5),
+                runtime.definitions);
+        assertThat(delivery).isNotNull();
+        assertThat(runtime.runs.completeDelivery(delivery, a, true, null)).isTrue();
+    }
+
+    /** 同一稳定 Job key 的两个定义版本各用自己的代码领取已有 Run。 */
+    @Test
+    void restoresRunsUsingTheirSubmittedDefinitionVersion() {
+        DirectJob<Long, Void> previous = workJob(
+                1,
+                JobTarget.any(),
+                OverlapPolicy.ALLOW,
+                JobRunRecording.PERSISTED);
+        DirectJob<Long, Void> current = workJob(
+                2,
+                JobTarget.any(),
+                OverlapPolicy.ALLOW,
+                JobRunRecording.PERSISTED);
+        Runtime runtime = runtime(List.of(previous, current));
+        Id oldRun = runtime.executor.submit(previous, 42L).runId().orElseThrow();
+        Id newRun = runtime.executor.submit(current, 42L).runId().orElseThrow();
+        runtime.worker.start();
+        try {
+            assertThat(runtime.executor.await(oldRun, previous, Duration.ofSeconds(10))).isNull();
+            assertThat(runtime.executor.await(newRun, current, Duration.ofSeconds(10))).isNull();
+            assertThat(
+                    jdbc.queryForObject(
+                            "SELECT count(*) FROM job.job_run WHERE status = 'SUCCEEDED'",
+                            Integer.class))
+                    .isEqualTo(2);
+        } finally {
+            runtime.worker.stop();
+        }
+    }
+
+    /** 同键相同输入复用运行，不同输入明确跳过而不返回错误的旧结果。 */
+    @Test
+    void distinguishesDuplicateSubmissionFromBusyWork() {
+        DirectJob<Long, Void> job = workJob(
+                1,
+                JobTarget.any(),
+                OverlapPolicy.SKIP_IF_RUNNING,
+                JobRunRecording.PERSISTED,
+                true);
+        Runtime runtime = runtime(List.of(job));
+        var first = runtime.executor.submit(job, 1L);
+        var duplicate = runtime.executor.submit(job, 1L);
+        var busy = runtime.executor.submit(job, 2L);
+
+        assertThat(first.status()).isEqualTo(JobSubmission.Status.CREATED);
+        assertThat(duplicate.status()).isEqualTo(JobSubmission.Status.EXISTING);
+        assertThat(duplicate.runId()).contains(first.runId().orElseThrow());
+        assertThat(busy.status()).isEqualTo(JobSubmission.Status.SKIPPED);
+        assertThat(busy.runId()).isEmpty();
+    }
+
+    /** 无记录工作以系统身份运行，业务自身的冲突异常不能伪装成调度跳过。 */
+    @Test
+    void unrecordedJobUsesSystemCallAndPreservesBusinessConflict() {
+        AtomicReference<Long> principalId = new AtomicReference<>();
+        DirectJob<Void, Void> job = DirectJob.unrecorded(
+                new JobKey("TEST/UNRECORDED"),
+                1,
+                TreeCode.ofColon("JOB:WORKER"),
+                () -> {
+                    principalId.set(CallHolder.current().principal().orElseThrow().principalId());
+                    throw new BusinessException(CoreErrorCode.CONFLICT);
+                });
+        Runtime runtime = runtime(List.of(job));
+        var capabilities = new InstanceCapabilities(
+                List.of(
+                        new InstanceCapability(
+                                TreeCode.ofColon("JOB:WORKER"),
+                                SystemPrincipals.MAIN,
+                                List.of())),
+                null);
+        var executor = new DefaultJobExecutor(
+                new JobCatalog(List.of(job)),
+                runtime.runs,
+                new Sca4djMapper(),
+                capabilities,
+                new InstanceProperties(),
+                immediateLock(),
+                Clock.systemUTC(),
+                new JobProperties());
+
+        assertThatThrownBy(() -> executor.trigger(job, null, OverlapPolicy.SKIP_IF_RUNNING))
+                .isInstanceOf(BusinessException.class);
+        assertThat(principalId.get()).isEqualTo(1L);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM job.job_run", Integer.class)).isZero();
+    }
+
+    /** 仅运行调度的实例把无记录工作交给在线的 Job Worker。 */
+    @Test
+    void schedulerWithoutJobCapabilityRoutesUnrecordedWorkToAnEligibleInstance() {
+        DirectJob<Void, Void> job = DirectJob.unrecorded(
+                new JobKey("TEST/REMOTE_SCAN"),
+                1,
+                TreeCode.ofColon("JOB:WORKER"),
+                () -> {
+                });
+        Runtime runtime = runtime(List.of(job));
+        UUID generation = UUID.randomUUID();
+        runtime.runs.registerInstance(
+                new InstanceId("worker-a"),
+                generation,
+                "[\"JOB:WORKER\"]",
+                Duration.ofMinutes(1));
+        var capability = new InstanceCapability(
+                TreeCode.ofColon("JOB:WORKER"),
+                SystemPrincipals.MAIN,
+                List.of());
+        var schedulerCapabilities = new InstanceCapabilities(List.of(capability), List.of());
+        var scheduler = new DefaultJobExecutor(
+                new JobCatalog(List.of(job)),
+                runtime.runs,
+                new Sca4djMapper(),
+                schedulerCapabilities,
+                new InstanceProperties(),
+                immediateLock(),
+                Clock.systemUTC(),
+                new JobProperties());
+
+        assertThat(
+                scheduler.triggerScheduled(
+                        job,
+                        null,
+                        new ScheduleKey("TEST/REMOTE_SCAN"),
+                        Instant.parse("2026-10-09T00:00:00Z"),
+                        OverlapPolicy.SKIP_IF_RUNNING))
+                .isTrue();
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM job.job_run", Integer.class)).isZero();
+        assertThat(
+                jdbc.queryForObject(
+                        "SELECT count(*) FROM job.job_delivery WHERE target_instance_id = 'worker-a'",
+                        Integer.class))
+                .isOne();
+    }
+
+    private static DirectJob<Long, Void> workJob(
+            JobTarget target,
+            OverlapPolicy overlap,
+            JobRunRecording recording) {
+        return workJob(1, target, overlap, recording);
+    }
+
+    private static DirectJob<Long, Void> workJob(
+            int version,
+            JobTarget target,
+            OverlapPolicy overlap,
+            JobRunRecording recording) {
+        return workJob(version, target, overlap, recording, false);
+    }
+
+    private static DirectJob<Long, Void> workJob(
+            int version,
+            JobTarget target,
+            OverlapPolicy overlap,
+            JobRunRecording recording,
+            boolean fixedKey) {
+        return new DirectJob<>() {
+            @Override
+            public @NotNull JobKey key() {
+                return new JobKey("TEST/WORK");
+            }
+
+            @Override
+            public int definitionVersion() {
+                return version;
+            }
+
+            @Override
+            public @NotNull Class<Long> inputType() {
+                return Long.class;
+            }
+
+            @Override
+            public @NotNull Class<Void> outputType() {
+                return Void.class;
+            }
+
+            @Override
+            public @NotNull JobRetryPolicy retryPolicy() {
+                return JobRetryPolicy.once();
+            }
+
+            @Override
+            public @NotNull JobRunRecording runRecording() {
+                return recording;
+            }
+
+            @Override
+            public @NotNull JobTarget target(Long input) {
+                return target;
+            }
+
+            @Override
+            public @NotNull OverlapPolicy overlapPolicy() {
+                return overlap;
+            }
+
+            @Override
+            public @NotNull JobWorkKey workKey(Long input) {
+                return fixedKey
+                        ? JobWorkKey.fixed(key())
+                        : JobWorkKey.of(TreeCode.ofSegment("TEST"), input);
+            }
+
+            @Override
+            protected @Nullable Void execute(@NotNull JobExecution execution, Long input) {
+                return null;
+            }
+        };
+    }
+
+    private static void awaitBothBranches(CountDownLatch bothBranches) {
+        bothBranches.countDown();
+        try {
+            if (!bothBranches.await(5, TimeUnit.SECONDS)) {
+                throw new IllegalStateException("并发分支未能同时开始");
+            }
+        } catch (InterruptedException exception) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("等待并发分支被中断", exception);
+        }
+    }
+
     /** 同一 fire 幂等返回原 run，活动 run 只在 SKIP_IF_RUNNING 下阻止新 fire。 */
     @Test
     void scheduledSubmissionDeduplicatesFireAndHonorsOverlapPolicy() {
@@ -502,7 +860,7 @@ class JobRuntimeIntegrationTest {
                 OverlapPolicy.SKIP_IF_RUNNING).orElseThrow();
         assertThat(
                 jdbc.queryForObject(
-                        "SELECT runtime_namespace FROM job.job_run WHERE id = ?",
+                        "SELECT app_name FROM job.job_run WHERE id = ?",
                         String.class,
                         firstRun.value()))
                 .isEqualTo(APPLICATION_NAME);
@@ -683,7 +1041,7 @@ class JobRuntimeIntegrationTest {
 
         DefaultJobHistory history = new DefaultJobHistory(
                 new JobRepository(mapper(), sqlBatches()),
-                new ObjectMapper().findAndRegisterModules());
+                new Sca4djMapper());
         var firstPage = history.findScheduledRuns(
                 scheduleKey,
                 job.nodeOutput("outcome", String.class),
@@ -724,7 +1082,7 @@ class JobRuntimeIntegrationTest {
         return Objects.requireNonNull(
                 jdbc.queryForObject(
                         "INSERT INTO job.job_run "
-                                + "(runtime_namespace, job_key, job_definition_version, job_kind, status, "
+                                + "(app_name, job_key, job_definition_version, job_kind, status, "
                                 + "schedule_key, scheduled_fire_time, created_at, completed_at) "
                                 + "VALUES (?, ?, ?, 'PIPELINE', ?, ?, ?, ?, ?) RETURNING id",
                         Long.class,
@@ -827,7 +1185,7 @@ class JobRuntimeIntegrationTest {
         return Objects.requireNonNull(
                 jdbc.queryForObject(
                         "INSERT INTO job.job_run "
-                                + "(runtime_namespace, job_key, job_definition_version, job_kind, status, created_at, completed_at) "
+                                + "(app_name, job_key, job_definition_version, job_kind, status, created_at, completed_at) "
                                 + "VALUES (?, 'TEST/HISTORY', 1, 'DIRECT', ?, ?, ?) RETURNING id",
                         Long.class,
                         namespace,
@@ -838,7 +1196,7 @@ class JobRuntimeIntegrationTest {
 
     /** 创建使用同一真实 DataSource 的 Repository、Executor 和 worker。 */
     private Runtime runtime(List<? extends Job<?, ?>> jobs) {
-        ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
+        Sca4djMapper objectMapper = new Sca4djMapper();
         JobCatalog catalog = new JobCatalog(List.copyOf(jobs));
         JobMapper mapper = mapper();
         JobRepository repository = new JobRepository(mapper, sqlBatches());
@@ -846,8 +1204,8 @@ class JobRuntimeIntegrationTest {
                 repository,
                 new DataSourceTransactionManager(dataSource),
                 Clock.systemUTC(),
-                immediateLock());
-        DefaultJobExecutor executor = new DefaultJobExecutor(catalog, runs, objectMapper);
+                immediateLock(),
+                objectMapper);
         JobProperties properties = new JobProperties();
         properties.setWorkerCount(4);
         properties.setClaimBatchSize(4);
@@ -855,13 +1213,32 @@ class JobRuntimeIntegrationTest {
         properties.setLeaseDuration(Duration.ofSeconds(5));
         properties.setLeaseRenewInterval(Duration.ofSeconds(1));
         properties.validate();
+        InstanceCapabilities capabilities = new InstanceCapabilities(
+                List.of(
+                        new InstanceCapability(
+                                TreeCode.ofColon("JOB:WORKER"),
+                                SystemPrincipals.MAIN,
+                                List.of())),
+                null);
+        InstanceProperties instance = new InstanceProperties();
+        DefaultJobExecutor executor = new DefaultJobExecutor(
+                catalog,
+                runs,
+                objectMapper,
+                capabilities,
+                instance,
+                immediateLock(),
+                Clock.systemUTC(),
+                properties);
         JobWorker worker = new JobWorker(
                 catalog,
                 runs,
                 objectMapper,
                 properties,
-                Clock.systemUTC());
-        return new Runtime(executor, worker);
+                Clock.systemUTC(),
+                instance,
+                capabilities);
+        return new Runtime(executor, worker, runs, catalog.availableVersions(capabilities));
     }
 
     /** @return 立即执行任务的单进程测试锁 */
@@ -881,7 +1258,25 @@ class JobRuntimeIntegrationTest {
             SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
             factory.setDataSource(dataSource);
             Configuration configuration = new Configuration();
+            configuration.setMapUnderscoreToCamelCase(true);
+            configuration.setArgNameBasedConstructorAutoMapping(true);
             configuration.setDefaultEnumTypeHandler(CoreEnumTypeHandler.class);
+            configuration.getTypeHandlerRegistry()
+                    .register(
+                            Name.class,
+                            new StringValueTypeHandler<>(Name::new, name -> name.format(NameFormat.COLON)));
+            configuration.getTypeHandlerRegistry()
+                    .register(
+                            TreeCode.class,
+                            new TreeCodeTypeHandler.Colon());
+            configuration.getTypeHandlerRegistry()
+                    .register(
+                            JobKey.class,
+                            new StringValueTypeHandler<>(JobKey::new, key -> key.format(NameFormat.SLASH)));
+            configuration.getTypeHandlerRegistry()
+                    .register(
+                            ScheduleKey.class,
+                            new StringValueTypeHandler<>(ScheduleKey::new, key -> key.format(NameFormat.SLASH)));
             factory.setConfiguration(configuration);
             factory.setMapperLocations(new ClassPathResource("mapper/job/JobMapper.xml"));
             factory.afterPropertiesSet();
@@ -900,13 +1295,23 @@ class JobRuntimeIntegrationTest {
     /** 保存一个测试用 Executor 和对应 worker。 */
     @SuppressWarnings("ClassCanBeRecord") // 测试类型遵守项目禁用 record 的规则。
     private static class Runtime {
+        private final JobRunService runs;
+
         private final DefaultJobExecutor executor;
 
         private final JobWorker worker;
 
-        private Runtime(DefaultJobExecutor executor, JobWorker worker) {
+        private final Map<JobKey, Map<Integer, InstanceCapability>> definitions;
+
+        private Runtime(
+                DefaultJobExecutor executor,
+                JobWorker worker,
+                JobRunService runs,
+                Map<JobKey, Map<Integer, InstanceCapability>> definitions) {
             this.executor = executor;
             this.worker = worker;
+            this.runs = runs;
+            this.definitions = definitions;
         }
     }
 }

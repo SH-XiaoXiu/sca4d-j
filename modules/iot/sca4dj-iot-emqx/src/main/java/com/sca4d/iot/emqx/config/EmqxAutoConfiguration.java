@@ -2,10 +2,14 @@ package com.sca4d.iot.emqx.config;
 
 import com.sca4d.core.api.concurrent.DistributedLock;
 import com.sca4d.core.api.connection.ConnectionRegistry;
+import com.sca4d.core.api.job.DirectJob;
+import com.sca4d.core.api.job.JobKey;
 import com.sca4d.core.api.name.Key;
-import com.sca4d.core.api.scheduling.ClusterTaskSchedule;
+import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.scheduling.IntervalSchedule;
+import com.sca4d.core.api.scheduling.JobSchedule;
 import com.sca4d.core.api.scheduling.MisfirePolicy;
+import com.sca4d.core.api.scheduling.OverlapPolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.spring.config.ConditionalOnCapability;
 import com.sca4d.core.spring.config.CoreRedisAutoConfiguration;
@@ -39,6 +43,7 @@ import com.sca4d.iot.emqx.transport.MqttMessageRoute;
 import com.sca4d.iot.emqx.transport.MqttMessageRouter;
 import com.sca4d.iot.emqx.transport.MqttTransport;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -184,16 +189,27 @@ public class EmqxAutoConfiguration {
 
     /** @return 按应用配置间隔修正 EMQX 与 Redis Connection 投影的集群计划 */
     @Bean
-    ClusterTaskSchedule emqxConnectionReconciliationSchedule(
-            EmqxConnectionReconciler reconciler,
+    JobSchedule<Void, Void> emqxConnectionReconciliationSchedule(
+            @Qualifier("emqxConnectionReconciliationJob") DirectJob<Void, Void> job,
             EmqxProperties properties) {
-        return new ClusterTaskSchedule(
+        return new JobSchedule<>(
                 new ScheduleKey("IOT/EMQX/CONNECTION_RECONCILIATION"),
                 1,
-                reconciler,
+                job,
+                null,
                 new IntervalSchedule(
                         properties.getReconciliationInterval(),
                         properties.getReconciliationInterval()),
-                MisfirePolicy.FIRE_ONCE_NOW);
+                MisfirePolicy.FIRE_ONCE_NOW,
+                OverlapPolicy.SKIP_IF_RUNNING);
+    }
+
+    @Bean
+    DirectJob<Void, Void> emqxConnectionReconciliationJob(EmqxConnectionReconciler reconciler) {
+        return DirectJob.unrecorded(
+                new JobKey("IOT/EMQX/CONNECTION_RECONCILIATION"),
+                1,
+                TreeCode.ofColon(IotCapabilities.WORKER),
+                reconciler::execute);
     }
 }

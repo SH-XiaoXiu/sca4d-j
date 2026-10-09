@@ -1,7 +1,6 @@
 package com.sca4d.iot.schedule;
 
 import com.sca4d.core.api.annotation.SystemExecution;
-import com.sca4d.core.api.scheduling.ClusterTask;
 import com.sca4d.iot.api.IotCapabilities;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -10,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Objects;
 
 /** 连续触发一批通过 Redis 分布式锁互斥执行的到期设备定时规则。 */
-public class DeviceScheduleTask implements ClusterTask {
+public class DeviceScheduleTask {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeviceScheduleTask.class);
 
@@ -37,7 +36,6 @@ public class DeviceScheduleTask implements ClusterTask {
     }
 
     /** 每条规则先取得分布式锁再使用独立事务；业务校验失败会暂停规则，基础设施失败留给下一次触发重新扫描。 */
-    @Override
     @SystemExecution(IotCapabilities.SYSTEM_IDENTITY_VALUE)
     public void execute() {
         int handled = 0;

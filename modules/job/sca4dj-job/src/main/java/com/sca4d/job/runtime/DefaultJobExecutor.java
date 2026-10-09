@@ -1,23 +1,43 @@
 package com.sca4d.job.runtime;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sca4d.core.api.call.Call;
+import com.sca4d.core.api.concurrent.DistributedLock;
+import com.sca4d.core.api.error.BusinessException;
+import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.id.Id;
+import com.sca4d.core.api.identity.SystemPrincipals;
+import com.sca4d.core.api.job.DirectJob;
 import com.sca4d.core.api.job.Job;
+import com.sca4d.core.api.job.JobDispatch;
+import com.sca4d.core.api.job.JobExecution;
 import com.sca4d.core.api.job.JobExecutor;
 import com.sca4d.core.api.job.JobRunFailedException;
+import com.sca4d.core.api.job.JobRunRecording;
 import com.sca4d.core.api.job.JobRunStatus;
+import com.sca4d.core.api.job.JobSubmission;
+import com.sca4d.core.api.job.JobTarget;
 import com.sca4d.core.api.job.JobWaitTimeoutException;
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.runtime.InstanceCapabilities;
+import com.sca4d.core.api.runtime.InstanceId;
 import com.sca4d.core.api.scheduling.OverlapPolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
+import com.sca4d.core.spring.call.CallHolder;
+import com.sca4d.core.spring.config.InstanceProperties;
+import com.sca4d.core.spring.json.Sca4djMapper;
+import com.sca4d.job.config.JobProperties;
 import com.sca4d.job.persistence.RunRecord;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.LockSupport;
 
 /** 使用 PostgreSQL Job runtime 实现提交、查询、等待和结果恢复。 */
@@ -27,30 +47,55 @@ public class DefaultJobExecutor implements JobExecutor {
 
     private final @NotNull JobRunService runs;
 
-    private final @NotNull ObjectMapper objectMapper;
+    private final @NotNull Sca4djMapper objectMapper;
+
+    private final @NotNull InstanceProperties instanceProperties;
+
+    private final @NotNull JobProperties properties;
+
+    private final @NotNull Clock clock;
+
+    private final @NotNull DistributedLock distributedLock;
+
+    private final @NotNull InstanceCapabilities instanceCapabilities;
 
     private final @NotNull JobCatalog catalog;
 
-    /**
-     * 创建使用当前应用 Job 目录和 PostgreSQL Repository 的执行器。
-     *
-     * @param catalog 当前应用登记的 Job 定义
-     * @param runs 持有 Job run 事务的服务
-     * @param objectMapper 脚手架统一 JSON 映射器
-     */
+    /** 创建同时支持持久化 Job 和无记录系统任务的执行器。 */
     public DefaultJobExecutor(
             @NotNull JobCatalog catalog,
             @NotNull JobRunService runs,
-            @NotNull ObjectMapper objectMapper) {
+            @NotNull Sca4djMapper objectMapper,
+            @NotNull InstanceCapabilities instanceCapabilities,
+            @NotNull InstanceProperties instanceProperties,
+            @NotNull DistributedLock distributedLock,
+            @NotNull Clock clock,
+            @NotNull JobProperties properties) {
         this.catalog = Objects.requireNonNull(catalog, "JobCatalog 不能为空");
         this.runs = Objects.requireNonNull(runs, "JobRunService 不能为空");
         this.objectMapper = Objects.requireNonNull(objectMapper, "Job ObjectMapper 不能为空");
+        this.instanceCapabilities = Objects.requireNonNull(instanceCapabilities, "Job 实例能力不能为空");
+        this.instanceProperties = Objects.requireNonNull(instanceProperties, "Job 实例配置不能为空");
+        this.distributedLock = Objects.requireNonNull(distributedLock, "Job 分布式锁不能为空");
+        this.clock = Objects.requireNonNull(clock, "Job 时钟不能为空");
+        this.properties = Objects.requireNonNull(properties, "Job 配置不能为空");
     }
 
     @Override
-    public <I, O> @NotNull Id submit(@NotNull Job<I, O> job, @Nullable I input) {
+    public <I, O> @NotNull JobSubmission submit(@NotNull Job<I, O> job, @Nullable I input) {
         Job<I, O> registered = registered(job);
-        return runs.create(registered, serializeInput(registered, input));
+        requirePersisted(registered);
+        JobTarget target = Objects.requireNonNull(registered.target(input), "Job 目标不能为空");
+        if (target.kind() == JobTarget.Kind.ALL) {
+            throw new IllegalArgumentException("广播 Job 请使用 broadcast 入口: " + registered.key());
+        }
+        return runs.create(
+                registered,
+                serializeInput(registered, input),
+                systemIdentity(registered),
+                Objects.requireNonNull(registered.workKey(input), "Job 工作键不能为空"),
+                registered.overlapPolicy(),
+                target);
     }
 
     @Override
@@ -61,12 +106,194 @@ public class DefaultJobExecutor implements JobExecutor {
             @NotNull Instant scheduledAt,
             @NotNull OverlapPolicy overlapPolicy) {
         Job<I, O> registered = registered(job);
+        requirePersisted(registered);
+        JobTarget target = Objects.requireNonNull(registered.target(input), "Job 目标不能为空");
+        if (target.kind() == JobTarget.Kind.ALL) {
+            throw new IllegalArgumentException("广播定时 Job 请使用 broadcastScheduled 入口: " + registered.key());
+        }
         return runs.createScheduled(
                 registered,
                 serializeInput(registered, input),
                 scheduleKey,
                 scheduledAt,
-                overlapPolicy);
+                overlapPolicy,
+                systemIdentity(registered),
+                Objects.requireNonNull(registered.workKey(input), "Job 工作键不能为空"),
+                target);
+    }
+
+    @Override
+    public <I, O> @NotNull JobDispatch broadcast(@NotNull Job<I, O> job, @Nullable I input) {
+        Job<I, O> registered = registered(job);
+        JobTarget target = Objects.requireNonNull(registered.target(input), "Job 目标不能为空");
+        if (target.kind() != JobTarget.Kind.ALL) {
+            throw new IllegalArgumentException("Job 未声明向全部在线实例广播: " + registered.key());
+        }
+        return runs.dispatch(
+                registered,
+                serializeInput(registered, input),
+                systemIdentity(registered),
+                Objects.requireNonNull(registered.workKey(input), "Job 工作键不能为空"),
+                registered.overlapPolicy(),
+                target,
+                null,
+                null);
+    }
+
+    @Override
+    public <I, O> @NotNull JobDispatch broadcastScheduled(
+            @NotNull Job<I, O> job,
+            @Nullable I input,
+            @NotNull ScheduleKey scheduleKey,
+            @NotNull Instant scheduledAt,
+            @NotNull OverlapPolicy overlapPolicy) {
+        Job<I, O> registered = registered(job);
+        JobTarget target = Objects.requireNonNull(registered.target(input), "Job 目标不能为空");
+        if (target.kind() != JobTarget.Kind.ALL) {
+            throw new IllegalArgumentException("Job 未声明向全部在线实例广播: " + registered.key());
+        }
+        return runs.dispatch(
+                registered,
+                serializeInput(registered, input),
+                systemIdentity(registered),
+                Objects.requireNonNull(registered.workKey(input), "Job 工作键不能为空"),
+                overlapPolicy,
+                target,
+                scheduleKey,
+                scheduledAt);
+    }
+
+    @Override
+    public <I, O> boolean trigger(
+            @NotNull Job<I, O> job,
+            @Nullable I input,
+            @NotNull OverlapPolicy overlapPolicy) {
+        return trigger(job, input, null, null, overlapPolicy);
+    }
+
+    @Override
+    public <I, O> boolean triggerScheduled(
+            @NotNull Job<I, O> job,
+            @Nullable I input,
+            @NotNull ScheduleKey scheduleKey,
+            @NotNull Instant scheduledAt,
+            @NotNull OverlapPolicy overlapPolicy) {
+        return trigger(job, input, scheduleKey, scheduledAt, overlapPolicy);
+    }
+
+    private <I, O> boolean trigger(
+            @NotNull Job<I, O> job,
+            @Nullable I input,
+            @Nullable ScheduleKey scheduleKey,
+            @Nullable Instant scheduledAt,
+            @NotNull OverlapPolicy overlapPolicy) {
+        Job<I, O> registered = registered(job);
+        if (registered.runRecording() != JobRunRecording.NONE
+                || !(registered instanceof DirectJob<?, ?> directJob)) {
+            throw new IllegalArgumentException("只有无记录 DirectJob 可以直接触发: " + registered.key());
+        }
+        if (overlapPolicy == OverlapPolicy.WAIT) {
+            throw new IllegalArgumentException("无记录 Job 不支持等待执行: " + registered.key());
+        }
+        String inputJson = serializeInput(registered, input);
+        JobTarget target = Objects.requireNonNull(registered.target(input), "Job 目标不能为空");
+        if (target.kind() != JobTarget.Kind.ANY) {
+            runs.dispatch(
+                    registered,
+                    inputJson,
+                    systemIdentity(registered),
+                    Objects.requireNonNull(registered.workKey(input), "Job 工作键不能为空"),
+                    overlapPolicy,
+                    target,
+                    scheduleKey,
+                    scheduledAt);
+            return true;
+        }
+        var workKey = Objects.requireNonNull(registered.workKey(input), "Job 工作键不能为空");
+        InstanceCapabilities capabilities = instanceCapabilities;
+        var capability = capabilities.definitions().get(registered.requiredCapability());
+        if (capability == null) {
+            throw new IllegalStateException("Job 所需能力未登记: " + registered.requiredCapability());
+        }
+        if (!capabilities.enabled(registered.requiredCapability())) {
+            var eligible = runs.eligibleInstances(
+                    registered.requiredCapability().format(com.sca4d.core.api.name.NameFormat.COLON));
+            if (eligible.isEmpty()) {
+                throw new IllegalStateException("没有在线实例启用 Job 所需能力: " + registered.requiredCapability());
+            }
+            runs.dispatch(
+                    registered,
+                    inputJson,
+                    capability.systemIdentity(),
+                    workKey,
+                    overlapPolicy,
+                    JobTarget.instance(eligible.getFirst().instanceId(), properties.getLeaseDuration()),
+                    scheduleKey,
+                    scheduledAt);
+            return true;
+        }
+        var principal = SystemPrincipals.require(capability.systemIdentity());
+        var lockKey = JobRunService.workLock(registered, principal.code(), workKey);
+        if (overlapPolicy == OverlapPolicy.ALLOW) {
+            runUnrecorded(directJob, input, principal, registered.requiredCapability());
+            return true;
+        }
+        AtomicBoolean entered = new AtomicBoolean();
+        try {
+            return distributedLock
+                    .execute(lockKey, Duration.ZERO, () -> {
+                        entered.set(true);
+                        runUnrecorded(directJob, input, principal, registered.requiredCapability());
+                        return true;
+                    });
+        } catch (BusinessException exception) {
+            if (!entered.get() && exception.errorCode() == CoreErrorCode.CONFLICT) {
+                return false;
+            }
+            throw exception;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private <I, O> void runUnrecorded(
+            @NotNull DirectJob<?, ?> job,
+            @Nullable I input,
+            @NotNull com.sca4d.core.api.identity.SystemPrincipal principal,
+            @NotNull TreeCode capability) {
+        UUID executionId = UUID.randomUUID();
+        Instant startedAt = clock.instant();
+        var execution = new JobExecution(
+                executionId,
+                null,
+                1,
+                startedAt,
+                new InstanceId(instanceProperties.getId()),
+                capability,
+                principal);
+        try {
+            CallHolder.run(
+                    Call.system(executionId.toString(), startedAt, principal),
+                    () -> ((DirectJob<I, O>) job).run(execution, input));
+        } catch (RuntimeException exception) {
+            throw exception;
+        } catch (Exception exception) {
+            throw new IllegalStateException("无记录 Job 执行失败: " + job.key(), exception);
+        }
+    }
+
+    private static void requirePersisted(@NotNull Job<?, ?> job) {
+        if (job.runRecording() != JobRunRecording.PERSISTED) {
+            throw new IllegalArgumentException("无记录 Job 不支持持久化提交: " + job.key());
+        }
+    }
+
+    /** 从已声明实例能力解析稳定系统身份；提交方不必启用执行能力。 */
+    private @NotNull TreeCode systemIdentity(@NotNull Job<?, ?> job) {
+        var capability = instanceCapabilities.definitions().get(job.requiredCapability());
+        if (capability == null) {
+            throw new IllegalArgumentException("Job 所需实例能力未声明: " + job.requiredCapability());
+        }
+        return capability.systemIdentity();
     }
 
     @Override
@@ -74,7 +301,8 @@ public class DefaultJobExecutor implements JobExecutor {
             @NotNull Job<I, O> job,
             @Nullable I input,
             @NotNull Duration timeout) {
-        Id runId = submit(job, input);
+        Id runId = submit(job, input).runId()
+                .orElseThrow(() -> new IllegalStateException("同键其他 Job 仍在执行: " + job.key()));
         return await(runId, job, timeout);
     }
 

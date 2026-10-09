@@ -40,6 +40,7 @@ dependencies {
     add("integrationTestImplementation", libs.testcontainers.rabbitmq)
     add("integrationTestImplementation", libs.testcontainers.junit.jupiter)
     add("integrationTestRuntimeOnly", libs.postgresql)
+    add("integrationTestRuntimeOnly", libs.jakarta.servlet)
     add("integrationTestRuntimeOnly", libs.junit.platform.launcher)
     testRuntimeOnly(libs.junit.platform.launcher)
 }

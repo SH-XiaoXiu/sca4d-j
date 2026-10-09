@@ -116,7 +116,7 @@ IoT 使用通用 `MessageBus`，不创建 IoT 专用 Outbox：
 - 可靠事件、下行、ACK 超时和断连的代理发布失败会留在通用 Messaging Outbox 重试。
 - 下行发送、ACK 和超时 Consumer 在数据库事务前取得同一消息的 Redis 分布式锁，并在锁内短事务中重新检查状态和 attempt。协议 publish 在两个数据库事务之间执行，不占用数据库事务；传输失败、ACK 超时与业务拒绝由消息快照中的 RetryPolicy 决定重试或进入终态。
 - 设备定时按 PostgreSQL `next_fire_at` 查询普通候选，取得 `iot:schedule:<scheduleId>` Redis 分布式锁后，在独立事务中重新检查 version、状态和计划时间；不使用显式行锁，也不为每条规则创建线程或 Redis 定时项。到期时只生成可靠 command 下行，实际发送由下行消息 Consumer 完成。
-- 模块使用 `ClusterTaskSchedule` 声明设备定时扫描和终态下行清理。具体应用只配置触发间隔，Quartz 集群直接执行任务且不创建 `job.*` 运行记录。
+- 模块使用无记录 `JobSchedule` 声明设备定时扫描和终态下行清理。具体应用只配置触发间隔，不创建 Job Run。
 - Session 终止、Redis 连接投影和 Broker 断连不构成跨存储事务。App 可靠发布带明确连接代次的断连消息；Consumer 先终止协议会话，再删除 DeviceConnection 和可选公共 ConnectionRegistry 投影，重复处理时不能断开后来建立的新连接。
 - 模块不判断谁能创建 Product、启用 Device、修改 desired 或提交 command。具体应用必须在公开入口外层完成权限和状态检查。
 
