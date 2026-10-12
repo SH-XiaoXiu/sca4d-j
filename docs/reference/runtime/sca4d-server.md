@@ -119,11 +119,11 @@ RabbitMQ 连接默认值来自 `application.yml`：主机 `localhost`、端口 `
 
 `sca4dj.messaging` 通过 `SCA4DJ_MESSAGING_*` 配置 confirm timeout、派发间隔、批量、租约、初始/最大退避、已发送保留期和清理批量。完整变量示例在 `.env/rabbitmq.env.example`。
 
-业务事务把消息先写入主 PostgreSQL Outbox。派发失败会按退避持续重试，没有发布侧最大次数或 `DEAD` 状态；发布成功后由 RabbitMQ 持久保存。Consumer 默认不重试，失败进入独立 DLQ；声明 HandlingPolicy 后按该策略重试，耗尽或明确拒绝才进入 DLQ。死信由运维明确重发或删除。
+业务事务把消息先写入主 PostgreSQL Outbox。派发失败会按退避持续重试，没有发布侧最大次数或 `DEAD` 状态；发布成功后由 RabbitMQ 持久保存。Handler 默认使用 `RetryRule.once()`，失败后进入独立 DLQ；声明其他 `RetryRule` 时，失败消息通过定向 Outbox 安排再次处理。规则耗尽、明确拒绝或消息内容无效时进入 DLQ。死信由运维明确重发或删除。
 
 ## Job 与 Quartz
 
-Job 和 Quartz 使用主 PostgreSQL DataSource。Flyway V7 建立 `job.*` 和 `quartz.qrtz_*`，`spring.quartz.jdbc.initialize-schema=never`，避免 Quartz 自己创建另一份表。Quartz 初始 `auto-startup=false`，代码计划完成对账后才开始获取 trigger。
+Job 和 Quartz 使用主 PostgreSQL DataSource。Flyway V1 建立 `job.*` 和 `quartz.qrtz_*`，V2 将已有 Job 的次数和固定间隔转换为版本化重试规则；`spring.quartz.jdbc.initialize-schema=never`，避免 Quartz 自己创建另一份表。Quartz 初始 `auto-startup=false`，代码计划完成对账后才开始获取 trigger。
 
 `SCA4DJ_JOB_*` 配置 worker 数量、领取批量、轮询间隔、租约、续租间隔以及成功历史的保留时间、清理间隔和批量；`SCA4DJ_QUARTZ_*` 配置线程数与集群 check-in。SUCCEEDED run 默认保留 30 天，FAILED、QUEUED 和 RUNNING 不按该窗口自动删除。参数限制见 [JobProperties](#jobproperties) 与 [QuartzSchedulingProperties](#quartzschedulingproperties)。
 

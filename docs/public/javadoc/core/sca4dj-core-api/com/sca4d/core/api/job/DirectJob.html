@@ -139,8 +139,8 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">执行一次已经领取的尝试。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract @NotNull <a href="JobRetryPolicy.html" title="class in com.sca4d.core.api.job">JobRetryPolicy</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#retryPolicy()" class="member-name-link">retryPolicy</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract @NotNull <a href="../retry/RetryRule.html" title="class in com.sca4d.core.api.retry">RetryRule</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#retryRule()" class="member-name-link">retryRule</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">返回当前业务动作的重试规则。</div>
 </div>
@@ -208,15 +208,15 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="retryPolicy()">
-<h3>retryPolicy</h3>
+<section class="detail" id="retryRule()">
+<h3>retryRule</h3>
 <div class="member-signature"><span class="annotations">@Contract(pure=true)
 @NotNull
-</span><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">@NotNull <a href="JobRetryPolicy.html" title="class in com.sca4d.core.api.job">JobRetryPolicy</a></span>&nbsp;<span class="element-name">retryPolicy</span>()</div>
+</span><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">@NotNull <a href="../retry/RetryRule.html" title="class in com.sca4d.core.api.retry">RetryRule</a></span>&nbsp;<span class="element-name">retryRule</span>()</div>
 <div class="block">返回当前业务动作的重试规则。</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>包含首次执行的最大尝试次数和固定重试间隔</dd>
+<dd>包含首次执行的次数限制和退避规则</dd>
 </dl>
 </section>
 </li>
@@ -236,7 +236,7 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>本次执行结果；输出类型为 Void 时可以是 null</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a></code> - 当前尝试失败时抛出；持久化 Job 按 <a href="#retryPolicy()"><code>retryPolicy()</code></a> 决定后续状态</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a></code> - 当前尝试失败时抛出；持久化 Job 按 <a href="#retryRule()"><code>retryRule()</code></a> 决定后续状态</dd>
 </dl>
 </section>
 </li>

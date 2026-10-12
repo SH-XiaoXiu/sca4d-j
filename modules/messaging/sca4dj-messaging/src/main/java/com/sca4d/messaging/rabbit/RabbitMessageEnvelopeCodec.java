@@ -85,7 +85,7 @@ public class RabbitMessageEnvelopeCodec {
             byte @NotNull [] body,
             @NotNull EventType<T> expectedType,
             boolean redelivered,
-            int attempt) {
+            long attempt) {
         EventMessageCodec<T> codec = new EventMessageCodec<>(expectedType, json);
         Envelope envelope = envelope(body, expectedType.code(), expectedType.protocolVersion());
         return new IncomingMessage<>(
@@ -101,7 +101,7 @@ public class RabbitMessageEnvelopeCodec {
             byte @NotNull [] body,
             @NotNull MessageCodec<M> codec,
             boolean redelivered,
-            int attempt) {
+            long attempt) {
         MessageCodec<M> checkedCodec = Objects.requireNonNull(codec, "MessageCodec 不能为空");
         Envelope envelope = envelope(body, checkedCodec.code());
         MessageCodec<?> selected = codecs.codec(checkedCodec.code(), envelope.protocolVersion);
@@ -117,6 +117,12 @@ public class RabbitMessageEnvelopeCodec {
                 envelope.publishedAt,
                 redelivered,
                 attempt);
+    }
+
+    /** 校验信封身份后返回业务消息标识，用于确认重试交接和 AMQP 元数据一致。 */
+    @NotNull
+    Id messageId(byte @NotNull [] body, @NotNull TreeCode code) {
+        return envelope(body, code).messageId;
     }
 
     private @NotNull Envelope envelope(

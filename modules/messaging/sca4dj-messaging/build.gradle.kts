@@ -29,6 +29,7 @@ dependencies {
     implementation(libs.slf4j.api)
     api(libs.spring.boot.autoconfigure)
     compileOnlyApi(libs.jetbrains.annotations)
+    compileOnly(libs.spotbugs.annotations)
     annotationProcessor(libs.spring.boot.autoconfigure.processor)
     annotationProcessor(libs.spring.boot.configuration.processor)
 

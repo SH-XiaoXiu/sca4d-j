@@ -14,11 +14,15 @@ import com.sca4d.core.api.job.JobSubmission;
 import com.sca4d.core.api.job.JobTarget;
 import com.sca4d.core.api.job.JobWorkKey;
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.retry.RetryContext;
+import com.sca4d.core.api.retry.RetryDecision;
+import com.sca4d.core.api.retry.RetryPolicy;
 import com.sca4d.core.api.runtime.InstanceCapability;
 import com.sca4d.core.api.runtime.InstanceId;
 import com.sca4d.core.api.scheduling.OverlapPolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.spring.json.Sca4djMapper;
+import com.sca4d.job.persistence.ExpiredJobAttempt;
 import com.sca4d.job.persistence.JobDelivery;
 import com.sca4d.job.persistence.JobInstance;
 import com.sca4d.job.persistence.JobRepository;
@@ -433,24 +437,35 @@ public class JobRunService {
     }
 
     /** 原子保存节点失败，并按尝试次数决定重试或结束根运行。 */
-    public void fail(@NotNull NodeClaim claim, @NotNull String workerId, @NotNull String error) {
-        transactions.executeWithoutResult(status -> {
+    public @NotNull RetryDecision fail(@NotNull NodeClaim claim, @NotNull String workerId, @NotNull String error) {
+        return Objects.requireNonNull(transactions.execute(status -> {
             Instant failedAt = clock.instant();
-            if (claim.attempt() < claim.maxAttempts()) {
+            RetryDecision decision = RetryPolicy.always(claim.retryRule())
+                    .evaluate(RetryContext.failed(claim.attempt(), error));
+            if (decision.retrying()) {
                 repository.saveNodeResult(
-                        claim.retry(error, failedAt.plusMillis(claim.retryDelayMillis()), failedAt),
+                        claim.retry(error, failedAt.plus(decision.retryDelay().orElseThrow()), failedAt),
                         workerId);
             } else {
                 repository.failNode(claim.nodeId(), claim.runId(), claim.attempt(), workerId, error, failedAt);
             }
-        });
+            return decision;
+        }));
     }
 
-    /** 标记租约到期且重试耗尽的节点。 */
-    public void failExpiredExhausted() {
+    /** 放弃过期尝试，按冻结规则结束或重新排队，并结束超过等待期限的目标。 */
+    public void recoverExpiredAttempts() {
         transactions.executeWithoutResult(status -> {
             Instant now = clock.instant();
             repository.failExpiredExhausted(now);
+            for (ExpiredJobAttempt attempt : repository.expiredAttempts(now)) {
+                RetryDecision decision = RetryPolicy.always(attempt.retryRule())
+                        .evaluate(RetryContext.failed(attempt.attempt(), "LEASE_EXPIRED"));
+                repository.rescheduleExpired(
+                        attempt,
+                        attempt.leaseUntil().plus(decision.retryDelay().orElseThrow()),
+                        now);
+            }
             repository.failExpiredTargets(now);
         });
     }

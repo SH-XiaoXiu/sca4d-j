@@ -1,6 +1,7 @@
 package com.sca4d.job.persistence;
 
 import com.sca4d.core.api.job.JobKey;
+import com.sca4d.core.api.retry.RetryRule;
 import com.sca4d.job.JobAttemptStatus;
 import com.sca4d.job.JobNodeStatus;
 import org.jetbrains.annotations.NotNull;
@@ -11,8 +12,9 @@ import java.util.Objects;
 
 /** 保存一个 worker 已经持有租约的节点及其 Job 定义定位信息。 */
 public class NodeClaim {
-
     private final @NotNull JobKey jobKey;
+
+    private final @NotNull RetryRule retryRule;
 
     private final @Nullable String inputJson;
 
@@ -20,15 +22,11 @@ public class NodeClaim {
 
     private final @NotNull String nodeKey;
 
-    private final int attempt;
-
     private final int jobDefinitionVersion;
 
-    private final int maxAttempts;
+    private final long attempt;
 
     private final long nodeId;
-
-    private final long retryDelayMillis;
 
     private final long runId;
 
@@ -55,8 +53,7 @@ public class NodeClaim {
      * @param nodeKey 节点在 Job 内的稳定名称
      * @param inputJson 已准备的输入 JSON；Void 或合并节点为空
      * @param attempt 当前从 1 开始的尝试次数
-     * @param maxAttempts 当前节点允许的最大尝试次数
-     * @param retryDelayMillis 失败后再次可领取前的固定毫秒数
+     * @param retryRule 节点创建时冻结的重试规则
      */
     public NodeClaim(
             long nodeId,
@@ -66,9 +63,8 @@ public class NodeClaim {
             @NotNull String jobKind,
             @NotNull String nodeKey,
             @Nullable String inputJson,
-            int attempt,
-            int maxAttempts,
-            long retryDelayMillis) {
+            long attempt,
+            @NotNull RetryRule retryRule) {
         this.nodeId = nodeId;
         this.runId = runId;
         this.jobKey = jobKey;
@@ -77,8 +73,7 @@ public class NodeClaim {
         this.nodeKey = nodeKey;
         this.inputJson = inputJson;
         this.attempt = attempt;
-        this.maxAttempts = maxAttempts;
-        this.retryDelayMillis = retryDelayMillis;
+        this.retryRule = Objects.requireNonNull(retryRule);
     }
 
     /**
@@ -152,8 +147,7 @@ public class NodeClaim {
                 nodeKey,
                 inputJson,
                 attempt,
-                maxAttempts,
-                retryDelayMillis);
+                retryRule);
     }
 
     /**
@@ -215,25 +209,12 @@ public class NodeClaim {
      *
      * @return 本次从 1 开始的尝试次数
      */
-    public int attempt() {
+    public long attempt() {
         return attempt;
     }
 
-    /**
-     * 当前节点允许的最大尝试次数。
-     *
-     * @return 当前节点最大尝试次数
-     */
-    public int maxAttempts() {
-        return maxAttempts;
-    }
-
-    /**
-     * 当前节点失败后的固定重试间隔。
-     *
-     * @return 失败后再次 READY 前的固定毫秒数
-     */
-    public long retryDelayMillis() {
-        return retryDelayMillis;
+    /** @return 本次运行创建时冻结的重试规则 */
+    public @NotNull RetryRule retryRule() {
+        return retryRule;
     }
 }

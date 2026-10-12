@@ -17,6 +17,7 @@ import com.sca4d.core.api.job.JobKey;
 import com.sca4d.core.api.job.JobRunStatus;
 import com.sca4d.core.api.job.JobSubmission;
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.retry.RetryRule;
 import com.sca4d.core.api.runtime.InstanceCapabilities;
 import com.sca4d.core.api.runtime.InstanceCapability;
 import com.sca4d.core.api.scheduling.IntervalSchedule;
@@ -25,6 +26,7 @@ import com.sca4d.core.api.scheduling.JobScheduler;
 import com.sca4d.core.api.scheduling.MisfirePolicy;
 import com.sca4d.core.api.scheduling.OverlapPolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
+import com.sca4d.core.spring.config.CoreJacksonAutoConfiguration;
 import com.sca4d.core.spring.config.InstanceProperties;
 import com.sca4d.core.spring.json.Sca4djJson;
 import com.sca4d.core.spring.json.Sca4djMapper;
@@ -97,6 +99,7 @@ class QuartzSchedulingIntegrationTest {
                 .withConfiguration(
                         AutoConfigurations.of(
                                 QuartzSchedulingAutoConfiguration.class,
+                                CoreJacksonAutoConfiguration.class,
                                 CoreMyBatisAutoConfiguration.class,
                                 MybatisAutoConfiguration.class,
                                 QuartzAutoConfiguration.class))
@@ -175,6 +178,7 @@ class QuartzSchedulingIntegrationTest {
                 .withConfiguration(
                         AutoConfigurations.of(
                                 QuartzSchedulingAutoConfiguration.class,
+                                CoreJacksonAutoConfiguration.class,
                                 CoreMyBatisAutoConfiguration.class,
                                 MybatisAutoConfiguration.class,
                                 QuartzAutoConfiguration.class))
@@ -272,8 +276,8 @@ class QuartzSchedulingIntegrationTest {
                 }
 
                 @Override
-                public @NotNull com.sca4d.core.api.job.JobRetryPolicy retryPolicy() {
-                    return com.sca4d.core.api.job.JobRetryPolicy.once();
+                public @NotNull RetryRule retryRule() {
+                    return RetryRule.once();
                 }
 
                 @Override

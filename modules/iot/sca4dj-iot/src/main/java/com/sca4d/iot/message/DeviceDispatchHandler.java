@@ -119,7 +119,7 @@ public class DeviceDispatchHandler implements MessageHandler<DeviceDispatchMessa
                 || current.status().terminal()
                 || current.status() == DeviceDownlinkStatus.WAITING_ACK
                 || current.status() == DeviceDownlinkStatus.PENDING
-                        && dispatch.attempt() != current.attemptCount() + 1
+                        && dispatch.attempt() != Math.incrementExact(current.attemptCount())
                 || current.status() == DeviceDownlinkStatus.SENDING
                         && dispatch.attempt() != current.attemptCount()) {
             LOG.trace(
@@ -188,7 +188,7 @@ public class DeviceDispatchHandler implements MessageHandler<DeviceDispatchMessa
             if (!downlinks.reschedule(message.messageId(), message.attemptCount(), failure.code())) {
                 return;
             }
-            messages.publishDispatch(message.messageId(), message.attemptCount() + 1, retryAt);
+            messages.publishDispatch(message.messageId(), Math.incrementExact(message.attemptCount()), retryAt);
             LOG.warn(
                     "Device 下行等待重试 | messageId={} failure={} attempt={} retryAt={}",
                     message.messageId(),

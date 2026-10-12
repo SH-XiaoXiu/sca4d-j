@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="annotations">@Internal
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">RabbitMessageTopology</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">校验 Message Handler 契约，并声明持久业务 exchange、Handler 队列、retry queue 和 DLQ。</div>
+<div class="block">校验 Message Handler 契约，并声明持久业务 exchange、Handler 队列和 DLQ。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -106,7 +106,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">RabbitMessageTopology</a>()</code></div>
 <div class="col-last even-row-color">
-<div class="block">使用固定业务消息、重试和死信 exchange 名称建立拓扑定义。</div>
+<div class="block">使用固定业务消息和死信 exchange 名称建立拓扑定义。</div>
 </div>
 </div>
 </section>
@@ -126,17 +126,19 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#declarables(java.util.List,java.util.List)" class="member-name-link">declarables</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends @NotNull com.sca4d.core.api.messaging.EventHandler&lt;?&gt;&gt;&nbsp;eventHandlers,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends @NotNull com.sca4d.core.api.messaging.MessageHandler&lt;?&gt;&gt;&nbsp;messageHandlers)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">根据全部 Handler 声明 exchange、队列、重试队列和死信队列。</div>
+<div class="block">根据全部 Handler 声明 exchange、主队列和死信队列。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.name.Key</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#exchangeName()" class="member-name-link">exchangeName</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.name.Key</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#retryRoutingKey(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">retryRoutingKey</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;handlerCode)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#handlerQueueName(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">handlerQueueName</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;handlerCode)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.name.Key</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#routingKey(com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">routingKey</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;messageCode)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">在实际 RabbitMQ 路由边界追加部署前缀，业务消息编码保持原值。</div>
+</div>
 </div>
 </div>
 </div>
@@ -158,7 +160,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="&lt;init&gt;()">
 <h3>RabbitMessageTopology</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RabbitMessageTopology</span>()</div>
-<div class="block">使用固定业务消息、重试和死信 exchange 名称建立拓扑定义。</div>
+<div class="block">使用固定业务消息和死信 exchange 名称建立拓扑定义。</div>
 </section>
 </li>
 </ul>
@@ -186,21 +188,26 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.Key</span>&nbsp;<span class="element-name">routingKey</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;messageCode)</span></div>
+<div class="block">在实际 RabbitMQ 路由边界追加部署前缀，业务消息编码保持原值。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>messageCode</code> - 业务消息编码 @return 业务消息路由键</dd>
+<dd><code>messageCode</code> - 业务消息编码</dd>
+<dt>Returns:</dt>
+<dd>业务消息路由键</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="retryRoutingKey(com.sca4d.core.api.name.code.TreeCode)">
-<h3>retryRoutingKey</h3>
+<section class="detail" id="handlerQueueName(com.sca4d.core.api.name.code.TreeCode)">
+<h3>handlerQueueName</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.Key</span>&nbsp;<span class="element-name">retryRoutingKey</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.name.Key</span>&nbsp;<span class="element-name">handlerQueueName</span><wbr><span class="parameters">(@NotNull
  @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;handlerCode)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>handlerCode</code> - Handler 编码 @return Handler 重试路由键</dd>
+<dd><code>handlerCode</code> - 已注册的 Handler 编码</dd>
+<dt>Returns:</dt>
+<dd>使用当前应用隔离名称的目标主队列</dd>
 </dl>
 </section>
 </li>
@@ -212,7 +219,7 @@ loadScripts(document, 'script');</script>
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends @NotNull com.sca4d.core.api.messaging.EventHandler&lt;?&gt;&gt;&nbsp;eventHandlers,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends @NotNull com.sca4d.core.api.messaging.MessageHandler&lt;?&gt;&gt;&nbsp;messageHandlers)</span></div>
-<div class="block">根据全部 Handler 声明 exchange、队列、重试队列和死信队列。</div>
+<div class="block">根据全部 Handler 声明 exchange、主队列和死信队列。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>eventHandlers</code> - 已安装的 EventHandler</dd>

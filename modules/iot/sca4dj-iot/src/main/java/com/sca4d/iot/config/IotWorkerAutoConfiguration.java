@@ -5,7 +5,6 @@ import com.sca4d.core.api.connection.ConnectionRegistry;
 import com.sca4d.core.api.job.DirectJob;
 import com.sca4d.core.api.job.JobKey;
 import com.sca4d.core.api.messaging.JacksonMessageCodec;
-import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.runtime.InstanceCapability;
@@ -195,15 +194,11 @@ public class IotWorkerAutoConfiguration {
     DeviceDisconnectHandler deviceDisconnectHandler(
             DeviceConnectionTerminatorRouter terminators,
             DeviceConnectionRepository connections,
-            Clock clock,
-            MessageBus messages,
             ObjectProvider<ConnectionRegistry> commonConnections,
             MessageCodec<DeviceDisconnectMessage> codec) {
         return new DeviceDisconnectHandler(
                 terminators,
                 connections,
-                messages,
-                clock,
                 commonConnections.getIfAvailable(),
                 codec);
     }

@@ -103,12 +103,12 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.id.Id,M,com.sca4d.core.api.name.Name,java.time.Instant,boolean,int)" class="member-name-link">IncomingMessage</a><wbr>(@NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a>&nbsp;messageId,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.core.api.id.Id,M,com.sca4d.core.api.name.Name,java.time.Instant,boolean,long)" class="member-name-link">IncomingMessage</a><wbr>(@NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a>&nbsp;messageId,
  <a href="IncomingMessage.html" title="type parameter in IncomingMessage">M</a>&nbsp;message,
  @NotNull <a href="../name/Name.html" title="class in com.sca4d.core.api.name">Name</a>&nbsp;sourceApplication,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;publishedAt,
  boolean&nbsp;redelivered,
- int&nbsp;attempt)</code></div>
+ long&nbsp;attempt)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建一条包含 RabbitMQ 投递元数据的业务消息。</div>
 </div>
@@ -126,7 +126,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#attempt()" class="member-name-link">attempt</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="IncomingMessage.html" title="type parameter in IncomingMessage">M</a></code></div>
@@ -162,8 +162,8 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.id.Id,M,com.sca4d.core.api.name.Name,java.time.Instant,boolean,int)">
-<h3 id="&lt;init&gt;(com.sca4d.core.api.id.Id,com.sca4d.core.api.message.Message,com.sca4d.core.api.name.Name,java.time.Instant,boolean,int)">IncomingMessage</h3>
+<section class="detail" id="&lt;init&gt;(com.sca4d.core.api.id.Id,M,com.sca4d.core.api.name.Name,java.time.Instant,boolean,long)">
+<h3 id="&lt;init&gt;(com.sca4d.core.api.id.Id,com.sca4d.core.api.message.Message,com.sca4d.core.api.name.Name,java.time.Instant,boolean,long)">IncomingMessage</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">IncomingMessage</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../id/Id.html" title="class in com.sca4d.core.api.id">Id</a>&nbsp;messageId,
  @NotNull
@@ -173,7 +173,7 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;publishedAt,
  boolean&nbsp;redelivered,
- int&nbsp;attempt)</span></div>
+ long&nbsp;attempt)</span></div>
 <div class="block">创建一条包含 RabbitMQ 投递元数据的业务消息。</div>
 </section>
 </li>
@@ -242,7 +242,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="attempt()">
 <h3>attempt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">attempt</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">attempt</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>当前消息的处理尝试序号</dd>

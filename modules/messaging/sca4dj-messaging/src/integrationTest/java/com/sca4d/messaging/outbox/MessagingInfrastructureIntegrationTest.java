@@ -1,50 +1,58 @@
 package com.sca4d.messaging.outbox;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.awaitility.Awaitility.await;
 
-import com.sca4d.core.api.concurrent.OptimisticLockException;
-import com.sca4d.core.api.concurrent.VersionCondition;
-import com.sca4d.core.api.concurrent.VersionConditions;
-import com.sca4d.core.api.error.CoreErrorCode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sca4d.core.api.event.Event;
 import com.sca4d.core.api.event.EventType;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.id.IdGenerator;
+import com.sca4d.core.api.isolation.AppName;
 import com.sca4d.core.api.messaging.DispatchPolicy;
-import com.sca4d.core.api.messaging.MessageBus;
-import com.sca4d.core.api.messaging.MessageConsumer;
-import com.sca4d.core.api.messaging.MessageDelivery;
+import com.sca4d.core.api.messaging.EventHandler;
+import com.sca4d.core.api.messaging.HandlingDecision;
+import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.name.NameFormat;
 import com.sca4d.core.api.name.code.TreeCode;
-import com.sca4d.core.api.scheduling.JobSchedule;
-import com.sca4d.core.spring.config.CoreJacksonAutoConfiguration;
-import com.sca4d.core.spring.config.CoreSpringAutoConfiguration;
-import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.api.retry.Backoff;
+import com.sca4d.core.api.retry.RetryRule;
 import com.sca4d.core.spring.json.Sca4djMapper;
-import com.sca4d.core.spring.persistence.batch.SqlBatchProperties;
-import com.sca4d.core.spring.persistence.batch.SqlBatches;
+import com.sca4d.core.spring.persistence.mybatis.CoreEnumTypeHandler;
+import com.sca4d.core.spring.persistence.mybatis.StringValueTypeHandler;
+import com.sca4d.core.spring.persistence.mybatis.TreeCodeTypeHandler;
+import com.sca4d.core.spring.retry.RetryRuleCodec;
+import com.sca4d.messaging.config.MessagingProperties;
+import com.sca4d.messaging.outbox.mapper.OutboxMapper;
+import com.sca4d.messaging.rabbit.RabbitHandlerContainers;
+import com.sca4d.messaging.rabbit.RabbitMessageBus;
+import com.sca4d.messaging.rabbit.RabbitMessageEnvelopeCodec;
+import com.sca4d.messaging.rabbit.RabbitMessageTopology;
+import com.sca4d.messaging.rabbit.RabbitPublisher;
+import org.apache.ibatis.session.Configuration;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.Declarable;
+import org.springframework.amqp.core.Exchange;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageBuilder;
-import org.springframework.amqp.core.MessageDeliveryMode;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
-import org.springframework.jdbc.datasource.init.ScriptUtils;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.transaction.TransactionSystemException;
+import org.springframework.transaction.support.DefaultTransactionStatus;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.RabbitMQContainer;
@@ -55,443 +63,486 @@ import java.sql.Timestamp;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 
 import javax.sql.DataSource;
 
-/** 使用 PostgreSQL 和 RabbitMQ 验证业务消息发布、消费、DLQ 与 Outbox。 */
+/** 使用真实 PostgreSQL 和 RabbitMQ 验证定向重试交接、恢复、原消息身份和发布次数隔离。 */
 @Testcontainers
-@SpringBootTest(classes = MessagingInfrastructureIntegrationTest.TestApplication.class, properties = {
-        "spring.application.name=messaging-test",
-        "spring.autoconfigure.exclude="
-                + "com.sca4d.core.spring.config.CoreSpringAutoConfiguration,"
-                + "com.sca4d.core.spring.config.CoreJacksonAutoConfiguration,"
-                + "com.sca4d.core.spring.gateway.GatewaySpringAutoConfiguration,"
-                + "com.sca4d.core.spring.openapi.CoreOpenApiConfiguration",
-        "sca4dj.messaging.dispatch-interval=PT1H",
-        "sca4dj.messaging.cleanup-interval=PT1H"
-})
-@SuppressWarnings({
-        "rawtypes",
-        "SqlNoDataSourceInspection",
-        "SpringJavaInjectionPointsAutowiringInspection"
-})
 class MessagingInfrastructureIntegrationTest {
-
-    private static final String COPY_QUEUE = "messaging-test:sca4dj:messaging:consumer:invoice-copy";
-
-    private static final String FAILURE_QUEUE = "messaging-test:sca4dj:messaging:consumer:invoice-failure";
-
-    private static final String SUCCESS_QUEUE = "messaging-test:sca4dj:messaging:consumer:invoice-primary";
-
-    private static final TreeCode EVENT_CODE = TreeCode.of("INVOICE/CREATED");
-
-    private static final EventType<Map> EVENT_TYPE = new EventType<>(EVENT_CODE, 1, Map.class);
-
-    private static final String FAILURE_DLQ = FAILURE_QUEUE + ":dead-letter";
-
     @Container
     private static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:17-alpine");
 
     @Container
-    private static final RabbitMQContainer RABBITMQ = new RabbitMQContainer("rabbitmq:4-alpine")
-            .withAdminUser("sca4dj")
-            .withAdminPassword("sca4dj");
+    private static final RabbitMQContainer RABBIT = new RabbitMQContainer("rabbitmq:4-alpine")
+            .withAdminUser("retry")
+            .withAdminPassword("retry-test");
 
-    @Autowired
-    private MessageBus publisher;
+    private static final EventType<String> TYPE = new EventType<>("TEST/RETRY/EVENT", 1, String.class);
 
-    @Autowired
-    private MessageOutboxDispatcher dispatcher;
+    private static final Instant NOW = Instant.parse("2026-10-12T00:00:00Z");
+    static {
+        AppName.publish("RETRY_TEST");
+    }
 
-    @Autowired
-    private MessageOutboxRepository outbox;
+    private final AtomicLong sequence = new AtomicLong(100);
 
-    @Autowired
-    private TransactionTemplate transactions;
+    private final AtomicReference<Instant> now = new AtomicReference<>(NOW);
 
-    @Autowired
+    private final Clock clock = new Clock() {
+        @Override
+        public ZoneId getZone() {
+            return ZoneOffset.UTC;
+        }
+
+        @Override
+        public Clock withZone(ZoneId zone) {
+            return this;
+        }
+
+        @Override
+        public Instant instant() {
+            return now.get();
+        }
+    };
+
     private JdbcTemplate jdbc;
 
-    @Autowired
+    private final Sca4djMapper mapper = new Sca4djMapper();
+
+    private final RetryRuleCodec retryRules = new RetryRuleCodec(mapper);
+
+    private FaultTransactions manager;
+
+    private TransactionTemplate transactions;
+
+    private CachingConnectionFactory connection;
+
+    private RabbitAdmin admin;
+
     private RabbitTemplate rabbit;
 
-    @Autowired
-    private RabbitAdmin rabbitAdmin;
+    private RabbitMessageTopology topology;
 
-    @Autowired
-    private PrimaryConsumer primaryConsumer;
+    private RabbitMessageEnvelopeCodec codec;
 
-    @Autowired
-    private CopyConsumer copyConsumer;
+    private MessageOutboxRepository outbox;
 
-    @Autowired
-    private FailureConsumer failureConsumer;
+    private MessageOutboxDispatcher dispatcher;
 
-    @Autowired
-    private ApplicationContext applicationContext;
+    private RabbitMessageBus bus;
 
-    @DynamicPropertySource
-    static void infrastructureProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.application.name", () -> "messaging-test");
-        registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
-        registry.add("spring.datasource.username", POSTGRES::getUsername);
-        registry.add("spring.datasource.password", POSTGRES::getPassword);
-        registry.add("spring.datasource.dynamic.primary", () -> "master");
-        registry.add("spring.datasource.dynamic.datasource.master.url", POSTGRES::getJdbcUrl);
-        registry.add("spring.datasource.dynamic.datasource.master.username", POSTGRES::getUsername);
-        registry.add("spring.datasource.dynamic.datasource.master.password", POSTGRES::getPassword);
-        registry.add("spring.rabbitmq.host", RABBITMQ::getHost);
-        registry.add("spring.rabbitmq.port", RABBITMQ::getAmqpPort);
-        registry.add("spring.rabbitmq.username", () -> "sca4dj");
-        registry.add("spring.rabbitmq.password", () -> "sca4dj");
-    }
+    private RabbitHandlerContainers consumers;
 
+    private TestHandler primary;
+
+    private TestHandler copy;
+
+    private final IdGenerator ids = () -> Id.of(sequence.incrementAndGet());
+
+    @SuppressWarnings("resource") // SqlSessionTemplate 按调用管理会话，不允许手动关闭。
     @BeforeEach
-    void resetState() {
-        Boolean schemaExists = jdbc.queryForObject(
-                "SELECT to_regclass('public.messaging_outbox') IS NOT NULL",
-                Boolean.class);
-        if (!Boolean.TRUE.equals(schemaExists)) {
-            DataSource dataSource = Objects.requireNonNull(jdbc.getDataSource());
-            ResourceDatabasePopulator coreSchema = new ResourceDatabasePopulator(
-                    new ClassPathResource("META-INF/sca4dj/schema/dictionary-settings.sql"));
-            coreSchema.setSeparator(ScriptUtils.EOF_STATEMENT_SEPARATOR);
-            coreSchema.execute(dataSource);
-            new ResourceDatabasePopulator(
-                    new ClassPathResource("META-INF/sca4dj/schema/messaging.sql"))
-                    .execute(dataSource);
-        }
-        jdbc.execute("TRUNCATE TABLE messaging_outbox");
-
-        primaryConsumer.reset();
-        copyConsumer.reset();
-        failureConsumer.reset();
-        for (String queue : List.of(SUCCESS_QUEUE, COPY_QUEUE, FAILURE_QUEUE, FAILURE_DLQ)) {
-            if (rabbitAdmin.getQueueProperties(queue) != null) {
-                rabbitAdmin.purgeQueue(queue, false);
+    void infrastructure() throws Exception {
+        DataSource source = new DriverManagerDataSource(
+                POSTGRES.getJdbcUrl(),
+                POSTGRES.getUsername(),
+                POSTGRES.getPassword());
+        jdbc = new JdbcTemplate(source);
+        jdbc.execute("DROP TABLE IF EXISTS messaging_outbox");
+        jdbc.execute(
+                "CREATE OR REPLACE FUNCTION sca4dj_set_updated_at() RETURNS TRIGGER LANGUAGE plpgsql AS $$ BEGIN NEW.updated_at = CURRENT_TIMESTAMP; RETURN NEW; END; $$");
+        new ResourceDatabasePopulator(new ClassPathResource("META-INF/sca4dj/schema/messaging.sql")).execute(source);
+        manager = new FaultTransactions(source);
+        manager.setRollbackOnCommitFailure(true);
+        transactions = new TransactionTemplate(manager);
+        Configuration configuration = new Configuration();
+        configuration.setMapUnderscoreToCamelCase(true);
+        configuration.setArgNameBasedConstructorAutoMapping(true);
+        configuration.setDefaultEnumTypeHandler(CoreEnumTypeHandler.class);
+        configuration.getTypeHandlerRegistry()
+                .register(RetryRule.class, new StringValueTypeHandler<>(retryRules::decode, retryRules::encode));
+        configuration.getTypeHandlerRegistry().register(TreeCode.class, new TreeCodeTypeHandler.Colon());
+        SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
+        factory.setDataSource(source);
+        factory.setConfiguration(configuration);
+        factory.setMapperLocations(new ClassPathResource("mapper/messaging/OutboxMapper.xml"));
+        factory.afterPropertiesSet();
+        outbox = new MessageOutboxRepository(
+                new SqlSessionTemplate(Objects.requireNonNull(factory.getObject())).getMapper(OutboxMapper.class));
+        connection = new CachingConnectionFactory(RABBIT.getHost(), RABBIT.getAmqpPort());
+        connection.setUsername("retry");
+        connection.setPassword("retry-test");
+        connection.setPublisherConfirmType(CachingConnectionFactory.ConfirmType.CORRELATED);
+        connection.setPublisherReturns(true);
+        rabbit = new RabbitTemplate(connection);
+        admin = new RabbitAdmin(connection);
+        topology = new RabbitMessageTopology();
+        primary = new TestHandler(
+                "TEST/PRIMARY",
+                RetryRule.atMost(
+                        3,
+                        Backoff.exponential(Duration.ofSeconds(1), 2, Duration.ofSeconds(10))));
+        primary.action = incoming -> incoming.attempt() < 3
+                ? HandlingDecision.retry("TEMPORARY")
+                : HandlingDecision.acknowledge();
+        copy = new TestHandler("TEST/COPY", RetryRule.once());
+        for (Declarable declaration : topology.declarables(List.of(primary, copy), List.of()).getDeclarables()) {
+            if (declaration instanceof Exchange exchange)
+                admin.declareExchange(exchange);
+            if (declaration instanceof Queue queue) {
+                admin.declareQueue(queue);
+                admin.purgeQueue(queue.getName());
             }
+            if (declaration instanceof Binding binding)
+                admin.declareBinding(binding);
         }
+        MessagingProperties properties = new MessagingProperties();
+        codec = new RabbitMessageEnvelopeCodec(mapper, List.of());
+        RabbitPublisher sender = new RabbitPublisher(rabbit, topology, properties, retryRules);
+        dispatcher = new MessageOutboxDispatcher(outbox, sender, transactions, properties, clock);
+        bus = new RabbitMessageBus(ids, codec, sender, outbox, clock);
+        startConsumers();
     }
 
-    /** Messaging 登记不保留 Run 的派发与清理 Job 计划。 */
-    @Test
-    void registersOutboxJobsWithoutJobRuntime() {
-        assertThat(applicationContext.getBeansOfType(JobSchedule.class).values())
-                .extracting(schedule -> schedule.key().format(NameFormat.SLASH))
-                .containsExactlyInAnyOrder("MESSAGING/OUTBOX/DISPATCH", "MESSAGING/OUTBOX/CLEANUP");
+    private void startConsumers() {
+        consumers = new RabbitHandlerContainers(
+                connection,
+                topology,
+                codec,
+                outbox,
+                ids,
+                manager,
+                clock,
+                retryRules,
+                List.of(primary, copy),
+                List.of());
+        consumers.start();
     }
 
-    @Test
-    @DisplayName("Publisher Confirm Requires A Route And Each Consumer Receives A Copy")
-    void publisherConfirmRequiresRouteAndEachConsumerReceivesCopy() throws InterruptedException {
-        assertThat(rabbit.isMandatoryFor(MessageBuilder.withBody(new byte[0]).build())).isFalse();
-
-        Id messageId = publisher.dispatch(message(), DispatchPolicy.immediate()).messageId();
-
-        assertThat(primaryConsumer.receivedMessage()).isEqualTo(messageId);
-        assertThat(copyConsumer.receivedMessage()).isEqualTo(messageId);
-        assertThat(failureConsumer.receivedMessage()).isEqualTo(messageId);
-
-        Message deadLetter = rabbit.receive(FAILURE_DLQ, 5_000);
-        assertThat(deadLetter).isNotNull();
-        assertThat(deadLetter.getMessageProperties().getReceivedDeliveryMode())
-                .isEqualTo(MessageDeliveryMode.PERSISTENT);
-        assertThat(deadLetter.getMessageProperties().getMessageId())
-                .isEqualTo(messageId.toString());
-        assertThat(rabbit.receive(FAILURE_QUEUE, 500)).isNull();
-        assertThat(failureConsumer.attempts).hasValue(1);
-
-        assertThatThrownBy(() -> {
-            Id unexpected = publisher.dispatch(
-                    new Event<>(
-                            new EventType<>(TreeCode.of("INVOICE/UNROUTED"), 1, Map.class),
-                            "invoice:42",
-                            Instant.now(),
-                            Map.of("invoiceId", 42)),
-                    DispatchPolicy.immediate()).messageId();
-            assertThat(unexpected).isNotNull();
-        })
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("没有匹配消息路由");
+    @AfterEach
+    void close() {
+        if (consumers != null)
+            consumers.stop();
+        if (connection != null)
+            connection.destroy();
     }
 
     @Test
-    @DisplayName("AMQP Message Id Must Match The Envelope")
-    void amqpMessageIdMustMatchEnvelope() throws InterruptedException {
-        Id envelopeMessageId = Objects.requireNonNull(
-                transactions.execute(
-                        status -> publisher.dispatch(message(), DispatchPolicy.outbox()).messageId()));
-        byte[] envelope = jdbc.queryForObject(
-                "SELECT envelope FROM messaging_outbox WHERE message_id = ?",
-                byte[].class,
-                envelopeMessageId.value());
-        rabbit.send(
-                FAILURE_QUEUE,
-                MessageBuilder.withBody(envelope)
-                        .setMessageId(Long.toString(envelopeMessageId.value() + 1))
-                        .setDeliveryMode(MessageDeliveryMode.PERSISTENT)
-                        .build());
-
-        Message deadLetter = rabbit.receive(FAILURE_DLQ, 5_000);
-        assertThat(deadLetter).isNotNull();
-        assertThat(deadLetter.getMessageProperties().getMessageId())
-                .isEqualTo(Long.toString(envelopeMessageId.value() + 1));
-        assertThat(failureConsumer.receivedMessage()).isNull();
-        assertThat(failureConsumer.attempts).hasValue(0);
-    }
-
-    @Test
-    @DisplayName("Outbox Follows Transaction Delay Lease And Retention Rules")
-    void outboxFollowsTransactionDelayLeaseAndRetentionRules() {
-        Id committed = transactions.execute(
-                status -> publisher.dispatch(message(), DispatchPolicy.outbox()).messageId());
-        assertThat(committed).isNotNull();
-        assertThat(status(committed)).isEqualTo(OutboxStatus.PENDING);
-
-        assertThatThrownBy(() -> transactions.executeWithoutResult(status -> {
-            Id rolledBack = publisher.dispatch(message(), DispatchPolicy.outbox()).messageId();
-            assertThat(rolledBack).isNotNull();
-            throw new IllegalStateException("rollback");
-        }))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessage("rollback");
-        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM messaging_outbox", Integer.class))
-                .isEqualTo(1);
-
+    @DisplayName("指数退避定向返回原 Handler，重启后沿用原规则与业务标识")
+    void targetsOnlyOriginalHandlerAndRestoresFrozenRule() {
+        Id id = bus.dispatch(event(), DispatchPolicy.immediate()).messageId();
+        await().atMost(Duration.ofSeconds(10)).untilAsserted(() -> assertThat(retryRows()).isEqualTo(1));
+        await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> assertThat(copy.calls).hasValue(1));
+        assertThat(nextAt(2)).isEqualTo(NOW.plusSeconds(1));
         dispatcher.dispatch();
-        assertThat(status(committed)).isEqualTo(OutboxStatus.SENT);
-
-        Instant delayedUntil = Instant.now().plus(Duration.ofHours(1));
-        Id delayed = transactions.execute(
-                status -> publisher.dispatch(message(), DispatchPolicy.outboxNotBefore(delayedUntil)).messageId());
-        assertThat(delayed).isNotNull();
-        dispatcher.dispatch();
-        assertThat(status(delayed)).isEqualTo(OutboxStatus.PENDING);
-
-        Id takeover = transactions.execute(
-                status -> publisher.dispatch(message(), DispatchPolicy.outbox()).messageId());
-        assertThat(takeover).isNotNull();
-        transactions.executeWithoutResult(
-                status -> assertThat(
-                        outbox.claim(
-                                Instant.now(),
-                                1,
-                                "abandoned-lease",
-                                Instant.now().plusSeconds(60)))
-                        .extracting(OutboxClaim::messageId)
-                        .containsExactly(takeover));
-        jdbc.update(
-                "UPDATE messaging_outbox SET lease_until = ? WHERE message_id = ?",
-                Timestamp.from(Instant.now().minusSeconds(1)),
-                takeover.value());
-        dispatcher.dispatch();
-        assertThat(status(takeover)).isEqualTo(OutboxStatus.SENT);
         assertThat(
-                jdbc.queryForObject(
-                        "SELECT attempt_count FROM messaging_outbox WHERE message_id = ?",
-                        Integer.class,
-                        takeover.value()))
-                .isEqualTo(2);
-
-        jdbc.update(
-                "UPDATE messaging_outbox SET sent_at = ? WHERE message_id IN (?, ?)",
-                Timestamp.from(Instant.now().minus(Duration.ofDays(8))),
-                committed.value(),
-                takeover.value());
-        dispatcher.cleanup();
-        assertThat(
-                jdbc.queryForObject(
-                        "SELECT COUNT(*) FROM messaging_outbox WHERE message_id IN (?, ?)",
-                        Integer.class,
-                        committed.value(),
-                        takeover.value()))
+                jdbc.queryForObject("SELECT attempt_count FROM messaging_outbox WHERE handler_attempt = 2", Long.class))
                 .isZero();
-        assertThat(status(delayed)).isEqualTo(OutboxStatus.PENDING);
+        consumers.stop();
+        primary.rule = RetryRule.once();
+        startConsumers();
+        now.set(nextAt(2));
+        dispatcher.dispatch();
+        await().atMost(Duration.ofSeconds(10)).untilAsserted(() -> assertThat(retryRows()).isEqualTo(2));
+        assertThat(nextAt(3)).isEqualTo(NOW.plusSeconds(3));
+        now.set(nextAt(3));
+        dispatcher.dispatch();
+        await().atMost(Duration.ofSeconds(10)).untilAsserted(() -> assertThat(primary.calls).hasValue(3));
+        assertThat(primary.ids).containsOnly(id);
+        assertThat(primary.attempts).containsExactly(1L, 2L, 3L);
+        assertThat(copy.calls).hasValue(1);
+        assertThat(jdbc.queryForList("SELECT DISTINCT message_id FROM messaging_outbox", Long.class))
+                .containsExactly(id.value());
     }
 
     @Test
-    @DisplayName("Repository Affected Rows Uses The MyBatis Update Count")
-    void repositoryAffectedRowsUsesTheMyBatisUpdateCount() {
-        OutboxClaim missing = new OutboxClaim(
-                Id.of(Long.MAX_VALUE),
-                EVENT_CODE,
-                new byte[0],
-                1,
-                "missing-lease",
-                0);
+    @DisplayName("交接提交后 ACK 连接中断，原消息重投不重复登记或执行已知旧尝试")
+    void survivesAckFailureAfterCommit() {
+        manager.afterCommit.set(connection::resetConnection);
+        Id messageId = bus.dispatch(event(), DispatchPolicy.immediate()).messageId();
+        await().atMost(Duration.ofSeconds(15)).untilAsserted(() -> {
+            assertThat(retryRows()).isEqualTo(1);
+            assertThat(admin.getQueueInfo(queue(primary)).getMessageCount()).isZero();
+        });
+        now.set(nextAt(2));
+        dispatcher.dispatch();
+        await().atMost(Duration.ofSeconds(15)).untilAsserted(() -> assertThat(retryRows()).isEqualTo(2));
+        assertThat(primary.attempts).containsExactly(1L, 2L);
+        assertThat(primary.ids).containsOnly(messageId);
+    }
 
-        assertThatThrownBy(() -> outbox.saveProgress(missing.sent(Instant.now())))
-                .isInstanceOfSatisfying(OptimisticLockException.class, exception -> {
-                    assertThat(exception.errorCode()).isEqualTo(CoreErrorCode.CONFLICT);
-                    assertThat(exception.messageArguments()).containsExactly("Outbox 消息派发结果");
-                });
+    @Test
+    @DisplayName("交接事务失败时保留 Broker 消息并最终恢复登记")
+    void retainsOriginalMessageWhenCommitFails() {
+        manager.beforeCommit.set(() -> {
+            throw new TransactionSystemException("injected commit failure");
+        });
+        Id messageId = bus.dispatch(event(), DispatchPolicy.immediate()).messageId();
+        await().atMost(Duration.ofSeconds(10)).untilAsserted(() -> assertThat(retryRows()).isEqualTo(1));
+        assertThat(primary.calls.get()).isGreaterThanOrEqualTo(2);
+        assertThat(primary.ids).containsOnly(messageId);
+        assertThat(jdbc.queryForObject("SELECT handler_attempt FROM messaging_outbox", Long.class)).isEqualTo(2);
+    }
 
-        Id id = transactions.execute(
-                status -> publisher.dispatch(message(), DispatchPolicy.outbox()).messageId());
-        Instant now = Instant.now().plusSeconds(1);
-        OutboxClaim first = transactions
-                .execute(status -> outbox.claim(now, 1, "first", now.plusSeconds(10)).getFirst());
-        transactions.executeWithoutResult(status -> outbox.saveProgress(first.failed(now, "test failure")));
-        assertThat(status(id)).isEqualTo(OutboxStatus.FAILED);
-        OutboxClaim next = transactions.execute(status -> outbox.claim(now, 1, "next", now.plusSeconds(10)).getFirst());
-        assertThatThrownBy(() -> transactions.executeWithoutResult(status -> outbox.saveProgress(first.sent(now))))
-                .isInstanceOf(OptimisticLockException.class);
-        transactions.executeWithoutResult(status -> outbox.saveProgress(next.sent(now)));
-        assertThat(status(id)).isEqualTo(OutboxStatus.SENT);
+    @Test
+    @DisplayName("不可路由的定向发布持续重试，发布次数与消费次数分离")
+    void publisherFailuresDoNotConsumeHandlerAttempts() {
+        consumers.stop();
+        Id id = Objects.requireNonNull(
+                transactions.execute(status -> bus.dispatch(event(), DispatchPolicy.outbox()).messageId()));
+        byte[] body = Objects.requireNonNull(
+                jdbc
+                        .queryForObject(
+                                "SELECT envelope FROM messaging_outbox WHERE message_id = ?",
+                                byte[].class,
+                                id.value()));
+        jdbc.update("DELETE FROM messaging_outbox");
+        TreeCode handler = TreeCode.of("TEST/MISSING");
+        String target = topology.handlerQueueName(handler).format(NameFormat.COLON);
+        admin.deleteQueue(target);
+        RetryRule rule = RetryRule.unlimited(Backoff.sequence(Duration.ofSeconds(1), Duration.ofSeconds(3)));
+        transactions.executeWithoutResult(
+                status -> outbox.scheduleHandlerRetry(ids.nextId(), id, TYPE.code(), body, handler, 2, rule, NOW));
+        dispatcher.dispatch();
+        assertThat(jdbc.queryForObject("SELECT status FROM messaging_outbox", String.class)).isEqualTo("FAILED");
+        assertThat(jdbc.queryForObject("SELECT attempt_count FROM messaging_outbox", Long.class)).isEqualTo(1);
+        assertThat(jdbc.queryForObject("SELECT handler_attempt FROM messaging_outbox", Long.class)).isEqualTo(2);
+        admin.declareQueue(new Queue(target, true));
+        now.set(NOW.plusSeconds(1));
+        dispatcher.dispatch();
+        Message received = rabbit.receive(target, 5000);
+        assertThat(received).isNotNull();
+        assertThat(received.getMessageProperties().getMessageId()).isEqualTo(id.toString());
+        assertThat(received.getMessageProperties().getHeaders()).containsEntry("HANDLER:ATTEMPT", 2L);
         assertThat(
+                retryRules.decode(received.getMessageProperties().getHeader("HANDLER:RETRY_RULE").toString())
+                        .maximumAttempts())
+                .isEmpty();
+        assertThat(jdbc.queryForObject("SELECT attempt_count FROM messaging_outbox", Long.class)).isEqualTo(2);
+        admin.deleteQueue(target);
+    }
+
+    @Test
+    @DisplayName("有限消费规则耗尽进入独立 DLQ，不影响其他 Handler")
+    void exhaustedHandlerGoesToItsDlq() {
+        consumers.stop();
+        primary.rule = RetryRule.atMost(2, Backoff.fixed(Duration.ofSeconds(1)));
+        primary.action = incoming -> HandlingDecision.retry("TEMPORARY");
+        startConsumers();
+        Id id = bus.dispatch(event(), DispatchPolicy.immediate()).messageId();
+        await().atMost(Duration.ofSeconds(10)).untilAsserted(() -> assertThat(retryRows()).isEqualTo(1));
+        now.set(nextAt(2));
+        dispatcher.dispatch();
+        Message dead = rabbit.receive(queue(primary) + ":DEAD_LETTER", 10000);
+        assertThat(dead).isNotNull();
+        assertThat(dead.getMessageProperties().getMessageId()).isEqualTo(id.toString());
+        assertThat(primary.attempts).containsExactly(1L, 2L);
+        assertThat(retryRows()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("同一消费尝试幂等登记，无效消息内容或信封冲突直接拒绝")
+    void rejectsCorruptMetadataAndDeduplicatesHandoff() throws Exception {
+        consumers.stop();
+        primary.rule = RetryRule.unlimited(Backoff.fixed(Duration.ofSeconds(1)));
+        Id id = Objects.requireNonNull(
+                transactions.execute(status -> bus.dispatch(event(), DispatchPolicy.outbox()).messageId()));
+        byte[] body = Objects.requireNonNull(
+                jdbc
+                        .queryForObject(
+                                "SELECT envelope FROM messaging_outbox WHERE message_id = ?",
+                                byte[].class,
+                                id.value()));
+        for (int index = 0; index < 2; index++) {
+            transactions.executeWithoutResult(
+                    status -> outbox.scheduleHandlerRetry(
+                            ids.nextId(),
+                            id,
+                            TYPE.code(),
+                            body,
+                            primary.code(),
+                            2,
+                            primary.rule,
+                            NOW.plusSeconds(5)));
+        }
+        assertThat(retryRows()).isEqualTo(1);
+        startConsumers();
+        rabbit.send(
+                "",
+                queue(primary),
+                MessageBuilder.withBody(body).setMessageId(id.toString()).setHeader("HANDLER:ATTEMPT", -1).build());
+        assertThat(rabbit.receive(queue(primary) + ":DEAD_LETTER", 10000)).isNotNull();
+        ObjectNode invalidVersion = (ObjectNode) mapper.readTree(body);
+        Id invalidId = ids.nextId();
+        invalidVersion.put("messageId", invalidId.toString());
+        invalidVersion.put("protocolVersion", 2);
+        rabbit.send(
+                "",
+                queue(primary),
+                MessageBuilder.withBody(mapper.writeValueAsBytes(invalidVersion))
+                        .setMessageId(invalidId.toString())
+                        .build());
+        assertThat(rabbit.receive(queue(primary) + ":DEAD_LETTER", 10000)).isNotNull();
+        ObjectNode conflictingEnvelope = (ObjectNode) mapper.readTree(body);
+        conflictingEnvelope.put("publishedAt", NOW.plusSeconds(1).toString());
+        rabbit.send(
+                "",
+                queue(primary),
+                MessageBuilder.withBody(mapper.writeValueAsBytes(conflictingEnvelope))
+                        .setMessageId(id.toString())
+                        .build());
+        assertThat(rabbit.receive(queue(primary) + ":DEAD_LETTER", 10000)).isNotNull();
+        assertThat(primary.calls).hasValue(0);
+        assertThat(retryRows()).isEqualTo(1);
+    }
+
+    /** 无限消费规则按序列等待，末项持续复用，成功后停止登记。 */
+    @Test
+    void repeatsLastSequenceIntervalUntilSuccessfulConsumption() {
+        consumers.stop();
+        primary.rule = RetryRule.unlimited(Backoff.sequence(Duration.ofSeconds(2), Duration.ofSeconds(5)));
+        primary.action = incoming -> incoming.attempt() < 4
+                ? HandlingDecision.retry("TEMPORARY")
+                : HandlingDecision.acknowledge();
+        startConsumers();
+        Id messageId = bus.dispatch(event(), DispatchPolicy.immediate()).messageId();
+        Instant expected = NOW;
+        for (long attempt = 2; attempt <= 4; attempt++) {
+            long targetAttempt = attempt;
+            await().atMost(Duration.ofSeconds(10))
+                    .untilAsserted(() -> assertThat(retryRows()).isEqualTo((int) targetAttempt - 1));
+            expected = expected.plusSeconds(attempt == 2 ? 2 : 5);
+            assertThat(nextAt(attempt)).isEqualTo(expected);
+            now.set(expected);
+            dispatcher.dispatch();
+        }
+        await().atMost(Duration.ofSeconds(10)).untilAsserted(() -> assertThat(primary.calls).hasValue(4));
+        assertThat(retryRows()).isEqualTo(3);
+        assertThat(primary.attempts).containsExactly(1L, 2L, 3L, 4L);
+        assertThat(primary.ids).containsOnly(messageId);
+    }
+
+    /** 旧发布租约不能覆盖接管后的状态；当前持有者仍可写回成功。 */
+    @Test
+    void rejectsStaleOutboxLeaseWriteback() {
+        consumers.stop();
+        Id messageId = Objects.requireNonNull(
+                transactions.execute(status -> bus.dispatch(event(), DispatchPolicy.outbox()).messageId()));
+        OutboxClaim first = Objects
+                .requireNonNull(transactions.execute(status -> outbox.claim(NOW, 1, "first", NOW.plusSeconds(1))))
+                .getFirst();
+        assertThat(first.messageId()).isEqualTo(messageId);
+        OutboxClaim next = Objects.requireNonNull(
+                transactions.execute(status -> outbox.claim(NOW.plusSeconds(2), 1, "next", NOW.plusSeconds(10))))
+                .getFirst();
+        transactions.executeWithoutResult(status -> outbox.saveProgress(first.sent(NOW.plusSeconds(2))));
+        assertThat(jdbc.queryForObject("SELECT lease_id FROM messaging_outbox", String.class)).isEqualTo("next");
+        assertThat(jdbc.queryForObject("SELECT status FROM messaging_outbox", String.class)).isEqualTo("SENDING");
+        transactions.executeWithoutResult(status -> outbox.saveProgress(next.sent(NOW.plusSeconds(3))));
+        assertThat(jdbc.queryForObject("SELECT status FROM messaging_outbox", String.class)).isEqualTo("SENT");
+    }
+
+    private Event<String> event() {
+        return new Event<>(TYPE, "event", NOW, "payload");
+    }
+
+    private int retryRows() {
+        return Objects.requireNonNull(
                 jdbc.queryForObject(
-                        "SELECT last_error IS NULL AND lease_id IS NULL FROM messaging_outbox WHERE message_id = ?",
-                        Boolean.class,
-                        id.value()))
-                .isTrue();
+                        "SELECT count(*) FROM messaging_outbox WHERE target_handler_code IS NOT NULL",
+                        Integer.class));
     }
 
-    /** 读取并校验数据库中的 Outbox 状态名称。 */
-    private OutboxStatus status(Id messageId) {
-        return OutboxStatus.valueOf(
-                jdbc.queryForObject(
-                        "SELECT status FROM messaging_outbox WHERE message_id = ?",
-                        String.class,
-                        messageId.value()));
+    private Instant nextAt(long attempt) {
+        return Objects
+                .requireNonNull(
+                        jdbc.queryForObject(
+                                "SELECT available_at FROM messaging_outbox WHERE handler_attempt = ?",
+                                Timestamp.class,
+                                attempt))
+                .toInstant();
     }
 
-    private static Event<Map> message() {
-        return new Event<>(
-                EVENT_TYPE,
-                "invoice:42",
-                Instant.now(),
-                Map.of("invoiceId", 42));
+    private String queue(TestHandler handler) {
+        return topology.handlerQueueName(handler.code()).format(NameFormat.COLON);
     }
 
-    /** 保存成功 Consumer 收到的 Id。 */
-    private abstract static class SuccessfulConsumer implements MessageConsumer<Map> {
-        private final BlockingQueue<Id> messages = new LinkedBlockingQueue<>();
+    /** 在真实提交前后注入一次故障，验证跨数据库与 Broker 的交接边界。 */
+    private static class FaultTransactions extends DataSourceTransactionManager {
+        private final AtomicReference<Runnable> beforeCommit = new AtomicReference<>();
 
-        @Override
-        public @NotNull EventType<Map> eventType() {
-            return EVENT_TYPE;
+        private final AtomicReference<Runnable> afterCommit = new AtomicReference<>();
+
+        private FaultTransactions(DataSource source) {
+            super(source);
         }
 
         @Override
-        public void consume(@NotNull MessageDelivery<Map> delivery) {
-            messages.add(delivery.messageId());
-        }
-
-        Id receivedMessage() throws InterruptedException {
-            return messages.poll(5, TimeUnit.SECONDS);
-        }
-
-        void reset() {
-            messages.clear();
+        protected void doCommit(@NotNull DefaultTransactionStatus status) {
+            Runnable before = beforeCommit.getAndSet(null);
+            if (before != null)
+                before.run();
+            super.doCommit(status);
+            Runnable after = afterCommit.getAndSet(null);
+            if (after != null)
+                after.run();
         }
     }
 
-    /** 消费 invoice.created 的主 Consumer。 */
-    private static class PrimaryConsumer extends SuccessfulConsumer {
-        @Override
-        public @NotNull String consumerCode() {
-            return "invoice-primary";
-        }
-    }
+    /** 保存实际消费身份和尝试序号，并返回可配置业务决定。 */
+    private static class TestHandler implements EventHandler<String> {
+        private final TreeCode code;
 
-    /** 独立消费同一事件并验证 RabbitMQ 为不同 Consumer 各保留一份消息。 */
-    private static class CopyConsumer extends SuccessfulConsumer {
-        @Override
-        public @NotNull String consumerCode() {
-            return "invoice-copy";
-        }
-    }
+        private volatile RetryRule rule;
 
-    /** 每次都失败，用于验证消息直接进入当前 Consumer 的 DLQ。 */
-    private static class FailureConsumer implements MessageConsumer<Map> {
-        private final BlockingQueue<Id> messages = new LinkedBlockingQueue<>();
+        private volatile Function<IncomingMessage<Event<String>>, HandlingDecision> action = incoming -> HandlingDecision
+                .acknowledge();
 
-        private final AtomicInteger attempts = new AtomicInteger();
+        private final AtomicInteger calls = new AtomicInteger();
 
-        @Override
-        public @NotNull String consumerCode() {
-            return "invoice-failure";
+        private final List<Id> ids = new CopyOnWriteArrayList<>();
+
+        private final List<Long> attempts = new CopyOnWriteArrayList<>();
+
+        private TestHandler(String code, RetryRule rule) {
+            this.code = TreeCode.of(code);
+            this.rule = rule;
         }
 
         @Override
-        public @NotNull EventType<Map> eventType() {
-            return EVENT_TYPE;
+        public @NotNull TreeCode code() {
+            return code;
         }
 
         @Override
-        public void consume(@NotNull MessageDelivery<Map> delivery) {
-            messages.add(delivery.messageId());
-            attempts.incrementAndGet();
-            throw new IllegalStateException("consumer failure");
+        public @NotNull EventType<String> eventType() {
+            return TYPE;
         }
 
-        private Id receivedMessage() throws InterruptedException {
-            return messages.poll(5, TimeUnit.SECONDS);
+        @Override
+        public @NotNull RetryRule retryRule() {
+            return rule;
         }
 
-        private void reset() {
-            messages.clear();
-            attempts.set(0);
-        }
-    }
-
-    /** 为 Messaging 自动配置提供测试依赖和三个 Consumer。 */
-    @SpringBootConfiguration
-    @EnableAutoConfiguration(exclude = {
-            CoreSpringAutoConfiguration.class,
-            CoreJacksonAutoConfiguration.class
-    })
-    static class TestApplication {
-
-        /** 非 HTTP 测试使用 Repository 当前版本作为乐观锁条件。 */
-        @Bean
-        VersionConditions versionConditions() {
-            return VersionCondition::optimistic;
+        @Override
+        public void handleEvent(@NotNull IncomingMessage<Event<String>> incoming) {
+            throw new UnsupportedOperationException();
         }
 
-        @Bean
-        @Sca4djJson
-        Sca4djMapper sca4djObjectMapper() {
-            return new Sca4djMapper();
-        }
-
-        @Bean
-        SqlBatches sqlBatches() {
-            return new SqlBatches(new SqlBatchProperties());
-        }
-
-        @Bean
-        Clock clock() {
-            return Clock.systemUTC();
-        }
-
-        @Bean
-        IdGenerator idGenerator() {
-            AtomicLong ids = new AtomicLong(10_000);
-            return () -> Id.of(ids.incrementAndGet());
-        }
-
-        @Bean
-        PrimaryConsumer primaryConsumer() {
-            return new PrimaryConsumer();
-        }
-
-        @Bean
-        CopyConsumer copyConsumer() {
-            return new CopyConsumer();
-        }
-
-        @Bean
-        FailureConsumer failureConsumer() {
-            return new FailureConsumer();
+        @Override
+        public @NotNull HandlingDecision handle(@NotNull IncomingMessage<Event<String>> incoming) {
+            ids.add(incoming.messageId());
+            attempts.add(incoming.attempt());
+            calls.incrementAndGet();
+            return action.apply(incoming);
         }
     }
 }

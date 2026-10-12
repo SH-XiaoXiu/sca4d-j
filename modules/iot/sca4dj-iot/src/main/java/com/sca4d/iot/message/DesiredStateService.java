@@ -2,6 +2,10 @@ package com.sca4d.iot.message;
 
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.id.IdGenerator;
+import com.sca4d.core.api.retry.Backoff;
+import com.sca4d.core.api.retry.RetryContext;
+import com.sca4d.core.api.retry.RetryPolicy;
+import com.sca4d.core.api.retry.RetryRule;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.Device;
 import com.sca4d.iot.api.ProductDefinition;
@@ -43,7 +47,8 @@ public class DesiredStateService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DesiredStateService.class);
 
-    private static final int DESIRED_CONCURRENCY_RETRIES = 8;
+    private static final RetryPolicy<Boolean> DESIRED_RETRY = RetryPolicy.always(
+            RetryRule.atMost(8, Backoff.fixed(Duration.ZERO)));
 
     private final @NotNull DeviceRepository devices;
 
@@ -153,7 +158,7 @@ public class DesiredStateService {
         List<String> orderedCodes = allCodes.stream().sorted().toList();
 
         // 每轮批量读取涉及的属性，并用 desiredSequence 乐观更新争取本次写入权。
-        for (int attempt = 0; attempt < DESIRED_CONCURRENCY_RETRIES; attempt++) {
+        for (long attempt = 1;; attempt++) {
             Long currentDesiredSequence = downlinks.findDesiredSequence(device.id());
             if (currentDesiredSequence == null) {
                 throw new IllegalStateException("修改 desired state 时 Device 不存在");
@@ -179,6 +184,8 @@ public class DesiredStateService {
             }
             long desiredSequence = currentDesiredSequence + 1;
             if (!downlinks.advanceDesiredSequence(device.id(), currentDesiredSequence, desiredSequence)) {
+                if (!DESIRED_RETRY.evaluate(RetryContext.failed(attempt, false)).retrying())
+                    break;
                 continue;
             }
 

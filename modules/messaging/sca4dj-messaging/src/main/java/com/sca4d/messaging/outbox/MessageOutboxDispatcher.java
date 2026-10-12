@@ -1,5 +1,10 @@
 package com.sca4d.messaging.outbox;
 
+import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.retry.Backoff;
+import com.sca4d.core.api.retry.RetryContext;
+import com.sca4d.core.api.retry.RetryPolicy;
+import com.sca4d.core.api.retry.RetryRule;
 import com.sca4d.messaging.config.MessagingProperties;
 import com.sca4d.messaging.rabbit.RabbitPublisher;
 import org.jetbrains.annotations.ApiStatus;
@@ -72,7 +77,18 @@ public class MessageOutboxDispatcher {
         for (OutboxClaim message : messages) {
             try {
                 // 在事务外等待 mandatory return 和 publisher confirm，再用独立事务写回 SENT。
-                sender.send(message.messageId(), message.messageCode(), message.envelope());
+                TreeCode handlerCode = message.targetHandlerCode();
+                if (handlerCode == null) {
+                    sender.send(message.messageId(), message.messageCode(), message.envelope());
+                } else {
+                    sender.sendHandler(
+                            message.outboxId(),
+                            message.messageId(),
+                            handlerCode,
+                            message.envelope(),
+                            Objects.requireNonNull(message.handlerAttempt()),
+                            Objects.requireNonNull(message.handlerRetryRule()));
+                }
                 Instant sentAt = clock.instant();
                 transactions.executeWithoutResult(status -> repository.saveProgress(message.sent(sentAt)));
                 sentCount++;
@@ -80,7 +96,19 @@ public class MessageOutboxDispatcher {
                 failedCount++;
                 // 发布或 SENT 写回失败时登记下一次退避；写回也失败则保留租约等待其他实例接管。
                 Instant failedAt = clock.instant();
-                Instant availableAt = failedAt.plus(backoff(message.attemptCount()));
+                Instant availableAt = failedAt.plus(
+                        RetryPolicy.always(
+                                RetryRule.unlimited(
+                                        Backoff.exponential(
+                                                Duration.ofMillis(
+                                                        Math.min(
+                                                                properties.getInitialBackoff().toMillis(),
+                                                                properties.getMaximumBackoff().toMillis())),
+                                                2,
+                                                properties.getMaximumBackoff())))
+                                .evaluate(RetryContext.failed(message.attemptCount(), exception))
+                                .retryDelay()
+                                .orElseThrow());
                 String error = errorSummary(exception);
                 try {
                     transactions.executeWithoutResult(
@@ -121,20 +149,6 @@ public class MessageOutboxDispatcher {
         if (deleted > 0) {
             LOG.info("Outbox 已发送记录清理完成 | deletedCount={} before={}", deleted, before);
         }
-    }
-
-    /** 按失败次数计算不超过配置上限的指数退避。 */
-    private @NotNull Duration backoff(int attemptCount) {
-        long initialMillis = properties.getInitialBackoff().toMillis();
-        long maximumMillis = properties.getMaximumBackoff().toMillis();
-        int exponent = Math.clamp(attemptCount - 1, 0, 30);
-        long delay;
-        try {
-            delay = Math.multiplyExact(initialMillis, 1L << exponent);
-        } catch (ArithmeticException exception) {
-            delay = maximumMillis;
-        }
-        return Duration.ofMillis(Math.min(delay, maximumMillis));
     }
 
     /** 生成可写入数据库且不包含完整消息内容的失败摘要。 */

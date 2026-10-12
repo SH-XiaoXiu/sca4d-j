@@ -5,13 +5,14 @@ import com.sca4d.core.api.delivery.DeliveryOutcome;
 import com.sca4d.core.api.id.Id;
 import com.sca4d.core.api.messaging.DispatchPolicy;
 import com.sca4d.core.api.messaging.DispatchReceipt;
-import com.sca4d.core.api.messaging.HandlingPolicy;
 import com.sca4d.core.api.messaging.MessageBus;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.Notification;
 import com.sca4d.core.api.notification.NotificationDelivery;
 import com.sca4d.core.api.region.ParsedPhoneNumber;
 import com.sca4d.core.api.region.RegionCatalog;
+import com.sca4d.core.api.retry.Backoff;
+import com.sca4d.core.api.retry.RetryRule;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,8 +115,8 @@ public class SmsNotificationDelivery implements NotificationDelivery {
     }
 
     @Override
-    public @NotNull HandlingPolicy handlingPolicy() {
-        return new HandlingPolicy(11, Duration.ofSeconds(5));
+    public @NotNull RetryRule retryRule() {
+        return RetryRule.atMost(11, Backoff.fixed(Duration.ofSeconds(5)));
     }
 
     @Override

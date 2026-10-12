@@ -121,8 +121,8 @@ extends <a href="../delivery/Delivery.html" title="interface in com.sca4d.core.a
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">同步投递通知，正常返回表示具体提供方已经接受。</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="../messaging/HandlingPolicy.html" title="class in com.sca4d.core.api.messaging">HandlingPolicy</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#handlingPolicy()" class="member-name-link">handlingPolicy</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="../retry/RetryRule.html" title="class in com.sca4d.core.api.retry">RetryRule</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#retryRule()" class="member-name-link">retryRule</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
 </div>
 </div>
@@ -164,10 +164,10 @@ extends <a href="../delivery/Delivery.html" title="interface in com.sca4d.core.a
 </section>
 </li>
 <li>
-<section class="detail" id="handlingPolicy()">
-<h3>handlingPolicy</h3>
+<section class="detail" id="retryRule()">
+<h3>retryRule</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="../messaging/HandlingPolicy.html" title="class in com.sca4d.core.api.messaging">HandlingPolicy</a></span>&nbsp;<span class="element-name">handlingPolicy</span>()</div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="../retry/RetryRule.html" title="class in com.sca4d.core.api.retry">RetryRule</a></span>&nbsp;<span class="element-name">retryRule</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>当前渠道 Handler 发生技术失败或结果未知时的再次处理策略</dd>

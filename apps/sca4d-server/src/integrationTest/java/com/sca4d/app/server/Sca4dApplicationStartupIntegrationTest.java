@@ -196,8 +196,8 @@ class Sca4dApplicationStartupIntegrationTest {
         assertThat(defaultSqlSessionFactory).isNotSameAs(historySqlSessionFactory);
         assertThat(defaultSqlSessionTemplate).isNotSameAs(historySqlSessionTemplate);
 
-        assertThat(defaultFlyway.info().applied()).hasSize(1);
-        assertThat(defaultFlyway.info().current().getVersion().getVersion()).isEqualTo("1");
+        assertThat(defaultFlyway.info().applied()).hasSize(2);
+        assertThat(defaultFlyway.info().current().getVersion().getVersion()).isEqualTo("2");
         assertThat(historyFlyway.info().applied()).hasSize(1);
         assertThat(historyFlyway.info().current().getVersion().getVersion()).isEqualTo("1");
         assertThat(settingMapper.select(TreeCode.of("SYSTEM"), "1", List.of("startup.integration.missing"))).isEmpty();

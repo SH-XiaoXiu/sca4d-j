@@ -1,10 +1,15 @@
 package com.sca4d.core.spring.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.sca4d.core.api.codec.VersionedCodec;
+import com.sca4d.core.api.retry.RetryRule;
 import com.sca4d.core.spring.json.Sca4djJson;
+import com.sca4d.core.spring.retry.RetryRuleCodec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.DisplayName;
@@ -74,6 +79,24 @@ class CoreJacksonAutoConfigurationTest {
                                     context.getBeansWithAnnotation(Sca4djJson.class)
                                             .get("customSca4djObjectMapper"));
                 });
+    }
+
+    @Test
+    @DisplayName("重试规则 Codec 复用脚手架映射器并遵守版本契约")
+    void retryRuleCodecUsesSharedScaffoldMapper() {
+        contextRunner.run(context -> {
+            ObjectMapper mapper = context.getBean("sca4djObjectMapper", ObjectMapper.class);
+            mapper.enable(SerializationFeature.INDENT_OUTPUT);
+            mapper.enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
+            VersionedCodec<RetryRule, String> codec = context.getBean(RetryRuleCodec.class);
+            String encoded = codec.encode(RetryRule.once());
+            assertThat(encoded).contains("\n");
+            assertThat(codec.valueType()).isEqualTo(RetryRule.class);
+            assertThat(codec.version()).isEqualTo(1);
+            assertThat(codec.decode(encoded).isOnce()).isTrue();
+            assertThatThrownBy(() -> codec.decode(encoded + " {}"))
+                    .isInstanceOf(IllegalArgumentException.class);
+        });
     }
 
     /** 声明替换脚手架内部 JSON 映射器的应用测试配置。 */

@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.spring.security.crypto)
     api(libs.spring.aspectjweaver)
     api(libs.spring.boot.autoconfigure)
+    compileOnly(libs.spring.retry)
     compileOnly(libs.spring.data.redis)
     compileOnly(libs.mybatis.spring)
     compileOnly(libs.mybatis.spring.boot.autoconfigure)
@@ -53,6 +54,7 @@ dependencies {
     annotationProcessor(libs.spring.boot.configuration.processor)
     runtimeOnly(libs.bouncycastle.provider)
 
+    testImplementation(libs.spring.retry)
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.spring.boot.starter.validation)
     testImplementation(libs.spring.data.redis)

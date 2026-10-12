@@ -6,6 +6,7 @@ import com.sca4d.core.api.job.DirectJob;
 import com.sca4d.core.api.job.JobKey;
 import com.sca4d.core.api.name.Key;
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.retry.RetryExecutor;
 import com.sca4d.core.api.scheduling.IntervalSchedule;
 import com.sca4d.core.api.scheduling.JobSchedule;
 import com.sca4d.core.api.scheduling.MisfirePolicy;
@@ -113,7 +114,8 @@ public class EmqxAutoConfiguration {
             ObjectProvider<MqttMessageObserver> observers,
             ObjectProvider<MqttMessageProcessingObserver> processingObservers,
             ObjectProvider<MqttInboundFailureStore> failureStore,
-            EmqxConnectionReconciler connectionReconciler) {
+            EmqxConnectionReconciler connectionReconciler,
+            ObjectProvider<RetryExecutor> retries) {
         properties.initializeClientId();
         return new EmqxMqttRuntime(
                 properties,
@@ -122,7 +124,10 @@ public class EmqxAutoConfiguration {
                 observers.orderedStream().toList(),
                 processingObservers.orderedStream().toList(),
                 failureStore.getIfAvailable(),
-                connectionReconciler);
+                connectionReconciler,
+                retries.getIfAvailable(() -> {
+                    throw new IllegalStateException("MQTT 上行需要 RetryExecutor；请添加 spring-retry 运行时依赖或提供自定义实现");
+                }));
     }
 
     /** @return 路由和设备下行使用的 MQTT QoS 1 发布入口 */

@@ -44,7 +44,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /** 轮询可执行节点和短期投递，在有界线程池中执行并为运行中的工作续租。 */
-public final class JobWorker implements SmartLifecycle {
+public class JobWorker implements SmartLifecycle {
 
     private static final int MAX_ERROR_LENGTH = 1000;
 
@@ -179,13 +179,13 @@ public final class JobWorker implements SmartLifecycle {
         return Integer.MAX_VALUE - 200;
     }
 
-    /** 清理耗尽租约的节点，并在容量范围内领取一批节点。 */
+    /** 恢复过期尝试，并在容量范围内领取一批节点。 */
     private void pollSafely() {
         if (!running.get()) {
             return;
         }
         try {
-            runs.failExpiredExhausted();
+            runs.recoverExpiredAttempts();
             int capacity = properties.getWorkerCount() - activeWorkers.get();
             int claimCount = Math.min(capacity, properties.getClaimBatchSize());
             for (int index = 0; index < claimCount; index++) {
@@ -372,8 +372,9 @@ public final class JobWorker implements SmartLifecycle {
             String error = errorSummary(exception);
             try {
                 // Job runtime 根据节点策略重新排队或结束根运行；业务异常只在最终处理位置记录一次。
-                runs.fail(claim, workerId.toString(), error);
-                if (claim.attempt() < claim.maxAttempts()) {
+                var decision = runs.fail(claim, workerId.toString(), error);
+                if (decision.retrying()) {
+                    var maximumAttempts = claim.retryRule().maximumAttempts();
                     log.warn(
                             "Job 节点执行失败，等待重试 | applicationId={} jobKey={} runId={} nodeKey={} attempt={} maxAttempts={} workerId={}",
                             applicationId,
@@ -381,7 +382,7 @@ public final class JobWorker implements SmartLifecycle {
                             claim.runId(),
                             claim.nodeKey(),
                             claim.attempt(),
-                            claim.maxAttempts(),
+                            maximumAttempts.isPresent() ? Long.toString(maximumAttempts.getAsLong()) : "UNLIMITED",
                             workerId,
                             exception);
                 } else {

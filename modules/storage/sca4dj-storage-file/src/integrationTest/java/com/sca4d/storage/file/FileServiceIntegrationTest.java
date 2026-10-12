@@ -81,12 +81,13 @@ import java.util.function.Supplier;
 
 /** 使用 PostgreSQL 17 验证文件状态、对象位置和多实例删除领取。 */
 @Testcontainers
-@SpringBootTest(classes = FileServiceIntegrationTest.TestApplication.class, properties = "spring.autoconfigure.exclude="
-        + "com.sca4d.core.spring.config.CoreSpringAutoConfiguration,"
-        + "com.sca4d.core.spring.gateway.GatewaySpringAutoConfiguration,"
-        + "com.sca4d.core.spring.openapi.CoreOpenApiConfiguration,"
-        + "com.sca4d.core.spring.setting.SettingsAutoConfiguration,"
-        + "com.sca4d.core.spring.dictionary.DictionaryAutoConfiguration")
+@SpringBootTest(classes = FileServiceIntegrationTest.TestApplication.class, properties = {
+        "spring.application.name=storage-test", "spring.autoconfigure.exclude="
+                + "com.sca4d.core.spring.config.CoreSpringAutoConfiguration,"
+                + "com.sca4d.core.spring.gateway.GatewaySpringAutoConfiguration,"
+                + "com.sca4d.core.spring.openapi.CoreOpenApiConfiguration,"
+                + "com.sca4d.core.spring.setting.SettingsAutoConfiguration,"
+                + "com.sca4d.core.spring.dictionary.DictionaryAutoConfiguration"})
 @SuppressWarnings({
         "SqlNoDataSourceInspection",
         "SqlDialectInspection",
@@ -119,6 +120,10 @@ class FileServiceIntegrationTest {
 
     @DynamicPropertySource
     static void databaseProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.dynamic.primary", () -> "master");
+        registry.add("spring.datasource.dynamic.datasource.master.url", POSTGRES::getJdbcUrl);
+        registry.add("spring.datasource.dynamic.datasource.master.username", POSTGRES::getUsername);
+        registry.add("spring.datasource.dynamic.datasource.master.password", POSTGRES::getPassword);
         registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
         registry.add("spring.datasource.username", POSTGRES::getUsername);
         registry.add("spring.datasource.password", POSTGRES::getPassword);
@@ -156,7 +161,7 @@ class FileServiceIntegrationTest {
         byte[] content = png();
 
         assertThat(upload.fileId()).isPositive();
-        assertThat(storage.preparedObject().objectKey()).startsWith("storage-test:sca4dj:storage/uploads/");
+        assertThat(storage.preparedObject().objectKey()).startsWith("STORAGE_TEST/STORAGE/UPLOADS/");
         storage.write(storage.preparedObject(), "image/png", content.length, new ByteArrayInputStream(content));
 
         StoredFile ready = files.completeUpload(upload.fileId(), uploader);

@@ -130,6 +130,24 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">在调用方事务内保存一条已经序列化的待发布消息。</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hasHandlerRetry(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.id.Id,long,byte%5B%5D)" class="member-name-link">hasHandlerRetry</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;handlerCode,
+ @NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
+ long&nbsp;handlerAttempt,
+ byte @NotNull []&nbsp;envelope)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#scheduleHandlerRetry(com.sca4d.core.api.id.Id,com.sca4d.core.api.id.Id,com.sca4d.core.api.name.code.TreeCode,byte%5B%5D,com.sca4d.core.api.name.code.TreeCode,long,com.sca4d.core.api.retry.RetryRule,java.time.Instant)" class="member-name-link">scheduleHandlerRetry</a><wbr>(@NotNull com.sca4d.core.api.id.Id&nbsp;outboxId,
+ @NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;messageCode,
+ byte @NotNull []&nbsp;envelope,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;handlerCode,
+ long&nbsp;handlerAttempt,
+ @NotNull com.sca4d.core.api.retry.RetryRule&nbsp;rule,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;availableAt)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">登记下一次定向消费；相同尝试已存在时保留首次登记的规则与执行时间。</div>
+</div>
 </div>
 </div>
 </div>
@@ -178,6 +196,43 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Throws:</dt>
 <dd><code>com.sca4d.core.api.persistence.AffectedRowsMismatchException</code> - 新增没有影响一行时抛出</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="scheduleHandlerRetry(com.sca4d.core.api.id.Id,com.sca4d.core.api.id.Id,com.sca4d.core.api.name.code.TreeCode,byte[],com.sca4d.core.api.name.code.TreeCode,long,com.sca4d.core.api.retry.RetryRule,java.time.Instant)">
+<h3>scheduleHandlerRetry</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">scheduleHandlerRetry</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.id.Id&nbsp;outboxId,
+ @NotNull
+ @NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
+ @NotNull
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;messageCode,
+ byte @NotNull []&nbsp;envelope,
+ @NotNull
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;handlerCode,
+ long&nbsp;handlerAttempt,
+ @NotNull
+ @NotNull com.sca4d.core.api.retry.RetryRule&nbsp;rule,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;availableAt)</span></div>
+<div class="block">登记下一次定向消费；相同尝试已存在时保留首次登记的规则与执行时间。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="hasHandlerRetry(com.sca4d.core.api.name.code.TreeCode,com.sca4d.core.api.id.Id,long,byte[])">
+<h3>hasHandlerRetry</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">hasHandlerRetry</span><wbr><span class="parameters">(@NotNull
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;handlerCode,
+ @NotNull
+ @NotNull com.sca4d.core.api.id.Id&nbsp;messageId,
+ long&nbsp;handlerAttempt,
+ byte @NotNull []&nbsp;envelope)</span></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>相同信封的下一次或更晚尝试是否已登记</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - 相同消息身份对应不同信封时抛出</dd>
 </dl>
 </section>
 </li>

@@ -12,6 +12,7 @@ com.sca4d.core.spring.permission
 com.sca4d.core.spring.persistence.batch
 com.sca4d.core.spring.persistence.mybatis
 com.sca4d.core.spring.redis
+com.sca4d.core.spring.retry
 com.sca4d.core.spring.security
 com.sca4d.core.spring.setting
 com.sca4d.core.spring.transaction

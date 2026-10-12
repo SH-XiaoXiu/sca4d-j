@@ -28,7 +28,7 @@ public class JobExecution {
 
     private final @NotNull UUID executionId;
 
-    private final int attempt;
+    private final long attempt;
 
     /**
      * 创建一次 Job Attempt 的执行事实。
@@ -44,7 +44,7 @@ public class JobExecution {
     public JobExecution(
             @NotNull UUID executionId,
             @Nullable Id runId,
-            int attempt,
+            long attempt,
             @NotNull Instant startedAt,
             @NotNull InstanceId instanceId,
             @NotNull TreeCode capability,
@@ -101,7 +101,7 @@ public class JobExecution {
      * @return 从 1 开始的尝试次数
      */
     @Contract(pure = true)
-    public int attempt() {
+    public long attempt() {
         return attempt;
     }
 

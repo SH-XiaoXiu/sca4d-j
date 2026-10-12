@@ -157,7 +157,7 @@ public class DeviceAcknowledgementService {
                     failure.code())) {
                 return;
             }
-            downlinkMessages.publishDispatch(message.messageId(), message.attemptCount() + 1, retryAt);
+            downlinkMessages.publishDispatch(message.messageId(), Math.incrementExact(message.attemptCount()), retryAt);
             LOG.warn("Device 下行等待重试 | messageId={} failure={}", message.messageId(), failure.code());
         } else {
             downlinks.complete(

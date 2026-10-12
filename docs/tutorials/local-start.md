@@ -44,7 +44,7 @@ done
 
 PostgreSQL 和 TimescaleDB 只在各自数据目录首次初始化时读取用户名与密码。清理数据目录会删除其中的全部数据库数据，只能在确认数据可丢弃或已经备份后执行。要按新的 `.env/database.env` 或 `.env/iot-database.env` 重建本地数据库，先停止对应容器，再由操作者清理 `docker-data/postgresql` 与可选的 `docker-data/iot/timescaledb`；仅修改环境文件不会修改已经存在数据库角色的密码。
 
-Sca4d Server 主库仅包含 `V1__init_sca4d.sql`，直接建立现行模块和 App 结构，必须使用空数据库。存在旧 Flyway 记录的数据库不能直接启动，也不要通过 `repair` 或 `baseline` 跳过校验。独立 TimescaleDB 同样仅通过 V1 建立现行历史数据结构，也必须使用空数据库。Docker 数据采用宿主机目录挂载，删除容器或执行 `down --volumes` 都不会清空这些目录；完全重新体验还需由操作者清理可丢弃的 Redis、RabbitMQ、MinIO 和 EMQX 状态，避免遗留会话、消息和文件。RabbitMQ 初始密码也只在首次初始化时写入。
+Sca4d Server 主库依次执行 `V1__init_sca4d.sql` 和 `V2__unify_retry_rules_and_handler_delivery.sql`。空数据库可以直接初始化；已经执行 V1 的主库先备份，再由 V2 转换 Job 重试规则和 Messaging Outbox，保留原尝试进度与消息标识。更早版本的 Flyway 记录不能直接启动，也不要通过 `repair` 或 `baseline` 跳过校验。独立 TimescaleDB 仍仅通过 V1 建立现行历史数据结构，必须使用空数据库。Docker 数据采用宿主机目录挂载，删除容器或执行 `down --volumes` 都不会清空这些目录；完全重新体验还需由操作者清理可丢弃的 Redis、RabbitMQ、MinIO 和 EMQX 状态，避免遗留会话、消息和文件。RabbitMQ 初始密码也只在首次初始化时写入。
 
 ## 启动全部本地依赖
 

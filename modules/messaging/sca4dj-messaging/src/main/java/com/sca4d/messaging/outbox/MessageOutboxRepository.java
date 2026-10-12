@@ -6,11 +6,13 @@ import com.sca4d.core.api.persistence.AffectedRows;
 import com.sca4d.core.api.persistence.AffectedRowsMismatchException;
 import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.core.api.persistence.ZeroRowPolicy;
+import com.sca4d.core.api.retry.RetryRule;
 import com.sca4d.messaging.outbox.mapper.OutboxMapper;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -44,6 +46,49 @@ public class MessageOutboxRepository {
                 availableAt);
     }
 
+    /** 登记下一次定向消费；相同尝试已存在时保留首次登记的规则与执行时间。 */
+    public void scheduleHandlerRetry(
+            @NotNull Id outboxId,
+            @NotNull Id messageId,
+            @NotNull TreeCode messageCode,
+            byte @NotNull [] envelope,
+            @NotNull TreeCode handlerCode,
+            long handlerAttempt,
+            @NotNull RetryRule rule,
+            @NotNull Instant availableAt) {
+        if (handlerAttempt < 2)
+            throw new IllegalArgumentException("再次消费序号必须至少为 2");
+        mapper.insertHandlerRetry(
+                outboxId.value(),
+                messageId.value(),
+                messageCode,
+                envelope,
+                handlerCode,
+                handlerAttempt,
+                rule,
+                availableAt);
+        if (!hasHandlerRetry(handlerCode, messageId, handlerAttempt, envelope)) {
+            throw new IllegalStateException("定向消费重试登记后无法读取");
+        }
+    }
+
+    /**
+     * @return 相同信封的下一次或更晚尝试是否已登记
+     * @throws IllegalArgumentException 相同消息身份对应不同信封时抛出
+     */
+    public boolean hasHandlerRetry(
+            @NotNull TreeCode handlerCode,
+            @NotNull Id messageId,
+            long handlerAttempt,
+            byte @NotNull [] envelope) {
+        var stored = mapper.selectHandlerRetry(handlerCode, messageId.value(), handlerAttempt);
+        if (stored == null)
+            return false;
+        if (!Arrays.equals(stored.envelope(), envelope))
+            throw new IllegalArgumentException("相同消息标识对应不同重试信封");
+        return true;
+    }
+
     /**
      * 按状态、时间和版本条件领取可发布或租约已过期的记录，并把成功领取的记录改为 SENDING。
      *
@@ -59,12 +104,16 @@ public class MessageOutboxRepository {
                 .stream()
                 .map(
                         row -> new OutboxClaim(
+                                Id.of(row.outboxId()),
                                 Id.of(row.messageId()),
                                 row.messageCode(),
                                 row.envelope(),
                                 row.attemptCount(),
                                 leaseId,
-                                row.version()))
+                                row.version(),
+                                row.targetHandlerCode(),
+                                row.handlerAttempt(),
+                                row.handlerRetryRule()))
                 .toList();
     }
 
@@ -75,7 +124,7 @@ public class MessageOutboxRepository {
             throw new IllegalArgumentException("Outbox 派发尚未产生结果");
         }
         mapper.updateProgress(
-                message.messageId().value(),
+                message.outboxId().value(),
                 message.leaseId(),
                 message.version(),
                 Patch.set(message.status()),

@@ -1,5 +1,6 @@
 package com.sca4d.job.runtime;
 
+import com.sca4d.core.api.job.DirectJob;
 import com.sca4d.core.api.job.Job;
 import com.sca4d.core.api.job.JobKey;
 import com.sca4d.core.api.job.JobRunRecording;
@@ -125,6 +126,11 @@ public class JobCatalog {
         Objects.requireNonNull(checked.outputType(), "Job 输出类型不能为空");
         Objects.requireNonNull(checked.requiredCapability(), "Job 所需能力不能为空");
         Objects.requireNonNull(checked.runRecording(), "Job 运行记录策略不能为空");
+        if (checked instanceof DirectJob<?, ?> direct
+                && checked.runRecording() == JobRunRecording.NONE
+                && !direct.retryRule().isOnce()) {
+            throw new IllegalStateException("无记录 Job 不提供框架重试: " + checked.key());
+        }
         if (checked instanceof PipelineJob<?, ?> && checked.runRecording() == JobRunRecording.NONE) {
             throw new IllegalStateException("PipelineJob 必须保存持久化运行记录: " + checked.key());
         }

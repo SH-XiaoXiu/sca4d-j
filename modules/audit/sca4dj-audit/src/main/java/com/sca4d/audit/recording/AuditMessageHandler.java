@@ -1,11 +1,12 @@
 package com.sca4d.audit.recording;
 
 import com.sca4d.core.api.messaging.HandlingDecision;
-import com.sca4d.core.api.messaging.HandlingPolicy;
 import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.api.messaging.MessageHandler;
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.retry.Backoff;
+import com.sca4d.core.api.retry.RetryRule;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,8 +40,8 @@ public class AuditMessageHandler implements MessageHandler<AuditMessage> {
     }
 
     @Override
-    public @NotNull HandlingPolicy handlingPolicy() {
-        return new HandlingPolicy(5, Duration.ofSeconds(5));
+    public @NotNull RetryRule retryRule() {
+        return RetryRule.atMost(5, Backoff.fixed(Duration.ofSeconds(5)));
     }
 
     @Override

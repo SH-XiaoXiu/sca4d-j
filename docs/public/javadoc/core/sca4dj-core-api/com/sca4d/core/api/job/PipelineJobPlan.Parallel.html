@@ -117,9 +117,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;N&gt;&nbsp;@NotNull <a href="PipelineJobPlan.html" title="class in com.sca4d.core.api.job">PipelineJobPlan</a><wbr>&lt;<a href="PipelineJobPlan.Parallel.html" title="type parameter in PipelineJobPlan.Parallel">I</a>,<wbr>N&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#merge(java.lang.String,com.sca4d.core.api.pipeline.Pipeline,com.sca4d.core.api.job.JobRetryPolicy)" class="member-name-link">merge</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;mergeKey,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#merge(java.lang.String,com.sca4d.core.api.pipeline.Pipeline,com.sca4d.core.api.retry.RetryRule)" class="member-name-link">merge</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;mergeKey,
  @NotNull <a href="../pipeline/Pipeline.html" title="class in com.sca4d.core.api.pipeline">Pipeline</a>&lt;<a href="ParallelResults.html" title="class in com.sca4d.core.api.job">ParallelResults</a>&lt;<a href="PipelineJobPlan.Parallel.html" title="type parameter in PipelineJobPlan.Parallel">L</a>,<wbr><a href="PipelineJobPlan.Parallel.html" title="type parameter in PipelineJobPlan.Parallel">R</a>&gt;,<wbr>N&gt;&nbsp;merge,
- @NotNull <a href="JobRetryPolicy.html" title="class in com.sca4d.core.api.job">JobRetryPolicy</a>&nbsp;retryPolicy)</code></div>
+ @NotNull <a href="../retry/RetryRule.html" title="class in com.sca4d.core.api.retry">RetryRule</a>&nbsp;retryRule)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">增加左右分支和等待二者成功的合并 Pipeline。</div>
 </div>
@@ -141,7 +141,7 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="merge(java.lang.String,com.sca4d.core.api.pipeline.Pipeline,com.sca4d.core.api.job.JobRetryPolicy)">
+<section class="detail" id="merge(java.lang.String,com.sca4d.core.api.pipeline.Pipeline,com.sca4d.core.api.retry.RetryRule)">
 <h3>merge</h3>
 <div class="member-signature"><span class="annotations">@CheckReturnValue
 @Contract(pure=true)
@@ -151,7 +151,7 @@ loadScripts(document, 'script');</script>
  @NotNull
  @NotNull <a href="../pipeline/Pipeline.html" title="class in com.sca4d.core.api.pipeline">Pipeline</a>&lt;<a href="ParallelResults.html" title="class in com.sca4d.core.api.job">ParallelResults</a>&lt;<a href="PipelineJobPlan.Parallel.html" title="type parameter in PipelineJobPlan.Parallel">L</a>,<wbr><a href="PipelineJobPlan.Parallel.html" title="type parameter in PipelineJobPlan.Parallel">R</a>&gt;,<wbr>N&gt;&nbsp;merge,
  @NotNull
- @NotNull <a href="JobRetryPolicy.html" title="class in com.sca4d.core.api.job">JobRetryPolicy</a>&nbsp;retryPolicy)</span></div>
+ @NotNull <a href="../retry/RetryRule.html" title="class in com.sca4d.core.api.retry">RetryRule</a>&nbsp;retryRule)</span></div>
 <div class="block">增加左右分支和等待二者成功的合并 Pipeline。</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -159,7 +159,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>mergeKey</code> - 合并节点名称</dd>
 <dd><code>merge</code> - 接受左右结果的合并 Pipeline</dd>
-<dd><code>retryPolicy</code> - 合并 Pipeline 的重试策略</dd>
+<dd><code>retryRule</code> - 合并 Pipeline 的重试策略</dd>
 <dt>Returns:</dt>
 <dd>以合并结果作为终点的完整计划</dd>
 <dt>Throws:</dt>

@@ -10,7 +10,7 @@ Email 保存主题、纯文本和 HTML 源码，Inbox 保存 Tiptap JSON，SMS �
 
 在业务 Service 的数据库事务中完成写入后，调用 `MessageBus.dispatch(message, DispatchPolicy.outbox())`。该方法要求活跃事务；返回的 `DispatchReceipt.messageId()` 对应同一事务中的 Outbox 记录。事务回滚时业务写入和 Outbox 一起回滚。
 
-消费者按消息标识或业务唯一键防止重复执行。验证时分别检查事务回滚没有留下 Outbox、正常发送进入消费者、同一消息重复投递没有重复修改业务数据。消费失败按 Handler 的 `HandlingPolicy` 重试或进入独立 DLQ；修复原因后再决定重新发布或删除死信。
+消费者按消息标识或业务唯一键防止重复执行。验证时分别检查事务回滚没有留下 Outbox、正常发送进入消费者、同一消息重复投递没有重复修改业务数据。消费失败按 Handler 的 `RetryRule` 重试或进入独立 DLQ；修复原因后再决定重新发布或删除死信。
 
 ## 在本地发送一封通知邮件
 
@@ -54,7 +54,7 @@ flowchart LR
 
 Outbox 消息不能直接携带 `BinaryContent`，需要持久保存内容时使用 `ReferencedContent`。返回的 DispatchReceipt 区分 Broker 接收、回调登记和 Outbox 登记，不代表消费者已经完成业务。
 
-Outbox 只保证发布。它不是业务消息存储，不保存 Consumer 处理结果，也不负责消费失败恢复。消息发布到 RabbitMQ 后，持久保存、队列复制和重新投递由 RabbitMQ 负责。
+Outbox 保存普通发布与定向消费重试，不保存完整业务消费历史。消息发布到 RabbitMQ 后，持久保存和重新投递由 RabbitMQ 负责。
 
 ### Outbox 状态与重复消息
 
@@ -66,9 +66,9 @@ RabbitMQ 已确认而 Outbox 状态更新失败时，同一消息标识可能再
 
 每个 `EventHandler` 或 `MessageHandler` 编码对应一条持久队列和一条独立 DLQ。同一 Handler 的多个 App 实例竞争消费；不同 Handler 分别获得一份消息。
 
-Handler 返回 `HandlingDecision.acknowledge()` 后才 ACK；返回 `reject(...)` 时，消息以 `requeue=false` 进入该 Handler 的 DLQ。返回 `retry(...)` 或抛出异常时，基础设施按 `HandlingPolicy` 的最大尝试次数和间隔安排重试，耗尽后进入 DLQ。
+Handler 返回 `HandlingDecision.acknowledge()` 后才 ACK；返回 `reject(...)` 时，消息以 `requeue=false` 进入该 Handler 的 DLQ。返回 `retry(...)` 或抛出异常时，基础设施按 `RetryRule` 的最大尝试次数和间隔安排重试，耗尽后进入 DLQ。
 
-默认 `HandlingPolicy.noRetry()` 只允许一次尝试，因此默认处理失败直接进入 DLQ。重试消息发布成功后才确认原消息；发布重试消息失败时，原消息重新入队。消息解码或协议版本错误同样受该 Handler 策略限制。Messaging 不自动重放 DLQ，也不提供 Inbox、补偿工作流或 DLQ 管理页面。
+默认 `RetryRule.once()` 只允许一次尝试，因此默认处理失败直接进入 DLQ。定向重试记录提交到 Outbox 后才确认原消息；交接失败时原消息重新入队。损坏信封或重试元数据直接拒绝。Messaging 不自动重放 DLQ，也不提供 Inbox、补偿工作流或 DLQ 管理页面。
 
 进程在 ACK 前退出或 ACK 丢失时，RabbitMQ 可以重新投递原消息。这与 Consumer 处理失败进入 DLQ 是不同情况，两者都要求 Consumer 具备幂等性。
 

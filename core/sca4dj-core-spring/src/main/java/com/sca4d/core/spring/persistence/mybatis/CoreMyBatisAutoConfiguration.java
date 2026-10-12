@@ -13,10 +13,12 @@ import com.sca4d.core.api.name.Name;
 import com.sca4d.core.api.name.NameFormat;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.permission.Action;
+import com.sca4d.core.api.retry.RetryRule;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.spring.config.CoreJacksonAutoConfiguration;
 import com.sca4d.core.spring.json.Sca4djJson;
 import com.sca4d.core.spring.json.Sca4djMapper;
+import com.sca4d.core.spring.retry.RetryRuleCodec;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.scripting.LanguageDriver;
@@ -135,11 +137,17 @@ public class CoreMyBatisAutoConfiguration {
      * @return MyBatis 配置定制器
      */
     @Bean
-    ConfigurationCustomizer coreTypeHandlerCustomizer(@Sca4djJson Sca4djMapper objectMapper) {
+    ConfigurationCustomizer coreTypeHandlerCustomizer(
+            @Sca4djJson Sca4djMapper objectMapper,
+            RetryRuleCodec retryRules) {
         return configuration -> {
             configuration.setMapUnderscoreToCamelCase(true);
             configuration.setArgNameBasedConstructorAutoMapping(true);
             configuration.setDefaultEnumTypeHandler(CoreEnumTypeHandler.class);
+            configuration.getTypeHandlerRegistry()
+                    .register(
+                            RetryRule.class,
+                            new StringValueTypeHandler<>(retryRules::decode, retryRules::encode));
             configuration.getTypeHandlerRegistry()
                     .register(
                             Version.class,

@@ -34,6 +34,7 @@ com.sca4d.core.api.query
 com.sca4d.core.api.region
 com.sca4d.core.api.render
 com.sca4d.core.api.resource
+com.sca4d.core.api.retry
 com.sca4d.core.api.runtime
 com.sca4d.core.api.scheduling
 com.sca4d.core.api.security

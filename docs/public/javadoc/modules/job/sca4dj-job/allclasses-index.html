@@ -63,76 +63,80 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">使用当前 App 隔离名称的 Job Repository 返回类型化调度历史。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/job/JobAttemptStatus.html" title="enum class in com.sca4d.job">JobAttemptStatus</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/ExpiredJobAttempt.html" title="class in com.sca4d.job.persistence">ExpiredJobAttempt</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">保存已经锁定的过期 Job 尝试，用原租约截止时间计算恢复时间。</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/job/JobAttemptStatus.html" title="enum class in com.sca4d.job">JobAttemptStatus</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
 <div class="block">表示 Job 节点一次尝试的执行结果，与节点是否继续重试分别保存。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/config/JobAutoConfiguration.html" title="class in com.sca4d.job.config">JobAutoConfiguration</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/config/JobAutoConfiguration.html" title="class in com.sca4d.job.config">JobAutoConfiguration</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">自动装配使用主 PostgreSQL DataSource 的 Job 定义目录、持久化执行器和集群 worker。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/runtime/JobCatalog.html" title="class in com.sca4d.job.runtime">JobCatalog</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/runtime/JobCatalog.html" title="class in com.sca4d.job.runtime">JobCatalog</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">校验 Spring 登记的 Job，并按提交时保存的 key 和版本恢复定义。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/JobDelivery.html" title="class in com.sca4d.job.persistence">JobDelivery</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/JobDelivery.html" title="class in com.sca4d.job.persistence">JobDelivery</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">已由目标实例领取的不保留 Run 的工作份额。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/JobDispatchRecord.html" title="class in com.sca4d.job.persistence">JobDispatchRecord</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/JobDispatchRecord.html" title="class in com.sca4d.job.persistence">JobDispatchRecord</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">从持久化广播头读取标识及触发时的目标快照。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/JobDispatchRun.html" title="class in com.sca4d.job.persistence">JobDispatchRun</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/JobDispatchRun.html" title="class in com.sca4d.job.persistence">JobDispatchRun</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">一次广播下某个目标实例已创建的持久化 Run。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/runtime/JobHistoryCleanupTask.html" title="class in com.sca4d.job.runtime">JobHistoryCleanupTask</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/runtime/JobHistoryCleanupTask.html" title="class in com.sca4d.job.runtime">JobHistoryCleanupTask</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">由集群定时器触发一次成功 Job run 历史清理。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/runtime/JobHistoryService.html" title="class in com.sca4d.job.runtime">JobHistoryService</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/runtime/JobHistoryService.html" title="class in com.sca4d.job.runtime">JobHistoryService</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">按配置保留窗口分批删除已经成功的 Job run 历史。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/JobInstance.html" title="class in com.sca4d.job.persistence">JobInstance</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/JobInstance.html" title="class in com.sca4d.job.persistence">JobInstance</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">当前在线且具备执行能力的进程实例和本次启动代次。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/job/persistence/JobMapper.html" title="interface in com.sca4d.job.persistence">JobMapper</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/sca4d/job/persistence/JobMapper.html" title="interface in com.sca4d.job.persistence">JobMapper</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">使用 MyBatis 执行 Job run、节点、依赖和尝试的单条 PostgreSQL 读写。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/job/JobNodeStatus.html" title="enum class in com.sca4d.job">JobNodeStatus</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/sca4d/job/JobNodeStatus.html" title="enum class in com.sca4d.job">JobNodeStatus</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
 <div class="block">表示 Job 节点的依赖等待、执行和终态。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/config/JobProperties.html" title="class in com.sca4d.job.config">JobProperties</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/config/JobProperties.html" title="class in com.sca4d.job.config">JobProperties</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">配置 Job worker、租约和成功历史清理。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/JobRepository.html" title="class in com.sca4d.job.persistence">JobRepository</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/JobRepository.html" title="class in com.sca4d.job.persistence">JobRepository</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">隐藏 Job Mapper 和 App 隔离名称，提供稳定的持久化语义。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/runtime/JobRunService.html" title="class in com.sca4d.job.runtime">JobRunService</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/runtime/JobRunService.html" title="class in com.sca4d.job.runtime">JobRunService</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">编排 Job 创建、租约和状态转换，并为每个完整动作设置事务边界。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/runtime/JobWorker.html" title="class in com.sca4d.job.runtime">JobWorker</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/runtime/JobWorker.html" title="class in com.sca4d.job.runtime">JobWorker</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">轮询可执行节点和短期投递，在有界线程池中执行并为运行中的工作续租。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/NodeClaim.html" title="class in com.sca4d.job.persistence">NodeClaim</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/NodeClaim.html" title="class in com.sca4d.job.persistence">NodeClaim</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存一个 worker 已经持有租约的节点及其 Job 定义定位信息。</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/RunRecord.html" title="class in com.sca4d.job.persistence">RunRecord</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/RunRecord.html" title="class in com.sca4d.job.persistence">RunRecord</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存 JobExecutor 查询状态和结果需要的根运行列值。</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/ScheduledRunRecord.html" title="class in com.sca4d.job.persistence">ScheduledRunRecord</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/sca4d/job/persistence/ScheduledRunRecord.html" title="class in com.sca4d.job.persistence">ScheduledRunRecord</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">保存定时 Job 历史查询从根运行和目标节点读取的数据库列。</div>
 </div>
 </div>

@@ -2,12 +2,12 @@ package com.sca4d.notification;
 
 import com.sca4d.core.api.delivery.DeliveryOutcome;
 import com.sca4d.core.api.messaging.HandlingDecision;
-import com.sca4d.core.api.messaging.HandlingPolicy;
 import com.sca4d.core.api.messaging.IncomingMessage;
 import com.sca4d.core.api.messaging.MessageCodec;
 import com.sca4d.core.api.messaging.MessageHandler;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.notification.NotificationDelivery;
+import com.sca4d.core.api.retry.RetryRule;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -17,11 +17,11 @@ import java.util.Objects;
  */
 public class NotificationMessageHandler implements MessageHandler<NotificationMessage> {
 
-    private final @NotNull HandlingPolicy handlingPolicy;
-
     private final @NotNull NotificationDeliveryRouter deliveries;
 
     private final @NotNull NotificationMessageCodec codec;
+
+    private final @NotNull RetryRule retryRule;
 
     private final @NotNull TreeCode channel;
 
@@ -35,7 +35,7 @@ public class NotificationMessageHandler implements MessageHandler<NotificationMe
             @NotNull NotificationDeliveryRouter deliveries,
             @NotNull NotificationMessageCodec codec) {
         this.channel = Objects.requireNonNull(delivery, "通知投递实现不能为空").channel();
-        this.handlingPolicy = delivery.handlingPolicy();
+        this.retryRule = delivery.retryRule();
         this.deliveries = Objects.requireNonNull(deliveries, "通知渠道路由器不能为空");
         this.codec = Objects.requireNonNull(codec, "通知消息 Codec 不能为空");
     }
@@ -51,8 +51,8 @@ public class NotificationMessageHandler implements MessageHandler<NotificationMe
     }
 
     @Override
-    public @NotNull HandlingPolicy handlingPolicy() {
-        return handlingPolicy;
+    public @NotNull RetryRule retryRule() {
+        return retryRule;
     }
 
     @Override

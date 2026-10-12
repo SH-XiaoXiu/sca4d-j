@@ -15,6 +15,7 @@ import com.sca4d.core.api.scheduling.OverlapPolicy;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.core.spring.json.Sca4djJson;
 import com.sca4d.core.spring.json.Sca4djMapper;
+import com.sca4d.core.spring.retry.RetryRuleCodec;
 import com.sca4d.messaging.outbox.MessageOutboxDispatcher;
 import com.sca4d.messaging.outbox.MessageOutboxRepository;
 import com.sca4d.messaging.outbox.OutboxCleanupTask;
@@ -92,14 +93,15 @@ public class MessagingAutoConfiguration {
     RabbitPublisher rabbitMessageSender(
             @NotNull ConnectionFactory connectionFactory,
             @NotNull RabbitMessageTopology topology,
-            @NotNull MessagingProperties properties) {
+            @NotNull MessagingProperties properties,
+            @NotNull RetryRuleCodec retryRules) {
         if (!(connectionFactory instanceof CachingConnectionFactory caching)) {
             throw new IllegalStateException("Messaging 要求使用 CachingConnectionFactory 支持发布确认");
         }
         caching.setPublisherConfirmType(CachingConnectionFactory.ConfirmType.CORRELATED);
         caching.setPublisherReturns(true);
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        return new RabbitPublisher(rabbitTemplate, topology, properties);
+        return new RabbitPublisher(rabbitTemplate, topology, properties, retryRules);
     }
 
     /** @return 支持立即、提交后和 Outbox 发布的公共 MessageBus */
@@ -119,16 +121,22 @@ public class MessagingAutoConfiguration {
             @NotNull ConnectionFactory connectionFactory,
             @NotNull RabbitMessageTopology topology,
             @NotNull RabbitMessageEnvelopeCodec codec,
-            @NotNull MessagingProperties properties,
-            @NotNull RabbitPublisher publisher,
+            @NotNull MessageOutboxRepository outbox,
+            @NotNull IdGenerator ids,
+            @NotNull PlatformTransactionManager transactionManager,
+            @NotNull Clock clock,
+            @NotNull RetryRuleCodec retryRules,
             @NotNull List<@NotNull EventHandler<?>> eventHandlers,
             @NotNull List<@NotNull MessageHandler<?>> messageHandlers) {
         return new RabbitHandlerContainers(
                 connectionFactory,
                 topology,
                 codec,
-                properties,
-                publisher,
+                outbox,
+                ids,
+                transactionManager,
+                clock,
+                retryRules,
                 eventHandlers,
                 messageHandlers);
     }

@@ -34,7 +34,7 @@ JobSchedule<Void, Void> statusScanSchedule(
 
 ## 提交可恢复的工作
 
-`DirectJob<I, O>` 声明输入输出类型、`JobKey`、定义版本、`JobRetryPolicy` 和一次 `execute(...)`。需要同一对象互斥、不同对象并行时覆盖 `workKey(input)`：
+`DirectJob<I, O>` 声明输入输出类型、`JobKey`、定义版本、`RetryRule` 和一次 `execute(...)`。需要同一对象互斥、不同对象并行时覆盖 `workKey(input)`：
 
 ```java
 @Override

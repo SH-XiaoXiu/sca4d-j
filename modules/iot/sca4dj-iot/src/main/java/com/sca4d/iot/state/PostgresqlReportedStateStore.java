@@ -4,6 +4,10 @@ import cn.hutool.crypto.digest.DigestUtil;
 import com.sca4d.core.api.error.BusinessException;
 import com.sca4d.core.api.persistence.AffectedRowCounts;
 import com.sca4d.core.api.persistence.ZeroRowPolicy;
+import com.sca4d.core.api.retry.Backoff;
+import com.sca4d.core.api.retry.RetryContext;
+import com.sca4d.core.api.retry.RetryPolicy;
+import com.sca4d.core.api.retry.RetryRule;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.iot.IotErrorCode;
 import com.sca4d.iot.api.query.ReportedStateSnapshot;
@@ -19,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -29,7 +34,8 @@ import java.util.Optional;
 /** 使用 PostgreSQL version 条件写入维护每个 Device 字段组的 latest reported 投影。 */
 public class PostgresqlReportedStateStore implements ReportedStateStore {
 
-    private static final int MAX_WRITE_ATTEMPTS = 3;
+    private static final RetryPolicy<Boolean> WRITE_RETRY = RetryPolicy.always(
+            RetryRule.atMost(3, Backoff.fixed(Duration.ZERO)));
 
     private final @NotNull ReportedStateMapper mapper;
 
@@ -68,7 +74,7 @@ public class PostgresqlReportedStateStore implements ReportedStateStore {
         Optional<ReportedGroupState> current = findCurrent(deviceId, bindingGeneration, input.groupCode());
 
         // 条件写入冲突时重新读取最新投影，再执行相同的顺序和内容判断。
-        for (int attempt = 1; attempt <= MAX_WRITE_ATTEMPTS; attempt++) {
+        for (long attempt = 1;; attempt++) {
             LinkedHashMap<String, Object> latest = new LinkedHashMap<>();
             if (input.mergeMode() == ReportedMergeMode.PATCH && current.isPresent()) {
                 latest.putAll(current.get().values());
@@ -114,11 +120,12 @@ public class PostgresqlReportedStateStore implements ReportedStateStore {
                     current.map(ReportedGroupState::version).orElse(null))) {
                 return new ReportedStateWriteResult(ReportedStateWriteResult.Outcome.ACCEPTED, version);
             }
-            if (attempt == MAX_WRITE_ATTEMPTS) {
+            if (!WRITE_RETRY.evaluate(RetryContext.failed(attempt, false)).retrying()) {
                 AffectedRowCounts.requireSingle(
                         0,
                         ZeroRowPolicy.OPTIMISTIC_LOCK,
                         "reported 字段组");
+                break;
             }
             current = Optional.of(
                     findCurrent(deviceId, bindingGeneration, input.groupCode())

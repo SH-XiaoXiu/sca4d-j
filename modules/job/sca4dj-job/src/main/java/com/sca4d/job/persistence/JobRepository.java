@@ -353,7 +353,7 @@ public class JobRepository {
     public void failNode(
             long nodeId,
             long runId,
-            int attempt,
+            long attempt,
             @NotNull String workerId,
             @NotNull String error,
             @NotNull Instant failedAt) {
@@ -366,6 +366,28 @@ public class JobRepository {
     /** 处理租约到期且重试耗尽的节点。 */
     public void failExpiredExhausted(@NotNull Instant now) {
         mapper.updateExpiredNodes(appName, now);
+    }
+
+    /** 在当前事务中锁定一批仍允许再次执行的过期尝试。 */
+    public @NotNull List<ExpiredJobAttempt> expiredAttempts(@NotNull Instant now) {
+        return mapper.selectExpiredAttempts(appName, now);
+    }
+
+    /** 保存过期尝试的放弃事实和业务层计算的下次领取时间。 */
+    public void rescheduleExpired(
+            @NotNull ExpiredJobAttempt attempt,
+            @NotNull Instant availableAt,
+            @NotNull Instant now) {
+        AffectedRowCounts.requireSingle(
+                mapper.rescheduleExpired(
+                        attempt.nodeId(),
+                        attempt.attempt(),
+                        attempt.workerId(),
+                        attempt.leaseUntil(),
+                        availableAt,
+                        now),
+                ZeroRowPolicy.OPTIMISTIC_LOCK,
+                "过期 Job 尝试恢复");
     }
 
     /** 结束目标实例等待期限已到而尚未启动的 Run。 */
@@ -443,8 +465,7 @@ public class JobRepository {
                     inputJson,
                     JobNodeStatus.READY,
                     false,
-                    directJob.retryPolicy().maxAttempts(),
-                    directJob.retryPolicy().delay().toMillis(),
+                    directJob.retryRule(),
                     now);
             return Id.of(runId);
         }
@@ -458,8 +479,7 @@ public class JobRepository {
                     node.dependencies().isEmpty() ? inputJson : null,
                     node.dependencies().isEmpty() ? JobNodeStatus.READY : JobNodeStatus.WAITING,
                     node.parallelMerge(),
-                    node.retryPolicy().maxAttempts(),
-                    node.retryPolicy().delay().toMillis(),
+                    node.retryRule(),
                     now);
             nodeIds.put(node.key(), nodeId);
         }

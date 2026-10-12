@@ -3,8 +3,8 @@ package com.sca4d.core.api.notification;
 import com.sca4d.core.api.delivery.Delivery;
 import com.sca4d.core.api.delivery.DeliveryOutcome;
 import com.sca4d.core.api.id.Id;
-import com.sca4d.core.api.messaging.HandlingPolicy;
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.retry.RetryRule;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -30,8 +30,8 @@ public interface NotificationDelivery extends Delivery<Notification> {
      * @return 当前渠道 Handler 发生技术失败或结果未知时的再次处理策略
      */
     @NotNull
-    default HandlingPolicy handlingPolicy() {
-        return HandlingPolicy.noRetry();
+    default RetryRule retryRule() {
+        return RetryRule.once();
     }
 
     /**

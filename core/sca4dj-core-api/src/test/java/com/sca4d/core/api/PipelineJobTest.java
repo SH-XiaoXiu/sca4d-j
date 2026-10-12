@@ -7,13 +7,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.sca4d.core.api.job.JobKey;
 import com.sca4d.core.api.job.JobNodeOutput;
-import com.sca4d.core.api.job.JobRetryPolicy;
 import com.sca4d.core.api.job.ParallelResults;
 import com.sca4d.core.api.job.PipelineJob;
 import com.sca4d.core.api.job.PipelineJobPlan;
 import com.sca4d.core.api.pipeline.Pipeline;
 import com.sca4d.core.api.pipeline.PipelineExecutionException;
 import com.sca4d.core.api.pipeline.PipelineStage;
+import com.sca4d.core.api.retry.Backoff;
+import com.sca4d.core.api.retry.RetryRule;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ import java.util.function.Function;
 
 class PipelineJobTest {
 
-    private static final JobRetryPolicy ONCE = JobRetryPolicy.once();
+    private static final RetryRule ONCE = RetryRule.once();
 
     @Test
     @DisplayName("Pipeline Runs Directly In Declared Order")
@@ -121,7 +122,7 @@ class PipelineJobTest {
                 PipelineJobPlan.from(Integer.class)
                         .then("seed", seed, ONCE)
                         .parallel("left", left, ONCE, "right", right, ONCE)
-                        .merge("merge", merge, new JobRetryPolicy(2, Duration.ofSeconds(1))));
+                        .merge("merge", merge, RetryRule.atMost(2, Backoff.fixed(Duration.ofSeconds(1)))));
 
         PipelineJobPlan<Integer, String> definition = job.definition();
         assertEquals(Integer.class, job.inputType());

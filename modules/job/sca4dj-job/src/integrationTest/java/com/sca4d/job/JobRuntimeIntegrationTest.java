@@ -16,7 +16,6 @@ import com.sca4d.core.api.job.DirectJob;
 import com.sca4d.core.api.job.Job;
 import com.sca4d.core.api.job.JobExecution;
 import com.sca4d.core.api.job.JobKey;
-import com.sca4d.core.api.job.JobRetryPolicy;
 import com.sca4d.core.api.job.JobRunFailedException;
 import com.sca4d.core.api.job.JobRunRecording;
 import com.sca4d.core.api.job.JobRunStatus;
@@ -33,6 +32,8 @@ import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.pipeline.Pipeline;
 import com.sca4d.core.api.pipeline.PipelineStage;
 import com.sca4d.core.api.query.PageRequest;
+import com.sca4d.core.api.retry.Backoff;
+import com.sca4d.core.api.retry.RetryRule;
 import com.sca4d.core.api.runtime.InstanceCapabilities;
 import com.sca4d.core.api.runtime.InstanceCapability;
 import com.sca4d.core.api.runtime.InstanceId;
@@ -46,6 +47,7 @@ import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.core.spring.persistence.mybatis.CoreEnumTypeHandler;
 import com.sca4d.core.spring.persistence.mybatis.StringValueTypeHandler;
 import com.sca4d.core.spring.persistence.mybatis.TreeCodeTypeHandler;
+import com.sca4d.core.spring.retry.RetryRuleCodec;
 import com.sca4d.job.config.JobProperties;
 import com.sca4d.job.persistence.JobMapper;
 import com.sca4d.job.persistence.JobRepository;
@@ -110,6 +112,8 @@ class JobRuntimeIntegrationTest {
 
     private DataSource dataSource;
 
+    private final RetryRuleCodec retryRules = new RetryRuleCodec(new Sca4djMapper());
+
     private JdbcTemplate jdbc;
 
     /** 每个用例重新创建 Job schema，避免运行状态互相影响。 */
@@ -153,8 +157,8 @@ class JobRuntimeIntegrationTest {
             }
 
             @Override
-            public @NotNull JobRetryPolicy retryPolicy() {
-                return new JobRetryPolicy(2, Duration.ofMillis(10));
+            public @NotNull RetryRule retryRule() {
+                return RetryRule.atMost(2, Backoff.fixed(Duration.ofMillis(10)));
             }
 
             @Override
@@ -210,8 +214,8 @@ class JobRuntimeIntegrationTest {
             }
 
             @Override
-            public @NotNull JobRetryPolicy retryPolicy() {
-                return JobRetryPolicy.once();
+            public @NotNull RetryRule retryRule() {
+                return RetryRule.once();
             }
 
             @Override
@@ -309,8 +313,8 @@ class JobRuntimeIntegrationTest {
             @Override
             protected @NotNull PipelineJobPlan<String, String> plan() {
                 return PipelineJobPlan.from(String.class)
-                        .then("failing", failing, new JobRetryPolicy(2, Duration.ofMillis(10)))
-                        .then("dependent", dependent, JobRetryPolicy.once());
+                        .then("failing", failing, RetryRule.atMost(2, Backoff.fixed(Duration.ofMillis(10))))
+                        .then("dependent", dependent, RetryRule.once());
             }
         };
 
@@ -451,15 +455,15 @@ class JobRuntimeIntegrationTest {
             @Override
             protected @NotNull PipelineJobPlan<String, String> plan() {
                 return PipelineJobPlan.from(String.class)
-                        .then("normalize", normalize, JobRetryPolicy.once())
+                        .then("normalize", normalize, RetryRule.once())
                         .parallel(
                                 "left",
                                 left,
-                                JobRetryPolicy.once(),
+                                RetryRule.once(),
                                 "right",
                                 right,
-                                JobRetryPolicy.once())
-                        .merge("merge", merge, JobRetryPolicy.once());
+                                RetryRule.once())
+                        .merge("merge", merge, RetryRule.once());
             }
         };
 
@@ -768,8 +772,8 @@ class JobRuntimeIntegrationTest {
             }
 
             @Override
-            public @NotNull JobRetryPolicy retryPolicy() {
-                return JobRetryPolicy.once();
+            public @NotNull RetryRule retryRule() {
+                return RetryRule.once();
             }
 
             @Override
@@ -840,8 +844,8 @@ class JobRuntimeIntegrationTest {
             }
 
             @Override
-            public @NotNull JobRetryPolicy retryPolicy() {
-                return JobRetryPolicy.once();
+            public @NotNull RetryRule retryRule() {
+                return RetryRule.once();
             }
 
             @Override
@@ -903,10 +907,11 @@ class JobRuntimeIntegrationTest {
         long nodeId = Objects.requireNonNull(
                 jdbc.queryForObject(
                         "INSERT INTO job.job_run_node (run_id, node_key, node_kind, status, parallel_merge, "
-                                + "max_attempts, retry_delay_millis, attempt_count, available_at, completed_at) "
-                                + "VALUES (?, 'direct', 'DIRECT', 'SUCCEEDED', 0, 1, 0, 1, ?, ?) RETURNING id",
+                                + "retry_rule, attempt_count, available_at, completed_at) "
+                                + "VALUES (?, 'direct', 'DIRECT', 'SUCCEEDED', 0, CAST(? AS JSONB), 1, ?, ?) RETURNING id",
                         Long.class,
                         firstExpired,
+                        retryRules.encode(RetryRule.once()),
                         Timestamp.from(now.minus(Duration.ofDays(40))),
                         Timestamp.from(now.minus(Duration.ofDays(40)))));
         jdbc.update(
@@ -988,7 +993,7 @@ class JobRuntimeIntegrationTest {
                                             Integer.class,
                                             String.class,
                                             Object::toString)),
-                            JobRetryPolicy.once());
+                            RetryRule.once());
 
             @Override
             public @NotNull JobKey key() {
@@ -1103,12 +1108,13 @@ class JobRuntimeIntegrationTest {
             @NotNull Instant completedAt) {
         jdbc.update(
                 "INSERT INTO job.job_run_node "
-                        + "(run_id, node_key, node_kind, output_json, status, parallel_merge, max_attempts, "
-                        + "retry_delay_millis, attempt_count, available_at, completed_at) "
-                        + "VALUES (?, ?, 'PIPELINE', CAST(? AS JSONB), 'SUCCEEDED', 0, 1, 0, 1, ?, ?)",
+                        + "(run_id, node_key, node_kind, output_json, status, parallel_merge, retry_rule, "
+                        + "attempt_count, available_at, completed_at) "
+                        + "VALUES (?, ?, 'PIPELINE', CAST(? AS JSONB), 'SUCCEEDED', 0, CAST(? AS JSONB), 1, ?, ?)",
                 runId,
                 "outcome",
                 outputJson,
+                retryRules.encode(RetryRule.once()),
                 Timestamp.from(completedAt),
                 Timestamp.from(completedAt));
     }
@@ -1120,9 +1126,10 @@ class JobRuntimeIntegrationTest {
         long runId = insertRun(APPLICATION_NAME, "RUNNING", null);
         long nodeId = Objects.requireNonNull(
                 jdbc.queryForObject(
-                        "INSERT INTO job.job_run_node (run_id, node_key, node_kind, status, max_attempts, retry_delay_millis, attempt_count, available_at, lease_owner, lease_until, output_json) VALUES (?, 'direct', 'DIRECT', 'RUNNING', 3, 0, 2, ?, 'new', ?, '\"old\"'::jsonb) RETURNING id",
+                        "INSERT INTO job.job_run_node (run_id, node_key, node_kind, status, retry_rule, attempt_count, available_at, lease_owner, lease_until, output_json) VALUES (?, 'direct', 'DIRECT', 'RUNNING', CAST(? AS JSONB), 2, ?, 'new', ?, '\"old\"'::jsonb) RETURNING id",
                         Long.class,
                         runId,
+                        retryRules.encode(RetryRule.atMost(3, Backoff.fixed(Duration.ZERO))),
                         Timestamp.from(now),
                         Timestamp.from(now.plusSeconds(60))));
         jdbc.update(
@@ -1139,8 +1146,7 @@ class JobRuntimeIntegrationTest {
                 "direct",
                 null,
                 1,
-                3,
-                0);
+                RetryRule.atMost(3, Backoff.fixed(Duration.ZERO)));
         var current = new NodeClaim(
                 nodeId,
                 runId,
@@ -1150,8 +1156,7 @@ class JobRuntimeIntegrationTest {
                 "direct",
                 null,
                 2,
-                3,
-                0);
+                RetryRule.atMost(3, Backoff.fixed(Duration.ZERO)));
         var transactions = new TransactionTemplate(
                 new DataSourceTransactionManager(dataSource));
         assertThatThrownBy(
@@ -1175,6 +1180,94 @@ class JobRuntimeIntegrationTest {
                         String.class,
                         nodeId))
                 .isEqualTo("SUCCEEDED");
+    }
+
+    /** 固定、指数、序列和无限规则在失败写回后保留相同的持久化等待。 */
+    @Test
+    void persistsAllRetryRulesAndRecoversExpiredLeaseWithoutResettingDelay() {
+        Instant now = Instant.parse("2026-10-12T00:00:00Z");
+        List<RetryRule> rules = List.of(
+                RetryRule.atMost(4, Backoff.fixed(Duration.ofSeconds(5))),
+                RetryRule.atMost(4, Backoff.exponential(Duration.ofSeconds(1), 2, Duration.ofSeconds(10))),
+                RetryRule.atMost(4, Backoff.sequence(Duration.ofSeconds(1), Duration.ofSeconds(7))),
+                RetryRule.unlimited(Backoff.fixed(Duration.ofSeconds(9))));
+        JobRepository repository = new JobRepository(mapper(), sqlBatches());
+        JobRunService runs = new JobRunService(
+                repository,
+                new DataSourceTransactionManager(dataSource),
+                Clock.fixed(now, ZoneOffset.UTC),
+                immediateLock(),
+                new Sca4djMapper());
+        for (RetryRule rule : rules) {
+            String json = retryRules.encode(rule);
+            long runId = insertRun(APPLICATION_NAME, "RUNNING", null);
+            long nodeId = Objects.requireNonNull(
+                    jdbc.queryForObject(
+                            "INSERT INTO job.job_run_node (run_id, node_key, node_kind, status, retry_rule, attempt_count, available_at, lease_owner, lease_until) "
+                                    + "VALUES (?, 'direct', 'DIRECT', 'RUNNING', CAST(? AS JSONB), 2, ?, 'worker', ?) RETURNING id",
+                            Long.class,
+                            runId,
+                            json,
+                            Timestamp.from(now),
+                            Timestamp.from(now.plusSeconds(60))));
+            jdbc.update(
+                    "INSERT INTO job.job_run_attempt (node_id, attempt_number, worker_id, status, started_at) VALUES (?, 2, 'worker', 'RUNNING', ?)",
+                    nodeId,
+                    Timestamp.from(now));
+            NodeClaim claim = new NodeClaim(
+                    nodeId,
+                    runId,
+                    new JobKey("TEST/HISTORY"),
+                    1,
+                    "DIRECT",
+                    "direct",
+                    null,
+                    2,
+                    rule);
+            assertThat(runs.fail(claim, "worker", "temporary").retrying()).isTrue();
+            assertThat(
+                    Objects.requireNonNull(
+                            jdbc.queryForObject(
+                                    "SELECT available_at FROM job.job_run_node WHERE id = ?",
+                                    Timestamp.class,
+                                    nodeId))
+                            .toInstant())
+                    .isEqualTo(now.plus(rule.backoff().delayAfter(2)));
+            // 模拟下一次进程失联；恢复从原租约截止时间计算，不从每次扫描时间重新计时。
+            Instant expiredAt = now.minusSeconds(1);
+            jdbc.update(
+                    "UPDATE job.job_run_node SET status = 'RUNNING', lease_owner = 'worker', lease_until = ? WHERE id = ?",
+                    Timestamp.from(expiredAt),
+                    nodeId);
+            jdbc.update(
+                    "UPDATE job.job_run_attempt SET status = 'RUNNING', completed_at = NULL WHERE node_id = ?",
+                    nodeId);
+            runs.recoverExpiredAttempts();
+            Instant next = Objects.requireNonNull(
+                    jdbc
+                            .queryForObject(
+                                    "SELECT available_at FROM job.job_run_node WHERE id = ?",
+                                    Timestamp.class,
+                                    nodeId))
+                    .toInstant();
+            assertThat(next).isEqualTo(expiredAt.plus(rule.backoff().delayAfter(2)));
+            runs.recoverExpiredAttempts();
+            assertThat(
+                    Objects.requireNonNull(
+                            jdbc.queryForObject(
+                                    "SELECT available_at FROM job.job_run_node WHERE id = ?",
+                                    Timestamp.class,
+                                    nodeId))
+                            .toInstant())
+                    .isEqualTo(next);
+            assertThat(
+                    jdbc.queryForObject(
+                            "SELECT status FROM job.job_run_attempt WHERE node_id = ?",
+                            String.class,
+                            nodeId))
+                    .isEqualTo("ABANDONED");
+            assertThatThrownBy(() -> runs.succeed(claim, "worker", null)).isInstanceOf(OptimisticLockException.class);
+        }
     }
 
     /** 插入一个用于历史保留测试的根运行。 */
@@ -1261,6 +1354,8 @@ class JobRuntimeIntegrationTest {
             configuration.setMapUnderscoreToCamelCase(true);
             configuration.setArgNameBasedConstructorAutoMapping(true);
             configuration.setDefaultEnumTypeHandler(CoreEnumTypeHandler.class);
+            configuration.getTypeHandlerRegistry()
+                    .register(RetryRule.class, new StringValueTypeHandler<>(retryRules::decode, retryRules::encode));
             configuration.getTypeHandlerRegistry()
                     .register(
                             Name.class,

@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">FileCleanupJob</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">FileCleanupJob</span>
 <span class="extends-implements">extends com.sca4d.core.api.job.DirectJob&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span></div>
 <div class="block">由分布式 Job runtime 触发一次文件过期与待删除对象扫描。
 
@@ -144,8 +144,8 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#outputType()" class="member-name-link">outputType</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.job.JobRetryPolicy</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#retryPolicy()" class="member-name-link">retryPolicy</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull com.sca4d.core.api.retry.RetryRule</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#retryRule()" class="member-name-link">retryRule</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
@@ -236,13 +236,13 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="retryPolicy()">
-<h3>retryPolicy</h3>
+<section class="detail" id="retryRule()">
+<h3>retryRule</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.job.JobRetryPolicy</span>&nbsp;<span class="element-name">retryPolicy</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull com.sca4d.core.api.retry.RetryRule</span>&nbsp;<span class="element-name">retryRule</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code>retryPolicy</code>&nbsp;in class&nbsp;<code>com.sca4d.core.api.job.DirectJob&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</code></dd>
+<dd><code>retryRule</code>&nbsp;in class&nbsp;<code>com.sca4d.core.api.job.DirectJob&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</code></dd>
 </dl>
 </section>
 </li>

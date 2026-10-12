@@ -117,13 +117,14 @@ implements org.springframework.context.SmartLifecycle</span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.iot.emqx.config.EmqxProperties,com.sca4d.iot.emqx.transport.MqttMessageRouter,java.time.Clock,java.util.Collection,java.util.Collection,com.sca4d.iot.emqx.transport.MqttInboundFailureStore,com.sca4d.iot.emqx.connection.EmqxConnectionReconciler)" class="member-name-link">EmqxMqttRuntime</a><wbr>(@NotNull <a href="../config/EmqxProperties.html" title="class in com.sca4d.iot.emqx.config">EmqxProperties</a>&nbsp;properties,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(com.sca4d.iot.emqx.config.EmqxProperties,com.sca4d.iot.emqx.transport.MqttMessageRouter,java.time.Clock,java.util.Collection,java.util.Collection,com.sca4d.iot.emqx.transport.MqttInboundFailureStore,com.sca4d.iot.emqx.connection.EmqxConnectionReconciler,com.sca4d.core.api.retry.RetryExecutor)" class="member-name-link">EmqxMqttRuntime</a><wbr>(@NotNull <a href="../config/EmqxProperties.html" title="class in com.sca4d.iot.emqx.config">EmqxProperties</a>&nbsp;properties,
  @NotNull <a href="MqttMessageRouter.html" title="class in com.sca4d.iot.emqx.transport">MqttMessageRouter</a>&nbsp;router,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="MqttMessageObserver.html" title="interface in com.sca4d.iot.emqx.transport">MqttMessageObserver</a>&gt;&nbsp;observers,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="MqttMessageProcessingObserver.html" title="interface in com.sca4d.iot.emqx.transport">MqttMessageProcessingObserver</a>&gt;&nbsp;processingObservers,
  @Nullable <a href="MqttInboundFailureStore.html" title="interface in com.sca4d.iot.emqx.transport">MqttInboundFailureStore</a>&nbsp;failureStore,
- @NotNull <a href="../connection/EmqxConnectionReconciler.html" title="class in com.sca4d.iot.emqx.connection">EmqxConnectionReconciler</a>&nbsp;connectionReconciler)</code></div>
+ @NotNull <a href="../connection/EmqxConnectionReconciler.html" title="class in com.sca4d.iot.emqx.connection">EmqxConnectionReconciler</a>&nbsp;connectionReconciler,
+ @NotNull com.sca4d.core.api.retry.RetryExecutor&nbsp;retries)</code></div>
 <div class="col-last even-row-color">
 <div class="block">创建使用唯一 clientId 且自动重连后重新订阅的 MQTT 运行时。</div>
 </div>
@@ -189,7 +190,7 @@ implements org.springframework.context.SmartLifecycle</span></div>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(com.sca4d.iot.emqx.config.EmqxProperties,com.sca4d.iot.emqx.transport.MqttMessageRouter,java.time.Clock,java.util.Collection,java.util.Collection,com.sca4d.iot.emqx.transport.MqttInboundFailureStore,com.sca4d.iot.emqx.connection.EmqxConnectionReconciler)">
+<section class="detail" id="&lt;init&gt;(com.sca4d.iot.emqx.config.EmqxProperties,com.sca4d.iot.emqx.transport.MqttMessageRouter,java.time.Clock,java.util.Collection,java.util.Collection,com.sca4d.iot.emqx.transport.MqttInboundFailureStore,com.sca4d.iot.emqx.connection.EmqxConnectionReconciler,com.sca4d.core.api.retry.RetryExecutor)">
 <h3>EmqxMqttRuntime</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">EmqxMqttRuntime</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../config/EmqxProperties.html" title="class in com.sca4d.iot.emqx.config">EmqxProperties</a>&nbsp;properties,
@@ -204,7 +205,9 @@ implements org.springframework.context.SmartLifecycle</span></div>
  @Nullable
  @Nullable <a href="MqttInboundFailureStore.html" title="interface in com.sca4d.iot.emqx.transport">MqttInboundFailureStore</a>&nbsp;failureStore,
  @NotNull
- @NotNull <a href="../connection/EmqxConnectionReconciler.html" title="class in com.sca4d.iot.emqx.connection">EmqxConnectionReconciler</a>&nbsp;connectionReconciler)</span></div>
+ @NotNull <a href="../connection/EmqxConnectionReconciler.html" title="class in com.sca4d.iot.emqx.connection">EmqxConnectionReconciler</a>&nbsp;connectionReconciler,
+ @NotNull
+ @NotNull com.sca4d.core.api.retry.RetryExecutor&nbsp;retries)</span></div>
 <div class="block">创建使用唯一 clientId 且自动重连后重新订阅的 MQTT 运行时。</div>
 </section>
 </li>

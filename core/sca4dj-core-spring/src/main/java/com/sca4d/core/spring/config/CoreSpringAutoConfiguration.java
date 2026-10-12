@@ -33,6 +33,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
         CoreI18nConfiguration.class,
         CoreCallLifecycleConfiguration.class,
         CoreConcurrencyConfiguration.class,
+        CoreRetryConfiguration.class,
         CorePermissionConfiguration.class,
         CoreIdentityConfiguration.class,
         CoreWebMvcConfiguration.class

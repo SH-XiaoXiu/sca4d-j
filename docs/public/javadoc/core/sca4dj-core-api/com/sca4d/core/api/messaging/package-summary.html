@@ -102,36 +102,32 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab3"><a href="HandlingDecision.Status.html" title="enum class in com.sca4d.core.api.messaging">HandlingDecision.Status</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab3">&nbsp;</div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="HandlingPolicy.html" title="class in com.sca4d.core.api.messaging">HandlingPolicy</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="IncomingMessage.html" title="class in com.sca4d.core.api.messaging">IncomingMessage</a>&lt;M extends <a href="../message/Message.html" title="class in com.sca4d.core.api.message">Message</a>&gt;</div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">限制 MessageHandler 因技术失败再次处理同一 RabbitMQ 消息的次数和间隔。</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="IncomingMessage.html" title="class in com.sca4d.core.api.messaging">IncomingMessage</a>&lt;M extends <a href="../message/Message.html" title="class in com.sca4d.core.api.message">Message</a>&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">保存 MessageHandler 收到的业务 Message 和 RabbitMQ 投递元数据。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JacksonMessageCodec.html" title="class in com.sca4d.core.api.messaging">JacksonMessageCodec</a>&lt;M extends <a href="../message/Message.html" title="class in com.sca4d.core.api.message">Message</a>&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JacksonMessageCodec.html" title="class in com.sca4d.core.api.messaging">JacksonMessageCodec</a>&lt;M extends <a href="../message/Message.html" title="class in com.sca4d.core.api.message">Message</a>&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">使用项目统一 ObjectMapper 编解码一个具有固定 TreeCode 和版本的 Message 类型。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="MessageBus.html" title="interface in com.sca4d.core.api.messaging">MessageBus</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="MessageBus.html" title="interface in com.sca4d.core.api.messaging">MessageBus</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">把业务 Message 按指定策略交给固定 RabbitMQ 消息总线。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="MessageCodec.html" title="interface in com.sca4d.core.api.messaging">MessageCodec</a>&lt;M extends <a href="../message/Message.html" title="class in com.sca4d.core.api.message">Message</a>&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="MessageCodec.html" title="interface in com.sca4d.core.api.messaging">MessageCodec</a>&lt;M extends <a href="../message/Message.html" title="class in com.sca4d.core.api.message">Message</a>&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">把一种 Message 与 RabbitMQ/Outbox 保存的二进制 payload 互相转换。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="MessageConsumer.html" title="interface in com.sca4d.core.api.messaging">MessageConsumer</a>&lt;T&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="MessageConsumer.html" title="interface in com.sca4d.core.api.messaging">MessageConsumer</a>&lt;T&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">声明一个稳定的业务事件 Consumer 契约。</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="MessageDelivery.html" title="class in com.sca4d.core.api.messaging">MessageDelivery</a>&lt;T&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="MessageDelivery.html" title="class in com.sca4d.core.api.messaging">MessageDelivery</a>&lt;T&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">保存 RabbitMQ 投递给 `MessageConsumer` 的事件和发布元数据。</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="MessageHandler.html" title="interface in com.sca4d.core.api.messaging">MessageHandler</a>&lt;M extends <a href="../message/Message.html" title="class in com.sca4d.core.api.message">Message</a>&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="MessageHandler.html" title="interface in com.sca4d.core.api.messaging">MessageHandler</a>&lt;M extends <a href="../message/Message.html" title="class in com.sca4d.core.api.message">Message</a>&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">声明一种 Message 的稳定 RabbitMQ 消费入口和技术失败处理策略。</div>
 </div>
 </div>

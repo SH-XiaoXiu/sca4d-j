@@ -115,6 +115,25 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">新增一条待发布消息。</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#insertHandlerRetry(long,long,com.sca4d.core.api.name.code.TreeCode,byte%5B%5D,com.sca4d.core.api.name.code.TreeCode,long,com.sca4d.core.api.retry.RetryRule,java.time.Instant)" class="member-name-link">insertHandlerRetry</a><wbr>(long&nbsp;outboxId,
+ long&nbsp;messageId,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;messageCode,
+ byte @NotNull []&nbsp;envelope,
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;handlerCode,
+ long&nbsp;handlerAttempt,
+ @NotNull com.sca4d.core.api.retry.RetryRule&nbsp;retryRule,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;availableAt)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">幂等登记同一 Handler、业务消息和消费序号的下一次投递。</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="OutboxCandidate.html" title="class in com.sca4d.messaging.outbox.mapper">OutboxCandidate</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#selectHandlerRetry(com.sca4d.core.api.name.code.TreeCode,long,long)" class="member-name-link">selectHandlerRetry</a><wbr>(@NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;handlerCode,
+ long&nbsp;messageId,
+ long&nbsp;handlerAttempt)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">查询已登记的下一次或更晚消费信封，用于交接后的重复消息确认。</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="OutboxCandidate.html" title="class in com.sca4d.messaging.outbox.mapper">OutboxCandidate</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateClaimable(java.time.Instant,int,java.lang.String,java.time.Instant)" class="member-name-link">updateClaimable</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;now,
  int&nbsp;limit,
@@ -124,7 +143,7 @@ loadScripts(document, 'script');</script>
 <div class="block">原子领取可发布或租约已过期的消息。</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateProgress(long,java.lang.String,long,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch)" class="member-name-link">updateProgress</a><wbr>(long&nbsp;messageId,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateProgress(long,java.lang.String,long,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch)" class="member-name-link">updateProgress</a><wbr>(long&nbsp;outboxId,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;leaseId,
  long&nbsp;expectedVersion,
  @NotNull com.sca4d.core.api.persistence.Patch&lt;<a href="../OutboxStatus.html" title="enum class in com.sca4d.messaging.outbox">OutboxStatus</a>&gt;&nbsp;status,
@@ -175,6 +194,40 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="insertHandlerRetry(long,long,com.sca4d.core.api.name.code.TreeCode,byte[],com.sca4d.core.api.name.code.TreeCode,long,com.sca4d.core.api.retry.RetryRule,java.time.Instant)">
+<h3>insertHandlerRetry</h3>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">insertHandlerRetry</span><wbr><span class="parameters">(@Param("outboxId")
+ long&nbsp;outboxId,
+ @Param("messageId")
+ long&nbsp;messageId,
+ @Param("messageCode") @NotNull
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;messageCode,
+ @Param("envelope")
+ byte @NotNull []&nbsp;envelope,
+ @Param("handlerCode") @NotNull
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;handlerCode,
+ @Param("handlerAttempt")
+ long&nbsp;handlerAttempt,
+ @Param("retryRule") @NotNull
+ @NotNull com.sca4d.core.api.retry.RetryRule&nbsp;retryRule,
+ @Param("availableAt") @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;availableAt)</span></div>
+<div class="block">幂等登记同一 Handler、业务消息和消费序号的下一次投递。</div>
+</section>
+</li>
+<li>
+<section class="detail" id="selectHandlerRetry(com.sca4d.core.api.name.code.TreeCode,long,long)">
+<h3>selectHandlerRetry</h3>
+<div class="member-signature"><span class="return-type"><a href="OutboxCandidate.html" title="class in com.sca4d.messaging.outbox.mapper">OutboxCandidate</a></span>&nbsp;<span class="element-name">selectHandlerRetry</span><wbr><span class="parameters">(@Param("handlerCode") @NotNull
+ @NotNull com.sca4d.core.api.name.code.TreeCode&nbsp;handlerCode,
+ @Param("messageId")
+ long&nbsp;messageId,
+ @Param("handlerAttempt")
+ long&nbsp;handlerAttempt)</span></div>
+<div class="block">查询已登记的下一次或更晚消费信封，用于交接后的重复消息确认。</div>
+</section>
+</li>
+<li>
 <section class="detail" id="updateClaimable(java.time.Instant,int,java.lang.String,java.time.Instant)">
 <h3>updateClaimable</h3>
 <div class="member-signature"><span class="annotations">@NotNull
@@ -196,8 +249,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="updateProgress(long,java.lang.String,long,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch,com.sca4d.core.api.persistence.Patch)">
 <h3>updateProgress</h3>
-<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">updateProgress</span><wbr><span class="parameters">(@Param("messageId")
- long&nbsp;messageId,
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">updateProgress</span><wbr><span class="parameters">(@Param("outboxId")
+ long&nbsp;outboxId,
  @Param("leaseId") @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;leaseId,
  @Param("expectedVersion")

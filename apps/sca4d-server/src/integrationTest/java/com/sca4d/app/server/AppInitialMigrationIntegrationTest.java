@@ -11,7 +11,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-/** 验证 App 在空数据库上仅通过 V1 建立现行结构，重复启动不再执行迁移。 */
+/** 验证 App 在空数据库上执行现行迁移，重复启动不再执行迁移。 */
 @Testcontainers
 class AppInitialMigrationIntegrationTest {
 
@@ -23,16 +23,16 @@ class AppInitialMigrationIntegrationTest {
                             .withNanoCPUs(500_000_000L));
 
     @Test
-    @DisplayName("空数据库仅执行 V1 并建立设置、字典、身份和 App 现行结构")
-    void createsCurrentSchemaWithOneMigrationAndDoesNotRepeatIt() {
+    @DisplayName("空数据库执行 V1、V2 并建立设置、字典、身份和重试结构")
+    void createsCurrentSchemaAndDoesNotRepeatMigrations() {
         Flyway flyway = Flyway.configure()
                 .dataSource(POSTGRES.getJdbcUrl(), POSTGRES.getUsername(), POSTGRES.getPassword())
                 .locations("classpath:db/migration")
                 .load();
 
-        assertThat(flyway.migrate().migrationsExecuted).isEqualTo(1);
-        assertThat(flyway.info().applied()).hasSize(1);
-        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("1");
+        assertThat(flyway.migrate().migrationsExecuted).isEqualTo(2);
+        assertThat(flyway.info().applied()).hasSize(2);
+        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("2");
         assertThat(flyway.migrate().migrationsExecuted).isZero();
         flyway.validate();
 
@@ -61,6 +61,19 @@ class AppInitialMigrationIntegrationTest {
                         String.class))
                 .contains("binding_generation")
                 .doesNotContain("binding_revision");
+        assertThat(
+                jdbc.queryForList(
+                        "SELECT column_name FROM information_schema.columns "
+                                + "WHERE table_schema = 'job' AND table_name = 'job_run_node'",
+                        String.class))
+                .contains("retry_rule", "max_attempts")
+                .doesNotContain("retry_delay_millis");
+        assertThat(
+                jdbc.queryForList(
+                        "SELECT column_name FROM information_schema.columns "
+                                + "WHERE table_schema = 'public' AND table_name = 'messaging_outbox'",
+                        String.class))
+                .contains("outbox_id", "target_handler_code", "handler_attempt", "handler_retry_rule");
         assertThat(
                 jdbc.queryForList(
                         "SELECT tablename FROM pg_tables WHERE schemaname = 'public'",

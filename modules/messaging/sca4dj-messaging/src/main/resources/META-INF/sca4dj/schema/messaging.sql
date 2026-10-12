@@ -1,10 +1,14 @@
 CREATE TABLE messaging_outbox (
-    message_id BIGINT PRIMARY KEY,
+    outbox_id BIGINT PRIMARY KEY,
+    message_id BIGINT NOT NULL,
+    target_handler_code VARCHAR(128),
+    handler_attempt BIGINT,
+    handler_retry_rule JSONB,
     message_code VARCHAR(128) NOT NULL,
     envelope BYTEA NOT NULL,
     status VARCHAR(16) NOT NULL,
     available_at TIMESTAMP WITH TIME ZONE NOT NULL,
-    attempt_count INTEGER NOT NULL DEFAULT 0,
+    attempt_count BIGINT NOT NULL DEFAULT 0,
     lease_id VARCHAR(64),
     lease_until TIMESTAMP WITH TIME ZONE,
     last_error VARCHAR(512),
@@ -14,16 +18,22 @@ CREATE TABLE messaging_outbox (
     version BIGINT NOT NULL DEFAULT 0
 );
 
+CREATE UNIQUE INDEX uk_messaging_outbox_message ON messaging_outbox (message_id)
+    WHERE target_handler_code IS NULL;
+CREATE UNIQUE INDEX uk_messaging_outbox_handler_attempt
+    ON messaging_outbox (target_handler_code, message_id, handler_attempt)
+    WHERE target_handler_code IS NOT NULL;
+
 CREATE INDEX idx_messaging_outbox_dispatch
-    ON messaging_outbox (available_at, message_id)
+    ON messaging_outbox (available_at, outbox_id)
     WHERE status IN ('PENDING', 'FAILED');
 
 CREATE INDEX idx_messaging_outbox_lease
-    ON messaging_outbox (lease_until, message_id)
+    ON messaging_outbox (lease_until, outbox_id)
     WHERE status = 'SENDING';
 
 CREATE INDEX idx_messaging_outbox_sent
-    ON messaging_outbox (sent_at, message_id)
+    ON messaging_outbox (sent_at, outbox_id)
     WHERE status = 'SENT';
 
 COMMENT ON TABLE messaging_outbox IS '保存业务事务中登记且尚未由 RabbitMQ 确认发布的消息信封';
@@ -44,3 +54,8 @@ COMMENT ON COLUMN messaging_outbox.version IS '发布状态并发修改使用的
 CREATE TRIGGER set_messaging_outbox_updated_at
     BEFORE UPDATE ON messaging_outbox
     FOR EACH ROW EXECUTE FUNCTION sca4dj_set_updated_at();
+
+COMMENT ON COLUMN messaging_outbox.outbox_id IS '单次代理发布记录标识，与业务消息标识分离';
+COMMENT ON COLUMN messaging_outbox.target_handler_code IS '定向重试的 Handler 编码，NULL 表示普通消息分发';
+COMMENT ON COLUMN messaging_outbox.handler_attempt IS '目标 Handler 要开始的消费尝试序号';
+COMMENT ON COLUMN messaging_outbox.handler_retry_rule IS '消费重试链首次登记时冻结的版本化规则';

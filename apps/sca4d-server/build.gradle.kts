@@ -69,6 +69,7 @@ dependencies {
     runtimeOnly(project(":modules:storage:sca4dj-storage-file"))
     runtimeOnly(project(":modules:storage:sca4dj-storage-local"))
     runtimeOnly(project(":modules:storage:sca4dj-storage-minio"))
+    runtimeOnly(libs.spring.retry)
     runtimeOnly(libs.zxing.javase)
     implementation(libs.flyway.core)
     runtimeOnly(libs.flyway.postgresql)

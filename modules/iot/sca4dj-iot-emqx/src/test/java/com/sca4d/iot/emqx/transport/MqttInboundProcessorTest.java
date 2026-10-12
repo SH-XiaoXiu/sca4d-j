@@ -9,6 +9,8 @@ import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
 import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5Publish;
+import com.sca4d.core.spring.retry.SpringRetryExecutor;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -191,6 +193,48 @@ class MqttInboundProcessorTest {
         }
     }
 
+    /** 关闭过程必须中断长退避，保留 Broker 未确认状态，不隔离为业务耗尽。 */
+    @Test
+    void shutdownInterruptsRetryWithoutAcknowledgingOrQuarantining() throws Exception {
+        Mqtt5Publish publish = mock(Mqtt5Publish.class);
+        MqttInboundFailureStore store = mock(MqttInboundFailureStore.class);
+        AtomicInteger attempts = new AtomicInteger();
+        CountDownLatch retrying = new CountDownLatch(1);
+        MqttMessageProcessingObserver observer = new MqttMessageProcessingObserver() {
+            @Override
+            public void messageRetrying(
+                    @NotNull String deliveryId,
+                    @NotNull MqttMessage message,
+                    int attempt,
+                    int maximumAttempts,
+                    @NotNull RuntimeException failure) {
+                retrying.countDown();
+            }
+        };
+        try (MqttInboundProcessor processor = new MqttInboundProcessor(message -> {
+            attempts.incrementAndGet();
+            throw new IllegalStateException("temporary");
+        },
+                List.of(),
+                List.of(observer),
+                store,
+                1,
+                4,
+                3,
+                Duration.ofHours(1),
+                Duration.ofMillis(1),
+                new SpringRetryExecutor())) {
+            processor.submit(publish, MESSAGE);
+            assertThat(retrying.await(2, TimeUnit.SECONDS)).isTrue();
+            processor.close();
+            await(() -> processor.status().pending() == 0);
+            assertThat(processor.status().retrying()).isZero();
+        }
+        assertThat(attempts).hasValue(1);
+        verify(publish, never()).acknowledge();
+        verify(store, never()).store(any());
+    }
+
     /** 创建使用毫秒级等待和停止时间的测试处理器。 */
     private static MqttInboundProcessor processor(
             Consumer<MqttMessage> router,
@@ -208,7 +252,8 @@ class MqttInboundProcessorTest {
                 queueCapacity,
                 3,
                 Duration.ofMillis(1),
-                Duration.ofSeconds(1));
+                Duration.ofSeconds(1),
+                new SpringRetryExecutor());
     }
 
     /** 创建只靠 Topic 和单字节载荷区分的测试消息。 */

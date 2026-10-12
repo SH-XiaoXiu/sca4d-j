@@ -1,6 +1,9 @@
 package com.sca4d.iot.message.policy;
 
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.retry.Backoff;
+import com.sca4d.core.api.retry.RetryContext;
+import com.sca4d.core.api.retry.RetryRule;
 import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.message.DeviceDownlinkKind;
 import com.sca4d.iot.api.message.IotFailureCode;
@@ -11,14 +14,20 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Duration;
 import java.time.Instant;
 
-/** 按固定退避持续发送当前 desired sequence，直到新 desired sequence 取代或 reported 收敛。 */
+/** 按预设退避序列持续发送当前 desired sequence，直到新 desired sequence 取代或 reported 收敛。 */
 public class DefaultStateSyncRetryPolicy implements RetryPolicy {
 
     public static final @NotNull TreeCode CODE = TreeCode.of("IOT/DOWNLINK/RETRY/STATE/SYNC/DEFAULT");
 
-    private static final Duration[] RETRY_DELAYS = {
-            Duration.ofSeconds(1), Duration.ofSeconds(5), Duration.ofSeconds(30), Duration.ofMinutes(2)
-    };
+    private static final com.sca4d.core.api.retry.RetryPolicy<IotFailureCode> RETRY = com.sca4d.core.api.retry.RetryPolicy
+            .always(
+                    RetryRule.unlimited(
+                            Backoff.sequence(
+                                    Duration.ofSeconds(1),
+                                    Duration.ofSeconds(5),
+                                    Duration.ofSeconds(30),
+                                    Duration.ofMinutes(2),
+                                    Duration.ofMinutes(5))));
 
     public DefaultStateSyncRetryPolicy() {
     }
@@ -36,15 +45,9 @@ public class DefaultStateSyncRetryPolicy implements RetryPolicy {
         if (message.kind() != DeviceDownlinkKind.DESIRED) {
             return RetryDecision.stop(IotFailureCode.RETRY_POLICY_MISMATCH);
         }
-        return RetryDecision.retryAt(now.plus(delay(message.attemptCount())));
-    }
-
-    /** 返回按尝试次数增长且最高五分钟的退避。 */
-    private static @NotNull Duration delay(int attemptCount) {
-        if (attemptCount <= 0)
-            return RETRY_DELAYS[0];
-        if (attemptCount <= RETRY_DELAYS.length)
-            return RETRY_DELAYS[attemptCount - 1];
-        return Duration.ofMinutes(5);
+        var decision = RETRY.evaluate(RetryContext.failed(Math.max(1, message.attemptCount()), failure));
+        return decision.retryDelay()
+                .map(delay -> RetryDecision.retryAt(now.plus(delay)))
+                .orElseGet(() -> RetryDecision.stop(IotFailureCode.RETRY_POLICY_MISMATCH));
     }
 }

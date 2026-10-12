@@ -7,6 +7,7 @@ import com.sca4d.core.api.name.Name;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.persistence.Patch;
 import com.sca4d.core.api.query.PageRequest;
+import com.sca4d.core.api.retry.RetryRule;
 import com.sca4d.core.api.runtime.InstanceCapability;
 import com.sca4d.core.api.scheduling.ScheduleKey;
 import com.sca4d.job.JobAttemptStatus;
@@ -196,8 +197,7 @@ public interface JobMapper {
             @Param("inputJson") @Nullable String inputJson,
             @Param("status") @NotNull JobNodeStatus status,
             @Param("parallelMerge") boolean parallelMerge,
-            @Param("maxAttempts") int maxAttempts,
-            @Param("retryDelayMillis") long retryDelayMillis,
+            @Param("retryRule") @NotNull RetryRule retryRule,
             @Param("availableAt") @NotNull Instant availableAt);
 
     /** 插入本次运行已经解析的节点依赖；外层键为节点标识，内层键为输入顺序、值为依赖节点标识。 */
@@ -244,7 +244,7 @@ public interface JobMapper {
     /** 按本次租约和尝试序号更新节点与尝试字段。 */
     int updateNodeProgress(
             @Param("nodeId") long nodeId,
-            @Param("attempt") int attempt,
+            @Param("attempt") long attempt,
             @Param("workerId") @NotNull String workerId,
             @Param("nodeStatus") @NotNull Patch<JobNodeStatus> nodeStatus,
             @Param("attemptStatus") @NotNull Patch<JobAttemptStatus> attemptStatus,
@@ -270,10 +270,25 @@ public interface JobMapper {
     int updateNodeFailed(
             @Param("nodeId") long nodeId,
             @Param("runId") long runId,
-            @Param("attempt") int attempt,
+            @Param("attempt") long attempt,
             @Param("workerId") @NotNull String workerId,
             @Param("error") @NotNull String error,
             @Param("failedAt") @NotNull Instant failedAt);
+
+    /** 锁定当前应用仍有尝试额度的过期租约，避免重复计算恢复时间。 */
+    @NotNull
+    List<ExpiredJobAttempt> selectExpiredAttempts(
+            @Param("appName") @NotNull Name appName,
+            @Param("now") @NotNull Instant now);
+
+    /** 按旧租约原子放弃尝试并恢复 READY，返回结束的尝试数。 */
+    int rescheduleExpired(
+            @Param("nodeId") long nodeId,
+            @Param("attempt") long attempt,
+            @Param("workerId") @NotNull String workerId,
+            @Param("leaseUntil") @NotNull Instant leaseUntil,
+            @Param("availableAt") @NotNull Instant availableAt,
+            @Param("now") @NotNull Instant now);
 
     /** 失败当前 App 隔离名称内租约过期且重试耗尽的节点及其根运行。 */
     int updateExpiredNodes(

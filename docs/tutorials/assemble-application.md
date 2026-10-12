@@ -179,7 +179,7 @@ App 把模块提交后的 Device 数据区域变化发布到 `iot.device.<device
 
 ## 可靠业务消息
 
-Messaging 在业务事务中写入 PostgreSQL Outbox，事务提交后再向 RabbitMQ 发布。它用于需要被其他业务 Consumer 处理的消息；发布失败会重试，Consumer 按自己的 HandlingPolicy 重试或进入 DLQ。Outbox 派发和清理由无记录 `JobSchedule` 触发，不创建 Job Run。
+Messaging 在业务事务中写入 PostgreSQL Outbox，事务提交后再向 RabbitMQ 发布。它用于需要被其他业务 Consumer 处理的消息；发布失败会重试，Consumer 按自己的 RetryRule 重试或进入 DLQ。Outbox 派发和清理由无记录 `JobSchedule` 触发，不创建 Job Run。
 
 ## 后台 Job
 

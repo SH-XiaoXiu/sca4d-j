@@ -2,6 +2,10 @@ package com.sca4d.storage.file.lifecycle;
 
 import static java.lang.Boolean.TRUE;
 
+import com.sca4d.core.api.retry.Backoff;
+import com.sca4d.core.api.retry.RetryContext;
+import com.sca4d.core.api.retry.RetryPolicy;
+import com.sca4d.core.api.retry.RetryRule;
 import com.sca4d.core.api.storage.FileStatus;
 import com.sca4d.core.api.storage.FileStorage;
 import com.sca4d.core.api.storage.StorageObject;
@@ -125,7 +129,12 @@ public class FileCleanupService {
                         record.backendId());
             }
         } catch (RuntimeException exception) {
-            Instant retryAt = clock.instant().plus(properties.getDeleteRetryDelay());
+            Instant retryAt = clock.instant()
+                    .plus(
+                            RetryPolicy.always(RetryRule.unlimited(Backoff.fixed(properties.getDeleteRetryDelay())))
+                                    .evaluate(RetryContext.failed(1, exception))
+                                    .retryDelay()
+                                    .orElseThrow());
             boolean recorded = TRUE.equals(
                     transactions.execute(
                             status -> repository

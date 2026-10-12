@@ -1,6 +1,7 @@
 package com.sca4d.core.api.job;
 
 import com.sca4d.core.api.name.code.TreeCode;
+import com.sca4d.core.api.retry.RetryRule;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -66,8 +67,8 @@ public abstract class DirectJob<I, O> extends Job<I, O> {
             }
 
             @Override
-            public @NotNull JobRetryPolicy retryPolicy() {
-                return JobRetryPolicy.once();
+            public @NotNull RetryRule retryRule() {
+                return RetryRule.once();
             }
 
             @Override
@@ -81,10 +82,10 @@ public abstract class DirectJob<I, O> extends Job<I, O> {
     /**
      * 返回当前业务动作的重试规则。
      *
-     * @return 包含首次执行的最大尝试次数和固定重试间隔
+     * @return 包含首次执行的次数限制和退避规则
      */
     @Contract(pure = true)
-    public abstract @NotNull JobRetryPolicy retryPolicy();
+    public abstract @NotNull RetryRule retryRule();
 
     /**
      * 执行一次已经领取的尝试。
@@ -92,7 +93,7 @@ public abstract class DirectJob<I, O> extends Job<I, O> {
      * @param execution 当前执行标识、可选 run、尝试次数和开始时间
      * @param input 本次工作输入；输入类型为 Void 时是 null
      * @return 本次执行结果；输出类型为 Void 时可以是 null
-     * @throws RuntimeException 当前尝试失败时抛出；持久化 Job 按 {@link #retryPolicy()} 决定后续状态
+     * @throws RuntimeException 当前尝试失败时抛出；持久化 Job 按 {@link #retryRule()} 决定后续状态
      */
     protected abstract @Nullable O execute(
             @NotNull JobExecution execution,
