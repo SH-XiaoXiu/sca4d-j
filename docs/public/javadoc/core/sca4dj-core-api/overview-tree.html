@@ -100,6 +100,7 @@ loadScripts(document, 'script');</script>
 <li><a href="com/sca4d/core/api/storage/package-tree.html">com.sca4d.core.api.storage</a>, </li>
 <li><a href="com/sca4d/core/api/utils/package-tree.html">com.sca4d.core.api.utils</a>, </li>
 <li><a href="com/sca4d/core/api/validation/package-tree.html">com.sca4d.core.api.validation</a>, </li>
+<li><a href="com/sca4d/core/api/version/package-tree.html">com.sca4d.core.api.version</a>, </li>
 <li><a href="com/sca4d/core/api/webrealtime/package-tree.html">com.sca4d.core.api.webrealtime</a></li>
 </ul>
 <section class="hierarchy">
@@ -115,6 +116,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/ApiDefinition.html" class="type-name-link" title="class in com.sca4d.core.api.plugin">ApiDefinition</a></li>
 <li class="circle">com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/ApiOperation.html" class="type-name-link" title="class in com.sca4d.core.api.plugin">ApiOperation</a></li>
 <li class="circle">com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/ApiTarget.html" class="type-name-link" title="class in com.sca4d.core.api.plugin">ApiTarget</a></li>
+<li class="circle">com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/ApplicationVersion.html" class="type-name-link" title="class in com.sca4d.core.api.version">ApplicationVersion</a></li>
 <li class="circle">com.sca4d.core.api.isolation.<a href="com/sca4d/core/api/isolation/AppName.html" class="type-name-link" title="class in com.sca4d.core.api.isolation">AppName</a></li>
 <li class="circle">com.sca4d.core.api.audit.<a href="com/sca4d/core/api/audit/AuditActor.html" class="type-name-link" title="class in com.sca4d.core.api.audit">AuditActor</a></li>
 <li class="circle">com.sca4d.core.api.audit.<a href="com/sca4d/core/api/audit/AuditCallInterceptor.html" class="type-name-link" title="class in com.sca4d.core.api.audit">AuditCallInterceptor</a> (implements com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.Around.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Around</a>)</li>
@@ -135,7 +137,11 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycleConfiguration.html" class="type-name-link" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration</a></li>
 <li class="circle">com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycleConfiguration.Registration.html" class="type-name-link" title="class in com.sca4d.core.api.call">CallLifecycleConfiguration.Registration</a></li>
 <li class="circle">com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallOutcome.html" class="type-name-link" title="class in com.sca4d.core.api.call">CallOutcome</a></li>
+<li class="circle">com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/ClientVersion.html" class="type-name-link" title="class in com.sca4d.core.api.version">ClientVersion</a></li>
 <li class="circle">com.sca4d.core.api.codec.<a href="com/sca4d/core/api/codec/CodecMigrationStep.html" class="type-name-link" title="class in com.sca4d.core.api.codec">CodecMigrationStep</a>&lt;V,<wbr>W&gt; (implements com.sca4d.core.api.codec.<a href="com/sca4d/core/api/codec/Migratable.html" title="interface in com.sca4d.core.api.codec">Migratable</a>&lt;W&gt;)</li>
+<li class="circle">com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityDecision.html" class="type-name-link" title="class in com.sca4d.core.api.version">CompatibilityDecision</a></li>
+<li class="circle">com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityResolver.html" class="type-name-link" title="class in com.sca4d.core.api.version">CompatibilityResolver</a></li>
+<li class="circle">com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityRule.html" class="type-name-link" title="class in com.sca4d.core.api.version">CompatibilityRule</a></li>
 <li class="circle">com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/ConfiguredConstants.html" class="type-name-link" title="class in com.sca4d.core.api.setting">ConfiguredConstants</a></li>
 <li class="circle">com.sca4d.core.api.connection.<a href="com/sca4d/core/api/connection/Connection.html" class="type-name-link" title="class in com.sca4d.core.api.connection">Connection</a></li>
 <li class="circle">com.sca4d.core.api.connection.<a href="com/sca4d/core/api/connection/ConnectionId.html" class="type-name-link" title="class in com.sca4d.core.api.connection">ConnectionId</a></li>
@@ -373,6 +379,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/OptimisticLockException.html" class="type-name-link" title="class in com.sca4d.core.api.concurrent">OptimisticLockException</a></li>
 <li class="circle">com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/PluginUnavailableException.html" class="type-name-link" title="class in com.sca4d.core.api.plugin">PluginUnavailableException</a></li>
 <li class="circle">com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/RateLimitExceededException.html" class="type-name-link" title="class in com.sca4d.core.api.concurrent">RateLimitExceededException</a></li>
+<li class="circle">com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/VersionCompatibilityException.html" class="type-name-link" title="class in com.sca4d.core.api.version">VersionCompatibilityException</a></li>
 <li class="circle">com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/VersionPreconditionFailedException.html" class="type-name-link" title="class in com.sca4d.core.api.concurrent">VersionPreconditionFailedException</a></li>
 </ul>
 </li>
@@ -598,6 +605,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">com.sca4d.core.api.retry.<a href="com/sca4d/core/api/retry/Backoff.Kind.html" class="type-name-link" title="enum class in com.sca4d.core.api.retry">Backoff.Kind</a></li>
 <li class="circle">com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.html" class="type-name-link" title="enum class in com.sca4d.core.api.call">CallLifecycle</a></li>
 <li class="circle">com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallOutcome.Status.html" class="type-name-link" title="enum class in com.sca4d.core.api.call">CallOutcome.Status</a></li>
+<li class="circle">com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityStatus.html" class="type-name-link" title="enum class in com.sca4d.core.api.version">CompatibilityStatus</a></li>
 <li class="circle">com.sca4d.core.api.message.<a href="com/sca4d/core/api/message/ContentDisposition.html" class="type-name-link" title="enum class in com.sca4d.core.api.message">ContentDisposition</a></li>
 <li class="circle">com.sca4d.core.api.region.<a href="com/sca4d/core/api/region/Continent.html" class="type-name-link" title="enum class in com.sca4d.core.api.region">Continent</a></li>
 <li class="circle">com.sca4d.core.api.error.<a href="com/sca4d/core/api/error/CoreErrorCode.html" class="type-name-link" title="enum class in com.sca4d.core.api.error">CoreErrorCode</a> (implements com.sca4d.core.api.error.<a href="com/sca4d/core/api/error/ErrorCode.html" title="interface in com.sca4d.core.api.error">ErrorCode</a>)</li>

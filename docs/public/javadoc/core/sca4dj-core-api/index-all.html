@@ -210,6 +210,8 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/persistence/AffectedRowsMismatchException.html#actual()" class="member-name-link">actual()</a> - Method in exception class com.sca4d.core.api.persistence.<a href="com/sca4d/core/api/persistence/AffectedRowsMismatchException.html" title="class in com.sca4d.core.api.persistence">AffectedRowsMismatchException</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityRule.html#adapter()" class="member-name-link">adapter()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityRule.html" title="class in com.sca4d.core.api.version">CompatibilityRule</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/data/DataOps.html#add(java.lang.Long,java.lang.Long)" class="member-name-link">add(Long, Long)</a> - Static method in class com.sca4d.core.api.data.<a href="com/sca4d/core/api/data/DataOps.html" title="class in com.sca4d.core.api.data">DataOps</a></dt>
 <dd>
 <div class="block">两个 Long 都为空时返回空，否则把空值按零求和。</div>
@@ -406,6 +408,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">由生成器实现类型安全客户端及实际对象分发器的构造。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/version/ApplicationVersion.html#apiContractVersion()" class="member-name-link">apiContractVersion()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/ApplicationVersion.html" title="class in com.sca4d.core.api.version">ApplicationVersion</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/plugin/ApiDefinition.html" class="type-name-link" title="class in com.sca4d.core.api.plugin">ApiDefinition</a> - Class in <a href="com/sca4d/core/api/plugin/package-summary.html">com.sca4d.core.api.plugin</a></dt>
 <dd>
 <div class="block">保存 App 公开契约及其可调用操作，不持有实际业务对象。</div>
@@ -470,6 +474,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">使用应用密钥、请求签名或其他程序认证方式接入的应用程序。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/version/ApplicationVersion.html" class="type-name-link" title="class in com.sca4d.core.api.version">ApplicationVersion</a> - Class in <a href="com/sca4d/core/api/version/package-summary.html">com.sca4d.core.api.version</a></dt>
+<dd>
+<div class="block">随构件保存的不可变版本事实；所有运行时消费方共享同一对象。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/version/ApplicationVersion.html#%3Cinit%3E(java.util.Map)" class="member-name-link">ApplicationVersion(Map&lt;String, String&gt;)</a> - Constructor for class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/ApplicationVersion.html" title="class in com.sca4d.core.api.version">ApplicationVersion</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/call/CallLifecycle.PreCommit.html#appliesToReadOnlyTransaction()" class="member-name-link">appliesToReadOnlyTransaction()</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.PreCommit.html" title="interface in com.sca4d.core.api.call">CallLifecycle.PreCommit</a></dt>
 <dd>
 <div class="block">只读事务提交时是否也必须校验该条件。</div>
@@ -927,6 +937,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">将实际对象绑定为直接调用分发器。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityStatus.html#BLOCKED" class="member-name-link">BLOCKED</a> - Enum constant in enum class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityStatus.html" title="enum class in com.sca4d.core.api.version">CompatibilityStatus</a></dt>
+<dd>
+<div class="block">不允许调用。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/gateway/GatewayCallbackRequest.html#body()" class="member-name-link">body()</a> - Method in class com.sca4d.core.api.gateway.<a href="com/sca4d/core/api/gateway/GatewayCallbackRequest.html" title="class in com.sca4d.core.api.gateway">GatewayCallbackRequest</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/gateway/GatewayCallbackResponse.html#body()" class="member-name-link">body()</a> - Method in class com.sca4d.core.api.gateway.<a href="com/sca4d/core/api/gateway/GatewayCallbackResponse.html" title="class in com.sca4d.core.api.gateway">GatewayCallbackResponse</a></dt>
@@ -961,6 +975,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">创建只读设置，历史 Codec 目录必须完整且无冲突。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/version/ClientVersion.html#build()" class="member-name-link">build()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/ClientVersion.html" title="class in com.sca4d.core.api.version">ClientVersion</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/data/DataGraph.html#builder()" class="member-name-link">builder()</a> - Static method in class com.sca4d.core.api.data.<a href="com/sca4d/core/api/data/DataGraph.html" title="class in com.sca4d.core.api.data">DataGraph</a></dt>
 <dd>
 <div class="block">开始声明输入键和计算节点。</div>
@@ -977,10 +993,16 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/data/DataValues.Builder.html#%3Cinit%3E()" class="member-name-link">Builder()</a> - Constructor for class com.sca4d.core.api.data.<a href="com/sca4d/core/api/data/DataValues.Builder.html" title="class in com.sca4d.core.api.data">DataValues.Builder</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/version/ApplicationVersion.html#buildMode()" class="member-name-link">buildMode()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/ApplicationVersion.html" title="class in com.sca4d.core.api.version">ApplicationVersion</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/version/ApplicationVersion.html#buildVersion()" class="member-name-link">buildVersion()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/ApplicationVersion.html" title="class in com.sca4d.core.api.version">ApplicationVersion</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/setting/Setting.Builder.html#buildWritable()" class="member-name-link">buildWritable()</a> - Method in class com.sca4d.core.api.setting.<a href="com/sca4d/core/api/setting/Setting.Builder.html" title="class in com.sca4d.core.api.setting">Setting.Builder</a></dt>
 <dd>
 <div class="block">创建可写设置；没有写入目标时失败。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/version/ApplicationVersion.html#builtAt()" class="member-name-link">builtAt()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/ApplicationVersion.html" title="class in com.sca4d.core.api.version">ApplicationVersion</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/error/BusinessException.html" class="type-name-link" title="class in com.sca4d.core.api.error">BusinessException</a> - Exception Class in <a href="com/sca4d/core/api/error/package-summary.html">com.sca4d.core.api.error</a></dt>
 <dd>
 <div class="block">携带错误码并由外围转换为 HTTP 响应的业务异常。</div>
@@ -1158,6 +1180,8 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/job/JobExecution.html#capability()" class="member-name-link">capability()</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobExecution.html" title="class in com.sca4d.core.api.job">JobExecution</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityRule.html#capability()" class="member-name-link">capability()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityRule.html" title="class in com.sca4d.core.api.version">CompatibilityRule</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/concurrent/VersionConditions.html#capture()" class="member-name-link">capture()</a> - Method in interface com.sca4d.core.api.concurrent.<a href="com/sca4d/core/api/concurrent/VersionConditions.html" title="interface in com.sca4d.core.api.concurrent">VersionConditions</a></dt>
 <dd>
 <div class="block">冻结当前调用的版本条件入口，供显式传入异步工作；默认无请求状态的实现保持自身。
@@ -1244,16 +1268,34 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">条件命中时选择把数据库字段写为 <code>NULL</code>。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityRule.html#client()" class="member-name-link">client()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityRule.html" title="class in com.sca4d.core.api.version">CompatibilityRule</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/plugin/ApiContract.html#client(com.sca4d.core.api.plugin.ApiInvoker,com.sca4d.core.api.name.code.TreeCode)" class="member-name-link">client(ApiInvoker, TreeCode)</a> - Method in interface com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/ApiContract.html" title="interface in com.sca4d.core.api.plugin">ApiContract</a></dt>
 <dd>
 <div class="block">构造绑定当前调用入口的类型安全客户端。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/error/CoreErrorCode.html#CLIENT_INCOMPATIBLE" class="member-name-link">CLIENT_INCOMPATIBLE</a> - Enum constant in enum class com.sca4d.core.api.error.<a href="com/sca4d/core/api/error/CoreErrorCode.html" title="enum class in com.sca4d.core.api.error">CoreErrorCode</a></dt>
+<dd>
+<div class="block">客户端无法使用请求的接口契约。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/gateway/GatewayConstants.html#CLIENT_IP_HEADER" class="member-name-link">CLIENT_IP_HEADER</a> - Static variable in class com.sca4d.core.api.gateway.<a href="com/sca4d/core/api/gateway/GatewayConstants.html" title="class in com.sca4d.core.api.gateway">GatewayConstants</a></dt>
 <dd>
 <div class="block">Gateway 写入客户端地址的 Header 名称。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/error/CoreErrorCode.html#CLIENT_VERSION_INVALID" class="member-name-link">CLIENT_VERSION_INVALID</a> - Enum constant in enum class com.sca4d.core.api.error.<a href="com/sca4d/core/api/error/CoreErrorCode.html" title="enum class in com.sca4d.core.api.error">CoreErrorCode</a></dt>
+<dd>
+<div class="block">客户端版本声明格式错误。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/audit/HttpCall.html#clientIp()" class="member-name-link">clientIp()</a> - Method in class com.sca4d.core.api.audit.<a href="com/sca4d/core/api/audit/HttpCall.html" title="class in com.sca4d.core.api.audit">HttpCall</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/version/ClientVersion.html" class="type-name-link" title="class in com.sca4d.core.api.version">ClientVersion</a> - Class in <a href="com/sca4d/core/api/version/package-summary.html">com.sca4d.core.api.version</a></dt>
+<dd>
+<div class="block">客户端声明的构建身份；只用于兼容选择和排障，不提供认证或授权。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/version/ClientVersion.html#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.Integer)" class="member-name-link">ClientVersion(String, String, String, String, Integer)</a> - Constructor for class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/ClientVersion.html" title="class in com.sca4d.core.api.version">ClientVersion</a></dt>
+<dd>
+<div class="block">创建已解析的客户端身份，未声明的字段保留为空。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/plugin/LoadedPlugin.html#close()" class="member-name-link">close()</a> - Method in interface com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/LoadedPlugin.html" title="interface in com.sca4d.core.api.plugin">LoadedPlugin</a></dt>
 <dd>
 <div class="block">关闭加载器和交付物资源。</div>
@@ -1668,6 +1710,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">定义不依赖 Jakarta Validation 的类型化校验、问题和结果类型。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/version/package-summary.html">com.sca4d.core.api.version</a> - package com.sca4d.core.api.version</dt>
+<dd>
+<div class="block">构建身份、客户端版本和与传输无关的兼容规则。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/webrealtime/package-summary.html">com.sca4d.core.api.webrealtime</a> - package com.sca4d.core.api.webrealtime</dt>
 <dd>
 <div class="block">定义浏览器实时连接标识、目标索引和发布入口。</div>
@@ -1677,6 +1723,36 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/name/code/Code.html#compareTo(com.sca4d.core.api.name.code.Code)" class="member-name-link">compareTo(Code)</a> - Method in class com.sca4d.core.api.name.code.<a href="com/sca4d/core/api/name/code/Code.html" title="class in com.sca4d.core.api.name.code">Code</a></dt>
 <dd>
 <div class="block">按领域类型和节点内容稳定排序，与 equals 使用相同的身份规则。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityRule.html#compareVersions(java.lang.String,java.lang.String)" class="member-name-link">compareVersions(String, String)</a> - Static method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityRule.html" title="class in com.sca4d.core.api.version">CompatibilityRule</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityDecision.html" class="type-name-link" title="class in com.sca4d.core.api.version">CompatibilityDecision</a> - Class in <a href="com/sca4d/core/api/version/package-summary.html">com.sca4d.core.api.version</a></dt>
+<dd>
+<div class="block">统一兼容解析的结果；路由和同路径适配共用此结果。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityDecision.html#%3Cinit%3E(com.sca4d.core.api.version.CompatibilityStatus,com.sca4d.core.api.version.CompatibilityRule,java.lang.String)" class="member-name-link">CompatibilityDecision(CompatibilityStatus, CompatibilityRule, String)</a> - Constructor for class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityDecision.html" title="class in com.sca4d.core.api.version">CompatibilityDecision</a></dt>
+<dd>
+<div class="block">创建不包含请求原文的安全决策。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityResolver.html" class="type-name-link" title="class in com.sca4d.core.api.version">CompatibilityResolver</a> - Class in <a href="com/sca4d/core/api/version/package-summary.html">com.sca4d.core.api.version</a></dt>
+<dd>
+<div class="block">根据客户端身份、能力和显式契约选择唯一兼容规则，不依赖 HTTP。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityResolver.html#%3Cinit%3E(java.util.List)" class="member-name-link">CompatibilityResolver(List&lt;CompatibilityRule&gt;)</a> - Constructor for class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityResolver.html" title="class in com.sca4d.core.api.version">CompatibilityResolver</a></dt>
+<dd>
+<div class="block">创建静态矩阵并拒绝重叠范围，避免按文件顺序选择行为。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityRule.html" class="type-name-link" title="class in com.sca4d.core.api.version">CompatibilityRule</a> - Class in <a href="com/sca4d/core/api/version/package-summary.html">com.sca4d.core.api.version</a></dt>
+<dd>
+<div class="block">某客户端产品版本范围可使用的一个能力契约及其入口。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityRule.html#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.lang.String,int,com.sca4d.core.api.version.CompatibilityStatus,java.lang.String,java.lang.String)" class="member-name-link">CompatibilityRule(String, String, String, String, int, CompatibilityStatus, String, String)</a> - Constructor for class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityRule.html" title="class in com.sca4d.core.api.version">CompatibilityRule</a></dt>
+<dd>
+<div class="block">版本范围为左闭右开；入口是应用内路径，可含路径参数模板。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityStatus.html" class="type-name-link" title="enum class in com.sca4d.core.api.version">CompatibilityStatus</a> - Enum Class in <a href="com/sca4d/core/api/version/package-summary.html">com.sca4d.core.api.version</a></dt>
+<dd>
+<div class="block">一次契约选择的支持状态。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/call/CallLifecycle.Completion.html#complete(com.sca4d.core.api.call.CallExecution,com.sca4d.core.api.call.CallOutcome)" class="member-name-link">complete(CallExecution, CallOutcome)</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallLifecycle.Completion.html" title="interface in com.sca4d.core.api.call">CallLifecycle.Completion</a></dt>
 <dd>
@@ -1695,6 +1771,10 @@ loadScripts(document, 'script');</script>
 <div class="block">在 Call 最终结束时执行清理。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/call/CallOutcome.html#completionFailure()" class="member-name-link">completionFailure()</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallOutcome.html" title="class in com.sca4d.core.api.call">CallOutcome</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/version/ApplicationVersion.html#component()" class="member-name-link">component()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/ApplicationVersion.html" title="class in com.sca4d.core.api.version">ApplicationVersion</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/version/ApplicationVersion.html#componentBuildId()" class="member-name-link">componentBuildId()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/ApplicationVersion.html" title="class in com.sca4d.core.api.version">ApplicationVersion</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/flow/FlowTransition.html#condition()" class="member-name-link">condition()</a> - Method in class com.sca4d.core.api.flow.<a href="com/sca4d/core/api/flow/FlowTransition.html" title="class in com.sca4d.core.api.flow">FlowTransition</a></dt>
 <dd>
@@ -1865,6 +1945,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">读取地区所属洲别。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/version/ClientVersion.html#contract()" class="member-name-link">contract()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/ClientVersion.html" title="class in com.sca4d.core.api.version">ClientVersion</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityDecision.html#contract()" class="member-name-link">contract()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityDecision.html" title="class in com.sca4d.core.api.version">CompatibilityDecision</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityRule.html#contract()" class="member-name-link">contract()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityRule.html" title="class in com.sca4d.core.api.version">CompatibilityRule</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/error/CoreErrorCode.html" class="type-name-link" title="enum class in com.sca4d.core.api.error">CoreErrorCode</a> - Enum Class in <a href="com/sca4d/core/api/error/package-summary.html">com.sca4d.core.api.error</a></dt>
 <dd>
 <div class="block">列出 Core 固定检查可能产生的错误码（Core Error Code）。</div>
@@ -2070,6 +2156,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">根据当前主体绑定的静态资源判断固定操作权限。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/version/VersionCompatibilityException.html#decision()" class="member-name-link">decision()</a> - Method in exception class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/VersionCompatibilityException.html" title="class in com.sca4d.core.api.version">VersionCompatibilityException</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/call/CallExecution.html#declaration(java.lang.Class)" class="member-name-link">declaration(Class&lt;A&gt;)</a> - Method in class com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/CallExecution.html" title="class in com.sca4d.core.api.call">CallExecution</a></dt>
 <dd>
 <div class="block">查询有效声明；方法声明优先于类型声明。</div>
@@ -2263,6 +2351,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/job/PipelineJobPlan.Node.html#dependencies()" class="member-name-link">dependencies()</a> - Method in class com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/PipelineJobPlan.Node.html" title="class in com.sca4d.core.api.job">PipelineJobPlan.Node</a></dt>
 <dd>
 <div class="block">直接依赖。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityStatus.html#DEPRECATED" class="member-name-link">DEPRECATED</a> - Enum constant in enum class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityStatus.html" title="enum class in com.sca4d.core.api.version">CompatibilityStatus</a></dt>
+<dd>
+<div class="block">仍可调用但已弃用。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/query/Sort.html#desc()" class="member-name-link">desc()</a> - Method in class com.sca4d.core.api.query.<a href="com/sca4d/core/api/query/Sort.html" title="class in com.sca4d.core.api.query">Sort</a></dt>
 <dd>&nbsp;</dd>
@@ -4511,6 +4603,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">判断转换条件。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityRule.html#matches(com.sca4d.core.api.version.ClientVersion,java.lang.String)" class="member-name-link">matches(ClientVersion, String)</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityRule.html" title="class in com.sca4d.core.api.version">CompatibilityRule</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/security/SecretHasher.html#matches(java.lang.String,java.lang.String)" class="member-name-link">matches(String, String)</a> - Method in interface com.sca4d.core.api.security.<a href="com/sca4d/core/api/security/SecretHasher.html" title="interface in com.sca4d.core.api.security">SecretHasher</a></dt>
 <dd>
 <div class="block">校验原始秘密值是否与已保存摘要匹配。</div>
@@ -4533,6 +4627,8 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/retry/Backoff.html#maximum()" class="member-name-link">maximum()</a> - Method in class com.sca4d.core.api.retry.<a href="com/sca4d/core/api/retry/Backoff.html" title="class in com.sca4d.core.api.retry">Backoff</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/retry/RetryRule.html#maximumAttempts()" class="member-name-link">maximumAttempts()</a> - Method in class com.sca4d.core.api.retry.<a href="com/sca4d/core/api/retry/RetryRule.html" title="class in com.sca4d.core.api.retry">RetryRule</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityRule.html#maximumVersion()" class="member-name-link">maximumVersion()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityRule.html" title="class in com.sca4d.core.api.version">CompatibilityRule</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/message/MessageContent.html#mediaType()" class="member-name-link">mediaType()</a> - Method in class com.sca4d.core.api.message.<a href="com/sca4d/core/api/message/MessageContent.html" title="class in com.sca4d.core.api.message">MessageContent</a></dt>
 <dd>&nbsp;</dd>
@@ -4670,6 +4766,8 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/persistence/AffectedRowsMismatchException.html#minimum()" class="member-name-link">minimum()</a> - Method in exception class com.sca4d.core.api.persistence.<a href="com/sca4d/core/api/persistence/AffectedRowsMismatchException.html" title="class in com.sca4d.core.api.persistence">AffectedRowsMismatchException</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityRule.html#minimumVersion()" class="member-name-link">minimumVersion()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityRule.html" title="class in com.sca4d.core.api.version">CompatibilityRule</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/scheduling/JobSchedule.html#misfirePolicy()" class="member-name-link">misfirePolicy()</a> - Method in class com.sca4d.core.api.scheduling.<a href="com/sca4d/core/api/scheduling/JobSchedule.html" title="class in com.sca4d.core.api.scheduling">JobSchedule</a></dt>
 <dd>
 <div class="block">misfire 策略。</div>
@@ -4724,6 +4822,8 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/message/MessageContent.html#name()" class="member-name-link">name()</a> - Method in class com.sca4d.core.api.message.<a href="com/sca4d/core/api/message/MessageContent.html" title="class in com.sca4d.core.api.message">MessageContent</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/query/Sort.html#name()" class="member-name-link">name()</a> - Method in class com.sca4d.core.api.query.<a href="com/sca4d/core/api/query/Sort.html" title="class in com.sca4d.core.api.query">Sort</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/version/ClientVersion.html#name()" class="member-name-link">name()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/ClientVersion.html" title="class in com.sca4d.core.api.version">ClientVersion</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/name/Name.html" class="type-name-link" title="class in com.sca4d.core.api.name">Name</a> - Class in <a href="com/sca4d/core/api/name/package-summary.html">com.sca4d.core.api.name</a></dt>
 <dd>
@@ -5415,6 +5515,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">出现问题的输入位置。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityRule.html#path()" class="member-name-link">path()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityRule.html" title="class in com.sca4d.core.api.version">CompatibilityRule</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/runtime/InstanceCapability.html#paths()" class="member-name-link">paths()</a> - Method in class com.sca4d.core.api.runtime.<a href="com/sca4d/core/api/runtime/InstanceCapability.html" title="class in com.sca4d.core.api.runtime">InstanceCapability</a></dt>
 <dd>
 <div class="block">声明该能力的全部 HTTP 路径前缀。</div>
@@ -5817,6 +5919,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">正式生产环境。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/version/ApplicationVersion.html#product()" class="member-name-link">product()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/ApplicationVersion.html" title="class in com.sca4d.core.api.version">ApplicationVersion</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/storage/FileStorage.html#promote(com.sca4d.core.api.storage.StorageObject,com.sca4d.core.api.storage.StorageObject)" class="member-name-link">promote(StorageObject, StorageObject)</a> - Method in interface com.sca4d.core.api.storage.<a href="com/sca4d/core/api/storage/FileStorage.html" title="interface in com.sca4d.core.api.storage">FileStorage</a></dt>
 <dd>
 <div class="block">把临时对象复制或移动到不可被上传签名覆盖的正式键。</div>
@@ -6027,6 +6131,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">返回拒绝原因；允许执行时为空。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityDecision.html#reason()" class="member-name-link">reason()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityDecision.html" title="class in com.sca4d.core.api.version">CompatibilityDecision</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/storage/FileService.html#receiveUpload(java.lang.String,java.lang.String,long,java.io.InputStream)" class="member-name-link">receiveUpload(String, String, long, InputStream)</a> - Method in interface com.sca4d.core.api.storage.<a href="com/sca4d/core/api/storage/FileService.html" title="interface in com.sca4d.core.api.storage">FileService</a></dt>
 <dd>
 <div class="block">接收本地目录实现签发的匿名 PUT。</div>
@@ -6135,6 +6241,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">仅在 token 仍拥有处理中记录时原子释放失败执行的所有权。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/version/ApplicationVersion.html#releaseId()" class="member-name-link">releaseId()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/ApplicationVersion.html" title="class in com.sca4d.core.api.version">ApplicationVersion</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/version/ClientVersion.html#releaseId()" class="member-name-link">releaseId()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/ClientVersion.html" title="class in com.sca4d.core.api.version">ClientVersion</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/version/ApplicationVersion.html#releaseVersion()" class="member-name-link">releaseVersion()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/ApplicationVersion.html" title="class in com.sca4d.core.api.version">ApplicationVersion</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/version/ClientVersion.html#releaseVersion()" class="member-name-link">releaseVersion()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/ClientVersion.html" title="class in com.sca4d.core.api.version">ClientVersion</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/plugin/PluginRuntime.html#reload(com.sca4d.core.api.name.code.TreeCode,java.time.Duration)" class="member-name-link">reload(TreeCode, Duration)</a> - Method in interface com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/PluginRuntime.html" title="interface in com.sca4d.core.api.plugin">PluginRuntime</a></dt>
 <dd>
 <div class="block">从活动代次保存的构件重载 App 配置，并用独立实例发布新代次；必须在调用作用域外执行。
@@ -6391,6 +6505,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/identity/AccountDirectory.html#resolve(com.sca4d.core.api.identity.RealmKey,com.sca4d.core.api.identity.AccountIdentifierType,java.lang.String)" class="member-name-link">resolve(RealmKey, AccountIdentifierType, String)</a> - Method in interface com.sca4d.core.api.identity.<a href="com/sca4d/core/api/identity/AccountDirectory.html" title="interface in com.sca4d.core.api.identity">AccountDirectory</a></dt>
 <dd>
 <div class="block">在指定认证域中按原始登录标识查找完整可用身份链对应的 Account。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityResolver.html#resolve(com.sca4d.core.api.version.ClientVersion,java.lang.String,java.lang.Integer)" class="member-name-link">resolve(ClientVersion, String, Integer)</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityResolver.html" title="class in com.sca4d.core.api.version">CompatibilityResolver</a></dt>
+<dd>
+<div class="block">显式路由契约和请求头不一致时拒绝；未显式选择时使用客户端匹配的最高可用契约。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/call/SPICallValueResolver.html#resolve(java.lang.String,com.sca4d.core.api.call.CallExecution)" class="member-name-link">resolve(String, CallExecution)</a> - Method in interface com.sca4d.core.api.call.<a href="com/sca4d/core/api/call/SPICallValueResolver.html" title="interface in com.sca4d.core.api.call">SPICallValueResolver</a></dt>
 <dd>
@@ -6678,6 +6796,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">右分支结果。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityDecision.html#rule()" class="member-name-link">rule()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityDecision.html" title="class in com.sca4d.core.api.version">CompatibilityDecision</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityResolver.html#rules()" class="member-name-link">rules()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityResolver.html" title="class in com.sca4d.core.api.version">CompatibilityResolver</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/retry/RetryOperation.html#run()" class="member-name-link">run()</a> - Method in interface com.sca4d.core.api.retry.<a href="com/sca4d/core/api/retry/RetryOperation.html" title="interface in com.sca4d.core.api.retry">RetryOperation</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/job/JobExecutor.html#run(com.sca4d.core.api.job.Job,I,java.time.Duration)" class="member-name-link">run(Job&lt;I, O&gt;, I, Duration)</a> - Method in interface com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobExecutor.html" title="interface in com.sca4d.core.api.job">JobExecutor</a></dt>
@@ -7145,6 +7267,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/messaging/MessageDelivery.html#sourceApplication()" class="member-name-link">sourceApplication()</a> - Method in class com.sca4d.core.api.messaging.<a href="com/sca4d/core/api/messaging/MessageDelivery.html" title="class in com.sca4d.core.api.messaging">MessageDelivery</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/version/ApplicationVersion.html#sourceRevision()" class="member-name-link">sourceRevision()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/ApplicationVersion.html" title="class in com.sca4d.core.api.version">ApplicationVersion</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/codec/CodecMigrationStep.html#sourceVersion()" class="member-name-link">sourceVersion()</a> - Method in class com.sca4d.core.api.codec.<a href="com/sca4d/core/api/codec/CodecMigrationStep.html" title="class in com.sca4d.core.api.codec">CodecMigrationStep</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/codec/Migratable.html#sourceVersion()" class="member-name-link">sourceVersion()</a> - Method in interface com.sca4d.core.api.codec.<a href="com/sca4d/core/api/codec/Migratable.html" title="interface in com.sca4d.core.api.codec">Migratable</a></dt>
@@ -7229,6 +7353,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">文件当前状态。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityDecision.html#status()" class="member-name-link">status()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityDecision.html" title="class in com.sca4d.core.api.version">CompatibilityDecision</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityRule.html#status()" class="member-name-link">status()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityRule.html" title="class in com.sca4d.core.api.version">CompatibilityRule</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/job/JobExecutor.html#status(com.sca4d.core.api.id.Id)" class="member-name-link">status(Id)</a> - Method in interface com.sca4d.core.api.job.<a href="com/sca4d/core/api/job/JobExecutor.html" title="interface in com.sca4d.core.api.job">JobExecutor</a></dt>
 <dd>
 <div class="block">返回当前应用运行时命名空间内指定 run 的状态。</div>
@@ -7391,6 +7519,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/api/data/DataOps.html#summary(java.lang.String,java.lang.String)" class="member-name-link">summary(String, String)</a> - Static method in class com.sca4d.core.api.data.<a href="com/sca4d/core/api/data/DataOps.html" title="class in com.sca4d.core.api.data">DataOps</a></dt>
 <dd>
 <div class="block">创建包含阶段编码和可选 JSON detail 的摘要对象。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityStatus.html#SUPPORTED" class="member-name-link">SUPPORTED</a> - Enum constant in enum class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityStatus.html" title="enum class in com.sca4d.core.api.version">CompatibilityStatus</a></dt>
+<dd>
+<div class="block">当前支持。</div>
 </dd>
 <dt><a href="com/sca4d/core/api/i18n/LocaleCatalog.html#supportedLocales()" class="member-name-link">supportedLocales()</a> - Method in class com.sca4d.core.api.i18n.<a href="com/sca4d/core/api/i18n/LocaleCatalog.html" title="class in com.sca4d.core.api.i18n">LocaleCatalog</a></dt>
 <dd>
@@ -7903,6 +8035,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">libphonenumber 无法确定用途类型。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityStatus.html#UNKNOWN" class="member-name-link">UNKNOWN</a> - Enum constant in enum class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityStatus.html" title="enum class in com.sca4d.core.api.version">CompatibilityStatus</a></dt>
+<dd>
+<div class="block">旧客户端没有版本声明，应用选择保持原行为。</div>
+</dd>
 <dt><a href="com/sca4d/core/api/retry/RetryRule.html#unlimited(com.sca4d.core.api.retry.Backoff)" class="member-name-link">unlimited(Backoff)</a> - Static method in class com.sca4d.core.api.retry.<a href="com/sca4d/core/api/retry/RetryRule.html" title="class in com.sca4d.core.api.retry">RetryRule</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/plugin/PluginConfiguration.html#unload(com.sca4d.core.api.plugin.PluginConfigurationSnapshot)" class="member-name-link">unload(PluginConfigurationSnapshot&lt;C&gt;)</a> - Method in interface com.sca4d.core.api.plugin.<a href="com/sca4d/core/api/plugin/PluginConfiguration.html" title="interface in com.sca4d.core.api.plugin">PluginConfiguration</a></dt>
@@ -7918,6 +8054,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">读取一个无符号字节。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/version/ClientVersion.html#unspecified()" class="member-name-link">unspecified()</a> - Method in class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/ClientVersion.html" title="class in com.sca4d.core.api.version">ClientVersion</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/flow/FlowStore.html#update(com.sca4d.core.api.concurrent.Version,com.sca4d.core.api.flow.FlowInstance)" class="member-name-link">update(Version, FlowInstance)</a> - Method in interface com.sca4d.core.api.flow.<a href="com/sca4d/core/api/flow/FlowStore.html" title="interface in com.sca4d.core.api.flow">FlowStore</a></dt>
 <dd>
 <div class="block">按预期版本原子更新实例。</div>
@@ -8151,6 +8289,8 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/api/storage/FileStatus.html#value()" class="member-name-link">value()</a> - Method in enum class com.sca4d.core.api.storage.<a href="com/sca4d/core/api/storage/FileStatus.html" title="enum class in com.sca4d.core.api.storage">FileStatus</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityStatus.html#value()" class="member-name-link">value()</a> - Method in enum class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityStatus.html" title="enum class in com.sca4d.core.api.version">CompatibilityStatus</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/setting/value/SettingValues.html#value(com.sca4d.core.api.setting.definition.SystemSetting)" class="member-name-link">value(SystemSetting&lt;T&gt;)</a> - Method in class com.sca4d.core.api.setting.value.<a href="com/sca4d/core/api/setting/value/SettingValues.html" title="class in com.sca4d.core.api.setting.value">SettingValues</a></dt>
 <dd>
 <div class="block">按类型化定义读取当前快照中的完整值和来源。</div>
@@ -8304,6 +8444,10 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
 </dd>
 <dt><a href="com/sca4d/core/api/storage/FileStatus.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class com.sca4d.core.api.storage.<a href="com/sca4d/core/api/storage/FileStatus.html" title="enum class in com.sca4d.core.api.storage">FileStatus</a></dt>
+<dd>
+<div class="block">Returns the enum constant of this class with the specified name.</div>
+</dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityStatus.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityStatus.html" title="enum class in com.sca4d.core.api.version">CompatibilityStatus</a></dt>
 <dd>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
 </dd>
@@ -8511,6 +8655,11 @@ the order they are declared.</div>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
 </dd>
+<dt><a href="com/sca4d/core/api/version/CompatibilityStatus.html#values()" class="member-name-link">values()</a> - Static method in enum class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/CompatibilityStatus.html" title="enum class in com.sca4d.core.api.version">CompatibilityStatus</a></dt>
+<dd>
+<div class="block">Returns an array containing the constants of this enum class, in
+the order they are declared.</div>
+</dd>
 <dt><a href="com/sca4d/core/api/webrealtime/WebRealtimeTarget.Type.html#values()" class="member-name-link">values()</a> - Static method in enum class com.sca4d.core.api.webrealtime.<a href="com/sca4d/core/api/webrealtime/WebRealtimeTarget.Type.html" title="enum class in com.sca4d.core.api.webrealtime">WebRealtimeTarget.Type</a></dt>
 <dd>
 <div class="block">Returns an array containing the constants of this enum class, in
@@ -8628,6 +8777,12 @@ the order they are declared.</div>
 <dd>
 <div class="block">零行表示调用方提交的版本前置条件已经失效。</div>
 </dd>
+<dt><a href="com/sca4d/core/api/version/VersionCompatibilityException.html" class="type-name-link" title="class in com.sca4d.core.api.version">VersionCompatibilityException</a> - Exception Class in <a href="com/sca4d/core/api/version/package-summary.html">com.sca4d.core.api.version</a></dt>
+<dd>
+<div class="block">版本声明畸形或矩阵拒绝当前契约；不包含请求头原文。</div>
+</dd>
+<dt><a href="com/sca4d/core/api/version/VersionCompatibilityException.html#%3Cinit%3E(com.sca4d.core.api.version.CompatibilityDecision)" class="member-name-link">VersionCompatibilityException(CompatibilityDecision)</a> - Constructor for exception class com.sca4d.core.api.version.<a href="com/sca4d/core/api/version/VersionCompatibilityException.html" title="class in com.sca4d.core.api.version">VersionCompatibilityException</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="com/sca4d/core/api/concurrent/VersionCondition.html" class="type-name-link" title="class in com.sca4d.core.api.concurrent">VersionCondition</a> - Class in <a href="com/sca4d/core/api/concurrent/package-summary.html">com.sca4d.core.api.concurrent</a></dt>
 <dd>
 <div class="block">保存一次条件写入使用的预期版本，以及写入零行时的失败含义。</div>

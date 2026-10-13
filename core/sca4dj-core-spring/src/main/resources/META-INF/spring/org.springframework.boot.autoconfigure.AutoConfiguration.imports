@@ -10,3 +10,4 @@ com.sca4d.core.spring.security.SecretHasherAutoConfiguration
 com.sca4d.core.spring.security.SecretKeyringAutoConfiguration
 com.sca4d.core.spring.setting.SettingsAutoConfiguration
 com.sca4d.core.spring.dictionary.DictionaryAutoConfiguration
+com.sca4d.core.spring.version.ApplicationVersionAutoConfiguration

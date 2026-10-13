@@ -19,6 +19,10 @@ public enum CoreErrorCode implements ErrorCode {
     IDEMPOTENCY_IN_PROGRESS("1006", ErrorCategory.CONFLICT, "error.core.idempotency-in-progress"),
     /** 幂等键已经绑定不同请求。 */
     IDEMPOTENCY_KEY_CONFLICT("1007", ErrorCategory.CONFLICT, "error.core.idempotency-key-conflict"),
+    /** 客户端版本声明格式错误。 */
+    CLIENT_VERSION_INVALID("1008", ErrorCategory.VALIDATION, "error.core.client-version-invalid"),
+    /** 客户端无法使用请求的接口契约。 */
+    CLIENT_INCOMPATIBLE("1009", ErrorCategory.CONFLICT, "error.core.client-incompatible"),
     /** 外部服务暂时不可用。 */
     UNAVAILABLE("1098", ErrorCategory.UNAVAILABLE, "error.core.unavailable"),
     /** Core 无法归类的内部失败。 */

@@ -47,4 +47,5 @@ com.sca4d.core.api.setting.value
 com.sca4d.core.api.storage
 com.sca4d.core.api.utils
 com.sca4d.core.api.validation
+com.sca4d.core.api.version
 com.sca4d.core.api.webrealtime
