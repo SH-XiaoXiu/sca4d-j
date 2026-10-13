@@ -6,6 +6,7 @@ import com.sca4d.core.api.version.CompatibilityDecision;
 import com.sca4d.core.api.version.CompatibilityResolver;
 import com.sca4d.core.api.version.CompatibilityStatus;
 import com.sca4d.core.api.version.VersionCompatibilityException;
+import com.sca4d.core.spring.web.HttpConstants;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jetbrains.annotations.NotNull;
@@ -98,13 +99,22 @@ public class VersionWebConfiguration implements WebMvcConfigurer {
                     @NotNull HttpServletRequest request,
                     @NotNull HttpServletResponse response,
                     @NotNull Object handler) {
-                response.setHeader("X-Server-Release-Version", version.releaseVersion());
-                response.setHeader("X-Server-Release-Id", version.releaseId());
-                response.setHeader("X-Server-Build", version.componentBuildId());
-                response.setHeader("X-Server-Api-Contract", Integer.toString(version.apiContractVersion()));
+                response.setHeader(HttpConstants.SERVER_RELEASE_VERSION_HEADER, version.releaseVersion());
+                response.setHeader(HttpConstants.SERVER_RELEASE_ID_HEADER, version.releaseId());
+                response.setHeader(HttpConstants.SERVER_BUILD_HEADER, version.componentBuildId());
+                response.setHeader(
+                        HttpConstants.SERVER_API_CONTRACT_HEADER,
+                        Integer.toString(version.apiContractVersion()));
                 response.addHeader(
                         "Access-Control-Expose-Headers",
-                        "X-Server-Release-Version, X-Server-Release-Id, X-Server-Build, X-Server-Api-Contract, X-Compatibility-Status, X-Api-Contract");
+                        String.join(
+                                ", ",
+                                HttpConstants.SERVER_RELEASE_VERSION_HEADER,
+                                HttpConstants.SERVER_RELEASE_ID_HEADER,
+                                HttpConstants.SERVER_BUILD_HEADER,
+                                HttpConstants.SERVER_API_CONTRACT_HEADER,
+                                HttpConstants.COMPATIBILITY_STATUS_HEADER,
+                                HttpConstants.API_CONTRACT_HEADER));
                 if (!(handler instanceof HandlerMethod method))
                     return true;
                 if (AnnotatedElementUtils.hasAnnotation(method.getMethod(), VersionDiscovery.class)
@@ -137,11 +147,17 @@ public class VersionWebConfiguration implements WebMvcConfigurer {
                 if (request.getAttribute(VersionCompatibilityException.class.getName()) != null)
                     decision = new CompatibilityDecision(CompatibilityStatus.BLOCKED, null, "invalid-client");
                 request.setAttribute(DECISION, decision);
-                response.setHeader("X-Compatibility-Status", decision.status().value());
-                response.addHeader("Vary", "X-Client-Name, X-Client-Release-Version, X-Client-Api-Contract");
+                response.setHeader(HttpConstants.COMPATIBILITY_STATUS_HEADER, decision.status().value());
+                response.addHeader(
+                        "Vary",
+                        String.join(
+                                ", ",
+                                HttpConstants.CLIENT_NAME_HEADER,
+                                HttpConstants.CLIENT_RELEASE_VERSION_HEADER,
+                                HttpConstants.CLIENT_API_CONTRACT_HEADER));
 
                 if (decision.rule() != null && decision.status() != CompatibilityStatus.BLOCKED)
-                    response.setHeader("X-Api-Contract", Integer.toString(decision.contract()));
+                    response.setHeader(HttpConstants.API_CONTRACT_HEADER, Integer.toString(decision.contract()));
                 return true;
             }
         });

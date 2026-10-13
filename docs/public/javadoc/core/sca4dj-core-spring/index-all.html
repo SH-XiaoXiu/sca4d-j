@@ -132,6 +132,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">指定号码至少需要满足的一组规则。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/web/HttpConstants.html#API_CONTRACT_HEADER" class="member-name-link">API_CONTRACT_HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></dt>
+<dd>
+<div class="block">应用启动时确定的版本协议头：api-contract。</div>
+</dd>
 <dt><a href="com/sca4d/core/spring/version/ApiCapability.html" class="type-name-link" title="annotation interface in com.sca4d.core.spring.version">ApiCapability</a> - Annotation Interface in <a href="com/sca4d/core/spring/version/package-summary.html">com.sca4d.core.spring.version</a></dt>
 <dd>
 <div class="block">声明接口所属能力及固定路由契约；contract 为零时按请求协商。</div>
@@ -162,7 +166,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="com/sca4d/core/spring/version/ApplicationVersionAutoConfiguration.html" class="type-name-link" title="class in com.sca4d.core.spring.version">ApplicationVersionAutoConfiguration</a> - Class in <a href="com/sca4d/core/spring/version/package-summary.html">com.sca4d.core.spring.version</a></dt>
 <dd>
-<div class="block">从构件内部读取版本，部署环境变量不能改写构建事实。</div>
+<div class="block">从应用配置创建版本和兼容规则；不依赖构建工具、产物格式或固定文件位置。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/version/ApplicationVersionAutoConfiguration.html#%3Cinit%3E()" class="member-name-link">ApplicationVersionAutoConfiguration()</a> - Constructor for class com.sca4d.core.spring.version.<a href="com/sca4d/core/spring/version/ApplicationVersionAutoConfiguration.html" title="class in com.sca4d.core.spring.version">ApplicationVersionAutoConfiguration</a></dt>
 <dd>&nbsp;</dd>
@@ -404,6 +408,26 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">清理当前线程保存的版本前置条件。</div>
 </dd>
+<dt><a href="com/sca4d/core/spring/web/HttpConstants.html#CLIENT_API_CONTRACT_HEADER" class="member-name-link">CLIENT_API_CONTRACT_HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></dt>
+<dd>
+<div class="block">应用启动时确定的版本协议头：client-api-contract。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/HttpConstants.html#CLIENT_BUILD_HEADER" class="member-name-link">CLIENT_BUILD_HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></dt>
+<dd>
+<div class="block">应用启动时确定的版本协议头：client-build。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/HttpConstants.html#CLIENT_NAME_HEADER" class="member-name-link">CLIENT_NAME_HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></dt>
+<dd>
+<div class="block">应用启动时确定的版本协议头：client-name。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/HttpConstants.html#CLIENT_RELEASE_ID_HEADER" class="member-name-link">CLIENT_RELEASE_ID_HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></dt>
+<dd>
+<div class="block">应用启动时确定的版本协议头：client-release-id。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/HttpConstants.html#CLIENT_RELEASE_VERSION_HEADER" class="member-name-link">CLIENT_RELEASE_VERSION_HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></dt>
+<dd>
+<div class="block">应用启动时确定的版本协议头：client-release-version。</div>
+</dd>
 <dt><a href="com/sca4d/core/spring/web/HttpConstants.html#CLIENT_STATE_REFRESH_HEADER" class="member-name-link">CLIENT_STATE_REFRESH_HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></dt>
 <dd>
 <div class="block">客户端收到后重新读取指定本地状态的响应 Header。</div>
@@ -577,6 +601,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/spring/web/view/package-summary.html">com.sca4d.core.spring.web.view</a> - package com.sca4d.core.spring.web.view</dt>
 <dd>
 <div class="block">提供 BaseView 最终 JSON 定制、本地化内置定制和 HTTP Jackson 序列化接入。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/HttpConstants.html#COMPATIBILITY_STATUS_HEADER" class="member-name-link">COMPATIBILITY_STATUS_HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></dt>
+<dd>
+<div class="block">应用启动时确定的版本协议头：compatibility-status。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/config/ConditionalOnCapability.html" class="type-name-link" title="annotation interface in com.sca4d.core.spring.config">ConditionalOnCapability</a> - Annotation Interface in <a href="com/sca4d/core/spring/config/package-summary.html">com.sca4d.core.spring.config</a></dt>
 <dd>
@@ -2444,6 +2472,22 @@ loadScripts(document, 'script');</script>
 <dt><a href="com/sca4d/core/spring/web/view/BaseViewSerializer.html#serialize(com.sca4d.core.spring.web.view.BaseView,com.fasterxml.jackson.core.JsonGenerator,com.fasterxml.jackson.databind.SerializerProvider)" class="member-name-link">serialize(BaseView, JsonGenerator, SerializerProvider)</a> - Method in class com.sca4d.core.spring.web.view.<a href="com/sca4d/core/spring/web/view/BaseViewSerializer.html" title="class in com.sca4d.core.spring.web.view">BaseViewSerializer</a></dt>
 <dd>
 <div class="block">缓冲默认 Bean JSON，依次执行全部定制，成功后只写出一次最终对象。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/HttpConstants.html#SERVER_API_CONTRACT_HEADER" class="member-name-link">SERVER_API_CONTRACT_HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></dt>
+<dd>
+<div class="block">应用启动时确定的版本协议头：server-api-contract。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/HttpConstants.html#SERVER_BUILD_HEADER" class="member-name-link">SERVER_BUILD_HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></dt>
+<dd>
+<div class="block">应用启动时确定的版本协议头：server-build。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/HttpConstants.html#SERVER_RELEASE_ID_HEADER" class="member-name-link">SERVER_RELEASE_ID_HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></dt>
+<dd>
+<div class="block">应用启动时确定的版本协议头：server-release-id。</div>
+</dd>
+<dt><a href="com/sca4d/core/spring/web/HttpConstants.html#SERVER_RELEASE_VERSION_HEADER" class="member-name-link">SERVER_RELEASE_VERSION_HEADER</a> - Static variable in class com.sca4d.core.spring.web.<a href="com/sca4d/core/spring/web/HttpConstants.html" title="class in com.sca4d.core.spring.web">HttpConstants</a></dt>
+<dd>
+<div class="block">应用启动时确定的版本协议头：server-release-version。</div>
 </dd>
 <dt><a href="com/sca4d/core/spring/call/CallHolder.html#set(com.sca4d.core.api.call.Call)" class="member-name-link">set(Call)</a> - Static method in class com.sca4d.core.spring.call.<a href="com/sca4d/core/spring/call/CallHolder.html" title="class in com.sca4d.core.spring.call">CallHolder</a></dt>
 <dd>

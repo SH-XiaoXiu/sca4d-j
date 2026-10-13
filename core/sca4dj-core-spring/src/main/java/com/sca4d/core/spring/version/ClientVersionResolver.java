@@ -3,6 +3,7 @@ package com.sca4d.core.spring.version;
 import com.sca4d.core.api.version.ClientVersion;
 import com.sca4d.core.api.version.CompatibilityRule;
 import com.sca4d.core.api.version.VersionCompatibilityException;
+import com.sca4d.core.spring.web.HttpConstants;
 import jakarta.servlet.http.HttpServletRequest;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,11 +14,11 @@ public final class ClientVersionResolver {
     /** @return 客户端声明；畸形或重复头返回版本输入异常 */
     public ClientVersion resolve(HttpServletRequest request) {
         try {
-            String name = header(request, "X-Client-Name");
-            String version = header(request, "X-Client-Release-Version");
-            String release = header(request, "X-Client-Release-Id");
-            String build = header(request, "X-Client-Build");
-            String contract = header(request, "X-Client-Api-Contract");
+            String name = header(request, HttpConstants.CLIENT_NAME_HEADER);
+            String version = header(request, HttpConstants.CLIENT_RELEASE_VERSION_HEADER);
+            String release = header(request, HttpConstants.CLIENT_RELEASE_ID_HEADER);
+            String build = header(request, HttpConstants.CLIENT_BUILD_HEADER);
+            String contract = header(request, HttpConstants.CLIENT_API_CONTRACT_HEADER);
             var client = new ClientVersion(
                     name,
                     version,

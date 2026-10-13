@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">ApplicationVersion</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">随构件保存的不可变版本事实；所有运行时消费方共享同一对象。</div>
+<div class="block">从应用配置创建的不可变版本快照；不依赖配置文件格式或构建工具。</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -103,8 +103,19 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.Map)" class="member-name-link">ApplicationVersion</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;properties)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,int,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">ApplicationVersion</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;product,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;component,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;releaseVersion,
+ int&nbsp;apiContractVersion,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;releaseId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;componentBuildId,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sourceRevision,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;builtAt,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;buildMode,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;buildVersion)</code></div>
+<div class="col-last even-row-color">
+<div class="block">创建已经解析配置变量的版本快照，版本规则不交给构建系统执行。</div>
+</div>
 </div>
 </section>
 </li>
@@ -167,13 +178,40 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(java.util.Map)">
+<section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String,java.lang.String,int,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)">
 <h3>ApplicationVersion</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ApplicationVersion</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;properties)</span></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;product,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;component,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;releaseVersion,
+ int&nbsp;apiContractVersion,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;releaseId,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;componentBuildId,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sourceRevision,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;builtAt,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;buildMode,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;buildVersion)</span></div>
+<div class="block">创建已经解析配置变量的版本快照，版本规则不交给构建系统执行。</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>properties</code> - 构建生成的字段，缺失时停止启动而不伪造版本</dd>
+<dd><code>product</code> - 产品标识</dd>
+<dd><code>component</code> - 当前应用组件</dd>
+<dd><code>releaseVersion</code> - 产品发布版本</dd>
+<dd><code>apiContractVersion</code> - 接口契约版本</dd>
+<dd><code>releaseId</code> - 发布批次</dd>
+<dd><code>componentBuildId</code> - 组件构建标识</dd>
+<dd><code>sourceRevision</code> - 源码提交或明确的未知值</dd>
+<dd><code>builtAt</code> - 构建时间或明确的未知值</dd>
+<dd><code>buildMode</code> - 配置声明的构建模式</dd>
+<dd><code>buildVersion</code> - 配置声明的构建展示值</dd>
 </dl>
 </section>
 </li>
@@ -191,7 +229,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">product</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>构建字段 product</dd>
+<dd>配置字段 product</dd>
 </dl>
 </section>
 </li>
@@ -201,7 +239,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">releaseVersion</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>构建字段 releaseVersion</dd>
+<dd>配置字段 releaseVersion</dd>
 </dl>
 </section>
 </li>
@@ -211,7 +249,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">releaseId</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>构建字段 releaseId</dd>
+<dd>配置字段 releaseId</dd>
 </dl>
 </section>
 </li>
@@ -221,7 +259,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">component</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>构建字段 component</dd>
+<dd>配置字段 component</dd>
 </dl>
 </section>
 </li>
@@ -231,7 +269,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">componentBuildId</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>构建字段 componentBuildId</dd>
+<dd>配置字段 componentBuildId</dd>
 </dl>
 </section>
 </li>
@@ -241,7 +279,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">sourceRevision</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>构建字段 sourceRevision</dd>
+<dd>配置字段 sourceRevision</dd>
 </dl>
 </section>
 </li>
@@ -251,7 +289,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">builtAt</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>构建字段 builtAt</dd>
+<dd>配置字段 builtAt</dd>
 </dl>
 </section>
 </li>
@@ -261,7 +299,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">buildMode</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>构建字段 buildMode</dd>
+<dd>配置字段 buildMode</dd>
 </dl>
 </section>
 </li>
@@ -271,7 +309,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">buildVersion</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>构建字段 buildVersion</dd>
+<dd>配置字段 buildVersion</dd>
 </dl>
 </section>
 </li>
@@ -281,7 +319,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">apiContractVersion</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>构建字段 apiContractVersion</dd>
+<dd>配置字段 apiContractVersion</dd>
 </dl>
 </section>
 </li>

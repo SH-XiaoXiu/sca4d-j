@@ -50,12 +50,12 @@ Gateway 对普通 API 使用最长匹配路径的能力要求，只选择已启�
 
 Controller 是 HTTP 输入边界，Gateway 是流量边界，Mapper 是 SQL 边界，消息处理器是 RabbitMQ 边界，协议适配器是设备或外部系统边界。这些位置负责把外部数据转成应用能理解的调用，业务状态变化由 Service 完成。
 
-## 构建版本与接口契约
+## 版本配置与接口契约
 
-构建插件的 `generateBuildManifest` 生成不可变版本清单；Spring Boot 构件同时保存 `META-INF/build-info.properties`。产品版本、发布批次、组件构建号、源码提交和接口契约版本具有不同用途，HTTP 路由、日志和界面消费同一份构建事实。`project.version` 继续表示 Gradle/Maven 坐标，不用于客户端兼容判断。
+具体应用用 YAML 声明自己的版本、Header 与兼容规则，可以在 YAML 中引用通用构建变量。构建工具只复制配置、替换变量，不理解产品版本号规范；替换后的配置随产物保存。App 代码不依赖构建工具和插件。
 
-具体应用注入 [ApplicationVersion](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/version/ApplicationVersion.html) 公开自己的版本。应用提供静态规则并构造 [CompatibilityResolver](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/version/CompatibilityResolver.html)，导入 VersionWebConfiguration 接入 HTTP；公共 Core 不登记某个应用的版本查询路由和兼容策略。
+具体应用注入 [ApplicationVersion](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/version/ApplicationVersion.html) 公开自己的版本。ApplicationVersionAutoConfiguration 从 Spring Environment 绑定 `sca4dj.version` 和 `sca4dj.versioning.clients`，创建不可变版本快照与 [CompatibilityResolver](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/version/CompatibilityResolver.html)。版本与范围校验属于这些公共模型。
 
 同一路径协商接口使用 `@ApiCapability("projects")`；固定版本路由使用 `@ApiCapability(value = "projects", contract = 2)`。两种入口都经过同一解析器，返回 CompatibilityDecision，具体应用按选中契约转换有类型的请求和响应，再调用应用 Service。矩阵只声明支持范围和入口，不自动实现业务转换。
 
-版本拒绝由 VersionCallInterceptor 在 CallLifecycle 的 BEFORE 阶段报告，VersionCompatibilityException 继承 BusinessException，进入统一错误转换和审计。未声明版本的客户端是否继续访问由具体应用明确配置。版本声明是客户端输入，不能代替身份认证和权限检查。
+HTTP Header 名称沿用 HttpConstants 中的 ConfiguredConstants 声明，由 App 配置并在启动后固定。版本拒绝由 VersionCallInterceptor 在 CallLifecycle 的 BEFORE 阶段报告，VersionCompatibilityException 继承 BusinessException，进入统一错误转换和审计。未声明版本的客户端是否继续访问由具体应用明确配置；版本声明不能代替身份认证和权限检查。

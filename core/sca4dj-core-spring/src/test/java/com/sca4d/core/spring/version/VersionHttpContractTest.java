@@ -130,27 +130,16 @@ class VersionHttpContractTest {
         @Bean
         ApplicationVersion version() {
             return new ApplicationVersion(
-                    Map.of(
-                            "product",
-                            "test",
-                            "releaseVersion",
-                            "1.3.0",
-                            "releaseId",
-                            "release",
-                            "component",
-                            "server",
-                            "componentBuildId",
-                            "build",
-                            "sourceRevision",
-                            "sha",
-                            "builtAt",
-                            "2026-01-01T00:00:00Z",
-                            "buildMode",
-                            "dev",
-                            "buildVersion",
-                            "sha-time",
-                            "apiContractVersion",
-                            "2"));
+                    "test",
+                    "server",
+                    "1.3.0",
+                    2,
+                    "release",
+                    "build",
+                    "sha",
+                    "2026-01-01T00:00:00Z",
+                    "dev",
+                    "sha-time");
         }
 
         @Bean
