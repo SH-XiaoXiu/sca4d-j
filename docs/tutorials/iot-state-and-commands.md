@@ -47,6 +47,7 @@ Content-Type: application/json
 - [DeviceConnectionAdmission](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/connection/DeviceConnectionAdmission.html)、DeviceConnectionReceiver 与 DeviceConnectionTerminator 分别处理连接准入、当前连接信息和协议断连；
 - DeviceUplinkDispatcher 按 Device 当前的 `protocolCode` 选择 DeviceUplinkProtocol，解码 DeviceProtocolMessage 后交给 DeviceUplinkReceiver；具体应用可以替换 Receiver，在同一业务事务中更新 IoT 当前事实和应用业务表；
 - DeviceTransport 接收完整 Device，由设备协议适配器选择直接连接或应用业务路由并发送标准下行；
+- [DeviceDispatchAdmission](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/message/DeviceDispatchAdmission.html) 可由具体应用提供，在发送前的短事务中判断共享传输资源是否允许当前下行；没有实现时默认允许发送；
 - [ReportedStateStore](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/state/ReportedStateStore.html) 保存 latest reported，可以由 PostgreSQL、Redis 或具体应用的其他实现提供；
 - [DeviceHistoryStore](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/history/DeviceHistoryStore.html) 读取遥测、事件、ACK 和设备定时执行历史；IoT base 只依赖契约，不拥有历史数据库；
 - [DeviceRuntimeQueryService](/tutorials/iot-state-and-commands)、[DeviceHistoryQueryService](/tutorials/iot-state-and-commands)、[DeviceScheduleService](/tutorials/iot-state-and-commands) 和 [DeviceScheduleQueryService](/javadoc/modules/iot/sca4dj-iot-api/com/sca4d/iot/api/schedule/DeviceScheduleQueryService.html) 分别管理当前状态、历史查询和设备定时；
@@ -72,6 +73,8 @@ DeviceService 只保存 Product、物模型、设备协议、可选 DeviceConnec
 - 设备定时规则、下一次触发时间和最新执行结果；完整执行历史通过事件存储，不另建设备定时执行历史表。
 
 `iot_downlink_message` 是需要跨事务恢复的业务状态，不是临时投递表。它保存 command 或 desired 下行从 `PENDING`、`SENDING`、`WAITING_ACK` 到终态的状态、attempt、ACK 截止时间、最新 ACK 和稳定失败 code，不保存面向某种语言的失败文本。发送、ACK 和超时处理使用同一个 `iot:downlink:<messageId>` Redis 分布式锁；进程在协议发布后、结果事务前退出时，重复派发可以从 `SENDING` 继续。终态记录按保留期分批删除，`SUCCEEDED`、`FAILED`、`EXPIRED` 与 `SUPERSEDED` 都必须进入清理范围。
+
+具体应用需要协调网关或其他共享传输资源时，注册一个 `DeviceDispatchAdmission` Bean。`admit(message, attempt, now)` 返回 `DeviceDispatchDecision.allow()` 后才开始本次发送；返回 `deferUntil(at)` 会在晚于 `now` 的时间重新检查，不进入 `SENDING`，也不消耗发送次数或启动 ACK 等待；返回 `reject(failure)` 会以该失败码结束下行。准入在发送前事务内执行，资源占用可以与下行状态一起提交；协议发布仍在事务外执行。准入实现必须自行协调多个实例对共享资源的竞争。
 
 Redis 保存可重建的当前连接投影，以及应用选择 RedisReportedStateStore 时的 latest reported。没有设备顺序的 reported 使用 IdGenerator 分配固定宽度的平台顺序值，不创建 Redis 递增 key。连接在线结果由 DeviceOnlinePolicy 在查询时计算，不写 PostgreSQL。Redis 丢失不会删除 Product、Device、desired、下行或定时规则。
 
