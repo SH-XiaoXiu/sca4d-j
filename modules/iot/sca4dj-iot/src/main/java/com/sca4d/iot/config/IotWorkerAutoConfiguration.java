@@ -21,6 +21,8 @@ import com.sca4d.iot.api.connection.DeviceConnectionTerminator;
 import com.sca4d.iot.api.connection.DeviceDisconnectMessage;
 import com.sca4d.iot.api.message.DeviceAcknowledgement;
 import com.sca4d.iot.api.message.DeviceAcknowledgementCheck;
+import com.sca4d.iot.api.message.DeviceDispatchAdmission;
+import com.sca4d.iot.api.message.DeviceDispatchDecision;
 import com.sca4d.iot.api.message.DeviceDispatchMessage;
 import com.sca4d.iot.api.message.DeviceTransport;
 import com.sca4d.iot.change.DeviceChangeNotifier;
@@ -142,7 +144,8 @@ public class IotWorkerAutoConfiguration {
             DeviceChangeNotifier changes,
             DistributedLock distributedLock,
             PlatformTransactionManager transactionManager,
-            MessageCodec<DeviceDispatchMessage> codec) {
+            MessageCodec<DeviceDispatchMessage> codec,
+            ObjectProvider<DeviceDispatchAdmission> admission) {
         return new DeviceDispatchHandler(
                 downlinks,
                 router,
@@ -151,7 +154,8 @@ public class IotWorkerAutoConfiguration {
                 changes,
                 distributedLock,
                 new TransactionTemplate(transactionManager),
-                codec);
+                codec,
+                admission.getIfAvailable(() -> (message, attempt, now) -> DeviceDispatchDecision.allow()));
     }
 
     /** @return 消费延迟消息并处理分阶段 ACK 超时的业务 Consumer */

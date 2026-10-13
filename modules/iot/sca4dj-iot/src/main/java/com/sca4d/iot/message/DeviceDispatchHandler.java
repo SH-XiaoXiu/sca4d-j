@@ -10,6 +10,8 @@ import com.sca4d.core.api.messaging.MessageHandler;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.iot.api.IotCapabilities;
 import com.sca4d.iot.api.change.DeviceChangeArea;
+import com.sca4d.iot.api.message.DeviceDispatchAdmission;
+import com.sca4d.iot.api.message.DeviceDispatchDecision;
 import com.sca4d.iot.api.message.DeviceDispatchMessage;
 import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
@@ -41,6 +43,8 @@ public class DeviceDispatchHandler implements MessageHandler<DeviceDispatchMessa
 
     private final @NotNull DeviceDeliveryScheduler messages;
 
+    private final @NotNull DeviceDispatchAdmission admission;
+
     private final @NotNull DeviceTransportRouter router;
 
     private final @NotNull DistributedLock distributedLock;
@@ -58,7 +62,8 @@ public class DeviceDispatchHandler implements MessageHandler<DeviceDispatchMessa
             @NotNull DeviceChangeNotifier changes,
             @NotNull DistributedLock distributedLock,
             @NotNull TransactionTemplate transactions,
-            @NotNull MessageCodec<DeviceDispatchMessage> codec) {
+            @NotNull MessageCodec<DeviceDispatchMessage> codec,
+            @NotNull DeviceDispatchAdmission admission) {
         this.downlinks = Objects.requireNonNull(downlinks, "Downlink Repository 不能为空");
         this.router = Objects.requireNonNull(router, "Device 下行路由不能为空");
         this.messages = Objects.requireNonNull(messages, "下行消息发布器不能为空");
@@ -67,6 +72,7 @@ public class DeviceDispatchHandler implements MessageHandler<DeviceDispatchMessa
         this.distributedLock = Objects.requireNonNull(distributedLock, "下行分布式锁不能为空");
         this.codec = Objects.requireNonNull(codec, "下行消息 Codec 不能为空");
         this.transactions = Objects.requireNonNull(transactions, "下行事务模板不能为空");
+        this.admission = Objects.requireNonNull(admission, "发送准入不能为空");
     }
 
     @Override
@@ -132,6 +138,24 @@ public class DeviceDispatchHandler implements MessageHandler<DeviceDispatchMessa
         if (current.expiresAt().filter(expiry -> !expiry.isAfter(now)).isPresent()) {
             downlinks.complete(current.messageId(), DeviceDownlinkStatus.EXPIRED, null, now);
             changes.changed(current.deviceId(), DeviceChangeArea.DOWNLINK, now);
+            return null;
+        }
+        DeviceDispatchDecision decision = admission.admit(current, dispatch.attempt(), now);
+        if (decision.failure().isPresent()) {
+            downlinks.complete(
+                    current.messageId(),
+                    DeviceDownlinkStatus.FAILED,
+                    decision.failure().orElseThrow().code(),
+                    now);
+            changes.changed(current.deviceId(), DeviceChangeArea.DOWNLINK, now);
+            return null;
+        }
+        if (decision.deferredUntil().isPresent()) {
+            Instant next = decision.deferredUntil().orElseThrow();
+            if (!next.isAfter(now)) {
+                throw new IllegalArgumentException("发送准入延后时间必须晚于当前时间");
+            }
+            messages.publishDispatch(current.messageId(), dispatch.attempt(), next);
             return null;
         }
         if (current.status() == DeviceDownlinkStatus.SENDING) {

@@ -19,6 +19,7 @@ import com.sca4d.core.spring.persistence.batch.SqlBatchProperties;
 import com.sca4d.core.spring.persistence.batch.SqlBatches;
 import com.sca4d.core.spring.persistence.mybatis.CoreEnumTypeHandler;
 import com.sca4d.core.spring.persistence.mybatis.TreeCodeTypeHandler;
+import com.sca4d.iot.api.message.DeviceDispatchDecision;
 import com.sca4d.iot.api.message.DeviceDispatchMessage;
 import com.sca4d.iot.api.message.DeviceDownlinkKind;
 import com.sca4d.iot.api.message.DeviceDownlinkStatus;
@@ -215,7 +216,8 @@ class DeviceCommandCancellationIntegrationTest {
                         DeviceDispatchMessage.CODE,
                         DeviceDispatchMessage.PROTOCOL_VERSION,
                         DeviceDispatchMessage.class,
-                        new ObjectMapper()));
+                        new ObjectMapper()),
+                (message, attempt, now) -> DeviceDispatchDecision.allow());
         consumer.handle(
                 new IncomingMessage<>(
                         Id.of(31L),
