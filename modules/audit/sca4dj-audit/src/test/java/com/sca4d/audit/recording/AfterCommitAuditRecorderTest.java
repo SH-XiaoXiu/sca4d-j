@@ -6,7 +6,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.sca4d.audit.recording.mapper.EncodedAuditEntry;
 import com.sca4d.core.api.audit.AuditOperation;
 import com.sca4d.core.api.audit.AuditRecord;
 import com.sca4d.core.spring.call.CallHolder;
@@ -41,7 +40,7 @@ class AfterCommitAuditRecorderTest {
         AuditRecord record = mock(AuditRecord.class);
         when(record.requestId()).thenReturn("request-1");
         when(record.operation()).thenReturn(AuditOperation.declared("TEST/RECORD"));
-        EncodedAuditEntry frozen = mock(EncodedAuditEntry.class);
+        FrozenAuditEntry frozen = mock(FrozenAuditEntry.class);
         when(repository.freeze(record)).thenReturn(frozen);
         List<Runnable> work = new ArrayList<>();
         AfterCommitAuditRecorder recorder = new AfterCommitAuditRecorder(repository, work::add);
@@ -60,7 +59,7 @@ class AfterCommitAuditRecorderTest {
         AuditRecord record = mock(AuditRecord.class);
         when(record.requestId()).thenReturn("request-2");
         when(record.operation()).thenReturn(AuditOperation.declared("TEST/RECORD"));
-        EncodedAuditEntry frozen = mock(EncodedAuditEntry.class);
+        FrozenAuditEntry frozen = mock(FrozenAuditEntry.class);
         when(repository.freeze(record)).thenReturn(frozen);
         List<Runnable> work = new ArrayList<>();
         TransactionSynchronizationManager.setActualTransactionActive(true);

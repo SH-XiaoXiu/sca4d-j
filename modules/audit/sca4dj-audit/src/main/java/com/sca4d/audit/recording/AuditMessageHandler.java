@@ -21,10 +21,10 @@ public class AuditMessageHandler implements MessageHandler<AuditMessage> {
 
     private final AuditRepository repository;
 
-    private final AuditMessageCodec codec;
+    private final MessageCodec<AuditMessage> codec;
 
     /** 使用 Audit 模块的持久化入口和消息编码器消费可靠审计。 */
-    public AuditMessageHandler(AuditRepository repository, AuditMessageCodec codec) {
+    public AuditMessageHandler(AuditRepository repository, MessageCodec<AuditMessage> codec) {
         this.repository = Objects.requireNonNull(repository);
         this.codec = Objects.requireNonNull(codec);
     }

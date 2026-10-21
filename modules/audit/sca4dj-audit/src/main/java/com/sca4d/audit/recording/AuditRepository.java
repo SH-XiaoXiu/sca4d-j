@@ -17,10 +17,11 @@ import com.sca4d.core.api.id.IdGenerator;
 import com.sca4d.core.api.persistence.AffectedRows;
 import com.sca4d.core.api.query.Page;
 import com.sca4d.core.api.resource.Resource;
-import com.sca4d.core.api.resource.ResourceReference;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -59,19 +60,24 @@ public class AuditRepository {
      */
     @AffectedRows(target = "新增审计记录")
     public void append(@NotNull AuditRecord record) {
-        mapper.insert(encode(Objects.requireNonNull(record, "审计记录不能为空"), ids.nextId().value()));
+        EncodedAuditEntry entry = encode(Objects.requireNonNull(record, "审计记录不能为空"), ids.nextId().value());
+        mapper.insert(entry);
+        associate(entry.id(), record.relatedResources());
     }
 
     /** 在交接前完成编码和脱敏，快照只保存不可变列值，不引用业务 payload。 */
     @NotNull
-    EncodedAuditEntry freeze(@NotNull AuditRecord record) {
-        return encode(Objects.requireNonNull(record), 0);
+    FrozenAuditEntry freeze(@NotNull AuditRecord record) {
+        return new FrozenAuditEntry(encode(Objects.requireNonNull(record), 0), record.relatedResources());
     }
 
     /** 为已冻结字段分配主键并追加单条审计行。 */
     @AffectedRows(target = "新增尽力审计记录")
-    void appendFrozen(@NotNull EncodedAuditEntry entry) {
-        mapper.insert(Objects.requireNonNull(entry, "冻结审计字段不能为空").withId(ids.nextId().value()));
+    @Transactional
+    public void appendFrozen(@NotNull FrozenAuditEntry frozen) {
+        EncodedAuditEntry entry = frozen.entry().withId(ids.nextId().value());
+        mapper.insert(entry);
+        associate(entry.id(), frozen.resources());
     }
 
     /** 使用消息标识幂等追加冻结记录；提交成功后消费者才允许确认消息。 */
@@ -79,7 +85,33 @@ public class AuditRepository {
         if (messageId <= 0) {
             throw new IllegalArgumentException("审计消息标识必须为正数");
         }
-        mapper.insertDelivery(message.entry().withId(messageId));
+        if (mapper.insertDelivery(message.entry().withId(messageId)) > 0) {
+            associate(messageId, message.resources());
+        }
+    }
+
+    /** 幂等追加关联，不改写原审计事实；关联时间直接取原记录。 */
+    public void associate(long id, Collection<? extends Resource> resources) {
+        List<Resource.Ref> checked = resources.stream()
+                .map(
+                        resource -> new Resource.Ref(
+                                required(resource.type().format(SLASH), "关联资源类型"),
+                                required(resource.id(), "关联资源标识")))
+                .distinct()
+                .toList();
+        for (int offset = 0; offset < checked.size(); offset += 500) {
+            mapper.insertResources(id, checked.subList(offset, Math.min(offset + 500, checked.size())));
+        }
+    }
+
+    /** 按主键游标读取原始事实，用于有界历史补齐。 */
+    public List<AuditEntry> scan(long afterId, long throughId, int size) {
+        return mapper.scan(afterId, throughId, size).stream().map(this::decode).toList();
+    }
+
+    /** 查询快照关联，不通过当前业务归属推断。 */
+    public boolean relatesTo(long id, Resource resource) {
+        return mapper.relatesTo(id, resource.type().format(SLASH), resource.id());
     }
 
     /**
@@ -111,6 +143,9 @@ public class AuditRepository {
         HttpCall httpCall = record.httpCall().orElse(null);
         return new EncodedAuditEntry(
                 id,
+                required(record.auditId(), "审计记录标识"),
+                required(record.auditTrailId(), "审计链标识"),
+                record.auditParentId(),
                 required(record.requestId(), "调用标识"),
                 record.actor().subjectId(),
                 record.actor().accountId().orElse(null),
@@ -139,7 +174,7 @@ public class AuditRepository {
         String httpMethod = row.httpMethod();
         Resource target = targetType == null
                 ? null
-                : new ResourceReference(targetType, Objects.requireNonNull(row.targetId()));
+                : new Resource.Ref(targetType, Objects.requireNonNull(row.targetId()));
         AuditPayloadData payload = payloadType == null
                 ? null
                 : payloadJson.decode(
@@ -155,6 +190,9 @@ public class AuditRepository {
                         row.userAgent());
         return new AuditEntry(
                 row.id(),
+                row.auditId(),
+                row.auditTrailId(),
+                row.auditParentId(),
                 row.requestId(),
                 new AuditActor(row.subjectId(), row.accountId(), row.principalId()),
                 new AuditOperation(row.operation()),
@@ -176,4 +214,5 @@ public class AuditRepository {
         }
         return checked;
     }
+
 }

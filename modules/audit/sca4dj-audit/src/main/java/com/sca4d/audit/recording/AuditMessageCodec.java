@@ -11,13 +11,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
-/** 将已脱敏的审计字段编解码为稳定消息 JSON；不在消息中保留业务对象或执行实例。 */
+/** 读取和写入审计消息 v1 载荷；新消息由 {@link AuditMessageV2Codec} 写入。 */
 public class AuditMessageCodec implements MessageCodec<AuditMessage> {
     private final ObjectMapper json;
 
-    /** 使用 Messaging 同一 JSON 基础契约，显式写入协议字段。 */
+    /** 使用 Messaging 同一 JSON 基础契约，保留审计消息 v1 的字段。 */
     public AuditMessageCodec(ObjectMapper json) {
         this.json = Objects.requireNonNull(json);
     }
@@ -93,26 +95,32 @@ public class AuditMessageCodec implements MessageCodec<AuditMessage> {
             if (payloadJson != null) {
                 json.readTree(payloadJson);
             }
+            String legacyId = UUID.nameUUIDFromBytes(bytes).toString();
             return new AuditMessage(
-                    new EncodedAuditEntry(
-                            0,
-                            w.required("requestId").requireNonNull().textValue(),
-                            positive(w, "subjectId"),
-                            account,
-                            positive(w, "principalId"),
-                            w.required("operation").requireNonNull().textValue(),
-                            targetType,
-                            targetId,
-                            AuditResult.valueOf(w.required("result").textValue()),
-                            payloadType,
-                            payloadVersion,
-                            payloadJson,
-                            httpMethod,
-                            httpPath,
-                            ip,
-                            text(w, "userAgent"),
-                            Instant.parse(w.required("occurredAt").textValue()),
-                            text(w, "instanceId")));
+                    new FrozenAuditEntry(
+                            new EncodedAuditEntry(
+                                    0,
+                                    legacyId,
+                                    legacyId,
+                                    null,
+                                    w.required("requestId").requireNonNull().textValue(),
+                                    positive(w, "subjectId"),
+                                    account,
+                                    positive(w, "principalId"),
+                                    w.required("operation").requireNonNull().textValue(),
+                                    targetType,
+                                    targetId,
+                                    AuditResult.valueOf(w.required("result").textValue()),
+                                    payloadType,
+                                    payloadVersion,
+                                    payloadJson,
+                                    httpMethod,
+                                    httpPath,
+                                    ip,
+                                    text(w, "userAgent"),
+                                    Instant.parse(w.required("occurredAt").textValue()),
+                                    text(w, "instanceId")),
+                            List.of()));
         } catch (IOException | RuntimeException failure) {
             throw new IllegalArgumentException("审计消息无法解码", failure);
         }

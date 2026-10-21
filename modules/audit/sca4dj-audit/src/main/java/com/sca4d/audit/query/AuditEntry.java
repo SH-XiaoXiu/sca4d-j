@@ -12,9 +12,16 @@ import org.jetbrains.annotations.Nullable;
 import java.time.Instant;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 /** 返回一条持久化审计记录及其原始或强类型 payload。 */
 public class AuditEntry {
+    private final @NotNull String auditId;
+
+    private final @Nullable String auditParentId;
+
+    private final @NotNull String auditTrailId;
+
     private final long id;
 
     private final @NotNull String requestId;
@@ -52,6 +59,9 @@ public class AuditEntry {
      */
     public AuditEntry(
             long id,
+            @NotNull String auditId,
+            @NotNull String auditTrailId,
+            @Nullable String auditParentId,
             @NotNull String requestId,
             @NotNull AuditActor actor,
             @NotNull AuditOperation operation,
@@ -65,6 +75,9 @@ public class AuditEntry {
             throw new IllegalArgumentException("审计记录标识必须为正数");
         }
         this.id = id;
+        this.auditId = Objects.requireNonNull(auditId, "审计记录标识不能为空");
+        this.auditTrailId = Objects.requireNonNull(auditTrailId, "审计链标识不能为空");
+        this.auditParentId = auditParentId;
         String checkedRequestId = Objects.requireNonNull(requestId, "调用标识不能为空");
         if (checkedRequestId.isBlank()) {
             throw new IllegalArgumentException("调用标识不能为空白");
@@ -80,9 +93,49 @@ public class AuditEntry {
         this.instanceId = instanceId;
     }
 
+    /** 创建没有链路元数据的历史测试记录。 */
+    public AuditEntry(
+            long id,
+            @NotNull String requestId,
+            @NotNull AuditActor actor,
+            @NotNull AuditOperation operation,
+            @Nullable Resource target,
+            @NotNull AuditResult result,
+            @Nullable AuditPayloadData payload,
+            @Nullable HttpCall httpCall,
+            @NotNull Instant occurredAt,
+            @Nullable String instanceId) {
+        this(
+                id,
+                UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(),
+                null,
+                requestId,
+                actor,
+                operation,
+                target,
+                result,
+                payload,
+                httpCall,
+                occurredAt,
+                instanceId);
+    }
+
     /** @return 正数审计记录标识 */
     public long id() {
         return id;
+    }
+
+    public @NotNull String auditId() {
+        return auditId;
+    }
+
+    public @NotNull String auditTrailId() {
+        return auditTrailId;
+    }
+
+    public @Nullable String auditParentId() {
+        return auditParentId;
     }
 
     /** @return 调用链中的调用标识 */
