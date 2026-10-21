@@ -1,3 +1,4 @@
+-- 独立 IoT 历史库的完整结构；由具体应用纳入该数据源的迁移。
 CREATE EXTENSION IF NOT EXISTS timescaledb;
 
 CREATE TABLE iot_telemetry_sample (
@@ -38,6 +39,11 @@ CREATE INDEX idx_iot_event_device
 CREATE INDEX idx_iot_event_schedule
     ON iot_event (((data_json ->> 'scheduleId')::BIGINT), occurred_at DESC)
     WHERE event_code = '$schedule.execution';
+
+-- 回执关联的下行标识保存在事件数据中；表内 message_id 是历史事件的消息标识。
+CREATE INDEX idx_iot_event_acknowledgement_downlink
+    ON iot_event (((data_json ->> 'messageId')::BIGINT), received_at DESC, occurred_at DESC, message_id DESC)
+    WHERE event_code = '$downlink.ack';
 
 COMMENT ON TABLE iot_telemetry_sample IS '保存 MessageConsumer 从 reported 消息写入的 Device Telemetry 样本';
 COMMENT ON COLUMN iot_telemetry_sample.observed_at IS 'Device 观察到属性值的时间和 hypertable 分区时间';
