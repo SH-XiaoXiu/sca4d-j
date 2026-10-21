@@ -38,7 +38,12 @@ class ApplicationVersionConfigurationTest {
             assertThat(version.releaseVersion()).isEqualTo("1.2.3");
             assertThat(version.apiContractVersion()).isEqualTo(2);
         });
-        configured.withPropertyValues("sca4dj.version.release-version=invalid")
+        configured.withPropertyValues("sca4dj.version.release-version=dev-abc123")
+                .run(context -> {
+                    assertThat(context).hasNotFailed();
+                    assertThat(context.getBean(ApplicationVersion.class).releaseVersion()).isEqualTo("dev-abc123");
+                });
+        configured.withPropertyValues("sca4dj.version.release-version=bad version")
                 .run(context -> assertThat(context).hasFailed());
     }
 }

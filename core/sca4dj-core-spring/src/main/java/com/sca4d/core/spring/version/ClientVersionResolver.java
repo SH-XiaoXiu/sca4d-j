@@ -1,7 +1,6 @@
 package com.sca4d.core.spring.version;
 
 import com.sca4d.core.api.version.ClientVersion;
-import com.sca4d.core.api.version.CompatibilityRule;
 import com.sca4d.core.api.version.VersionCompatibilityException;
 import com.sca4d.core.spring.web.HttpConstants;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,7 +27,6 @@ public final class ClientVersionResolver {
             if (!client.unspecified()) {
                 if (name == null || version == null)
                     throw new IllegalArgumentException("缺少客户端名称或版本");
-                CompatibilityRule.compareVersions(version, version);
                 if (contract != null && !contract.matches("[1-9][0-9]*"))
                     throw new IllegalArgumentException("无效契约");
             }

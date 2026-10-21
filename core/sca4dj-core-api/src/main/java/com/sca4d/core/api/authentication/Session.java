@@ -8,7 +8,6 @@ import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.Subject;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.Resource;
-import com.sca4d.core.api.resource.ResourceReference;
 import com.sca4d.core.api.utils.TextUtils;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -161,12 +160,12 @@ public class Session {
         }
         LinkedHashMap<Long, List<Resource>> normalized = new LinkedHashMap<>();
         for (Long principalId : principalIds) {
-            LinkedHashMap<ResourceReference, Resource> resources = new LinkedHashMap<>();
+            LinkedHashMap<Resource.Ref, Resource> resources = new LinkedHashMap<>();
             for (Resource resource : Objects.requireNonNull(checked.get(principalId), "Principal 授权资源不能为空")) {
                 Resource checkedResource = Objects.requireNonNull(resource, "Session 授权资源不能为空");
                 var type = Objects.requireNonNull(checkedResource.type(), "资源类型不能为空");
                 String resourceId = TextUtils.requireText(checkedResource.id(), "资源标识");
-                ResourceReference key = new ResourceReference(type, resourceId);
+                Resource.Ref key = new Resource.Ref(type, resourceId);
                 if (resources.putIfAbsent(key, checkedResource) != null) {
                     throw new IllegalArgumentException("Session 包含重复资源: " + type + "/" + resourceId);
                 }

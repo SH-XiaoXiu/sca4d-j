@@ -40,6 +40,7 @@ import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.time.Duration;
 import java.time.Instant;
 
 class CoreSpringAutoConfigurationTest {
@@ -62,6 +63,19 @@ class CoreSpringAutoConfigurationTest {
             .withBean(RateLimiter.class, () -> mock(RateLimiter.class))
             .withBean(IdempotencyStore.class, () -> mock(IdempotencyStore.class))
             .withBean(DistributedLock.class, () -> mock(DistributedLock.class));
+
+    @Test
+    void bindsSlowRequestThresholdAndRejectsInvalidDurations() {
+        contextRunner.withPropertyValues("sca4dj.web.slow-request-threshold=750ms").run(context -> {
+            assertThat(context).hasNotFailed();
+            assertThat(context.getBean(WebRequestProperties.class).getSlowRequestThreshold())
+                    .isEqualTo(Duration.ofMillis(750));
+        });
+        for (String value : new String[] {"0ms", "-1ms", "1ns", "999999999999s"}) {
+            contextRunner.withPropertyValues("sca4dj.web.slow-request-threshold=" + value)
+                    .run(context -> assertThat(context).hasFailed());
+        }
+    }
 
     @Test
     @DisplayName("Fails startup when Redis concurrency beans are absent")

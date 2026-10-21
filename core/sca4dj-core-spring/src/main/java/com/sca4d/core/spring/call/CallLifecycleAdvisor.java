@@ -148,7 +148,8 @@ public class CallLifecycleAdvisor extends AbstractPointcutAdvisor {
                     targetType,
                     method,
                     invocation.getArguments(),
-                    resultType(method));
+                    resultType(method),
+                    CallHolder.executions().stream().findFirst().orElse(null));
             CallHolder.push(execution);
             for (CallBindingRegistry.Binding binding : matchedBindings) {
                 binding.attach(execution);

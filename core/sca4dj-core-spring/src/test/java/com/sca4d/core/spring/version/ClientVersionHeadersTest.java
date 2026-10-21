@@ -31,14 +31,14 @@ class ClientVersionHeadersTest {
         var resolve = resolver.getClass().getMethod("resolve", HttpServletRequest.class);
         var request = new MockHttpServletRequest();
         request.addHeader("X-App-Name", "mobile");
-        request.addHeader("X-App-Version", "5.7.0");
+        request.addHeader("X-App-Version", "dev-abc123");
         request.addHeader("X-App-Contract", "2");
         // 原来的默认头不能覆盖 App 已选择的协议。
         request.addHeader("X-Client-Name", "wrong");
         request.addHeader("X-Client-Release-Version", "invalid");
         var client = (ClientVersion) resolve.invoke(resolver, request);
         assertThat(client.name()).isEqualTo("mobile");
-        assertThat(client.releaseVersion()).isEqualTo("5.7.0");
+        assertThat(client.releaseVersion()).isEqualTo("dev-abc123");
         assertThat(client.contract()).isEqualTo(2);
         assertThatThrownBy(() -> initialize(loader, Map.of("sca4dj.http.headers.client-name", "X-Changed")))
                 .isInstanceOf(InvocationTargetException.class)

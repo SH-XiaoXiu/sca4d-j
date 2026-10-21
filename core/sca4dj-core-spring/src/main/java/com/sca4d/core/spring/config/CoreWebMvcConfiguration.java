@@ -60,12 +60,21 @@ class CoreWebMvcConfiguration {
         return new HttpInputValidationAspect(validator, localizer, properties);
     }
 
-    /** @param clock 调用开始时间使用的时钟 @return 最外层调用过滤器 */
+    /**
+     * @param clock 调用开始时间使用的时钟
+     * @param invoker 调用生命周期执行器
+     * @param properties HTTP 请求配置
+     * @return 最外层调用过滤器
+     */
     @Bean
-    FilterRegistrationBean<HttpCallFilter> httpCallFilter(Clock clock, CallInvoker invoker) {
+    FilterRegistrationBean<HttpCallFilter> httpCallFilter(
+            Clock clock,
+            CallInvoker invoker,
+            WebRequestProperties properties) {
         FilterRegistrationBean<HttpCallFilter> registration = new FilterRegistrationBean<>(
-                new HttpCallFilter(clock, invoker));
+                new HttpCallFilter(clock, invoker, properties));
         registration.setOrder(Ordered.HIGHEST_PRECEDENCE + 10);
+        registration.setAsyncSupported(true);
         return registration;
     }
 

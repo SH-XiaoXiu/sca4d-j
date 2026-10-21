@@ -5,23 +5,23 @@ import org.jetbrains.annotations.NotNull;
 
 /** 从应用配置创建的不可变版本快照；不依赖配置文件格式或构建工具。 */
 public final class ApplicationVersion {
-    private final String buildMode;
+    private final @NotNull String buildMode;
 
-    private final String buildVersion;
+    private final @NotNull String buildVersion;
 
-    private final String builtAt;
+    private final @NotNull String builtAt;
 
-    private final String component;
+    private final @NotNull String component;
 
-    private final String componentBuildId;
+    private final @NotNull String componentBuildId;
 
-    private final String product;
+    private final @NotNull String product;
 
-    private final String releaseId;
+    private final @NotNull String releaseId;
 
-    private final String releaseVersion;
+    private final @NotNull String releaseVersion;
 
-    private final String sourceRevision;
+    private final @NotNull String sourceRevision;
 
     private final int apiContractVersion;
 
@@ -58,7 +58,6 @@ public final class ApplicationVersion {
             if (!headerValue.matches("[A-Za-z0-9._-]{1,240}"))
                 throw new IllegalArgumentException("版本配置不能作为 HTTP Header 值使用");
         }
-        CompatibilityRule.compareVersions(releaseVersion, releaseVersion);
         if (apiContractVersion <= 0)
             throw new IllegalArgumentException("契约版本必须为正数");
         this.product = product;
@@ -73,61 +72,61 @@ public final class ApplicationVersion {
         this.buildVersion = buildVersion;
     }
 
-    /** @return 配置字段 product */
+    /** @return 产品标识 */
     @JsonProperty
-    public String product() {
+    public @NotNull String product() {
         return product;
     }
 
-    /** @return 配置字段 releaseVersion */
+    /** @return 产品发布版本 */
     @JsonProperty
-    public String releaseVersion() {
+    public @NotNull String releaseVersion() {
         return releaseVersion;
     }
 
-    /** @return 配置字段 releaseId */
+    /** @return 发布批次标识 */
     @JsonProperty
-    public String releaseId() {
+    public @NotNull String releaseId() {
         return releaseId;
     }
 
-    /** @return 配置字段 component */
+    /** @return 当前应用组件标识 */
     @JsonProperty
-    public String component() {
+    public @NotNull String component() {
         return component;
     }
 
-    /** @return 配置字段 componentBuildId */
+    /** @return 组件构建标识 */
     @JsonProperty
-    public String componentBuildId() {
+    public @NotNull String componentBuildId() {
         return componentBuildId;
     }
 
-    /** @return 配置字段 sourceRevision */
+    /** @return 构建使用的源码提交；无法确定时为配置声明的未知值 */
     @JsonProperty
-    public String sourceRevision() {
+    public @NotNull String sourceRevision() {
         return sourceRevision;
     }
 
-    /** @return 配置字段 builtAt */
+    /** @return 构建时间；无法确定时为配置声明的未知值 */
     @JsonProperty
-    public String builtAt() {
+    public @NotNull String builtAt() {
         return builtAt;
     }
 
-    /** @return 配置字段 buildMode */
+    /** @return 构建模式 */
     @JsonProperty
-    public String buildMode() {
+    public @NotNull String buildMode() {
         return buildMode;
     }
 
-    /** @return 配置字段 buildVersion */
+    /** @return 用于显示的构建版本 */
     @JsonProperty
-    public String buildVersion() {
+    public @NotNull String buildVersion() {
         return buildVersion;
     }
 
-    /** @return 配置字段 apiContractVersion */
+    /** @return 当前组件的接口契约版本 */
     @JsonProperty
     public int apiContractVersion() {
         return apiContractVersion;

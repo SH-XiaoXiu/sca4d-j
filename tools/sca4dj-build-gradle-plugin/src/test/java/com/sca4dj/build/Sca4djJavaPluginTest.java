@@ -10,6 +10,7 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 
 /** 验证应用项目通过 Sca4d-J Java 扩展覆盖 Spotless 字段排序。 */
 class Sca4djJavaPluginTest {
@@ -61,7 +62,7 @@ class Sca4djJavaPluginTest {
                 }
                 """ + configuration);
         Path javaFile = javaFile();
-        Files.createDirectories(javaFile.getParent());
+        Files.createDirectories(Objects.requireNonNull(javaFile.getParent()));
         Files.writeString(javaFile, """
                 class Sample {
                     private final ZRepository repository;

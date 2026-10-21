@@ -1,11 +1,14 @@
 package com.sca4d.core.spring.validation;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.time.Instant;
 
 class ValidationAnnotationsTest {
 
@@ -29,6 +32,72 @@ class ValidationAnnotationsTest {
         assertThat(validator.validate(invalid)).hasSize(4);
 
         assertThat(validator.validate(new Input())).isEmpty();
+    }
+
+    @Test
+    void validatesEachTimeRangeAndReportsTheEndProperty() {
+        RangeInput input = new RangeInput();
+        input.startFrom = Instant.parse("2026-10-15T00:00:00Z");
+        assertThat(validator.validate(input)).isEmpty();
+
+        input.startTo = input.startFrom.plusSeconds(1);
+        assertThat(validator.validate(input)).isEmpty();
+
+        input.startTo = input.startFrom;
+        input.otherStart = input.startFrom.plusSeconds(2);
+        input.otherEnd = input.startFrom;
+        assertThat(validator.validate(input))
+                .extracting(violation -> violation.getPropertyPath().toString())
+                .containsExactlyInAnyOrder("startTo", "otherEnd");
+
+        input.startTo = input.startFrom.minusSeconds(1);
+        assertThat(validator.validate(input)).hasSize(2);
+    }
+
+    @Test
+    void rejectsAnUnknownTimeRangeProperty() {
+        assertThatThrownBy(() -> validator.validate(new InvalidRangeInput()))
+                .hasRootCauseInstanceOf(IllegalArgumentException.class)
+                .satisfies(exception -> assertThat(exception.getCause()).hasMessageContaining("@TimeRange"));
+    }
+
+    /** 保存两组相互独立的时间范围。 */
+    @TimeRange(start = "startFrom", end = "startTo")
+    @TimeRange(start = "otherStart", end = "otherEnd")
+    private static class RangeInput {
+
+        private Instant startFrom;
+
+        private Instant startTo;
+
+        private Instant otherStart;
+
+        private Instant otherEnd;
+
+        public Instant getStartFrom() {
+            return startFrom;
+        }
+
+        public Instant getStartTo() {
+            return startTo;
+        }
+
+        public Instant getOtherStart() {
+            return otherStart;
+        }
+
+        public Instant getOtherEnd() {
+            return otherEnd;
+        }
+    }
+
+    /** 校验错误的属性声明应明确失败。 */
+    @TimeRange(start = "missing", end = "startTo")
+    private static class InvalidRangeInput {
+
+        public Instant getStartTo() {
+            return null;
+        }
     }
 
     /** 保存公共格式校验测试输入。 */

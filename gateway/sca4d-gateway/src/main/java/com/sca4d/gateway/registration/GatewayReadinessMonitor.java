@@ -1,7 +1,6 @@
 package com.sca4d.gateway.registration;
 
 import com.sca4d.gateway.config.GatewayProperties;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +33,6 @@ public class GatewayReadinessMonitor {
      * @param registry 内存实例注册表
      * @param properties 已校验的 Gateway 配置
      */
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "registry 是注入的共享实例注册协作对象，监视器必须更新同一个注册表")
     @Autowired
     public GatewayReadinessMonitor(
             @NotNull GatewayInstanceRegistry registry,

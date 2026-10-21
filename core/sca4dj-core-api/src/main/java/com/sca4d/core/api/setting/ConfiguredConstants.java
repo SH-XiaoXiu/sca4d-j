@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 
 /** 在配置加载后初始化一组不再改变的 Java 静态字段。 */
@@ -22,6 +23,8 @@ public final class ConfiguredConstants {
     private static final SettingOwner OWNER = new SettingOwner(TreeCode.ofSegment("CONFIG"), "PROCESS");
 
     private static final ThreadLocal<Initialization> INITIALIZATION = new ThreadLocal<>();
+
+    private static final ReentrantLock INITIALIZATION_LOCK = new ReentrantLock();
 
     private static final Map<Class<?>, Map<String, Value>> GROUPS = new LinkedHashMap<>();
 
@@ -37,7 +40,18 @@ public final class ConfiguredConstants {
      * @param source 按完整配置键读取外部文本；缺失时返回 null
      * @return 该类全部配置键及其已经校验的有效文本
      */
-    public static synchronized @NotNull Map<String, String> initialize(
+    public static @NotNull Map<String, String> initialize(
+            @NotNull Class<?> group,
+            @NotNull Function<String, String> source) {
+        INITIALIZATION_LOCK.lock();
+        try {
+            return initializeLocked(group, source);
+        } finally {
+            INITIALIZATION_LOCK.unlock();
+        }
+    }
+
+    private static @NotNull Map<String, String> initializeLocked(
             @NotNull Class<?> group,
             @NotNull Function<String, String> source) {
         Class<?> checkedGroup = Objects.requireNonNull(group, "常量类不能为空");

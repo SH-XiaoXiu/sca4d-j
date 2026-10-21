@@ -12,11 +12,12 @@ import com.sca4d.core.api.error.CoreErrorCode;
 import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.name.code.TreeCode;
 import com.sca4d.core.api.resource.Resource;
-import com.sca4d.core.api.resource.ResourceReference;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -181,7 +182,7 @@ public class PermissionCallInterceptor implements CallLifecycle.Around {
                 ? expressionResolver.resolve(requirement.resource(), execution)
                 : resolverLookup.resolver(requirement.resolver()).resolve(execution);
         if (expression && !(resolved instanceof Collection<?>)) {
-            return List.of(new Permission(ResourceReference.fromValue(resolved, requirement.resourceType()), action));
+            return List.of(new Permission(reference(resolved, requirement.resourceType()), action));
         }
         if (!(resolved instanceof Collection<?> resources)) {
             throw new IllegalStateException(
@@ -198,17 +199,46 @@ public class PermissionCallInterceptor implements CallLifecycle.Around {
         List<Permission> permissions = new ArrayList<>(resources.size());
         for (Object value : resources) {
             if (expression) {
-                permissions.add(new Permission(ResourceReference.fromValue(value, requirement.resourceType()), action));
+                permissions.add(new Permission(reference(value, requirement.resourceType()), action));
                 continue;
             }
             if (!(value instanceof Resource resource)) {
                 throw new IllegalStateException(
-                        "动态资源解析器集合元素必须实现 Resource: "
+                        "动态资源表达式或解析器必须返回 Resource: "
                                 + requirement.resolver().getName());
             }
             permissions.add(new Permission(resource, action));
         }
         return permissions;
+    }
+
+    private static @NotNull Resource reference(@NotNull Object value, @NotNull String resourceType) {
+        if (value instanceof Resource resource) {
+            if (!resourceType.isBlank() && !TreeCode.of(resourceType).equals(resource.type())) {
+                throw new IllegalStateException("资源值与声明的 resourceType 不一致");
+            }
+            return resource;
+        }
+        if (resourceType.isBlank()) {
+            throw new IllegalStateException("权限资源标识必须声明 resourceType");
+        }
+        String id;
+        if (value instanceof Number number) {
+            try {
+                BigInteger integer = new BigDecimal(number.toString()).toBigIntegerExact();
+                if (integer.signum() <= 0) {
+                    throw new IllegalStateException("权限资源标识必须是正整数");
+                }
+                id = integer.toString();
+            } catch (ArithmeticException | NumberFormatException exception) {
+                throw new IllegalStateException("权限资源标识必须是正整数", exception);
+            }
+        } else if (value instanceof String text && !text.isBlank()) {
+            id = text.trim();
+        } else {
+            throw new IllegalStateException("权限资源必须是 Resource、正整数或非空文本标识");
+        }
+        return new Resource.Ref(resourceType, id);
     }
 
 }

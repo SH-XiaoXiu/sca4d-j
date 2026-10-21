@@ -26,7 +26,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
         I18nProperties.class,
         RedisIdempotencyProperties.class,
         RedisPipelineProperties.class,
-        SqlBatchProperties.class
+        SqlBatchProperties.class,
+        WebRequestProperties.class
 })
 @Import({
         CoreInfrastructureConfiguration.class,
