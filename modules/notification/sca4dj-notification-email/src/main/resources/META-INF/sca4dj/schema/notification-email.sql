@@ -13,7 +13,12 @@ CREATE UNIQUE INDEX uk_notification_email_template_code
     ON notification_email_template (notification_code) WHERE deleted = 0;
 
 COMMENT ON TABLE notification_email_template IS '保存 Email 渠道使用的多语言主题、纯文本和 HTML 源码模板';
+COMMENT ON COLUMN notification_email_template.id IS 'Email 模板全局标识';
+COMMENT ON COLUMN notification_email_template.notification_code IS '对应 NotificationType 的稳定通知编码';
 COMMENT ON COLUMN notification_email_template.locales IS 'Locale 到 subject、text、html 源码的 JSON object';
+COMMENT ON COLUMN notification_email_template.enabled IS '是否参与 Email 投递';
+COMMENT ON COLUMN notification_email_template.created_at IS 'Email 模板创建时间';
+COMMENT ON COLUMN notification_email_template.updated_at IS 'Email 模板最近更新时间，由数据库触发器维护';
 COMMENT ON COLUMN notification_email_template.version IS '模板并发修改使用的乐观版本';
 COMMENT ON COLUMN notification_email_template.deleted IS '逻辑删除标记；0 表示保留，1 表示已删除';
 

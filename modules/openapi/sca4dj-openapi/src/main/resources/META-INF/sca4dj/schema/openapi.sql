@@ -22,8 +22,12 @@ COMMENT ON COLUMN openapi_client.client_id IS '第三方请求和 OAuth Client C
 COMMENT ON COLUMN openapi_client.account_id IS 'Client 对应的 IAM APPLICATION Account 标识';
 COMMENT ON COLUMN openapi_client.display_name IS '管理端显示的 Client 名称';
 COMMENT ON COLUMN openapi_client.status IS 'ACTIVE 允许认证和调用，DISABLED 拒绝新的 OpenAPI 请求';
+COMMENT ON COLUMN openapi_client.created_at IS 'OpenAPI Client 创建时间';
+COMMENT ON COLUMN openapi_client.updated_at IS 'OpenAPI Client 最近更新时间，由数据库触发器维护';
 COMMENT ON TABLE openapi_client_operation IS '保存 Client 已显式开放的 Operation 子集';
+COMMENT ON COLUMN openapi_client_operation.client_id IS '已开放 Operation 的 OpenAPI Client 标识';
 COMMENT ON COLUMN openapi_client_operation.operation IS 'OperationCatalog 中已经注册的 ACTION 编码';
+COMMENT ON COLUMN openapi_client_operation.created_at IS 'Client Operation 关系创建时间';
 
 CREATE TRIGGER set_openapi_client_updated_at
     BEFORE UPDATE ON openapi_client

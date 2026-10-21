@@ -14,7 +14,7 @@ import com.sca4d.core.api.identity.Principal;
 import com.sca4d.core.api.identity.SystemPrincipal;
 import com.sca4d.core.api.job.JobExecutor;
 import com.sca4d.core.api.name.code.TreeCode;
-import com.sca4d.core.api.resource.ResourceReference;
+import com.sca4d.core.api.resource.Resource;
 import com.sca4d.core.api.scheduling.JobScheduler;
 import com.sca4d.core.api.setting.access.SettingReader;
 import com.sca4d.core.api.setting.access.SettingWriter;
@@ -502,7 +502,7 @@ class FileServiceIntegrationTest {
     private static FileUse use(String targetId) {
         return new FileUse(
                 "PLATFORM:USERS:PROFILES:AVATARS",
-                new ResourceReference("PLATFORM:USERS:PROFILES", targetId));
+                new Resource.Ref("PLATFORM:USERS:PROFILES", targetId));
     }
 
     /** 返回使用指定正数标识的测试 Principal。 */

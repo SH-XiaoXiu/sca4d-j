@@ -115,18 +115,18 @@ flowchart LR
 
 权限声明和审计声明分别确定各自的目标 Resource。两者使用相同的 `type + id` 时，表示权限判断和审计记录指向同一个业务对象；一个业务过程涉及文件及其绑定的用户资料时，也可以分别指向两个 Resource。
 
-### 领域对象与 ResourceReference
+### 领域对象与 Resource.Ref
 
 领域对象已经包含稳定标识，而且对象本身就是操作目标时，可以直接实现 Resource。当前 Account、StoredFile、Role 和 PlatformUserProfile 都采用这种方式。调用方取得完整对象后，可以直接把它交给权限判断或审计，不需要再创建一个只转发相同标识的包装类型。
 
-调用方只有资源类型和标识，而且没有必要为了构造权限目标查询完整对象时，使用 [ResourceReference](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/resource/ResourceReference.html)：
+调用方只有资源类型和标识，而且没有必要为了构造权限目标查询完整对象时，使用 [Resource.Ref](/javadoc/core/sca4dj-core-api/com/sca4d/core/api/resource/Resource.html)：
 
 ```java
-Resource file = new ResourceReference("file", "9001");
+Resource file = new Resource.Ref("file", "9001");
 Permission read = new Permission(file, Action.READ);
 ```
 
-ResourceReference 不保存领域字段，也不确认目标当前是否存在。负责该资源的 PermissionPolicy 或业务 Service 仍要从所属模块读取当前状态，再决定允许、拒绝或返回不存在结果。
+Resource.Ref 不保存领域字段，也不确认目标当前是否存在。负责该资源的 PermissionPolicy 或业务 Service 仍要从所属模块读取当前状态，再决定允许、拒绝或返回不存在结果。
 
 同一个业务流程中还可能同时出现多个 Resource。StoredFile 本身使用 `file + fileId` 表示正在读写的文件；FileUse 另外保存文件场景 `profile-avatar` 和目标 Resource `platform:user:profile + 3001`。文件、文件用途和用户资料因此保持各自含义，权限与审计可以准确说明本次处理的是哪个对象。
 

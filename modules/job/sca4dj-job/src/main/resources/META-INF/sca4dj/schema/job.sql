@@ -201,3 +201,39 @@ COMMENT ON COLUMN job.job_run_attempt.status IS '本次尝试正在运行或最�
 COMMENT ON COLUMN job.job_run_attempt.error_summary IS '本次尝试失败或放弃时保存的受限原因摘要';
 COMMENT ON COLUMN job.job_run_attempt.started_at IS 'Worker 开始本次尝试的时间';
 COMMENT ON COLUMN job.job_run_attempt.completed_at IS '本次尝试进入最终状态的时间';
+
+COMMENT ON COLUMN job.job_run.overlap_policy IS '同一工作键已有运行时允许并行、跳过或替换的策略编码';
+
+COMMENT ON COLUMN job.job_instance.app_name IS '实例注册所属的运行时命名空间';
+COMMENT ON COLUMN job.job_instance.instance_id IS '实例在应用命名空间内的稳定标识';
+COMMENT ON COLUMN job.job_instance.generation_id IS '实例本次进程启动代次；重启后必须变化';
+COMMENT ON COLUMN job.job_instance.capabilities_json IS '实例当前声明的可执行能力集合';
+COMMENT ON COLUMN job.job_instance.expires_at IS '实例注册租约截止时间；过期实例不再接收目标';
+
+COMMENT ON COLUMN job.job_dispatch.id IS '一次广播调度的数据库标识';
+COMMENT ON COLUMN job.job_dispatch.app_name IS '广播调度所属的运行时命名空间';
+COMMENT ON COLUMN job.job_dispatch.job_key IS '广播调度使用的稳定 Job 编码';
+COMMENT ON COLUMN job.job_dispatch.schedule_key IS '触发广播的计划编码；手工触发时为空';
+COMMENT ON COLUMN job.job_dispatch.scheduled_fire_time IS '广播对应的计划触发时间';
+COMMENT ON COLUMN job.job_dispatch.targets_json IS '提交时冻结的目标实例与代次清单';
+COMMENT ON COLUMN job.job_dispatch.created_at IS '广播调度创建时间';
+
+COMMENT ON COLUMN job.job_delivery.id IS '广播工作份额的数据库标识';
+COMMENT ON COLUMN job.job_delivery.app_name IS '工作份额所属的运行时命名空间';
+COMMENT ON COLUMN job.job_delivery.dispatch_id IS '所属广播调度标识';
+COMMENT ON COLUMN job.job_delivery.job_key IS '工作份额执行的稳定 Job 编码';
+COMMENT ON COLUMN job.job_delivery.job_definition_version IS '工作份额采用的 Job 定义版本';
+COMMENT ON COLUMN job.job_delivery.capability_code IS '目标实例必须具备的执行能力';
+COMMENT ON COLUMN job.job_delivery.system_identity IS '工作份额绑定的 IAM 系统身份编码';
+COMMENT ON COLUMN job.job_delivery.work_key IS '参与同一工作并发控制的稳定键';
+COMMENT ON COLUMN job.job_delivery.overlap_policy IS '同一工作键已有运行时的并发策略编码';
+COMMENT ON COLUMN job.job_delivery.input_json IS '目标实例执行工作份额时读取的可选输入';
+COMMENT ON COLUMN job.job_delivery.target_instance_id IS '固定执行目标的实例标识';
+COMMENT ON COLUMN job.job_delivery.target_generation_id IS '固定执行目标的进程启动代次';
+COMMENT ON COLUMN job.job_delivery.status IS '工作份额就绪、运行、成功、失败或过期状态';
+COMMENT ON COLUMN job.job_delivery.expires_at IS '工作份额未开始执行时的截止时间';
+COMMENT ON COLUMN job.job_delivery.created_at IS '工作份额创建时间';
+COMMENT ON COLUMN job.job_delivery.started_at IS '目标实例开始执行工作份额的时间';
+COMMENT ON COLUMN job.job_delivery.lease_until IS '工作份额当前租约截止时间';
+COMMENT ON COLUMN job.job_delivery.completed_at IS '工作份额进入最终状态的时间';
+COMMENT ON COLUMN job.job_delivery.error_summary IS '工作份额失败时保存的受限原因摘要';

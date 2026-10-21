@@ -44,6 +44,7 @@ COMMENT ON TABLE iam_system_identity IS '整个业务系统的稳定领域身份
 COMMENT ON COLUMN iam_system_identity.code IS '代码常量声明的系统身份编码';
 COMMENT ON COLUMN iam_system_identity.principal_id IS '配置指定且禁止自动改写的全局 Principal ID';
 COMMENT ON COLUMN iam_system_identity.subject_id IS '整个业务系统唯一的 SYSTEM Subject';
+COMMENT ON COLUMN iam_system_identity.created_at IS '系统身份记录创建时间';
 
 CREATE TABLE iam_account_principal (
     account_id BIGINT NOT NULL,
