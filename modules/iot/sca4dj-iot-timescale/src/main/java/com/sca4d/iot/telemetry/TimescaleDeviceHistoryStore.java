@@ -11,11 +11,14 @@ import com.sca4d.iot.api.telemetry.TelemetrySample;
 import com.sca4d.iot.config.IotTimescale;
 import com.sca4d.iot.timescale.persistence.TimescaleRepository;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /** 通过 TimescaleDB 两张历史表实现 Device 历史查询契约。 */
@@ -28,6 +31,20 @@ public class TimescaleDeviceHistoryStore implements DeviceHistoryStore {
     /** @param repository TimescaleDB 历史持久化入口 */
     public TimescaleDeviceHistoryStore(@NotNull TimescaleRepository repository) {
         this.repository = Objects.requireNonNull(repository, "Timescale Repository 不能为空");
+    }
+
+    @Override
+    public @NotNull @Unmodifiable Map<@NotNull Long, @NotNull List<@NotNull DeviceEvent>> recentEvents(
+            @NotNull Collection<@NotNull Long> deviceIds,
+            int limitPerDevice) {
+        return repository.findRecentEvents(deviceIds, limitPerDevice);
+    }
+
+    @Override
+    public @NotNull @Unmodifiable Map<@NotNull Long, @NotNull List<@NotNull DeviceAcknowledgement>> recentAcknowledgements(
+            @NotNull Collection<@NotNull Long> messageIds,
+            int limitPerMessage) {
+        return repository.findRecentAcknowledgements(messageIds, limitPerMessage);
     }
 
     @Override

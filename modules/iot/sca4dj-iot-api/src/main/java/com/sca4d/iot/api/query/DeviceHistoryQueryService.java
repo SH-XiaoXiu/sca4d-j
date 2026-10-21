@@ -19,6 +19,50 @@ import java.util.Optional;
 public interface DeviceHistoryQueryService {
 
     /**
+     * 批量读取每个设备最近的下行消息，按创建时间倒序排列。
+     *
+     * @param deviceIds 正数设备标识；重复标识只查询一次，空集合直接返回空映射
+     * @param limitPerDevice 每个设备的记录上限，范围为 1 到 100
+     * @return 以设备标识为键的不可修改映射和列表；没有记录时对应空列表
+     * @throws IllegalArgumentException 标识或数量上限不合法时抛出
+     * @throws BusinessException 任一设备不存在时抛出
+     */
+    @NotNull
+    @Unmodifiable
+    Map<@NotNull Long, @NotNull List<@NotNull DeviceDownlink>> recentDownlinks(
+            @NotNull Collection<@NotNull Long> deviceIds,
+            int limitPerDevice);
+
+    /**
+     * 批量读取每个设备最近的事件，按发生时间倒序排列。
+     *
+     * @param deviceIds 正数设备标识；重复标识只查询一次，空集合直接返回空映射
+     * @param limitPerDevice 每个设备的记录上限，范围为 1 到 100
+     * @return 以设备标识为键的不可修改映射和列表；没有记录时对应空列表
+     * @throws IllegalArgumentException 标识或数量上限不合法时抛出
+     * @throws BusinessException 任一设备不存在时抛出；事件查询未安装历史存储时抛出依赖不可用错误
+     */
+    @NotNull
+    @Unmodifiable
+    Map<@NotNull Long, @NotNull List<@NotNull DeviceEvent>> recentEvents(
+            @NotNull Collection<@NotNull Long> deviceIds,
+            int limitPerDevice);
+
+    /**
+     * 批量读取每条消息最近的回执，按接收时间倒序排列。历史回执优先；某条消息没有历史回执或未安装历史存储时返回主库最新回执。
+     *
+     * @param messageIds 正数消息标识；重复标识只查询一次，空集合直接返回空映射
+     * @param limitPerMessage 每个消息的记录上限，范围为 1 到 100
+     * @return 以消息标识为键的不可修改映射和列表；没有记录时对应空列表
+     * @throws IllegalArgumentException 标识或数量上限不合法时抛出
+     */
+    @NotNull
+    @Unmodifiable
+    Map<@NotNull Long, @NotNull List<@NotNull DeviceAcknowledgement>> recentAcknowledgements(
+            @NotNull Collection<@NotNull Long> messageIds,
+            int limitPerMessage);
+
+    /**
      * @param messageId 全局下行消息标识
      * @return 当前主库中的下行消息快照；不存在或已按保留策略删除时为空
      */

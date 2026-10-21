@@ -23,7 +23,6 @@ import com.sca4d.iot.telemetry.TimescaleTelemetryConsumer;
 import com.sca4d.iot.timescale.persistence.TimescaleMapper;
 import com.sca4d.iot.timescale.persistence.TimescaleRepository;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.flywaydb.core.Flyway;
 import org.jetbrains.annotations.NotNull;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
@@ -51,30 +50,18 @@ public class TimescaleIotAutoConfiguration {
 
     private static final String MAPPER_LOCATIONS = "classpath*:META-INF/sca4dj/mybatis/iot-history/*.xml";
 
-    /** @return 只迁移 IoT 模块版本化高频表资源的独立 Flyway */
-    @Bean(initMethod = "migrate", defaultCandidate = false)
+    /** @return 只加载 IoT 历史 Mapper XML 的独立 SqlSessionFactory */
+    @Bean(defaultCandidate = false)
     @IotTimescale
-    Flyway iotTimescaleFlyway(@NotNull DataSource dataSource) {
+    SqlSessionFactory iotTimescaleSqlSessionFactory(
+            @NotNull DataSource dataSource,
+            @NotNull AdditionalMyBatisSessionFactoryBuilder builder) throws Exception {
         if (!(dataSource instanceof DynamicRoutingDataSource routing)) {
             throw new IllegalStateException("IoT 历史存储必须使用动态数据源");
         }
         if (!routing.getDataSources().containsKey(IotTimescale.DATASOURCE)) {
             throw new IllegalStateException("启用 IoT 历史存储必须配置 spring.datasource.dynamic.datasource.iot-history");
         }
-        return Flyway.configure()
-                .dataSource(routing.getDataSource(IotTimescale.DATASOURCE))
-                .locations("classpath:META-INF/sca4dj/timescale/migration")
-                .load();
-    }
-
-    /** @return 只加载 IoT 历史 Mapper XML 的独立 SqlSessionFactory */
-    @Bean(defaultCandidate = false)
-    @IotTimescale
-    SqlSessionFactory iotTimescaleSqlSessionFactory(
-            @NotNull DataSource dataSource,
-            @IotTimescale @NotNull Flyway migration,
-            @NotNull AdditionalMyBatisSessionFactoryBuilder builder) throws Exception {
-        Objects.requireNonNull(migration, "IoT Timescale Flyway 不能为空");
         Resource[] mapperLocations = new PathMatchingResourcePatternResolver().getResources(MAPPER_LOCATIONS);
         if (mapperLocations.length == 0) {
             throw new IllegalStateException("IoT Timescale Mapper XML 不存在: " + MAPPER_LOCATIONS);

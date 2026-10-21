@@ -10,10 +10,40 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.time.Instant;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /** 从具体应用选择的历史存储读取 Device 事件、ACK、定时结果和 Telemetry。 */
 public interface DeviceHistoryStore {
+
+    /**
+     * 批量读取每个设备最近的记录，按发生时间倒序排列。
+     *
+     * @param deviceIds 正数设备标识；重复标识只查询一次，空集合直接返回空映射
+     * @param limitPerDevice 每个设备的记录上限，范围为 1 到 100
+     * @return 以设备标识为键的不可修改映射和列表；没有记录时对应空列表
+     * @throws IllegalArgumentException 标识或数量上限不合法时抛出
+     */
+    @NotNull
+    @Unmodifiable
+    Map<@NotNull Long, @NotNull List<@NotNull DeviceEvent>> recentEvents(
+            @NotNull Collection<@NotNull Long> deviceIds,
+            int limitPerDevice);
+
+    /**
+     * 批量读取每个消息最近的记录，按接收时间倒序排列。
+     *
+     * @param messageIds 正数消息标识；重复标识只查询一次，空集合直接返回空映射
+     * @param limitPerMessage 每个消息的记录上限，范围为 1 到 100
+     * @return 以消息标识为键的不可修改映射和列表；没有记录时对应空列表
+     * @throws IllegalArgumentException 标识或数量上限不合法时抛出
+     */
+    @NotNull
+    @Unmodifiable
+    Map<@NotNull Long, @NotNull List<@NotNull DeviceAcknowledgement>> recentAcknowledgements(
+            @NotNull Collection<@NotNull Long> messageIds,
+            int limitPerMessage);
 
     /**
      * @param deviceId Device 标识

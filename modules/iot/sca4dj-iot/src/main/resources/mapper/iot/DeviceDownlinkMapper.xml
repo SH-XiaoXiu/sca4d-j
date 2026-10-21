@@ -9,6 +9,26 @@
         status, attempt_count, expires_at, created_at
     </sql>
 
+    <select id="selectRecentDeviceDownlinks" resultType="com.sca4d.iot.persistence.EncodedDownlinkMessage">
+        SELECT recent.* FROM (VALUES
+        <foreach collection="deviceIds" item="deviceId" separator=",">(CAST(#{deviceId} AS BIGINT))</foreach>
+        ) AS requested(device_id)
+        CROSS JOIN LATERAL (
+            SELECT <include refid="messageColumns"/>
+            FROM iot_downlink_message WHERE device_id = requested.device_id
+            ORDER BY created_at DESC, message_id DESC LIMIT #{limit}
+        ) recent
+        ORDER BY recent.device_id, recent.created_at DESC, recent.message_id DESC
+    </select>
+    <select id="selectAcknowledgementsByMessageIds" resultType="com.sca4d.iot.persistence.EncodedDeviceAcknowledgement">
+        SELECT message_id, last_ack_code AS ack_code, last_ack_data_json::text AS data_json,
+               last_ack_source AS source,
+               last_ack_source_acknowledgement_id AS source_acknowledgement_id,
+               last_acknowledged_at AS acknowledged_at, last_ack_received_at AS received_at
+        FROM iot_downlink_message WHERE last_ack_code IS NOT NULL AND message_id IN
+        <foreach collection="messageIds" item="messageId" open="(" separator="," close=")">#{messageId}</foreach>
+    </select>
+
     <select id="countDeviceDownlinks" resultType="long">
         SELECT COUNT(*) FROM iot_downlink_message WHERE device_id = #{deviceId}
     </select>

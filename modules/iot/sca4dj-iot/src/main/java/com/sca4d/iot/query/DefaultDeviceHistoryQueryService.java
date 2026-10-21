@@ -10,6 +10,7 @@ import com.sca4d.iot.api.message.DeviceDownlink;
 import com.sca4d.iot.api.query.DeviceEvent;
 import com.sca4d.iot.api.query.DeviceHistoryQueryService;
 import com.sca4d.iot.api.telemetry.TelemetrySample;
+import com.sca4d.iot.device.DeviceQuery;
 import com.sca4d.iot.device.DeviceRepository;
 import com.sca4d.iot.message.DownlinkRepository;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.ObjectProvider;
 
 import java.time.Instant;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -39,6 +41,68 @@ public class DefaultDeviceHistoryQueryService implements DeviceHistoryQueryServi
         this.devices = Objects.requireNonNull(devices, "Device Repository 不能为空");
         this.downlinks = Objects.requireNonNull(downlinks, "下行 Repository 不能为空");
         this.history = Objects.requireNonNull(history, "Device 历史存储 Provider 不能为空");
+    }
+
+    @Override
+    public @NotNull @Unmodifiable Map<@NotNull Long, @NotNull List<@NotNull DeviceDownlink>> recentDownlinks(
+            @NotNull Collection<@NotNull Long> deviceIds,
+            int limitPerDevice) {
+        int checkedLimit = new PageRequest(1, limitPerDevice).verifyMaxSize(100).size();
+        List<Long> ids = validateDeviceIds(deviceIds);
+        return downlinks.findRecentDownlinks(ids, checkedLimit);
+    }
+
+    @Override
+    public @NotNull @Unmodifiable Map<@NotNull Long, @NotNull List<@NotNull DeviceEvent>> recentEvents(
+            @NotNull Collection<@NotNull Long> deviceIds,
+            int limitPerDevice) {
+        int checkedLimit = new PageRequest(1, limitPerDevice).verifyMaxSize(100).size();
+        List<Long> ids = validateDeviceIds(deviceIds);
+        return ids.isEmpty() ? Map.of() : historyStore().recentEvents(ids, checkedLimit);
+    }
+
+    @Override
+    public @NotNull @Unmodifiable Map<@NotNull Long, @NotNull List<@NotNull DeviceAcknowledgement>> recentAcknowledgements(
+            @NotNull Collection<@NotNull Long> messageIds,
+            int limitPerMessage) {
+        int checkedLimit = new PageRequest(1, limitPerMessage).verifyMaxSize(100).size();
+        List<Long> ids = Objects.requireNonNull(messageIds, "下行消息标识不能为空")
+                .stream()
+                .map(id -> Objects.requireNonNull(id, "下行消息标识不能为空"))
+                .distinct()
+                .toList();
+        for (Long id : ids) {
+            if (id <= 0)
+                throw new IllegalArgumentException("下行消息标识必须为正数");
+        }
+        if (ids.isEmpty())
+            return Map.of();
+        DeviceHistoryStore store = history.getIfAvailable();
+        Map<Long, List<DeviceAcknowledgement>> result = new LinkedHashMap<>();
+        if (store != null)
+            result.putAll(store.recentAcknowledgements(ids, checkedLimit));
+        // 每条消息单独判断历史是否缺失，批量补充主库最新投影，不混入已有完整历史。
+        List<Long> missing = ids.stream().filter(id -> result.getOrDefault(id, List.of()).isEmpty()).toList();
+        result.putAll(downlinks.findLatestAcknowledgements(missing));
+        result.replaceAll((id, values) -> List.copyOf(values));
+        return Map.copyOf(result);
+    }
+
+    /** 批量确认设备存在，避免为每台设备单独装载台账。 */
+    private @NotNull List<Long> validateDeviceIds(@NotNull Collection<@NotNull Long> deviceIds) {
+        List<Long> ids = Objects.requireNonNull(deviceIds, "设备标识不能为空")
+                .stream()
+                .map(id -> Objects.requireNonNull(id, "设备标识不能为空"))
+                .distinct()
+                .toList();
+        for (Long id : ids) {
+            if (id <= 0)
+                throw new IllegalArgumentException("设备标识必须为正数");
+        }
+        if (!ids.isEmpty() && devices.find(DeviceQuery.forIds(ids).build()).getItems().size() != ids.size()) {
+            throw new BusinessException(IotErrorCode.DEVICE_NOT_FOUND);
+        }
+        return ids;
     }
 
     @Override
